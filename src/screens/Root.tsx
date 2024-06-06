@@ -9,6 +9,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { Text } from '#ui/components/Text';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -23,7 +24,7 @@ function Section({ children, title }: SectionProps): React.JSX.Element {
   );
 }
 
-export default function App() {
+function RootScreen() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -49,3 +50,5 @@ export default function App() {
     </SafeAreaView>
   );
 }
+
+export default withSafeArea(RootScreen);

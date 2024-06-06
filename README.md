@@ -6,7 +6,7 @@
 # 1st step
 yarn install
 
-# 2nd step (freshly cloned repo)
+# 2nd step
 cd ios
 bundle install
 bundle exec pod install
