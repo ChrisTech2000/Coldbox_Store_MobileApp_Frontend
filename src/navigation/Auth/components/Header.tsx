@@ -34,7 +34,7 @@ export default function NavigatorHeader(props: NativeStackHeaderProps) {
   return (
     <View
       style={{ paddingTop: insets.top }}
-      tw="p-3.5 w-full flex-row items-center justify-between bg-white border-b border-zinc-200"
+      tw="ios:pt-6 android:mt-6 px-3.5 pb-3 w-full flex-row items-center justify-between bg-white border-b border-zinc-200"
     >
       <HeaderItem>
         <TouchableOpacity
