@@ -4,7 +4,7 @@ import { ToastProvider } from 'react-native-toast-notifications';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 
-import StaleWhileRevalidate from '#common/StaleWhileRevalidate';
+import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import AuthNavigator from './navigation/Auth';
 
 export default function App() {
