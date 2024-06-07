@@ -30,7 +30,6 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     ],
-    'react/prop-types': 'off',
 
     // React Hooks
     'react-hooks/rules-of-hooks': 'error',
