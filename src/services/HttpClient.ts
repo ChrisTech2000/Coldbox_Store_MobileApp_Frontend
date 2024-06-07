@@ -4,8 +4,8 @@ type Options = {
   baseURL: string;
   getAuthTokens: () => Promise<{ accessToken: string; refreshToken: string }>;
   onSessionRenewal: () => Promise<void>;
-  onUnauthorized?: () => Promise<void>;
-  onForbidden?: () => Promise<void>;
+  onUnauthorized?: () => void;
+  onForbidden?: () => void;
 };
 
 export type HttpClientOptions = Pick<

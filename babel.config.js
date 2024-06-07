@@ -11,6 +11,7 @@ module.exports = {
           '#ui': './src/ui',
           '#services': './src/services',
           '#common': './src/common',
+          '#navigation': './src/navigation',
         },
       },
     ],
