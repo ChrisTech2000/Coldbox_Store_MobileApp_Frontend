@@ -3,9 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "*": ["src/*"],
       "#screens/*": ["./src/screens/*"],
       "#ui/*": ["./src/ui/*"],
-      "#services/*": ["./src/services/*"]
+      "#services/*": ["./src/services/*"],
+      "#common/*": ["./src/common/*"]
     }
   }
 }

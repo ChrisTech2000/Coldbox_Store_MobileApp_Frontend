@@ -5,11 +5,12 @@ module.exports = {
     [
       'module-resolver',
       {
-        root: ['./'],
+        root: ['./src'],
         alias: {
           '#screens': './src/screens',
           '#ui': './src/ui',
           '#services': './src/services',
+          '#common': './src/common',
         },
       },
     ],
