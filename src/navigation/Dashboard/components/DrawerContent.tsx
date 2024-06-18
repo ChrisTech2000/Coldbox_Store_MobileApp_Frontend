@@ -1,40 +1,30 @@
 import React from 'react';
+import { View } from 'react-native';
 import {
-  type DrawerContentComponentProps,
   DrawerContentScrollView,
+  type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { styled } from 'nativewind';
 import { Drawer } from 'react-native-paper';
 
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 
-import type { Routes } from '../index';
-import { View } from 'react-native';
+import type { DashboardRoutes } from '../index';
 
 const StyledDrawerContentScrollView = styled(DrawerContentScrollView);
 
-type RoutePaths = Exclude<keyof Routes, 'Root'>;
+type RoutePaths = Exclude<keyof DashboardRoutes, 'Root'>;
 
-const DRAWER_ROUTES: Array<RoutePaths> = [
-  'AccountDetails',
-  'Management',
-  'KnowledgeHub',
-  'Tutorial',
-  'FAQ',
-  'About',
-];
-
-const DRAWER_ITEM_TITLE: Record<RoutePaths, string> = {
-  AccountDetails: 'Account Details',
-  Management: 'Management',
-  KnowledgeHub: 'Knowledge Hub',
-  Tutorial: 'Tutorial',
-  FAQ: 'FAQ',
-  About: 'About',
+const DRAWER_ITEM_TITLE: Record<RoutePaths, { iconName: string; title: string }> = {
+  AccountDetails: { title: 'Account Details', iconName: 'account-settings-outline' },
+  Management: { title: 'Management', iconName: 'account-supervisor-outline' },
+  KnowledgeHub: { title: 'Knowledge Hub', iconName: 'information-outline' },
+  Tutorial: { title: 'Tutorial', iconName: 'card-multiple-outline' },
+  FAQ: { title: 'FAQ', iconName: 'chat-question-outline' },
+  About: { title: 'About', iconName: 'information-outline' },
 };
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
-  // TODO: improve this
   const { routeNames, index } = props.state;
   const focusedRoute = routeNames[index];
 
@@ -44,17 +34,17 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
         <ColdtivateLogo width={60} height={60} />
       </View>
 
-      <View tw="space-y-2">
-        {DRAWER_ROUTES.map((routePath, routeIdx) => (
+      <View tw="space-y-1.5">
+        {Object.entries(DRAWER_ITEM_TITLE).map(([routeName, datums], routeIdx) => (
           <Drawer.Item
-            key={`${routePath}-#${routeIdx}`}
-            label={DRAWER_ITEM_TITLE[routePath]}
-            active={focusedRoute === routePath}
+            key={`${routeName}-#${routeIdx}`}
+            label={datums.title}
+            active={focusedRoute === routeName}
             onPress={(evt) => {
               evt.stopPropagation();
-              props.navigation.navigate(routePath);
+              props.navigation.navigate(routeName);
             }}
-            icon="camera"
+            icon={datums.iconName}
           />
         ))}
       </View>
