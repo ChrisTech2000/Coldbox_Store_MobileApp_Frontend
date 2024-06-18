@@ -8,7 +8,8 @@
       "#ui/*": ["./src/ui/*"],
       "#services/*": ["./src/services/*"],
       "#common/*": ["./src/common/*"],
-      "#navigation/*": ["./src/navigation/*"]
+      "#navigation/*": ["./src/navigation/*"],
+      "#assets/*": ["./src/assets/*"]
     }
   }
 }

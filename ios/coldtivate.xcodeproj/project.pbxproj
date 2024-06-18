@@ -15,6 +15,7 @@
 		7522F1BBA8235EDC84A1BA30 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EBF3B6864E19E58B0A22F9E5 /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-coldtivate-coldtivateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-coldtivate-coldtivateTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9CF5AA9298654C609070C713 /* root_hero.svg in Resources */ = {isa = PBXBuildFile; fileRef = 7439424A75404E33A886445C /* root_hero.svg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		5709B34CF0A7D63546082F79 /* Pods-coldtivate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coldtivate.release.xcconfig"; path = "Target Support Files/Pods-coldtivate/Pods-coldtivate.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-coldtivate-coldtivateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coldtivate-coldtivateTests.debug.xcconfig"; path = "Target Support Files/Pods-coldtivate-coldtivateTests/Pods-coldtivate-coldtivateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-coldtivate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-coldtivate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7439424A75404E33A886445C /* root_hero.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = root_hero.svg; path = ../src/assets/images/root_hero.svg; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = coldtivate/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-coldtivate-coldtivateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coldtivate-coldtivateTests.release.xcconfig"; path = "Target Support Files/Pods-coldtivate-coldtivateTests/Pods-coldtivate-coldtivateTests.release.xcconfig"; sourceTree = "<group>"; };
 		EBF3B6864E19E58B0A22F9E5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = coldtivate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				A08D48B2472B4A5BB63285F4 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -140,6 +143,15 @@
 				00E356EE1AD99517003FC87E /* coldtivateTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A08D48B2472B4A5BB63285F4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7439424A75404E33A886445C /* root_hero.svg */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -249,6 +261,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				7522F1BBA8235EDC84A1BA30 /* PrivacyInfo.xcprivacy in Resources */,
+				9CF5AA9298654C609070C713 /* root_hero.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
