@@ -2,6 +2,10 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/images/coldtivate_logo.svg",
+      "sha1": "f74556f7efc1d37e4b4c959f79b130a4cb0bf638"
+    },
+    {
       "path": "src/assets/images/root_hero.svg",
       "sha1": "904c213ad1552b1a97bcee2784d9f6e79c5795c3"
     }

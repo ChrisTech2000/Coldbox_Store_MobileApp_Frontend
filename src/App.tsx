@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { ToastProvider } from 'react-native-toast-notifications';
@@ -6,7 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
 
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
-import AuthNavigator from './navigation/Auth';
+// import AuthNavigator from './navigation/Auth';
+import DashboardNavigator from './navigation/Dashboard';
 import theme from './ui/lib/theme';
 
 export default function App() {
@@ -17,7 +19,7 @@ export default function App() {
         <StaleWhileRevalidate>
           <SafeAreaProvider>
             <NavigationContainer>
-              <AuthNavigator />
+              <DashboardNavigator />
             </NavigationContainer>
           </SafeAreaProvider>
         </StaleWhileRevalidate>
