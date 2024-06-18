@@ -1,16 +1,11 @@
-import React, { useCallback } from 'react';
-import {
-  createDrawerNavigator,
-  type DrawerNavigationProp,
-  type DrawerNavigationOptions,
-} from '@react-navigation/drawer';
-import type { RouteProp } from '@react-navigation/native';
-import { Appbar } from 'react-native-paper';
+import React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import AccountDetails from '#screens/Dashboard/AccountDetails';
+import DashboardRoot from '#screens/Dashboard/Root';
 
-import NavigatorHeader from '../components/NavigatorHeader';
 import DrawerContent from './components/DrawerContent';
+import DashboardScreenOptions from './components/ScreenOptions';
 
 export type DashboardRoutes = {
   Root: undefined;
@@ -22,49 +17,16 @@ export type DashboardRoutes = {
   About: undefined;
 };
 
-type ScreenOptions = (props: {
-  route: RouteProp<DashboardRoutes, keyof DashboardRoutes>;
-  navigation: DrawerNavigationProp<DashboardRoutes, 'Root', undefined>;
-}) => DrawerNavigationOptions;
-
-const NAVIGATOR_HEADER_TITLES: Record<keyof DashboardRoutes, string | undefined> = {
-  Root: undefined,
-  AccountDetails: 'Account details',
-  Management: undefined,
-  KnowledgeHub: undefined,
-  Tutorial: undefined,
-  FAQ: undefined,
-  About: undefined,
-};
-
 const Drawer = createDrawerNavigator<DashboardRoutes>();
 
 export default function DashboardNavigator() {
-  const screenOptions: ScreenOptions = useCallback((props) => {
-    // eslint-disable-next-line react/prop-types
-    const focusedRouteName = props.route.name;
-    const headerShown = !focusedRouteName || focusedRouteName !== 'Root';
-    return {
-      ...props,
-      headerShown,
-      header: (headerProps) => (
-        <NavigatorHeader
-          {...headerProps}
-          routeTitle={NAVIGATOR_HEADER_TITLES[focusedRouteName]}
-          // eslint-disable-next-line react/prop-types
-          leftContent={<Appbar.Action icon="menu" onPress={props.navigation.openDrawer} />}
-        />
-      ),
-    };
-  }, []);
-
   return (
     <Drawer.Navigator
-      initialRouteName="AccountDetails"
+      initialRouteName="Root"
       drawerContent={DrawerContent}
-      screenOptions={screenOptions}
+      screenOptions={DashboardScreenOptions}
     >
-      {/* <Drawer.Screen name="Root" component={() => <View />} /> */}
+      <Drawer.Screen name="Root" component={DashboardRoot} />
       <Drawer.Screen name="AccountDetails" component={AccountDetails} />
       {/* <Drawer.Screen name="Management" component={() => <View />} />
       <Drawer.Screen name="KnowledgeHub" component={() => <View />} />
