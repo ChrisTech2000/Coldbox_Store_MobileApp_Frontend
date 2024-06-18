@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-
-import { Text } from '#ui/components/Text';
+import { Text } from 'react-native-paper';
 
 export default function SignUpCompany() {
   return (

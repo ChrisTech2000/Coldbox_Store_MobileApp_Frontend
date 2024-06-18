@@ -12,6 +12,7 @@ module.exports = {
           '#services': './src/services',
           '#common': './src/common',
           '#navigation': './src/navigation',
+          '#assets': './src/assets',
         },
       },
     ],
