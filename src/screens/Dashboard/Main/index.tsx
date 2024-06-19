@@ -2,10 +2,10 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-export default function DashboardRoot() {
+export default function DashboardMain() {
   return (
     <View tw="flex-1 items-center justify-center space-y-4">
-      <Text>Dashboard Root Screen</Text>
+      <Text>Dashboard Main Screen</Text>
     </View>
   );
 }

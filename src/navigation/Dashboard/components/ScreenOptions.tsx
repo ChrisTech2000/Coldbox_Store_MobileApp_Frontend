@@ -6,15 +6,15 @@ import { Appbar } from 'react-native-paper';
 
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
-import type { DashboardRoutes } from '../index';
+import type { DashboardRoutes, DashboardRoutePaths } from '../index';
 
 type Props = {
-  route: RouteProp<DashboardRoutes, keyof DashboardRoutes>;
+  route: RouteProp<DashboardRoutes, DashboardRoutePaths>;
   navigation: NavigationProp<Record<string, unknown>>;
 };
 
-const NAVIGATOR_HEADER_TITLES: Record<keyof DashboardRoutes, string | undefined> = {
-  Root: '{{firstName}} Coldtivate',
+const NAVIGATOR_HEADER_TITLES: Record<DashboardRoutePaths, string | undefined> = {
+  Main: '{{firstName}} Coldtivate',
   AccountDetails: 'Account details',
   Management: undefined,
   KnowledgeHub: undefined,
@@ -25,12 +25,14 @@ const NAVIGATOR_HEADER_TITLES: Record<keyof DashboardRoutes, string | undefined>
 
 export default function DashboardScreenOptions(props: Props): DrawerNavigationOptions {
   const focusedRouteName = props.route.name;
+  const routeTitle = NAVIGATOR_HEADER_TITLES[focusedRouteName];
   return {
     ...props,
+    headerShown: typeof routeTitle !== 'undefined',
     header: (headerProps) => (
       <NavigatorHeader
         {...headerProps}
-        routeTitle={NAVIGATOR_HEADER_TITLES[focusedRouteName]}
+        routeTitle={routeTitle}
         leftContent={
           <_LeftContentFactory focusedRouteName={focusedRouteName} navigation={props.navigation} />
         }
@@ -40,11 +42,11 @@ export default function DashboardScreenOptions(props: Props): DrawerNavigationOp
 }
 
 function _LeftContentFactory(props: {
-  focusedRouteName: keyof DashboardRoutes;
+  focusedRouteName: DashboardRoutePaths;
   navigation: NavigationProp<Record<string, unknown>>;
 }) {
   switch (props.focusedRouteName) {
-    case 'Root':
+    case 'Main':
       return (
         <Appbar.Action
           icon="menu"

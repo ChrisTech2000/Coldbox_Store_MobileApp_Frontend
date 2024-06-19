@@ -13,7 +13,7 @@ import type { DashboardRoutes } from '../index';
 
 const StyledDrawerContentScrollView = styled(DrawerContentScrollView);
 
-type RoutePaths = Exclude<keyof DashboardRoutes, 'Root'>;
+type RoutePaths = Exclude<keyof DashboardRoutes, 'Main'>;
 
 const DRAWER_ITEM_TITLE: Record<RoutePaths, { iconName: string; title: string }> = {
   AccountDetails: { title: 'Account Details', iconName: 'account-settings-outline' },

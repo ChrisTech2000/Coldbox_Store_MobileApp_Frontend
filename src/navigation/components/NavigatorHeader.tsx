@@ -1,7 +1,7 @@
 import React from 'react';
 import { Appbar } from 'react-native-paper';
 
-type NavigationHeaderProps = {
+export type NavigationHeaderProps = {
   routeTitle?: string;
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;

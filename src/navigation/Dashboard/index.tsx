@@ -2,13 +2,14 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import AccountDetails from '#screens/Dashboard/AccountDetails';
-import DashboardRoot from '#screens/Dashboard/Root';
+import DashboardMain from '#screens/Dashboard/Main';
 
 import DrawerContent from './components/DrawerContent';
 import DashboardScreenOptions from './components/ScreenOptions';
+import ManagementStack from './Management';
 
 export type DashboardRoutes = {
-  Root: undefined;
+  Main: undefined;
   AccountDetails: undefined;
   Management: undefined;
   KnowledgeHub: undefined;
@@ -17,19 +18,21 @@ export type DashboardRoutes = {
   About: undefined;
 };
 
+export type DashboardRoutePaths = keyof DashboardRoutes;
+
 const Drawer = createDrawerNavigator<DashboardRoutes>();
 
 export default function DashboardNavigator() {
   return (
     <Drawer.Navigator
-      initialRouteName="Root"
+      initialRouteName="Main"
       drawerContent={DrawerContent}
       screenOptions={DashboardScreenOptions}
     >
-      <Drawer.Screen name="Root" component={DashboardRoot} />
+      <Drawer.Screen name="Main" component={DashboardMain} />
       <Drawer.Screen name="AccountDetails" component={AccountDetails} />
-      {/* <Drawer.Screen name="Management" component={() => <View />} />
-      <Drawer.Screen name="KnowledgeHub" component={() => <View />} />
+      <Drawer.Screen name="Management" component={ManagementStack} />
+      {/* <Drawer.Screen name="KnowledgeHub" component={() => <View />} />
       <Drawer.Screen name="Tutorial" component={() => <View />} />
       <Drawer.Screen name="FAQ" component={() => <View />} />
       <Drawer.Screen name="About" component={() => <View />} /> */}
