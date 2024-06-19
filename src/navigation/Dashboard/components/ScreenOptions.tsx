@@ -17,10 +17,10 @@ const NAVIGATOR_HEADER_TITLES: Record<DashboardRoutePaths, string | undefined> =
   Main: '{{firstName}} Coldtivate',
   AccountDetails: 'Account details',
   Management: undefined,
-  KnowledgeHub: undefined,
-  Tutorial: undefined,
-  FAQ: undefined,
-  About: undefined,
+  KnowledgeHub: 'Knowledge Hub',
+  Tutorial: 'Quit Tutorial',
+  FAQ: 'FAQ',
+  About: 'About',
 };
 
 export default function DashboardScreenOptions(props: Props): DrawerNavigationOptions {
