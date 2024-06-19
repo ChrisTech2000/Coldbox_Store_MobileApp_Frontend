@@ -20,6 +20,11 @@ import EditCoolingUnit from '#screens/Dashboard/Management/EditCoolingUnit';
 import Operators from '#screens/Dashboard/Management/Operators';
 import AddOperator from '#screens/Dashboard/Management/AddOperator';
 import EditOperator from '#screens/Dashboard/Management/EditOperator';
+import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee';
+import AddRegisteredEmployee from '#screens/Dashboard/Management/AddRegisteredEmployee';
+import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredEmployeeDetails';
+import RevenueAnalysis from '#screens/Dashboard/Management/RevenueAnalysis';
+import UsageAnalysis from '#screens/Dashboard/Management/UsageAnalysis';
 
 import NavigatorHeader, { type NavigationHeaderProps } from '../components/NavigatorHeader';
 
@@ -50,7 +55,10 @@ export type ManagementRoutes = {
   // Registered Employee related routes
   RegisteredEmployee: undefined;
   AddRegisteredEmployee: undefined;
-  RegisteredEmployeeDetails: undefined;
+  RegisteredEmployeeDetails: {
+    firstName: string;
+    familyName: string;
+  };
 };
 
 export type ManagementRoutePaths = keyof ManagementRoutes;
@@ -67,7 +75,7 @@ type ScreenOptions = (props: {
 const NAVIGATOR_HEADER_TITLES: Record<ManagementRoutePaths, string | undefined> = {
   Root: 'Management',
   CompanyDetails: 'Company Details',
-  RevenueAnalysis: 'Revenue Analysis',
+  RevenueAnalysis: 'Revenue analysis',
   UsageAnalysis: 'Usage Analysis',
   Locations: 'Locations',
   AddLocation: 'Add Location',
@@ -102,7 +110,7 @@ export default function ManagementStack() {
             />
           }
           // eslint-disable-next-line react/prop-types
-          {...rightContentFactory(focusedRouteName, props.navigation)}
+          {..._rightContentFactory(focusedRouteName, props.navigation)}
         />
       ),
       contentStyle: { backgroundColor: colors.white },
@@ -113,6 +121,8 @@ export default function ManagementStack() {
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={ManagementRoot} />
       <Stack.Screen name="CompanyDetails" component={CompanyDetails} />
+      <Stack.Screen name="RevenueAnalysis" component={RevenueAnalysis} />
+      <Stack.Screen name="UsageAnalysis" component={UsageAnalysis} />
       <Stack.Screen name="Locations" component={Locations} />
       <Stack.Screen name="AddLocation" component={AddLocation} />
       <Stack.Screen name="EditLocation" component={EditLocation} />
@@ -122,11 +132,14 @@ export default function ManagementStack() {
       <Stack.Screen name="Operators" component={Operators} />
       <Stack.Screen name="AddOperator" component={AddOperator} />
       <Stack.Screen name="EditOperator" component={EditOperator} />
+      <Stack.Screen name="RegisteredEmployee" component={RegisteredEmployee} />
+      <Stack.Screen name="AddRegisteredEmployee" component={AddRegisteredEmployee} />
+      <Stack.Screen name="RegisteredEmployeeDetails" component={RegisteredEmployeeDetails} />
     </Stack.Navigator>
   );
 }
 
-function rightContentFactory(
+function _rightContentFactory(
   focusedRouteName: ManagementRoutePaths,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ): NavigationHeaderProps {
@@ -158,6 +171,16 @@ function rightContentFactory(
             icon="plus-circle-outline"
             size={35}
             onPress={() => navigation.navigate('AddOperator')}
+          />
+        ),
+      };
+    case 'RegisteredEmployee':
+      return {
+        rightContent: (
+          <Appbar.Action
+            icon="plus-circle-outline"
+            size={35}
+            onPress={() => navigation.navigate('AddRegisteredEmployee')}
           />
         ),
       };
