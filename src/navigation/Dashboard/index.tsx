@@ -1,7 +1,6 @@
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
 
-import DashboardMain from '#screens/Dashboard/Main';
 import AccountDetails from '#screens/Dashboard/AccountDetails';
 import KnowledgeHub from '#screens/Dashboard/KnowledgeHub';
 import Tutorial from '#screens/Dashboard/Tutorial';
@@ -10,6 +9,7 @@ import FAQ from '#screens/Dashboard/FAQ';
 
 import DrawerContent from './components/DrawerContent';
 import DashboardScreenOptions from './components/ScreenOptions';
+import DashboardMainBottomTabs from './Main';
 import ManagementStack from './Management';
 
 export type DashboardRoutes = {
@@ -23,6 +23,10 @@ export type DashboardRoutes = {
 };
 
 export type DashboardRoutePaths = keyof DashboardRoutes;
+export type DashboardRouteProps<Path extends DashboardRoutePaths> = DrawerScreenProps<
+  DashboardRoutes,
+  Path
+>;
 
 const Drawer = createDrawerNavigator<DashboardRoutes>();
 
@@ -33,7 +37,7 @@ export default function DashboardNavigator() {
       drawerContent={DrawerContent}
       screenOptions={DashboardScreenOptions}
     >
-      <Drawer.Screen name="Main" component={DashboardMain} />
+      <Drawer.Screen name="Main" component={DashboardMainBottomTabs} />
       <Drawer.Screen name="AccountDetails" component={AccountDetails} />
       <Drawer.Screen name="Management" component={ManagementStack} />
       <Drawer.Screen name="KnowledgeHub" component={KnowledgeHub} />

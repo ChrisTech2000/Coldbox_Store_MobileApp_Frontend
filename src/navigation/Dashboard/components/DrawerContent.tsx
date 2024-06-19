@@ -34,7 +34,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
         <ColdtivateLogo width={60} height={60} />
       </View>
 
-      <View tw="space-y-1.5">
+      <Drawer.Section tw="space-y-1.5">
         {Object.entries(DRAWER_ITEM_TITLE).map(([routeName, datums], routeIdx) => (
           <Drawer.Item
             key={`${routeName}-#${routeIdx}`}
@@ -47,7 +47,9 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
             icon={datums.iconName}
           />
         ))}
-      </View>
+      </Drawer.Section>
+
+      <Drawer.Item label="Log-out" onPress={() => undefined} icon="logout-variant" />
     </StyledDrawerContentScrollView>
   );
 }

@@ -49,8 +49,8 @@ const Stack = createNativeStackNavigator<AuthRoutes>();
 export default function AuthNavigator() {
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types
-    const focusedRouteName = props.route.name;
-    const headerShown = !focusedRouteName || focusedRouteName !== 'Root';
+    const routeName = props.route.name;
+    const headerShown = !routeName || routeName !== 'Root';
 
     return {
       ...props,
@@ -58,7 +58,7 @@ export default function AuthNavigator() {
       header: (headerProps) => (
         <NavigatorHeader
           {...headerProps}
-          routeTitle={NAVIGATOR_HEADER_TITLES[focusedRouteName]}
+          routeTitle={NAVIGATOR_HEADER_TITLES[routeName]}
           leftContent={
             <Appbar.BackAction
               // eslint-disable-next-line react/prop-types

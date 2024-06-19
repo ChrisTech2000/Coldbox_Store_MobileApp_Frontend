@@ -7,7 +7,6 @@ import {
 } from '@react-navigation/native-stack';
 import type { NavigationProp, RouteProp } from '@react-navigation/native';
 import { Appbar } from 'react-native-paper';
-import colors from 'tailwindcss/colors';
 
 import ManagementRoot from '#screens/Dashboard/Management';
 import CompanyDetails from '#screens/Dashboard/Management/CompanyDetails';
@@ -96,13 +95,13 @@ const Stack = createNativeStackNavigator<ManagementRoutes>();
 export default function ManagementStack() {
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types
-    const focusedRouteName = props.route.name;
+    const routeName = props.route.name;
     return {
       ...props,
       header: (headerProps) => (
         <NavigatorHeader
           {...headerProps}
-          routeTitle={NAVIGATOR_HEADER_TITLES[focusedRouteName]}
+          routeTitle={NAVIGATOR_HEADER_TITLES[routeName]}
           leftContent={
             <Appbar.BackAction
               // eslint-disable-next-line react/prop-types
@@ -110,10 +109,9 @@ export default function ManagementStack() {
             />
           }
           // eslint-disable-next-line react/prop-types
-          {..._rightContentFactory(focusedRouteName, props.navigation)}
+          {..._rightContentFactory(routeName, props.navigation)}
         />
       ),
-      contentStyle: { backgroundColor: colors.white },
     };
   }, []);
 
@@ -140,16 +138,16 @@ export default function ManagementStack() {
 }
 
 function _rightContentFactory(
-  focusedRouteName: ManagementRoutePaths,
+  routeName: ManagementRoutePaths,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ): NavigationHeaderProps {
-  switch (focusedRouteName) {
+  switch (routeName) {
     case 'Locations':
       return {
         rightContent: (
           <Appbar.Action
             icon="plus-circle-outline"
-            size={35}
+            size={32}
             onPress={() => navigation.navigate('AddLocation')}
           />
         ),
@@ -159,7 +157,7 @@ function _rightContentFactory(
         rightContent: (
           <Appbar.Action
             icon="plus-circle-outline"
-            size={35}
+            size={32}
             onPress={() => navigation.navigate('AddCoolingUnit')}
           />
         ),
@@ -169,7 +167,7 @@ function _rightContentFactory(
         rightContent: (
           <Appbar.Action
             icon="plus-circle-outline"
-            size={35}
+            size={32}
             onPress={() => navigation.navigate('AddOperator')}
           />
         ),
@@ -179,7 +177,7 @@ function _rightContentFactory(
         rightContent: (
           <Appbar.Action
             icon="plus-circle-outline"
-            size={35}
+            size={32}
             onPress={() => navigation.navigate('AddRegisteredEmployee')}
           />
         ),
