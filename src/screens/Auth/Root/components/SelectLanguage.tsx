@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 import { GestureResponderEvent, View } from 'react-native';
 import { Button, RadioButton } from 'react-native-paper';
 import { Select } from '#ui/components/Select';
+import { RadioButtonItem } from '#ui/components/RadioButton';
 
 // TODO: get languages from BE
 const LANGUAGES = ['English', 'Hindi', 'Oriya', 'Gujarati', 'French', 'Portuguese'];
@@ -32,39 +33,40 @@ export function SelectLanguage() {
   );
 
   return (
-    <Select
-      label={activeLanguage}
-      isModalOpen={isModalOpen}
-      onClick={() => setIsModalOpen(!isModalOpen)}
-      content={{
-        header: 'Language',
-        options: (
-          /** TODO: create styled radio button group */
-          <RadioButton.Group
-            value={selectedLanguage}
-            onValueChange={(value) => setSelectedLanguage(value)}
-          >
-            {LANGUAGES.map((lang, index) => (
-              <RadioButton.Item
-                key={`${lang}-${index}`}
-                label={lang}
-                value={lang}
-                style={{ flexDirection: 'row-reverse', marginLeft: -10 }}
-              />
-            ))}
-          </RadioButton.Group>
-        ),
-        footer: (
-          <View tw="flex flex-row items-center justify-end">
-            <Button mode="text" uppercase onPress={cancelLanguageUpdate}>
-              Cancel
-            </Button>
-            <Button mode="text" uppercase onPress={doLanguageUpdate}>
-              OK
-            </Button>
-          </View>
-        ),
-      }}
-    />
+    <View tw="mt-8">
+      <Select
+        label={activeLanguage}
+        isModalOpen={isModalOpen}
+        onClick={() => setIsModalOpen(!isModalOpen)}
+        content={{
+          header: 'Language',
+          options: (
+            <RadioButton.Group
+              value={selectedLanguage}
+              onValueChange={(value) => setSelectedLanguage(value)}
+            >
+              {LANGUAGES.map((lang, index) => (
+                <RadioButtonItem
+                  key={`${lang}-${index}`}
+                  label={lang}
+                  value={lang}
+                  tw="flex flex-row-reverse ml-[-10]"
+                />
+              ))}
+            </RadioButton.Group>
+          ),
+          footer: (
+            <View tw="flex flex-row items-center justify-end">
+              <Button mode="text" uppercase onPress={cancelLanguageUpdate}>
+                Cancel
+              </Button>
+              <Button mode="text" uppercase onPress={doLanguageUpdate}>
+                OK
+              </Button>
+            </View>
+          ),
+        }}
+      />
+    </View>
   );
 }
