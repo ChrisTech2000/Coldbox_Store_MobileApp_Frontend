@@ -54,12 +54,13 @@ export default function DashboardMainBottomTabs() {
 
     // eslint-disable-next-line react/prop-types
     const focusedRoute = getFocusedRouteNameFromRoute(props.route);
-    const showNavigation = !focusedRoute || focusedRoute === 'RootMainTabStack';
+    const showBottomNav = !focusedRoute || focusedRoute === 'RootMainTabStack';
+    const showHeader = focusedRoute !== 'RootMainTabStack' && routeName !== 'Dashboard';
 
     return {
       ...props,
-      headerShown: showNavigation,
-      ...(!showNavigation && { tabBarStyle: { display: 'none' } }),
+      headerShown: showHeader,
+      tabBarStyle: { display: showBottomNav ? 'flex' : 'none' },
       tabBarLabel: TAB_METADATA[routeName].title,
       tabBarIcon: (iconProps) => <Icon name={TAB_METADATA[routeName].tabBarIcon} {...iconProps} />,
       header: (headerProps) => (

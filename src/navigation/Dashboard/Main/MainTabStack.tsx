@@ -11,7 +11,8 @@ import { Appbar } from 'react-native-paper';
 import DashboardMain from '#screens/Dashboard/Main';
 import ProduceDetails from '#screens/Dashboard/Main/ProduceDetails';
 
-import NavigatorHeader from '../../components/NavigatorHeader';
+import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';
+import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 
 export type MainTabStackRoutes = {
   RootMainTabStack: undefined;
@@ -42,13 +43,12 @@ export default function MainTabStack() {
     const routeName = props.route.name;
     return {
       ...props,
-      headerShown: routeName !== 'RootMainTabStack',
       header: (headerProps) => (
         <NavigatorHeader
           {...headerProps}
           routeTitle={NAVIGATOR_HEADER_TITLES[routeName]}
           // eslint-disable-next-line react/prop-types
-          leftContent={<Appbar.BackAction onPress={props.navigation.goBack} />}
+          {..._renderContentFactory(routeName, props.navigation)}
         />
       ),
     };
@@ -60,4 +60,18 @@ export default function MainTabStack() {
       <Stack.Screen name="ProduceDetails" component={ProduceDetails} />
     </Stack.Navigator>
   );
+}
+
+function _renderContentFactory(
+  routeName: MainTabStackRoutePaths,
+  navigation: NativeStackNavigationProp<MainTabStackRoutes, MainTabStackRoutePaths>
+): NavigationHeaderProps {
+  switch (routeName) {
+    case 'ProduceDetails':
+      return {
+        leftContent: <Appbar.BackAction onPress={navigation.goBack} />,
+      };
+    default:
+      return dashboardHeaderFactory(navigation);
+  }
 }
