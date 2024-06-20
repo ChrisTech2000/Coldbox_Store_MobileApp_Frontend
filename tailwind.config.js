@@ -13,7 +13,7 @@ module.exports = {
         //   default: "red",
         // }), // TODO: try to make this work (currently throws an error related to the import)
         green: {
-          primary: '#07857E',
+          primary: 'rgb(7, 133, 126)',
         },
       },
     },

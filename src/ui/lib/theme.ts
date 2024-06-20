@@ -10,7 +10,7 @@ export const paperTheme = {
   ...PaperDefaultTheme,
   colors: {
     // https://callstack.github.io/react-native-paper/docs/guides/theming#creating-dynamic-theme-colors
-    primary: 'rgb(0, 106, 100)',
+    primary: 'rgb(7, 133, 126)',
     onPrimary: 'rgb(255, 255, 255)',
     primaryContainer: 'rgb(113, 247, 237)',
     onPrimaryContainer: 'rgb(0, 32, 30)',
