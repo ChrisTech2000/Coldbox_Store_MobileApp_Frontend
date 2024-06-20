@@ -4,8 +4,9 @@ import { Text } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import type { AuthRouteProps } from '#navigation/Auth';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-export default function SignIn(props: AuthRouteProps<'SignIn'>) {
+function SignIn(props: AuthRouteProps<'SignIn'>) {
   const { navigation } = props;
 
   return (
@@ -23,3 +24,5 @@ export default function SignIn(props: AuthRouteProps<'SignIn'>) {
     </View>
   );
 }
+
+export default withSafeArea(SignIn);

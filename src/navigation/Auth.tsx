@@ -63,6 +63,7 @@ export default function AuthNavigator() {
             <Appbar.BackAction
               // eslint-disable-next-line react/prop-types
               onPress={props.navigation.goBack}
+              size={22}
             />
           }
         />

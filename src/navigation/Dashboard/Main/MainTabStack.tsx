@@ -51,6 +51,8 @@ export default function MainTabStack() {
           {..._renderContentFactory(routeName, props.navigation)}
         />
       ),
+      gestureDirection: 'vertical',
+      animationDuration: 180,
     };
   }, []);
 
@@ -69,7 +71,7 @@ function _renderContentFactory(
   switch (routeName) {
     case 'ProduceDetails':
       return {
-        leftContent: <Appbar.BackAction onPress={navigation.goBack} />,
+        leftContent: <Appbar.BackAction onPress={navigation.goBack} size={22} />,
       };
     default:
       return dashboardHeaderFactory(navigation);

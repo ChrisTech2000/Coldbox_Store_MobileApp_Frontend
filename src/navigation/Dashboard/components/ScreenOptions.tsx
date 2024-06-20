@@ -32,7 +32,7 @@ export default function DashboardScreenOptions(props: Props): DrawerNavigationOp
       <NavigatorHeader
         {...headerProps}
         routeTitle={routeTitle}
-        leftContent={<Appbar.BackAction onPress={props.navigation.goBack} />}
+        leftContent={<Appbar.BackAction onPress={props.navigation.goBack} size={22} />}
       />
     ),
   };

@@ -2,10 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-export default function Tutorial() {
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+function Tutorial() {
   return (
     <View tw="flex-1 items-center justify-center space-y-4">
       <Text>Tutorial Screen</Text>
     </View>
   );
 }
+
+export default withSafeArea(Tutorial);
