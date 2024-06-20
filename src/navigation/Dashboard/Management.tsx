@@ -106,6 +106,7 @@ export default function ManagementStack() {
             <Appbar.BackAction
               // eslint-disable-next-line react/prop-types
               onPress={props.navigation.goBack}
+              size={22}
             />
           }
           // eslint-disable-next-line react/prop-types

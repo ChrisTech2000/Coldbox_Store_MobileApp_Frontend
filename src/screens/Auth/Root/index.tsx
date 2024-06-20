@@ -1,16 +1,17 @@
-import RootHero from '#assets/images/root_hero.svg';
-import { Button } from '#ui/components/Button';
-
-import type { AuthRouteProps } from '#navigation/Auth';
-
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import { SelectLanguage } from './components/SelectLanguage';
 import { Text } from 'react-native-paper';
+
+import type { AuthRouteProps } from '#navigation/Auth';
+import { Button } from '#ui/components/Button';
+import RootHero from '#assets/images/root_hero.svg';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+import { SelectLanguage } from './components/SelectLanguage';
 
 const HERO_IMG_SIZE = Dimensions.get('screen').width / 1.1;
 
-export default function AuthRoot(props: AuthRouteProps<'Root'>) {
+function AuthRoot(props: AuthRouteProps<'Root'>) {
   const { navigation } = props;
 
   return (
@@ -63,3 +64,5 @@ export default function AuthRoot(props: AuthRouteProps<'Root'>) {
     </View>
   );
 }
+
+export default withSafeArea(AuthRoot);
