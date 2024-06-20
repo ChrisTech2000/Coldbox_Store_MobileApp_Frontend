@@ -12,7 +12,7 @@ export const paperTheme = {
     ...PaperDefaultTheme.colors,
     // TODO: use the colors of the project itself and generate the color schemes:
     // https://callstack.github.io/react-native-paper/docs/guides/theming#creating-dynamic-theme-colors
-    // primary: '',
+    primary: '#07857E',
     // secondary: '',
     // tertiary: '',
   },

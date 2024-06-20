@@ -20,6 +20,7 @@ export default function StaleWhileRevalidate(props: PropsWithChildren) {
 
   const { isConnected } = useNetInfo();
   const toast = useToast();
+  const isToastLoaded = useMemo(() => Object.entries(toast).length > 0, []);
 
   useEffect(() => {
     return NetInfo.addEventListener((state) => {
@@ -29,11 +30,12 @@ export default function StaleWhileRevalidate(props: PropsWithChildren) {
       const toastType = isConnected ? ToastType.SUCCESS : ToastType.DANGER;
       if (previousToast !== toastType) {
         toastTypeRef.current = toastType;
+
         // TODO: maybe we should show a different message based on the network type and it's changes (cellular ↔ wifi)
-        toast.show(TOAST_MESSAGE[toastType], { type: toastType });
+        if (isToastLoaded) toast.show(TOAST_MESSAGE[toastType], { type: toastType });
       }
     });
-  }, [toastTypeRef.current, toast]);
+  }, [toastTypeRef.current, toast, isToastLoaded]);
 
   const config = useMemo(
     () =>
