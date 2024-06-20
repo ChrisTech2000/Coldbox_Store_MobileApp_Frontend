@@ -9,14 +9,14 @@ import { getFocusedRouteNameFromRoute, type RouteProp } from '@react-navigation/
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import History from '#screens/Dashboard/Main/History';
-import MarketPrice from '#screens/Dashboard/Main/MarketPrice';
-import CoolingUnits from '#screens/Dashboard/Main/CoolingUnits';
 import Analytics from '#screens/Dashboard/Main/Analytics';
 
 import BottomNavigation from '../components/BottomNavigation';
 import NavigatorHeader from '../../components/NavigatorHeader';
-import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
+import { BOTTOM_NAV_ROUTES_SCOPE, dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 import MainTabStack from './MainTabStack';
+import MarketPriceTabs from './MarketPriceTabs';
+import CoolingUnitsTabs from './CoolingUnitsTabs';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
@@ -54,8 +54,10 @@ export default function DashboardMainBottomTabs() {
 
     // eslint-disable-next-line react/prop-types
     const focusedRoute = getFocusedRouteNameFromRoute(props.route);
-    const showBottomNav = !focusedRoute || focusedRoute === 'RootMainTabStack';
     const showHeader = focusedRoute !== 'RootMainTabStack' && routeName !== 'Dashboard';
+    // eslint-disable-next-line
+    // @ts-ignore
+    const showBottomNav = !focusedRoute || BOTTOM_NAV_ROUTES_SCOPE.includes(focusedRoute);
 
     return {
       ...props,
@@ -82,8 +84,8 @@ export default function DashboardMainBottomTabs() {
     >
       <Tab.Screen name="Dashboard" component={MainTabStack} />
       <Tab.Screen name="History" component={History} />
-      <Tab.Screen name="MarketPrice" component={MarketPrice} />
-      <Tab.Screen name="CoolingUnits" component={CoolingUnits} />
+      <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
+      <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       <Tab.Screen name="Analytics" component={Analytics} />
     </Tab.Navigator>
   );

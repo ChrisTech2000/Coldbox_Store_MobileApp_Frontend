@@ -27,7 +27,7 @@ export type MainTabStackRouteProps<Path extends MainTabStackRoutePaths> = Native
 
 type ScreenOptions = (props: {
   route: RouteProp<MainTabStackRoutes, MainTabStackRoutePaths>;
-  navigation: NativeStackNavigationProp<MainTabStackRoutes, 'RootMainTabStack', undefined>;
+  navigation: NativeStackNavigationProp<MainTabStackRoutes, MainTabStackRoutePaths>;
 }) => NativeStackNavigationOptions;
 
 const NAVIGATOR_HEADER_TITLES: Record<MainTabStackRoutePaths, string | undefined> = {
