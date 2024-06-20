@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dimensions, Text, View } from 'react-native';
-import { Divider } from 'react-native-paper';
+import { Divider, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import type { AuthRouteProps } from '#navigation/Auth';
@@ -35,10 +35,10 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   const [activeProfile, setActiveProfile] = useState<EAccountProfile>(EAccountProfile.EMPLOYEE);
 
   return (
-    <View tw="flex-1 items-center justify-center mx-4">
-      <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-12" />
+    <View tw="flex-1 items-center justify-center">
+      <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-4 mt-[-32]" />
       <Text tw="mb-2 text-xl font-bold">Sign In</Text>
-      <View tw="w-full flex flex-row justify-between mb-3">
+      <View tw="w-full flex flex-row justify-between mb-2 px-4">
         <View tw="items-center">
           <AccountCard
             isActive={activeProfile === EAccountProfile.EMPLOYEE}
@@ -69,24 +69,44 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           <Text tw="text-xs">User</Text>
         </View>
       </View>
-      <View tw="w-full flex flex-row justify-between px-6 mb-2"></View>
 
-      <Divider tw="w-full my-2" />
+      <Divider tw="w-full mb-2" />
       <Text tw="text-xs max-w-[95%]">{ACCOUNT_DESCRIPTIONS[activeProfile]}</Text>
       <Divider tw="w-full my-2" />
 
+      {/** @NOTE that currently this component is responsible for an error being thrown. There is already a PR that should be included in the next version */}
+      <TextInput
+        tw="w-[95%] px-4 bg-white border rounded-sm mb-2 h-12"
+        label={`${activeProfile === EAccountProfile.EMPLOYEE && 'Email/'}Phone Number`}
+        left={<TextInput.Icon icon="phone" />}
+      />
+      <Text tw="text-xs w-[95%] mb-2 px-3">
+        Please provide valid {activeProfile === EAccountProfile.EMPLOYEE ? 'email/' : ''}phone
+        number (with country code).{' '}
+      </Text>
+      <TextInput
+        tw="w-[95%] px-4 bg-white border rounded-sm mb-2 h-12"
+        label="Password"
+        secureTextEntry
+        right={<TextInput.Icon icon="eye" />}
+        left={<TextInput.Icon icon="lock" />}
+      />
+
       <Button
-        tw="w-full border-2 rounded-sm"
+        tw="w-[95%] border-2 rounded-sm mb-2"
         mode="contained"
+        uppercase
         onPress={(evt) => {
           evt.stopPropagation();
+          // TODO: implement API call
         }}
       >
-        Login
+        Log In
       </Button>
       <Button
         mode="text"
         rippleColor="white"
+        labelStyle="text-xs"
         onPress={(evt) => {
           evt.stopPropagation();
           navigation.navigate('PasswordRecovery');
