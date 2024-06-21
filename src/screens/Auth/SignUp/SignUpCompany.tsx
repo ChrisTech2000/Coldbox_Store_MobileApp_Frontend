@@ -1,24 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { currencies as _currencies } from 'currencies.json';
+import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Text, TextInput } from 'react-native-paper';
+import { Checkbox, Text, TextInput } from 'react-native-paper';
 import validator from 'validator';
 import { z } from 'zod';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { getAllISOCodes } from 'iso-country-currency';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { customCountrySort } from './utils';
-
-enum EGender {
-  FEMALE = 'Female',
-  MALE = 'Male',
-  OTHER = 'Other',
-}
+import { EGender } from '#types/auth';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -41,7 +37,10 @@ const Schema = z
         message:
           'Your password needs to be at least 8 characters long, contain one uppercase and one lowercase letters, and a number',
       }),
-    confirmPassword: z.string().min(1),
+    confirmPassword: z.string(),
+    terms: z
+      .boolean()
+      .refine((terms) => !terms, { message: 'You need to agree to the Terms of Use.' }),
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
@@ -53,7 +52,7 @@ const Schema = z
     }
   });
 
-export type SignUpSchemaType = z.infer<typeof Schema>;
+type SignUpSchemaType = z.infer<typeof Schema>;
 
 function SignUpCompany() {
   const {
@@ -318,6 +317,31 @@ function SignUpCompany() {
           />
         )}
         name="confirmPassword"
+      />
+
+      {/** TERMS */}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, value } }) => (
+          <View tw="flex flex-row items-center max-w-[85%] mx-4 my-2 space-x-2">
+            <View tw="border border-green-primary rounded-md scale-75">
+              <Checkbox
+                onPress={() => {
+                  onChange(!value);
+                  console.log(value);
+                }}
+                status={value ? 'checked' : 'unchecked'}
+              />
+            </View>
+            <Text>
+              I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use
+            </Text>
+          </View>
+        )}
+        name="terms"
       />
 
       {/** SUBMIT */}

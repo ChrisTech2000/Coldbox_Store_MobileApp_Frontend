@@ -68,7 +68,7 @@ export function Select({
       >
         <Text
           tw={cn(
-            variant === 'sm' ? 'text-green-primary' : 'text-gray-700 text-base',
+            variant === 'sm' ? 'text-green-primary' : 'text-gray-600 text-base',
             minifyLabel && currentValue && 'text-xs'
           )}
         >
