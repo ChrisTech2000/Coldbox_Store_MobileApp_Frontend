@@ -13,10 +13,11 @@ type WrapperProps = {
     header?: string;
     footer?: React.ReactElement;
   };
+  variant?: 'sm' | 'lg';
   onClick: () => void;
 };
 
-export function Select({ content, label, isModalOpen, onClick }: WrapperProps) {
+export function Select({ content, label, isModalOpen, variant = 'sm', onClick }: WrapperProps) {
   const { options, header, footer } = content;
   const colors = useTailwindColors();
 
@@ -41,13 +42,22 @@ export function Select({ content, label, isModalOpen, onClick }: WrapperProps) {
           </View>
         </Modal>
       </Portal>
-      <TouchableOpacity tw="flex flex-row items-center space-x-0.5" onPress={onClick}>
-        <Text tw="text-green-primary">{label}</Text>
+      <TouchableOpacity
+        tw={
+          variant === 'sm'
+            ? 'flex flex-row items-center space-x-0.5'
+            : 'flex flex-row items-center justify-between'
+        }
+        onPress={onClick}
+      >
+        <Text tw={variant === 'sm' ? 'text-green-primary' : 'text-gray-700 text-base'}>
+          {label}
+        </Text>
         <Icon
-          name="arrow-drop-down"
-          size={20}
+          name={variant === 'sm' ? 'arrow-drop-down' : 'keyboard-arrow-down'}
+          size={variant === 'sm' ? 20 : 30}
           style={{
-            color: colors.green.primary,
+            color: variant === 'sm' ? colors.green.primary : colors.gray[600],
             ...(isModalOpen && { transform: [{ rotate: '180deg' }] }),
           }}
         />
