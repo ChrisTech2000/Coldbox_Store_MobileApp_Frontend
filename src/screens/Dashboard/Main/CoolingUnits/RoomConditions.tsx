@@ -4,12 +4,12 @@ import { Text } from 'react-native-paper';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-function MarketPrice() {
+function CoolingUnitsRoomConditions() {
   return (
     <View tw="flex-1 items-center justify-center space-y-4">
-      <Text>Market Price Screen</Text>
+      <Text>Cooling Units Room Conditions Screen</Text>
     </View>
   );
 }
 
-export default withSafeArea(MarketPrice);
+export default withSafeArea(CoolingUnitsRoomConditions);

@@ -3,6 +3,9 @@ import { DrawerActions, NavigationProp } from '@react-navigation/native';
 import { Appbar } from 'react-native-paper';
 
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
+import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
+import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
+import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
 
 export function dashboardHeaderFactory<Params extends Record<string, unknown>, Path extends string>(
   navigation: NavigationProp<Params, Path>
@@ -18,3 +21,17 @@ export function dashboardHeaderFactory<Params extends Record<string, unknown>, P
     rightContent: <Appbar.Action icon="bell-outline" size={25} onPressIn={() => undefined} />,
   };
 }
+
+type BottomNavRoutePaths =
+  | MainTabStackRoutePaths
+  | MarketPriceTabsRoutePaths
+  | CoolingUnitsTabsRoutePaths;
+
+export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
+  'RootMainTabStack',
+  'PriceTrend',
+  'PriceRanking',
+  'Planner',
+  'RoomConditions',
+  'CratesInfo',
+];
