@@ -4,12 +4,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Text, TextInput } from 'react-native-paper';
+import validator from 'validator';
 import { z } from 'zod';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { getAllISOCodes } from 'iso-country-currency';
-import { SignUpFormSelect } from './components/SignUpFormSelect';
+import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
+import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { customCountrySort } from './utils';
 
 enum EGender {
@@ -21,23 +23,35 @@ enum EGender {
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
 
-const Schema = z.object({
-  companyName: z.string().min(1),
-  country: z.string().optional(),
-  currency: z.string().min(1),
-  email: z.string().email().min(1),
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  phone: z
-    .string()
-    .regex(/^\+\d{1,3}\s?\d{1,14}$/, {
-      message: 'Invalid phone number format',
-    })
-    .optional(),
-  gender: z.enum([EGender.FEMALE, EGender.MALE, EGender.OTHER]),
-  password: z.string().min(1),
-  confirmPassword: z.string().min(1),
-});
+const Schema = z
+  .object({
+    companyName: z.string().min(1, { message: 'Company Name is mandatory.' }),
+    country: z.string().optional(),
+    currency: z.string().min(1, { message: 'Currency selection is mandatory.' }),
+    email: z.string().email().min(1, { message: 'Email is mandatory.' }),
+    firstName: z.string().min(1, { message: 'First Name is mandatory.' }),
+    lastName: z.string().min(1, { message: 'Last Name is mandatory.' }),
+    phone: z.string().refine(validator.isMobilePhone).optional(),
+    gender: z
+      .enum([EGender.FEMALE, EGender.MALE, EGender.OTHER])
+      .refine((gender) => !!gender, { message: 'Gender selection is mandatory.' }),
+    password: z
+      .string()
+      .refine((pass) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(pass), {
+        message:
+          'Your password needs to be at least 8 characters long, contain one uppercase and one lowercase letters, and a number',
+      }),
+    confirmPassword: z.string().min(1),
+  })
+  .superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The passwords do not match.',
+        path: ['confirmPassword'],
+      });
+    }
+  });
 
 export type SignUpSchemaType = z.infer<typeof Schema>;
 
@@ -89,6 +103,17 @@ function SignUpCompany() {
   ////////////// SIGN UP EMPLOYEE
   const [hidePass, setHidePass] = useState<boolean>(true);
   const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
+  const [isGenderModalOpen, setIsGenderModalOpen] = useState<boolean>(false);
+
+  const selectedGender = watch('gender');
+
+  const closeGenderModal = useCallback(() => {
+    setIsGenderModalOpen(!isGenderModalOpen);
+  }, [isGenderModalOpen]);
+
+  const setGenderValue = useCallback((val: string) => {
+    setValue('gender', val as EGender);
+  }, []);
 
   ////////////// ACTIONS
   const onSubmit = useCallback(() => {
@@ -109,7 +134,7 @@ function SignUpCompany() {
   }, [selectedCountry]);
 
   return (
-    <KeyboardAwareScrollView tw="flex-1 h-full">
+    <KeyboardAwareScrollView tw="flex-1 h-full" keyboardOpeningTime={Number.MAX_SAFE_INTEGER}>
       <Text tw="mb-4 text-5xl font-bold self-center text-center">Welcome to Coldtivate</Text>
 
       {/** SIGNUP COMPANY */}
@@ -133,7 +158,7 @@ function SignUpCompany() {
       />
 
       {/** COUNTRY */}
-      <SignUpFormSelect
+      <SignUpFormSelectLg
         form={{
           control,
           fieldName: 'country',
@@ -147,7 +172,7 @@ function SignUpCompany() {
       />
 
       {/** CURRENCY */}
-      <SignUpFormSelect
+      <SignUpFormSelectLg
         form={{
           control,
           fieldName: 'currency',
@@ -218,6 +243,17 @@ function SignUpCompany() {
       />
 
       {/** GENDER */}
+      <SignUpFormSelectMd
+        form={{
+          fieldName: 'gender',
+          required: true,
+          currentValue: selectedGender,
+          setCurrentValue: setGenderValue,
+        }}
+        isModalOpen={isGenderModalOpen}
+        closeModal={closeGenderModal}
+        data={[EGender.FEMALE, EGender.MALE, EGender.OTHER]}
+      />
 
       {/** PHONE */}
       <Controller
@@ -248,8 +284,13 @@ function SignUpCompany() {
             label={'Password*'}
             onChangeText={onChange}
             value={value}
-            secureTextEntry={hidePass ? true : false}
-            right={<TextInput.Icon icon="eye" onPress={() => setHidePass(!hidePass)} />}
+            secureTextEntry={hidePass}
+            right={
+              <TextInput.Icon
+                icon={hidePass ? 'eye' : 'eye-off'}
+                onPress={() => setHidePass(!hidePass)}
+              />
+            }
           />
         )}
         name="password"
@@ -267,13 +308,19 @@ function SignUpCompany() {
             label={'Confirm Password*'}
             onChangeText={onChange}
             value={value}
-            secureTextEntry={hideConfirmPass ? true : false}
-            right={<TextInput.Icon icon="eye" onPress={() => setHideConfirmPass(!hidePass)} />}
+            secureTextEntry={hideConfirmPass}
+            right={
+              <TextInput.Icon
+                icon={hideConfirmPass ? 'eye' : 'eye-off'}
+                onPress={() => setHideConfirmPass(!hideConfirmPass)}
+              />
+            }
           />
         )}
         name="confirmPassword"
       />
 
+      {/** SUBMIT */}
       <Button
         tw="w-[95%] self-center border-2 rounded-sm my-2"
         mode="contained"

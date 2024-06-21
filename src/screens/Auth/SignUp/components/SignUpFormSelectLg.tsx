@@ -22,7 +22,7 @@ type SignUpFormSelectProps = {
   setSearch: (val: string) => void;
 };
 
-export function SignUpFormSelect({
+export function SignUpFormSelectLg({
   data,
   form,
   isModalOpen,

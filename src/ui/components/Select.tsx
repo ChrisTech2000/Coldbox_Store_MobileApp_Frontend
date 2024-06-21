@@ -15,7 +15,8 @@ type WrapperProps = {
     header?: string;
     footer?: React.ReactElement;
   };
-  variant?: 'sm' | 'lg';
+  variant?: 'sm' | 'md' | 'lg';
+  minifyLabel?: boolean;
   onClick: () => void;
 };
 
@@ -23,6 +24,7 @@ export function Select({
   currentValue,
   content,
   label,
+  minifyLabel,
   isModalOpen,
   variant = 'sm',
   onClick,
@@ -37,7 +39,7 @@ export function Select({
           <View
             tw={cn(
               'w-full mx-24 bg-white rounded-sm py-1',
-              variant === 'sm' ? 'max-h-72' : 'h-full'
+              variant !== 'lg' ? 'max-h-72' : 'h-full'
             )}
           >
             {header && (
@@ -57,17 +59,31 @@ export function Select({
         </Modal>
       </Portal>
       <TouchableOpacity
-        tw={cn('flex flex-row items-center', variant === 'sm' ? 'space-x-0.5' : 'justify-between')}
+        tw={cn(
+          'flex flex-row items-center',
+          variant === 'sm' ? 'space-x-0.5' : 'justify-between',
+          minifyLabel && currentValue && 'flex flex-col items-start'
+        )}
         onPress={onClick}
       >
-        <Text tw={variant === 'sm' ? 'text-green-primary' : 'text-gray-700 text-base'}>
+        <Text
+          tw={cn(
+            variant === 'sm' ? 'text-green-primary' : 'text-gray-700 text-base',
+            minifyLabel && currentValue && 'text-xs'
+          )}
+        >
           {label}
         </Text>
-        <View tw="flex flex-row items-center space-x-2s">
+        <View
+          tw={cn(
+            'flex flex-row items-center',
+            minifyLabel && currentValue ? 'w-full justify-between' : 'space-x-2s'
+          )}
+        >
           {currentValue && <Text tw="text-base">{currentValue}</Text>}
           <Icon
-            name={variant === 'sm' ? 'arrow-drop-down' : 'keyboard-arrow-down'}
-            size={variant === 'sm' ? 20 : 30}
+            name={variant !== 'lg' ? 'arrow-drop-down' : 'keyboard-arrow-down'}
+            size={variant !== 'lg' ? 20 : 30}
             style={{
               color: variant === 'sm' ? colors.green.primary : colors.gray[600],
               ...(isModalOpen && { transform: [{ rotate: '180deg' }] }),

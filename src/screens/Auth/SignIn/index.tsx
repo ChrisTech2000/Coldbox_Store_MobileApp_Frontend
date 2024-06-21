@@ -1,17 +1,18 @@
-import React, { useCallback, useState } from 'react';
-import { Dimensions, Text, View } from 'react-native';
-import { Divider, TextInput } from 'react-native-paper';
-import { Controller, useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useCallback, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Dimensions, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Divider, TextInput } from 'react-native-paper';
+import { z } from 'zod';
 
-import { Button } from '#ui/components/Button';
-import type { AuthRouteProps } from '#navigation/Auth';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import Logo from '#assets/images/coldtivate_logo.svg';
 import Employee from '#assets/icons/employee.svg';
-import Operator from '#assets/icons/operator.svg';
 import Farmer from '#assets/icons/farmer.svg';
+import Operator from '#assets/icons/operator.svg';
+import Logo from '#assets/images/coldtivate_logo.svg';
+import type { AuthRouteProps } from '#navigation/Auth';
+import { Button } from '#ui/components/Button';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { AccountCard } from './components/AccountCard';
 
 const IMG_SIZE = Dimensions.get('screen').width / 2.5;
@@ -88,152 +89,159 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   }, []);
 
   return (
-    <View tw="flex-1 items-center justify-center">
-      <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-4 mt-[-32]" />
-      <Text tw="mb-2 text-xl font-bold">Sign In</Text>
-      <View tw="w-full flex flex-row justify-between mb-2 px-4">
-        <View tw="items-center">
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange } }) => (
-              <AccountCard
-                isActive={activeProfile === EAccountProfile.EMPLOYEE}
-                onPress={() => {
-                  clearErrors();
-                  onChange(EAccountProfile.EMPLOYEE);
-                }}
-              >
-                <Employee width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
-              </AccountCard>
-            )}
-            name="activeProfile"
-          />
-          <Text tw="mt-4 text-xs">Registered</Text>
-          <Text tw="text-xs">Employee</Text>
-        </View>
-        <View tw="items-center">
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange } }) => (
-              <AccountCard
-                isActive={activeProfile === EAccountProfile.OPERATOR}
-                onPress={() => {
-                  clearErrors();
-                  onChange(EAccountProfile.OPERATOR);
-                }}
-              >
-                <Operator width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
-              </AccountCard>
-            )}
-            name="activeProfile"
-          />
-          <Text tw="mt-4 text-xs">Operator</Text>
-        </View>
-        <View tw="items-center">
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange } }) => (
-              <AccountCard
-                isActive={activeProfile === EAccountProfile.FARMER}
-                onPress={() => {
-                  clearErrors();
-                  onChange(EAccountProfile.FARMER);
-                }}
-              >
-                <Farmer width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
-              </AccountCard>
-            )}
-            name="activeProfile"
-          />
+    <KeyboardAwareScrollView tw="mt-[-32]">
+      <View tw="flex-1 items-center justify-center">
+        <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-4" />
+        <Text tw="mb-2 text-xl font-bold">Sign In</Text>
+        <View tw="w-full flex flex-row justify-between mb-2 px-4">
+          <View tw="items-center">
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange } }) => (
+                <AccountCard
+                  isActive={activeProfile === EAccountProfile.EMPLOYEE}
+                  onPress={() => {
+                    clearErrors();
+                    onChange(EAccountProfile.EMPLOYEE);
+                  }}
+                >
+                  <Employee width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
+                </AccountCard>
+              )}
+              name="activeProfile"
+            />
+            <Text tw="mt-4 text-xs">Registered</Text>
+            <Text tw="text-xs">Employee</Text>
+          </View>
+          <View tw="items-center">
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange } }) => (
+                <AccountCard
+                  isActive={activeProfile === EAccountProfile.OPERATOR}
+                  onPress={() => {
+                    clearErrors();
+                    onChange(EAccountProfile.OPERATOR);
+                  }}
+                >
+                  <Operator width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
+                </AccountCard>
+              )}
+              name="activeProfile"
+            />
+            <Text tw="mt-4 text-xs">Operator</Text>
+          </View>
+          <View tw="items-center">
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange } }) => (
+                <AccountCard
+                  isActive={activeProfile === EAccountProfile.FARMER}
+                  onPress={() => {
+                    clearErrors();
+                    onChange(EAccountProfile.FARMER);
+                  }}
+                >
+                  <Farmer width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
+                </AccountCard>
+              )}
+              name="activeProfile"
+            />
 
-          <Text tw="mt-4 text-xs">Cooling</Text>
-          <Text tw="text-xs">User</Text>
+            <Text tw="mt-4 text-xs">Cooling</Text>
+            <Text tw="text-xs">User</Text>
+          </View>
         </View>
+
+        <Divider tw="w-full mb-2" />
+        <Text tw="text-xs max-w-[95%]">{ACCOUNT_DESCRIPTIONS[activeProfile]}</Text>
+        <Divider tw="w-full my-2" />
+
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              tw="w-[95%] px-4 bg-white border rounded-sm mb-2 h-12"
+              label={`${activeProfile === EAccountProfile.EMPLOYEE ? 'Email/' : ''}Phone Number`}
+              left={<TextInput.Icon icon="phone" />}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="user"
+        />
+        {errors.user && (
+          <Text tw="text-xs text-red-600 mt-[-2] pl-3 w-[95%]">
+            {errors.user.message?.toString()}
+          </Text>
+        )}
+        <Text tw="text-xs w-[95%] my-2 px-3">
+          Please provide valid {activeProfile === EAccountProfile.EMPLOYEE ? 'email/' : ''}phone
+          number (with country code).
+        </Text>
+
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              tw="w-[95%] px-4 bg-white border rounded-sm mb-2 h-12"
+              label="Password"
+              secureTextEntry={hidePass}
+              right={
+                <TextInput.Icon
+                  icon={hidePass ? 'eye' : 'eye-off'}
+                  onPress={() => setHidePass(!hidePass)}
+                />
+              }
+              left={<TextInput.Icon icon="lock" />}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="password"
+        />
+        {errors.password && (
+          <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+            {errors.password.message?.toString()}
+          </Text>
+        )}
+
+        <Button
+          tw="w-[95%] border-2 rounded-sm mb-2"
+          mode="contained"
+          uppercase
+          onPress={handleSubmit(onSubmit)}
+        >
+          Log In
+        </Button>
+        <Button
+          mode="text"
+          rippleColor="white"
+          labelStyle="text-xs"
+          onPress={(evt) => {
+            evt.stopPropagation();
+            navigation.navigate('PasswordRecovery');
+          }}
+        >
+          Forgot Password
+        </Button>
       </View>
-
-      <Divider tw="w-full mb-2" />
-      <Text tw="text-xs max-w-[95%]">{ACCOUNT_DESCRIPTIONS[activeProfile]}</Text>
-      <Divider tw="w-full my-2" />
-
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            tw="w-[95%] px-4 bg-white border rounded-sm mb-2 h-12"
-            label={`${activeProfile === EAccountProfile.EMPLOYEE ? 'Email/' : ''}Phone Number`}
-            left={<TextInput.Icon icon="phone" />}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="user"
-      />
-      {errors.user && (
-        <Text tw="text-xs text-red-600 mt-[-2] pl-3 w-[95%]">
-          {errors.user.message?.toString()}
-        </Text>
-      )}
-      <Text tw="text-xs w-[95%] my-2 px-3">
-        Please provide valid {activeProfile === EAccountProfile.EMPLOYEE ? 'email/' : ''}phone
-        number (with country code).{' '}
-      </Text>
-
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            tw="w-[95%] px-4 bg-white border rounded-sm mb-2 h-12"
-            label="Password"
-            secureTextEntry={hidePass ? true : false}
-            right={<TextInput.Icon icon="eye" onPress={() => setHidePass(!hidePass)} />}
-            left={<TextInput.Icon icon="lock" />}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="password"
-      />
-      {errors.password && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.password.message?.toString()}
-        </Text>
-      )}
-
-      <Button
-        tw="w-[95%] border-2 rounded-sm mb-2"
-        mode="contained"
-        uppercase
-        onPress={handleSubmit(onSubmit)}
-      >
-        Log In
-      </Button>
-      <Button
-        mode="text"
-        rippleColor="white"
-        labelStyle="text-xs"
-        onPress={(evt) => {
-          evt.stopPropagation();
-          navigation.navigate('PasswordRecovery');
-        }}
-      >
-        Forgot Password
-      </Button>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
