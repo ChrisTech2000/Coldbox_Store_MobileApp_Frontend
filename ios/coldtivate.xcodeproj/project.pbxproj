@@ -36,6 +36,9 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9CF5AA9298654C609070C713 /* root_hero.svg in Resources */ = {isa = PBXBuildFile; fileRef = 7439424A75404E33A886445C /* root_hero.svg */; };
 		C617CC5021894201A62E3BD1 /* coldtivate_logo.svg in Resources */ = {isa = PBXBuildFile; fileRef = 29F863ED6E684DE2B45A5727 /* coldtivate_logo.svg */; };
+		14908BD75E8F44A696C7D890 /* employee.svg in Resources */ = {isa = PBXBuildFile; fileRef = BA5E6F59DCC948798269F922 /* employee.svg */; };
+		A2154905037B423583740A9A /* farmer.svg in Resources */ = {isa = PBXBuildFile; fileRef = 8CDC63FEC67E4BF7BC3C78C6 /* farmer.svg */; };
+		F31AD301A5134403AB09996F /* operator.svg in Resources */ = {isa = PBXBuildFile; fileRef = F29467767798412793EEC61D /* operator.svg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +92,9 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-coldtivate-coldtivateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coldtivate-coldtivateTests.release.xcconfig"; path = "Target Support Files/Pods-coldtivate-coldtivateTests/Pods-coldtivate-coldtivateTests.release.xcconfig"; sourceTree = "<group>"; };
 		EBF3B6864E19E58B0A22F9E5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = coldtivate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		BA5E6F59DCC948798269F922 /* employee.svg */ = {isa = PBXFileReference; name = "employee.svg"; path = "../src/assets/icons/employee.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8CDC63FEC67E4BF7BC3C78C6 /* farmer.svg */ = {isa = PBXFileReference; name = "farmer.svg"; path = "../src/assets/icons/farmer.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F29467767798412793EEC61D /* operator.svg */ = {isa = PBXFileReference; name = "operator.svg"; path = "../src/assets/icons/operator.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +224,9 @@
 			children = (
 				7439424A75404E33A886445C /* root_hero.svg */,
 				29F863ED6E684DE2B45A5727 /* coldtivate_logo.svg */,
+				BA5E6F59DCC948798269F922 /* employee.svg */,
+				8CDC63FEC67E4BF7BC3C78C6 /* farmer.svg */,
+				F29467767798412793EEC61D /* operator.svg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -350,6 +359,9 @@
 				1F0362642C21D88E0085C32C /* SimpleLineIcons.ttf in Resources */,
 				1F0362562C21D88E0085C32C /* Feather.ttf in Resources */,
 				1F0362622C21D88E0085C32C /* MaterialIcons.ttf in Resources */,
+				14908BD75E8F44A696C7D890 /* employee.svg in Resources */,
+				A2154905037B423583740A9A /* farmer.svg in Resources */,
+				F31AD301A5134403AB09996F /* operator.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
