@@ -1,14 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useCallback, useMemo, useState } from 'react';
+import { currencies as _currencies } from 'currencies.json';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ScrollView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
-import { currencies as _currencies } from 'currencies.json';
 
+import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { SignUpFormSelect } from './components/SignUpFormSelect';
 import { getAllISOCodes } from 'iso-country-currency';
+import { SignUpFormSelect } from './components/SignUpFormSelect';
 import { customCountrySort } from './utils';
 
 enum EGender {
@@ -17,7 +18,8 @@ enum EGender {
   OTHER = 'Other',
 }
 
-const allCountries = getAllISOCodes().map((code) => code.countryName);
+const allCountries = getAllISOCodes();
+const allCountryNames = allCountries.map((code) => code.countryName);
 
 const Schema = z.object({
   companyName: z.string().min(1),
@@ -42,8 +44,9 @@ export type SignUpSchemaType = z.infer<typeof Schema>;
 function SignUpCompany() {
   const {
     control,
-    // handleSubmit,
+    handleSubmit,
     watch,
+    setValue,
     // clearErrors,
     // formState: { errors },
   } = useForm<SignUpSchemaType>({
@@ -60,7 +63,7 @@ function SignUpCompany() {
 
   const countries = useMemo(() => {
     const lowerSearch = search.toLowerCase();
-    return allCountries
+    return allCountryNames
       .filter((country) => country.toLowerCase().includes(lowerSearch))
       .sort(customCountrySort);
   }, [search]);
@@ -83,8 +86,30 @@ function SignUpCompany() {
     if (search) setSearch('');
   }, [search, isCurrenciesModalOpen]);
 
+  ////////////// SIGN UP EMPLOYEE
+  const [hidePass, setHidePass] = useState<boolean>(true);
+  const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
+
+  ////////////// ACTIONS
+  const onSubmit = useCallback(() => {
+    // TODO: Implement API call here
+  }, []);
+
+  useEffect(() => {
+    if (selectedCountry) {
+      const currency = allCountries.find(
+        (country) => selectedCountry === country.countryName
+      )?.currency;
+
+      if (currency) {
+        const currencyName = _currencies.find((c) => c.code === currency)?.name;
+        setValue('currency', currencyName ?? '');
+      }
+    }
+  }, [selectedCountry]);
+
   return (
-    <ScrollView tw="flex-1 h-full">
+    <KeyboardAwareScrollView tw="flex-1 h-full">
       <Text tw="mb-4 text-5xl font-bold self-center text-center">Welcome to Coldtivate</Text>
 
       {/** SIGNUP COMPANY */}
@@ -98,7 +123,7 @@ function SignUpCompany() {
         }}
         render={({ field: { onChange, value } }) => (
           <TextInput
-            tw="w-full text-base bg-white rounded-sm mb-2 h-12"
+            tw="w-full text-base bg-white rounded-sm mb-3 h-12"
             label={'Company Name*'}
             onChangeText={onChange}
             value={value}
@@ -112,7 +137,7 @@ function SignUpCompany() {
         form={{
           control,
           fieldName: 'country',
-          currentValue: selectedCountry,
+          currentValue: selectedCountry ?? '',
         }}
         isModalOpen={isCountriesModalOpen}
         search={search}
@@ -127,7 +152,9 @@ function SignUpCompany() {
           control,
           fieldName: 'currency',
           required: true,
-          currentValue: `${_currencies.find((c) => c.name === selectedCurrency)?.symbol ?? ''}${selectedCurrency ? '-' : ''}${selectedCurrency}`,
+          currentValue: selectedCurrency
+            ? `${_currencies.find((c) => c.name === selectedCurrency)?.symbol ?? ''}-${selectedCurrency}`
+            : '',
         }}
         isModalOpen={isCurrenciesModalOpen}
         search={search}
@@ -136,10 +163,10 @@ function SignUpCompany() {
         data={currencies}
       />
 
-      {/** SIGNUP COMPANY */}
+      {/** SIGNUP EMPLOYEE */}
       <Text tw="mt-4 mb-2 px-4 text-xl font-bold">Sign Up Registered Employee</Text>
 
-      {/** Email*/}
+      {/** EMAIL */}
       <Controller
         control={control}
         rules={{
@@ -155,7 +182,107 @@ function SignUpCompany() {
         )}
         name="email"
       />
-    </ScrollView>
+
+      {/** FIRST NAME */}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            tw="w-full text-base bg-white rounded-sm mb-2 h-12"
+            label={'First Name*'}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="firstName"
+      />
+
+      {/** LAST NAME */}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            tw="w-full text-base bg-white rounded-sm mb-2 h-12"
+            label={'Last Name*'}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="lastName"
+      />
+
+      {/** GENDER */}
+
+      {/** PHONE */}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            tw="w-full text-base bg-white rounded-sm mb-2 h-12"
+            label={'Phone Number (with country code)'}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="phone"
+      />
+
+      {/** PASSWORD */}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            tw="w-full text-base bg-white rounded-sm mb-2 h-12"
+            label={'Password*'}
+            onChangeText={onChange}
+            value={value}
+            secureTextEntry={hidePass ? true : false}
+            right={<TextInput.Icon icon="eye" onPress={() => setHidePass(!hidePass)} />}
+          />
+        )}
+        name="password"
+      />
+
+      {/** CONFIRM PASSWORD */}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            tw="w-full text-base bg-white rounded-sm mb-2 h-12"
+            label={'Confirm Password*'}
+            onChangeText={onChange}
+            value={value}
+            secureTextEntry={hideConfirmPass ? true : false}
+            right={<TextInput.Icon icon="eye" onPress={() => setHideConfirmPass(!hidePass)} />}
+          />
+        )}
+        name="confirmPassword"
+      />
+
+      <Button
+        tw="w-[95%] self-center border-2 rounded-sm my-2"
+        mode="contained"
+        uppercase
+        onPress={handleSubmit(onSubmit)}
+      >
+        Sign Up
+      </Button>
+    </KeyboardAwareScrollView>
   );
 }
 

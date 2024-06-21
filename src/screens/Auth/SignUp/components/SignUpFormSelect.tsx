@@ -82,7 +82,7 @@ export function SignUpFormSelect({
         )}
         name={fieldName}
       />
-      <Divider tw="w-full bg-gray-700 my-2" />
+      <Divider tw="w-full bg-gray-700 my-3" />
     </View>
   );
 }
