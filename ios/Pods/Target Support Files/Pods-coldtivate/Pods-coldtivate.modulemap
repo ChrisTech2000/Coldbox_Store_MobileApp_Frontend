@@ -1,0 +1,6 @@
+module Pods_coldtivate {
+  umbrella header "Pods-coldtivate-umbrella.h"
+
+  export *
+  module * { export * }
+}

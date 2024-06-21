@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Dimensions, Text, View } from 'react-native';
 import { Divider, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
@@ -78,6 +78,8 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
       password: '',
     },
   });
+
+  const [hidePass, setHidePass] = useState<boolean>(true);
 
   const activeProfile = watch('activeProfile');
 
@@ -197,8 +199,8 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           <TextInput
             tw="w-[95%] px-4 bg-white border rounded-sm mb-2 h-12"
             label="Password"
-            secureTextEntry
-            right={<TextInput.Icon icon="eye" />}
+            secureTextEntry={hidePass ? true : false}
+            right={<TextInput.Icon icon="eye" onPress={() => setHidePass(!hidePass)} />}
             left={<TextInput.Icon icon="lock" />}
             onChangeText={onChange}
             value={value}
