@@ -10,7 +10,8 @@
       "#common/*": ["./src/common/*"],
       "#navigation/*": ["./src/navigation/*"],
       "#assets/*": ["./src/assets/*"],
-      "#stores/*": ["./src/stores/*"]
+      "#types/*": ["./src/types/*"],
+      "#stores/*": ["./src/stores/*"],
     }
   }
 }

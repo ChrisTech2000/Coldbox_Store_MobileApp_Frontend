@@ -11,8 +11,8 @@ import colors from 'tailwindcss/colors';
 
 import AuthRoot from '#screens/Auth/Root';
 import SignIn from '#screens/Auth/SignIn';
-import SignUpCompany from '#screens/Auth/SignUpCompany';
-import SignUpCoolingUser from '#screens/Auth/SignUpCoolingUser';
+import SignUpCompany from '#screens/Auth/SignUp/SignUpCompany';
+import SignUpCoolingUser from '#screens/Auth/SignUp/SignUpCoolingUser';
 import PasswordRecovery from '#screens/Auth/PasswordRecovery';
 import AppInfo from '#screens/Auth/AppInfo';
 
