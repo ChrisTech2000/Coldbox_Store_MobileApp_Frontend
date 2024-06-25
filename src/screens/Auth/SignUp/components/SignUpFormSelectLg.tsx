@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Divider, List, TextInput } from 'react-native-paper';
 
 import { Select } from '#ui/components/Select';
@@ -22,6 +22,9 @@ type SignUpFormSelectProps<T extends FieldValues> = {
   closeModal: () => void;
   setSearch: (val: string) => void;
 };
+
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 export function SignUpFormSelectLg<T extends FieldValues>({
   data,
@@ -73,7 +76,11 @@ export function SignUpFormSelectLg<T extends FieldValues>({
                           <Divider tw="mx-4" />
                         </TouchableOpacity>
                       )}
-                      estimatedItemSize={data.length}
+                      estimatedItemSize={40}
+                      estimatedListSize={{
+                        height: deviceHeight,
+                        width: deviceWidth / 2,
+                      }}
                     />
                   </ScrollView>
                 ),
