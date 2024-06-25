@@ -3,8 +3,9 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-export default function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
+function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   const { params } = props.route;
 
   return (
@@ -15,3 +16,5 @@ export default function EditOperator(props: ManagementRouteProps<'EditOperator'>
     </View>
   );
 }
+
+export default withSafeArea(EditOperator);

@@ -8,9 +8,14 @@ import { PaperProvider } from 'react-native-paper';
 
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import AuthNavigator from './navigation/Auth';
+import DashboardNavigator from './navigation/Dashboard';
+
 import { paperTheme, navigatorTheme } from './ui/lib/theme';
+import { useAuthManager } from '#stores/auth';
 
 export default function App() {
+  const isAuthenticated = useAuthManager();
+
   return (
     <PaperProvider theme={paperTheme}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
@@ -18,7 +23,7 @@ export default function App() {
         <StaleWhileRevalidate>
           <SafeAreaProvider>
             <NavigationContainer theme={navigatorTheme}>
-              <AuthNavigator />
+              {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
             </NavigationContainer>
           </SafeAreaProvider>
         </StaleWhileRevalidate>

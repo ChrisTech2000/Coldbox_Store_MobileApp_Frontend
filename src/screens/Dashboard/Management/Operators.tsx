@@ -3,8 +3,9 @@ import { View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-export default function Operators(props: ManagementRouteProps<'Operators'>) {
+function Operators(props: ManagementRouteProps<'Operators'>) {
   const { navigation } = props;
 
   return (
@@ -27,3 +28,5 @@ export default function Operators(props: ManagementRouteProps<'Operators'>) {
     </View>
   );
 }
+
+export default withSafeArea(Operators);

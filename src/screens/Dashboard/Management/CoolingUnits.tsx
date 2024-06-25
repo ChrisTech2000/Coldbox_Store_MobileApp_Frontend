@@ -3,8 +3,9 @@ import { View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-export default function CoolingUnits(props: ManagementRouteProps<'CoolingUnits'>) {
+function CoolingUnits(props: ManagementRouteProps<'CoolingUnits'>) {
   const { navigation } = props;
 
   return (
@@ -26,3 +27,5 @@ export default function CoolingUnits(props: ManagementRouteProps<'CoolingUnits'>
     </View>
   );
 }
+
+export default withSafeArea(CoolingUnits);
