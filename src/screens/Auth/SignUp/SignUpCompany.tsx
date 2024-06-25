@@ -3,24 +3,27 @@ import { currencies as _currencies } from 'currencies.json';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Checkbox, Text, TextInput } from 'react-native-paper';
+import { Checkbox, Portal, Text, TextInput } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { z } from 'zod';
 
+import Danger from '#assets/icons/danger.svg';
 import { EGender } from '#types/auth';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
+import { Modal } from '#ui/components/Modal';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { SignUpAsCompanySchema } from './schemas';
 import { customCountrySort } from './utils';
-import { Modal } from '#ui/components/Modal';
-import Danger from '#assets/icons/danger.svg';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
+
+const REASONS_TO_ADD_PHONE = [{ key: 'Resetting account' }, { key: 'Receiving sms receipts' }];
 
 export type SignUpSchemaType = z.infer<typeof SignUpAsCompanySchema>;
 
@@ -358,45 +361,43 @@ function SignUpCompany() {
       </Button>
 
       {/** USER WITHOUT PHONE MODAL */}
-      <Modal tw="w-2/3" visible={isPhoneModalOpen} onDismiss={closePhoneWarningModal}>
-        <View tw="w-full items-center mx-16 bg-white rounded-sm py-1 max-h-80">
-          <Text tw="text-lg font-bold mb-1 mt-2">Warning</Text>
-          <Danger tw="max-h-16 mb-1" />
-          <Text tw="text-center mb-2">
-            If you register without a phone some functionalities will not work:
-          </Text>
-          <FlatList
-            data={[{ key: 'Resetting account' }, { key: 'Receiving sms receipts' }]}
-            renderItem={({ item }) => {
-              return (
-                <View>
-                  <Text>{`\u2022 ${item.key}`}</Text>
-                </View>
-              );
-            }}
-          />
-          <Button
-            tw="border-2 border-green-primary mt-4 mb-2"
-            mode="contained"
-            uppercase
-            onPress={handleSubmit(onSubmit)}
-            icon="close-circle-outline"
-            contentStyle="flex flex-row-reverse items-center"
-          >
-            Continue Anyway
-          </Button>
-          <Button
-            tw="border-2 border-green-primary mb-2"
-            mode="contained"
-            uppercase
-            onPress={closePhoneWarningModal}
-            icon="phone"
-            contentStyle="flex flex-row-reverse items-center"
-          >
-            Add Phone
-          </Button>
-        </View>
-      </Modal>
+      <Portal>
+        <Modal tw="w-2/3" visible={isPhoneModalOpen} onDismiss={closePhoneWarningModal}>
+          <View tw="w-full items-center mx-16 bg-white rounded-sm py-1 max-h-80">
+            <Text tw="text-lg font-bold mb-1 mt-2">Warning</Text>
+            <Danger tw="max-h-16 mb-1" />
+            <Text tw="text-center mb-2">
+              If you register without a phone some functionalities will not work:
+            </Text>
+            {REASONS_TO_ADD_PHONE.map((item) => (
+              <View key={item.key} tw="flex flex-row space-x-1 items-center">
+                <Icon name="fiber-manual-record" size={8} />
+                <Text>{item.key}</Text>
+              </View>
+            ))}
+            <Button
+              tw="border-2 border-green-primary mt-4 mb-2"
+              mode="contained"
+              uppercase
+              onPress={handleSubmit(onSubmit)}
+              icon="close-circle-outline"
+              contentStyle="flex flex-row-reverse items-center"
+            >
+              Continue Anyway
+            </Button>
+            <Button
+              tw="border-2 border-green-primary mb-2"
+              mode="contained"
+              uppercase
+              onPress={closePhoneWarningModal}
+              icon="phone"
+              contentStyle="flex flex-row-reverse items-center"
+            >
+              Add Phone
+            </Button>
+          </View>
+        </Modal>
+      </Portal>
     </KeyboardAwareScrollView>
   );
 }
