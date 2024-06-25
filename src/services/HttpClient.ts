@@ -1,8 +1,10 @@
 import axios, { type AxiosError, type AxiosRequestHeaders } from 'axios';
 
+import { type Tokens, useAuthStore } from '#stores/auth';
+
 type Options = {
   baseURL: string;
-  getAuthTokens: () => Promise<{ accessToken: string; refreshToken: string }>;
+  getAuthTokens: () => Tokens;
   onSessionRenewal: () => Promise<void>;
   onUnauthorized?: () => void;
   onForbidden?: () => void;
@@ -21,17 +23,15 @@ export default class HttpClient {
     this.updateOptions({
       ...options,
       baseURL: '', // TODO: load api endpoint from env vars
-      getAuthTokens: async () => {
-        // TODO: consume it from 'local' storage
-        return {
-          accessToken: '',
-          refreshToken: '',
-        };
+      getAuthTokens: () => {
+        const storedTokens = useAuthStore.getState().tokens;
+        if (storedTokens) return storedTokens;
+        return { accessToken: '', refreshToken: '' };
       },
     });
 
     this.axios.interceptors.request.use(async (config) => {
-      config.headers = await this._buildHeaders(config.headers);
+      config.headers = this._buildHeaders(config.headers);
       return config;
     });
 
@@ -40,7 +40,7 @@ export default class HttpClient {
       async (exception: AxiosError) => {
         if (exception.response?.status === 401) {
           if (typeof this.options.onUnauthorized === 'function') {
-            await this.options.onUnauthorized();
+            this.options.onUnauthorized();
           }
 
           if (typeof this.options.onSessionRenewal !== 'function') {
@@ -48,7 +48,7 @@ export default class HttpClient {
           }
 
           await this.options.onSessionRenewal();
-          const headers = await this._buildHeaders();
+          const headers = this._buildHeaders();
 
           return this.axios.request({
             ...exception.config,
@@ -64,7 +64,7 @@ export default class HttpClient {
             throw exception;
           }
 
-          await this.options.onForbidden();
+          this.options.onForbidden();
         }
 
         return Promise.reject(exception);
@@ -77,9 +77,9 @@ export default class HttpClient {
     this.axios.defaults.baseURL = this.options.baseURL;
   };
 
-  private _buildHeaders = async (prevHeaders?: AxiosRequestHeaders) => {
+  private _buildHeaders = (prevHeaders?: AxiosRequestHeaders) => {
     const headers = { ...prevHeaders } as AxiosRequestHeaders;
-    const tokens = await this.options.getAuthTokens();
+    const tokens = this.options.getAuthTokens();
     if (tokens.accessToken && !headers.Authorization) {
       headers.Authorization = `Bearer ${tokens.accessToken}`;
     }

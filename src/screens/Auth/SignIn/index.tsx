@@ -14,6 +14,7 @@ import type { AuthRouteProps } from '#navigation/Auth';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { AccountCard } from './components/AccountCard';
+import { useAuthStore } from '#stores/auth';
 
 const IMG_SIZE = Dimensions.get('screen').width / 2.5;
 const ACCOUNT_TYPE_SIZE = Dimensions.get('screen').width / 5;
@@ -65,6 +66,8 @@ const schema = z
 function SignIn(props: AuthRouteProps<'SignIn'>) {
   const { navigation } = props;
 
+  const setSession = useAuthStore((store) => store.setSession);
+
   const {
     control,
     handleSubmit,
@@ -86,6 +89,13 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
 
   const onSubmit = useCallback(() => {
     // TODO: Implement API call here
+
+    setSession({
+      accessToken:
+        '***REMOVED***',
+      refreshToken:
+        '***REMOVED***',
+    });
   }, []);
 
   return (

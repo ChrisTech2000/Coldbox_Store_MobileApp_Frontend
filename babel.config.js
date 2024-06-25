@@ -14,6 +14,7 @@ module.exports = {
           '#navigation': './src/navigation',
           '#assets': './src/assets',
           '#types': './src/types',
+          '#stores': './src/stores',
         },
       },
     ],

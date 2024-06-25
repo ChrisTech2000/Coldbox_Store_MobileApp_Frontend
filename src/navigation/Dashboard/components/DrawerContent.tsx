@@ -10,6 +10,7 @@ import { Drawer } from 'react-native-paper';
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 
 import type { DashboardRoutes } from '../index';
+import { useAuthStore } from '#stores/auth';
 
 const StyledDrawerContentScrollView = styled(DrawerContentScrollView);
 
@@ -27,6 +28,8 @@ const DRAWER_ITEM_TITLE: Record<RoutePaths, { iconName: string; title: string }>
 export default function DrawerContent(props: DrawerContentComponentProps) {
   const { routeNames, index } = props.state;
   const focusedRoute = routeNames[index];
+
+  const revokeSession = useAuthStore((store) => store.revokeSession);
 
   return (
     <StyledDrawerContentScrollView {...props} tw="flex-1">
@@ -49,7 +52,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
         ))}
       </Drawer.Section>
 
-      <Drawer.Item label="Log-out" onPress={() => undefined} icon="logout-variant" />
+      <Drawer.Item label="Log-out" onPress={revokeSession} icon="logout-variant" />
     </StyledDrawerContentScrollView>
   );
 }

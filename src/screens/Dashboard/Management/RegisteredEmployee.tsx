@@ -3,8 +3,9 @@ import { View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-export default function RegisteredEmployee(props: ManagementRouteProps<'RegisteredEmployee'>) {
+function RegisteredEmployee(props: ManagementRouteProps<'RegisteredEmployee'>) {
   const { navigation } = props;
 
   return (
@@ -33,3 +34,5 @@ export default function RegisteredEmployee(props: ManagementRouteProps<'Register
     </View>
   );
 }
+
+export default withSafeArea(RegisteredEmployee);
