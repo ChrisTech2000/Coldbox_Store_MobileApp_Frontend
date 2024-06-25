@@ -85,7 +85,7 @@ export function Select({
         <View
           tw={cn(
             'flex flex-row items-center',
-            minifyLabel && currentValue ? 'w-full justify-between' : 'space-x-2s'
+            minifyLabel && currentValue ? 'w-full justify-between' : 'space-x-2'
           )}
         >
           {currentValue && <Text tw="text-base">{currentValue}</Text>}

@@ -29,6 +29,7 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
       >
         Sign In
       </Button>
+
       <Button
         tw="w-full border-2 border-green-primary"
         mode="outlined"
@@ -40,6 +41,7 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
       >
         Sign up as Company
       </Button>
+
       <Button
         tw="w-full border-2 border-green-primary"
         mode="outlined"
@@ -51,9 +53,12 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
       >
         Sign up as Cooling User
       </Button>
+
       <SelectLanguage />
+
       <Button
         mode="text"
+        tw="w-full"
         rippleColor="white"
         onPress={(evt) => {
           evt.stopPropagation();

@@ -15,6 +15,7 @@ module.exports = {
           '#assets': './src/assets',
           '#types': './src/types',
           '#stores': './src/stores',
+          '#constants': './src/constants',
         },
       },
     ],
