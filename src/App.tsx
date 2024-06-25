@@ -10,6 +10,8 @@ import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import AuthNavigator from './navigation/Auth';
 import { paperTheme, navigatorTheme } from './ui/lib/theme';
 
+import './i18n';
+
 export default function App() {
   return (
     <PaperProvider theme={paperTheme}>

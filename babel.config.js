@@ -13,6 +13,7 @@ module.exports = {
           '#common': './src/common',
           '#navigation': './src/navigation',
           '#assets': './src/assets',
+          '#i18n': './src/i18n',
         },
       },
     ],
