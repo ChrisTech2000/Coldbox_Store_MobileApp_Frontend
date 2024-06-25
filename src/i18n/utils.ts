@@ -14,8 +14,12 @@ export function translation(path: TranslationPaths, opts?: TOptions): string {
   return i18n.t(path, opts);
 }
 
-export function onLanguageChange(locale: TranslationLocales): void {
-  i18n.changeLanguage(locale);
+export async function onLanguageChange(locale: TranslationLocales): Promise<void> {
+  try {
+    await i18n.changeLanguage(locale);
+  } catch {
+    // silent error
+  }
 }
 
 ///

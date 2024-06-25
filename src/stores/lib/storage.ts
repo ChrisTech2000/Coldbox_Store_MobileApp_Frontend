@@ -1,18 +1,18 @@
 import { createJSONStorage } from 'zustand/middleware';
 import { MMKV } from 'react-native-mmkv';
 
-const storage = new MMKV();
+export const mmkv = new MMKV();
 
 // eslint-disable-next-line
 export default createJSONStorage<any>(() => ({
   setItem: (name, value) => {
-    return storage.set(name, value);
+    return mmkv.set(name, value);
   },
   getItem: (name) => {
-    const value = storage.getString(name);
+    const value = mmkv.getString(name);
     return value ?? null;
   },
   removeItem: (name) => {
-    return storage.delete(name);
+    return mmkv.delete(name);
   },
 }));
