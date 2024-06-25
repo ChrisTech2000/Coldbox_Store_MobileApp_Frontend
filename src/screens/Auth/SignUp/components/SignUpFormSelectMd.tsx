@@ -2,17 +2,19 @@ import startCase from 'lodash/startCase';
 import React, { useCallback, useState } from 'react';
 import { GestureResponderEvent, ScrollView, View } from 'react-native';
 import { Divider, RadioButton } from 'react-native-paper';
+import { FieldValues, Path } from 'react-hook-form';
 
 import { Button } from '#ui/components/Button';
 import { Select } from '#ui/components/Select';
-import { SignUpSchemaType } from '../SignUpCompany';
 import { RadioButtonItem } from '#ui/components/RadioButton';
+import { cn } from '#ui/lib/cn';
 
-type SignUpFormSelectProps = {
+type SignUpFormSelectProps<T extends FieldValues> = {
   data: Array<string>;
   form: {
-    fieldName: keyof SignUpSchemaType;
+    fieldName: Path<T>;
     currentValue?: string;
+    error?: boolean;
     required?: boolean;
     setCurrentValue: (val: string) => void;
   };
@@ -20,8 +22,13 @@ type SignUpFormSelectProps = {
   closeModal: () => void;
 };
 
-export function SignUpFormSelectMd({ data, form, isModalOpen, closeModal }: SignUpFormSelectProps) {
-  const { fieldName, currentValue, required, setCurrentValue } = form;
+export function SignUpFormSelectMd<T extends FieldValues>({
+  data,
+  form,
+  isModalOpen,
+  closeModal,
+}: SignUpFormSelectProps<T>) {
+  const { fieldName, currentValue, required, setCurrentValue, error } = form;
 
   const [selectedValue, setSelectedValue] = useState<string>('');
 
@@ -48,6 +55,7 @@ export function SignUpFormSelectMd({ data, form, isModalOpen, closeModal }: Sign
       <View tw="w-full px-4 mb-1">
         <Select
           variant="md"
+          error={error}
           label={`${startCase(fieldName)}${required ? '*' : ''}`}
           currentValue={currentValue}
           minifyLabel
@@ -85,7 +93,7 @@ export function SignUpFormSelectMd({ data, form, isModalOpen, closeModal }: Sign
           onClick={closeModal}
         />
       </View>
-      <Divider tw="w-full bg-gray-700 mt-2 my-2" />
+      <Divider tw={cn('w-full bg-gray-700 mt-2 my-2', error && 'bg-red-700 h-0.5')} />
     </View>
   );
 }

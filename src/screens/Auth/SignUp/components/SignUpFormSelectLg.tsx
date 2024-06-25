@@ -1,20 +1,21 @@
 import { FlashList } from '@shopify/flash-list';
 import React from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { Divider, List, TextInput } from 'react-native-paper';
 
 import { Select } from '#ui/components/Select';
-import { SignUpSchemaType } from '../SignUpCompany';
 import startCase from 'lodash/startCase';
+import { cn } from '#ui/lib/cn';
 
-type SignUpFormSelectProps = {
+type SignUpFormSelectProps<T extends FieldValues> = {
   data: Array<string>;
   form: {
-    control: Control<SignUpSchemaType>;
-    fieldName: keyof SignUpSchemaType;
+    control: Control<T>;
+    fieldName: Path<T>;
     currentValue?: string;
     required?: boolean;
+    error?: boolean;
   };
   isModalOpen: boolean;
   search: string;
@@ -22,15 +23,15 @@ type SignUpFormSelectProps = {
   setSearch: (val: string) => void;
 };
 
-export function SignUpFormSelectLg({
+export function SignUpFormSelectLg<T extends FieldValues>({
   data,
   form,
   isModalOpen,
   search,
   closeModal,
   setSearch,
-}: SignUpFormSelectProps) {
-  const { control, fieldName, currentValue, required } = form;
+}: SignUpFormSelectProps<T>) {
+  const { control, fieldName, currentValue, required, error } = form;
 
   return (
     <View>
@@ -43,6 +44,7 @@ export function SignUpFormSelectLg({
           <View tw="mx-4">
             <Select
               variant="lg"
+              error={error}
               label={`${startCase(fieldName)}${required ? '*' : ''}`}
               currentValue={currentValue}
               isModalOpen={isModalOpen}
@@ -82,7 +84,7 @@ export function SignUpFormSelectLg({
         )}
         name={fieldName}
       />
-      <Divider tw="w-full bg-gray-700 my-3" />
+      <Divider tw={cn('w-full bg-gray-700 my-3', error && 'bg-red-700 h-0.5')} />
     </View>
   );
 }

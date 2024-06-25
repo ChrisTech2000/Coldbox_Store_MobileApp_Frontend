@@ -6,7 +6,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Text, TextInput } from 'react-native-paper';
-import validator from 'validator';
 import { z } from 'zod';
 
 import { Button } from '#ui/components/Button';
@@ -15,44 +14,12 @@ import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { customCountrySort } from './utils';
 import { EGender } from '#types/auth';
+import { SignUpAsCompanySchema } from './schemas';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
 
-const Schema = z
-  .object({
-    companyName: z.string().min(1, { message: 'Company Name is mandatory.' }),
-    country: z.string().optional(),
-    currency: z.string().min(1, { message: 'Currency selection is mandatory.' }),
-    email: z.string().email().min(1, { message: 'Email is mandatory.' }),
-    firstName: z.string().min(1, { message: 'First Name is mandatory.' }),
-    lastName: z.string().min(1, { message: 'Last Name is mandatory.' }),
-    phone: z.string().refine(validator.isMobilePhone).optional(),
-    gender: z
-      .enum([EGender.FEMALE, EGender.MALE, EGender.OTHER])
-      .refine((gender) => !!gender, { message: 'Gender selection is mandatory.' }),
-    password: z
-      .string()
-      .refine((pass) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(pass), {
-        message:
-          'Your password needs to be at least 8 characters long, contain one uppercase and one lowercase letters, and a number',
-      }),
-    confirmPassword: z.string(),
-    terms: z
-      .boolean()
-      .refine((terms) => !terms, { message: 'You need to agree to the Terms of Use.' }),
-  })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'The passwords do not match.',
-        path: ['confirmPassword'],
-      });
-    }
-  });
-
-type SignUpSchemaType = z.infer<typeof Schema>;
+export type SignUpSchemaType = z.infer<typeof SignUpAsCompanySchema>;
 
 function SignUpCompany() {
   const {
@@ -60,10 +27,10 @@ function SignUpCompany() {
     handleSubmit,
     watch,
     setValue,
-    // clearErrors,
-    // formState: { errors },
+    clearErrors,
+    formState: { errors },
   } = useForm<SignUpSchemaType>({
-    resolver: zodResolver(Schema),
+    resolver: zodResolver(SignUpAsCompanySchema),
   });
 
   ////////////// SIGN UP COMPANY
@@ -73,6 +40,7 @@ function SignUpCompany() {
 
   const selectedCountry = watch('country');
   const selectedCurrency = watch('currency');
+  const termsAgreement = watch('terms');
 
   const countries = useMemo(() => {
     const lowerSearch = search.toLowerCase();
@@ -112,6 +80,7 @@ function SignUpCompany() {
 
   const setGenderValue = useCallback((val: string) => {
     setValue('gender', val as EGender);
+    clearErrors('gender');
   }, []);
 
   ////////////// ACTIONS
@@ -128,6 +97,7 @@ function SignUpCompany() {
       if (currency) {
         const currencyName = _currencies.find((c) => c.code === currency)?.name;
         setValue('currency', currencyName ?? '');
+        clearErrors('currency');
       }
     }
   }, [selectedCountry]);
@@ -151,13 +121,19 @@ function SignUpCompany() {
             label={'Company Name*'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.companyName}
           />
         )}
         name="companyName"
       />
+      {errors.companyName && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.companyName.message?.toString()}
+        </Text>
+      )}
 
       {/** COUNTRY */}
-      <SignUpFormSelectLg
+      <SignUpFormSelectLg<SignUpSchemaType>
         form={{
           control,
           fieldName: 'country',
@@ -171,11 +147,12 @@ function SignUpCompany() {
       />
 
       {/** CURRENCY */}
-      <SignUpFormSelectLg
+      <SignUpFormSelectLg<SignUpSchemaType>
         form={{
           control,
           fieldName: 'currency',
           required: true,
+          error: !!errors.currency,
           currentValue: selectedCurrency
             ? `${_currencies.find((c) => c.name === selectedCurrency)?.symbol ?? ''}-${selectedCurrency}`
             : '',
@@ -186,6 +163,11 @@ function SignUpCompany() {
         setSearch={setSearch}
         data={currencies}
       />
+      {errors.currency && (
+        <Text tw="text-xs text-red-600 mt-[-2] pl-3 w-[95%]">
+          {errors.currency.message?.toString()}
+        </Text>
+      )}
 
       {/** SIGNUP EMPLOYEE */}
       <Text tw="mt-4 mb-2 px-4 text-xl font-bold">Sign Up Registered Employee</Text>
@@ -202,10 +184,16 @@ function SignUpCompany() {
             label={'Email*'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.email}
           />
         )}
         name="email"
       />
+      {errors.email && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.email.message?.toString()}
+        </Text>
+      )}
 
       {/** FIRST NAME */}
       <Controller
@@ -219,10 +207,16 @@ function SignUpCompany() {
             label={'First Name*'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.firstName}
           />
         )}
         name="firstName"
       />
+      {errors.firstName && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.firstName.message?.toString()}
+        </Text>
+      )}
 
       {/** LAST NAME */}
       <Controller
@@ -236,16 +230,23 @@ function SignUpCompany() {
             label={'Last Name*'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.lastName}
           />
         )}
         name="lastName"
       />
+      {errors.lastName && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.lastName.message?.toString()}
+        </Text>
+      )}
 
       {/** GENDER */}
       <SignUpFormSelectMd
         form={{
           fieldName: 'gender',
           required: true,
+          error: !!errors.gender,
           currentValue: selectedGender,
           setCurrentValue: setGenderValue,
         }}
@@ -253,19 +254,22 @@ function SignUpCompany() {
         closeModal={closeGenderModal}
         data={[EGender.FEMALE, EGender.MALE, EGender.OTHER]}
       />
+      {errors.gender && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.gender.message?.toString()}
+        </Text>
+      )}
 
       {/** PHONE */}
       <Controller
         control={control}
-        rules={{
-          required: true,
-        }}
         render={({ field: { onChange, value } }) => (
           <TextInput
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Phone Number (with country code)'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.phone}
           />
         )}
         name="phone"
@@ -284,6 +288,7 @@ function SignUpCompany() {
             onChangeText={onChange}
             value={value}
             secureTextEntry={hidePass}
+            error={!!errors.password?.password}
             right={
               <TextInput.Icon
                 icon={hidePass ? 'eye' : 'eye-off'}
@@ -292,8 +297,13 @@ function SignUpCompany() {
             }
           />
         )}
-        name="password"
+        name="password.password"
       />
+      {errors.password?.password && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.password.password.message?.toString()}
+        </Text>
+      )}
 
       {/** CONFIRM PASSWORD */}
       <Controller
@@ -307,6 +317,7 @@ function SignUpCompany() {
             label={'Confirm Password*'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.password?.confirmPassword}
             secureTextEntry={hideConfirmPass}
             right={
               <TextInput.Icon
@@ -316,8 +327,13 @@ function SignUpCompany() {
             }
           />
         )}
-        name="confirmPassword"
+        name="password.confirmPassword"
       />
+      {errors.password?.confirmPassword && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.password.confirmPassword.message?.toString()}
+        </Text>
+      )}
 
       {/** TERMS */}
       <Controller
@@ -331,7 +347,6 @@ function SignUpCompany() {
               <Checkbox
                 onPress={() => {
                   onChange(!value);
-                  console.log(value);
                 }}
                 status={value ? 'checked' : 'unchecked'}
               />
@@ -350,6 +365,7 @@ function SignUpCompany() {
         mode="contained"
         uppercase
         onPress={handleSubmit(onSubmit)}
+        disabled={!termsAgreement}
       >
         Sign Up
       </Button>

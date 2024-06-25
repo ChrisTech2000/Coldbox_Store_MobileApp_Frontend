@@ -197,6 +197,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
             {errors.user.message?.toString()}
           </Text>
         )}
+
         <Text tw="text-xs w-[95%] my-2 px-3">
           Please provide valid {activeProfile === EAccountProfile.EMPLOYEE ? 'email/' : ''}phone
           number (with country code).

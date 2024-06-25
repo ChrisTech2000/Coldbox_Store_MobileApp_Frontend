@@ -5,7 +5,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Text, TextInput } from 'react-native-paper';
-import validator from 'validator';
 import { z } from 'zod';
 
 import { Button } from '#ui/components/Button';
@@ -14,47 +13,12 @@ import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { customCountrySort } from './utils';
 import { EGender } from '#types/auth';
-
-// TODO: get languages from BE
-const LANGUAGES = ['English', 'Hindi', 'Oriya', 'Gujarati', 'French', 'Portuguese'];
+import { LANGUAGES, SignUpAsCoolingUserSchema } from './schemas';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
 
-const Schema = z
-  .object({
-    country: z.string().optional(),
-    firstName: z.string().min(1, { message: 'First Name is mandatory.' }),
-    lastName: z.string().min(1, { message: 'Last Name is mandatory.' }),
-    phone: z.string().refine(validator.isMobilePhone).optional(),
-    language: z
-      .string()
-      .refine((lang) => !lang || !LANGUAGES.includes(lang), { message: 'Language is mandatory.' }),
-    gender: z
-      .enum([EGender.FEMALE, EGender.MALE, EGender.OTHER])
-      .refine((gender) => !!gender, { message: 'Gender selection is mandatory.' }),
-    password: z
-      .string()
-      .refine((pass) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(pass), {
-        message:
-          'Your password needs to be at least 8 characters long, contain one uppercase and one lowercase letters, and a number',
-      }),
-    confirmPassword: z.string(),
-    terms: z
-      .boolean()
-      .refine((terms) => !terms, { message: 'You need to agree to the Terms of Use.' }),
-  })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'The passwords do not match.',
-        path: ['confirmPassword'],
-      });
-    }
-  });
-
-type SignUpSchemaType = z.infer<typeof Schema>;
+type SignUpSchemaType = z.infer<typeof SignUpAsCoolingUserSchema>;
 
 function SignUpCoolingUser() {
   const {
@@ -62,10 +26,10 @@ function SignUpCoolingUser() {
     handleSubmit,
     watch,
     setValue,
-    // clearErrors,
-    // formState: { errors },
+    clearErrors,
+    formState: { errors },
   } = useForm<SignUpSchemaType>({
-    resolver: zodResolver(Schema),
+    resolver: zodResolver(SignUpAsCoolingUserSchema),
   });
 
   ////////////// SIGN UP COOLING USER
@@ -79,6 +43,7 @@ function SignUpCoolingUser() {
   const selectedCountry = watch('country');
   const selectedGender = watch('gender');
   const selectedLanguage = watch('language');
+  const termsAgreement = watch('terms');
 
   const countries = useMemo(() => {
     const lowerSearch = search.toLowerCase();
@@ -102,16 +67,19 @@ function SignUpCoolingUser() {
 
   const setGenderValue = useCallback((val: string) => {
     setValue('gender', val as EGender);
+    clearErrors('gender');
   }, []);
 
   const setLanguageValue = useCallback((val: string) => {
     setValue('language', val);
+    clearErrors('language');
   }, []);
 
   const onSubmit = useCallback(() => {
     // TODO: Implement API call here
   }, []);
 
+  console.log(errors.phone);
   return (
     <KeyboardAwareScrollView tw="flex-1 h-full" keyboardOpeningTime={Number.MAX_SAFE_INTEGER}>
       <Text tw="mb-4 text-5xl font-bold self-center text-center">Welcome to Coldtivate</Text>
@@ -120,11 +88,12 @@ function SignUpCoolingUser() {
       <Text tw="mb-2 px-4 text-xl font-bold">Sign Up Cooling User</Text>
 
       {/** COUNTRY */}
-      <SignUpFormSelectLg
+      <SignUpFormSelectLg<SignUpSchemaType>
         form={{
           control,
           fieldName: 'country',
           required: true,
+          error: !!errors.country,
           currentValue: selectedCountry ?? '',
         }}
         isModalOpen={isCountriesModalOpen}
@@ -133,6 +102,11 @@ function SignUpCoolingUser() {
         setSearch={setSearch}
         data={countries}
       />
+      {errors.country && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.country.message?.toString()}
+        </Text>
+      )}
 
       {/** PHONE */}
       <Controller
@@ -146,10 +120,16 @@ function SignUpCoolingUser() {
             label={'Phone Number (with country code)*'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.phone}
           />
         )}
         name="phone"
       />
+      {errors.phone && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.phone.message?.toString()}
+        </Text>
+      )}
 
       {/** FIRST NAME */}
       <Controller
@@ -163,10 +143,16 @@ function SignUpCoolingUser() {
             label={'First Name*'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.firstName}
           />
         )}
         name="firstName"
       />
+      {errors.firstName && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.firstName.message?.toString()}
+        </Text>
+      )}
 
       {/** LAST NAME */}
       <Controller
@@ -180,16 +166,23 @@ function SignUpCoolingUser() {
             label={'Last Name*'}
             onChangeText={onChange}
             value={value}
+            error={!!errors.lastName}
           />
         )}
         name="lastName"
       />
+      {errors.lastName && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.lastName.message?.toString()}
+        </Text>
+      )}
 
       {/** LANGUAGES */}
-      <SignUpFormSelectMd
+      <SignUpFormSelectMd<SignUpSchemaType>
         form={{
           fieldName: 'language',
           required: true,
+          error: !!errors.language,
           currentValue: selectedLanguage,
           setCurrentValue: setLanguageValue,
         }}
@@ -197,12 +190,18 @@ function SignUpCoolingUser() {
         closeModal={closeLanguageModal}
         data={LANGUAGES}
       />
+      {errors.language && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.language.message?.toString()}
+        </Text>
+      )}
 
       {/** GENDER */}
-      <SignUpFormSelectMd
+      <SignUpFormSelectMd<SignUpSchemaType>
         form={{
           fieldName: 'gender',
           required: true,
+          error: !!errors.gender,
           currentValue: selectedGender,
           setCurrentValue: setGenderValue,
         }}
@@ -210,6 +209,11 @@ function SignUpCoolingUser() {
         closeModal={closeGenderModal}
         data={[EGender.FEMALE, EGender.MALE, EGender.OTHER]}
       />
+      {errors.gender && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.gender.message?.toString()}
+        </Text>
+      )}
 
       {/** PASSWORD */}
       <Controller
@@ -224,6 +228,7 @@ function SignUpCoolingUser() {
             onChangeText={onChange}
             value={value}
             secureTextEntry={hidePass}
+            error={!!errors.password?.password}
             right={
               <TextInput.Icon
                 icon={hidePass ? 'eye' : 'eye-off'}
@@ -232,8 +237,13 @@ function SignUpCoolingUser() {
             }
           />
         )}
-        name="password"
+        name="password.password"
       />
+      {errors.password?.password && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.password.password.message?.toString()}
+        </Text>
+      )}
 
       {/** CONFIRM PASSWORD */}
       <Controller
@@ -248,6 +258,7 @@ function SignUpCoolingUser() {
             onChangeText={onChange}
             value={value}
             secureTextEntry={hideConfirmPass}
+            error={!!errors.password?.confirmPassword}
             right={
               <TextInput.Icon
                 icon={hideConfirmPass ? 'eye' : 'eye-off'}
@@ -256,8 +267,13 @@ function SignUpCoolingUser() {
             }
           />
         )}
-        name="confirmPassword"
+        name="password.confirmPassword"
       />
+      {errors.password?.confirmPassword && (
+        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+          {errors.password.confirmPassword.message?.toString()}
+        </Text>
+      )}
 
       {/** TERMS */}
       <Controller
@@ -290,6 +306,7 @@ function SignUpCoolingUser() {
         mode="contained"
         uppercase
         onPress={handleSubmit(onSubmit)}
+        disabled={!termsAgreement}
       >
         Sign Up
       </Button>

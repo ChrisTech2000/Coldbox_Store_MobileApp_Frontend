@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { Divider, Portal, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -7,30 +7,37 @@ import { Modal } from './Modal';
 import { cn } from '#ui/lib/cn';
 
 type WrapperProps = {
-  currentValue?: string;
-  label: string;
-  isModalOpen: boolean;
   content: {
     options: React.ReactElement;
     header?: string;
     footer?: React.ReactElement;
   };
-  variant?: 'sm' | 'md' | 'lg';
+  currentValue?: string;
+  error?: boolean;
+  isModalOpen: boolean;
+  label: string;
   minifyLabel?: boolean;
+  variant?: 'sm' | 'md' | 'lg';
   onClick: () => void;
 };
 
 export function Select({
-  currentValue,
   content,
+  currentValue,
+  error,
+  isModalOpen,
   label,
   minifyLabel,
-  isModalOpen,
   variant = 'sm',
   onClick,
 }: WrapperProps) {
   const { options, header, footer } = content;
   const colors = useTailwindColors();
+
+  const arrowColor = useMemo(() => {
+    if (error) return colors.red[700];
+    return variant === 'sm' ? colors.green.primary : colors.gray[600];
+  }, [error]);
 
   return (
     <View>
@@ -69,7 +76,8 @@ export function Select({
         <Text
           tw={cn(
             variant === 'sm' ? 'text-green-primary' : 'text-gray-600 text-base',
-            minifyLabel && currentValue && 'text-xs'
+            minifyLabel && currentValue && 'text-xs',
+            error && 'text-red-700'
           )}
         >
           {label}
@@ -85,7 +93,7 @@ export function Select({
             name={variant !== 'lg' ? 'arrow-drop-down' : 'keyboard-arrow-down'}
             size={variant !== 'lg' ? 20 : 30}
             style={{
-              color: variant === 'sm' ? colors.green.primary : colors.gray[600],
+              color: arrowColor,
               ...(isModalOpen && { transform: [{ rotate: '180deg' }] }),
             }}
           />
