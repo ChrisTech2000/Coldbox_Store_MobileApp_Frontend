@@ -3,7 +3,7 @@ import { currencies as _currencies } from 'currencies.json';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
@@ -16,6 +16,8 @@ import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { SignUpAsCompanySchema } from './schemas';
 import { customCountrySort } from './utils';
+import { Modal } from '#ui/components/Modal';
+import Danger from '#assets/icons/danger.svg';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -72,8 +74,10 @@ function SignUpCompany() {
   const [hidePass, setHidePass] = useState<boolean>(true);
   const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
   const [isGenderModalOpen, setIsGenderModalOpen] = useState<boolean>(false);
+  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState<boolean>(false);
 
   const selectedGender = watch('gender');
+  const phoneNumber = watch('phone');
 
   const closeGenderModal = useCallback(() => {
     setIsGenderModalOpen(!isGenderModalOpen);
@@ -87,6 +91,18 @@ function SignUpCompany() {
   ////////////// ACTIONS
   const onSubmit = useCallback(() => {
     // TODO: Implement API call here
+  }, []);
+
+  const checkPhoneNumber = useCallback(() => {
+    if (!phoneNumber) {
+      setIsPhoneModalOpen(true);
+    } else {
+      onSubmit();
+    }
+  }, [phoneNumber]);
+
+  const closePhoneWarningModal = useCallback(() => {
+    setIsPhoneModalOpen(false);
   }, []);
 
   useEffect(() => {
@@ -332,14 +348,55 @@ function SignUpCompany() {
 
       {/** SUBMIT */}
       <Button
-        tw="w-[95%] self-center border-2 rounded-sm my-2"
+        tw="w-[95%] self-center border-2 my-2"
         mode="contained"
         uppercase
-        onPress={handleSubmit(onSubmit)}
+        onPress={handleSubmit(checkPhoneNumber)}
         disabled={!termsAgreement}
       >
         Sign Up
       </Button>
+
+      {/** USER WITHOUT PHONE MODAL */}
+      <Modal tw="w-2/3" visible={isPhoneModalOpen} onDismiss={closePhoneWarningModal}>
+        <View tw="w-full items-center mx-16 bg-white rounded-sm py-1 max-h-80">
+          <Text tw="text-lg font-bold mb-1 mt-2">Warning</Text>
+          <Danger tw="max-h-16 mb-1" />
+          <Text tw="text-center mb-2">
+            If you register without a phone some functionalities will not work:
+          </Text>
+          <FlatList
+            data={[{ key: 'Resetting account' }, { key: 'Receiving sms receipts' }]}
+            renderItem={({ item }) => {
+              return (
+                <View>
+                  <Text>{`\u2022 ${item.key}`}</Text>
+                </View>
+              );
+            }}
+          />
+          <Button
+            tw="border-2 border-green-primary mt-4 mb-2"
+            mode="contained"
+            uppercase
+            onPress={handleSubmit(onSubmit)}
+            icon="close-circle-outline"
+            contentStyle="flex flex-row-reverse items-center"
+          >
+            Continue Anyway
+          </Button>
+          <Button
+            tw="border-2 border-green-primary mb-2"
+            mode="contained"
+            uppercase
+            onPress={closePhoneWarningModal}
+            icon="phone"
+            contentStyle="flex flex-row-reverse items-center"
+          >
+            Add Phone
+          </Button>
+        </View>
+      </Modal>
     </KeyboardAwareScrollView>
   );
 }

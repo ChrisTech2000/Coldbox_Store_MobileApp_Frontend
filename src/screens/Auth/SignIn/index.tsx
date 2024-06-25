@@ -233,7 +233,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
         )}
 
         <Button
-          tw="w-[95%] border-2 rounded-sm mb-2"
+          tw="w-[95%] border-2 mb-2"
           mode="contained"
           uppercase
           onPress={handleSubmit(onSubmit)}

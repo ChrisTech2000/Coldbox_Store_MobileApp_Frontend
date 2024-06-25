@@ -48,7 +48,7 @@ function PasswordRecovery() {
       />
 
       <Button
-        tw="w-[95%] border-2 border-green-primary rounded-sm mt-6"
+        tw="w-[95%] border-2 border-green-primary mt-6"
         mode="outlined"
         uppercase
         onPress={handleSubmit(onSubmit)}

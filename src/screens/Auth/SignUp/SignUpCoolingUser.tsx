@@ -277,7 +277,7 @@ function SignUpCoolingUser() {
 
       {/** SUBMIT */}
       <Button
-        tw="w-[95%] self-center border-2 rounded-sm my-2"
+        tw="w-[95%] self-center border-2 my-2"
         mode="contained"
         uppercase
         onPress={handleSubmit(onSubmit)}
