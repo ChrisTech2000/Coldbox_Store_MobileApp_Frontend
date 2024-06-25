@@ -1,24 +1,26 @@
-import React from 'react';
-import { useState, useCallback } from 'react';
-import { GestureResponderEvent, View } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { type GestureResponderEvent, View } from 'react-native';
 import { Button, RadioButton } from 'react-native-paper';
+
 import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 
-// TODO: get languages from BE
-const LANGUAGES = ['English', 'Hindi', 'Oriya', 'Gujarati', 'French', 'Portuguese'];
+import { APP_LANGUAGES, type TranslationLocales } from '#i18n/constants';
+import { onLanguageChange, LanguageStorage } from '#i18n/utils';
+
+const languages = Object.keys(APP_LANGUAGES) as Array<TranslationLocales>;
 
 export function SelectLanguage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [activeLanguage, setActiveLanguage] = useState<string>(LANGUAGES[0]);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(activeLanguage);
+  const [activeLanguage, setActiveLanguage] = useState<TranslationLocales>(LanguageStorage.read());
+  const [selectedLanguage, setSelectedLanguage] = useState<TranslationLocales>(activeLanguage);
 
-  // TODO: bind both actions to BE calls
   const doLanguageUpdate = useCallback(
-    (evt: GestureResponderEvent) => {
+    async (evt: GestureResponderEvent) => {
       evt.stopPropagation();
       setActiveLanguage(selectedLanguage);
       setIsModalOpen(false);
+      await onLanguageChange(selectedLanguage);
     },
     [selectedLanguage]
   );
@@ -35,7 +37,7 @@ export function SelectLanguage() {
   return (
     <View tw="mt-8">
       <Select
-        label={activeLanguage}
+        label={APP_LANGUAGES[activeLanguage].label}
         isModalOpen={isModalOpen}
         onClick={() => setIsModalOpen(!isModalOpen)}
         content={{
@@ -43,13 +45,13 @@ export function SelectLanguage() {
           options: (
             <RadioButton.Group
               value={selectedLanguage}
-              onValueChange={(value) => setSelectedLanguage(value)}
+              onValueChange={(value) => setSelectedLanguage(value as TranslationLocales)}
             >
-              {LANGUAGES.map((lang, index) => (
+              {languages.map((lang, index) => (
                 <RadioButtonItem
                   key={`${lang}-${index}`}
-                  label={lang}
-                  value={lang}
+                  label={APP_LANGUAGES[lang].label}
+                  value={APP_LANGUAGES[lang].value}
                   tw="flex flex-row-reverse ml-[-10]"
                 />
               ))}

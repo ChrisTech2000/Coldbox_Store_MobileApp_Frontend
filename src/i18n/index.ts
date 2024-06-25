@@ -3,9 +3,10 @@ import i18n, { type InitOptions } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { getLocales } from 'react-native-localize';
 
-import englishTranslations, { type Translations } from './en';
-import type { RecursiveKeyOf, ValueOf } from '#ui/types/general';
-import { mmkv } from '#stores/lib/storage';
+import englishTranslations, { type Translations } from './transl/en';
+import type { RecursiveKeyOf } from '#types/miscellaneous';
+import { APP_LOCALES } from './constants';
+import { LanguageStorage } from './utils';
 
 export type TranslationPaths = RecursiveKeyOf<Translations>;
 
@@ -16,24 +17,16 @@ export const isRTL = systemLocale?.isRTL ?? false;
 I18nManager.allowRTL(isRTL);
 I18nManager.forceRTL(isRTL);
 
-export const APP_LOCALES = {
-  EN: 'en',
-} as const;
-
-export type TranslationLocales = ValueOf<typeof APP_LOCALES>;
-
-const STORAGE_KEY = 'i18n-locale';
-
-function _optionsFactory(): InitOptions {
-  const initialLanguage = mmkv.getString(STORAGE_KEY) ?? APP_LOCALES.EN;
+function _optionsFactory() {
+  const initialLanguage = LanguageStorage.read();
   return {
     resources: {
-      [APP_LOCALES.EN]: {
+      [APP_LOCALES.ENGLISH]: {
         translation: englishTranslations,
       },
     },
     lng: initialLanguage,
-    fallbackLng: APP_LOCALES.EN,
+    fallbackLng: APP_LOCALES.ENGLISH,
     react: {
       useSuspense: false,
     },
@@ -41,13 +34,11 @@ function _optionsFactory(): InitOptions {
       escapeValue: false,
     },
     debug: false,
-  };
+    compatibilityJSON: 'v3',
+  } satisfies InitOptions;
 }
 
 i18n.use(initReactI18next).init(_optionsFactory());
-
-i18n.on('languageChanged', (selectedValue) => {
-  mmkv.set(STORAGE_KEY, selectedValue);
-});
+i18n.on('languageChanged', LanguageStorage.persist);
 
 export default i18n;

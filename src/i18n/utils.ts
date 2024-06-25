@@ -4,7 +4,24 @@ import { formatDate } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
 import { enGB } from 'date-fns/locale/en-GB';
 
-import type { TranslationPaths, TranslationLocales } from './index';
+import { mmkv } from '#stores/lib/storage';
+import type { TranslationPaths } from './index';
+import { APP_LOCALES, type TranslationLocales } from './constants';
+
+///
+// Storage Manager
+///
+
+export class LanguageStorage {
+  static persist(value: string) {
+    mmkv.set('i18n-locale', value);
+  }
+
+  static read() {
+    const value = mmkv.getString('i18n-locale') ?? APP_LOCALES.ENGLISH;
+    return value as TranslationLocales;
+  }
+}
 
 ///
 // Translation Related
