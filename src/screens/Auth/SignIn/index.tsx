@@ -99,7 +99,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   }, []);
 
   return (
-    <KeyboardAwareScrollView tw="mt-[-32]">
+    <KeyboardAwareScrollView tw="mt-[-8]">
       <View tw="flex-1 items-center justify-center">
         <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-4" />
         <Text tw="mb-2 text-xl font-bold">Sign In</Text>
