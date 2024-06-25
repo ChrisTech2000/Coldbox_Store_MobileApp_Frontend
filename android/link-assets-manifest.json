@@ -8,6 +8,18 @@
     {
       "path": "src/assets/images/root_hero.svg",
       "sha1": "904c213ad1552b1a97bcee2784d9f6e79c5795c3"
+    },
+    {
+      "path": "src/assets/icons/employee.svg",
+      "sha1": "5241a417ca8e5d8e31ca549df353937253e5ea4a"
+    },
+    {
+      "path": "src/assets/icons/farmer.svg",
+      "sha1": "fa62c81091c1d6563e610871af92ce1e09fa20ea"
+    },
+    {
+      "path": "src/assets/icons/operator.svg",
+      "sha1": "3caaa2bd3439db8e56f5536f83851d0e591376a2"
     }
   ]
 }

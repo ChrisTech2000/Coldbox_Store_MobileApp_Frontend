@@ -3,10 +3,9 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-export default function RegisteredEmployeeDetails(
-  props: ManagementRouteProps<'RegisteredEmployeeDetails'>
-) {
+function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmployeeDetails'>) {
   const { params } = props.route;
 
   return (
@@ -19,3 +18,5 @@ export default function RegisteredEmployeeDetails(
     </View>
   );
 }
+
+export default withSafeArea(RegisteredEmployeeDetails);
