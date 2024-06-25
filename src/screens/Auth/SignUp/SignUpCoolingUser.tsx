@@ -79,7 +79,6 @@ function SignUpCoolingUser() {
     // TODO: Implement API call here
   }, []);
 
-  console.log(errors.phone);
   return (
     <KeyboardAwareScrollView tw="flex-1 h-full" keyboardOpeningTime={Number.MAX_SAFE_INTEGER}>
       <Text tw="mb-4 text-5xl font-bold self-center text-center">Welcome to Coldtivate</Text>
