@@ -1,4 +1,8 @@
-import i18n, { type TOptions } from 'i18next';
+import moize from 'moize';
+import ms from 'ms';
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TOptions } from 'i18next';
 import type { Locale } from 'date-fns';
 import { formatDate } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
@@ -12,13 +16,15 @@ import { APP_LOCALES, type TranslationLocales } from './constants';
 // Storage Manager
 ///
 
+const _memoizedRead = moize(() => mmkv.getString('i18n-locale'), { maxAge: ms('4 seconds') });
+
 export class LanguageStorage {
   static persist(value: string) {
     mmkv.set('i18n-locale', value);
   }
 
   static read() {
-    const value = mmkv.getString('i18n-locale') ?? APP_LOCALES.ENGLISH;
+    const value = _memoizedRead() ?? APP_LOCALES.ENGLISH;
     return value as TranslationLocales;
   }
 }
@@ -27,16 +33,25 @@ export class LanguageStorage {
 // Translation Related
 ///
 
-export function translation(path: TranslationPaths, opts?: TOptions): string {
-  return i18n.t(path, opts);
-}
+type Path = TranslationPaths | [basePath: TranslationPaths, dynamicKey: string];
 
-export async function onLanguageChange(locale: TranslationLocales): Promise<void> {
-  try {
-    await i18n.changeLanguage(locale);
-  } catch {
-    // silent error
-  }
+export function useTranslationUtils() {
+  const { t, i18n } = useTranslation();
+
+  const _translation = useCallback(
+    (path: Path, opts?: TOptions) => t(typeof path === 'string' ? path : path.join('.'), opts),
+    []
+  );
+
+  const _fireMutation = useCallback(async (locale: TranslationLocales) => {
+    try {
+      await i18n.changeLanguage(locale);
+    } catch {
+      // silent error
+    }
+  }, []);
+
+  return { t: _translation, mutate: _fireMutation };
 }
 
 ///
@@ -44,13 +59,7 @@ export async function onLanguageChange(locale: TranslationLocales): Promise<void
 ///
 
 function _derivedLocale(): Locale {
-  const currentLocale = i18n.language.slice();
-
-  const shortHand = currentLocale.includes('-')
-    ? (currentLocale.split('-').at(0) as TranslationLocales)
-    : (currentLocale as TranslationLocales);
-
-  switch (shortHand) {
+  switch (LanguageStorage.read()) {
     default:
       return enGB;
   }

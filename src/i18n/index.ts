@@ -3,8 +3,9 @@ import i18n, { type InitOptions } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { getLocales } from 'react-native-localize';
 
-import englishTranslations, { type Translations } from './transl/en';
 import type { RecursiveKeyOf } from '#types/miscellaneous';
+import englishTranslations, { type Translations } from './transl/en';
+import hindiTranslations from './transl/hi';
 import { APP_LOCALES } from './constants';
 import { LanguageStorage } from './utils';
 
@@ -23,6 +24,9 @@ function _optionsFactory() {
     resources: {
       [APP_LOCALES.ENGLISH]: {
         translation: englishTranslations,
+      },
+      [APP_LOCALES.HINDI]: {
+        translation: hindiTranslations,
       },
     },
     lng: initialLanguage,

@@ -256,4 +256,4 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   );
 }
 
-export default withSafeArea(SignIn);
+export default withSafeArea(SignIn, ['top', 'bottom']);
