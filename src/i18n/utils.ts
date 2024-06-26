@@ -1,12 +1,14 @@
 import moize from 'moize';
 import ms from 'ms';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TOptions } from 'i18next';
 import type { Locale } from 'date-fns';
 import { formatDate } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
 import { enGB } from 'date-fns/locale/en-GB';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { mmkv } from '#stores/lib/storage';
 import type { TranslationPaths } from './index';
@@ -34,6 +36,7 @@ export class LanguageStorage {
 ///
 
 type Path = TranslationPaths | [basePath: TranslationPaths, dynamicKey: string];
+type ZodResolverCb<T> = (zod: typeof z, t: T) => z.ZodSchema;
 
 export function useTranslationUtils() {
   const { t, i18n } = useTranslation();
@@ -51,7 +54,14 @@ export function useTranslationUtils() {
     }
   }, []);
 
-  return { t: _translation, mutate: _fireMutation };
+  const _zodResolver = useMemo(() => {
+    return (cb: ZodResolverCb<typeof _translation>) => {
+      const schema = cb(z, _translation);
+      return zodResolver(schema);
+    };
+  }, []);
+
+  return { t: _translation, mutate: _fireMutation, zodResolver: _zodResolver };
 }
 
 ///
