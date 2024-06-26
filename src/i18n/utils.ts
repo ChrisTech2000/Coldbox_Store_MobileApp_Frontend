@@ -1,14 +1,15 @@
 import moize from 'moize';
 import ms from 'ms';
-import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useCallback, useMemo } from 'react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import type { TOptions } from 'i18next';
 import type { Locale } from 'date-fns';
 import { formatDate } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
-import { enGB } from 'date-fns/locale/en-GB';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { enGB as englishLocale } from 'date-fns/locale/en-GB';
+import { hi as hindiLocale } from 'date-fns/locale/hi';
 
 import { mmkv } from '#stores/lib/storage';
 import type { TranslationPaths } from './index';
@@ -70,8 +71,10 @@ export function useTranslationUtils() {
 
 function _derivedLocale(): Locale {
   switch (LanguageStorage.read()) {
+    case 'hi':
+      return hindiLocale;
     default:
-      return enGB;
+      return englishLocale;
   }
 }
 
