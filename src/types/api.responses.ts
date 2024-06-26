@@ -12,3 +12,9 @@ export interface SignUpAsCompanyResponse {
   company: Company;
   user: User;
 }
+
+export interface SignUpAsCoolingUserResponse {
+  id: number;
+  user: User;
+  userCode: string;
+}

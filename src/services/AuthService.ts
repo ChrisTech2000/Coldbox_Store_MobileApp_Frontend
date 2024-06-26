@@ -1,6 +1,15 @@
 import { EAuthenticationEndpoints } from '#constants/api.routes';
-import { type SignUpAsCompanyParams, type SignInParams } from '#types/api.params';
-import { type SignUpAsCompanyResponse, type SignInResponse } from '#types/api.responses';
+import {
+  type SignUpAsCompanyParams,
+  type SignInParams,
+  type SignUpAsCoolingUserParams,
+} from '#types/api.params';
+import {
+  type SignUpAsCompanyResponse,
+  type SignInResponse,
+  type SignUpAsCoolingUserResponse,
+} from '#types/api.responses';
+import merge from 'lodash/merge';
 import HttpClient, { HttpClientOptions } from './HttpClient';
 
 class AuthService extends HttpClient {
@@ -21,7 +30,20 @@ class AuthService extends HttpClient {
     }
   };
 
-  public signUpAsCoolingUser = () => {};
+  public signUpAsCoolingUser = async (params: SignUpAsCoolingUserParams) => {
+    const _params = merge(params, { createUser: true, parentName: '' });
+
+    try {
+      const { data } = await this.post<SignUpAsCoolingUserResponse>(
+        EAuthenticationEndpoints.SIGN_UP_AS_COOLING_USER,
+        _params
+      );
+
+      return data;
+    } catch (error) {
+      console.log(JSON.stringify(error));
+    }
+  };
 
   public signIn = async (params: SignInParams): Promise<SignInResponse | undefined> => {
     try {
@@ -39,6 +61,10 @@ class AuthService extends HttpClient {
   };
 
   public signOut = () => {
+    // TODO: implement
+  };
+
+  public resetPassword = () => {
     // TODO: implement
   };
 }

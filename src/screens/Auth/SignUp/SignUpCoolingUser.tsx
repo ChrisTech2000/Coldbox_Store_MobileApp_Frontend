@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 
-import { EAppGender } from '#types/global';
+import AuthService from '#services/AuthService';
+import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -15,13 +16,15 @@ import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { LANGUAGES, SignUpAsCoolingUserSchema } from './schemas';
 import { customCountrySort } from './utils';
+import { AuthRouteProps } from 'navigation/Auth';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
 
 type SignUpSchemaType = z.infer<typeof SignUpAsCoolingUserSchema>;
 
-function SignUpCoolingUser() {
+function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
+  const { navigation } = props;
   const {
     control,
     handleSubmit,
@@ -76,8 +79,30 @@ function SignUpCoolingUser() {
     clearErrors('language');
   }, []);
 
-  const onSubmit = useCallback(() => {
-    // TODO: Implement API call here
+  const onSubmit: SubmitHandler<SignUpSchemaType> = useCallback(async (data) => {
+    const {
+      firstName,
+      lastName,
+      phone,
+      password: { password },
+      gender,
+      country,
+    } = data;
+
+    const result = await AuthService.signUpAsCoolingUser({
+      user: {
+        firstName,
+        lastName,
+        phone,
+        password,
+        country,
+        gender: MAP_APP_GENDER_TO_API[gender],
+      },
+    });
+
+    if (result) {
+      navigation.navigate('SignIn');
+    }
   }, []);
 
   return (

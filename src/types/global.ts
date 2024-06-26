@@ -6,6 +6,7 @@ export interface User {
   phone: string;
   email?: string;
   lastLogin: string;
+  language?: string;
 }
 
 export interface Company {
@@ -20,10 +21,10 @@ export interface Company {
   ml4Farmers: boolean;
   dateJoined: Date;
   crop: number[];
+  logo: File | null;
 
   //TODO: figure out types
   // bankDetails
-  // logo
   // bankAccount
 }
 
@@ -49,7 +50,7 @@ export enum EAppGender {
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',
   [ERoles.EMPLOYEE]: 'sp',
-  [ERoles.COOLING_USER]: 'f',
+  [ERoles.COOLING_USER]: 'cu',
 };
 
 export const MAP_API_GENDER_TO_APP = {
