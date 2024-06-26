@@ -16,6 +16,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     'max-lines': ['error', { max: 500 }],
+    //'@stylistic/js/quotes': ["error", "double"],
 
     // TypeScript
     '@typescript-eslint/no-non-null-assertion': 'off',
@@ -35,5 +36,10 @@ module.exports = {
     // React Hooks
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 };

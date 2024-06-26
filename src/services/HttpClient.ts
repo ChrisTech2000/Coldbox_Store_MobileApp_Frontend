@@ -1,6 +1,7 @@
 import axios, { type AxiosError, type AxiosRequestHeaders } from 'axios';
 
 import { type Tokens, useAuthStore } from '#stores/auth';
+import { API_BASE_URL } from '#constants/environment';
 
 type Options = {
   baseURL: string;
@@ -19,10 +20,10 @@ export default class HttpClient {
   public axios = axios.create();
   public options = {} as Options;
 
-  constructor(options: HttpClientOptions) {
+  constructor(options?: HttpClientOptions) {
     this.updateOptions({
       ...options,
-      baseURL: '', // TODO: load api endpoint from env vars
+      baseURL: API_BASE_URL,
       getAuthTokens: () => {
         const storedTokens = useAuthStore.getState().tokens;
         if (storedTokens) return storedTokens;
