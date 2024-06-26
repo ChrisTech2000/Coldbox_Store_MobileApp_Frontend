@@ -16,7 +16,6 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     'max-lines': ['error', { max: 500 }],
-    //'@stylistic/js/quotes': ["error", "double"],
 
     // TypeScript
     '@typescript-eslint/no-non-null-assertion': 'off',
