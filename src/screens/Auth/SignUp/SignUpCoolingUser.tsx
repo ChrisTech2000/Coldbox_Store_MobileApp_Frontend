@@ -7,7 +7,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Checkbox, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 
-import { EGender } from '#types/auth';
+import { EAppGender } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -67,7 +67,7 @@ function SignUpCoolingUser() {
   }, [isLanguageModalOpen]);
 
   const setGenderValue = useCallback((val: string) => {
-    setValue('gender', val as EGender);
+    setValue('gender', val as EAppGender);
     clearErrors('gender');
   }, []);
 
@@ -192,7 +192,7 @@ function SignUpCoolingUser() {
         }}
         isModalOpen={isGenderModalOpen}
         closeModal={closeGenderModal}
-        data={[EGender.FEMALE, EGender.MALE, EGender.OTHER]}
+        data={[EAppGender.FEMALE, EAppGender.MALE, EAppGender.OTHER]}
       />
       {errors.gender && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
@@ -262,7 +262,6 @@ function SignUpCoolingUser() {
               <Checkbox
                 onPress={() => {
                   onChange(!value);
-                  console.log(value);
                 }}
                 status={value ? 'checked' : 'unchecked'}
               />

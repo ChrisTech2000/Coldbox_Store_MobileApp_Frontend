@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { currencies as _currencies } from 'currencies.json';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Portal, Text, TextInput } from 'react-native-paper';
@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { z } from 'zod';
 
 import Danger from '#assets/icons/danger.svg';
-import { EGender } from '#types/auth';
+import AuthService from '#services/AuthService';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
@@ -19,6 +19,8 @@ import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { SignUpAsCompanySchema } from './schemas';
 import { customCountrySort } from './utils';
+import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
+import { AuthRouteProps } from 'navigation/Auth';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -27,7 +29,8 @@ const REASONS_TO_ADD_PHONE = [{ key: 'Resetting account' }, { key: 'Receiving sm
 
 export type SignUpSchemaType = z.infer<typeof SignUpAsCompanySchema>;
 
-function SignUpCompany() {
+function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
+  const { navigation } = props;
   const {
     control,
     handleSubmit,
@@ -87,20 +90,52 @@ function SignUpCompany() {
   }, [isGenderModalOpen]);
 
   const setGenderValue = useCallback((val: string) => {
-    setValue('gender', val as EGender);
+    setValue('gender', val as EAppGender);
     clearErrors('gender');
   }, []);
 
   ////////////// ACTIONS
-  const onSubmit = useCallback(() => {
-    // TODO: Implement API call here
+  const onSubmit: SubmitHandler<SignUpSchemaType> = useCallback(async (data) => {
+    const {
+      firstName,
+      lastName,
+      phone,
+      email,
+      password: { password },
+      gender,
+      companyName: name,
+      country,
+      currency,
+    } = data;
+
+    const result = await AuthService.signUpAsCompany({
+      user: {
+        firstName,
+        lastName,
+        phone,
+        email,
+        password,
+        gender: MAP_APP_GENDER_TO_API[gender],
+      },
+      company: {
+        name,
+        country,
+        currency,
+        language: 'en', // TODO: fix
+        crop: [],
+      },
+    });
+
+    if (result) {
+      navigation.navigate('SignIn');
+    }
   }, []);
 
   const checkPhoneNumber = useCallback(() => {
     if (!phoneNumber) {
       setIsPhoneModalOpen(true);
     } else {
-      onSubmit();
+      handleSubmit(onSubmit);
     }
   }, [phoneNumber]);
 
@@ -252,7 +287,7 @@ function SignUpCompany() {
         }}
         isModalOpen={isGenderModalOpen}
         closeModal={closeGenderModal}
-        data={[EGender.FEMALE, EGender.MALE, EGender.OTHER]}
+        data={[EAppGender.FEMALE, EAppGender.MALE, EAppGender.OTHER]}
       />
       {errors.gender && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">

@@ -1,7 +1,13 @@
-import axios, { type AxiosError, type AxiosRequestHeaders } from 'axios';
+import axios, {
+  AxiosRequestConfig,
+  AxiosResponse,
+  type AxiosError,
+  type AxiosRequestHeaders,
+} from 'axios';
 
 import { type Tokens, useAuthStore } from '#stores/auth';
 import { API_BASE_URL } from '#constants/environment';
+import { JsonObject, serialize, deserialize } from './utils';
 
 type Options = {
   baseURL: string;
@@ -37,7 +43,10 @@ export default class HttpClient {
     });
 
     this.axios.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        response.data = deserialize(response.data);
+        return response;
+      },
       async (exception: AxiosError) => {
         if (exception.response?.status === 401) {
           if (typeof this.options.onUnauthorized === 'function') {
@@ -77,6 +86,38 @@ export default class HttpClient {
     this.options = { ...this.options, ...options };
     this.axios.defaults.baseURL = this.options.baseURL;
   };
+
+  protected post<T>(
+    url: string,
+    data: JsonObject,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
+    return this.axios.post<T>(url, serialize(data), config);
+  }
+
+  protected get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.axios.get<T>(url, config);
+  }
+
+  protected put<T>(
+    url: string,
+    data: JsonObject,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
+    return this.axios.put<T>(url, serialize(data), config);
+  }
+
+  protected delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.axios.delete<T>(url, config);
+  }
+
+  protected patch<T>(
+    url: string,
+    data: JsonObject,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
+    return this.axios.patch<T>(url, serialize(data), config);
+  }
 
   private _buildHeaders = (prevHeaders?: AxiosRequestHeaders) => {
     const headers = { ...prevHeaders } as AxiosRequestHeaders;

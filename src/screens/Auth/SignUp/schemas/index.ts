@@ -1,4 +1,4 @@
-import { EGender } from '#types/auth';
+import { EAppGender } from '#types/global';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -50,7 +50,7 @@ export const SignUpAsCoolingUserSchema = z.object({
     .refine((lang) => lang.length && LANGUAGES.includes(lang), {
       message: 'Language is mandatory.',
     }),
-  gender: z.enum([EGender.FEMALE, EGender.MALE, EGender.OTHER], {
+  gender: z.enum([EAppGender.FEMALE, EAppGender.MALE, EAppGender.OTHER], {
     required_error: 'Gender selection is mandatory.',
   }),
   password: PASSWORD_SCHEMA,
@@ -73,7 +73,7 @@ export const SignUpAsCompanySchema = z.object({
       message: 'Phone number is invalid',
     })
     .optional(),
-  gender: z.enum([EGender.FEMALE, EGender.MALE, EGender.OTHER], {
+  gender: z.enum([EAppGender.FEMALE, EAppGender.MALE, EAppGender.OTHER], {
     required_error: 'Gender selection is mandatory.',
   }),
   password: PASSWORD_SCHEMA,

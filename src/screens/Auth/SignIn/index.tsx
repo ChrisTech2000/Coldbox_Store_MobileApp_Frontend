@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useCallback, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Dimensions, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Divider, TextInput } from 'react-native-paper';
@@ -11,19 +11,20 @@ import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
 import Logo from '#assets/images/coldtivate_logo.svg';
 import type { AuthRouteProps } from '#navigation/Auth';
+import AuthService from '#services/AuthService';
+import { useAuthStore } from '#stores/auth';
+import { ERoles, MAP_ROLES } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { AccountCard } from './components/AccountCard';
-import { useAuthStore } from '#stores/auth';
 
 const IMG_SIZE = Dimensions.get('screen').width / 2.5;
 const ACCOUNT_TYPE_SIZE = Dimensions.get('screen').width / 5;
 
-// TODO: check if we have profiles available in the BE
 enum EAccountProfile {
-  FARMER = 'farmer',
-  EMPLOYEE = 'employee',
-  OPERATOR = 'operator',
+  FARMER = ERoles.COOLING_USER,
+  EMPLOYEE = ERoles.EMPLOYEE,
+  OPERATOR = ERoles.OPERATOR,
 }
 
 const ACCOUNT_DESCRIPTIONS = {
@@ -35,7 +36,7 @@ const ACCOUNT_DESCRIPTIONS = {
     'The cold room user. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator.',
 };
 
-const schema = z
+const Schema = z
   .object({
     activeProfile: z.enum([
       EAccountProfile.EMPLOYEE,
@@ -63,10 +64,15 @@ const schema = z
     }
   });
 
+export type SignInSchemaType = z.infer<typeof Schema>;
+
 function SignIn(props: AuthRouteProps<'SignIn'>) {
   const { navigation } = props;
 
-  const setSession = useAuthStore((store) => store.setSession);
+  const { setSession, setUser } = useAuthStore((store) => ({
+    setSession: store.setSession,
+    setUser: store.setUser,
+  }));
 
   const {
     control,
@@ -75,7 +81,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
     clearErrors,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(Schema),
     defaultValues: {
       activeProfile: EAccountProfile.EMPLOYEE,
       user: '',
@@ -87,15 +93,22 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
 
   const activeProfile = watch('activeProfile');
 
-  const onSubmit = useCallback(() => {
-    // TODO: Implement API call here
-
-    setSession({
-      accessToken:
-        '***REMOVED***',
-      refreshToken:
-        '***REMOVED***',
+  const onSubmit: SubmitHandler<SignInSchemaType> = useCallback(async (data) => {
+    const result = await AuthService.signIn({
+      userType: MAP_ROLES[data.activeProfile],
+      password: data.password,
+      username: data.user,
+      language: 'en', // TODO: fix
     });
+
+    if (result) {
+      setSession({
+        accessToken: result.access,
+        refreshToken: result.refresh,
+      });
+
+      setUser(result.user);
+    }
   }, []);
 
   return (
