@@ -19,7 +19,7 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
       <RootHero width={HERO_IMG_SIZE} height={HERO_IMG_SIZE} />
       <Text tw="mb-3 text-xl font-bold">Welcome to Coldtivate</Text>
       <Button
-        tw="w-full border-2 rounded-sm"
+        tw="w-full border-2"
         mode="contained"
         uppercase
         onPress={(evt) => {
@@ -29,8 +29,9 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
       >
         Sign In
       </Button>
+
       <Button
-        tw="w-full border-2 border-green-primary rounded-sm"
+        tw="w-full border-2 border-green-primary"
         mode="outlined"
         uppercase
         onPress={(evt) => {
@@ -40,8 +41,9 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
       >
         Sign up as Company
       </Button>
+
       <Button
-        tw="w-full border-2 border-green-primary rounded-sm"
+        tw="w-full border-2 border-green-primary"
         mode="outlined"
         uppercase
         onPress={(evt) => {
@@ -51,9 +53,12 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
       >
         Sign up as Cooling User
       </Button>
+
       <SelectLanguage />
+
       <Button
         mode="text"
+        tw="w-full"
         rippleColor="white"
         onPress={(evt) => {
           evt.stopPropagation();

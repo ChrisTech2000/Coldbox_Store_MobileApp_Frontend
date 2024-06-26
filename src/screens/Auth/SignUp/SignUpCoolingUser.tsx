@@ -7,13 +7,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Checkbox, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 
+import { EGender } from '#types/auth';
 import { Button } from '#ui/components/Button';
+import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
-import { customCountrySort } from './utils';
-import { EGender } from '#types/auth';
 import { LANGUAGES, SignUpAsCoolingUserSchema } from './schemas';
+import { customCountrySort } from './utils';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -79,7 +80,6 @@ function SignUpCoolingUser() {
     // TODO: Implement API call here
   }, []);
 
-  console.log(errors.phone);
   return (
     <KeyboardAwareScrollView tw="flex-1 h-full" keyboardOpeningTime={Number.MAX_SAFE_INTEGER}>
       <Text tw="mb-4 text-5xl font-bold self-center text-center">Welcome to Coldtivate</Text>
@@ -115,21 +115,16 @@ function SignUpCoolingUser() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Phone Number (with country code)*'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.phone}
+            error={errors.phone}
           />
         )}
         name="phone"
       />
-      {errors.phone && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.phone.message?.toString()}
-        </Text>
-      )}
 
       {/** FIRST NAME */}
       <Controller
@@ -138,21 +133,16 @@ function SignUpCoolingUser() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'First Name*'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.firstName}
+            error={errors.firstName}
           />
         )}
         name="firstName"
       />
-      {errors.firstName && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.firstName.message?.toString()}
-        </Text>
-      )}
 
       {/** LAST NAME */}
       <Controller
@@ -161,21 +151,16 @@ function SignUpCoolingUser() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Last Name*'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.lastName}
+            error={errors.lastName}
           />
         )}
         name="lastName"
       />
-      {errors.lastName && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.lastName.message?.toString()}
-        </Text>
-      )}
 
       {/** LANGUAGES */}
       <SignUpFormSelectMd<SignUpSchemaType>
@@ -222,13 +207,13 @@ function SignUpCoolingUser() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Password*'}
             onChangeText={onChange}
             value={value}
             secureTextEntry={hidePass}
-            error={!!errors.password?.password}
+            error={errors.password?.password}
             right={
               <TextInput.Icon
                 icon={hidePass ? 'eye' : 'eye-off'}
@@ -239,11 +224,6 @@ function SignUpCoolingUser() {
         )}
         name="password.password"
       />
-      {errors.password?.password && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.password.password.message?.toString()}
-        </Text>
-      )}
 
       {/** CONFIRM PASSWORD */}
       <Controller
@@ -252,13 +232,13 @@ function SignUpCoolingUser() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Confirm Password*'}
             onChangeText={onChange}
             value={value}
             secureTextEntry={hideConfirmPass}
-            error={!!errors.password?.confirmPassword}
+            error={errors.password?.confirmPassword}
             right={
               <TextInput.Icon
                 icon={hideConfirmPass ? 'eye' : 'eye-off'}
@@ -269,11 +249,6 @@ function SignUpCoolingUser() {
         )}
         name="password.confirmPassword"
       />
-      {errors.password?.confirmPassword && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.password.confirmPassword.message?.toString()}
-        </Text>
-      )}
 
       {/** TERMS */}
       <Controller
@@ -302,7 +277,7 @@ function SignUpCoolingUser() {
 
       {/** SUBMIT */}
       <Button
-        tw="w-[95%] self-center border-2 rounded-sm my-2"
+        tw="w-[95%] self-center border-2 my-2"
         mode="contained"
         uppercase
         onPress={handleSubmit(onSubmit)}

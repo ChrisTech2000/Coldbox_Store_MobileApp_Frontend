@@ -1,0 +1,6 @@
+export enum ERoles {
+  AUTH = 'AUTH',
+  OPERATOR = 'OPERATOR',
+  COOLING_USER = 'COOLING_USER',
+  EMPLOYEE = 'EMPLOYEE',
+}
