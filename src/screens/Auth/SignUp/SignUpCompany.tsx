@@ -5,19 +5,25 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Checkbox, Text, TextInput } from 'react-native-paper';
+import { Checkbox, Portal, Text, TextInput } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { z } from 'zod';
 
+import Danger from '#assets/icons/danger.svg';
+import { EGender } from '#types/auth';
 import { Button } from '#ui/components/Button';
+import { Input } from '#ui/components/Input';
+import { Modal } from '#ui/components/Modal';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
-import { customCountrySort } from './utils';
-import { EGender } from '#types/auth';
 import { SignUpAsCompanySchema } from './schemas';
+import { customCountrySort } from './utils';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
+
+const REASONS_TO_ADD_PHONE = [{ key: 'Resetting account' }, { key: 'Receiving sms receipts' }];
 
 export type SignUpSchemaType = z.infer<typeof SignUpAsCompanySchema>;
 
@@ -71,8 +77,10 @@ function SignUpCompany() {
   const [hidePass, setHidePass] = useState<boolean>(true);
   const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
   const [isGenderModalOpen, setIsGenderModalOpen] = useState<boolean>(false);
+  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState<boolean>(false);
 
   const selectedGender = watch('gender');
+  const phoneNumber = watch('phone');
 
   const closeGenderModal = useCallback(() => {
     setIsGenderModalOpen(!isGenderModalOpen);
@@ -86,6 +94,18 @@ function SignUpCompany() {
   ////////////// ACTIONS
   const onSubmit = useCallback(() => {
     // TODO: Implement API call here
+  }, []);
+
+  const checkPhoneNumber = useCallback(() => {
+    if (!phoneNumber) {
+      setIsPhoneModalOpen(true);
+    } else {
+      onSubmit();
+    }
+  }, [phoneNumber]);
+
+  const closePhoneWarningModal = useCallback(() => {
+    setIsPhoneModalOpen(false);
   }, []);
 
   useEffect(() => {
@@ -116,21 +136,16 @@ function SignUpCompany() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-3 h-12"
             label={'Company Name*'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.companyName}
+            error={errors.companyName}
           />
         )}
         name="companyName"
       />
-      {errors.companyName && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.companyName.message?.toString()}
-        </Text>
-      )}
 
       {/** COUNTRY */}
       <SignUpFormSelectLg<SignUpSchemaType>
@@ -179,21 +194,16 @@ function SignUpCompany() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Email*'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.email}
+            error={errors.email}
           />
         )}
         name="email"
       />
-      {errors.email && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.email.message?.toString()}
-        </Text>
-      )}
 
       {/** FIRST NAME */}
       <Controller
@@ -202,21 +212,16 @@ function SignUpCompany() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'First Name*'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.firstName}
+            error={errors.firstName}
           />
         )}
         name="firstName"
       />
-      {errors.firstName && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.firstName.message?.toString()}
-        </Text>
-      )}
 
       {/** LAST NAME */}
       <Controller
@@ -225,21 +230,16 @@ function SignUpCompany() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Last Name*'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.lastName}
+            error={errors.lastName}
           />
         )}
         name="lastName"
       />
-      {errors.lastName && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.lastName.message?.toString()}
-        </Text>
-      )}
 
       {/** GENDER */}
       <SignUpFormSelectMd
@@ -264,12 +264,12 @@ function SignUpCompany() {
       <Controller
         control={control}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Phone Number (with country code)'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.phone}
+            error={errors.phone}
           />
         )}
         name="phone"
@@ -282,13 +282,13 @@ function SignUpCompany() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Password*'}
             onChangeText={onChange}
             value={value}
             secureTextEntry={hidePass}
-            error={!!errors.password?.password}
+            error={errors.password?.password}
             right={
               <TextInput.Icon
                 icon={hidePass ? 'eye' : 'eye-off'}
@@ -299,11 +299,6 @@ function SignUpCompany() {
         )}
         name="password.password"
       />
-      {errors.password?.password && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.password.password.message?.toString()}
-        </Text>
-      )}
 
       {/** CONFIRM PASSWORD */}
       <Controller
@@ -312,12 +307,12 @@ function SignUpCompany() {
           required: true,
         }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
+          <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
             label={'Confirm Password*'}
             onChangeText={onChange}
             value={value}
-            error={!!errors.password?.confirmPassword}
+            error={errors.password?.confirmPassword}
             secureTextEntry={hideConfirmPass}
             right={
               <TextInput.Icon
@@ -329,11 +324,6 @@ function SignUpCompany() {
         )}
         name="password.confirmPassword"
       />
-      {errors.password?.confirmPassword && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-          {errors.password.confirmPassword.message?.toString()}
-        </Text>
-      )}
 
       {/** TERMS */}
       <Controller
@@ -361,14 +351,53 @@ function SignUpCompany() {
 
       {/** SUBMIT */}
       <Button
-        tw="w-[95%] self-center border-2 rounded-sm my-2"
+        tw="w-[95%] self-center border-2 my-2"
         mode="contained"
         uppercase
-        onPress={handleSubmit(onSubmit)}
+        onPress={handleSubmit(checkPhoneNumber)}
         disabled={!termsAgreement}
       >
         Sign Up
       </Button>
+
+      {/** USER WITHOUT PHONE MODAL */}
+      <Portal>
+        <Modal tw="w-2/3" visible={isPhoneModalOpen} onDismiss={closePhoneWarningModal}>
+          <View tw="w-full items-center mx-16 bg-white rounded-sm py-1 max-h-80">
+            <Text tw="text-lg font-bold mb-1 mt-2">Warning</Text>
+            <Danger tw="max-h-16 mb-1" />
+            <Text tw="text-center mb-2">
+              If you register without a phone some functionalities will not work:
+            </Text>
+            {REASONS_TO_ADD_PHONE.map((item) => (
+              <View key={item.key} tw="flex flex-row space-x-1 items-center">
+                <Icon name="fiber-manual-record" size={8} />
+                <Text>{item.key}</Text>
+              </View>
+            ))}
+            <Button
+              tw="border-2 border-green-primary mt-4 mb-2"
+              mode="contained"
+              uppercase
+              onPress={handleSubmit(onSubmit)}
+              icon="close-circle-outline"
+              contentStyle="flex flex-row-reverse items-center"
+            >
+              Continue Anyway
+            </Button>
+            <Button
+              tw="border-2 border-green-primary mb-2"
+              mode="contained"
+              uppercase
+              onPress={closePhoneWarningModal}
+              icon="phone"
+              contentStyle="flex flex-row-reverse items-center"
+            >
+              Add Phone
+            </Button>
+          </View>
+        </Modal>
+      </Portal>
     </KeyboardAwareScrollView>
   );
 }

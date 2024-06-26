@@ -16,6 +16,7 @@ module.exports = {
           '#i18n': './src/i18n',
           '#types': './src/types',
           '#stores': './src/stores',
+          '#constants': './src/constants',
         },
       },
     ],

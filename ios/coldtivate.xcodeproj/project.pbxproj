@@ -39,6 +39,7 @@
 		A2154905037B423583740A9A /* farmer.svg in Resources */ = {isa = PBXBuildFile; fileRef = 8CDC63FEC67E4BF7BC3C78C6 /* farmer.svg */; };
 		C617CC5021894201A62E3BD1 /* coldtivate_logo.svg in Resources */ = {isa = PBXBuildFile; fileRef = 29F863ED6E684DE2B45A5727 /* coldtivate_logo.svg */; };
 		F31AD301A5134403AB09996F /* operator.svg in Resources */ = {isa = PBXBuildFile; fileRef = F29467767798412793EEC61D /* operator.svg */; };
+		30B1644DDCBB4BA7A333EAE2 /* danger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 9FAB9E1065924CA7A333D97C /* danger.svg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		EBF3B6864E19E58B0A22F9E5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = coldtivate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F29467767798412793EEC61D /* operator.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = operator.svg; path = ../src/assets/icons/operator.svg; sourceTree = "<group>"; };
+		9FAB9E1065924CA7A333D97C /* danger.svg */ = {isa = PBXFileReference; name = "danger.svg"; path = "../src/assets/icons/danger.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +229,7 @@
 				BA5E6F59DCC948798269F922 /* employee.svg */,
 				8CDC63FEC67E4BF7BC3C78C6 /* farmer.svg */,
 				F29467767798412793EEC61D /* operator.svg */,
+				9FAB9E1065924CA7A333D97C /* danger.svg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				14908BD75E8F44A696C7D890 /* employee.svg in Resources */,
 				A2154905037B423583740A9A /* farmer.svg in Resources */,
 				F31AD301A5134403AB09996F /* operator.svg in Resources */,
+				30B1644DDCBB4BA7A333EAE2 /* danger.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
