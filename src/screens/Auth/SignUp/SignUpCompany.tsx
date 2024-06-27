@@ -10,17 +10,19 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { z } from 'zod';
 
 import Danger from '#assets/icons/danger.svg';
+import { APP_LOCALES } from '#i18n/constants';
 import AuthService from '#services/AuthService';
+import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { AuthRouteProps } from 'navigation/Auth';
+
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { SignUpAsCompanySchema } from './schemas';
 import { customCountrySort } from './utils';
-import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
-import { AuthRouteProps } from 'navigation/Auth';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -121,7 +123,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         name,
         country,
         currency,
-        language: 'en', // TODO: fix
+        language: APP_LOCALES.ENGLISH, // TODO: fix
         crop: [],
       },
     });
