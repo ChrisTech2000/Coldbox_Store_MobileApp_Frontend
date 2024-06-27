@@ -5,7 +5,6 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Text, TextInput } from 'react-native-paper';
-import { z } from 'zod';
 
 import AuthService from '#services/AuthService';
 import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
@@ -14,17 +13,18 @@ import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
-import { LANGUAGES, SignUpAsCoolingUserSchema } from './schemas';
+import { LANGUAGES, SignUpAsCoolingUserSchema, SignUpCoolingUserSchemaType } from './schemas';
 import { customCountrySort } from './utils';
 import { AuthRouteProps } from 'navigation/Auth';
+import { useTranslationUtils } from '#i18n/utils';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
 
-type SignUpSchemaType = z.infer<typeof SignUpAsCoolingUserSchema>;
-
 function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
   const { navigation } = props;
+  const { t } = useTranslationUtils();
+
   const {
     control,
     handleSubmit,
@@ -32,8 +32,8 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<SignUpSchemaType>({
-    resolver: zodResolver(SignUpAsCoolingUserSchema),
+  } = useForm<SignUpCoolingUserSchemaType>({
+    resolver: zodResolver(SignUpAsCoolingUserSchema(t)),
   });
 
   ////////////// SIGN UP COOLING USER
@@ -79,7 +79,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
     clearErrors('language');
   }, []);
 
-  const onSubmit: SubmitHandler<SignUpSchemaType> = useCallback(async (data) => {
+  const onSubmit: SubmitHandler<SignUpCoolingUserSchemaType> = useCallback(async (data) => {
     const {
       firstName,
       lastName,
@@ -113,7 +113,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       <Text tw="mb-2 px-4 text-xl font-bold">Sign Up Cooling User</Text>
 
       {/** COUNTRY */}
-      <SignUpFormSelectLg<SignUpSchemaType>
+      <SignUpFormSelectLg<SignUpCoolingUserSchemaType>
         form={{
           control,
           fieldName: 'country',
@@ -188,7 +188,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       />
 
       {/** LANGUAGES */}
-      <SignUpFormSelectMd<SignUpSchemaType>
+      <SignUpFormSelectMd<SignUpCoolingUserSchemaType>
         form={{
           fieldName: 'language',
           required: true,
@@ -198,7 +198,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         }}
         isModalOpen={isLanguageModalOpen}
         closeModal={closeLanguageModal}
-        data={LANGUAGES}
+        data={LANGUAGES(t)}
       />
       {errors.language && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
@@ -207,7 +207,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       )}
 
       {/** GENDER */}
-      <SignUpFormSelectMd<SignUpSchemaType>
+      <SignUpFormSelectMd<SignUpCoolingUserSchemaType>
         form={{
           fieldName: 'gender',
           required: true,

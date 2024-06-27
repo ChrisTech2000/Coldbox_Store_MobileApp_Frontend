@@ -39,11 +39,14 @@ export class LanguageStorage {
 type Path = TranslationPaths | [basePath: TranslationPaths, dynamicKey: string];
 type ZodResolverCb<T> = (zod: typeof z, t: T) => z.ZodSchema;
 
+export type Translator = (path: Path, opts?: TOptions) => string;
+
 export function useTranslationUtils() {
   const { t, i18n } = useTranslation();
 
   const _translation = useCallback(
-    (path: Path, opts?: TOptions) => t(typeof path === 'string' ? path : path.join('.'), opts),
+    (path: Path, opts?: TOptions): string =>
+      t(typeof path === 'string' ? path : path.join('.'), opts),
     []
   );
 

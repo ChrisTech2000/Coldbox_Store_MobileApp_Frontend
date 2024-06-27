@@ -1,12 +1,13 @@
 import startCase from 'lodash/startCase';
 import React, { useCallback, useState } from 'react';
+import { FieldValues, Path } from 'react-hook-form';
 import { GestureResponderEvent, ScrollView, View } from 'react-native';
 import { Divider, RadioButton } from 'react-native-paper';
-import { FieldValues, Path } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
-import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
+import { Select } from '#ui/components/Select';
 import { cn } from '#ui/lib/cn';
 
 type SignUpFormSelectProps<T extends FieldValues> = {
@@ -28,6 +29,7 @@ export function SignUpFormSelectMd<T extends FieldValues>({
   isModalOpen,
   closeModal,
 }: SignUpFormSelectProps<T>) {
+  const { t } = useTranslationUtils();
   const { fieldName, currentValue, required, setCurrentValue, error } = form;
 
   const [selectedValue, setSelectedValue] = useState<string>('');
@@ -61,14 +63,14 @@ export function SignUpFormSelectMd<T extends FieldValues>({
           minifyLabel
           isModalOpen={isModalOpen}
           content={{
-            header: `Select a ${fieldName}`,
+            header: t('Auth.SignUp.select.header', { fieldName }),
             footer: (
               <View tw="flex flex-row items-center justify-end">
                 <Button mode="text" uppercase onPress={cancel}>
-                  Cancel
+                  {t('Auth.SignUp.select.cancel')}
                 </Button>
                 <Button mode="text" uppercase onPress={submit}>
-                  OK
+                  {t('Auth.SignUp.select.ok')}
                 </Button>
               </View>
             ),

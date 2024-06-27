@@ -8,14 +8,13 @@ import Employee from '#assets/icons/employee.svg';
 import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
 import Logo from '#assets/images/coldtivate_logo.svg';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import type { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
 import { useAuthStore } from '#stores/auth';
 import { ERoles, MAP_ROLES } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { APP_LOCALES } from '#i18n/constants';
 
 import { AccountCard } from './components/AccountCard';
 
@@ -104,7 +103,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
       userType: MAP_ROLES[data.activeProfile],
       password: data.password,
       username: data.user,
-      language: APP_LOCALES.ENGLISH, // TODO: fix
+      language: LanguageStorage.read(),
     });
 
     if (result) {
