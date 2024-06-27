@@ -7,6 +7,7 @@ export interface User {
   email?: string;
   lastLogin: string;
   language?: string;
+  role?: ERoles;
 }
 
 export interface Company {
@@ -50,7 +51,7 @@ export enum EAppGender {
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',
   [ERoles.EMPLOYEE]: 'sp',
-  [ERoles.COOLING_USER]: 'cu',
+  [ERoles.COOLING_USER]: 'f',
 };
 
 export const MAP_API_GENDER_TO_APP = {

@@ -112,7 +112,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
         refreshToken: result.refresh,
       });
 
-      setUser(result.user);
+      setUser({ ...result.user, role: result.role });
     }
   }, []);
 
