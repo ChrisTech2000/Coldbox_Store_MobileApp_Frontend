@@ -270,7 +270,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           labelStyle="text-xs"
           onPress={(evt) => {
             evt.stopPropagation();
-            navigation.navigate('PasswordRecovery');
+            navigation.navigate('PasswordRecoveryRequest');
           }}
         >
           {t('Auth.ForgotPassword.heading')}

@@ -157,6 +157,17 @@ const en = {
         partTwo: '&phoneNumber={{phone}}  Add https:// if url is not working',
       },
     },
+    ResetPassword: {
+      schema: {
+        passwordError:
+          'Your password needs to be at least 8 characters long, contain one uppercase and one lowercase letters, and a number.',
+        confirmPasswordError: 'Password confirmation is mandatory.',
+        passwordsMismatchError: 'The passwords do not match.',
+      },
+      passwordLabel: 'New Password',
+      confirmPasswordLabel: 'Confirm Password',
+      resetButton: 'Reset',
+    },
   },
 };
 

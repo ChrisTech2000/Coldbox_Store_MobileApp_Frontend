@@ -1,14 +1,15 @@
 import React, { useCallback } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useToast } from 'react-native-toast-notifications';
 import { z } from 'zod';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Button } from '#ui/components/Button';
-import AuthService from '#services/AuthService';
-import { useToast } from 'react-native-toast-notifications';
 import { useTranslationUtils } from '#i18n/utils';
+import AuthService from '#services/AuthService';
+import { Button } from '#ui/components/Button';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { AuthRouteProps } from 'navigation/Auth';
 
 const schema = z.object({
   phone: z.string().default(''),
@@ -16,8 +17,9 @@ const schema = z.object({
 
 type PasswordRecoverySchema = { phone: string };
 
-function PasswordRecovery() {
+function PasswordRecoveryRequest(props: AuthRouteProps<'PasswordRecoveryRequest'>) {
   const toast = useToast();
+  const { navigation } = props;
   const { t, zodResolver } = useTranslationUtils();
 
   const { control, handleSubmit } = useForm<PasswordRecoverySchema>({
@@ -30,16 +32,21 @@ function PasswordRecovery() {
       const partOne = t('Auth.ForgotPassword.link.partOne');
       const partTwo = t('Auth.ForgotPassword.link.partTwo', { phone: data.phone });
 
-      await AuthService.requestResetPassword({
-        phoneNumber: data.phone,
-        link: { partOne, partTwo },
-      });
+      try {
+        await AuthService.requestResetPassword({
+          phoneNumber: data.phone,
+          link: { partOne, partTwo },
+        });
+      } catch (error) {
+        // Noop
+      }
 
+      // For security reasons, we don't want to inform the user whether the introduced phone exists in our BD or not
       toast.show(t('Auth.ForgotPassword.messageSentNotification'), {
         type: 'success',
       });
 
-      // TODO: create next screen (when user receives sms and starts resetting process)
+      navigation.navigate('PasswordReset');
     },
     [toast]
   );
@@ -83,4 +90,4 @@ function PasswordRecovery() {
   );
 }
 
-export default withSafeArea(PasswordRecovery);
+export default withSafeArea(PasswordRecoveryRequest);
