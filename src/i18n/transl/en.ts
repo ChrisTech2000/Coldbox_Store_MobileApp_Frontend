@@ -118,6 +118,7 @@ const en = {
         genderFieldName: 'gender',
         terms:
           'I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use',
+        submit: 'SignUp',
       },
       SignUpCompany: {
         companyHeader: 'Sign Up Company',
@@ -125,7 +126,6 @@ const en = {
         companyNameLabel: 'Company Name',
         emailLabel: 'Company Name',
         currencyFieldName: 'currency',
-        submit: 'SignUp',
         modal: {
           warning: 'If you register without a phone some functionalities will not work:',
           reasons: {
@@ -138,7 +138,10 @@ const en = {
           },
         },
       },
-      SignUpCoolingUser: {},
+      SignUpCoolingUser: {
+        header: 'Sign Up Registered Employee',
+        languageFieldName: 'language',
+      },
     },
     ForgotPassword: {
       heading: 'Forgot Password',

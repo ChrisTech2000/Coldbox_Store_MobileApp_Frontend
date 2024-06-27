@@ -120,6 +120,7 @@ export default {
         genderFieldName: 'लिंग',
         terms:
           'मैं Coldtivate उपयोगकर्ता लाइसेंस समझौते, गोपनीयता नीति और COMSOL उपयोग की शर्तों से सहमत हूँ',
+        submit: 'साइन अप',
       },
       SignUpCompany: {
         companyHeader: 'कंपनी का साइन अप करें',
@@ -127,7 +128,6 @@ export default {
         companyNameLabel: 'कंपनी का नाम',
         emailLabel: 'ईमेल',
         currencyFieldName: 'मुद्रा',
-        submit: 'साइन अप',
         modal: {
           warning:
             'अगर आप बिना फ़ोन नंबर के रजिस्टर करते हैं तो कुछ कार्यक्षमताएँ काम नहीं करेंगी:',
@@ -141,7 +141,10 @@ export default {
           },
         },
       },
-      SignUpCoolingUser: {},
+      SignUpCoolingUser: {
+        header: 'रजिस्टर्ड कर्मचारी का साइन अप करें',
+        languageFieldName: 'भाषा',
+      },
     },
     ForgotPassword: {
       heading: 'पासवर्ड भूल गए',

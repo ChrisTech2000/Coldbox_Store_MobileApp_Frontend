@@ -391,7 +391,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         onPress={handleSubmit(checkPhoneNumber)}
         disabled={!termsAgreement}
       >
-        {t('Auth.SignUp.SignUpCompany.submit')}
+        {t('Auth.SignUp.commonForm.submit')}
       </Button>
 
       {/** USER WITHOUT PHONE MODAL */}

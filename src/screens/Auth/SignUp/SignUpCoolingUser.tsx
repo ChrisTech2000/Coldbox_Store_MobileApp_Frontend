@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Text, TextInput } from 'react-native-paper';
@@ -107,16 +107,18 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
 
   return (
     <KeyboardAwareScrollView tw="flex-1 h-full" keyboardOpeningTime={Number.MAX_SAFE_INTEGER}>
-      <Text tw="mb-4 text-5xl font-bold self-center text-center">Welcome to Coldtivate</Text>
+      <Text tw="mb-4 text-5xl font-bold self-center text-center">{t('Auth.SignUp.welcome')}</Text>
 
       {/** SIGNUP COMPANY */}
-      <Text tw="mb-2 px-4 text-xl font-bold">Sign Up Cooling User</Text>
+      <Text tw="mb-2 px-4 text-xl font-bold">{t('Auth.SignUp.SignUpCoolingUser.header')}</Text>
 
       {/** COUNTRY */}
       <SignUpFormSelectLg<SignUpCoolingUserSchemaType>
         form={{
           control,
-          fieldName: 'country',
+          fieldName: t(
+            'Auth.SignUp.commonForm.countryFieldName'
+          ) as Path<SignUpCoolingUserSchemaType>,
           required: true,
           error: !!errors.country,
           currentValue: selectedCountry ?? '',
@@ -142,7 +144,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Phone Number (with country code)*'}
+            label={`${t('Auth.SignUp.commonForm.phoneLabel')}*`}
             onChangeText={onChange}
             value={value}
             error={errors.phone}
@@ -160,7 +162,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'First Name*'}
+            label={`${t('Auth.SignUp.commonForm.firstNameLabel')}*`}
             onChangeText={onChange}
             value={value}
             error={errors.firstName}
@@ -178,7 +180,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Last Name*'}
+            label={`${t('Auth.SignUp.commonForm.lastNameLabel')}*`}
             onChangeText={onChange}
             value={value}
             error={errors.lastName}
@@ -190,7 +192,9 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       {/** LANGUAGES */}
       <SignUpFormSelectMd<SignUpCoolingUserSchemaType>
         form={{
-          fieldName: 'language',
+          fieldName: t(
+            'Auth.SignUp.SignUpCoolingUser.languageFieldName'
+          ) as Path<SignUpCoolingUserSchemaType>,
           required: true,
           error: !!errors.language,
           currentValue: selectedLanguage,
@@ -209,7 +213,9 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       {/** GENDER */}
       <SignUpFormSelectMd<SignUpCoolingUserSchemaType>
         form={{
-          fieldName: 'gender',
+          fieldName: t(
+            'Auth.SignUp.commonForm.genderFieldName'
+          ) as Path<SignUpCoolingUserSchemaType>,
           required: true,
           error: !!errors.gender,
           currentValue: selectedGender,
@@ -234,7 +240,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Password*'}
+            label={`${t('Auth.SignUp.commonForm.passwordLabel')}*`}
             onChangeText={onChange}
             value={value}
             secureTextEntry={hidePass}
@@ -259,7 +265,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Confirm Password*'}
+            label={`${t('Auth.SignUp.commonForm.confirmPasswordLabel')}*`}
             onChangeText={onChange}
             value={value}
             secureTextEntry={hideConfirmPass}
@@ -291,9 +297,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
                 status={value ? 'checked' : 'unchecked'}
               />
             </View>
-            <Text>
-              I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use
-            </Text>
+            <Text>{t('Auth.SignUp.commonForm.terms')}</Text>
           </View>
         )}
         name="terms"
@@ -307,7 +311,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         onPress={handleSubmit(onSubmit)}
         disabled={!termsAgreement}
       >
-        Sign Up
+        {t('Auth.SignUp.commonForm.submit')}
       </Button>
     </KeyboardAwareScrollView>
   );
