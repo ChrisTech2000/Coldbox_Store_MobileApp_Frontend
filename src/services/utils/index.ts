@@ -15,8 +15,14 @@ export const serialize = (obj: Json): Json => {
   if (Array.isArray(obj)) {
     return obj.map((item) => serialize(item));
   } else if (isObject(obj)) {
-    return Object.keys(obj).reduce<JsonObject>((acc, key) => {
-      acc[snakeCase(key)] = serialize(obj[key]);
+    const { unserializable, ...rest } = obj as JsonObject;
+
+    return Object.keys(rest).reduce<JsonObject>((acc, key) => {
+      if (unserializable && Array.isArray(unserializable) && unserializable.includes(key)) {
+        acc[key] = serialize(rest[key]);
+      } else {
+        acc[snakeCase(key)] = serialize(rest[key]);
+      }
       return acc;
     }, {});
   }

@@ -1,15 +1,15 @@
 import { EAuthenticationEndpoints } from '#constants/api.routes';
 import {
-  type SignUpAsCompanyParams,
+  type RequestPasswordResetParams,
   type SignInParams,
+  type SignUpAsCompanyParams,
   type SignUpAsCoolingUserParams,
 } from '#types/api.params';
 import {
-  type SignUpAsCompanyResponse,
   type SignInResponse,
+  type SignUpAsCompanyResponse,
   type SignUpAsCoolingUserResponse,
 } from '#types/api.responses';
-import merge from 'lodash/merge';
 import HttpClient, { HttpClientOptions } from './HttpClient';
 
 class AuthService extends HttpClient {
@@ -31,7 +31,12 @@ class AuthService extends HttpClient {
   };
 
   public signUpAsCoolingUser = async (params: SignUpAsCoolingUserParams) => {
-    const _params = merge(params, { createUser: true, parentName: '' });
+    const _params = {
+      ...params,
+      createUser: true,
+      parentName: '',
+      unserializable: ['createUser'],
+    };
 
     try {
       const { data } = await this.post<SignUpAsCoolingUserResponse>(
@@ -60,12 +65,28 @@ class AuthService extends HttpClient {
     }
   };
 
-  public signOut = () => {
-    // TODO: implement
-  };
+  public requestResetPassword = async (params: RequestPasswordResetParams) => {
+    // TODO: study possibility of making this a BE responsibility
+    const partOne =
+      'Click on this link to reset your password https://app.coldtivate.org/auth/reset/?resetcode=';
+    const partTwo = `&phoneNumber=${params.phoneNumber}  Add https:// if url is not working`;
+    const _params = {
+      ...params,
+      partOne,
+      partTwo,
+    };
 
-  public resetPassword = () => {
-    // TODO: implement
+    try {
+      // No need to map the keys in this request (BE is expecting camel case...)
+      const { data } = await this.axios.post<SignInResponse>(
+        EAuthenticationEndpoints.REQUEST_PASSWORD_RESET_ENDPOINT,
+        _params
+      );
+
+      return data;
+    } catch (error) {
+      console.log(JSON.stringify(error));
+    }
   };
 }
 

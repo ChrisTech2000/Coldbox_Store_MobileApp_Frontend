@@ -2,24 +2,37 @@ import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { Button } from '#ui/components/Button';
+import AuthService from '#services/AuthService';
+import { useToast } from 'react-native-toast-notifications';
 
 const schema = z.object({
   phone: z.string().default(''),
 });
 
+type PasswordRecoverySchema = { phone: string };
+
 function PasswordRecovery() {
-  const { control, handleSubmit } = useForm({
+  const toast = useToast();
+
+  const { control, handleSubmit } = useForm<PasswordRecoverySchema>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = useCallback(() => {
-    // TODO: Implement API call here
-  }, []);
+  const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(
+    async (data) => {
+      await AuthService.requestResetPassword({ phoneNumber: data.phone });
+      toast.show('If the phone number exists, an sms has been sent to reset your password.', {
+        type: 'success',
+      });
+      // TODO: create next screen (when user receives sms and starts resetting process)
+    },
+    [toast]
+  );
 
   return (
     <View tw="flex-1 items-center">
