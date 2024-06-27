@@ -1,8 +1,8 @@
 import React from 'react';
-import type { StyleProp, ViewStyle } from 'react-native';
+import { type StyleProp, type ViewStyle } from 'react-native';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { BottomTabDescriptorMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import { BottomNavigation as MDBottomNavigation } from 'react-native-paper';
+import { BottomNavigation as MDBottomNavigation, Text } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
 
 function useStyles(descriptors: BottomTabDescriptorMap, routeKey: string) {
@@ -45,6 +45,15 @@ export default function BottomNavigation(props: BottomTabBarProps) {
         const { options } = descriptors[route.key];
         if (typeof options.tabBarLabel === 'string') return options.tabBarLabel;
         return options.title;
+      }}
+      renderLabel={({ route }) => {
+        const label =
+          descriptors[route.key].options.tabBarLabel || descriptors[route.key].options.title;
+        return (label as string)?.split(' ').map((label: string, id) => (
+          <Text key={`${label}-${id}`} tw="text-center">
+            {label}
+          </Text>
+        ));
       }}
     />
   );
