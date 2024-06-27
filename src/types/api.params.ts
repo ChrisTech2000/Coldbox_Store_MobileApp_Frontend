@@ -30,4 +30,8 @@ export interface SignUpAsCoolingUserParams extends JsonObject {
 
 export interface RequestPasswordResetParams extends JsonObject {
   phoneNumber: string;
+  link: {
+    partOne: string;
+    partTwo: string;
+  };
 }

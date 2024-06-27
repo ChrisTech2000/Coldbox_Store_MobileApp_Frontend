@@ -66,14 +66,10 @@ class AuthService extends HttpClient {
   };
 
   public requestResetPassword = async (params: RequestPasswordResetParams) => {
-    // TODO: study possibility of making this a BE responsibility
-    const partOne =
-      'Click on this link to reset your password https://app.coldtivate.org/auth/reset/?resetcode=';
-    const partTwo = `&phoneNumber=${params.phoneNumber}  Add https:// if url is not working`;
     const _params = {
-      ...params,
-      partOne,
-      partTwo,
+      phoneNumber: params.phoneNumber,
+      partOne: params.link.partOne,
+      partTwo: params.link.partTwo,
     };
 
     try {

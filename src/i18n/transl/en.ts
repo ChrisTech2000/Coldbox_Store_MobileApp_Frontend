@@ -145,6 +145,17 @@ const en = {
     },
     ForgotPassword: {
       heading: 'Forgot Password',
+      messageSentNotification:
+        'If the phone number exists, an sms has been sent to reset your password.',
+      instructions:
+        'In order to reset your password, please enter the phone number with it&apos;s country code, to which the account is connected.',
+      phoneInputLabel: 'Phone Number',
+      resetButton: 'Reset',
+      link: {
+        partOne:
+          'Click on this link to reset your password https://app.coldtivate.org/auth/reset/?resetcode=',
+        partTwo: '&phoneNumber={{phone}}  Add https:// if url is not working',
+      },
     },
   },
 };

@@ -148,6 +148,17 @@ export default {
     },
     ForgotPassword: {
       heading: 'पासवर्ड भूल गए',
+      messageSentNotification:
+        'अगर फोन नंबर मौजूद है, तो आपके पासवर्ड रीसेट करने के लिए एक एसएमएस भेजा गया है।',
+      instructions:
+        'अपना पासवर्ड रीसेट करने के लिए, कृपया फोन नंबर दर्ज करें जिसके साथ देश कोड है, जिससे खाता जुड़ा हुआ है।',
+      phoneInputLabel: 'फोन नंबर',
+      resetButton: 'रीसेट',
+      link: {
+        partOne:
+          'अपना पासवर्ड रीसेट करने के लिए इस लिंक पर क्लिक करें https://app.coldtivate.org/auth/reset/?resetcode=',
+        partTwo: '&phoneNumber={{phone}}  यदि URL काम नहीं कर रहा है, तो https:// जोड़ें',
+      },
     },
   },
 } satisfies Translations;
