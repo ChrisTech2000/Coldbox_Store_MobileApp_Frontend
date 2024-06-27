@@ -9,7 +9,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { Button } from '#ui/components/Button';
 import AuthService from '#services/AuthService';
 import { useToast } from 'react-native-toast-notifications';
-import { useTranslationUtils } from 'i18n/utils';
+import { useTranslationUtils } from '#i18n/utils';
 
 const schema = z.object({
   phone: z.string().default(''),

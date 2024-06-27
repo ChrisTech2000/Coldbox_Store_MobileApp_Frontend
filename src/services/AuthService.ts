@@ -1,36 +1,44 @@
 import { EAuthenticationEndpoints } from '#constants/api.routes';
 import {
-  type RequestPasswordResetParams,
-  type SignInParams,
-  type SignUpAsCompanyParams,
-  type SignUpAsCoolingUserParams,
+  RequestPasswordResetParams,
+  SignInParams,
+  SignUpAsCompanyParams,
+  SignUpAsCoolingUserParams,
 } from '#types/api.params';
 import {
-  type SignInResponse,
-  type SignUpAsCompanyResponse,
-  type SignUpAsCoolingUserResponse,
+  SignInResponse,
+  SignUpAsCompanyResponse,
+  SignUpAsCoolingUserResponse,
 } from '#types/api.responses';
+import { AxiosError } from 'axios';
+
 import HttpClient, { HttpClientOptions } from './HttpClient';
+import ErrorUtil, { CustomError } from './utils/ErrorUtil';
 
 class AuthService extends HttpClient {
   constructor(options?: HttpClientOptions) {
     super(options);
   }
 
-  public signUpAsCompany = async (params: SignUpAsCompanyParams) => {
+  public signUpAsCompany = async (
+    params: SignUpAsCompanyParams
+  ): Promise<SignUpAsCompanyResponse | undefined> => {
     try {
       const { data } = await this.post<SignUpAsCompanyResponse>(
         EAuthenticationEndpoints.SIGN_UP_AS_COMPANY_ENDPOINT,
         params
       );
-
       return data;
     } catch (error) {
-      console.log(JSON.stringify(error));
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
     }
   };
 
-  public signUpAsCoolingUser = async (params: SignUpAsCoolingUserParams) => {
+  public signUpAsCoolingUser = async (
+    params: SignUpAsCoolingUserParams
+  ): Promise<SignUpAsCoolingUserResponse | undefined> => {
     const _params = {
       ...params,
       createUser: true,
@@ -43,10 +51,11 @@ class AuthService extends HttpClient {
         EAuthenticationEndpoints.SIGN_UP_AS_COOLING_USER,
         _params
       );
-
       return data;
     } catch (error) {
-      console.log(JSON.stringify(error));
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
     }
   };
 
@@ -61,11 +70,15 @@ class AuthService extends HttpClient {
 
       return data;
     } catch (error) {
-      console.log(JSON.stringify(error));
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
     }
   };
 
-  public requestResetPassword = async (params: RequestPasswordResetParams) => {
+  public requestResetPassword = async (
+    params: RequestPasswordResetParams
+  ): Promise<SignInResponse | undefined> => {
     const _params = {
       phoneNumber: params.phoneNumber,
       partOne: params.link.partOne,
@@ -81,7 +94,9 @@ class AuthService extends HttpClient {
 
       return data;
     } catch (error) {
-      console.log(JSON.stringify(error));
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
     }
   };
 }
