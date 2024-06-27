@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -19,10 +18,10 @@ type PasswordRecoverySchema = { phone: string };
 
 function PasswordRecovery() {
   const toast = useToast();
-  const { t } = useTranslationUtils();
+  const { t, zodResolver } = useTranslationUtils();
 
   const { control, handleSubmit } = useForm<PasswordRecoverySchema>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(() => schema),
   });
 
   const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(

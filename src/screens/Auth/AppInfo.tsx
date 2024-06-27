@@ -3,14 +3,23 @@ import { ScrollView, View } from 'react-native';
 import { Divider, List, Text } from 'react-native-paper';
 
 import { FAQ_CONTENT } from '#constants/faq';
-import { LanguageStorage } from '#i18n/utils';
 import { ERoles } from '#types/global';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { mmkv } from '#stores/lib/storage';
+import { TranslationLocales } from 'i18n/constants';
 
 function AppInfo() {
+  const activeLanguage = mmkv.getString('i18n-locale');
+  console.log(activeLanguage);
+
   const faq = useMemo(
-    () => FAQ_CONTENT[LanguageStorage.read()].filter((faq) => faq.role.includes(ERoles.AUTH)),
-    []
+    () =>
+      activeLanguage
+        ? FAQ_CONTENT[activeLanguage as TranslationLocales].filter((faq) =>
+            faq.role.includes(ERoles.AUTH)
+          )
+        : [],
+    [activeLanguage]
   );
 
   return (

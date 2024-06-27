@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, Path, SubmitHandler, useForm } from 'react-hook-form';
@@ -23,7 +22,7 @@ const allCountryNames = allCountries.map((code) => code.countryName);
 
 function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
   const { navigation } = props;
-  const { t } = useTranslationUtils();
+  const { t, zodResolver } = useTranslationUtils();
 
   const {
     control,
@@ -33,7 +32,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
     clearErrors,
     formState: { errors },
   } = useForm<SignUpCoolingUserSchemaType>({
-    resolver: zodResolver(SignUpAsCoolingUserSchema(t)),
+    resolver: zodResolver(() => SignUpAsCoolingUserSchema(t)),
   });
 
   ////////////// SIGN UP COOLING USER

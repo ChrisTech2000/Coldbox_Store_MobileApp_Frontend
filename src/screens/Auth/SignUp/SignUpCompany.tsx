@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { currencies as _currencies } from 'currencies.json';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -28,7 +27,7 @@ const allCountryNames = allCountries.map((code) => code.countryName);
 
 function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
   const { navigation } = props;
-  const { t } = useTranslationUtils();
+  const { t, zodResolver } = useTranslationUtils();
 
   const {
     control,
@@ -38,7 +37,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
     clearErrors,
     formState: { errors },
   } = useForm<SignUpCompanySchemaType>({
-    resolver: zodResolver(SignUpAsCompanySchema(t)),
+    resolver: zodResolver(() => SignUpAsCompanySchema(t)),
   });
 
   ////////////// SIGN UP COMPANY
