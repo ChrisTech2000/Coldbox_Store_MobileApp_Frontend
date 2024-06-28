@@ -1,32 +1,54 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { Button } from '#ui/components/Button';
+import AuthService from '#services/AuthService';
+import { useToast } from 'react-native-toast-notifications';
+import { useTranslationUtils } from '#i18n/utils';
 
 const schema = z.object({
   phone: z.string().default(''),
 });
 
+type PasswordRecoverySchema = { phone: string };
+
 function PasswordRecovery() {
-  const { control, handleSubmit } = useForm({
-    resolver: zodResolver(schema),
+  const toast = useToast();
+  const { t, zodResolver } = useTranslationUtils();
+
+  const { control, handleSubmit } = useForm<PasswordRecoverySchema>({
+    resolver: zodResolver(() => schema),
   });
 
-  const onSubmit = useCallback(() => {
-    // TODO: Implement API call here
-  }, []);
+  const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(
+    async (data) => {
+      // TODO: study possibility of making this a BE responsibility
+      const partOne = t('Auth.ForgotPassword.link.partOne');
+      const partTwo = t('Auth.ForgotPassword.link.partTwo', { phone: data.phone });
+
+      await AuthService.requestResetPassword({
+        phoneNumber: data.phone,
+        link: { partOne, partTwo },
+      });
+
+      toast.show(t('Auth.ForgotPassword.messageSentNotification'), {
+        type: 'success',
+      });
+
+      // TODO: create next screen (when user receives sms and starts resetting process)
+    },
+    [toast]
+  );
 
   return (
     <View tw="flex-1 items-center">
       <View tw="w-[95%] border border-gray-300 rounded-md mb-6">
         <Text tw="text-base my-1 mx-2 text-green-primary text-center">
-          In order to reset your password, please enter the phone number with it&apos;s country
-          code, to which the account is connected.
+          {t('Auth.ForgotPassword.instructions')}
         </Text>
       </View>
 
@@ -38,7 +60,7 @@ function PasswordRecovery() {
         render={({ field: { onChange, value } }) => (
           <TextInput
             tw="w-[95%] text-base border bg-white rounded-sm h-12"
-            label="Phone number"
+            label={t('Auth.ForgotPassword.instructions')}
             left={<TextInput.Icon icon="phone" />}
             onChangeText={onChange}
             value={value}
@@ -55,7 +77,7 @@ function PasswordRecovery() {
         icon="refresh"
         contentStyle="flex flex-row-reverse items-center"
       >
-        Reset
+        {t('Auth.ForgotPassword.resetButton')}
       </Button>
     </View>
   );

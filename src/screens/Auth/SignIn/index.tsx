@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Dimensions, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Divider, TextInput } from 'react-native-paper';
@@ -8,28 +8,38 @@ import Employee from '#assets/icons/employee.svg';
 import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
 import Logo from '#assets/images/coldtivate_logo.svg';
+import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import type { AuthRouteProps } from '#navigation/Auth';
+import AuthService from '#services/AuthService';
+import { useAuthStore } from '#stores/auth';
+import { ERoles, MAP_ROLES } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { useAuthStore } from '#stores/auth';
-import { useTranslationUtils } from '#i18n/utils';
 
 import { AccountCard } from './components/AccountCard';
 
 const IMG_SIZE = Dimensions.get('screen').width / 2.5;
 const ACCOUNT_TYPE_SIZE = Dimensions.get('screen').width / 5;
 
-// TODO: check if we have profiles available in the BE
 enum EAccountProfile {
-  FARMER = 'farmer',
-  EMPLOYEE = 'employee',
-  OPERATOR = 'operator',
+  FARMER = ERoles.COOLING_USER,
+  EMPLOYEE = ERoles.EMPLOYEE,
+  OPERATOR = ERoles.OPERATOR,
 }
+
+type SignInSchema = {
+  activeProfile: EAccountProfile;
+  user: string;
+  password: string;
+};
 
 function SignIn(props: AuthRouteProps<'SignIn'>) {
   const { navigation } = props;
 
-  const setSession = useAuthStore((store) => store.setSession);
+  const { setSession, setUser } = useAuthStore((store) => ({
+    setSession: store.setSession,
+    setUser: store.setUser,
+  }));
   const { t, zodResolver } = useTranslationUtils();
 
   const descriptions = useMemo(
@@ -47,7 +57,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
     watch,
     clearErrors,
     formState: { errors },
-  } = useForm({
+  } = useForm<SignInSchema>({
     resolver: zodResolver((z, t) =>
       z
         .object({
@@ -88,15 +98,22 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
 
   const activeProfile = watch('activeProfile');
 
-  const onSubmit = useCallback(() => {
-    // TODO: Implement API call here
-
-    setSession({
-      accessToken:
-        '***REMOVED***',
-      refreshToken:
-        '***REMOVED***',
+  const onSubmit: SubmitHandler<SignInSchema> = useCallback(async (data) => {
+    const result = await AuthService.signIn({
+      userType: MAP_ROLES[data.activeProfile],
+      password: data.password,
+      username: data.user,
+      language: LanguageStorage.read(),
     });
+
+    if (result) {
+      setSession({
+        accessToken: result.access,
+        refreshToken: result.refresh,
+      });
+
+      setUser(result.user);
+    }
   }, []);
 
   return (

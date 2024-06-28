@@ -82,8 +82,80 @@ const en = {
         },
       },
     },
+    SignUp: {
+      select: {
+        header: 'Select a {{fieldName}}',
+        label: 'Search...',
+        cancel: 'Cancel',
+        ok: 'OK',
+      },
+      welcome: 'Welcome to Coldtivate',
+      schema: {
+        passwordError:
+          'Your password needs to be at least 8 characters long, contain one uppercase and one lowercase letters, and a number.',
+        confirmPasswordError: 'Password confirmation is mandatory.',
+        passwordsMismatchError: 'The passwords do not match.',
+        countryError: 'Country selection is mandatory.',
+        firstNameError: 'First Name is mandatory.',
+        lastNameError: 'Last Name is mandatory.',
+        phoneError: 'Phone number is mandatory.',
+        invalidPhoneError: 'Phone number is invalid',
+        languageError: 'Language is mandatory.',
+        genderError: 'Gender selection is mandatory.',
+        termsError: 'You need to agree to the Terms of Use.',
+        companyError: 'Company Name is mandatory.',
+        currencyError: 'Currency selection is mandatory.',
+        emailError: 'Email is mandatory.',
+        malformedEmailError: 'Invalid email.',
+      },
+      commonForm: {
+        firstNameLabel: 'First Name',
+        lastNameLabel: 'Last Name',
+        phoneLabel: 'Phone Number (with country code)',
+        passwordLabel: 'Password',
+        confirmPasswordLabel: 'Confirm Password',
+        countryFieldName: 'country',
+        genderFieldName: 'gender',
+        terms:
+          'I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use',
+        submit: 'SignUp',
+      },
+      SignUpCompany: {
+        companyHeader: 'Sign Up Company',
+        userHeader: 'Sign Up Registered Employee',
+        companyNameLabel: 'Company Name',
+        emailLabel: 'Company Name',
+        currencyFieldName: 'currency',
+        modal: {
+          warning: 'If you register without a phone some functionalities will not work:',
+          reasons: {
+            1: 'Resetting account',
+            2: 'Receiving sms receipts',
+          },
+          buttons: {
+            continue: 'Continue Anyway',
+            addPhone: 'Add Phone',
+          },
+        },
+      },
+      SignUpCoolingUser: {
+        header: 'Sign Up Registered Employee',
+        languageFieldName: 'language',
+      },
+    },
     ForgotPassword: {
       heading: 'Forgot Password',
+      messageSentNotification:
+        'If the phone number exists, an sms has been sent to reset your password.',
+      instructions:
+        'In order to reset your password, please enter the phone number with it&apos;s country code, to which the account is connected.',
+      phoneInputLabel: 'Phone Number',
+      resetButton: 'Reset',
+      link: {
+        partOne:
+          'Click on this link to reset your password https://app.coldtivate.org/auth/reset/?resetcode=',
+        partTwo: '&phoneNumber={{phone}}  Add https:// if url is not working',
+      },
     },
   },
 };

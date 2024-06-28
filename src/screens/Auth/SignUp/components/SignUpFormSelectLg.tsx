@@ -1,11 +1,12 @@
 import { FlashList } from '@shopify/flash-list';
+import startCase from 'lodash/startCase';
 import React from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Divider, List, TextInput } from 'react-native-paper';
 
+import { useTranslationUtils } from '#i18n/utils';
 import { Select } from '#ui/components/Select';
-import startCase from 'lodash/startCase';
 import { cn } from '#ui/lib/cn';
 
 type SignUpFormSelectProps<T extends FieldValues> = {
@@ -35,6 +36,7 @@ export function SignUpFormSelectLg<T extends FieldValues>({
   setSearch,
 }: SignUpFormSelectProps<T>) {
   const { control, fieldName, currentValue, required, error } = form;
+  const { t } = useTranslationUtils();
 
   return (
     <View>
@@ -52,12 +54,12 @@ export function SignUpFormSelectLg<T extends FieldValues>({
               currentValue={currentValue}
               isModalOpen={isModalOpen}
               content={{
-                header: `Select a ${fieldName}`,
+                header: t('Auth.SignUp.select.header', { fieldName }),
                 options: (
                   <ScrollView>
                     <TextInput
                       tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600"
-                      label={'Search...'}
+                      label={t('Auth.SignUp.select.label')}
                       onChangeText={(val) => setSearch(val)}
                       value={search}
                       left={<TextInput.Icon icon="magnify" />}
