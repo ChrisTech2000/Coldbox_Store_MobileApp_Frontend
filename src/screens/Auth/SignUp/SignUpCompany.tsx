@@ -1,33 +1,34 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { currencies as _currencies } from 'currencies.json';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Portal, Text, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { z } from 'zod';
 
 import Danger from '#assets/icons/danger.svg';
-import { EGender } from '#types/auth';
+import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import AuthService from '#services/AuthService';
+import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { AuthRouteProps } from 'navigation/Auth';
+
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
-import { SignUpAsCompanySchema } from './schemas';
+import { SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
 import { customCountrySort } from './utils';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
 
-const REASONS_TO_ADD_PHONE = [{ key: 'Resetting account' }, { key: 'Receiving sms receipts' }];
+function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
+  const { navigation } = props;
+  const { t, zodResolver } = useTranslationUtils();
 
-export type SignUpSchemaType = z.infer<typeof SignUpAsCompanySchema>;
-
-function SignUpCompany() {
   const {
     control,
     handleSubmit,
@@ -35,8 +36,8 @@ function SignUpCompany() {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<SignUpSchemaType>({
-    resolver: zodResolver(SignUpAsCompanySchema),
+  } = useForm<SignUpCompanySchemaType>({
+    resolver: zodResolver(() => SignUpAsCompanySchema(t)),
   });
 
   ////////////// SIGN UP COMPANY
@@ -87,20 +88,52 @@ function SignUpCompany() {
   }, [isGenderModalOpen]);
 
   const setGenderValue = useCallback((val: string) => {
-    setValue('gender', val as EGender);
+    setValue('gender', val as EAppGender);
     clearErrors('gender');
   }, []);
 
   ////////////// ACTIONS
-  const onSubmit = useCallback(() => {
-    // TODO: Implement API call here
+  const onSubmit: SubmitHandler<SignUpCompanySchemaType> = useCallback(async (data) => {
+    const {
+      firstName,
+      lastName,
+      phone,
+      email,
+      password: { password },
+      gender,
+      companyName: name,
+      country,
+      currency,
+    } = data;
+
+    const result = await AuthService.signUpAsCompany({
+      user: {
+        firstName,
+        lastName,
+        phone,
+        email,
+        password,
+        gender: MAP_APP_GENDER_TO_API[gender],
+      },
+      company: {
+        name,
+        country,
+        currency,
+        language: LanguageStorage.read(),
+        crop: [],
+      },
+    });
+
+    if (result) {
+      navigation.navigate('SignIn');
+    }
   }, []);
 
   const checkPhoneNumber = useCallback(() => {
     if (!phoneNumber) {
       setIsPhoneModalOpen(true);
     } else {
-      onSubmit();
+      handleSubmit(onSubmit);
     }
   }, [phoneNumber]);
 
@@ -124,10 +157,10 @@ function SignUpCompany() {
 
   return (
     <KeyboardAwareScrollView tw="flex-1 h-full" keyboardOpeningTime={Number.MAX_SAFE_INTEGER}>
-      <Text tw="mb-4 text-5xl font-bold self-center text-center">Welcome to Coldtivate</Text>
+      <Text tw="mb-4 text-5xl font-bold self-center text-center">{t('Auth.SignUp.welcome')}</Text>
 
       {/** SIGNUP COMPANY */}
-      <Text tw="mb-2 px-4 text-xl font-bold">Sign Up Company</Text>
+      <Text tw="mb-2 px-4 text-xl font-bold">{t('Auth.SignUp.SignUpCompany.companyHeader')}</Text>
 
       {/** COMPANY NAME */}
       <Controller
@@ -138,7 +171,7 @@ function SignUpCompany() {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-3 h-12"
-            label={'Company Name*'}
+            label={`${t('Auth.SignUp.SignUpCompany.companyNameLabel')}*`}
             onChangeText={onChange}
             value={value}
             error={errors.companyName}
@@ -148,10 +181,10 @@ function SignUpCompany() {
       />
 
       {/** COUNTRY */}
-      <SignUpFormSelectLg<SignUpSchemaType>
+      <SignUpFormSelectLg<SignUpCompanySchemaType>
         form={{
           control,
-          fieldName: 'country',
+          fieldName: t('Auth.SignUp.commonForm.countryFieldName') as Path<SignUpCompanySchemaType>,
           currentValue: selectedCountry ?? '',
         }}
         isModalOpen={isCountriesModalOpen}
@@ -162,10 +195,12 @@ function SignUpCompany() {
       />
 
       {/** CURRENCY */}
-      <SignUpFormSelectLg<SignUpSchemaType>
+      <SignUpFormSelectLg<SignUpCompanySchemaType>
         form={{
           control,
-          fieldName: 'currency',
+          fieldName: t(
+            'Auth.SignUp.SignUpCompany.currencyFieldName'
+          ) as Path<SignUpCompanySchemaType>,
           required: true,
           error: !!errors.currency,
           currentValue: selectedCurrency
@@ -185,7 +220,7 @@ function SignUpCompany() {
       )}
 
       {/** SIGNUP EMPLOYEE */}
-      <Text tw="mt-4 mb-2 px-4 text-xl font-bold">Sign Up Registered Employee</Text>
+      <Text tw="mt-4 mb-2 px-4 text-xl font-bold">{t('Auth.SignUp.SignUpCompany.userHeader')}</Text>
 
       {/** EMAIL */}
       <Controller
@@ -196,7 +231,7 @@ function SignUpCompany() {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Email*'}
+            label={`${t('Auth.SignUp.SignUpCompany.emailLabel')}*`}
             onChangeText={onChange}
             value={value}
             error={errors.email}
@@ -214,7 +249,7 @@ function SignUpCompany() {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'First Name*'}
+            label={`${t('Auth.SignUp.commonForm.firstNameLabel')}*`}
             onChangeText={onChange}
             value={value}
             error={errors.firstName}
@@ -232,7 +267,7 @@ function SignUpCompany() {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Last Name*'}
+            label={`${t('Auth.SignUp.commonForm.lastNameLabel')}*`}
             onChangeText={onChange}
             value={value}
             error={errors.lastName}
@@ -244,7 +279,7 @@ function SignUpCompany() {
       {/** GENDER */}
       <SignUpFormSelectMd
         form={{
-          fieldName: 'gender',
+          fieldName: t('Auth.SignUp.commonForm.genderFieldName') as Path<SignUpCompanySchemaType>,
           required: true,
           error: !!errors.gender,
           currentValue: selectedGender,
@@ -252,7 +287,7 @@ function SignUpCompany() {
         }}
         isModalOpen={isGenderModalOpen}
         closeModal={closeGenderModal}
-        data={[EGender.FEMALE, EGender.MALE, EGender.OTHER]}
+        data={[EAppGender.FEMALE, EAppGender.MALE, EAppGender.OTHER]}
       />
       {errors.gender && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
@@ -266,7 +301,7 @@ function SignUpCompany() {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Phone Number (with country code)'}
+            label={t('Auth.SignUp.commonForm.phoneLabel')}
             onChangeText={onChange}
             value={value}
             error={errors.phone}
@@ -284,7 +319,7 @@ function SignUpCompany() {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Password*'}
+            label={`${t('Auth.SignUp.commonForm.passwordLabel')}*`}
             onChangeText={onChange}
             value={value}
             secureTextEntry={hidePass}
@@ -309,7 +344,7 @@ function SignUpCompany() {
         render={({ field: { onChange, value } }) => (
           <Input
             tw="w-full text-base bg-white rounded-sm mb-2 h-12"
-            label={'Confirm Password*'}
+            label={`${t('Auth.SignUp.commonForm.confirmPasswordLabel')}*`}
             onChangeText={onChange}
             value={value}
             error={errors.password?.confirmPassword}
@@ -341,9 +376,7 @@ function SignUpCompany() {
                 status={value ? 'checked' : 'unchecked'}
               />
             </View>
-            <Text>
-              I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use
-            </Text>
+            <Text>{t('Auth.SignUp.commonForm.terms')}</Text>
           </View>
         )}
         name="terms"
@@ -357,7 +390,7 @@ function SignUpCompany() {
         onPress={handleSubmit(checkPhoneNumber)}
         disabled={!termsAgreement}
       >
-        Sign Up
+        {t('Auth.SignUp.commonForm.submit')}
       </Button>
 
       {/** USER WITHOUT PHONE MODAL */}
@@ -366,13 +399,14 @@ function SignUpCompany() {
           <View tw="w-full items-center mx-16 bg-white rounded-sm py-1 max-h-80">
             <Text tw="text-lg font-bold mb-1 mt-2">Warning</Text>
             <Danger tw="max-h-16 mb-1" />
-            <Text tw="text-center mb-2">
-              If you register without a phone some functionalities will not work:
-            </Text>
-            {REASONS_TO_ADD_PHONE.map((item) => (
-              <View key={item.key} tw="flex flex-row space-x-1 items-center">
+            <Text tw="text-center mb-2">{t('Auth.SignUp.SignUpCompany.modal.warning')}</Text>
+            {[
+              t('Auth.SignUp.SignUpCompany.modal.reasons.1'),
+              t('Auth.SignUp.SignUpCompany.modal.reasons.2'),
+            ].map((item) => (
+              <View key={item} tw="flex flex-row space-x-1 items-center">
                 <Icon name="fiber-manual-record" size={8} />
-                <Text>{item.key}</Text>
+                <Text>{item}</Text>
               </View>
             ))}
             <Button
@@ -383,7 +417,7 @@ function SignUpCompany() {
               icon="close-circle-outline"
               contentStyle="flex flex-row-reverse items-center"
             >
-              Continue Anyway
+              {t('Auth.SignUp.SignUpCompany.modal.buttons.continue')}
             </Button>
             <Button
               tw="border-2 border-green-primary mb-2"
@@ -393,7 +427,7 @@ function SignUpCompany() {
               icon="phone"
               contentStyle="flex flex-row-reverse items-center"
             >
-              Add Phone
+              {t('Auth.SignUp.SignUpCompany.modal.buttons.addPhone')}
             </Button>
           </View>
         </Modal>

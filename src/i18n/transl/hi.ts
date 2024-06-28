@@ -84,8 +84,92 @@ export default {
         },
       },
     },
+    SignUp: {
+      select: {
+        header: 'एक चयन करें {{fieldName}}',
+        label: 'खोज...',
+        cancel: 'रद्द करें',
+        ok: 'ओके',
+      },
+      welcome: 'Coldtivate में आपका स्वागत है',
+      schema: {
+        passwordError:
+          'आपका पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए, जिसमें एक अपरकेस और एक लोअरकेस अक्षर और एक संख्या होनी चाहिए।',
+        confirmPasswordError: 'पासवर्ड की पुष्टि अनिवार्य है।',
+        passwordsMismatchError: 'पासवर्ड मेल नहीं खाते।',
+        countryError: 'देश का चयन अनिवार्य है।',
+        firstNameError: 'पहला नाम अनिवार्य है।',
+        lastNameError: 'अंतिम नाम अनिवार्य है।',
+        phoneError: 'फ़ोन नंबर अनिवार्य है।',
+        invalidPhoneError: 'फ़ोन नंबर अमान्य है।',
+        languageError: 'भाषा अनिवार्य है।',
+        genderError: 'लिंग चयन अनिवार्य है।',
+        termsError: 'आपको उपयोग की शर्तों से सहमत होना आवश्यक है।',
+        companyError: 'कंपनी का नाम अनिवार्य है।',
+        currencyError: 'मुद्रा चयन अनिवार्य है।',
+        emailError: 'ईमेल अनिवार्य है।',
+        malformedEmailError: 'अमान्य ईमेल।',
+      },
+      commonForm: {
+        firstNameLabel: 'पहला नाम',
+        lastNameLabel: 'अंतिम नाम',
+        phoneLabel: 'फोन नंबर (देश कोड के साथ)',
+        passwordLabel: 'पासवर्ड',
+        confirmPasswordLabel: 'पासवर्ड की पुष्टि करें',
+        countryFieldName: 'देश',
+        genderFieldName: 'लिंग',
+        terms:
+          'मैं Coldtivate उपयोगकर्ता लाइसेंस समझौते, गोपनीयता नीति और COMSOL उपयोग की शर्तों से सहमत हूँ',
+        submit: 'साइन अप',
+      },
+      SignUpCompany: {
+        companyHeader: 'कंपनी का साइन अप करें',
+        userHeader: 'रजिस्टर्ड कर्मचारी का साइन अप करें',
+        companyNameLabel: 'कंपनी का नाम',
+        emailLabel: 'ईमेल',
+        currencyFieldName: 'मुद्रा',
+        modal: {
+          warning:
+            'अगर आप बिना फ़ोन नंबर के रजिस्टर करते हैं तो कुछ कार्यक्षमताएँ काम नहीं करेंगी:',
+          reasons: {
+            1: 'खाता रीसेट करना',
+            2: 'एसएमएस रसीद प्राप्त करना',
+          },
+          buttons: {
+            continue: 'फिर भी जारी रखें',
+            addPhone: 'फोन जोड़ें',
+          },
+        },
+      },
+      SignUpCoolingUser: {
+        header: 'रजिस्टर्ड कर्मचारी का साइन अप करें',
+        languageFieldName: 'भाषा',
+      },
+    },
     ForgotPassword: {
       heading: 'पासवर्ड भूल गए',
+      messageSentNotification:
+        'अगर फोन नंबर मौजूद है, तो आपके पासवर्ड रीसेट करने के लिए एक एसएमएस भेजा गया है।',
+      instructions:
+        'अपना पासवर्ड रीसेट करने के लिए, कृपया फोन नंबर दर्ज करें जिसके साथ देश कोड है, जिससे खाता जुड़ा हुआ है।',
+      phoneInputLabel: 'फोन नंबर',
+      resetButton: 'रीसेट',
+      link: {
+        partOne:
+          'अपना पासवर्ड रीसेट करने के लिए इस लिंक पर क्लिक करें https://app.coldtivate.org/auth/reset/?resetcode=',
+        partTwo: '&phoneNumber={{phone}}  यदि URL काम नहीं कर रहा है, तो https:// जोड़ें',
+      },
+    },
+    ResetPassword: {
+      schema: {
+        passwordError:
+          'आपका पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए, जिसमें एक अपरकेस और एक लोअरकेस अक्षर और एक संख्या होनी चाहिए।',
+        confirmPasswordError: 'पासवर्ड की पुष्टि अनिवार्य है।',
+        passwordsMismatchError: 'पासवर्ड मेल नहीं खा रहे हैं।',
+      },
+      passwordLabel: 'नया पासवर्ड',
+      confirmPasswordLabel: 'पासवर्ड की पुष्टि करें',
+      resetButton: 'रीसेट',
     },
   },
   Dashboard: {

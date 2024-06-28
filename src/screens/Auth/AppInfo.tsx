@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
-import { Divider, List, Text } from 'react-native-paper';
+import { Divider, List } from 'react-native-paper';
 
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { TextRegular } from '#ui/components/Text';
+
+import { LanguageStorage } from '#i18n/utils';
 import { FAQ_CONTENT } from '#constants/faq';
 import { ERoles } from '#types/global';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-
-const FAQ = FAQ_CONTENT.filter((faq) => faq.role.includes(ERoles.AUTH));
 
 function AppInfo() {
+  const faq = useMemo(
+    () => FAQ_CONTENT[LanguageStorage.read()].filter((faq) => faq.role.includes(ERoles.AUTH)),
+    []
+  );
+
   return (
     <ScrollView tw="w-full h-full space-y-4">
       <List.AccordionGroup>
-        {FAQ.map((faq, index) => (
-          <View key={`${faq.title}-${index}`}>
-            <List.Accordion title={faq.title} id={index}>
-              <Text tw="text-xs text-gray-500 text-wrap mx-8 mt-2 mb-8">{faq.text}</Text>
+        {faq.map((item, index) => (
+          <View key={`${item.title}-${index}`}>
+            <List.Accordion title={item.title} id={index}>
+              <TextRegular tw="text-wrap mx-8 mt-2 mb-8">{item.text}</TextRegular>
             </List.Accordion>
             <Divider />
           </View>

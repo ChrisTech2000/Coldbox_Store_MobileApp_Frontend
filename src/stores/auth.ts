@@ -1,11 +1,12 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { useShallow } from 'zustand/react/shallow';
 import { jwtDecode } from 'jwt-decode';
 import moize from 'moize';
 import ms from 'ms';
 import { useEffect } from 'react';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 
+import { User } from '#types/global';
 import { useInterval } from '#ui/hooks/useInterval';
 import storage from './lib/storage';
 
@@ -24,10 +25,12 @@ export type Tokens = {
 type State = {
   tokens: Tokens | null;
   isAuthenticated: boolean;
+  user: User | null;
 };
 
 type Actions = {
   setSession: (tokens: Tokens | null) => void;
+  setUser: (user: User | null) => void;
   verifySession: (bufferInMs?: number) => boolean;
   renewSession: () => Promise<void>;
   revokeSession: () => void;
@@ -38,10 +41,12 @@ export const useAuthStore = create(
     (set, get) => ({
       tokens: null,
       isAuthenticated: false,
+      user: null,
       setSession: (tokens) => {
         const isAuthenticated = !!tokens?.accessToken && !!tokens?.refreshToken;
         set({ tokens, isAuthenticated });
       },
+      setUser: (user) => set({ user }),
       verifySession: (bufferInMs = 0) => {
         const accessToken = get().tokens?.accessToken;
         if (!accessToken) {
