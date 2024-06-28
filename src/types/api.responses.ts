@@ -20,3 +20,7 @@ export interface SignUpAsCoolingUserResponse {
 }
 
 export interface ResetPasswordResponse {}
+
+export interface GetDashboardProducesResponse {}
+
+export interface GetFarmerDashboardProducesResponse {}

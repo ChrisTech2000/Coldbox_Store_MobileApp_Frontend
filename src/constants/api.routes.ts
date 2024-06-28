@@ -4,3 +4,7 @@ export enum EAuthenticationEndpoints {
   SIGN_UP_AS_COMPANY_ENDPOINT = 'user/v1/service-provider-signup/',
   SIGN_UP_AS_COOLING_USER = 'user/v1/farmers/',
 }
+
+export enum EDashboardEndpoints {
+  GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
+}
