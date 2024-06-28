@@ -1,26 +1,28 @@
-import React, { useCallback } from 'react';
+import type { NavigationProp, RouteProp } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
-  type NativeStackNavigationProp,
   type NativeStackNavigationOptions,
+  type NativeStackNavigationProp,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import type { NavigationProp, RouteProp } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
 import ManagementRoot from '#screens/Dashboard/Management';
-import CompanyDetails from '#screens/Dashboard/Management/CompanyDetails';
-import Locations from '#screens/Dashboard/Management/Locations';
-import AddLocation from '#screens/Dashboard/Management/AddLocation';
-import EditLocation from '#screens/Dashboard/Management/EditLocation';
-import CoolingUnits from '#screens/Dashboard/Management/CoolingUnits';
 import AddCoolingUnit from '#screens/Dashboard/Management/AddCoolingUnit';
-import EditCoolingUnit from '#screens/Dashboard/Management/EditCoolingUnit';
-import Operators from '#screens/Dashboard/Management/Operators';
+import AddCoolingUser from '#screens/Dashboard/Management/AddCoolingUser';
+import AddLocation from '#screens/Dashboard/Management/AddLocation';
 import AddOperator from '#screens/Dashboard/Management/AddOperator';
-import EditOperator from '#screens/Dashboard/Management/EditOperator';
-import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee';
 import AddRegisteredEmployee from '#screens/Dashboard/Management/AddRegisteredEmployee';
+import CompanyDetails from '#screens/Dashboard/Management/CompanyDetails';
+import CoolingUnits from '#screens/Dashboard/Management/CoolingUnits';
+import CoolingUsers from '#screens/Dashboard/Management/CoolingUsers';
+import EditCoolingUnit from '#screens/Dashboard/Management/EditCoolingUnit';
+import EditLocation from '#screens/Dashboard/Management/EditLocation';
+import EditOperator from '#screens/Dashboard/Management/EditOperator';
+import Locations from '#screens/Dashboard/Management/Locations';
+import Operators from '#screens/Dashboard/Management/Operators';
+import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee';
 import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredEmployeeDetails';
 import RevenueAnalysis from '#screens/Dashboard/Management/RevenueAnalysis';
 import UsageAnalysis from '#screens/Dashboard/Management/UsageAnalysis';
@@ -58,6 +60,13 @@ export type ManagementRoutes = {
     firstName: string;
     familyName: string;
   };
+  // Cooling User related routes
+  CoolingUsers: undefined;
+  AddCoolingUser: undefined;
+  EditCoolingUser: {
+    firstName: string;
+    familyName: string;
+  };
 };
 
 export type ManagementRoutePaths = keyof ManagementRoutes;
@@ -80,6 +89,9 @@ const NAVIGATOR_HEADER_TITLES: Record<ManagementRoutePaths, string | undefined> 
   AddLocation: 'Add Location',
   EditLocation: 'Edit Location',
   CoolingUnits: 'Cooling Units',
+  CoolingUsers: 'Cooling Users',
+  AddCoolingUser: 'Add Cooling User',
+  EditCoolingUser: 'Edit Cooling User',
   AddCoolingUnit: 'Add Cooling Unit',
   EditCoolingUnit: 'Edit Cooling Unit',
   Operators: 'Operators',
@@ -120,6 +132,8 @@ export default function ManagementStack() {
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={ManagementRoot} />
       <Stack.Screen name="CompanyDetails" component={CompanyDetails} />
+      <Stack.Screen name="CoolingUsers" component={CoolingUsers} />
+      <Stack.Screen name="AddCoolingUser" component={AddCoolingUser} />
       <Stack.Screen name="RevenueAnalysis" component={RevenueAnalysis} />
       <Stack.Screen name="UsageAnalysis" component={UsageAnalysis} />
       <Stack.Screen name="Locations" component={Locations} />
@@ -160,6 +174,16 @@ function _rightContentFactory(
             icon="plus-circle-outline"
             size={32}
             onPress={() => navigation.navigate('AddCoolingUnit')}
+          />
+        ),
+      };
+    case 'CoolingUsers':
+      return {
+        rightContent: (
+          <Appbar.Action
+            icon="plus-circle-outline"
+            size={32}
+            onPress={() => navigation.navigate('AddCoolingUser')}
           />
         ),
       };
