@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View } from 'react-native';
 import Svg, { G, Circle, type CircleProps } from 'react-native-svg';
 import { Text } from 'react-native-paper';
@@ -14,7 +14,7 @@ export type SemiCircleChartProps = {
 
 const RADIUS = 65;
 
-export default function SemiCircleChart(props: SemiCircleChartProps) {
+function SemiCircleChart(props: SemiCircleChartProps) {
   const { currentAmount, maxCapacity, currentDate } = props;
 
   const circleCircumference = 2 * Math.PI * RADIUS;
@@ -44,7 +44,7 @@ export default function SemiCircleChart(props: SemiCircleChartProps) {
             {...circleProps}
             stroke={hasExceeded ? paperTheme.colors.error : paperTheme.colors.primary}
             strokeDashoffset={strokeDashoffset}
-            strokeLinecap="butt"
+            strokeLinecap="round"
           />
         </G>
       </Svg>
@@ -55,3 +55,5 @@ export default function SemiCircleChart(props: SemiCircleChartProps) {
     </View>
   );
 }
+
+export default memo(SemiCircleChart);

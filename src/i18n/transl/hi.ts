@@ -88,4 +88,14 @@ export default {
       heading: 'पासवर्ड भूल गए',
     },
   },
+  Dashboard: {
+    CoolingUnitsPlanner: {
+      SelectCoolingUnit: {
+        label: 'शीत कक्ष: {{name}}',
+        header: 'एक शीतलन इकाई का चयन करें',
+      },
+      occupancy: 'शीतलन इकाई का वर्तमान अधिभोग',
+      week: 'इस सप्ताह',
+    },
+  },
 } satisfies Translations;

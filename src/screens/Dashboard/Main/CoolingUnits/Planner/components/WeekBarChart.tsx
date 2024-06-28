@@ -1,85 +1,119 @@
-import React from 'react';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
-import Svg, { Rect } from 'react-native-svg';
+import React, { memo, useCallback, type SetStateAction } from 'react';
+import { FlatList, type ListRenderItem, TouchableOpacity, View } from 'react-native';
+import Svg, { Rect, type RectProps } from 'react-native-svg';
 import { Text } from 'react-native-paper';
 
+import { useControlledState } from '#ui/hooks/useControlledState';
 import { paperTheme } from '#ui/lib/theme';
 import { dateFmt } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
-type Datum = {
+export type WeekBarChartDatum = {
   amount: number;
   timestamp: string;
 };
 
-export type BarChartProps = {
+export type WeekBarChartProps = {
   maxCapacity: number;
-  datums: Array<Datum>;
+  datums: Array<WeekBarChartDatum>;
+  selectedDatum: WeekBarChartDatum;
+  onSelect: (datum: SetStateAction<WeekBarChartDatum>) => void;
 };
 
-const CHART_MAX_WIDTH = Dimensions.get('screen').width - 30;
 const CHART_MAX_HEIGHT = 160;
 const BAR_WIDTH = 12;
 const CORNER_RADIUS = 5;
 
-// TODO: find a way to increase the tapping area
+export default function WeekBarChart(props: WeekBarChartProps) {
+  const { maxCapacity, datums, selectedDatum, onSelect } = props;
 
-export default function WeekBarChart(props: BarChartProps) {
-  const { maxCapacity, datums } = props;
+  const [_selection, _setSelection] = useControlledState<WeekBarChartDatum>(
+    selectedDatum,
+    onSelect
+  );
+
+  const renderItem: ListRenderItem<WeekBarChartDatum> = useCallback(
+    ({ item }) => {
+      const barHeight = (item.amount / maxCapacity) * CHART_MAX_HEIGHT;
+      const hasExceeded = barHeight >= CHART_MAX_HEIGHT;
+      const yPosition = hasExceeded ? 0 : CHART_MAX_HEIGHT - barHeight;
+      const isSelected = _selection.timestamp === item.timestamp;
+
+      return (
+        <TouchableOpacity
+          onPress={(evt) => {
+            evt.stopPropagation();
+            _setSelection(item);
+          }}
+        >
+          <_SVGColumn
+            isSelected={isSelected}
+            timestamp={item.timestamp}
+            yPosition={yPosition}
+            barHeight={hasExceeded ? CHART_MAX_HEIGHT : barHeight}
+            fill={hasExceeded ? paperTheme.colors.error : paperTheme.colors.primary}
+          />
+          <_SelectionIndicator isSelected={isSelected} />
+        </TouchableOpacity>
+      );
+    },
+    [maxCapacity, _selection.timestamp]
+  );
 
   return (
-    <View style={{ flexDirection: 'row', width: CHART_MAX_WIDTH - 45 }}>
-      {datums.map((datum, datumIdx) => {
-        const barHeight = (datum.amount / maxCapacity) * CHART_MAX_HEIGHT;
-        const hasExceeded = barHeight >= CHART_MAX_HEIGHT;
-        const xPosition = Math.floor(CHART_MAX_WIDTH / 7) * datumIdx;
-        const yPosition = hasExceeded ? 0 : CHART_MAX_HEIGHT - barHeight;
-
-        return (
-          <TouchableOpacity
-            key={`svg-${datumIdx}`}
-            style={{ alignItems: 'center', position: 'relative', height: CHART_MAX_HEIGHT + 50 }}
-          >
-            <Svg
-              height={CHART_MAX_HEIGHT}
-              width={BAR_WIDTH}
-              style={{ position: 'absolute', left: xPosition }}
-            >
-              <Rect
-                key={`backdrop-${datumIdx}`}
-                x={0}
-                y={0}
-                width={BAR_WIDTH}
-                height={CHART_MAX_HEIGHT}
-                fill={paperTheme.colors.secondaryContainer}
-                opacity={0.3}
-                rx={CORNER_RADIUS}
-                ry={CORNER_RADIUS}
-              />
-              <Rect
-                key={`bar-${datumIdx}`}
-                x={0}
-                y={yPosition}
-                width={BAR_WIDTH}
-                height={hasExceeded ? CHART_MAX_HEIGHT : barHeight}
-                fill={hasExceeded ? paperTheme.colors.error : paperTheme.colors.primary}
-                rx={CORNER_RADIUS}
-                ry={CORNER_RADIUS}
-              />
-            </Svg>
-
-            <View style={{ left: xPosition - BAR_WIDTH / 2, position: 'absolute', bottom: 0 }}>
-              <Text>{dateFmt(datum.timestamp, 'eee').toUpperCase()}</Text>
-              <View
-                tw={cn(
-                  'h-2 w-2 rounded-full self-center mt-3',
-                  datumIdx === 1 ? 'bg-green-primary' : 'bg-transparent'
-                )}
-              />
-            </View>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+    <FlatList
+      horizontal
+      data={datums}
+      keyExtractor={(_, itemIdx) => `week-bar-chart-${itemIdx}`}
+      renderItem={renderItem}
+      contentContainerStyle={{ gap: 8 }}
+    />
   );
 }
+
+const _SVGColumn = memo(function Component(props: {
+  isSelected: boolean;
+  timestamp: string;
+  yPosition: number;
+  barHeight: number;
+  fill: string;
+}) {
+  const baseProps = {
+    x: 0,
+    width: BAR_WIDTH,
+    rx: CORNER_RADIUS,
+    ry: CORNER_RADIUS,
+  } satisfies RectProps;
+
+  return (
+    <View
+      tw={cn(
+        'items-center space-y-2.5 w-12 py-3 rounded-md',
+        props.isSelected ? 'bg-zinc-200' : 'bg-transparent'
+      )}
+    >
+      <Svg height={CHART_MAX_HEIGHT} width={BAR_WIDTH}>
+        <Rect
+          y={0}
+          height={CHART_MAX_HEIGHT}
+          fill={paperTheme.colors.secondaryContainer}
+          opacity={0.3}
+          {...baseProps}
+        />
+        <Rect y={props.yPosition} height={props.barHeight} fill={props.fill} {...baseProps} />
+      </Svg>
+      <Text>{dateFmt(props.timestamp, 'eee').toUpperCase()}</Text>
+    </View>
+  );
+});
+
+const _SelectionIndicator = memo(function Component(props: { isSelected: boolean }) {
+  return (
+    <View
+      tw={cn(
+        'h-2 w-2 rounded-full self-center mt-3',
+        props.isSelected ? 'bg-green-primary' : 'bg-transparent'
+      )}
+    />
+  );
+});
