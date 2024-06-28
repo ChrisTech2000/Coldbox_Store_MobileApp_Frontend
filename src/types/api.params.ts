@@ -35,3 +35,9 @@ export interface RequestPasswordResetParams extends JsonObject {
     partTwo: string;
   };
 }
+
+export interface ResetPasswordParams extends JsonObject {
+  code: string;
+  phoneNumber: string;
+  password: string;
+}

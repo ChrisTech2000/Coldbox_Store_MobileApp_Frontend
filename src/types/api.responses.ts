@@ -18,3 +18,5 @@ export interface SignUpAsCoolingUserResponse {
   user: User;
   userCode: string;
 }
+
+export interface ResetPasswordResponse {}

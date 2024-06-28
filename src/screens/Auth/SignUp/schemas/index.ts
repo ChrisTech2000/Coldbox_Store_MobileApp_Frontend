@@ -1,12 +1,9 @@
+import { passwordRegex } from '#constants/schemas';
 import { Translator } from '#i18n/utils';
 import { EAppGender } from '#types/global';
 
 import validator from 'validator';
 import { z } from 'zod';
-
-// TODO: currently only validating the English && Hindi alphabets
-const passwordRegex =
-  /^(?=.*[a-zA-Z])(?=.*[\u0900-\u097F])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\u0900-\u097F!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/;
 
 export const LANGUAGES = (t: Translator) => [
   t('languages.options.en'),

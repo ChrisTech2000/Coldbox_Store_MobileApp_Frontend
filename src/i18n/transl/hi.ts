@@ -160,5 +160,16 @@ export default {
         partTwo: '&phoneNumber={{phone}}  यदि URL काम नहीं कर रहा है, तो https:// जोड़ें',
       },
     },
+    ResetPassword: {
+      schema: {
+        passwordError:
+          'आपका पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए, जिसमें एक अपरकेस और एक लोअरकेस अक्षर और एक संख्या होनी चाहिए।',
+        confirmPasswordError: 'पासवर्ड की पुष्टि अनिवार्य है।',
+        passwordsMismatchError: 'पासवर्ड मेल नहीं खा रहे हैं।',
+      },
+      passwordLabel: 'नया पासवर्ड',
+      confirmPasswordLabel: 'पासवर्ड की पुष्टि करें',
+      resetButton: 'रीसेट',
+    },
   },
 } satisfies Translations;

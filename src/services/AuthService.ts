@@ -1,14 +1,16 @@
 import { EAuthenticationEndpoints } from '#constants/api.routes';
 import {
-  RequestPasswordResetParams,
-  SignInParams,
-  SignUpAsCompanyParams,
-  SignUpAsCoolingUserParams,
+  type RequestPasswordResetParams,
+  type ResetPasswordParams,
+  type SignInParams,
+  type SignUpAsCompanyParams,
+  type SignUpAsCoolingUserParams,
 } from '#types/api.params';
 import {
-  SignInResponse,
-  SignUpAsCompanyResponse,
-  SignUpAsCoolingUserResponse,
+  type ResetPasswordResponse,
+  type SignInResponse,
+  type SignUpAsCompanyResponse,
+  type SignUpAsCoolingUserResponse,
 } from '#types/api.responses';
 import { AxiosError } from 'axios';
 
@@ -78,7 +80,7 @@ class AuthService extends HttpClient {
 
   public requestResetPassword = async (
     params: RequestPasswordResetParams
-  ): Promise<SignInResponse | undefined> => {
+  ): Promise<string | undefined> => {
     const _params = {
       phoneNumber: params.phoneNumber,
       partOne: params.link.partOne,
@@ -87,9 +89,26 @@ class AuthService extends HttpClient {
 
     try {
       // No need to map the keys in this request (BE is expecting camel case...)
-      const { data } = await this.axios.post<SignInResponse>(
-        EAuthenticationEndpoints.REQUEST_PASSWORD_RESET_ENDPOINT,
+      const { data } = await this.axios.post<string>(
+        EAuthenticationEndpoints.RESET_PASSWORD,
         _params
+      );
+
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public resetPassword = async (
+    params: ResetPasswordParams
+  ): Promise<ResetPasswordResponse | undefined> => {
+    try {
+      const { data } = await this.post<ResetPasswordResponse>(
+        EAuthenticationEndpoints.RESET_PASSWORD,
+        params
       );
 
       return data;

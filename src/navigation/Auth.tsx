@@ -1,20 +1,21 @@
-import React, { useCallback } from 'react';
+import type { RouteProp } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
   type NativeStackNavigationOptions,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import type { RouteProp } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
+import AppInfo from '#screens/Auth/AppInfo';
+import PasswordRecoveryRequest from '#screens/Auth/PasswordRecovery/PasswordRecoveryRequest';
+import PasswordReset from '#screens/Auth/PasswordRecovery/PasswordReset';
 import AuthRoot from '#screens/Auth/Root';
 import SignIn from '#screens/Auth/SignIn';
 import SignUpCompany from '#screens/Auth/SignUp/SignUpCompany';
 import SignUpCoolingUser from '#screens/Auth/SignUp/SignUpCoolingUser';
-import PasswordRecovery from '#screens/Auth/PasswordRecovery';
-import AppInfo from '#screens/Auth/AppInfo';
 
 import NavigatorHeader from './components/NavigatorHeader';
 
@@ -23,7 +24,8 @@ export type AuthRoutes = {
   SignIn: undefined;
   SignUpCompany: undefined;
   SignUpCoolingUser: undefined;
-  PasswordRecovery: undefined;
+  PasswordReset: undefined;
+  PasswordRecoveryRequest: undefined;
   AppInfo: undefined;
 };
 
@@ -39,7 +41,8 @@ const NAVIGATOR_HEADER_TITLES: Record<keyof AuthRoutes, string | undefined> = {
   SignIn: 'Log in',
   SignUpCompany: 'Sign up',
   SignUpCoolingUser: 'Sign up',
-  PasswordRecovery: 'Forgot Password',
+  PasswordRecoveryRequest: 'Forgot Password',
+  PasswordReset: 'Reset Password',
   AppInfo: 'FAQ',
   Root: undefined,
 };
@@ -78,7 +81,8 @@ export default function AuthNavigator() {
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="SignUpCompany" component={SignUpCompany} />
       <Stack.Screen name="SignUpCoolingUser" component={SignUpCoolingUser} />
-      <Stack.Screen name="PasswordRecovery" component={PasswordRecovery} />
+      <Stack.Screen name="PasswordRecoveryRequest" component={PasswordRecoveryRequest} />
+      <Stack.Screen name="PasswordReset" component={PasswordReset} />
       <Stack.Screen name="AppInfo" component={AppInfo} />
     </Stack.Navigator>
   );
