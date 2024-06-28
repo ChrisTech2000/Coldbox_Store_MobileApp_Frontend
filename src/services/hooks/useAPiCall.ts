@@ -4,15 +4,18 @@ import { AxiosError } from 'axios';
 import ErrorUtil from '../utils/ErrorUtil';
 import { useCallback, useMemo, useRef } from 'react';
 
-//type ApiResponse<IData> = AxiosResponse<IData>;
-
 interface IApiQueryOptions<IData> {
   skip?: boolean;
   defaultData?: IData;
   refreshInterval?: number;
+  revalidateOnFocus?: boolean;
+  revalidateOnReconnect?: boolean;
+  dedupingInterval?: number;
+  errorRetryCount?: number;
+  errorRetryInterval?: number;
 }
 
-const useApiCall = <IData, IParams>(
+export const useApiCall = <IData, IParams>(
   name: string,
   method: (params: IParams) => Promise<IData>,
   params: IParams,
@@ -34,6 +37,11 @@ const useApiCall = <IData, IParams>(
 
   const { data, isValidating, error, mutate } = useSWR(options?.skip ? null : key, fetcher, {
     refreshInterval: options?.refreshInterval,
+    revalidateOnFocus: options?.revalidateOnFocus,
+    revalidateOnReconnect: options?.revalidateOnReconnect,
+    dedupingInterval: options?.dedupingInterval,
+    errorRetryCount: options?.errorRetryCount,
+    errorRetryInterval: options?.errorRetryInterval,
   });
 
   if (data) {
@@ -52,5 +60,3 @@ const useApiCall = <IData, IParams>(
     refetch,
   };
 };
-
-export default useApiCall;

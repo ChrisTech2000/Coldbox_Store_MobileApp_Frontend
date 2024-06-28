@@ -22,6 +22,13 @@ export default function App() {
   return (
     <SWRConfig
       value={{
+        // Global SWR config; can be overwritten when using useApiCall()
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
+        refreshInterval: 30000,
+        dedupingInterval: 2000,
+        errorRetryCount: 3,
+        errorRetryInterval: 5000,
         initFocus(revalidate) {
           let appState = AppState.currentState;
 

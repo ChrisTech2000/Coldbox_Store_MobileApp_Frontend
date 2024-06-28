@@ -2,13 +2,12 @@ import { AxiosError } from 'axios';
 
 import { EDashboardEndpoints } from '#constants/api.routes';
 import {
-  GetFarmerDashboardProducesParams,
+  type GetFarmerDashboardProducesParams,
+  type GetFarmerParams,
   type GetDashboardProducesParams,
 } from '#types/api.params';
-import {
-  GetDashboardProducesResponse,
-  GetFarmerDashboardProducesResponse,
-} from '#types/api.responses';
+import { type GetFarmerResponse, type GetDashboardProducesResponse } from '#types/api.responses';
+import { type DashboardProduce } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
@@ -18,11 +17,24 @@ class ColdtivateService extends HttpClient {
     super(options);
   }
 
+  public getFarmer = async (params: GetFarmerParams): Promise<GetFarmerResponse[] | undefined> => {
+    try {
+      const { data } = await this.get<GetFarmerResponse[]>(EDashboardEndpoints.GET_FARMER, {
+        params,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public getDashboardProduces = async (
-    params: GetDashboardProducesParams
+    params: GetDashboardProducesParams[]
   ): Promise<GetDashboardProducesResponse | undefined> => {
     try {
-      const { data } = await this.get<GetDashboardProducesResponse>(
+      const { data } = await this.get<GetDashboardProducesResponse[]>(
         EDashboardEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );
@@ -36,9 +48,9 @@ class ColdtivateService extends HttpClient {
 
   public getFarmerDashboardProduces = async (
     params: GetFarmerDashboardProducesParams
-  ): Promise<GetFarmerDashboardProducesResponse | undefined> => {
+  ): Promise<DashboardProduce[] | undefined> => {
     try {
-      const { data } = await this.get<GetFarmerDashboardProducesResponse>(
+      const { data } = await this.get<DashboardProduce[]>(
         EDashboardEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );

@@ -7,4 +7,5 @@ export enum EAuthenticationEndpoints {
 
 export enum EDashboardEndpoints {
   GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
+  GET_FARMER = 'user/v1/farmers/',
 }

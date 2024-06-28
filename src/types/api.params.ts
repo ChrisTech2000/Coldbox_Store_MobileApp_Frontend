@@ -42,6 +42,10 @@ export interface ResetPasswordParams extends JsonObject {
   password: string;
 }
 
+export interface GetFarmerParams extends JsonObject {
+  userId: number;
+}
+
 export interface GetDashboardProducesParams extends JsonObject {
   coolingUnit: number;
 }
