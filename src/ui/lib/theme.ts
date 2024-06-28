@@ -6,6 +6,8 @@ import {
 } from '@react-navigation/native';
 import colors from 'tailwindcss/colors';
 
+import paperFonts from './fonts';
+
 export const paperTheme = {
   ...PaperDefaultTheme,
   colors: {
@@ -51,6 +53,7 @@ export const paperTheme = {
     onSurfaceDisabled: 'rgba(25, 28, 28, 0.38)',
     backdrop: 'rgba(41, 50, 49, 0.4)',
   },
+  fonts: paperFonts,
 } satisfies ThemeProp;
 
 export const navigatorTheme = {
