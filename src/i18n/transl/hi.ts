@@ -172,4 +172,14 @@ export default {
       resetButton: 'रीसेट',
     },
   },
+  Dashboard: {
+    CoolingUnitsPlanner: {
+      SelectCoolingUnit: {
+        label: 'शीत कक्ष: {{name}}',
+        header: 'एक शीतलन इकाई का चयन करें',
+      },
+      occupancy: 'शीतलन इकाई का वर्तमान अधिभोग',
+      week: 'इस सप्ताह',
+    },
+  },
 } satisfies Translations;

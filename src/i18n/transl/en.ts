@@ -169,6 +169,16 @@ const en = {
       resetButton: 'Reset',
     },
   },
+  Dashboard: {
+    CoolingUnitsPlanner: {
+      SelectCoolingUnit: {
+        label: 'Cooling unit: {{name}}',
+        header: 'Select a cooling unit',
+      },
+      occupancy: 'Current occupancy of the cooling unit',
+      week: 'This week',
+    },
+  },
 };
 
 export default en;
