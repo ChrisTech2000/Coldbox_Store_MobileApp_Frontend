@@ -29,6 +29,67 @@ export interface Company {
   // bankAccount
 }
 
+export interface Pricing {
+  id: number;
+  pricingType: EPricingType;
+  fixedRate: number;
+  dailyRate: number;
+}
+
+export interface Crate {
+  id: number;
+  produce: number; // the produce id
+  coolingUnit: number; // the cooling unit id
+  weight: number;
+  remainingShelfLife: number;
+  plannedDays: number;
+  checkOut: Date; // TODO: confirm this type
+  pricing: Pricing[];
+  coolingUnitMetric: ECoolingUnitMetric;
+  checkInDate: Date;
+  name: string;
+  cropImage: string;
+  movementCode: string;
+  currentStorageDays: number;
+  runDt: boolean;
+  qualityDt: boolean;
+  tag: string;
+}
+
+export interface DashboardProduce {
+  additonalInfo: string;
+  checkoutComplete: boolean;
+  crates: Crate[];
+  cratesAmount: number;
+  cratesCombinedCost: number;
+  cratesCombinedWeight: number;
+  cropId: number;
+  cropImage: string;
+  cropName: string;
+  currentStorageDays: number;
+  farmer: string; // the cooling user's name
+  farmerContact: string; // the cooling user's phone?
+  farmerId: number;
+  hasDigitalTwin: boolean;
+  id: number;
+  minimumRemainingShelfLife: number;
+  movementCode: string;
+  plannedDays: number;
+  qualityDt: number;
+  runDt: boolean;
+}
+
+//////////////////////// ENUMS
+export enum ECoolingUnitMetric {
+  KILOGRAMS = 'KILOGRAMS',
+  CRATES = 'CRATES',
+}
+
+export enum EPricingType {
+  FIXED = 'FIXED',
+  PERIODICITY = 'PERIODICITY',
+}
+
 export enum ERoles {
   AUTH = 'Auth',
   OPERATOR = 'Operator',
@@ -48,6 +109,7 @@ export enum EAppGender {
   OTHER = 'Other',
 }
 
+//////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',
   [ERoles.EMPLOYEE]: 'sp',

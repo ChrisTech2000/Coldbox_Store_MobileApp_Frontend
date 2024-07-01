@@ -6,7 +6,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
 
-import { User } from '#types/global';
+import type { User } from '#types/global';
 import { useInterval } from '#ui/hooks/useInterval';
 import storage from './lib/storage';
 

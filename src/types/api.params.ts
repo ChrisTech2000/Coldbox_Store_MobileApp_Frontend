@@ -41,3 +41,16 @@ export interface ResetPasswordParams extends JsonObject {
   phoneNumber: string;
   password: string;
 }
+
+export interface GetFarmerParams extends JsonObject {
+  userId: number;
+}
+
+export interface GetDashboardProducesParams extends JsonObject {
+  coolingUnit: number;
+}
+
+export interface GetFarmerDashboardProducesParams extends JsonObject {
+  coolingUnit: number;
+  farmerId: number;
+}
