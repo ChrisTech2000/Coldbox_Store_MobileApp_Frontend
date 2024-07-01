@@ -1,5 +1,5 @@
 import React, { memo, useCallback, type SetStateAction } from 'react';
-import { FlatList, type ListRenderItem, TouchableOpacity, View } from 'react-native';
+import { FlatList, type ListRenderItem, Platform, TouchableOpacity, View } from 'react-native';
 import Svg, { Rect, type RectProps } from 'react-native-svg';
 import { Text } from 'react-native-paper';
 
@@ -23,6 +23,7 @@ export type WeekBarChartProps = {
 const CHART_MAX_HEIGHT = 160;
 const BAR_WIDTH = 12;
 const CORNER_RADIUS = 5;
+const COLUMN_GAP = Platform.select({ android: 10, ios: 4, default: 8 });
 
 export default function WeekBarChart(props: WeekBarChartProps) {
   const { maxCapacity, datums, selectedDatum, onSelect } = props;
@@ -66,7 +67,7 @@ export default function WeekBarChart(props: WeekBarChartProps) {
       data={datums}
       keyExtractor={(_, itemIdx) => `week-bar-chart-${itemIdx}`}
       renderItem={renderItem}
-      contentContainerStyle={{ gap: 8 }}
+      contentContainerStyle={{ gap: COLUMN_GAP }}
     />
   );
 }
