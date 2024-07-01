@@ -40,6 +40,13 @@ export default function StaleWhileRevalidate(props: PropsWithChildren) {
   const config = useMemo(
     () =>
       ({
+        // Global SWR config; can be overwritten when using useApiCall()
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
+        refreshInterval: 30000,
+        dedupingInterval: 2000,
+        errorRetryCount: 3,
+        errorRetryInterval: 5000,
         provider: () => cache,
         isOnline: () => isConnected ?? false,
         initFocus: (callback) => {
@@ -53,9 +60,7 @@ export default function StaleWhileRevalidate(props: PropsWithChildren) {
           };
 
           const subscription = AppState.addEventListener('change', onAppStateChange);
-          return () => {
-            subscription.remove();
-          };
+          return () => subscription.remove();
         },
       }) satisfies SWRConfiguration,
     [cache, isConnected]

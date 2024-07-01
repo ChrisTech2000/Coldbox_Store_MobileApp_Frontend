@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Image, View } from 'react-native';
 
 import ColdRoom from '#assets/icons/coldroom.svg';
@@ -11,21 +11,36 @@ import { useDashboardStore } from '#stores/dashboard';
 import { TextBold, TextRegular } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { cn } from '#ui/lib/cn';
-import { type DashboardProduce, EPricingType } from '#types/global';
+import { type DashboardProduce, type Company, type CoolingUnit, EPricingType } from '#types/global';
 
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
-  const { farmerId } = useDashboardStore();
+  const { farmerId, farmerCompanies } = useDashboardStore();
 
-  const { data } = useApiCall(
+  const [selectedCompany] = useState<Company | null>(farmerCompanies?.[0] ?? null);
+  const [selectedUnit, setSelectedUnit] = useState<CoolingUnit | null>(null);
+
+  const { data: coolingUnits } = useApiCall(
+    'getCoolingUnits',
+    ColdtivateService.getCoolingUnits,
+    {
+      company: selectedCompany?.id as number,
+    },
+    {
+      skip: !selectedCompany,
+      defaultData: [],
+    }
+  );
+
+  const { data: dashboardProduces } = useApiCall(
     'getFarmerDashboardProduces',
     ColdtivateService.getFarmerDashboardProduces,
     {
-      coolingUnit: 143, // TODO: fetch user's cooling units (when creating the filters)
+      coolingUnit: selectedUnit?.id as number,
       farmerId: farmerId as number,
     },
     {
-      skip: !farmerId,
+      skip: !farmerId || !selectedUnit,
       defaultData: [],
     }
   );
@@ -38,9 +53,15 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     return `${produce.cratesCombinedCost}${produce.crates[0]?.pricing[0]?.pricingType === EPricingType.PERIODICITY ? ' / Day' : ''}`; // TODO: get currency
   }, []);
 
+  useEffect(() => {
+    if (coolingUnits) {
+      setSelectedUnit(coolingUnits[0]);
+    }
+  }, [coolingUnits]);
+
   return (
     <View tw="flex-1 items-center justify-center space-y-6">
-      {data?.map((produce, index) => (
+      {dashboardProduces?.map((produce, index) => (
         <View key={`${produce.id}-${index}`} tw="w-[90%] h-24 flex flex-row">
           <View
             tw={cn(
