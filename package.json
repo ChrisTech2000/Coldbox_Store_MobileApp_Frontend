@@ -15,6 +15,7 @@
     "link-assets": "npx react-native-asset"
   },
   "dependencies": {
+    "@casl/ability": "^6.7.1",
     "@hookform/resolvers": "^3.6.0",
     "@react-native-community/netinfo": "^11.3.2",
     "@react-navigation/bottom-tabs": "^6.5.20",
