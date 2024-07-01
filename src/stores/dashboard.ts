@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import ColdtivateService from '#services/ColdtivateService';
-import { type GetFarmerParams } from '#types/api.params';
+import type { GetFarmerParams } from '#types/api.params';
 
 import storage from './lib/storage';
 

@@ -1,13 +1,13 @@
 import { AxiosError } from 'axios';
 
 import { EDashboardEndpoints } from '#constants/api.routes';
-import {
-  type GetFarmerDashboardProducesParams,
-  type GetFarmerParams,
-  type GetDashboardProducesParams,
+import type {
+  GetDashboardProducesParams,
+  GetFarmerDashboardProducesParams,
+  GetFarmerParams,
 } from '#types/api.params';
-import { type GetFarmerResponse, type GetDashboardProducesResponse } from '#types/api.responses';
-import { type DashboardProduce } from '#types/global';
+import type { GetDashboardProducesResponse, GetFarmerResponse } from '#types/api.responses';
+import type { DashboardProduce } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';

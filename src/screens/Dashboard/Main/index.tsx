@@ -11,7 +11,7 @@ import { useDashboardStore } from '#stores/dashboard';
 import { TextBold, TextRegular } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { cn } from '#ui/lib/cn';
-import { DashboardProduce, EPricingType } from '#types/global';
+import { type DashboardProduce, EPricingType } from '#types/global';
 
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;

@@ -1,18 +1,18 @@
 import { AxiosError } from 'axios';
 
 import { EAuthenticationEndpoints } from '#constants/api.routes';
-import {
-  type RequestPasswordResetParams,
-  type ResetPasswordParams,
-  type SignInParams,
-  type SignUpAsCompanyParams,
-  type SignUpAsCoolingUserParams,
+import type {
+  RequestPasswordResetParams,
+  ResetPasswordParams,
+  SignInParams,
+  SignUpAsCompanyParams,
+  SignUpAsCoolingUserParams,
 } from '#types/api.params';
-import {
-  type ResetPasswordResponse,
-  type SignInResponse,
-  type SignUpAsCompanyResponse,
-  type SignUpAsCoolingUserResponse,
+import type {
+  ResetPasswordResponse,
+  SignInResponse,
+  SignUpAsCompanyResponse,
+  SignUpAsCoolingUserResponse,
 } from '#types/api.responses';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
