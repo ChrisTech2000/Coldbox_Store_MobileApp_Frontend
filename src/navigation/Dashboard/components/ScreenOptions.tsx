@@ -28,6 +28,7 @@ export default function DashboardScreenOptions(props: Props): DrawerNavigationOp
   return {
     ...props,
     headerShown: typeof routeTitle !== 'undefined',
+    drawerPosition: 'left',
     header: (headerProps) => (
       <NavigatorHeader
         {...headerProps}
