@@ -10,6 +10,10 @@
       "sha1": "904c213ad1552b1a97bcee2784d9f6e79c5795c3"
     },
     {
+      "path": "src/assets/icons/coldroom.svg",
+      "sha1": "53585bc04e93dd255fa6ed4d460b24ab0b9ac375"
+    },
+    {
       "path": "src/assets/icons/danger.svg",
       "sha1": "7860bde640730e987ee983d35d10205f1d865b19"
     },
@@ -20,6 +24,10 @@
     {
       "path": "src/assets/icons/farmer.svg",
       "sha1": "fa62c81091c1d6563e610871af92ce1e09fa20ea"
+    },
+    {
+      "path": "src/assets/icons/mine-cart.svg",
+      "sha1": "cd3b40a4b51f49bbd0697c525b29e070c7bda77e"
     },
     {
       "path": "src/assets/icons/operator.svg",
