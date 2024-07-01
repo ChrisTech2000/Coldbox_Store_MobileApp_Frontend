@@ -96,7 +96,7 @@ export default class HttpClient {
   }
 
   protected get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.axios.get<T>(url, config);
+    return this.axios.get<T>(url, config ? { ...config, params: serialize(config?.params) } : {});
   }
 
   protected put<T>(

@@ -1,21 +1,22 @@
-import { EAuthenticationEndpoints } from '#constants/api.routes';
-import {
-  type RequestPasswordResetParams,
-  type ResetPasswordParams,
-  type SignInParams,
-  type SignUpAsCompanyParams,
-  type SignUpAsCoolingUserParams,
-} from '#types/api.params';
-import {
-  type ResetPasswordResponse,
-  type SignInResponse,
-  type SignUpAsCompanyResponse,
-  type SignUpAsCoolingUserResponse,
-} from '#types/api.responses';
 import { AxiosError } from 'axios';
 
-import HttpClient, { HttpClientOptions } from './HttpClient';
-import ErrorUtil, { CustomError } from './utils/ErrorUtil';
+import { EAuthenticationEndpoints } from '#constants/api.routes';
+import type {
+  RequestPasswordResetParams,
+  ResetPasswordParams,
+  SignInParams,
+  SignUpAsCompanyParams,
+  SignUpAsCoolingUserParams,
+} from '#types/api.params';
+import type {
+  ResetPasswordResponse,
+  SignInResponse,
+  SignUpAsCompanyResponse,
+  SignUpAsCoolingUserResponse,
+} from '#types/api.responses';
+
+import HttpClient, { type HttpClientOptions } from './HttpClient';
+import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 
 class AuthService extends HttpClient {
   constructor(options?: HttpClientOptions) {

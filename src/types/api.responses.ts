@@ -20,3 +20,16 @@ export interface SignUpAsCoolingUserResponse {
 }
 
 export interface ResetPasswordResponse {}
+
+export interface GetFarmerResponse {
+  id: number;
+  user: User;
+  birthday: Date;
+  parentName: string;
+  country: string;
+  userCode: string;
+  companies: number[];
+  coolingUnits: number[];
+}
+
+export interface GetDashboardProducesResponse {}

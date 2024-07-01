@@ -43,6 +43,8 @@
 		C617CC5021894201A62E3BD1 /* coldtivate_logo.svg in Resources */ = {isa = PBXBuildFile; fileRef = 29F863ED6E684DE2B45A5727 /* coldtivate_logo.svg */; };
 		EA78CD88D2AA4976A2C1E8E0 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D1DF6D3D9024F8BA2F0BA92 /* Roboto-Medium.ttf */; };
 		F31AD301A5134403AB09996F /* operator.svg in Resources */ = {isa = PBXBuildFile; fileRef = F29467767798412793EEC61D /* operator.svg */; };
+		9DBA98F3179647ADAF24281E /* coldroom.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4C9DFE8E3FA54BB891B92744 /* coldroom.svg */; };
+		9F62F2FE1F8E45E18126CDD3 /* mine-cart.svg in Resources */ = {isa = PBXBuildFile; fileRef = B096564513214963853ACF67 /* mine-cart.svg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,8 @@
 		EBF3B6864E19E58B0A22F9E5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = coldtivate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F29467767798412793EEC61D /* operator.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = operator.svg; path = ../src/assets/icons/operator.svg; sourceTree = "<group>"; };
+		4C9DFE8E3FA54BB891B92744 /* coldroom.svg */ = {isa = PBXFileReference; name = "coldroom.svg"; path = "../src/assets/icons/coldroom.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B096564513214963853ACF67 /* mine-cart.svg */ = {isa = PBXFileReference; name = "mine-cart.svg"; path = "../src/assets/icons/mine-cart.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +243,8 @@
 				C94D89D7CB2842F0B86F5212 /* Roboto-Bold.ttf */,
 				3D1DF6D3D9024F8BA2F0BA92 /* Roboto-Medium.ttf */,
 				8FE04C60CBE446FE8F1BDD15 /* Roboto-Regular.ttf */,
+				4C9DFE8E3FA54BB891B92744 /* coldroom.svg */,
+				B096564513214963853ACF67 /* mine-cart.svg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -378,6 +384,8 @@
 				261B7CCA0EA14619A1439FB0 /* Roboto-Bold.ttf in Resources */,
 				EA78CD88D2AA4976A2C1E8E0 /* Roboto-Medium.ttf in Resources */,
 				3B840A1F873040EEB2D6DBCB /* Roboto-Regular.ttf in Resources */,
+				9DBA98F3179647ADAF24281E /* coldroom.svg in Resources */,
+				9F62F2FE1F8E45E18126CDD3 /* mine-cart.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
