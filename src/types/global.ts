@@ -62,6 +62,7 @@ export interface DashboardProduce {
   crates: Crate[];
   cratesAmount: number;
   cratesCombinedCost: number;
+  cratesCombinedWeight: number;
   cropId: number;
   cropImage: string;
   cropName: string;
