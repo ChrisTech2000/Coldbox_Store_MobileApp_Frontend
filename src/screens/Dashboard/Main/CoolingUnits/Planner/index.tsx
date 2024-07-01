@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-
 import { useTranslationUtils } from '#i18n/utils';
+import { ScrollView } from '#ui/components/ScrollView';
 
 import SelectCoolingUnit, { type CoolingUnitMockedEntry } from './components/SelectCoolingUnit';
 import SemiCircleChart from './components/SemiCircleChart';
@@ -27,7 +25,7 @@ const MOCKED_DATUMS = [
   { amount: 33, timestamp: '2024-06-30T16:14:08.564Z' },
 ] satisfies Array<WeekBarChartDatum>;
 
-function CoolingUnitsPlanner() {
+export default function CoolingUnitsPlanner() {
   const [selectedCoolingUnit, setSelectedCoolingUnit] = useState<CoolingUnitMockedEntry>(
     MOCKED_COOLING_UNITS[0]
   );
@@ -37,7 +35,10 @@ function CoolingUnitsPlanner() {
   const { t } = useTranslationUtils();
 
   return (
-    <View tw="mt-5 items-center">
+    <ScrollView
+      contentContainerStyle="mt-5 items-center pb-10"
+      showsVerticalScrollIndicator={false}
+    >
       <SelectCoolingUnit
         datums={MOCKED_COOLING_UNITS}
         selectedCoolingUnit={selectedCoolingUnit}
@@ -68,8 +69,6 @@ function CoolingUnitsPlanner() {
         selectedDatum={selectedColumn}
         onSelect={setSelectedColumn}
       />
-    </View>
+    </ScrollView>
   );
 }
-
-export default withSafeArea(CoolingUnitsPlanner, ['bottom']);

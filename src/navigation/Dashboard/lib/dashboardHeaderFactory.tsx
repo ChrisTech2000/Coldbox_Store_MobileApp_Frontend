@@ -6,6 +6,7 @@ import type { NavigationHeaderProps } from '#navigation/components/NavigatorHead
 import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
 import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
+import { useRightDrawerStore } from '../index';
 
 export function dashboardHeaderFactory<Params extends Record<string, unknown>, Path extends string>(
   navigation: NavigationProp<Params, Path>
@@ -18,7 +19,13 @@ export function dashboardHeaderFactory<Params extends Record<string, unknown>, P
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
       />
     ),
-    rightContent: <Appbar.Action icon="bell-outline" size={25} onPressIn={() => undefined} />,
+    rightContent: (
+      <Appbar.Action
+        icon="bell-outline"
+        size={25}
+        onPress={() => useRightDrawerStore.getState().toggle()}
+      />
+    ),
   };
 }
 

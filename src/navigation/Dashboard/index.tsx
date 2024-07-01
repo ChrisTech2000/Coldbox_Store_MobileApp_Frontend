@@ -1,5 +1,7 @@
-import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
 import React from 'react';
+import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
+import { Drawer } from 'react-native-drawer-layout';
+import { create } from 'zustand';
 
 import About from '#screens/Dashboard/About';
 import AccountDetails from '#screens/Dashboard/AccountDetails';
@@ -13,6 +15,7 @@ import DrawerContent from './components/DrawerContent';
 import DashboardScreenOptions from './components/ScreenOptions';
 import DashboardMainBottomTabs from './Main';
 import ManagementStack from './Management';
+import NotificationsDrawerContent from './components/NotificationsDrawerContent';
 
 export type DashboardRoutes = {
   Main: undefined;
@@ -30,26 +33,55 @@ export type DashboardRouteProps<Path extends DashboardRoutePaths> = DrawerScreen
   Path
 >;
 
-const Drawer = createDrawerNavigator<DashboardRoutes>();
+const NavigationDrawer = createDrawerNavigator<DashboardRoutes>();
 
-export default function DashboardNavigator() {
+function DashboardNavigationRouter() {
   const { user } = useAuthStore();
 
   return (
-    <Drawer.Navigator
+    <NavigationDrawer.Navigator
       initialRouteName="Main"
       drawerContent={DrawerContent}
       screenOptions={DashboardScreenOptions}
     >
-      <Drawer.Screen name="Main" component={DashboardMainBottomTabs} />
-      <Drawer.Screen name="AccountDetails" component={AccountDetails} />
+      <NavigationDrawer.Screen name="Main" component={DashboardMainBottomTabs} />
+      <NavigationDrawer.Screen name="AccountDetails" component={AccountDetails} />
       {user && user.role !== ERoles.COOLING_USER && (
-        <Drawer.Screen name="Management" component={ManagementStack} />
+        <NavigationDrawer.Screen name="Management" component={ManagementStack} />
       )}
-      <Drawer.Screen name="KnowledgeHub" component={KnowledgeHub} />
-      <Drawer.Screen name="Tutorial" component={Tutorial} />
-      <Drawer.Screen name="FAQ" component={FAQ} />
-      <Drawer.Screen name="About" component={About} />
-    </Drawer.Navigator>
+      <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHub} />
+      <NavigationDrawer.Screen name="Tutorial" component={Tutorial} />
+      <NavigationDrawer.Screen name="FAQ" component={FAQ} />
+      <NavigationDrawer.Screen name="About" component={About} />
+    </NavigationDrawer.Navigator>
+  );
+}
+
+export const useRightDrawerStore = create<{
+  isOpen: boolean;
+  toggle: (value?: boolean) => void;
+}>((set) => ({
+  isOpen: false,
+  toggle: (value) => set((state) => ({ isOpen: value ?? !state.isOpen })),
+}));
+
+export default function DashboardNavigator() {
+  const isOpen = useRightDrawerStore((store) => store.isOpen);
+  const toggle = useRightDrawerStore((store) => store.toggle);
+
+  return (
+    <Drawer
+      open={isOpen}
+      onOpen={() => toggle(true)}
+      onClose={() => toggle(false)}
+      drawerPosition="right"
+      renderDrawerContent={() => (
+        <React.Fragment>
+          <NotificationsDrawerContent />
+        </React.Fragment>
+      )}
+    >
+      <DashboardNavigationRouter />
+    </Drawer>
   );
 }
