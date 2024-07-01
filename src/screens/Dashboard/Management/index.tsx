@@ -20,6 +20,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
           left={(props) => <List.Icon {...props} icon="account-multiple-outline" />}
           right={(props) => <List.Icon {...props} icon="chevron-right" />}
         />
+        <Divider />
       </RBAC.ProtectedResource>
 
       <RBAC.ProtectedResource action="NAVIGATE" subject="CompanyDetails">

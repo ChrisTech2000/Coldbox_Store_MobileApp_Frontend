@@ -37,21 +37,19 @@ const NavigationDrawer = createDrawerNavigator<DashboardRoutes>();
 
 function DashboardNavigationRouter() {
   return (
-    <RBAC>
-      <NavigationDrawer.Navigator
-        initialRouteName="Main"
-        drawerContent={DrawerContent}
-        screenOptions={DashboardScreenOptions}
-      >
-        <NavigationDrawer.Screen name="Main" component={DashboardMainBottomTabs} />
-        <NavigationDrawer.Screen name="AccountDetails" component={AccountDetails} />
-        <NavigationDrawer.Screen name="Management" component={ManagementStack} />
-        <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHub} />
-        <NavigationDrawer.Screen name="Tutorial" component={Tutorial} />
-        <NavigationDrawer.Screen name="FAQ" component={FAQ} />
-        <NavigationDrawer.Screen name="About" component={About} />
-      </NavigationDrawer.Navigator>
-    </RBAC>
+    <NavigationDrawer.Navigator
+      initialRouteName="Main"
+      drawerContent={DrawerContent}
+      screenOptions={DashboardScreenOptions}
+    >
+      <NavigationDrawer.Screen name="Main" component={DashboardMainBottomTabs} />
+      <NavigationDrawer.Screen name="AccountDetails" component={AccountDetails} />
+      <NavigationDrawer.Screen name="Management" component={ManagementStack} />
+      <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHub} />
+      <NavigationDrawer.Screen name="Tutorial" component={Tutorial} />
+      <NavigationDrawer.Screen name="FAQ" component={FAQ} />
+      <NavigationDrawer.Screen name="About" component={About} />
+    </NavigationDrawer.Navigator>
   );
 }
 
@@ -68,18 +66,20 @@ export default function DashboardNavigator() {
   const toggle = useRightDrawerStore((store) => store.toggle);
 
   return (
-    <Drawer
-      open={isOpen}
-      onOpen={() => toggle(true)}
-      onClose={() => toggle(false)}
-      drawerPosition="right"
-      renderDrawerContent={() => (
-        <React.Fragment>
-          <NotificationsDrawerContent />
-        </React.Fragment>
-      )}
-    >
-      <DashboardNavigationRouter />
-    </Drawer>
+    <RBAC>
+      <Drawer
+        open={isOpen}
+        onOpen={() => toggle(true)}
+        onClose={() => toggle(false)}
+        drawerPosition="right"
+        renderDrawerContent={() => (
+          <React.Fragment>
+            <NotificationsDrawerContent />
+          </React.Fragment>
+        )}
+      >
+        <DashboardNavigationRouter />
+      </Drawer>
+    </RBAC>
   );
 }
