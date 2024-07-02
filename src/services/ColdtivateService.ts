@@ -1,13 +1,14 @@
 import { AxiosError } from 'axios';
 
-import { EDashboardEndpoints } from '#constants/api.routes';
+import { EStorageEndpoints, EUserEndpoints } from '#constants/api.routes';
 import type {
+  GetCoolingUnitsParams,
   GetDashboardProducesParams,
   GetFarmerDashboardProducesParams,
   GetFarmerParams,
 } from '#types/api.params';
-import type { GetDashboardProducesResponse, GetFarmerResponse } from '#types/api.responses';
-import type { DashboardProduce } from '#types/global';
+import type { GetFarmerResponse } from '#types/api.responses';
+import type { Company, CoolingUnit, DashboardProduce } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
@@ -19,7 +20,33 @@ class ColdtivateService extends HttpClient {
 
   public getFarmer = async (params: GetFarmerParams): Promise<GetFarmerResponse[] | undefined> => {
     try {
-      const { data } = await this.get<GetFarmerResponse[]>(EDashboardEndpoints.GET_FARMER, {
+      const { data } = await this.get<GetFarmerResponse[]>(EUserEndpoints.GET_FARMER, {
+        params,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCompanies = async (): Promise<Company[] | undefined> => {
+    try {
+      const { data } = await this.get<Company[]>(EStorageEndpoints.GET_COMPANIES, {});
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnits = async (
+    params: GetCoolingUnitsParams
+  ): Promise<CoolingUnit[] | undefined> => {
+    try {
+      const { data } = await this.get<CoolingUnit[]>(EStorageEndpoints.GET_COOLING_UNITS, {
         params,
       });
       return data;
@@ -32,10 +59,10 @@ class ColdtivateService extends HttpClient {
 
   public getDashboardProduces = async (
     params: GetDashboardProducesParams[]
-  ): Promise<GetDashboardProducesResponse | undefined> => {
+  ): Promise<DashboardProduce[] | undefined> => {
     try {
-      const { data } = await this.get<GetDashboardProducesResponse[]>(
-        EDashboardEndpoints.GET_DASHBOARD_PRODUCTS,
+      const { data } = await this.get<DashboardProduce[]>(
+        EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );
       return data;
@@ -51,7 +78,7 @@ class ColdtivateService extends HttpClient {
   ): Promise<DashboardProduce[] | undefined> => {
     try {
       const { data } = await this.get<DashboardProduce[]>(
-        EDashboardEndpoints.GET_DASHBOARD_PRODUCTS,
+        EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );
       return data;

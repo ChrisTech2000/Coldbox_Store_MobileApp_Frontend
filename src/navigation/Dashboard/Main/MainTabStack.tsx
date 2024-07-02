@@ -8,7 +8,7 @@ import {
 import type { RouteProp } from '@react-navigation/native';
 import { Appbar } from 'react-native-paper';
 
-import DashboardMain from '#screens/Dashboard/Main';
+import DashboardMain from '#screens/Dashboard/Main/Dashboard';
 import ProduceDetails from '#screens/Dashboard/Main/ProduceDetails';
 
 import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';

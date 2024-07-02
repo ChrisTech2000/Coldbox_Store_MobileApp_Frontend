@@ -1,0 +1,36 @@
+import { DashboardProduce } from '#types/global';
+import { ESortingOptions } from '../Dashboard/components/SortMenu';
+
+export function sortProduces(a: DashboardProduce, b: DashboardProduce, sorting: ESortingOptions) {
+  let hasMinShelfLifeA: boolean;
+  let hasMinShelfLifeB: boolean;
+
+  switch (sorting) {
+    case ESortingOptions.CROP_TYPE:
+      return a.cropName.toLowerCase().localeCompare(b.cropName.toLowerCase());
+    case ESortingOptions.PICK_UP_TIME:
+      hasMinShelfLifeA =
+        Number.isInteger(a.minimumRemainingShelfLife) && a.runDt && a.qualityDt !== -1;
+      hasMinShelfLifeB =
+        Number.isInteger(b.minimumRemainingShelfLife) && b.runDt && b.qualityDt !== -1;
+
+      if (!hasMinShelfLifeA && hasMinShelfLifeB) return 1;
+      if (hasMinShelfLifeA && !hasMinShelfLifeB) return -1;
+      if (!hasMinShelfLifeA && !hasMinShelfLifeB) return 0;
+
+      return (
+        (hasMinShelfLifeA ? a.minimumRemainingShelfLife : a.currentStorageDays) -
+        (hasMinShelfLifeB ? b.minimumRemainingShelfLife : b.currentStorageDays)
+      );
+    case ESortingOptions.CHECK_IN_DATE:
+      return (
+        new Date(a.crates[0].checkInDate).getTime() - new Date(b.crates[0].checkInDate).getTime()
+      );
+    case ESortingOptions.CHECK_IN_DATE_REVERSE:
+      return (
+        new Date(b.crates[0].checkInDate).getTime() - new Date(a.crates[0].checkInDate).getTime()
+      );
+    default:
+      return 0;
+  }
+}

@@ -178,6 +178,29 @@ const en = {
       occupancy: 'Current occupancy of the cooling unit',
       week: 'This week',
     },
+    Company: {
+      SelectCompany: {
+        label: 'Company: {{name}}',
+        header: 'Select a company',
+      },
+    },
+    SearchFilter: {
+      detailsMessage:
+        'Search for a check-in using crop type, farmer name, days in storage, days left in storage, or check-in code',
+      idMessage: 'Search for a crate using the crate ID number used to identify a specific crate',
+      crateDetailsButton: 'Search for Crate Details',
+      crateIdButton: 'Search for Crate ID',
+      searchLabel: 'Search',
+    },
+    SortMenu: {
+      title: 'Sort by',
+      options: {
+        cropType: 'Crop type',
+        timeToPick: 'Time to pick up',
+        checkInDate: 'Check in date (first to latest)',
+        checkInDateReverse: 'Check in date (latest to first)',
+      },
+    },
   },
 };
 

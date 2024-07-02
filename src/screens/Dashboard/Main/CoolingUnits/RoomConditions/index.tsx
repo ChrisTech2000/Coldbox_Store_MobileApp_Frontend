@@ -5,7 +5,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { Text } from '#ui/components/Text';
 
-import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectCoolingUnit';
+import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectWithStore';
 
 const MOCKED_COOLING_UNITS = [
   { name: 'CU098765' },
