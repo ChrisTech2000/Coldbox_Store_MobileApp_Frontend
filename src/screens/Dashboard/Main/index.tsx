@@ -13,7 +13,7 @@ import { EPricingType, type Company, type CoolingUnit, type DashboardProduce } f
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { ScrollView } from '#ui/components/ScrollView';
-import { TextBold, TextRegular } from '#ui/components/Text';
+import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -142,11 +142,11 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           </Button>
         </View>
 
-        <TextRegular tw="text-base mt-2">
+        <Text tw="text-base mt-2">
           {searchType === 'details'
             ? t('Dashboard.SearchFilter.detailsMessage')
             : t('Dashboard.SearchFilter.idMessage')}
-        </TextRegular>
+        </Text>
 
         <View tw="flex flex-row items-center justify-between">
           <Input
@@ -181,45 +181,41 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
                 />
                 <View tw="flex flex-row items-center space-x-1">
                   <MineCart width={12} height={12} />
-                  <TextRegular tw="text-base">{produce.cratesAmount}</TextRegular>
+                  <Text tw="text-base">{produce.cratesAmount}</Text>
                 </View>
               </View>
               <View tw="w-full justify-between">
                 <View tw="flex flex-row items-center w-[80%] justify-between">
-                  <TextBold tw="font-bold text-base">{produce.movementCode}</TextBold>
+                  <Text tw="font-bold text-base">{produce.movementCode}</Text>
                   <View tw="items-end">
                     {produce.minimumRemainingShelfLife && (
-                      <TextRegular tw="text-green-400 text-base font-bold">
+                      <Text tw="text-green-400 text-base font-bold">
                         {generateDaysString(produce.minimumRemainingShelfLife)}
-                      </TextRegular>
+                      </Text>
                     )}
-                    <TextRegular
+                    <Text
                       tw="underline text-green-primary"
                       onPress={() => navigation.navigate('ProduceDetails')}
                     >
                       See Details
-                    </TextRegular>
+                    </Text>
                   </View>
                 </View>
                 <View tw="flex flex-row items-center w-[80%] justify-between">
                   <View>
                     {produce.cropName.split(' ').map((name, index) => (
-                      <TextRegular key={`${name}-${index}`} tw="text-gray-400">
+                      <Text key={`${name}-${index}`} tw="text-gray-400">
                         {name}
-                      </TextRegular>
+                      </Text>
                     ))}
                   </View>
-                  <TextRegular tw="text-gray-400">{produce.farmer}</TextRegular>
+                  <Text tw="text-gray-400">{produce.farmer}</Text>
                 </View>
                 <View tw="flex flex-row items-center w-[80%] justify-between">
-                  <TextRegular tw="text-gray-400">
-                    {getPricing(produce, company?.currency ?? '')}
-                  </TextRegular>
+                  <Text tw="text-gray-400">{getPricing(produce, company?.currency ?? '')}</Text>
                   <View tw="flex flex-row items-center space-x-1">
                     <ColdRoom width={14} height={14} tw="text-black" />
-                    <TextBold tw="text-base">
-                      {generateDaysString(produce.currentStorageDays)}
-                    </TextBold>
+                    <Text tw="text-base">{generateDaysString(produce.currentStorageDays)}</Text>
                   </View>
                 </View>
               </View>
