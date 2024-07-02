@@ -1,6 +1,8 @@
-import React, { useState, type SetStateAction } from 'react';
+import React, { useCallback, useState, type SetStateAction } from 'react';
 import { FlatList, View } from 'react-native';
 import { RadioButton } from 'react-native-paper';
+import { create } from 'zustand';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
@@ -9,29 +11,41 @@ import { RadioButtonItem } from '#ui/components/RadioButton';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useTranslationUtils } from '#i18n/utils';
 
-export type CoolingUnitMockedEntry = { name: string };
+export type CoolingUnitMockedEntry = { name: string } | null;
+
+export const useSelectCoolingUnitStore = create<{
+  coolingUnit: CoolingUnitMockedEntry;
+  onSelect: (coolingUnit: CoolingUnitMockedEntry) => void;
+}>((set) => ({
+  coolingUnit: null,
+  onSelect: (datum) => set({ coolingUnit: datum }),
+}));
 
 type SelectCoolingUnitProps = {
   datums: Array<CoolingUnitMockedEntry>;
-  selectedCoolingUnit: CoolingUnitMockedEntry;
-  onSelect: (datum: SetStateAction<CoolingUnitMockedEntry>) => void;
   isModalVisible: boolean;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
 };
 
 export default function SelectCoolingUnit(props: SelectCoolingUnitProps) {
-  const [selectedCoolingUnit, setSelectedCoolingUnit] = useControlledState<CoolingUnitMockedEntry>(
-    props.selectedCoolingUnit,
-    props.onSelect
-  );
+  const store = useSelectCoolingUnitStore();
 
   const [isModalVisible, setIsModalVisible] = useControlledState<boolean>(
     props.isModalVisible,
     props.setIsModalVisible
   );
 
-  const [internalSelection, setInternalSelection] =
-    useState<CoolingUnitMockedEntry>(selectedCoolingUnit);
+  const [internalSelection, setInternalSelection] = useState<CoolingUnitMockedEntry>(
+    store.coolingUnit
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (internalSelection?.name !== store.coolingUnit?.name) {
+        setInternalSelection(store.coolingUnit);
+      }
+    }, [store.coolingUnit?.name])
+  );
 
   const { t } = useTranslationUtils();
 
@@ -40,7 +54,7 @@ export default function SelectCoolingUnit(props: SelectCoolingUnitProps) {
       <Select
         variant="md"
         label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-          name: selectedCoolingUnit.name,
+          name: store.coolingUnit?.name || props.datums.at(0)?.name || '',
         })}
         isModalOpen={isModalVisible}
         onClick={() => setIsModalVisible(!isModalVisible)}
@@ -48,9 +62,9 @@ export default function SelectCoolingUnit(props: SelectCoolingUnitProps) {
           header: t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header'),
           options: (
             <RadioButton.Group
-              value={internalSelection.name}
+              value={internalSelection?.name || props.datums.at(0)?.name || ''}
               onValueChange={(value) => {
-                const unit = props.datums.find((item) => item.name === value);
+                const unit = props.datums.find((item) => item?.name === value);
                 if (!unit) return;
                 setInternalSelection(unit);
               }}
@@ -60,8 +74,8 @@ export default function SelectCoolingUnit(props: SelectCoolingUnitProps) {
                 keyExtractor={(_, itemIdx) => `cooling-unit-${itemIdx}`}
                 renderItem={({ item }) => (
                   <RadioButtonItem
-                    label={item.name}
-                    value={item.name}
+                    label={item?.name || ''}
+                    value={item?.name || ''}
                     tw="flex flex-row-reverse ml-[-10]"
                   />
                 )}
@@ -76,7 +90,7 @@ export default function SelectCoolingUnit(props: SelectCoolingUnitProps) {
                 uppercase
                 onPress={(evt) => {
                   evt.stopPropagation();
-                  setInternalSelection(selectedCoolingUnit);
+                  setInternalSelection(store.coolingUnit);
                   setIsModalVisible(!isModalVisible);
                 }}
               >
@@ -87,7 +101,7 @@ export default function SelectCoolingUnit(props: SelectCoolingUnitProps) {
                 uppercase
                 onPress={(evt) => {
                   evt.stopPropagation();
-                  setSelectedCoolingUnit(internalSelection);
+                  store.onSelect(internalSelection);
                   setIsModalVisible(!isModalVisible);
                 }}
               >
