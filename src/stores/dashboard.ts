@@ -10,6 +10,7 @@ import { useAuthStore } from './auth';
 type State = {
   farmerId: number | null;
   farmerCompanies: Company[] | null;
+  farmerUnitsIds: number[] | null;
 };
 
 type Actions = {
@@ -19,6 +20,7 @@ type Actions = {
 export const useDashboardStore = create<State & Actions>((set) => ({
   farmerId: null,
   farmerCompanies: null,
+  farmerUnitsIds: null,
 
   fetchGlobalInformation: async (params: GetFarmerParams) => {
     try {
@@ -32,6 +34,7 @@ export const useDashboardStore = create<State & Actions>((set) => ({
         farmerCompanies: getCompaniesResponse?.filter((company) =>
           farmer?.companies.includes(company.id)
         ),
+        farmerUnitsIds: farmer?.coolingUnits,
       });
     } catch (err) {
       console.error('Error fetching data:', err);

@@ -129,10 +129,10 @@ export interface PowerOption {
   batteryMaxCurrent: number;
   batteryType: unknown; // TODO: figure out type
   batteryPeakEnergyStorage: number;
-  refrigerantType: string;
+  refrigerantType: ERefrigerantType;
   powerSource: EPowerSource;
-  electricityStorageSystem: string;
-  thermalStorageMethod: string;
+  electricityStorageSystem: EElectricStorageSystem;
+  thermalStorageMethod: EThermalStorageSystem;
   roomInsulator: number;
   amountRefrigerant: number;
 }
@@ -158,7 +158,7 @@ export interface CoolingUnit {
   roomWidth: number;
   roomWeight: number;
   operators: number[];
-  latestTemperature: string; // why?
+  latestTemperature: string;
   crateWeight: number;
   crateWidth: number;
   crateLength: number;
@@ -208,18 +208,46 @@ export enum EAppGender {
 }
 
 export enum ECoolingUnitType {
-  FARM_GATE_STORAGE_ROOM = 'Farm-gate storage room',
-  MARKET_STORAGE_ROOM = 'Market storage room',
-  MOVABLE_UNIT = 'Movable unit',
-  OTHER = 'Other',
+  FARM_GATE_STORAGE_ROOM = 'FARM_GATE_STORAGE_ROOM',
+  MARKET_STORAGE_ROOM = 'MARKET_STORAGE_ROOM',
+  MOVABLE_UNIT = 'MOVABLE_UNIT',
+  OTHER = 'OTHER',
 }
 
 export enum EPowerSource {
-  GENERATOR = 'GENERATOR',
-  GRID = 'GRID',
-  PV_PANELS = 'PVPANELS',
-  BIO_MASS = 'BIOMASS',
-  HYBRID = 'HYBRID',
+  GENERATOR = 'generator',
+  GRID = 'grid',
+  PV_PANELS = 'pvpanels',
+  BIO_MASS = 'biomass',
+  HYBRID = 'hybrid',
+}
+
+export enum EElectricStorageSystem {
+  BATTERY = 'battery',
+  THERMAL_STORAGE = 'thermal storage',
+  ICE_PACK = 'ice-pack',
+  HYBRID = 'hybrid',
+  NONE = 'none',
+}
+
+export enum EThermalStorageSystem {
+  PHASE_CHANGE_MATERIAL = 'phase change material',
+  ICE_BLOCK_STORAGE = 'ice block storage',
+  CHILLED_WATER_STORAGE = 'chilled water storage',
+  OTHER = 'other',
+  NONE = 'none',
+}
+
+export enum ERefrigerantType {
+  R290 = 'R290',
+  R410A = 'R-410A',
+  R0407c = 'R-407c',
+  R717 = 'R717',
+  R600 = 'R600',
+  R600A = 'R600A',
+  R601 = 'R601',
+  R601A = 'R601A',
+  OTHER = 'Other',
 }
 
 //////////////////////// MAPPERS

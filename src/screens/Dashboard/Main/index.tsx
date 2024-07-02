@@ -15,9 +15,9 @@ import { type DashboardProduce, type Company, type CoolingUnit, EPricingType } f
 
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
-  const { farmerId, farmerCompanies } = useDashboardStore();
+  const { farmerId, farmerCompanies, farmerUnitsIds } = useDashboardStore();
 
-  const [selectedCompany] = useState<Company | null>(farmerCompanies?.[0] ?? null);
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedUnit, setSelectedUnit] = useState<CoolingUnit | null>(null);
 
   const { data: coolingUnits } = useApiCall(
@@ -27,7 +27,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       company: selectedCompany?.id as number,
     },
     {
-      skip: !selectedCompany,
+      skip: !selectedCompany?.id,
       defaultData: [],
     }
   );
@@ -40,7 +40,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       farmerId: farmerId as number,
     },
     {
-      skip: !farmerId || !selectedUnit,
+      skip: !farmerId || !selectedUnit?.id,
       defaultData: [],
     }
   );
@@ -54,13 +54,20 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, []);
 
   useEffect(() => {
-    if (coolingUnits) {
-      setSelectedUnit(coolingUnits[0]);
+    if (farmerCompanies && !selectedCompany) {
+      setSelectedCompany(farmerCompanies[0]);
+    }
+  }, [farmerCompanies]);
+
+  useEffect(() => {
+    if (coolingUnits && !selectedUnit) {
+      const farmerUnits = coolingUnits.filter((unit) => farmerUnitsIds?.includes(unit.id));
+      setSelectedUnit(farmerUnits[0]);
     }
   }, [coolingUnits]);
 
   return (
-    <View tw="flex-1 items-center justify-center space-y-6">
+    <View tw="flex-1 items-center justify-center space-y-4">
       {dashboardProduces?.map((produce, index) => (
         <View key={`${produce.id}-${index}`} tw="w-[90%] h-24 flex flex-row">
           <View
