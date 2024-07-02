@@ -175,10 +175,10 @@ export default {
   Dashboard: {
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {
-        label: 'कूलिंग यूनिट: {{name}}',
-        header: 'कूलिंग यूनिट का चयन करें',
+        label: 'शीत कक्ष: {{name}}',
+        header: 'एक शीतलन इकाई का चयन करें',
       },
-      occupancy: 'कूलिंग यूनिट की वर्तमान स्थिति',
+      occupancy: 'शीतलन इकाई का वर्तमान अधिभोग',
       week: 'इस सप्ताह',
     },
     Company: {
