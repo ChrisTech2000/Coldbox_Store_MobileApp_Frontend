@@ -2,7 +2,7 @@ import React, { memo, useCallback, type SetStateAction } from 'react';
 import { FlatList, type ListRenderItem, Platform, TouchableOpacity, View } from 'react-native';
 import Svg, { Rect, type RectProps } from 'react-native-svg';
 
-import { TextRegular } from '#ui/components/Text';
+import { Text } from '#ui/components/Text';
 
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { paperTheme } from '#ui/lib/theme';
@@ -104,7 +104,7 @@ const _SVGColumn = memo(function Component(props: {
         />
         <Rect y={props.yPosition} height={props.barHeight} fill={props.fill} {...baseProps} />
       </Svg>
-      <TextRegular>{dateFmt(props.timestamp, 'eee').toUpperCase()}</TextRegular>
+      <Text>{dateFmt(props.timestamp, 'eee').toUpperCase()}</Text>
     </View>
   );
 });

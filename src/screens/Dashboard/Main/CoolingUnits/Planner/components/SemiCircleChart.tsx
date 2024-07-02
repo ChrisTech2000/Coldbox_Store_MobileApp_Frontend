@@ -1,7 +1,8 @@
 import React, { memo } from 'react';
 import { View } from 'react-native';
 import Svg, { G, Circle, type CircleProps } from 'react-native-svg';
-import { Text } from 'react-native-paper';
+
+import { Text } from '#ui/components/Text';
 
 import { paperTheme } from '#ui/lib/theme';
 import { dateFmt } from '#i18n/utils';
@@ -49,8 +50,8 @@ function SemiCircleChart(props: SemiCircleChartProps) {
         </G>
       </Svg>
       <View tw="absolute bottom-0 items-center space-y-2">
-        <Text variant="displayMedium">{percentage.toFixed(2)}%</Text>
-        <Text variant="titleLarge">{dateFmt(currentDate, 'eeee')}</Text>
+        <Text variant="HeadingRegular">{percentage.toFixed(2)}%</Text>
+        <Text variant="TitleRegular">{dateFmt(currentDate, 'eeee')}</Text>
       </View>
     </View>
   );

@@ -1,23 +1,35 @@
 import { configureFonts } from 'react-native-paper';
 
-const baseVariants = configureFonts({
-  config: {
-    fontFamily: 'Roboto-Regular',
-  },
-});
+const baseVariants = configureFonts({ config: { fontFamily: 'Roboto-Regular' } });
 
-const customVariants = configureFonts({
-  config: {
-    TextMedium: {
-      ...baseVariants.bodyMedium,
-      fontFamily: 'Roboto-Medium',
-    },
-    TextBold: {
-      ...baseVariants.bodyMedium,
-      fontFamily: 'Roboto-Bold',
-    },
+const CUSTOM_VARIANTS_DEFS = {
+  TextMedium: {
+    ...baseVariants.bodyMedium,
+    fontFamily: 'Roboto-Medium',
   },
-});
+  TextBold: {
+    ...baseVariants.bodyMedium,
+    fontFamily: 'Roboto-Bold',
+  },
+  TitleRegular: {
+    ...baseVariants.titleLarge,
+  },
+  TitleMedium: {
+    ...baseVariants.titleLarge,
+    fontFamily: 'Roboto-Medium',
+  },
+  TitleBold: {
+    ...baseVariants.titleLarge,
+    fontFamily: 'Roboto-Bold',
+  },
+  HeadingRegular: {
+    ...baseVariants.displayMedium,
+  },
+} as const;
+
+export type FontVariants = keyof typeof CUSTOM_VARIANTS_DEFS;
+
+const customVariants = configureFonts({ config: CUSTOM_VARIANTS_DEFS });
 
 export default configureFonts({
   config: {

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Divider, Text } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { Text } from '#ui/components/Text';
 
 import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectCoolingUnit';
 
@@ -29,7 +30,7 @@ function CoolingUnitsRoomConditions() {
 
       <Divider tw="w-full bg-gray-700 my-4" />
 
-      <Text tw="self-start mt-5 mb-4 ml-4" variant="titleLarge">
+      <Text tw="self-start mt-5 mb-4 mx-4 text-green-primary text-center" variant="TitleRegular">
         Cooling units occupancy and temperature will appear here when you do at least one check-in
         in any room.
       </Text>

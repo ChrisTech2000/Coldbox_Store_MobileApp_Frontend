@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { TextRegular } from '#ui/components/Text';
+import { Text } from '#ui/components/Text';
 
 import { LanguageStorage } from '#i18n/utils';
 import { FAQ_CONTENT } from '#constants/faq';
@@ -21,7 +21,7 @@ function AppInfo() {
         {faq.map((item, index) => (
           <View key={`${item.title}-${index}`}>
             <List.Accordion title={item.title} id={index}>
-              <TextRegular tw="text-wrap mx-8 mt-2 mb-8">{item.text}</TextRegular>
+              <Text tw="text-wrap mx-8 mt-2 mb-8">{item.text}</Text>
             </List.Accordion>
             <Divider />
           </View>
