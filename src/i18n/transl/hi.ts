@@ -181,5 +181,11 @@ export default {
       occupancy: 'शीतलन इकाई का वर्तमान अधिभोग',
       week: 'इस सप्ताह',
     },
+    CoolingUnitsRoomConditions: {
+      heading: 'पिछले तापमान को ट्रैक करें',
+      temperature: 'तापमान',
+      lastUpdated: 'पिछली बार {{date}} पर अपडेट किया गया',
+      enterTemperature: 'तापमान दर्ज करें',
+    },
   },
 } satisfies Translations;

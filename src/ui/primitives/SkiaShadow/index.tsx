@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
-import { Canvas, Color, Path, Shadow, Skia } from '@shopify/react-native-skia';
+import { Canvas, Color, Path, Shadow } from '@shopify/react-native-skia';
+
+import usePath from './hooks/usePath';
+import useShadowDimensions from './hooks/useShadowDimensions';
 
 export type SkiaShadowProps = {
   blur: number;
@@ -72,86 +75,3 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
-
-//
-// Internals
-//
-
-type Args = {
-  top: number;
-  left: number;
-  borderTopLeftRadius: number;
-  borderTopRightRadius: number;
-  borderBottomLeftRadius: number;
-  borderBottomRightRadius: number;
-  shadowWidth: number;
-  shadowHeight: number;
-};
-
-const usePath = (args: Args) => {
-  const { top, left, shadowHeight, shadowWidth } = args;
-  const { borderTopLeftRadius, borderTopRightRadius } = args;
-  const { borderBottomLeftRadius, borderBottomRightRadius } = args;
-
-  return useMemo(() => {
-    const width = shadowWidth / 2;
-    const height = shadowHeight / 2;
-    const brTopRight = Math.min(borderTopRightRadius, width);
-    const brTopLeft = Math.min(borderTopLeftRadius, height);
-    const brBottomLeft = Math.min(borderBottomLeftRadius, width);
-    const brBottomRight = Math.min(borderBottomRightRadius, height);
-
-    const path = Skia.Path.Make();
-    path.moveTo(brTopLeft + left, top);
-    path.arcToTangent(shadowWidth + left, top, shadowWidth + left, top + brTopRight, brTopRight);
-    path.arcToTangent(
-      shadowWidth + left,
-      shadowHeight + top,
-      shadowWidth + left - brBottomRight,
-      shadowHeight + top,
-      brBottomRight
-    );
-    path.arcToTangent(
-      left,
-      top + shadowHeight,
-      left,
-      top + shadowHeight - brBottomLeft,
-      brBottomLeft
-    );
-    path.arcToTangent(left, top, left + brTopLeft, top, brTopLeft);
-    path.close();
-
-    return path;
-  }, [
-    borderBottomLeftRadius,
-    borderBottomRightRadius,
-    borderTopLeftRadius,
-    borderTopRightRadius,
-    shadowHeight,
-    shadowWidth,
-    left,
-    top,
-  ]);
-};
-
-type ShadowDimensionsArgs = Pick<SkiaShadowProps, 'blur' | 'dx' | 'dy'>;
-const useShadowDimensions = (args: ShadowDimensionsArgs) => {
-  const { blur, dx, dy } = args;
-
-  const blurRadius = blur * 3;
-
-  const top = useMemo(() => {
-    return blurRadius + (dy < 0 ? -dy : 0);
-  }, [blurRadius, dy]);
-  const bottom = useMemo(() => {
-    return blurRadius + (dy > 0 ? dy : 0);
-  }, [blurRadius, dy]);
-  const left = useMemo(() => {
-    return blurRadius + (dx < 0 ? -dx : 0);
-  }, [blurRadius, dx]);
-  const right = useMemo(() => {
-    return blurRadius + (dx > 0 ? dx : 0);
-  }, [blurRadius, dx]);
-
-  return { top, bottom, left, right };
-};
