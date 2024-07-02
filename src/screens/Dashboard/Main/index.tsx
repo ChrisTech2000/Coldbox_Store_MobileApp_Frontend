@@ -19,7 +19,8 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import SelectWithStore, { createSelectStore } from './components/SelectWithStore';
 import { TextInput } from 'react-native-paper';
-import { SortingMenu } from './components/SortMenu';
+import { SortingMenu, useSortingStore } from './components/SortMenu';
+import { sortProduces } from './utils/sortProduces';
 
 type Search = 'id' | 'details';
 
@@ -29,6 +30,7 @@ const useCompanyStore = createSelectStore<Company>();
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
   const { farmerId, farmerCompanies, farmerUnitsIds } = useDashboardStore();
+  const { sorting } = useSortingStore();
   const { t } = useTranslationUtils();
 
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
@@ -63,6 +65,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   // STATE
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
+  const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
   const [searchType, setSearchType] = useState<Search>('details');
   const [search, setSearch] = useState<string>('');
 
@@ -70,11 +73,15 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     return coolingUnits?.filter((unit) => farmerUnitsIds?.includes(unit.id)) ?? [];
   }, [coolingUnits]);
 
+  const sortedProduces = useMemo(() => {
+    return (dashboardProduces ?? []).slice().sort((a, b) => sortProduces(a, b, sorting));
+  }, [dashboardProduces, sorting]);
+
   const filteredProduces = useMemo(() => {
-    if (!search) return dashboardProduces;
+    if (!search) return sortedProduces;
     const lowerCaseSearch = search.toLowerCase();
 
-    return dashboardProduces?.filter((produce) => {
+    return sortedProduces.filter((produce) => {
       if (searchType === 'id') {
         return produce.crates.some((crate) => crate.id.toString() === lowerCaseSearch);
       }
@@ -86,7 +93,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         produce.movementCode.toLowerCase().includes(lowerCaseSearch)
       );
     });
-  }, [dashboardProduces, search, searchType]);
+  }, [sortedProduces, search, searchType]);
 
   // ACTIONS
   const generateDaysString = useCallback((days: number) => {
@@ -142,7 +149,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           </Button>
         </View>
 
-        <Text tw="text-base mt-2">
+        <Text variant="TextMedium" tw="text-base mt-2">
           {searchType === 'details'
             ? t('Dashboard.SearchFilter.detailsMessage')
             : t('Dashboard.SearchFilter.idMessage')}
@@ -159,7 +166,12 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
             value={search}
             left={<TextInput.Icon icon="magnify" />}
           />
-          {searchType === 'details' && <SortingMenu />}
+          {searchType === 'details' && (
+            <SortingMenu
+              isModalVisible={isSortingModalOpen}
+              setIsModalVisible={setIsSortingModalOpen}
+            />
+          )}
         </View>
       </View>
 
@@ -181,19 +193,24 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
                 />
                 <View tw="flex flex-row items-center space-x-1">
                   <MineCart width={12} height={12} />
-                  <Text tw="text-base">{produce.cratesAmount}</Text>
+                  <Text variant="TextMedium" tw="text-base">
+                    {produce.cratesAmount}
+                  </Text>
                 </View>
               </View>
               <View tw="w-full justify-between">
                 <View tw="flex flex-row items-center w-[80%] justify-between">
-                  <Text tw="font-bold text-base">{produce.movementCode}</Text>
+                  <Text variant="TextBold" tw="font-bold text-base">
+                    {produce.movementCode}
+                  </Text>
                   <View tw="items-end">
                     {produce.minimumRemainingShelfLife && (
-                      <Text tw="text-green-400 text-base font-bold">
+                      <Text variant="TextBold" tw="text-green-400 text-base font-bold">
                         {generateDaysString(produce.minimumRemainingShelfLife)}
                       </Text>
                     )}
                     <Text
+                      variant="TextMedium"
                       tw="underline text-green-primary"
                       onPress={() => navigation.navigate('ProduceDetails')}
                     >
@@ -209,13 +226,19 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
                       </Text>
                     ))}
                   </View>
-                  <Text tw="text-gray-400">{produce.farmer}</Text>
+                  <Text variant="TextMedium" tw="text-gray-400">
+                    {produce.farmer}
+                  </Text>
                 </View>
                 <View tw="flex flex-row items-center w-[80%] justify-between">
-                  <Text tw="text-gray-400">{getPricing(produce, company?.currency ?? '')}</Text>
+                  <Text variant="TextMedium" tw="text-gray-400">
+                    {getPricing(produce, company?.currency ?? '')}
+                  </Text>
                   <View tw="flex flex-row items-center space-x-1">
                     <ColdRoom width={14} height={14} tw="text-black" />
-                    <Text tw="text-base">{generateDaysString(produce.currentStorageDays)}</Text>
+                    <Text variant="TextMedium" tw="text-base">
+                      {generateDaysString(produce.currentStorageDays)}
+                    </Text>
                   </View>
                 </View>
               </View>

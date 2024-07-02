@@ -86,7 +86,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
               >
                 <FlatList
                   data={rest.datums}
-                  keyExtractor={(item, index) => `item-${index}`}
+                  keyExtractor={(item, index) => `${item}-${index}`}
                   renderItem={({ item }) => (
                     <RadioButtonItem
                       label={rest.itemName(item)}

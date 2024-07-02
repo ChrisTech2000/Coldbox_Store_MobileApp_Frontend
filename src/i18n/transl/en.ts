@@ -192,6 +192,15 @@ const en = {
       crateIdButton: 'Search for Crate ID',
       searchLabel: 'Search',
     },
+    SortMenu: {
+      title: 'Sort by',
+      options: {
+        cropType: 'Crop ype',
+        timeToPick: 'Time to pick up',
+        checkInDate: 'Check in date (first to latest)',
+        checkInDateReverse: 'Check in date (latest to first)',
+      },
+    },
   },
 };
 
