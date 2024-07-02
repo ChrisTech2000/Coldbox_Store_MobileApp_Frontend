@@ -15,6 +15,7 @@
     "link-assets": "npx react-native-asset"
   },
   "dependencies": {
+    "@casl/ability": "^6.7.1",
     "@hookform/resolvers": "^3.6.0",
     "@react-native-community/netinfo": "^11.3.2",
     "@react-navigation/bottom-tabs": "^6.5.20",
@@ -58,6 +59,7 @@
     "tailwind-merge": "^2.3.0",
     "urlcat": "^3.1.0",
     "validator": "^13.12.0",
+    "victory-native": "^41.0.1",
     "zod": "^3.23.8",
     "zustand": "^4.5.2"
   },
