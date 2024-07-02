@@ -1,0 +1,171 @@
+import Clipboard from '@react-native-clipboard/clipboard';
+import React, { useCallback, useMemo } from 'react';
+import { FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { Divider, Icon } from 'react-native-paper';
+import { useToast } from 'react-native-toast-notifications';
+
+import MineCart from '#assets/icons/mine-cart.svg';
+import { API_BASE_URL } from '#constants/environment';
+import { useTranslationUtils } from '#i18n/utils';
+import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
+import { ECoolingUnitMetric, EPricingType } from '#types/global';
+import { Text } from '#ui/components/Text';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+function ProduceDetails({ route }: MainTabStackRouteProps<'ProduceDetails'>) {
+  const { produce } = route.params;
+  const { t } = useTranslationUtils();
+  const toast = useToast();
+
+  const crates = produce.crates.length;
+
+  const copyToClipboard = useCallback(
+    (text: string) => {
+      Clipboard.setString(text);
+      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'success' });
+    },
+    [toast]
+  );
+
+  // @NOTE: need to test for fixed price
+  // but need to wait until original app allows to create new cooling units
+  const pricing = useMemo(() => {
+    const pricing = produce.crates[0].pricing[0];
+    const metric =
+      produce.crates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
+        ? produce.cratesCombinedWeight
+        : produce.cratesAmount;
+
+    if (pricing.pricingType === EPricingType.FIXED) {
+      return pricing.fixedRate * metric;
+    }
+
+    return produce.plannedDays ? pricing.dailyRate * metric * produce.plannedDays : 'N/A';
+  }, [produce]);
+
+  const data = useMemo(
+    () => [
+      {
+        label: t('Dashboard.ProduceDetails.cropType'),
+        value: produce.cropName,
+      },
+      {
+        label: t('Dashboard.ProduceDetails.numberOfCrates'),
+        value: produce.crates.length,
+      },
+      {
+        label: t('Dashboard.ProduceDetails.crateIds'),
+        value: produce.crates.map((crate) => crate.id).join(', '),
+      },
+      {
+        label: t('Dashboard.ProduceDetails.combinedWeight'),
+        value: produce.cratesCombinedWeight,
+      },
+      {
+        label: t('Dashboard.ProduceDetails.remainingTime'),
+        value: produce.minimumRemainingShelfLife,
+      },
+      {
+        label: t('Dashboard.ProduceDetails.currentStorageDays'),
+        value: produce.currentStorageDays,
+      },
+      {
+        label: t('Dashboard.ProduceDetails.plannedDays'),
+        value: produce.plannedDays,
+      },
+      produce.crates[0].pricing[0].pricingType === EPricingType.PERIODICITY
+        ? {
+            label: t('Dashboard.ProduceDetails.pricePerDay'),
+            value: produce.crates[0].pricing[0].dailyRate,
+          }
+        : {},
+      {
+        label: t('Dashboard.ProduceDetails.plannedStorageCost'),
+        value: pricing,
+      },
+    ],
+    [produce, pricing]
+  );
+
+  return (
+    <View tw="flex-1 items-center justify-center space-y-4">
+      <View tw="flex flex-row items-center space-x-3">
+        <Image
+          resizeMode="contain"
+          tw="w-32 h-32"
+          source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}
+        />
+        <View tw="space-y-3">
+          <View>
+            <Text variant="TextMedium" tw="text-gray-400">
+              {t('Dashboard.ProduceDetails.coolingUser')}
+            </Text>
+            <Text variant="TextMedium">{produce.farmer}</Text>
+          </View>
+          <View>
+            <Text variant="TextMedium" tw="text-gray-400">
+              {t('Dashboard.ProduceDetails.contact')}
+            </Text>
+            <View tw="flex flex-row items-center space-x-2">
+              <Text variant="TextMedium">{produce.farmerContact}</Text>
+              <TouchableOpacity onPress={() => copyToClipboard(produce.farmerContact)}>
+                <Icon source="content-copy" size={20} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      {produce.runDt && produce.qualityDt !== -1 ? (
+        <View tw="w-full px-2">
+          <View tw="w-full bg-green-300 rounded-lg h-3 " />
+          <View tw="flex flex-row items-center justify-between">
+            <Text variant="TextMedium" tw="px-2">
+              0%
+              {/**NOTE: figure out what's the behaviour here; currently does nothing in original app */}
+            </Text>
+            <Text variant="TextMedium" tw="px-2">
+              {t('Dashboard.ProduceDetails.pickUp')}
+            </Text>
+            <Text
+              variant="TextMedium"
+              tw="px-2"
+            >{`${produce.minimumRemainingShelfLife} ${t('Dashboard.ProduceDetails.days')}`}</Text>
+          </View>
+        </View>
+      ) : (
+        <Text variant="TextMedium" tw="text-lg px-2">
+          {t('Dashboard.ProduceDetails.noDTMessage')}
+        </Text>
+      )}
+
+      <View tw="flex flex-row items-center space-x-2">
+        <MineCart width={16} height={16} />
+        <Text variant="TitleBold">
+          {`${crates} ${crates === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
+        </Text>
+      </View>
+
+      <View tw="w-full px-3">
+        <FlatList
+          data={data}
+          renderItem={({ item, index }) => (
+            <View tw="space-y-1 my-2" key={`${item.label}-${index}`}>
+              <View tw="flex flex-row justify-between items-center">
+                <Text variant="TextMedium" tw="text-base">
+                  {item.label}
+                </Text>
+                <Text variant="TextMedium" tw="text-base text-gray-400">
+                  {item.value ?? '-'}
+                </Text>
+              </View>
+              <Divider />
+            </View>
+          )}
+        />
+      </View>
+    </View>
+  );
+}
+
+export default withSafeArea(ProduceDetails);
