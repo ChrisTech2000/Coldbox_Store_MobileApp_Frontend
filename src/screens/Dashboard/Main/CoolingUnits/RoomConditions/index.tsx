@@ -4,7 +4,7 @@ import { Divider, Text } from 'react-native-paper';
 import { ScrollView } from '#ui/components/ScrollView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectCoolingUnit';
+import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectWithStore';
 
 const MOCKED_COOLING_UNITS = [
   { name: 'CU098765' },
