@@ -175,11 +175,35 @@ export default {
   Dashboard: {
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {
-        label: 'शीत कक्ष: {{name}}',
-        header: 'एक शीतलन इकाई का चयन करें',
+        label: 'कूलिंग यूनिट: {{name}}',
+        header: 'कूलिंग यूनिट का चयन करें',
       },
-      occupancy: 'शीतलन इकाई का वर्तमान अधिभोग',
+      occupancy: 'कूलिंग यूनिट की वर्तमान स्थिति',
       week: 'इस सप्ताह',
+    },
+    Company: {
+      SelectCompany: {
+        label: 'कंपनी: {{name}}',
+        header: 'कंपनी का चयन करें',
+      },
+    },
+    SearchFilter: {
+      detailsMessage:
+        'फसल प्रकार, किसान का नाम, भंडारण में दिन, भंडारण में बचे दिन, या चेक-इन कोड का उपयोग करके चेक-इन खोजें',
+      idMessage:
+        'किसी विशिष्ट क्रेट की पहचान के लिए उपयोग किए गए क्रेट आईडी नंबर का उपयोग करके क्रेट खोजें',
+      crateDetailsButton: 'क्रेट विवरण खोजें',
+      crateIdButton: 'क्रेट आईडी खोजें',
+      searchLabel: 'खोजें',
+    },
+    SortMenu: {
+      title: 'सॉर्ट करें',
+      options: {
+        cropType: 'फसल प्रकार',
+        timeToPick: 'उठाने का समय',
+        checkInDate: 'चेक-इन तिथि (पहले से नवीनतम)',
+        checkInDateReverse: 'चेक-इन तिथि (नवीनतम से पहले)',
+      },
     },
   },
 } satisfies Translations;
