@@ -1,34 +1,55 @@
+import { useEffect } from 'react';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 import ColdtivateService from '#services/ColdtivateService';
 import type { GetFarmerParams } from '#types/api.params';
+import { Company } from '#types/global';
 
-import storage from './lib/storage';
+import { useAuthStore } from './auth';
 
 type State = {
   farmerId: number | null;
+  farmerCompanies: Company[] | null;
+  farmerUnitsIds: number[] | null;
 };
 
 type Actions = {
-  fetchFarmer: (params: GetFarmerParams) => Promise<void>;
+  fetchGlobalInformation: (params: GetFarmerParams) => Promise<void>;
 };
 
-export const useDashboardStore = create(
-  persist<State & Actions>(
-    (set) => ({
-      farmerId: null,
+export const useDashboardStore = create<State & Actions>((set) => ({
+  farmerId: null,
+  farmerCompanies: null,
+  farmerUnitsIds: null,
 
-      fetchFarmer: async (params: GetFarmerParams) => {
-        try {
-          const res = await ColdtivateService.getFarmer(params);
-          set({ farmerId: res?.[0]?.id });
-        } catch (err) {
-          console.error('Error in data fetch:', err);
-          set({ farmerId: null });
-        }
-      },
-    }),
-    { name: 'dashboard', storage }
-  )
-);
+  fetchGlobalInformation: async (params: GetFarmerParams) => {
+    try {
+      const getFarmerResponse = await ColdtivateService.getFarmer(params);
+      const getCompaniesResponse = await ColdtivateService.getCompanies();
+
+      const farmer = getFarmerResponse?.[0];
+
+      set({
+        farmerId: farmer?.id,
+        farmerCompanies: getCompaniesResponse?.filter((company) =>
+          farmer?.companies.includes(company.id)
+        ),
+        farmerUnitsIds: farmer?.coolingUnits,
+      });
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      set({ farmerId: null, farmerCompanies: null });
+    }
+  },
+}));
+
+export const useGlobalInformation = (isAuthenticated: boolean) => {
+  const { fetchGlobalInformation } = useDashboardStore();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (!isAuthenticated || !user?.id) return;
+
+    fetchGlobalInformation({ userId: user?.id });
+  }, [isAuthenticated, user]);
+};

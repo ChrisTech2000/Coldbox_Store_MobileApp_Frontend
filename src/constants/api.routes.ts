@@ -5,7 +5,12 @@ export enum EAuthenticationEndpoints {
   SIGN_UP_AS_COOLING_USER = 'user/v1/farmers/',
 }
 
-export enum EDashboardEndpoints {
-  GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
+export enum EUserEndpoints {
   GET_FARMER = 'user/v1/farmers/',
+}
+
+export enum EStorageEndpoints {
+  GET_COMPANIES = 'user/v1/companies/',
+  GET_COOLING_UNITS = 'storage/v1/cooling-units/',
+  GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
 }

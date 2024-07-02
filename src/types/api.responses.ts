@@ -31,5 +31,3 @@ export interface GetFarmerResponse {
   companies: number[];
   coolingUnits: number[];
 }
-
-export interface GetDashboardProducesResponse {}

@@ -1,0 +1,133 @@
+import React, { useCallback, useEffect, useState, type SetStateAction } from 'react';
+import { FlatList, View } from 'react-native';
+import { Divider, RadioButton } from 'react-native-paper';
+import { create } from 'zustand';
+import { useFocusEffect } from '@react-navigation/native';
+
+import { Select } from '#ui/components/Select';
+import { Button } from '#ui/components/Button';
+import { RadioButtonItem } from '#ui/components/RadioButton';
+
+import { useControlledState } from '#ui/hooks/useControlledState';
+import { useTranslationUtils } from '#i18n/utils';
+
+type SelectStore<T> = {
+  selectedItem: T | null;
+  onSelect: (item: T) => void;
+};
+
+export const createSelectStore = <T,>() =>
+  create<SelectStore<T>>((set) => ({
+    selectedItem: null,
+    onSelect: (item) => set({ selectedItem: item }),
+  }));
+
+type SelectItemProps<T> = {
+  datums: Array<T>;
+  isModalVisible: boolean;
+  label: string;
+  modalHeader: string;
+  useSelectStore: ReturnType<typeof createSelectStore<T>>;
+  setIsModalVisible: (value: SetStateAction<boolean>) => void;
+  itemName: (item: T) => string;
+};
+
+export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectItemProps<T>) {
+  const store = useSelectStore();
+
+  const [isModalVisible, setIsModalVisible] = useControlledState<boolean>(
+    rest.isModalVisible,
+    rest.setIsModalVisible
+  );
+
+  const [internalSelection, setInternalSelection] = useState<T | null>(
+    store.selectedItem ?? rest.datums[0]
+  );
+
+  useEffect(() => {
+    if (!store.selectedItem && rest.datums.length > 0) {
+      const firstDatum = rest.datums[0];
+      store.onSelect(firstDatum);
+      setInternalSelection(firstDatum);
+    }
+  }, [rest.datums, store.selectedItem]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (
+        internalSelection &&
+        rest.itemName(internalSelection) !== rest.itemName(store.selectedItem as T)
+      ) {
+        setInternalSelection(store.selectedItem);
+      }
+    }, [store.selectedItem])
+  );
+
+  const { t } = useTranslationUtils();
+
+  return (
+    <View tw="w-full">
+      <View tw="px-2">
+        <Select
+          variant="md"
+          label={rest.label}
+          isModalOpen={isModalVisible}
+          onClick={() => setIsModalVisible(!isModalVisible)}
+          content={{
+            header: rest.modalHeader,
+            options: (
+              <RadioButton.Group
+                value={internalSelection ? rest.itemName(internalSelection) : ''}
+                onValueChange={(value) => {
+                  const item = rest.datums.find((datum) => rest.itemName(datum) === value);
+                  if (!item) return;
+                  setInternalSelection(item);
+                }}
+              >
+                <FlatList
+                  data={rest.datums}
+                  keyExtractor={(item, index) => `${item}-${index}`}
+                  renderItem={({ item }) => (
+                    <RadioButtonItem
+                      label={rest.itemName(item)}
+                      value={rest.itemName(item)}
+                      tw="flex flex-row-reverse ml-[-10]"
+                    />
+                  )}
+                  nestedScrollEnabled
+                />
+              </RadioButton.Group>
+            ),
+            footer: (
+              <View tw="flex flex-row items-center justify-end">
+                <Button
+                  mode="text"
+                  uppercase
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    setInternalSelection(store.selectedItem);
+                    setIsModalVisible(!isModalVisible);
+                  }}
+                >
+                  {t('actions.cancel')}
+                </Button>
+                <Button
+                  mode="text"
+                  uppercase
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    if (internalSelection) store.onSelect(internalSelection);
+                    setIsModalVisible(!isModalVisible);
+                  }}
+                >
+                  {t('actions.ok')}
+                </Button>
+              </View>
+            ),
+          }}
+        />
+      </View>
+      <Divider tw="bg-gray-600 my-1" />
+    </View>
+  );
+}

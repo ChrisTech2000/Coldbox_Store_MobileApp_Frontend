@@ -4,7 +4,7 @@ import { Divider, Text } from 'react-native-paper';
 import { useTranslationUtils } from '#i18n/utils';
 import { ScrollView } from '#ui/components/ScrollView';
 
-import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectCoolingUnit';
+import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectWithStore';
 import SemiCircleChart from './components/SemiCircleChart';
 import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
 

@@ -15,7 +15,6 @@ import { useAuthStore } from '#stores/auth';
 import { ERoles, MAP_ROLES } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { useDashboardStore } from '#stores/dashboard';
 
 import { AccountCard } from './components/AccountCard';
 
@@ -41,7 +40,6 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
     setSession: store.setSession,
     setUser: store.setUser,
   }));
-  const { fetchFarmer } = useDashboardStore();
 
   const { t, zodResolver } = useTranslationUtils();
 
@@ -116,7 +114,6 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
       });
 
       setUser({ ...result.user, role: result.role });
-      fetchFarmer({ userId: result.user.id });
     }
   }, []);
 
