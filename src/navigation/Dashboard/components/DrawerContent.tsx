@@ -9,7 +9,7 @@ import { Drawer } from 'react-native-paper';
 
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 import { useAuthStore } from '#stores/auth';
-import { ERoles } from '#types/global';
+import RBAC from '#common/RBAC';
 
 import type { DashboardRoutes } from '../index';
 
@@ -17,15 +17,15 @@ const StyledDrawerContentScrollView = styled(DrawerContentScrollView);
 
 type RoutePaths = Exclude<keyof DashboardRoutes, 'Main'>;
 
-const DRAWER_ITEM_TITLE: Record<
+const DRAWER_ITEMS: Record<
   RoutePaths,
-  { iconName: string; title: string; permissions?: ERoles[] }
+  { iconName: string; title: string; permissionSubject?: string }
 > = {
   AccountDetails: { title: 'Account Details', iconName: 'account-settings-outline' },
   Management: {
     title: 'Management',
     iconName: 'account-supervisor-outline',
-    permissions: [ERoles.OPERATOR, ERoles.EMPLOYEE],
+    permissionSubject: 'ManagementStack',
   },
   KnowledgeHub: { title: 'Knowledge Hub', iconName: 'information-outline' },
   Tutorial: { title: 'Tutorial', iconName: 'card-multiple-outline' },
@@ -37,11 +37,6 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
   const { routeNames, index } = props.state;
   const focusedRoute = routeNames[index];
 
-  const { revokeSession, user } = useAuthStore((store) => ({
-    revokeSession: store.revokeSession,
-    user: store.user,
-  }));
-
   return (
     <StyledDrawerContentScrollView {...props} tw="flex-1">
       <View tw="mx-2.5 mb-4">
@@ -49,13 +44,13 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
       </View>
 
       <Drawer.Section tw="space-y-1.5">
-        {Object.entries(DRAWER_ITEM_TITLE)
-          .filter(
-            ([, datums]) => !datums.permissions || datums.permissions.includes(user?.role as ERoles)
-          )
-          .map(([routeName, datums], routeIdx) => (
+        {Object.entries(DRAWER_ITEMS).map(([routeName, datums], routeIdx) => (
+          <RBAC.ProtectedResource
+            key={`${routeName}-#${routeIdx}`}
+            action="NAVIGATE"
+            subject={datums.permissionSubject ?? routeName}
+          >
             <Drawer.Item
-              key={`${routeName}-#${routeIdx}`}
               label={datums.title}
               active={focusedRoute === routeName}
               onPress={(evt) => {
@@ -64,10 +59,15 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
               }}
               icon={datums.iconName}
             />
-          ))}
+          </RBAC.ProtectedResource>
+        ))}
       </Drawer.Section>
 
-      <Drawer.Item label="Log-out" onPress={revokeSession} icon="logout-variant" />
+      <Drawer.Item
+        label="Log-out"
+        onPress={() => useAuthStore.getState().revokeSession()}
+        icon="logout-variant"
+      />
     </StyledDrawerContentScrollView>
   );
 }
