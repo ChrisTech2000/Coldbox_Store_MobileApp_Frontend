@@ -4,7 +4,7 @@ import { Divider, Text } from 'react-native-paper';
 import { useTranslationUtils } from '#i18n/utils';
 import { ScrollView } from '#ui/components/ScrollView';
 
-import SelectCoolingUnit, { type CoolingUnitMockedEntry } from './components/SelectCoolingUnit';
+import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectCoolingUnit';
 import SemiCircleChart from './components/SemiCircleChart';
 import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
 
@@ -26,9 +26,6 @@ const MOCKED_DATUMS = [
 ] satisfies Array<WeekBarChartDatum>;
 
 export default function CoolingUnitsPlanner() {
-  const [selectedCoolingUnit, setSelectedCoolingUnit] = useState<CoolingUnitMockedEntry>(
-    MOCKED_COOLING_UNITS[0]
-  );
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedColumn, setSelectedColumn] = useState<WeekBarChartDatum>(MOCKED_DATUMS[0]);
 
@@ -41,8 +38,6 @@ export default function CoolingUnitsPlanner() {
     >
       <SelectCoolingUnit
         datums={MOCKED_COOLING_UNITS}
-        selectedCoolingUnit={selectedCoolingUnit}
-        onSelect={setSelectedCoolingUnit}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
       />
