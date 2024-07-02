@@ -1,26 +1,24 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Image, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { View } from 'react-native';
 
-import ColdRoom from '#assets/icons/coldroom.svg';
-import MineCart from '#assets/icons/mine-cart.svg';
-import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
-import { EPricingType, type Company, type CoolingUnit, type DashboardProduce } from '#types/global';
+import { type Company, type CoolingUnit } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
-import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import SelectWithStore, { createSelectStore } from './components/SelectWithStore';
 import { TextInput } from 'react-native-paper';
+import SelectWithStore, { createSelectStore } from '../components/SelectWithStore';
+import { sortProduces } from '../utils/sortProduces';
+import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
-import { sortProduces } from './utils/sortProduces';
+import { FlatList } from 'react-native-gesture-handler';
 
 type Search = 'id' | 'details';
 
@@ -62,7 +60,6 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
-  // STATE
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
@@ -95,17 +92,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     });
   }, [sortedProduces, search, searchType]);
 
-  // ACTIONS
-  const generateDaysString = useCallback((days: number) => {
-    return `${days} Day${days > 1 ? 's' : ''}`;
-  }, []);
-
-  const getPricing = useCallback((produce: DashboardProduce, currency: string) => {
-    return `${produce.cratesCombinedCost} ${currency}${produce.crates[0]?.pricing[0]?.pricingType === EPricingType.PERIODICITY ? ' / Day' : ''}`; // TODO: get currency
-  }, []);
-
   return (
-    <View tw="absolute left-0 right-0 top-0 bottom-0">
+    <View tw="absolute bottom-0 top-0 right-0 left-0">
       <View tw="mt-2 px-4">
         {
           <SelectWithStore<Company>
@@ -158,7 +146,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         <View tw="flex flex-row items-center justify-between">
           <Input
             tw={cn(
-              'mt-2 border bg-white border-gray-700 rounded-sm mb-2 h-11',
+              'border bg-white border-gray-700 rounded-sm my-2 h-11',
               searchType === 'details' ? 'w-[90%] mr-2' : 'w-full'
             )}
             label={`${t('Dashboard.SearchFilter.searchLabel')}...`}
@@ -175,77 +163,17 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         </View>
       </View>
 
-      <ScrollView contentContainerStyle="items-center justify-center space-y-4 pr-3 pl-2">
-        {filteredProduces?.map((produce, index) => (
-          <View key={`${produce.id}-${index}`} tw="w-[95%] h-24 flex flex-row mt-3">
-            <View
-              tw={cn(
-                'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
-                !produce.minimumRemainingShelfLife && 'bg-gray-300 border-gray-300'
-              )}
-            />
-            <View tw="flex flex-row h-full w-full space-x-2 p-1 bg-white rounded-sm border border-l-0 border-gray-300">
-              <View tw="justify-between items-center">
-                <Image
-                  resizeMode="contain"
-                  tw="w-14 h-10"
-                  source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}
-                />
-                <View tw="flex flex-row items-center space-x-1">
-                  <MineCart width={12} height={12} />
-                  <Text variant="TextMedium" tw="text-base">
-                    {produce.cratesAmount}
-                  </Text>
-                </View>
-              </View>
-              <View tw="w-full justify-between">
-                <View tw="flex flex-row items-center w-[80%] justify-between">
-                  <Text variant="TextBold" tw="font-bold text-base">
-                    {produce.movementCode}
-                  </Text>
-                  <View tw="items-end">
-                    {produce.minimumRemainingShelfLife && (
-                      <Text variant="TextBold" tw="text-green-400 text-base font-bold">
-                        {generateDaysString(produce.minimumRemainingShelfLife)}
-                      </Text>
-                    )}
-                    <Text
-                      variant="TextMedium"
-                      tw="underline text-green-primary"
-                      onPress={() => navigation.navigate('ProduceDetails')}
-                    >
-                      See Details
-                    </Text>
-                  </View>
-                </View>
-                <View tw="flex flex-row items-center w-[80%] justify-between">
-                  <View>
-                    {produce.cropName.split(' ').map((name, index) => (
-                      <Text key={`${name}-${index}`} tw="text-gray-400">
-                        {name}
-                      </Text>
-                    ))}
-                  </View>
-                  <Text variant="TextMedium" tw="text-gray-400">
-                    {produce.farmer}
-                  </Text>
-                </View>
-                <View tw="flex flex-row items-center w-[80%] justify-between">
-                  <Text variant="TextMedium" tw="text-gray-400">
-                    {getPricing(produce, company?.currency ?? '')}
-                  </Text>
-                  <View tw="flex flex-row items-center space-x-1">
-                    <ColdRoom width={14} height={14} tw="text-black" />
-                    <Text variant="TextMedium" tw="text-base">
-                      {generateDaysString(produce.currentStorageDays)}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
+      <FlatList
+        data={filteredProduces}
+        renderItem={({ item: produce, index }) => (
+          <Produce
+            key={`${produce.id}-${index}`}
+            produce={produce}
+            onNavigate={() => navigation.navigate('ProduceDetails')}
+            currency={company?.currency ?? ''}
+          />
+        )}
+      />
     </View>
   );
 }
