@@ -195,7 +195,7 @@ const en = {
     SortMenu: {
       title: 'Sort by',
       options: {
-        cropType: 'Crop ype',
+        cropType: 'Crop type',
         timeToPick: 'Time to pick up',
         checkInDate: 'Check in date (first to latest)',
         checkInDateReverse: 'Check in date (latest to first)',

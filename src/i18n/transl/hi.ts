@@ -199,7 +199,7 @@ export default {
     SortMenu: {
       title: 'सॉर्ट करें',
       options: {
-        cropType: 'फसल प्रकार',
+        cropType: 'फसल का प्रकार',
         timeToPick: 'उठाने का समय',
         checkInDate: 'चेक-इन तिथि (पहले से नवीनतम)',
         checkInDateReverse: 'चेक-इन तिथि (नवीनतम से पहले)',
