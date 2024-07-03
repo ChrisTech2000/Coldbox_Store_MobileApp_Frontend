@@ -1,24 +1,30 @@
 import React, { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
+import CratesManagement from '#assets/icons/crates-management.svg';
+import CheckIn from '#assets/icons/check-in.svg';
+import CheckOut from '#assets/icons/check-out.svg';
 import { useTranslationUtils } from '#i18n/utils';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
-import { type Company, type CoolingUnit } from '#types/global';
+import { ERoles, type Company, type CoolingUnit } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
-import { TextInput } from 'react-native-paper';
+import { FlatList } from 'react-native-gesture-handler';
+import { Icon, TextInput } from 'react-native-paper';
 import SelectWithStore, { createSelectStore } from '../components/SelectWithStore';
 import { sortProduces } from '../utils/sortProduces';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
-import { FlatList } from 'react-native-gesture-handler';
+import colors from 'tailwindcss/colors';
 
 type Search = 'id' | 'details';
 
@@ -28,6 +34,7 @@ const useCompanyStore = createSelectStore<Company>();
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
   const { farmerId, farmerCompanies, farmerUnitsIds } = useDashboardStore();
+  const { user } = useAuthStore();
   const { sorting } = useSortingStore();
   const { t } = useTranslationUtils();
 
@@ -39,15 +46,17 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     'getCoolingUnits',
     ColdtivateService.getCoolingUnits,
     {
-      company: company?.id as number,
+      ...(user?.role === ERoles.COOLING_USER
+        ? { company: company?.id as number }
+        : { operator: user?.id as number }),
     },
     {
-      skip: !company?.id,
+      skip: (user?.role === ERoles.COOLING_USER && !company?.id) || !user?.id,
       defaultData: [],
     }
   );
 
-  const { data: dashboardProduces } = useApiCall(
+  const { data: farmerDashboardProduces } = useApiCall(
     'getFarmerDashboardProduces',
     ColdtivateService.getFarmerDashboardProduces,
     {
@@ -60,15 +69,35 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
+  const { data: operatorDashboardProduces } = useApiCall(
+    'getDashboardProduces',
+    ColdtivateService.getDashboardProduces,
+    {
+      coolingUnit: coolingUnit?.id as number,
+    },
+    {
+      skip: user?.role === ERoles.COOLING_USER || !coolingUnit?.id,
+      defaultData: [],
+    }
+  );
+
+  const dashboardProduces =
+    user?.role === ERoles.COOLING_USER ? farmerDashboardProduces : operatorDashboardProduces;
+
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
+  const [isCrateManagementOpen, setIsCrateManagementOpen] = useState<boolean>(false);
   const [searchType, setSearchType] = useState<Search>('details');
   const [search, setSearch] = useState<string>('');
 
-  const farmerUnits = useMemo(() => {
-    return coolingUnits?.filter((unit) => farmerUnitsIds?.includes(unit.id)) ?? [];
-  }, [coolingUnits]);
+  const units = useMemo(() => {
+    return (
+      (user?.role === ERoles.COOLING_USER
+        ? coolingUnits?.filter((unit) => farmerUnitsIds?.includes(unit.id))
+        : coolingUnits) ?? []
+    );
+  }, [coolingUnits, user]);
 
   const sortedProduces = useMemo(() => {
     return (dashboardProduces ?? []).slice().sort((a, b) => sortProduces(a, b, sorting));
@@ -95,7 +124,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0">
       <View tw="mt-2 px-4">
-        {
+        {user?.role === ERoles.COOLING_USER && (
           <SelectWithStore<Company>
             datums={farmerCompanies ?? []}
             isModalVisible={isCompaniesModalOpen}
@@ -107,9 +136,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
             })}
             modalHeader={t('Dashboard.Company.SelectCompany.header')}
           />
-        }
+        )}
         <SelectWithStore<CoolingUnit>
-          datums={farmerUnits}
+          datums={units}
           isModalVisible={isUnitsModalOpen}
           setIsModalVisible={setIsUnitsModalOpen}
           itemName={(item) => item?.name}
@@ -174,6 +203,46 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           />
         )}
       />
+
+      {user?.role === ERoles.OPERATOR && (
+        <View tw="absolute right-4 bottom-2 flex flex-row-reverse items-center">
+          <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
+            <TouchableOpacity
+              tw={cn(
+                'w-12 h-12 items-center justify-center rounded-3xl',
+                isCrateManagementOpen ? 'bg-red-500' : 'bg-green-primary'
+              )}
+              onPress={() => setIsCrateManagementOpen(!isCrateManagementOpen)}
+            >
+              {isCrateManagementOpen ? (
+                <Icon source="close" size={25} color="white" />
+              ) : (
+                <CratesManagement width={30} height={30} />
+              )}
+            </TouchableOpacity>
+          </SkiaShadow>
+          {isCrateManagementOpen && (
+            <View tw="flex flex-row">
+              <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
+                <TouchableOpacity
+                  tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-green-100"
+                  onPress={() => null}
+                >
+                  <CheckIn width={20} height={20} />
+                </TouchableOpacity>
+              </SkiaShadow>
+              <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
+                <TouchableOpacity
+                  tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-orange-100"
+                  onPress={() => null}
+                >
+                  <CheckOut width={20} height={20} />
+                </TouchableOpacity>
+              </SkiaShadow>
+            </View>
+          )}
+        </View>
+      )}
     </View>
   );
 }

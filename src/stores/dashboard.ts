@@ -4,8 +4,8 @@ import { useShallow } from 'zustand/react/shallow';
 
 import ColdtivateService from '#services/ColdtivateService';
 import type { GetFarmerParams } from '#types/api.params';
-import type { Company } from '#types/global';
 import type { GetFarmerResponse } from '#types/api.responses';
+import { ERoles, type Company } from '#types/global';
 
 import { useAuthStore } from './auth';
 
@@ -56,7 +56,7 @@ export const useGlobalInformation = (isAuthenticated: boolean) => {
   const user = useAuthStore(useShallow((store) => store.user));
 
   useEffect(() => {
-    if (!isAuthenticated || !user?.id) return;
+    if (!isAuthenticated || !user?.id || user.role !== ERoles.COOLING_USER) return;
 
     void fetchGlobalInformation({ userId: user?.id });
   }, [isAuthenticated, user]);
