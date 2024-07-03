@@ -230,6 +230,9 @@ export default {
   Dashboard: {
     CrateManagement: {
       userModalTitle: 'एक ठंडाई उपयोगकर्ता चुनें',
+      CheckOut: {
+        ttp: 'उ.स.',
+      },
     },
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {

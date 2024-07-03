@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { TextInput } from 'react-native-paper';
@@ -29,10 +29,10 @@ const useCompanyStore = createSelectStore<Company>();
 
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
-  const { farmerId, farmerCompanies, farmerUnitsIds } = useDashboardStore();
   const { user } = useAuthStore();
   const { sorting } = useSortingStore();
   const { t } = useTranslationUtils();
+  const { farmerId, farmerCompanies, farmerUnitsIds, setCoolingUnits } = useDashboardStore();
 
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
 
@@ -116,6 +116,10 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     });
   }, [sortedProduces, search, searchType]);
 
+  useEffect(() => {
+    if (coolingUnits) setCoolingUnits(coolingUnits);
+  }, [coolingUnits]);
+
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0">
       <View tw="mt-2 px-4">
@@ -130,6 +134,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
               name: company ? company.name : '',
             })}
             modalHeader={t('Dashboard.Company.SelectCompany.header')}
+            divider
+            autoSelect
+            occupyFullWidth
           />
         )}
         <SelectWithStore<CoolingUnit>
@@ -142,6 +149,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
             name: coolingUnit ? coolingUnit.name : '',
           })}
           modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+          divider
+          autoSelect
+          occupyFullWidth
         />
 
         <View tw="flex flex-row items-center justify-center space-x-2 mt-4">

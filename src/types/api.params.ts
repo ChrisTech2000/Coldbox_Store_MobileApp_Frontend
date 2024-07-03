@@ -63,3 +63,8 @@ export interface GetFarmerDashboardProducesParams extends JsonObject {
   coolingUnit: number;
   farmerId: number;
 }
+
+export interface GetFarmerCratesParams extends JsonObject {
+  coolingUnit: number;
+  farmer: number;
+}

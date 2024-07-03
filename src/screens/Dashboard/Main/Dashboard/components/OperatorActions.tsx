@@ -33,7 +33,7 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [managementMode, setManagementMode] = useState<ManagementMode | undefined>();
-  const [selectedUser, setSelectedUser] = useState<GetFarmerResponse | 'NoPhone' | undefined>();
+  const [selectedUser, setSelectedUser] = useState<GetFarmerResponse | undefined>();
   const [search, setSearch] = useState<string>('');
 
   const { data } = useApiCall(
@@ -85,7 +85,7 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
   }, []);
 
   const onNavigate = useCallback(() => {
-    navigation.navigate(route, { user: selectedUser === 'NoPhone' ? undefined : selectedUser });
+    navigation.navigate(route, { user: selectedUser });
     setIsModalOpen(false);
     setSearch('');
     setSelectedUser(undefined);
@@ -171,10 +171,10 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
               />
               {(!search || noPhoneUser?.user.firstName.includes(search)) && (
                 <TouchableOpacity
-                  onPress={() => setSelectedUser('NoPhone')}
+                  onPress={() => setSelectedUser(noPhoneUser)}
                   tw={cn(
                     'my-1 border-b border-gray-300 p-1',
-                    selectedUser === 'NoPhone' ? 'border-2 border-green-primary' : ''
+                    selectedUser?.id === noPhoneUser?.id ? 'border-2 border-green-primary' : ''
                   )}
                 >
                   <Text variant="TextMedium" tw="text-base">
@@ -185,11 +185,12 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
             </ScrollView>
 
             <Button
-              tw="w-[85%] border-2 border-green-primary my-4"
+              tw="w-[85%] my-4"
               mode="contained"
               uppercase
               onPress={onNavigate}
               icon="check-circle-outline"
+              disabled={!selectedUser}
               contentStyle="flex flex-row-reverse items-center"
             >
               {t('actions.confirm')}

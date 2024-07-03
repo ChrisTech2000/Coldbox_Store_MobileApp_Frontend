@@ -13,4 +13,5 @@ export enum EStorageEndpoints {
   GET_COMPANIES = 'user/v1/companies/',
   GET_COOLING_UNITS = 'storage/v1/cooling-units/',
   GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
+  GET_FARMER_CRATES = '/storage/v1/crates/',
 }

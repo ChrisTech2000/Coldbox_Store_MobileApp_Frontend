@@ -227,6 +227,17 @@ const en = {
   Dashboard: {
     CrateManagement: {
       userModalTitle: 'Select a cooling user',
+      coolingUserLabel: 'Cooling user',
+      coolingUnitLabel: 'Select a cooling unit',
+      noUnitWarning: 'Please select a cooling unit',
+      noCratesWarning: "The selected Cooling user doesn't have any crates in this cooling unit",
+      CheckOut: {
+        selectCrateMessage: 'Select the crates you want to remove',
+        checkIn: 'Check-in',
+        days: 'days',
+        day: 'day',
+        ttp: 'TTP',
+      },
     },
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {
@@ -256,6 +267,7 @@ const en = {
       },
     },
     ProduceDetails: {
+      kilogram: 'kg',
       coolingUser: 'Cooling User',
       contact: 'Contact',
       contactCopied: 'Copied!',

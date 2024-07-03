@@ -4,12 +4,13 @@ import { EStorageEndpoints, EUserEndpoints } from '#constants/api.routes';
 import type {
   GetCoolingUnitsParams,
   GetDashboardProducesParams,
+  GetFarmerCratesParams,
   GetFarmerDashboardProducesParams,
   GetFarmerParams,
   GetOperatorFarmersParams,
 } from '#types/api.params';
 import type { GetFarmerResponse } from '#types/api.responses';
-import type { Company, CoolingUnit, DashboardProduce } from '#types/global';
+import type { Company, CoolingUnit, Crate, DashboardProduce } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
@@ -97,6 +98,17 @@ class ColdtivateService extends HttpClient {
         EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getFarmerCrates = async (params: GetFarmerCratesParams): Promise<Crate[] | undefined> => {
+    try {
+      const { data } = await this.get<Crate[]>(EStorageEndpoints.GET_FARMER_CRATES, { params });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
