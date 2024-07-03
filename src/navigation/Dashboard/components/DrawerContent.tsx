@@ -7,6 +7,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { Drawer } from 'react-native-paper';
 
+import type { TranslationPaths } from '#i18n/index';
+import type { Translator } from '#i18n/utils';
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 import { useAuthStore } from '#stores/auth';
 import RBAC from '#common/RBAC';
@@ -19,21 +21,31 @@ type RoutePaths = Exclude<keyof DashboardRoutes, 'Main'>;
 
 const DRAWER_ITEMS: Record<
   RoutePaths,
-  { iconName: string; title: string; permissionSubject?: string }
+  { iconName: string; translationPath: TranslationPaths; permissionSubject?: string }
 > = {
-  AccountDetails: { title: 'Account Details', iconName: 'account-settings-outline' },
+  AccountDetails: {
+    translationPath: 'navigation.dashboard.AccountDetails',
+    iconName: 'account-settings-outline',
+  },
   Management: {
-    title: 'Management',
+    translationPath: 'navigation.dashboard.Management',
     iconName: 'account-supervisor-outline',
     permissionSubject: 'ManagementStack',
   },
-  KnowledgeHub: { title: 'Knowledge Hub', iconName: 'information-outline' },
-  Tutorial: { title: 'Tutorial', iconName: 'card-multiple-outline' },
-  FAQ: { title: 'FAQ', iconName: 'chat-question-outline' },
-  About: { title: 'About', iconName: 'information-outline' },
+  KnowledgeHub: {
+    translationPath: 'navigation.dashboard.KnowledgeHub',
+    iconName: 'information-outline',
+  },
+  Tutorial: { translationPath: 'navigation.dashboard.Tutorial', iconName: 'card-multiple-outline' },
+  FAQ: { translationPath: 'navigation.dashboard.FAQ', iconName: 'chat-question-outline' },
+  About: { translationPath: 'navigation.dashboard.About', iconName: 'information-outline' },
 };
 
-export default function DrawerContent(props: DrawerContentComponentProps) {
+type Props = {
+  t: Translator;
+} & DrawerContentComponentProps;
+
+export default function DrawerContent(props: Props) {
   const { routeNames, index } = props.state;
   const focusedRoute = routeNames[index];
 
@@ -51,7 +63,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
             subject={datums.permissionSubject ?? routeName}
           >
             <Drawer.Item
-              label={datums.title}
+              label={props.t(datums.translationPath)}
               active={focusedRoute === routeName}
               onPress={(evt) => {
                 evt.stopPropagation();

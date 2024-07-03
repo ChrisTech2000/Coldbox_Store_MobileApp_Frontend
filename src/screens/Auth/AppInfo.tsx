@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ScrollView, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -16,18 +16,23 @@ function AppInfo() {
   );
 
   return (
-    <ScrollView tw="w-full h-full space-y-4">
+    <View tw="w-full h-full space-y-4">
       <List.AccordionGroup>
-        {faq.map((item, index) => (
-          <View key={`${item.title}-${index}`}>
-            <List.Accordion title={item.title} id={index}>
-              <Text tw="text-wrap mx-8 mt-2 mb-8">{item.text}</Text>
-            </List.Accordion>
-            <Divider />
-          </View>
-        ))}
+        <FlatList
+          data={faq}
+          keyExtractor={(item, itemIdx) => `faq-${item.id}-#${itemIdx}`}
+          renderItem={({ item }) => (
+            <React.Fragment>
+              <List.Accordion title={item.title} id={item.id}>
+                <Text tw="text-wrap mx-8 mt-2 mb-8">{item.text}</Text>
+              </List.Accordion>
+              <Divider />
+            </React.Fragment>
+          )}
+          nestedScrollEnabled
+        />
       </List.AccordionGroup>
-    </ScrollView>
+    </View>
   );
 }
 

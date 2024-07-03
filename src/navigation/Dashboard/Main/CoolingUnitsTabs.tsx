@@ -9,6 +9,9 @@ import type { RouteProp } from '@react-navigation/native';
 import CoolingUnitsPlanner from '#screens/Dashboard/Main/CoolingUnits/Planner';
 import CoolingUnitsRoomConditions from '#screens/Dashboard/Main/CoolingUnits/RoomConditions';
 import CoolingUnitsCratesInfo from '#screens/Dashboard/Main/CoolingUnits/CratesInfo';
+
+import type { TranslationPaths } from '#i18n/index';
+import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 
 export type CoolingUnitsTabsRoutes = {
@@ -26,20 +29,27 @@ type ScreenOptions = (props: {
   navigation: BottomTabNavigationProp<CoolingUnitsTabsRoutes, CoolingUnitsTabsRoutePaths>;
 }) => MaterialTopTabNavigationOptions;
 
-const TAB_TITLE: Record<CoolingUnitsTabsRoutePaths, string | undefined> = {
-  Planner: 'Planner',
-  RoomConditions: 'Room Conditions',
-  CratesInfo: 'Crates Info',
+const TAB_HEADERS: Record<CoolingUnitsTabsRoutePaths, TranslationPaths | undefined> = {
+  Planner: 'navigation.bottomTabs.Planner',
+  RoomConditions: 'navigation.bottomTabs.RoomConditions',
+  CratesInfo: 'navigation.bottomTabs.CratesInfo',
 };
 
 const TopTabs = createMaterialTopTabNavigator<CoolingUnitsTabsRoutes>();
 
 export default function CoolingUnitsTabs() {
-  const screenOptions: ScreenOptions = useCallback(
-    (props) => ({
+  const { t } = useTranslationUtils();
+
+  const screenOptions: ScreenOptions = useCallback((props) => {
+    // eslint-disable-next-line react/prop-types
+    const routeName = props.route.name;
+
+    const translationPath = TAB_HEADERS[routeName];
+    const routeTitle = translationPath ? t(translationPath) : undefined;
+
+    return {
       ...props,
-      // eslint-disable-next-line react/prop-types
-      tabBarLabel: TAB_TITLE[props.route.name],
+      tabBarLabel: routeTitle,
       tabBarIndicatorStyle: {
         backgroundColor: paperTheme.colors.secondary,
       },
@@ -50,9 +60,8 @@ export default function CoolingUnitsTabs() {
         color: paperTheme.colors.secondary,
         ...paperTheme.fonts.labelMedium,
       },
-    }),
-    []
-  );
+    };
+  }, []);
 
   return (
     <TopTabs.Navigator screenOptions={screenOptions}>

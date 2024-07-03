@@ -2,18 +2,22 @@ import React from 'react';
 import { View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { useTranslationUtils } from '#i18n/utils';
 import RBAC from '#common/RBAC';
 
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
 
+  const { t } = useTranslationUtils();
+
   return (
     <View tw="flex-1 justify-start">
       <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUsers">
         <List.Item
-          title="Cooling users"
+          title={t('navigation.management.CoolingUsers')}
           onPress={() => {
             navigation.navigate('CoolingUsers');
           }}
@@ -25,7 +29,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
       <RBAC.ProtectedResource action="NAVIGATE" subject="CompanyDetails">
         <List.Item
-          title="Company details"
+          title={t('navigation.management.CompanyDetails')}
           onPress={() => navigation.navigate('CompanyDetails')}
           left={(props) => <List.Icon {...props} icon="information-outline" />}
           right={(props) => <List.Icon {...props} icon="chevron-right" />}
@@ -35,7 +39,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
       <RBAC.ProtectedResource action="NAVIGATE" subject="Locations">
         <List.Item
-          title="Locations"
+          title={t('navigation.management.Locations')}
           onPress={() => {
             navigation.navigate('Locations');
           }}
@@ -47,7 +51,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
       <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUnits">
         <List.Item
-          title="Cooling units"
+          title={t('navigation.management.CoolingUnits')}
           onPress={() => {
             navigation.navigate('CoolingUnits');
           }}
@@ -59,7 +63,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
       <RBAC.ProtectedResource action="NAVIGATE" subject="Operators">
         <List.Item
-          title="Operators"
+          title={t('navigation.management.Operators')}
           onPress={() => {
             navigation.navigate('Operators');
           }}
@@ -71,7 +75,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
       <RBAC.ProtectedResource action="NAVIGATE" subject="RegisteredEmployees">
         <List.Item
-          title="Registered Employee"
+          title={t('navigation.management.RegisteredEmployee')}
           onPress={() => {
             navigation.navigate('RegisteredEmployee');
           }}
@@ -83,7 +87,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
       <RBAC.ProtectedResource action="NAVIGATE" subject="RevenueAnalysis">
         <List.Item
-          title="Revenue analysis"
+          title={t('navigation.management.RevenueAnalysis')}
           onPress={() => {
             navigation.navigate('RevenueAnalysis');
           }}
@@ -95,7 +99,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
       <RBAC.ProtectedResource action="NAVIGATE" subject="UsageAnalysis">
         <List.Item
-          title="Usage Analysis"
+          title={t('navigation.management.UsageAnalysis')}
           onPress={() => {
             navigation.navigate('UsageAnalysis');
           }}
