@@ -1,29 +1,61 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Divider, List } from 'react-native-paper';
+import { FlatList, RefreshControl, View } from 'react-native';
+import { ActivityIndicator, Divider, List } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
+
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import ColdtivateService from '#services/ColdtivateService';
+import { paperTheme } from '#ui/lib/theme';
+import { useManagementStore } from '#stores/management';
 
 function Locations(props: ManagementRouteProps<'Locations'>) {
   const { navigation } = props;
 
+  const companyId = useManagementStore(useShallow((store) => store.companyId));
+
+  const { data, isLoading, isValidating, refetch } = useApiCall(
+    'getLocations',
+    ColdtivateService.getLocations,
+    companyId as number,
+    {
+      skip: !companyId,
+      defaultData: [],
+    }
+  );
+
+  if (isLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating={true} color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
+
   return (
     <View tw="flex-1 justify-start">
-      {['Porto', 'Terceira'].map((item, itemIdx) => (
-        <View key={`${item}-#${itemIdx}`}>
-          <List.Item
-            title={item}
-            onPress={() => {
-              navigation.navigate('EditLocation', {
-                name: item,
-              });
-            }}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
-          />
-          <Divider />
-        </View>
-      ))}
+      <FlatList
+        data={data}
+        keyExtractor={(item) => `location-item-#${item.id}`}
+        renderItem={({ item }) => (
+          <React.Fragment>
+            <List.Item
+              title={item.name}
+              onPress={() => {
+                navigation.navigate('EditLocation', {
+                  name: '',
+                });
+              }}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            />
+            <Divider />
+          </React.Fragment>
+        )}
+        refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
+        nestedScrollEnabled
+      />
     </View>
   );
 }

@@ -17,6 +17,7 @@ import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { AccountCard } from './components/AccountCard';
+import { useManagementStore } from '#stores/management';
 
 const IMG_SIZE = Dimensions.get('screen').width / 2.5;
 const ACCOUNT_TYPE_SIZE = Dimensions.get('screen').width / 5;
@@ -36,6 +37,7 @@ type SignInSchema = {
 function SignIn(props: AuthRouteProps<'SignIn'>) {
   const { navigation } = props;
 
+  const setCompanyId = useManagementStore((store) => store.setCompanyId); // → this is for management (RE and OP)
   const { setSession, setUser } = useAuthStore((store) => ({
     setSession: store.setSession,
     setUser: store.setUser,
@@ -108,11 +110,13 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
     });
 
     if (result) {
+      if (typeof result.company !== 'undefined') {
+        setCompanyId(result.company.id);
+      }
       setSession({
         accessToken: result.access,
         refreshToken: result.refresh,
       });
-
       setUser({ ...result.user, role: result.role });
     }
   }, []);
