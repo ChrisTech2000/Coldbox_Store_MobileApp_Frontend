@@ -6,7 +6,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTranslationUtils } from '#i18n/utils';
 
-import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
+import SelectWithStore from '../../components/SelectWithStore';
+import { useCoolingUnitStore } from '../Planner';
 
 type MockedCoolingUnit = { name: string };
 
@@ -40,9 +41,6 @@ const DATA = [
     optimalTemp: '13°C',
   },
 ];
-
-// TODO: remove this factory and import it's instance from the Planner tab instead (only after !29 PR is merged)
-const useCoolingUnitStore = createSelectStore<MockedCoolingUnit>();
 
 function CoolingUnitsCratesInfo() {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
