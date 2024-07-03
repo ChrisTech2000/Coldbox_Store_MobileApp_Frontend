@@ -27,6 +27,9 @@ import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredE
 import RevenueAnalysis from '#screens/Dashboard/Management/RevenueAnalysis';
 import UsageAnalysis from '#screens/Dashboard/Management/UsageAnalysis';
 
+import type { TranslationPaths } from '#i18n/index';
+import { useTranslationUtils } from '#i18n/utils';
+
 import NavigatorHeader, { type NavigationHeaderProps } from '../components/NavigatorHeader';
 
 export type ManagementRoutes = {
@@ -80,40 +83,46 @@ type ScreenOptions = (props: {
   navigation: NativeStackNavigationProp<ManagementRoutes, 'Root', undefined>;
 }) => NativeStackNavigationOptions;
 
-const NAVIGATOR_HEADER_TITLES: Record<ManagementRoutePaths, string | undefined> = {
-  Root: 'Management',
-  CompanyDetails: 'Company Details',
-  RevenueAnalysis: 'Revenue analysis',
-  UsageAnalysis: 'Usage Analysis',
-  Locations: 'Locations',
-  AddLocation: 'Add Location',
-  EditLocation: 'Edit Location',
-  CoolingUnits: 'Cooling Units',
-  CoolingUsers: 'Cooling Users',
-  AddCoolingUser: 'Add Cooling User',
-  EditCoolingUser: 'Edit Cooling User',
-  AddCoolingUnit: 'Add Cooling Unit',
-  EditCoolingUnit: 'Edit Cooling Unit',
-  Operators: 'Operators',
-  AddOperator: 'Add Operator',
-  EditOperator: 'Edit Operator',
-  RegisteredEmployee: 'Registered Employee',
-  AddRegisteredEmployee: 'Add Registered Employee',
-  RegisteredEmployeeDetails: 'Registered Employee Details',
+const NAVIGATOR_HEADERS: Record<ManagementRoutePaths, TranslationPaths | undefined> = {
+  Root: 'navigation.management.Root',
+  CompanyDetails: 'navigation.management.CompanyDetails',
+  RevenueAnalysis: 'navigation.management.RevenueAnalysis',
+  UsageAnalysis: 'navigation.management.UsageAnalysis',
+  Locations: 'navigation.management.Locations',
+  AddLocation: 'navigation.management.AddLocation',
+  EditLocation: 'navigation.management.EditLocation',
+  CoolingUnits: 'navigation.management.CoolingUnits',
+  CoolingUsers: 'navigation.management.CoolingUsers',
+  AddCoolingUser: 'navigation.management.AddCoolingUser',
+  EditCoolingUser: 'navigation.management.EditCoolingUser',
+  AddCoolingUnit: 'navigation.management.AddCoolingUnit',
+  EditCoolingUnit: 'navigation.management.EditCoolingUnit',
+  Operators: 'navigation.management.Operators',
+  AddOperator: 'navigation.management.AddOperator',
+  EditOperator: 'navigation.management.EditOperator',
+  RegisteredEmployee: 'navigation.management.RegisteredEmployee',
+  AddRegisteredEmployee: 'navigation.management.AddRegisteredEmployee',
+  RegisteredEmployeeDetails: 'navigation.management.RegisteredEmployeeDetails',
 };
 
 const Stack = createNativeStackNavigator<ManagementRoutes>();
 
 export default function ManagementStack() {
+  const { t } = useTranslationUtils();
+
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types
     const routeName = props.route.name;
+
+    const translationPath = NAVIGATOR_HEADERS[routeName];
+    const routeTitle = translationPath ? t(translationPath) : undefined;
+
     return {
       ...props,
       header: (headerProps) => (
         <NavigatorHeader
           {...headerProps}
-          routeTitle={NAVIGATOR_HEADER_TITLES[routeName]}
+          routeTitle={routeTitle}
           leftContent={
             <Appbar.BackAction
               // eslint-disable-next-line react/prop-types

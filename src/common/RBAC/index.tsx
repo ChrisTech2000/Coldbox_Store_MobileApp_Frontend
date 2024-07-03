@@ -35,6 +35,8 @@ function useRBAC(): Context {
   return useMemo(() => ({ ...ctx }), [ctx]);
 }
 
+RBAC.useRBAC = useRBAC;
+
 function ProtectedResource(
   props: PropsWithChildren<{
     action: PermissionKinds;

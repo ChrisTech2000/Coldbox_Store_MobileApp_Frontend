@@ -12,6 +12,10 @@ import DashboardMain from '#screens/Dashboard/Main/Dashboard';
 import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
 import { DashboardProduce } from '#types/global';
 
+import type { TranslationPaths } from '#i18n/index';
+import { useAuthStore } from '#stores/auth';
+import { useTranslationUtils } from '#i18n/utils';
+
 import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';
 import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 
@@ -31,26 +35,33 @@ type ScreenOptions = (props: {
   navigation: NativeStackNavigationProp<MainTabStackRoutes, MainTabStackRoutePaths>;
 }) => NativeStackNavigationOptions;
 
-const NAVIGATOR_HEADER_TITLES: Record<MainTabStackRoutePaths, string | undefined> = {
-  RootMainTabStack: 'Coldtivate',
-  ProduceDetails: 'Produce Details',
+const NAVIGATOR_HEADERS: Record<MainTabStackRoutePaths, TranslationPaths | undefined> = {
+  RootMainTabStack: 'navigation.bottomTabs.RootMainTabStack',
+  ProduceDetails: 'navigation.bottomTabs.ProduceDetails',
 };
 
 const Stack = createNativeStackNavigator<MainTabStackRoutes>();
 
 export default function MainTabStack() {
+  const { t } = useTranslationUtils();
+
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types
     const routeName = props.route.name;
     // eslint-disable-next-line react/prop-types
     const produce = props.route.params?.produce;
+    const firstName = useAuthStore.getState().user?.firstName;
+
+    const translationPath = NAVIGATOR_HEADERS[routeName];
+    const datums = produce ? { produceCode: produce.movementCode } : { firstName };
+    const routeTitle = translationPath ? t(translationPath, datums) : undefined;
 
     return {
       ...props,
       header: (headerProps) => (
         <NavigatorHeader
           {...headerProps}
-          routeTitle={produce ? produce.movementCode : NAVIGATOR_HEADER_TITLES[routeName]}
+          routeTitle={routeTitle}
           // eslint-disable-next-line react/prop-types
           {..._renderContentFactory(routeName, props.navigation)}
         />

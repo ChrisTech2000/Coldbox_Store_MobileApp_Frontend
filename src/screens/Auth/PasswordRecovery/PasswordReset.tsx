@@ -71,7 +71,6 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
     [toast]
   );
 
-  console.log(errors);
   return (
     <View tw="flex-1 items-center mt-4 space-y-4">
       <Controller
