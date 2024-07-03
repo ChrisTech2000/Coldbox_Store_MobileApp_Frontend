@@ -9,14 +9,15 @@ import type { RouteProp } from '@react-navigation/native';
 import { Appbar } from 'react-native-paper';
 
 import DashboardMain from '#screens/Dashboard/Main/Dashboard';
-import ProduceDetails from '#screens/Dashboard/Main/ProduceDetails';
+import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
+import { DashboardProduce } from '#types/global';
 
 import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';
 import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 
 export type MainTabStackRoutes = {
   RootMainTabStack: undefined;
-  ProduceDetails: undefined;
+  ProduceDetails: { produce: DashboardProduce };
 };
 
 export type MainTabStackRoutePaths = keyof MainTabStackRoutes;
@@ -41,12 +42,15 @@ export default function MainTabStack() {
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types
     const routeName = props.route.name;
+    // eslint-disable-next-line react/prop-types
+    const produce = props.route.params?.produce;
+
     return {
       ...props,
       header: (headerProps) => (
         <NavigatorHeader
           {...headerProps}
-          routeTitle={NAVIGATOR_HEADER_TITLES[routeName]}
+          routeTitle={produce ? produce.movementCode : NAVIGATOR_HEADER_TITLES[routeName]}
           // eslint-disable-next-line react/prop-types
           {..._renderContentFactory(routeName, props.navigation)}
         />
