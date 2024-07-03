@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
-import { Divider, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { ScrollView } from '#ui/components/ScrollView';
 
-import SelectCoolingUnit, { type CoolingUnitMockedEntry } from '../../components/SelectWithStore';
+import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
 import SemiCircleChart from './components/SemiCircleChart';
 import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
+
+type MockedCoolingUnit = { name: string };
 
 const MOCKED_COOLING_UNITS = [
   { name: 'CU098765' },
   { name: 'CU38496' },
   { name: 'unit_1' },
   { name: 'unit_2' },
-] satisfies Array<CoolingUnitMockedEntry>;
+] satisfies Array<MockedCoolingUnit>;
 const MOCKED_MAX_CAPACITY = 80;
 const MOCKED_DATUMS = [
   { amount: 60, timestamp: '2024-06-24T16:14:08.564Z' },
@@ -25,10 +28,13 @@ const MOCKED_DATUMS = [
   { amount: 33, timestamp: '2024-06-30T16:14:08.564Z' },
 ] satisfies Array<WeekBarChartDatum>;
 
+export const useCoolingUnitStore = createSelectStore<MockedCoolingUnit>();
+
 export default function CoolingUnitsPlanner() {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedColumn, setSelectedColumn] = useState<WeekBarChartDatum>(MOCKED_DATUMS[0]);
 
+  const coolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
   const { t } = useTranslationUtils();
 
   return (
@@ -36,13 +42,17 @@ export default function CoolingUnitsPlanner() {
       contentContainerStyle="mt-5 items-center pb-10"
       showsVerticalScrollIndicator={false}
     >
-      <SelectCoolingUnit
+      <SelectWithStore<MockedCoolingUnit>
         datums={MOCKED_COOLING_UNITS}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
+        itemName={(item) => item?.name}
+        useSelectStore={useCoolingUnitStore}
+        label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
+          name: coolingUnit?.name ?? '',
+        })}
+        modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
       />
-
-      <Divider tw="w-full bg-gray-700 my-4" />
 
       <Text tw="self-start mt-5 mb-4 ml-4" variant="titleLarge">
         {t('Dashboard.CoolingUnitsPlanner.occupancy')}
