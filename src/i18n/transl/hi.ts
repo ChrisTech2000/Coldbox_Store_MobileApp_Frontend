@@ -181,6 +181,13 @@ export default {
       occupancy: 'शीतलन इकाई का वर्तमान अधिभोग',
       week: 'इस सप्ताह',
     },
+    CoolingUnitsCratesInfo: {
+      commodity: 'सामग्री',
+      percentage: 'प्रतिशत',
+      weight: 'वज़न',
+      crates: 'टोकरी',
+      optimalTemp: 'इष्टतम तापमान ° C',
+    },
     Company: {
       SelectCompany: {
         label: 'कंपनी: {{name}}',
