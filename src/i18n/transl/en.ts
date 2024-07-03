@@ -178,6 +178,19 @@ const en = {
       occupancy: 'Current occupancy of the cooling unit',
       week: 'This week',
     },
+    CoolingUnitsRoomConditions: {
+      heading: 'Temperature history',
+      temperature: 'Temperature',
+      lastUpdated: 'Last updated at {{date}}',
+      enterTemperature: 'Enter temperature',
+    },
+    CoolingUnitsCratesInfo: {
+      commodity: 'Commodity',
+      percentage: 'Percentage',
+      weight: 'Weight',
+      crates: 'Crates',
+      optimalTemp: 'Optimal T°C',
+    },
     Company: {
       SelectCompany: {
         label: 'Company: {{name}}',

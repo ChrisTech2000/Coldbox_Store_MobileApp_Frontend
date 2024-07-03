@@ -11,6 +11,9 @@ const CUSTOM_VARIANTS_DEFS = {
     ...baseVariants.bodyMedium,
     fontFamily: 'Roboto-Bold',
   },
+  TitleSmall: {
+    ...baseVariants.titleMedium,
+  },
   TitleRegular: {
     ...baseVariants.titleLarge,
   },
