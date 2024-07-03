@@ -58,7 +58,7 @@ class ColdtivateService extends HttpClient {
   };
 
   public getDashboardProduces = async (
-    params: GetDashboardProducesParams[]
+    params: GetDashboardProducesParams
   ): Promise<DashboardProduce[] | undefined> => {
     try {
       const { data } = await this.get<DashboardProduce[]>(

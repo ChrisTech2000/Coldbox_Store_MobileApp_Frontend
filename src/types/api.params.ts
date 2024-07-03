@@ -47,7 +47,8 @@ export interface GetFarmerParams extends JsonObject {
 }
 
 export interface GetCoolingUnitsParams extends JsonObject {
-  company: number;
+  company?: number;
+  operator?: number;
 }
 
 export interface GetDashboardProducesParams extends JsonObject {

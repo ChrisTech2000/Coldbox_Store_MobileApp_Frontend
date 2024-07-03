@@ -3,7 +3,7 @@ import { create } from 'zustand';
 
 import ColdtivateService from '#services/ColdtivateService';
 import type { GetFarmerParams } from '#types/api.params';
-import { Company } from '#types/global';
+import { type Company, ERoles } from '#types/global';
 
 import { useAuthStore } from './auth';
 
@@ -48,7 +48,7 @@ export const useGlobalInformation = (isAuthenticated: boolean) => {
   const { user } = useAuthStore();
 
   useEffect(() => {
-    if (!isAuthenticated || !user?.id) return;
+    if (!isAuthenticated || !user?.id || user.role !== ERoles.COOLING_USER) return;
 
     fetchGlobalInformation({ userId: user?.id });
   }, [isAuthenticated, user]);
