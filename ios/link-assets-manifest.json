@@ -10,8 +10,20 @@
       "sha1": "904c213ad1552b1a97bcee2784d9f6e79c5795c3"
     },
     {
+      "path": "src/assets/icons/check-in.svg",
+      "sha1": "a0a89cf79bd7d44a32154e603efc2770fcf52170"
+    },
+    {
+      "path": "src/assets/icons/check-out.svg",
+      "sha1": "2523ec3f3f2f5899ca9aef04896535e7b0026ea5"
+    },
+    {
       "path": "src/assets/icons/coldroom.svg",
       "sha1": "53585bc04e93dd255fa6ed4d460b24ab0b9ac375"
+    },
+    {
+      "path": "src/assets/icons/crates-management.svg",
+      "sha1": "f751a052cd81af0981d6fd028c3be05b4b677275"
     },
     {
       "path": "src/assets/icons/danger.svg",
