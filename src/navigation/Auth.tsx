@@ -17,6 +17,9 @@ import SignIn from '#screens/Auth/SignIn';
 import SignUpCompany from '#screens/Auth/SignUp/SignUpCompany';
 import SignUpCoolingUser from '#screens/Auth/SignUp/SignUpCoolingUser';
 
+import type { TranslationPaths } from '#i18n/index';
+import { useTranslationUtils } from '#i18n/utils';
+
 import NavigatorHeader from './components/NavigatorHeader';
 
 export type AuthRoutes = {
@@ -37,23 +40,28 @@ type ScreenOptions = (props: {
   navigation: NativeStackNavigationProp<AuthRoutes, 'Root', undefined>;
 }) => NativeStackNavigationOptions;
 
-const NAVIGATOR_HEADER_TITLES: Record<keyof AuthRoutes, string | undefined> = {
-  SignIn: 'Log in',
-  SignUpCompany: 'Sign up',
-  SignUpCoolingUser: 'Sign up',
-  PasswordRecoveryRequest: 'Forgot Password',
-  PasswordReset: 'Reset Password',
-  AppInfo: 'FAQ',
+const NAVIGATOR_HEADERS: Record<keyof AuthRoutes, TranslationPaths | undefined> = {
+  SignIn: 'navigation.auth.SignIn',
+  SignUpCompany: 'navigation.auth.SignUp',
+  SignUpCoolingUser: 'navigation.auth.SignUp',
+  PasswordRecoveryRequest: 'navigation.auth.ForgotPassword',
+  PasswordReset: 'navigation.auth.PasswordReset',
+  AppInfo: 'navigation.auth.AppInfo',
   Root: undefined,
 };
 
 const Stack = createNativeStackNavigator<AuthRoutes>();
 
 export default function AuthNavigator() {
+  const { t } = useTranslationUtils();
+
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types
     const routeName = props.route.name;
     const headerShown = !routeName || routeName !== 'Root';
+
+    const translationPath = NAVIGATOR_HEADERS[routeName];
+    const routeTitle = translationPath ? t(translationPath) : undefined;
 
     return {
       ...props,
@@ -61,7 +69,7 @@ export default function AuthNavigator() {
       header: (headerProps) => (
         <NavigatorHeader
           {...headerProps}
-          routeTitle={NAVIGATOR_HEADER_TITLES[routeName]}
+          routeTitle={routeTitle}
           leftContent={
             <Appbar.BackAction
               // eslint-disable-next-line react/prop-types

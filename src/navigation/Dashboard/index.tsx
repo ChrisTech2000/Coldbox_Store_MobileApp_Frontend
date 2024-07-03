@@ -9,6 +9,7 @@ import FAQ from '#screens/Dashboard/FAQ';
 import KnowledgeHub from '#screens/Dashboard/KnowledgeHub';
 import Tutorial from '#screens/Dashboard/Tutorial';
 
+import { useTranslationUtils } from '#i18n/utils';
 import RBAC from '#common/RBAC';
 
 import DrawerContent from './components/DrawerContent';
@@ -36,11 +37,13 @@ export type DashboardRouteProps<Path extends DashboardRoutePaths> = DrawerScreen
 const NavigationDrawer = createDrawerNavigator<DashboardRoutes>();
 
 function DashboardNavigationRouter() {
+  const { t } = useTranslationUtils();
+
   return (
     <NavigationDrawer.Navigator
       initialRouteName="Main"
-      drawerContent={DrawerContent}
-      screenOptions={DashboardScreenOptions}
+      drawerContent={(props) => <DrawerContent {...props} t={t} />}
+      screenOptions={(opts) => DashboardScreenOptions(opts, t)}
     >
       <NavigationDrawer.Screen name="Main" component={DashboardMainBottomTabs} />
       <NavigationDrawer.Screen name="AccountDetails" component={AccountDetails} />

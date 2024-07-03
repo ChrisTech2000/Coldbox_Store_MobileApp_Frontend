@@ -4,6 +4,8 @@ import type { DrawerNavigationOptions } from '@react-navigation/drawer';
 import { Appbar } from 'react-native-paper';
 
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
+import type { TranslationPaths } from '#i18n/index';
+import type { Translator } from '#i18n/utils';
 
 import type { DashboardRoutes, DashboardRoutePaths } from '../index';
 
@@ -12,19 +14,23 @@ type Props = {
   navigation: NavigationProp<Record<string, unknown>>;
 };
 
-const NAVIGATOR_HEADER_TITLES: Record<DashboardRoutePaths, string | undefined> = {
+const NAVIGATOR_HEADERS: Record<DashboardRoutePaths, TranslationPaths | undefined> = {
   Main: undefined,
-  AccountDetails: 'Account details',
+  AccountDetails: 'navigation.dashboard.AccountDetails',
   Management: undefined,
-  KnowledgeHub: 'Knowledge Hub',
-  Tutorial: 'Quit Tutorial',
-  FAQ: 'FAQ',
-  About: 'About',
+  KnowledgeHub: 'navigation.dashboard.KnowledgeHub',
+  Tutorial: 'navigation.dashboard.QuitTutorial',
+  FAQ: 'navigation.dashboard.FAQ',
+  About: 'navigation.dashboard.About',
 };
 
-export default function DashboardScreenOptions(props: Props): DrawerNavigationOptions {
+export default function DashboardScreenOptions(
+  props: Props,
+  t: Translator
+): DrawerNavigationOptions {
   const routeName = props.route.name;
-  const routeTitle = NAVIGATOR_HEADER_TITLES[routeName];
+  const translationPath = NAVIGATOR_HEADERS[routeName];
+  const routeTitle = translationPath ? t(translationPath) : undefined;
   return {
     ...props,
     headerShown: typeof routeTitle !== 'undefined',

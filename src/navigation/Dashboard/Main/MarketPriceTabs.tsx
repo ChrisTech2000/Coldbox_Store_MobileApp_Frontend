@@ -6,9 +6,12 @@ import {
 import type { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { RouteProp } from '@react-navigation/native';
 
+import type { TranslationPaths } from '#i18n/index';
+import { useTranslationUtils } from '#i18n/utils';
+import { paperTheme } from '#ui/lib/theme';
+
 import MarketPriceTrend from '#screens/Dashboard/Main/MarketPrice/Trend';
 import MarketPriceRanking from '#screens/Dashboard/Main/MarketPrice/Ranking';
-import { paperTheme } from '#ui/lib/theme';
 
 export type MarketPriceTabsRoutes = {
   PriceTrend: undefined;
@@ -24,19 +27,26 @@ type ScreenOptions = (props: {
   navigation: BottomTabNavigationProp<MarketPriceTabsRoutes, MarketPriceTabsRoutePaths>;
 }) => MaterialTopTabNavigationOptions;
 
-const TAB_TITLE: Record<MarketPriceTabsRoutePaths, string | undefined> = {
-  PriceTrend: 'Price trend',
-  PriceRanking: 'Price ranking',
+const TAB_HEADERS: Record<MarketPriceTabsRoutePaths, TranslationPaths | undefined> = {
+  PriceTrend: 'navigation.bottomTabs.PriceTrend',
+  PriceRanking: 'navigation.bottomTabs.PriceRanking',
 };
 
 const TopTabs = createMaterialTopTabNavigator<MarketPriceTabsRoutes>();
 
 export default function MarketPriceTabs() {
-  const screenOptions: ScreenOptions = useCallback(
-    (props) => ({
+  const { t } = useTranslationUtils();
+
+  const screenOptions: ScreenOptions = useCallback((props) => {
+    // eslint-disable-next-line react/prop-types
+    const routeName = props.route.name;
+
+    const translationPath = TAB_HEADERS[routeName];
+    const routeTitle = translationPath ? t(translationPath) : undefined;
+
+    return {
       ...props,
-      // eslint-disable-next-line react/prop-types
-      tabBarLabel: TAB_TITLE[props.route.name],
+      tabBarLabel: routeTitle,
       tabBarIndicatorStyle: {
         backgroundColor: paperTheme.colors.secondary,
       },
@@ -47,9 +57,8 @@ export default function MarketPriceTabs() {
         color: paperTheme.colors.secondary,
         ...paperTheme.fonts.labelMedium,
       },
-    }),
-    []
-  );
+    };
+  }, []);
 
   return (
     <TopTabs.Navigator screenOptions={screenOptions}>
