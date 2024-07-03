@@ -184,6 +184,13 @@ const en = {
       lastUpdated: 'Last updated at {{date}}',
       enterTemperature: 'Enter temperature',
     },
+    CoolingUnitsCratesInfo: {
+      commodity: 'Commodity',
+      percentage: 'Percentage',
+      weight: 'Weight',
+      crates: 'Crates',
+      optimalTemp: 'Optimal T°C',
+    },
     Company: {
       SelectCompany: {
         label: 'Company: {{name}}',

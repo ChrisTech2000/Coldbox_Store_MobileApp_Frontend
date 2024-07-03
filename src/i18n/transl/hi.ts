@@ -187,6 +187,13 @@ export default {
       lastUpdated: 'पिछली बार {{date}} पर अपडेट किया गया',
       enterTemperature: 'तापमान दर्ज करें',
     },
+    CoolingUnitsCratesInfo: {
+      commodity: 'सामग्री',
+      percentage: 'प्रतिशत',
+      weight: 'वज़न',
+      crates: 'टोकरी',
+      optimalTemp: 'इष्टतम तापमान ° C',
+    },
     Company: {
       SelectCompany: {
         label: 'कंपनी: {{name}}',
