@@ -55,6 +55,8 @@ export default {
       MarketPrice: 'बाजार कीमत',
       CoolingUnits: 'शीतलन इकाइयाँ',
       Analytics: 'वैश्लेषिकी',
+      CheckIn: 'चेक इन',
+      CheckOut: 'चेक आउट',
     },
     dashboard: {
       AccountDetails: 'अकाउंट डिटेल्स',
@@ -226,6 +228,9 @@ export default {
     },
   },
   Dashboard: {
+    CrateManagement: {
+      userModalTitle: 'एक ठंडाई उपयोगकर्ता चुनें',
+    },
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {
         label: 'शीत कक्ष: {{name}}',

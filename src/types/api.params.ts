@@ -46,6 +46,10 @@ export interface GetFarmerParams extends JsonObject {
   userId: number;
 }
 
+export interface GetOperatorFarmersParams extends JsonObject {
+  operator: number;
+}
+
 export interface GetCoolingUnitsParams extends JsonObject {
   company?: number;
   operator?: number;

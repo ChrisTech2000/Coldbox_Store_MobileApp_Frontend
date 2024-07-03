@@ -199,7 +199,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         )}
       />
 
-      {user?.role === ERoles.OPERATOR && <OperatorActions />}
+      {user?.role === ERoles.OPERATOR && <OperatorActions {...props} />}
     </View>
   );
 }

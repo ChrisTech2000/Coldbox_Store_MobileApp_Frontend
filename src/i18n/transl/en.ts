@@ -53,6 +53,8 @@ const en = {
       MarketPrice: 'Market Price',
       CoolingUnits: 'Cooling units',
       Analytics: 'Analytics',
+      CheckIn: 'Check In',
+      CheckOut: 'Check Out',
     },
     dashboard: {
       AccountDetails: 'Account details',
@@ -223,6 +225,9 @@ const en = {
     },
   },
   Dashboard: {
+    CrateManagement: {
+      userModalTitle: 'Select a cooling user',
+    },
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {
         label: 'Cooling unit: {{name}}',

@@ -6,6 +6,7 @@ import type {
   GetDashboardProducesParams,
   GetFarmerDashboardProducesParams,
   GetFarmerParams,
+  GetOperatorFarmersParams,
 } from '#types/api.params';
 import type { GetFarmerResponse } from '#types/api.responses';
 import type { Company, CoolingUnit, DashboardProduce } from '#types/global';
@@ -19,6 +20,21 @@ class ColdtivateService extends HttpClient {
   }
 
   public getFarmer = async (params: GetFarmerParams): Promise<GetFarmerResponse[] | undefined> => {
+    try {
+      const { data } = await this.get<GetFarmerResponse[]>(EUserEndpoints.GET_FARMER, {
+        params,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getOperatorFarmers = async (
+    params: GetOperatorFarmersParams
+  ): Promise<GetFarmerResponse[] | undefined> => {
     try {
       const { data } = await this.get<GetFarmerResponse[]>(EUserEndpoints.GET_FARMER, {
         params,
