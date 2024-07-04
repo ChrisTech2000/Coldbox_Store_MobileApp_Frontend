@@ -91,10 +91,7 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
 
   // TODO: fix
   const navigateToCheckIn = (selectedUser?: GetFarmerResponse) => {
-    navigation.navigate('CheckOutStack', {
-      screen: 'CrateSelection',
-      params: { user: selectedUser },
-    });
+    console.log(selectedUser);
   };
 
   const navigate = managementMode === 'check-in' ? navigateToCheckIn : navigateToCheckOut;
