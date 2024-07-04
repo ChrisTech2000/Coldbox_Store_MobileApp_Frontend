@@ -16,3 +16,7 @@ export enum EStorageEndpoints {
   GET_FARMER_CRATES = '/storage/v1/crates/',
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
 }
+
+export enum EOperationEndpoints {
+  CHECK_OUT = 'operation/checkouts/',
+}

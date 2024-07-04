@@ -32,7 +32,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { user } = useAuthStore();
   const { sorting } = useSortingStore();
   const { t } = useTranslationUtils();
-  const { farmerId, farmerCompanies, farmerUnitsIds, setCoolingUnits } = useDashboardStore();
+  const { farmerId, farmerCompanies, farmerUnitsIds, setCoolingUnits, setRefreshDashboardFn } =
+    useDashboardStore();
 
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
 
@@ -52,7 +53,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
-  const { data: farmerDashboardProduces } = useApiCall(
+  const { data: farmerDashboardProduces, refetch: refreshFarmerDashboardProduces } = useApiCall(
     'getFarmerDashboardProduces',
     ColdtivateService.getFarmerDashboardProduces,
     {
@@ -65,7 +66,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
-  const { data: operatorDashboardProduces } = useApiCall(
+  const { data: operatorDashboardProduces, refetch: refreshOperatorDashboardProduces } = useApiCall(
     'getDashboardProduces',
     ColdtivateService.getDashboardProduces,
     {
@@ -119,6 +120,11 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   useEffect(() => {
     if (coolingUnits) setCoolingUnits(coolingUnits);
   }, [coolingUnits]);
+
+  useEffect(() => {
+    if (user?.role === ERoles.COOLING_USER) setRefreshDashboardFn(refreshFarmerDashboardProduces);
+    else setRefreshDashboardFn(refreshOperatorDashboardProduces);
+  }, [user?.role]);
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0">

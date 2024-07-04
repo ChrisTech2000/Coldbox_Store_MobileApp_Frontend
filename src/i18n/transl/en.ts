@@ -231,6 +231,7 @@ const en = {
       coolingUnitLabel: 'Select a cooling unit',
       noUnitWarning: 'Please select a cooling unit',
       noCratesWarning: "The selected Cooling user doesn't have any crates in this cooling unit",
+      operationError: 'Something went wrong. Please try again later.',
       CheckOut: {
         selectCrateMessage: 'Select the crates you want to remove',
         selectAll: 'Select All',

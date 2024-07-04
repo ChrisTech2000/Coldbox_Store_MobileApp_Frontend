@@ -1,31 +1,37 @@
-import React, { useMemo, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import { Divider, Icon, Switch } from 'react-native-paper';
+import { useToast } from 'react-native-toast-notifications';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
-import { EPricingType } from '#types/global';
+import { EPaymentType, EPricingType } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
 
-enum EPaymentType {
-  CASH = 'cash',
-  CREDIT_CARD = 'creditCard',
-}
+import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
 
 const usePaymentTypeStore = createSelectStore<EPaymentType>();
 
 function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo'>) {
   const { user, crates, coolingUnit } = route.params;
+
+  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const { t } = useTranslationUtils();
+  const toast = useToast();
+
   const { companyId } = useManagementStore();
   const { selectedItem: paymentType } = usePaymentTypeStore();
+  const { refreshDashboard } = useDashboardStore();
 
   const [discount, setDiscount] = useState<number>(0);
   const [isPaid, setIsPaid] = useState<boolean>(false);
@@ -79,6 +85,27 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       ? t('Dashboard.CrateManagement.CheckOut.paymentType.cash')
       : t('Dashboard.CrateManagement.CheckOut.paymentType.creditCard');
   }, [paymentType]);
+
+  const checkout = useCallback(async () => {
+    if (!crates || !user) {
+      toast.show(t('Dashboard.CrateManagement.operationError'), {
+        type: 'danger',
+      });
+      return;
+    }
+
+    await ColdtivateService.checkOut({
+      crates: crates?.map((crate) => crate.id),
+      operatorId: user.user,
+      priceDiscount: discount,
+      currency: currency,
+      paymentType: paymentType as EPaymentType,
+      paid: isPaid,
+    });
+
+    refreshDashboard?.();
+    rootNavigation.navigate('RootMainTabStack');
+  }, [user, crates, discount, currency, paymentType, isPaid, refreshDashboard]);
 
   return (
     <View tw="flex-1 p-4">
@@ -195,9 +222,14 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         <Divider tw="bg-gray-400 my-2" />
 
         <View tw="flex flex-row w-full justify-between items-center">
-          <Text variant="TextMedium" tw="text-lg">
-            {t('Dashboard.CrateManagement.CheckOut.paymentType.label')}
-          </Text>
+          <View tw="flex flex-row items-center space-x-1">
+            <Text variant="TextMedium" tw="text-lg">
+              {`${t('Dashboard.CrateManagement.CheckOut.paymentType.label')}`}
+            </Text>
+            <Text variant="TextMedium" tw="text-lg text-red-400">
+              *
+            </Text>
+          </View>
           <SelectWithStore<EPaymentType>
             datums={[EPaymentType.CASH, EPaymentType.CREDIT_CARD]}
             isModalVisible={isPaymentTypeModalOpen}
@@ -215,7 +247,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         <Divider tw="bg-gray-400 my-2" />
         <View tw="flex flex-row w-full justify-between items-center">
           <Text variant="TextMedium" tw="text-lg">
-            {t('Dashboard.CrateManagement.CheckOut.priceWithDiscount')}
+            {t('Dashboard.CrateManagement.CheckOut.paid')}
           </Text>
           <Switch value={isPaid} onChange={() => setIsPaid(!isPaid)} />
         </View>
@@ -237,7 +269,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         <Button
           mode="contained"
           uppercase
-          onPress={() => null}
+          onPress={checkout}
           contentStyle="flex flex-row-reverse items-center"
           icon="check-circle-outline"
           disabled={!isPaid || !paymentType}

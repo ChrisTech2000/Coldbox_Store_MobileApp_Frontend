@@ -15,11 +15,14 @@ type State = {
   farmerUnitsIds: number[] | null;
 
   coolingUnits: CoolingUnit[] | null;
+
+  refreshDashboard: (() => void) | null;
 };
 
 type Actions = {
   fetchGlobalInformation: (params: GetFarmerParams) => Promise<void>;
   setCoolingUnits: (units: CoolingUnit[]) => void;
+  setRefreshDashboardFn: (fn: () => void) => void;
 };
 
 export const useDashboardStore = create<State & Actions>((set) => ({
@@ -27,6 +30,7 @@ export const useDashboardStore = create<State & Actions>((set) => ({
   farmerCompanies: null,
   farmerUnitsIds: null,
   coolingUnits: null,
+  refreshDashboard: null,
 
   fetchGlobalInformation: async (params: GetFarmerParams) => {
     try {
@@ -53,7 +57,9 @@ export const useDashboardStore = create<State & Actions>((set) => ({
       set({ farmerId: null, farmerCompanies: null });
     }
   },
+
   setCoolingUnits: (coolingUnits) => set({ coolingUnits }),
+  setRefreshDashboardFn: (fn) => set({ refreshDashboard: fn }),
 }));
 
 export const useGlobalInformation = (isAuthenticated: boolean) => {

@@ -1,5 +1,5 @@
 import { JsonObject } from '#services/utils';
-import { ERoles, type Company, type User } from './global';
+import { EPaymentType, ERoles, type Company, type User } from './global';
 
 type SignUpEmployee = Omit<User, 'lastLogin' | 'id' | 'phone'> & {
   phone?: string;
@@ -67,4 +67,13 @@ export interface GetFarmerDashboardProducesParams extends JsonObject {
 export interface GetFarmerCratesParams extends JsonObject {
   coolingUnit: number;
   farmer: number;
+}
+
+export interface CheckOutParams extends JsonObject {
+  crates: number[];
+  operatorId: User;
+  priceDiscount: number;
+  currency: string;
+  paymentType: EPaymentType;
+  paid: boolean;
 }

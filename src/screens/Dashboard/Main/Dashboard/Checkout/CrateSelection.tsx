@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
-import { Divider, Icon } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
@@ -10,9 +10,9 @@ import { useDashboardStore } from '#stores/dashboard';
 import { CoolingUnit, Crate } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { RadioButtonItem } from '#ui/components/RadioButton';
 import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
 import { CheckoutCrate } from '../components/CheckOutCrate';
 
@@ -23,7 +23,6 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const { t } = useTranslationUtils();
   const { coolingUnits } = useDashboardStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
-  const colors = useTailwindColors();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [selectedCrates, setSelectedCrates] = useState<Crate[]>([]);
@@ -123,45 +122,44 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           <Text variant="TextBold" tw="text-lg mt-2 mb-1 ml-4">
             {t('Dashboard.CrateManagement.CheckOut.selectCrateMessage')}
           </Text>
-          <View tw="flex flex-row justify-between items-center">
+          <TouchableOpacity tw="flex flex-row justify-between items-center" onPress={onSelectAll}>
             <Text variant="TextBold" tw="text-lg mt-2 ml-4">
               {t('Dashboard.CrateManagement.CheckOut.selectAll')}
             </Text>
-            <TouchableOpacity tw="mr-2" onPress={onSelectAll}>
-              {selectedCrates.length < data.length ? (
-                <Icon
-                  source="checkbox-blank-circle-outline"
-                  color={colors.green.primary}
-                  size={30}
-                />
-              ) : (
-                <Icon source="check-circle-outline" color={colors.green.primary} size={30} />
-              )}
-            </TouchableOpacity>
-          </View>
+            <RadioButtonItem
+              rippleColor="white"
+              onPress={onSelectAll}
+              label=""
+              value=""
+              status={selectedCrates.length === data.length ? 'checked' : 'unchecked'}
+            />
+          </TouchableOpacity>
 
           <FlatList
             data={data ?? []}
             extraData={selectedCrates.length}
             renderItem={({ item: crate, index }) => (
-              <View tw="flex flex-row items-center" key={`${crate.id}-${index}`}>
+              <TouchableOpacity
+                key={`${crate.id}-${index}`}
+                tw="flex flex-row items-center"
+                onPress={() => onPress(crate)}
+              >
                 <CheckoutCrate crate={crate} />
-                <TouchableOpacity tw="absolute right-2 bottom-8" onPress={() => onPress(crate)}>
-                  {selectedCrates.includes(crate) ? (
-                    <Icon source="check-circle-outline" color={colors.green.primary} size={30} />
-                  ) : (
-                    <Icon
-                      source="checkbox-blank-circle-outline"
-                      color={colors.green.primary}
-                      size={30}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
+                <View tw="absolute right-[-2]">
+                  <RadioButtonItem
+                    rippleColor="white"
+                    onPress={() => onPress(crate)}
+                    label=""
+                    value={crate.id.toString()}
+                    status={selectedCrates.includes(crate) ? 'checked' : 'unchecked'}
+                  />
+                </View>
+              </TouchableOpacity>
             )}
           />
         </>
       )}
+
       <View tw="flex flex-row space-x-2 w-full mt-4 justify-center">
         <Button
           tw="border-green-primary"

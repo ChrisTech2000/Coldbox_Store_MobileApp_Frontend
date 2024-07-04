@@ -1,27 +1,25 @@
-import { type CoolingUnit, ERoles, type Company, type User } from './global';
+import { type CoolingUnit, ERoles, type Company, type User, EPaymentType } from './global';
 
-export interface SignInResponse {
+export type SignInResponse = {
   refresh: string;
   access: string;
   user: User;
   role: ERoles;
   company: Company;
-}
+};
 
-export interface SignUpAsCompanyResponse {
+export type SignUpAsCompanyResponse = {
   company: Company;
   user: User;
-}
+};
 
-export interface SignUpAsCoolingUserResponse {
+export type SignUpAsCoolingUserResponse = {
   id: number;
   user: User;
   userCode: string;
-}
+};
 
-export interface ResetPasswordResponse {}
-
-export interface GetFarmerResponse {
+export type GetFarmerResponse = {
   id: number;
   user: User;
   birthday: Date;
@@ -30,7 +28,7 @@ export interface GetFarmerResponse {
   userCode: string;
   companies: number[];
   coolingUnits: number[];
-}
+};
 
 export type GetLocationsResponse = Array<{
   id: number;
@@ -48,3 +46,13 @@ export type GetLocationsResponse = Array<{
   dateCreation: string;
   dateLastModified: string;
 }>;
+
+export type CheckOutResponse = {
+  id: number;
+  movement: number;
+  paid: boolean;
+  price: number;
+  paymentType: EPaymentType;
+  currency: string;
+  priceDiscount: number;
+};
