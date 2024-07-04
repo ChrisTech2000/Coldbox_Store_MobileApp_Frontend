@@ -2,12 +2,13 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
-import { Text } from '#ui/components/Text';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from './FormManager';
 
 export default function AddressForm() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -17,115 +18,103 @@ export default function AddressForm() {
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full mt-3"
-            label="Country"
-            mode="flat"
+            tw="w-full bg-transparent mt-3"
+            label={t('Dashboard.Management.fields.country')}
+            mode="outlined"
             dense
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
+            error={!!errors.country}
           />
         )}
         name="country"
       />
-      {typeof errors.country !== 'undefined' ? (
-        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.country.message?.toString()}</Text>
-      ) : null}
 
       <Controller
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full mt-3"
-            label="State"
-            mode="flat"
+            tw="w-full bg-transparent mt-3"
+            label={t('Dashboard.Management.fields.state')}
+            mode="outlined"
             dense
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
+            error={!!errors.state}
           />
         )}
         name="state"
       />
-      {typeof errors.state !== 'undefined' ? (
-        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.state.message?.toString()}</Text>
-      ) : null}
 
       <Controller
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full mt-3"
-            label="City"
-            mode="flat"
+            tw="w-full bg-transparent mt-3"
+            label={t('Dashboard.Management.fields.city')}
+            mode="outlined"
             dense
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
+            error={!!errors.city}
           />
         )}
         name="city"
       />
-      {typeof errors.city !== 'undefined' ? (
-        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.city.message?.toString()}</Text>
-      ) : null}
 
       <Controller
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full mt-3"
-            label="Postal Code"
-            mode="flat"
+            tw="w-full bg-transparent mt-3"
+            label={t('Dashboard.Management.fields.zipCode')}
+            mode="outlined"
             dense
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
+            error={!!errors.zipCode}
           />
         )}
         name="zipCode"
       />
-      {typeof errors.zipCode !== 'undefined' ? (
-        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.zipCode.message?.toString()}</Text>
-      ) : null}
 
       <Controller
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full mt-3"
-            label="Street"
-            mode="flat"
+            tw="w-full bg-transparent mt-3"
+            label={t('Dashboard.Management.fields.street')}
+            mode="outlined"
             dense
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
+            error={!!errors.street}
           />
         )}
         name="street"
       />
-      {typeof errors.street !== 'undefined' ? (
-        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.street.message?.toString()}</Text>
-      ) : null}
 
       <Controller
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full mt-3"
-            label="Street Number"
-            mode="flat"
+            tw="w-full bg-transparent mt-3"
+            label={t('Dashboard.Management.fields.streetNumber')}
+            mode="outlined"
             dense
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
+            error={!!errors.streetNumber}
           />
         )}
         name="streetNumber"
       />
-      {typeof errors.streetNumber !== 'undefined' ? (
-        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.streetNumber.message?.toString()}</Text>
-      ) : null}
     </React.Fragment>
   );
 }

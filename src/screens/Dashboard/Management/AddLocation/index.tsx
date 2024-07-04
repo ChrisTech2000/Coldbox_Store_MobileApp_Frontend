@@ -11,6 +11,7 @@ import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useManagementStore } from '#stores/management';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager, { type FormValues, DEFAULT_VALUES } from './components/FormManager';
 import LocationNameModule from './modules/LocationNameModule';
@@ -23,6 +24,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { navigation } = props;
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
+  const { t } = useTranslationUtils();
 
   const { mutate } = useSWRConfig();
   const company = useManagementStore(useShallow((store) => store.company));
@@ -64,7 +66,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
             icon={isSubmitting ? undefined : 'plus-circle'}
             uppercase
           >
-            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : 'Add'}
+            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
           </Button>
         </ScrollView>
       )}

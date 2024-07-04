@@ -2,10 +2,13 @@ import React from 'react';
 import { View } from 'react-native';
 import { Chip } from 'react-native-paper';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager, { type FormValues } from '../components/FormManager';
 
 export default function StepModule() {
   const { watch, setValue, clearErrors } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   function onSelect(step: FormValues['_step']) {
     setValue('_step', step);
@@ -22,7 +25,7 @@ export default function StepModule() {
         onPress={() => onSelect('coordinates')}
         compact
       >
-        Coordinates
+        {t('Dashboard.Management.chips.coordinates')}
       </Chip>
       <Chip
         icon="map-marker-outline"
@@ -30,7 +33,7 @@ export default function StepModule() {
         onPress={() => onSelect('geolocation')}
         compact
       >
-        Phone Geolocation
+        {t('Dashboard.Management.chips.geolocation')}
       </Chip>
       <Chip
         icon="home-outline"
@@ -38,7 +41,7 @@ export default function StepModule() {
         onPress={() => onSelect('address')}
         compact
       >
-        Address
+        {t('Dashboard.Management.chips.address')}
       </Chip>
     </View>
   );

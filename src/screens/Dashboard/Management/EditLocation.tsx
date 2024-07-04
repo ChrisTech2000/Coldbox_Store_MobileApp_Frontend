@@ -14,6 +14,7 @@ import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useToggle } from '#ui/hooks/useToggle';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager, { type FormValues, DEFAULT_VALUES } from './AddLocation/components/FormManager';
 import LocationNameModule from './AddLocation/modules/LocationNameModule';
@@ -32,6 +33,8 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const [isModalVisible, toggleModalVisibility] = useToggle();
   const [isProcessing, toggleProcessing] = useToggle();
+
+  const { t } = useTranslationUtils();
   const { mutate, cache } = useSWRConfig();
 
   const { data, isLoading } = useApiCall(
@@ -125,7 +128,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
                 buttonColor={paperTheme.colors.error}
                 uppercase
               >
-                {isProcessing ? <ButtonLoader /> : 'Delete'}
+                {isProcessing ? <ButtonLoader /> : t('actions.delete')}
               </Button>
               <Button
                 style={{ width }}
@@ -134,7 +137,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
                 icon={isSubmitting ? undefined : 'pencil'}
                 uppercase
               >
-                {isSubmitting ? <ButtonLoader /> : 'Edit'}
+                {isSubmitting ? <ButtonLoader /> : t('actions.edit')}
               </Button>
             </View>
           </ScrollView>
@@ -143,16 +146,13 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       <Portal>
         <Modal visible={isModalVisible} onDismiss={toggleModalVisibility}>
           <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-48 max-h-48 p-8 self-center space-y-6">
-            <Text variant="TitleSmall">
-              This operation will delete all cooling units associated with this location. Do you
-              want to continue?
-            </Text>
+            <Text variant="TitleSmall">{t('Dashboard.Management.modal.message')}</Text>
             <View tw="flex-row self-end space-x-2">
               <Button mode="text" onPress={toggleModalVisibility}>
-                Cancel
+                {t('actions.cancel')}
               </Button>
               <Button mode="text" onPress={onDelete}>
-                Ok
+                {t('actions.ok')}
               </Button>
             </View>
           </View>

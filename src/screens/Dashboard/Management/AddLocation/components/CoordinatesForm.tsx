@@ -3,7 +3,7 @@ import { Dimensions, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
-import { Text } from '#ui/components/Text';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../components/FormManager';
 
@@ -11,6 +11,7 @@ const width = (Dimensions.get('screen').width - 42) / 2;
 
 export default function CoordinatesForm() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -21,19 +22,17 @@ export default function CoordinatesForm() {
           control={control}
           render={({ field: { value, onChange, onBlur } }) => (
             <TextInput
-              label="Latitude"
+              label={t('Dashboard.Management.fields.latitude')}
               mode="flat"
               dense
               value={value.toString()}
               onChangeText={onChange}
               onBlur={onBlur}
+              error={!!errors.latitude}
             />
           )}
           name="latitude"
         />
-        {typeof errors.latitude !== 'undefined' ? (
-          <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.latitude.message?.toString()}</Text>
-        ) : null}
       </View>
 
       <View style={{ width }}>
@@ -41,19 +40,17 @@ export default function CoordinatesForm() {
           control={control}
           render={({ field: { value, onChange, onBlur } }) => (
             <TextInput
-              label="Longitude"
+              label={t('Dashboard.Management.fields.longitude')}
               mode="flat"
               dense
               value={value.toString()}
               onChangeText={onChange}
               onBlur={onBlur}
+              error={!!errors.longitude}
             />
           )}
           name="longitude"
         />
-        {typeof errors.longitude !== 'undefined' ? (
-          <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.longitude.message?.toString()}</Text>
-        ) : null}
       </View>
     </View>
   );

@@ -2,12 +2,13 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
-import { Text } from '#ui/components/Text';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../components/FormManager';
 
 export default function LocationNameModule() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errorMessage = formState.errors.name?.message?.toString();
 
@@ -15,21 +16,20 @@ export default function LocationNameModule() {
     <React.Fragment>
       <Controller
         control={control}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full"
-            label="Name"
-            mode="flat"
+            tw="w-full bg-transparent"
+            label={t('Dashboard.Management.fields.name')}
+            mode="outlined"
             dense
             value={value}
             onChangeText={onChange}
+            onBlur={onBlur}
+            error={!!errorMessage}
           />
         )}
         name="name"
       />
-      {typeof errorMessage !== 'undefined' ? (
-        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errorMessage}</Text>
-      ) : null}
     </React.Fragment>
   );
 }
