@@ -155,6 +155,19 @@ class ColdtivateService extends HttpClient {
       throw customError;
     }
   };
+
+  public deleteLocation = async (locationId: number): Promise<unknown> => {
+    try {
+      const url = subs(EStorageEndpoints.GET_LOCATION, { locationId });
+      const { data } = await this.delete(url);
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new ColdtivateService();
