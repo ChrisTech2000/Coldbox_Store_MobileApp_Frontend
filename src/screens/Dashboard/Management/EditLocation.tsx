@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator, Portal } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 
-import { ScrollView } from '#ui/components/ScrollView';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Modal } from '#ui/components/Modal';
@@ -113,8 +113,9 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     <React.Fragment>
       <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
         {(handler, isSubmitting) => (
-          <ScrollView
-            contentContainerStyle="flex-1 items-start mt-5 mx-4"
+          <KeyboardAwareScrollView
+            tw="h-full pt-5 mx-4"
+            keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
             showsVerticalScrollIndicator={false}
           >
             <LocationNameModule />
@@ -141,7 +142,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
                 {isSubmitting ? <ButtonLoader /> : t('actions.edit')}
               </Button>
             </View>
-          </ScrollView>
+          </KeyboardAwareScrollView>
         )}
       </FormManager>
       <Portal>

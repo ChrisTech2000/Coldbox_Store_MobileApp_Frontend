@@ -68,7 +68,7 @@ export default function FormManager(props: FormManagerProps) {
         country: z.string().min(1),
         state: z.string().min(1),
         city: z.string().min(1),
-        postalCode: z.string().min(1),
+        zipCode: z.string().min(1),
         street: z.string().min(1),
         streetNumber: z.string().min(1),
       });

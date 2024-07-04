@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
 
-import { ScrollView } from '#ui/components/ScrollView';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -52,8 +52,9 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   return (
     <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
       {(handler, isSubmitting) => (
-        <ScrollView
-          contentContainerStyle="flex-1 items-start mt-5 mx-4"
+        <KeyboardAwareScrollView
+          tw="h-full pt-5 mx-4"
+          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           showsVerticalScrollIndicator={false}
         >
           <LocationNameModule />
@@ -68,7 +69,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
           >
             {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
           </Button>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       )}
     </FormManager>
   );
