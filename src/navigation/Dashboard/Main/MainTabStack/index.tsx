@@ -10,25 +10,30 @@ import { Appbar } from 'react-native-paper';
 
 import DashboardMain from '#screens/Dashboard/Main/Dashboard';
 import CheckIn from '#screens/Dashboard/Main/Dashboard/CheckIn';
-import Checkout from '#screens/Dashboard/Main/Dashboard/Checkout';
 import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
 
 import type { TranslationPaths } from '#i18n/index';
-import { type Translator, useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type Translator } from '#i18n/utils';
+import { dashboardHeaderFactory } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
+import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
 import type { GetFarmerResponse } from '#types/api.responses';
 import type { DashboardProduce } from '#types/global';
 import { Text } from '#ui/components/Text';
 
 import { TouchableOpacity } from 'react-native';
-import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';
-import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
+import CheckOutStack, { CheckOutStackRoutes } from './CheckOutTabStack';
 
 export type MainTabStackRoutes = {
   RootMainTabStack: undefined;
   ProduceDetails: { produce: DashboardProduce };
   CheckIn: { user?: GetFarmerResponse };
-  CheckOut: { user?: GetFarmerResponse };
+  CheckOutStack: {
+    screen: keyof CheckOutStackRoutes;
+    params: {
+      user?: GetFarmerResponse;
+    };
+  };
 };
 
 export type MainTabStackRoutePaths = keyof MainTabStackRoutes;
@@ -42,11 +47,11 @@ type ScreenOptions = (props: {
   navigation: NativeStackNavigationProp<MainTabStackRoutes, MainTabStackRoutePaths>;
 }) => NativeStackNavigationOptions;
 
-const NAVIGATOR_HEADERS: Record<MainTabStackRoutePaths, TranslationPaths | undefined> = {
+export const NAVIGATOR_HEADERS: Record<MainTabStackRoutePaths, TranslationPaths | undefined> = {
   RootMainTabStack: 'navigation.bottomTabs.RootMainTabStack',
   ProduceDetails: 'navigation.bottomTabs.ProduceDetails',
   CheckIn: 'navigation.bottomTabs.CheckIn',
-  CheckOut: 'navigation.bottomTabs.CheckOut',
+  CheckOutStack: 'navigation.bottomTabs.CheckOut',
 };
 
 const Stack = createNativeStackNavigator<MainTabStackRoutes>();
@@ -86,7 +91,7 @@ export default function MainTabStack() {
       <Stack.Screen name="RootMainTabStack" component={DashboardMain} />
       <Stack.Screen name="ProduceDetails" component={ProduceDetails} />
       <Stack.Screen name="CheckIn" component={CheckIn} />
-      <Stack.Screen name="CheckOut" component={Checkout} />
+      <Stack.Screen name="CheckOutStack" component={CheckOutStack} />
     </Stack.Navigator>
   );
 }
@@ -102,7 +107,7 @@ function _renderContentFactory(
         leftContent: <Appbar.BackAction onPress={navigation.goBack} size={22} />,
       };
     case 'CheckIn':
-    case 'CheckOut':
+    case 'CheckOutStack':
       return {
         rightContent: (
           <TouchableOpacity onPress={() => navigation.navigate('RootMainTabStack')}>

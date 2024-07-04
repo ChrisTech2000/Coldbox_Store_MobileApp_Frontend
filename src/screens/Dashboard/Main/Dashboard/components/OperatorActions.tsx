@@ -65,8 +65,6 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
     );
   }, [users, search]);
 
-  const route = managementMode === 'check-in' ? 'CheckIn' : 'CheckOut';
-
   const onModalClose = useCallback(() => {
     setIsModalOpen(false);
     setManagementMode(undefined);
@@ -84,12 +82,29 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
     setIsModalOpen(true);
   }, []);
 
+  const navigateToCheckOut = useCallback((selectedUser?: GetFarmerResponse) => {
+    navigation.navigate('CheckOutStack', {
+      screen: 'CrateSelection',
+      params: { user: selectedUser },
+    });
+  }, []);
+
+  // TODO: fix
+  const navigateToCheckIn = (selectedUser?: GetFarmerResponse) => {
+    navigation.navigate('CheckOutStack', {
+      screen: 'CrateSelection',
+      params: { user: selectedUser },
+    });
+  };
+
+  const navigate = managementMode === 'check-in' ? navigateToCheckIn : navigateToCheckOut;
+
   const onNavigate = useCallback(() => {
-    navigation.navigate(route, { user: selectedUser });
+    navigate(selectedUser);
     setIsModalOpen(false);
     setSearch('');
     setSelectedUser(undefined);
-  }, [route, selectedUser]);
+  }, [selectedUser]);
 
   return (
     <View tw="absolute right-4 bottom-2 flex flex-row-reverse items-center">

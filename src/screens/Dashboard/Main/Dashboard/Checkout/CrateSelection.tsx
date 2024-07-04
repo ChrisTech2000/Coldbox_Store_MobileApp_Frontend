@@ -3,22 +3,22 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { CoolingUnit } from '#types/global';
+import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Button } from '#ui/components/Button';
+import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
 
-import SelectWithStore, { createSelectStore } from '../components/SelectWithStore';
-import { CheckoutCrate } from './components/CheckOutCrate';
+import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
+import { CheckoutCrate } from '../components/CheckOutCrate';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 
-function CheckOut({ route, navigation }: MainTabStackRouteProps<'CheckOut'>) {
+function CheckOut({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
   const { user } = route.params;
   const { t } = useTranslationUtils();
   const { coolingUnits } = useDashboardStore();
@@ -153,7 +153,8 @@ function CheckOut({ route, navigation }: MainTabStackRouteProps<'CheckOut'>) {
       )}
       <View tw="flex flex-row space-x-2 w-full mt-4 justify-center">
         <Button
-          mode="contained"
+          tw="border-green-primary"
+          mode="outlined"
           uppercase
           onPress={(evt) => {
             evt.stopPropagation();
