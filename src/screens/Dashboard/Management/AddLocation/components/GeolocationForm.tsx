@@ -31,7 +31,7 @@ export default function GeoLocationForm() {
   }
 
   return (
-    <Button mode="text" onPress={getCoordinates} tw="self-center mt-2" disabled={isLoading}>
+    <Button mode="text" onPress={getCoordinates} tw="self-center mb-3.5 mt-1" disabled={isLoading}>
       Choose current location
     </Button>
   );

@@ -32,7 +32,10 @@ export const DEFAULT_VALUES = {
 type FormManagerProps = {
   initialValues?: FormValues;
   onSubmit: (values: FormValues) => Promise<void>;
-  children: (submitHandler: (e?: React.BaseSyntheticEvent) => Promise<void>) => React.ReactNode;
+  children: (
+    submitHandler: (e?: React.BaseSyntheticEvent) => Promise<void>,
+    isSubmitting: boolean
+  ) => React.ReactNode;
 };
 
 export default function FormManager(props: FormManagerProps) {
@@ -81,7 +84,11 @@ export default function FormManager(props: FormManagerProps) {
     reValidateMode: 'onSubmit',
   });
 
-  return <FormProvider {...form}>{props.children(form.handleSubmit(props.onSubmit))}</FormProvider>;
+  return (
+    <FormProvider {...form}>
+      {props.children(form.handleSubmit(props.onSubmit), form.formState.isSubmitting)}
+    </FormProvider>
+  );
 }
 
 function useFormManager() {

@@ -23,6 +23,8 @@ import { getCountryFullName, pickFormValues } from './AddLocation/utils';
 
 const width = (Dimensions.get('screen').width - 42) / 2;
 
+const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
+
 function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   const { locationId, companyId } = props.route.params;
   const navigation = props.navigation;
@@ -42,7 +44,13 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     }
   );
 
-  if (isLoading) return <_Loading />;
+  if (isLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
 
   async function onSubmit(values: FormValues) {
     try {
@@ -64,12 +72,12 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   async function onDelete() {
     try {
       toggleProcessing();
+      toggleModalVisibility();
       await ColdtivateService.deleteLocation(locationId);
 
       await mutate(getQueryKey('getLocations', companyId));
       cache.delete(getQueryKey('getLocation', { locationId, companyId }));
       toggleProcessing();
-      toggleModalVisibility();
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
@@ -100,7 +108,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   return (
     <React.Fragment>
       <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
-        {(handler) => (
+        {(handler, isSubmitting) => (
           <ScrollView
             contentContainerStyle="flex-1 items-start mt-5 mx-4"
             showsVerticalScrollIndicator={false}
@@ -113,14 +121,20 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
                 style={{ width }}
                 mode="contained"
                 onPress={toggleModalVisibility}
-                icon="trash-can-outline"
+                icon={isProcessing ? undefined : 'trash-can-outline'}
                 buttonColor={paperTheme.colors.error}
                 uppercase
               >
-                Delete
+                {isProcessing ? <ButtonLoader /> : 'Delete'}
               </Button>
-              <Button style={{ width }} mode="contained" onPress={handler} icon="pencil" uppercase>
-                Edit
+              <Button
+                style={{ width }}
+                mode="contained"
+                onPress={handler}
+                icon={isSubmitting ? undefined : 'pencil'}
+                uppercase
+              >
+                {isSubmitting ? <ButtonLoader /> : 'Edit'}
               </Button>
             </View>
           </ScrollView>
@@ -129,36 +143,22 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       <Portal>
         <Modal visible={isModalVisible} onDismiss={toggleModalVisibility}>
           <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-48 max-h-48 p-8 self-center space-y-6">
-            {isProcessing ? (
-              <_Loading />
-            ) : (
-              <React.Fragment>
-                <Text variant="TitleSmall">
-                  This operation will delete all cooling units associated with this location. Do you
-                  want to continue?
-                </Text>
-                <View tw="flex-row self-end space-x-2">
-                  <Button mode="text" onPress={toggleModalVisibility}>
-                    Cancel
-                  </Button>
-                  <Button mode="text" onPress={onDelete}>
-                    Ok
-                  </Button>
-                </View>
-              </React.Fragment>
-            )}
+            <Text variant="TitleSmall">
+              This operation will delete all cooling units associated with this location. Do you
+              want to continue?
+            </Text>
+            <View tw="flex-row self-end space-x-2">
+              <Button mode="text" onPress={toggleModalVisibility}>
+                Cancel
+              </Button>
+              <Button mode="text" onPress={onDelete}>
+                Ok
+              </Button>
+            </View>
           </View>
         </Modal>
       </Portal>
     </React.Fragment>
-  );
-}
-
-function _Loading() {
-  return (
-    <View tw="flex-1 items-center justify-center">
-      <ActivityIndicator animating={true} color={paperTheme.colors.primary} size="large" />
-    </View>
   );
 }
 

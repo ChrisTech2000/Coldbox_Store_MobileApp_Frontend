@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -48,7 +49,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
 
   return (
     <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
-      {(handler) => (
+      {(handler, isSubmitting) => (
         <ScrollView
           contentContainerStyle="flex-1 items-start mt-5 mx-4"
           showsVerticalScrollIndicator={false}
@@ -56,8 +57,14 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
           <LocationNameModule />
           <StepModule />
           <StepFactory />
-          <Button tw="w-full mt-6" mode="contained" onPress={handler} icon="plus-circle" uppercase>
-            Add
+          <Button
+            tw="w-full mt-6"
+            mode="contained"
+            onPress={handler}
+            icon={isSubmitting ? undefined : 'plus-circle'}
+            uppercase
+          >
+            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : 'Add'}
           </Button>
         </ScrollView>
       )}

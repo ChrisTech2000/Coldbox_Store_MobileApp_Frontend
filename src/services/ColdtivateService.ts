@@ -156,10 +156,10 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public deleteLocation = async (locationId: number): Promise<unknown> => {
+  public deleteLocation = async (locationId: number): Promise<Record<string, string>> => {
     try {
       const url = subs(EStorageEndpoints.GET_LOCATION, { locationId });
-      const { data } = await this.delete(url);
+      const { data } = await this.delete<Record<string, string>>(url);
       return data;
     } catch (error) {
       console.log(error);
