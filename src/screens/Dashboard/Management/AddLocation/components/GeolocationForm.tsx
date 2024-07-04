@@ -26,9 +26,10 @@ export default function GeoLocationForm() {
         latitude: result.latitude,
         longitude: result.longitude,
       }));
-      toggleLoading();
     } catch {
       // silent error
+    } finally {
+      toggleLoading();
     }
   }
 

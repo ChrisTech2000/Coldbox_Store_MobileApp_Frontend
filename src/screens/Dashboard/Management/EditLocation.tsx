@@ -74,16 +74,17 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
 
   async function onDelete() {
     try {
-      toggleProcessing();
       toggleModalVisibility();
+      toggleProcessing();
       await ColdtivateService.deleteLocation(locationId);
 
       await mutate(getQueryKey('getLocations', companyId));
       cache.delete(getQueryKey('getLocation', { locationId, companyId }));
-      toggleProcessing();
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
+    } finally {
+      toggleProcessing();
     }
   }
 
