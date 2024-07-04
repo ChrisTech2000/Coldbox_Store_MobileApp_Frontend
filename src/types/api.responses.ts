@@ -1,4 +1,4 @@
-import { ERoles, type Company, type User } from './global';
+import { type CoolingUnit, ERoles, type Company, type User } from './global';
 
 export interface SignInResponse {
   refresh: string;
@@ -31,3 +31,20 @@ export interface GetFarmerResponse {
   companies: number[];
   coolingUnits: number[];
 }
+
+export type GetLocationsResponse = Array<{
+  id: number;
+  coolingUnits: Array<CoolingUnit>;
+  company: Company;
+  name: string;
+  state: string;
+  city: string;
+  street: string;
+  streetNumber: unknown | null;
+  zipCode: string;
+  latitude: number;
+  longitude: number;
+  deleted: boolean;
+  dateCreation: string;
+  dateLastModified: string;
+}>;

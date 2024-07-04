@@ -7,7 +7,7 @@ import type {
   GetFarmerDashboardProducesParams,
   GetFarmerParams,
 } from '#types/api.params';
-import type { GetFarmerResponse } from '#types/api.responses';
+import type { GetFarmerResponse, GetLocationsResponse } from '#types/api.responses';
 import type { Company, CoolingUnit, DashboardProduce } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
@@ -79,6 +79,21 @@ class ColdtivateService extends HttpClient {
     try {
       const { data } = await this.get<DashboardProduce[]>(
         EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
+        { params }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getLocations = async (companyId: number): Promise<GetLocationsResponse> => {
+    try {
+      const params = { company: companyId };
+      const { data } = await this.get<GetLocationsResponse>(
+        EStorageEndpoints.GET_MANAGEMENT_LOCATIONS,
         { params }
       );
       return data;
