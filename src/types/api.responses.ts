@@ -1,4 +1,4 @@
-import { type CoolingUnit, ERoles, type Company, type User, EPaymentType } from './global';
+import { EPaymentType, ERoles, type Company, type CoolingUnit, type User } from './global';
 
 export type SignInResponse = {
   refresh: string;

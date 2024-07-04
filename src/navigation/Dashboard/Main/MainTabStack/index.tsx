@@ -6,6 +6,7 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { Appbar } from 'react-native-paper';
 
 import DashboardMain from '#screens/Dashboard/Main/Dashboard';
@@ -21,7 +22,6 @@ import type { GetFarmerResponse } from '#types/api.responses';
 import type { DashboardProduce } from '#types/global';
 import { Text } from '#ui/components/Text';
 
-import { TouchableOpacity } from 'react-native';
 import CheckOutStack, { CheckOutStackRoutes } from './CheckOutTabStack';
 
 export type MainTabStackRoutes = {

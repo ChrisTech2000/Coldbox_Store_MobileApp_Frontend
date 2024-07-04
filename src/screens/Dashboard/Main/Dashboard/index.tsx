@@ -30,14 +30,13 @@ const useCompanyStore = createSelectStore<Company>();
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
   const { user } = useAuthStore();
-  const { sorting } = useSortingStore();
   const { t } = useTranslationUtils();
+
+  const { sorting } = useSortingStore();
+  const { selectedItem: coolingUnit } = useCoolingUnitStore();
+  const { selectedItem: company } = useCompanyStore();
   const { farmerId, farmerCompanies, farmerUnitsIds, setCoolingUnits, setRefreshDashboardFn } =
     useDashboardStore();
-
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
-
-  const { selectedItem: company } = useCompanyStore();
 
   const { data: coolingUnits } = useApiCall(
     'getCoolingUnits',
