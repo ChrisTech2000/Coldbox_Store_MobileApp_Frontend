@@ -229,9 +229,33 @@ export default {
   },
   Dashboard: {
     CrateManagement: {
-      userModalTitle: 'एक ठंडाई उपयोगकर्ता चुनें',
+      userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
+      coolingUserLabel: 'कूलिंग उपयोगकर्ता',
+      coolingUnitLabel: 'कूलिंग यूनिट चुनें',
+      noUnitWarning: 'कृपया एक कूलिंग यूनिट चुनें',
+      noCratesWarning: 'चुने गए कूलिंग उपयोगकर्ता के पास इस कूलिंग यूनिट में कोई क्रेट्स नहीं हैं',
+      operationError: 'कुछ गलत हो गया। कृपया बाद में पुनः प्रयास करें।',
       CheckOut: {
-        ttp: 'उ.स.',
+        selectCrateMessage: 'वे क्रेट्स चुनें जिन्हें आप हटाना चाहते हैं',
+        selectAll: 'सभी चुनें',
+        checkIn: 'चेक-इन',
+        days: 'दिन',
+        day: 'दिन',
+        ttp: 'टीटीपी',
+        numberOfCrates: 'क्रेट्स की संख्या',
+        totalWeight: 'कुल वजन',
+        priceType: 'मूल्य प्रकार',
+        crate: 'क्रेट',
+        pricePerProduct: 'प्रति उत्पाद मूल्य:',
+        calculatedPrice: 'गणना किया गया मूल्य',
+        discount: 'छूट',
+        priceWithDiscount: 'कुल मूल्य',
+        paymentType: {
+          label: 'भुगतान प्रकार',
+          cash: 'नकद',
+          creditCard: 'क्रेडिट कार्ड',
+        },
+        paid: 'भुगतान किया गया',
       },
     },
     CoolingUnitsPlanner: {
@@ -262,6 +286,7 @@ export default {
       },
     },
     ProduceDetails: {
+      kilogram: 'किग्रा',
       coolingUser: 'ठंडाई उपयोगकर्ता',
       contact: 'संपर्क',
       contactCopied: 'कॉपी किया गया!',
