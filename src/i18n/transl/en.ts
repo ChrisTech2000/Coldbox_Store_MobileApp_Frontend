@@ -233,6 +233,7 @@ const en = {
       noCratesWarning: "The selected Cooling user doesn't have any crates in this cooling unit",
       CheckOut: {
         selectCrateMessage: 'Select the crates you want to remove',
+        selectAll: 'Select All',
         checkIn: 'Check-in',
         days: 'days',
         day: 'day',
