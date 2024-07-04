@@ -40,3 +40,9 @@ export const deserialize = (obj: Json): Json => {
   }
   return obj;
 };
+
+export function subs(url: string, params: { [key: string]: string | number }): string {
+  return url.replace(/:([a-zA-Z0-9_]+)/g, (match, p1) => {
+    return params[p1] !== undefined ? params[p1].toString() : match;
+  });
+}

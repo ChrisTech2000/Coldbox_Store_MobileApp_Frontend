@@ -45,7 +45,8 @@ function Locations(props: ManagementRouteProps<'Locations'>) {
               title={item.name}
               onPress={() => {
                 navigation.navigate('EditLocation', {
-                  name: '',
+                  locationId: item.id,
+                  companyId: item.company.id,
                 });
               }}
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
