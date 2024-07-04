@@ -83,10 +83,10 @@ export default function AddressForm() {
             onBlur={onBlur}
           />
         )}
-        name="postalCode"
+        name="zipCode"
       />
-      {typeof errors.postalCode !== 'undefined' ? (
-        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.postalCode.message?.toString()}</Text>
+      {typeof errors.zipCode !== 'undefined' ? (
+        <Text tw="text-xs text-red-600 mt-1.5 pl-3">{errors.zipCode.message?.toString()}</Text>
       ) : null}
 
       <Controller

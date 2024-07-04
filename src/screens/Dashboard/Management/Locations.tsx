@@ -14,14 +14,14 @@ import { useManagementStore } from '#stores/management';
 function Locations(props: ManagementRouteProps<'Locations'>) {
   const { navigation } = props;
 
-  const companyId = useManagementStore(useShallow((store) => store.companyId));
+  const company = useManagementStore(useShallow((store) => store.company));
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getLocations',
     ColdtivateService.getLocations,
-    companyId as number,
+    company?.id as number,
     {
-      skip: !companyId,
+      skip: !company?.id,
       defaultData: [],
     }
   );

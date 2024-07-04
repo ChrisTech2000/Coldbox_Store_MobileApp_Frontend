@@ -3,6 +3,7 @@ import type { AxiosError } from 'axios';
 import { EStorageEndpoints, EUserEndpoints } from '#constants/api.routes';
 import type {
   AddLocationParams,
+  EditLocationParams,
   GetCoolingUnitsParams,
   GetDashboardProducesParams,
   GetFarmerDashboardProducesParams,
@@ -18,7 +19,7 @@ import type { Company, CoolingUnit, DashboardProduce } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
-import { type JsonObject, serialize, subs } from './utils';
+import { subs } from './utils';
 
 class ColdtivateService extends HttpClient {
   constructor(options?: HttpClientOptions) {
@@ -130,8 +131,22 @@ class ColdtivateService extends HttpClient {
     try {
       const { data } = await this.post<AddLocationResponse>(
         EStorageEndpoints.GET_MANAGEMENT_LOCATIONS,
-        serialize(params) as JsonObject
+        params
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public editLocation = async (params: EditLocationParams): Promise<AddLocationResponse> => {
+    try {
+      const { locationId, ...rest } = params;
+      const url = subs(EStorageEndpoints.GET_LOCATION, { locationId });
+      const { data } = await this.put<AddLocationResponse>(url, rest);
       return data;
     } catch (error) {
       console.log(error);

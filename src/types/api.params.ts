@@ -76,3 +76,7 @@ export interface AddLocationParams extends JsonObject {
   street?: string;
   streetNumber?: string;
 }
+
+export interface EditLocationParams extends AddLocationParams {
+  locationId: number;
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -11,18 +11,20 @@ import { useManagementStore } from '#stores/management';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 
-import FormManager, { type FormValues } from './components/FormManager';
+import FormManager, { type FormValues, DEFAULT_VALUES } from './components/FormManager';
 import LocationNameModule from './modules/LocationNameModule';
 import StepModule from './modules/StepModule';
 import StepFactory from './modules/StepFactory';
 
-import { pickFormValues } from './utils';
+import { getCountryFullName, pickFormValues } from './utils';
 
 function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { navigation } = props;
 
+  const formInitialValues = useRef<FormValues | undefined>(undefined);
+
   const { mutate } = useSWRConfig();
-  const companyId = useManagementStore(useShallow((store) => store.companyId));
+  const company = useManagementStore(useShallow((store) => store.company));
 
   async function onSubmit(values: FormValues) {
     try {
@@ -31,15 +33,21 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
 
       await ColdtivateService.addLocation(data);
 
-      await mutate(getQueryKey('getLocations', companyId));
+      await mutate(getQueryKey('getLocations', company?.id));
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
     }
   }
 
+  if (!formInitialValues.current) {
+    const values = { ...DEFAULT_VALUES } as FormValues;
+    values.country = getCountryFullName(company?.country) ?? '';
+    formInitialValues.current = values;
+  }
+
   return (
-    <FormManager onSubmit={onSubmit}>
+    <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
       {(handler) => (
         <ScrollView
           contentContainerStyle="flex-1 items-start mt-5 mx-4"

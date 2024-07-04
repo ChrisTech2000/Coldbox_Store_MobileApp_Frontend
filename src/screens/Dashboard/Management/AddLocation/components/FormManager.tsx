@@ -11,12 +11,12 @@ export type FormValues = {
   country: string;
   state: string;
   city: string;
-  postalCode: string;
+  zipCode: string;
   street: string;
   streetNumber: string;
 };
 
-const DEFAULT_VALUES = {
+export const DEFAULT_VALUES = {
   _step: 'coordinates',
   name: '',
   latitude: 0,
@@ -24,7 +24,7 @@ const DEFAULT_VALUES = {
   country: '',
   state: '',
   city: '',
-  postalCode: '',
+  zipCode: '',
   street: '',
   streetNumber: '',
 } satisfies FormValues;

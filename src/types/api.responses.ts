@@ -40,7 +40,7 @@ export type GetLocationResponse = {
   state: string;
   city: string;
   street: string;
-  streetNumber: unknown | null;
+  streetNumber: string | null;
   zipCode: string;
   latitude: number;
   longitude: number;

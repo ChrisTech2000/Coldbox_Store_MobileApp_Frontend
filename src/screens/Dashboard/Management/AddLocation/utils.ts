@@ -1,3 +1,5 @@
+import { getAllISOCodes } from 'iso-country-currency';
+
 import type { FormValues } from './components/FormManager';
 
 export function pickFormValues(datums: FormValues): Partial<FormValues> | undefined {
@@ -11,4 +13,9 @@ export function pickFormValues(datums: FormValues): Partial<FormValues> | undefi
     default:
       return undefined;
   }
+}
+
+export function getCountryFullName(companyCountry?: string): string | undefined {
+  const document = getAllISOCodes().find((country) => country.iso === companyCountry);
+  return document?.countryName;
 }
