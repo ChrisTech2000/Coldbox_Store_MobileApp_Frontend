@@ -1,24 +1,24 @@
 import React, { useCallback, useState } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
-import { CoolingUnit } from '#types/global';
+import { CoolingUnit, Crate } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
 
 import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
 import { CheckoutCrate } from '../components/CheckOutCrate';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 
-function CheckOut({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
+function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
   const { user } = route.params;
   const { t } = useTranslationUtils();
   const { coolingUnits } = useDashboardStore();
@@ -26,7 +26,7 @@ function CheckOut({ route, navigation }: CheckOutStackRouteProps<'CrateSelection
   const colors = useTailwindColors();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
-  const [selectedCrates, setSelectedCrates] = useState<number[]>([]);
+  const [selectedCrates, setSelectedCrates] = useState<Crate[]>([]);
 
   const { data } = useApiCall(
     'getFarmerCrates',
@@ -41,12 +41,12 @@ function CheckOut({ route, navigation }: CheckOutStackRouteProps<'CrateSelection
   );
 
   const onPress = useCallback(
-    (crateId: number) => {
+    (crate: Crate) => {
       const copySelectedCrates = [...selectedCrates];
-      const index = copySelectedCrates.indexOf(crateId);
+      const index = copySelectedCrates.indexOf(crate);
 
       if (index !== -1) copySelectedCrates.splice(index, 1);
-      else copySelectedCrates.push(crateId);
+      else copySelectedCrates.push(crate);
 
       setSelectedCrates(copySelectedCrates);
     },
@@ -59,9 +59,20 @@ function CheckOut({ route, navigation }: CheckOutStackRouteProps<'CrateSelection
       return;
     }
 
-    const ids = data?.map((crate) => crate.id);
-    if (ids && ids.length > 0) setSelectedCrates(ids);
+    setSelectedCrates(data ?? []);
   }, [data, selectedCrates]);
+
+  const onNext = useCallback(
+    (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+      navigation.navigate('BillingInfo', {
+        user,
+        crates: selectedCrates,
+        coolingUnit: coolingUnit ?? undefined,
+      });
+    },
+    [selectedCrates, coolingUnit, user]
+  );
 
   return (
     <View tw="flex-1 p-4">
@@ -135,8 +146,8 @@ function CheckOut({ route, navigation }: CheckOutStackRouteProps<'CrateSelection
             renderItem={({ item: crate, index }) => (
               <View tw="flex flex-row items-center" key={`${crate.id}-${index}`}>
                 <CheckoutCrate crate={crate} />
-                <TouchableOpacity tw="absolute right-2 bottom-8" onPress={() => onPress(crate.id)}>
-                  {selectedCrates.includes(crate.id) ? (
+                <TouchableOpacity tw="absolute right-2 bottom-8" onPress={() => onPress(crate)}>
+                  {selectedCrates.includes(crate) ? (
                     <Icon source="check-circle-outline" color={colors.green.primary} size={30} />
                   ) : (
                     <Icon
@@ -167,10 +178,8 @@ function CheckOut({ route, navigation }: CheckOutStackRouteProps<'CrateSelection
         <Button
           mode="contained"
           uppercase
-          onPress={(evt) => {
-            evt.stopPropagation();
-            navigation.goBack();
-          }}
+          onPress={onNext}
+          contentStyle="flex flex-row-reverse items-center"
           icon="arrow-right"
           disabled={selectedCrates.length === 0}
         >
@@ -181,4 +190,4 @@ function CheckOut({ route, navigation }: CheckOutStackRouteProps<'CrateSelection
   );
 }
 
-export default withSafeArea(CheckOut);
+export default withSafeArea(CrateSelection);

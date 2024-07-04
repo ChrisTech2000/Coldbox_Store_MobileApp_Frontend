@@ -5,7 +5,7 @@ import { useShallow } from 'zustand/react/shallow';
 import ColdtivateService from '#services/ColdtivateService';
 import type { GetFarmerParams } from '#types/api.params';
 import type { GetFarmerResponse } from '#types/api.responses';
-import { CoolingUnit, ERoles, type Company } from '#types/global';
+import { type CoolingUnit, ERoles, type Company } from '#types/global';
 
 import { useAuthStore } from './auth';
 
