@@ -25,7 +25,7 @@ export default function StepModule() {
         onPress={() => onSelect('coordinates')}
         compact
       >
-        {t('Dashboard.Management.chips.coordinates')}
+        {t('Dashboard.Management.Location.chips.coordinates')}
       </Chip>
       <Chip
         icon="map-marker-outline"
@@ -33,7 +33,7 @@ export default function StepModule() {
         onPress={() => onSelect('geolocation')}
         compact
       >
-        {t('Dashboard.Management.chips.geolocation')}
+        {t('Dashboard.Management.Location.chips.geolocation')}
       </Chip>
       <Chip
         icon="home-outline"
@@ -41,7 +41,7 @@ export default function StepModule() {
         onPress={() => onSelect('address')}
         compact
       >
-        {t('Dashboard.Management.chips.address')}
+        {t('Dashboard.Management.Location.chips.address')}
       </Chip>
     </View>
   );

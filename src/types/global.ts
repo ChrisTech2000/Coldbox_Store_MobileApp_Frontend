@@ -8,6 +8,7 @@ export interface User {
   lastLogin: string;
   language?: string;
   role?: ERoles;
+  username?: string; // we get this prop when we fetch the operators
 }
 
 export interface Company {

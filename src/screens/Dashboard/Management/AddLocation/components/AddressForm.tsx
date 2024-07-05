@@ -19,7 +19,7 @@ export default function AddressForm() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-3"
-            label={t('Dashboard.Management.fields.country')}
+            label={t('Dashboard.Management.Location.fields.country')}
             mode="outlined"
             dense
             value={value}
@@ -36,7 +36,7 @@ export default function AddressForm() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-3"
-            label={t('Dashboard.Management.fields.state')}
+            label={t('Dashboard.Management.Location.fields.state')}
             mode="outlined"
             dense
             value={value}
@@ -53,7 +53,7 @@ export default function AddressForm() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-3"
-            label={t('Dashboard.Management.fields.city')}
+            label={t('Dashboard.Management.Location.fields.city')}
             mode="outlined"
             dense
             value={value}
@@ -70,7 +70,7 @@ export default function AddressForm() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-3"
-            label={t('Dashboard.Management.fields.zipCode')}
+            label={t('Dashboard.Management.Location.fields.zipCode')}
             mode="outlined"
             dense
             value={value}
@@ -87,7 +87,7 @@ export default function AddressForm() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-3"
-            label={t('Dashboard.Management.fields.street')}
+            label={t('Dashboard.Management.Location.fields.street')}
             mode="outlined"
             dense
             value={value}
@@ -104,7 +104,7 @@ export default function AddressForm() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-3"
-            label={t('Dashboard.Management.fields.streetNumber')}
+            label={t('Dashboard.Management.Location.fields.streetNumber')}
             mode="outlined"
             dense
             value={value}

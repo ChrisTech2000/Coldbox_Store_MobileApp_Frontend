@@ -243,6 +243,24 @@ class ColdtivateService extends HttpClient {
       throw customError;
     }
   };
+
+  public getOperatorByUserId = async (userId: number): Promise<Array<GetOperatorsResponse>> => {
+    try {
+      const params = { user_id: userId };
+      const { data } = await this.delete<Array<GetOperatorsResponse>>(
+        EStorageEndpoints.GET_OPERATORS,
+        {
+          params,
+        }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new ColdtivateService();

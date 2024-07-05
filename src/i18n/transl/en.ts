@@ -322,28 +322,42 @@ const en = {
       },
     },
     Management: {
-      chips: {
-        address: 'Address',
-        coordinates: 'Coordinates',
-        geolocation: 'Phone Geolocation',
+      Location: {
+        text: {
+          invited: 'Invited ({{amount}})',
+          registered: 'Registered ({{amount}})',
+        },
+        chips: {
+          address: 'Address',
+          coordinates: 'Coordinates',
+          geolocation: 'Phone Geolocation',
+        },
+        fields: {
+          name: 'Name',
+          latitude: 'Latitude',
+          longitude: 'Longitude',
+          country: 'Country',
+          state: 'State',
+          city: 'City',
+          zipCode: 'Postal Code',
+          street: 'Street',
+          streetNumber: 'Street Number',
+        },
+        modal: {
+          message:
+            'This operation will delete all cooling units associated with this location. Do you want to continue?',
+        },
+        actions: {
+          currentLocation: 'Choose current location',
+        },
       },
-      fields: {
-        name: 'Name',
-        latitude: 'Latitude',
-        longitude: 'Longitude',
-        country: 'Country',
-        state: 'State',
-        city: 'City',
-        zipCode: 'Postal Code',
-        street: 'Street',
-        streetNumber: 'Street Number',
-      },
-      modal: {
-        message:
-          'This operation will delete all cooling units associated with this location. Do you want to continue?',
-      },
-      actions: {
-        currentLocation: 'Choose current location',
+      Operators: {
+        text: {
+          gender: 'Gender',
+          ma: 'Male',
+          fe: 'Female',
+          ot: 'Other',
+        },
       },
     },
   },

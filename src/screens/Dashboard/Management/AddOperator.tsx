@@ -111,7 +111,7 @@ function AddOperator() {
           control={control}
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
-              tw="w-full bg-transparent mt-5"
+              tw="w-full bg-transparent my-7"
               label="Phone number"
               mode="outlined"
               dense
@@ -123,10 +123,8 @@ function AddOperator() {
           )}
           name="phoneNumber"
         />
-      </View>
 
-      <View tw="space-y-4">
-        <View tw="px-4">
+        <View tw="space-y-4">
           <Select
             variant="md"
             label={selectLabel}
@@ -182,8 +180,10 @@ function AddOperator() {
               ),
             }}
           />
+          <Divider
+            tw={cn('w-full bg-gray-700 mt-2 my-2', !!errors.coolingUnits && 'bg-red-700 h-0.5')}
+          />
         </View>
-        <Divider tw={cn(!!errors.coolingUnits && 'bg-red-700')} />
       </View>
 
       <Button

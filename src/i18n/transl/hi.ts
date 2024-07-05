@@ -326,28 +326,42 @@ export default {
       },
     },
     Management: {
-      chips: {
-        address: 'पता',
-        coordinates: 'निर्देशांक',
-        geolocation: 'फोन जियोलोकेशन',
+      Location: {
+        text: {
+          invited: 'आमंत्रित ({{amount}})',
+          registered: 'पंजीकृत ({{amount}})',
+        },
+        chips: {
+          address: 'पता',
+          coordinates: 'निर्देशांक',
+          geolocation: 'फोन जियोलोकेशन',
+        },
+        fields: {
+          name: 'नाम',
+          latitude: 'अक्षांश',
+          longitude: 'देशान्तर',
+          country: 'देश',
+          state: 'राज्य',
+          city: 'शहर',
+          zipCode: 'डाक कोड',
+          street: 'गली',
+          streetNumber: 'गली नंबर',
+        },
+        modal: {
+          message:
+            'यह कार्रवाई इस स्थान से संबद्ध सभी शीतलन इकाइयों को हटा देगी। क्या आप जारी रखना चाहते हैं?',
+        },
+        actions: {
+          currentLocation: 'वर्त्तमान स्थान चुनिए',
+        },
       },
-      fields: {
-        name: 'नाम',
-        latitude: 'अक्षांश',
-        longitude: 'देशान्तर',
-        country: 'देश',
-        state: 'राज्य',
-        city: 'शहर',
-        zipCode: 'डाक कोड',
-        street: 'गली',
-        streetNumber: 'गली नंबर',
-      },
-      modal: {
-        message:
-          'यह कार्रवाई इस स्थान से संबद्ध सभी शीतलन इकाइयों को हटा देगी। क्या आप जारी रखना चाहते हैं?',
-      },
-      actions: {
-        currentLocation: 'वर्त्तमान स्थान चुनिए',
+      Operators: {
+        text: {
+          gender: 'लिंग',
+          ma: 'पुरुष',
+          fe: 'महिला',
+          ot: 'अन्य',
+        },
       },
     },
   },

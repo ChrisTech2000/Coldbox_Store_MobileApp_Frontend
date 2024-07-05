@@ -54,8 +54,7 @@ export type ManagementRoutes = {
   Operators: undefined;
   AddOperator: undefined;
   EditOperator: {
-    firstName: string;
-    familyName: string;
+    userId: number;
   };
   // Registered Employee related routes
   RegisteredEmployee: undefined;

@@ -11,7 +11,7 @@ import { useManagementStore } from '#stores/management';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
-import { dateFmt } from '#i18n/utils';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
 import { User } from '#types/global';
 
@@ -19,6 +19,7 @@ function Operators(props: ManagementRouteProps<'Operators'>) {
   const { navigation } = props;
 
   const company = useManagementStore(useShallow((store) => store.company));
+  const { t } = useTranslationUtils();
 
   const {
     data: operators,
@@ -53,8 +54,12 @@ function Operators(props: ManagementRouteProps<'Operators'>) {
   return (
     <View tw="flex-1 justify-start">
       <View tw="w-full bg-zinc-200 space-y-2 px-4 py-2">
-        <Text variant="TextMedium">Invited ({invites.length})</Text>
-        <Text variant="TextMedium">Registered ({datums.length})</Text>
+        <Text variant="TextMedium">
+          {t('Dashboard.Management.Location.text.invited', { amount: invites.length })}
+        </Text>
+        <Text variant="TextMedium">
+          {t('Dashboard.Management.Location.text.registered', { amount: datums.length })}
+        </Text>
       </View>
 
       <FlatList
@@ -64,12 +69,7 @@ function Operators(props: ManagementRouteProps<'Operators'>) {
           <React.Fragment>
             <List.Item
               title={_getTitle(item.user)}
-              onPress={() => {
-                navigation.navigate('EditOperator', {
-                  firstName: item.user.firstName,
-                  familyName: item.user.lastName,
-                });
-              }}
+              onPress={() => navigation.navigate('EditOperator', { userId: item.user.id })}
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
             />
             <Divider />
