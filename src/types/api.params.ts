@@ -111,3 +111,8 @@ export interface AddLocationParams extends JsonObject {
 export interface EditLocationParams extends AddLocationParams {
   locationId: number;
 }
+
+export interface GetCoolingUnitCropsParams extends JsonObject {
+  coolingUnitId: number;
+  crop: number;
+}

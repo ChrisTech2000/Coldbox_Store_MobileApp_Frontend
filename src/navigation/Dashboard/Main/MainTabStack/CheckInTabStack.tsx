@@ -20,8 +20,8 @@ import { ECropType, type Farmer, type CoolingUnit, type Crop } from '#types/glob
 
 export type CheckInStackRoutes = {
   CheckIn: { user?: Farmer; coolingUnit: CoolingUnit };
-  SelectCropType: undefined;
-  CropList: { type: ECropType };
+  SelectCropType: { coolingUnit: CoolingUnit };
+  CropList: { type: ECropType; coolingUnit: CoolingUnit };
   CrateSetup: { crop: Crop };
 };
 

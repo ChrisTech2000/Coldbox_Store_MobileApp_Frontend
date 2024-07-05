@@ -13,7 +13,7 @@ type Option = {
   name: string;
 };
 
-function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>) {
+function SelectCropType({ route, navigation }: CheckInStackRouteProps<'SelectCropType'>) {
   const { t } = useTranslationUtils();
 
   const options: Array<Option> = useMemo(() => {
@@ -45,7 +45,12 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
           <TouchableOpacity
             key={`${item.id}-${index}`}
             tw="mx-2"
-            onPress={() => navigation.navigate('CropList', { type: item.id })}
+            onPress={() =>
+              navigation.navigate('CropList', {
+                type: item.id,
+                coolingUnit: route.params.coolingUnit,
+              })
+            }
           >
             <Text variant="TitleMedium">{item.name}</Text>
             <Divider tw="bg-gray-400 my-2" />

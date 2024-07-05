@@ -50,7 +50,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         <Button
           tw="w-full border-2 border-green-primary"
           mode="outlined"
-          onPress={() => navigation.navigate('SelectCropType')}
+          onPress={() => navigation.navigate('SelectCropType', { coolingUnit })}
           icon="basket"
           contentStyle="flex flex-row-reverse items-center"
         >

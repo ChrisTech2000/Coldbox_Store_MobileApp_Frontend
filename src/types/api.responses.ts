@@ -5,6 +5,7 @@ import {
   type Company,
   type CoolingUnit,
   type User,
+  Crop,
 } from './global';
 
 export type SignInResponse = {
@@ -78,3 +79,12 @@ export type AddLocationResponse = {
   streetNumber: string;
   zipCode: string;
 };
+
+export type GetCoolingUnitCropsResponse = Array<{
+  id: number;
+  fullCrop: Crop;
+  active: true;
+  crop: number;
+  coolingUnit: number;
+  pricing: number;
+}>;
