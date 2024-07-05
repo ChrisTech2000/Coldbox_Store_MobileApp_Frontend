@@ -81,6 +81,8 @@ export default {
     none: 'कोई नहीं',
     next: 'अगला',
     back: 'वापस',
+    add: 'ऐड',
+    edit: 'एडिट',
     search: 'खोजा जा रहा है...',
     or: 'या',
     'not-available': 'अभी उपलब्ध नहीं है',
@@ -288,6 +290,31 @@ export default {
         timeToPick: 'उठाने का समय',
         checkInDate: 'चेक-इन तिथि (पहले से नवीनतम)',
         checkInDateReverse: 'चेक-इन तिथि (नवीनतम से पहले)',
+      },
+    },
+    Management: {
+      chips: {
+        address: 'पता',
+        coordinates: 'निर्देशांक',
+        geolocation: 'फोन जियोलोकेशन',
+      },
+      fields: {
+        name: 'नाम',
+        latitude: 'अक्षांश',
+        longitude: 'देशान्तर',
+        country: 'देश',
+        state: 'राज्य',
+        city: 'शहर',
+        zipCode: 'डाक कोड',
+        street: 'गली',
+        streetNumber: 'गली नंबर',
+      },
+      modal: {
+        message:
+          'यह कार्रवाई इस स्थान से संबद्ध सभी शीतलन इकाइयों को हटा देगी। क्या आप जारी रखना चाहते हैं?',
+      },
+      actions: {
+        currentLocation: 'वर्त्तमान स्थान चुनिए',
       },
     },
   },

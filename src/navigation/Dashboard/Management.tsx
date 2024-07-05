@@ -41,7 +41,8 @@ export type ManagementRoutes = {
   Locations: undefined;
   AddLocation: undefined;
   EditLocation: {
-    name: string;
+    locationId: number;
+    companyId: number;
   };
   // Cooling Unit related routes
   CoolingUnits: undefined;

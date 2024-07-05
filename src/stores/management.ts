@@ -4,18 +4,21 @@ import { persist } from 'zustand/middleware';
 import storage from './lib/storage';
 
 type State = {
-  companyId: number | null;
+  company: {
+    id: number;
+    country?: string;
+  } | null;
 };
 
 type Actions = {
-  setCompanyId: (companyId: number) => void;
+  setCompany: (companyId: State['company']) => void;
 };
 
 export const useManagementStore = create(
   persist<State & Actions>(
     (set) => ({
-      companyId: null,
-      setCompanyId: (id) => set({ companyId: id }),
+      company: null,
+      setCompany: (company) => set({ company }),
     }),
     { name: 'management', storage }
   )

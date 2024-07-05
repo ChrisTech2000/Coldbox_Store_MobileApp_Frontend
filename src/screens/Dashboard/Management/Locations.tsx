@@ -14,14 +14,14 @@ import { useManagementStore } from '#stores/management';
 function Locations(props: ManagementRouteProps<'Locations'>) {
   const { navigation } = props;
 
-  const companyId = useManagementStore(useShallow((store) => store.companyId));
+  const company = useManagementStore(useShallow((store) => store.company));
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getLocations',
     ColdtivateService.getLocations,
-    companyId as number,
+    company?.id as number,
     {
-      skip: !companyId,
+      skip: !company?.id,
       defaultData: [],
     }
   );
@@ -45,7 +45,8 @@ function Locations(props: ManagementRouteProps<'Locations'>) {
               title={item.name}
               onPress={() => {
                 navigation.navigate('EditLocation', {
-                  name: '',
+                  locationId: item.id,
+                  companyId: item.company.id,
                 });
               }}
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
