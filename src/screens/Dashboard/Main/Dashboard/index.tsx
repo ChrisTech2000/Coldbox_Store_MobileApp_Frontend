@@ -1,9 +1,8 @@
-import React, { useMemo, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-paper';
 
-import CratesManagement from '#assets/icons/crates-management.svg';
-import CheckIn from '#assets/icons/check-in.svg';
-import CheckOut from '#assets/icons/check-out.svg';
 import { useTranslationUtils } from '#i18n/utils';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -16,15 +15,12 @@ import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
-import { FlatList } from 'react-native-gesture-handler';
-import { Icon, TextInput } from 'react-native-paper';
 import SelectWithStore, { createSelectStore } from '../components/SelectWithStore';
 import { sortProduces } from '../utils/sortProduces';
+import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
-import colors from 'tailwindcss/colors';
 
 type Search = 'id' | 'details';
 
@@ -33,14 +29,14 @@ const useCompanyStore = createSelectStore<Company>();
 
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
-  const { farmerId, farmerCompanies, farmerUnitsIds } = useDashboardStore();
   const { user } = useAuthStore();
-  const { sorting } = useSortingStore();
   const { t } = useTranslationUtils();
 
+  const { sorting } = useSortingStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
-
   const { selectedItem: company } = useCompanyStore();
+  const { farmerId, farmerCompanies, farmerUnitsIds, setCoolingUnits, setRefreshDashboardFn } =
+    useDashboardStore();
 
   const { data: coolingUnits } = useApiCall(
     'getCoolingUnits',
@@ -56,7 +52,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
-  const { data: farmerDashboardProduces } = useApiCall(
+  const { data: farmerDashboardProduces, refetch: refreshFarmerDashboardProduces } = useApiCall(
     'getFarmerDashboardProduces',
     ColdtivateService.getFarmerDashboardProduces,
     {
@@ -69,7 +65,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
-  const { data: operatorDashboardProduces } = useApiCall(
+  const { data: operatorDashboardProduces, refetch: refreshOperatorDashboardProduces } = useApiCall(
     'getDashboardProduces',
     ColdtivateService.getDashboardProduces,
     {
@@ -87,7 +83,6 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
-  const [isCrateManagementOpen, setIsCrateManagementOpen] = useState<boolean>(false);
   const [searchType, setSearchType] = useState<Search>('details');
   const [search, setSearch] = useState<string>('');
 
@@ -121,6 +116,15 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     });
   }, [sortedProduces, search, searchType]);
 
+  useEffect(() => {
+    if (coolingUnits) setCoolingUnits(coolingUnits);
+  }, [coolingUnits]);
+
+  useEffect(() => {
+    if (user?.role === ERoles.COOLING_USER) setRefreshDashboardFn(refreshFarmerDashboardProduces);
+    else setRefreshDashboardFn(refreshOperatorDashboardProduces);
+  }, [user?.role]);
+
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0">
       <View tw="mt-2 px-4">
@@ -135,6 +139,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
               name: company ? company.name : '',
             })}
             modalHeader={t('Dashboard.Company.SelectCompany.header')}
+            divider
+            autoSelect
+            occupyFullWidth
           />
         )}
         <SelectWithStore<CoolingUnit>
@@ -147,6 +154,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
             name: coolingUnit ? coolingUnit.name : '',
           })}
           modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+          divider
+          autoSelect
+          occupyFullWidth
         />
 
         <View tw="flex flex-row items-center justify-center space-x-2 mt-4">
@@ -204,45 +214,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         )}
       />
 
-      {user?.role === ERoles.OPERATOR && (
-        <View tw="absolute right-4 bottom-2 flex flex-row-reverse items-center">
-          <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-            <TouchableOpacity
-              tw={cn(
-                'w-12 h-12 items-center justify-center rounded-3xl',
-                isCrateManagementOpen ? 'bg-red-500' : 'bg-green-primary'
-              )}
-              onPress={() => setIsCrateManagementOpen(!isCrateManagementOpen)}
-            >
-              {isCrateManagementOpen ? (
-                <Icon source="close" size={25} color="white" />
-              ) : (
-                <CratesManagement width={30} height={30} />
-              )}
-            </TouchableOpacity>
-          </SkiaShadow>
-          {isCrateManagementOpen && (
-            <View tw="flex flex-row">
-              <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-                <TouchableOpacity
-                  tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-green-100"
-                  onPress={() => null}
-                >
-                  <CheckIn width={20} height={20} />
-                </TouchableOpacity>
-              </SkiaShadow>
-              <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-                <TouchableOpacity
-                  tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-orange-100"
-                  onPress={() => null}
-                >
-                  <CheckOut width={20} height={20} />
-                </TouchableOpacity>
-              </SkiaShadow>
-            </View>
-          )}
-        </View>
-      )}
+      {user?.role === ERoles.OPERATOR && <OperatorActions {...props} />}
     </View>
   );
 }

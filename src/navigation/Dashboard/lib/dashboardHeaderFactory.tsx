@@ -1,11 +1,12 @@
-import React from 'react';
 import { DrawerActions, NavigationProp } from '@react-navigation/native';
+import React from 'react';
 import { Appbar } from 'react-native-paper';
 
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
-import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
-import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
+
 import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
+import { MainTabStackRoutePaths } from '../Main/MainTabStack';
+import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import { useRightDrawerStore } from '../index';
 
 export function dashboardHeaderFactory<Params extends Record<string, unknown>, Path extends string>(

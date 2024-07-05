@@ -250,6 +250,11 @@ export enum ERefrigerantType {
   OTHER = 'Other',
 }
 
+export enum EPaymentType {
+  CASH = 'CASH',
+  CREDIT_CARD = 'CREDIT_CARD',
+}
+
 //////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',

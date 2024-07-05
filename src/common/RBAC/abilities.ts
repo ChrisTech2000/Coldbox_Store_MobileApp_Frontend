@@ -27,6 +27,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         //
         // navigation
         can(PERMISSION_KINDS.NAVIGATE, 'ManagementStack');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'CheckoutStack');
         // scope: management stack
         can(PERMISSION_KINDS.NAVIGATE, 'CompanyDetails');
         can(PERMISSION_KINDS.NAVIGATE, 'Locations');
@@ -43,6 +44,8 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         //
         // navigation
         can(PERMISSION_KINDS.NAVIGATE, 'ManagementStack');
+        can(PERMISSION_KINDS.NAVIGATE, 'CheckoutStack');
+
         // scope: management stack
         cannot(PERMISSION_KINDS.NAVIGATE, 'CompanyDetails');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Locations');
@@ -59,6 +62,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         //
         // navigation
         cannot(PERMISSION_KINDS.NAVIGATE, 'ManagementStack');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'CheckoutStack');
         break;
       }
 
