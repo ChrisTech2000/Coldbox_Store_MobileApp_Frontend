@@ -15,6 +15,7 @@ export enum EStorageEndpoints {
   GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
   GET_FARMER_CRATES = '/storage/v1/crates/',
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
+  GET_LOCATION = '/storage/v1/locations/:locationId/',
 }
 
 export enum EOperationEndpoints {

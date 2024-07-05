@@ -30,7 +30,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const { t } = useTranslationUtils();
   const toast = useToast();
 
-  const { companyId } = useManagementStore();
+  const { company } = useManagementStore();
   const { selectedItem: paymentType } = usePaymentTypeStore();
   const { refreshDashboard } = useDashboardStore();
 
@@ -41,7 +41,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const { data: locations } = useApiCall(
     'getLocations',
     ColdtivateService.getLocations,
-    companyId ?? 0,
+    company?.id ?? 0,
     {
       skip: !user?.id || !coolingUnit?.id,
     }

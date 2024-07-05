@@ -23,7 +23,7 @@ export const useApiCall = <IData, IParams>(
 ) => {
   const defaultData = useRef(options?.defaultData || ({} as IData));
   const previousData = useRef<IData | undefined>(undefined);
-  const key = useMemo(() => `${name}:${JSON.stringify(params || {})}`, [method, params]);
+  const key = useMemo(() => getQueryKey<IParams>(name, params), [method, params]);
 
   const fetcher = useCallback(async () => {
     try {
@@ -60,3 +60,7 @@ export const useApiCall = <IData, IParams>(
     refetch,
   };
 };
+
+export function getQueryKey<T>(name: string, params?: T): string {
+  return `${name}:${JSON.stringify(params || {})}`;
+}

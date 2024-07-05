@@ -63,7 +63,6 @@ export interface GetFarmerDashboardProducesParams extends JsonObject {
   coolingUnit: number;
   farmerId: number;
 }
-
 export interface GetFarmerCratesParams extends JsonObject {
   coolingUnit: number;
   farmer: number;
@@ -76,4 +75,25 @@ export interface CheckOutParams extends JsonObject {
   currency: string;
   paymentType: EPaymentType;
   paid: boolean;
+}
+
+export interface GetLocationParams extends JsonObject {
+  companyId: number;
+  locationId: number;
+}
+
+export interface AddLocationParams extends JsonObject {
+  name?: string;
+  latitude?: number;
+  longitude?: number;
+  country?: string;
+  state?: string;
+  city?: string;
+  postalCode?: string;
+  street?: string;
+  streetNumber?: string;
+}
+
+export interface EditLocationParams extends AddLocationParams {
+  locationId: number;
 }

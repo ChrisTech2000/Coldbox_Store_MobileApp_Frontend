@@ -37,7 +37,7 @@ type SignInSchema = {
 function SignIn(props: AuthRouteProps<'SignIn'>) {
   const { navigation } = props;
 
-  const setCompanyId = useManagementStore((store) => store.setCompanyId); // → this is for management (RE and OP)
+  const setCompany = useManagementStore((store) => store.setCompany); // → this is for management (RE and OP)
   const { setSession, setUser } = useAuthStore((store) => ({
     setSession: store.setSession,
     setUser: store.setUser,
@@ -111,7 +111,10 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
 
     if (result) {
       if (typeof result.company !== 'undefined') {
-        setCompanyId(result.company.id);
+        setCompany({
+          id: result.company.id,
+          country: result.company.country,
+        });
       }
       setSession({
         accessToken: result.access,

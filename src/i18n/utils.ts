@@ -6,10 +6,11 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { TOptions } from 'i18next';
 import type { Locale } from 'date-fns';
-import { formatDate } from 'date-fns/format';
+import { formatInTimeZone } from 'date-fns-tz';
 import { parseISO } from 'date-fns/parseISO';
 import { enGB as englishLocale } from 'date-fns/locale/en-GB';
 import { hi as hindiLocale } from 'date-fns/locale/hi';
+import { getTimeZone } from 'react-native-localize';
 
 import { mmkv } from '#stores/lib/storage';
 import type { TranslationPaths } from './index';
@@ -81,10 +82,10 @@ function _derivedLocale(): Locale {
   }
 }
 
-type Options = Parameters<typeof formatDate>[2];
+type Options = Parameters<typeof formatInTimeZone>[3];
 
 export function dateFmt(timestamp: string, dateFormat?: string, opts?: Options): string {
-  return formatDate(parseISO(timestamp), dateFormat ?? 'dd/mm/yyyy', {
+  return formatInTimeZone(parseISO(timestamp), getTimeZone(), dateFormat ?? 'dd/mm/yyyy', {
     ...opts,
     locale: _derivedLocale(),
   });

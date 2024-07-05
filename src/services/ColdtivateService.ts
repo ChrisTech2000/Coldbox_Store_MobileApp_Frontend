@@ -1,24 +1,29 @@
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { EOperationEndpoints, EStorageEndpoints, EUserEndpoints } from '#constants/api.routes';
 import type {
   CheckOutParams,
+  AddLocationParams,
+  EditLocationParams,
   GetCoolingUnitsParams,
   GetDashboardProducesParams,
   GetFarmerCratesParams,
   GetFarmerDashboardProducesParams,
   GetFarmerParams,
   GetOperatorFarmersParams,
+  GetLocationParams,
 } from '#types/api.params';
 import type {
+  AddLocationResponse,
   CheckOutResponse,
   GetFarmerResponse,
-  GetLocationsResponse,
+  GetLocationResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
+import { subs } from './utils';
 
 class ColdtivateService extends HttpClient {
   constructor(options?: HttpClientOptions) {
@@ -111,9 +116,13 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getFarmerCrates = async (params: GetFarmerCratesParams): Promise<Crate[] | undefined> => {
+  public getLocations = async (companyId: number): Promise<Array<GetLocationResponse>> => {
     try {
-      const { data } = await this.get<Crate[]>(EStorageEndpoints.GET_FARMER_CRATES, { params });
+      const params = { company: companyId };
+      const { data } = await this.get<Array<GetLocationResponse>>(
+        EStorageEndpoints.GET_MANAGEMENT_LOCATIONS,
+        { params }
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -122,13 +131,9 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getLocations = async (companyId: number): Promise<GetLocationsResponse> => {
+  public getFarmerCrates = async (params: GetFarmerCratesParams): Promise<Crate[] | undefined> => {
     try {
-      const params = { company: companyId };
-      const { data } = await this.get<GetLocationsResponse>(
-        EStorageEndpoints.GET_MANAGEMENT_LOCATIONS,
-        { params }
-      );
+      const { data } = await this.get<Crate[]>(EStorageEndpoints.GET_FARMER_CRATES, { params });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -142,6 +147,64 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.post<CheckOutResponse>(EOperationEndpoints.CHECK_OUT, params);
       return data;
     } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getLocation = async (params: GetLocationParams): Promise<GetLocationResponse> => {
+    try {
+      const url = subs(EStorageEndpoints.GET_LOCATION, { locationId: params.locationId });
+      const { data } = await this.get<GetLocationResponse>(url, {
+        params: { company: params.companyId },
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public addLocation = async (params: AddLocationParams): Promise<AddLocationResponse> => {
+    try {
+      const { data } = await this.post<AddLocationResponse>(
+        EStorageEndpoints.GET_MANAGEMENT_LOCATIONS,
+        params
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public editLocation = async (params: EditLocationParams): Promise<AddLocationResponse> => {
+    try {
+      const { locationId, ...rest } = params;
+      const url = subs(EStorageEndpoints.GET_LOCATION, { locationId });
+      const { data } = await this.put<AddLocationResponse>(url, rest);
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public deleteLocation = async (locationId: number): Promise<Record<string, string>> => {
+    try {
+      const url = subs(EStorageEndpoints.GET_LOCATION, { locationId });
+      const { data } = await this.delete<Record<string, string>>(url);
+      return data;
+    } catch (error) {
+      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;

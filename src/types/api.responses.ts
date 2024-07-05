@@ -30,23 +30,6 @@ export type GetFarmerResponse = {
   coolingUnits: number[];
 };
 
-export type GetLocationsResponse = Array<{
-  id: number;
-  coolingUnits: Array<CoolingUnit>;
-  company: Company;
-  name: string;
-  state: string;
-  city: string;
-  street: string;
-  streetNumber: unknown | null;
-  zipCode: string;
-  latitude: number;
-  longitude: number;
-  deleted: boolean;
-  dateCreation: string;
-  dateLastModified: string;
-}>;
-
 export type CheckOutResponse = {
   id: number;
   movement: number;
@@ -55,4 +38,38 @@ export type CheckOutResponse = {
   paymentType: EPaymentType;
   currency: string;
   priceDiscount: number;
+};
+
+export type GetLocationResponse = {
+  id: number;
+  coolingUnits: Array<CoolingUnit>;
+  company: Company;
+  name: string;
+  state: string;
+  city: string;
+  street: string;
+  streetNumber: string | null;
+  zipCode: string;
+  latitude: number;
+  longitude: number;
+  deleted: boolean;
+  dateCreation: string;
+  dateLastModified: string;
+};
+
+export type AddLocationResponse = {
+  city: string;
+  company: Company;
+  coolingUnits: Array<CoolingUnit>;
+  dateCreation: string;
+  dateLastModified: string;
+  deleted: boolean;
+  id: number;
+  latitude: number;
+  longitude: number;
+  name: string;
+  state: string;
+  street: string;
+  streetNumber: string;
+  zipCode: string;
 };

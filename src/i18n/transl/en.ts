@@ -83,6 +83,8 @@ const en = {
     back: 'Back',
     search: 'Search...',
     or: 'or',
+    add: 'Add',
+    edit: 'Edit',
     'not-available': 'N/A',
     'complete-later': 'Complete later',
     'update-success': 'Succesfully updated',
@@ -317,6 +319,31 @@ const en = {
         timeToPick: 'Time to pick up',
         checkInDate: 'Check in date (first to latest)',
         checkInDateReverse: 'Check in date (latest to first)',
+      },
+    },
+    Management: {
+      chips: {
+        address: 'Address',
+        coordinates: 'Coordinates',
+        geolocation: 'Phone Geolocation',
+      },
+      fields: {
+        name: 'Name',
+        latitude: 'Latitude',
+        longitude: 'Longitude',
+        country: 'Country',
+        state: 'State',
+        city: 'City',
+        zipCode: 'Postal Code',
+        street: 'Street',
+        streetNumber: 'Street Number',
+      },
+      modal: {
+        message:
+          'This operation will delete all cooling units associated with this location. Do you want to continue?',
+      },
+      actions: {
+        currentLocation: 'Choose current location',
       },
     },
   },
