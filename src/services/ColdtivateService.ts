@@ -32,9 +32,9 @@ class ColdtivateService extends HttpClient {
     super(options);
   }
 
-  public getFarmer = async (params: GetFarmerParams): Promise<GetFarmerResponse[] | undefined> => {
+  public getFarmer = async (params: GetFarmerParams): Promise<GetFarmerResponse | undefined> => {
     try {
-      const { data } = await this.get<GetFarmerResponse[]>(EUserEndpoints.GET_FARMER, {
+      const { data } = await this.get<GetFarmerResponse>(EUserEndpoints.GET_FARMER, {
         params,
       });
       return data;
@@ -47,9 +47,9 @@ class ColdtivateService extends HttpClient {
 
   public getOperatorFarmers = async (
     params: GetOperatorFarmersParams
-  ): Promise<GetFarmerResponse[] | undefined> => {
+  ): Promise<GetFarmerResponse | undefined> => {
     try {
-      const { data } = await this.get<GetFarmerResponse[]>(EUserEndpoints.GET_FARMER, {
+      const { data } = await this.get<GetFarmerResponse>(EUserEndpoints.GET_FARMER, {
         params,
       });
       return data;
@@ -60,9 +60,9 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getCompanies = async (): Promise<Company[] | undefined> => {
+  public getCompanies = async (): Promise<Array<Company> | undefined> => {
     try {
-      const { data } = await this.get<Company[]>(EStorageEndpoints.GET_COMPANIES, {});
+      const { data } = await this.get<Array<Company>>(EStorageEndpoints.GET_COMPANIES, {});
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -73,9 +73,9 @@ class ColdtivateService extends HttpClient {
 
   public getCoolingUnits = async (
     params: GetCoolingUnitsParams
-  ): Promise<CoolingUnit[] | undefined> => {
+  ): Promise<Array<CoolingUnit> | undefined> => {
     try {
-      const { data } = await this.get<CoolingUnit[]>(EStorageEndpoints.GET_COOLING_UNITS, {
+      const { data } = await this.get<Array<CoolingUnit>>(EStorageEndpoints.GET_COOLING_UNITS, {
         params,
       });
       return data;
@@ -88,9 +88,9 @@ class ColdtivateService extends HttpClient {
 
   public getDashboardProduces = async (
     params: GetDashboardProducesParams
-  ): Promise<DashboardProduce[] | undefined> => {
+  ): Promise<Array<DashboardProduce> | undefined> => {
     try {
-      const { data } = await this.get<DashboardProduce[]>(
+      const { data } = await this.get<Array<DashboardProduce>>(
         EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );
@@ -104,9 +104,9 @@ class ColdtivateService extends HttpClient {
 
   public getFarmerDashboardProduces = async (
     params: GetFarmerDashboardProducesParams
-  ): Promise<DashboardProduce[] | undefined> => {
+  ): Promise<Array<DashboardProduce> | undefined> => {
     try {
-      const { data } = await this.get<DashboardProduce[]>(
+      const { data } = await this.get<Array<DashboardProduce>>(
         EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );
@@ -133,9 +133,13 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getFarmerCrates = async (params: GetFarmerCratesParams): Promise<Crate[] | undefined> => {
+  public getFarmerCrates = async (
+    params: GetFarmerCratesParams
+  ): Promise<Array<Crate> | undefined> => {
     try {
-      const { data } = await this.get<Crate[]>(EStorageEndpoints.GET_FARMER_CRATES, { params });
+      const { data } = await this.get<Array<Crate>>(EStorageEndpoints.GET_FARMER_CRATES, {
+        params,
+      });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -156,7 +160,7 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public checkIn = async (params: CheckInParams[]): Promise<CheckInResponse> => {
+  public checkIn = async (params: Array<CheckInParams>): Promise<CheckInResponse> => {
     const _params = {
       ...params,
       unserializable: ['hasPicture'],

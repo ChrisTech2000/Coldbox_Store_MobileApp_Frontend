@@ -1,4 +1,11 @@
-import { EPaymentType, ERoles, type Company, type CoolingUnit, type User } from './global';
+import {
+  EPaymentType,
+  ERoles,
+  type Farmer,
+  type Company,
+  type CoolingUnit,
+  type User,
+} from './global';
 
 export type SignInResponse = {
   refresh: string;
@@ -19,16 +26,7 @@ export type SignUpAsCoolingUserResponse = {
   userCode: string;
 };
 
-export type GetFarmerResponse = {
-  id: number;
-  user: User;
-  birthday: Date;
-  parentName: string;
-  country: string;
-  userCode: string;
-  companies: number[];
-  coolingUnits: number[];
-};
+export type GetFarmerResponse = Array<Farmer>;
 
 export type CheckOutResponse = {
   id: number;

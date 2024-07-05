@@ -13,15 +13,14 @@ import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabS
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import type { GetFarmerResponse } from '#types/api.responses';
 
+import type { CoolingUnit, Farmer } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
-import { CoolingUnit } from 'types/global';
 
 type ManagementMode = 'check-in' | 'check-out';
 
@@ -39,7 +38,7 @@ export function OperatorActions({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [managementMode, setManagementMode] = useState<ManagementMode | undefined>();
-  const [selectedUser, setSelectedUser] = useState<GetFarmerResponse | undefined>();
+  const [selectedUser, setSelectedUser] = useState<Farmer | undefined>();
   const [search, setSearch] = useState<string>('');
 
   const { data } = useApiCall(
@@ -88,7 +87,7 @@ export function OperatorActions({
     setIsModalOpen(true);
   }, []);
 
-  const navigateToCheckOut = useCallback((selectedUser?: GetFarmerResponse) => {
+  const navigateToCheckOut = useCallback((selectedUser?: Farmer) => {
     navigation.navigate('CheckOutStack', {
       screen: 'CrateSelection',
       params: { user: selectedUser },
@@ -96,7 +95,7 @@ export function OperatorActions({
   }, []);
 
   const navigateToCheckIn = useCallback(
-    (selectedUser?: GetFarmerResponse) => {
+    (selectedUser?: Farmer) => {
       navigation.navigate('CheckInStack', {
         screen: 'CheckIn',
         params: { user: selectedUser, coolingUnit: coolingUnit ?? undefined },
@@ -175,7 +174,7 @@ export function OperatorActions({
                     onPress={() => setSelectedUser(item)}
                     tw={cn(
                       'my-1 border-b border-gray-300 p-1',
-                      (selectedUser as GetFarmerResponse)?.id === item.id
+                      (selectedUser as Farmer)?.id === item.id
                         ? 'border-2 border-green-primary'
                         : ''
                     )}

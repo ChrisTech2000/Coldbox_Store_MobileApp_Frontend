@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import type { CheckInParams } from '#types/api.params';
 
 type State = {
-  produces: CheckInParams[];
+  produces: Array<CheckInParams>;
 };
 
 type Actions = {

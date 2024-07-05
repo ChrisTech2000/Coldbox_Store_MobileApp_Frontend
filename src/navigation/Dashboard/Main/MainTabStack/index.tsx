@@ -17,8 +17,7 @@ import { useTranslationUtils, type Translator } from '#i18n/utils';
 import { dashboardHeaderFactory } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
-import type { GetFarmerResponse } from '#types/api.responses';
-import type { CoolingUnit, DashboardProduce } from '#types/global';
+import type { CoolingUnit, DashboardProduce, Farmer } from '#types/global';
 import { Text } from '#ui/components/Text';
 
 import CheckInStack, { CheckInStackRoutes } from './CheckInTabStack';
@@ -30,14 +29,14 @@ export type MainTabStackRoutes = {
   CheckInStack: {
     screen: keyof CheckInStackRoutes;
     params: {
-      user?: GetFarmerResponse;
+      user?: Farmer;
       coolingUnit?: CoolingUnit;
     };
   };
   CheckOutStack: {
     screen: keyof CheckOutStackRoutes;
     params: {
-      user?: GetFarmerResponse;
+      user?: Farmer;
     };
   };
 };

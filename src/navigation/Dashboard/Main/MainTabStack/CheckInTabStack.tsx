@@ -16,11 +16,10 @@ import SelectCropType from '#screens/Dashboard/Main/Dashboard/CheckIn/SelectCrop
 import { TranslationPaths } from '#i18n/index';
 import { Translator, useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
-import type { GetFarmerResponse } from '#types/api.responses';
-import { ECropType, type CoolingUnit, type Crop } from '#types/global';
+import { ECropType, type Farmer, type CoolingUnit, type Crop } from '#types/global';
 
 export type CheckInStackRoutes = {
-  CheckIn: { user?: GetFarmerResponse; coolingUnit: CoolingUnit };
+  CheckIn: { user?: Farmer; coolingUnit: CoolingUnit };
   SelectCropType: undefined;
   CropList: { type: ECropType };
   CrateSetup: { crop: Crop };

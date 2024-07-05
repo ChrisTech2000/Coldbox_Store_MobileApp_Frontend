@@ -10,6 +10,17 @@ export type User = {
   role?: ERoles;
 };
 
+export type Farmer = {
+  id: number;
+  user: User;
+  birthday: Date;
+  parentName: string;
+  country: string;
+  userCode: string;
+  companies: Array<number>;
+  coolingUnits: Array<number>;
+};
+
 export type Company = {
   id: number;
   hasCoolingUnits: boolean;
@@ -21,7 +32,7 @@ export type Company = {
   ml4Quality: boolean;
   ml4Farmers: boolean;
   dateJoined: Date;
-  crop: number[];
+  crop: Array<number>;
   logo: File | null;
 
   //TODO: figure out types
@@ -51,7 +62,7 @@ export type Crate = {
   remainingShelfLife: number;
   plannedDays: number;
   checkOut: Date; // TODO: confirm this type
-  pricing: Pricing[];
+  pricing: Array<Pricing>;
   coolingUnitMetric: ECoolingUnitMetric;
   checkInDate: Date;
   name: string;
@@ -66,7 +77,7 @@ export type Crate = {
 export type DashboardProduce = {
   additonalInfo: string;
   checkoutComplete: boolean;
-  crates: Crate[];
+  crates: Array<Crate>;
   cratesAmount: number;
   cratesCombinedCost: number;
   cratesCombinedWeight: number;
@@ -92,7 +103,7 @@ export type CoolingUnitCrop = {
   coolingUnitId: number;
   pricingId: number;
   active: boolean;
-  pricing: Pricing[];
+  pricing: Array<Pricing>;
 };
 
 export type CommodityInfo = {
@@ -143,27 +154,27 @@ export type CoolingUnit = {
   location: number;
   metric: ECoolingUnitMetric;
   sensor: boolean;
-  sensorList: unknown[]; // TODO: figure out type
+  sensorList: Array<unknown>; // TODO: figure out type
   capacityInMetricTons: number;
   capacityInNumberCrates: number;
   occupancy: number;
   occupancyModifiedDate: Date;
   dateLastModified: Date;
   dateCreation: Date;
-  dateOperatorAssigned: Date[]; // a date for each operator????
+  dateOperatorAssigned: Array<Date>; // a date for each operator????
   coolingUnitType: ECoolingUnitType;
-  crops: CoolingUnitCrop[];
+  crops: Array<CoolingUnitCrop>;
   roomHeight: number;
   roomLength: number;
   roomWidth: number;
   roomWeight: number;
-  operators: number[];
+  operators: Array<number>;
   latestTemperature: string;
   crateWeight: number;
   crateWidth: number;
   crateLength: number;
   crateHeight: number;
-  commodityInfos: CommodityInfo[];
+  commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
   ubibotSensorChannel: unknown; // TODO: figure out type
@@ -174,7 +185,7 @@ export type CoolingUnit = {
   editableCheckins: boolean; // @Note: not a typo
   commonPricingType: CommonPricingType;
   commodityTotal: CommodityTotal;
-  powerOptions: PowerOption[];
+  powerOptions: Array<PowerOption>;
 };
 
 export type Crop = {
