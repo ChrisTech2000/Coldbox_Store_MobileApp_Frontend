@@ -29,7 +29,7 @@ function Locations(props: ManagementRouteProps<'Locations'>) {
   if (isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
-        <ActivityIndicator animating={true} color={paperTheme.colors.primary} size="large" />
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
   }

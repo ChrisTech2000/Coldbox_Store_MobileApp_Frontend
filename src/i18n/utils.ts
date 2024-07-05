@@ -85,7 +85,7 @@ function _derivedLocale(): Locale {
 type Options = Parameters<typeof formatInTimeZone>[3];
 
 export function dateFmt(timestamp: string, dateFormat?: string, opts?: Options): string {
-  return formatInTimeZone(parseISO(timestamp), getTimeZone(), dateFormat ?? 'dd/mm/yyyy', {
+  return formatInTimeZone(parseISO(timestamp), getTimeZone(), dateFormat ?? 'dd/MM/yyyy', {
     ...opts,
     locale: _derivedLocale(),
   });
