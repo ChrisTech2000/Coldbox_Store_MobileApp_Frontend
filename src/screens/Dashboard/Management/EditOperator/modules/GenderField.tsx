@@ -27,7 +27,7 @@ export default function GenderField() {
   const [internalSelection, setInternalSelection] = useState<EApiGender>(selectedGender);
 
   return (
-    <View>
+    <View tw="mt-6">
       <View tw="px-5">
         <Select
           variant="md"

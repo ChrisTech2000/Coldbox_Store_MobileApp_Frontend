@@ -38,7 +38,7 @@ export default function CoolingUnitsField(props: Props) {
   }, [coolingUnits, selectedCoolingUnits]);
 
   return (
-    <View>
+    <View tw="mt-6">
       <View tw="px-5">
         <Select
           variant="md"

@@ -9,7 +9,7 @@ export type FormValues = {
   coolingUnits: Array<number>;
 };
 
-export const DEFAULT_VALUES = {
+const DEFAULT_VALUES = {
   gender: EApiGender.OTHER,
   coolingUnits: [],
 } satisfies FormValues;

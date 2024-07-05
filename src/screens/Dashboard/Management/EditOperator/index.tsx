@@ -13,7 +13,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import { EApiGender } from '#types/global';
 
-import FormManager, { DEFAULT_VALUES, type FormValues } from './components/FormManager';
+import FormManager, { type FormValues } from './components/FormManager';
 import GenderField from './modules/GenderField';
 import CoolingUnitsField from './modules/CoolingUnitsField';
 
@@ -65,8 +65,9 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   }
 
   if (!formInitialValues.current) {
-    const values = { ...DEFAULT_VALUES } as FormValues;
+    const values = {} as FormValues;
     values.gender = contextualOperator?.user.gender || EApiGender.OTHER;
+    values.coolingUnits = contextualOperator?.coolingUnits ?? [];
     formInitialValues.current = values;
   }
 
