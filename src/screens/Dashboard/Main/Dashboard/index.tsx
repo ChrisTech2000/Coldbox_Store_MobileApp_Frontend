@@ -214,7 +214,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         )}
       />
 
-      {user?.role === ERoles.OPERATOR && <OperatorActions {...props} />}
+      {user?.role === ERoles.OPERATOR && <OperatorActions {...props} coolingUnit={coolingUnit} />}
     </View>
   );
 }

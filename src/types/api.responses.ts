@@ -40,6 +40,13 @@ export type CheckOutResponse = {
   priceDiscount: number;
 };
 
+export type CheckInResponse = {
+  id: number;
+  movement: number;
+  farmer: number;
+  hasDt: string;
+};
+
 export type GetLocationResponse = {
   id: number;
   coolingUnits: Array<CoolingUnit>;

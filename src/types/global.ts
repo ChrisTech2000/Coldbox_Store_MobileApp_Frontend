@@ -1,4 +1,4 @@
-export interface User {
+export type User = {
   id: number;
   firstName: string;
   lastName: string;
@@ -8,9 +8,9 @@ export interface User {
   lastLogin: string;
   language?: string;
   role?: ERoles;
-}
+};
 
-export interface Company {
+export type Company = {
   id: number;
   hasCoolingUnits: boolean;
   name: string;
@@ -27,23 +27,23 @@ export interface Company {
   //TODO: figure out types
   bankDetails: unknown;
   bankAccount: unknown;
-}
+};
 
-export interface Pricing {
+export type Pricing = {
   id: number;
   pricingType: EPricingType;
   fixedRate: number;
   dailyRate: number;
-}
+};
 
-export interface CommonPricingType {
+export type CommonPricingType = {
   type: EPricingType;
   value: number;
   pricingId: number;
   metric: ECoolingUnitMetric;
-}
+};
 
-export interface Crate {
+export type Crate = {
   id: number;
   produce: number; // the produce id
   coolingUnit: number; // the cooling unit id
@@ -61,9 +61,9 @@ export interface Crate {
   runDt: boolean;
   qualityDt: boolean;
   tag: string;
-}
+};
 
-export interface DashboardProduce {
+export type DashboardProduce = {
   additonalInfo: string;
   checkoutComplete: boolean;
   crates: Crate[];
@@ -84,31 +84,31 @@ export interface DashboardProduce {
   plannedDays: number;
   qualityDt: number;
   runDt: boolean;
-}
+};
 
-export interface Crop {
+export type CoolingUnitCrop = {
   id: number;
   cropId: number;
   coolingUnitId: number;
   pricingId: number;
   active: boolean;
   pricing: Pricing[];
-}
+};
 
-export interface CommodityInfo {
+export type CommodityInfo = {
   commodity: string;
   percentage: number;
   combinedWeight: number;
   cratesNumber: number;
   optimalStorageTemperature: string;
-}
+};
 
-export interface CommodityTotal {
+export type CommodityTotal = {
   totalWeight: number;
   totalCrates: number;
-}
+};
 
-export interface PowerOption {
+export type PowerOption = {
   id: number;
   coolingUnitId: number;
   powerConsumptionInMt: number;
@@ -135,9 +135,9 @@ export interface PowerOption {
   thermalStorageMethod: EThermalStorageSystem;
   roomInsulator: number;
   amountRefrigerant: number;
-}
+};
 
-export interface CoolingUnit {
+export type CoolingUnit = {
   id: number;
   name: string;
   location: number;
@@ -152,7 +152,7 @@ export interface CoolingUnit {
   dateCreation: Date;
   dateOperatorAssigned: Date[]; // a date for each operator????
   coolingUnitType: ECoolingUnitType;
-  crops: Crop[];
+  crops: CoolingUnitCrop[];
   roomHeight: number;
   roomLength: number;
   roomWidth: number;
@@ -175,7 +175,26 @@ export interface CoolingUnit {
   commonPricingType: CommonPricingType;
   commodityTotal: CommodityTotal;
   powerOptions: PowerOption[];
-}
+};
+
+export type Crop = {
+  id: number;
+  cropTypeId: number;
+  name: string;
+  image: string;
+  optimalStorageTemperature: string;
+  approximateShelfLife: string;
+  harvestedToday: number;
+  harvestedYesterday: number;
+  harvestedDayBeforeYesterday: number;
+  harvestedBefore: number;
+  sizeSelection1: number;
+  sizeSelection2: number;
+  sizeSelection3: number;
+  digitalTwinIdentifier: string;
+  dependentConstant: number;
+  activationEnergyConstant: number;
+};
 
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
@@ -253,6 +272,20 @@ export enum ERefrigerantType {
 export enum EPaymentType {
   CASH = 'CASH',
   CREDIT_CARD = 'CREDIT_CARD',
+}
+
+export enum ECropType {
+  FRUITS = 1,
+  VEGETABLES = 2,
+  ROOT_VEGETABLES = 3,
+  OTHER = 4,
+}
+
+export enum EDateCropped {
+  TODAY = 100,
+  YESTERDAY = 59,
+  DAY_BEFORE = -3,
+  EVEN_BEFORE = -4,
 }
 
 //////////////////////// MAPPERS

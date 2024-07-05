@@ -65,6 +65,12 @@ const en = {
       Management: 'Management',
       Tutorial: 'Tutorial',
     },
+    checkIn: {
+      SelectCropType: 'Select Crop Type',
+      CheckIn: 'CheckIn',
+      CropList: '{{cropType}}',
+      CrateSetup: 'CheckIn',
+    },
   },
   actions: {
     error: 'An error occured',
@@ -230,7 +236,8 @@ const en = {
     CrateManagement: {
       userModalTitle: 'Select a cooling user',
       coolingUserLabel: 'Cooling user',
-      coolingUnitLabel: 'Select a cooling unit',
+      selectCoolingUnitLabel: 'Select a cooling unit',
+      coolingUnitLabel: 'Cooling unit',
       noUnitWarning: 'Please select a cooling unit',
       noCratesWarning: "The selected Cooling user doesn't have any crates in this cooling unit",
       operationError: 'Something went wrong. Please try again later.',
@@ -255,6 +262,18 @@ const en = {
           creditCard: 'Credit Card',
         },
         paid: 'Paid',
+      },
+      CheckIn: {
+        emptyState: 'No boxes added yet',
+        addCrates: 'Add Crates',
+        checkInWithCode: 'Check in with code',
+        estimatedCost: 'Estimated Cost',
+        SelectCropType: {
+          fruits: 'Fruits',
+          vegetables: 'Vegetables',
+          rootVegetables: 'Root Vegetables',
+          other: 'Other Items',
+        },
       },
     },
     CoolingUnitsPlanner: {

@@ -12,9 +12,11 @@ import type {
   GetFarmerParams,
   GetOperatorFarmersParams,
   GetLocationParams,
+  CheckInParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
+  CheckInResponse,
   CheckOutResponse,
   GetFarmerResponse,
   GetLocationResponse,
@@ -145,6 +147,23 @@ class ColdtivateService extends HttpClient {
   public checkOut = async (params: CheckOutParams): Promise<CheckOutResponse> => {
     try {
       const { data } = await this.post<CheckOutResponse>(EOperationEndpoints.CHECK_OUT, params);
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public checkIn = async (params: CheckInParams[]): Promise<CheckInResponse> => {
+    const _params = {
+      ...params,
+      unserializable: ['hasPicture'],
+    };
+    try {
+      const { data } = await this.post<CheckInResponse>(EOperationEndpoints.CHECK_IN, _params);
+
       return data;
     } catch (error) {
       console.log(error);

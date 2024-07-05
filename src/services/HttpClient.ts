@@ -5,9 +5,10 @@ import axios, {
   type AxiosRequestHeaders,
 } from 'axios';
 
-import { type Tokens, useAuthStore } from '#stores/auth';
 import { API_BASE_URL } from '#constants/environment';
-import { JsonObject, serialize, deserialize } from './utils';
+import { useAuthStore, type Tokens } from '#stores/auth';
+
+import { deserialize, serialize, type JsonArray, type JsonObject } from './utils';
 
 type Options = {
   baseURL: string;
@@ -89,7 +90,7 @@ export default class HttpClient {
 
   protected post<T>(
     url: string,
-    data: JsonObject,
+    data: JsonObject | JsonArray,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.axios.post<T>(url, serialize(data), config);

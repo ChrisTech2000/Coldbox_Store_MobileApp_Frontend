@@ -77,6 +77,20 @@ export interface CheckOutParams extends JsonObject {
   paid: boolean;
 }
 
+export interface CheckInParams extends JsonObject {
+  crop: { id: number };
+  additionalInfo: string;
+  crates: Array<{
+    checkOut: Date | null;
+    weight: number;
+    tag: string;
+    coolingUnitId: number;
+  }>;
+  harvestDate: number;
+  initialGrade: unknown; // TODO: figure out type
+  hasPicture: boolean;
+}
+
 export interface GetLocationParams extends JsonObject {
   companyId: number;
   locationId: number;

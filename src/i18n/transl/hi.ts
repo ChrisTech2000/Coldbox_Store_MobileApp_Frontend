@@ -67,6 +67,12 @@ export default {
       Management: 'प्रबंधन',
       Tutorial: 'ट्यूटोरियल',
     },
+    checkIn: {
+      SelectCropType: 'फसल प्रकार चुनें',
+      CheckIn: 'चेक इन',
+      CropList: '{{cropType}}',
+      CrateSetup: 'चेक इन',
+    },
   },
   actions: {
     error: 'एक त्रुटि हुई',
@@ -233,7 +239,8 @@ export default {
     CrateManagement: {
       userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
       coolingUserLabel: 'कूलिंग उपयोगकर्ता',
-      coolingUnitLabel: 'कूलिंग यूनिट चुनें',
+      selectCoolingUnitLabel: 'कूलिंग यूनिट चुनें',
+      coolingUnitLabel: 'कूलिंग यूनिट',
       noUnitWarning: 'कृपया एक कूलिंग यूनिट चुनें',
       noCratesWarning: 'चुने गए कूलिंग उपयोगकर्ता के पास इस कूलिंग यूनिट में कोई क्रेट्स नहीं हैं',
       operationError: 'कुछ गलत हो गया। कृपया बाद में पुनः प्रयास करें।',
@@ -258,6 +265,18 @@ export default {
           creditCard: 'क्रेडिट कार्ड',
         },
         paid: 'भुगतान किया गया',
+      },
+      CheckIn: {
+        emptyState: 'अभी तक कोई बॉक्स नहीं जोड़ा गया',
+        addCrates: 'क्रेट जोड़ें',
+        checkInWithCode: 'कोड के साथ चेक इन करें',
+        estimatedCost: 'अनुमानित लागत',
+        SelectCropType: {
+          fruits: 'फल',
+          vegetables: 'सब्जियां',
+          rootVegetables: 'मूल सब्जियां',
+          other: 'अन्य वस्तुएं',
+        },
       },
     },
     CoolingUnitsPlanner: {

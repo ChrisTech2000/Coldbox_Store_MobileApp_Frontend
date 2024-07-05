@@ -21,13 +21,17 @@ import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { CoolingUnit } from 'types/global';
 
 type ManagementMode = 'check-in' | 'check-out';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMainTabStack'>) {
+export function OperatorActions({
+  navigation,
+  coolingUnit,
+}: MainTabStackRouteProps<'RootMainTabStack'> & { coolingUnit: CoolingUnit | null }) {
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
 
@@ -91,10 +95,15 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
     });
   }, []);
 
-  // TODO: fix
-  const navigateToCheckIn = (selectedUser?: GetFarmerResponse) => {
-    console.log(selectedUser);
-  };
+  const navigateToCheckIn = useCallback(
+    (selectedUser?: GetFarmerResponse) => {
+      navigation.navigate('CheckInStack', {
+        screen: 'CheckIn',
+        params: { user: selectedUser, coolingUnit: coolingUnit ?? undefined },
+      });
+    },
+    [selectedUser, coolingUnit]
+  );
 
   const navigate = managementMode === 'check-in' ? navigateToCheckIn : navigateToCheckOut;
 
