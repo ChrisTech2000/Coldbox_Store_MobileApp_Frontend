@@ -19,7 +19,7 @@ export default function LocationNameModule() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent"
-            label={t('Dashboard.Management.fields.name')}
+            label={t('Dashboard.Management.Location.fields.name')}
             mode="outlined"
             dense
             value={value}

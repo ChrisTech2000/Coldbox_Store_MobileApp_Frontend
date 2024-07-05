@@ -80,6 +80,13 @@ export type AddLocationResponse = {
   zipCode: string;
 };
 
+export type GetOperatorsResponse = {
+  id: number;
+  user: User;
+  company: Company;
+  coolingUnits: number[];
+};
+
 export type GetCoolingUnitCropsResponse = Array<{
   id: number;
   fullCrop: Crop;

@@ -148,7 +148,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       <Portal>
         <Modal visible={isModalVisible} onDismiss={toggleModalVisibility}>
           <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-48 max-h-48 p-8 self-center space-y-6">
-            <Text variant="TitleSmall">{t('Dashboard.Management.modal.message')}</Text>
+            <Text variant="TitleSmall">{t('Dashboard.Management.Location.modal.message')}</Text>
             <View tw="flex-row self-end space-x-2">
               <Button mode="text" onPress={toggleModalVisibility}>
                 {t('actions.cancel')}

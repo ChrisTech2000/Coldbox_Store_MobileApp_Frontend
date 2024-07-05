@@ -22,7 +22,7 @@ export default function CoordinatesForm() {
           control={control}
           render={({ field: { value, onChange, onBlur } }) => (
             <TextInput
-              label={t('Dashboard.Management.fields.latitude')}
+              label={t('Dashboard.Management.Location.fields.latitude')}
               mode="flat"
               dense
               value={value.toString()}
@@ -40,7 +40,7 @@ export default function CoordinatesForm() {
           control={control}
           render={({ field: { value, onChange, onBlur } }) => (
             <TextInput
-              label={t('Dashboard.Management.fields.longitude')}
+              label={t('Dashboard.Management.Location.fields.longitude')}
               mode="flat"
               dense
               value={value.toString()}

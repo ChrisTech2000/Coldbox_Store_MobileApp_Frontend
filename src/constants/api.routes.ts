@@ -17,6 +17,8 @@ export enum EStorageEndpoints {
   GET_FARMER_CRATES = '/storage/v1/crates/',
   GET_LOCATION = '/storage/v1/locations/:locationId/',
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
+  GET_OPERATORS = 'user/v1/operators',
+  GET_INVITED_OPERATORS = 'user/v1/operator-invite',
 }
 
 export enum EOperationEndpoints {

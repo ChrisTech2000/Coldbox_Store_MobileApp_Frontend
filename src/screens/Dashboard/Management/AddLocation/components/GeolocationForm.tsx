@@ -35,7 +35,7 @@ export default function GeoLocationForm() {
 
   return (
     <Button mode="text" onPress={getCoordinates} tw="self-center mb-3.5 mt-1" disabled={isLoading}>
-      {t('Dashboard.Management.actions.currentLocation')}
+      {t('Dashboard.Management.Location.actions.currentLocation')}
     </Button>
   );
 }

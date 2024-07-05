@@ -8,6 +8,7 @@ export type User = {
   lastLogin: string;
   language?: string;
   role?: ERoles;
+  username?: string; // we get this prop when we fetch the operators
 };
 
 export type Farmer = {
