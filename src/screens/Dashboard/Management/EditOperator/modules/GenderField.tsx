@@ -37,7 +37,7 @@ export default function GenderField() {
           isModalOpen={isModalVisible}
           onClick={toggleModalVisibility}
           content={{
-            header: 'Gender',
+            header: t('Dashboard.Management.Operators.text.gender'),
             options: (
               <RadioButton.Group
                 value={internalSelection}

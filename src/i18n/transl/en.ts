@@ -352,11 +352,21 @@ const en = {
         },
       },
       Operators: {
+        banner:
+          'After adding the user, they will receive an sms with an invitation link, where they can activate their account.',
         text: {
           gender: 'Gender',
           ma: 'Male',
           fe: 'Female',
           ot: 'Other',
+        },
+        fields: {
+          selectCoolingUnit: 'Select a cooling unit',
+          coolingUnits: 'Cooling unit(s)',
+        },
+        actions: {
+          invite: 'Invite',
+          save: 'Save changes',
         },
       },
     },

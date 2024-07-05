@@ -74,7 +74,9 @@ function AddOperator() {
     const selectedOptions = options
       .filter((option) => selectedCoolingUnits.includes(option.id))
       .map((option) => option.name);
-    return selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Select a cooling unit';
+    return selectedOptions.length > 0
+      ? selectedOptions.join(', ')
+      : t('Dashboard.Management.Operators.fields.selectCoolingUnit');
   }, [options, selectedCoolingUnits]);
 
   async function onSubmit(values: FormValues) {
@@ -102,8 +104,7 @@ function AddOperator() {
             elevation={0}
             style={{ backgroundColor: paperTheme.colors.elevation.level3 }}
           >
-            After adding the user, they will receive an sms with an invitation link, where they can
-            activate their account.
+            {t('Dashboard.Management.Operators.banner')}
           </Banner>
         </SkiaShadow>
 
@@ -112,7 +113,7 @@ function AddOperator() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="w-full bg-transparent my-7"
-              label="Phone number"
+              label={t('Auth.ForgotPassword.phoneInputLabel')}
               mode="outlined"
               dense
               value={value}
@@ -192,7 +193,11 @@ function AddOperator() {
         icon={isSubmitting ? undefined : 'account-arrow-down-outline'}
         onPress={handleSubmit(onSubmit)}
       >
-        {isSubmitting ? <ActivityIndicator animating size="small" color="white" /> : 'Invite'}
+        {isSubmitting ? (
+          <ActivityIndicator animating size="small" color="white" />
+        ) : (
+          t('Dashboard.Management.Operators.actions.invite')
+        )}
       </Button>
     </KeyboardAwareScrollView>
   );

@@ -88,7 +88,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
           <View tw="mx-4 space-y-6">
             <TextInput
               tw="w-full bg-transparent"
-              label="First Name"
+              label={t('Auth.SignUp.commonForm.firstNameLabel')}
               mode="outlined"
               value={contextualOperator?.user.firstName}
               disabled
@@ -96,7 +96,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
             />
             <TextInput
               tw="w-full bg-transparent"
-              label="Last Name"
+              label={t('Auth.SignUp.commonForm.lastNameLabel')}
               mode="outlined"
               value={contextualOperator?.user.lastName}
               disabled
@@ -107,7 +107,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
 
             <TextInput
               tw="w-full bg-transparent"
-              label="Phone Number"
+              label={t('Auth.ForgotPassword.phoneInputLabel')}
               mode="outlined"
               value={contextualOperator?.user.phone}
               disabled
@@ -135,7 +135,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
                 icon={isSubmitting ? undefined : 'check-circle-outline'}
                 uppercase
               >
-                {isSubmitting ? <ButtonLoader /> : 'Save Changes'}
+                {isSubmitting ? <ButtonLoader /> : t('Dashboard.Management.Operators.actions.save')}
               </Button>
             </View>
           </View>

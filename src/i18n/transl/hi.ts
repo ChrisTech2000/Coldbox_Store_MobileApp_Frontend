@@ -356,11 +356,21 @@ export default {
         },
       },
       Operators: {
+        banner:
+          'आपको एक परिचालक के रूप में Coldtivate ऐप में शामिल होने के लिए आमंत्रित किया गया था। पंजीकरण पूरा करने के लिए, यहां जाएं:',
         text: {
           gender: 'लिंग',
           ma: 'पुरुष',
           fe: 'महिला',
           ot: 'अन्य',
+        },
+        fields: {
+          selectCoolingUnit: 'एक शीतलन इकाई का चयन करें',
+          coolingUnits: 'शीतलन इकाई (ओं)',
+        },
+        actions: {
+          invite: 'आमंत्रित करना',
+          save: 'सेव चंगेस',
         },
       },
     },

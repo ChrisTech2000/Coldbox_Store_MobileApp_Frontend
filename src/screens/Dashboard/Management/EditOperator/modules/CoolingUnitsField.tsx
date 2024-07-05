@@ -34,7 +34,9 @@ export default function CoolingUnitsField(props: Props) {
     const selectedOptions = coolingUnits
       .filter((option) => selectedCoolingUnits.includes(option.id))
       .map((option) => option.name);
-    return selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Cooling unit(s)';
+    return selectedOptions.length > 0
+      ? selectedOptions.join(', ')
+      : t('Dashboard.Management.Operators.fields.coolingUnits');
   }, [coolingUnits, selectedCoolingUnits]);
 
   return (
@@ -42,13 +44,13 @@ export default function CoolingUnitsField(props: Props) {
       <View tw="px-5">
         <Select
           variant="md"
-          label="Cooling Units"
+          label={t('Dashboard.Management.Operators.fields.coolingUnits')}
           currentValue={selectLabel}
           minifyLabel
           isModalOpen={isModalVisible}
           onClick={toggleModalVisibility}
           content={{
-            header: 'Cooling unit(s)',
+            header: t('Dashboard.Management.Operators.fields.coolingUnits'),
             options: (
               <React.Fragment>
                 {coolingUnits.map((option, optionIdx) => (
