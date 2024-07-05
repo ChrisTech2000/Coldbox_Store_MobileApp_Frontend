@@ -53,6 +53,8 @@
 #import "react/renderer/components/safeareacontext/States.h"
 #import "reactnativemmkv/reactnativemmkv.h"
 #import "reactnativemmkvJSI.h"
+#import "RNCGeolocationSpec/RNCGeolocationSpec.h"
+#import "RNCGeolocationSpecJSI.h"
 #import "rnclipboard/rnclipboard.h"
 #import "rnclipboardJSI.h"
 #import "rngesturehandler_codegen/rngesturehandler_codegen.h"
