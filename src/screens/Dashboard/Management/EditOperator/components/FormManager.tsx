@@ -14,13 +14,16 @@ const DEFAULT_VALUES = {
   coolingUnits: [],
 } satisfies FormValues;
 
+type CallbackProps = {
+  submitHandler: (evt?: React.BaseSyntheticEvent) => Promise<void>;
+  isSubmitting: boolean;
+  hasChanges: boolean;
+};
+
 type FormManagerProps = {
   initialValues?: FormValues;
   onSubmit: (values: FormValues) => Promise<void>;
-  children: (
-    submitHandler: (e?: React.BaseSyntheticEvent) => Promise<void>,
-    isSubmitting: boolean
-  ) => React.ReactNode;
+  children: (props: CallbackProps) => React.ReactNode;
 };
 
 export default function FormManager(props: FormManagerProps) {
@@ -43,11 +46,13 @@ export default function FormManager(props: FormManagerProps) {
     reValidateMode: 'onSubmit',
   });
 
-  return (
-    <FormProvider {...form}>
-      {props.children(form.handleSubmit(props.onSubmit), form.formState.isSubmitting)}
-    </FormProvider>
-  );
+  const callbackProps = {
+    submitHandler: form.handleSubmit(props.onSubmit),
+    isSubmitting: form.formState.isSubmitting,
+    hasChanges: JSON.stringify(form.formState.defaultValues) !== JSON.stringify(form.getValues()),
+  } satisfies CallbackProps;
+
+  return <FormProvider {...form}>{props.children(callbackProps)}</FormProvider>;
 }
 
 function useFormManager() {

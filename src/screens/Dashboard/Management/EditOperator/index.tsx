@@ -22,7 +22,8 @@ import CoolingUnitsField from './modules/CoolingUnitsField';
 const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
 
 function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
-  const { userId } = props.route.params;
+  const { navigation, route } = props;
+  const userId = route.params.userId;
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const company = useManagementStore(useShallow((store) => store.company));
@@ -75,7 +76,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
 
   if (!formInitialValues.current) {
     const values = {} as FormValues;
-    values.gender = contextualOperator?.user.gender || EApiGender.OTHER;
+    values.gender = contextualOperator?.user.gender ?? EApiGender.OTHER;
     values.coolingUnits = contextualOperator?.coolingUnits ?? [];
     formInitialValues.current = values;
   }
@@ -83,7 +84,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   return (
     <ScrollView contentContainerStyle="h-full pt-5 space-y-6" showsVerticalScrollIndicator={false}>
       <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
-        {(handler, isSubmitting) => (
+        {({ submitHandler, isSubmitting, hasChanges }) => (
           <View tw="mx-4 space-y-6">
             <TextInput
               tw="w-full bg-transparent"
@@ -119,8 +120,10 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
               <Button
                 tw="w-full"
                 mode="contained"
+                onPress={() => navigation.goBack()}
                 icon="close-circle-outline"
                 buttonColor={paperTheme.colors.error}
+                disabled={!hasChanges}
                 uppercase
               >
                 {t('actions.cancel')}
@@ -128,7 +131,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
               <Button
                 tw="w-full"
                 mode="contained"
-                onPress={handler}
+                onPress={submitHandler}
                 icon={isSubmitting ? undefined : 'check-circle-outline'}
                 uppercase
               >
