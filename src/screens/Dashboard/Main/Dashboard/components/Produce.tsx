@@ -4,6 +4,7 @@ import { Image, View } from 'react-native';
 import ColdRoom from '#assets/icons/coldroom.svg';
 import MineCart from '#assets/icons/mine-cart.svg';
 import { API_BASE_URL } from '#constants/environment';
+import { useTranslationUtils } from '#i18n/utils';
 import { DashboardProduce, EPricingType } from '#types/global';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
@@ -15,8 +16,10 @@ type ProduceProps = {
 };
 
 export function Produce({ currency, produce, onNavigate }: ProduceProps) {
+  const { t } = useTranslationUtils();
+
   const generateDaysString = useCallback((days: number) => {
-    return `${days} Day${days > 1 ? 's' : ''}`;
+    return `${days} ${days > 1 ? t('Dashboard.CrateManagement.CheckOut.days') : t('Dashboard.CrateManagement.CheckOut.day')}`;
   }, []);
 
   const getPricing = useCallback((produce: DashboardProduce, currency: string) => {

@@ -53,6 +53,8 @@ const en = {
       MarketPrice: 'Market Price',
       CoolingUnits: 'Cooling units',
       Analytics: 'Analytics',
+      CheckIn: 'Check In',
+      CheckOut: 'Check Out',
     },
     dashboard: {
       AccountDetails: 'Account details',
@@ -225,6 +227,36 @@ const en = {
     },
   },
   Dashboard: {
+    CrateManagement: {
+      userModalTitle: 'Select a cooling user',
+      coolingUserLabel: 'Cooling user',
+      coolingUnitLabel: 'Select a cooling unit',
+      noUnitWarning: 'Please select a cooling unit',
+      noCratesWarning: "The selected Cooling user doesn't have any crates in this cooling unit",
+      operationError: 'Something went wrong. Please try again later.',
+      CheckOut: {
+        selectCrateMessage: 'Select the crates you want to remove',
+        selectAll: 'Select All',
+        checkIn: 'Check-in',
+        days: 'days',
+        day: 'day',
+        ttp: 'TTP',
+        numberOfCrates: 'Number of crates',
+        totalWeight: 'Total Weight',
+        priceType: 'Price type',
+        crate: 'crate',
+        pricePerProduct: 'Price per product:',
+        calculatedPrice: 'Calculated price',
+        discount: 'Discount',
+        priceWithDiscount: 'Total price',
+        paymentType: {
+          label: 'Payment type',
+          cash: 'Cash',
+          creditCard: 'Credit Card',
+        },
+        paid: 'Paid',
+      },
+    },
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {
         label: 'Cooling unit: {{name}}',
@@ -253,6 +285,7 @@ const en = {
       },
     },
     ProduceDetails: {
+      kilogram: 'kg',
       coolingUser: 'Cooling User',
       contact: 'Contact',
       contactCopied: 'Copied!',

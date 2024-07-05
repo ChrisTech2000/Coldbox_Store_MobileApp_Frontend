@@ -13,8 +13,13 @@ export enum EStorageEndpoints {
   GET_COMPANIES = 'user/v1/companies/',
   GET_COOLING_UNITS = 'storage/v1/cooling-units/',
   GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
+  GET_FARMER_CRATES = '/storage/v1/crates/',
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
   GET_LOCATION = '/storage/v1/locations/:locationId/',
   GET_OPERATORS = 'user/v1/operators',
   GET_INVITED_OPERATORS = 'user/v1/operator-invite',
+}
+
+export enum EOperationEndpoints {
+  CHECK_OUT = 'operation/checkouts/',
 }

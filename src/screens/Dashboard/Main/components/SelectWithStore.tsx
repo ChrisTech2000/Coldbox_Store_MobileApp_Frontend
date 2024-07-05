@@ -23,10 +23,13 @@ export const createSelectStore = <T,>() =>
   }));
 
 type SelectItemProps<T> = {
+  autoSelect?: boolean;
   datums: Array<T>;
+  divider?: boolean;
   isModalVisible: boolean;
   label: string;
   modalHeader: string;
+  occupyFullWidth?: boolean;
   useSelectStore: ReturnType<typeof createSelectStore<T>>;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
   itemName: (item: T) => string;
@@ -40,12 +43,10 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
     rest.setIsModalVisible
   );
 
-  const [internalSelection, setInternalSelection] = useState<T | null>(
-    store.selectedItem ?? rest.datums[0]
-  );
+  const [internalSelection, setInternalSelection] = useState<T | null>(store.selectedItem);
 
   useEffect(() => {
-    if (!store.selectedItem && rest.datums.length > 0) {
+    if (!store.selectedItem && rest.autoSelect && rest.datums.length > 0) {
       const firstDatum = rest.datums[0];
       store.onSelect(firstDatum);
       setInternalSelection(firstDatum);
@@ -66,7 +67,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
   const { t } = useTranslationUtils();
 
   return (
-    <View tw="w-full">
+    <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
       <View tw="px-2">
         <Select
           variant="md"
@@ -127,7 +128,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
           }}
         />
       </View>
-      <Divider tw="bg-gray-600 my-1" />
+      {rest.divider && <Divider tw="bg-gray-600 my-1" />}
     </View>
   );
 }

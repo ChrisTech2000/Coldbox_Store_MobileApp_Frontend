@@ -5,7 +5,7 @@ import { useShallow } from 'zustand/react/shallow';
 import ColdtivateService from '#services/ColdtivateService';
 import type { GetFarmerParams } from '#types/api.params';
 import type { GetFarmerResponse } from '#types/api.responses';
-import { ERoles, type Company } from '#types/global';
+import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
 import { useAuthStore } from './auth';
 
@@ -13,16 +13,24 @@ type State = {
   farmerId: number | null;
   farmerCompanies: Company[] | null;
   farmerUnitsIds: number[] | null;
+
+  coolingUnits: CoolingUnit[] | null;
+
+  refreshDashboard: (() => void) | null;
 };
 
 type Actions = {
   fetchGlobalInformation: (params: GetFarmerParams) => Promise<void>;
+  setCoolingUnits: (units: CoolingUnit[]) => void;
+  setRefreshDashboardFn: (fn: () => void) => void;
 };
 
 export const useDashboardStore = create<State & Actions>((set) => ({
   farmerId: null,
   farmerCompanies: null,
   farmerUnitsIds: null,
+  coolingUnits: null,
+  refreshDashboard: null,
 
   fetchGlobalInformation: async (params: GetFarmerParams) => {
     try {
@@ -49,6 +57,9 @@ export const useDashboardStore = create<State & Actions>((set) => ({
       set({ farmerId: null, farmerCompanies: null });
     }
   },
+
+  setCoolingUnits: (coolingUnits) => set({ coolingUnits }),
+  setRefreshDashboardFn: (fn) => set({ refreshDashboard: fn }),
 }));
 
 export const useGlobalInformation = (isAuthenticated: boolean) => {
