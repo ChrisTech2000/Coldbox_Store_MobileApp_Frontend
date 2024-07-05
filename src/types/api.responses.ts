@@ -73,3 +73,10 @@ export type AddLocationResponse = {
   streetNumber: string;
   zipCode: string;
 };
+
+export type GetOperatorsResponse = {
+  id: number;
+  user: User;
+  company: Company;
+  coolingUnits: number[];
+};
