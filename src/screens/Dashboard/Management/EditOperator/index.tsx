@@ -4,10 +4,12 @@ import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
+import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useManagementStore } from '#stores/management';
+import { useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
@@ -17,11 +19,14 @@ import FormManager, { type FormValues } from './components/FormManager';
 import GenderField from './modules/GenderField';
 import CoolingUnitsField from './modules/CoolingUnitsField';
 
+const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
+
 function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   const { userId } = props.route.params;
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const company = useManagementStore(useShallow((store) => store.company));
+  const { t } = useTranslationUtils();
 
   const { data: operator, isLoading: isLoadingOperator } = useApiCall(
     'getOperatorByUserId',
@@ -56,6 +61,10 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
     [coolingUnits]
   );
 
+  async function onSubmit(values: FormValues) {
+    console.log(values);
+  }
+
   if (isLoadingOperator || isLoadingCoolingUnits) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -73,8 +82,8 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
 
   return (
     <ScrollView contentContainerStyle="h-full pt-5 space-y-6" showsVerticalScrollIndicator={false}>
-      <FormManager onSubmit={async () => undefined} initialValues={formInitialValues.current}>
-        {() => (
+      <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
+        {(handler, isSubmitting) => (
           <View tw="mx-4 space-y-6">
             <TextInput
               tw="w-full bg-transparent"
@@ -105,6 +114,27 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
             />
 
             <CoolingUnitsField coolingUnits={coolingUnitsOptions} />
+
+            <View tw="space-y-5">
+              <Button
+                tw="w-full"
+                mode="contained"
+                icon="close-circle-outline"
+                buttonColor={paperTheme.colors.error}
+                uppercase
+              >
+                {t('actions.cancel')}
+              </Button>
+              <Button
+                tw="w-full"
+                mode="contained"
+                onPress={handler}
+                icon={isSubmitting ? undefined : 'check-circle-outline'}
+                uppercase
+              >
+                {isSubmitting ? <ButtonLoader /> : 'Save Changes'}
+              </Button>
+            </View>
           </View>
         )}
       </FormManager>
