@@ -1,6 +1,7 @@
 import React, { useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
+import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
@@ -8,9 +9,9 @@ import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { useManagementStore } from '#stores/management';
 import { useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
+import { useManagementStore } from '#stores/management';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import { EApiGender } from '#types/global';
@@ -25,8 +26,10 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   const { navigation, route } = props;
   const userId = route.params.userId;
 
-  const formInitialValues = useRef<FormValues | undefined>(undefined);
+  const { mutate } = useSWRConfig();
   const company = useManagementStore(useShallow((store) => store.company));
+
+  const formInitialValues = useRef<FormValues | undefined>(undefined);
   const { t } = useTranslationUtils();
 
   const { data: operator, isLoading: isLoadingOperator } = useApiCall(
@@ -63,7 +66,21 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   );
 
   async function onSubmit(values: FormValues) {
-    console.log(values);
+    try {
+      await ColdtivateService.updateUser({
+        gender: values.gender,
+        coolingUnits: values.coolingUnits,
+        userId,
+      });
+
+      await Promise.all([
+        mutate(getQueryKey('getOperatorByUserId', userId)),
+        mutate(getQueryKey('getOperators', company?.id)),
+      ]);
+      navigation.goBack();
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   if (isLoadingOperator || isLoadingCoolingUnits) {
@@ -84,7 +101,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   return (
     <ScrollView contentContainerStyle="h-full pt-5 space-y-6" showsVerticalScrollIndicator={false}>
       <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
-        {({ submitHandler, isSubmitting, hasChanges }) => (
+        {({ submitHandler, isSubmitting }) => (
           <View tw="mx-4 space-y-6">
             <TextInput
               tw="w-full bg-transparent"
@@ -123,7 +140,6 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
                 onPress={() => navigation.goBack()}
                 icon="close-circle-outline"
                 buttonColor={paperTheme.colors.error}
-                disabled={!hasChanges}
                 uppercase
               >
                 {t('actions.cancel')}

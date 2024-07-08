@@ -12,6 +12,7 @@ import type {
   GetFarmerParams,
   GetOperatorFarmersParams,
   GetLocationParams,
+  UpdateUserParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -20,11 +21,12 @@ import type {
   GetLocationResponse,
   GetOperatorsResponse,
 } from '#types/api.responses';
-import type { Company, CoolingUnit, Crate, DashboardProduce } from '#types/global';
+import type { Company, CoolingUnit, Crate, DashboardProduce, User } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 import { subs } from './utils';
+import { WithRequired } from 'types/miscellaneous';
 
 class ColdtivateService extends HttpClient {
   constructor(options?: HttpClientOptions) {
@@ -216,7 +218,7 @@ class ColdtivateService extends HttpClient {
     try {
       const params = { company: companyId };
       const { data } = await this.delete<Array<GetOperatorsResponse>>(
-        EStorageEndpoints.GET_OPERATORS,
+        EUserEndpoints.GET_OPERATORS,
         { params }
       );
       return data;
@@ -232,7 +234,7 @@ class ColdtivateService extends HttpClient {
     try {
       const params = { company: companyId };
       const { data } = await this.delete<Array<GetOperatorsResponse>>(
-        EStorageEndpoints.GET_INVITED_OPERATORS,
+        EUserEndpoints.GET_INVITED_OPERATORS,
         { params }
       );
       return data;
@@ -248,11 +250,28 @@ class ColdtivateService extends HttpClient {
     try {
       const params = { user_id: userId };
       const { data } = await this.delete<Array<GetOperatorsResponse>>(
-        EStorageEndpoints.GET_OPERATORS,
+        EUserEndpoints.GET_OPERATORS,
         {
           params,
         }
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public updateUser = async (params: WithRequired<UpdateUserParams, 'userId'>): Promise<User> => {
+    try {
+      const { userId, ...rest } = params;
+      rest.lastLogin = new Date().toISOString();
+      rest.coolingUnits = params.coolingUnits ?? null;
+
+      const url = subs(EUserEndpoints.UPDATE_USER, { userId });
+      const { data } = await this.put<User>(url, rest);
       return data;
     } catch (error) {
       console.log(error);

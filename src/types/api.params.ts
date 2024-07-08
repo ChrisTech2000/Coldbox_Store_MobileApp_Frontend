@@ -97,3 +97,8 @@ export interface AddLocationParams extends JsonObject {
 export interface EditLocationParams extends AddLocationParams {
   locationId: number;
 }
+
+export interface UpdateUserParams extends JsonObject, Omit<Partial<User>, 'id'> {
+  coolingUnits?: Array<number> | null;
+  userId: number;
+}
