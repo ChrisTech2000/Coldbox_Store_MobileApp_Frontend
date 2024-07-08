@@ -17,7 +17,6 @@ const DEFAULT_VALUES = {
 type CallbackProps = {
   submitHandler: (evt?: React.BaseSyntheticEvent) => Promise<void>;
   isSubmitting: boolean;
-  hasChanges: boolean;
 };
 
 type FormManagerProps = {
@@ -49,7 +48,6 @@ export default function FormManager(props: FormManagerProps) {
   const callbackProps = {
     submitHandler: form.handleSubmit(props.onSubmit),
     isSubmitting: form.formState.isSubmitting,
-    hasChanges: JSON.stringify(form.formState.defaultValues) !== JSON.stringify(form.getValues()),
   } satisfies CallbackProps;
 
   return <FormProvider {...form}>{props.children(callbackProps)}</FormProvider>;
