@@ -1,6 +1,11 @@
 import type { AxiosError } from 'axios';
 
-import { EOperationEndpoints, EStorageEndpoints, EUserEndpoints } from '#constants/api.routes';
+import {
+  ECompanyEndpoints,
+  EOperationEndpoints,
+  EStorageEndpoints,
+  EUserEndpoints,
+} from '#constants/api.routes';
 import type {
   CheckOutParams,
   AddLocationParams,
@@ -17,16 +22,17 @@ import type {
 import type {
   AddLocationResponse,
   CheckOutResponse,
+  GetAllCropsResponse,
   GetFarmerResponse,
   GetLocationResponse,
   GetOperatorsResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, User } from '#types/global';
+import type { WithRequired } from '#types/miscellaneous';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 import { subs } from './utils';
-import { WithRequired } from 'types/miscellaneous';
 
 class ColdtivateService extends HttpClient {
   constructor(options?: HttpClientOptions) {
@@ -63,7 +69,19 @@ class ColdtivateService extends HttpClient {
 
   public getCompanies = async (): Promise<Company[] | undefined> => {
     try {
-      const { data } = await this.get<Company[]>(EStorageEndpoints.GET_COMPANIES, {});
+      const { data } = await this.get<Company[]>(ECompanyEndpoints.GET_COMPANIES, {});
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCompanyById = async (companyId: number): Promise<Company> => {
+    try {
+      const url = subs(ECompanyEndpoints.GET_COMPANY, { companyId });
+      const { data } = await this.get<Company>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -272,6 +290,18 @@ class ColdtivateService extends HttpClient {
 
       const url = subs(EUserEndpoints.UPDATE_USER, { userId });
       const { data } = await this.put<User>(url, rest);
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getAllCrops = async (): Promise<Array<GetAllCropsResponse>> => {
+    try {
+      const { data } = await this.get<Array<GetAllCropsResponse>>(EStorageEndpoints.GET_ALL_CROPS);
       return data;
     } catch (error) {
       console.log(error);

@@ -80,3 +80,22 @@ export type GetOperatorsResponse = {
   company: Company;
   coolingUnits: number[];
 };
+
+export type GetAllCropsResponse = {
+  id: number;
+  image: string;
+  name: string;
+  optimalStorageTemperature: string;
+  approximateShelfLife: string;
+  harvestedToday?: number;
+  harvestedYesterday?: number;
+  harvestedDayBeforeYesterday?: number;
+  harvestedBefore?: number;
+  sizeSelection1?: string;
+  sizeSelection2?: string;
+  sizeSelection3?: string;
+  digitalTwinIdentifier?: string;
+  dependentConstant?: number;
+  activationEnergyConstant?: number;
+  cropType: number;
+};

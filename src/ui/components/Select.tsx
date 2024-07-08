@@ -11,6 +11,7 @@ type WrapperProps = {
     options: React.ReactElement;
     header?: string;
     footer?: React.ReactElement;
+    headerComponent?: React.ReactElement;
   };
   currentValue?: string;
   error?: boolean;
@@ -19,6 +20,7 @@ type WrapperProps = {
   minifyLabel?: boolean;
   variant?: 'sm' | 'md' | 'lg';
   onClick: () => void;
+  useScrollView?: boolean;
 };
 
 export function Select({
@@ -30,8 +32,9 @@ export function Select({
   minifyLabel,
   variant = 'sm',
   onClick,
+  useScrollView = true,
 }: WrapperProps) {
-  const { options, header, footer } = content;
+  const { options, header, footer, headerComponent } = content;
   const colors = useTailwindColors();
 
   const arrowColor = useMemo(() => {
@@ -55,7 +58,8 @@ export function Select({
                 <Divider />
               </>
             )}
-            <ScrollView tw="py-0.5">{options}</ScrollView>
+            {headerComponent ? headerComponent : null}
+            {useScrollView ? <ScrollView tw="py-0.5">{options}</ScrollView> : options}
             {footer && (
               <>
                 <Divider />
