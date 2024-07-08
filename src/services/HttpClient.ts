@@ -7,7 +7,7 @@ import axios, {
 
 import { type Tokens, useAuthStore } from '#stores/auth';
 import { API_BASE_URL } from '#constants/environment';
-import { JsonObject, serialize, deserialize } from './utils';
+import { type JsonObject, serialize, deserialize, type Json } from './utils';
 
 type Options = {
   baseURL: string;
@@ -16,6 +16,8 @@ type Options = {
   onUnauthorized?: () => void;
   onForbidden?: () => void;
 };
+
+type RequestBody = JsonObject | FormData;
 
 export type HttpClientOptions = Pick<
   Options,
@@ -89,10 +91,11 @@ export default class HttpClient {
 
   protected post<T>(
     url: string,
-    data: JsonObject,
+    data: RequestBody,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
-    return this.axios.post<T>(url, serialize(data), config);
+    const serialized = this._requestBodySerialization(data);
+    return this.axios.post<T>(url, serialized, config);
   }
 
   protected get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
@@ -101,10 +104,11 @@ export default class HttpClient {
 
   protected put<T>(
     url: string,
-    data: JsonObject,
+    data: RequestBody,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
-    return this.axios.put<T>(url, serialize(data), config);
+    const serialized = this._requestBodySerialization(data);
+    return this.axios.put<T>(url, serialized, config);
   }
 
   protected delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
@@ -113,10 +117,11 @@ export default class HttpClient {
 
   protected patch<T>(
     url: string,
-    data: JsonObject,
+    data: RequestBody,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
-    return this.axios.patch<T>(url, serialize(data), config);
+    const serialized = this._requestBodySerialization(data);
+    return this.axios.patch<T>(url, serialized, config);
   }
 
   private _buildHeaders = (prevHeaders?: AxiosRequestHeaders) => {
@@ -127,4 +132,8 @@ export default class HttpClient {
     }
     return headers;
   };
+
+  private _requestBodySerialization(data: RequestBody): FormData | Json {
+    return data instanceof FormData ? data : serialize(data);
+  }
 }

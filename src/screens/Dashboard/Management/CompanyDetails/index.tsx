@@ -13,6 +13,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 
 import FormManager, { type FormValues } from './components/FormManager';
+import LogoField from './modules/LogoField';
 import CountryField from './modules/CountryField';
 import CommodityField from './modules/CommodityField';
 import CurrencyField from './modules/CurrencyField';
@@ -23,15 +24,14 @@ function CompanyDetails() {
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const company = useManagementStore(useShallow((store) => store.company));
 
-  const { data: companyDetails, isLoading: isLoadingCompanyDetails } = useApiCall(
-    'getCompanyById',
-    ColdtivateService.getCompanyById,
-    company?.id as number,
-    {
-      skip: !company?.id,
-      defaultData: undefined,
-    }
-  );
+  const {
+    data: companyDetails,
+    isLoading: isLoadingCompanyDetails,
+    refetch,
+  } = useApiCall('getCompanyById', ColdtivateService.getCompanyById, company?.id as number, {
+    skip: !company?.id,
+    defaultData: undefined,
+  });
 
   const { data: allCrops, isLoading: isLoadingAllCrops } = useApiCall(
     'getAllCrops',
@@ -45,6 +45,27 @@ function CompanyDetails() {
 
   const subjects = useMemo(() => derivedSubjects(companyDetails), [companyDetails]);
 
+  async function onSubmit(values: FormValues) {
+    if (!company?.id) return; // safe guard
+    try {
+      await ColdtivateService.updateCompany({
+        name: subjects.companyName,
+        country: values.country,
+        crop: values.commodities,
+        currency: values.currency,
+        models: subjects.models,
+        accountName: subjects.accountName ?? '',
+        accountNumber: subjects.accountNumber ?? '',
+        bankName: subjects.bankName ?? '',
+        companyId: company.id,
+        logo: values.logo.uri !== subjects.companyLogo ? values.logo : null,
+      });
+      await refetch();
+    } catch (exception) {
+      console.error(exception);
+    }
+  }
+
   if (isLoadingCompanyDetails || isLoadingAllCrops) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -54,18 +75,16 @@ function CompanyDetails() {
   }
 
   if (!formInitialValues.current) {
-    const values = {} as FormValues;
+    const values = { logo: {} } as FormValues;
     values.country = subjects.countryCode ?? '';
     values.currency = subjects.currencyCode ?? '';
     values.commodities = subjects.commodities ?? [];
+    values.logo.uri = subjects.companyLogo ?? '';
     formInitialValues.current = values;
   }
 
   return (
-    <FormManager
-      onSubmit={async (values) => console.log(values)}
-      initialValues={formInitialValues.current}
-    >
+    <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
       {({ submitHandler, isSubmitting }) => (
         <KeyboardAwareScrollView
           tw="h-full pt-5 mx-4"
@@ -80,6 +99,7 @@ function CompanyDetails() {
             disabled
             dense
           />
+          <LogoField />
           <CountryField />
           <CommodityField crops={allCrops} />
           <CurrencyField />

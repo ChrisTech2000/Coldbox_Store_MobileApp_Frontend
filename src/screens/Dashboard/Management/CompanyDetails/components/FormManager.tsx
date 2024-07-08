@@ -7,6 +7,11 @@ export type FormValues = {
   country: string;
   commodities: Array<number>;
   currency: string;
+  logo: {
+    uri: string;
+    name?: string;
+    type?: string;
+  };
 };
 
 type CallbackProps = {
@@ -32,6 +37,11 @@ export default function FormManager(props: FormManagerProps) {
         country: z.string(),
         commodities: z.array(z.number()),
         currency: z.string(),
+        logo: z.object({
+          uri: z.string(),
+          name: z.string().optional(),
+          type: z.string().optional(),
+        }),
       })
     ),
     reValidateMode: 'onSubmit',

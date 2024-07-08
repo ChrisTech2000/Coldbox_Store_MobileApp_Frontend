@@ -9,8 +9,10 @@ export function derivedSubjects(company: Company) {
   const models = new Set<Models>(['digitalTwin', 'ml4Market', 'ml4Quality', 'ml4Farmers']);
 
   for (const model of models) {
-    if (model in company) continue;
-    models.delete(model);
+    if (model in company) {
+      const value = company[model];
+      if (!value) models.delete(model);
+    }
   }
 
   const bankNameValue: string | undefined =
@@ -24,13 +26,38 @@ export function derivedSubjects(company: Company) {
           (company.bankDetails.bankName as string)
       : undefined;
 
+  const accountNameValue: string | undefined =
+    // eslint-disable-next-line
+    // @ts-ignore
+    typeof company.bankDetails !== 'undefined' && 'accountName' in company.bankDetails
+      ? company.bankDetails.accountName === 'undefined'
+        ? undefined
+        : // eslint-disable-next-line
+          // @ts-ignore
+          (company.bankDetails.accountName as string)
+      : undefined;
+
+  const accountNumberValue: string | undefined =
+    // eslint-disable-next-line
+    // @ts-ignore
+    typeof company.bankDetails !== 'undefined' && 'accountNumber' in company.bankDetails
+      ? company.bankDetails.accountNumber === 'undefined'
+        ? undefined
+        : // eslint-disable-next-line
+          // @ts-ignore
+          (company.bankDetails.accountNumber as string)
+      : undefined;
+
   return {
     models: Array.from(models),
     countryCode: company.country,
     currencyCode: company.currency,
-    bankName: bankNameValue,
-    companyLogo: company.logo,
+    companyLogo: company.logo as unknown as string,
     commodities: company.crop,
+    bankName: bankNameValue,
+    accountName: accountNameValue,
+    accountNumber: accountNumberValue,
+    companyName: company.name,
   };
 }
 

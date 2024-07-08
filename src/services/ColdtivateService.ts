@@ -1,4 +1,5 @@
 import type { AxiosError } from 'axios';
+import snakeCase from 'lodash/snakeCase';
 
 import {
   ECompanyEndpoints,
@@ -18,6 +19,7 @@ import type {
   GetOperatorFarmersParams,
   GetLocationParams,
   UpdateUserParams,
+  UpdateCompanyParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -302,6 +304,44 @@ class ColdtivateService extends HttpClient {
   public getAllCrops = async (): Promise<Array<GetAllCropsResponse>> => {
     try {
       const { data } = await this.get<Array<GetAllCropsResponse>>(EStorageEndpoints.GET_ALL_CROPS);
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public updateCompany = async (params: UpdateCompanyParams) => {
+    try {
+      const { companyId, logo, ...rest } = params;
+      const formData = new FormData();
+
+      for (const key in rest) {
+        const name = snakeCase(key);
+        const value = rest[key];
+        if (Array.isArray(value)) {
+          for (const item of value) {
+            formData.append(name, item);
+          }
+          continue;
+        }
+        formData.append(name, value);
+      }
+
+      formData.append('digital_twin', rest.models.includes('digitalTwin'));
+      formData.append('ML4_market', rest.models.includes('ml4Market'));
+      formData.append('ML4_quality', rest.models.includes('ml4Quality'));
+      formData.append('ML4_farmers', rest.models.includes('ml4Farmers'));
+
+      formData.append('avatar', logo);
+      if (logo) formData.append('logo', logo);
+
+      const url = subs(ECompanyEndpoints.GET_COMPANY, { companyId });
+      const { data } = await this.put(url, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       return data;
     } catch (error) {
       console.log(error);
