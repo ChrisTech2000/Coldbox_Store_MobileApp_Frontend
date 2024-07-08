@@ -17,3 +17,5 @@ type RecursiveKeyOfHandleValue<TValue, Text extends string> = TValue extends any
     : Text;
 
 export type ValueOf<T> = T[keyof T];
+
+export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };

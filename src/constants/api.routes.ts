@@ -7,6 +7,9 @@ export enum EAuthenticationEndpoints {
 
 export enum EUserEndpoints {
   GET_FARMER = 'user/v1/farmers/',
+  GET_OPERATORS = 'user/v1/operators',
+  GET_INVITED_OPERATORS = 'user/v1/operator-invite',
+  UPDATE_USER = 'user/v1/users/:userId/',
 }
 
 export enum EStorageEndpoints {
@@ -16,8 +19,6 @@ export enum EStorageEndpoints {
   GET_FARMER_CRATES = '/storage/v1/crates/',
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
   GET_LOCATION = '/storage/v1/locations/:locationId/',
-  GET_OPERATORS = 'user/v1/operators',
-  GET_INVITED_OPERATORS = 'user/v1/operator-invite',
 }
 
 export enum EOperationEndpoints {
