@@ -22,7 +22,7 @@ export type CheckInStackRoutes = {
   CheckIn: { user?: Farmer; coolingUnit: CoolingUnit };
   SelectCropType: { coolingUnit: CoolingUnit };
   CropList: { type: ECropType; coolingUnit: CoolingUnit };
-  CrateSetup: { crop: Crop };
+  CrateSetup: { crop: Crop; additionalInfo: string; coolingUnit: CoolingUnit };
 };
 
 export type CheckInStackRoutePaths = keyof CheckInStackRoutes;

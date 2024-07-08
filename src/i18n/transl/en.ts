@@ -94,6 +94,7 @@ const en = {
     'not-available': 'N/A',
     'complete-later': 'Complete later',
     'update-success': 'Succesfully updated',
+    'save-changes': 'Save changes',
   },
   Auth: {
     Root: {
@@ -273,6 +274,30 @@ const en = {
           vegetables: 'Vegetables',
           rootVegetables: 'Root Vegetables',
           other: 'Other Items',
+        },
+        SelectCrop: {
+          additionalInfo: 'Additional Info',
+        },
+        Setup: {
+          selectedCrop: 'Selected crop',
+          changeCropButton: 'Click here to change crop',
+          individualCrateWeightButton: 'Click here to edit individual crate weight',
+          individualCrateIdButton: 'Click here to edit individual crate IDs',
+          numberOfCratesLabel: 'Number of crates',
+          crateWeightLabel: 'General weight of crate',
+          pricePerDayLabel: 'Price per day / crate',
+          totalPriceLabel: 'Total price',
+          plannedDaysLabel: 'Planned number of days in storage',
+          harvestDateLabel: 'When was the crop harvested?',
+          harvestDateValues: {
+            today: 'Today',
+            yesterday: 'Yesterday',
+            dayBefore: 'Two days back',
+            evenBefore: 'Even Before',
+          },
+          cratesError: 'Please insert a positive crate number',
+          crateWeightError: 'Please insert a positive crate weight',
+          harvestDateError: 'Harvest date is required',
         },
       },
     },

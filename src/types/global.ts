@@ -294,10 +294,10 @@ export enum ECropType {
 }
 
 export enum EDateCropped {
-  TODAY = 100,
-  YESTERDAY = 59,
-  DAY_BEFORE = -3,
-  EVEN_BEFORE = -4,
+  TODAY = '100',
+  YESTERDAY = '59',
+  DAY_BEFORE = '-3',
+  EVEN_BEFORE = '-4',
 }
 
 //////////////////////// MAPPERS

@@ -96,6 +96,7 @@ export default {
     'not-available': 'अभी उपलब्ध नहीं है',
     'complete-later': 'बाद में पूरा करें',
     'update-success': 'सफलतापूर्वक उत्परिवर्तित',
+    'save-changes': 'बदलाव सहेजें',
   },
   Auth: {
     Root: {
@@ -276,6 +277,30 @@ export default {
           vegetables: 'सब्जियां',
           rootVegetables: 'मूल सब्जियां',
           other: 'अन्य वस्तुएं',
+        },
+        SelectCrop: {
+          additionalInfo: 'अतिरिक्त जानकारी',
+        },
+        Setup: {
+          selectedCrop: 'चयनित फसल',
+          changeCropButton: 'यहाँ क्लिक करें फसल बदलने के लिए',
+          individualCrateWeightButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट वजन संपादित करने के लिए',
+          individualCrateIdButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट आईडी संपादित करने के लिए',
+          numberOfCratesLabel: 'क्रेटों की संख्या',
+          crateWeightLabel: 'क्रेट का सामान्य वजन',
+          pricePerDayLabel: 'प्रति दिन / क्रेट की कीमत',
+          totalPriceLabel: 'कुल मूल्य',
+          plannedDaysLabel: 'भंडार में रखने की योजना की गई दिनों की संख्या',
+          harvestDateLabel: 'फसल कब काटी गई थी?',
+          harvestDateValues: {
+            today: 'आज',
+            yesterday: 'कल',
+            dayBefore: 'दो दिन पहले',
+            evenBefore: 'और पहले',
+          },
+          cratesError: 'कृपया एक सकारात्मक क्रेट संख्या डालें',
+          crateWeightError: 'कृपया एक सकारात्मक क्रेट वजन डालें',
+          harvestDateError: 'फसल की कटाई की तारीख आवश्यक है',
         },
       },
     },
