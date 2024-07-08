@@ -298,6 +298,13 @@ const en = {
           cratesError: 'Please insert a positive crate number',
           crateWeightError: 'Please insert a positive crate weight',
           harvestDateError: 'Harvest date is required',
+          modals: {
+            weight: 'Set Individual Weight of Crates',
+            id: 'Set Individual ID of Crates',
+            crateLabel: 'Crate',
+            selectInitialId: 'Please set the starting crate ID',
+            serialize: 'Serialize',
+          },
         },
       },
     },

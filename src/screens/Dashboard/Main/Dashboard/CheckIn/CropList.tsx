@@ -17,7 +17,7 @@ const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
-  const { type, coolingUnit } = route.params;
+  const { type, coolingUnit, user } = route.params;
   const { t } = useTranslationUtils();
 
   const [additionalInfo, setAdditionalInfo] = useState<string>('');
@@ -65,6 +65,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
                       crop: item.fullCrop,
                       additionalInfo,
                       coolingUnit,
+                      user,
                     })
                   }
                 >

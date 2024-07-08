@@ -78,17 +78,21 @@ export interface CheckOutParams extends JsonObject {
 }
 
 export interface CheckInParams extends JsonObject {
-  crop: { id: number };
-  additionalInfo: string;
-  crates: Array<{
-    checkOut: Date | null;
-    weight: number;
-    tag: string;
-    coolingUnitId: number;
+  farmerId: number;
+  id: number | undefined;
+  produces: Array<{
+    crop: { id: number };
+    additionalInfo: string;
+    crates: Array<{
+      checkOut: Date | null;
+      weight: number;
+      tag: string; // the id defined during checkout
+      coolingUnitId: number;
+    }>;
+    harvestDate: number;
+    initialGrade: unknown; // TODO: figure out type
+    hasPicture: boolean;
   }>;
-  harvestDate: number;
-  initialGrade: unknown; // TODO: figure out type
-  hasPicture: boolean;
 }
 
 export interface GetLocationParams extends JsonObject {

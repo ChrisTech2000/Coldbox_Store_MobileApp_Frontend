@@ -3,43 +3,29 @@ import { create } from 'zustand';
 import type { CheckInParams } from '#types/api.params';
 
 type State = {
-  produces: Array<CheckInParams>;
+  produces: CheckInParams['produces'];
 };
 
 type Actions = {
-  addProduce: (produce: CheckInParams) => void;
-  removeProduce: (produceId: CheckInParams['id']) => void;
+  addProduce: (produce: CheckInParams['produces'][number]) => void;
+  removeProduce: (produce: CheckInParams['produces'][number]) => void;
   resetCheckInStore: () => void;
 };
 
 export const useCheckInStore = create<State & Actions>((set, get) => ({
-  produces: [
-    {
-      crop: { id: 2 },
-      additionalInfo: '',
-      crates: [
-        {
-          checkOut: null,
-          weight: 40,
-          tag: '',
-          coolingUnitId: 143,
-        },
-      ],
-      harvestDate: 100,
-      initialGrade: null,
-      hasPicture: false,
-    },
-  ],
+  produces: [],
 
-  removeProduce: (produceId: CheckInParams['id']) => {
+  removeProduce: (produce: CheckInParams['produces'][number]) => {
     const currentProduces = get().produces;
-    const updatedProduces = currentProduces.filter((produce) => produce.id !== produceId);
+    const updatedProduces = currentProduces.filter((_produce) => produce !== _produce);
     set({ produces: updatedProduces });
   },
-  addProduce: (produce: CheckInParams) => {
+
+  addProduce: (produce: CheckInParams['produces'][number]) => {
     const currentProduces = get().produces;
     currentProduces.push(produce);
     set({ produces: currentProduces });
   },
+
   resetCheckInStore: () => set({ produces: [] }),
 }));

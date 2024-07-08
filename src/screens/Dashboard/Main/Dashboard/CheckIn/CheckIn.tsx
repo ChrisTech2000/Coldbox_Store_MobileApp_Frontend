@@ -1,14 +1,18 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
+import { useCheckInStore } from '#stores/checkIn';
+import { useManagementStore } from '#stores/management';
+import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { useCheckInStore } from '#stores/checkIn';
-import { Button } from '#ui/components/Button';
-import { useManagementStore } from '#stores/management';
+
+import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -16,6 +20,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
   const { produces } = useCheckInStore();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   return (
     <View tw="flex-1 p-4">
@@ -77,7 +82,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           <Button
             tw="w-1/2 border-2 border-red-400"
             mode="outlined"
-            onPress={() => null}
+            onPress={() => rootNavigation.navigate('RootMainTabStack')}
             icon="close-circle-outline"
             contentStyle="flex flex-row-reverse items-center"
             labelStyle="text-red-400"

@@ -1,35 +1,43 @@
-import React, { useCallback, useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { IconButton, RadioButton } from 'react-native-paper';
 
+import { Button } from '#ui/components/Button';
+import { Input } from '#ui/components/Input';
+import { RadioButtonItem } from '#ui/components/RadioButton';
+import { ScrollView } from '#ui/components/ScrollView';
+import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
+import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
 import { EDateCropped } from '#types/global';
-import { Button } from '#ui/components/Button';
-import { Input } from '#ui/components/Input';
-import { ScrollView } from '#ui/components/ScrollView';
-import { Text } from '#ui/components/Text';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { RadioButtonItem } from '#ui/components/RadioButton';
 
-type SetupSchema = {
+import { CrateSetupModal } from './components/CrateSetupModal';
+
+export type SetupSchema = {
   numberOfCrates: number;
   generalCrateWeight: number;
   crates: Array<{
     crateWeight: number;
-    crateId: number;
+    crateId: number | undefined;
   }>;
   plannedDays: number | undefined;
   dateHarvested: EDateCropped;
 };
 
+export type ModalMode = 'weight' | 'id' | undefined;
+
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
-  const { crop, coolingUnit } = route.params;
+  const { additionalInfo, crop, coolingUnit, user } = route.params;
   const { company } = useManagementStore();
+  const { addProduce } = useCheckInStore();
 
   const { t, zodResolver } = useTranslationUtils();
 
@@ -37,13 +45,19 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     control,
     handleSubmit,
     watch,
+    setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<SetupSchema>({
     resolver: zodResolver((z, t) =>
       z.object({
-        numberOfCrates: z.number().min(1, {
-          message: t('Dashboard.CrateManagement.CheckIn.Setup.cratesError'),
-        }),
+        numberOfCrates: z
+          .number()
+          .min(1, {
+            message: t('Dashboard.CrateManagement.CheckIn.Setup.cratesError'),
+          })
+          .default(0),
         generalWeight: z
           .number()
           .min(1, {
@@ -53,10 +67,10 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         crates: z
           .object({
             crateWeight: z.number(),
-            crateId: z.number().nullable(),
+            crateId: z.number().optional(),
           })
           .array(),
-        plannedDays: z.number().nullable(),
+        plannedDays: z.number().optional(),
         dateHarvested: z
           .enum([
             EDateCropped.TODAY,
@@ -64,6 +78,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             EDateCropped.DAY_BEFORE,
             EDateCropped.EVEN_BEFORE,
           ])
+          .optional()
           .refine((date) => !!date, {
             message: t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateError'),
           }),
@@ -71,7 +86,12 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     ),
   });
 
+  const [openModal, setOpenModal] = useState<ModalMode>(undefined);
+
   const plannedDays = watch('plannedDays');
+  const numberOfCrates = watch('numberOfCrates');
+  const generalCrateWeight = watch('generalCrateWeight');
+  const crates = watch('crates');
 
   const harvestDateOptions = useMemo(
     () => [
@@ -96,12 +116,107 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   );
 
   const onChangeNumericKeyboard = useCallback(
-    (newVal: string, onChange: (...event: unknown[]) => void) =>
-      !Number.isNaN(Number(newVal)) && onChange(newVal),
-    []
+    (
+      newVal: string | number,
+      onChange: (...event: unknown[]) => void,
+      field?: keyof SetupSchema
+    ) => {
+      const value = Number(newVal);
+
+      if (isNaN(value)) return;
+
+      onChange(value);
+      field && clearErrors(field);
+
+      if (field === 'generalCrateWeight' && crates) {
+        const crateWeight = value;
+        setValue(
+          'crates',
+          crates.map((crate) => ({
+            ...crate,
+            crateWeight,
+          }))
+        );
+      }
+
+      if (field === 'numberOfCrates') {
+        const numberOfCrates = value;
+        const weight = generalCrateWeight ?? 40;
+
+        let newCrates =
+          !crates || crates.length === 0
+            ? Array.from({ length: numberOfCrates }, () => ({
+                crateWeight: weight,
+                crateId: undefined,
+              }))
+            : [...crates];
+
+        if (newCrates.length !== numberOfCrates) {
+          if (newCrates.length < numberOfCrates) {
+            const additionalCrates = Array.from(
+              { length: numberOfCrates - newCrates.length },
+              () => ({
+                crateWeight: weight,
+                crateId: undefined,
+              })
+            );
+            newCrates = [...newCrates, ...additionalCrates];
+          } else {
+            newCrates = newCrates.slice(0, numberOfCrates);
+          }
+        }
+        setValue('crates', newCrates);
+      }
+    },
+    [crates, generalCrateWeight]
   );
 
-  const onSubmit = useCallback(() => {}, []);
+  const onOpenModal = useCallback(
+    (mode: ModalMode) => {
+      if (!numberOfCrates || numberOfCrates < 1) {
+        setError('numberOfCrates', {
+          message: t('Dashboard.CrateManagement.CheckIn.Setup.cratesError'),
+        });
+      } else {
+        setOpenModal(mode);
+      }
+    },
+    [numberOfCrates]
+  );
+
+  const onSubmit: SubmitHandler<SetupSchema> = useCallback(
+    (values) => {
+      const dateHarvested = values.dateHarvested;
+      let harvestDate = null;
+
+      if (dateHarvested === EDateCropped.TODAY) {
+        harvestDate = crop.harvestedToday;
+      } else if (dateHarvested === EDateCropped.YESTERDAY) {
+        harvestDate = crop.harvestedYesterday;
+      } else if (dateHarvested === EDateCropped.DAY_BEFORE) {
+        harvestDate = crop.harvestedDayBeforeYesterday;
+      } else if (dateHarvested === EDateCropped.EVEN_BEFORE) {
+        harvestDate = crop.harvestedBefore;
+      }
+
+      addProduce({
+        crop: { id: crop.id },
+        additionalInfo,
+        crates: values.crates.map((crate) => ({
+          checkOut: null,
+          weight: crate.crateWeight,
+          tag: crate.crateId?.toString() ?? '',
+          coolingUnitId: coolingUnit.id,
+        })),
+        initialGrade: null,
+        harvestDate: (harvestDate ?? dateHarvested) as number,
+        hasPicture: !!crop.image,
+      });
+
+      navigation.navigate('CheckIn', { user, coolingUnit });
+    },
+    [coolingUnit, additionalInfo, crop]
+  );
 
   return (
     <ScrollView tw="p-4 bg-white space-y-6">
@@ -144,15 +259,19 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           }}
           render={({ field: { onChange, value } }) => (
             <Input
-              tw="w-full px-4 bg-white border rounded-sm h-12 mt-1"
-              onChangeText={(newVal) => onChangeNumericKeyboard(newVal, onChange)}
-              value={value?.toString()}
+              tw={cn(
+                'w-full px-4 bg-white border rounded-sm h-12 mt-1',
+                errors.numberOfCrates && 'border-red-300'
+              )}
+              keyboardType="numeric"
+              onChangeText={(newVal) => onChangeNumericKeyboard(newVal, onChange, 'numberOfCrates')}
+              value={value?.toString() ?? ''}
             />
           )}
           name="numberOfCrates"
         />
         {errors.numberOfCrates && (
-          <Text tw="text-xs text-red-600 mt-[-2] pl-3 w-[95%]">
+          <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
             {errors.numberOfCrates.message?.toString()}
           </Text>
         )}
@@ -177,21 +296,31 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             <View tw="w-full flex flex-row justify-between items-center space-x-1">
               <Input
                 tw="w-1/2 px-4 bg-white border rounded-sm h-12 mt-1"
-                onChangeText={(newVal) => onChangeNumericKeyboard(newVal, onChange)}
-                value={value?.toString()}
+                onChangeText={(newVal) =>
+                  onChangeNumericKeyboard(newVal, onChange, 'generalCrateWeight')
+                }
+                value={value?.toString() ?? ''}
                 keyboardType="numeric"
               />
               <Button
                 contentStyle="bg-green-50"
                 labelStyle="text-lg"
-                onPress={() => onChange(Number(value ?? 0) + 1)}
+                onPress={() =>
+                  onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'generalCrateWeight')
+                }
               >
                 +
               </Button>
               <Button
                 contentStyle="bg-green-50"
                 labelStyle="text-lg"
-                onPress={() => onChange(!value ? 0 : Number(value) - 1)}
+                onPress={() =>
+                  onChangeNumericKeyboard(
+                    !value ? 0 : Number(value) - 1,
+                    onChange,
+                    'generalCrateWeight'
+                  )
+                }
               >
                 -
               </Button>
@@ -214,7 +343,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
               {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateWeightButton')}
             </Text>
           )}
-          onPress={() => null}
+          onPress={() => onOpenModal('weight')}
         />
 
         <IconButton
@@ -224,7 +353,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
               {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateIdButton')}
             </Text>
           )}
-          onPress={() => null}
+          onPress={() => onOpenModal('id')}
         />
       </View>
 
@@ -241,7 +370,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             <Input
               tw="w-full px-4 bg-white border rounded-sm h-12 mt-1"
               onChangeText={(newVal) => onChangeNumericKeyboard(newVal, onChange)}
-              value={value?.toString()}
+              value={value?.toString() ?? ''}
               keyboardType="numeric"
             />
           )}
@@ -275,9 +404,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         </Text>
         <Controller
           control={control}
-          rules={{
-            required: false,
-          }}
           render={({ field: { onChange, value } }) => (
             <RadioButton.Group value={value?.toString() ?? ''} onValueChange={onChange}>
               {harvestDateOptions.map((option, optionIdx) => (
@@ -293,6 +419,11 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           name="dateHarvested"
         />
       </View>
+      {errors.dateHarvested && (
+        <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
+          {errors.dateHarvested.message?.toString()}
+        </Text>
+      )}
 
       <View tw="flex flex-row self-center space-x-2 mb-8">
         <Button
@@ -301,6 +432,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           labelStyle="text-red-400 text-lg"
           contentStyle="flex flex-row-reverse"
           icon="close-circle-outline"
+          onPress={() => navigation.navigate('CheckIn', { user, coolingUnit })}
         >
           {t('actions.cancel')}
         </Button>
@@ -309,11 +441,20 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           labelStyle="text-lg"
           contentStyle="flex flex-row-reverse"
           icon="check-circle-outline"
-          onPress={() => handleSubmit(onSubmit)}
+          onPress={handleSubmit(onSubmit)}
         >
           {t('actions.save-changes')}
         </Button>
       </View>
+      <CrateSetupModal
+        setValue={setValue}
+        crates={crates}
+        mode={openModal}
+        isOpen={openModal !== undefined}
+        numberOfCrates={numberOfCrates}
+        closeModal={() => setOpenModal(undefined)}
+        title={openModal ? t(`Dashboard.CrateManagement.CheckIn.Setup.modals.${openModal}`) : ''}
+      />
     </ScrollView>
   );
 }

@@ -178,7 +178,6 @@ class ColdtivateService extends HttpClient {
     };
     try {
       const { data } = await this.post<CheckInResponse>(EOperationEndpoints.CHECK_IN, _params);
-
       return data;
     } catch (error) {
       console.log(error);
