@@ -120,7 +120,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
 
   return (
     <Portal>
-      <Modal tw="w-[85%]" visible={isModalOpen} onDismiss={closeModal}>
+      <Modal tw="w-[85%] pb-52" visible={isModalOpen} onDismiss={closeModal}>
         <View tw="w-full items-center mx-8 bg-white rounded-sm py-1 max-h-90">
           <Text variant="TitleMedium" tw="mb-1 mt-2 text-center w-2/3">
             {t('Dashboard.CrateManagement.CheckIn.WithCode.modalTitle')}

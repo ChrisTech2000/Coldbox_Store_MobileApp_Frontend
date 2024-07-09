@@ -23,7 +23,12 @@ export function CheckoutCrate({ crate }: ProduceProps) {
       <View
         tw={cn(
           'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
-          !crate.remainingShelfLife && 'bg-gray-300 border-gray-300'
+          crate.remainingShelfLife <= 7 &&
+            crate.remainingShelfLife > 2 &&
+            'bg-yellow-400 border-yellow-400',
+          crate.remainingShelfLife < 2 && 'bg-red-500 border-red-500',
+          (!crate.remainingShelfLife || crate.remainingShelfLife === -1) &&
+            'bg-gray-300 border-gray-300'
         )}
       />
       <View tw="flex flex-row items-center h-full w-full space-x-2 p-1 bg-white rounded-sm border border-l-0 border-gray-300">

@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, TouchableHighlight, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { Divider, Icon } from 'react-native-paper';
+import { Divider, Icon, IconButton } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
 import colors from 'tailwindcss/colors';
 
@@ -12,14 +13,17 @@ import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import ColdtivateService from '#services/ColdtivateService';
-import { useCheckInStore } from '#stores/checkIn';
-import { useManagementStore } from '#stores/management';
+import { ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
+import { CrateSetupModal } from './components/CrateSetupModal';
+import { SetupSchema } from './CrateSetup';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -31,6 +35,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     checkOutCode,
     produces,
     removeProduce,
+    setProduces,
     setCoolingUnit,
     setUser,
     resetCheckInStore,
@@ -40,17 +45,22 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const toast = useToast();
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isCodeModalOpen, setIsCodeModalOpen] = useState<boolean>(false);
+  const [isIdsModalOpen, setIsIdsModalOpen] = useState<number | undefined>(undefined);
+
+  const allCrates = useMemo(
+    () => produces.flatMap((produce) => produce.crates),
+    [produces, produces.length]
+  );
 
   const allHavePlannedDays = useMemo(() => {
     return produces.flatMap((produce) => produce.crates).every((crate) => !!crate.plannedDays);
-  }, [produces.length]);
+  }, [produces, produces.length]);
 
   const total = useMemo(() => {
     const dailyPricePerCrate = coolingUnit.commonPricingType.value;
-    const allCrates = produces.flatMap((produce) => produce.crates);
 
-    if (!allHavePlannedDays) return dailyPricePerCrate * allCrates.length;
+    if (!allHavePlannedDays) return (dailyPricePerCrate * allCrates.length).toFixed(2);
 
     return allCrates
       .reduce((acc, current) => {
@@ -58,7 +68,28 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         return acc;
       }, 0)
       .toFixed(2);
-  }, [produces.length, coolingUnit, allHavePlannedDays]);
+  }, [produces, produces.length, coolingUnit, allHavePlannedDays, allCrates]);
+
+  const setCrateIDs = useCallback(
+    (modalCrates: SetupSchema['crates'], item: ProduceCrate) => {
+      const _produce = cloneDeep(item);
+
+      const updatedCrates = _produce.crates.map((crate, index) => ({
+        ...crate,
+        tag: modalCrates[index].crateId?.toString() ?? '',
+      }));
+
+      _produce.crates = updatedCrates;
+
+      const index = produces.indexOf(item);
+
+      if (index !== -1) {
+        produces[index] = _produce;
+        setProduces(produces);
+      }
+    },
+    [produces, produces.length]
+  );
 
   const onSubmit = useCallback(async () => {
     if (!produces || !produces.length) {
@@ -75,7 +106,12 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             farmer: user.id,
             coolingUnitId: coolingUnit?.id as number,
             days: produces[0].crates[0].plannedDays,
-            tags: undefined,
+            tags: produces
+              .flatMap((produce) => produce.crates)
+              .map((crate) => {
+                return crate.tag;
+              })
+              .filter((tag) => typeof tag === 'string'),
           },
         })
       : await ColdtivateService.checkIn({
@@ -169,6 +205,31 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                   </TouchableHighlight>
                 </View>
               </View>
+              {checkOutCode && (
+                <React.Fragment>
+                  <IconButton
+                    tw="bg-gray-300 w-full px-1 self-center"
+                    icon={() => (
+                      <Text tw="w-full text-center font-bold text-wrap">
+                        {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateIdButton')}
+                      </Text>
+                    )}
+                    onPress={() => setIsIdsModalOpen(index)}
+                  />
+                  <CrateSetupModal
+                    setValue={(modalCrates) => setCrateIDs(modalCrates, item)}
+                    crates={item.crates.map((crate) => ({
+                      crateId: Number(crate.tag),
+                      crateWeight: crate.weight,
+                    }))}
+                    mode={'id'}
+                    isOpen={isIdsModalOpen === index}
+                    numberOfCrates={allCrates.length}
+                    closeModal={() => setIsIdsModalOpen(undefined)}
+                    title={t('Dashboard.CrateManagement.CheckIn.Setup.modals.id')}
+                  />
+                </React.Fragment>
+              )}
               <Divider tw="w-full bg-grey-400" />
             </View>
           )}
@@ -192,7 +253,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           <Button
             tw="w-full border-2 border-green-primary"
             mode="outlined"
-            onPress={() => setIsModalOpen(true)}
+            onPress={() => setIsCodeModalOpen(true)}
             icon="ticket-confirmation-outline"
             contentStyle="flex flex-row-reverse items-center"
           >
@@ -221,7 +282,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           <Button
             tw="w-1/2 border-2 border-red-400"
             mode="outlined"
-            onPress={() => rootNavigation.navigate('RootMainTabStack')}
+            onPress={() => {
+              resetCheckInStore();
+              rootNavigation.navigate('RootMainTabStack');
+            }}
             icon="close-circle-outline"
             contentStyle="flex flex-row-reverse items-center"
             labelStyle="text-red-400"
@@ -240,7 +304,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         </View>
       </View>
       {(!produces || produces.length === 0) && (
-        <CheckInWithCodeModal closeModal={() => setIsModalOpen(false)} isModalOpen={isModalOpen} />
+        <CheckInWithCodeModal
+          closeModal={() => setIsCodeModalOpen(false)}
+          isModalOpen={isCodeModalOpen}
+        />
       )}
     </View>
   );

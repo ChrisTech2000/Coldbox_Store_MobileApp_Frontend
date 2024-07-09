@@ -106,7 +106,7 @@ export interface CheckOutWithCodeParams extends JsonObject {
     days: number | undefined;
     farmer: number;
     coolingUnitId: number;
-    tags: number[] | undefined;
+    tags: string[] | undefined;
   };
 }
 

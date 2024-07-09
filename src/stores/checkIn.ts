@@ -4,7 +4,7 @@ import type { CheckInParams } from '#types/api.params';
 import type { CoolingUnit, Farmer } from '#types/global';
 
 type Produce = CheckInParams['produces'][number];
-interface ProduceCrate extends Omit<Produce, 'crop' | 'harvestDate'> {
+export interface ProduceCrate extends Omit<Produce, 'crop' | 'harvestDate'> {
   crop: {
     id: number | undefined;
     name: string;
@@ -27,6 +27,7 @@ type Actions = {
   setCoolingUnit: (coolingUnit: CoolingUnit | null) => void;
   setUser: (user: Farmer | null) => void;
   setCheckOutCode: (value: string | null) => void;
+  setProduces: (produces: Array<ProduceCrate>) => void;
 };
 
 export const useCheckInStore = create<State & Actions>((set, get) => ({
@@ -51,4 +52,5 @@ export const useCheckInStore = create<State & Actions>((set, get) => ({
   setCoolingUnit: (coolingUnit: CoolingUnit | null) => set({ coolingUnit }),
   setUser: (user: Farmer | null) => set({ user }),
   setCheckOutCode: (value: string | null) => set({ checkOutCode: value }),
+  setProduces: (produces: Array<ProduceCrate>) => set({ produces }),
 }));
