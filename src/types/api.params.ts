@@ -119,3 +119,10 @@ export interface UpdateCompanyParams extends JsonObject {
     type?: string;
   } | null;
 }
+
+export interface UpdateFarmerParams extends JsonObject {
+  farmerId: number;
+  country: string;
+  parentName: string;
+  updateUser: true;
+}

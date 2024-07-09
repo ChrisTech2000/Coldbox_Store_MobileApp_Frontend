@@ -10,6 +10,7 @@ export enum EUserEndpoints {
   GET_OPERATORS = 'user/v1/operators',
   GET_INVITED_OPERATORS = 'user/v1/operator-invite',
   UPDATE_USER = 'user/v1/users/:userId/',
+  UPDATE_FARMER = 'user/v1/farmers/:farmerId/',
 }
 
 export enum EStorageEndpoints {

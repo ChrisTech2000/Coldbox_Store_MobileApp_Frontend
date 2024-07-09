@@ -11,6 +11,10 @@ import { useAuthStore } from './auth';
 
 type State = {
   farmerId: number | null;
+  farmerParentName: string | null;
+  farmerCountry: string | null;
+  farmerUserCode: string | null;
+
   farmerCompanies: Company[] | null;
   farmerUnitsIds: number[] | null;
 
@@ -19,14 +23,20 @@ type State = {
   refreshDashboard: (() => void) | null;
 };
 
+type FarmerDatum = Partial<Pick<State, 'farmerCountry' | 'farmerParentName'>>;
+
 type Actions = {
   fetchGlobalInformation: (params: GetFarmerParams) => Promise<void>;
   setCoolingUnits: (units: CoolingUnit[]) => void;
   setRefreshDashboardFn: (fn: () => void) => void;
+  patchFarmer: (datum: FarmerDatum) => void;
 };
 
 export const useDashboardStore = create<State & Actions>((set) => ({
   farmerId: null,
+  farmerCountry: null,
+  farmerParentName: null,
+  farmerUserCode: null,
   farmerCompanies: null,
   farmerUnitsIds: null,
   coolingUnits: null,
@@ -49,6 +59,9 @@ export const useDashboardStore = create<State & Actions>((set) => ({
 
       set({
         farmerId: farmer?.id ?? null,
+        farmerCountry: farmer?.country ?? null,
+        farmerParentName: farmer?.parentName ?? null,
+        farmerUserCode: farmer?.userCode ?? null,
         farmerCompanies: farmerCompanies ?? null,
         farmerUnitsIds: farmer?.coolingUnits ?? null,
       });
@@ -60,6 +73,7 @@ export const useDashboardStore = create<State & Actions>((set) => ({
 
   setCoolingUnits: (coolingUnits) => set({ coolingUnits }),
   setRefreshDashboardFn: (fn) => set({ refreshDashboard: fn }),
+  patchFarmer: (datum) => set((prev) => ({ ...prev, ...datum })),
 }));
 
 export const useGlobalInformation = (isAuthenticated: boolean) => {
