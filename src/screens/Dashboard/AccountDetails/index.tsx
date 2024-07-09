@@ -1,8 +1,10 @@
 import React from 'react';
+import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useShallow } from 'zustand/react/shallow';
 
+import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -101,10 +103,16 @@ function AccountDetails() {
           <ContactFields includeEmail={!isCoolingUser} />
           <GenderField />
 
-          <React.Fragment>
-            <LocationField />
-            <CountryField />
-          </React.Fragment>
+          {isCoolingUser ? (
+            <React.Fragment>
+              <LocationField />
+              <CountryField />
+              <View tw="w-full bg-zinc-200 flex-row items-center justify-between p-3 rounded-md my-1.5">
+                <Text variant="TitleSmall">Cooling User Import Code</Text>
+                <Text variant="TitleSmall">{farmerUserCode}</Text>
+              </View>
+            </React.Fragment>
+          ) : null}
 
           <Button
             tw="w-full mt-4"
