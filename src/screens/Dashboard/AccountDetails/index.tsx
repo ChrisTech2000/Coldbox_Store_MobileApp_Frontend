@@ -22,6 +22,7 @@ import ContactFields from './modules/ContactFields';
 import GenderField from './modules/GenderField';
 import LocationField from './modules/Location';
 import CountryField from './modules/CountryField';
+import DeleteAccountAction from './components/DeleteAccountAction';
 
 function AccountDetails() {
   const user = useAuthStore(useShallow((store) => store.user));
@@ -114,15 +115,18 @@ function AccountDetails() {
             </React.Fragment>
           ) : null}
 
-          <Button
-            tw="w-full mt-4"
-            mode="contained"
-            onPress={submitHandler}
-            icon={isSubmitting ? undefined : 'check-circle-outline'}
-            uppercase
-          >
-            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : 'Save Changes'}
-          </Button>
+          <View tw="space-y-4 mt-4">
+            <DeleteAccountAction />
+            <Button
+              tw="w-full"
+              mode="contained"
+              onPress={submitHandler}
+              icon={isSubmitting ? undefined : 'check-circle-outline'}
+              uppercase
+            >
+              {isSubmitting ? <ActivityIndicator size="small" color="white" /> : 'Save Changes'}
+            </Button>
+          </View>
         </KeyboardAwareScrollView>
       )}
     </FormManager>

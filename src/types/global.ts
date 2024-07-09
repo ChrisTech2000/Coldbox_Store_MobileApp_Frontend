@@ -25,9 +25,8 @@ export interface Company {
   crop: number[];
   logo: File | null;
 
-  //TODO: figure out types
-  bankDetails: unknown;
-  bankAccount: unknown;
+  bankDetails: BankDetails;
+  bankAccount: number;
 }
 
 export interface Pricing {
@@ -176,6 +175,19 @@ export interface CoolingUnit {
   commonPricingType: CommonPricingType;
   commodityTotal: CommodityTotal;
   powerOptions: PowerOption[];
+}
+
+export interface BankDetails {
+  id: number;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+}
+
+export interface DateOperatorAssigned {
+  id: number;
+  operatorId: number;
+  date: string;
 }
 
 //////////////////////// ENUMS

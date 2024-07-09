@@ -126,3 +126,10 @@ export interface UpdateFarmerParams extends JsonObject {
   parentName: string;
   updateUser: true;
 }
+
+export interface GetCoolingUnitsByStatusParams extends JsonObject {
+  userId?: number;
+  companyId?: number;
+  isFarmer?: boolean;
+  notEmpty: boolean;
+}

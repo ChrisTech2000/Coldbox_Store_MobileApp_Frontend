@@ -21,14 +21,17 @@ import type {
   UpdateUserParams,
   UpdateCompanyParams,
   UpdateFarmerParams,
+  GetCoolingUnitsByStatusParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
   CheckOutResponse,
+  GetCompanyEmployeesResponse,
   GetAllCropsResponse,
   GetFarmerResponse,
   GetLocationResponse,
   GetOperatorsResponse,
+  GetCoolingUnitsByStatusResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -360,6 +363,45 @@ class ColdtivateService extends HttpClient {
         ...rest,
         unserializable: ['updateUser'],
       });
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCompanyEmployees = async (companyId: number): Promise<GetCompanyEmployeesResponse> => {
+    try {
+      const params = { company: companyId };
+      const { data } = await this.get<GetCompanyEmployeesResponse>(
+        EUserEndpoints.GET_COMPANY_EMPLOYEES,
+        { params }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnitsByStatus = async (
+    params: GetCoolingUnitsByStatusParams
+  ): Promise<GetCoolingUnitsByStatusResponse> => {
+    try {
+      const shallow = { ...params };
+      shallow.user = shallow.userId;
+      delete shallow.userId;
+      shallow.company = shallow.companyId;
+      delete shallow.companyId;
+
+      const { data } = await this.get<GetCoolingUnitsByStatusResponse>(
+        EStorageEndpoints.GET_COOLING_UNITS,
+        { params: shallow }
+      );
       return data;
     } catch (error) {
       console.log(error);
