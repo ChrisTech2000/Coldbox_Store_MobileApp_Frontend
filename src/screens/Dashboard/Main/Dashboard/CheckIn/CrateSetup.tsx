@@ -17,7 +17,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
-import { EDateCropped } from '#types/global';
+import { CoolingUnit, EDateCropped, Farmer } from '#types/global';
 
 import { CrateSetupModal } from './components/CrateSetupModal';
 
@@ -35,9 +35,9 @@ export type SetupSchema = {
 export type ModalMode = 'weight' | 'id' | undefined;
 
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
-  const { additionalInfo, crop, coolingUnit, user } = route.params;
+  const { additionalInfo, crop } = route.params;
   const { company } = useManagementStore();
-  const { addProduce } = useCheckInStore();
+  const { addProduce, coolingUnit, user } = useCheckInStore();
 
   const { t, zodResolver } = useTranslationUtils();
 
@@ -186,6 +186,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
 
   const onSubmit: SubmitHandler<SetupSchema> = useCallback(
     (values) => {
+      if (!coolingUnit || !user) return;
+
       const dateHarvested = values.dateHarvested;
       let harvestDate = null;
 
@@ -200,7 +202,11 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       }
 
       addProduce({
-        crop: { id: crop.id },
+        crop: {
+          id: crop.id,
+          name: crop.name,
+          image: crop.image,
+        },
         additionalInfo,
         crates: values.crates.map((crate) => ({
           checkOut: null,
@@ -210,12 +216,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         })),
         initialGrade: null,
         harvestDate: (harvestDate ?? dateHarvested) as number,
-        hasPicture: !!crop.image,
+        hasPicture: false, // TODO: confirm this in the future, but sending true returns a 500 error
       });
 
-      navigation.navigate('CheckIn', { user, coolingUnit });
+      navigation.navigate('CheckIn', {
+        user: user ?? undefined,
+        coolingUnit: coolingUnit ?? undefined,
+      });
     },
-    [coolingUnit, additionalInfo, crop]
+    [coolingUnit, additionalInfo, crop, user]
   );
 
   return (
@@ -384,7 +393,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             {t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayLabel')}
           </Text>
           <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
-            {company?.currency} {coolingUnit.commonPricingType.value.toFixed(2)}
+            {company?.currency} {coolingUnit?.commonPricingType.value.toFixed(2)}
           </Text>
         </View>
         <View tw="flex flex-row items-center justify-between">
@@ -393,7 +402,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           </Text>
           <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
             {company?.currency}{' '}
-            {(coolingUnit.commonPricingType.value * (plannedDays ?? 0)).toFixed(2)}
+            {((coolingUnit?.commonPricingType.value ?? 0) * (plannedDays ?? 0)).toFixed(2)}
           </Text>
         </View>
       </View>
@@ -432,7 +441,12 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           labelStyle="text-red-400 text-lg"
           contentStyle="flex flex-row-reverse"
           icon="close-circle-outline"
-          onPress={() => navigation.navigate('CheckIn', { user, coolingUnit })}
+          onPress={() =>
+            navigation.navigate('CheckIn', {
+              user: user as Farmer,
+              coolingUnit: coolingUnit as CoolingUnit,
+            })
+          }
         >
           {t('actions.cancel')}
         </Button>

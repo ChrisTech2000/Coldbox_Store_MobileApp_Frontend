@@ -269,6 +269,8 @@ const en = {
         addCrates: 'Add Crates',
         checkInWithCode: 'Check in with code',
         estimatedCost: 'Estimated Cost',
+        day: 'day',
+        successMessage: 'Crates were successfully checked in',
         SelectCropType: {
           fruits: 'Fruits',
           vegetables: 'Vegetables',

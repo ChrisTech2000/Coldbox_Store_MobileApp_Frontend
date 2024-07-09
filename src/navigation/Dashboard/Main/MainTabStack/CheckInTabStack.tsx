@@ -19,14 +19,12 @@ import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import { ECropType, type Farmer, type CoolingUnit, type Crop } from '#types/global';
 
 export type CheckInStackRoutes = {
-  CheckIn: { user?: Farmer; coolingUnit: CoolingUnit };
-  SelectCropType: { coolingUnit: CoolingUnit; user?: Farmer };
-  CropList: { type: ECropType; coolingUnit: CoolingUnit; user?: Farmer };
+  CheckIn: { coolingUnit: CoolingUnit; user: Farmer };
+  SelectCropType: undefined;
+  CropList: { type: ECropType };
   CrateSetup: {
     crop: Crop;
     additionalInfo: string;
-    coolingUnit: CoolingUnit;
-    user?: Farmer;
   };
 };
 

@@ -5,20 +5,23 @@ import FastImage from 'react-native-fast-image';
 import { Divider, Icon } from 'react-native-paper';
 
 import { API_BASE_URL } from '#constants/environment';
+import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { useCheckInStore } from '#stores/checkIn';
+import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Input } from '#ui/components/Input';
-import { useTranslationUtils } from '#i18n/utils';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
-  const { type, coolingUnit, user } = route.params;
+  const { type } = route.params;
+
   const { t } = useTranslationUtils();
+  const { coolingUnit } = useCheckInStore();
 
   const [additionalInfo, setAdditionalInfo] = useState<string>('');
 
@@ -27,10 +30,10 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
     ColdtivateService.getCoolingUnitCrops,
     {
       crop: type,
-      coolingUnitId: coolingUnit.id,
+      coolingUnitId: coolingUnit?.id as number,
     },
     {
-      skip: !coolingUnit.id || !type,
+      skip: !coolingUnit?.id || !type,
     }
   );
 
@@ -64,8 +67,6 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
                     navigation.navigate('CrateSetup', {
                       crop: item.fullCrop,
                       additionalInfo,
-                      coolingUnit,
-                      user,
                     })
                   }
                 >

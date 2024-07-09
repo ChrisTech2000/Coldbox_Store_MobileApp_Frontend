@@ -29,7 +29,7 @@ import type { Company, CoolingUnit, Crate, DashboardProduce, User } from '#types
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
-import { subs } from './utils';
+import { serialize, subs } from './utils';
 import { WithRequired } from 'types/miscellaneous';
 
 class ColdtivateService extends HttpClient {
@@ -171,11 +171,12 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public checkIn = async (params: Array<CheckInParams>): Promise<CheckInResponse> => {
+  public checkIn = async (params: CheckInParams): Promise<CheckInResponse> => {
     const _params = {
       ...params,
-      unserializable: ['hasPicture'],
+      produces: JSON.stringify(serialize(params.produces, ['hasPicture'])),
     };
+
     try {
       const { data } = await this.post<CheckInResponse>(EOperationEndpoints.CHECK_IN, _params);
       return data;
@@ -260,6 +261,7 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  ///////// OPERATORS
   public getOperators = async (companyId: number): Promise<Array<GetOperatorsResponse>> => {
     try {
       const params = { company: companyId };

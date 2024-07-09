@@ -79,7 +79,7 @@ export interface CheckOutParams extends JsonObject {
 
 export interface CheckInParams extends JsonObject {
   farmerId: number;
-  id: number | undefined;
+  id?: number;
   produces: Array<{
     crop: { id: number };
     additionalInfo: string;

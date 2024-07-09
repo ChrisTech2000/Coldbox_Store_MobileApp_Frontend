@@ -13,7 +13,7 @@ type Option = {
   name: string;
 };
 
-function SelectCropType({ route, navigation }: CheckInStackRouteProps<'SelectCropType'>) {
+function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>) {
   const { t } = useTranslationUtils();
 
   const options: Array<Option> = useMemo(() => {
@@ -48,7 +48,6 @@ function SelectCropType({ route, navigation }: CheckInStackRouteProps<'SelectCro
             onPress={() =>
               navigation.navigate('CropList', {
                 type: item.id,
-                coolingUnit: route.params.coolingUnit,
               })
             }
           >

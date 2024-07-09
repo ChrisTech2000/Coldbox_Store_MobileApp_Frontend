@@ -267,11 +267,14 @@ export default {
         },
         paid: 'भुगतान किया गया',
       },
+
       CheckIn: {
         emptyState: 'अभी तक कोई बॉक्स नहीं जोड़ा गया',
         addCrates: 'क्रेट जोड़ें',
         checkInWithCode: 'कोड के साथ चेक इन करें',
         estimatedCost: 'अनुमानित लागत',
+        day: 'दिन',
+        successMessage: 'क्रेट सफलतापूर्वक चेक इन किए गए',
         SelectCropType: {
           fruits: 'फल',
           vegetables: 'सब्जियां',
@@ -301,6 +304,13 @@ export default {
           cratesError: 'कृपया एक सकारात्मक क्रेट संख्या डालें',
           crateWeightError: 'कृपया एक सकारात्मक क्रेट वजन डालें',
           harvestDateError: 'फसल की कटाई की तारीख आवश्यक है',
+          modals: {
+            weight: 'क्रेट्स का व्यक्तिगत वजन सेट करें',
+            id: 'क्रेट्स का व्यक्तिगत आईडी सेट करें',
+            crateLabel: 'क्रेट',
+            selectInitialId: 'कृपया प्रारंभिक क्रेट आईडी सेट करें',
+            serialize: 'सीरियलाइज करें',
+          },
         },
       },
     },
