@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -7,10 +7,12 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useManagementStore } from '#stores/management';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import LogoField from './modules/LogoField';
@@ -20,9 +22,14 @@ import CurrencyField from './modules/CurrencyField';
 
 import { derivedSubjects } from './utils';
 
-function CompanyDetails() {
+const width = (Dimensions.get('screen').width - 42) / 2;
+
+function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
+  const { navigation } = props;
+
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const company = useManagementStore(useShallow((store) => store.company));
+  const { t } = useTranslationUtils();
 
   const {
     data: companyDetails,
@@ -61,6 +68,7 @@ function CompanyDetails() {
         logo: values.logo.uri !== subjects.companyLogo ? values.logo : null,
       });
       await refetch();
+      navigation.goBack();
     } catch (exception) {
       console.error(exception);
     }
@@ -93,7 +101,7 @@ function CompanyDetails() {
         >
           <TextInput
             tw="w-full bg-transparent mb-3"
-            label="Name"
+            label={t('Dashboard.Management.CompanyDetails.labels.name')}
             mode="outlined"
             value={companyDetails.name}
             disabled
@@ -103,15 +111,31 @@ function CompanyDetails() {
           <CountryField />
           <CommodityField crops={allCrops} />
           <CurrencyField />
-          <Button
-            tw="w-full mt-6"
-            mode="contained"
-            onPress={submitHandler}
-            icon={isSubmitting ? undefined : 'plus-circle'}
-            uppercase
-          >
-            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : 'Save Changes'}
-          </Button>
+          <View tw="w-full flex-row items-center justify-between mt-5">
+            <Button
+              style={{ width }}
+              mode="contained"
+              onPress={navigation.goBack}
+              icon="close-circle-outline"
+              buttonColor={paperTheme.colors.error}
+              uppercase
+            >
+              {t('actions.cancel')}
+            </Button>
+            <Button
+              style={{ width }}
+              mode="contained"
+              onPress={submitHandler}
+              icon={isSubmitting ? undefined : 'plus-circle'}
+              uppercase
+            >
+              {isSubmitting ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                t('Dashboard.Management.CompanyDetails.actions.save')
+              )}
+            </Button>
+          </View>
         </KeyboardAwareScrollView>
       )}
     </FormManager>

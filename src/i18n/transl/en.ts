@@ -369,6 +369,23 @@ const en = {
           save: 'Save changes',
         },
       },
+      CompanyDetails: {
+        labels: {
+          name: 'Name',
+          uploadLogo: 'Upload Logo',
+          country: 'Country',
+          commodity: 'Commodity Shortlist',
+          currency: 'Currency',
+        },
+        headings: {
+          country: 'Select a country',
+          commodity: 'Select a commodity',
+          currency: 'Select a currency',
+        },
+        actions: {
+          save: 'Save Changes',
+        },
+      },
     },
   },
 };

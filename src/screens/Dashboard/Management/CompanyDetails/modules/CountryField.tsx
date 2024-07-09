@@ -10,6 +10,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { useToggle } from '#ui/hooks/useToggle';
 import { customCountrySort } from '#screens/Auth/SignUp/utils';
 import { cn } from '#ui/lib/cn';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager, { type FormValues } from '../components/FormManager';
 
@@ -22,6 +23,7 @@ const deviceHeight = Dimensions.get('screen').height;
 
 export default function CountryField() {
   const { control, watch, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
@@ -47,17 +49,17 @@ export default function CountryField() {
           <View tw="mx-4">
             <Select
               variant="lg"
-              label="Country"
+              label={t('Dashboard.Management.CompanyDetails.labels.country')}
               currentValue={selectedCountry}
               isModalOpen={isVisible}
               onClick={toggleVisibility}
               content={{
-                header: 'Select a country',
+                header: t('Dashboard.Management.CompanyDetails.headings.country'),
                 options: (
                   <ScrollView>
                     <TextInput
                       tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600"
-                      label="Search..."
+                      label={t('actions.search')}
                       value={search}
                       onChangeText={(val) => setSearch(val)}
                       left={<TextInput.Icon icon="magnify" />}

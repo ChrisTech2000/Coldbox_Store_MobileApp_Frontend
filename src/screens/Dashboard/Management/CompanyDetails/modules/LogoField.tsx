@@ -7,18 +7,23 @@ import { Text } from '#ui/components/Text';
 import { Image } from '#ui/components/Image';
 import { Button } from '#ui/components/Button';
 
+import { useTranslationUtils } from '#i18n/utils';
 import DefaultLogo from '#assets/images/coldtivate_logo.svg';
+
 import FormManager from '../components/FormManager';
 
 export default function LogoField() {
   const { watch, setValue } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const currentLogo = watch('logo');
 
   return (
     <React.Fragment>
       <View tw="flex-row items-center justify-between px-4">
-        <Text tw="text-gray-600 text-base truncate">Upload Logo</Text>
+        <Text tw="text-gray-600 text-base truncate">
+          {t('Dashboard.Management.CompanyDetails.labels.uploadLogo')}
+        </Text>
         <View tw="flex-row items-center space-x-2">
           {!currentLogo.uri ? (
             <DefaultLogo width={56} height={56} />
@@ -51,7 +56,7 @@ export default function LogoField() {
               );
             }}
           >
-            Upload Logo
+            {t('Dashboard.Management.CompanyDetails.labels.uploadLogo')}
           </Button>
         </View>
       </View>

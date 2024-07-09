@@ -11,6 +11,7 @@ import { Button } from '#ui/components/Button';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager, { type FormValues } from '../components/FormManager';
 
@@ -25,6 +26,7 @@ export default function CommodityField(props: Props) {
   const { crops } = props;
 
   const { control, watch, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
@@ -56,17 +58,17 @@ export default function CommodityField(props: Props) {
           <View tw="mx-4">
             <Select
               variant="lg"
-              label="Commodity Shortlist"
+              label={t('Dashboard.Management.CompanyDetails.labels.commodity')}
               currentValue={selectLabel}
               isModalOpen={isVisible}
               onClick={toggleVisibility}
               useScrollView={false}
               content={{
-                header: 'Select a commodity',
+                header: t('Dashboard.Management.CompanyDetails.headings.commodity'),
                 headerComponent: (
                   <TextInput
                     tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600 mb-2"
-                    label="Search..."
+                    label={t('actions.search')}
                     value={search}
                     onChangeText={(val) => setSearch(val)}
                     left={<TextInput.Icon icon="magnify" />}
@@ -112,7 +114,7 @@ export default function CommodityField(props: Props) {
                         toggleVisibility();
                       }}
                     >
-                      Cancel
+                      {t('actions.cancel')}
                     </Button>
                     <Button
                       mode="text"
@@ -123,7 +125,7 @@ export default function CommodityField(props: Props) {
                         toggleVisibility();
                       }}
                     >
-                      Ok
+                      {t('actions.ok')}
                     </Button>
                   </View>
                 ),
