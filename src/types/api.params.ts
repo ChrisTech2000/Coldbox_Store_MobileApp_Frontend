@@ -88,11 +88,16 @@ export interface CheckInParams extends JsonObject {
       weight: number;
       tag: string; // the id defined during checkout
       coolingUnitId: number;
+      plannedDays: number | undefined;
     }>;
     harvestDate: number;
     initialGrade: unknown; // TODO: figure out type
     hasPicture: boolean;
   }>;
+}
+
+export interface CheckInWithCodeParams extends JsonObject {
+  code: string;
 }
 
 export interface GetLocationParams extends JsonObject {

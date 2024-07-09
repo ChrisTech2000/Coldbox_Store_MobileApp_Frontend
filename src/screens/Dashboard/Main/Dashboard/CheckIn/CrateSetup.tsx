@@ -213,6 +213,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           weight: crate.crateWeight,
           tag: crate.crateId?.toString() ?? '',
           coolingUnitId: coolingUnit.id,
+          plannedDays: values.plannedDays,
         })),
         initialGrade: null,
         harvestDate: (harvestDate ?? dateHarvested) as number,
@@ -402,7 +403,11 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           </Text>
           <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
             {company?.currency}{' '}
-            {((coolingUnit?.commonPricingType.value ?? 0) * (plannedDays ?? 0)).toFixed(2)}
+            {(
+              (coolingUnit?.commonPricingType.value ?? 0) *
+              (crates?.length ?? 0) *
+              (plannedDays ?? 1)
+            ).toFixed(2)}
           </Text>
         </View>
       </View>

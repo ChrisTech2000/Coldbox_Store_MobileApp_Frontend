@@ -15,10 +15,12 @@ import type {
   CheckInParams,
   GetCoolingUnitCropsParams,
   UpdateUserParams,
+  CheckInWithCodeParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
   CheckInResponse,
+  CheckInWithCodeResponse,
   CheckOutResponse,
   GetCoolingUnitCropsResponse,
   GetFarmerResponse,
@@ -179,6 +181,23 @@ class ColdtivateService extends HttpClient {
 
     try {
       const { data } = await this.post<CheckInResponse>(EOperationEndpoints.CHECK_IN, _params);
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public checkInWithCode = async (
+    params: CheckInWithCodeParams
+  ): Promise<CheckInWithCodeResponse> => {
+    try {
+      const { data } = await this.post<CheckInWithCodeResponse>(
+        EOperationEndpoints.MOVE_CHECKOUT,
+        params
+      );
       return data;
     } catch (error) {
       console.log(error);

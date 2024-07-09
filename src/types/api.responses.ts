@@ -6,6 +6,8 @@ import {
   type CoolingUnit,
   type User,
   Crop,
+  Pricing,
+  ECoolingUnitMetric,
 } from './global';
 
 export type SignInResponse = {
@@ -44,6 +46,26 @@ export type CheckInResponse = {
   movement: number;
   farmer: number;
   hasDt: string;
+};
+
+export type CheckInWithCodeResponse = {
+  id: number;
+  produce: number;
+  coolingUnit: number;
+  weight: number;
+  remainingShelfLife: number | null;
+  plannedDays: number | null;
+  checkOut: number;
+  pricing: Array<Pricing>;
+  coolingUnitMetric: ECoolingUnitMetric;
+  checkInDate: Date;
+  name: string;
+  cropImage: string;
+  movementCode: string;
+  currentStorageDays: number;
+  runDt: boolean;
+  qualityDt: number;
+  tag: string | null;
 };
 
 export type GetLocationResponse = {

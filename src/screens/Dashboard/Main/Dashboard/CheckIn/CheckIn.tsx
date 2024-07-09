@@ -14,6 +14,7 @@ import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/
 import ColdtivateService from '#services/ColdtivateService';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -24,18 +25,23 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
+  const { refreshDashboard } = useDashboardStore();
   const { produces, removeProduce, setCoolingUnit, setUser, resetCheckInStore } = useCheckInStore();
 
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const toast = useToast();
 
-  const total = useMemo(
-    () =>
-      (
-        coolingUnit.commonPricingType.value * produces.flatMap((produce) => produce.crates).length
-      ).toFixed(2),
-    [produces.length, coolingUnit]
-  );
+  const total = useMemo(() => {
+    const dailyPricePerCrate = coolingUnit.commonPricingType.value;
+    const allCrates = produces.flatMap((produce) => produce.crates);
+
+    return allCrates
+      .reduce((acc, current) => {
+        acc += (current.plannedDays ?? 1) * dailyPricePerCrate;
+        return acc;
+      }, 0)
+      .toFixed(2);
+  }, [produces.length, coolingUnit]);
 
   const onSubmit = useCallback(async () => {
     const result = await ColdtivateService.checkIn({
@@ -54,6 +60,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), {
         type: 'success',
       });
+
+      setTimeout(() => refreshDashboard?.(), 1000);
       rootNavigation.navigate('RootMainTabStack');
     }
   }, [user, produces]);

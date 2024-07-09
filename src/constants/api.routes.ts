@@ -27,4 +27,5 @@ export enum EStorageEndpoints {
 export enum EOperationEndpoints {
   CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
+  MOVE_CHECKOUT = 'operation/move-checkout/',
 }

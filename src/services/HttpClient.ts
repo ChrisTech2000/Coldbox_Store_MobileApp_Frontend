@@ -93,9 +93,6 @@ export default class HttpClient {
     data: JsonObject | JsonArray,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
-    console.log(serialize(data));
-    console.log(data);
-
     return this.axios.post<T>(url, serialize(data), config);
   }
 
