@@ -91,21 +91,31 @@ export default class HttpClient {
   protected post<T>(
     url: string,
     data: JsonObject | JsonArray,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
+    unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    return this.axios.post<T>(url, serialize(data), config);
+    console.log(serialize(data, unserializable)), console.log(data);
+    return this.axios.post<T>(url, serialize(data, unserializable), config);
   }
 
-  protected get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.axios.get<T>(url, config ? { ...config, params: serialize(config?.params) } : {});
+  protected get<T>(
+    url: string,
+    config?: AxiosRequestConfig,
+    unserializable?: string[]
+  ): Promise<AxiosResponse<T>> {
+    return this.axios.get<T>(
+      url,
+      config ? { ...config, params: serialize(config?.params, unserializable) } : {}
+    );
   }
 
   protected put<T>(
     url: string,
     data: JsonObject,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
+    unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    return this.axios.put<T>(url, serialize(data), config);
+    return this.axios.put<T>(url, serialize(data, unserializable), config);
   }
 
   protected delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {

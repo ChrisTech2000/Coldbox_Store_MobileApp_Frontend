@@ -96,8 +96,18 @@ export interface CheckInParams extends JsonObject {
   }>;
 }
 
-export interface CheckInWithCodeParams extends JsonObject {
+export interface GetCheckOutParams extends JsonObject {
   code: string;
+}
+
+export interface CheckOutWithCodeParams extends JsonObject {
+  params: {
+    code: string;
+    days: number | undefined;
+    farmer: number;
+    coolingUnitId: number;
+    tags: number[] | undefined;
+  };
 }
 
 export interface GetLocationParams extends JsonObject {

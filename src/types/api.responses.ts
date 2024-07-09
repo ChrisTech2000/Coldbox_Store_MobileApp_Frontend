@@ -41,6 +41,10 @@ export type CheckOutResponse = {
   priceDiscount: number;
 };
 
+export type CheckInWitCodeResponse = {
+  message: string;
+};
+
 export type CheckInResponse = {
   id: number;
   movement: number;
@@ -48,7 +52,7 @@ export type CheckInResponse = {
   hasDt: string;
 };
 
-export type CheckInWithCodeResponse = {
+export type CheckOut = Array<{
   id: number;
   produce: number;
   coolingUnit: number;
@@ -66,7 +70,9 @@ export type CheckInWithCodeResponse = {
   runDt: boolean;
   qualityDt: number;
   tag: string | null;
-};
+}>;
+
+export type GetCheckOutResponse = CheckOut | { message: string };
 
 export type GetLocationResponse = {
   id: number;

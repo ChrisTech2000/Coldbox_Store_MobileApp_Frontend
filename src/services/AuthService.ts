@@ -45,13 +45,14 @@ class AuthService extends HttpClient {
       ...params,
       createUser: true,
       parentName: '',
-      unserializable: ['createUser'],
     };
 
     try {
       const { data } = await this.post<SignUpAsCoolingUserResponse>(
         EAuthenticationEndpoints.SIGN_UP_AS_COOLING_USER,
-        _params
+        _params,
+        undefined,
+        ['createUser']
       );
       return data;
     } catch (error) {
