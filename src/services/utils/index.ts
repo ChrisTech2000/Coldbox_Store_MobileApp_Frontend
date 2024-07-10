@@ -11,17 +11,21 @@ const isObject = (obj: unknown): obj is JsonObject => {
   return obj !== null && typeof obj === 'object' && !Array.isArray(obj);
 };
 
-export const serialize = (obj: Json): Json => {
+export const serialize = (obj: Json, unserializable: string[] = []): Json => {
   if (Array.isArray(obj)) {
-    return obj.map((item) => serialize(item));
+    return obj.map((item) => serialize(item, unserializable));
   } else if (isObject(obj)) {
-    const { unserializable, ...rest } = obj as JsonObject;
+    const { unserializable: nestedUnserializable, ...rest } = obj as JsonObject;
+    const combinedUnserializable = [
+      ...unserializable,
+      ...((nestedUnserializable as string[]) ?? []),
+    ];
 
     return Object.keys(rest).reduce<JsonObject>((acc, key) => {
-      if (unserializable && Array.isArray(unserializable) && unserializable.includes(key)) {
-        acc[key] = serialize(rest[key]);
+      if (combinedUnserializable.includes(key)) {
+        acc[key] = serialize(rest[key], combinedUnserializable);
       } else {
-        acc[snakeCase(key)] = serialize(rest[key]);
+        acc[snakeCase(key)] = serialize(rest[key], combinedUnserializable);
       }
       return acc;
     }, {});

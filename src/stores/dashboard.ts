@@ -4,24 +4,23 @@ import { useShallow } from 'zustand/react/shallow';
 
 import ColdtivateService from '#services/ColdtivateService';
 import type { GetFarmerParams } from '#types/api.params';
-import type { GetFarmerResponse } from '#types/api.responses';
-import { ERoles, type Company, type CoolingUnit } from '#types/global';
+import { ERoles, type Farmer, type Company, type CoolingUnit } from '#types/global';
 
 import { useAuthStore } from './auth';
 
 type State = {
   farmerId: number | null;
-  farmerCompanies: Company[] | null;
-  farmerUnitsIds: number[] | null;
+  farmerCompanies: Array<Company> | null;
+  farmerUnitsIds: Array<number> | null;
 
-  coolingUnits: CoolingUnit[] | null;
+  coolingUnits: Array<CoolingUnit> | null;
 
   refreshDashboard: (() => void) | null;
 };
 
 type Actions = {
   fetchGlobalInformation: (params: GetFarmerParams) => Promise<void>;
-  setCoolingUnits: (units: CoolingUnit[]) => void;
+  setCoolingUnits: (units: Array<CoolingUnit>) => void;
   setRefreshDashboardFn: (fn: () => void) => void;
 };
 
@@ -40,7 +39,7 @@ export const useDashboardStore = create<State & Actions>((set) => ({
       ]);
 
       const farmer =
-        farmerResult.status === 'fulfilled' ? farmerResult.value?.at(0) : ({} as GetFarmerResponse);
+        farmerResult.status === 'fulfilled' ? farmerResult.value?.at(0) : ({} as Farmer);
       const companies = companiesResult.status === 'fulfilled' ? companiesResult.value : [];
 
       const farmerCompanies = companies?.filter((company) =>

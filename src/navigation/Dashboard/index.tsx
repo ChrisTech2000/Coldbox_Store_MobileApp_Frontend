@@ -15,13 +15,17 @@ import RBAC from '#common/RBAC';
 import DrawerContent from './components/DrawerContent';
 import DashboardScreenOptions from './components/ScreenOptions';
 import DashboardMainBottomTabs from './Main';
-import ManagementStack from './Management';
+import ManagementStack, { ManagementRoutes } from './Management';
 import NotificationsDrawerContent from './components/NotificationsDrawerContent';
 
 export type DashboardRoutes = {
   Main: undefined;
   AccountDetails: undefined;
-  Management: undefined;
+  Management:
+    | {
+        screen: keyof ManagementRoutes;
+      }
+    | undefined;
   KnowledgeHub: undefined;
   Tutorial: undefined;
   FAQ: undefined;
