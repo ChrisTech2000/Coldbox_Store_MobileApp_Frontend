@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { TextInput } from 'react-native-paper';
+import { ActivityIndicator, TextInput } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
@@ -10,14 +10,17 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import SelectWithStore, { createSelectStore } from '../components/SelectWithStore';
 import { sortProduces } from '../utils/sortProduces';
+import { DashboardEmptyState } from './components/DashboardEmptyState';
 import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
@@ -52,7 +55,11 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
-  const { data: farmerDashboardProduces, refetch: refreshFarmerDashboardProduces } = useApiCall(
+  const {
+    data: farmerDashboardProduces,
+    refetch: refreshFarmerDashboardProduces,
+    isLoading: loadingFarmerDashboardProduces,
+  } = useApiCall(
     'getFarmerDashboardProduces',
     ColdtivateService.getFarmerDashboardProduces,
     {
@@ -65,7 +72,11 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
-  const { data: operatorDashboardProduces, refetch: refreshOperatorDashboardProduces } = useApiCall(
+  const {
+    data: operatorDashboardProduces,
+    refetch: refreshOperatorDashboardProduces,
+    isLoading: loadingOperatorDashboardProduces,
+  } = useApiCall(
     'getDashboardProduces',
     ColdtivateService.getDashboardProduces,
     {
@@ -125,11 +136,20 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     else setRefreshDashboardFn(refreshOperatorDashboardProduces);
   }, [user?.role]);
 
+  if (loadingFarmerDashboardProduces || loadingOperatorDashboardProduces) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
+
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0">
       <View tw="mt-2 px-4">
         {user?.role === ERoles.COOLING_USER && (
           <SelectWithStore<Company>
+            emptyMessage={t('Dashboard.noCompanyAvailable')}
             datums={farmerCompanies ?? []}
             isModalVisible={isCompaniesModalOpen}
             setIsModalVisible={setIsCompaniesModalOpen}
@@ -145,6 +165,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           />
         )}
         <SelectWithStore<CoolingUnit>
+          emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
           datums={units}
           isModalVisible={isUnitsModalOpen}
           setIsModalVisible={setIsUnitsModalOpen}
@@ -202,17 +223,21 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         </View>
       </View>
 
-      <FlatList
-        data={filteredProduces}
-        renderItem={({ item: produce, index }) => (
-          <Produce
-            key={`${produce.id}-${index}`}
-            produce={produce}
-            onNavigate={() => navigation.navigate('ProduceDetails', { produce })}
-            currency={company?.currency ?? ''}
-          />
-        )}
-      />
+      {!dashboardProduces?.length ? (
+        <DashboardEmptyState />
+      ) : (
+        <FlatList
+          data={filteredProduces}
+          renderItem={({ item: produce, index }) => (
+            <Produce
+              key={`${produce.id}-${index}`}
+              produce={produce}
+              onNavigate={() => navigation.navigate('ProduceDetails', { produce })}
+              currency={company?.currency ?? ''}
+            />
+          )}
+        />
+      )}
 
       {user?.role === ERoles.OPERATOR && <OperatorActions {...props} coolingUnit={coolingUnit} />}
     </View>

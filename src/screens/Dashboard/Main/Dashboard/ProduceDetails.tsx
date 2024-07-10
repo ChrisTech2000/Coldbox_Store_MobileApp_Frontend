@@ -9,7 +9,9 @@ import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import { ECoolingUnitMetric, EPricingType } from '#types/global';
+
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 function ProduceDetails({ route }: MainTabStackRouteProps<'ProduceDetails'>) {
@@ -41,6 +43,13 @@ function ProduceDetails({ route }: MainTabStackRouteProps<'ProduceDetails'>) {
     }
 
     return produce.plannedDays ? pricing.dailyRate * metric * produce.plannedDays : 'N/A';
+  }, [produce]);
+
+  const percentage = useMemo(() => {
+    const quality = produce.qualityDt * 100;
+    if (quality > 100) return 100;
+    if (quality < 0 || isNaN(quality)) return 0;
+    return quality;
   }, [produce]);
 
   const data = useMemo(
@@ -118,10 +127,20 @@ function ProduceDetails({ route }: MainTabStackRouteProps<'ProduceDetails'>) {
 
       {produce.runDt && produce.qualityDt !== -1 ? (
         <View tw="w-full px-2">
-          <View tw="w-full bg-green-300 rounded-lg h-3 " />
+          <View
+            tw={cn(
+              'w-full bg-green-300 rounded-lg h-3',
+              produce.minimumRemainingShelfLife <= 7 &&
+                produce.minimumRemainingShelfLife > 2 &&
+                'bg-yellow-400',
+              produce.minimumRemainingShelfLife < 2 && 'bg-red-500',
+              (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
+                'bg-gray-300'
+            )}
+          />
           <View tw="flex flex-row items-center justify-between">
             <Text variant="TextMedium" tw="px-2">
-              0%
+              {percentage}%
               {/**NOTE: figure out what's the behaviour here; currently does nothing in original app */}
             </Text>
             <Text variant="TextMedium" tw="px-2">

@@ -2,7 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import React, { useState } from 'react';
 import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { Divider, Icon } from 'react-native-paper';
+import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
@@ -12,6 +12,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useCheckInStore } from '#stores/checkIn';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -25,7 +26,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
 
   const [additionalInfo, setAdditionalInfo] = useState<string>('');
 
-  const { data } = useApiCall(
+  const { data, isLoading } = useApiCall(
     'getCoolingUnitCrops',
     ColdtivateService.getCoolingUnitCrops,
     {
@@ -36,6 +37,16 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
       skip: !coolingUnit?.id || !type,
     }
   );
+
+  console.log(data);
+
+  if (isLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
 
   return (
     <View>

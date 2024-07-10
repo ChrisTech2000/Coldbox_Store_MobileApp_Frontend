@@ -234,6 +234,11 @@ const en = {
     },
   },
   Dashboard: {
+    emptyGeneral: 'At the moment, there is no available data.',
+    emptyCoolingUser:
+      'Items in storage will appear in the dashboard when you do at least one check-in in any room.',
+    noCompanyAvailable: 'No company available',
+    noCoolingUnitAvailable: 'No cooling unit available',
     CrateManagement: {
       userModalTitle: 'Select a cooling user',
       coolingUserLabel: 'Cooling user',

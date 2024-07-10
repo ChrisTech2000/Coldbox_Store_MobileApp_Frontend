@@ -237,6 +237,9 @@ export default {
     },
   },
   Dashboard: {
+    emptyGeneral: 'इस समय, कोई उपलब्ध डेटा नहीं है।',
+    emptyCoolingUser:
+      'किसी भी कमरे में कम से कम एक चेक-इन करने पर भंडारण में रखे आइटम डैशबोर्ड में दिखाई देंगे।',
     CrateManagement: {
       userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
       coolingUserLabel: 'कूलिंग उपयोगकर्ता',
