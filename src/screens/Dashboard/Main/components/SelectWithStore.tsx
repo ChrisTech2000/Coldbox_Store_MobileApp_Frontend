@@ -30,7 +30,7 @@ type SelectItemProps<T> = {
   emptyMessage?: string;
   isModalVisible: boolean;
   label: string;
-  modalHeader: string;
+  modalHeader?: string;
   occupyFullWidth?: boolean;
   useSelectStore: ReturnType<typeof createSelectStore<T>>;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
@@ -88,7 +88,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
           isModalOpen={isModalVisible}
           onClick={() => setIsModalVisible(!isModalVisible)}
           content={{
-            header: rest.modalHeader,
+            header: rest.modalHeader ?? '',
             options: (
               <RadioButton.Group
                 value={internalSelection ? rest.itemName(internalSelection) : ''}

@@ -269,6 +269,13 @@ const en = {
             boxes: 'Boxes',
             sacks: 'Sacks',
             baskets: 'Baskets',
+            singular: {
+              kg: 'kg',
+              crates: 'crate',
+              boxes: 'box',
+              sacks: 'sack',
+              baskets: 'basket',
+            },
           },
           reasonsForLoss: {
             improperHarvest: 'Improper harvest or handling',

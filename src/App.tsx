@@ -4,7 +4,7 @@ import { StatusBar } from 'react-native';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, Portal } from 'react-native-paper';
 
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import AuthNavigator from './navigation/Auth';
@@ -28,7 +28,9 @@ export default function App() {
         <StaleWhileRevalidate>
           <SafeAreaProvider>
             <NavigationContainer theme={navigatorTheme}>
-              {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
+              <Portal.Host>
+                {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
+              </Portal.Host>
             </NavigationContainer>
           </SafeAreaProvider>
         </StaleWhileRevalidate>

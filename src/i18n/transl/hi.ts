@@ -271,6 +271,13 @@ export default {
             boxes: 'बक्से',
             sacks: 'बोरियां',
             baskets: 'टोकरी',
+            singular: {
+              kg: 'किलो',
+              crates: 'टोकरा',
+              boxes: 'डिब्बा',
+              sacks: 'बोरा',
+              baskets: 'टोकरी',
+            },
           },
           reasonsForLoss: {
             improperHarvest: 'गलत कटाई या संभाल',
