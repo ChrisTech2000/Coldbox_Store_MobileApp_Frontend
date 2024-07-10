@@ -322,10 +322,9 @@ class ColdtivateService extends HttpClient {
   public getOperators = async (companyId: number): Promise<Array<GetOperatorsResponse>> => {
     try {
       const params = { company: companyId };
-      const { data } = await this.delete<Array<GetOperatorsResponse>>(
-        EUserEndpoints.GET_OPERATORS,
-        { params }
-      );
+      const { data } = await this.get<Array<GetOperatorsResponse>>(EUserEndpoints.GET_OPERATORS, {
+        params,
+      });
       return data;
     } catch (error) {
       console.log(error);
@@ -338,7 +337,7 @@ class ColdtivateService extends HttpClient {
   public getInvitedOperators = async (companyId: number): Promise<Array<GetOperatorsResponse>> => {
     try {
       const params = { company: companyId };
-      const { data } = await this.delete<Array<GetOperatorsResponse>>(
+      const { data } = await this.get<Array<GetOperatorsResponse>>(
         EUserEndpoints.GET_INVITED_OPERATORS,
         { params }
       );
@@ -354,12 +353,9 @@ class ColdtivateService extends HttpClient {
   public getOperatorByUserId = async (userId: number): Promise<Array<GetOperatorsResponse>> => {
     try {
       const params = { user_id: userId };
-      const { data } = await this.delete<Array<GetOperatorsResponse>>(
-        EUserEndpoints.GET_OPERATORS,
-        {
-          params,
-        }
-      );
+      const { data } = await this.get<Array<GetOperatorsResponse>>(EUserEndpoints.GET_OPERATORS, {
+        params,
+      });
       return data;
     } catch (error) {
       console.log(error);
