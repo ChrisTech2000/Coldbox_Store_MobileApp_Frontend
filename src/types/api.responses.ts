@@ -1,15 +1,18 @@
 import {
-  type CommodityInfo,
-  type CommodityTotal,
-  type CommonPricingType,
-  type Crop,
-  type DateOperatorAssigned,
   EPaymentType,
   ERoles,
-  type PowerOption,
+  type Farmer,
   type Company,
   type CoolingUnit,
   type User,
+  Crop,
+  Pricing,
+  ECoolingUnitMetric,
+  DateOperatorAssigned,
+  CommodityInfo,
+  CommonPricingType,
+  CommodityTotal,
+  PowerOption,
 } from './global';
 
 export type SignInResponse = {
@@ -31,16 +34,7 @@ export type SignUpAsCoolingUserResponse = {
   userCode: string;
 };
 
-export type GetFarmerResponse = {
-  id: number;
-  user: User;
-  birthday: Date;
-  parentName: string;
-  country: string;
-  userCode: string;
-  companies: number[];
-  coolingUnits: number[];
-};
+export type GetFarmerResponse = Array<Farmer>;
 
 export type CheckOutResponse = {
   id: number;
@@ -51,6 +45,39 @@ export type CheckOutResponse = {
   currency: string;
   priceDiscount: number;
 };
+
+export type CheckInWitCodeResponse = {
+  message: string;
+};
+
+export type CheckInResponse = {
+  id: number;
+  movement: number;
+  farmer: number;
+  hasDt: string;
+};
+
+export type CheckOut = Array<{
+  id: number;
+  produce: number;
+  coolingUnit: number;
+  weight: number;
+  remainingShelfLife: number | null;
+  plannedDays: number | null;
+  checkOut: number;
+  pricing: Array<Pricing>;
+  coolingUnitMetric: ECoolingUnitMetric;
+  checkInDate: Date;
+  name: string;
+  cropImage: string;
+  movementCode: string;
+  currentStorageDays: number;
+  runDt: boolean;
+  qualityDt: number;
+  tag: string | null;
+}>;
+
+export type GetCheckOutResponse = CheckOut | { message: string };
 
 export type GetLocationResponse = {
   id: number;
@@ -157,3 +184,12 @@ export type GetCoolingUnitsByStatusResponse = {
   powerOptions: Array<PowerOption>;
   editableCheckins: boolean;
 }[];
+
+export type GetCoolingUnitCropsResponse = Array<{
+  id: number;
+  fullCrop: Crop;
+  active: true;
+  crop: number;
+  coolingUnit: number;
+  pricing: number;
+}>;

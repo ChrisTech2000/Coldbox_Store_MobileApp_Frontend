@@ -86,7 +86,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
       <Divider tw="bg-gray-400 my-2" />
       <View tw="flex flex-row w-full justify-between items-center">
         <Text variant="TextMedium" tw="text-lg">
-          {t('Dashboard.CrateManagement.coolingUnitLabel')}
+          {t('Dashboard.CrateManagement.selectCoolingUnitLabel')}
         </Text>
         <SelectWithStore<CoolingUnit>
           datums={coolingUnits ?? []}

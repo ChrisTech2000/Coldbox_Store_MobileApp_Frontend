@@ -5,9 +5,10 @@ import axios, {
   type AxiosRequestHeaders,
 } from 'axios';
 
-import { type Tokens, useAuthStore } from '#stores/auth';
 import { API_BASE_URL } from '#constants/environment';
-import { type JsonObject, serialize, deserialize, type Json } from './utils';
+import { useAuthStore, type Tokens } from '#stores/auth';
+
+import { deserialize, Json, serialize, type JsonArray, type JsonObject } from './utils';
 
 type Options = {
   baseURL: string;
@@ -17,7 +18,7 @@ type Options = {
   onForbidden?: () => void;
 };
 
-type RequestBody = JsonObject | FormData;
+type RequestBody = JsonObject | JsonArray | FormData;
 
 export type HttpClientOptions = Pick<
   Options,
@@ -92,23 +93,30 @@ export default class HttpClient {
   protected post<T>(
     url: string,
     data: RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
+    unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    const serialized = this._requestBodySerialization(data);
-    return this.axios.post<T>(url, serialized, config);
+    return this.axios.post<T>(url, this._requestBodySerialization(data, unserializable), config);
   }
 
-  protected get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.axios.get<T>(url, config ? { ...config, params: serialize(config?.params) } : {});
+  protected get<T>(
+    url: string,
+    config?: AxiosRequestConfig,
+    unserializable?: string[]
+  ): Promise<AxiosResponse<T>> {
+    return this.axios.get<T>(
+      url,
+      config ? { ...config, params: serialize(config?.params, unserializable) } : {}
+    );
   }
 
   protected put<T>(
     url: string,
     data: RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
+    unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    const serialized = this._requestBodySerialization(data);
-    return this.axios.put<T>(url, serialized, config);
+    return this.axios.put<T>(url, this._requestBodySerialization(data, unserializable), config);
   }
 
   protected delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
@@ -118,10 +126,10 @@ export default class HttpClient {
   protected patch<T>(
     url: string,
     data: RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
+    unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    const serialized = this._requestBodySerialization(data);
-    return this.axios.patch<T>(url, serialized, config);
+    return this.axios.patch<T>(url, this._requestBodySerialization(data, unserializable), config);
   }
 
   private _buildHeaders = (prevHeaders?: AxiosRequestHeaders) => {
@@ -133,7 +141,10 @@ export default class HttpClient {
     return headers;
   };
 
-  private _requestBodySerialization(data: RequestBody): FormData | Json {
-    return data instanceof FormData ? data : serialize(data);
+  private _requestBodySerialization(
+    data: RequestBody,
+    unserializable?: Array<string>
+  ): FormData | Json {
+    return data instanceof FormData ? data : serialize(data, unserializable);
   }
 }

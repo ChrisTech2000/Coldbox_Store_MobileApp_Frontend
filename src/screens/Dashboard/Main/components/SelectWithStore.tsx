@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
+import { Text } from '#ui/components/Text';
 
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useTranslationUtils } from '#i18n/utils';
@@ -26,6 +27,7 @@ type SelectItemProps<T> = {
   autoSelect?: boolean;
   datums: Array<T>;
   divider?: boolean;
+  emptyMessage?: string;
   isModalVisible: boolean;
   label: string;
   modalHeader: string;
@@ -65,6 +67,17 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
   );
 
   const { t } = useTranslationUtils();
+
+  if (!rest.datums.length && rest.emptyMessage) {
+    return (
+      <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
+        <Text variant="TextMedium" tw="text-base">
+          {rest.emptyMessage}
+        </Text>
+        <Divider tw="bg-gray-600 my-1" />
+      </View>
+    );
+  }
 
   return (
     <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
