@@ -445,6 +445,23 @@ export default {
           save: 'सेव चंगेस',
         },
       },
+      CompanyDetails: {
+        labels: {
+          name: 'नाम',
+          uploadLogo: 'लोगो अपलोड करें',
+          country: 'देश',
+          commodity: 'सामग्री',
+          currency: 'मुद्रा',
+        },
+        headings: {
+          country: 'देश चुनें',
+          commodity: 'उपज को चयन करें',
+          currency: 'एक मुद्रा चुनें',
+        },
+        actions: {
+          save: 'सेव चंगेस',
+        },
+      },
     },
   },
 } satisfies Translations;

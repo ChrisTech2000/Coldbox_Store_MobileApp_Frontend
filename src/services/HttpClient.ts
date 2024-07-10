@@ -8,7 +8,7 @@ import axios, {
 import { API_BASE_URL } from '#constants/environment';
 import { useAuthStore, type Tokens } from '#stores/auth';
 
-import { deserialize, serialize, type JsonArray, type JsonObject } from './utils';
+import { deserialize, Json, serialize, type JsonArray, type JsonObject } from './utils';
 
 type Options = {
   baseURL: string;
@@ -17,6 +17,8 @@ type Options = {
   onUnauthorized?: () => void;
   onForbidden?: () => void;
 };
+
+type RequestBody = JsonObject | JsonArray | FormData;
 
 export type HttpClientOptions = Pick<
   Options,
@@ -90,11 +92,11 @@ export default class HttpClient {
 
   protected post<T>(
     url: string,
-    data: JsonObject | JsonArray,
+    data: RequestBody,
     config?: AxiosRequestConfig,
     unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    return this.axios.post<T>(url, serialize(data, unserializable), config);
+    return this.axios.post<T>(url, this._requestBodySerialization(data, unserializable), config);
   }
 
   protected get<T>(
@@ -110,11 +112,11 @@ export default class HttpClient {
 
   protected put<T>(
     url: string,
-    data: JsonObject,
+    data: RequestBody,
     config?: AxiosRequestConfig,
     unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    return this.axios.put<T>(url, serialize(data, unserializable), config);
+    return this.axios.put<T>(url, this._requestBodySerialization(data, unserializable), config);
   }
 
   protected delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
@@ -123,10 +125,11 @@ export default class HttpClient {
 
   protected patch<T>(
     url: string,
-    data: JsonObject,
-    config?: AxiosRequestConfig
+    data: RequestBody,
+    config?: AxiosRequestConfig,
+    unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    return this.axios.patch<T>(url, serialize(data), config);
+    return this.axios.patch<T>(url, this._requestBodySerialization(data, unserializable), config);
   }
 
   private _buildHeaders = (prevHeaders?: AxiosRequestHeaders) => {
@@ -137,4 +140,11 @@ export default class HttpClient {
     }
     return headers;
   };
+
+  private _requestBodySerialization(
+    data: RequestBody,
+    unserializable?: Array<string>
+  ): FormData | Json {
+    return data instanceof FormData ? data : serialize(data, unserializable);
+  }
 }

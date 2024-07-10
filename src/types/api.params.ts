@@ -140,3 +140,20 @@ export interface UpdateUserParams extends JsonObject, Omit<Partial<User>, 'id'> 
   coolingUnits?: Array<number> | null;
   userId: number;
 }
+
+export interface UpdateCompanyParams extends JsonObject {
+  accountName: string;
+  accountNumber: string;
+  bankName: string;
+  models: Array<string>;
+  name: string;
+  country: string;
+  crop: Array<number>;
+  currency: string;
+  companyId: number;
+  logo: {
+    uri: string;
+    name?: string;
+    type?: string;
+  } | null;
+}

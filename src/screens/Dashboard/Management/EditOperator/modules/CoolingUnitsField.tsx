@@ -78,8 +78,8 @@ export default function CoolingUnitsField(props: Props) {
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    toggleModalVisibility();
                     setInternalSelection(selectedCoolingUnits);
+                    toggleModalVisibility();
                   }}
                 >
                   {t('actions.cancel')}
@@ -89,8 +89,8 @@ export default function CoolingUnitsField(props: Props) {
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    toggleModalVisibility();
                     setValue('coolingUnits', internalSelection);
+                    toggleModalVisibility();
                   }}
                 >
                   {t('actions.ok')}
