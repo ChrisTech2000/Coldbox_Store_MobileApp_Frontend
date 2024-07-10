@@ -242,6 +242,8 @@ export default {
       'किसी भी कमरे में कम से कम एक चेक-इन करने पर भंडारण में रखे आइटम डैशबोर्ड में दिखाई देंगे।',
     noCompanyAvailable: 'कोई कंपनी उपलब्ध नहीं है',
     noCoolingUnitAvailable: 'कोई कूलिंग यूनिट उपलब्ध नहीं है',
+    noLocationsAvailable:
+      'Coldtivate में आपका स्वागत है। प्रबंधन पैनल में अपने ऐप में स्थान जोड़कर शुरुआत करें।',
     CrateManagement: {
       userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
       coolingUserLabel: 'कूलिंग उपयोगकर्ता',

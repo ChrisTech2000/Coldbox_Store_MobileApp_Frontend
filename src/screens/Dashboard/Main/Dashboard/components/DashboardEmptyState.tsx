@@ -41,7 +41,10 @@ export function DashboardEmptyState() {
 
   if (user?.role === ERoles.EMPLOYEE && !data.length) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center mx-4 mt-4 space-y-4">
+        <Text variant="TextBold" tw="text-base text-green-primary text-center">
+          {t('Dashboard.noLocationsAvailable')}
+        </Text>
         <Button
           mode="contained"
           contentStyle="flex flex-row-reverse"
@@ -57,7 +60,7 @@ export function DashboardEmptyState() {
 
   return (
     <View tw="flex-1 items-center text-center mx-4 mt-4">
-      <Text variant="TextBold" tw="text-base text-green-primary">
+      <Text variant="TextBold" tw="text-base text-green-primary text-center">
         {user?.role === ERoles.COOLING_USER
           ? t('Dashboard.emptyCoolingUser')
           : t('Dashboard.emptyGeneral')}

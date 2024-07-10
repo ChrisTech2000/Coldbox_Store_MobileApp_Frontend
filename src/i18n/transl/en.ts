@@ -239,6 +239,8 @@ const en = {
       'Items in storage will appear in the dashboard when you do at least one check-in in any room.',
     noCompanyAvailable: 'No company available',
     noCoolingUnitAvailable: 'No cooling unit available',
+    noLocationsAvailable:
+      'Welcome to Coldtivate. Get started by adding locations to your app in the management panel.',
     CrateManagement: {
       userModalTitle: 'Select a cooling user',
       coolingUserLabel: 'Cooling user',
