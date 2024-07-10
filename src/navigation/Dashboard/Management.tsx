@@ -48,7 +48,7 @@ export type ManagementRoutes = {
   CoolingUnits: undefined;
   AddCoolingUnit: undefined;
   EditCoolingUnit: {
-    unitId: string;
+    coolingUnitId: number;
   };
   // Operator related routes
   Operators: undefined;
