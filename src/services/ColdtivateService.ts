@@ -41,7 +41,7 @@ import type {
   GetCoolingUnitsByStatusResponse,
   CheckInWitCodeResponse,
 } from '#types/api.responses';
-import type { Company, CoolingUnit, Crate, DashboardProduce, User } from '#types/global';
+import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
@@ -436,11 +436,11 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public updateFarmer = async (params: UpdateFarmerParams): Promise<GetFarmerResponse> => {
+  public updateFarmer = async (params: UpdateFarmerParams): Promise<Farmer> => {
     try {
       const { farmerId, ...rest } = params;
       const url = subs(EUserEndpoints.UPDATE_FARMER, { farmerId });
-      const { data } = await this.put<GetFarmerResponse>(url, {
+      const { data } = await this.put<Farmer>(url, {
         ...rest,
         unserializable: ['updateUser'],
       });

@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
 
-import { WithRequired } from '#types/miscellaneous';
+import type { WithRequired } from '#types/miscellaneous';
 
 const POP_UP_EVT = {
   SHOW: 'SHOW',
