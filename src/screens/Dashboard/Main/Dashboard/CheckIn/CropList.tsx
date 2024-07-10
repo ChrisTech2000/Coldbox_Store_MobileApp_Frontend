@@ -38,8 +38,6 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
     }
   );
 
-  console.log(data);
-
   if (isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">

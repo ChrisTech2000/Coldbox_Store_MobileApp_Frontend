@@ -94,7 +94,6 @@ export default class HttpClient {
     config?: AxiosRequestConfig,
     unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
-    console.log(serialize(data, unserializable)), console.log(data);
     return this.axios.post<T>(url, serialize(data, unserializable), config);
   }
 

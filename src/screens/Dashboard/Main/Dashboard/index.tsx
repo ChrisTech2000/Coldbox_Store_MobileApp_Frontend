@@ -9,6 +9,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
 import { Button } from '#ui/components/Button';
@@ -36,6 +37,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { t } = useTranslationUtils();
 
   const { sorting } = useSortingStore();
+  const { company: _company } = useManagementStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { selectedItem: company } = useCompanyStore();
   const { farmerId, farmerCompanies, farmerUnitsIds, setCoolingUnits, setRefreshDashboardFn } =
@@ -45,12 +47,15 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     'getCoolingUnits',
     ColdtivateService.getCoolingUnits,
     {
-      ...(user?.role === ERoles.COOLING_USER
-        ? { company: company?.id as number }
+      ...(user?.role === ERoles.COOLING_USER || user?.role === ERoles.EMPLOYEE
+        ? { company: (company?.id || _company?.id) as number }
         : { operator: user?.id as number }),
     },
     {
-      skip: (user?.role === ERoles.COOLING_USER && !company?.id) || !user?.id,
+      skip:
+        user?.role === ERoles.COOLING_USER ||
+        (user?.role === ERoles.EMPLOYEE && !company?.id && !_company?.id) ||
+        !user?.id,
       defaultData: [],
     }
   );
