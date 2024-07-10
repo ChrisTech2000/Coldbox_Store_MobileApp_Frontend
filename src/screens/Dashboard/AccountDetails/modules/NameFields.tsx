@@ -2,10 +2,13 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../components/FormManager';
 
 export default function NameFields() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -17,7 +20,7 @@ export default function NameFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-3"
-            label="Name"
+            label={t('Dashboard.Management.CompanyDetails.labels.name')}
             mode="outlined"
             dense
             value={value}
@@ -34,7 +37,7 @@ export default function NameFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-3"
-            label="Last name"
+            label={t('Auth.SignUp.commonForm.lastNameLabel')}
             mode="outlined"
             dense
             value={value}

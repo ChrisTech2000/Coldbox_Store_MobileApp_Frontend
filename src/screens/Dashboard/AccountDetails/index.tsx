@@ -11,7 +11,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { EApiGender, ERoles } from '#types/global';
-import { LanguageStorage } from '#i18n/utils';
+import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import type { TranslationLocales } from '#i18n/constants';
 import RBAC from '#common/RBAC';
@@ -38,6 +38,7 @@ function AccountDetails() {
 
   const setUser = useAuthStore((store) => store.setUser);
   const patchFarmer = useDashboardStore((store) => store.patchFarmer);
+  const { t } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
 
   async function onSubmit(values: FormValues) {
@@ -107,7 +108,7 @@ function AccountDetails() {
             <LocationField />
             <CountryField />
             <View tw="w-full bg-zinc-200 flex-row items-center justify-between p-3 rounded-md my-1.5">
-              <Text variant="TitleSmall">Cooling User Import Code</Text>
+              <Text variant="TitleSmall">{t('Dashboard.AccountDetails.fields.userCode')}</Text>
               <Text variant="TitleSmall">{farmerUserCode}</Text>
             </View>
           </RBAC.ProtectedResource>
@@ -121,7 +122,11 @@ function AccountDetails() {
               icon={isSubmitting ? undefined : 'check-circle-outline'}
               uppercase
             >
-              {isSubmitting ? <ActivityIndicator size="small" color="white" /> : 'Save Changes'}
+              {isSubmitting ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                t('Dashboard.Management.CompanyDetails.actions.save')
+              )}
             </Button>
           </View>
         </KeyboardAwareScrollView>

@@ -399,6 +399,10 @@ const en = {
         activeCheckInCU:
           'You can not delete your account because you have active check-ins in cooling unit(s) {{names}}. Please check out these items first, and then try again to delete your account!',
       },
+      fields: {
+        location: 'Location',
+        userCode: 'Cooling User Import Code',
+      },
     },
   },
 };

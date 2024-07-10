@@ -121,7 +121,7 @@ export default function DeleteAccountAction() {
         disabled={isSubmitting || isProcessing}
         uppercase
       >
-        {isProcessing ? <ActivityIndicator size="small" color="white" /> : 'Delete'}
+        {isProcessing ? <ActivityIndicator size="small" color="white" /> : t('actions.delete')}
       </Button>
 
       <Portal>
