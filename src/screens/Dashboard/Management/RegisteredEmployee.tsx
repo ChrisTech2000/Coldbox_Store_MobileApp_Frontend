@@ -60,7 +60,7 @@ function RegisteredEmployee(props: ManagementRouteProps<'RegisteredEmployee'>) {
 
       <FlatList
         data={registeredEmployees}
-        keyExtractor={(item) => `operator-item-#${item.id}`}
+        keyExtractor={(item) => `registered-employee-item-#${item.id}`}
         renderItem={({ item }) => (
           <React.Fragment>
             <List.Item
