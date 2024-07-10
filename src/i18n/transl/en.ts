@@ -281,6 +281,11 @@ const en = {
             price: 'Market prices too low',
             other: 'Other',
           },
+          errorMessages: {
+            number: 'Must be a non-null, positive number',
+            totalMismatch:
+              'The sum of Self-consumed, Sold and Lost or sold below market price should be equal to the total quantity produced.',
+          },
         },
       },
       CheckOut: {

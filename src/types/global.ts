@@ -225,7 +225,7 @@ export interface FarmerSurvey {
   cropId: number;
   farmerSurveyId: number;
   averagePrice: number;
-  unit: EFarmerSurveyQuantityUnit;
+  unit: EUnitOfMeasurement;
   quantityTotal: number;
   quantitySelfConsumed: number;
   quantitySold: number;
@@ -330,7 +330,7 @@ export enum EDateCropped {
   EVEN_BEFORE = '-4',
 }
 
-export enum EFarmerSurveyQuantityUnit {
+export enum EUnitOfMeasurement {
   KILOGRAMS = 'kg',
   CRATES = 'crates',
   BOXES = 'boxes',
