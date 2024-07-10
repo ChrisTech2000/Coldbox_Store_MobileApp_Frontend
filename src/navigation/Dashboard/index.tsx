@@ -2,6 +2,7 @@ import React from 'react';
 import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
 import { Drawer } from 'react-native-drawer-layout';
 import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 
 import About from '#screens/Dashboard/About';
 import AccountDetails from '#screens/Dashboard/AccountDetails';
@@ -9,7 +10,12 @@ import FAQ from '#screens/Dashboard/FAQ';
 import KnowledgeHub from '#screens/Dashboard/KnowledgeHub';
 import Tutorial from '#screens/Dashboard/Tutorial';
 
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
 import { useTranslationUtils } from '#i18n/utils';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import ColdtivateService from '#services/ColdtivateService';
+import { ERoles } from '#types/global';
 import RBAC from '#common/RBAC';
 
 import DrawerContent from './components/DrawerContent';
@@ -41,12 +47,24 @@ export type DashboardRouteProps<Path extends DashboardRoutePaths> = DrawerScreen
 const NavigationDrawer = createDrawerNavigator<DashboardRoutes>();
 
 function DashboardNavigationRouter() {
+  const user = useAuthStore(useShallow((store) => store.user));
+  const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
+
+  const { data } = useApiCall(
+    'getCompanyById',
+    ColdtivateService.getCompanyById,
+    company?.id as number,
+    {
+      skip: user?.role === ERoles.COOLING_USER || !company?.id,
+      defaultData: undefined,
+    }
+  );
 
   return (
     <NavigationDrawer.Navigator
       initialRouteName="Main"
-      drawerContent={(props) => <DrawerContent {...props} t={t} />}
+      drawerContent={(props) => <DrawerContent {...props} t={t} logoURI={data?.logo} />}
       screenOptions={(opts) => DashboardScreenOptions(opts, t)}
     >
       <NavigationDrawer.Screen name="Main" component={DashboardMainBottomTabs} />

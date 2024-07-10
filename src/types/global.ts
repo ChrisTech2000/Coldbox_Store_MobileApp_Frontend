@@ -34,11 +34,10 @@ export type Company = {
   ml4Farmers: boolean;
   dateJoined: Date;
   crop: Array<number>;
-  logo: File | null;
+  logo: string | null;
 
-  //TODO: figure out types
-  bankDetails: unknown;
-  bankAccount: unknown;
+  bankDetails: BankDetails;
+  bankAccount: number;
 };
 
 export type Pricing = {
@@ -207,6 +206,19 @@ export type Crop = {
   dependentConstant: number;
   activationEnergyConstant: number;
 };
+
+export interface BankDetails {
+  id: number;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+}
+
+export interface DateOperatorAssigned {
+  id: number;
+  operatorId: number;
+  date: string;
+}
 
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {

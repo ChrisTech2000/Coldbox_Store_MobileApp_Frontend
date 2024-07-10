@@ -458,6 +458,23 @@ const en = {
         },
       },
     },
+    AccountDetails: {
+      popups: {
+        default: 'Are you sure that you want to delete your account?',
+        lastRegisteredEmployee:
+          'You are the only Registered Employee in the company, this action will delete the company!',
+        activeCheckInOP:
+          'The cooling unit(s) {{names}} that you are assigned to has active check-ins and you are the last operator in it. You need to check out all the produce or notify a Registered Employee to assign a different operator to this cooling unit before you can delete your account!',
+        activeCheckInRE:
+          'You can not delete your account if you are the last Registered Employee and there are active check-ins on some cooling units, as this action would delete your company. Please make sure all active check-ins in cooling unit(s) {{names}} are checked out first.',
+        activeCheckInCU:
+          'You can not delete your account because you have active check-ins in cooling unit(s) {{names}}. Please check out these items first, and then try again to delete your account!',
+      },
+      fields: {
+        location: 'Location',
+        userCode: 'Cooling User Import Code',
+      },
+    },
   },
 };
 

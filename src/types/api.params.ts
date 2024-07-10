@@ -157,3 +157,17 @@ export interface UpdateCompanyParams extends JsonObject {
     type?: string;
   } | null;
 }
+
+export interface UpdateFarmerParams extends JsonObject {
+  farmerId: number;
+  country: string;
+  parentName: string;
+  updateUser: true;
+}
+
+export interface GetCoolingUnitsByStatusParams extends JsonObject {
+  userId?: number;
+  companyId?: number;
+  isFarmer?: boolean;
+  notEmpty: boolean;
+}

@@ -8,6 +8,11 @@ import {
   Crop,
   Pricing,
   ECoolingUnitMetric,
+  DateOperatorAssigned,
+  CommodityInfo,
+  CommonPricingType,
+  CommodityTotal,
+  PowerOption,
 } from './global';
 
 export type SignInResponse = {
@@ -133,6 +138,52 @@ export type GetAllCropsResponse = {
   activationEnergyConstant?: number;
   cropType: number;
 };
+
+export type GetCompanyEmployeesResponse = {
+  id: number;
+  user: User;
+  company: Company;
+}[];
+
+export type GetCoolingUnitsByStatusResponse = {
+  id: number;
+  name: string;
+  location: number;
+  metric: string;
+  sensor: boolean;
+  sensorList: Array<unknown>; // TODO: figure this structure data type
+  capacityInMetricTons: number;
+  capacityInNumberCrates: number;
+  occupancy: number;
+  occupancyModifiedDate: string;
+  dateLastModified: string;
+  dateCreation: string;
+  dateOperatorAssigned: Array<DateOperatorAssigned>;
+  coolingUnitType: string;
+  crops: Array<Crop>;
+  roomHeight: number;
+  roomLength: number;
+  roomWidth: number;
+  roomWeight: number;
+  operators: number[];
+  latestTemperature: string;
+  crateWeight: number;
+  crateWidth: number;
+  crateLength: number;
+  crateHeight: number;
+  commodityInfos: Array<CommodityInfo>;
+  foodCapacityInMetricTons: number;
+  public: boolean;
+  ubibotSensorChannel?: unknown; // TODO: figure this structure data type
+  commonPricingType: CommonPricingType;
+  sensorError: boolean;
+  latestTemperatureTimestamp: string;
+  lastCheckInDate: string;
+  canDelete: boolean;
+  commodityTotal: CommodityTotal;
+  powerOptions: Array<PowerOption>;
+  editableCheckins: boolean;
+}[];
 
 export type GetCoolingUnitCropsResponse = Array<{
   id: number;

@@ -22,6 +22,8 @@ import type {
   GetCoolingUnitCropsParams,
   UpdateUserParams,
   UpdateCompanyParams,
+  UpdateFarmerParams,
+  GetCoolingUnitsByStatusParams,
   GetCheckOutParams,
   CheckOutWithCodeParams,
 } from '#types/api.params';
@@ -30,14 +32,16 @@ import type {
   CheckInResponse,
   GetCheckOutResponse,
   CheckOutResponse,
+  GetCompanyEmployeesResponse,
   GetAllCropsResponse,
   GetCoolingUnitCropsResponse,
   GetFarmerResponse,
   GetLocationResponse,
   GetOperatorsResponse,
+  GetCoolingUnitsByStatusResponse,
   CheckInWitCodeResponse,
 } from '#types/api.responses';
-import type { Company, CoolingUnit, Crate, DashboardProduce, User } from '#types/global';
+import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
@@ -423,6 +427,74 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.put(url, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public updateFarmer = async (params: UpdateFarmerParams): Promise<Farmer> => {
+    try {
+      const { farmerId, ...rest } = params;
+      const url = subs(EUserEndpoints.UPDATE_FARMER, { farmerId });
+      const { data } = await this.put<Farmer>(url, {
+        ...rest,
+        unserializable: ['updateUser'],
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCompanyEmployees = async (companyId: number): Promise<GetCompanyEmployeesResponse> => {
+    try {
+      const params = { company: companyId };
+      const { data } = await this.get<GetCompanyEmployeesResponse>(
+        EUserEndpoints.GET_COMPANY_EMPLOYEES,
+        { params }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnitsByStatus = async (
+    params: GetCoolingUnitsByStatusParams
+  ): Promise<GetCoolingUnitsByStatusResponse> => {
+    try {
+      const shallow = { ...params };
+      shallow.user = shallow.userId;
+      delete shallow.userId;
+      shallow.company = shallow.companyId;
+      delete shallow.companyId;
+
+      const { data } = await this.get<GetCoolingUnitsByStatusResponse>(
+        EStorageEndpoints.GET_COOLING_UNITS,
+        { params: shallow }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public deleteUser = async (userId: number) => {
+    try {
+      const { data } = await this.delete(subs(EUserEndpoints.UPDATE_USER, { userId }));
       return data;
     } catch (error) {
       console.log(error);
