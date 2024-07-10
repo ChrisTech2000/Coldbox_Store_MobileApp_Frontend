@@ -410,6 +410,18 @@ class ColdtivateService extends HttpClient {
       throw customError;
     }
   };
+
+  public deleteUser = async (userId: number) => {
+    try {
+      const { data } = await this.delete(subs(EUserEndpoints.UPDATE_USER, { userId }));
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new ColdtivateService();
