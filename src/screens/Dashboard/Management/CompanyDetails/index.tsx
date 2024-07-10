@@ -3,13 +3,14 @@ import { Dimensions, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useSWRConfig } from 'swr';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useManagementStore } from '#stores/management';
-import { useApiCall } from '#services/hooks/useAPiCall';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
@@ -27,18 +28,21 @@ const width = (Dimensions.get('screen').width - 42) / 2;
 function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
   const { navigation } = props;
 
+  const { mutate } = useSWRConfig();
+
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
 
-  const {
-    data: companyDetails,
-    isLoading: isLoadingCompanyDetails,
-    refetch,
-  } = useApiCall('getCompanyById', ColdtivateService.getCompanyById, company?.id as number, {
-    skip: !company?.id,
-    defaultData: undefined,
-  });
+  const { data: companyDetails, isLoading: isLoadingCompanyDetails } = useApiCall(
+    'getCompanyById',
+    ColdtivateService.getCompanyById,
+    company?.id as number,
+    {
+      skip: !company?.id,
+      defaultData: undefined,
+    }
+  );
 
   const { data: allCrops, isLoading: isLoadingAllCrops } = useApiCall(
     'getAllCrops',
@@ -67,7 +71,8 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
         companyId: company.id,
         logo: values.logo.uri !== subjects.companyLogo ? values.logo : null,
       });
-      await refetch();
+
+      await mutate(getQueryKey('getCompanyById', company.id));
       navigation.goBack();
     } catch (exception) {
       console.error(exception);

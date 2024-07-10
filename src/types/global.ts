@@ -34,7 +34,7 @@ export type Company = {
   ml4Farmers: boolean;
   dateJoined: Date;
   crop: Array<number>;
-  logo: File | null;
+  logo: string | null;
 
   bankDetails: BankDetails;
   bankAccount: number;

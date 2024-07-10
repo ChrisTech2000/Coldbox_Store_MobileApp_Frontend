@@ -11,6 +11,7 @@ import type { TranslationPaths } from '#i18n/index';
 import type { Translator } from '#i18n/utils';
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 import { useAuthStore } from '#stores/auth';
+import { Image } from '#ui/components/Image';
 import RBAC from '#common/RBAC';
 
 import type { DashboardRoutes } from '../index';
@@ -43,6 +44,7 @@ const DRAWER_ITEMS: Record<
 
 type Props = {
   t: Translator;
+  logoURI?: string | null;
 } & DrawerContentComponentProps;
 
 export default function DrawerContent(props: Props) {
@@ -51,8 +53,12 @@ export default function DrawerContent(props: Props) {
 
   return (
     <StyledDrawerContentScrollView {...props} tw="flex-1">
-      <View tw="mx-2.5 mb-4">
-        <ColdtivateLogo width={60} height={60} />
+      <View tw="mx-6 mb-4">
+        {!props.logoURI ? (
+          <ColdtivateLogo width={60} height={60} />
+        ) : (
+          <Image tw="h-14 w-14" source={{ uri: props.logoURI }} resizeMode="contain" />
+        )}
       </View>
 
       <Drawer.Section tw="space-y-1.5">
