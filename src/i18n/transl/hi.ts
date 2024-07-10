@@ -462,6 +462,15 @@ export default {
           save: 'सेव चंगेस',
         },
       },
+      RegisteredEmployee: {
+        invited: 'आमंत्रित ({{amount}})',
+        registered: 'पंजीकृत ({{amount}})',
+      },
+      RegisteredEmployeeDetails: {
+        deletePersonal: 'अपना अकाउंट डिलीट करने के लिए अकाउंट डिटेल्स में जाएं',
+        deleteOther:
+          'अगर आप इस खाते को हटाना चाहते हैं, तो कृपया app@yourvcca.org पर संपर्क करें। {{contact}}',
+      },
     },
     AccountDetails: {
       popups: {

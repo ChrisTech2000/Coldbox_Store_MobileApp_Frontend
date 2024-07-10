@@ -11,12 +11,13 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import type { User } from '#types/global';
-import { dateFmt } from '#i18n/utils';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
 function RegisteredEmployee(props: ManagementRouteProps<'RegisteredEmployee'>) {
   const { navigation } = props;
 
   const company = useManagementStore(useShallow((store) => store.company));
+  const { t } = useTranslationUtils();
 
   const {
     data: registeredEmployees,
@@ -53,9 +54,17 @@ function RegisteredEmployee(props: ManagementRouteProps<'RegisteredEmployee'>) {
 
   return (
     <View tw="flex-1 justify-start">
-      <List.Item title={`Invited (${invitations.length})`} />
+      <List.Item
+        title={t('Dashboard.Management.RegisteredEmployee.invited', {
+          amount: invitations.length,
+        })}
+      />
       <Divider />
-      <List.Item title={`Registered (${registeredEmployees.length})`} />
+      <List.Item
+        title={t('Dashboard.Management.RegisteredEmployee.registered', {
+          amount: registeredEmployees.length,
+        })}
+      />
       <Divider />
 
       <FlatList
