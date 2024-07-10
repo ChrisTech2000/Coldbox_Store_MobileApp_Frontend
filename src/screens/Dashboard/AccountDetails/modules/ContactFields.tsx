@@ -2,13 +2,11 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import RBAC from '#common/RBAC';
+
 import FormManager from '../components/FormManager';
 
-type Props = {
-  includeEmail: boolean;
-};
-
-export default function ContactFields(props: Props) {
+export default function ContactFields() {
   const { control, formState } = FormManager.useFormManager();
 
   const errors = formState.errors;
@@ -32,7 +30,7 @@ export default function ContactFields(props: Props) {
         )}
       />
 
-      {props.includeEmail ? (
+      <RBAC.ProtectedResource action="SET" subject="FormEmailField">
         <Controller
           name="email"
           control={control}
@@ -49,7 +47,7 @@ export default function ContactFields(props: Props) {
             />
           )}
         />
-      ) : null}
+      </RBAC.ProtectedResource>
     </React.Fragment>
   );
 }

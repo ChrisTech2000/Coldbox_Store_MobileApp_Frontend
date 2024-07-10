@@ -63,7 +63,6 @@ export default function FormManager(props: FormManagerProps) {
 
       const operatorSchema = z.object({
         kind: z.literal(ERoles.OPERATOR),
-        email: z.string().email(),
       });
 
       const coolingUserSchema = z.object({

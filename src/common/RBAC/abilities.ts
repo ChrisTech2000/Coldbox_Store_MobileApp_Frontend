@@ -4,6 +4,9 @@ import { ERoles } from '#types/global';
 
 export const PERMISSION_KINDS = {
   NAVIGATE: 'NAVIGATE',
+  SET: 'SET',
+  VIEW: 'VIEW',
+  STORE: 'MUTATE',
 } as const;
 
 export type PermissionKinds = keyof typeof PERMISSION_KINDS;
@@ -37,6 +40,12 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.NAVIGATE, 'RevenueAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'UsageAnalysis');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CoolingUsers');
+        //
+        // actions
+        // scope: account details
+        can(PERMISSION_KINDS.SET, 'FormEmailField');
+        cannot(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
+        cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
         break;
       }
 
@@ -55,6 +64,12 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.NAVIGATE, 'RevenueAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'UsageAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'CoolingUsers');
+        //
+        // actions
+        // scope: account details
+        cannot(PERMISSION_KINDS.SET, 'FormEmailField');
+        cannot(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
+        cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
         break;
       }
 
@@ -63,6 +78,12 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // navigation
         cannot(PERMISSION_KINDS.NAVIGATE, 'ManagementStack');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CheckoutStack');
+        //
+        // actions
+        // scope: account details
+        cannot(PERMISSION_KINDS.SET, 'FormEmailField');
+        can(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
+        can(PERMISSION_KINDS.STORE, 'FarmerDetails');
         break;
       }
 

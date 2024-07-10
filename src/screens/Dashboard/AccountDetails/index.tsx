@@ -14,6 +14,7 @@ import { EApiGender, ERoles } from '#types/global';
 import { LanguageStorage } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import type { TranslationLocales } from '#i18n/constants';
+import RBAC from '#common/RBAC';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import NameFields from './modules/NameFields';
@@ -37,29 +38,29 @@ function AccountDetails() {
 
   const setUser = useAuthStore((store) => store.setUser);
   const patchFarmer = useDashboardStore((store) => store.patchFarmer);
+  const { guard } = RBAC.useRBAC();
 
   async function onSubmit(values: FormValues) {
-    if (!user?.id || !farmerId) return; // safe guard
+    if (!user) return; // safe guard
     try {
-      const { kind, ...rest } = values;
-
       const userDatum = await ColdtivateService.updateUser({
         userId: user.id,
-        firstName: rest.firstName,
-        lastName: rest.lastName,
-        phone: rest.phone,
-        email: rest.email,
-        gender: rest.gender,
-        language: rest.language,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phone: values.phone,
+        email: values.email,
+        gender: values.gender,
+        language: values.language,
       });
 
       setUser({ ...userDatum, role: user.role });
 
-      if (kind === ERoles.COOLING_USER) {
+      if (guard('STORE', 'FarmerDetails')) {
+        if (!farmerId) return; // safe guard
         const farmerDatum = await ColdtivateService.updateFarmer({
           farmerId,
-          country: rest.country,
-          parentName: rest.parentName,
+          country: values.country,
+          parentName: values.parentName,
           updateUser: true,
         });
 
@@ -89,8 +90,6 @@ function AccountDetails() {
     };
   }
 
-  const isCoolingUser = user?.role === ERoles.COOLING_USER;
-
   return (
     <FormManager onSubmit={onSubmit} initialValues={buildInitialValues()}>
       {({ submitHandler, isSubmitting }) => (
@@ -101,19 +100,17 @@ function AccountDetails() {
         >
           <NameFields />
           <LanguageField />
-          <ContactFields includeEmail={!isCoolingUser} />
+          <ContactFields />
           <GenderField />
 
-          {isCoolingUser ? (
-            <React.Fragment>
-              <LocationField />
-              <CountryField />
-              <View tw="w-full bg-zinc-200 flex-row items-center justify-between p-3 rounded-md my-1.5">
-                <Text variant="TitleSmall">Cooling User Import Code</Text>
-                <Text variant="TitleSmall">{farmerUserCode}</Text>
-              </View>
-            </React.Fragment>
-          ) : null}
+          <RBAC.ProtectedResource action="VIEW" subject="FarmerFormFields">
+            <LocationField />
+            <CountryField />
+            <View tw="w-full bg-zinc-200 flex-row items-center justify-between p-3 rounded-md my-1.5">
+              <Text variant="TitleSmall">Cooling User Import Code</Text>
+              <Text variant="TitleSmall">{farmerUserCode}</Text>
+            </View>
+          </RBAC.ProtectedResource>
 
           <View tw="space-y-4 mt-4">
             <DeleteAccountAction />
