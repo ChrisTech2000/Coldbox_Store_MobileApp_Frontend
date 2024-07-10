@@ -126,7 +126,7 @@ export default function DeleteAccountAction() {
 
       <Portal>
         <Modal visible={state.isVisible} onDismiss={resetPopup}>
-          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto p-8 self-center space-y-2">
+          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
             <View tw="items-center space-y-3">
               {state.showActions ? (
                 <MaterialIcons
@@ -150,7 +150,7 @@ export default function DeleteAccountAction() {
                   </Button>
                 </React.Fragment>
               ) : (
-                <Button mode="text" onPress={resetPopup} buttonColor={paperTheme.colors.primary}>
+                <Button mode="text" onPress={resetPopup}>
                   {t('actions.close')}
                 </Button>
               )}
