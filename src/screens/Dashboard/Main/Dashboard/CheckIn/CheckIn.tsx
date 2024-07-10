@@ -13,6 +13,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import { ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
@@ -21,15 +22,17 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CrateSetupModal } from './components/CrateSetupModal';
-import { SetupSchema } from './CrateSetup';
+import { FarmerSurvey } from './components/FarmerSurvey';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
 
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
+
   const { refreshDashboard } = useDashboardStore();
   const {
     checkOutCode,
@@ -44,6 +47,18 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const toast = useToast();
+
+  const { data: surveys } = useApiCall(
+    'getFarmerSurveys',
+    ColdtivateService.getFarmerSurveys,
+    {
+      farmerId: user.id as number,
+    },
+    {
+      skip: !user.id,
+      defaultData: [],
+    }
+  );
 
   const [isCodeModalOpen, setIsCodeModalOpen] = useState<boolean>(false);
   const [isIdsModalOpen, setIsIdsModalOpen] = useState<number | undefined>(undefined);
@@ -171,6 +186,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         )}
         <FlatList
           data={produces}
+          extraData={surveys}
           keyExtractor={(item, itemIdx) => `crate-${item.crop.id}-#${itemIdx}`}
           renderItem={({ item, index }) => (
             <View>
@@ -198,13 +214,17 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                   )}
                   <TouchableHighlight
                     onPress={() => {
-                      if (produces.length === 1) setCheckOutCode(null), removeProduce(item);
+                      if (produces.length === 1) setCheckOutCode(null);
+                      removeProduce(item);
                     }}
                   >
                     <Icon source="trash-can-outline" size={30} color={colors.red[500]} />
                   </TouchableHighlight>
                 </View>
               </View>
+              {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) && (
+                <FarmerSurvey cropName={item.crop.name} />
+              )}
               {checkOutCode && (
                 <React.Fragment>
                   <IconButton

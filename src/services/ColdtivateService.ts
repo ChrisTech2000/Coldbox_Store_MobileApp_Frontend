@@ -26,6 +26,8 @@ import type {
   GetCoolingUnitsByStatusParams,
   GetCheckOutParams,
   CheckOutWithCodeParams,
+  GetFarmerSurveysParams,
+  UpdateFarmerSurveysParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -40,6 +42,8 @@ import type {
   GetOperatorsResponse,
   GetCoolingUnitsByStatusResponse,
   CheckInWitCodeResponse,
+  GetFarmerSurveysResponse,
+  UpdateFarmerSurveysResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -129,6 +133,38 @@ class ColdtivateService extends HttpClient {
     try {
       const { data } = await this.get<GetFarmerResponse>(EUserEndpoints.GET_FARMER, {
         params,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getFarmerSurveys = async (
+    params: GetFarmerSurveysParams
+  ): Promise<GetFarmerSurveysResponse | undefined> => {
+    try {
+      const { data } = await this.get<GetFarmerSurveysResponse>(EUserEndpoints.GET_FARMER_SURVEYS, {
+        params,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public updateFarmerSurveys = async (
+    params: UpdateFarmerSurveysParams
+  ): Promise<UpdateFarmerSurveysResponse | undefined> => {
+    try {
+      const { farmer, ...rest } = params;
+      const url = subs(EUserEndpoints.UPDATE_FARMER_SURVEYS, { farmerId: farmer });
+      const { data } = await this.put<UpdateFarmerSurveysResponse>(url, {
+        ...rest,
       });
       return data;
     } catch (error) {
