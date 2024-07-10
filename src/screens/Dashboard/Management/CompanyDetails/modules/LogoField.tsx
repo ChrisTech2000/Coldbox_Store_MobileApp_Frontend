@@ -28,7 +28,7 @@ export default function LogoField() {
           {!currentLogo.uri ? (
             <DefaultLogo width={56} height={56} />
           ) : (
-            <Image tw="h-14 w-14" source={{ uri: currentLogo.uri }} />
+            <Image tw="h-14 w-14" source={{ uri: currentLogo.uri }} resizeMode="contain" />
           )}
           <Button
             uppercase
