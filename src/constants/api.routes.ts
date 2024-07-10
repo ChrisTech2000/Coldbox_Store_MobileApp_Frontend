@@ -14,13 +14,18 @@ export enum EUserEndpoints {
 
 export enum EStorageEndpoints {
   GET_COMPANIES = 'user/v1/companies/',
+  GET_COOLING_UNIT_CROPS = 'storage/v1/cooling-unit-crops/',
   GET_COOLING_UNITS = 'storage/v1/cooling-units/',
   GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
   GET_FARMER_CRATES = '/storage/v1/crates/',
-  GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
+  GET_INVITED_OPERATORS = 'user/v1/operator-invite',
   GET_LOCATION = '/storage/v1/locations/:locationId/',
+  GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
+  GET_OPERATORS = 'user/v1/operators',
 }
 
 export enum EOperationEndpoints {
+  CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
+  MOVE_CHECKOUT = 'operation/move-checkout/',
 }

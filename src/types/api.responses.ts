@@ -1,4 +1,14 @@
-import { EPaymentType, ERoles, type Company, type CoolingUnit, type User } from './global';
+import {
+  EPaymentType,
+  ERoles,
+  type Farmer,
+  type Company,
+  type CoolingUnit,
+  type User,
+  Crop,
+  Pricing,
+  ECoolingUnitMetric,
+} from './global';
 
 export type SignInResponse = {
   refresh: string;
@@ -19,16 +29,7 @@ export type SignUpAsCoolingUserResponse = {
   userCode: string;
 };
 
-export type GetFarmerResponse = {
-  id: number;
-  user: User;
-  birthday: Date;
-  parentName: string;
-  country: string;
-  userCode: string;
-  companies: number[];
-  coolingUnits: number[];
-};
+export type GetFarmerResponse = Array<Farmer>;
 
 export type CheckOutResponse = {
   id: number;
@@ -38,6 +39,33 @@ export type CheckOutResponse = {
   paymentType: EPaymentType;
   currency: string;
   priceDiscount: number;
+};
+
+export type CheckInResponse = {
+  id: number;
+  movement: number;
+  farmer: number;
+  hasDt: string;
+};
+
+export type CheckInWithCodeResponse = {
+  id: number;
+  produce: number;
+  coolingUnit: number;
+  weight: number;
+  remainingShelfLife: number | null;
+  plannedDays: number | null;
+  checkOut: number;
+  pricing: Array<Pricing>;
+  coolingUnitMetric: ECoolingUnitMetric;
+  checkInDate: Date;
+  name: string;
+  cropImage: string;
+  movementCode: string;
+  currentStorageDays: number;
+  runDt: boolean;
+  qualityDt: number;
+  tag: string | null;
 };
 
 export type GetLocationResponse = {
@@ -80,3 +108,12 @@ export type GetOperatorsResponse = {
   company: Company;
   coolingUnits: number[];
 };
+
+export type GetCoolingUnitCropsResponse = Array<{
+  id: number;
+  fullCrop: Crop;
+  active: true;
+  crop: number;
+  coolingUnit: number;
+  pricing: number;
+}>;

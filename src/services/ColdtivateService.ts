@@ -12,11 +12,17 @@ import type {
   GetFarmerParams,
   GetOperatorFarmersParams,
   GetLocationParams,
+  CheckInParams,
+  GetCoolingUnitCropsParams,
   UpdateUserParams,
+  CheckInWithCodeParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
+  CheckInResponse,
+  CheckInWithCodeResponse,
   CheckOutResponse,
+  GetCoolingUnitCropsResponse,
   GetFarmerResponse,
   GetLocationResponse,
   GetOperatorsResponse,
@@ -25,7 +31,7 @@ import type { Company, CoolingUnit, Crate, DashboardProduce, User } from '#types
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
-import { subs } from './utils';
+import { serialize, subs } from './utils';
 import { WithRequired } from 'types/miscellaneous';
 
 class ColdtivateService extends HttpClient {
@@ -33,37 +39,10 @@ class ColdtivateService extends HttpClient {
     super(options);
   }
 
-  public getFarmer = async (params: GetFarmerParams): Promise<GetFarmerResponse[] | undefined> => {
+  ///////// DASHBOARD
+  public getCompanies = async (): Promise<Array<Company> | undefined> => {
     try {
-      const { data } = await this.get<GetFarmerResponse[]>(EUserEndpoints.GET_FARMER, {
-        params,
-      });
-      return data;
-    } catch (error) {
-      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
-      throw customError;
-    }
-  };
-
-  public getOperatorFarmers = async (
-    params: GetOperatorFarmersParams
-  ): Promise<GetFarmerResponse[] | undefined> => {
-    try {
-      const { data } = await this.get<GetFarmerResponse[]>(EUserEndpoints.GET_FARMER, {
-        params,
-      });
-      return data;
-    } catch (error) {
-      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
-      throw customError;
-    }
-  };
-
-  public getCompanies = async (): Promise<Company[] | undefined> => {
-    try {
-      const { data } = await this.get<Company[]>(EStorageEndpoints.GET_COMPANIES, {});
+      const { data } = await this.get<Array<Company>>(EStorageEndpoints.GET_COMPANIES, {});
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -74,9 +53,9 @@ class ColdtivateService extends HttpClient {
 
   public getCoolingUnits = async (
     params: GetCoolingUnitsParams
-  ): Promise<CoolingUnit[] | undefined> => {
+  ): Promise<Array<CoolingUnit> | undefined> => {
     try {
-      const { data } = await this.get<CoolingUnit[]>(EStorageEndpoints.GET_COOLING_UNITS, {
+      const { data } = await this.get<Array<CoolingUnit>>(EStorageEndpoints.GET_COOLING_UNITS, {
         params,
       });
       return data;
@@ -89,9 +68,9 @@ class ColdtivateService extends HttpClient {
 
   public getDashboardProduces = async (
     params: GetDashboardProducesParams
-  ): Promise<DashboardProduce[] | undefined> => {
+  ): Promise<Array<DashboardProduce> | undefined> => {
     try {
-      const { data } = await this.get<DashboardProduce[]>(
+      const { data } = await this.get<Array<DashboardProduce>>(
         EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );
@@ -105,9 +84,9 @@ class ColdtivateService extends HttpClient {
 
   public getFarmerDashboardProduces = async (
     params: GetFarmerDashboardProducesParams
-  ): Promise<DashboardProduce[] | undefined> => {
+  ): Promise<Array<DashboardProduce> | undefined> => {
     try {
-      const { data } = await this.get<DashboardProduce[]>(
+      const { data } = await this.get<Array<DashboardProduce>>(
         EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
         { params }
       );
@@ -119,13 +98,12 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getLocations = async (companyId: number): Promise<Array<GetLocationResponse>> => {
+  ///////// FARMER
+  public getFarmer = async (params: GetFarmerParams): Promise<GetFarmerResponse | undefined> => {
     try {
-      const params = { company: companyId };
-      const { data } = await this.get<Array<GetLocationResponse>>(
-        EStorageEndpoints.GET_MANAGEMENT_LOCATIONS,
-        { params }
-      );
+      const { data } = await this.get<GetFarmerResponse>(EUserEndpoints.GET_FARMER, {
+        params,
+      });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -134,9 +112,47 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getFarmerCrates = async (params: GetFarmerCratesParams): Promise<Crate[] | undefined> => {
+  ///////// CRATE MANAGEMENT
+  public getOperatorFarmers = async (
+    params: GetOperatorFarmersParams
+  ): Promise<GetFarmerResponse | undefined> => {
     try {
-      const { data } = await this.get<Crate[]>(EStorageEndpoints.GET_FARMER_CRATES, { params });
+      const { data } = await this.get<GetFarmerResponse>(EUserEndpoints.GET_FARMER, {
+        params,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getFarmerCrates = async (
+    params: GetFarmerCratesParams
+  ): Promise<Array<Crate> | undefined> => {
+    try {
+      const { data } = await this.get<Array<Crate>>(EStorageEndpoints.GET_FARMER_CRATES, {
+        params,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnitCrops = async (
+    params: GetCoolingUnitCropsParams
+  ): Promise<GetCoolingUnitCropsResponse | undefined> => {
+    try {
+      const { data } = await this.get<GetCoolingUnitCropsResponse>(
+        EStorageEndpoints.GET_COOLING_UNIT_CROPS,
+        {
+          params,
+        }
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -157,6 +173,41 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  public checkIn = async (params: CheckInParams): Promise<CheckInResponse> => {
+    const _params = {
+      ...params,
+      produces: JSON.stringify(serialize(params.produces, ['hasPicture'])),
+    };
+
+    try {
+      const { data } = await this.post<CheckInResponse>(EOperationEndpoints.CHECK_IN, _params);
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public checkInWithCode = async (
+    params: CheckInWithCodeParams
+  ): Promise<CheckInWithCodeResponse> => {
+    try {
+      const { data } = await this.post<CheckInWithCodeResponse>(
+        EOperationEndpoints.MOVE_CHECKOUT,
+        params
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  ///////// LOCATIONS
   public getLocation = async (params: GetLocationParams): Promise<GetLocationResponse> => {
     try {
       const url = subs(EStorageEndpoints.GET_LOCATION, { locationId: params.locationId });
@@ -166,6 +217,21 @@ class ColdtivateService extends HttpClient {
       return data;
     } catch (error) {
       console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getLocations = async (companyId: number): Promise<Array<GetLocationResponse>> => {
+    try {
+      const params = { company: companyId };
+      const { data } = await this.get<Array<GetLocationResponse>>(
+        EStorageEndpoints.GET_MANAGEMENT_LOCATIONS,
+        { params }
+      );
+      return data;
+    } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -214,6 +280,7 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  ///////// OPERATORS
   public getOperators = async (companyId: number): Promise<Array<GetOperatorsResponse>> => {
     try {
       const params = { company: companyId };

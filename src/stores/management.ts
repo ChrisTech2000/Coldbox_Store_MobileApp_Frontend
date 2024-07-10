@@ -7,6 +7,7 @@ type State = {
   company: {
     id: number;
     country?: string;
+    currency?: string;
   } | null;
 };
 

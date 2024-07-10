@@ -65,6 +65,12 @@ const en = {
       Management: 'Management',
       Tutorial: 'Tutorial',
     },
+    checkIn: {
+      SelectCropType: 'Select Crop Type',
+      CheckIn: 'CheckIn',
+      CropList: '{{cropType}}',
+      CrateSetup: 'CheckIn',
+    },
   },
   actions: {
     error: 'An error occured',
@@ -88,6 +94,7 @@ const en = {
     'not-available': 'N/A',
     'complete-later': 'Complete later',
     'update-success': 'Succesfully updated',
+    'save-changes': 'Save changes',
   },
   Auth: {
     Root: {
@@ -230,7 +237,8 @@ const en = {
     CrateManagement: {
       userModalTitle: 'Select a cooling user',
       coolingUserLabel: 'Cooling user',
-      coolingUnitLabel: 'Select a cooling unit',
+      selectCoolingUnitLabel: 'Select a cooling unit',
+      coolingUnitLabel: 'Cooling unit',
       noUnitWarning: 'Please select a cooling unit',
       noCratesWarning: "The selected Cooling user doesn't have any crates in this cooling unit",
       operationError: 'Something went wrong. Please try again later.',
@@ -255,6 +263,51 @@ const en = {
           creditCard: 'Credit Card',
         },
         paid: 'Paid',
+      },
+      CheckIn: {
+        emptyState: 'No boxes added yet',
+        addCrates: 'Add Crates',
+        checkInWithCode: 'Check in with code',
+        estimatedCost: 'Estimated Cost',
+        day: 'day',
+        successMessage: 'Crates were successfully checked in',
+        SelectCropType: {
+          fruits: 'Fruits',
+          vegetables: 'Vegetables',
+          rootVegetables: 'Root Vegetables',
+          other: 'Other Items',
+        },
+        SelectCrop: {
+          additionalInfo: 'Additional Info',
+        },
+        Setup: {
+          selectedCrop: 'Selected crop',
+          changeCropButton: 'Click here to change crop',
+          individualCrateWeightButton: 'Click here to edit individual crate weight',
+          individualCrateIdButton: 'Click here to edit individual crate IDs',
+          numberOfCratesLabel: 'Number of crates',
+          crateWeightLabel: 'General weight of crate',
+          pricePerDayLabel: 'Price per day / crate',
+          totalPriceLabel: 'Total price',
+          plannedDaysLabel: 'Planned number of days in storage',
+          harvestDateLabel: 'When was the crop harvested?',
+          harvestDateValues: {
+            today: 'Today',
+            yesterday: 'Yesterday',
+            dayBefore: 'Two days back',
+            evenBefore: 'Even Before',
+          },
+          cratesError: 'Please insert a positive crate number',
+          crateWeightError: 'Please insert a positive crate weight',
+          harvestDateError: 'Harvest date is required',
+          modals: {
+            weight: 'Set Individual Weight of Crates',
+            id: 'Set Individual ID of Crates',
+            crateLabel: 'Crate',
+            selectInitialId: 'Please set the starting crate ID',
+            serialize: 'Serialize',
+          },
+        },
       },
     },
     CoolingUnitsPlanner: {

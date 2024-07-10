@@ -10,12 +10,11 @@ import React, { useCallback } from 'react';
 import BillingInfoScreen from '#screens/Dashboard/Main/Dashboard/Checkout/BillingInfo';
 import CrateSelectionScreen from '#screens/Dashboard/Main/Dashboard/Checkout/CrateSelection';
 
-import type { GetFarmerResponse } from '#types/api.responses';
-import type { CoolingUnit, Crate } from '#types/global';
+import type { CoolingUnit, Crate, Farmer } from '#types/global';
 
 export type CheckOutStackRoutes = {
-  CrateSelection: { user?: GetFarmerResponse };
-  BillingInfo: { user?: GetFarmerResponse; crates?: Crate[]; coolingUnit?: CoolingUnit };
+  CrateSelection: { user?: Farmer };
+  BillingInfo: { user?: Farmer; crates?: Crate[]; coolingUnit?: CoolingUnit };
 };
 
 export type CheckOutStackRoutePaths = keyof CheckOutStackRoutes;

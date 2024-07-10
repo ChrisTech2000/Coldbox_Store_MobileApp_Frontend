@@ -13,8 +13,8 @@ import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabS
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import type { GetFarmerResponse } from '#types/api.responses';
 
+import type { CoolingUnit, Farmer } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
@@ -27,7 +27,10 @@ type ManagementMode = 'check-in' | 'check-out';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMainTabStack'>) {
+export function OperatorActions({
+  navigation,
+  coolingUnit,
+}: MainTabStackRouteProps<'RootMainTabStack'> & { coolingUnit: CoolingUnit | null }) {
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
 
@@ -35,7 +38,7 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [managementMode, setManagementMode] = useState<ManagementMode | undefined>();
-  const [selectedUser, setSelectedUser] = useState<GetFarmerResponse | undefined>();
+  const [selectedUser, setSelectedUser] = useState<Farmer | undefined>();
   const [search, setSearch] = useState<string>('');
 
   const { data } = useApiCall(
@@ -84,17 +87,22 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
     setIsModalOpen(true);
   }, []);
 
-  const navigateToCheckOut = useCallback((selectedUser?: GetFarmerResponse) => {
+  const navigateToCheckOut = useCallback((selectedUser?: Farmer) => {
     navigation.navigate('CheckOutStack', {
       screen: 'CrateSelection',
       params: { user: selectedUser },
     });
   }, []);
 
-  // TODO: fix
-  const navigateToCheckIn = (selectedUser?: GetFarmerResponse) => {
-    console.log(selectedUser);
-  };
+  const navigateToCheckIn = useCallback(
+    (selectedUser?: Farmer) => {
+      navigation.navigate('CheckInStack', {
+        screen: 'CheckIn',
+        params: { user: selectedUser, coolingUnit: coolingUnit ?? undefined },
+      });
+    },
+    [selectedUser, coolingUnit]
+  );
 
   const navigate = managementMode === 'check-in' ? navigateToCheckIn : navigateToCheckOut;
 
@@ -166,7 +174,7 @@ export function OperatorActions({ navigation }: MainTabStackRouteProps<'RootMain
                     onPress={() => setSelectedUser(item)}
                     tw={cn(
                       'my-1 border-b border-gray-300 p-1',
-                      (selectedUser as GetFarmerResponse)?.id === item.id
+                      (selectedUser as Farmer)?.id === item.id
                         ? 'border-2 border-green-primary'
                         : ''
                     )}

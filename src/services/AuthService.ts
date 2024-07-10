@@ -9,7 +9,6 @@ import type {
   SignUpAsCoolingUserParams,
 } from '#types/api.params';
 import type {
-  ResetPasswordResponse,
   SignInResponse,
   SignUpAsCompanyResponse,
   SignUpAsCoolingUserResponse,
@@ -103,14 +102,9 @@ class AuthService extends HttpClient {
     }
   };
 
-  public resetPassword = async (
-    params: ResetPasswordParams
-  ): Promise<ResetPasswordResponse | undefined> => {
+  public resetPassword = async (params: ResetPasswordParams): Promise<void> => {
     try {
-      const { data } = await this.post<ResetPasswordResponse>(
-        EAuthenticationEndpoints.RESET_PASSWORD,
-        params
-      );
+      const { data } = await this.post<void>(EAuthenticationEndpoints.RESET_PASSWORD, params);
 
       return data;
     } catch (error) {

@@ -69,12 +69,35 @@ export interface GetFarmerCratesParams extends JsonObject {
 }
 
 export interface CheckOutParams extends JsonObject {
-  crates: number[];
+  crates: Array<number>;
   operatorId: User;
   priceDiscount: number;
   currency: string;
   paymentType: EPaymentType;
   paid: boolean;
+}
+
+export interface CheckInParams extends JsonObject {
+  farmerId: number;
+  id?: number;
+  produces: Array<{
+    crop: { id: number };
+    additionalInfo: string;
+    crates: Array<{
+      checkOut: Date | null;
+      weight: number;
+      tag: string; // the id defined during checkout
+      coolingUnitId: number;
+      plannedDays: number | undefined;
+    }>;
+    harvestDate: number;
+    initialGrade: unknown; // TODO: figure out type
+    hasPicture: boolean;
+  }>;
+}
+
+export interface CheckInWithCodeParams extends JsonObject {
+  code: string;
 }
 
 export interface GetLocationParams extends JsonObject {
@@ -96,6 +119,11 @@ export interface AddLocationParams extends JsonObject {
 
 export interface EditLocationParams extends AddLocationParams {
   locationId: number;
+}
+
+export interface GetCoolingUnitCropsParams extends JsonObject {
+  coolingUnitId: number;
+  crop: number;
 }
 
 export interface UpdateUserParams extends JsonObject, Omit<Partial<User>, 'id'> {

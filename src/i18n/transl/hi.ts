@@ -67,6 +67,12 @@ export default {
       Management: 'प्रबंधन',
       Tutorial: 'ट्यूटोरियल',
     },
+    checkIn: {
+      SelectCropType: 'फसल प्रकार चुनें',
+      CheckIn: 'चेक इन',
+      CropList: '{{cropType}}',
+      CrateSetup: 'चेक इन',
+    },
   },
   actions: {
     error: 'एक त्रुटि हुई',
@@ -90,6 +96,7 @@ export default {
     'not-available': 'अभी उपलब्ध नहीं है',
     'complete-later': 'बाद में पूरा करें',
     'update-success': 'सफलतापूर्वक उत्परिवर्तित',
+    'save-changes': 'बदलाव सहेजें',
   },
   Auth: {
     Root: {
@@ -233,7 +240,8 @@ export default {
     CrateManagement: {
       userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
       coolingUserLabel: 'कूलिंग उपयोगकर्ता',
-      coolingUnitLabel: 'कूलिंग यूनिट चुनें',
+      selectCoolingUnitLabel: 'कूलिंग यूनिट चुनें',
+      coolingUnitLabel: 'कूलिंग यूनिट',
       noUnitWarning: 'कृपया एक कूलिंग यूनिट चुनें',
       noCratesWarning: 'चुने गए कूलिंग उपयोगकर्ता के पास इस कूलिंग यूनिट में कोई क्रेट्स नहीं हैं',
       operationError: 'कुछ गलत हो गया। कृपया बाद में पुनः प्रयास करें।',
@@ -258,6 +266,52 @@ export default {
           creditCard: 'क्रेडिट कार्ड',
         },
         paid: 'भुगतान किया गया',
+      },
+
+      CheckIn: {
+        emptyState: 'अभी तक कोई बॉक्स नहीं जोड़ा गया',
+        addCrates: 'क्रेट जोड़ें',
+        checkInWithCode: 'कोड के साथ चेक इन करें',
+        estimatedCost: 'अनुमानित लागत',
+        day: 'दिन',
+        successMessage: 'क्रेट सफलतापूर्वक चेक इन किए गए',
+        SelectCropType: {
+          fruits: 'फल',
+          vegetables: 'सब्जियां',
+          rootVegetables: 'मूल सब्जियां',
+          other: 'अन्य वस्तुएं',
+        },
+        SelectCrop: {
+          additionalInfo: 'अतिरिक्त जानकारी',
+        },
+        Setup: {
+          selectedCrop: 'चयनित फसल',
+          changeCropButton: 'यहाँ क्लिक करें फसल बदलने के लिए',
+          individualCrateWeightButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट वजन संपादित करने के लिए',
+          individualCrateIdButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट आईडी संपादित करने के लिए',
+          numberOfCratesLabel: 'क्रेटों की संख्या',
+          crateWeightLabel: 'क्रेट का सामान्य वजन',
+          pricePerDayLabel: 'प्रति दिन / क्रेट की कीमत',
+          totalPriceLabel: 'कुल मूल्य',
+          plannedDaysLabel: 'भंडार में रखने की योजना की गई दिनों की संख्या',
+          harvestDateLabel: 'फसल कब काटी गई थी?',
+          harvestDateValues: {
+            today: 'आज',
+            yesterday: 'कल',
+            dayBefore: 'दो दिन पहले',
+            evenBefore: 'और पहले',
+          },
+          cratesError: 'कृपया एक सकारात्मक क्रेट संख्या डालें',
+          crateWeightError: 'कृपया एक सकारात्मक क्रेट वजन डालें',
+          harvestDateError: 'फसल की कटाई की तारीख आवश्यक है',
+          modals: {
+            weight: 'क्रेट्स का व्यक्तिगत वजन सेट करें',
+            id: 'क्रेट्स का व्यक्तिगत आईडी सेट करें',
+            crateLabel: 'क्रेट',
+            selectInitialId: 'कृपया प्रारंभिक क्रेट आईडी सेट करें',
+            serialize: 'सीरियलाइज करें',
+          },
+        },
       },
     },
     CoolingUnitsPlanner: {
