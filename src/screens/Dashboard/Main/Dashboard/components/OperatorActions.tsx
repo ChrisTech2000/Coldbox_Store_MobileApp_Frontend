@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
-import { Icon, Portal, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Icon, Portal, TextInput } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import CheckIn from '#assets/icons/check-in.svg';
@@ -21,6 +21,7 @@ import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { paperTheme } from '#ui/lib/theme';
 
 type ManagementMode = 'check-in' | 'check-out';
 
@@ -41,7 +42,7 @@ export function OperatorActions({
   const [selectedUser, setSelectedUser] = useState<Farmer | undefined>();
   const [search, setSearch] = useState<string>('');
 
-  const { data } = useApiCall(
+  const { data, isLoading } = useApiCall(
     'getOperatorFarmers',
     ColdtivateService.getOperatorFarmers,
     {
@@ -164,34 +165,41 @@ export function OperatorActions({
               onChangeText={(value) => setSearch(value)}
               value={search}
               left={<TextInput.Icon icon="magnify" />}
+              disabled={isLoading}
             />
             <ScrollView tw="w-full">
-              <FlashList
-                data={filteredUsers}
-                extraData={selectedUser}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => setSelectedUser(item)}
-                    tw={cn(
-                      'my-1 border-b border-gray-300 p-1',
-                      (selectedUser as Farmer)?.id === item.id
-                        ? 'border-2 border-green-primary'
-                        : ''
-                    )}
-                  >
-                    <Text
-                      variant="TextMedium"
-                      tw="text-base"
-                    >{`${item.user.firstName} ${item.user.lastName}`}</Text>
-                  </TouchableOpacity>
-                )}
-                estimatedItemSize={20}
-                estimatedListSize={{
-                  height: deviceHeight,
-                  width: deviceWidth / 2,
-                }}
-              />
-              {(!search || noPhoneUser?.user.firstName.includes(search)) && (
+              {isLoading ? (
+                <View tw="w-full flex-1 items-center justify-center">
+                  <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+                </View>
+              ) : (
+                <FlashList
+                  data={filteredUsers}
+                  extraData={selectedUser}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => setSelectedUser(item)}
+                      tw={cn(
+                        'my-1 border-b border-gray-300 p-1',
+                        (selectedUser as Farmer)?.id === item.id
+                          ? 'border-2 border-green-primary'
+                          : ''
+                      )}
+                    >
+                      <Text
+                        variant="TextMedium"
+                        tw="text-base"
+                      >{`${item.user.firstName} ${item.user.lastName}`}</Text>
+                    </TouchableOpacity>
+                  )}
+                  estimatedItemSize={20}
+                  estimatedListSize={{
+                    height: deviceHeight,
+                    width: deviceWidth / 2,
+                  }}
+                />
+              )}
+              {!isLoading && (!search || noPhoneUser?.user.firstName.includes(search)) && (
                 <TouchableOpacity
                   onPress={() => setSelectedUser(noPhoneUser)}
                   tw={cn(

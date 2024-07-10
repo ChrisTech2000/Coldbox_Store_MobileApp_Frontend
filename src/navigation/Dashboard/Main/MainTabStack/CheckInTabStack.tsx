@@ -16,7 +16,8 @@ import SelectCropType from '#screens/Dashboard/Main/Dashboard/CheckIn/SelectCrop
 import { TranslationPaths } from '#i18n/index';
 import { Translator, useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
-import { ECropType, type Farmer, type CoolingUnit, type Crop } from '#types/global';
+import { useCheckInStore } from '#stores/checkIn';
+import { ECropType, type CoolingUnit, type Crop, type Farmer } from '#types/global';
 
 export type CheckInStackRoutes = {
   CheckIn: { coolingUnit: CoolingUnit; user: Farmer };
@@ -51,6 +52,7 @@ const Stack = createNativeStackNavigator<CheckInStackRoutes>();
 
 export default function CheckInStack() {
   const { t } = useTranslationUtils();
+  const { resetCheckInStore } = useCheckInStore();
 
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types
@@ -67,8 +69,16 @@ export default function CheckInStack() {
         <NavigatorHeader
           {...headerProps}
           routeTitle={routeTitle}
-          // eslint-disable-next-line react/prop-types
-          leftContent={<Appbar.BackAction onPress={props.navigation.goBack} size={22} />}
+          leftContent={
+            <Appbar.BackAction
+              onPress={() => {
+                // eslint-disable-next-line react/prop-types
+                props.navigation.goBack();
+                resetCheckInStore();
+              }}
+              size={22}
+            />
+          }
         />
       ),
       gestureDirection: 'vertical',

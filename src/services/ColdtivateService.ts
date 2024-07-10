@@ -15,17 +15,19 @@ import type {
   CheckInParams,
   GetCoolingUnitCropsParams,
   UpdateUserParams,
-  CheckInWithCodeParams,
+  GetCheckOutParams,
+  CheckOutWithCodeParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
   CheckInResponse,
-  CheckInWithCodeResponse,
+  GetCheckOutResponse,
   CheckOutResponse,
   GetCoolingUnitCropsResponse,
   GetFarmerResponse,
   GetLocationResponse,
   GetOperatorsResponse,
+  CheckInWitCodeResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, User } from '#types/global';
 
@@ -191,13 +193,29 @@ class ColdtivateService extends HttpClient {
   };
 
   public checkInWithCode = async (
-    params: CheckInWithCodeParams
-  ): Promise<CheckInWithCodeResponse> => {
+    params: CheckOutWithCodeParams
+  ): Promise<CheckInWitCodeResponse> => {
     try {
-      const { data } = await this.post<CheckInWithCodeResponse>(
+      const { data } = await this.post<CheckInWitCodeResponse>(
         EOperationEndpoints.MOVE_CHECKOUT,
-        params
+        params,
+        undefined,
+        ['coolingUnitId']
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCheckOut = async (params: GetCheckOutParams): Promise<GetCheckOutResponse> => {
+    try {
+      const { data } = await this.get<GetCheckOutResponse>(EOperationEndpoints.MOVE_CHECKOUT, {
+        params,
+      });
       return data;
     } catch (error) {
       console.log(error);

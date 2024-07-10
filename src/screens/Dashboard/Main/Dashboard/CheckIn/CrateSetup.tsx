@@ -6,8 +6,8 @@ import { IconButton, RadioButton } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { RadioButtonItem } from '#ui/components/RadioButton';
-import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -229,7 +229,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   );
 
   return (
-    <ScrollView tw="p-4 bg-white space-y-6">
+    <KeyboardAwareScrollView tw="p-4 bg-white space-y-6">
       <View tw="bg-blue-50 p-2 rounded-sm space-y-2">
         <View tw="flex flex-row items-center justify-between space-y-1">
           <Text variant="TextBold" tw="text-lg font-bold ml-2">
@@ -466,7 +466,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         </Button>
       </View>
       <CrateSetupModal
-        setValue={setValue}
+        setValue={(crates: SetupSchema['crates']) => setValue('crates', crates)}
         crates={crates}
         mode={openModal}
         isOpen={openModal !== undefined}
@@ -474,7 +474,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         closeModal={() => setOpenModal(undefined)}
         title={openModal ? t(`Dashboard.CrateManagement.CheckIn.Setup.modals.${openModal}`) : ''}
       />
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 

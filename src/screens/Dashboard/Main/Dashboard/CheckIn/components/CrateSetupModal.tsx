@@ -1,7 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { UseFormSetValue } from 'react-hook-form';
 import { Dimensions, View } from 'react-native';
 import { Divider, Icon, Portal, TextInput } from 'react-native-paper';
 
@@ -21,7 +20,7 @@ type CrateModalProps = {
   isOpen: boolean;
   mode: ModalMode;
   numberOfCrates: number;
-  setValue: UseFormSetValue<SetupSchema>;
+  setValue: (crates: SetupSchema['crates']) => void;
   title: string;
   closeModal: () => void;
 };
@@ -47,6 +46,7 @@ export function CrateSetupModal({
   const onChangeNumericKeyboard = useCallback(
     (newVal: string | number, index: number) => {
       const value = Number(newVal);
+
       if (!isNaN(value)) {
         const crates = cloneDeep(modalCrates);
         crates[index][weightMode ? 'crateWeight' : 'crateId'] = value;
@@ -77,7 +77,7 @@ export function CrateSetupModal({
   }, [initialId, crates]);
 
   const saveChanges = useCallback(() => {
-    setValue('crates', modalCrates);
+    setValue(modalCrates);
     closeModal();
   }, [modalCrates]);
 
@@ -93,8 +93,8 @@ export function CrateSetupModal({
 
   return (
     <Portal>
-      <Modal tw="w-[85%]" visible={isOpen} onDismiss={dismissModal}>
-        <View tw="w-full items-center mx-8 bg-white rounded-sm py-1 max-h-90">
+      <Modal tw="w-[85%] pb-32" visible={isOpen} onDismiss={dismissModal}>
+        <View tw="w-full mx-8 items-center bg-white rounded-sm py-1 max-h-90">
           <Text tw="text-lg font-bold mb-1 mt-2">{title}</Text>
           <Divider tw="w-full bg-gray-400 my-2" />
 

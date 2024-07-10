@@ -1,3 +1,4 @@
-// TODO: currently only validating the English && Hindi alphabets
+// TODO: currently validating the English or Hindi alphabets
 export const passwordRegex =
-  /^(?=.*[a-zA-Z])(?=.*[\u0900-\u097F])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\u0900-\u097F!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/;
+  // eslint-disable-next-line no-misleading-character-class
+  /^(?=.*[A-Z])(?=.*\d)(?=.*[a-zA-Z\u0900-\u097F])[a-zA-Z\u0900-\u097F\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/;

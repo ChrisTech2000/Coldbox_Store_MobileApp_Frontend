@@ -234,6 +234,13 @@ const en = {
     },
   },
   Dashboard: {
+    emptyGeneral: 'At the moment, there is no available data.',
+    emptyCoolingUser:
+      'Items in storage will appear in the dashboard when you do at least one check-in in any room.',
+    noCompanyAvailable: 'No company available',
+    noCoolingUnitAvailable: 'No cooling unit available',
+    noLocationsAvailable:
+      'Welcome to Coldtivate. Get started by adding locations to your app in the management panel.',
     CrateManagement: {
       userModalTitle: 'Select a cooling user',
       coolingUserLabel: 'Cooling user',
@@ -269,8 +276,19 @@ const en = {
         addCrates: 'Add Crates',
         checkInWithCode: 'Check in with code',
         estimatedCost: 'Estimated Cost',
+        pricing: 'Pricing',
         day: 'day',
         successMessage: 'Crates were successfully checked in',
+        emptyMessage: 'Please add at least one crate to your check in',
+        noPlannedDaysMessage:
+          'Missing planned days on some items. Cannot calculate estimated cost.',
+        WithCode: {
+          modalTitle: 'Create Check In from existing Check Out',
+          modalDescription:
+            'You will need the check out code to start a new check in in this way. If you don’t have it, consider starting a new check in. If you know how long you plan to store, consider adding the number of days here.',
+          codeLabel: 'Add code',
+          codeErrorMessage: 'Code is required',
+        },
         SelectCropType: {
           fruits: 'Fruits',
           vegetables: 'Vegetables',
