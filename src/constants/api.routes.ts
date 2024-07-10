@@ -12,6 +12,8 @@ export enum EUserEndpoints {
   UPDATE_USER = 'user/v1/users/:userId/',
   UPDATE_FARMER = 'user/v1/farmers/:farmerId/',
   GET_COMPANY_EMPLOYEES = 'user/v1/service-providers/',
+  GET_INVITED_COMPANY_EMPLOYEES = 'user/v1/service-provider-invite',
+  GET_COMPANY_EMPLOYEE = 'user/v1/service-providers/:registeredEmployeeId/',
 }
 
 export enum EStorageEndpoints {

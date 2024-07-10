@@ -60,8 +60,7 @@ export type ManagementRoutes = {
   RegisteredEmployee: undefined;
   AddRegisteredEmployee: undefined;
   RegisteredEmployeeDetails: {
-    firstName: string;
-    familyName: string;
+    registeredEmployeeId: number;
   };
   // Cooling User related routes
   CoolingUsers: undefined;
