@@ -171,3 +171,8 @@ export interface GetCoolingUnitsByStatusParams extends JsonObject {
   isFarmer?: boolean;
   notEmpty: boolean;
 }
+
+export interface GetCompanyEmployeeParams extends JsonObject {
+  registeredEmployeeId: number;
+  companyId: number;
+}

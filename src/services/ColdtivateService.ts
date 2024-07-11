@@ -26,6 +26,7 @@ import type {
   GetCoolingUnitsByStatusParams,
   GetCheckOutParams,
   CheckOutWithCodeParams,
+  GetCompanyEmployeeParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -460,6 +461,42 @@ class ColdtivateService extends HttpClient {
         EUserEndpoints.GET_COMPANY_EMPLOYEES,
         { params }
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getInvitedCompanyEmployees = async (
+    companyId: number
+  ): Promise<GetCompanyEmployeesResponse> => {
+    try {
+      const params = { company: companyId };
+      const { data } = await this.get<GetCompanyEmployeesResponse>(
+        EUserEndpoints.GET_INVITED_COMPANY_EMPLOYEES,
+        { params }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCompanyEmployee = async (
+    params: GetCompanyEmployeeParams
+  ): Promise<GetCompanyEmployeesResponse[0]> => {
+    try {
+      const { registeredEmployeeId, companyId } = params;
+      const url = subs(EUserEndpoints.GET_COMPANY_EMPLOYEE, { registeredEmployeeId });
+      const { data } = await this.get<GetCompanyEmployeesResponse[0]>(url, {
+        params: { company: companyId },
+      });
       return data;
     } catch (error) {
       console.log(error);
