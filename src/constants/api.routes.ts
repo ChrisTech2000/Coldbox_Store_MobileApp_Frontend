@@ -32,6 +32,7 @@ export enum EStorageEndpoints {
 export enum EOperationEndpoints {
   CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
+  GET_MOVEMENTS = '/operation/movements/',
   MOVE_CHECKOUT = 'operation/move-checkout/',
 }
 

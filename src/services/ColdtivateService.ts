@@ -29,6 +29,7 @@ import type {
   GetFarmerSurveysParams,
   UpdateFarmerSurveysParams,
   GetCompanyEmployeeParams,
+  GetMovementsHistoryParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -45,6 +46,7 @@ import type {
   CheckInWitCodeResponse,
   GetFarmerSurveysResponse,
   UpdateFarmerSurveysResponse,
+  GetMovementsHistoryResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -276,6 +278,25 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.get<GetCheckOutResponse>(EOperationEndpoints.MOVE_CHECKOUT, {
         params,
       });
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getMovementsHistory = async (
+    params: GetMovementsHistoryParams
+  ): Promise<GetMovementsHistoryResponse> => {
+    try {
+      const { data } = await this.get<GetMovementsHistoryResponse>(
+        EOperationEndpoints.GET_MOVEMENTS,
+        {
+          params,
+        }
+      );
       return data;
     } catch (error) {
       console.log(error);

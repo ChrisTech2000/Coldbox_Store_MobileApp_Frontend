@@ -1,5 +1,6 @@
 import {
   ECoolingUnitMetric,
+  EMovementType,
   EPaymentType,
   ERoles,
   type CommodityInfo,
@@ -214,4 +215,37 @@ export type UpdateFarmerSurveysResponse = Array<{
   experienceDuration: number;
   dateFilledIn: Date;
   dateLastModified: Date;
+}>;
+
+export type GetMovementsHistoryResponse = Array<{
+  id: number;
+  coolingUnitId: number;
+  code: string;
+  date: Date;
+  movementType: EMovementType;
+  farmer: string;
+  cratesWeight: number;
+  movementCrops: Array<Pick<Crop, 'name' | 'id'>>;
+  checkoutId?: number;
+  hasMarketSurvey: Array<FarmerSurvey>; // TODO: confirm type
+  marketSurveyDelay: boolean;
+  calculatedPrice: number;
+  discount: number;
+  totalPrice: number;
+  checkinDate: Date;
+  cratesNumber: number;
+  checkinCode: string;
+  cratesCheckin: Array<{
+    date: Date;
+    name: string;
+    code: string;
+    crateAmount: number;
+    remainingShelfLife: number;
+    plannedDays: number | null;
+    currentStorageDays: number;
+    tag: string;
+    weight: number;
+  }>;
+  paymentType: EPaymentType;
+  operator: string;
 }>;

@@ -338,6 +338,11 @@ export enum EUnitOfMeasurement {
   BASKETS = 'baskets',
 }
 
+export enum EMovementType {
+  OUT = 'out',
+  IN = 'in',
+}
+
 //////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',

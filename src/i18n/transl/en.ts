@@ -545,6 +545,15 @@ const en = {
       privacyPolicy: 'Privacy Policy',
       comsolAbout: 'Comsol About',
     },
+    History: {
+      sortMenuOptions: {
+        cropType: 'Crop type',
+        movementDate: 'Movement date (first to latest)',
+        movementDateReverse: 'Movement date (latest to first)',
+        checkInFirst: 'Check in first',
+        checkOutFirst: 'Check out first',
+      },
+    },
   },
 };
 
