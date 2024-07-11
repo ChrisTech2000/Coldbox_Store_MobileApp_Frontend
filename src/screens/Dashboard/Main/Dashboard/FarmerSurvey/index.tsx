@@ -58,7 +58,6 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurv
   const {
     handleSubmit,
     control,
-    // clearErrors,
     setValue,
     formState: { errors },
   } = useForm<Schema>({
@@ -82,11 +81,11 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurv
 
   const onSubmit: SubmitHandler<Schema> = useCallback(
     async (values) => {
-      await ColdtivateService.updateFarmerSurveys({
+      const result = await ColdtivateService.updateFarmerSurveys({
         farmer: farmerId,
         userType: '',
-        experience: false,
-        experienceDuration: 0,
+        experience: 'no',
+        experienceDuration: 1,
         commodities: [
           ...(surveys?.flatMap((survey) => survey.co) ?? []),
           {
@@ -104,6 +103,10 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurv
           },
         ],
       });
+
+      if (result) {
+        setIsSurveyModalVisible(false);
+      }
     },
     [farmerId, cropId, company]
   );

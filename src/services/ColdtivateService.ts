@@ -161,11 +161,10 @@ class ColdtivateService extends HttpClient {
     params: UpdateFarmerSurveysParams
   ): Promise<UpdateFarmerSurveysResponse | undefined> => {
     try {
-      const { farmer, ...rest } = params;
+      const { farmer } = params;
       const url = subs(EUserEndpoints.UPDATE_FARMER_SURVEYS, { farmerId: farmer });
-      const { data } = await this.put<UpdateFarmerSurveysResponse>(url, {
-        ...rest,
-      });
+      const { data } = await this.put<UpdateFarmerSurveysResponse>(url, params);
+
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

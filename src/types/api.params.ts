@@ -183,7 +183,7 @@ type FarmerSurveyParams = Omit<
 export interface UpdateFarmerSurveysParams extends JsonObject {
   farmer: number;
   userType: ERoles | string;
-  experience: boolean;
+  experience: string;
   experienceDuration: number;
   commodities: Array<FarmerSurveyParams>;
 }

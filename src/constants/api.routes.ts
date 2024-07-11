@@ -12,7 +12,7 @@ export enum EUserEndpoints {
   GET_INVITED_OPERATORS = 'user/v1/operator-invite',
   GET_OPERATORS = 'user/v1/operators',
   UPDATE_FARMER = 'user/v1/farmers/:farmerId/',
-  UPDATE_FARMER_SURVEYS = 'user/v1/farmer-survey/:farmerId',
+  UPDATE_FARMER_SURVEYS = 'user/v1/farmer-survey/:farmerId/',
   UPDATE_USER = 'user/v1/users/:userId/',
 }
 

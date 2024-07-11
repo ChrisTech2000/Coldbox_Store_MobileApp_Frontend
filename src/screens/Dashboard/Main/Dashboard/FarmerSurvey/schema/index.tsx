@@ -30,9 +30,9 @@ export const FarmerSurveySchema = (t: Translator) =>
           .min(1, {
             message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
           }),
-        quantitySelfConsumed: z.number().optional(),
-        quantitySold: z.number().optional(),
-        quantityLost: z.number().optional(),
+        quantitySelfConsumed: z.number(),
+        quantitySold: z.number(),
+        quantityLost: z.number(),
       })
       .superRefine((data, ctx) => {
         if (
@@ -49,7 +49,7 @@ export const FarmerSurveySchema = (t: Translator) =>
     reasonsForSpoilage: z
       .string()
       .array()
-      .refine((array) => array && array.length > 1, {
+      .refine((array) => array && array.length > 0, {
         message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.reasonsForSpoilage'),
       }),
     averagePrice: z

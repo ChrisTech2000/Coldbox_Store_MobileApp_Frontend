@@ -265,6 +265,9 @@ export default {
           lost: 'बाजार मूल्य से कम पर बिक गया या खो गया ({{unit}})',
           totalQuantity: 'एक सप्ताह में कुल उत्पादन मात्रा',
           unitWeight: 'प्रत्येक {{crate}} का वजन है',
+          selectSpoilageReasonsPlaceholder: 'सभी लागू कारणों का चयन करें',
+          priceLabel: 'मूल्य',
+          priceUnit: '{{unit}} के लिए',
           unit: {
             kg: 'किलो',
             crates: 'टोकरियां',
@@ -291,6 +294,7 @@ export default {
             other: 'अन्य',
           },
           errorMessages: {
+            reasonsForSpoilage: 'कृपया कम से कम एक कारण दर्ज करें।',
             number: 'एक गैर-शून्य, सकारात्मक संख्या होनी चाहिए',
             totalMismatch:
               'स्व-उपभोग, बेचा और खोया या बाजार मूल्य से नीचे बेचा का योग कुल उत्पादित मात्रा के बराबर होना चाहिए।',
