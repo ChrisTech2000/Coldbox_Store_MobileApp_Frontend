@@ -39,3 +39,7 @@ export enum ECompanyEndpoints {
   GET_COMPANIES = 'user/v1/companies/',
   GET_COMPANY = 'user/v1/companies/:companyId/',
 }
+
+export enum ESMSEndpoints {
+  SEND_SMS = 'storage/v1/send-sms/',
+}
