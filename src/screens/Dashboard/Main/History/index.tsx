@@ -65,25 +65,23 @@ function History() {
         setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
       />
 
-      <View tw="mx-4 my-2">
+      <ScrollView tw="mx-4 my-2">
         {areCoolingUnitsLoading || areMovementsLoading ? (
-          <View tw="flex-1 items-center justify-center">
+          <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
           </View>
         ) : movements.length > 0 ? (
-          <ScrollView>
-            <FlashList
-              data={movements}
-              renderItem={({ item: movement, index }) => (
-                <Movement key={`${movement.id}-${index}`} movement={movement} />
-              )}
-              estimatedItemSize={40}
-              estimatedListSize={{
-                height: deviceHeight,
-                width: deviceWidth / 2,
-              }}
-            />
-          </ScrollView>
+          <FlashList
+            data={movements}
+            renderItem={({ item: movement, index }) => (
+              <Movement key={`${movement.id}-${index}`} movement={movement} />
+            )}
+            estimatedItemSize={40}
+            estimatedListSize={{
+              height: deviceHeight,
+              width: deviceWidth / 2,
+            }}
+          />
         ) : (
           <View tw="flex-1 items-center text-center mx-4 mt-4">
             <Text variant="TextBold" tw="text-base text-green-primary text-center">
@@ -91,7 +89,7 @@ function History() {
             </Text>
           </View>
         )}
-      </View>
+      </ScrollView>
     </View>
   );
 }
