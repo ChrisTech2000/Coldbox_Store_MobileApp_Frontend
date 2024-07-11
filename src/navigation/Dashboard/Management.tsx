@@ -29,6 +29,7 @@ import UsageAnalysis from '#screens/Dashboard/Management/UsageAnalysis';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import NavigatorHeader, { type NavigationHeaderProps } from '../components/NavigatorHeader';
 
@@ -191,7 +192,7 @@ function _rightContentFactory(
           <Appbar.Action
             icon="plus-circle-outline"
             size={32}
-            onPress={() => navigation.navigate('AddCoolingUser')}
+            onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true)}
           />
         ),
       };

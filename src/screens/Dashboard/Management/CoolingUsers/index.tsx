@@ -5,13 +5,17 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useAuthStore } from '#stores/auth';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import type { User } from '#types/global';
 
-function CoolingUsers() {
+import Prompt from './components/Prompt';
+import FormModal from './components/FormModal';
+
+function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   const user = useAuthStore(useShallow((store) => store.user));
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
@@ -46,6 +50,9 @@ function CoolingUsers() {
         refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
         nestedScrollEnabled
       />
+
+      <Prompt navigation={props.navigation} />
+      <FormModal navigation={props.navigation} />
     </View>
   );
 }
