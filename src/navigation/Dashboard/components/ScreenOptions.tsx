@@ -21,7 +21,7 @@ const NAVIGATOR_HEADERS: Record<DashboardRoutePaths, TranslationPaths | undefine
   KnowledgeHub: 'navigation.dashboard.KnowledgeHub',
   Tutorial: 'navigation.dashboard.QuitTutorial',
   FAQ: 'navigation.dashboard.FAQ',
-  About: 'navigation.dashboard.About',
+  About: undefined,
 };
 
 export default function DashboardScreenOptions(

@@ -4,7 +4,6 @@ import { Drawer } from 'react-native-drawer-layout';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
-import About from '#screens/Dashboard/About';
 import AccountDetails from '#screens/Dashboard/AccountDetails';
 import FAQ from '#screens/Dashboard/FAQ';
 import KnowledgeHub from '#screens/Dashboard/KnowledgeHub';
@@ -23,6 +22,7 @@ import DashboardScreenOptions from './components/ScreenOptions';
 import DashboardMainBottomTabs from './Main';
 import ManagementStack, { ManagementRoutes } from './Management';
 import NotificationsDrawerContent from './components/NotificationsDrawerContent';
+import AboutStack from './About';
 
 export type DashboardRoutes = {
   Main: undefined;
@@ -73,7 +73,7 @@ function DashboardNavigationRouter() {
       <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHub} />
       <NavigationDrawer.Screen name="Tutorial" component={Tutorial} />
       <NavigationDrawer.Screen name="FAQ" component={FAQ} />
-      <NavigationDrawer.Screen name="About" component={About} />
+      <NavigationDrawer.Screen name="About" component={AboutStack} />
     </NavigationDrawer.Navigator>
   );
 }

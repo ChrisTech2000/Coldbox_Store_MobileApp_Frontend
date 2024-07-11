@@ -71,6 +71,12 @@ const en = {
       CropList: '{{cropType}}',
       CrateSetup: 'CheckIn',
     },
+    about: {
+      comsolAgreement: 'COMSOL Runtime License Agreement 6.0',
+      userLicense: 'END USER LICENSE AGREEMENT',
+      aboutComsol: 'About COMSOL',
+      privacyPolicy: 'Privacy Policy',
+    },
   },
   actions: {
     error: 'An error occured',
@@ -482,6 +488,12 @@ const en = {
         location: 'Location',
         userCode: 'Cooling User Import Code',
       },
+    },
+    About: {
+      runtimeAgree: 'Comsol Runtime Agreement',
+      userLicense: 'End User License Agreement',
+      privacyPolicy: 'Privacy Policy',
+      comsolAbout: 'Comsol About',
     },
   },
 };
