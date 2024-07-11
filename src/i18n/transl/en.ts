@@ -507,6 +507,14 @@ const en = {
           save: 'Save Changes',
         },
       },
+      RegisteredEmployee: {
+        invited: 'Invited ({{amount}})',
+        registered: 'Registered ({{amount}})',
+      },
+      RegisteredEmployeeDetails: {
+        deletePersonal: 'To delete your account, go to Account Details.',
+        deleteOther: 'If you want to delete this account, please contact {{contact}}',
+      },
     },
     AccountDetails: {
       popups: {

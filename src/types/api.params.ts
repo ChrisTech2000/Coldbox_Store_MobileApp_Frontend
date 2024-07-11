@@ -180,10 +180,16 @@ type FarmerSurveyParams = Omit<
   FarmerSurvey,
   'id' | 'farmerSurveyId' | 'dateFilledIn' | 'dateLastModified'
 >;
+
 export interface UpdateFarmerSurveysParams extends JsonObject {
   farmer: number;
   userType: ERoles | string;
   experience: string;
   experienceDuration: number;
   commodities: Array<FarmerSurveyParams>;
+}
+
+export interface GetCompanyEmployeeParams extends JsonObject {
+  registeredEmployeeId: number;
+  companyId: number;
 }

@@ -48,7 +48,7 @@ export type ManagementRoutes = {
   CoolingUnits: undefined;
   AddCoolingUnit: undefined;
   EditCoolingUnit: {
-    unitId: string;
+    coolingUnitId: number;
   };
   // Operator related routes
   Operators: undefined;
@@ -60,8 +60,7 @@ export type ManagementRoutes = {
   RegisteredEmployee: undefined;
   AddRegisteredEmployee: undefined;
   RegisteredEmployeeDetails: {
-    firstName: string;
-    familyName: string;
+    registeredEmployeeId: number;
   };
   // Cooling User related routes
   CoolingUsers: undefined;
