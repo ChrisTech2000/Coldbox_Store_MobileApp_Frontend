@@ -254,7 +254,7 @@ const en = {
         warningMessage: 'Please fill in the baseline survey for {{crop}}!',
         modal: {
           weeklyQuantityQuestion:
-            'What is the quantity of Guava that you produce or trade in a week?',
+            'What is the quantity of {{crop}} that you produce or trade in a week?',
           cropSpoilageQuestion: 'What is the main reason for crop spoilage?',
           marketPriceQuestion: 'Average market price per week when selling {{crop}}',
           quantityDistributionQuestion: 'How much of that is:',
@@ -263,6 +263,9 @@ const en = {
           lost: 'Lost or sold below market price ({{unit}})',
           totalQuantity: 'Total quantity produced in a week',
           unitWeight: 'Each {{crate}} is',
+          selectSpoilageReasonsPlaceholder: 'Select all reasons that apply',
+          priceLabel: 'Price',
+          priceUnit: 'per {{unit}}',
           unit: {
             kg: 'Kg',
             crates: 'Crates',
@@ -290,6 +293,7 @@ const en = {
           },
           errorMessages: {
             number: 'Must be a non-null, positive number',
+            reasonsForSpoilage: 'Please introduce at least one reason.',
             totalMismatch:
               'The sum of Self-consumed, Sold and Lost or sold below market price should be equal to the total quantity produced.',
           },

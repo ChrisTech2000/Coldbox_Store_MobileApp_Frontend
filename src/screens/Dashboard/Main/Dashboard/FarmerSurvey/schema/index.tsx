@@ -4,69 +4,63 @@ import { Translator } from '#i18n/utils';
 import { EUnitOfMeasurement } from '#types/global';
 
 export const FarmerSurveySchema = (t: Translator) =>
-  z
-    .object({
-      totalProducedWeekly: z
-        .number()
-        .positive()
-        .min(1, {
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        }),
-      unitOfMeasurement: z
-        .enum([
-          EUnitOfMeasurement.KILOGRAMS,
-          EUnitOfMeasurement.BOXES,
-          EUnitOfMeasurement.BASKETS,
-          EUnitOfMeasurement.SACKS,
-          EUnitOfMeasurement.CRATES,
-        ])
-        .refine((unit) => !!unit, { message: '' }),
-      unitaryWeight: z
-        .number()
-        .positive()
-        .min(1, {
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        }),
-      quantitySelfConsumed: z
-        .number()
-        .positive()
-        .min(1, {
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        }),
-      quantitySold: z
-        .number()
-        .positive()
-        .min(1, {
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        }),
-      quantityLost: z
-        .number()
-        .positive()
-        .min(1, {
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        }),
-      reasonsForSpoilage: z
-        .string()
-        .array()
-        .refine((array) => array && array.length > 1, { message: '' }),
-      averagePrice: z
-        .number()
-        .positive()
-        .min(1, {
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        }),
-    })
-    .refine(
-      (data) =>
-        data.quantitySelfConsumed + data.quantitySold + data.quantityLost ===
-        data.totalProducedWeekly,
-      {
-        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.totalMismatch'),
-        path: ['quantitySelfConsumed', 'quantitySold', 'quantityLost'],
-      }
-    );
+  z.object({
+    unitOfMeasurement: z.enum([
+      EUnitOfMeasurement.KILOGRAMS,
+      EUnitOfMeasurement.BOXES,
+      EUnitOfMeasurement.BASKETS,
+      EUnitOfMeasurement.SACKS,
+      EUnitOfMeasurement.CRATES,
+    ]),
+    unitaryWeight: z
+      .number({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
+      .positive({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
+      .min(1, {
+        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
+      }),
+    weightDistribution: z
+      .object({
+        totalProducedWeekly: z
+          .number({
+            message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
+          })
+          .positive({
+            message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
+          })
+          .min(1, {
+            message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
+          }),
+        quantitySelfConsumed: z.number().optional(),
+        quantitySold: z.number().optional(),
+        quantityLost: z.number().optional(),
+      })
+      .superRefine((data, ctx) => {
+        if (
+          (data.quantitySelfConsumed ?? 0) + (data.quantitySold ?? 0) + (data.quantityLost ?? 0) !==
+          data.totalProducedWeekly
+        ) {
+          ctx.addIssue({
+            code: 'custom',
+            message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.totalMismatch'),
+            path: ['quantitySelfConsumed'],
+          });
+        }
+      }),
+    reasonsForSpoilage: z
+      .string()
+      .array()
+      .refine((array) => array && array.length > 1, {
+        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.reasonsForSpoilage'),
+      }),
+    averagePrice: z
+      .number({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
+      .positive({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
+      .min(1, {
+        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
+      }),
+  });
 
 export const defaultValues = {
-  totalProducedWeekly: 0,
   unitOfMeasurement: EUnitOfMeasurement.KILOGRAMS,
+  unitaryWeight: 25,
 };

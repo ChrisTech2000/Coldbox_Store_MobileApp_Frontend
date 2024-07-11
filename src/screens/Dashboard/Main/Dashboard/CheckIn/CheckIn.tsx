@@ -223,7 +223,12 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                 </View>
               </View>
               {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) && (
-                <FarmerSurvey cropName={item.crop.name} />
+                <FarmerSurvey
+                  cropId={item.crop.id}
+                  cropName={item.crop.name}
+                  farmerId={user.id}
+                  surveys={surveys}
+                />
               )}
               {checkOutCode && (
                 <React.Fragment>
