@@ -73,6 +73,12 @@ export default {
       CropList: '{{cropType}}',
       CrateSetup: 'चेक इन',
     },
+    about: {
+      comsolAgreement: 'COMSOL Runtime License Agreement 6.0',
+      userLicense: 'END USER LICENSE AGREEMENT',
+      aboutComsol: 'About COMSOL',
+      privacyPolicy: 'Privacy Policy',
+    },
   },
   actions: {
     error: 'एक त्रुटि हुई',
@@ -488,6 +494,12 @@ export default {
         location: 'स्थान',
         userCode: 'शीतलक उपयोगकर्ता आयात कोड',
       },
+    },
+    About: {
+      runtimeAgree: 'कॉमसोल रनटाइम समझौता',
+      userLicense: 'अंत उपयोगकर्ता लाइसेंस समझौता',
+      privacyPolicy: 'गोपनीयता नीति',
+      comsolAbout: 'कॉमसोल के बारे में',
     },
   },
 } satisfies Translations;
