@@ -11,6 +11,7 @@ export type FormValues = {
   gender: EApiGender;
   phone: string;
   language: TranslationLocales;
+  parentName: string;
 };
 
 type CallbackProps = {
@@ -42,6 +43,7 @@ export default function FormManager(props: FormManagerProps) {
           z.literal(EApiGender.MALE),
         ]),
         language: z.string(),
+        parentName: z.string(),
       })
     ),
     reValidateMode: 'onSubmit',

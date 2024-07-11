@@ -1,15 +1,20 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
+import { useSWRConfig } from 'swr';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
+import AuthService from '#services/AuthService';
 import { EApiGender } from '#types/global';
 import type { TranslationLocales } from '#i18n/constants';
 import { paperTheme } from '#ui/lib/theme';
@@ -25,7 +30,10 @@ const width = (Dimensions.get('screen').width - 42) / 2;
 function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   const { params } = props.route;
 
+  const operator = useAuthStore(useShallow((store) => store.user));
+  const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
+  const { mutate } = useSWRConfig();
 
   const { data, isLoading } = useApiCall(
     'getFarmer',
@@ -45,21 +53,69 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
     );
   }
 
+  const contextualFarmer = data?.at(0);
+
+  async function revalidateCUCache(): Promise<void> {
+    await mutate(getQueryKey('getOperatorFarmers', { operator: operator?.id }));
+  }
+
+  async function onSubmit(values: FormValues): Promise<void> {
+    if (!contextualFarmer || !company) return; // safe guard
+    try {
+      // assign existing cooling user to the company if he already has an account, fyk: added by code
+      if (typeof params?.userId !== 'undefined') {
+        await ColdtivateService.updateFarmerCompany({
+          farmerId: contextualFarmer.id,
+          companyId: company.id,
+        });
+        await revalidateCUCache();
+        return props.navigation.goBack();
+      }
+
+      // assign new cooling user if he doesn't have the app, fyk: added by phone number
+      const result = await AuthService.signUpAsCoolingUser({
+        user: {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          gender: values.gender,
+          phone: values.phone,
+          language: values.language,
+          password: 'fakePassword',
+        },
+        createUser: false,
+        parentName: values.parentName,
+      });
+
+      if (typeof result !== 'undefined') {
+        await ColdtivateService.updateFarmerCompany({
+          farmerId: result.id,
+          companyId: company.id,
+        });
+      }
+
+      await revalidateCUCache();
+      return props.navigation.goBack(); // TODO: redirect operator to the farmer survey instead
+    } catch (exception) {
+      console.error(exception);
+    }
+  }
+
   function buildInitialValues() {
-    const farmer = data?.at(0);
     const values = {} as FormValues;
-    values.firstName = farmer?.user?.firstName ?? '';
-    values.lastName = farmer?.user?.lastName ?? '';
-    values.gender = farmer?.user?.gender ?? EApiGender.OTHER;
-    values.phone = farmer?.user?.phone ?? '';
-    values.language = (farmer?.user?.language as TranslationLocales) ?? LanguageStorage.read();
+    values.parentName = contextualFarmer?.parentName ?? '';
+    values.firstName = contextualFarmer?.user?.firstName ?? '';
+    values.lastName = contextualFarmer?.user?.lastName ?? '';
+    values.gender = contextualFarmer?.user?.gender ?? EApiGender.OTHER;
+    values.phone = contextualFarmer?.user?.phone ?? '';
+    values.language =
+      (contextualFarmer?.user?.language as TranslationLocales) ?? LanguageStorage.read();
     return values;
   }
 
   const disabled = (data ?? []).length >= 1;
 
   return (
-    <FormManager onSubmit={async () => undefined} initialValues={buildInitialValues()}>
+    <FormManager onSubmit={onSubmit} initialValues={buildInitialValues()}>
       {({ submitHandler, isSubmitting }) => (
         <KeyboardAwareScrollView
           contentContainerStyle="flex-1 justify-between pt-6 pb-8 mx-4"

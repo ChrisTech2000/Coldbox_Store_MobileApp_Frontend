@@ -25,7 +25,9 @@ export interface SignUpAsCompanyParams extends JsonObject {
 }
 
 export interface SignUpAsCoolingUserParams extends JsonObject {
-  user: SignUpCoolingUser;
+  user: SignUpCoolingUser | Omit<SignUpCoolingUser, 'country'>;
+  createUser?: boolean;
+  parentName?: string;
 }
 
 export interface RequestPasswordResetParams extends JsonObject {
@@ -174,5 +176,10 @@ export interface GetCoolingUnitsByStatusParams extends JsonObject {
 
 export interface GetCompanyEmployeeParams extends JsonObject {
   registeredEmployeeId: number;
+  companyId: number;
+}
+
+export interface UpdateFarmerCompany {
+  farmerId: number;
   companyId: number;
 }

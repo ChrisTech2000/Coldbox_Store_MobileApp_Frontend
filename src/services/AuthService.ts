@@ -43,8 +43,8 @@ class AuthService extends HttpClient {
   ): Promise<SignUpAsCoolingUserResponse | undefined> => {
     const _params = {
       ...params,
-      createUser: true,
-      parentName: '',
+      createUser: params?.createUser ?? true,
+      parentName: params?.parentName ?? '',
     };
 
     try {

@@ -27,6 +27,7 @@ import type {
   GetCheckOutParams,
   CheckOutWithCodeParams,
   GetCompanyEmployeeParams,
+  UpdateFarmerCompany,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -143,6 +144,21 @@ class ColdtivateService extends HttpClient {
     try {
       const params = { user_code: userCode };
       const { data } = await this.get<Array<Farmer>>(EUserEndpoints.GET_FARMER, { params });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  }
+
+  async updateFarmerCompany(params: UpdateFarmerCompany) {
+    try {
+      const url = subs(EUserEndpoints.UPDATE_FARMER, { farmerId: params.farmerId });
+      const { data } = await this.put(url, {
+        company_id: params.companyId,
+        update_companies: true,
+      });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
