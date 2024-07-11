@@ -65,7 +65,9 @@ export type ManagementRoutes = {
   };
   // Cooling User related routes
   CoolingUsers: undefined;
-  AddCoolingUser: undefined;
+  AddCoolingUser: {
+    userId: number;
+  };
   EditCoolingUser: {
     firstName: string;
     familyName: string;

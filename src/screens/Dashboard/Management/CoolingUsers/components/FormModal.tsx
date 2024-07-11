@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { type NavigationProp } from '@react-navigation/native';
 import { Modal, Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
+import { useToast } from 'react-native-toast-notifications';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
@@ -11,6 +12,7 @@ import type { ManagementRoutePaths, ManagementRoutes } from '#navigation/Dashboa
 import { useToggle } from '#ui/hooks/useToggle';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAppEventListener } from '#ui/lib/emitter';
+import ColdtivateService from '#services/ColdtivateService';
 
 type FormValues = {
   code: string;
@@ -22,13 +24,15 @@ const DEFAULT_VALUES = {
 
 type Props = {
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>;
+  coolingUsersIds: Array<number>;
 };
 
 export default function FormModal(props: Props) {
-  const { navigation } = props;
+  const { navigation, coolingUsersIds } = props;
 
   const [isVisible, toggleVisibility, setModalVisibility] = useToggle(false);
   const { t, zodResolver } = useTranslationUtils();
+  const toast = useToast();
 
   useAppEventListener<[boolean]>('DISPATCH_CU_FORM_MODAL', setModalVisibility);
 
@@ -47,10 +51,28 @@ export default function FormModal(props: Props) {
     form.reset(DEFAULT_VALUES);
   }
 
-  function onSubmit(values: FormValues) {
-    console.log(values);
-    toggleVisibility();
-    navigation.navigate('AddCoolingUser');
+  async function onSubmit(values: FormValues) {
+    try {
+      const result = await ColdtivateService.getFarmerByUserCode(values.code);
+      const coolingUser = result?.at(0);
+
+      if (!coolingUser) {
+        toast.show('No cooling user with this user code were found.', { type: 'danger' });
+        return;
+      }
+
+      if (coolingUsersIds.includes(coolingUser.id)) {
+        toast.show('This user is already in your list of cooling users.', { type: 'danger' });
+        return;
+      }
+
+      onClose();
+      navigation.navigate('AddCoolingUser', {
+        userId: coolingUser.user.id,
+      });
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   return (

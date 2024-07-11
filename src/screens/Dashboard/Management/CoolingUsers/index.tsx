@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, Divider, List, type ListItemProps } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
@@ -28,6 +28,11 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
     }
   );
 
+  const coolingUsersIds: Array<number> = useMemo(
+    () => data?.map((coolingUser) => coolingUser.id) ?? [],
+    [data]
+  );
+
   if (isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -52,7 +57,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
       />
 
       <Prompt navigation={props.navigation} />
-      <FormModal navigation={props.navigation} />
+      <FormModal navigation={props.navigation} coolingUsersIds={coolingUsersIds} />
     </View>
   );
 }
