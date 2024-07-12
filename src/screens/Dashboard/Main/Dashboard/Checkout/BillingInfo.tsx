@@ -32,7 +32,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
   const { company } = useManagementStore();
   const { selectedItem: paymentType } = usePaymentTypeStore();
-  const { refreshDashboard } = useDashboardStore();
+  const { refreshData } = useDashboardStore();
 
   const [discount, setDiscount] = useState<number>(0);
   const [isPaid, setIsPaid] = useState<boolean>(false);
@@ -104,9 +104,9 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       paid: isPaid,
     });
 
-    refreshDashboard?.();
+    refreshData.forEach((fn) => fn());
     rootNavigation.navigate('RootMainTabStack');
-  }, [user, crates, discount, currency, paymentType, isPaid, refreshDashboard]);
+  }, [user, crates, discount, currency, paymentType, isPaid, refreshData]);
 
   return (
     <View tw="flex-1 p-4">

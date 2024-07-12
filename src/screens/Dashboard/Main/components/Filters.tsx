@@ -45,7 +45,7 @@ export function Filters({
   const { t } = useTranslationUtils();
 
   const { company: _company } = useManagementStore();
-  const { farmerCompanies, farmerUnitsIds } = useDashboardStore();
+  const { farmerCompanies, farmerUnitsIds, setCoolingUnits } = useDashboardStore();
 
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { selectedItem: company } = useCompanyStore();
@@ -82,6 +82,10 @@ export function Filters({
   useEffect(() => {
     setAreCoolingUnitsLoading(isLoading);
   }, [isLoading]);
+
+  useEffect(() => {
+    if (coolingUnits) setCoolingUnits(coolingUnits);
+  }, [coolingUnits]);
 
   return (
     <View tw="mt-2 px-4">

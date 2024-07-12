@@ -1,5 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -28,7 +28,7 @@ const deviceHeight = Dimensions.get('screen').height;
 
 function History() {
   const { t } = useTranslationUtils();
-  const { farmerId } = useDashboardStore();
+  const { farmerId, addRefreshDataFn } = useDashboardStore();
   const { user } = useAuthStore();
   const { sorting } = useSortingStore();
 
@@ -38,7 +38,11 @@ function History() {
   const [areCoolingUnitsLoading, setAreCoolingUnitsLoading] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
 
-  const { data: movements, isLoading: areMovementsLoading } = useApiCall(
+  const {
+    data: movements,
+    isLoading: areMovementsLoading,
+    refetch: refetchHistoryMovements,
+  } = useApiCall(
     'getMovementsHistory',
     ColdtivateService.getMovementsHistory,
     {
@@ -70,6 +74,10 @@ function History() {
       return matchesCode || matchesFarmer || matchesCrop;
     });
   }, [sortedMovements, search]);
+
+  useEffect(() => {
+    addRefreshDataFn(refetchHistoryMovements);
+  }, []);
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0">

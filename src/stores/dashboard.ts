@@ -19,15 +19,15 @@ type State = {
 
   coolingUnits: Array<CoolingUnit> | null;
 
-  refreshDashboard: (() => void) | null;
+  refreshData: Array<() => void>;
 };
 
 type FarmerDatum = Partial<Pick<State, 'farmerCountry' | 'farmerParentName'>>;
 
 type Actions = {
+  addRefreshDataFn: (fn: () => void) => void;
   fetchGlobalInformation: (params: GetFarmerParams) => Promise<void>;
   setCoolingUnits: (units: Array<CoolingUnit>) => void;
-  setRefreshDashboardFn: (fn: () => void) => void;
   patchFarmer: (datum: FarmerDatum) => void;
 };
 
@@ -39,7 +39,7 @@ export const useDashboardStore = create<State & Actions>((set) => ({
   farmerCompanies: null,
   farmerUnitsIds: null,
   coolingUnits: null,
-  refreshDashboard: null,
+  refreshData: [],
 
   fetchGlobalInformation: async (params: GetFarmerParams) => {
     try {
@@ -71,7 +71,10 @@ export const useDashboardStore = create<State & Actions>((set) => ({
   },
 
   setCoolingUnits: (coolingUnits) => set({ coolingUnits }),
-  setRefreshDashboardFn: (fn) => set({ refreshDashboard: fn }),
+  addRefreshDataFn: (fn) =>
+    set((state) => ({
+      refreshData: state.refreshData ? [...state.refreshData, fn] : [fn],
+    })),
   patchFarmer: (datum) => set((prev) => ({ ...prev, ...datum })),
 }));
 

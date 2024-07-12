@@ -31,7 +31,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { sorting } = useSortingStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { selectedItem: company } = useCompanyStore();
-  const { farmerId, setRefreshDashboardFn } = useDashboardStore();
+  const { farmerId, addRefreshDataFn } = useDashboardStore();
 
   const {
     data: farmerDashboardProduces,
@@ -97,8 +97,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, [sortedProduces, search, searchType]);
 
   useEffect(() => {
-    if (user?.role === ERoles.COOLING_USER) setRefreshDashboardFn(refreshFarmerDashboardProduces);
-    else setRefreshDashboardFn(refreshOperatorDashboardProduces);
+    if (user?.role === ERoles.COOLING_USER) addRefreshDataFn(refreshFarmerDashboardProduces);
+    else addRefreshDataFn(refreshOperatorDashboardProduces);
   }, [user?.role]);
 
   return (

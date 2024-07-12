@@ -14,6 +14,7 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EMovementType, type CoolingUnit } from '#types/global';
+import { isWithinLast24Hours } from '../../utils/dates';
 
 type MovementProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -34,7 +35,6 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
     return movement.movementType === EMovementType.IN;
   }, [movement]);
 
-  // TODO: add actions + disable options when appropriate
   const optionsMenu = useMemo(() => {
     return [
       {
@@ -46,7 +46,7 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
             {
               label: t('Dashboard.History.optionsMenu.checkIn.edit'),
               action: () => null,
-              disabled: true,
+              disabled: !isWithinLast24Hours(movement.date),
             },
           ]
         : [
@@ -61,11 +61,11 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
             {
               label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
               action: () => null,
-              disabled: true,
+              disabled: true, // TODO: understand when and how this works
             },
           ]),
     ];
-  }, [isCheckIn]);
+  }, [isCheckIn, movement]);
 
   return (
     <View tw="w-full">
