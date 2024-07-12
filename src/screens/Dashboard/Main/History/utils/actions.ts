@@ -1,5 +1,5 @@
 import { Translator, dateFmt } from '#i18n/utils';
-import SMSService from '#services/SMSService';
+import SMSService from '#services/SmsService';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EMovementType } from '#types/global';
 
