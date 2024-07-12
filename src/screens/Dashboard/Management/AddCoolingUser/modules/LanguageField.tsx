@@ -14,7 +14,7 @@ import FormManager from '../components/FormManager';
 import { cn } from '#ui/lib/cn';
 
 type Props = {
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 export default function LanguageField(props: Props) {

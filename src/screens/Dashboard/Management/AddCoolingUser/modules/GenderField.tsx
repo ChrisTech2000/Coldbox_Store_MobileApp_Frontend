@@ -14,7 +14,7 @@ import { cn } from '#ui/lib/cn';
 import FormManager from '../components/FormManager';
 
 type Props = {
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 export default function GenderField(props: Props) {

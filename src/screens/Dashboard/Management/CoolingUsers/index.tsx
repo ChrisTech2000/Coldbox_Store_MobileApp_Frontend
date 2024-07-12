@@ -1,12 +1,17 @@
 import React, { useMemo } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, Divider, List, type ListItemProps } from 'react-native-paper';
+import type { NavigationProp } from '@react-navigation/native';
 import { useShallow } from 'zustand/react/shallow';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import type {
+  ManagementRoutePaths,
+  ManagementRouteProps,
+  ManagementRoutes,
+} from '#navigation/Dashboard/Management';
 import { useAuthStore } from '#stores/auth';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
@@ -61,7 +66,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
         keyExtractor={(item) => `cooling-user-item-#${item.id}`}
         renderItem={({ item }) => (
           <React.Fragment>
-            <List.Item {..._propsFactory(item.user)} />
+            <List.Item {..._propsFactory(item.user, props.navigation)} />
             <Divider />
           </React.Fragment>
         )}
@@ -75,13 +80,21 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   );
 }
 
-function _propsFactory(datum: User) {
+function _propsFactory(
+  datum: User,
+  navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
+) {
   const props = {} as ListItemProps;
   props.title = [datum.firstName, datum.lastName].join(' ');
   if (typeof datum.lastLogin === 'string') {
     props.right = (props) => <List.Icon {...props} icon="cellphone" />;
   }
-  props.onPress = () => undefined;
+  props.onPress = () => {
+    navigation.navigate('EditCoolingUser', {
+      userId: datum.id,
+      createdByOperator: typeof datum.lastLogin !== 'string',
+    });
+  };
   return props;
 }
 

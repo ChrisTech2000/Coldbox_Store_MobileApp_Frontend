@@ -26,6 +26,7 @@ import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee
 import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredEmployeeDetails';
 import RevenueAnalysis from '#screens/Dashboard/Management/RevenueAnalysis';
 import UsageAnalysis from '#screens/Dashboard/Management/UsageAnalysis';
+import EditCoolingUser from '#screens/Dashboard/Management/EditCoolingUser';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -69,8 +70,8 @@ export type ManagementRoutes = {
     userId: number;
   };
   EditCoolingUser: {
-    firstName: string;
-    familyName: string;
+    userId: number;
+    createdByOperator: boolean;
   };
 };
 
@@ -145,6 +146,7 @@ export default function ManagementStack() {
       <Stack.Screen name="CompanyDetails" component={CompanyDetails} />
       <Stack.Screen name="CoolingUsers" component={CoolingUsers} />
       <Stack.Screen name="AddCoolingUser" component={AddCoolingUser} />
+      <Stack.Screen name="EditCoolingUser" component={EditCoolingUser} />
       <Stack.Screen name="RevenueAnalysis" component={RevenueAnalysis} />
       <Stack.Screen name="UsageAnalysis" component={UsageAnalysis} />
       <Stack.Screen name="Locations" component={Locations} />
