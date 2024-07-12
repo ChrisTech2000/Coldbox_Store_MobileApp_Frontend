@@ -554,6 +554,19 @@ const en = {
         checkInFirst: 'Check in first',
         checkOutFirst: 'Check out first',
       },
+      optionsMenu: {
+        common: {
+          pdfReceipt: 'Download PDF receipt',
+        },
+        checkOut: {
+          seeDetails: 'See details',
+          smsReceipt: 'Download SMS receipt',
+          marketSurvey: 'Fill in market survey',
+        },
+        checkIn: {
+          edit: 'Edit check in',
+        },
+      },
     },
   },
 };

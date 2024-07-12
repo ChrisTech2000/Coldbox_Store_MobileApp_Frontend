@@ -1,11 +1,12 @@
-import React, { useMemo } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { Divider, Icon } from 'react-native-paper';
+import React, { useMemo, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { Divider, Icon, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
 
+import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
@@ -23,7 +24,7 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
 
-  // const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>();
+  const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
 
   const crops = useMemo(() => {
     return movement.movementCrops.map((crop) => crop.name).join(', ');
@@ -32,6 +33,20 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
   const isCheckIn = useMemo(() => {
     return movement.movementType === EMovementType.IN;
   }, [movement]);
+
+  // TODO: add actions + disable options when appropriate
+  const optionsMenu = useMemo(() => {
+    return [
+      t('Dashboard.History.optionsMenu.common.pdfReceipt'),
+      ...(isCheckIn
+        ? [t('Dashboard.History.optionsMenu.checkIn.edit')]
+        : [
+            t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+            t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
+            t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
+          ]),
+    ];
+  }, [isCheckIn]);
 
   return (
     <View tw="w-full">
@@ -73,12 +88,35 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
         </View>
 
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setIsOptionsModalOpen(true)}>
             <Icon source="dots-vertical" size={20} />
           </TouchableOpacity>
         </View>
       </View>
       <Divider tw="w-full bg-gray-400" />
+      <Portal>
+        <Modal
+          tw="w-2/3"
+          visible={isOptionsModalOpen}
+          onDismiss={() => setIsOptionsModalOpen(false)}
+        >
+          <View tw="w-full mx-16 px-3 bg-white rounded-sm py-1 max-h-80">
+            <FlatList
+              data={optionsMenu}
+              keyExtractor={(item, index) => `faq-${item}-#${index}`}
+              renderItem={({ item }) => (
+                <TouchableOpacity tw="space-y-2 w-full my-1" onPress={() => null}>
+                  <Text variant="TextMedium" tw="text-base">
+                    {item}
+                  </Text>
+                  <Divider tw="w-full bg-gray-400" />
+                </TouchableOpacity>
+              )}
+              nestedScrollEnabled
+            />
+          </View>
+        </Modal>
+      </Portal>
     </View>
   );
 }

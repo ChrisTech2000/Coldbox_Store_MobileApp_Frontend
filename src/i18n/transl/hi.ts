@@ -559,6 +559,19 @@ export default {
         checkInFirst: 'पहले चेक इन',
         checkOutFirst: 'पहले चेक आउट',
       },
+      optionsMenu: {
+        common: {
+          pdfReceipt: 'पीडीएफ रसीद डाउनलोड करें',
+        },
+        checkOut: {
+          seeDetails: 'विवरण देखें',
+          smsReceipt: 'एसएमएस रसीद डाउनलोड करें',
+          marketSurvey: 'बाजार सर्वेक्षण भरें',
+        },
+        checkIn: {
+          edit: 'चेक इन संपादित करें',
+        },
+      },
     },
   },
 } satisfies Translations;
