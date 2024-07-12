@@ -15,7 +15,7 @@ import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import AuthService from '#services/AuthService';
-import { EApiGender } from '#types/global';
+import { EApiGender, type Farmer } from '#types/global';
 import type { TranslationLocales } from '#i18n/constants';
 import { paperTheme } from '#ui/lib/theme';
 
@@ -100,22 +100,10 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
     }
   }
 
-  function buildInitialValues() {
-    const values = {} as FormValues;
-    values.parentName = contextualFarmer?.parentName ?? '';
-    values.firstName = contextualFarmer?.user?.firstName ?? '';
-    values.lastName = contextualFarmer?.user?.lastName ?? '';
-    values.gender = contextualFarmer?.user?.gender ?? EApiGender.OTHER;
-    values.phone = contextualFarmer?.user?.phone ?? '';
-    values.language =
-      (contextualFarmer?.user?.language as TranslationLocales) ?? LanguageStorage.read();
-    return values;
-  }
-
   const disabled = (data ?? []).length >= 1;
 
   return (
-    <FormManager onSubmit={onSubmit} initialValues={buildInitialValues()}>
+    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(contextualFarmer)}>
       {({ submitHandler, isSubmitting }) => (
         <KeyboardAwareScrollView
           contentContainerStyle="flex-1 justify-between pt-6 pb-8 mx-4"
@@ -153,6 +141,18 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
       )}
     </FormManager>
   );
+}
+
+function _buildInitialValues(contextualFarmer?: Farmer) {
+  const values = {} as FormValues;
+  values.parentName = contextualFarmer?.parentName ?? '';
+  values.firstName = contextualFarmer?.user?.firstName ?? '';
+  values.lastName = contextualFarmer?.user?.lastName ?? '';
+  values.gender = contextualFarmer?.user?.gender ?? EApiGender.OTHER;
+  values.phone = contextualFarmer?.user?.phone ?? '';
+  values.language =
+    (contextualFarmer?.user?.language as TranslationLocales) ?? LanguageStorage.read();
+  return values;
 }
 
 export default withSafeArea(AddCoolingUser);
