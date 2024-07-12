@@ -37,13 +37,32 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
   // TODO: add actions + disable options when appropriate
   const optionsMenu = useMemo(() => {
     return [
-      t('Dashboard.History.optionsMenu.common.pdfReceipt'),
+      {
+        label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
+        action: () => null,
+      },
       ...(isCheckIn
-        ? [t('Dashboard.History.optionsMenu.checkIn.edit')]
+        ? [
+            {
+              label: t('Dashboard.History.optionsMenu.checkIn.edit'),
+              action: () => null,
+              disabled: true,
+            },
+          ]
         : [
-            t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-            t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-            t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+              action: () => null,
+            },
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
+              action: () => null,
+            },
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
+              action: () => null,
+              disabled: true,
+            },
           ]),
     ];
   }, [isCheckIn]);
@@ -103,11 +122,15 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
           <View tw="w-full mx-16 px-3 bg-white rounded-sm py-1 max-h-80">
             <FlatList
               data={optionsMenu}
-              keyExtractor={(item, index) => `faq-${item}-#${index}`}
+              keyExtractor={(item, index) => `faq-${item.label}-#${index}`}
               renderItem={({ item }) => (
-                <TouchableOpacity tw="space-y-2 w-full my-1" onPress={() => null}>
-                  <Text variant="TextMedium" tw="text-base">
-                    {item}
+                <TouchableOpacity
+                  tw="space-y-2 w-full my-1"
+                  onPress={item.action}
+                  disabled={item.disabled}
+                >
+                  <Text variant="TextMedium" tw={cn('text-base', item.disabled && 'text-gray-400')}>
+                    {item.label}
                   </Text>
                   <Divider tw="w-full bg-gray-400" />
                 </TouchableOpacity>
