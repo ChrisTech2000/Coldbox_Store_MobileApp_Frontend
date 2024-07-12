@@ -8,6 +8,7 @@ type State = {
     id: number;
     country?: string;
     currency?: string;
+    name?: string;
   } | null;
 };
 

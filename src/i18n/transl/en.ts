@@ -567,6 +567,22 @@ const en = {
           edit: 'Edit check in',
         },
       },
+      stringTemplates: {
+        sendSMS: `{{companyName}} - {{movementType}} Receipt: 
+        Movement code: {{code}}
+        Crops: {{crops}}
+        Total weight: {{weight}} Kg
+        {{movementTypeForDate}}: {{date}}
+        Price: {{price}}
+        Paid by: {{farmersName}}
+        `,
+        movementType: {
+          checkOut: 'Check Out',
+          checkIn: 'Check In',
+          checkedOut: 'Checked out',
+          checkedIn: 'Checked in',
+        },
+      },
     },
   },
 };

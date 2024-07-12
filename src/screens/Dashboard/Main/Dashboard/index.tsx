@@ -15,7 +15,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { Filters, type Search } from '../components/Filters';
 import { createSelectStore } from '../components/SelectWithStore';
-import { sortProduces } from '../utils/sortProduces';
+import { sortProduces } from './utils/sortProduces';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
 import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
