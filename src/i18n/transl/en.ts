@@ -546,6 +546,7 @@ const en = {
       comsolAbout: 'Comsol About',
     },
     History: {
+      priceLabel: 'Price',
       sortMenuOptions: {
         cropType: 'Crop type',
         movementDate: 'Movement date (first to latest)',

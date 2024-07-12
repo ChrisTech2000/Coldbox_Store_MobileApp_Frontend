@@ -74,7 +74,11 @@ function History() {
           <FlashList
             data={movements}
             renderItem={({ item: movement, index }) => (
-              <Movement key={`${movement.id}-${index}`} movement={movement} />
+              <Movement
+                key={`${movement.id}-${index}`}
+                movement={movement}
+                coolingUnit={coolignUnit}
+              />
             )}
             estimatedItemSize={40}
             estimatedListSize={{
