@@ -220,6 +220,24 @@ export interface DateOperatorAssigned {
   date: string;
 }
 
+export interface FarmerSurvey {
+  id: number;
+  cropId: number;
+  farmerSurveyId: number;
+  averagePrice: number;
+  unit: EUnitOfMeasurement;
+  quantityTotal: number;
+  quantitySelfConsumed: number;
+  quantitySold: number;
+  quantityBelowMarketPrice: number;
+  averageSeasonInMonths: number | null;
+  currency: string;
+  kgInUnit: number;
+  reasonForLoss: Array<string>;
+  dateFilledIn: Date;
+  dateLastModified: Date;
+}
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',
@@ -310,6 +328,14 @@ export enum EDateCropped {
   YESTERDAY = '-2',
   DAY_BEFORE = '-3',
   EVEN_BEFORE = '-4',
+}
+
+export enum EUnitOfMeasurement {
+  KILOGRAMS = 'kg',
+  CRATES = 'crates',
+  BOXES = 'boxes',
+  SACKS = 'sacks',
+  BASKETS = 'baskets',
 }
 
 //////////////////////// MAPPERS

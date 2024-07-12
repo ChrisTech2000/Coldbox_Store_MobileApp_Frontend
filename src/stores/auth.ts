@@ -63,7 +63,7 @@ export const useAuthStore = create(
         },
         { maxAge: ms('15 seconds') }
       ),
-      revokeSession: () => set({ tokens: null, isAuthenticated: false }),
+      revokeSession: () => set({ tokens: null, isAuthenticated: false, user: null }),
     }),
     { name: 'session', storage }
   )

@@ -1,18 +1,19 @@
 import {
+  ECoolingUnitMetric,
   EPaymentType,
   ERoles,
-  type Farmer,
+  type CommodityInfo,
+  type CommodityTotal,
+  type CommonPricingType,
   type Company,
   type CoolingUnit,
+  type Crop,
+  type DateOperatorAssigned,
+  type Farmer,
+  type FarmerSurvey,
+  type PowerOption,
+  type Pricing,
   type User,
-  Crop,
-  Pricing,
-  ECoolingUnitMetric,
-  DateOperatorAssigned,
-  CommodityInfo,
-  CommonPricingType,
-  CommodityTotal,
-  PowerOption,
 } from './global';
 
 export type SignInResponse = {
@@ -139,11 +140,11 @@ export type GetAllCropsResponse = {
   cropType: number;
 };
 
-export type GetCompanyEmployeesResponse = {
+export type GetCompanyEmployeesResponse = Array<{
   id: number;
   user: User;
   company: Company;
-}[];
+}>;
 
 export type GetCoolingUnitsByStatusResponse = {
   id: number;
@@ -192,4 +193,25 @@ export type GetCoolingUnitCropsResponse = Array<{
   crop: number;
   coolingUnit: number;
   pricing: number;
+}>;
+
+export type GetFarmerSurveysResponse = Array<{
+  id: number;
+  co: Array<FarmerSurvey>;
+  userType: ERoles | string;
+  experience: boolean;
+  experienceDuration: number;
+  dateFilledIn: Date;
+  dateLastModified: Date;
+  farmer: number;
+}>;
+
+export type UpdateFarmerSurveysResponse = Array<{
+  id: number;
+  farmerId: number;
+  userType: ERoles | string;
+  experience: boolean;
+  experienceDuration: number;
+  dateFilledIn: Date;
+  dateLastModified: Date;
 }>;
