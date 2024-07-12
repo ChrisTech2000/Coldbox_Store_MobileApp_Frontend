@@ -76,11 +76,8 @@ export default function DeleteAction(props: Props) {
     try {
       resetPopup();
       toggleProcessing();
-      if (!contextualDatum.userCode) {
-        await ColdtivateService.deleteUser(userId);
-      } else {
-        await ColdtivateService.removeCompany({ farmerId, companyId });
-      }
+      if (!contextualDatum.userCode) await ColdtivateService.deleteUser(userId);
+      else await ColdtivateService.removeCompany({ farmerId, companyId });
       await revalidateCache();
       goBack();
     } catch (exception) {

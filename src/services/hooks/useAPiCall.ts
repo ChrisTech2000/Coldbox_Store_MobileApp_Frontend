@@ -68,5 +68,10 @@ export function getQueryKey<T>(name: string, params?: T): string {
 export function useApiCache<P, T>(name: string, params?: P): T | undefined {
   const { cache } = useSWRConfig();
   const queryCache = cache.get(getQueryKey(name, params));
-  return useMemo(() => queryCache?.data, [queryCache?.data]);
+  return useMemo(() => {
+    if (typeof queryCache?.data === 'undefined') return undefined;
+    if (typeof queryCache.data === 'object') return { ...queryCache.data };
+    if (Array.isArray(queryCache.data)) return [...queryCache.data];
+    return queryCache.data; // null, string, number, etc
+  }, [queryCache?.data]);
 }
