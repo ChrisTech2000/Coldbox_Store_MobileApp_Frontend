@@ -16,7 +16,7 @@ import { useAuthStore } from '#stores/auth';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
-import type { User } from '#types/global';
+import type { Farmer } from '#types/global';
 
 import Prompt from './components/Prompt';
 import FormModal from './components/FormModal';
@@ -66,7 +66,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
         keyExtractor={(item) => `cooling-user-item-#${item.id}`}
         renderItem={({ item }) => (
           <React.Fragment>
-            <List.Item {..._propsFactory(item.user, props.navigation)} />
+            <List.Item {..._propsFactory(item, props.navigation)} />
             <Divider />
           </React.Fragment>
         )}
@@ -81,18 +81,18 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
 }
 
 function _propsFactory(
-  datum: User,
+  datum: Farmer,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ) {
   const props = {} as ListItemProps;
-  props.title = [datum.firstName, datum.lastName].join(' ');
-  if (typeof datum.lastLogin === 'string') {
+  props.title = [datum.user.firstName, datum.user.lastName].join(' ');
+  if (datum.userCode) {
     props.right = (props) => <List.Icon {...props} icon="cellphone" />;
   }
   props.onPress = () => {
     navigation.navigate('EditCoolingUser', {
-      userId: datum.id,
-      createdByOperator: typeof datum.lastLogin !== 'string',
+      userId: datum.user.id,
+      createdByOperator: !datum.userCode,
     });
   };
   return props;

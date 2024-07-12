@@ -30,6 +30,7 @@ import type {
   UpdateFarmerSurveysParams,
   GetCompanyEmployeeParams,
   UpdateFarmerCompany,
+  RemoveCompanyParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -595,6 +596,25 @@ class ColdtivateService extends HttpClient {
   public deleteUser = async (userId: number) => {
     try {
       const { data } = await this.delete(subs(EUserEndpoints.UPDATE_USER, { userId }));
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public removeCompany = async (params: RemoveCompanyParams) => {
+    try {
+      const _params = {
+        companyId: params.companyId,
+        deleteCompany: true,
+      };
+      const { data } = await this.patch(
+        subs(EUserEndpoints.UPDATE_FARMER, { farmerId: params.farmerId }),
+        _params
+      );
       return data;
     } catch (error) {
       console.log(error);

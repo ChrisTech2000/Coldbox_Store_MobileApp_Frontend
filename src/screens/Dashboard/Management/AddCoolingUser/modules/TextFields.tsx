@@ -53,7 +53,7 @@ export default function TextFields(props: Props) {
       />
 
       <Controller
-        name="userId"
+        name="parentName"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
@@ -63,8 +63,8 @@ export default function TextFields(props: Props) {
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
-            error={!!errors.userId}
-            disabled={props.disabled || props.disabledFields?.includes('userId')}
+            error={!!errors.parentName}
+            disabled={props.disabled || props.disabledFields?.includes('parentName')}
             dense
           />
         )}

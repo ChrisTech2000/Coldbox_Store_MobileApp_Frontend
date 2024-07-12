@@ -12,7 +12,6 @@ export type FormValues = {
   phone: string;
   language: TranslationLocales;
   parentName: string;
-  userId: string;
 };
 
 type CallbackProps = {
@@ -45,7 +44,6 @@ export default function FormManager(props: FormManagerProps) {
         ]),
         language: z.string(),
         parentName: z.string(),
-        userId: z.string().optional(),
       })
     ),
     reValidateMode: 'onSubmit',

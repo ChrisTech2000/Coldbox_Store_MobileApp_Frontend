@@ -196,7 +196,12 @@ export interface GetCompanyEmployeeParams extends JsonObject {
   companyId: number;
 }
 
-export interface UpdateFarmerCompany {
+export interface UpdateFarmerCompany extends JsonObject {
+  farmerId: number;
+  companyId: number;
+}
+
+export interface RemoveCompanyParams extends JsonObject {
   farmerId: number;
   companyId: number;
 }

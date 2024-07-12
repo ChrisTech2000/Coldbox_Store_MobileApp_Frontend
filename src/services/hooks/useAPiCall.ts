@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { AxiosError } from 'axios';
 
 import ErrorUtil from '../utils/ErrorUtil';
@@ -63,4 +63,10 @@ export const useApiCall = <IData, IParams>(
 
 export function getQueryKey<T>(name: string, params?: T): string {
   return `${name}:${JSON.stringify(params || {})}`;
+}
+
+export function useApiCache<P, T>(name: string, params?: P): T | undefined {
+  const { cache } = useSWRConfig();
+  const queryCache = cache.get(getQueryKey(name, params));
+  return useMemo(() => queryCache?.data, [queryCache?.data]);
 }

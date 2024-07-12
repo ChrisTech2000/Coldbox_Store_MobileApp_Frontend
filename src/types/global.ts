@@ -17,7 +17,7 @@ export type Farmer = {
   birthday: Date;
   parentName: string;
   country: string;
-  userCode: string;
+  userCode: string | null;
   companies: Array<number>;
   coolingUnits: Array<number>;
 };
