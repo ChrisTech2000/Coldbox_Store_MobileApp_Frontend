@@ -2,6 +2,8 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager, { type FormValues } from '../components/FormManager';
 
 type Props = {
@@ -11,6 +13,7 @@ type Props = {
 
 export default function TextFields(props: Props) {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -22,7 +25,7 @@ export default function TextFields(props: Props) {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent"
-            label="First Name"
+            label={t('Auth.SignUp.commonForm.firstNameLabel')}
             mode="outlined"
             value={value}
             onChangeText={onChange}
@@ -40,7 +43,7 @@ export default function TextFields(props: Props) {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-4"
-            label="Last Name"
+            label={t('Auth.SignUp.commonForm.lastNameLabel')}
             mode="outlined"
             value={value}
             onChangeText={onChange}

@@ -535,6 +535,14 @@ const en = {
           taken: 'This user is already in your list of cooling users.',
         },
       },
+      EditCoolingUsers: {
+        toasts: {
+          warning:
+            'This account cannot be deleted because the user has active check-ins in the cooling unit(s) {{names}}. Please notify the user to come to the room to pick up these items and complete the check-outs before deleting the account!',
+          confirmation:
+            'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
+        },
+      },
     },
     AccountDetails: {
       popups: {

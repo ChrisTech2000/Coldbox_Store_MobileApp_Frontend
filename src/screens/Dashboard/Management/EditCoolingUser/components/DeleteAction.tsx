@@ -50,17 +50,12 @@ export default function DeleteAction(props: Props) {
       });
 
       if (nonEmptyCoolingUnits.length >= 1) {
-        // const names = nonEmptyCoolingUnits.map((coolingUnit) => coolingUnit.name).join(', ');
-        displayPopup(
-          'This account cannot be deleted because the user has active check-ins in the cooling unit(s) {{names}}. Please notify the user to come to the room to pick up these items and complete the check-outs before deleting the account!'
-        ); // warning popup
+        const names = nonEmptyCoolingUnits.map((coolingUnit) => coolingUnit.name).join(', ');
+        displayPopup(t('Dashboard.Management.EditCoolingUsers.toasts.warning', { names })); // warning popup
         return;
       }
 
-      displayPopup(
-        'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
-        true
-      ); // confirmation popup
+      displayPopup(t('Dashboard.Management.EditCoolingUsers.toasts.confirmation'), true); // confirmation popup
     } catch (exception) {
       console.error(exception);
     } finally {
