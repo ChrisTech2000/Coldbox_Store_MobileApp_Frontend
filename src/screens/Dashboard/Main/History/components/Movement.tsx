@@ -23,6 +23,8 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
 
+  // const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>();
+
   const crops = useMemo(() => {
     return movement.movementCrops.map((crop) => crop.name).join(', ');
   }, [movement]);

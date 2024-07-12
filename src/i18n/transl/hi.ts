@@ -551,6 +551,7 @@ export default {
       comsolAbout: 'कॉमसोल के बारे में',
     },
     History: {
+      priceLabel: 'कीमत',
       sortMenuOptions: {
         cropType: 'फसल का प्रकार',
         movementDate: 'आवागमन की तिथि (पहले से नवीनतम)',

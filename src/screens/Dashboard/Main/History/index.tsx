@@ -1,5 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -49,6 +49,22 @@ function History() {
     }
   );
 
+  const filteredMovements = useMemo(() => {
+    if (!search) return movements;
+
+    const lowerCaseSearchString = search.toLowerCase();
+
+    return movements.filter((movement) => {
+      const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
+      const matchesFarmer = movement.farmer.toLowerCase().includes(lowerCaseSearchString);
+      const matchesCrop = movement.movementCrops.some((crop) =>
+        crop.name.toLowerCase().includes(lowerCaseSearchString)
+      );
+
+      return matchesCode || matchesFarmer || matchesCrop;
+    });
+  }, [movements, search]);
+
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0">
       <Filters
@@ -72,7 +88,7 @@ function History() {
           </View>
         ) : movements.length > 0 ? (
           <FlashList
-            data={movements}
+            data={filteredMovements}
             renderItem={({ item: movement, index }) => (
               <Movement
                 key={`${movement.id}-${index}`}
