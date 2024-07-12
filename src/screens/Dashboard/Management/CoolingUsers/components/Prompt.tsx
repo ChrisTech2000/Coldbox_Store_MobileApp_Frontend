@@ -36,11 +36,11 @@ export default function Prompt(props: Props) {
       <Modal visible={isVisible} onDismiss={toggleVisibility}>
         <View tw="w-full bg-white rounded-3xl w-2/3 max-w-2/3 h-auto pt-6 pb-4 self-center space-y-2">
           <Text variant="TitleRegular" tw="px-6">
-            How do you want to add the user?
+            {t('Dashboard.Management.CoolingUsers.modals.selectMethod')}
           </Text>
           <View tw="w-full py-1.5">
             <List.Item
-              title="Add user with details"
+              title={t('Dashboard.Management.CoolingUsers.modals.addWithDetails')}
               tw="px-2"
               onPress={() => {
                 toggleVisibility();
@@ -50,7 +50,7 @@ export default function Prompt(props: Props) {
             <Divider />
 
             <List.Item
-              title="Add user by code"
+              title={t('Dashboard.Management.CoolingUsers.modals.addByCode')}
               tw="px-2"
               onPress={() => {
                 toggleVisibility();

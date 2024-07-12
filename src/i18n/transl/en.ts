@@ -521,6 +521,20 @@ const en = {
         deletePersonal: 'To delete your account, go to Account Details.',
         deleteOther: 'If you want to delete this account, please contact {{contact}}',
       },
+      CoolingUsers: {
+        modals: {
+          selectMethod: 'How do you want to add the user?',
+          userCode: 'Enter an user code',
+          userCodeDesc:
+            'You can find the code in your account-details if you registered as a cooling user.',
+          addByCode: 'Add user by code',
+          addWithDetails: 'Add user with details',
+        },
+        toasts: {
+          notFound: 'No cooling user with this user code were found.',
+          taken: 'This user is already in your list of cooling users.',
+        },
+      },
     },
     AccountDetails: {
       popups: {

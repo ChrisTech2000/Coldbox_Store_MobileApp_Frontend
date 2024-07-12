@@ -57,12 +57,12 @@ export default function FormModal(props: Props) {
       const coolingUser = result?.at(0);
 
       if (!coolingUser) {
-        toast.show('No cooling user with this user code were found.', { type: 'danger' });
+        toast.show(t('Dashboard.Management.CoolingUsers.toasts.notFound'), { type: 'danger' });
         return;
       }
 
       if (coolingUsersIds.includes(coolingUser.id)) {
-        toast.show('This user is already in your list of cooling users.', { type: 'danger' });
+        toast.show(t('Dashboard.Management.CoolingUsers.toasts.taken'), { type: 'danger' });
         return;
       }
 
@@ -80,11 +80,9 @@ export default function FormModal(props: Props) {
       <Modal visible={isVisible} onDismiss={onClose}>
         <View tw="w-full bg-white rounded-3xl w-2/3 max-w-2/3 h-auto pt-6 pb-4 self-center space-y-2">
           <Text variant="TitleRegular" tw="px-6">
-            Enter an user code
+            {t('Dashboard.Management.CoolingUsers.modals.userCode')}
           </Text>
-          <Text tw="px-6">
-            You can find the code in your account-details if you registered as a cooling user.
-          </Text>
+          <Text tw="px-6">{t('Dashboard.Management.CoolingUsers.modals.userCodeDesc')}</Text>
           <View tw="w-full pt-1.5 pb-3">
             <Controller
               name="code"
