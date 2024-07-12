@@ -550,5 +550,28 @@ export default {
       privacyPolicy: 'गोपनीयता नीति',
       comsolAbout: 'कॉमसोल के बारे में',
     },
+    History: {
+      priceLabel: 'कीमत',
+      sortMenuOptions: {
+        cropType: 'फसल का प्रकार',
+        movementDate: 'आवागमन की तिथि (पहले से नवीनतम)',
+        movementDateReverse: 'आवागमन की तिथि (नवीनतम से पहले)',
+        checkInFirst: 'पहले चेक इन',
+        checkOutFirst: 'पहले चेक आउट',
+      },
+      optionsMenu: {
+        common: {
+          pdfReceipt: 'पीडीएफ रसीद डाउनलोड करें',
+        },
+        checkOut: {
+          seeDetails: 'विवरण देखें',
+          smsReceipt: 'एसएमएस रसीद डाउनलोड करें',
+          marketSurvey: 'बाजार सर्वेक्षण भरें',
+        },
+        checkIn: {
+          edit: 'चेक इन संपादित करें',
+        },
+      },
+    },
   },
 } satisfies Translations;

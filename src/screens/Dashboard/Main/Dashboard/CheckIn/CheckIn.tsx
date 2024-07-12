@@ -33,7 +33,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
 
-  const { refreshDashboard } = useDashboardStore();
+  const { refreshData } = useDashboardStore();
   const {
     checkOutCode,
     produces,
@@ -147,7 +147,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         type: 'success',
       });
 
-      setTimeout(() => refreshDashboard?.(), 1000);
+      setTimeout(() => refreshData.forEach((fn) => fn()), 1000);
       rootNavigation.navigate('RootMainTabStack');
     }
   }, [user, produces, checkOutCode]);

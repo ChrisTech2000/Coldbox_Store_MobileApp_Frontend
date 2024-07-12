@@ -193,3 +193,13 @@ export interface GetCompanyEmployeeParams extends JsonObject {
   registeredEmployeeId: number;
   companyId: number;
 }
+
+export interface SendSMSParams extends JsonObject {
+  phoneNumber: string | string[];
+  message: string;
+}
+
+export interface GetMovementsHistoryParams extends JsonObject {
+  coolingUnit: number;
+  farmerId?: number;
+}
