@@ -16,8 +16,9 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { Filters } from '../components/Filters';
 import { createSelectStore } from '../components/SelectWithStore';
-import { SortingMenu } from './components/SortMenu';
+import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { Movement } from './components/Movement';
+import { sortMovements } from '../utils/sortMovements';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
@@ -29,6 +30,7 @@ function History() {
   const { t } = useTranslationUtils();
   const { farmerId } = useDashboardStore();
   const { user } = useAuthStore();
+  const { sorting } = useSortingStore();
 
   const { selectedItem: coolignUnit } = useCoolingUnitStore();
 
@@ -49,12 +51,16 @@ function History() {
     }
   );
 
+  const sortedMovements = useMemo(() => {
+    return (movements ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
+  }, [movements, sorting]);
+
   const filteredMovements = useMemo(() => {
-    if (!search) return movements;
+    if (!search) return sortedMovements;
 
     const lowerCaseSearchString = search.toLowerCase();
 
-    return movements.filter((movement) => {
+    return sortedMovements.filter((movement) => {
       const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
       const matchesFarmer = movement.farmer.toLowerCase().includes(lowerCaseSearchString);
       const matchesCrop = movement.movementCrops.some((crop) =>
@@ -63,7 +69,7 @@ function History() {
 
       return matchesCode || matchesFarmer || matchesCrop;
     });
-  }, [movements, search]);
+  }, [sortedMovements, search]);
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0">
