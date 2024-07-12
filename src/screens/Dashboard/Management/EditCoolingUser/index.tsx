@@ -33,7 +33,7 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
-  const { data, isLoading } = useApiCall(
+  const { data, isLoading, refetch } = useApiCall(
     'getFarmer',
     ColdtivateService.getFarmer,
     { userId: params?.userId as number },
@@ -58,8 +58,30 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
   }
 
   async function onSubmit(values: FormValues): Promise<void> {
-    console.log(values);
-    // TODO
+    try {
+      const userDatum = await ColdtivateService.updateUser({
+        userId: params.userId,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phone: values.phone,
+        gender: values.gender,
+        language: values.language,
+        parentName: values.parentName,
+      });
+
+      if (typeof userDatum !== 'undefined' && typeof contextualFarmer !== 'undefined') {
+        await ColdtivateService.updateFarmer({
+          farmerId: contextualFarmer.id,
+          country: contextualFarmer.country,
+          parentName: values.parentName,
+          updateUser: true,
+        });
+      }
+      await Promise.all([refetch(), revalidateCUCache()]);
+      props.navigation.goBack();
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   return (

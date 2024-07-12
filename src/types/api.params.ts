@@ -140,6 +140,7 @@ export interface GetCoolingUnitCropsParams extends JsonObject {
 
 export interface UpdateUserParams extends JsonObject, Omit<Partial<User>, 'id'> {
   coolingUnits?: Array<number> | null;
+  parentName?: string;
   userId: number;
 }
 
