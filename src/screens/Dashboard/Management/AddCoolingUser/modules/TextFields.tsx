@@ -2,10 +2,11 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
-import FormManager from '../components/FormManager';
+import FormManager, { type FormValues } from '../components/FormManager';
 
 type Props = {
-  disabled: boolean;
+  disabled?: boolean;
+  disabledFields?: Array<keyof FormValues>;
 };
 
 export default function TextFields(props: Props) {
@@ -27,7 +28,7 @@ export default function TextFields(props: Props) {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.firstName}
-            disabled={props.disabled}
+            disabled={props.disabled || props.disabledFields?.includes('firstName')}
             dense
           />
         )}
@@ -45,7 +46,25 @@ export default function TextFields(props: Props) {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.firstName}
-            disabled={props.disabled}
+            disabled={props.disabled || props.disabledFields?.includes('lastName')}
+            dense
+          />
+        )}
+      />
+
+      <Controller
+        name="userId"
+        control={control}
+        render={({ field: { onChange, value, onBlur } }) => (
+          <TextInput
+            tw="w-full bg-transparent mt-4"
+            label="User ID"
+            mode="outlined"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={!!errors.userId}
+            disabled={props.disabled || props.disabledFields?.includes('userId')}
             dense
           />
         )}

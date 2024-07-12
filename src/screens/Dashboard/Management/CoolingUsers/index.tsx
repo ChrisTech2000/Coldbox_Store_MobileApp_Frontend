@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, Divider, List, type ListItemProps } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -28,6 +29,18 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
     }
   );
 
+  const datums = useMemo(
+    () =>
+      cloneDeep(data)?.sort((a, b) => {
+        const nameA = a.user.firstName.toLowerCase();
+        const nameB = b.user.firstName.toLowerCase();
+        if (nameA > nameB) return 1;
+        if (nameA < nameB) return -1;
+        return 0;
+      }) ?? [],
+    [data]
+  );
+
   const coolingUsersIds: Array<number> = useMemo(
     () => data?.map((coolingUser) => coolingUser.id) ?? [],
     [data]
@@ -44,7 +57,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   return (
     <View tw="flex-1 justify-start">
       <FlatList
-        data={data}
+        data={datums}
         keyExtractor={(item) => `cooling-user-item-#${item.id}`}
         renderItem={({ item }) => (
           <React.Fragment>
@@ -65,7 +78,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
 function _propsFactory(datum: User) {
   const props = {} as ListItemProps;
   props.title = [datum.firstName, datum.lastName].join(' ');
-  if (datum.firstName !== 'User without a phone') {
+  if (typeof datum.lastLogin === 'string') {
     props.right = (props) => <List.Icon {...props} icon="cellphone" />;
   }
   props.onPress = () => undefined;

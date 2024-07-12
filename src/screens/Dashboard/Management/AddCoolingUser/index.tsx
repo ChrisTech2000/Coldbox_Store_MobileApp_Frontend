@@ -60,10 +60,10 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   }
 
   async function onSubmit(values: FormValues): Promise<void> {
-    if (!contextualFarmer || !company) return; // safe guard
+    if (!company) return; // safe guard
     try {
       // assign existing cooling user to the company if he already has an account, fyk: added by code
-      if (typeof params?.userId !== 'undefined') {
+      if (typeof params?.userId !== 'undefined' && typeof contextualFarmer !== 'undefined') {
         await ColdtivateService.updateFarmerCompany({
           farmerId: contextualFarmer.id,
           companyId: company.id,
