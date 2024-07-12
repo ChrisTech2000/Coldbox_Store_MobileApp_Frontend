@@ -572,6 +572,22 @@ export default {
           edit: 'चेक इन संपादित करें',
         },
       },
+      stringTemplates: {
+        sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:
+          गतिविधि कोड: {{code}}
+          फसलें: {{crops}}
+          कुल वजन: {{weight}} किलोग्राम
+          {{movementTypeForDate}}: {{date}}
+          मूल्य: {{price}}
+          द्वारा भुगतान: {{farmersName}}
+          `,
+        movementType: {
+          checkOut: 'चेक आउट',
+          checkIn: 'चेक इन',
+          checkedOut: 'चेक आउट किया गया',
+          checkedIn: 'चेक इन किया गया',
+        },
+      },
     },
   },
 } satisfies Translations;

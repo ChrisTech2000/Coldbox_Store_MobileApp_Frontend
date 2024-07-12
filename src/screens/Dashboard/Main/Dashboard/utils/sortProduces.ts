@@ -1,5 +1,5 @@
 import { DashboardProduce } from '#types/global';
-import { ESortingOptions } from '../Dashboard/components/SortMenu';
+import { ESortingOptions } from '../components/SortMenu';
 
 export function sortProduces(a: DashboardProduce, b: DashboardProduce, sorting: ESortingOptions) {
   let hasMinShelfLifeA: boolean;

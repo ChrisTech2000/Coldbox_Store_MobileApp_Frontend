@@ -16,9 +16,9 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { Filters } from '../components/Filters';
 import { createSelectStore } from '../components/SelectWithStore';
-import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { Movement } from './components/Movement';
-import { sortMovements } from '../utils/sortMovements';
+import { SortingMenu, useSortingStore } from './components/SortMenu';
+import { sortMovements } from './utils/sortMovements';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
@@ -33,6 +33,7 @@ function History() {
   const { sorting } = useSortingStore();
 
   const { selectedItem: coolignUnit } = useCoolingUnitStore();
+  const { selectedItem: company } = useCompanyStore();
 
   const [search, setSearch] = useState<string>('');
   const [areCoolingUnitsLoading, setAreCoolingUnitsLoading] = useState<boolean>(false);
@@ -108,6 +109,8 @@ function History() {
                 key={`${movement.id}-${index}`}
                 movement={movement}
                 coolingUnit={coolignUnit}
+                userContact={user?.phone ?? ''}
+                selectedCompany={company}
               />
             )}
             estimatedItemSize={40}

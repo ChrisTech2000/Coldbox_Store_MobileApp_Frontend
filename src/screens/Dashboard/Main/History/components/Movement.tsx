@@ -13,15 +13,19 @@ import { cn } from '#ui/lib/cn';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { EMovementType, type CoolingUnit } from '#types/global';
-import { isWithinLast24Hours } from '../../utils/dates';
+import { EMovementType, type Company, type CoolingUnit } from '#types/global';
+
+import { sendSMS } from '../utils/actions';
+import { isWithinLast24Hours } from '../utils/dates';
 
 type MovementProps = {
   movement: GetMovementsHistoryResponse[number];
   coolingUnit: CoolingUnit | null;
+  userContact: string;
+  selectedCompany: Company | null;
 };
 
-export function Movement({ movement, coolingUnit }: MovementProps) {
+export function Movement({ movement, coolingUnit, userContact, selectedCompany }: MovementProps) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
 
@@ -34,6 +38,12 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
   const isCheckIn = useMemo(() => {
     return movement.movementType === EMovementType.IN;
   }, [movement]);
+
+  const price = useMemo(() => {
+    return isCheckIn
+      ? `${coolingUnit?.commonPricingType.value ?? 0} ${company?.currency} / ${t('Dashboard.CrateManagement.CheckIn.day')}`
+      : `${movement.totalPrice} ${company?.currency}`;
+  }, [isCheckIn]);
 
   const optionsMenu = useMemo(() => {
     return [
@@ -56,7 +66,14 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-              action: () => null,
+              action: async () =>
+                await sendSMS(
+                  userContact ?? '',
+                  movement,
+                  company?.name ?? selectedCompany?.name ?? '',
+                  price,
+                  t
+                ),
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
@@ -65,7 +82,7 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
             },
           ]),
     ];
-  }, [isCheckIn, movement]);
+  }, [isCheckIn, movement, userContact, company, selectedCompany, price, t]);
 
   return (
     <View tw="w-full">
@@ -96,10 +113,7 @@ export function Movement({ movement, coolingUnit }: MovementProps) {
             tw={cn('text-base', !isCheckIn && 'font-bold')}
             numberOfLines={1}
           >
-            {t('Dashboard.History.priceLabel')}:{' '}
-            {isCheckIn
-              ? `${coolingUnit?.commonPricingType.value ?? 0} ${company?.currency} / ${t('Dashboard.CrateManagement.CheckIn.day')}`
-              : `${movement.totalPrice} ${company?.currency}`}
+            {t('Dashboard.History.priceLabel')}: {price}
           </Text>
           <Text variant="TextMedium" tw="text-base" numberOfLines={1}>
             {movement.farmer}

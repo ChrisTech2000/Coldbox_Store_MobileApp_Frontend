@@ -1,5 +1,5 @@
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { ESortingOptions } from '../History/components/SortMenu';
+import { ESortingOptions } from '../components/SortMenu';
 
 type Movement = GetMovementsHistoryResponse[number];
 
