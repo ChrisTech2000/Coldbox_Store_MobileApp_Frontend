@@ -1,26 +1,26 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState, type SetStateAction } from 'react';
 import { FlatList, View } from 'react-native';
-import { Divider, RadioButton } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 import { create } from 'zustand';
-import { useFocusEffect } from '@react-navigation/native';
 
-import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
-import { RadioButtonItem } from '#ui/components/RadioButton';
+import { CheckboxItem } from '#ui/components/Checkbox';
+import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
 
-import { useControlledState } from '#ui/hooks/useControlledState';
 import { useTranslationUtils } from '#i18n/utils';
+import { useControlledState } from '#ui/hooks/useControlledState';
 
 type SelectStore<T> = {
-  selectedItem: T | null;
-  onSelect: (item: T) => void;
+  selectedItems: T[];
+  onSelect: (items: T[]) => void;
 };
 
-export const createSelectStore = <T,>() =>
+export const createMultipleSelectStore = <T,>() =>
   create<SelectStore<T>>((set) => ({
-    selectedItem: null,
-    onSelect: (item) => set({ selectedItem: item }),
+    selectedItems: [],
+    onSelect: (items) => set({ selectedItems: items }),
   }));
 
 type SelectItemProps<T> = {
@@ -32,12 +32,15 @@ type SelectItemProps<T> = {
   label: string;
   modalHeader?: string;
   occupyFullWidth?: boolean;
-  useSelectStore: ReturnType<typeof createSelectStore<T>>;
+  useSelectStore: ReturnType<typeof createMultipleSelectStore<T>>;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
   itemName: (item: T) => string;
 };
 
-export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectItemProps<T>) {
+export default function MultipleSelectWithStore<T>({
+  useSelectStore,
+  ...rest
+}: SelectItemProps<T>) {
   const store = useSelectStore();
 
   const [isModalVisible, setIsModalVisible] = useControlledState<boolean>(
@@ -45,25 +48,22 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
     rest.setIsModalVisible
   );
 
-  const [internalSelection, setInternalSelection] = useState<T | null>(store.selectedItem);
+  const [internalSelection, setInternalSelection] = useState<T[]>(store.selectedItems);
 
   useEffect(() => {
-    if (!store.selectedItem && rest.autoSelect && rest.datums.length > 0) {
+    if (!store.selectedItems.length && rest.autoSelect && rest.datums.length > 0) {
       const firstDatum = rest.datums[0];
-      store.onSelect(firstDatum);
-      setInternalSelection(firstDatum);
+      store.onSelect([firstDatum]);
+      setInternalSelection([firstDatum]);
     }
-  }, [rest.datums, store.selectedItem]);
+  }, [rest.datums, store.selectedItems]);
 
   useFocusEffect(
     useCallback(() => {
-      if (
-        internalSelection &&
-        rest.itemName(internalSelection) !== rest.itemName(store.selectedItem as T)
-      ) {
-        setInternalSelection(store.selectedItem);
+      if (internalSelection.length !== store.selectedItems.length) {
+        setInternalSelection(store.selectedItems);
       }
-    }, [store.selectedItem])
+    }, [store.selectedItems])
   );
 
   const { t } = useTranslationUtils();
@@ -79,6 +79,14 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
     );
   }
 
+  const handleSelect = (item: T) => {
+    if (internalSelection.includes(item)) {
+      setInternalSelection(internalSelection.filter((selectedItem) => selectedItem !== item));
+    } else {
+      setInternalSelection([...internalSelection, item]);
+    }
+  };
+
   return (
     <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
       <View tw="px-2">
@@ -90,27 +98,19 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
           content={{
             header: rest.modalHeader ?? '',
             options: (
-              <RadioButton.Group
-                value={internalSelection ? rest.itemName(internalSelection) : ''}
-                onValueChange={(value) => {
-                  const item = rest.datums.find((datum) => rest.itemName(datum) === value);
-                  if (!item) return;
-                  setInternalSelection(item);
-                }}
-              >
-                <FlatList
-                  data={rest.datums}
-                  keyExtractor={(item, index) => `${item}-${index}`}
-                  renderItem={({ item }) => (
-                    <RadioButtonItem
-                      label={rest.itemName(item)}
-                      value={rest.itemName(item)}
-                      tw="flex flex-row-reverse ml-[-10]"
-                    />
-                  )}
-                  nestedScrollEnabled
-                />
-              </RadioButton.Group>
+              <FlatList
+                data={rest.datums}
+                keyExtractor={(item, index) => `${item}-${index}`}
+                renderItem={({ item }) => (
+                  <CheckboxItem
+                    label={rest.itemName(item)}
+                    tw="flex flex-row-reverse ml-[-10]"
+                    status={internalSelection.includes(item) ? 'checked' : 'unchecked'}
+                    onPress={() => handleSelect(item)}
+                  />
+                )}
+                nestedScrollEnabled
+              />
             ),
             footer: (
               <View tw="flex flex-row items-center justify-end">
@@ -119,7 +119,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    setInternalSelection(store.selectedItem);
+                    setInternalSelection(store.selectedItems);
                     setIsModalVisible(!isModalVisible);
                   }}
                 >
@@ -130,7 +130,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    if (internalSelection) store.onSelect(internalSelection);
+                    store.onSelect(internalSelection);
                     setIsModalVisible(!isModalVisible);
                   }}
                 >

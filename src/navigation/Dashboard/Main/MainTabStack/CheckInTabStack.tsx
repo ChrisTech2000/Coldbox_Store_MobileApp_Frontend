@@ -74,7 +74,7 @@ export default function CheckInStack() {
               onPress={() => {
                 // eslint-disable-next-line react/prop-types
                 props.navigation.goBack();
-                resetCheckInStore();
+                if (routeName === 'CheckIn') resetCheckInStore();
               }}
               size={22}
             />
