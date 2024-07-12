@@ -12,7 +12,7 @@ import { Text } from '#ui/components/Text';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useTranslationUtils } from '#i18n/utils';
 
-type SelectStore<T> = {
+export type SelectStore<T> = {
   selectedItem: T | null;
   onSelect: (item: T) => void;
 };
@@ -71,7 +71,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
   if (!rest.datums.length && rest.emptyMessage) {
     return (
       <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
-        <Text variant="TextMedium" tw="text-base">
+        <Text variant="TextMedium" tw="text-base pl-2">
           {rest.emptyMessage}
         </Text>
         <Divider tw="bg-gray-600 my-1" />

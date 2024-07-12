@@ -32,10 +32,15 @@ export enum EStorageEndpoints {
 export enum EOperationEndpoints {
   CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
+  GET_MOVEMENTS = '/operation/movements/',
   MOVE_CHECKOUT = 'operation/move-checkout/',
 }
 
 export enum ECompanyEndpoints {
   GET_COMPANIES = 'user/v1/companies/',
   GET_COMPANY = 'user/v1/companies/:companyId/',
+}
+
+export enum ESMSEndpoints {
+  SEND_SMS = 'storage/v1/send-sms/',
 }

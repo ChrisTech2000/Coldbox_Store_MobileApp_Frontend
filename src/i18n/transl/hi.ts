@@ -572,5 +572,44 @@ export default {
       privacyPolicy: 'गोपनीयता नीति',
       comsolAbout: 'कॉमसोल के बारे में',
     },
+    History: {
+      priceLabel: 'कीमत',
+      sortMenuOptions: {
+        cropType: 'फसल का प्रकार',
+        movementDate: 'आवागमन की तिथि (पहले से नवीनतम)',
+        movementDateReverse: 'आवागमन की तिथि (नवीनतम से पहले)',
+        checkInFirst: 'पहले चेक इन',
+        checkOutFirst: 'पहले चेक आउट',
+      },
+      optionsMenu: {
+        common: {
+          pdfReceipt: 'पीडीएफ रसीद डाउनलोड करें',
+        },
+        checkOut: {
+          seeDetails: 'विवरण देखें',
+          smsReceipt: 'एसएमएस रसीद डाउनलोड करें',
+          marketSurvey: 'बाजार सर्वेक्षण भरें',
+        },
+        checkIn: {
+          edit: 'चेक इन संपादित करें',
+        },
+      },
+      stringTemplates: {
+        sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:
+          गतिविधि कोड: {{code}}
+          फसलें: {{crops}}
+          कुल वजन: {{weight}} किलोग्राम
+          {{movementTypeForDate}}: {{date}}
+          मूल्य: {{price}}
+          द्वारा भुगतान: {{farmersName}}
+          `,
+        movementType: {
+          checkOut: 'चेक आउट',
+          checkIn: 'चेक इन',
+          checkedOut: 'चेक आउट किया गया',
+          checkedIn: 'चेक इन किया गया',
+        },
+      },
+    },
   },
 } satisfies Translations;

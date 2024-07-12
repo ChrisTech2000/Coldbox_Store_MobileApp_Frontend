@@ -567,6 +567,45 @@ const en = {
       privacyPolicy: 'Privacy Policy',
       comsolAbout: 'Comsol About',
     },
+    History: {
+      priceLabel: 'Price',
+      sortMenuOptions: {
+        cropType: 'Crop type',
+        movementDate: 'Movement date (first to latest)',
+        movementDateReverse: 'Movement date (latest to first)',
+        checkInFirst: 'Check in first',
+        checkOutFirst: 'Check out first',
+      },
+      optionsMenu: {
+        common: {
+          pdfReceipt: 'Download PDF receipt',
+        },
+        checkOut: {
+          seeDetails: 'See details',
+          smsReceipt: 'Download SMS receipt',
+          marketSurvey: 'Fill in market survey',
+        },
+        checkIn: {
+          edit: 'Edit check in',
+        },
+      },
+      stringTemplates: {
+        sendSMS: `{{companyName}} - {{movementType}} Receipt: 
+        Movement code: {{code}}
+        Crops: {{crops}}
+        Total weight: {{weight}} Kg
+        {{movementTypeForDate}}: {{date}}
+        Price: {{price}}
+        Paid by: {{farmersName}}
+        `,
+        movementType: {
+          checkOut: 'Check Out',
+          checkIn: 'Check In',
+          checkedOut: 'Checked out',
+          checkedIn: 'Checked in',
+        },
+      },
+    },
   },
 };
 

@@ -115,6 +115,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           id: result.company.id,
           country: result.company.country,
           currency: result.company.currency,
+          name: result.company.name,
         });
       }
       setSession({
