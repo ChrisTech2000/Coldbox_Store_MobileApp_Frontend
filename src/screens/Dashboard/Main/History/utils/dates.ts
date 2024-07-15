@@ -1,4 +1,5 @@
-import { isWithinInterval, sub } from 'date-fns';
+import { isWithinInterval } from 'date-fns/isWithinInterval';
+import { sub } from 'date-fns/sub';
 
 export function isWithinLast24Hours(date: Date): boolean {
   const now = new Date();

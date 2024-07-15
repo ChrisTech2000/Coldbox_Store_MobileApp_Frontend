@@ -519,6 +519,28 @@ const en = {
         deletePersonal: 'To delete your account, go to Account Details.',
         deleteOther: 'If you want to delete this account, please contact {{contact}}',
       },
+      CoolingUsers: {
+        modals: {
+          selectMethod: 'How do you want to add the user?',
+          userCode: 'Enter an user code',
+          userCodeDesc:
+            'You can find the code in your account-details if you registered as a cooling user.',
+          addByCode: 'Add user by code',
+          addWithDetails: 'Add user with details',
+        },
+        toasts: {
+          notFound: 'No cooling user with this user code were found.',
+          taken: 'This user is already in your list of cooling users.',
+        },
+      },
+      EditCoolingUsers: {
+        toasts: {
+          warning:
+            'This account cannot be deleted because the user has active check-ins in the cooling unit(s) {{names}}. Please notify the user to come to the room to pick up these items and complete the check-outs before deleting the account!',
+          confirmation:
+            'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
+        },
+      },
     },
     AccountDetails: {
       popups: {
