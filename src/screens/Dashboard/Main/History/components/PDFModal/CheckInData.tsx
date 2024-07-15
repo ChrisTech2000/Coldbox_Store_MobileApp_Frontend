@@ -51,34 +51,34 @@ export function CheckInData({
         </head>
         <body>
           <div class="container">
-            <div class="title">Check-In Data</div>
+            <div class="title">${t('Dashboard.History.pdfModal.checkIn.title')}</div>
 
             <div class="section">
               <div class="column">
-                <div class="label">Code:</div>
+                <div class="label">${t('Dashboard.History.pdfModal.checkIn.codeLabel')}</div>
                 <div class="value">${movement.code}</div>
               </div>
               <div class="column">
-                <div class="label">Company:</div>
+                <div class="label">${t('Dashboard.History.pdfModal.checkIn.companyLabel')}</div>
                 <div class="value">${companyName}</div>
               </div>
               <div class="column">
-                <div class="label">Cooling Unit:</div>
+                <div class="label">${t('Dashboard.History.pdfModal.checkIn.coolingUnitLabel')}</div>
                 <div class="value">${coolingUnit?.name ?? ''}</div>
               </div>
             </div>
 
             <div class="section">
               <div class="column">
-                <div class="label">Cooling User:</div>
+                <div class="label">${t('Dashboard.History.pdfModal.coolingUserLabel')}</div>
                 <div class="value">${movement.farmer}</div>
               </div>
               <div class="column">
-                <div class="label">Operator:</div>
+                <div class="label">${t('Dashboard.History.pdfModal.checkIn.operatorLabel')}</div>
                 <div class="value">${movement.operator}</div>
               </div>
               <div class="column">
-                <div class="label">Date:</div>
+                <div class="label">${t('Dashboard.History.pdfModal.dateLabel')}</div>
                 <div class="value">${dateFmt(movement.date.toString(), 'MMM dd yyyy')}</div>
               </div>
             </div>
@@ -86,10 +86,10 @@ export function CheckInData({
             <table>
               <thead>
                 <tr>
-                  <th>Crop</th>
-                  <th>Number of Crates</th>
-                  <th>Weight</th>
-                  <th>Price (${currency})</th>
+                  <th>${t('Dashboard.History.pdfModal.checkIn.cropLabel')}</th>
+                  <th>${t('Dashboard.History.pdfModal.checkIn.numberOfCratesLabel')}</th>
+                  <th>${t('Dashboard.History.pdfModal.weightLabel')}</th>
+                  <th>${t('Dashboard.History.pdfModal.checkIn.priceLabel', { currency })}</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,7 +114,7 @@ export function CheckInData({
                   })
                   .join('')}
                 <tr class="total-row">
-                  <td>Total</td>
+                  <td>${t('Dashboard.History.pdfModal.checkIn.totalLabel')}</td>
                   <td>${movement.cratesCheckin.length}</td>
                   <td>${movement.cratesWeight}</td>
                   <td>${((coolingUnit?.commonPricingType.value ?? 0) * movement.cratesCheckin.length).toFixed(2)}</td>
