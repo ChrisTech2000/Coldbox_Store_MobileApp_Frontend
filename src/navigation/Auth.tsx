@@ -57,7 +57,7 @@ const NAVIGATOR_HEADERS: Record<keyof AuthRoutes, TranslationPaths | undefined> 
   PasswordReset: 'navigation.auth.PasswordReset',
   AppInfo: 'navigation.auth.AppInfo',
   Root: undefined,
-  Invite: undefined,
+  Invite: 'navigation.auth.SignUp',
 };
 
 const Stack = createNativeStackNavigator<AuthRoutes>();
