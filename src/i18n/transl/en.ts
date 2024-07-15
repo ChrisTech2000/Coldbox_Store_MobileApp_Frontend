@@ -223,9 +223,7 @@ const en = {
       phoneInputLabel: 'Phone Number',
       resetButton: 'Reset',
       link: {
-        partOne:
-          'Click on this link to reset your password https://app.coldtivate.org/auth/reset/?resetcode=',
-        partTwo: '&phoneNumber={{phone}}  Add https:// if url is not working',
+        partOne: 'Click on this link to reset your password {{baseLink}}',
       },
     },
     ResetPassword: {

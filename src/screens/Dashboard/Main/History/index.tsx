@@ -116,7 +116,7 @@ function History() {
             estimatedItemSize={40}
             estimatedListSize={{
               height: deviceHeight,
-              width: deviceWidth / 2,
+              width: deviceWidth,
             }}
           />
         ) : (
