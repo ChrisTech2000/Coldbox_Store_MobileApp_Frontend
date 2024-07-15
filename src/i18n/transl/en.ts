@@ -189,7 +189,7 @@ const en = {
         genderFieldName: 'gender',
         terms:
           'I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use',
-        submit: 'SignUp',
+        submit: 'Sign Up',
       },
       SignUpCompany: {
         companyHeader: 'Sign Up Company',
