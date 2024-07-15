@@ -16,6 +16,7 @@ import AuthRoot from '#screens/Auth/Root';
 import SignIn from '#screens/Auth/SignIn';
 import SignUpCompany from '#screens/Auth/SignUp/SignUpCompany';
 import SignUpCoolingUser from '#screens/Auth/SignUp/SignUpCoolingUser';
+import Invite from '#screens/Auth/Invite';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -33,6 +34,11 @@ export type AuthRoutes = {
     phoneNumber: string;
   };
   AppInfo: undefined;
+  Invite: {
+    userType: string;
+    inviteCode: string;
+    phoneNumber: string;
+  };
 };
 
 export type AuthRoutePaths = keyof AuthRoutes;
@@ -51,6 +57,7 @@ const NAVIGATOR_HEADERS: Record<keyof AuthRoutes, TranslationPaths | undefined> 
   PasswordReset: 'navigation.auth.PasswordReset',
   AppInfo: 'navigation.auth.AppInfo',
   Root: undefined,
+  Invite: undefined,
 };
 
 const Stack = createNativeStackNavigator<AuthRoutes>();
@@ -95,6 +102,7 @@ export default function AuthNavigator() {
       <Stack.Screen name="PasswordRecoveryRequest" component={PasswordRecoveryRequest} />
       <Stack.Screen name="PasswordReset" component={PasswordReset} />
       <Stack.Screen name="AppInfo" component={AppInfo} />
+      <Stack.Screen name="Invite" component={Invite} />
     </Stack.Navigator>
   );
 }

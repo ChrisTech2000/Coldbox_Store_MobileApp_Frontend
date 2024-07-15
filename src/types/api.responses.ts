@@ -249,3 +249,11 @@ export type GetMovementsHistoryResponse = Array<{
   paymentType: EPaymentType;
   operator: string;
 }>;
+
+export type GetInvitedOperatorsResponse = {
+  code: string;
+  coolingUnits: Array<number>;
+  expirationDate: string;
+  phone: string;
+  userType: number;
+};

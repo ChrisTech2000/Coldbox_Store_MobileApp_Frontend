@@ -498,6 +498,13 @@ export default {
           save: 'सेव चंगेस',
         },
       },
+      AddOperator: {
+        messages: {
+          operator: 'एक ऑपरेटर के रूप में Coldtivate ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
+          employee:
+            'एक पंजीकृत कर्मचारी के रूप में कोल्डटिवेट ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
+        },
+      },
       CompanyDetails: {
         labels: {
           name: 'नाम',

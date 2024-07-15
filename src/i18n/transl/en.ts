@@ -494,6 +494,12 @@ const en = {
           save: 'Save changes',
         },
       },
+      AddOperator: {
+        messages: {
+          operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
+          employee: 'To join the Coldtivate app as a Registered Employee, go to: {{link}}',
+        },
+      },
       CompanyDetails: {
         labels: {
           name: 'Name',

@@ -16,6 +16,7 @@ export enum EUserEndpoints {
   UPDATE_FARMER = 'user/v1/farmers/:farmerId/',
   UPDATE_FARMER_SURVEYS = 'user/v1/farmer-survey/:farmerId/',
   UPDATE_USER = 'user/v1/users/:userId/',
+  INVITE_OPERATOR = 'user/v1/operator-invite/',
 }
 
 export enum EStorageEndpoints {

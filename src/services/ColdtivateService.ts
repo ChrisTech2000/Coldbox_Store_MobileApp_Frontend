@@ -32,6 +32,7 @@ import type {
   UpdateFarmerCompany,
   RemoveCompanyParams,
   GetMovementsHistoryParams,
+  SendOperatorInvitationParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -49,6 +50,7 @@ import type {
   GetFarmerSurveysResponse,
   UpdateFarmerSurveysResponse,
   GetMovementsHistoryResponse,
+  GetInvitedOperatorsResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -424,10 +426,12 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getInvitedOperators = async (companyId: number): Promise<Array<GetOperatorsResponse>> => {
+  public getInvitedOperators = async (
+    companyId: number
+  ): Promise<Array<GetInvitedOperatorsResponse>> => {
     try {
       const params = { company: companyId };
-      const { data } = await this.get<Array<GetOperatorsResponse>>(
+      const { data } = await this.get<Array<GetInvitedOperatorsResponse>>(
         EUserEndpoints.GET_INVITED_OPERATORS,
         { params }
       );
@@ -446,6 +450,31 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.get<Array<GetOperatorsResponse>>(EUserEndpoints.GET_OPERATORS, {
         params,
       });
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public sendOperatorInvitation = async (params: SendOperatorInvitationParams) => {
+    try {
+      const { phone, coolingUnits, userId, message, url } = params;
+      const { data } = await this.post<Array<GetOperatorsResponse>>(
+        EUserEndpoints.INVITE_OPERATOR,
+        {
+          urlOne: url.partOne,
+          urlTwo: url.partTwo,
+          coolingUnits,
+          userId,
+          phone,
+          ...message,
+        },
+        undefined,
+        ['partOne', 'partTwo', 'urlOne', 'urlTwo']
+      );
       return data;
     } catch (error) {
       console.log(error);
