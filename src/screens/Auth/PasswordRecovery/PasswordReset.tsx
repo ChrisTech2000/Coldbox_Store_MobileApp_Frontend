@@ -3,15 +3,14 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
-import { z } from 'zod';
 
+import type { AuthRouteProps } from '#navigation/Auth';
 import { passwordRegex } from '#constants/schemas';
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { AuthRouteProps } from 'navigation/Auth';
 
 type PasswordResetSchema = {
   password: string;
@@ -19,8 +18,9 @@ type PasswordResetSchema = {
 };
 
 function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
+  const { navigation, route } = props;
+
   const toast = useToast();
-  const { navigation } = props;
   const { t, zodResolver } = useTranslationUtils();
 
   const [hidePass, setHidePass] = useState<boolean>(true);
@@ -31,7 +31,7 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
     handleSubmit,
     formState: { errors },
   } = useForm<PasswordResetSchema>({
-    resolver: zodResolver(() =>
+    resolver: zodResolver((z, t) =>
       z
         .object({
           password: z
@@ -59,14 +59,19 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
 
   const onSubmit: SubmitHandler<PasswordResetSchema> = useCallback(
     async (data) => {
-      // TODO: figure out best way to implement
-      await AuthService.resetPassword({
-        code: '', // TODO: fix
-        phoneNumber: '', // TODO: fix
-        password: data.password,
-      });
+      try {
+        const { resetCode, phoneNumber } = route.params;
 
-      navigation.navigate('SignIn');
+        await AuthService.resetPassword({
+          phoneNumber,
+          code: resetCode,
+          password: data.password,
+        });
+
+        navigation.navigate('SignIn');
+      } catch {
+        // silent error
+      }
     },
     [toast]
   );

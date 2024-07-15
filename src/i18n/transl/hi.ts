@@ -226,9 +226,7 @@ export default {
       phoneInputLabel: 'फोन नंबर',
       resetButton: 'रीसेट',
       link: {
-        partOne:
-          'अपना पासवर्ड रीसेट करने के लिए इस लिंक पर क्लिक करें https://app.coldtivate.org/auth/reset/?resetcode=',
-        partTwo: '&phoneNumber={{phone}}  यदि URL काम नहीं कर रहा है, तो https:// जोड़ें',
+        partOne: 'अपना पासवर्ड रीसेट करने के लिए इस लिंक पर क्लिक करें {{baseLink}}',
       },
     },
     ResetPassword: {

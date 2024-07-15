@@ -1,52 +1,45 @@
 import React, { useCallback } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { Text, TextInput } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
-import { z } from 'zod';
+
+import { Button } from '#ui/components/Button';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
-import { Button } from '#ui/components/Button';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { AuthRouteProps } from 'navigation/Auth';
-
-const schema = z.object({
-  phone: z.string().default(''),
-});
+import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
 
 type PasswordRecoverySchema = { phone: string };
 
-function PasswordRecoveryRequest(props: AuthRouteProps<'PasswordRecoveryRequest'>) {
+function PasswordRecoveryRequest() {
   const toast = useToast();
-  const { navigation } = props;
   const { t, zodResolver } = useTranslationUtils();
 
   const { control, handleSubmit } = useForm<PasswordRecoverySchema>({
-    resolver: zodResolver(() => schema),
+    resolver: zodResolver((z) => z.object({ phone: z.string().default('') })),
   });
 
   const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(
-    async (data) => {
-      // TODO: study possibility of making this a BE responsibility
-      const partOne = t('Auth.ForgotPassword.link.partOne');
-      const partTwo = t('Auth.ForgotPassword.link.partTwo', { phone: data.phone });
+    async (values) => {
+      const partOne = t('Auth.ForgotPassword.link.partOne', {
+        baseLink: `${BASE_DEEP_LINK_URL}/password-reset/`,
+      });
 
       try {
         await AuthService.requestResetPassword({
-          phoneNumber: data.phone,
-          link: { partOne, partTwo },
+          phoneNumber: values.phone,
+          link: { partOne, partTwo: `/${values.phone}` },
         });
-      } catch (error) {
-        // Noop
+      } catch {
+        // silent error
       }
 
       // For security reasons, we don't want to inform the user whether the introduced phone exists in our BD or not
       toast.show(t('Auth.ForgotPassword.messageSentNotification'), {
         type: 'success',
       });
-
-      navigation.navigate('PasswordReset');
     },
     [toast]
   );

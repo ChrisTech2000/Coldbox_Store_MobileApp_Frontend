@@ -13,6 +13,7 @@ import DashboardNavigator from './navigation/Dashboard';
 import { paperTheme, navigatorTheme } from './ui/lib/theme';
 import { useAuthManager } from './stores/auth';
 import { useGlobalInformation } from './stores/dashboard';
+import linking from './navigation/deepLinking';
 
 import './i18n';
 
@@ -27,7 +28,7 @@ export default function App() {
       <ToastProvider>
         <StaleWhileRevalidate>
           <SafeAreaProvider>
-            <NavigationContainer theme={navigatorTheme}>
+            <NavigationContainer theme={navigatorTheme} linking={linking}>
               <Portal.Host>
                 {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
               </Portal.Host>
