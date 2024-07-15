@@ -21,6 +21,7 @@ type WrapperProps = {
   variant?: 'sm' | 'md' | 'lg';
   onClick: () => void;
   useScrollView?: boolean;
+  disabled?: boolean;
 };
 
 export function Select({
@@ -33,11 +34,13 @@ export function Select({
   variant = 'sm',
   onClick,
   useScrollView = true,
+  ...props
 }: WrapperProps) {
   const { options, header, footer, headerComponent } = content;
   const colors = useTailwindColors();
 
   const arrowColor = useMemo(() => {
+    if (props.disabled) return colors.gray[400];
     if (error) return colors.red[700];
     return variant === 'sm' ? colors.green.primary : colors.gray[600];
   }, [error]);
@@ -75,13 +78,15 @@ export function Select({
           variant === 'sm' ? 'space-x-0.5' : 'justify-between',
           minifyLabel && currentValue && 'flex flex-col items-start'
         )}
+        disabled={props.disabled}
         onPress={onClick}
       >
         <Text
           tw={cn(
             variant === 'sm' ? 'text-green-primary' : 'text-gray-600 text-base truncate',
             minifyLabel && currentValue && 'text-xs',
-            error && 'text-red-700'
+            error && 'text-red-700',
+            props.disabled && 'text-gray-400'
           )}
         >
           {label}
@@ -92,7 +97,9 @@ export function Select({
             minifyLabel && currentValue ? 'w-full justify-between' : 'space-x-2'
           )}
         >
-          {currentValue && <Text tw="text-base">{currentValue}</Text>}
+          {currentValue && (
+            <Text tw={cn('text-base', props.disabled && 'text-gray-400')}>{currentValue}</Text>
+          )}
           <Icon
             name={variant !== 'lg' ? 'arrow-drop-down' : 'keyboard-arrow-down'}
             size={variant !== 'lg' ? 20 : 30}

@@ -26,9 +26,11 @@ import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee
 import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredEmployeeDetails';
 import RevenueAnalysis from '#screens/Dashboard/Management/RevenueAnalysis';
 import UsageAnalysis from '#screens/Dashboard/Management/UsageAnalysis';
+import EditCoolingUser from '#screens/Dashboard/Management/EditCoolingUser';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import NavigatorHeader, { type NavigationHeaderProps } from '../components/NavigatorHeader';
 
@@ -64,10 +66,12 @@ export type ManagementRoutes = {
   };
   // Cooling User related routes
   CoolingUsers: undefined;
-  AddCoolingUser: undefined;
+  AddCoolingUser?: {
+    userId: number;
+  };
   EditCoolingUser: {
-    firstName: string;
-    familyName: string;
+    userId: number;
+    createdByOperator: boolean;
   };
 };
 
@@ -142,6 +146,7 @@ export default function ManagementStack() {
       <Stack.Screen name="CompanyDetails" component={CompanyDetails} />
       <Stack.Screen name="CoolingUsers" component={CoolingUsers} />
       <Stack.Screen name="AddCoolingUser" component={AddCoolingUser} />
+      <Stack.Screen name="EditCoolingUser" component={EditCoolingUser} />
       <Stack.Screen name="RevenueAnalysis" component={RevenueAnalysis} />
       <Stack.Screen name="UsageAnalysis" component={UsageAnalysis} />
       <Stack.Screen name="Locations" component={Locations} />
@@ -191,7 +196,7 @@ function _rightContentFactory(
           <Appbar.Action
             icon="plus-circle-outline"
             size={32}
-            onPress={() => navigation.navigate('AddCoolingUser')}
+            onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true)}
           />
         ),
       };

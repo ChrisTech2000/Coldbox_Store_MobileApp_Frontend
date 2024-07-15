@@ -29,6 +29,8 @@ import type {
   GetFarmerSurveysParams,
   UpdateFarmerSurveysParams,
   GetCompanyEmployeeParams,
+  UpdateFarmerCompany,
+  RemoveCompanyParams,
   GetMovementsHistoryParams,
 } from '#types/api.params';
 import type {
@@ -175,6 +177,33 @@ class ColdtivateService extends HttpClient {
       throw customError;
     }
   };
+
+  async getFarmerByUserCode(userCode: string): Promise<Array<Farmer>> {
+    try {
+      const params = { user_code: userCode };
+      const { data } = await this.get<Array<Farmer>>(EUserEndpoints.GET_FARMER, { params });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  }
+
+  async updateFarmerCompany(params: UpdateFarmerCompany) {
+    try {
+      const url = subs(EUserEndpoints.UPDATE_FARMER, { farmerId: params.farmerId });
+      const { data } = await this.put(url, {
+        company_id: params.companyId,
+        update_companies: true,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  }
 
   ///////// CRATE MANAGEMENT
   public getOperatorFarmers = async (
@@ -588,6 +617,25 @@ class ColdtivateService extends HttpClient {
   public deleteUser = async (userId: number) => {
     try {
       const { data } = await this.delete(subs(EUserEndpoints.UPDATE_USER, { userId }));
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public removeCompany = async (params: RemoveCompanyParams) => {
+    try {
+      const _params = {
+        companyId: params.companyId,
+        deleteCompany: true,
+      };
+      const { data } = await this.patch(
+        subs(EUserEndpoints.UPDATE_FARMER, { farmerId: params.farmerId }),
+        _params
+      );
       return data;
     } catch (error) {
       console.log(error);
