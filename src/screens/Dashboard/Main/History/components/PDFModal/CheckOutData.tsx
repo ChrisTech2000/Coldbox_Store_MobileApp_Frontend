@@ -38,6 +38,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
           .divider { width: 60%; background-color: #cccccc; height: 1px; margin: 10px 0; }
           .button { margin-top: 10px; padding: 10px 20px; background-color: #007bff; color: #ffffff; border: none; border-radius: 5px; cursor: pointer; }
           .button:hover { background-color: #0056b3; }
+          .section-end { display: flex; flex-direction: row; justify-content: flex-end; margin-top: 10px; }
         </style>
       </head>
       <body>
@@ -82,21 +83,21 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
             </tbody>
           </table>
   
-          <div class="section items-end">
-            <div>
-              <div class="label">${t('Dashboard.History.pdfModal.weightLabel')}:</div>
+          <div>
+            <div class="section-end">
+              <div class="label">${t('Dashboard.History.pdfModal.weightLabel')}:&nbsp;</div>
               <div class="value">${movement.cratesWeight}</div>
             </div>
-            <div>
-              <div class="label">${t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:</div>
+            <div class="section-end">
+              <div class="label">${t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:&nbsp;</div>
               <div class="value">${movement.totalPrice.toFixed(2)}</div>
             </div>
-            <div>
-              <div class="label">${t('Dashboard.History.pdfModal.checkOut.discountLabel')}:</div>
+            <div class="section-end">
+              <div class="label">${t('Dashboard.History.pdfModal.checkOut.discountLabel')}:&nbsp;</div>
               <div class="value">${movement.discount.toFixed(2)}</div>
             </div>
-            <div>
-              <div class="label">${t('Dashboard.History.pdfModal.checkOut.totalPrice')}:</div>
+            <div class="section-end">
+              <div class="label">${t('Dashboard.History.pdfModal.checkOut.totalPrice')}:&nbsp;</div>
               <div class="value">${(movement.totalPrice - movement.discount).toFixed(2)}</div>
             </div>
           </div>
@@ -160,7 +161,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
         </View>
       </View>
 
-      <ScrollView tw="max-h-[70%]">
+      <ScrollView tw="max-h-[80%]">
         <DataTable>
           <DataTable.Header tw="bg-gray-200">
             <DataTable.Title>{t('Dashboard.History.pdfModal.checkOut.idLabel')}</DataTable.Title>
