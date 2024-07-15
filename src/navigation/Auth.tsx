@@ -27,8 +27,11 @@ export type AuthRoutes = {
   SignIn: undefined;
   SignUpCompany: undefined;
   SignUpCoolingUser: undefined;
-  PasswordReset: undefined;
   PasswordRecoveryRequest: undefined;
+  PasswordReset: {
+    resetCode: string;
+    phoneNumber: string;
+  };
   AppInfo: undefined;
 };
 
