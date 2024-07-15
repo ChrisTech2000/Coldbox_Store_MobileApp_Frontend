@@ -594,6 +594,35 @@ export default {
           edit: 'चेक इन संपादित करें',
         },
       },
+      pdfModal: {
+        coolingUserLabel: 'कूलिंग उपयोगकर्ता',
+        dateLabel: 'तारीख',
+        weightLabel: 'वजन (किलोग्राम)',
+        downloadButton: 'चालान डाउनलोड करें',
+        downloadName: '{{code}}-रसीद',
+        successMessage: 'रसीद डाउनलोड हो गई!',
+        errorMessage: 'कुछ गड़बड़ हो गया। कृपया बाद में पुनः प्रयास करें।',
+        checkOut: {
+          title: 'कंपनी',
+          checkOutLabel: 'चेक-आउट कोड',
+          idLabel: 'आईडी',
+          itemLabel: 'वस्तु',
+          calculatedPriceLabel: 'गणित मूल्य',
+          discountLabel: 'छूट',
+          totalPrice: 'कुल मूल्य',
+        },
+        checkIn: {
+          title: 'चेक-इन रसीद',
+          operatorLabel: 'ऑपरेटर',
+          codeLabel: 'चेक-इन कोड',
+          companyLabel: 'कंपनी',
+          coolingUnitLabel: 'कूलिंग इकाई',
+          priceLabel: 'मूल्य {{currency}} / दिन',
+          cropLabel: 'फसल',
+          numberOfCratesLabel: 'क्रेटों की संख्या',
+          totalLabel: 'कुल',
+        },
+      },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:
           गतिविधि कोड: {{code}}

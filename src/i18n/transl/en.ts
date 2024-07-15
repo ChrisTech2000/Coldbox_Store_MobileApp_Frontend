@@ -606,6 +606,17 @@ const en = {
           discountLabel: 'Discount',
           totalPrice: 'Total price',
         },
+        checkIn: {
+          title: 'Check-in receipt',
+          operatorLabel: 'Operator',
+          codeLabel: 'Check-in code',
+          companyLabel: 'Company',
+          coolingUnitLabel: 'Cooling Unit',
+          priceLabel: 'Price {{currency}} / Day',
+          cropLabel: 'Crop',
+          numberOfCratesLabel: 'Number of Crates',
+          totalLabel: 'Total',
+        },
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} Receipt: 

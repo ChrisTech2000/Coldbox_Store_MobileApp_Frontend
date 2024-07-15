@@ -162,6 +162,9 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
           isOpen={isPDFModalOpen}
           dismiss={() => setIsPDFModalOpen(false)}
           movement={movement}
+          companyName={selectedCompany?.name ?? company?.name ?? ''}
+          coolingUnit={coolingUnit}
+          currency={company?.currency ?? ''}
         />
       </Portal>
     </View>
