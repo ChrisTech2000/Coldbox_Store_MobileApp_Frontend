@@ -637,6 +637,7 @@ const en = {
         disclaimer: 'Disclaimer: The time to pick up is an estimated amount of days.',
         disclaimerMessage:
           'Disclaimer. Note that the time to pick up is an estimated amount of days. This estimation was based on calibrated models for the fruit or vegetable species and a numerical simulation. The actual quality degradation of the product however also depends on local weather conditions, growing conditions, harvest date and others. Therefore, deviations from our predicted time to pick up days can occur.',
+        selectCropLabel: 'Select a commodity',
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} Receipt: 

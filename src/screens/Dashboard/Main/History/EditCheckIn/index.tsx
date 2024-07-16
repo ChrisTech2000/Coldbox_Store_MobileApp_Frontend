@@ -1,7 +1,8 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
+import { ActivityIndicator, Icon } from 'react-native-paper';
 import { Easing, useSharedValue } from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
 import { useToast } from 'react-native-toast-notifications';
@@ -10,7 +11,6 @@ import MineCart from '#assets/icons/mine-cart.svg';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -19,9 +19,12 @@ import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTab
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import { DashboardProduce, ECoolingUnitMetric, EPricingType } from '#types/global';
-import { DisclaimerModal } from './components/DisclaimerModal';
+
+import { DTInfo } from './components/DTInfo';
 import { Pagination } from './components/Pagination';
+import { ProduceDetailsOption } from './components/ProduceDetailsOption';
+import { EditCheckInSchema, Schema } from './schema';
+import { generateData } from './utils';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -29,13 +32,11 @@ const deviceHeight = Dimensions.get('screen').height;
 function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   const { movement, coolingUnitId } = props.route.params;
 
-  const { t } = useTranslationUtils();
+  const { t, zodResolver } = useTranslationUtils();
   const toast = useToast();
   const { user } = useAuthStore();
 
   const progress = useSharedValue<number>(0);
-
-  const [isDisclaimerModalOpen, setIsDisclaimerModalOpen] = useState<boolean>(false);
 
   const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getOperatorFarmers',
@@ -61,6 +62,8 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     }
   );
 
+  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, {});
+
   const farmerContact = useMemo(() => {
     return (
       farmers?.find(
@@ -73,6 +76,20 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     return produces?.filter((produce) => produce.movementCode === movement.code) ?? [];
   }, [produces, movement]);
 
+  const {
+    //handleSubmit,
+    control,
+  } = useForm<Schema>({
+    resolver: zodResolver(() => EditCheckInSchema()),
+    defaultValues: {
+      produces: matchingProduces.map((produce) => ({
+        id: produce.id,
+        crop: produce.cropName,
+        plannedDays: produce.plannedDays,
+      })),
+    },
+  });
+
   const copyToClipboard = useCallback(
     (text: string) => {
       Clipboard.setString(text);
@@ -80,70 +97,6 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     },
     [toast]
   );
-
-  const generateData = useCallback((produce: DashboardProduce) => {
-    const pricing = produce.crates[0].pricing[0];
-    const metric =
-      produce.crates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
-        ? produce.cratesCombinedWeight
-        : produce.cratesAmount;
-
-    let price: number | string = '';
-
-    if (pricing.pricingType === EPricingType.FIXED) {
-      price = pricing.fixedRate * metric;
-    } else {
-      price = produce.plannedDays ? pricing.dailyRate * metric * produce.plannedDays : 'N/A';
-    }
-
-    return [
-      {
-        label: t('Dashboard.ProduceDetails.cropType'),
-        value: produce.cropName,
-      },
-      {
-        label: t('Dashboard.ProduceDetails.numberOfCrates'),
-        value: produce.crates.length,
-      },
-      {
-        label: t('Dashboard.ProduceDetails.crateIds'),
-        value: produce.crates.map((crate) => crate.id).join(', '),
-      },
-      {
-        label: t('Dashboard.ProduceDetails.combinedWeight'),
-        value: produce.cratesCombinedWeight,
-      },
-      {
-        label: t('Dashboard.ProduceDetails.remainingTime'),
-        value: produce.minimumRemainingShelfLife,
-      },
-      {
-        label: t('Dashboard.ProduceDetails.currentStorageDays'),
-        value: produce.currentStorageDays,
-      },
-      {
-        label: t('Dashboard.ProduceDetails.plannedDays'),
-        value: produce.plannedDays,
-      },
-      produce.crates[0].pricing[0].pricingType === EPricingType.PERIODICITY
-        ? {
-            label: t('Dashboard.ProduceDetails.pricePerDay'),
-            value: produce.crates[0].pricing[0].dailyRate,
-          }
-        : {},
-      {
-        label: t('Dashboard.ProduceDetails.plannedStorageCost'),
-        value: price,
-      },
-    ];
-  }, []);
-
-  const getPercentage = useCallback((produce: DashboardProduce) => {
-    const quality = produce.qualityDt * 100;
-    if (quality > 100) return 100;
-    if (quality < 0 || isNaN(quality)) return 0;
-    return quality;
-  }, []);
 
   if (loadingFarmers || loadingProduces) {
     return (
@@ -155,7 +108,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
   return (
     <View tw="flex-1 items-center justify-center space-y-4">
-      <View tw="my-4">
+      <View tw="my-2">
         <Text variant="TextMedium" tw="text-gray-400 text-base">
           {t('Dashboard.History.editCheckIn.coolingUserLabel')}
         </Text>
@@ -176,8 +129,8 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
       <Carousel
         width={deviceWidth}
+        height={deviceHeight * 0.7}
         enabled={matchingProduces.length > 1}
-        height={deviceHeight * 0.8}
         data={matchingProduces}
         onProgressChange={(_offsetProgress, absoluteProgress) =>
           (progress.value = absoluteProgress)
@@ -192,82 +145,43 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
             easing: Easing.linear,
           },
         }}
-        renderItem={({ item: produce }) => (
-          <View tw="space-y-4 items-center">
-            {produce.runDt && produce.qualityDt !== -1 ? (
-              <View tw="w-full px-2">
-                <View
-                  tw={cn(
-                    'w-full bg-green-300 rounded-lg h-3',
-                    produce.minimumRemainingShelfLife <= 7 &&
-                      produce.minimumRemainingShelfLife > 2 &&
-                      'bg-yellow-400',
-                    produce.minimumRemainingShelfLife < 2 && 'bg-red-500',
-                    (!produce.minimumRemainingShelfLife ||
-                      produce.minimumRemainingShelfLife === -1) &&
-                      'bg-gray-300'
-                  )}
-                />
+        renderItem={({ item: produce, index }) => {
+          return (
+            <View tw="space-y-3 items-center">
+              {produce.runDt && produce.qualityDt !== -1 ? (
+                <DTInfo produce={produce} />
+              ) : (
+                <Text variant="TextMedium" tw="text-lg px-2">
+                  {t('Dashboard.ProduceDetails.noDTMessage')}
+                </Text>
+              )}
 
-                <View tw="flex flex-row items-center justify-between">
-                  <Text variant="TextMedium" tw="px-2">
-                    {getPercentage(produce)}%
-                  </Text>
-                  <Text variant="TextMedium" tw="px-2">
-                    {t('Dashboard.ProduceDetails.pickUp')}
-                  </Text>
-                  <Text
-                    variant="TextMedium"
-                    tw="px-2"
-                  >{`${produce.minimumRemainingShelfLife} ${t('Dashboard.ProduceDetails.days')}`}</Text>
-                </View>
-
-                <View tw="flex flex-row items-center mt-4">
-                  <Text variant="TextMedium" tw="text-gray-400 mr-1" numberOfLines={2}>
-                    {t('Dashboard.History.editCheckIn.disclaimer')}
-                  </Text>
-                  <TouchableOpacity onPress={() => setIsDisclaimerModalOpen(true)}>
-                    <Icon source="information" size={15} />
-                  </TouchableOpacity>
-                  <DisclaimerModal
-                    isOpen={isDisclaimerModalOpen}
-                    dismiss={() => setIsDisclaimerModalOpen(false)}
-                  />
-                </View>
+              <View tw="flex flex-row items-center space-x-2">
+                <MineCart width={16} height={16} />
+                <Text variant="TitleBold">
+                  {`${produce.crates.length} ${produce.crates.length === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
+                </Text>
               </View>
-            ) : (
-              <Text variant="TextMedium" tw="text-lg px-2">
-                {t('Dashboard.ProduceDetails.noDTMessage')}
-              </Text>
-            )}
 
-            <View tw="flex flex-row items-center space-x-2">
-              <MineCart width={16} height={16} />
-              <Text variant="TitleBold">
-                {`${produce.crates.length} ${produce.crates.length === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
-              </Text>
+              <View tw="w-full px-3">
+                <FlatList
+                  data={generateData(produce, t)}
+                  keyExtractor={(item, idx) => `${item.label}-#${index}-${idx}`}
+                  renderItem={({ item }) => {
+                    return (
+                      <ProduceDetailsOption
+                        index={index}
+                        option={item}
+                        crops={crops}
+                        control={control}
+                      />
+                    );
+                  }}
+                />
+              </View>
             </View>
-
-            <View tw="w-full px-3">
-              <FlatList
-                data={generateData(produce)}
-                renderItem={({ item, index }) => (
-                  <View tw="space-y-1 my-2" key={`${item.label}-${index}`}>
-                    <View tw="flex flex-row justify-between items-center">
-                      <Text variant="TextMedium" tw="text-base">
-                        {item.label}
-                      </Text>
-                      <Text variant="TextMedium" tw="text-base text-gray-400">
-                        {item.value ?? '-'}
-                      </Text>
-                    </View>
-                    <Divider />
-                  </View>
-                )}
-              />
-            </View>
-          </View>
-        )}
+          );
+        }}
         mode="horizontal-stack"
         loop={false}
       />
