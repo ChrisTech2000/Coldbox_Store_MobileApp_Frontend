@@ -77,6 +77,9 @@ const en = {
       aboutComsol: 'About COMSOL',
       privacyPolicy: 'Privacy Policy',
     },
+    history: {
+      EditCheckIn: '{{code}}',
+    },
   },
   actions: {
     error: 'An error occured',
@@ -627,6 +630,10 @@ const en = {
           numberOfCratesLabel: 'Number of Crates',
           totalLabel: 'Total',
         },
+      },
+      editCheckIn: {
+        contactLabel: 'Contact',
+        coolingUserLabel: 'Cooling User',
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} Receipt: 

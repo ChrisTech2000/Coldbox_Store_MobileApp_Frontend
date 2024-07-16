@@ -79,6 +79,9 @@ export default {
       aboutComsol: 'About COMSOL',
       privacyPolicy: 'Privacy Policy',
     },
+    history: {
+      EditCheckIn: '{{code}}',
+    },
   },
   actions: {
     error: 'एक त्रुटि हुई',

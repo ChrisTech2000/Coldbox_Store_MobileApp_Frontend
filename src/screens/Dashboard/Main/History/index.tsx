@@ -14,6 +14,7 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { HistoryTabStackRouteProps } from 'navigation/Dashboard/Main/HistoryTabStack';
 import { Filters } from '../components/Filters';
 import { createSelectStore } from '../components/SelectWithStore';
 import { Movement } from './components/Movement';
@@ -26,7 +27,7 @@ const useCompanyStore = createSelectStore<Company>();
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-function History() {
+function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const { t } = useTranslationUtils();
   const { farmerId, addRefreshDataFn } = useDashboardStore();
   const { user } = useAuthStore();
@@ -109,8 +110,8 @@ function History() {
                 key={`${movement.id}-${index}`}
                 movement={movement}
                 coolingUnit={coolignUnit}
-                userContact={user?.phone ?? ''}
                 selectedCompany={company}
+                {...props}
               />
             )}
             estimatedItemSize={40}
