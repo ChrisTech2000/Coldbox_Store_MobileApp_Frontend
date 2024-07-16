@@ -185,7 +185,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
           <Divider tw="w-[60%] bg-grey-300" />
           <Text variant="TextBold" tw="font-bold">
             {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:{' '}
-            {movement.totalPrice.toFixed(2)}
+            {movement.calculatedPrice.toFixed(2)}
           </Text>
           <Divider tw="w-[60%] bg-grey-300" />
           <Text variant="TextBold" tw="font-bold">
@@ -193,8 +193,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
           </Text>
           <Divider tw="w-[60%] bg-grey-300" />
           <Text variant="TextBold" tw="font-bold">
-            {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:{' '}
-            {(movement.totalPrice - movement.discount).toFixed(2)}
+            {t('Dashboard.History.pdfModal.checkOut.totalPrice')}: {movement.totalPrice.toFixed(2)}
           </Text>
         </View>
       </ScrollView>

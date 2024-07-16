@@ -257,3 +257,10 @@ export type GetInvitedOperatorsResponse = {
   phone: string;
   userType: number;
 };
+
+export type GetMovementOperatorsResponse = Array<{
+  id: number;
+  user: User;
+  company: Company;
+  coolingUnits: Array<number>;
+}>;
