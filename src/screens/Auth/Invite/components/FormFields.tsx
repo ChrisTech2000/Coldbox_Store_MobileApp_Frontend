@@ -29,7 +29,7 @@ export default function FormFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Phone number"
+            label={t('Auth.ForgotPassword.phoneInputLabel')}
             mode="outlined"
             dense
             value={value}
@@ -47,7 +47,7 @@ export default function FormFields() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="w-full bg-transparent mt-1"
-              label="Email"
+              label={t('Auth.SignUp.SignUpCompany.emailLabel')}
               mode="outlined"
               dense
               value={value}
@@ -65,7 +65,7 @@ export default function FormFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="First Name"
+            label={t('Auth.SignUp.commonForm.firstNameLabel')}
             mode="outlined"
             dense
             value={value}
@@ -82,7 +82,7 @@ export default function FormFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Last Name"
+            label={t('Auth.SignUp.commonForm.lastNameLabel')}
             mode="outlined"
             dense
             value={value}
@@ -101,7 +101,7 @@ export default function FormFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Password"
+            label={t('Auth.SignUp.commonForm.passwordLabel')}
             mode="outlined"
             dense
             value={value}
@@ -121,7 +121,7 @@ export default function FormFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Confirm Password"
+            label={t('Auth.SignUp.commonForm.confirmPasswordLabel')}
             mode="outlined"
             dense
             value={value}
