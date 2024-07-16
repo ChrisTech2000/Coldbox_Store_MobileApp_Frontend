@@ -24,10 +24,9 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
     'getMovementOperators',
     ColdtivateService.getMovementOperators,
     movement.id,
-    { defaultData: [] }
+    { defaultData: [], skip: !isOpen }
   );
 
-  console.log(movement);
   return (
     <Modal visible={isOpen} onDismiss={dismiss}>
       <View tw="w-[90%] bg-white mx-5 py-1 rounded-sm max-h-[95%] space-y-2">
@@ -110,19 +109,19 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:
               </Text>{' '}
-              {movement.calculatedPrice.toFixed(2)}
+              {movement.calculatedPrice?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.discountLabel')}:
               </Text>{' '}
-              {movement.discount.toFixed(2)}
+              {movement.discount?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:
               </Text>{' '}
-              {movement.totalPrice.toFixed(2)}
+              {movement.totalPrice?.toFixed(2)}
             </Text>
           </View>
 

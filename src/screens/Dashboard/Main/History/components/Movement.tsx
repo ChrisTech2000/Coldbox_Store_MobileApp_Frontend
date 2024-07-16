@@ -175,13 +175,11 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
           coolingUnit={coolingUnit}
           currency={company?.currency ?? ''}
         />
-        {isDetailsModalOpen && (
-          <DetailsModal
-            isOpen={isDetailsModalOpen}
-            movement={movement}
-            dismiss={() => setIsDetailsModalOpen(false)}
-          />
-        )}
+        <DetailsModal
+          isOpen={isDetailsModalOpen}
+          movement={movement}
+          dismiss={() => setIsDetailsModalOpen(false)}
+        />
       </Portal>
     </View>
   );
