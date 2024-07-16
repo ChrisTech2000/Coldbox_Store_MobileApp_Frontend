@@ -511,8 +511,6 @@ export default {
       AddOperator: {
         messages: {
           operator: 'एक ऑपरेटर के रूप में Coldtivate ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
-          employee:
-            'एक पंजीकृत कर्मचारी के रूप में कोल्डटिवेट ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
         },
       },
       CompanyDetails: {
@@ -540,6 +538,10 @@ export default {
         deletePersonal: 'अपना अकाउंट डिलीट करने के लिए अकाउंट डिटेल्स में जाएं',
         deleteOther:
           'अगर आप इस खाते को हटाना चाहते हैं, तो कृपया app@yourvcca.org पर संपर्क करें। {{contact}}',
+      },
+      AddRegisteredEmployee: {
+        message:
+          'एक पंजीकृत कर्मचारी के रूप में कोल्डटिवेट ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
       },
       CoolingUsers: {
         modals: {

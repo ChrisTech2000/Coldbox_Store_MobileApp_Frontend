@@ -60,11 +60,12 @@ function Invite(props: AuthRouteProps<'Invite'>) {
     <FormManager onSubmit={onSubmit} initialValues={buildInitialValues(params)}>
       {({ submitHandler, isSubmitting, isDisabled }) => (
         <KeyboardAwareScrollView
-          tw="h-full pt-5 mx-4"
+          tw="h-full mx-4"
+          contentContainerStyle="pt-5 pb-8"
           keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           showsVerticalScrollIndicator={false}
         >
-          <View tw="items-center space-y-4 mt-3">
+          <View tw="items-center space-y-4">
             <Text variant="TitleMedium">{t('Auth.Invite.heading')}</Text>
             <Text style={{ color: paperTheme.colors.primary }}>
               {isOperator ? t('Auth.Invite.operator') : t('Auth.Invite.employee')}
