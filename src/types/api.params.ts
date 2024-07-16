@@ -230,3 +230,22 @@ export interface SendOperatorInvitationParams extends JsonObject {
   };
   userId: number;
 }
+
+export interface SignupEmployeeByInviteParams extends JsonObject {
+  firstName: string;
+  lastName: string;
+  gender: string;
+  phone: string;
+  email: string;
+  password: string;
+  code: string;
+}
+
+export interface SignupOperatorByInviteParams extends JsonObject {
+  firstName: string;
+  lastName: string;
+  gender: string;
+  phone: string;
+  password: string;
+  code: string;
+}

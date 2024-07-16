@@ -22,7 +22,7 @@ import { useManagementStore } from '#stores/management';
 const IMG_SIZE = Dimensions.get('screen').width / 2.5;
 const ACCOUNT_TYPE_SIZE = Dimensions.get('screen').width / 5;
 
-enum EAccountProfile {
+export enum EAccountProfile {
   FARMER = ERoles.COOLING_USER,
   EMPLOYEE = ERoles.EMPLOYEE,
   OPERATOR = ERoles.OPERATOR,
@@ -35,7 +35,7 @@ type SignInSchema = {
 };
 
 function SignIn(props: AuthRouteProps<'SignIn'>) {
-  const { navigation } = props;
+  const { navigation, route } = props;
 
   const setCompany = useManagementStore((store) => store.setCompany); // → this is for management (RE and OP)
   const { setSession, setUser } = useAuthStore((store) => ({
@@ -91,7 +91,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
         })
     ),
     defaultValues: {
-      activeProfile: EAccountProfile.EMPLOYEE,
+      activeProfile: route.params?.accountProfile ?? EAccountProfile.EMPLOYEE,
       user: '',
       password: '',
     },

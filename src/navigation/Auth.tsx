@@ -13,7 +13,7 @@ import AppInfo from '#screens/Auth/AppInfo';
 import PasswordRecoveryRequest from '#screens/Auth/PasswordRecovery/PasswordRecoveryRequest';
 import PasswordReset from '#screens/Auth/PasswordRecovery/PasswordReset';
 import AuthRoot from '#screens/Auth/Root';
-import SignIn from '#screens/Auth/SignIn';
+import SignIn, { type EAccountProfile } from '#screens/Auth/SignIn';
 import SignUpCompany from '#screens/Auth/SignUp/SignUpCompany';
 import SignUpCoolingUser from '#screens/Auth/SignUp/SignUpCoolingUser';
 import Invite from '#screens/Auth/Invite';
@@ -25,7 +25,9 @@ import NavigatorHeader from './components/NavigatorHeader';
 
 export type AuthRoutes = {
   Root: undefined;
-  SignIn: undefined;
+  SignIn?: {
+    accountProfile: EAccountProfile;
+  };
   SignUpCompany: undefined;
   SignUpCoolingUser: undefined;
   PasswordRecoveryRequest: undefined;

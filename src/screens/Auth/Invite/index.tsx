@@ -9,9 +9,12 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { AuthRouteProps } from '#navigation/Auth';
 import { useTranslationUtils } from '#i18n/utils';
+import { ERoles } from '#types/global';
+import AuthService from '#services/AuthService';
 
 import FormManager, { type FormValues, buildInitialValues } from './components/FormManager';
 import FormFields from './components/FormFields';
+import { EAccountProfile } from '../SignIn';
 
 const LOGO_SIZE = Dimensions.get('screen').width / 2.5;
 
@@ -21,7 +24,51 @@ function Invite(props: AuthRouteProps<'Invite'>) {
   const { t } = useTranslationUtils();
 
   async function onSubmit(values: FormValues): Promise<void> {
-    console.log({ values, params });
+    const { kind, ...rest } = values;
+
+    switch (kind) {
+      case ERoles.OPERATOR: {
+        try {
+          const result = await AuthService.signUpOperatorByInvite({
+            firstName: rest.firstName,
+            lastName: rest.lastName,
+            gender: rest.gender,
+            phone: rest.phone,
+            password: rest.password,
+            code: params.inviteCode,
+          });
+          if (!result) return;
+
+          props.navigation.navigate('SignIn', { accountProfile: EAccountProfile.OPERATOR });
+        } catch (exception) {
+          console.error(exception);
+        }
+        break;
+      }
+
+      case ERoles.EMPLOYEE: {
+        try {
+          const result = await AuthService.signUpEmployeeByInvite({
+            firstName: rest.firstName,
+            lastName: rest.lastName,
+            gender: rest.gender,
+            phone: rest.phone,
+            password: rest.password,
+            code: params.inviteCode,
+            email: rest.email,
+          });
+          if (!result) return;
+
+          props.navigation.navigate('SignIn', { accountProfile: EAccountProfile.EMPLOYEE });
+        } catch (exception) {
+          console.error(exception);
+        }
+        break;
+      }
+
+      default:
+        break;
+    }
   }
 
   return (
