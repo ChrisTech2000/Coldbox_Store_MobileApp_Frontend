@@ -31,7 +31,7 @@ export type DashboardMainRoutes = {
 };
 
 export type DashboardMainRoutePaths = keyof DashboardMainRoutes;
-export type AuthRouteProps<Path extends DashboardMainRoutePaths> = BottomTabScreenProps<
+export type DashboardMainRouteProps<Path extends DashboardMainRoutePaths> = BottomTabScreenProps<
   DashboardMainRoutes,
   Path
 >;

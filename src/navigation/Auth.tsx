@@ -13,9 +13,10 @@ import AppInfo from '#screens/Auth/AppInfo';
 import PasswordRecoveryRequest from '#screens/Auth/PasswordRecovery/PasswordRecoveryRequest';
 import PasswordReset from '#screens/Auth/PasswordRecovery/PasswordReset';
 import AuthRoot from '#screens/Auth/Root';
-import SignIn from '#screens/Auth/SignIn';
+import SignIn, { type EAccountProfile } from '#screens/Auth/SignIn';
 import SignUpCompany from '#screens/Auth/SignUp/SignUpCompany';
 import SignUpCoolingUser from '#screens/Auth/SignUp/SignUpCoolingUser';
+import Invite from '#screens/Auth/Invite';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -24,7 +25,9 @@ import NavigatorHeader from './components/NavigatorHeader';
 
 export type AuthRoutes = {
   Root: undefined;
-  SignIn: undefined;
+  SignIn?: {
+    accountProfile: EAccountProfile;
+  };
   SignUpCompany: undefined;
   SignUpCoolingUser: undefined;
   PasswordRecoveryRequest: undefined;
@@ -33,6 +36,11 @@ export type AuthRoutes = {
     phoneNumber: string;
   };
   AppInfo: undefined;
+  Invite: {
+    userType: string;
+    inviteCode: string;
+    phoneNumber: string;
+  };
 };
 
 export type AuthRoutePaths = keyof AuthRoutes;
@@ -51,6 +59,7 @@ const NAVIGATOR_HEADERS: Record<keyof AuthRoutes, TranslationPaths | undefined> 
   PasswordReset: 'navigation.auth.PasswordReset',
   AppInfo: 'navigation.auth.AppInfo',
   Root: undefined,
+  Invite: 'navigation.auth.SignUp',
 };
 
 const Stack = createNativeStackNavigator<AuthRoutes>();
@@ -75,8 +84,12 @@ export default function AuthNavigator() {
           routeTitle={routeTitle}
           leftContent={
             <Appbar.BackAction
-              // eslint-disable-next-line react/prop-types
-              onPress={props.navigation.goBack}
+              onPress={() => {
+                // eslint-disable-next-line react/prop-types
+                if (routeName !== 'Invite') return props.navigation.goBack();
+                // eslint-disable-next-line react/prop-types
+                return props.navigation.navigate('Root');
+              }}
               size={22}
             />
           }
@@ -95,6 +108,7 @@ export default function AuthNavigator() {
       <Stack.Screen name="PasswordRecoveryRequest" component={PasswordRecoveryRequest} />
       <Stack.Screen name="PasswordReset" component={PasswordReset} />
       <Stack.Screen name="AppInfo" component={AppInfo} />
+      <Stack.Screen name="Invite" component={Invite} />
     </Stack.Navigator>
   );
 }

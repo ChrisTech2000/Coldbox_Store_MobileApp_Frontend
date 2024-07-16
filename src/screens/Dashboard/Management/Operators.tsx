@@ -1,19 +1,25 @@
 import React, { useMemo } from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
-import { ActivityIndicator, Divider, List } from 'react-native-paper';
+import { RefreshControl, SectionList, View } from 'react-native';
+import type { NavigationProp } from '@react-navigation/native';
+import { ActivityIndicator, Divider, List, type ListItemProps } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
+import colors from 'tailwindcss/colors';
 
-import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import type {
+  ManagementRoutePaths,
+  ManagementRouteProps,
+  ManagementRoutes,
+} from '#navigation/Dashboard/Management';
 import { useManagementStore } from '#stores/management';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
+import type { User } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
-import { User } from '#types/global';
+type Invite = { phone: string };
 
 function Operators(props: ManagementRouteProps<'Operators'>) {
   const { navigation } = props;
@@ -41,7 +47,28 @@ function Operators(props: ManagementRouteProps<'Operators'>) {
     }
   );
 
-  const datums = useMemo(() => operators.filter((operator) => operator?.user?.phone), [operators]);
+  const datums = useMemo(() => {
+    const invitedOperators: Array<Invite> = invites.map((invite) => ({ phone: invite.phone }));
+
+    const registeredOperators: Array<User> = [];
+    for (const operator of operators) {
+      if (!operator?.user?.phone) continue;
+      registeredOperators.push(operator.user);
+    }
+
+    return [
+      {
+        title: t('Dashboard.Management.Location.text.invited', { amount: invitedOperators.length }),
+        data: invitedOperators,
+      },
+      {
+        title: t('Dashboard.Management.Location.text.registered', {
+          amount: registeredOperators.length,
+        }),
+        data: registeredOperators,
+      },
+    ] satisfies Array<{ title: string; data: Array<User | Invite> }>;
+  }, [invites, operators]);
 
   if (isLoading) {
     return (
@@ -53,25 +80,18 @@ function Operators(props: ManagementRouteProps<'Operators'>) {
 
   return (
     <View tw="flex-1 justify-start">
-      <View tw="w-full bg-zinc-200 space-y-2 px-4 py-2">
-        <Text variant="TextMedium">
-          {t('Dashboard.Management.Location.text.invited', { amount: invites.length })}
-        </Text>
-        <Text variant="TextMedium">
-          {t('Dashboard.Management.Location.text.registered', { amount: datums.length })}
-        </Text>
-      </View>
-
-      <FlatList
-        data={datums}
-        keyExtractor={(item) => `operator-item-#${item.id}`}
+      <SectionList
+        sections={datums}
+        keyExtractor={(_, itemIdx) => `section-list-item-#${itemIdx}`}
+        renderSectionHeader={({ section }) => (
+          <React.Fragment>
+            <List.Item title={section.title} titleStyle={{ color: colors.zinc[500] }} />
+            <Divider />
+          </React.Fragment>
+        )}
         renderItem={({ item }) => (
           <React.Fragment>
-            <List.Item
-              title={_getTitle(item.user)}
-              onPress={() => navigation.navigate('EditOperator', { userId: item.user.id })}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
-            />
+            <List.Item {..._propsFactory(item, navigation)} />
             <Divider />
           </React.Fragment>
         )}
@@ -87,9 +107,23 @@ function Operators(props: ManagementRouteProps<'Operators'>) {
   );
 }
 
-function _getTitle(datum: User) {
-  const formatted = dateFmt(datum.lastLogin);
-  return [datum.firstName, datum.lastName, formatted].join(' ');
+function _propsFactory(
+  datum: User | Invite,
+  navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
+) {
+  const props = {} as ListItemProps;
+  if ('firstName' in datum) {
+    const _str: Array<string> = [datum.firstName, datum.lastName];
+    if (typeof datum.lastLogin === 'string') _str.push(dateFmt(datum.lastLogin));
+    props.title = _str.join(' ');
+    props.onPress = () => {
+      navigation.navigate('EditOperator', { userId: datum.id });
+    };
+    props.right = (props) => <List.Icon {...props} icon="chevron-right" />;
+  } else {
+    props.title = datum.phone;
+  }
+  return props;
 }
 
 export default withSafeArea(Operators);

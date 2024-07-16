@@ -7,6 +7,8 @@ import type {
   SignInParams,
   SignUpAsCompanyParams,
   SignUpAsCoolingUserParams,
+  SignupEmployeeByInviteParams,
+  SignupOperatorByInviteParams,
 } from '#types/api.params';
 import type {
   SignInResponse,
@@ -106,7 +108,28 @@ class AuthService extends HttpClient {
   public resetPassword = async (params: ResetPasswordParams): Promise<void> => {
     try {
       const { data } = await this.post<void>(EAuthenticationEndpoints.RESET_PASSWORD, params);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 
+  public signUpEmployeeByInvite = async (params: SignupEmployeeByInviteParams) => {
+    try {
+      const { data } = await this.post(EAuthenticationEndpoints.SIGN_UP_EMPLOYEE_BY_INVITE, params);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public signUpOperatorByInvite = async (params: SignupOperatorByInviteParams) => {
+    try {
+      const { data } = await this.post(EAuthenticationEndpoints.SIGN_UP_OPERATOR_BY_INVITE, params);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

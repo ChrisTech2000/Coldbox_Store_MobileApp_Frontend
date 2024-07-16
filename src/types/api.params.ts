@@ -216,3 +216,36 @@ export interface RemoveCompanyParams extends JsonObject {
   farmerId: number;
   companyId: number;
 }
+
+export interface SendOperatorInvitationParams extends JsonObject {
+  phone: string;
+  coolingUnits: Array<number>;
+  message: {
+    partOne: string;
+    partTwo: string;
+  };
+  url: {
+    partOne: string;
+    partTwo: string;
+  };
+  userId: number;
+}
+
+export interface SignupEmployeeByInviteParams extends JsonObject {
+  firstName: string;
+  lastName: string;
+  gender: string;
+  phone: string;
+  email: string;
+  password: string;
+  code: string;
+}
+
+export interface SignupOperatorByInviteParams extends JsonObject {
+  firstName: string;
+  lastName: string;
+  gender: string;
+  phone: string;
+  password: string;
+  code: string;
+}

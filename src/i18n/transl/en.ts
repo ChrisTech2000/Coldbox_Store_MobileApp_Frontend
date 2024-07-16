@@ -189,7 +189,7 @@ const en = {
         genderFieldName: 'gender',
         terms:
           'I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use',
-        submit: 'SignUp',
+        submit: 'Sign Up',
       },
       SignUpCompany: {
         companyHeader: 'Sign Up Company',
@@ -236,6 +236,17 @@ const en = {
       passwordLabel: 'New Password',
       confirmPasswordLabel: 'Confirm Password',
       resetButton: 'Reset',
+    },
+    Invite: {
+      heading: 'Welcome to Coldtivate',
+      employee:
+        'You have been invited as Employee. Please fill in the form to finish your registration.',
+      operator:
+        'You have been invited as Operator. Please fill in the form to finish your registration.',
+      fields: {
+        password:
+          'Minimum eight characters, at least one uppercase letter, one lowercase letter and one number.',
+      },
     },
   },
   Dashboard: {
@@ -492,6 +503,12 @@ const en = {
         actions: {
           invite: 'Invite',
           save: 'Save changes',
+        },
+      },
+      AddOperator: {
+        messages: {
+          operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
+          employee: 'To join the Coldtivate app as a Registered Employee, go to: {{link}}',
         },
       },
       CompanyDetails: {
