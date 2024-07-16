@@ -593,6 +593,35 @@ const en = {
           edit: 'Edit check in',
         },
       },
+      pdfModal: {
+        coolingUserLabel: 'Cooling User',
+        dateLabel: 'Date',
+        weightLabel: 'Weight (Kg)',
+        downloadButton: 'Download Invoice',
+        downloadName: '{{code}}-receipt',
+        successMessage: 'Receipt downloaded!',
+        errorMessage: 'Something went wrong. Please try again later.',
+        checkOut: {
+          title: 'Company',
+          checkOutLabel: 'Check out code',
+          idLabel: 'ID',
+          itemLabel: 'Item',
+          calculatedPriceLabel: 'Calculated price',
+          discountLabel: 'Discount',
+          totalPrice: 'Total price',
+        },
+        checkIn: {
+          title: 'Check-in receipt',
+          operatorLabel: 'Operator',
+          codeLabel: 'Check-in code',
+          companyLabel: 'Company',
+          coolingUnitLabel: 'Cooling Unit',
+          priceLabel: 'Price {{currency}} / Day',
+          cropLabel: 'Crop',
+          numberOfCratesLabel: 'Number of Crates',
+          totalLabel: 'Total',
+        },
+      },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} Receipt: 
         Movement code: {{code}}
