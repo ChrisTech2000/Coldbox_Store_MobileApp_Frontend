@@ -17,6 +17,7 @@ import { EMovementType, type Company, type CoolingUnit } from '#types/global';
 
 import { sendSMS } from '../utils/actions';
 import { isWithinLast24Hours } from '../utils/dates';
+import { PDFModal } from './PDFModal';
 
 type MovementProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -30,6 +31,7 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
   const { company } = useManagementStore();
 
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
+  const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
 
   const crops = useMemo(() => {
     return movement.movementCrops.map((crop) => crop.name).join(', ');
@@ -49,7 +51,10 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
     return [
       {
         label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
-        action: () => null,
+        action: () => {
+          setIsPDFModalOpen(true);
+          setIsOptionsModalOpen(false);
+        },
       },
       ...(isCheckIn
         ? [
@@ -153,6 +158,14 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
             />
           </View>
         </Modal>
+        <PDFModal
+          isOpen={isPDFModalOpen}
+          dismiss={() => setIsPDFModalOpen(false)}
+          movement={movement}
+          companyName={selectedCompany?.name ?? company?.name ?? ''}
+          coolingUnit={coolingUnit}
+          currency={company?.currency ?? ''}
+        />
       </Portal>
     </View>
   );
