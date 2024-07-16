@@ -113,8 +113,9 @@ function _propsFactory(
 ) {
   const props = {} as ListItemProps;
   if ('firstName' in datum) {
-    const formatted = dateFmt(datum.lastLogin);
-    props.title = [datum.firstName, datum.lastName, formatted].join(' ');
+    const _str: Array<string> = [datum.firstName, datum.lastName];
+    if (typeof datum.lastLogin === 'string') _str.push(dateFmt(datum.lastLogin));
+    props.title = _str.join(' ');
     props.onPress = () => {
       navigation.navigate('EditOperator', { userId: datum.id });
     };
