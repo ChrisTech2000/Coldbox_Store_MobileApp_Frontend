@@ -237,6 +237,17 @@ const en = {
       confirmPasswordLabel: 'Confirm Password',
       resetButton: 'Reset',
     },
+    Invite: {
+      heading: 'Welcome to Coldtivate',
+      employee:
+        'You have been invited as Employee. Please fill in the form to finish your registration.',
+      operator:
+        'You have been invited as Operator. Please fill in the form to finish your registration.',
+      fields: {
+        password:
+          'Minimum eight characters, at least one uppercase letter, one lowercase letter and one number.',
+      },
+    },
   },
   Dashboard: {
     emptyGeneral: 'At the moment, there is no available data.',

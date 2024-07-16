@@ -16,6 +16,7 @@ export type FormValues = {
   code: string;
   phone: string;
   email: string;
+  hasAcceptedTerms: boolean;
 };
 
 export function buildInitialValues(params: AuthRoutes['Invite']): FormValues {
@@ -29,12 +30,14 @@ export function buildInitialValues(params: AuthRoutes['Invite']): FormValues {
     email: '',
     password: '',
     confirmPassword: '',
+    hasAcceptedTerms: false,
   };
 }
 
 type CallbackProps = {
   submitHandler: (evt?: React.BaseSyntheticEvent) => Promise<void>;
   isSubmitting: boolean;
+  isDisabled: boolean;
 };
 
 type FormManagerProps = {
@@ -73,6 +76,7 @@ export default function FormManager(props: FormManagerProps) {
             .default(''),
           phone: z.string().min(1),
           code: z.string().min(1),
+          hasAcceptedTerms: z.boolean(),
         })
         .superRefine(({ confirmPassword, password }, ctx) => {
           if (confirmPassword !== password) {
@@ -102,6 +106,7 @@ export default function FormManager(props: FormManagerProps) {
   const callbackProps = {
     submitHandler: form.handleSubmit(props.onSubmit),
     isSubmitting: form.formState.isSubmitting,
+    isDisabled: !form.watch('hasAcceptedTerms'),
   } satisfies CallbackProps;
 
   return <FormProvider {...form}>{props.children(callbackProps)}</FormProvider>;
