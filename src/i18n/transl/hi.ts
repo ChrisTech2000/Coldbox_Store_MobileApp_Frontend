@@ -592,6 +592,18 @@ export default {
           edit: 'चेक इन संपादित करें',
         },
       },
+      detailsModal: {
+        operatorNameLabel: 'चेक आउट ऑपरेटर का नाम',
+        operatorNumberLabel: 'चेक आउट ऑपरेटर नंबर',
+        checkOutDateLabel: 'चेक आउट तिथि',
+        marketSurveyLabel: 'बाजार सर्वेक्षण पूर्ण',
+        cratesLabel: 'क्रेट्स',
+        combinedWeightLabel: 'संयुक्त वजन',
+        paymentMethodLabel: 'भुगतान का तरीका',
+        cropTypeLabel: 'फसल का प्रकार',
+        checkInCodeLabel: 'चेक इन कोड',
+        crateIdsLabel: 'क्रेट आईडी',
+      },
       pdfModal: {
         coolingUserLabel: 'कूलिंग उपयोगकर्ता',
         dateLabel: 'तारीख',

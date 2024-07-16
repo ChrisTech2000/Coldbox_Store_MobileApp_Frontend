@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -18,6 +18,7 @@ import { EMovementType, type Company, type CoolingUnit } from '#types/global';
 import { sendSMS } from '../utils/actions';
 import { isWithinLast24Hours } from '../utils/dates';
 import { PDFModal } from './PDFModal';
+import { DetailsModal } from './DetailsModal';
 
 type MovementProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -32,6 +33,7 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
 
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
 
   const crops = useMemo(() => {
     return movement.movementCrops.map((crop) => crop.name).join(', ');
@@ -47,14 +49,21 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
       : `${movement.totalPrice} ${company?.currency}`;
   }, [isCheckIn]);
 
+  const seePDFModal = useCallback(() => {
+    setIsPDFModalOpen(true);
+    setIsOptionsModalOpen(false);
+  }, []);
+
+  const seeDetailsModal = useCallback(() => {
+    setIsDetailsModalOpen(true);
+    setIsOptionsModalOpen(false);
+  }, []);
+
   const optionsMenu = useMemo(() => {
     return [
       {
         label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
-        action: () => {
-          setIsPDFModalOpen(true);
-          setIsOptionsModalOpen(false);
-        },
+        action: seePDFModal,
       },
       ...(isCheckIn
         ? [
@@ -67,7 +76,7 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
         : [
             {
               label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-              action: () => null,
+              action: seeDetailsModal,
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
@@ -166,6 +175,13 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
           coolingUnit={coolingUnit}
           currency={company?.currency ?? ''}
         />
+        {isDetailsModalOpen && (
+          <DetailsModal
+            isOpen={isDetailsModalOpen}
+            movement={movement}
+            dismiss={() => setIsDetailsModalOpen(false)}
+          />
+        )}
       </Portal>
     </View>
   );

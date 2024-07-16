@@ -249,3 +249,10 @@ export type GetMovementsHistoryResponse = Array<{
   paymentType: EPaymentType;
   operator: string;
 }>;
+
+export type GetMovementOperatorsResponse = Array<{
+  id: number;
+  user: User;
+  company: Company;
+  coolingUnits: Array<number>;
+}>;
