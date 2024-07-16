@@ -2,8 +2,8 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
-//import { useSharedValue } from 'react-native-reanimated';
-import Carousel, { type ICarouselInstance } from 'react-native-reanimated-carousel';
+import { Easing, useSharedValue } from 'react-native-reanimated';
+import Carousel from 'react-native-reanimated-carousel';
 import { useToast } from 'react-native-toast-notifications';
 
 import MineCart from '#assets/icons/mine-cart.svg';
@@ -21,6 +21,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { DashboardProduce, ECoolingUnitMetric, EPricingType } from '#types/global';
 import { DisclaimerModal } from './components/DisclaimerModal';
+import { Pagination } from './components/Pagination';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -32,8 +33,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   const toast = useToast();
   const { user } = useAuthStore();
 
-  //const progress = useSharedValue<number>(0);
-  const ref = React.useRef<ICarouselInstance>(null);
+  const progress = useSharedValue<number>(0);
 
   const [isDisclaimerModalOpen, setIsDisclaimerModalOpen] = useState<boolean>(false);
 
@@ -145,17 +145,6 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     return quality;
   }, []);
 
-  // const onPressPagination = useCallback((index: number) => {
-  //   ref.current?.scrollTo({
-  //     /**
-  //      * Calculate the difference between the current index and the target index
-  //      * to ensure that the carousel scrolls to the nearest index
-  //      */
-  //     count: index - progress.value,
-  //     animated: true,
-  //   });
-  // }, []);
-
   if (loadingFarmers || loadingProduces) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -163,6 +152,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
       </View>
     );
   }
+
   return (
     <View tw="flex-1 items-center justify-center space-y-4">
       <View tw="my-4">
@@ -185,15 +175,22 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
       </View>
 
       <Carousel
-        ref={ref}
         width={deviceWidth}
+        enabled={matchingProduces.length > 1}
         height={deviceHeight * 0.8}
         data={matchingProduces}
+        onProgressChange={(_offsetProgress, absoluteProgress) =>
+          (progress.value = absoluteProgress)
+        }
         modeConfig={{
           showLength: 1,
-          scaleInterval: 0.2,
-          stackInterval: 50,
-          opacityInterval: 0.2,
+        }}
+        withAnimation={{
+          type: 'timing',
+          config: {
+            duration: 100,
+            easing: Easing.linear,
+          },
         }}
         renderItem={({ item: produce }) => (
           <View tw="space-y-4 items-center">
@@ -274,18 +271,14 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         mode="horizontal-stack"
         loop={false}
       />
+
+      {matchingProduces.length > 1 && (
+        <Pagination data={matchingProduces} currentIndex={progress} />
+      )}
+
       <Button mode="contained" tw="w-[80%]">
         {t('actions.save-changes')}
       </Button>
-      {/* 
-      <Pagination.Basic
-        progress={progress}
-        data={data}
-        dotStyle={{ backgroundColor: "rgba(0,0,0,0.2)", borderRadius: 50 }}
-        containerStyle={{ gap: 5, marginTop: 10 }}
-        onPress={onPressPagination}
-      /> 
-      */}
     </View>
   );
 }
