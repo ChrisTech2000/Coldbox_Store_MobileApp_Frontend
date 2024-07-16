@@ -3,21 +3,46 @@ import { ActivityIndicator, View } from 'react-native';
 import { Banner, TextInput } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Controller, useForm } from 'react-hook-form';
+import { useShallow } from 'zustand/react/shallow';
 import colors from 'tailwindcss/colors';
+import { useSWRConfig } from 'swr';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Button } from '#ui/components/Button';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { Button } from '#ui/components/Button';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useTranslationUtils } from '#i18n/utils';
+import { useManagementStore } from '#stores/management';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import ColdtivateService from '#services/ColdtivateService';
+import { useAuthStore } from '#stores/auth';
+import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
+import { ERoles, MAP_ROLES } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 
 type FormValues = {
   phoneNumber: string;
 };
 
-function AddRegisteredEmployee() {
+function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmployee'>) {
+  const { navigation } = props;
+
   const { t, zodResolver } = useTranslationUtils();
+  const company = useManagementStore(useShallow((store) => store.company));
+  const { mutate } = useSWRConfig();
+
+  const { data, isLoading } = useApiCall(
+    'getCoolingUnits',
+    ColdtivateService.getCoolingUnits,
+    {
+      company: company?.id as number,
+    },
+    {
+      skip: !company?.id,
+      defaultData: [],
+    }
+  );
 
   const {
     control,
@@ -30,7 +55,42 @@ function AddRegisteredEmployee() {
   });
 
   async function onSubmit(values: FormValues) {
-    console.log(values);
+    const userId = useAuthStore.getState().user?.id;
+    if (!userId) return; // safe guard
+
+    const head = `${BASE_DEEP_LINK_URL}/invite/`;
+    const tail = `/${MAP_ROLES[ERoles.EMPLOYEE]}/${values.phoneNumber}`;
+
+    const coolingUnits = data?.map((coolingUnit) => coolingUnit.id) ?? [];
+
+    try {
+      await ColdtivateService.sendEmployeeInvitation({
+        coolingUnits,
+        phone: values.phoneNumber,
+        message: {
+          partOne: t('Dashboard.Management.AddRegisteredEmployee.message', { link: head }),
+          partTwo: tail,
+        },
+        url: {
+          partOne: head,
+          partTwo: tail,
+        },
+        userId,
+      });
+
+      await mutate(getQueryKey('getInvitedCompanyEmployees', company?.id));
+      navigation.goBack();
+    } catch (exception) {
+      console.error(exception);
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
   }
 
   return (

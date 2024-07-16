@@ -195,7 +195,7 @@ const en = {
         companyHeader: 'Sign Up Company',
         userHeader: 'Sign Up Registered Employee',
         companyNameLabel: 'Company Name',
-        emailLabel: 'Company Name',
+        emailLabel: 'Email',
         currencyFieldName: 'currency',
         modal: {
           warning: 'If you register without a phone some functionalities will not work:',
@@ -508,7 +508,6 @@ const en = {
       AddOperator: {
         messages: {
           operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
-          employee: 'To join the Coldtivate app as a Registered Employee, go to: {{link}}',
         },
       },
       CompanyDetails: {
@@ -535,6 +534,9 @@ const en = {
       RegisteredEmployeeDetails: {
         deletePersonal: 'To delete your account, go to Account Details.',
         deleteOther: 'If you want to delete this account, please contact {{contact}}',
+      },
+      AddRegisteredEmployee: {
+        message: 'To join the Coldtivate app as a Registered Employee, go to: {{link}}',
       },
       CoolingUsers: {
         modals: {

@@ -258,6 +258,8 @@ export type GetInvitedOperatorsResponse = {
   userType: number;
 };
 
+export type GetInvitedCompanyEmployeesResponse = Array<GetInvitedOperatorsResponse>;
+
 export type GetMovementOperatorsResponse = Array<{
   id: number;
   user: User;

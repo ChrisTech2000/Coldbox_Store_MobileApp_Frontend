@@ -52,6 +52,7 @@ import type {
   GetMovementsHistoryResponse,
   GetInvitedOperatorsResponse,
   GetMovementOperatorsResponse,
+  GetInvitedCompanyEmployeesResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -505,6 +506,31 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  public sendEmployeeInvitation = async (params: SendOperatorInvitationParams) => {
+    try {
+      const { phone, coolingUnits, userId, message, url } = params;
+      const { data } = await this.post<Array<GetOperatorsResponse>>(
+        EUserEndpoints.INVITE_EMPLOYEE,
+        {
+          urlOne: url.partOne,
+          urlTwo: url.partTwo,
+          coolingUnits,
+          userId,
+          phone,
+          ...message,
+        },
+        undefined,
+        ['partOne', 'partTwo', 'urlOne', 'urlTwo']
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public updateUser = async (params: WithRequired<UpdateUserParams, 'userId'>): Promise<User> => {
     try {
       const { userId, ...rest } = params;
@@ -607,10 +633,10 @@ class ColdtivateService extends HttpClient {
 
   public getInvitedCompanyEmployees = async (
     companyId: number
-  ): Promise<GetCompanyEmployeesResponse> => {
+  ): Promise<GetInvitedCompanyEmployeesResponse> => {
     try {
       const params = { company: companyId };
-      const { data } = await this.get<GetCompanyEmployeesResponse>(
+      const { data } = await this.get<GetInvitedCompanyEmployeesResponse>(
         EUserEndpoints.GET_INVITED_COMPANY_EMPLOYEES,
         { params }
       );
