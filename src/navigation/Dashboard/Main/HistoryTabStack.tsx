@@ -19,7 +19,10 @@ import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 
 export type HistoryTabStackRoutes = {
   RootHistoryTabStack: undefined;
-  EditCheckIn: { movement: GetMovementsHistoryResponse[number] };
+  EditCheckIn: {
+    movement: GetMovementsHistoryResponse[number];
+    coolingUnitId?: number;
+  };
 };
 
 export type HistoryTabStackRoutePaths = keyof HistoryTabStackRoutes;

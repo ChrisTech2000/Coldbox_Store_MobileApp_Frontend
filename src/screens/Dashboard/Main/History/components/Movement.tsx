@@ -62,7 +62,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
   }, []);
 
   const editCheckIn = useCallback(() => {
-    navigation.navigate('EditCheckIn', { movement });
+    navigation.navigate('EditCheckIn', { movement, coolingUnitId: coolingUnit?.id });
     setIsOptionsModalOpen(false);
   }, []);
 

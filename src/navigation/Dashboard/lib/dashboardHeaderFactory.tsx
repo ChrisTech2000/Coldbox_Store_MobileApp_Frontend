@@ -8,6 +8,7 @@ import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
 import { MainTabStackRoutePaths } from '../Main/MainTabStack';
 import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import { useRightDrawerStore } from '../index';
+import { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
 
 export function dashboardHeaderFactory<Params extends Record<string, unknown>, Path extends string>(
   navigation: NavigationProp<Params, Path>
@@ -32,11 +33,13 @@ export function dashboardHeaderFactory<Params extends Record<string, unknown>, P
 
 type BottomNavRoutePaths =
   | MainTabStackRoutePaths
+  | HistoryTabStackRoutePaths
   | MarketPriceTabsRoutePaths
   | CoolingUnitsTabsRoutePaths;
 
 export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'RootMainTabStack',
+  'RootHistoryTabStack',
   'PriceTrend',
   'PriceRanking',
   'Planner',
