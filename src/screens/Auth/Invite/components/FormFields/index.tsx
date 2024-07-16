@@ -10,9 +10,10 @@ import { ERoles } from '#types/global';
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 
-import FormManager from '../components/FormManager';
-import ConditionalField from './ConditionalField';
-import GenderField from '../modules/GenderField';
+import FormManager from '../FormManager';
+import ConditionalField from './components/ConditionalField';
+import GenderField from '../../modules/GenderField';
+import PasswordField from './components/PasswordField';
 
 export default function FormFields() {
   const { control, watch, formState } = FormManager.useFormManager();
@@ -99,8 +100,7 @@ export default function FormFields() {
         name="password"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <PasswordField
             label={t('Auth.SignUp.commonForm.passwordLabel')}
             mode="outlined"
             dense
@@ -119,8 +119,7 @@ export default function FormFields() {
         name="confirmPassword"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <PasswordField
             label={t('Auth.SignUp.commonForm.confirmPasswordLabel')}
             mode="outlined"
             dense
