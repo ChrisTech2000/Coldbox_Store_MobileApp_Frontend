@@ -587,6 +587,18 @@ const en = {
           edit: 'Edit check in',
         },
       },
+      detailsModal: {
+        operatorNameLabel: 'Check out operator Name',
+        operatorNumberLabel: 'Check out operator number',
+        checkOutDateLabel: 'Check Out date',
+        marketSurveyLabel: 'Market survey completed',
+        cratesLabel: 'Crates',
+        combinedWeightLabel: 'Combined weight',
+        paymentMethodLabel: 'Payment Method',
+        cropTypeLabel: 'Crop type',
+        checkInCodeLabel: 'Check In code',
+        crateIdsLabel: 'Crate IDs',
+      },
       pdfModal: {
         coolingUserLabel: 'Cooling User',
         dateLabel: 'Date',
