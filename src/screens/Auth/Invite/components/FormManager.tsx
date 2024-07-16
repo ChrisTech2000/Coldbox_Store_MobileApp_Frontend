@@ -22,11 +22,11 @@ export function buildInitialValues(params: AuthRoutes['Invite']): FormValues {
   return {
     kind: params.userType === 'op' ? ERoles.OPERATOR : ERoles.EMPLOYEE,
     code: params.inviteCode,
+    phone: params.phoneNumber,
     firstName: '',
     lastName: '',
     gender: EApiGender.OTHER,
     email: '',
-    phone: '',
     password: '',
     confirmPassword: '',
   };

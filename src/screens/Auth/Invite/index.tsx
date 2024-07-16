@@ -24,19 +24,12 @@ function Invite(props: AuthRouteProps<'Invite'>) {
   const { t } = useTranslationUtils();
 
   async function onSubmit(values: FormValues): Promise<void> {
-    const { kind, ...rest } = values;
+    const { kind, email, ...rest } = values;
 
     switch (kind) {
       case ERoles.OPERATOR: {
         try {
-          const result = await AuthService.signUpOperatorByInvite({
-            firstName: rest.firstName,
-            lastName: rest.lastName,
-            gender: rest.gender,
-            phone: rest.phone,
-            password: rest.password,
-            code: params.inviteCode,
-          });
+          const result = await AuthService.signUpOperatorByInvite(rest);
           if (!result) return;
 
           props.navigation.navigate('SignIn', { accountProfile: EAccountProfile.OPERATOR });
@@ -48,15 +41,7 @@ function Invite(props: AuthRouteProps<'Invite'>) {
 
       case ERoles.EMPLOYEE: {
         try {
-          const result = await AuthService.signUpEmployeeByInvite({
-            firstName: rest.firstName,
-            lastName: rest.lastName,
-            gender: rest.gender,
-            phone: rest.phone,
-            password: rest.password,
-            code: params.inviteCode,
-            email: rest.email,
-          });
+          const result = await AuthService.signUpEmployeeByInvite({ ...rest, email });
           if (!result) return;
 
           props.navigation.navigate('SignIn', { accountProfile: EAccountProfile.EMPLOYEE });
