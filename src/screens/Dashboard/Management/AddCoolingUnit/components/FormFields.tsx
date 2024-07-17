@@ -4,6 +4,7 @@ import { Controller } from 'react-hook-form';
 
 import FormManager from '../contexts/FormManager';
 import LocationField from './LocationField';
+import UnitTypeField from './UnitTypeField';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -30,6 +31,7 @@ export default function FormFields() {
       />
 
       <LocationField />
+      <UnitTypeField />
     </React.Fragment>
   );
 }

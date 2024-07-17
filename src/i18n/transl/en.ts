@@ -560,6 +560,14 @@ const en = {
             'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
         },
       },
+      AddCoolingUnit: {
+        coolingUnitTypes: {
+          'farm-gate-storage-room': 'It is a storage room placed at a farm-gate',
+          'market-storage-room': 'It is a storage room placed at a market',
+          'movable-unit': 'It is a movable unit (for example, a refrigerated truck)',
+          other: 'Other',
+        },
+      },
     },
     AccountDetails: {
       popups: {

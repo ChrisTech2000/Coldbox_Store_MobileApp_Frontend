@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { Divider, RadioButton } from 'react-native-paper';
+import truncate from 'lodash/truncate';
 
 import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -12,45 +13,50 @@ import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
 import FormManager, { type FormValues } from '../contexts/FormManager';
-import DataAggregator from '../contexts/DataAggregator';
+import { COOLING_UNIT_TYPES } from '../constants';
 
-export default function LocationField() {
+export default function UnitTypeField() {
   const { control, watch, formState } = FormManager.useFormManager();
-  const { companyLocations } = DataAggregator.useDataAggregator();
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [internalSelection, setInternalSelection] = useState<string | null>(null);
 
-  const selectedLocationId = watch('location');
-  const currentValue = selectedLocationId ? companyLocations[selectedLocationId] : '';
+  const selectedUnitTypeId = watch('coolingUnitType');
+  const currentValue = selectedUnitTypeId
+    ? t(['Dashboard.Management.AddCoolingUnit.coolingUnitTypes', selectedUnitTypeId])
+    : '';
+
   const fieldError = !!formState.errors.location;
 
   return (
     <React.Fragment>
       <Controller<FormValues>
-        name="location"
+        name="coolingUnitType"
         control={control}
         render={({ field: { onChange } }) => (
           <View tw="mt-4">
             <View tw="px-1 pb-4">
               <Select
                 variant="md"
-                label="Location"
-                currentValue={currentValue}
+                label="What describes the cooling unit best?"
+                currentValue={truncate(currentValue, { length: 16 })}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 content={{
-                  header: 'Location',
+                  header: 'What describes the cooling unit best?',
                   options: (
                     <RadioButton.Group
                       value={internalSelection ?? ''}
                       onValueChange={(value) => setInternalSelection(value)}
                     >
-                      {Object.keys(companyLocations).map((option, optionIdx) => (
+                      {Object.values(COOLING_UNIT_TYPES).map((option, optionIdx) => (
                         <RadioButtonItem
                           key={`${option}-${optionIdx}`}
-                          label={companyLocations[parseInt(option)]}
+                          label={t([
+                            'Dashboard.Management.AddCoolingUnit.coolingUnitTypes',
+                            option,
+                          ])}
                           value={option}
                           tw="flex flex-row-reverse ml-[-10]"
                         />
@@ -65,7 +71,7 @@ export default function LocationField() {
                         onPress={(evt) => {
                           evt.stopPropagation();
                           toggleVisibility();
-                          setInternalSelection(selectedLocationId?.toString() ?? null);
+                          setInternalSelection(selectedUnitTypeId);
                         }}
                       >
                         {t('actions.cancel')}
@@ -76,10 +82,9 @@ export default function LocationField() {
                         onPress={(evt) => {
                           evt.stopPropagation();
                           toggleVisibility();
-                          const safeValue = internalSelection
-                            ? parseInt(internalSelection)
-                            : undefined;
-                          if (typeof safeValue === 'number') onChange(safeValue);
+                          if (typeof internalSelection === 'string') {
+                            onChange(internalSelection);
+                          }
                         }}
                       >
                         {t('actions.ok')}
