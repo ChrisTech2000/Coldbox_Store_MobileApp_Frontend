@@ -32,6 +32,7 @@ import type {
   UpdateFarmerCompany,
   RemoveCompanyParams,
   GetMovementsHistoryParams,
+  EditCheckInParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -50,6 +51,7 @@ import type {
   UpdateFarmerSurveysResponse,
   GetMovementsHistoryResponse,
   GetMovementOperatorsResponse,
+  EditCheckInResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -294,6 +296,20 @@ class ColdtivateService extends HttpClient {
         undefined,
         ['coolingUnitId']
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public editCheckIn = async (params: EditCheckInParams): Promise<EditCheckInResponse> => {
+    try {
+      const { checkInId, ...rest } = params;
+      const url = subs(EOperationEndpoints.EDIT_CHECK_IN, { id: checkInId });
+      const { data } = await this.put<EditCheckInResponse>(url, rest);
       return data;
     } catch (error) {
       console.log(error);

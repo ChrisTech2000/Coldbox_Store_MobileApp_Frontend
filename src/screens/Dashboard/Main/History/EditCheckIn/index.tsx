@@ -76,10 +76,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     return produces?.filter((produce) => produce.movementCode === movement.code) ?? [];
   }, [produces, movement]);
 
-  const {
-    //handleSubmit,
-    control,
-  } = useForm<Schema>({
+  const { handleSubmit, control } = useForm<Schema>({
     resolver: zodResolver(() => EditCheckInSchema()),
     defaultValues: {
       produces: matchingProduces.map((produce) => ({
@@ -98,6 +95,8 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     [toast]
   );
 
+  const onSubmit = useCallback(() => {}, []);
+
   if (loadingFarmers || loadingProduces) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -107,7 +106,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   }
 
   return (
-    <View tw="flex-1 items-center justify-center space-y-4">
+    <View tw="flex-1 items-center justify-center space-y-4 bg-white">
       <View tw="my-2">
         <Text variant="TextMedium" tw="text-gray-400 text-base">
           {t('Dashboard.History.editCheckIn.coolingUserLabel')}
@@ -132,11 +131,9 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         height={deviceHeight * 0.7}
         enabled={matchingProduces.length > 1}
         data={matchingProduces}
-        onProgressChange={(_offsetProgress, absoluteProgress) =>
-          (progress.value = absoluteProgress)
-        }
+        onProgressChange={(_, absoluteProgress) => (progress.value = absoluteProgress)}
         modeConfig={{
-          showLength: 1,
+          showLength: 2,
         }}
         withAnimation={{
           type: 'timing',
@@ -147,7 +144,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         }}
         renderItem={({ item: produce, index }) => {
           return (
-            <View tw="space-y-3 items-center">
+            <View tw="space-y-3 items-center bg-white">
               {produce.runDt && produce.qualityDt !== -1 ? (
                 <DTInfo produce={produce} />
               ) : (
@@ -190,7 +187,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         <Pagination data={matchingProduces} currentIndex={progress} />
       )}
 
-      <Button mode="contained" tw="w-[80%]">
+      <Button mode="contained" tw="w-[80%]" onPress={handleSubmit(onSubmit)}>
         {t('actions.save-changes')}
       </Button>
     </View>

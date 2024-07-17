@@ -24,7 +24,6 @@ export function ProduceDetailsOption({ option, index, crops, control }: ProduceD
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  console.log(index);
   return (
     <View tw="space-y-1 my-2">
       <View tw="flex flex-row justify-between items-center">
@@ -51,14 +50,13 @@ export function ProduceDetailsOption({ option, index, crops, control }: ProduceD
                         onValueChange={(value) => {
                           const item = crops.find((crop) => crop.name === value);
                           if (!item) return;
-                          console.log(value, index);
                           onChange(item.name);
                           setIsModalOpen(false);
                         }}
                       >
                         <FlatList
                           data={crops}
-                          keyExtractor={(item, idx) => `${item.name}-${idx}-${index}`}
+                          keyExtractor={(item, idx) => `rb-${item.name}-${idx}-${index}`}
                           renderItem={({ item }) => (
                             <RadioButtonItem
                               label={item.name}

@@ -33,6 +33,7 @@ export enum EOperationEndpoints {
   CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
   GET_MOVEMENTS = '/operation/movements/',
+  EDIT_CHECK_IN = '/operation/checkins/:id/',
   MOVE_CHECKOUT = 'operation/move-checkout/',
 }
 

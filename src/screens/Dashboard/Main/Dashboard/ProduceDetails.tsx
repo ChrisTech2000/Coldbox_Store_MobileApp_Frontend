@@ -1,8 +1,9 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useCallback, useMemo } from 'react';
-import { FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
+import FastImage from 'react-native-fast-image';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import { API_BASE_URL } from '#constants/environment';
@@ -99,7 +100,7 @@ function ProduceDetails({ route }: MainTabStackRouteProps<'ProduceDetails'>) {
   return (
     <View tw="flex-1 items-center justify-center space-y-4">
       <View tw="flex flex-row items-center space-x-3">
-        <Image
+        <FastImage
           resizeMode="contain"
           tw="w-32 h-32"
           source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}

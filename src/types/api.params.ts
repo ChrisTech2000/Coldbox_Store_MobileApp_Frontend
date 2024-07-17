@@ -216,3 +216,10 @@ export interface RemoveCompanyParams extends JsonObject {
   farmerId: number;
   companyId: number;
 }
+
+export interface EditCheckInParams extends JsonObject {
+  checkInId: number;
+  cropId: number;
+  farmerId: number;
+  plannedDays: number;
+}
