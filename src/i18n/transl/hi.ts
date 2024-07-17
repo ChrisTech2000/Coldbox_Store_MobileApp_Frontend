@@ -444,6 +444,7 @@ export default {
       pickUp: 'पिक अप में',
       days: 'दिन',
       noDTMessage: 'इस विशेष वस्त्र के लिए एक शेल्फ-लाइफ मॉडल उपलब्ध नहीं है।',
+      checkOutButton: 'चेक आउट',
     },
     SearchFilter: {
       detailsMessage:

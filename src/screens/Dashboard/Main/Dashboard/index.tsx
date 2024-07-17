@@ -134,7 +134,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
             <Produce
               key={`${produce.id}-${index}`}
               produce={produce}
-              onNavigate={() => navigation.navigate('ProduceDetails', { produce })}
+              onNavigate={() =>
+                navigation.navigate('ProduceDetails', { produce, coolingUnit: coolingUnit })
+              }
               currency={company?.currency ?? ''}
             />
           )}

@@ -1,24 +1,41 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { Divider, Icon } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
-import FastImage from 'react-native-fast-image';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
 import { ECoolingUnitMetric, EPricingType } from '#types/global';
 
+import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-function ProduceDetails({ route }: MainTabStackRouteProps<'ProduceDetails'>) {
-  const { produce } = route.params;
+function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDetails'>) {
+  const { produce, coolingUnit } = route.params;
   const { t } = useTranslationUtils();
+  const { user } = useAuthStore();
   const toast = useToast();
+
+  const { data: farmers } = useApiCall(
+    'getOperatorFarmers',
+    ColdtivateService.getOperatorFarmers,
+    {
+      operator: user?.id as number,
+    },
+    {
+      skip: !user?.id,
+      defaultData: [],
+    }
+  );
 
   const crates = produce.crates.length;
 
@@ -96,6 +113,12 @@ function ProduceDetails({ route }: MainTabStackRouteProps<'ProduceDetails'>) {
     ],
     [produce, pricing]
   );
+
+  const farmer = useMemo(() => {
+    return farmers?.find(
+      (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === produce.farmer
+    );
+  }, [produce, farmers]);
 
   return (
     <View tw="flex-1 items-center justify-center space-y-4">
@@ -184,6 +207,24 @@ function ProduceDetails({ route }: MainTabStackRouteProps<'ProduceDetails'>) {
           )}
         />
       </View>
+
+      <Button
+        mode="contained"
+        uppercase
+        tw="w-[85%]"
+        onPress={() => {
+          navigation.navigate('CheckOutStack', {
+            screen: 'CrateSelection',
+            params: {
+              coolingUnit,
+              user: farmer,
+              crates: produce.crates,
+            },
+          });
+        }}
+      >
+        {t('Dashboard.ProduceDetails.checkOutButton')}
+      </Button>
     </View>
   );
 }
