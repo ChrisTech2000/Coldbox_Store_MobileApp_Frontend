@@ -76,7 +76,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     return produces?.filter((produce) => produce.movementCode === movement.code) ?? [];
   }, [produces, movement]);
 
-  const { handleSubmit, control, formState } = useForm<Schema>({
+  const { handleSubmit, control } = useForm<Schema>({
     resolver: zodResolver(() => EditCheckInSchema()),
     defaultValues: {
       produces: matchingProduces.map((produce) => ({
@@ -86,8 +86,6 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
       })),
     },
   });
-
-  console.log(formState.errors.produces?.map?.((p) => p?.plannedDays?.message));
 
   const copyToClipboard = useCallback(
     (text: string) => {

@@ -442,6 +442,7 @@ const en = {
       pickUp: 'Pick up within',
       days: 'Days',
       noDTMessage: 'A Shelf-life model is not available for this particular commodity.',
+      checkOutButton: 'Check out',
     },
     SearchFilter: {
       detailsMessage:
