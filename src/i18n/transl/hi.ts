@@ -572,6 +572,11 @@ export default {
           'movable-unit': 'यह एक जंगम इकाई है (उदाहरण के लिए, एक प्रशीतित ट्रक)',
           other: 'अन्य',
         },
+        pricing: {
+          label: 'मूल्य का प्रकार',
+          PERIODICITY: 'प्रतिदिन',
+          FIXED: 'फिक्स्ड',
+        },
       },
     },
     AccountDetails: {

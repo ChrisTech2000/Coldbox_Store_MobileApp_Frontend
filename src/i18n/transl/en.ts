@@ -567,6 +567,11 @@ const en = {
           'movable-unit': 'It is a movable unit (for example, a refrigerated truck)',
           other: 'Other',
         },
+        pricing: {
+          label: 'Price type',
+          PERIODICITY: 'Per day',
+          FIXED: 'Fixed',
+        },
       },
     },
     AccountDetails: {
