@@ -577,6 +577,11 @@ export default {
           PERIODICITY: 'प्रतिदिन',
           FIXED: 'फिक्स्ड',
         },
+        metricUnit: {
+          label: 'मापीय',
+          KILOGRAMS: 'किलोग्राम',
+          CRATES: 'टोकरी',
+        },
       },
     },
     AccountDetails: {

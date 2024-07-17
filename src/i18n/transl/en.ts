@@ -572,6 +572,11 @@ const en = {
           PERIODICITY: 'Per day',
           FIXED: 'Fixed',
         },
+        metricUnit: {
+          label: 'Unit',
+          KILOGRAMS: 'kg',
+          CRATES: 'Crate',
+        },
       },
     },
     AccountDetails: {

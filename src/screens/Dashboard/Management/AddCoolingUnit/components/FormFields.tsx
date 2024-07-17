@@ -6,6 +6,7 @@ import FormManager from '../contexts/FormManager';
 import LocationField from './LocationField';
 import UnitTypeField from './UnitTypeField';
 import PriceTypeField from './PriceTypeField';
+import MetricUnitField from './MetricUnitField';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -34,6 +35,7 @@ export default function FormFields() {
       <LocationField />
       <UnitTypeField />
       <PriceTypeField />
+      <MetricUnitField />
     </React.Fragment>
   );
 }
