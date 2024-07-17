@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { Divider, Switch, TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
@@ -14,7 +15,6 @@ import VolumeFields from './VolumeFields';
 import UnitSizeFields from './UnitSizeFields';
 import UnitCapacityFields from './UnitCapacityFields';
 import CrateDimensionsFields from './CrateDimensionsFields';
-import { View } from 'react-native';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -55,6 +55,35 @@ export default function FormFields() {
           <React.Fragment>
             <View tw="flex-row items-center justify-between px-3 py-3.5">
               <Text>Make check-ins editable by operators</Text>
+              <Switch value={value} onValueChange={onChange} />
+            </View>
+            <Divider tw="w-full bg-gray-700" />
+          </React.Fragment>
+        )}
+      />
+      <Controller
+        name="sensor"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <React.Fragment>
+            <View tw="flex-row items-center justify-between px-3 py-3.5">
+              <Text>Sensor available</Text>
+              <Switch value={value} onValueChange={onChange} />
+            </View>
+            <Divider tw="w-full bg-gray-700" />
+          </React.Fragment>
+        )}
+      />
+      <Controller
+        name="public"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <React.Fragment>
+            <View tw="flex-row items-center justify-between px-3 py-3.5">
+              <Text tw="max-w-[80%]">
+                Do you want to make your cooling unit visible for potential cooling users (location,
+                type of room, capacity and price information)?
+              </Text>
               <Switch value={value} onValueChange={onChange} />
             </View>
             <Divider tw="w-full bg-gray-700" />
