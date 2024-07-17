@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { API_BASE_URL } from '#constants/environment';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import type { Crate } from '#types/global';
+
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
@@ -32,7 +34,7 @@ export function CheckoutCrate({ crate }: ProduceProps) {
         )}
       />
       <View tw="flex flex-row items-center h-full w-full space-x-2 p-1 bg-white rounded-sm border border-l-0 border-gray-300">
-        <Image
+        <FastImage
           resizeMode="contain"
           tw="w-20 h-16 mr-1"
           source={{ uri: `${API_BASE_URL}media/${crate.cropImage}` }}

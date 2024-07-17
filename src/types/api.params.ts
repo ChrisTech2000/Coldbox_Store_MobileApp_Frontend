@@ -249,3 +249,10 @@ export interface SignupOperatorByInviteParams extends JsonObject {
   password: string;
   code: string;
 }
+
+export interface EditCheckInParams extends JsonObject {
+  id: number;
+  cropId: number;
+  farmerId: number;
+  plannedDays: number;
+}

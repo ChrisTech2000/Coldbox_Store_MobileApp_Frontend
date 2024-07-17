@@ -48,6 +48,8 @@
 #import "LoggerInterface.h"
 #import "SpeedChecker.h"
 #import "LayoutAnimationsManager.h"
+#import "LayoutAnimationsProxy.h"
+#import "LayoutAnimationsUtils.h"
 #import "LayoutAnimationType.h"
 #import "NativeReanimatedModule.h"
 #import "NativeReanimatedModuleSpec.h"

@@ -1,26 +1,26 @@
-import React, { useCallback } from 'react';
 import {
+  createBottomTabNavigator,
+  type BottomTabNavigationOptions,
   type BottomTabNavigationProp,
   type BottomTabScreenProps,
-  type BottomTabNavigationOptions,
-  createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import { getFocusedRouteNameFromRoute, type RouteProp } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import History from '#screens/Dashboard/Main/History';
 import Analytics from '#screens/Dashboard/Main/Analytics';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 
-import BottomNavigation from '../components/BottomNavigation';
 import NavigatorHeader from '../../components/NavigatorHeader';
+import BottomNavigation from '../components/BottomNavigation';
 import { BOTTOM_NAV_ROUTES_SCOPE, dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
+import CoolingUnitsTabs from './CoolingUnitsTabs';
+import HistoryTabStack from './HistoryTabStack';
 import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
-import CoolingUnitsTabs from './CoolingUnitsTabs';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
@@ -69,7 +69,11 @@ export default function DashboardMainBottomTabs() {
 
     // eslint-disable-next-line react/prop-types
     const focusedRoute = getFocusedRouteNameFromRoute(props.route);
-    const showHeader = focusedRoute !== 'RootMainTabStack' && routeName !== 'Dashboard';
+    const showHeader =
+      focusedRoute !== 'RootMainTabStack' &&
+      routeName !== 'Dashboard' &&
+      focusedRoute !== 'RootHistoryTabStack' &&
+      routeName !== 'History';
     // eslint-disable-next-line
     // @ts-ignore
     const showBottomNav = !focusedRoute || BOTTOM_NAV_ROUTES_SCOPE.includes(focusedRoute);
@@ -103,7 +107,7 @@ export default function DashboardMainBottomTabs() {
       tabBar={BottomNavigation}
     >
       <Tab.Screen name="Dashboard" component={MainTabStack} />
-      <Tab.Screen name="History" component={History} />
+      <Tab.Screen name="History" component={HistoryTabStack} />
       <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
       <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       <Tab.Screen name="Analytics" component={Analytics} />
