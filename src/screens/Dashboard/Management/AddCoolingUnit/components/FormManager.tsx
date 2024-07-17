@@ -2,6 +2,7 @@ import React from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import type { ValueOf } from '#types/miscellaneous';
+import type { ElectricityStorageIds, PowerSourcesIds } from '../constants';
 import { useTranslationUtils } from '#i18n/utils';
 
 export const PRICING_TYPE = {
@@ -37,6 +38,13 @@ export type FormValues = {
   sensor: boolean; // sensor available field (sensor type, aka ecozen, etc) integration state
   public: boolean; // make cooling unit publicly available for potential cooling users field
   operators: Array<number>;
+  crops: Array<number>; // commodities field
+  refrigerantType: string; // type of refrigerant used field → REFRIGERANTS item/id
+  amountRefrigerant: number; // amount of refrigerant field
+  powerConsumptionInMt: number; // power consumption of cooling unit per MT field
+  dailyRoomWattage: number; // daily wattage of the room field
+  powerSource: PowerSourcesIds; // "how is the cooling unit powered?" field → POWER_SOURCE key/id
+  electricityStorageSystem: ElectricityStorageIds; // electricity storage system field → ELECTRICITY_STORAGE key/id
 };
 
 export function buildInitialValues(): FormValues {
@@ -63,6 +71,13 @@ export function buildInitialValues(): FormValues {
     sensor: false,
     public: false,
     operators: [],
+    crops: [],
+    refrigerantType: '',
+    amountRefrigerant: 0,
+    powerConsumptionInMt: 0,
+    dailyRoomWattage: 0,
+    powerSource: '',
+    electricityStorageSystem: '',
   };
 }
 
