@@ -91,7 +91,7 @@ export function OperatorActions({
   const navigateToCheckOut = useCallback((selectedUser?: Farmer) => {
     navigation.navigate('CheckOutStack', {
       screen: 'CrateSelection',
-      params: { user: selectedUser },
+      params: { user: selectedUser, coolingUnit: null },
     });
   }, []);
 

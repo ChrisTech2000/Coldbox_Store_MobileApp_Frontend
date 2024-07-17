@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import ColdRoom from '#assets/icons/coldroom.svg';
 import MineCart from '#assets/icons/mine-cart.svg';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { DashboardProduce, EPricingType } from '#types/global';
+
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
@@ -41,7 +43,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
       />
       <View tw="flex flex-row h-full w-full space-x-2 p-1 bg-white rounded-sm border border-l-0 border-gray-300">
         <View tw="justify-between items-center">
-          <Image
+          <FastImage
             resizeMode="contain"
             tw="w-14 h-10"
             source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}
@@ -79,13 +81,9 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
             </View>
           </View>
           <View tw="flex flex-row items-center w-[80%] justify-between">
-            <View>
-              {produce.cropName.split(' ').map((name, index) => (
-                <Text key={`${name}-${index}`} tw="text-gray-400">
-                  {name}
-                </Text>
-              ))}
-            </View>
+            <Text tw="text-gray-400 w-1/3" numberOfLines={1}>
+              {produce.cropName}
+            </Text>
             <Text variant="TextMedium" tw="text-gray-400">
               {produce.farmer}
             </Text>

@@ -11,25 +11,27 @@ import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { EMovementType, type Company, type CoolingUnit } from '#types/global';
+import { EMovementType, ERoles, type Company, type CoolingUnit } from '#types/global';
 
+import { HistoryTabStackRouteProps } from 'navigation/Dashboard/Main/HistoryTabStack';
 import { sendSMS } from '../utils/actions';
 import { isWithinLast24Hours } from '../utils/dates';
-import { PDFModal } from './PDFModal';
 import { DetailsModal } from './DetailsModal';
+import { PDFModal } from './PDFModal';
 
 type MovementProps = {
   movement: GetMovementsHistoryResponse[number];
   coolingUnit: CoolingUnit | null;
-  userContact: string;
   selectedCompany: Company | null;
-};
+} & HistoryTabStackRouteProps<'RootHistoryTabStack'>;
 
-export function Movement({ movement, coolingUnit, userContact, selectedCompany }: MovementProps) {
+export function Movement({ movement, coolingUnit, selectedCompany, navigation }: MovementProps) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
+  const { user } = useAuthStore();
 
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
@@ -59,21 +61,28 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
     setIsOptionsModalOpen(false);
   }, []);
 
+  const editCheckIn = useCallback(() => {
+    navigation.navigate('EditCheckIn', { movement, coolingUnitId: coolingUnit?.id });
+    setIsOptionsModalOpen(false);
+  }, []);
+
   const optionsMenu = useMemo(() => {
     return [
       {
         label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
         action: seePDFModal,
       },
-      ...(isCheckIn
+      ...(isCheckIn && user?.role === ERoles.OPERATOR
         ? [
             {
               label: t('Dashboard.History.optionsMenu.checkIn.edit'),
-              action: () => null,
+              action: editCheckIn,
               disabled: !isWithinLast24Hours(movement.date),
             },
           ]
-        : [
+        : []),
+      ...(!isCheckIn
+        ? [
             {
               label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
               action: seeDetailsModal,
@@ -82,7 +91,7 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
               label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
               action: async () =>
                 await sendSMS(
-                  userContact ?? '',
+                  user?.phone ?? '',
                   movement,
                   company?.name ?? selectedCompany?.name ?? '',
                   price,
@@ -94,9 +103,10 @@ export function Movement({ movement, coolingUnit, userContact, selectedCompany }
               action: () => null,
               disabled: true, // TODO: understand when and how this works
             },
-          ]),
+          ]
+        : []),
     ];
-  }, [isCheckIn, movement, userContact, company, selectedCompany, price, t]);
+  }, [isCheckIn, movement, user, company, selectedCompany, price, t]);
 
   return (
     <View tw="w-full">

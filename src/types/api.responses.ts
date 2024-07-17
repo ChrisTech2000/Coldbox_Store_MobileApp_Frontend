@@ -266,3 +266,7 @@ export type GetMovementOperatorsResponse = Array<{
   company: Company;
   coolingUnits: Array<number>;
 }>;
+
+export type EditCheckInResponse = {
+  message: string;
+};

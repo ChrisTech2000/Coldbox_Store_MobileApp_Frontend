@@ -79,6 +79,9 @@ export default {
       aboutComsol: 'About COMSOL',
       privacyPolicy: 'Privacy Policy',
     },
+    history: {
+      EditCheckIn: '{{code}}',
+    },
   },
   actions: {
     error: 'एक त्रुटि हुई',
@@ -441,6 +444,7 @@ export default {
       pickUp: 'पिक अप में',
       days: 'दिन',
       noDTMessage: 'इस विशेष वस्त्र के लिए एक शेल्फ-लाइफ मॉडल उपलब्ध नहीं है।',
+      checkOutButton: 'चेक आउट',
     },
     SearchFilter: {
       detailsMessage:
@@ -669,6 +673,16 @@ export default {
           numberOfCratesLabel: 'क्रेटों की संख्या',
           totalLabel: 'कुल',
         },
+      },
+      editCheckIn: {
+        contactLabel: 'संपर्क',
+        coolingUserLabel: 'कूलिंग उपयोगकर्ता',
+        disclaimer: 'अस्वीकरण: उठाने का समय अनुमानित दिनों की मात्रा है।',
+        disclaimerMessage:
+          'अस्वीकरण: ध्यान दें कि उठाने का समय अनुमानित दिनों की मात्रा है। यह अनुमान फल या सब्जी की प्रजातियों के लिए कैलिब्रेटेड मॉडलों और एक संख्यात्मक सिमुलेशन पर आधारित था। हालांकि, उत्पाद की वास्तविक गुणवत्ता का ह्रास स्थानीय मौसम की स्थिति, बढ़ती स्थिति, कटाई की तारीख और अन्य कारकों पर भी निर्भर करता है। इसलिए, हमारे पूर्वानुमानित दिनों से विचलन हो सकता है।',
+        selectCropLabel: 'एक वस्तु का चयन करें',
+        successMessage: 'चेक-इन सफलतापूर्वक अपडेट किया गया!',
+        errorMessage: 'चेक-इन अपडेट करने में विफल रहा। कृपया पुनः प्रयास करें।',
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:

@@ -36,7 +36,7 @@ function PasswordRecoveryRequest() {
         // silent error
       }
 
-      // For security reasons, we don't want to inform the user whether the introduced phone exists in our BD or not
+      // For security reasons, we don't want to inform the user whether the introduced phone exists in our DB or not
       toast.show(t('Auth.ForgotPassword.messageSentNotification'), {
         type: 'success',
       });

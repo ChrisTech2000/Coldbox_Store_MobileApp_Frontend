@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 
@@ -19,10 +19,10 @@ import { CheckoutCrate } from '../components/CheckOutCrate';
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 
 function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
-  const { user } = route.params;
+  const { user, coolingUnit: _coolingUnit, crates: _crates } = route.params;
   const { t } = useTranslationUtils();
   const { coolingUnits } = useDashboardStore();
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
+  const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } = useCoolingUnitStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [selectedCrates, setSelectedCrates] = useState<Crate[]>([]);
@@ -35,9 +35,11 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
       farmer: user?.id as number,
     },
     {
-      skip: !user?.id || !coolingUnit?.id,
+      skip: !user?.id || !coolingUnit?.id || !!_crates?.length,
     }
   );
+
+  const crates = useMemo(() => _crates ?? data, [_crates, data]);
 
   const onPress = useCallback(
     (crate: Crate) => {
@@ -53,13 +55,13 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   );
 
   const onSelectAll = useCallback(() => {
-    if (selectedCrates.length === data?.length) {
+    if (selectedCrates.length === crates?.length) {
       setSelectedCrates([]);
       return;
     }
 
-    setSelectedCrates(data ?? []);
-  }, [data, selectedCrates]);
+    setSelectedCrates(crates ?? []);
+  }, [crates, selectedCrates]);
 
   const onNext = useCallback(
     (evt: GestureResponderEvent) => {
@@ -72,6 +74,11 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     },
     [selectedCrates, coolingUnit, user]
   );
+
+  useEffect(() => {
+    if (_crates) setSelectedCrates(_crates);
+    if (_coolingUnit) onSelectCoolingUnit(_coolingUnit);
+  }, [_crates, _coolingUnit]);
 
   return (
     <View tw="flex-1 p-4">
@@ -111,13 +118,13 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
         </Text>
       )}
 
-      {coolingUnit && data?.length === 0 && (
+      {coolingUnit && crates?.length === 0 && (
         <Text variant="TextBold" tw="text-lg mt-2 ml-4">
           {t('Dashboard.CrateManagement.noCratesWarning')}
         </Text>
       )}
 
-      {coolingUnit && data && data.length > 0 && (
+      {coolingUnit && crates && crates.length > 0 && (
         <>
           <Text variant="TextBold" tw="text-lg mt-2 mb-1 ml-4">
             {t('Dashboard.CrateManagement.CheckOut.selectCrateMessage')}
@@ -131,12 +138,12 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
               onPress={onSelectAll}
               label=""
               value=""
-              status={selectedCrates.length === data.length ? 'checked' : 'unchecked'}
+              status={selectedCrates.length === crates.length ? 'checked' : 'unchecked'}
             />
           </TouchableOpacity>
 
           <FlatList
-            data={data ?? []}
+            data={crates ?? []}
             extraData={selectedCrates.length}
             renderItem={({ item: crate, index }) => (
               <TouchableOpacity
