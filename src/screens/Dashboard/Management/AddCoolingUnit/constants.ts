@@ -6,13 +6,13 @@ export const COOLING_UNIT_TYPES = {
 } as const;
 
 export const PRICING_TYPE = {
-  FIXED: 'FIXED',
   PER_DAY: 'PERIODICITY',
+  FIXED: 'FIXED',
 } as const;
 
 export const METRIC_UNITS = {
-  CRATES: 'CRATES',
   KG: 'KILOGRAMS',
+  CRATES: 'CRATES',
 } as const;
 
 export const REFRIGERANTS: Array<string> = [

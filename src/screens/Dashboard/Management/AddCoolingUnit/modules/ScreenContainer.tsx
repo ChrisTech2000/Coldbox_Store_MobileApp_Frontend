@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
 import ColdRoom from '#assets/icons/coldroom.svg';
 import { paperTheme } from '#ui/lib/theme';
@@ -22,17 +23,24 @@ export default function ScreenContainer() {
   }
 
   return (
-    <FormManager onSubmit={async () => undefined} initialValues={buildInitialValues()}>
-      {() => (
-        <React.Fragment>
-          <View tw="flex-row items-center space-x-3 mb-3 mx-3.5">
-            <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
-            <Text tw="text-lg">Add Cooling Unit Screen</Text>
-          </View>
+    <KeyboardAwareScrollView
+      tw="h-full"
+      contentContainerStyle="pt-5 pb-8"
+      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+      showsVerticalScrollIndicator={false}
+    >
+      <FormManager onSubmit={async () => undefined} initialValues={buildInitialValues()}>
+        {() => (
+          <React.Fragment>
+            <View tw="flex-row items-center space-x-3 mb-3 mx-3.5">
+              <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
+              <Text tw="text-lg">Add Cooling Unit Screen</Text>
+            </View>
 
-          <FormFields />
-        </React.Fragment>
-      )}
-    </FormManager>
+            <FormFields />
+          </React.Fragment>
+        )}
+      </FormManager>
+    </KeyboardAwareScrollView>
   );
 }
