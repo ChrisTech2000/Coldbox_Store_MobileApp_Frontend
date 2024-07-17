@@ -15,6 +15,7 @@ import VolumeFields from './VolumeFields';
 import UnitSizeFields from './UnitSizeFields';
 import UnitCapacityFields from './UnitCapacityFields';
 import CrateDimensionsFields from './CrateDimensionsFields';
+import OperatorsField from './OperatorsField';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -90,6 +91,7 @@ export default function FormFields() {
           </React.Fragment>
         )}
       />
+      <OperatorsField />
     </React.Fragment>
   );
 }
