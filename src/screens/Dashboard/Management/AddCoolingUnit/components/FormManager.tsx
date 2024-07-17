@@ -2,23 +2,18 @@ import React from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import type { ValueOf } from '#types/miscellaneous';
-import type { ElectricityStorageIds, PowerSourcesIds } from '../constants';
-import { useTranslationUtils } from '#i18n/utils';
-
-export const PRICING_TYPE = {
-  FIXED: 'FIXED',
-  PER_DAY: 'PERIODICITY',
-} as const;
-
-export const METRIC_UNITS = {
-  CRATES: 'CRATES',
-  KG: 'KILOGRAMS',
-} as const;
+import {
+  COOLING_UNIT_TYPES,
+  PRICING_TYPE,
+  METRIC_UNITS,
+  type PowerSourcesIds,
+  type ElectricityStorageIds,
+} from '../constants';
 
 export type FormValues = {
   name: string; // cooling unit name
-  location: number; // location identifier
-  coolingUnitType: string; // cooling unit description
+  location: number | null; // location identifier
+  coolingUnitType: ValueOf<typeof COOLING_UNIT_TYPES> | null; // cooling unit description
   priceType: ValueOf<typeof PRICING_TYPE>;
   metricUnit: ValueOf<typeof METRIC_UNITS>;
   price: number;
@@ -43,15 +38,15 @@ export type FormValues = {
   amountRefrigerant: number; // amount of refrigerant field
   powerConsumptionInMt: number; // power consumption of cooling unit per MT field
   dailyRoomWattage: number; // daily wattage of the room field
-  powerSource: PowerSourcesIds; // "how is the cooling unit powered?" field → POWER_SOURCE key/id
-  electricityStorageSystem: ElectricityStorageIds; // electricity storage system field → ELECTRICITY_STORAGE key/id
+  powerSource: PowerSourcesIds | null; // "how is the cooling unit powered?" field → POWER_SOURCE key/id
+  electricityStorageSystem: ElectricityStorageIds | null; // electricity storage system field → ELECTRICITY_STORAGE key/id
 };
 
 export function buildInitialValues(): FormValues {
   return {
     name: '',
-    location: 0,
-    coolingUnitType: '',
+    location: null,
+    coolingUnitType: null,
     priceType: PRICING_TYPE.PER_DAY,
     metricUnit: METRIC_UNITS.CRATES,
     price: 0,
@@ -63,7 +58,7 @@ export function buildInitialValues(): FormValues {
     roomWeight: 0,
     roomInsulator: 0,
     capacityInNumberCrates: 0,
-    crateWeight: 0,
+    crateWeight: 25,
     crateLength: 0,
     crateWidth: 0,
     crateHeight: 0,
@@ -76,8 +71,8 @@ export function buildInitialValues(): FormValues {
     amountRefrigerant: 0,
     powerConsumptionInMt: 0,
     dailyRoomWattage: 0,
-    powerSource: '',
-    electricityStorageSystem: '',
+    powerSource: null,
+    electricityStorageSystem: null,
   };
 }
 
@@ -95,11 +90,8 @@ type FormManagerProps = {
 export default function FormManager(props: FormManagerProps) {
   const { initialValues } = props;
 
-  const { zodResolver } = useTranslationUtils();
-
   const form = useForm<FormValues>({
     defaultValues: initialValues,
-    resolver: zodResolver((z) => z.null()),
     reValidateMode: 'onSubmit',
   });
 

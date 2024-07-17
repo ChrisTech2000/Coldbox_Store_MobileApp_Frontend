@@ -1,3 +1,20 @@
+export const COOLING_UNIT_TYPES = {
+  FARM_GATE_STORAGE_ROOM: 'farm-gate-storage-room',
+  MARKET_STORAGE_ROOM: 'market-storage-room',
+  MOVABLE_UNIT: 'movable-unit',
+  OTHER: 'other',
+} as const;
+
+export const PRICING_TYPE = {
+  FIXED: 'FIXED',
+  PER_DAY: 'PERIODICITY',
+} as const;
+
+export const METRIC_UNITS = {
+  CRATES: 'CRATES',
+  KG: 'KILOGRAMS',
+} as const;
+
 export const REFRIGERANTS: Array<string> = [
   'R290',
   'R-410A',
@@ -10,7 +27,7 @@ export const REFRIGERANTS: Array<string> = [
   'Other',
 ];
 
-export type PowerSourcesIds = 'generator' | 'grid' | 'pvpanels' | 'biomass' | 'hybrid' | string;
+export type PowerSourcesIds = 'generator' | 'grid' | 'pvpanels' | 'biomass' | 'hybrid';
 
 export const POWER_SOURCES: Record<PowerSourcesIds, string> = {
   generator: 'Generator',
@@ -20,7 +37,7 @@ export const POWER_SOURCES: Record<PowerSourcesIds, string> = {
   hybrid: 'Hybrid',
 };
 
-export type ElectricityStorageIds = 'battery' | 'thermal storage' | 'hybrid' | 'none' | string;
+export type ElectricityStorageIds = 'battery' | 'thermal storage' | 'hybrid' | 'none';
 
 export const ELECTRICITY_STORAGE: Record<ElectricityStorageIds, string> = {
   battery: 'Batteries',
