@@ -25,7 +25,7 @@ export default function PriceField() {
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full bg-transparent"
+            tw="w-full bg-transparent mt-1"
             label="Price"
             mode="flat"
             dense

@@ -8,6 +8,7 @@ import UnitTypeField from './UnitTypeField';
 import PriceTypeField from './PriceTypeField';
 import MetricUnitField from './MetricUnitField';
 import PriceField from './PriceField';
+import VolumeFields from './VolumeFields';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -38,6 +39,7 @@ export default function FormFields() {
       <PriceTypeField />
       <MetricUnitField />
       <PriceField />
+      <VolumeFields />
     </React.Fragment>
   );
 }
