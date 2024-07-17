@@ -1,6 +1,8 @@
 import React from 'react';
-import { TextInput } from 'react-native-paper';
+import { Divider, Switch, TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
+
+import { Text } from '#ui/components/Text';
 
 import FormManager from '../contexts/FormManager';
 import LocationField from './LocationField';
@@ -11,6 +13,8 @@ import PriceField from './PriceField';
 import VolumeFields from './VolumeFields';
 import UnitSizeFields from './UnitSizeFields';
 import UnitCapacityFields from './UnitCapacityFields';
+import CrateDimensionsFields from './CrateDimensionsFields';
+import { View } from 'react-native';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -35,7 +39,6 @@ export default function FormFields() {
           />
         )}
       />
-
       <LocationField />
       <UnitTypeField />
       <PriceTypeField />
@@ -44,6 +47,20 @@ export default function FormFields() {
       <VolumeFields />
       <UnitSizeFields />
       <UnitCapacityFields />
+      <CrateDimensionsFields />
+      <Controller
+        name="editableCheckins"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <React.Fragment>
+            <View tw="flex-row items-center justify-between px-3 py-3.5">
+              <Text>Make check-ins editable by operators</Text>
+              <Switch value={value} onValueChange={onChange} />
+            </View>
+            <Divider tw="w-full bg-gray-700" />
+          </React.Fragment>
+        )}
+      />
     </React.Fragment>
   );
 }
