@@ -1,6 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useCallback, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 import { Easing, useSharedValue } from 'react-native-reanimated';
@@ -19,6 +19,7 @@ import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTab
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
+import { useDashboardStore } from '#stores/dashboard';
 
 import { DTInfo } from './components/DTInfo';
 import { Pagination } from './components/Pagination';
@@ -35,6 +36,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   const { t, zodResolver } = useTranslationUtils();
   const toast = useToast();
   const { user } = useAuthStore();
+  const { refreshData } = useDashboardStore();
 
   const progress = useSharedValue<number>(0);
 
@@ -64,11 +66,9 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
   const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, {});
 
-  const farmerContact = useMemo(() => {
-    return (
-      farmers?.find(
-        (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === movement.farmer
-      )?.user.phone ?? ''
+  const farmer = useMemo(() => {
+    return farmers?.find(
+      (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === movement.farmer
     );
   }, [farmers]);
 
@@ -76,16 +76,18 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     return produces?.filter((produce) => produce.movementCode === movement.code) ?? [];
   }, [produces, movement]);
 
-  const { handleSubmit, control } = useForm<Schema>({
+  const { handleSubmit, control, formState } = useForm<Schema>({
     resolver: zodResolver(() => EditCheckInSchema()),
     defaultValues: {
       produces: matchingProduces.map((produce) => ({
         id: produce.id,
         crop: produce.cropName,
-        plannedDays: produce.plannedDays,
+        plannedDays: `${produce.plannedDays ?? ''}`,
       })),
     },
   });
+
+  console.log(formState.errors.produces?.map?.((p) => p?.plannedDays?.message));
 
   const copyToClipboard = useCallback(
     (text: string) => {
@@ -95,7 +97,31 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     [toast]
   );
 
-  const onSubmit = useCallback(() => {}, []);
+  const onSubmit: SubmitHandler<Schema> = useCallback(
+    async (values) => {
+      try {
+        const promises = values.produces.map((produce) => {
+          return ColdtivateService.editCheckIn({
+            id: produce.id,
+            cropId: matchingProduces.find((_produce) => _produce.cropName === produce.crop)
+              ?.cropId as number,
+            plannedDays: Number(produce.plannedDays) as number,
+            farmerId: farmer?.id as number,
+          });
+        });
+
+        await Promise.all(promises);
+
+        toast.show(t('Dashboard.History.editCheckIn.successMessage'), { type: 'success' });
+        refreshData.forEach((fn) => fn());
+        props.navigation.navigate('RootHistoryTabStack');
+      } catch (error) {
+        toast.show(t('Dashboard.History.editCheckIn.errorMessage'), { type: 'danger' });
+        console.log(error);
+      }
+    },
+    [toast, t, matchingProduces, farmer, refreshData]
+  );
 
   if (loadingFarmers || loadingProduces) {
     return (
@@ -119,8 +145,8 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
           {t('Dashboard.History.editCheckIn.contactLabel')}
         </Text>
         <View tw="flex flex-row items-center space-x-3">
-          <Text variant="TextMedium">{farmerContact}</Text>
-          <TouchableOpacity onPress={() => copyToClipboard(farmerContact)}>
+          <Text variant="TextMedium">{farmer?.user.phone ?? ''}</Text>
+          <TouchableOpacity onPress={() => copyToClipboard(farmer?.user.phone ?? '')}>
             <Icon source="content-copy" size={15} />
           </TouchableOpacity>
         </View>

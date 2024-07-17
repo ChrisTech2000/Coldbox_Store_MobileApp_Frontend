@@ -81,13 +81,9 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
             </View>
           </View>
           <View tw="flex flex-row items-center w-[80%] justify-between">
-            <View>
-              {produce.cropName.split(' ').map((name, index) => (
-                <Text key={`${name}-${index}`} tw="text-gray-400">
-                  {name}
-                </Text>
-              ))}
-            </View>
+            <Text tw="text-gray-400 w-1/3" numberOfLines={1}>
+              {produce.cropName}
+            </Text>
             <Text variant="TextMedium" tw="text-gray-400">
               {produce.farmer}
             </Text>

@@ -307,8 +307,8 @@ class ColdtivateService extends HttpClient {
 
   public editCheckIn = async (params: EditCheckInParams): Promise<EditCheckInResponse> => {
     try {
-      const { checkInId, ...rest } = params;
-      const url = subs(EOperationEndpoints.EDIT_CHECK_IN, { id: checkInId });
+      const { id, ...rest } = params;
+      const url = subs(EOperationEndpoints.EDIT_CHECK_IN, { id });
       const { data } = await this.put<EditCheckInResponse>(url, rest);
       return data;
     } catch (error) {

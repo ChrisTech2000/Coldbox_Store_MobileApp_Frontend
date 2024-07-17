@@ -4,7 +4,7 @@ export type Schema = {
   produces: Array<{
     id: number;
     crop: string;
-    plannedDays?: number;
+    plannedDays?: string;
   }>;
 };
 
@@ -14,7 +14,7 @@ export const EditCheckInSchema = () =>
       .object({
         id: z.number(),
         crop: z.string(),
-        plannedDays: z.number().optional(),
+        plannedDays: z.string().nullable(),
       })
       .array(),
   });

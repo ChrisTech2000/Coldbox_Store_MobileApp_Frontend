@@ -9,6 +9,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { Text } from '#ui/components/Text';
 import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
+import { Input } from '#ui/components/Input';
 
 import { Schema } from '../schema';
 
@@ -73,6 +74,19 @@ export function ProduceDetailsOption({ option, index, crops, control }: ProduceD
               );
             }}
             name={`produces.${index}.crop`}
+          />
+        ) : option.id === 'plannedDays' ? (
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                tw="w-24 items-end text-base bg-transparent rounded-sm h-12 truncate"
+                onChangeText={onChange}
+                keyboardType="number-pad"
+                value={value}
+              />
+            )}
+            name={`produces.${index}.plannedDays`}
           />
         ) : (
           <Text variant="TextMedium" tw="text-base text-gray-400">
