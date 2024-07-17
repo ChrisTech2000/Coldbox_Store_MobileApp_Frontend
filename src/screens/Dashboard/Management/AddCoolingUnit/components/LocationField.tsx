@@ -21,8 +21,8 @@ export default function LocationField() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [internalSelection, setInternalSelection] = useState<string | null>(null);
-  const selectedLocationId = watch('location');
 
+  const selectedLocationId = watch('location');
   const currentValue = selectedLocationId ? companyLocations[selectedLocationId] : '';
   const fieldError = !!formState.errors.location;
 
