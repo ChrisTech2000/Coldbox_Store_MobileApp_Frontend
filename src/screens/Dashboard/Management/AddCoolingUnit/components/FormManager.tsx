@@ -8,9 +8,12 @@ import {
   METRIC_UNITS,
   type PowerSourcesIds,
   type ElectricityStorageIds,
+  type PvPanelsTypes,
 } from '../constants';
 
 export type FormValues = {
+  //
+  // Base Fields
   name: string; // cooling unit name
   location: number | null; // location identifier
   coolingUnitType: ValueOf<typeof COOLING_UNIT_TYPES> | null; // cooling unit description
@@ -40,6 +43,21 @@ export type FormValues = {
   dailyRoomWattage: number; // daily wattage of the room field
   powerSource: PowerSourcesIds | null; // "how is the cooling unit powered?" field → POWER_SOURCE key/id
   electricityStorageSystem: ElectricityStorageIds | null; // electricity storage system field → ELECTRICITY_STORAGE key/id
+  //
+  // Electricity Conditional Fields
+  // scope: generator
+  powerSourceDieselConsumptionKwh: number;
+  // scope: pvpanels
+  pvPanelCount: number;
+  pvPanelType: PvPanelsTypes | null;
+  pvPanelSize: number;
+  pvPanelWeight: number;
+  pvPanelMaxPower: number;
+  // scope: hybrid → it is basically the union of the generator and pvpanels fields with these:
+  powerSourceDieselPercent: number;
+  powerSourceGridPercent: number;
+  powerSourcePvPercent: number;
+  powerSourceBiomassPercent: number;
 };
 
 export function buildInitialValues(): FormValues {
@@ -73,6 +91,16 @@ export function buildInitialValues(): FormValues {
     dailyRoomWattage: 0,
     powerSource: null,
     electricityStorageSystem: null,
+    powerSourceDieselConsumptionKwh: 0,
+    pvPanelCount: 0,
+    pvPanelType: null,
+    pvPanelSize: 0,
+    pvPanelWeight: 0,
+    pvPanelMaxPower: 0,
+    powerSourceDieselPercent: 0,
+    powerSourceGridPercent: 0,
+    powerSourcePvPercent: 0,
+    powerSourceBiomassPercent: 0,
   };
 }
 

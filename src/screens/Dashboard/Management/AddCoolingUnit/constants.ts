@@ -45,3 +45,20 @@ export const ELECTRICITY_STORAGE: Record<ElectricityStorageIds, string> = {
   hybrid: 'Hybrid',
   none: 'None',
 };
+
+export type PvPanelsTypes =
+  | 'monocrystalline'
+  | 'polycrystalline'
+  | 'amorphous'
+  | 'concentrated'
+  | 'other'
+  | 'none';
+
+export const PV_PANELS_TYPES: Record<PvPanelsTypes, string> = {
+  monocrystalline: 'Monocrystalline Solar Panels (Mono - SI)',
+  polycrystalline: 'Polycrystalline Solar Panels (p - Si)',
+  amorphous: 'Thin - Film: Amorphous Silicon Solar Panels (A - SI)',
+  concentrated: 'Concentrated PV Cell (CVP)',
+  other: 'Other',
+  none: 'None',
+};
