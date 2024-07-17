@@ -82,6 +82,7 @@ export default {
     history: {
       EditCheckIn: '{{code}}',
       MarketSurvey: '{{farmer}} के लिए बाजार सर्वेक्षण',
+      BaseSurvey: 'कूलिंग उपयोगकर्ता सर्वेक्षण',
     },
   },
   actions: {
@@ -669,6 +670,19 @@ export default {
       },
       farmersSurvey: {
         fillMessage: 'कृपया {{crop}} के लिए बेस सर्वे भरें!',
+        baseSurvey: {
+          occupationQuestion: 'आपको सबसे अच्छा क्या परिभाषित करता है?',
+          occupationFarmer: 'एक किसान',
+          occupationTrader: 'एक छोटे विक्रेता/व्यापारी/थोक विक्रेता',
+          usageQuestion: 'क्या आपने पहले ठंडे कमरे का उपयोग किया है?',
+          newUser: 'नहीं, मैं एक नया उपयोगकर्ता हूँ',
+          oldUser: 'हाँ, मैंने ठंडे कमरे का उपयोग किया है',
+          mostUsedCommoditiesQuestion: 'सबसे अधिक फसल/व्यापार की गई वस्तुएं?',
+          commodity: 'वस्तु',
+          fillCommoditiesMessage:
+            'कृपया नीचे दिए गए प्रश्नों को उन वस्तुओं के लिए भरें जिन्हें आप कमरे में अधिक बार लाने की योजना बना रहे हैं।',
+          addCommodityButton: 'वस्तु जोड़ें',
+        },
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:

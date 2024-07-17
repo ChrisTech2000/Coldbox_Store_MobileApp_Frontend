@@ -10,14 +10,14 @@ import { Appbar } from 'react-native-paper';
 
 import History from '#screens/Dashboard/Main/History';
 import EditCheckIn from '#screens/Dashboard/Main/History/EditCheckIn';
-import MarketSurvey from '#screens/Dashboard/Main/History/MarketSurvey';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import type { GetMovementsHistoryResponse } from '#types/api.responses';
 
-import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
+import { dashboardHeaderFactory } from '../../lib/dashboardHeaderFactory';
+import MarketSurveyStack, { MarketSurveyStackRoutes } from './MarketSurveyStack';
 
 export type HistoryTabStackRoutes = {
   RootHistoryTabStack: undefined;
@@ -25,10 +25,13 @@ export type HistoryTabStackRoutes = {
     movement: GetMovementsHistoryResponse[number];
     coolingUnitId?: number;
   };
-  MarketSurvey: {
-    checkoutId?: number;
-    crops: Array<{ id: number; name: string }>;
-    farmer: string;
+  MarketSurveyStack: {
+    screen: keyof MarketSurveyStackRoutes;
+    params: {
+      checkoutId?: number;
+      crops: Array<{ id: number; name: string }>;
+      farmer: string;
+    };
   };
 };
 
@@ -40,7 +43,7 @@ export type HistoryTabStackRouteProps<Path extends HistoryTabStackRoutePaths> =
 export const NAVIGATOR_HEADERS: Record<HistoryTabStackRoutePaths, TranslationPaths | undefined> = {
   RootHistoryTabStack: 'navigation.bottomTabs.History',
   EditCheckIn: 'navigation.history.EditCheckIn',
-  MarketSurvey: 'navigation.history.MarketSurvey',
+  MarketSurveyStack: 'navigation.history.MarketSurvey',
 };
 
 type ScreenOptions = (props: {
@@ -61,23 +64,20 @@ export default function HistoryTabStack() {
     const code = (props.route.params as { movement: GetMovementsHistoryResponse[number] })?.movement
       ?.code;
 
-    // eslint-disable-next-line react/prop-types
-    const farmer = (props.route.params as { farmer: string })?.farmer;
-
     const translationPath = NAVIGATOR_HEADERS[routeName];
-    const datums = code ? { code } : { farmer };
-    const routeTitle = translationPath ? t(translationPath, datums) : undefined;
+    const routeTitle = translationPath ? t(translationPath, { code }) : undefined;
 
     return {
       ...props,
-      header: (headerProps) => (
-        <NavigatorHeader
-          {...headerProps}
-          routeTitle={routeTitle}
-          // eslint-disable-next-line react/prop-types
-          {..._renderContentFactory(routeName, props.navigation)}
-        />
-      ),
+      header: (headerProps) =>
+        translationPath !== NAVIGATOR_HEADERS.MarketSurveyStack && (
+          <NavigatorHeader
+            {...headerProps}
+            routeTitle={routeTitle}
+            // eslint-disable-next-line react/prop-types
+            {..._renderContentFactory(routeName, props.navigation)}
+          />
+        ),
       gestureDirection: 'vertical',
       animationDuration: 180,
     };
@@ -87,7 +87,7 @@ export default function HistoryTabStack() {
     <Stack.Navigator initialRouteName="RootHistoryTabStack" screenOptions={screenOptions}>
       <Stack.Screen name="RootHistoryTabStack" component={History} />
       <Stack.Screen name="EditCheckIn" component={EditCheckIn} />
-      <Stack.Screen name="MarketSurvey" component={MarketSurvey} />
+      <Stack.Screen name="MarketSurveyStack" component={MarketSurveyStack} />
     </Stack.Navigator>
   );
 }
@@ -98,7 +98,6 @@ function _renderContentFactory(
 ): NavigationHeaderProps {
   switch (routeName) {
     case 'EditCheckIn':
-    case 'MarketSurvey':
       return {
         leftContent: <Appbar.BackAction onPress={navigation.goBack} size={22} />,
       };

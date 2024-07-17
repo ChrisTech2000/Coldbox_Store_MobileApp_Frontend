@@ -10,11 +10,11 @@ import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 
-function MarketSurvey(props: HistoryTabStackRouteProps<'MarketSurvey'>) {
+function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>) {
   const { crops, farmer } = props.route.params;
 
   const { t } = useTranslationUtils();
@@ -93,7 +93,7 @@ function MarketSurvey(props: HistoryTabStackRouteProps<'MarketSurvey'>) {
               <View>
                 <TouchableOpacity
                   tw="flex flex-row space-y-2 space-x-4 items-center w-full my-1 h-6"
-                  onPress={() => null}
+                  onPress={() => props.navigation.navigate('BaseSurvey')}
                 >
                   <Danger tw="w-7 h-7" />
                   <Text variant="TextMedium" tw="">
@@ -111,4 +111,4 @@ function MarketSurvey(props: HistoryTabStackRouteProps<'MarketSurvey'>) {
   );
 }
 
-export default withSafeArea(MarketSurvey);
+export default withSafeArea(MarketSurveyBase);

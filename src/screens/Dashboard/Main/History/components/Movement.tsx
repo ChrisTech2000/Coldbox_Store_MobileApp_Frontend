@@ -67,10 +67,13 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
   }, []);
 
   const fillMarketSurvey = useCallback(() => {
-    navigation.navigate('MarketSurvey', {
-      farmer: movement.farmer,
-      crops: movement.movementCrops,
-      checkoutId: movement.checkoutId,
+    navigation.navigate('MarketSurveyStack', {
+      screen: 'MarketSurveyBase',
+      params: {
+        farmer: movement.farmer,
+        crops: movement.movementCrops,
+        checkoutId: movement.checkoutId,
+      },
     });
     setIsOptionsModalOpen(false);
   }, []);
@@ -125,7 +128,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
         ) : (
           <CheckOut width={25} height={25} fill={colors.orange[400]} stroke={colors.orange[400]} />
         )}
-        <View>
+        <View tw="w-full">
           <View tw="flex flex-row items-center">
             <Text variant="TextBold" tw="text-base font-bold">
               {movement.code}
@@ -140,7 +143,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           </Text>
         </View>
 
-        <View>
+        <View tw="w-full">
           <Text
             variant="TextMedium"
             tw={cn('text-base', !isCheckIn && 'font-bold')}
@@ -153,11 +156,9 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           </Text>
         </View>
 
-        <View>
-          <TouchableOpacity onPress={() => setIsOptionsModalOpen(true)}>
-            <Icon source="dots-vertical" size={20} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => setIsOptionsModalOpen(true)}>
+          <Icon source="dots-vertical" size={20} />
+        </TouchableOpacity>
       </View>
       <Divider tw="w-full bg-gray-400" />
       <Portal>

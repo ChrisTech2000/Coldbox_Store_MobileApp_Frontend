@@ -80,6 +80,7 @@ const en = {
     history: {
       EditCheckIn: '{{code}}',
       MarketSurvey: 'Market Survey for {{farmer}}',
+      BaseSurvey: 'Cooling user survey',
     },
   },
   actions: {
@@ -664,6 +665,19 @@ const en = {
       },
       farmersSurvey: {
         fillMessage: 'Please fill in the base survey for {{crop}}!',
+        baseSurvey: {
+          occupationQuestion: 'What defines you best?',
+          occupationFarmer: 'A farmer',
+          occupationTrader: 'A small vendor/trader/wholesaler',
+          usageQuestion: 'Have you used the cold room in the past?',
+          newUser: 'No, I am a new user',
+          oldUser: 'Yes, I have used the cold room',
+          mostUsedCommoditiesQuestion: 'Most harvested/traded commodities?',
+          commodity: 'Commodity',
+          fillCommoditiesMessage:
+            'Please fill in the below questions for the commodities that you plan to bring to the room more often.',
+          addCommodityButton: 'Add commodity',
+        },
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} Receipt: 
