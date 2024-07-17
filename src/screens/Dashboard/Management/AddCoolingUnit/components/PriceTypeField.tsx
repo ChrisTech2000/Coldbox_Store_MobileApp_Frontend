@@ -35,8 +35,8 @@ export default function PriceTypeField() {
         name="priceType"
         control={control}
         render={({ field: { onChange } }) => (
-          <View tw="mt-4">
-            <View tw="px-1 pb-4">
+          <View tw="mt-5">
+            <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
                 label={t('Dashboard.Management.AddCoolingUnit.pricing.label')}

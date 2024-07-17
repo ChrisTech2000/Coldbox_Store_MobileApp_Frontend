@@ -25,7 +25,7 @@ export default function ScreenContainer() {
     <FormManager onSubmit={async () => undefined} initialValues={buildInitialValues()}>
       {() => (
         <React.Fragment>
-          <View tw="flex-row items-center space-x-3 mb-3">
+          <View tw="flex-row items-center space-x-3 mb-3 mx-3.5">
             <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
             <Text tw="text-lg">Add Cooling Unit Screen</Text>
           </View>

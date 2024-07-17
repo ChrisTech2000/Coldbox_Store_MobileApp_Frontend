@@ -112,5 +112,9 @@ export function currenciesDict() {
       if (!datum) return '';
       return [datum.symbol, datum.name].join(' - ');
     },
+    getSymbolByCode: (code: string): string | undefined => {
+      const datum = dict.get(code);
+      return datum?.symbol;
+    },
   };
 }

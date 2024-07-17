@@ -7,6 +7,7 @@ import LocationField from './LocationField';
 import UnitTypeField from './UnitTypeField';
 import PriceTypeField from './PriceTypeField';
 import MetricUnitField from './MetricUnitField';
+import PriceField from './PriceField';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -22,7 +23,7 @@ export default function FormFields() {
           <TextInput
             tw="w-full bg-transparent mt-1"
             label="Cooling unit ID"
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -36,6 +37,7 @@ export default function FormFields() {
       <UnitTypeField />
       <PriceTypeField />
       <MetricUnitField />
+      <PriceField />
     </React.Fragment>
   );
 }

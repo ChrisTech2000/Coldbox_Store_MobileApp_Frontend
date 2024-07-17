@@ -14,7 +14,7 @@ function AddCoolingUnit() {
 
   return (
     <KeyboardAwareScrollView
-      tw="h-full mx-4"
+      tw="h-full"
       contentContainerStyle="pt-5 pb-8"
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
       showsVerticalScrollIndicator={false}

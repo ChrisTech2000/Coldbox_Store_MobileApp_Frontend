@@ -9,6 +9,7 @@ type Context = {
   companyCrops: Datum;
   companyOperators: Datum;
   companyLocations: Datum;
+  companyCurrency: string | null;
   isLoading: boolean;
 };
 
@@ -16,6 +17,7 @@ const DataAggregatorContext = createContext<Context>({
   companyCrops: {} as Datum,
   companyOperators: {} as Datum,
   companyLocations: {} as Datum,
+  companyCurrency: null,
   isLoading: false,
 });
 
@@ -85,7 +87,13 @@ export default function DataAggregator(props: PropsWithChildren<{ companyId?: nu
 
   return (
     <DataAggregatorContext.Provider
-      value={{ companyCrops, companyOperators, companyLocations, isLoading }}
+      value={{
+        companyCrops,
+        companyOperators,
+        companyLocations,
+        companyCurrency: companyDetails?.currency ?? null,
+        isLoading,
+      }}
     >
       {props.children}
     </DataAggregatorContext.Provider>
