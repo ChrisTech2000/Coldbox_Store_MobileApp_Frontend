@@ -79,6 +79,7 @@ const en = {
     },
     history: {
       EditCheckIn: '{{code}}',
+      MarketSurvey: 'Market Survey for {{farmer}}',
     },
   },
   actions: {
@@ -660,6 +661,9 @@ const en = {
         selectCropLabel: 'Select a commodity',
         successMessage: 'Check-in updated successfully!',
         errorMessage: 'Failed to update check-in. Please try again.',
+      },
+      farmersSurvey: {
+        fillMessage: 'Please fill in the base survey for {{crop}}!',
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} Receipt: 

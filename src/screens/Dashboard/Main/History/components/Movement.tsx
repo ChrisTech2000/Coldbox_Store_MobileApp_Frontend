@@ -66,6 +66,15 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
     setIsOptionsModalOpen(false);
   }, []);
 
+  const fillMarketSurvey = useCallback(() => {
+    navigation.navigate('MarketSurvey', {
+      farmer: movement.farmer,
+      crops: movement.movementCrops,
+      checkoutId: movement.checkoutId,
+    });
+    setIsOptionsModalOpen(false);
+  }, []);
+
   const optionsMenu = useMemo(() => {
     return [
       {
@@ -100,8 +109,8 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
-              action: () => null,
-              disabled: true, // TODO: understand when and how this works
+              action: fillMarketSurvey,
+              disabled: !movement.marketSurveyDelay,
             },
           ]
         : []),
@@ -160,7 +169,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           <View tw="w-full mx-16 px-3 bg-white rounded-sm py-1 max-h-80">
             <FlatList
               data={optionsMenu}
-              keyExtractor={(item, index) => `faq-${item.label}-#${index}`}
+              keyExtractor={(item, index) => `opt-${item.label}-#${index}`}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   tw="space-y-2 w-full my-1"

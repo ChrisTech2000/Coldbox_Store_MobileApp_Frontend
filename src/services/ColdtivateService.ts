@@ -153,6 +153,17 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  public getFarmers = async (): Promise<GetFarmerResponse | undefined> => {
+    try {
+      const { data } = await this.get<GetFarmerResponse>(EUserEndpoints.GET_FARMER);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public getFarmerSurveys = async (
     params: GetFarmerSurveysParams
   ): Promise<GetFarmerSurveysResponse | undefined> => {

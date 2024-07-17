@@ -81,6 +81,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
+      MarketSurvey: '{{farmer}} के लिए बाजार सर्वेक्षण',
     },
   },
   actions: {
@@ -665,6 +666,9 @@ export default {
         selectCropLabel: 'एक वस्तु का चयन करें',
         successMessage: 'चेक-इन सफलतापूर्वक अपडेट किया गया!',
         errorMessage: 'चेक-इन अपडेट करने में विफल रहा। कृपया पुनः प्रयास करें।',
+      },
+      farmersSurvey: {
+        fillMessage: 'कृपया {{crop}} के लिए बेस सर्वे भरें!',
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:
