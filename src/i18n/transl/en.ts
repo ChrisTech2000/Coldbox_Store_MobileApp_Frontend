@@ -192,13 +192,13 @@ const en = {
         genderFieldName: 'gender',
         terms:
           'I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use',
-        submit: 'SignUp',
+        submit: 'Sign Up',
       },
       SignUpCompany: {
         companyHeader: 'Sign Up Company',
         userHeader: 'Sign Up Registered Employee',
         companyNameLabel: 'Company Name',
-        emailLabel: 'Company Name',
+        emailLabel: 'Email',
         currencyFieldName: 'currency',
         modal: {
           warning: 'If you register without a phone some functionalities will not work:',
@@ -239,6 +239,17 @@ const en = {
       passwordLabel: 'New Password',
       confirmPasswordLabel: 'Confirm Password',
       resetButton: 'Reset',
+    },
+    Invite: {
+      heading: 'Welcome to Coldtivate',
+      employee:
+        'You have been invited as Employee. Please fill in the form to finish your registration.',
+      operator:
+        'You have been invited as Operator. Please fill in the form to finish your registration.',
+      fields: {
+        password:
+          'Minimum eight characters, at least one uppercase letter, one lowercase letter and one number.',
+      },
     },
   },
   Dashboard: {
@@ -497,6 +508,11 @@ const en = {
           save: 'Save changes',
         },
       },
+      AddOperator: {
+        messages: {
+          operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
+        },
+      },
       CompanyDetails: {
         labels: {
           name: 'Name',
@@ -521,6 +537,9 @@ const en = {
       RegisteredEmployeeDetails: {
         deletePersonal: 'To delete your account, go to Account Details.',
         deleteOther: 'If you want to delete this account, please contact {{contact}}',
+      },
+      AddRegisteredEmployee: {
+        message: 'To join the Coldtivate app as a Registered Employee, go to: {{link}}',
       },
       CoolingUsers: {
         modals: {

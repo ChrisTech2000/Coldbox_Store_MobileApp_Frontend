@@ -243,6 +243,17 @@ export default {
       confirmPasswordLabel: 'पासवर्ड की पुष्टि करें',
       resetButton: 'रीसेट',
     },
+    Invite: {
+      heading: 'Coldtivate में आपका स्वागत है',
+      employee:
+        'आपको कर्मचारी के रूप में आमंत्रित किया गया है। कृपया अपना पंजीकरण पूरा करने के लिए फ़ॉर्म भरें।',
+      operator:
+        'आपको ऑपरेटर के रूप में आमंत्रित किया गया है। कृपया अपना पंजीकरण पूरा करने के लिए फ़ॉर्म भरें।',
+      fields: {
+        password:
+          'कम से कम आठ अक्षर, कम से कम एक बड़ा अक्षर, एक छोटा अक्षर, एक संख्या और एक विशेष वर्ण',
+      },
+    },
   },
   Dashboard: {
     emptyGeneral: 'इस समय, कोई उपलब्ध डेटा नहीं है।',
@@ -330,7 +341,6 @@ export default {
         },
         paid: 'भुगतान किया गया',
       },
-
       CheckIn: {
         emptyState: 'अभी तक कोई बॉक्स नहीं जोड़ा गया',
         addCrates: 'क्रेट जोड़ें',
@@ -501,6 +511,11 @@ export default {
           save: 'सेव चंगेस',
         },
       },
+      AddOperator: {
+        messages: {
+          operator: 'एक ऑपरेटर के रूप में Coldtivate ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
+        },
+      },
       CompanyDetails: {
         labels: {
           name: 'नाम',
@@ -526,6 +541,10 @@ export default {
         deletePersonal: 'अपना अकाउंट डिलीट करने के लिए अकाउंट डिटेल्स में जाएं',
         deleteOther:
           'अगर आप इस खाते को हटाना चाहते हैं, तो कृपया app@yourvcca.org पर संपर्क करें। {{contact}}',
+      },
+      AddRegisteredEmployee: {
+        message:
+          'एक पंजीकृत कर्मचारी के रूप में कोल्डटिवेट ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
       },
       CoolingUsers: {
         modals: {

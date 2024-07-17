@@ -250,6 +250,16 @@ export type GetMovementsHistoryResponse = Array<{
   operator: string;
 }>;
 
+export type GetInvitedOperatorsResponse = {
+  code: string;
+  coolingUnits: Array<number>;
+  expirationDate: string;
+  phone: string;
+  userType: number;
+};
+
+export type GetInvitedCompanyEmployeesResponse = Array<GetInvitedOperatorsResponse>;
+
 export type GetMovementOperatorsResponse = Array<{
   id: number;
   user: User;

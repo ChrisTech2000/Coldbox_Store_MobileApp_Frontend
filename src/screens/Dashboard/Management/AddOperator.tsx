@@ -5,17 +5,22 @@ import { useShallow } from 'zustand/react/shallow';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Controller, useForm } from 'react-hook-form';
 import colors from 'tailwindcss/colors';
+import { useSWRConfig } from 'swr';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useManagementStore } from '#stores/management';
-import { useApiCall } from '#services/hooks/useAPiCall';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { useToggle } from '#ui/hooks/useToggle';
 import { useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
+import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
+import { ERoles, MAP_ROLES } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
 
@@ -24,10 +29,14 @@ type FormValues = {
   coolingUnits: Array<number>;
 };
 
-function AddOperator() {
-  const [isModalVisible, toggleModalVisibility] = useToggle();
-  const { t, zodResolver } = useTranslationUtils();
+function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
+  const { navigation } = props;
+
   const company = useManagementStore(useShallow((store) => store.company));
+  const { t, zodResolver } = useTranslationUtils();
+  const { mutate } = useSWRConfig();
+
+  const [isModalVisible, toggleModalVisibility] = useToggle();
 
   const { data, isLoading } = useApiCall(
     'getCoolingUnits',
@@ -80,7 +89,32 @@ function AddOperator() {
   }, [options, selectedCoolingUnits]);
 
   async function onSubmit(values: FormValues) {
-    console.log(values);
+    const userId = useAuthStore.getState().user?.id;
+    if (!userId) return; // safe guard
+
+    const head = `${BASE_DEEP_LINK_URL}/invite/`;
+    const tail = `/${MAP_ROLES[ERoles.OPERATOR]}/${values.phoneNumber}`;
+
+    try {
+      await ColdtivateService.sendOperatorInvitation({
+        phone: values.phoneNumber,
+        coolingUnits: values.coolingUnits,
+        message: {
+          partOne: t('Dashboard.Management.AddOperator.messages.operator', { link: head }),
+          partTwo: tail,
+        },
+        url: {
+          partOne: head,
+          partTwo: tail,
+        },
+        userId,
+      });
+
+      await mutate(getQueryKey('getInvitedOperators', company?.id));
+      navigation.goBack();
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   if (isLoading) {

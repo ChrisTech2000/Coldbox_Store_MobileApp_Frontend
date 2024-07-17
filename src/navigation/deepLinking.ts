@@ -7,6 +7,7 @@ export default {
   config: {
     screens: {
       PasswordReset: 'password-reset/:resetCode/:phoneNumber',
+      Invite: 'invite/:inviteCode/:userType/:phoneNumber',
     },
   },
 } satisfies LinkingOptions<ReactNavigation.RootParamList>;

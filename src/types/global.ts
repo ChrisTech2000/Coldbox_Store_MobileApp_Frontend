@@ -5,7 +5,7 @@ export type User = {
   gender: EApiGender;
   phone: string;
   email?: string;
-  lastLogin: string;
+  lastLogin: string | null;
   language?: string;
   role?: ERoles;
   username?: string; // we get this prop when we fetch the operators
