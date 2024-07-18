@@ -10,10 +10,10 @@ import { Button } from '#ui/components/Button';
 import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
 
-import FormManager, { type FormValues } from '../contexts/FormManager';
-import FormFields from '../components/FormFields';
-import DataAggregator from '../contexts/DataAggregator';
-import { METRIC_UNITS, PRICING_TYPE } from '../constants';
+import FormManager, { type FormValues } from './contexts/FormManager';
+import FormFields from './components/FormFields';
+import DataAggregator from './contexts/DataAggregator';
+import { METRIC_UNITS, PRICING_TYPE } from './constants';
 
 export default function ScreenContainer() {
   const initialFormValues = useRef<FormValues | undefined>(undefined);
@@ -33,6 +33,10 @@ export default function ScreenContainer() {
     initialFormValues.current = _buildInitialValues();
   }
 
+  async function onSubmit(values: FormValues) {
+    console.log(values);
+  }
+
   return (
     <KeyboardAwareScrollView
       tw="h-full"
@@ -40,7 +44,7 @@ export default function ScreenContainer() {
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
       showsVerticalScrollIndicator={false}
     >
-      <FormManager onSubmit={async (v) => console.log(v)} initialValues={initialFormValues.current}>
+      <FormManager onSubmit={onSubmit} initialValues={initialFormValues.current}>
         {({ submitHandler, isSubmitting }) => (
           <React.Fragment>
             <View tw="flex-row items-center space-x-3 mb-3 mx-3.5">

@@ -5,7 +5,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useManagementStore } from '#stores/management';
 
-import ScreenContainer from './modules/ScreenContainer';
+import Container from './Container';
 import DataAggregator from './contexts/DataAggregator';
 
 function AddCoolingUnit() {
@@ -13,7 +13,7 @@ function AddCoolingUnit() {
 
   return (
     <DataAggregator companyId={company?.id}>
-      <ScreenContainer />
+      <Container />
     </DataAggregator>
   );
 }

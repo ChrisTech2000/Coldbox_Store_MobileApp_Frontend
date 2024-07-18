@@ -35,7 +35,7 @@ export const POWER_SOURCES = {
   pvpanels: 'PV Panels',
   biomass: 'Biomass',
   hybrid: 'Hybrid',
-};
+} as const;
 
 export type PowerSourcesIds = keyof typeof POWER_SOURCES;
 
