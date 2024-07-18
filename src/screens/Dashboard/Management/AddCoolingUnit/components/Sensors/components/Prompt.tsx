@@ -45,7 +45,7 @@ export default function Prompt() {
                   onPress={() => {
                     toggleVisibility();
                     timeoutRef.current = setTimeout(
-                      () => emitter.emit(APP_EVENTS.DISPATCH_SENSOR_MODAL, item),
+                      () => emitter.emit(APP_EVENTS.DISPATCH_SENSOR_MODAL, true, item),
                       440
                     );
                   }}

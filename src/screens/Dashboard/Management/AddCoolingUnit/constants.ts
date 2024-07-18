@@ -15,7 +15,7 @@ export const METRIC_UNITS = {
   CRATES: 'CRATES',
 } as const;
 
-export const REFRIGERANTS: Array<string> = [
+export const REFRIGERANTS = [
   'R290',
   'R-410A',
   'R-407C',
@@ -25,11 +25,11 @@ export const REFRIGERANTS: Array<string> = [
   'R601',
   'R601A',
   'Other',
-];
+] as const;
 
-export type PowerSourcesIds = 'generator' | 'grid' | 'pvpanels' | 'biomass' | 'hybrid';
+export type RefrigerantTypes = (typeof REFRIGERANTS)[number];
 
-export const POWER_SOURCES: Record<PowerSourcesIds, string> = {
+export const POWER_SOURCES = {
   generator: 'Generator',
   grid: 'Grid',
   pvpanels: 'PV Panels',
@@ -37,56 +37,49 @@ export const POWER_SOURCES: Record<PowerSourcesIds, string> = {
   hybrid: 'Hybrid',
 };
 
-export type ElectricityStorageIds = 'battery' | 'thermal storage' | 'hybrid' | 'none';
+export type PowerSourcesIds = keyof typeof POWER_SOURCES;
 
-export const ELECTRICITY_STORAGE: Record<ElectricityStorageIds, string> = {
+export const ELECTRICITY_STORAGE = {
   battery: 'Batteries',
   'thermal storage': 'Thermal storage / Icepacks',
   hybrid: 'Hybrid',
   none: 'None',
-};
+} as const;
 
-export type PvPanelsTypes =
-  | 'monocrystalline'
-  | 'polycrystalline'
-  | 'amorphous'
-  | 'concentrated'
-  | 'other'
-  | 'none';
+export type ElectricityStorageIds = keyof typeof ELECTRICITY_STORAGE;
 
-export const PV_PANELS_TYPES: Record<PvPanelsTypes, string> = {
+export const PV_PANELS_TYPES = {
   monocrystalline: 'Monocrystalline Solar Panels (Mono - SI)',
   polycrystalline: 'Polycrystalline Solar Panels (p - Si)',
   amorphous: 'Thin - Film: Amorphous Silicon Solar Panels (A - SI)',
   concentrated: 'Concentrated PV Cell (CVP)',
   other: 'Other',
   none: 'None',
-};
+} as const;
 
-export type ThermalStorageTypes =
-  | 'phase change material'
-  | 'ice block storage'
-  | 'chilled water storage'
-  | 'other'
-  | 'none';
+export type PvPanelsTypes = keyof typeof PV_PANELS_TYPES;
 
-export const THERMAL_STORAGE_TYPES: Record<ThermalStorageTypes, string> = {
+export const THERMAL_STORAGE_TYPES = {
   'phase change material': 'Phase Change Materials(e.g., parrafin wax)',
   'ice block storage': 'Iceblocks Storage',
   'chilled water storage': 'Chilled Water Storage',
   other: 'Other',
   none: 'None',
-};
+} as const;
 
-export type BatteryTypes = 'lead acid' | 'lithium ion' | 'nickel based' | 'flow' | 'other' | 'none';
+export type ThermalStorageTypes = keyof typeof THERMAL_STORAGE_TYPES;
 
-export const BATTERY_TYPES: Record<BatteryTypes, string> = {
+export const BATTERY_TYPES = {
   'lead acid': 'Lead acid batteries',
   'lithium ion': 'Lithium ion batteries',
   'nickel based': 'Nickel based batteries',
   flow: 'Flow batteries',
   other: 'Other',
   none: 'None',
-};
+} as const;
 
-export const SENSOR_TYPES: Array<string> = ['ecozen', 'ubibot', 'figorr'];
+export type BatteryTypes = keyof typeof BATTERY_TYPES;
+
+export const SENSOR_TYPES = ['ecozen', 'ubibot', 'figorr'] as const;
+
+export type SensorTypes = (typeof SENSOR_TYPES)[number];

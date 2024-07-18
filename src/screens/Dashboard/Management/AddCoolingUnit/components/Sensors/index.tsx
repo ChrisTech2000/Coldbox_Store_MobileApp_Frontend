@@ -6,6 +6,7 @@ import { emitter, APP_EVENTS } from '#ui/lib/emitter';
 
 import FormManager from '../../contexts/FormManager';
 import Prompt from './components/Prompt';
+import SensorModal from './components/SensorModal';
 
 export default function Sensors() {
   const { watch } = FormManager.useFormManager();
@@ -15,6 +16,7 @@ export default function Sensors() {
   return (
     <React.Fragment>
       <Prompt />
+      <SensorModal />
       <View tw="flex-row items-center justify-between px-3 py-3.5">
         <Text>Sensor available</Text>
         <Switch
