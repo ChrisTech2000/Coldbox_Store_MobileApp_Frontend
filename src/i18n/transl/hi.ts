@@ -670,7 +670,7 @@ export default {
         successMessage: 'चेक-इन सफलतापूर्वक अपडेट किया गया!',
         errorMessage: 'चेक-इन अपडेट करने में विफल रहा। कृपया पुनः प्रयास करें।',
       },
-      farmersSurvey: {
+      survey: {
         fillMessage: 'कृपया {{crop}} के लिए बेस सर्वे भरें!',
         baseSurvey: {
           occupationQuestion: 'आपको सबसे अच्छा क्या परिभाषित करता है?',
@@ -687,6 +687,20 @@ export default {
           addCommodityButton: 'वस्तु जोड़ें',
           genericFormError: 'कृपया एक विकल्प चुनें',
           experienceError: 'कृपया एक मान दर्ज करें',
+        },
+        marketSurvey: {
+          title: 'कृपया जाँच की गई {{crop}} की पेटियों के लिए निम्नलिखित प्रश्नों का उत्तर दें।',
+          locationQuestion: 'आपने अपनी उपज कहाँ बेची?',
+          locations: {
+            farm: 'खेत का फाटक',
+            market: 'स्थानीय बाजार',
+            both: 'दोनों खेत का फाटक और बाजार',
+          },
+          priceQuestion: 'आपको इसके लिए क्या कीमत मिली?',
+          spoiledProducesQuestion:
+            'पिछले सप्ताह भंडारण में कितना खराब हो गया था या औसत बाजार मूल्य से नीचे बिक गया था?',
+          spoilageReasonsQuestion: 'फसल खराब होने का मुख्य कारण क्या है?',
+          formError: 'कृपया एक विकल्प चुनें',
         },
       },
       stringTemplates: {

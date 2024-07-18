@@ -27,7 +27,11 @@ export type MarketSurveyStackRoutes = {
   BaseSurvey: {
     companyCurrency?: string;
   };
-  MarketSurvey: undefined;
+  MarketSurvey: {
+    cropId: number;
+    companyCurrency?: string;
+    farmer: string;
+  };
 };
 
 export type MarketSurveyStackRoutePaths = keyof MarketSurveyStackRoutes;

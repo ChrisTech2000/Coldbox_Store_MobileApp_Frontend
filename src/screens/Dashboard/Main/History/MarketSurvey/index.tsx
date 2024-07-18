@@ -99,7 +99,13 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
           <View tw="flex space-y-2 w-full my-2">
             <TouchableOpacity
               tw="flex flex-row justify-between items-center space-y-2 w-full my-1 h-6"
-              onPress={() => props.navigation.navigate('MarketSurvey')}
+              onPress={() =>
+                props.navigation.navigate('MarketSurvey', {
+                  cropId: item.id,
+                  companyCurrency,
+                  farmer,
+                })
+              }
               disabled={!item.hasSurvey}
             >
               <Text variant="TextMedium" tw={cn('text-lg', !item.hasSurvey && 'text-gray-400')}>
@@ -120,7 +126,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
                 >
                   <Danger tw="w-7 h-7" />
                   <Text variant="TextMedium" tw="">
-                    {t('Dashboard.History.farmersSurvey.fillMessage', { crop: item.name })}
+                    {t('Dashboard.History.survey.fillMessage', { crop: item.name })}
                   </Text>
                 </TouchableOpacity>
                 <Divider tw="w-full bg-gray-400 mt-1" />

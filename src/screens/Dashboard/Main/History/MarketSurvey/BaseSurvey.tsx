@@ -19,7 +19,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 import { FarmersSurveyModal, FarmerSurveySchemaType } from '../../components/FarmerSurveyModal';
-import { BaseSurveySchema, EExperience, EOccupation, type Schema } from './schema';
+import { BaseSurveySchema, EExperience, EOccupation, type BaseSurveySchemaType } from './schema';
 import { sanitizeString } from './utils';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -48,7 +48,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
     control,
     watch,
     formState: { errors },
-  } = useForm<Schema>({
+  } = useForm<BaseSurveySchemaType>({
     resolver: zodResolver(() => BaseSurveySchema(t)),
     defaultValues: {
       occupation: surveys[0].userType as EOccupation,
@@ -68,7 +68,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
     }));
   }, [surveys, crops]);
 
-  const onSubmit: SubmitHandler<Schema> = useCallback(
+  const onSubmit: SubmitHandler<BaseSurveySchemaType> = useCallback(
     async (values) => {
       const result = await ColdtivateService.updateFarmerSurveys({
         farmer: farmerId as number,
@@ -150,7 +150,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
           <View tw="flex flex-row space-x-2 items-center">
             <Icon source="account-outline" size={25} color={colors.green.primary} />
             <Text variant="TextBold" tw="text-lg font-bold">
-              {t('Dashboard.History.farmersSurvey.baseSurvey.occupationQuestion')}
+              {t('Dashboard.History.survey.baseSurvey.occupationQuestion')}
             </Text>
           </View>
 
@@ -159,12 +159,12 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
             render={({ field: { onChange, value } }) => (
               <RadioButton.Group value={value} onValueChange={onChange}>
                 <RadioButtonItem
-                  label={t('Dashboard.History.farmersSurvey.baseSurvey.occupationFarmer')}
+                  label={t('Dashboard.History.survey.baseSurvey.occupationFarmer')}
                   value={EOccupation.FARMER}
                   tw="flex flex-row-reverse ml-[-10]"
                 />
                 <RadioButtonItem
-                  label={t('Dashboard.History.farmersSurvey.baseSurvey.occupationTrader')}
+                  label={t('Dashboard.History.survey.baseSurvey.occupationTrader')}
                   value={EOccupation.TRADER}
                   tw="flex flex-row-reverse ml-[-10]"
                 />
@@ -183,7 +183,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
           <View tw="flex flex-row space-x-2 items-center">
             <Icon source="snowflake" size={25} color={colors.green.primary} />
             <Text variant="TextBold" tw="text-lg font-bold">
-              {t('Dashboard.History.farmersSurvey.baseSurvey.usageQuestion')}
+              {t('Dashboard.History.survey.baseSurvey.usageQuestion')}
             </Text>
           </View>
 
@@ -192,12 +192,12 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
             render={({ field: { onChange, value } }) => (
               <RadioButton.Group value={`${value}`} onValueChange={onChange}>
                 <RadioButtonItem
-                  label={t('Dashboard.History.farmersSurvey.baseSurvey.newUser')}
+                  label={t('Dashboard.History.survey.baseSurvey.newUser')}
                   value={EExperience.NEW}
                   tw="flex flex-row-reverse ml-[-10]"
                 />
                 <RadioButtonItem
-                  label={t('Dashboard.History.farmersSurvey.baseSurvey.oldUser')}
+                  label={t('Dashboard.History.survey.baseSurvey.oldUser')}
                   value={EExperience.OLD}
                   tw="flex flex-row-reverse ml-[-10]"
                 />
@@ -233,12 +233,12 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
           <View tw="flex flex-row space-x-2 items-center">
             <Icon source="shopping-outline" size={25} color={colors.green.primary} />
             <Text variant="TextBold" tw="text-lg font-bold">
-              {t('Dashboard.History.farmersSurvey.baseSurvey.mostUsedCommoditiesQuestion')}
+              {t('Dashboard.History.survey.baseSurvey.mostUsedCommoditiesQuestion')}
             </Text>
           </View>
 
           <Text variant="TextMedium" tw="text-lg">
-            {t('Dashboard.History.farmersSurvey.baseSurvey.fillCommoditiesMessage')}
+            {t('Dashboard.History.survey.baseSurvey.fillCommoditiesMessage')}
           </Text>
 
           <FlatList
@@ -248,7 +248,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
               <TouchableOpacity onPress={() => setOpenFarmersSurveyModal(index)}>
                 <View tw="flex flex-row items-center justify-between space-y-2">
                   <Text variant="TextMedium" tw="text-lg">
-                    {t('Dashboard.History.farmersSurvey.baseSurvey.commodity')} {index + 1}
+                    {t('Dashboard.History.survey.baseSurvey.commodity')} {index + 1}
                   </Text>
                   <View tw="flex flex-row space-x-2 items-center">
                     <Text variant="TextMedium" tw="text-lg">
@@ -292,14 +292,14 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
         tw="border-green-primary"
         onPress={() => setIsAddCommodityModalOpen(true)}
       >
-        {t('Dashboard.History.farmersSurvey.baseSurvey.addCommodityButton')}
+        {t('Dashboard.History.survey.baseSurvey.addCommodityButton')}
       </Button>
 
       {isAddCommodityModalOpen && (
         <FarmersSurveyModal
           companyCurrency={companyCurrency}
           cropSelectionAvailable={{
-            title: t('Dashboard.History.farmersSurvey.baseSurvey.newCommodity', {
+            title: t('Dashboard.History.survey.baseSurvey.newCommodity', {
               index: farmerSurveys.length + 1,
             }),
             crops,

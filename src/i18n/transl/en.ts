@@ -665,7 +665,7 @@ const en = {
         successMessage: 'Check-in updated successfully!',
         errorMessage: 'Failed to update check-in. Please try again.',
       },
-      farmersSurvey: {
+      survey: {
         fillMessage: 'Please fill in the base survey for {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'What defines you best?',
@@ -682,6 +682,21 @@ const en = {
           addCommodityButton: 'Add commodity',
           genericFormError: 'Please select an option',
           experienceError: 'Please introduce a value',
+        },
+        marketSurvey: {
+          title:
+            'Please answer the following questions for the crates of {{crop}} you checked out.',
+          locationQuestion: 'Where did you sell your produce?',
+          locations: {
+            farm: 'Farm-gate',
+            market: 'Local market',
+            both: 'Both farm-gate and market',
+          },
+          priceQuestion: 'What price did you receive for it?',
+          spoiledProducesQuestion:
+            'How much of what was in storage last week was spoiled or sold below the average market price?',
+          spoilageReasonsQuestion: 'What is the main reason for crop spoilage?',
+          formError: 'Please select an option',
         },
       },
       stringTemplates: {
