@@ -28,9 +28,9 @@ export type HistoryTabStackRoutes = {
   MarketSurveyStack: {
     screen: keyof MarketSurveyStackRoutes;
     params: {
-      checkoutId?: number;
       crops: Array<{ id: number; name: string }>;
       farmer: string;
+      companyCurrency?: string;
     };
   };
 };

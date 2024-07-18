@@ -288,6 +288,7 @@ export default {
           selectSpoilageReasonsPlaceholder: 'सभी लागू कारणों का चयन करें',
           priceLabel: 'मूल्य',
           priceUnit: '{{unit}} के लिए',
+          commodityShortlist: 'वस्तुओं की सूची',
           unit: {
             kg: 'किलो',
             crates: 'टोकरियां',
@@ -318,6 +319,7 @@ export default {
             number: 'एक गैर-शून्य, सकारात्मक संख्या होनी चाहिए',
             totalMismatch:
               'स्व-उपभोग, बेचा और खोया या बाजार मूल्य से नीचे बेचा का योग कुल उत्पादित मात्रा के बराबर होना चाहिए।',
+            cropError: 'कृपया एक माल का चयन करें',
           },
         },
       },
@@ -678,7 +680,8 @@ export default {
           newUser: 'नहीं, मैं एक नया उपयोगकर्ता हूँ',
           oldUser: 'हाँ, मैंने ठंडे कमरे का उपयोग किया है',
           mostUsedCommoditiesQuestion: 'सबसे अधिक फसल/व्यापार की गई वस्तुएं?',
-          commodity: 'वस्तु',
+          commodity: 'कमोडिटी',
+          newCommodity: 'कमोडिटी {{index}}',
           fillCommoditiesMessage:
             'कृपया नीचे दिए गए प्रश्नों को उन वस्तुओं के लिए भरें जिन्हें आप कमरे में अधिक बार लाने की योजना बना रहे हैं।',
           addCommodityButton: 'वस्तु जोड़ें',

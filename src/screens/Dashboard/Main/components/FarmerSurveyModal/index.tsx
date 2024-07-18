@@ -12,8 +12,9 @@ import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { EUnitOfMeasurement } from '#types/global';
-import { type ManagementCompany } from '#stores/management';
+import type { ManagementCompany } from '#stores/management';
+import type { GetAllCropsResponse } from '#types/api.responses';
+import { type Crop, EUnitOfMeasurement } from '#types/global';
 
 import MultipleSelectWithStore, { createMultipleSelectStore } from '../MultipleSelectWithStore';
 import SelectWithStore, { createSelectStore } from '../SelectWithStore';
@@ -30,25 +31,35 @@ export type FarmerSurveySchemaType = {
   unitaryWeight: number | undefined;
   reasonsForSpoilage: string[];
   averagePrice: number;
+  crop?: Crop | GetAllCropsResponse;
+  cropSelection: boolean;
 };
 
 type FarmersSurveyModalProps = {
-  company: ManagementCompany;
-  cropName: string;
+  company?: ManagementCompany;
+  companyCurrency?: string;
+  cropName?: string;
   defaultValues?: Partial<FarmerSurveySchemaType>;
   isModalVisible: boolean;
+  cropSelectionAvailable?: {
+    title: string;
+    crops: Array<Crop | GetAllCropsResponse>;
+  };
   onDismiss: () => void;
   onSubmit: SubmitHandler<FarmerSurveySchemaType>;
 };
 
 const useMeasurementStore = createSelectStore<EUnitOfMeasurement>();
 const useSpoilageReasonsStore = createMultipleSelectStore<string>();
+const useCropStore = createSelectStore<Crop | GetAllCropsResponse>();
 
 export function FarmersSurveyModal({
   company,
-  cropName,
+  companyCurrency,
+  cropName: _cropName,
   defaultValues,
   isModalVisible,
+  cropSelectionAvailable,
   onDismiss,
   onSubmit,
 }: FarmersSurveyModalProps) {
@@ -56,10 +67,12 @@ export function FarmersSurveyModal({
   const colors = useTailwindColors();
 
   const { selectedItem: measureUnit } = useMeasurementStore();
+  const { selectedItem: crop } = useCropStore();
   const { selectedItems: spoilageReasons, onSelect: onSelectSpoilageReasons } =
     useSpoilageReasonsStore();
 
   const [isUnitModalVisible, setIsUnitModalVisible] = useState<boolean>(false);
+  const [isCropModalVisible, setIsCropModalVisible] = useState<boolean>(false);
   const [isSpoilageReasonsModalVisible, setIsSpoilageReasonsModalVisible] =
     useState<boolean>(false);
 
@@ -70,7 +83,10 @@ export function FarmersSurveyModal({
     formState: { errors },
   } = useForm<FarmerSurveySchemaType>({
     resolver: zodResolver(() => FarmerSurveySchema(t)),
-    defaultValues: defaultValues ?? _defaultValues,
+    defaultValues: {
+      ...(defaultValues ?? _defaultValues),
+      cropSelection: !!cropSelectionAvailable,
+    },
   });
 
   const onChangeNumericKeyboard = useCallback(
@@ -91,6 +107,10 @@ export function FarmersSurveyModal({
   }, [spoilageReasons]);
 
   useEffect(() => {
+    if (crop) setValue('crop', crop);
+  }, [crop]);
+
+  useEffect(() => {
     if (defaultValues?.reasonsForSpoilage?.length) {
       onSelectSpoilageReasons(defaultValues.reasonsForSpoilage);
     }
@@ -100,10 +120,38 @@ export function FarmersSurveyModal({
     <Portal>
       <Modal visible={isModalVisible} onDismiss={onDismiss}>
         <View tw="w-full bg-white rounded-sm w-[90%] max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
+          {cropSelectionAvailable && (
+            <View tw="space-y-2">
+              <Text variant="TitleBold" tw="font-bold">
+                {cropSelectionAvailable.title}
+              </Text>
+              <Divider />
+              <View tw="flex flex-row items-center justify-between space-x-1">
+                <Text variant="TextMedium" tw="text-lg">
+                  {t('Dashboard.CrateManagement.FarmerSurvey.modal.commodityShortlist')}
+                </Text>
+                <SelectWithStore<Crop | GetAllCropsResponse>
+                  datums={cropSelectionAvailable.crops}
+                  isModalVisible={isCropModalVisible}
+                  itemName={(item) => item?.name}
+                  setIsModalVisible={setIsCropModalVisible}
+                  useSelectStore={useCropStore}
+                  label={crop?.name ?? ''}
+                />
+              </View>
+              {errors.crop && (
+                <Text tw="text-xs text-red-600 mt-2 pl-3 w-[95%]">
+                  {errors.crop.message?.toString()}
+                </Text>
+              )}
+              <Divider />
+            </View>
+          )}
+
           {/** QUANTITY */}
           <Question
             question={t('Dashboard.CrateManagement.FarmerSurvey.modal.weeklyQuantityQuestion', {
-              crop: cropName,
+              crop: _cropName ?? crop?.name ?? '__',
             })}
           />
 
@@ -308,7 +356,7 @@ export function FarmersSurveyModal({
           {/** PRICE */}
           <Question
             question={t('Dashboard.CrateManagement.FarmerSurvey.modal.marketPriceQuestion', {
-              crop: cropName,
+              crop: _cropName ?? crop?.name ?? '__',
             })}
           />
           <View tw="flex flex-row items-end space-x-2">
@@ -328,7 +376,7 @@ export function FarmersSurveyModal({
               name="averagePrice"
             />
             <Text variant="TextMedium" tw="text-base">
-              {company?.currency}{' '}
+              {companyCurrency ?? company?.currency}{' '}
               {t('Dashboard.CrateManagement.FarmerSurvey.modal.priceUnit', {
                 unit: t(
                   `Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.${measureUnit?.toLowerCase() as EUnitOfMeasurement}`

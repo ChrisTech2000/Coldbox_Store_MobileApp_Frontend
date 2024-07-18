@@ -17,7 +17,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>) {
-  const { crops, farmer } = props.route.params;
+  const { crops, farmer, companyCurrency } = props.route.params;
 
   const { t } = useTranslationUtils();
   const { setSurveys, setFarmerId, setRefetchSurveys } = useMarketSurveyStore();
@@ -116,7 +116,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
               <View>
                 <TouchableOpacity
                   tw="flex flex-row space-y-2 space-x-4 items-center w-full my-1 h-6"
-                  onPress={() => props.navigation.navigate('BaseSurvey')}
+                  onPress={() => props.navigation.navigate('BaseSurvey', { companyCurrency })}
                 >
                   <Danger tw="w-7 h-7" />
                   <Text variant="TextMedium" tw="">

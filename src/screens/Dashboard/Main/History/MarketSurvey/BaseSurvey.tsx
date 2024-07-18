@@ -16,7 +16,6 @@ import { useTranslationUtils } from '#i18n/utils';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { useManagementStore } from '#stores/management';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 import { FarmersSurveyModal, FarmerSurveySchemaType } from '../../components/FarmerSurveyModal';
@@ -27,12 +26,13 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { HistoryTabStackRoutes } from 'navigation/Dashboard/Main/HistoryTabStack';
 
 function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
+  const { companyCurrency } = props.route.params;
+
   const colors = useTailwindColors();
   const rootNavigation = useNavigation<NativeStackNavigationProp<HistoryTabStackRoutes>>();
 
   const { t, zodResolver } = useTranslationUtils();
   const { surveys, farmerId, refetchSurveys, resetMarketSurveyStore } = useMarketSurveyStore();
-  const { company } = useManagementStore();
 
   const { data: crops, isLoading: isCropsLoading } = useApiCall(
     'getAllCrops',
@@ -41,6 +41,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
   );
 
   const [openFarmersSurveyModal, setOpenFarmersSurveyModal] = useState<number | null>(null);
+  const [isAddCommodityModalOpen, setIsAddCommodityModalOpen] = useState<boolean>(false);
 
   const {
     handleSubmit,
@@ -86,51 +87,52 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
     [farmerId, farmerSurveys, refetchSurveys]
   );
 
-  const onSubmitSurvey: SubmitHandler<FarmerSurveySchemaType> = useCallback(
-    async (values) => {
-      if (openFarmersSurveyModal === null) return;
+  const onSubmitSurveyWrapper = useCallback(
+    (adding?: boolean): SubmitHandler<FarmerSurveySchemaType> => {
+      return async (values) => {
+        let cropId: number;
 
-      const cropId = farmerSurveys[openFarmersSurveyModal].cropId;
-      const result = await ColdtivateService.updateFarmerSurveys({
-        farmer: farmerId as number,
-        userType: surveys[0].userType,
-        experience: !!surveys[0].experience,
-        experienceDuration: surveys[0].experienceDuration,
-        commodities: [
-          ...Array.from(
-            (surveys ?? [])
+        if (adding) {
+          if (!values.crop) return;
+          cropId = values.crop.id;
+        } else {
+          if (openFarmersSurveyModal === null) return;
+          cropId = farmerSurveys[openFarmersSurveyModal].cropId;
+        }
+
+        const result = await ColdtivateService.updateFarmerSurveys({
+          farmer: farmerId as number,
+          userType: surveys[0].userType,
+          experience: !!surveys[0].experience,
+          experienceDuration: surveys[0].experienceDuration,
+          commodities: [
+            ...(surveys ?? [])
               .flatMap((survey) => survey.co)
-              .filter((survey) => survey.cropId !== cropId)
-              .reduce((map, survey) => {
-                if (!map.has(survey.cropId)) {
-                  map.set(survey.cropId, survey);
-                }
-                return map;
-              }, new Map())
-              .values()
-          ),
-          {
-            averagePrice: values.averagePrice,
-            unit: values.unitOfMeasurement,
-            quantityTotal: values.weightDistribution.totalProducedWeekly,
-            quantityBelowMarketPrice: values.weightDistribution.quantityLost,
-            quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
-            quantitySold: values.weightDistribution.quantitySold,
-            averageSeasonInMonths: null,
-            kgInUnit: values.unitaryWeight as number,
-            currency: company?.currency ?? '',
-            reasonForLoss: values.reasonsForSpoilage,
-            cropId,
-          },
-        ],
-      });
+              .filter((survey) => survey.cropId !== cropId),
+            {
+              averagePrice: values.averagePrice,
+              unit: values.unitOfMeasurement,
+              quantityTotal: values.weightDistribution.totalProducedWeekly,
+              quantityBelowMarketPrice: values.weightDistribution.quantityLost,
+              quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
+              quantitySold: values.weightDistribution.quantitySold,
+              averageSeasonInMonths: null,
+              kgInUnit: values.unitaryWeight as number,
+              currency: companyCurrency ?? '',
+              reasonForLoss: values.reasonsForSpoilage,
+              cropId,
+            },
+          ],
+        });
 
-      if (result) {
-        refetchSurveys?.();
-        setOpenFarmersSurveyModal(null);
-      }
+        if (result) {
+          refetchSurveys?.();
+          if (adding) setIsAddCommodityModalOpen(false);
+          else setOpenFarmersSurveyModal(null);
+        }
+      };
     },
-    [surveys, farmerSurveys, company, openFarmersSurveyModal, refetchSurveys]
+    [surveys, farmerSurveys, companyCurrency, openFarmersSurveyModal, refetchSurveys]
   );
 
   if (isCropsLoading) {
@@ -257,11 +259,11 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
                 </View>
                 {openFarmersSurveyModal === index && (
                   <FarmersSurveyModal
-                    company={company}
+                    companyCurrency={companyCurrency}
                     cropName={survey.cropName}
                     isModalVisible={openFarmersSurveyModal === index}
                     onDismiss={() => setOpenFarmersSurveyModal(null)}
-                    onSubmit={onSubmitSurvey}
+                    onSubmit={onSubmitSurveyWrapper()}
                     defaultValues={{
                       weightDistribution: {
                         totalProducedWeekly: survey.quantityTotal,
@@ -288,9 +290,25 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
         contentStyle="flex flex-row-reverse"
         uppercase
         tw="border-green-primary"
+        onPress={() => setIsAddCommodityModalOpen(true)}
       >
         {t('Dashboard.History.farmersSurvey.baseSurvey.addCommodityButton')}
       </Button>
+
+      {isAddCommodityModalOpen && (
+        <FarmersSurveyModal
+          companyCurrency={companyCurrency}
+          cropSelectionAvailable={{
+            title: t('Dashboard.History.farmersSurvey.baseSurvey.newCommodity', {
+              index: farmerSurveys.length + 1,
+            }),
+            crops,
+          }}
+          isModalVisible={isAddCommodityModalOpen}
+          onDismiss={() => setIsAddCommodityModalOpen(false)}
+          onSubmit={onSubmitSurveyWrapper(true)}
+        />
+      )}
 
       <View tw="flex flex-row space-x-2 justify-center">
         <Button

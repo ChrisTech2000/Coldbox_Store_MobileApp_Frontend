@@ -73,10 +73,11 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
         farmer: movement.farmer,
         crops: movement.movementCrops,
         checkoutId: movement.checkoutId,
+        companyCurrency: selectedCompany?.currency ?? company?.currency,
       },
     });
     setIsOptionsModalOpen(false);
-  }, []);
+  }, [selectedCompany, company]);
 
   const optionsMenu = useMemo(() => {
     return [

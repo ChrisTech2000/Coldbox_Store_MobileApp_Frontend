@@ -286,6 +286,7 @@ const en = {
           selectSpoilageReasonsPlaceholder: 'Select all reasons that apply',
           priceLabel: 'Price',
           priceUnit: 'per {{unit}}',
+          commodityShortlist: 'Commodity shortlist',
           unit: {
             kg: 'Kg',
             crates: 'Crates',
@@ -316,6 +317,7 @@ const en = {
             reasonsForSpoilage: 'Please introduce at least one reason.',
             totalMismatch:
               'The sum of Self-consumed, Sold and Lost or sold below market price should be equal to the total quantity produced.',
+            cropError: 'Please select a commodity',
           },
         },
       },
@@ -674,6 +676,7 @@ const en = {
           oldUser: 'Yes, I have used the cold room',
           mostUsedCommoditiesQuestion: 'Most harvested/traded commodities?',
           commodity: 'Commodity',
+          newCommodity: 'Commodity {{index}}',
           fillCommoditiesMessage:
             'Please fill in the below questions for the commodities that you plan to bring to the room more often.',
           addCommodityButton: 'Add commodity',
