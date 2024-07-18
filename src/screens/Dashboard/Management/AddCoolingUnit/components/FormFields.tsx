@@ -19,6 +19,7 @@ import OperatorsField from './OperatorsField';
 import CommoditiesField from './CommoditiesField';
 import RefrigerantFields from './RefrigerantFields';
 import PowerConsumptionFields from './PowerConsumptionFields';
+import PowerSourceFields from './PowerSourceFields';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -98,6 +99,7 @@ export default function FormFields() {
       <CommoditiesField />
       <RefrigerantFields />
       <PowerConsumptionFields />
+      <PowerSourceFields />
     </React.Fragment>
   );
 }

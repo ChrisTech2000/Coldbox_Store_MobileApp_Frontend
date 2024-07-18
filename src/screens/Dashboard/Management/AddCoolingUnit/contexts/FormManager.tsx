@@ -44,7 +44,7 @@ export type FormValues = {
   powerSource: PowerSourcesIds | null; // "how is the cooling unit powered?" field → POWER_SOURCE key/id
   electricityStorageSystem: ElectricityStorageIds | null; // electricity storage system field → ELECTRICITY_STORAGE key/id
   //
-  // Electricity Conditional Fields
+  // Power Source Conditional Fields
   // scope: generator
   powerSourceDieselConsumptionKwh: number;
   // scope: pvpanels
@@ -58,6 +58,9 @@ export type FormValues = {
   powerSourceGridPercent: number;
   powerSourcePvPercent: number;
   powerSourceBiomassPercent: number;
+  //
+  // Electricity Storage Conditional Fields
+  // TODO
 };
 
 export function buildInitialValues(): FormValues {

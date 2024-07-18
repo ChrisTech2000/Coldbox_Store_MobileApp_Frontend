@@ -62,7 +62,7 @@ export default function OperatorsField() {
                         const itemId = parseInt(item);
                         return (
                           <CheckboxItem
-                            tw="flex-row-reverse"
+                            tw="flex-row-reverse ml-[-10]"
                             label={companyOperators[itemId]}
                             status={internalSelection.includes(itemId) ? 'checked' : 'unchecked'}
                             onPress={() => {
