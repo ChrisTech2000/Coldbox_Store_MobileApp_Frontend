@@ -88,3 +88,5 @@ export const BATTERY_TYPES: Record<BatteryTypes, string> = {
   other: 'Other',
   none: 'None',
 };
+
+export const SENSOR_TYPES: Array<string> = ['ecozen', 'ubibot', 'figorr'];

@@ -21,6 +21,7 @@ import RefrigerantFields from './RefrigerantFields';
 import PowerConsumptionFields from './PowerConsumptionFields';
 import PowerSourceFields from './PowerSourceFields';
 import ElectricityStorageFields from './ElectricityStorageFields';
+import Sensors from './Sensors';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -67,19 +68,7 @@ export default function FormFields() {
           </React.Fragment>
         )}
       />
-      <Controller
-        name="sensor"
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <React.Fragment>
-            <View tw="flex-row items-center justify-between px-3 py-3.5">
-              <Text>Sensor available</Text>
-              <Switch value={value} onValueChange={onChange} />
-            </View>
-            <Divider tw="w-full bg-gray-700" />
-          </React.Fragment>
-        )}
-      />
+      <Sensors />
       <Controller
         name="public"
         control={control}
