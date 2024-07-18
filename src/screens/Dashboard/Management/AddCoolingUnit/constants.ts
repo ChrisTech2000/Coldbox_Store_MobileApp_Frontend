@@ -62,3 +62,29 @@ export const PV_PANELS_TYPES: Record<PvPanelsTypes, string> = {
   other: 'Other',
   none: 'None',
 };
+
+export type ThermalStorageTypes =
+  | 'phase change material'
+  | 'ice block storage'
+  | 'chilled water storage'
+  | 'other'
+  | 'none';
+
+export const THERMAL_STORAGE_TYPES: Record<ThermalStorageTypes, string> = {
+  'phase change material': 'Phase Change Materials(e.g., parrafin wax)',
+  'ice block storage': 'Iceblocks Storage',
+  'chilled water storage': 'Chilled Water Storage',
+  other: 'Other',
+  none: 'None',
+};
+
+export type BatteryTypes = 'lead acid' | 'lithium ion' | 'nickel based' | 'flow' | 'other' | 'none';
+
+export const BATTERY_TYPES: Record<BatteryTypes, string> = {
+  'lead acid': 'Lead acid batteries',
+  'lithium ion': 'Lithium ion batteries',
+  'nickel based': 'Nickel based batteries',
+  flow: 'Flow batteries',
+  other: 'Other',
+  none: 'None',
+};

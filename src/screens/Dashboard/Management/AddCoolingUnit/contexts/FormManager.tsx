@@ -9,6 +9,8 @@ import {
   type PowerSourcesIds,
   type ElectricityStorageIds,
   type PvPanelsTypes,
+  type BatteryTypes,
+  type ThermalStorageTypes,
 } from '../constants';
 
 export type FormValues = {
@@ -60,7 +62,16 @@ export type FormValues = {
   powerSourceBiomassPercent: number;
   //
   // Electricity Storage Conditional Fields
-  // TODO
+  // scope: hybrid → it is basically the union of the battery and thermal storage fields
+  // scope: battery
+  batteryType: BatteryTypes | null;
+  batteryCount: number;
+  batteryWeight: number;
+  batteryCapacity: number;
+  batteryMaxCurrent: number;
+  batteryPeakEnergyStorage: number;
+  // scope: thermal storage
+  thermalStorageMethod: ThermalStorageTypes | null;
 };
 
 export function buildInitialValues(): FormValues {
@@ -104,6 +115,13 @@ export function buildInitialValues(): FormValues {
     powerSourceGridPercent: 0,
     powerSourcePvPercent: 0,
     powerSourceBiomassPercent: 0,
+    batteryType: null,
+    batteryCount: 0,
+    batteryWeight: 0,
+    batteryCapacity: 0,
+    batteryMaxCurrent: 0,
+    batteryPeakEnergyStorage: 0,
+    thermalStorageMethod: null,
   };
 }
 
