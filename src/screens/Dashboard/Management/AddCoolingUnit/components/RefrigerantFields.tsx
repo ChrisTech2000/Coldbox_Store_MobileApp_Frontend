@@ -102,7 +102,7 @@ export default function RefrigerantFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.amountRefrigerant}
             right={<TextInput.Affix text="kg" />}

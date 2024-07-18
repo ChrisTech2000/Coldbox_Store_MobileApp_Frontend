@@ -23,7 +23,7 @@ export default function PvPanelsFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.pvPanelCount}
           />
@@ -41,7 +41,7 @@ export default function PvPanelsFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.pvPanelSize}
             right={<TextInput.Affix text="m2" />}
@@ -59,7 +59,7 @@ export default function PvPanelsFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.pvPanelWeight}
             right={<TextInput.Affix text="kg" />}
@@ -77,7 +77,7 @@ export default function PvPanelsFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.pvPanelMaxPower}
             right={<TextInput.Affix text="W" />}

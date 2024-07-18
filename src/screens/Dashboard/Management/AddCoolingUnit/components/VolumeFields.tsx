@@ -22,7 +22,7 @@ export default function VolumeFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.capacityInMetricTons}
             right={<TextInput.Affix text="MT" />}
@@ -41,7 +41,7 @@ export default function VolumeFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.foodCapacityInMetricTons}
             right={<TextInput.Affix text="MT" />}

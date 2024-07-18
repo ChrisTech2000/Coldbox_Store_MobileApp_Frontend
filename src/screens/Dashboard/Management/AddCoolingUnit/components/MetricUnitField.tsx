@@ -27,7 +27,7 @@ export default function MetricUnitField() {
     ? t(['Dashboard.Management.AddCoolingUnit.metricUnit', selectedMetricUnitId])
     : '';
 
-  const fieldError = !!formState.errors.location;
+  const fieldError = !!formState.errors.metricUnit;
 
   return (
     <React.Fragment>

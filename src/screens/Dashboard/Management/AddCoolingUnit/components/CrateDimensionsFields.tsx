@@ -25,7 +25,7 @@ export default function CrateDimensionsFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.crateLength}
             right={<TextInput.Affix text="cm" />}
@@ -44,7 +44,7 @@ export default function CrateDimensionsFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.crateWidth}
             right={<TextInput.Affix text="cm" />}
@@ -63,7 +63,7 @@ export default function CrateDimensionsFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.crateHeight}
             right={<TextInput.Affix text="cm" />}

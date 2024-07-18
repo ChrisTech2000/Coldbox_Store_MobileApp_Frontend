@@ -27,7 +27,7 @@ export default function UnitTypeField() {
     ? t(['Dashboard.Management.AddCoolingUnit.coolingUnitTypes', selectedUnitTypeId])
     : '';
 
-  const fieldError = !!formState.errors.location;
+  const fieldError = !!formState.errors.coolingUnitType;
 
   return (
     <React.Fragment>

@@ -22,7 +22,7 @@ export default function DieselConsumptionField() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.powerSourceDieselConsumptionKwh}
             right={<TextInput.Affix text="L/kWh" />}

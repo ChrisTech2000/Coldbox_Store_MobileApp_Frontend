@@ -22,7 +22,7 @@ export default function PowerConsumptionFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.powerConsumptionInMt}
             right={<TextInput.Affix text="kW/MT" />}
@@ -40,7 +40,7 @@ export default function PowerConsumptionFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.dailyRoomWattage}
             right={<TextInput.Affix text="kWh/day" />}

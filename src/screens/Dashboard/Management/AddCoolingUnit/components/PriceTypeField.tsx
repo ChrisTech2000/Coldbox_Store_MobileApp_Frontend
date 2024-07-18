@@ -27,7 +27,7 @@ export default function PriceTypeField() {
     ? t(['Dashboard.Management.AddCoolingUnit.pricing', selectedPriceTypeId])
     : '';
 
-  const fieldError = !!formState.errors.location;
+  const fieldError = !!formState.errors.priceType;
 
   return (
     <React.Fragment>

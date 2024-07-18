@@ -25,7 +25,7 @@ export default function UnitSizeFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.roomLength}
             right={<TextInput.Affix text="m" />}
@@ -44,7 +44,7 @@ export default function UnitSizeFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.roomWidth}
             right={<TextInput.Affix text="m" />}
@@ -63,7 +63,7 @@ export default function UnitSizeFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.roomHeight}
             right={<TextInput.Affix text="m" />}
@@ -82,7 +82,7 @@ export default function UnitSizeFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.roomWeight}
             right={<TextInput.Affix text="m" />}

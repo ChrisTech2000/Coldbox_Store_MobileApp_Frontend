@@ -2,6 +2,7 @@ import React from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import type { ValueOf } from '#types/miscellaneous';
+import { useTranslationUtils } from '#i18n/utils';
 import {
   COOLING_UNIT_TYPES,
   PRICING_TYPE,
@@ -139,9 +140,131 @@ type FormManagerProps = {
 export default function FormManager(props: FormManagerProps) {
   const { initialValues } = props;
 
+  const { zodResolver } = useTranslationUtils();
+
   const form = useForm<FormValues>({
     defaultValues: initialValues,
     reValidateMode: 'onSubmit',
+    resolver: zodResolver((z) => {
+      const baseSchema = z.object({
+        name: z.string().min(1),
+        location: z.number().gt(0).positive(),
+        coolingUnitType: z.string().min(1),
+        priceType: z.string().min(1),
+        metricUnit: z.string().min(1),
+        price: z.number().gt(0).positive(),
+        capacityInMetricTons: z.number().positive(),
+        foodCapacityInMetricTons: z.number().positive(),
+        roomLength: z.number().gte(0).optional(),
+        roomWidth: z.number().gte(0).optional(),
+        roomHeight: z.number().gte(0).optional(),
+        roomWeight: z.number().gte(0).optional(),
+        roomInsulator: z.number().gte(0).optional(),
+        capacityInNumberCrates: z.number().gt(0).positive(),
+        crateWeight: z.number().gt(0).positive(),
+        crateLength: z.number().gte(0).optional(),
+        crateWidth: z.number().gte(0).optional(),
+        crateHeight: z.number().gte(0).optional(),
+        editableCheckins: z.boolean(),
+        sensor: z.boolean(),
+        public: z.boolean(),
+        operators: z.array(z.number()),
+        crops: z.array(z.number()),
+        refrigerantType: z.string().optional(),
+        amountRefrigerant: z.number().gte(0).optional(),
+        powerConsumptionInMt: z.number().gte(0).optional(),
+        dailyRoomWattage: z.number().gte(0).optional(),
+        powerSource: z.union([
+          z.literal('generator'),
+          z.literal('pvpanels'),
+          z.literal('hybrid'),
+          z.literal('biomass'),
+          z.literal('grid'),
+          z.literal(null),
+        ]),
+        electricityStorageSystem: z.union([
+          z.literal('battery'),
+          z.literal('thermal storage'),
+          z.literal('hybrid'),
+          z.literal('none'),
+          z.literal(null),
+        ]),
+      });
+
+      const baseGeneratorPowerSource = z.object({
+        powerSourceDieselConsumptionKwh: z.number().positive(),
+      });
+
+      const basePvPanelsPowerSource = z.object({
+        pvPanelCount: z.number().gte(0).optional(),
+        pvPanelType: z.string().nullable(),
+        pvPanelSize: z.number().gte(0).optional(),
+        pvPanelWeight: z.number().gte(0).optional(),
+        pvPanelMaxPower: z.number().gte(0).optional(),
+      });
+
+      const generatorPowerSource = baseGeneratorPowerSource.extend({
+        powerSource: z.literal('generator'),
+      });
+
+      const pvPanelsPowerSource = basePvPanelsPowerSource.extend({
+        powerSource: z.literal('pvpanels'),
+      });
+
+      const hybridPowerSource = baseGeneratorPowerSource.merge(basePvPanelsPowerSource).extend({
+        powerSource: z.literal('hybrid'),
+        powerSourceDieselPercent: z.number().gte(0).optional(),
+        powerSourceGridPercent: z.number().gte(0).optional(),
+        powerSourcePvPercent: z.number().gte(0).optional(),
+        powerSourceBiomassPercent: z.number().gte(0).optional(),
+      });
+
+      const powerSourceConditions = z.discriminatedUnion('powerSource', [
+        generatorPowerSource,
+        pvPanelsPowerSource,
+        hybridPowerSource,
+        z.object({ powerSource: z.literal('grid') }),
+        z.object({ powerSource: z.literal('biomass') }),
+        z.object({ powerSource: z.literal(null) }),
+      ]);
+
+      const schemaWithPowerSource = z.intersection(baseSchema, powerSourceConditions);
+
+      const baseBatteryStorage = z.object({
+        batteryType: z.string().nullable(),
+        batteryCount: z.number().gte(0).optional(),
+        batteryWeight: z.number().gte(0).optional(),
+        batteryCapacity: z.number().gte(0).optional(),
+        batteryMaxCurrent: z.number().gte(0).optional(),
+        batteryPeakEnergyStorage: z.number().gte(0).optional(),
+      });
+
+      const baseThermalStorage = z.object({
+        thermalStorageMethod: z.string().nullable(),
+      });
+
+      const electricityBatteryStorage = baseBatteryStorage.extend({
+        electricityStorageSystem: z.literal('battery'),
+      });
+
+      const electricityThermalStorage = baseThermalStorage.extend({
+        electricityStorageSystem: z.literal('thermal storage'),
+      });
+
+      const electricityHybridStorage = baseBatteryStorage.merge(baseThermalStorage).extend({
+        electricityStorageSystem: z.literal('hybrid'),
+      });
+
+      const electricityStorageConditions = z.discriminatedUnion('electricityStorageSystem', [
+        electricityBatteryStorage,
+        electricityThermalStorage,
+        electricityHybridStorage,
+        z.object({ electricityStorageSystem: z.literal('none') }),
+        z.object({ electricityStorageSystem: z.literal(null) }),
+      ]);
+
+      return z.intersection(schemaWithPowerSource, electricityStorageConditions);
+    }),
   });
 
   const callbackProps = {

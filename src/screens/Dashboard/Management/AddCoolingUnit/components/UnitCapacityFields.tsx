@@ -22,7 +22,7 @@ export default function UnitCapacityFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.roomInsulator}
             right={<TextInput.Affix text="kg" />}
@@ -40,7 +40,7 @@ export default function UnitCapacityFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.capacityInNumberCrates}
           />
@@ -57,7 +57,7 @@ export default function UnitCapacityFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.crateWeight}
             right={<TextInput.Affix text="kg" />}

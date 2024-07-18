@@ -31,7 +31,7 @@ export default function PriceField() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.price}
             right={<TextInput.Affix text={textInputAffix} />}

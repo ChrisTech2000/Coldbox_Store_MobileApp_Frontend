@@ -27,7 +27,7 @@ export default function HybridFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.powerSourceDieselPercent}
             right={<TextInput.Affix text="%" />}
@@ -46,7 +46,7 @@ export default function HybridFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.powerSourceGridPercent}
             right={<TextInput.Affix text="%" />}
@@ -65,7 +65,7 @@ export default function HybridFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.powerSourcePvPercent}
             right={<TextInput.Affix text="%" />}
@@ -84,7 +84,7 @@ export default function HybridFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.powerSourceBiomassPercent}
             right={<TextInput.Affix text="%" />}

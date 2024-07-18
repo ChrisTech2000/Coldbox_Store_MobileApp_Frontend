@@ -24,7 +24,7 @@ export default function BatteryFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.batteryCount}
           />
@@ -41,7 +41,7 @@ export default function BatteryFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.batteryWeight}
             right={<TextInput.Affix text="kg" />}
@@ -59,7 +59,7 @@ export default function BatteryFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.batteryCapacity}
             right={<TextInput.Affix text="Ah" />}
@@ -77,7 +77,7 @@ export default function BatteryFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.batteryMaxCurrent}
             right={<TextInput.Affix text="A" />}
@@ -95,7 +95,7 @@ export default function BatteryFields() {
             dense
             value={value.toString()}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.batteryPeakEnergyStorage}
             right={<TextInput.Affix text="kWh" />}

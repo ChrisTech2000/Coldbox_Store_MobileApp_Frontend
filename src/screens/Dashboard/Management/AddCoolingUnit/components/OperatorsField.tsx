@@ -24,7 +24,7 @@ export default function OperatorsField() {
   const [internalSelection, setInternalSelection] = useState<Array<number>>([]);
 
   const selectedOperators = watch('operators');
-  const fieldError = !!formState.errors.location;
+  const fieldError = !!formState.errors.operators;
 
   const currentValue = useMemo(() => {
     const _str: Array<string> = [];
