@@ -2,10 +2,13 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../contexts/FormManager';
 
 export default function PowerConsumptionFields() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -17,7 +20,7 @@ export default function PowerConsumptionFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Power consumption of cooling unit per MT"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.powerConsumptionInMt')}
             mode="flat"
             dense
             value={value.toString()}
@@ -35,7 +38,7 @@ export default function PowerConsumptionFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Daily wattage of the room"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.dailyRoomWattage')}
             mode="flat"
             dense
             value={value.toString()}

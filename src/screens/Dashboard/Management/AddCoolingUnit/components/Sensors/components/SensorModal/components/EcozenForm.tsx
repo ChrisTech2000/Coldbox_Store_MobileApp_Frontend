@@ -43,7 +43,7 @@ export default function EcozenForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label="Username"
+              label={t('Dashboard.Management.AddCoolingUnit.fields.ecozen.username')}
               mode="flat"
               value={value}
               onChangeText={onChange}
@@ -58,7 +58,7 @@ export default function EcozenForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label="Password"
+              label={t('Dashboard.Management.AddCoolingUnit.fields.ecozen.password')}
               mode="flat"
               value={value}
               onChangeText={onChange}
@@ -73,7 +73,7 @@ export default function EcozenForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label="Machine Id"
+              label={t('Dashboard.Management.AddCoolingUnit.fields.ecozen.machineId')}
               mode="flat"
               value={value}
               onChangeText={onChange}

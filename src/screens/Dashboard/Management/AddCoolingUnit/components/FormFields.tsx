@@ -5,6 +5,8 @@ import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../contexts/FormManager';
 import LocationField from './LocationField';
 import UnitTypeField from './UnitTypeField';
@@ -25,6 +27,7 @@ import Sensors from './Sensors';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -36,7 +39,7 @@ export default function FormFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Cooling unit ID"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.name')}
             mode="flat"
             dense
             value={value}
@@ -61,7 +64,7 @@ export default function FormFields() {
         render={({ field: { onChange, value } }) => (
           <React.Fragment>
             <View tw="flex-row items-center justify-between px-3 py-3.5">
-              <Text>Make check-ins editable by operators</Text>
+              <Text>{t('Dashboard.Management.AddCoolingUnit.fields.editableCheckins')}</Text>
               <Switch value={value} onValueChange={onChange} />
             </View>
             <Divider tw="w-full bg-gray-700" />
@@ -75,10 +78,7 @@ export default function FormFields() {
         render={({ field: { onChange, value } }) => (
           <React.Fragment>
             <View tw="flex-row items-center justify-between px-3 py-3.5">
-              <Text tw="max-w-[80%]">
-                Do you want to make your cooling unit visible for potential cooling users (location,
-                type of room, capacity and price information)?
-              </Text>
+              <Text tw="max-w-[80%]">{t('Dashboard.Management.AddCoolingUnit.fields.public')}</Text>
               <Switch value={value} onValueChange={onChange} />
             </View>
             <Divider tw="w-full bg-gray-700" />

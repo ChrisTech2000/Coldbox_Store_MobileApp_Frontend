@@ -2,11 +2,14 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../../../../contexts/FormManager';
 import PvPanelTypeField from './components/PvPanelTypeField';
 
 export default function PvPanelsFields() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -18,7 +21,7 @@ export default function PvPanelsFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Number of PV panels"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelCount')}
             mode="flat"
             dense
             value={value.toString()}
@@ -36,7 +39,7 @@ export default function PvPanelsFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Size of a single panel"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelSize')}
             mode="flat"
             dense
             value={value.toString()}
@@ -54,7 +57,7 @@ export default function PvPanelsFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Weight of a single panel"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelWeight')}
             mode="flat"
             dense
             value={value.toString()}
@@ -72,7 +75,7 @@ export default function PvPanelsFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Maximum power of a single panel"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelMaxPower')}
             mode="flat"
             dense
             value={value.toString()}

@@ -41,7 +41,7 @@ export default function ElectricityStorageFields() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="Electricity storage system"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.electricityStorageSystem')}
                 currentValue={truncate(currentValue, { length: 25 })}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}

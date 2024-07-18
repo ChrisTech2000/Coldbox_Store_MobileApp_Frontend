@@ -4,10 +4,13 @@ import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../../../contexts/FormManager';
 
 export default function HybridFields() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -22,7 +25,7 @@ export default function HybridFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Diesel Generator"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceDieselPercent')}
             mode="flat"
             dense
             value={value.toString()}
@@ -41,7 +44,7 @@ export default function HybridFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Grid"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceGridPercent')}
             mode="flat"
             dense
             value={value.toString()}
@@ -60,7 +63,7 @@ export default function HybridFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="PV Panels"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourcePvPercent')}
             mode="flat"
             dense
             value={value.toString()}
@@ -79,7 +82,7 @@ export default function HybridFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Biomass"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceBiomassPercent')}
             mode="flat"
             dense
             value={value.toString()}

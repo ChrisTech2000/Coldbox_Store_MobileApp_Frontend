@@ -30,7 +30,7 @@ export default function Prompt() {
       <Modal visible={isVisible} onDismiss={toggleVisibility}>
         <View tw="w-full bg-white rounded-3xl w-2/3 max-w-2/3 h-auto pt-6 pb-4 self-center space-y-2">
           <Text variant="TitleRegular" tw="px-6">
-            Select a sensor type
+            {t('Dashboard.Management.AddCoolingUnit.fields.selectSensorType')}
           </Text>
           <View tw="w-full py-1.5">
             <FlatList

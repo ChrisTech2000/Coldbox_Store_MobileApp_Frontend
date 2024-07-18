@@ -2,10 +2,13 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../contexts/FormManager';
 
 export default function UnitCapacityFields() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -17,7 +20,7 @@ export default function UnitCapacityFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Insulator"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.roomInsulator')}
             mode="flat"
             dense
             value={value.toString()}
@@ -35,7 +38,7 @@ export default function UnitCapacityFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Max number of crates"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.capacityInNumberCrates')}
             mode="flat"
             dense
             value={value.toString()}
@@ -52,7 +55,7 @@ export default function UnitCapacityFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Standard weight of a crate"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.crateWeight')}
             mode="flat"
             dense
             value={value.toString()}

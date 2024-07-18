@@ -43,12 +43,12 @@ export default function PvPanelTypeField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="Type of PV Panels"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelType')}
                 currentValue={truncate(currentValue, { length: 30 })}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 content={{
-                  header: 'Type of PV Panels',
+                  header: t('Dashboard.Management.AddCoolingUnit.fields.pvPanelType'),
                   options: (
                     <RadioButton.Group
                       value={internalSelection ?? ''}

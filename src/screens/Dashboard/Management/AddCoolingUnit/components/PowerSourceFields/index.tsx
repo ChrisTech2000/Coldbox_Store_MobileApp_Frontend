@@ -40,7 +40,7 @@ export default function PowerSourceFields() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="How is the cooling unit powered?"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.powerSource')}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}

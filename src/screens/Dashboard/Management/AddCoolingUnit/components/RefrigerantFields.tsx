@@ -37,12 +37,12 @@ export default function RefrigerantFields() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="Type of refrigerant used"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.refrigerantType')}
                 currentValue={selectedRefrigerantType}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 content={{
-                  header: 'Type of refrigerant used',
+                  header: t('Dashboard.Management.AddCoolingUnit.fields.refrigerantType'),
                   options: (
                     <RadioButton.Group
                       value={internalSelection ?? ''}
@@ -100,7 +100,7 @@ export default function RefrigerantFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Amount of refrigerant"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.amountRefrigerant')}
             mode="flat"
             dense
             value={value.toString()}

@@ -2,10 +2,13 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../contexts/FormManager';
 
 export default function VolumeFields() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -17,7 +20,7 @@ export default function VolumeFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Total empty volume"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.capacityInMetricTons')}
             mode="flat"
             dense
             value={value.toString()}
@@ -36,7 +39,7 @@ export default function VolumeFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Max volume of food"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.foodCapacityInMetricTons')}
             mode="flat"
             dense
             value={value.toString()}

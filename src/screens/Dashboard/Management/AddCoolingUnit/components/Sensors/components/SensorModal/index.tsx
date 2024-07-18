@@ -4,6 +4,7 @@ import { Modal, Portal } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
 
+import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import { useAppEventListener } from '#ui/lib/emitter';
 
@@ -13,6 +14,8 @@ import UbibotForm from './components/UbibotForm';
 import FigorrForm from './components/FigorrForm';
 
 export default function SensorModal() {
+  const { t } = useTranslationUtils();
+
   const [isVisible, toggleVisibility, setModalVisibility] = useToggle(false);
   const [selectedSensor, setSelectedSensor] = useState<SensorTypes | undefined>(undefined);
 
@@ -26,9 +29,14 @@ export default function SensorModal() {
       <Modal visible={isVisible} onDismiss={toggleVisibility}>
         <View tw="w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2">
           <Text variant="TitleRegular" tw="px-6">
-            Add a temperature sensor to your cooling unit.
+            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
           </Text>
-          <Text tw="px-6">Request this info from your sensor provider if not at hand.</Text>
+          <Text tw="px-6">
+            {t([
+              'Dashboard.Management.AddCoolingUnit.fields.sensorDesc',
+              selectedSensor === 'ubibot' ? 'ubibot' : 'default',
+            ])}
+          </Text>
           <_SensorFactory sensorType={selectedSensor} />
         </View>
       </Modal>

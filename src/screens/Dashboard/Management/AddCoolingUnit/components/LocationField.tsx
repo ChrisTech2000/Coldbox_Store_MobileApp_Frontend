@@ -39,12 +39,12 @@ export default function LocationField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="Location"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.location')}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 content={{
-                  header: 'Location',
+                  header: t('Dashboard.Management.AddCoolingUnit.fields.location'),
                   options: (
                     <RadioButton.Group
                       value={internalSelection ?? ''}

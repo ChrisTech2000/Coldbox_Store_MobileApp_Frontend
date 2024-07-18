@@ -40,12 +40,12 @@ export default function UnitTypeField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="What describes the cooling unit best?"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.coolingUnitType')}
                 currentValue={truncate(currentValue, { length: 16 })}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 content={{
-                  header: 'What describes the cooling unit best?',
+                  header: t('Dashboard.Management.AddCoolingUnit.fields.coolingUnitType'),
                   options: (
                     <RadioButton.Group
                       value={internalSelection ?? ''}

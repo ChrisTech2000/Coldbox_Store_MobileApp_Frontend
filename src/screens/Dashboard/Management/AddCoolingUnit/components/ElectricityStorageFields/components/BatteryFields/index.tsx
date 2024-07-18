@@ -2,11 +2,14 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../../../../contexts/FormManager';
 import BatteryTypeField from './components/BatteryTypeField';
 
 export default function BatteryFields() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -19,7 +22,7 @@ export default function BatteryFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Number of batteries"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.batteryCount')}
             mode="flat"
             dense
             value={value.toString()}
@@ -36,7 +39,7 @@ export default function BatteryFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Battery weight"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.batteryWeight')}
             mode="flat"
             dense
             value={value.toString()}
@@ -54,7 +57,7 @@ export default function BatteryFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Capacity of one battery"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.batteryCapacity')}
             mode="flat"
             dense
             value={value.toString()}
@@ -72,7 +75,7 @@ export default function BatteryFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Maximum charging current of one battery"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.batteryMaxCurrent')}
             mode="flat"
             dense
             value={value.toString()}
@@ -90,7 +93,7 @@ export default function BatteryFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Energy storage at peak level of one battery"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.batteryPeakEnergyStorage')}
             mode="flat"
             dense
             value={value.toString()}

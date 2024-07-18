@@ -40,12 +40,12 @@ export default function ThermalStorageField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="Thermal storage method"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.thermalStorageMethod')}
                 currentValue={truncate(currentValue, { length: 30 })}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 content={{
-                  header: 'Thermal storage method',
+                  header: t('Dashboard.Management.AddCoolingUnit.fields.thermalStorageMethod'),
                   options: (
                     <RadioButton.Group
                       value={internalSelection ?? ''}

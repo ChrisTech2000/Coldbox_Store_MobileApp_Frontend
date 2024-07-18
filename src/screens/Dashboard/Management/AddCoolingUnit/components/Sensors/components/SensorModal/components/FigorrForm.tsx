@@ -41,7 +41,7 @@ export default function FigorrForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label="API Key"
+              label={t('Dashboard.Management.AddCoolingUnit.fields.figorr.apiKey')}
               mode="flat"
               value={value}
               onChangeText={onChange}
@@ -56,7 +56,7 @@ export default function FigorrForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label="Device Tag"
+              label={t('Dashboard.Management.AddCoolingUnit.fields.figorr.deviceTag')}
               mode="flat"
               value={value}
               onChangeText={onChange}

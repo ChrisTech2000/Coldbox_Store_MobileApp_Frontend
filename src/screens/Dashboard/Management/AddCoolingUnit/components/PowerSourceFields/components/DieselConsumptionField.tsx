@@ -2,10 +2,13 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { useTranslationUtils } from '#i18n/utils';
+
 import FormManager from '../../../contexts/FormManager';
 
 export default function DieselConsumptionField() {
   const { control, formState } = FormManager.useFormManager();
+  const { t } = useTranslationUtils();
 
   const errors = formState.errors;
 
@@ -17,7 +20,7 @@ export default function DieselConsumptionField() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label="Diesel consumption of the generator per kWh"
+            label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceDieselConsumptionKwh')}
             mode="flat"
             dense
             value={value.toString()}

@@ -43,12 +43,12 @@ export default function BatteryTypeField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="Type of Batteries"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.batteryType')}
                 currentValue={truncate(currentValue, { length: 30 })}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 content={{
-                  header: 'Type of Batteries',
+                  header: t('Dashboard.Management.AddCoolingUnit.fields.batteryType'),
                   options: (
                     <RadioButton.Group
                       value={internalSelection ?? ''}

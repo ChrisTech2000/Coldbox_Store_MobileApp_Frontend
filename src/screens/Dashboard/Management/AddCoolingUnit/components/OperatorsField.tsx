@@ -46,13 +46,13 @@ export default function OperatorsField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label="Operators"
+                label={t('navigation.management.Operators')}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 useScrollView={false}
                 content={{
-                  header: 'Operators',
+                  header: t('navigation.management.Operators'),
                   options: (
                     <FlatList
                       nestedScrollEnabled

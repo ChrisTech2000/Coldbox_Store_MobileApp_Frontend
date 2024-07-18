@@ -59,13 +59,13 @@ export default function CommoditiesField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="lg"
-                label="Commodities"
+                label={t('Dashboard.Management.AddCoolingUnit.fields.crops')}
                 currentValue={selectLabel}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 useScrollView={false}
                 content={{
-                  header: 'Commodities',
+                  header: t('Dashboard.Management.AddCoolingUnit.fields.selectCrops'),
                   headerComponent: (
                     <TextInput
                       tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600 mb-2"

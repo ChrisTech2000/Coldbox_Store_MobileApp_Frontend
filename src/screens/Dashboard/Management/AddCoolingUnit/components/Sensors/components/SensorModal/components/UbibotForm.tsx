@@ -41,7 +41,7 @@ export default function UbibotForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label="Account Key"
+              label={t('Dashboard.Management.AddCoolingUnit.fields.ubibot.accountKey')}
               mode="flat"
               value={value}
               onChangeText={onChange}
@@ -56,7 +56,7 @@ export default function UbibotForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label="Channel Id"
+              label={t('Dashboard.Management.AddCoolingUnit.fields.ubibot.channelId')}
               mode="flat"
               value={value}
               onChangeText={onChange}
