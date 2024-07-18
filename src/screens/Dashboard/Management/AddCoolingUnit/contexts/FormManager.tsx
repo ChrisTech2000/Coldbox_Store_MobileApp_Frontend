@@ -75,57 +75,6 @@ export type FormValues = {
   thermalStorageMethod: ThermalStorageTypes | null;
 };
 
-export function buildInitialValues(): FormValues {
-  return {
-    name: '',
-    location: null,
-    coolingUnitType: null,
-    priceType: PRICING_TYPE.PER_DAY,
-    metricUnit: METRIC_UNITS.CRATES,
-    price: 0,
-    capacityInMetricTons: 0,
-    foodCapacityInMetricTons: 0,
-    roomLength: 0,
-    roomWidth: 0,
-    roomHeight: 0,
-    roomWeight: 0,
-    roomInsulator: 0,
-    capacityInNumberCrates: 0,
-    crateWeight: 25,
-    crateLength: 0,
-    crateWidth: 0,
-    crateHeight: 0,
-    editableCheckins: true,
-    sensor: false,
-    public: false,
-    operators: [],
-    crops: [],
-    refrigerantType: '',
-    amountRefrigerant: 0,
-    powerConsumptionInMt: 0,
-    dailyRoomWattage: 0,
-    powerSource: null,
-    electricityStorageSystem: null,
-    powerSourceDieselConsumptionKwh: 0,
-    pvPanelCount: 0,
-    pvPanelType: null,
-    pvPanelSize: 0,
-    pvPanelWeight: 0,
-    pvPanelMaxPower: 0,
-    powerSourceDieselPercent: 0,
-    powerSourceGridPercent: 0,
-    powerSourcePvPercent: 0,
-    powerSourceBiomassPercent: 0,
-    batteryType: null,
-    batteryCount: 0,
-    batteryWeight: 0,
-    batteryCapacity: 0,
-    batteryMaxCurrent: 0,
-    batteryPeakEnergyStorage: 0,
-    thermalStorageMethod: null,
-  };
-}
-
 type CallbackProps = {
   submitHandler: (evt?: React.BaseSyntheticEvent) => Promise<void>;
   isSubmitting: boolean;
