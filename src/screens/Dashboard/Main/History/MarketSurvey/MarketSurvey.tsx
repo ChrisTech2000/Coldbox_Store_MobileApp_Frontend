@@ -1,29 +1,32 @@
 import startCase from 'lodash/startCase';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Icon, RadioButton, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+import MineCart from '#assets/icons/mine-cart.svg';
 
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { EUnitOfMeasurement } from '#types/global';
+import { EUnitOfMeasurement, ESellingLocation } from '#types/global';
 
-import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
-import { ELocation, MarketSurveySchema, MarketSurveySchemaType } from './schema';
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
 } from '../../components/MultipleSelectWithStore';
+import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
+import { MarketSurveySchema, MarketSurveySchemaType } from './schema';
 
 const useMeasurementStore = createSelectStore<EUnitOfMeasurement>();
 const useSpoilageReasonsStore = createMultipleSelectStore<string>();
@@ -31,6 +34,7 @@ const useSpoilageReasonsStore = createMultipleSelectStore<string>();
 function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
   const { cropId, companyCurrency } = props.route.params;
 
+  const colors = useTailwindColors();
   const { t, zodResolver } = useTranslationUtils();
   const { selectedItem: measureUnit } = useMeasurementStore();
   const { selectedItems: spoilageReasons } = useSpoilageReasonsStore();
@@ -46,6 +50,10 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
     formState: { errors },
   } = useForm<MarketSurveySchemaType>({
     resolver: zodResolver(() => MarketSurveySchema(t)),
+    defaultValues: {
+      unitOfMeasurement: EUnitOfMeasurement.KILOGRAMS,
+      unitaryWeight: 25,
+    },
   });
 
   const { data: crops, isLoading: isCropsLoading } = useApiCall(
@@ -102,17 +110,17 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
           <RadioButton.Group value={value} onValueChange={onChange}>
             <RadioButtonItem
               label={t('Dashboard.History.survey.marketSurvey.locations.farm')}
-              value={ELocation.FARM}
+              value={ESellingLocation.FARM}
               tw="flex flex-row-reverse ml-[-10]"
             />
             <RadioButtonItem
               label={t('Dashboard.History.survey.marketSurvey.locations.market')}
-              value={ELocation.MARKET}
+              value={ESellingLocation.MARKET}
               tw="flex flex-row-reverse ml-[-10]"
             />
             <RadioButtonItem
               label={t('Dashboard.History.survey.marketSurvey.locations.both')}
-              value={ELocation.BOTH}
+              value={ESellingLocation.BOTH}
               tw="flex flex-row-reverse ml-[-10]"
             />
           </RadioButton.Group>
@@ -126,7 +134,12 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
       )}
 
       <Question question={t('Dashboard.History.survey.marketSurvey.priceQuestion')} />
-      <View tw={cn('flex flex-row items-end space-x-2', !errors.price && 'mb-4')}>
+      <View
+        tw={cn(
+          'flex flex-row items-end space-x-2',
+          (!errors.price || measureUnit === EUnitOfMeasurement.KILOGRAMS) && 'mb-4'
+        )}
+      >
         <Controller
           control={control}
           render={({ field: { onChange, value, onBlur } }) => (
@@ -162,6 +175,47 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
       </View>
       {errors.price && (
         <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">{errors.price.message?.toString()}</Text>
+      )}
+      {measureUnit !== EUnitOfMeasurement.KILOGRAMS && (
+        <View tw="mb-4 flex flex-row items-end space-x-2">
+          <Text variant="TextMedium" tw="text-base">
+            {t('Dashboard.CrateManagement.FarmerSurvey.modal.unitWeight', {
+              crate: t(
+                `Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.${measureUnit?.toLowerCase() as EUnitOfMeasurement}`
+              ),
+            })}
+          </Text>
+          <MineCart tw="ml-2 mb-1" width={20} height={20} />
+          <Controller
+            control={control}
+            render={({ field: { onChange, value, onBlur } }) => (
+              <View tw="flex flex-row items-center justify-between space-x-2">
+                <TouchableOpacity
+                  onPress={() => onChangeNumericKeyboard(!value ? 0 : Number(value) - 1, onChange)}
+                  tw="ml-2"
+                >
+                  <Icon source="minus" size={20} color={colors.green.primary} />
+                </TouchableOpacity>
+                <TextInput
+                  tw="h-8 bg-transparent"
+                  keyboardType="number-pad"
+                  value={value?.toString()}
+                  onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
+                  onBlur={onBlur}
+                  error={!!errors.unitaryWeight?.message}
+                />
+                <TouchableOpacity
+                  onPress={() => onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange)}
+                  tw="mr-2"
+                >
+                  <Icon source="plus" size={20} color={colors.green.primary} />
+                </TouchableOpacity>
+              </View>
+            )}
+            name="unitaryWeight"
+          />
+          <Icon source="weight-kilogram" size={27} />
+        </View>
       )}
 
       <Question question={t('Dashboard.History.survey.marketSurvey.spoiledProducesQuestion')} />

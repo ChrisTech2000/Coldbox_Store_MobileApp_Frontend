@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { Translator } from '#i18n/utils';
-import { EUnitOfMeasurement } from '#types/global';
+import { ESellingLocation, EUnitOfMeasurement } from '#types/global';
 
 export enum EOccupation {
   FARMER = 'FARMER',
@@ -12,11 +12,6 @@ export enum EExperience {
   OLD = 'OLD',
   NEW = 'NEW',
 }
-export enum ELocation {
-  FARM = 'FARM',
-  MARKET = 'MARKET',
-  BOTH = 'BOTH',
-}
 
 export type BaseSurveySchemaType = {
   occupation: EOccupation;
@@ -25,10 +20,11 @@ export type BaseSurveySchemaType = {
 };
 
 export type MarketSurveySchemaType = {
-  location: ELocation;
+  location: ESellingLocation;
   reasonsForSpoilage: string[];
   spoiledProduceAmount: number;
   price: number;
+  unitaryWeight: number;
   unitOfMeasurement: EUnitOfMeasurement;
 };
 
@@ -55,7 +51,7 @@ export const BaseSurveySchema = (t: Translator) =>
 
 export const MarketSurveySchema = (t: Translator) =>
   z.object({
-    location: z.enum([ELocation.FARM, ELocation.MARKET, ELocation.BOTH], {
+    location: z.enum([ESellingLocation.FARM, ESellingLocation.MARKET, ESellingLocation.BOTH], {
       message: t('Dashboard.History.survey.marketSurvey.formError'),
     }),
     unitOfMeasurement: z.enum([
@@ -65,6 +61,14 @@ export const MarketSurveySchema = (t: Translator) =>
       EUnitOfMeasurement.SACKS,
       EUnitOfMeasurement.CRATES,
     ]),
+    unitaryWeight: z
+      .number({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
+      .positive({
+        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
+      })
+      .min(1, {
+        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
+      }),
     reasonsForSpoilage: z
       .string()
       .array()

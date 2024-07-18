@@ -17,10 +17,10 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>) {
-  const { crops, farmer, companyCurrency } = props.route.params;
+  const { crops, farmer, companyCurrency, checkoutId } = props.route.params;
 
   const { t } = useTranslationUtils();
-  const { setSurveys, setFarmerId, setRefetchSurveys } = useMarketSurveyStore();
+  const { setSurveys, setFarmerId, setRefetchSurveys, setCheckoutId } = useMarketSurveyStore();
 
   const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getFarmers',
@@ -81,6 +81,12 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
       setRefetchSurveys(refetch);
     }
   }, [surveys, refetch]);
+
+  useEffect(() => {
+    if (checkoutId) {
+      setCheckoutId(checkoutId);
+    }
+  }, [checkoutId]);
 
   if (loadingFarmers || loadingSurveys) {
     return (

@@ -343,6 +343,12 @@ export enum EMovementType {
   IN = 'in',
 }
 
+export enum ESellingLocation {
+  FARM = 'farm',
+  MARKET = 'local-market',
+  BOTH = 'both',
+}
+
 //////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',

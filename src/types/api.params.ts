@@ -1,5 +1,13 @@
 import { JsonObject } from '#services/utils';
-import { EPaymentType, ERoles, type FarmerSurvey, type Company, type User } from './global';
+import {
+  EPaymentType,
+  ERoles,
+  ESellingLocation,
+  EUnitOfMeasurement,
+  type Company,
+  type FarmerSurvey,
+  type User,
+} from './global';
 
 type SignUpEmployee = Omit<User, 'lastLogin' | 'id' | 'phone'> & {
   phone?: string;
@@ -255,4 +263,19 @@ export interface EditCheckInParams extends JsonObject {
   cropId: number;
   farmerId: number;
   plannedDays: number;
+}
+
+export interface AddMarketSurveyParams extends JsonObject {
+  crop: number;
+  checkout: number;
+  sellingPlace: ESellingLocation;
+  localMarket?: string | null;
+  market?: string | null;
+  price: number;
+  reasonsForLoss: Array<string>;
+  sellingUnit: EUnitOfMeasurement;
+  sellingDate: Date;
+  kgInUnit: number;
+  loss: number;
+  currency: string;
 }

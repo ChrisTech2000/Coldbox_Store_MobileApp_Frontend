@@ -3,6 +3,8 @@ import {
   EMovementType,
   EPaymentType,
   ERoles,
+  ESellingLocation,
+  EUnitOfMeasurement,
   type CommodityInfo,
   type CommodityTotal,
   type CommonPricingType,
@@ -269,4 +271,21 @@ export type GetMovementOperatorsResponse = Array<{
 
 export type EditCheckInResponse = {
   message: string;
+};
+
+export type AddMarketSurveyResponse = {
+  id: number;
+  sellingPlace: ESellingLocation;
+  price: number;
+  currency: string;
+  sellingUnit: EUnitOfMeasurement;
+  sellingDate: Date;
+  loss: number;
+  reasonsForLoss: Array<string>;
+  kgInUnit: number;
+  dateFilledIn: Date;
+  checkout: number;
+  market?: string | null;
+  localMarket?: string | null;
+  crop: number;
 };

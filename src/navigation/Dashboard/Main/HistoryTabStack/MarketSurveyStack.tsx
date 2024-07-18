@@ -20,6 +20,7 @@ import { dashboardHeaderFactory } from '../../lib/dashboardHeaderFactory';
 
 export type MarketSurveyStackRoutes = {
   MarketSurveyBase: {
+    checkoutId?: number;
     crops: Array<{ id: number; name: string }>;
     farmer: string;
     companyCurrency?: string;
