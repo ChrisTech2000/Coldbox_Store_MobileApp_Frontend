@@ -20,7 +20,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
   const { crops, farmer } = props.route.params;
 
   const { t } = useTranslationUtils();
-  const { setSurveys, setFarmerId } = useMarketSurveyStore();
+  const { setSurveys, setFarmerId, setRefetchSurveys } = useMarketSurveyStore();
 
   const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getFarmers',
@@ -37,7 +37,11 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
     )?.id;
   }, [farmers]);
 
-  const { data: surveys, isLoading: loadingSurveys } = useApiCall(
+  const {
+    data: surveys,
+    isLoading: loadingSurveys,
+    refetch,
+  } = useApiCall(
     'getFarmerSurveys',
     ColdtivateService.getFarmerSurveys,
     {
@@ -73,9 +77,10 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
   useEffect(() => {
     if (surveys?.length) {
       setSurveys(surveys);
-      setFarmerId(farmerId as number);
+      setFarmerId(surveys[0].farmer as number);
+      setRefetchSurveys(refetch);
     }
-  }, [surveys, farmerId]);
+  }, [surveys, refetch]);
 
   if (loadingFarmers || loadingSurveys) {
     return (

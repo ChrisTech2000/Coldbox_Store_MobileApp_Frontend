@@ -56,7 +56,8 @@ export function FarmersSurveyModal({
   const colors = useTailwindColors();
 
   const { selectedItem: measureUnit } = useMeasurementStore();
-  const { selectedItems: spoilageReasons } = useSpoilageReasonsStore();
+  const { selectedItems: spoilageReasons, onSelect: onSelectSpoilageReasons } =
+    useSpoilageReasonsStore();
 
   const [isUnitModalVisible, setIsUnitModalVisible] = useState<boolean>(false);
   const [isSpoilageReasonsModalVisible, setIsSpoilageReasonsModalVisible] =
@@ -88,6 +89,12 @@ export function FarmersSurveyModal({
   useEffect(() => {
     if (spoilageReasons) setValue('reasonsForSpoilage', spoilageReasons);
   }, [spoilageReasons]);
+
+  useEffect(() => {
+    if (defaultValues?.reasonsForSpoilage?.length) {
+      onSelectSpoilageReasons(defaultValues.reasonsForSpoilage);
+    }
+  }, [defaultValues?.reasonsForSpoilage]);
 
   return (
     <Portal>

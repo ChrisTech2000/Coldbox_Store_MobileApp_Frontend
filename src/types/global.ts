@@ -233,7 +233,7 @@ export interface FarmerSurvey {
   averageSeasonInMonths: number | null;
   currency: string;
   kgInUnit: number;
-  reasonForLoss: Array<string>;
+  reasonForLoss: Array<string> | string;
   dateFilledIn: Date;
   dateLastModified: Date;
 }

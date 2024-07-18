@@ -21,11 +21,17 @@ import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 import { FarmersSurveyModal, FarmerSurveySchemaType } from '../../components/FarmerSurveyModal';
 import { BaseSurveySchema, EExperience, EOccupation, type Schema } from './schema';
+import { sanitizeString } from './utils';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { HistoryTabStackRoutes } from 'navigation/Dashboard/Main/HistoryTabStack';
 
 function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
   const colors = useTailwindColors();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<HistoryTabStackRoutes>>();
+
   const { t, zodResolver } = useTranslationUtils();
-  const { surveys, farmerId } = useMarketSurveyStore();
+  const { surveys, farmerId, refetchSurveys, resetMarketSurveyStore } = useMarketSurveyStore();
   const { company } = useManagementStore();
 
   const { data: crops, isLoading: isCropsLoading } = useApiCall(
@@ -50,6 +56,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
     },
   });
 
+  console.log(surveys[0].experience);
   const experience = watch('experience');
 
   const farmerSurveys = useMemo(() => {
@@ -61,19 +68,49 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
     }));
   }, [surveys, crops]);
 
-  const onSubmit: SubmitHandler<Schema> = useCallback(() => {}, []);
+  const onSubmit: SubmitHandler<Schema> = useCallback(
+    async (values) => {
+      console.log(values, '$$$');
+      const result = await ColdtivateService.updateFarmerSurveys({
+        farmer: farmerId as number,
+        userType: values.occupation,
+        experience: values.experience === EExperience.OLD ? 'yes' : 'no',
+        experienceDuration: Number(values.experienceInMonths ?? 0),
+        commodities: [...farmerSurveys],
+      });
+
+      if (result) {
+        rootNavigation.navigate('RootHistoryTabStack');
+        resetMarketSurveyStore();
+        refetchSurveys?.();
+      }
+    },
+    [farmerId, farmerSurveys, refetchSurveys]
+  );
 
   const onSubmitSurvey: SubmitHandler<FarmerSurveySchemaType> = useCallback(
     async (values) => {
-      if (!openFarmersSurveyModal) return;
+      if (openFarmersSurveyModal === null) return;
 
+      const cropId = farmerSurveys[openFarmersSurveyModal].cropId;
       const result = await ColdtivateService.updateFarmerSurveys({
         farmer: farmerId as number,
         userType: surveys[0].userType,
         experience: !!surveys[0].experience,
         experienceDuration: surveys[0].experienceDuration,
         commodities: [
-          ...(surveys?.flatMap((survey) => survey.co) ?? []),
+          ...Array.from(
+            (surveys ?? [])
+              .flatMap((survey) => survey.co)
+              .filter((survey) => survey.cropId !== cropId)
+              .reduce((map, survey) => {
+                if (!map.has(survey.cropId)) {
+                  map.set(survey.cropId, survey);
+                }
+                return map;
+              }, new Map())
+              .values()
+          ),
           {
             averagePrice: values.averagePrice,
             unit: values.unitOfMeasurement,
@@ -85,16 +122,17 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
             kgInUnit: values.unitaryWeight as number,
             currency: company?.currency ?? '',
             reasonForLoss: values.reasonsForSpoilage,
-            cropId: farmerSurveys[openFarmersSurveyModal].cropId,
+            cropId,
           },
         ],
       });
 
       if (result) {
+        refetchSurveys?.();
         setOpenFarmersSurveyModal(null);
       }
     },
-    [surveys, farmerSurveys, company, openFarmersSurveyModal]
+    [surveys, farmerSurveys, company, openFarmersSurveyModal, refetchSurveys]
   );
 
   if (isCropsLoading) {
@@ -219,25 +257,27 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
                     <Icon source="chevron-right" size={20} />
                   </View>
                 </View>
-                <FarmersSurveyModal
-                  company={company}
-                  cropName={survey.cropName}
-                  isModalVisible={openFarmersSurveyModal === index}
-                  onDismiss={() => setOpenFarmersSurveyModal(null)}
-                  onSubmit={onSubmitSurvey}
-                  defaultValues={{
-                    weightDistribution: {
-                      totalProducedWeekly: survey.quantityTotal,
-                      quantitySelfConsumed: survey.quantitySelfConsumed,
-                      quantitySold: survey.quantitySold,
-                      quantityLost: survey.quantityBelowMarketPrice,
-                    },
-                    unitOfMeasurement: survey.unit,
-                    unitaryWeight: survey.kgInUnit,
-                    reasonsForSpoilage: survey.reasonForLoss,
-                    averagePrice: survey.averagePrice,
-                  }}
-                />
+                {openFarmersSurveyModal === index && (
+                  <FarmersSurveyModal
+                    company={company}
+                    cropName={survey.cropName}
+                    isModalVisible={openFarmersSurveyModal === index}
+                    onDismiss={() => setOpenFarmersSurveyModal(null)}
+                    onSubmit={onSubmitSurvey}
+                    defaultValues={{
+                      weightDistribution: {
+                        totalProducedWeekly: survey.quantityTotal,
+                        quantitySelfConsumed: survey.quantitySelfConsumed,
+                        quantitySold: survey.quantitySold,
+                        quantityLost: survey.quantityBelowMarketPrice,
+                      },
+                      unitOfMeasurement: survey.unit,
+                      unitaryWeight: survey.kgInUnit,
+                      reasonsForSpoilage: sanitizeString(survey.reasonForLoss as string),
+                      averagePrice: survey.averagePrice,
+                    }}
+                  />
+                )}
                 <Divider tw="bg-gray-400" />
               </TouchableOpacity>
             )}
