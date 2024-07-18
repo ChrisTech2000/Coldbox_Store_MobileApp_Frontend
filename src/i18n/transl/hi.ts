@@ -682,6 +682,8 @@ export default {
           fillCommoditiesMessage:
             'कृपया नीचे दिए गए प्रश्नों को उन वस्तुओं के लिए भरें जिन्हें आप कमरे में अधिक बार लाने की योजना बना रहे हैं।',
           addCommodityButton: 'वस्तु जोड़ें',
+          genericFormError: 'कृपया एक विकल्प चुनें',
+          experienceError: 'कृपया एक मान दर्ज करें',
         },
       },
       stringTemplates: {
