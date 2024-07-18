@@ -56,7 +56,6 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
     },
   });
 
-  console.log(surveys[0].experience);
   const experience = watch('experience');
 
   const farmerSurveys = useMemo(() => {
@@ -70,7 +69,6 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
 
   const onSubmit: SubmitHandler<Schema> = useCallback(
     async (values) => {
-      console.log(values, '$$$');
       const result = await ColdtivateService.updateFarmerSurveys({
         farmer: farmerId as number,
         userType: values.occupation,
