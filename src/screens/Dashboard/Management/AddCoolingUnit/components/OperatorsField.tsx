@@ -21,9 +21,10 @@ export default function OperatorsField() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<Array<number>>([]);
 
-  const selectedOperators = watch('operators');
+  const selectedOperators = watch('operators', []);
+  const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedOperators);
+
   const fieldError = !!formState.errors.operators;
 
   const currentValue = useMemo(() => {

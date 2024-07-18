@@ -23,9 +23,12 @@ export default function PvPanelTypeField() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<PvPanelsTypes | null>(null);
 
-  const selectedPvPanelType = watch('pvPanelType');
+  const selectedPvPanelType = watch('pvPanelType', null);
+  const [internalSelection, setInternalSelection] = useState<PvPanelsTypes | null>(
+    selectedPvPanelType
+  );
+
   const currentValue = selectedPvPanelType ? PV_PANELS_TYPES[selectedPvPanelType] : '';
 
   const fieldError = !!formState.errors.pvPanelType;

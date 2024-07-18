@@ -23,9 +23,12 @@ export default function BatteryTypeField() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<BatteryTypes | null>(null);
 
-  const selectedBatteryType = watch('batteryType');
+  const selectedBatteryType = watch('batteryType', null);
+  const [internalSelection, setInternalSelection] = useState<BatteryTypes | null>(
+    selectedBatteryType
+  );
+
   const currentValue = selectedBatteryType ? BATTERY_TYPES[selectedBatteryType] : '';
 
   const fieldError = !!formState.errors.batteryType;

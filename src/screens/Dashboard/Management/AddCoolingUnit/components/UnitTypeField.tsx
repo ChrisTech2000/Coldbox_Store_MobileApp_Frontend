@@ -20,9 +20,10 @@ export default function UnitTypeField() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<string | null>(null);
 
-  const selectedUnitTypeId = watch('coolingUnitType');
+  const selectedUnitTypeId = watch('coolingUnitType', null);
+  const [internalSelection, setInternalSelection] = useState<string | null>(selectedUnitTypeId);
+
   const currentValue = selectedUnitTypeId
     ? t(['Dashboard.Management.AddCoolingUnit.coolingUnitTypes', selectedUnitTypeId])
     : '';

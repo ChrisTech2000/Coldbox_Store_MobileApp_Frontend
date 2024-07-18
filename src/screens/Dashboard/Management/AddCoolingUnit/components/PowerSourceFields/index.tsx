@@ -20,9 +20,12 @@ export default function PowerSourceFields() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<PowerSourcesIds | null>(null);
 
-  const selectedPowerSource = watch('powerSource');
+  const selectedPowerSource = watch('powerSource', null);
+  const [internalSelection, setInternalSelection] = useState<PowerSourcesIds | null>(
+    selectedPowerSource
+  );
+
   const currentValue = selectedPowerSource ? POWER_SOURCES[selectedPowerSource] : '';
 
   const fieldError = !!formState.errors.powerSource;

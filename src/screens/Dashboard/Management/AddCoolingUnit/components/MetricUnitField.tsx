@@ -20,9 +20,12 @@ export default function MetricUnitField() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<string | null>(null);
 
   const selectedMetricUnitId = watch('metricUnit');
+  const [internalSelection, setInternalSelection] = useState<string | null>(
+    selectedMetricUnitId ?? null
+  );
+
   const currentValue = selectedMetricUnitId
     ? t(['Dashboard.Management.AddCoolingUnit.metricUnit', selectedMetricUnitId])
     : '';

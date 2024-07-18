@@ -20,9 +20,12 @@ export default function ThermalStorageField() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<ThermalStorageTypes | null>(null);
 
-  const selectedThermalStorage = watch('thermalStorageMethod');
+  const selectedThermalStorage = watch('thermalStorageMethod', null);
+  const [internalSelection, setInternalSelection] = useState<ThermalStorageTypes | null>(
+    selectedThermalStorage
+  );
+
   const currentValue = selectedThermalStorage ? THERMAL_STORAGE_TYPES[selectedThermalStorage] : '';
 
   const fieldError = !!formState.errors.thermalStorageMethod;

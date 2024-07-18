@@ -21,9 +21,12 @@ export default function ElectricityStorageFields() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<ElectricityStorageIds | null>(null);
 
-  const selectedStorageSystem = watch('electricityStorageSystem');
+  const selectedStorageSystem = watch('electricityStorageSystem', null);
+  const [internalSelection, setInternalSelection] = useState<ElectricityStorageIds | null>(
+    selectedStorageSystem
+  );
+
   const currentValue = selectedStorageSystem ? ELECTRICITY_STORAGE[selectedStorageSystem] : '';
 
   const fieldError = !!formState.errors.electricityStorageSystem;

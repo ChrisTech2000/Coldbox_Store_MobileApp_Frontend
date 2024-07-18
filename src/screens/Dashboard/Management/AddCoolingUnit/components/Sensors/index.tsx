@@ -11,7 +11,7 @@ import SensorModal from './components/SensorModal';
 export default function Sensors() {
   const { watch } = FormManager.useFormManager();
 
-  const selectedSensor = watch('sensor');
+  const integratedSensor = watch('sensor', false);
 
   return (
     <React.Fragment>
@@ -20,7 +20,7 @@ export default function Sensors() {
       <View tw="flex-row items-center justify-between px-3 py-3.5">
         <Text>Sensor available</Text>
         <Switch
-          value={selectedSensor}
+          value={integratedSensor}
           onChange={() => emitter.emit(APP_EVENTS.DISPATCH_SENSOR_PROMPT, true)}
         />
       </View>

@@ -20,9 +20,12 @@ export default function PriceTypeField() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<string | null>(null);
 
   const selectedPriceTypeId = watch('priceType');
+  const [internalSelection, setInternalSelection] = useState<string | null>(
+    selectedPriceTypeId ?? null
+  );
+
   const currentValue = selectedPriceTypeId
     ? t(['Dashboard.Management.AddCoolingUnit.pricing', selectedPriceTypeId])
     : '';

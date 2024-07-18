@@ -19,9 +19,12 @@ export default function RefrigerantFields() {
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
-  const [internalSelection, setInternalSelection] = useState<string | null>(null);
 
   const selectedRefrigerantType = watch('refrigerantType');
+  const [internalSelection, setInternalSelection] = useState<string | null>(
+    selectedRefrigerantType ?? null
+  );
+
   const errors = formState.errors;
 
   return (
