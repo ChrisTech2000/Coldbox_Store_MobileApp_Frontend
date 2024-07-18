@@ -47,7 +47,7 @@ export default function CommodityField(props: Props) {
     return selectedOptions.length > 0 ? selectedOptions.join(', ') : '';
   }, [datums, selectedCommodities]);
 
-  const fieldError = !!formState.errors.country;
+  const fieldError = !!formState.errors.commodities;
 
   return (
     <View tw="mb-2">

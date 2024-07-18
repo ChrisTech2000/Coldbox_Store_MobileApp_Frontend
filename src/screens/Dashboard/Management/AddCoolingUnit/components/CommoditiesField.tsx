@@ -1,0 +1,142 @@
+import React, { useMemo, useState } from 'react';
+import { Dimensions, View } from 'react-native';
+import { Controller } from 'react-hook-form';
+import { Checkbox, Divider, TextInput } from 'react-native-paper';
+import { FlashList } from '@shopify/flash-list';
+import truncate from 'lodash/truncate';
+
+import { Select } from '#ui/components/Select';
+import { Button } from '#ui/components/Button';
+
+import { useToggle } from '#ui/hooks/useToggle';
+import { useTranslationUtils } from '#i18n/utils';
+import { cn } from '#ui/lib/cn';
+
+import FormManager, { type FormValues } from '../contexts/FormManager';
+import DataAggregator from '../contexts/DataAggregator';
+
+const deviceWidth = Dimensions.get('screen').width;
+const deviceHeight = Dimensions.get('screen').height;
+
+export default function CommoditiesField() {
+  const { control, watch, formState } = FormManager.useFormManager();
+  const { companyCrops } = DataAggregator.useDataAggregator();
+  const { t } = useTranslationUtils();
+
+  const [isVisible, toggleVisibility] = useToggle(false);
+  const [search, setSearch] = useState<string>('');
+
+  const selectedCrops = watch('crops');
+  const [internalSelection, setInternalSelection] = useState<Array<number>>([]);
+
+  const datums = useMemo(() => {
+    const entries: Array<[number, string]> = [];
+    for (const [id, name] of Object.entries(companyCrops)) {
+      if (name.toLowerCase().includes(search.toLowerCase())) {
+        entries.push([parseInt(id), name]);
+      }
+    }
+    return entries;
+  }, [companyCrops, search]);
+
+  const selectLabel = useMemo(() => {
+    const selectedOptions = datums
+      .filter(([id]) => selectedCrops.includes(id))
+      .slice(0, 2)
+      .map(([, name]) => truncate(name, { length: 7 }));
+    return selectedOptions.length > 0 ? selectedOptions.join(', ') : '';
+  }, [datums, selectedCrops]);
+
+  const fieldError = !!formState.errors.crops;
+
+  return (
+    <React.Fragment>
+      <Controller<FormValues>
+        name="crops"
+        control={control}
+        render={({ field: { onChange } }) => (
+          <View tw="mt-4">
+            <View tw="pl-4 pr-2 pb-1.5">
+              <Select
+                variant="lg"
+                label="Commodities"
+                currentValue={selectLabel}
+                isModalOpen={isVisible}
+                onClick={toggleVisibility}
+                useScrollView={false}
+                content={{
+                  header: 'Commodities',
+                  headerComponent: (
+                    <TextInput
+                      tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600 mb-2"
+                      label={t('actions.search')}
+                      value={search}
+                      onChangeText={(val) => setSearch(val)}
+                      left={<TextInput.Icon icon="magnify" />}
+                    />
+                  ),
+                  options: (
+                    <FlashList
+                      data={[...datums]}
+                      renderItem={({ item: [id, name], index }) => (
+                        <React.Fragment>
+                          <Checkbox.Item
+                            key={`commodity-item-${id}-#${index}`}
+                            label={name}
+                            status={internalSelection.includes(id) ? 'checked' : 'unchecked'}
+                            onPress={() => {
+                              setInternalSelection((prev) => {
+                                const clone = [...prev];
+                                const idx = clone.indexOf(id);
+                                if (idx === -1) clone.push(id);
+                                else clone.splice(idx, 1);
+                                return clone;
+                              });
+                            }}
+                          />
+                          <Divider />
+                        </React.Fragment>
+                      )}
+                      estimatedItemSize={40}
+                      estimatedListSize={{
+                        height: deviceHeight,
+                        width: deviceWidth / 2,
+                      }}
+                    />
+                  ),
+                  footer: (
+                    <View tw="flex flex-row items-center justify-end">
+                      <Button
+                        mode="text"
+                        uppercase
+                        onPress={(evt) => {
+                          evt.stopPropagation();
+                          setInternalSelection(selectedCrops);
+                          toggleVisibility();
+                        }}
+                      >
+                        {t('actions.cancel')}
+                      </Button>
+                      <Button
+                        mode="text"
+                        uppercase
+                        onPress={(evt) => {
+                          evt.stopPropagation();
+                          onChange(internalSelection);
+                          toggleVisibility();
+                        }}
+                      >
+                        {t('actions.ok')}
+                      </Button>
+                    </View>
+                  ),
+                }}
+              />
+            </View>
+            <Divider tw={cn('w-full bg-gray-700', fieldError && 'bg-red-700 h-0.5')} />
+          </View>
+        )}
+      />
+    </React.Fragment>
+  );
+}
