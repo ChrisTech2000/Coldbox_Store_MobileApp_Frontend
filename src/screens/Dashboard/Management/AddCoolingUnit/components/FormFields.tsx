@@ -17,7 +17,7 @@ import UnitCapacityFields from './UnitCapacityFields';
 import CrateDimensionsFields from './CrateDimensionsFields';
 import OperatorsField from './OperatorsField';
 import CommoditiesField from './CommoditiesField';
-import RefrigerantTypeField from './RefrigerantTypeField';
+import RefrigerantFields from './RefrigerantFields';
 
 export default function FormFields() {
   const { control, formState } = FormManager.useFormManager();
@@ -95,7 +95,7 @@ export default function FormFields() {
       />
       <OperatorsField />
       <CommoditiesField />
-      <RefrigerantTypeField />
+      <RefrigerantFields />
     </React.Fragment>
   );
 }

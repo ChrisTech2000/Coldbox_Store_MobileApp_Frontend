@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Controller } from 'react-hook-form';
-import { Divider, RadioButton } from 'react-native-paper';
+import { Divider, RadioButton, TextInput } from 'react-native-paper';
 
 import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -14,7 +14,7 @@ import { cn } from '#ui/lib/cn';
 import FormManager, { type FormValues } from '../contexts/FormManager';
 import { REFRIGERANTS } from '../constants';
 
-export default function RefrigerantTypeField() {
+export default function RefrigerantFields() {
   const { control, watch, formState } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
 
@@ -22,7 +22,7 @@ export default function RefrigerantTypeField() {
   const [internalSelection, setInternalSelection] = useState<string | null>(null);
 
   const selectedRefrigerantType = watch('refrigerantType');
-  const fieldError = !!formState.errors.location;
+  const errors = formState.errors;
 
   return (
     <React.Fragment>
@@ -84,8 +84,29 @@ export default function RefrigerantTypeField() {
                 }}
               />
             </View>
-            <Divider tw={cn('w-full bg-gray-700', fieldError && 'bg-red-700 h-0.5')} />
+            <Divider
+              tw={cn('w-full bg-gray-700', !!errors.refrigerantType && 'bg-red-700 h-0.5')}
+            />
           </View>
+        )}
+      />
+
+      <Controller
+        name="amountRefrigerant"
+        control={control}
+        render={({ field: { onChange, value, onBlur } }) => (
+          <TextInput
+            tw="w-full bg-transparent mt-1"
+            label="Amount of refrigerant"
+            mode="flat"
+            dense
+            value={value.toString()}
+            keyboardType="numeric"
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={!!errors.amountRefrigerant}
+            right={<TextInput.Affix text="kg" />}
+          />
         )}
       />
     </React.Fragment>
