@@ -677,6 +677,8 @@ const en = {
           fillCommoditiesMessage:
             'Please fill in the below questions for the commodities that you plan to bring to the room more often.',
           addCommodityButton: 'Add commodity',
+          genericFormError: 'Please select an option',
+          experienceError: 'Please introduce a value',
         },
       },
       stringTemplates: {

@@ -1,75 +1,280 @@
-import React from 'react';
-import { View } from 'react-native';
-import { Icon, RadioButton } from 'react-native-paper';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { ActivityIndicator, Divider, Icon, RadioButton } from 'react-native-paper';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { Button } from '#ui/components/Button';
+import { Input } from '#ui/components/Input';
+import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { RadioButtonItem } from '#ui/components/RadioButton';
+import { paperTheme } from '#ui/lib/theme';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import { useManagementStore } from '#stores/management';
+import { useMarketSurveyStore } from '#stores/marketSurvey';
 
-function BaseSurvey() {
+import { FarmersSurveyModal, FarmerSurveySchemaType } from '../../components/FarmerSurveyModal';
+import { BaseSurveySchema, EExperience, EOccupation, type Schema } from './schema';
+
+function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
   const colors = useTailwindColors();
-  const { t } = useTranslationUtils();
+  const { t, zodResolver } = useTranslationUtils();
+  const { surveys, farmerId } = useMarketSurveyStore();
+  const { company } = useManagementStore();
+
+  const { data: crops, isLoading: isCropsLoading } = useApiCall(
+    'getAllCrops',
+    ColdtivateService.getAllCrops,
+    {}
+  );
+
+  const [openFarmersSurveyModal, setOpenFarmersSurveyModal] = useState<number | null>(null);
+
+  const {
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<Schema>({
+    resolver: zodResolver(() => BaseSurveySchema(t)),
+    defaultValues: {
+      occupation: surveys[0].userType as EOccupation,
+      experience: surveys[0].experience ? EExperience.OLD : EExperience.NEW,
+      experienceInMonths: surveys[0].experienceDuration.toString(),
+    },
+  });
+
+  const experience = watch('experience');
+
+  const farmerSurveys = useMemo(() => {
+    if (!crops?.length || !surveys.length) return [];
+
+    return surveys[0].co.map((co) => ({
+      ...co,
+      cropName: crops.find((c) => c.id === co.cropId)?.name ?? '',
+    }));
+  }, [surveys, crops]);
+
+  const onSubmit: SubmitHandler<Schema> = useCallback(() => {}, []);
+
+  const onSubmitSurvey: SubmitHandler<FarmerSurveySchemaType> = useCallback(
+    async (values) => {
+      if (!openFarmersSurveyModal) return;
+
+      const result = await ColdtivateService.updateFarmerSurveys({
+        farmer: farmerId as number,
+        userType: surveys[0].userType,
+        experience: !!surveys[0].experience,
+        experienceDuration: surveys[0].experienceDuration,
+        commodities: [
+          ...(surveys?.flatMap((survey) => survey.co) ?? []),
+          {
+            averagePrice: values.averagePrice,
+            unit: values.unitOfMeasurement,
+            quantityTotal: values.weightDistribution.totalProducedWeekly,
+            quantityBelowMarketPrice: values.weightDistribution.quantityLost,
+            quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
+            quantitySold: values.weightDistribution.quantitySold,
+            averageSeasonInMonths: null,
+            kgInUnit: values.unitaryWeight as number,
+            currency: company?.currency ?? '',
+            reasonForLoss: values.reasonsForSpoilage,
+            cropId: farmerSurveys[openFarmersSurveyModal].cropId,
+          },
+        ],
+      });
+
+      if (result) {
+        setOpenFarmersSurveyModal(null);
+      }
+    },
+    [surveys, farmerSurveys, company, openFarmersSurveyModal]
+  );
+
+  if (isCropsLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
 
   return (
     <View tw="flex-1 space-y-4 m-4">
-      <View>
-        <View tw="flex flex-row space-x-2 items-center">
-          <Icon source="account-outline" size={25} color={colors.green.primary} />
-          <Text variant="TextBold" tw="text-lg font-bold">
-            {t('Dashboard.History.farmersSurvey.baseSurvey.occupationQuestion')}
-          </Text>
+      <ScrollView tw="space-y-4" showsVerticalScrollIndicator={false}>
+        <View>
+          <View tw="flex flex-row space-x-2 items-center">
+            <Icon source="account-outline" size={25} color={colors.green.primary} />
+            <Text variant="TextBold" tw="text-lg font-bold">
+              {t('Dashboard.History.farmersSurvey.baseSurvey.occupationQuestion')}
+            </Text>
+          </View>
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <RadioButton.Group value={value} onValueChange={onChange}>
+                <RadioButtonItem
+                  label={t('Dashboard.History.farmersSurvey.baseSurvey.occupationFarmer')}
+                  value={EOccupation.FARMER}
+                  tw="flex flex-row-reverse ml-[-10]"
+                />
+                <RadioButtonItem
+                  label={t('Dashboard.History.farmersSurvey.baseSurvey.occupationTrader')}
+                  value={EOccupation.TRADER}
+                  tw="flex flex-row-reverse ml-[-10]"
+                />
+              </RadioButton.Group>
+            )}
+            name="occupation"
+          />
+          {errors.occupation && (
+            <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
+              {errors.occupation.message?.toString()}
+            </Text>
+          )}
         </View>
 
-        <RadioButton.Group value={''} onValueChange={() => null}>
-          <RadioButtonItem
-            label={t('Dashboard.History.farmersSurvey.baseSurvey.occupationFarmer')}
-            value={t('Dashboard.History.farmersSurvey.baseSurvey.occupationFarmer')}
-            tw="flex flex-row-reverse ml-[-10]"
-          />
-          <RadioButtonItem
-            label={t('Dashboard.History.farmersSurvey.baseSurvey.occupationTrader')}
-            value={t('Dashboard.History.farmersSurvey.baseSurvey.occupationTrader')}
-            tw="flex flex-row-reverse ml-[-10]"
-          />
-        </RadioButton.Group>
-      </View>
+        <View>
+          <View tw="flex flex-row space-x-2 items-center">
+            <Icon source="snowflake" size={25} color={colors.green.primary} />
+            <Text variant="TextBold" tw="text-lg font-bold">
+              {t('Dashboard.History.farmersSurvey.baseSurvey.usageQuestion')}
+            </Text>
+          </View>
 
-      <View>
-        <View tw="flex flex-row space-x-2 items-center">
-          <Icon source="snowflake" size={25} color={colors.green.primary} />
-          <Text variant="TextBold" tw="text-lg font-bold">
-            {t('Dashboard.History.farmersSurvey.baseSurvey.usageQuestion')}
-          </Text>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <RadioButton.Group value={`${value}`} onValueChange={onChange}>
+                <RadioButtonItem
+                  label={t('Dashboard.History.farmersSurvey.baseSurvey.newUser')}
+                  value={EExperience.NEW}
+                  tw="flex flex-row-reverse ml-[-10]"
+                />
+                <RadioButtonItem
+                  label={t('Dashboard.History.farmersSurvey.baseSurvey.oldUser')}
+                  value={EExperience.OLD}
+                  tw="flex flex-row-reverse ml-[-10]"
+                />
+              </RadioButton.Group>
+            )}
+            name="experience"
+          />
+          {errors.experience && (
+            <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
+              {errors.experience.message?.toString()}
+            </Text>
+          )}
+
+          {experience === EExperience.OLD && (
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  tw="w-full text-base bg-transparent rounded-sm h-12 truncate"
+                  onChangeText={onChange}
+                  keyboardType="number-pad"
+                  value={value ?? 0}
+                  label={'For how many months have you used the room?'}
+                  error={errors.experienceInMonths}
+                />
+              )}
+              name="experienceInMonths"
+            />
+          )}
         </View>
 
-        <RadioButton.Group value={''} onValueChange={() => null}>
-          <RadioButtonItem
-            label={t('Dashboard.History.farmersSurvey.baseSurvey.newUser')}
-            value={t('Dashboard.History.farmersSurvey.baseSurvey.newUser')}
-            tw="flex flex-row-reverse ml-[-10]"
-          />
-          <RadioButtonItem
-            label={t('Dashboard.History.farmersSurvey.baseSurvey.oldUser')}
-            value={t('Dashboard.History.farmersSurvey.baseSurvey.oldUser')}
-            tw="flex flex-row-reverse ml-[-10]"
-          />
-        </RadioButton.Group>
-      </View>
+        <View tw="space-y-2 mb-2">
+          <View tw="flex flex-row space-x-2 items-center">
+            <Icon source="shopping-outline" size={25} color={colors.green.primary} />
+            <Text variant="TextBold" tw="text-lg font-bold">
+              {t('Dashboard.History.farmersSurvey.baseSurvey.mostUsedCommoditiesQuestion')}
+            </Text>
+          </View>
 
-      <View tw="space-y-2">
-        <View tw="flex flex-row space-x-2 items-center">
-          <Icon source="shopping-outline" size={25} color={colors.green.primary} />
-          <Text variant="TextBold" tw="text-lg font-bold">
-            {t('Dashboard.History.farmersSurvey.baseSurvey.mostUsedCommoditiesQuestion')}
+          <Text variant="TextMedium" tw="text-lg">
+            {t('Dashboard.History.farmersSurvey.baseSurvey.fillCommoditiesMessage')}
           </Text>
-        </View>
 
-        <Text variant="TextMedium" tw="text-lg">
-          {t('Dashboard.History.farmersSurvey.baseSurvey.fillCommoditiesMessage')}
-        </Text>
+          <FlatList
+            data={farmerSurveys}
+            keyExtractor={(item, index) => `${item.id}-${index}`}
+            renderItem={({ item: survey, index }) => (
+              <TouchableOpacity onPress={() => setOpenFarmersSurveyModal(index)}>
+                <View tw="flex flex-row items-center justify-between space-y-2">
+                  <Text variant="TextMedium" tw="text-lg">
+                    {t('Dashboard.History.farmersSurvey.baseSurvey.commodity')} {index + 1}
+                  </Text>
+                  <View tw="flex flex-row space-x-2 items-center">
+                    <Text variant="TextMedium" tw="text-lg">
+                      {survey.cropName}
+                    </Text>
+                    <Icon source="chevron-right" size={20} />
+                  </View>
+                </View>
+                <FarmersSurveyModal
+                  company={company}
+                  cropName={survey.cropName}
+                  isModalVisible={openFarmersSurveyModal === index}
+                  onDismiss={() => setOpenFarmersSurveyModal(null)}
+                  onSubmit={onSubmitSurvey}
+                  defaultValues={{
+                    weightDistribution: {
+                      totalProducedWeekly: survey.quantityTotal,
+                      quantitySelfConsumed: survey.quantitySelfConsumed,
+                      quantitySold: survey.quantitySold,
+                      quantityLost: survey.quantityBelowMarketPrice,
+                    },
+                    unitOfMeasurement: survey.unit,
+                    unitaryWeight: survey.kgInUnit,
+                    reasonsForSpoilage: survey.reasonForLoss,
+                    averagePrice: survey.averagePrice,
+                  }}
+                />
+                <Divider tw="bg-gray-400" />
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      </ScrollView>
+      <Button
+        mode="outlined"
+        icon="plus-circle-outline"
+        contentStyle="flex flex-row-reverse"
+        uppercase
+        tw="border-green-primary"
+      >
+        {t('Dashboard.History.farmersSurvey.baseSurvey.addCommodityButton')}
+      </Button>
+
+      <View tw="flex flex-row space-x-2 justify-center">
+        <Button
+          mode="outlined"
+          icon="close-circle-outline"
+          contentStyle="flex flex-row-reverse"
+          labelStyle="text-red-400"
+          uppercase
+          tw="border-red-400"
+          onPress={props.navigation.goBack}
+        >
+          {t('actions.cancel')}
+        </Button>
+        <Button
+          mode="contained"
+          icon="check-circle-outline"
+          contentStyle="flex flex-row-reverse"
+          uppercase
+          onPress={handleSubmit(onSubmit)}
+        >
+          {t('actions.confirm')}
+        </Button>
       </View>
     </View>
   );

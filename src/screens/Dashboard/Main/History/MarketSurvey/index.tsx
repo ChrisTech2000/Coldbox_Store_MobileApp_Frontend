@@ -1,25 +1,28 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Divider, Icon } from 'react-native-paper';
+import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import Danger from '#assets/icons/danger.svg';
 
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
+import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>) {
   const { crops, farmer } = props.route.params;
 
   const { t } = useTranslationUtils();
+  const { setSurveys, setFarmerId } = useMarketSurveyStore();
 
-  const { data: farmers } = useApiCall(
+  const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getFarmers',
     ColdtivateService.getFarmers,
     {},
@@ -34,7 +37,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
     )?.id;
   }, [farmers]);
 
-  const { data: surveys } = useApiCall(
+  const { data: surveys, isLoading: loadingSurveys } = useApiCall(
     'getFarmerSurveys',
     ColdtivateService.getFarmerSurveys,
     {
@@ -67,6 +70,21 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
     return uniqueCrops;
   }, [surveys, crops]);
 
+  useEffect(() => {
+    if (surveys?.length) {
+      setSurveys(surveys);
+      setFarmerId(farmerId as number);
+    }
+  }, [surveys, farmerId]);
+
+  if (loadingFarmers || loadingSurveys) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
+
   return (
     <View tw="flex-1 justify-center space-y-4 mx-4 my-2">
       <FlatList
@@ -76,7 +94,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
           <View tw="flex space-y-2 w-full my-2">
             <TouchableOpacity
               tw="flex flex-row justify-between items-center space-y-2 w-full my-1 h-6"
-              onPress={() => null}
+              onPress={() => props.navigation.navigate('MarketSurvey')}
               disabled={!item.hasSurvey}
             >
               <Text variant="TextMedium" tw={cn('text-lg', !item.hasSurvey && 'text-gray-400')}>
