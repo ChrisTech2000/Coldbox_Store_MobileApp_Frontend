@@ -5,6 +5,8 @@ export const COOLING_UNIT_TYPES = {
   OTHER: 'other',
 } as const;
 
+export type CoolingUnitTypes = keyof typeof COOLING_UNIT_TYPES;
+
 export const PRICING_TYPE = {
   PER_DAY: 'PERIODICITY',
   FIXED: 'FIXED',

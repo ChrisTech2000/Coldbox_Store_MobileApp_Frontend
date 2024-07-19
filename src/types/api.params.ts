@@ -264,6 +264,63 @@ export interface EditCheckInParams extends JsonObject {
   plannedDays: number;
 }
 
+export interface AddCoolingUnitParams extends JsonObject {
+  name: string;
+  location: number;
+  metric: string;
+  capacityInNumberCrates: number;
+  capacityInMetricTons: number;
+  foodCapacityInMetricTons: number;
+  fixedPrice: boolean;
+  price: number;
+  sensor: boolean;
+  public: boolean;
+  sensorData: unknown;
+  powerOptions: {
+    powerConsumptionInMt: number;
+    dailyRoomWattage: number;
+    powerSourceDieselPercent: number;
+    powerSourceGridPercent: number;
+    powerSourcePvPercent: number;
+    powerSourceBiomassPercent: number;
+    powerSourceDieselConsumptionKwh: number;
+    pvPanelCount: number;
+    pvPanelSize: number;
+    pvPanelWeight: number;
+    pvPanelMaxPower: number;
+    batteryCount: number;
+    batteryWeight: number;
+    batteryCapacity: number;
+    batteryMaxCurrent: number;
+    batteryPeakEnergyStorage: number;
+    refrigerantType: string | null;
+    powerSource: string;
+    electricityStorageSystem: string;
+    thermalStorageMethod: string;
+    amountRefrigerant: number;
+    roomInsulator: number;
+    batteryType: string | null;
+    pvPanelType: string;
+  };
+  operators: Array<number>;
+  crops: Array<number>;
+  cropUpdates: Array<{
+    id: number;
+    pricingType: string;
+    dailyRate: number;
+    fixedRate: number;
+  }>;
+  crateWeight: number;
+  crateLength: number;
+  crateHeight: number;
+  crateWidth: number;
+  roomWeight: number;
+  roomHeight: number;
+  roomLength: number;
+  roomWidth: number;
+  coolingUnitType: string;
+}
+
 export interface AddMarketSurveyParams extends JsonObject {
   crop: number;
   checkout: number;

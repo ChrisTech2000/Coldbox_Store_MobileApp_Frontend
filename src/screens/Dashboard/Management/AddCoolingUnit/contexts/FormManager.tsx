@@ -4,9 +4,9 @@ import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import type { ValueOf } from '#types/miscellaneous';
 import { useTranslationUtils } from '#i18n/utils';
 import {
-  COOLING_UNIT_TYPES,
   PRICING_TYPE,
   METRIC_UNITS,
+  type CoolingUnitTypes,
   type PowerSourcesIds,
   type ElectricityStorageIds,
   type PvPanelsTypes,
@@ -19,7 +19,7 @@ export type FormValues = {
   // Base Fields
   name: string; // cooling unit name
   location: number | null; // location identifier
-  coolingUnitType: ValueOf<typeof COOLING_UNIT_TYPES> | null; // cooling unit description
+  coolingUnitType: CoolingUnitTypes | null; // cooling unit description
   priceType: ValueOf<typeof PRICING_TYPE>;
   metricUnit: ValueOf<typeof METRIC_UNITS>;
   price: number;
@@ -103,7 +103,7 @@ export default function FormManager(props: FormManagerProps) {
         metricUnit: z.string().min(1),
         price: z.number().gt(0).positive(),
         capacityInMetricTons: z.number().positive(),
-        foodCapacityInMetricTons: z.number().positive(),
+        foodCapacityInMetricTons: z.number().gt(0).positive(),
         roomLength: z.number().gte(0).optional(),
         roomWidth: z.number().gte(0).optional(),
         roomHeight: z.number().gte(0).optional(),
