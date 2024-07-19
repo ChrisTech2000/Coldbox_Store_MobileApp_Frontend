@@ -313,3 +313,18 @@ export interface AddCoolingUnitParams extends JsonObject {
   roomWidth: number;
   coolingUnitType: string;
 }
+
+export type GetCoolingUnitParams = {
+  coolingUnitId: number;
+} & (
+  | {
+      operatorId: number;
+    }
+  | {
+      companyId: number;
+    }
+);
+
+export interface EditCoolingUnitParams extends AddCoolingUnitParams {
+  pricingId: number;
+}
