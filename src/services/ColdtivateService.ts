@@ -789,6 +789,20 @@ class ColdtivateService extends HttpClient {
       throw customError;
     }
   };
+
+  public deleteCoolingUnit = async (coolingUnitId: number) => {
+    try {
+      const { data } = await this.delete(
+        subs(EStorageEndpoints.GET_COOLING_UNIT, { coolingUnitId })
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new ColdtivateService();

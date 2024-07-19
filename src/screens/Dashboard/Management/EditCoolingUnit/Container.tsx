@@ -22,6 +22,8 @@ import DataAggregator from '../AddCoolingUnit/contexts/DataAggregator';
 import FormFields from '../AddCoolingUnit/components/FormFields';
 import { METRIC_UNITS, PRICING_TYPE } from '../AddCoolingUnit/constants';
 
+import DeleteAction from './components/DeleteAction';
+
 const width = (Dimensions.get('screen').width - 42) / 2;
 
 type CropUpdates = AddCoolingUnitParams['cropUpdates'];
@@ -196,16 +198,7 @@ export default function ScreenContainer(props: Props) {
             </View>
             <FormFields />
             <View tw="w-full flex-row items-center justify-around mt-5 px-2">
-              <Button
-                style={{ width }}
-                mode="contained"
-                onPress={undefined}
-                icon="trash-can-outline"
-                buttonColor={paperTheme.colors.error}
-                uppercase
-              >
-                {t('actions.delete')}
-              </Button>
+              <DeleteAction coolingUnitId={coolingUnitId} companyId={companyId} />
               <Button
                 style={{ width }}
                 mode="contained"
