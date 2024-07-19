@@ -4,6 +4,8 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Icon, RadioButton, TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -20,7 +22,9 @@ import { useTranslationUtils } from '#i18n/utils';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { EUnitOfMeasurement, ESellingLocation } from '#types/global';
+import { useMarketSurveyStore } from '#stores/marketSurvey';
+import { ESellingLocation, EUnitOfMeasurement } from '#types/global';
+import { HistoryTabStackRoutes } from '#navigation/Dashboard/Main/HistoryTabStack';
 
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
@@ -35,10 +39,12 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
   const { cropId, companyCurrency } = props.route.params;
 
   const colors = useTailwindColors();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<HistoryTabStackRoutes>>();
   const { t, zodResolver } = useTranslationUtils();
   const { selectedItem: measureUnit } = useMeasurementStore();
   const { selectedItems: spoilageReasons } = useSpoilageReasonsStore();
 
+  const { checkoutId } = useMarketSurveyStore();
   const [isUnitModalVisible, setIsUnitModalVisible] = useState<boolean>(false);
   const [isSpoilageReasonsModalVisible, setIsSpoilageReasonsModalVisible] =
     useState<boolean>(false);
@@ -76,7 +82,29 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
     []
   );
 
-  const onSubmit: SubmitHandler<MarketSurveySchemaType> = useCallback(() => {}, []);
+  const onSubmit: SubmitHandler<MarketSurveySchemaType> = useCallback(
+    async (values) => {
+      const result = await ColdtivateService.addMarketSurvey({
+        crop: crop?.id as number,
+        checkout: checkoutId as number,
+        sellingPlace: values.location,
+        localMarket: null,
+        market: null,
+        price: values.price,
+        reasonsForLoss: values.reasonsForSpoilage,
+        sellingUnit: values.unitOfMeasurement,
+        sellingDate: null,
+        kgInUnit: values.unitaryWeight,
+        loss: values.spoiledProduceAmount,
+        currency: companyCurrency ?? '',
+      });
+
+      if (result) {
+        rootNavigation.navigate('RootHistoryTabStack');
+      }
+    },
+    [crop, checkoutId, companyCurrency]
+  );
 
   useEffect(() => {
     if (measureUnit) setValue('unitOfMeasurement', measureUnit);

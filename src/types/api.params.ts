@@ -274,7 +274,7 @@ export interface AddMarketSurveyParams extends JsonObject {
   price: number;
   reasonsForLoss: Array<string>;
   sellingUnit: EUnitOfMeasurement;
-  sellingDate: Date;
+  sellingDate: Date | null;
   kgInUnit: number;
   loss: number;
   currency: string;
