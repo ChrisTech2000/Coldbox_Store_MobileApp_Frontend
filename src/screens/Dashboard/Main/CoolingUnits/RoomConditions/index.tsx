@@ -3,16 +3,16 @@ import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
 
-import { ScrollView } from '#ui/components/ScrollView';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
-
+import { ScrollView } from '#ui/components/ScrollView';
+import SelectWithStore from '#ui/components/SelectWithStore';
+import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
 import { useCoolingUnitStore } from '../Planner';
-import SelectWithStore from '../../components/SelectWithStore';
 import LineChart, { type LineChartEntry } from './components/LineChart';
 
 type MockedCoolingUnit = { name: string };

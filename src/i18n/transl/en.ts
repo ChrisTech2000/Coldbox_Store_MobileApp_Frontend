@@ -108,6 +108,13 @@ const en = {
     'update-success': 'Succesfully updated',
     'save-changes': 'Save changes',
   },
+  components: {
+    datePicker: {
+      clearButtonLabel: 'Clear',
+      confirmButtonLabel: 'Confirm',
+      placeholder: 'dd/mm/yyyy',
+    },
+  },
   Auth: {
     Root: {
       welcome: 'Welcome to Coldtivate',
@@ -652,6 +659,9 @@ const en = {
           KILOGRAMS: 'kg',
           CRATES: 'Crate',
         },
+      },
+      UsageAnalysis: {
+        dateSelectionLabel: 'Select days:',
       },
     },
     AccountDetails: {

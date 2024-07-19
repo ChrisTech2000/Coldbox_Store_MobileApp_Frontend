@@ -12,7 +12,7 @@ import { cn } from '#ui/lib/cn';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
-import { useManagementStore } from '#stores/management';
+import { ManagementCompany, useManagementStore } from '#stores/management';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EMovementType, ERoles, type Company, type CoolingUnit } from '#types/global';
 
@@ -25,8 +25,8 @@ import { PDFModal } from './PDFModal';
 type MovementProps = {
   movement: GetMovementsHistoryResponse[number];
   coolingUnit: CoolingUnit | null;
-  selectedCompany: Company | null;
-} & HistoryTabStackRouteProps<'RootHistoryTabStack'>;
+  selectedCompany: Company | ManagementCompany | null;
+} & Partial<HistoryTabStackRouteProps<'RootHistoryTabStack'>>;
 
 export function Movement({ movement, coolingUnit, selectedCompany, navigation }: MovementProps) {
   const { t } = useTranslationUtils();
@@ -62,12 +62,12 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
   }, []);
 
   const editCheckIn = useCallback(() => {
-    navigation.navigate('EditCheckIn', { movement, coolingUnitId: coolingUnit?.id });
+    navigation?.navigate('EditCheckIn', { movement, coolingUnitId: coolingUnit?.id });
     setIsOptionsModalOpen(false);
   }, []);
 
   const fillMarketSurvey = useCallback(() => {
-    navigation.navigate('MarketSurveyStack', {
+    navigation?.navigate('MarketSurveyStack', {
       screen: 'MarketSurveyBase',
       params: {
         farmer: movement.farmer,

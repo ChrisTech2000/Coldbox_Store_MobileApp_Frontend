@@ -3,10 +3,11 @@ import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
+import SelectWithStore from '#ui/components/SelectWithStore';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
 import { useTranslationUtils } from '#i18n/utils';
 
-import SelectWithStore from '../../components/SelectWithStore';
 import { useCoolingUnitStore } from '../Planner';
 
 type MockedCoolingUnit = { name: string };

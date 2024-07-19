@@ -3,9 +3,10 @@ import { Text } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { ScrollView } from '#ui/components/ScrollView';
 
-import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
+import { ScrollView } from '#ui/components/ScrollView';
+import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
+
 import SemiCircleChart from './components/SemiCircleChart';
 import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
 

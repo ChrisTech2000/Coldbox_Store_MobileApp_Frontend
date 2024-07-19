@@ -8,6 +8,7 @@ import MineCart from '#assets/icons/mine-cart.svg';
 
 import { Button } from '#ui/components/Button';
 import { Modal } from '#ui/components/Modal';
+import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
@@ -16,8 +17,9 @@ import type { ManagementCompany } from '#stores/management';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { type Crop, EUnitOfMeasurement } from '#types/global';
 
-import MultipleSelectWithStore, { createMultipleSelectStore } from '../MultipleSelectWithStore';
-import SelectWithStore, { createSelectStore } from '../SelectWithStore';
+import MultipleSelectWithStore, {
+  createMultipleSelectStore,
+} from '../../../../../ui/components/MultipleSelectWithStore';
 import { defaultValues as _defaultValues, FarmerSurveySchema } from './schema';
 
 export type FarmerSurveySchemaType = {

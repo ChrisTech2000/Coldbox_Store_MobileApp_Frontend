@@ -766,6 +766,24 @@ class ColdtivateService extends HttpClient {
       throw customError;
     }
   };
+
+  ///////// ANALYSIS
+  public getUsageAnalysis = async (coolingUnitId: number): Promise<GetMovementsHistoryResponse> => {
+    try {
+      const params = { cooling_units: coolingUnitId };
+
+      const { data } = await this.get<GetMovementsHistoryResponse>(
+        EOperationEndpoints.GET_COOLING_UNIT_USAGE,
+        { params }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new ColdtivateService();
