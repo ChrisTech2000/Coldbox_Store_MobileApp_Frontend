@@ -644,10 +644,10 @@ const en = {
           },
         },
         coolingUnitTypes: {
-          'farm-gate-storage-room': 'It is a storage room placed at a farm-gate',
-          'market-storage-room': 'It is a storage room placed at a market',
-          'movable-unit': 'It is a movable unit (for example, a refrigerated truck)',
-          other: 'Other',
+          FARM_GATE_STORAGE_ROOM: 'It is a storage room placed at a farm-gate',
+          MARKET_STORAGE_ROOM: 'It is a storage room placed at a market',
+          MOVABLE_UNIT: 'It is a movable unit (for example, a refrigerated truck)',
+          OTHER: 'Other',
         },
         pricing: {
           label: 'Price type',
