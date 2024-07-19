@@ -34,6 +34,7 @@ import type {
   GetMovementsHistoryParams,
   EditCheckInParams,
   SendOperatorInvitationParams,
+  AddCoolingUnitParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -728,6 +729,18 @@ class ColdtivateService extends HttpClient {
         subs(EUserEndpoints.UPDATE_FARMER, { farmerId: params.farmerId }),
         _params
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public addCoolingUnit = async (params: AddCoolingUnitParams) => {
+    try {
+      const { data } = await this.post(EStorageEndpoints.GET_COOLING_UNITS, params);
       return data;
     } catch (error) {
       console.log(error);

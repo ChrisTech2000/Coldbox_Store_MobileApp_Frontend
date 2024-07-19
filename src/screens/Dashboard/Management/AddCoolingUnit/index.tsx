@@ -13,7 +13,7 @@ function AddCoolingUnit() {
 
   return (
     <DataAggregator companyId={company?.id}>
-      <Container />
+      <Container companyId={company?.id} />
     </DataAggregator>
   );
 }

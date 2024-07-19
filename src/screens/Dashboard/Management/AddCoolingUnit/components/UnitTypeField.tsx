@@ -13,7 +13,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
 import FormManager, { type FormValues } from '../contexts/FormManager';
-import { COOLING_UNIT_TYPES } from '../constants';
+import { COOLING_UNIT_TYPES, type CoolingUnitTypes } from '../constants';
 
 export default function UnitTypeField() {
   const { control, watch, formState } = FormManager.useFormManager();
@@ -22,7 +22,9 @@ export default function UnitTypeField() {
   const [isVisible, toggleVisibility] = useToggle(false);
 
   const selectedUnitTypeId = watch('coolingUnitType', null);
-  const [internalSelection, setInternalSelection] = useState<string | null>(selectedUnitTypeId);
+  const [internalSelection, setInternalSelection] = useState<CoolingUnitTypes | null>(
+    selectedUnitTypeId
+  );
 
   const currentValue = selectedUnitTypeId
     ? t(['Dashboard.Management.AddCoolingUnit.coolingUnitTypes', selectedUnitTypeId])
@@ -49,9 +51,9 @@ export default function UnitTypeField() {
                   options: (
                     <RadioButton.Group
                       value={internalSelection ?? ''}
-                      onValueChange={(value) => setInternalSelection(value)}
+                      onValueChange={(value) => setInternalSelection(value as CoolingUnitTypes)}
                     >
-                      {Object.values(COOLING_UNIT_TYPES).map((option, optionIdx) => (
+                      {Object.keys(COOLING_UNIT_TYPES).map((option, optionIdx) => (
                         <RadioButtonItem
                           key={`${option}-${optionIdx}`}
                           label={t([
