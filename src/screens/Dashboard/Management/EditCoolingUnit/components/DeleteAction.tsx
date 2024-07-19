@@ -43,6 +43,8 @@ export default function DeleteAction(props: Props) {
 
       await mutate(getQueryKey('getLocations', props.companyId));
       cache.delete(getQueryKey('getCoolingUnit', { ...props }));
+
+      toggleModalVisibility();
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
