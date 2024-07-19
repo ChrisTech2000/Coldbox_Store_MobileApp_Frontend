@@ -81,6 +81,8 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
+      MarketSurvey: '{{farmer}} के लिए बाजार सर्वेक्षण',
+      BaseSurvey: 'कूलिंग उपयोगकर्ता सर्वेक्षण',
     },
   },
   actions: {
@@ -286,6 +288,7 @@ export default {
           selectSpoilageReasonsPlaceholder: 'सभी लागू कारणों का चयन करें',
           priceLabel: 'मूल्य',
           priceUnit: '{{unit}} के लिए',
+          commodityShortlist: 'वस्तुओं की सूची',
           unit: {
             kg: 'किलो',
             crates: 'टोकरियां',
@@ -316,6 +319,7 @@ export default {
             number: 'एक गैर-शून्य, सकारात्मक संख्या होनी चाहिए',
             totalMismatch:
               'स्व-उपभोग, बेचा और खोया या बाजार मूल्य से नीचे बेचा का योग कुल उत्पादित मात्रा के बराबर होना चाहिए।',
+            cropError: 'कृपया एक माल का चयन करें',
           },
         },
       },
@@ -750,6 +754,39 @@ export default {
         selectCropLabel: 'एक वस्तु का चयन करें',
         successMessage: 'चेक-इन सफलतापूर्वक अपडेट किया गया!',
         errorMessage: 'चेक-इन अपडेट करने में विफल रहा। कृपया पुनः प्रयास करें।',
+      },
+      survey: {
+        fillMessage: 'कृपया {{crop}} के लिए बेस सर्वे भरें!',
+        baseSurvey: {
+          occupationQuestion: 'आपको सबसे अच्छा क्या परिभाषित करता है?',
+          occupationFarmer: 'एक किसान',
+          occupationTrader: 'एक छोटे विक्रेता/व्यापारी/थोक विक्रेता',
+          usageQuestion: 'क्या आपने पहले ठंडे कमरे का उपयोग किया है?',
+          newUser: 'नहीं, मैं एक नया उपयोगकर्ता हूँ',
+          oldUser: 'हाँ, मैंने ठंडे कमरे का उपयोग किया है',
+          mostUsedCommoditiesQuestion: 'सबसे अधिक फसल/व्यापार की गई वस्तुएं?',
+          commodity: 'कमोडिटी',
+          newCommodity: 'कमोडिटी {{index}}',
+          fillCommoditiesMessage:
+            'कृपया नीचे दिए गए प्रश्नों को उन वस्तुओं के लिए भरें जिन्हें आप कमरे में अधिक बार लाने की योजना बना रहे हैं।',
+          addCommodityButton: 'वस्तु जोड़ें',
+          genericFormError: 'कृपया एक विकल्प चुनें',
+          experienceError: 'कृपया एक मान दर्ज करें',
+        },
+        marketSurvey: {
+          title: 'कृपया जाँच की गई {{crop}} की पेटियों के लिए निम्नलिखित प्रश्नों का उत्तर दें।',
+          locationQuestion: 'आपने अपनी उपज कहाँ बेची?',
+          locations: {
+            farm: 'खेत का फाटक',
+            market: 'स्थानीय बाजार',
+            both: 'दोनों खेत का फाटक और बाजार',
+          },
+          priceQuestion: 'आपको इसके लिए क्या कीमत मिली?',
+          spoiledProducesQuestion:
+            'पिछले सप्ताह भंडारण में कितना खराब हो गया था या औसत बाजार मूल्य से नीचे बिक गया था?',
+          spoilageReasonsQuestion: 'फसल खराब होने का मुख्य कारण क्या है?',
+          formError: 'कृपया एक विकल्प चुनें',
+        },
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:

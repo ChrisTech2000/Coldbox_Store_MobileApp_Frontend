@@ -3,13 +3,15 @@ import { persist } from 'zustand/middleware';
 
 import storage from './lib/storage';
 
+export type ManagementCompany = {
+  id: number;
+  country?: string;
+  currency?: string;
+  name?: string;
+} | null;
+
 type State = {
-  company: {
-    id: number;
-    country?: string;
-    currency?: string;
-    name?: string;
-  } | null;
+  company: ManagementCompany;
 };
 
 type Actions = {

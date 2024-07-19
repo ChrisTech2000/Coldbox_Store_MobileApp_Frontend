@@ -34,6 +34,7 @@ export enum EStorageEndpoints {
 }
 
 export enum EOperationEndpoints {
+  ADD_MARKET_SURVEY = 'operation/market-survey/',
   CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
   GET_MOVEMENTS = '/operation/movements/',

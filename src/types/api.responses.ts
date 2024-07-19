@@ -3,6 +3,7 @@ import {
   EMovementType,
   EPaymentType,
   ERoles,
+  ESellingLocation,
   type CommodityInfo,
   type CommodityTotal,
   type CommonPricingType,
@@ -227,7 +228,7 @@ export type GetMovementsHistoryResponse = Array<{
   cratesWeight: number;
   movementCrops: Array<Pick<Crop, 'name' | 'id'>>;
   checkoutId?: number;
-  hasMarketSurvey: Array<FarmerSurvey>; // TODO: confirm type
+  hasMarketSurvey: Array<number>;
   marketSurveyDelay: boolean;
   calculatedPrice: number;
   discount: number;
@@ -269,4 +270,21 @@ export type GetMovementOperatorsResponse = Array<{
 
 export type EditCheckInResponse = {
   message: string;
+};
+
+export type AddMarketSurveyResponse = {
+  id: number;
+  sellingPlace: ESellingLocation;
+  price: number;
+  currency: string;
+  sellingUnit: string;
+  sellingDate: Date;
+  loss: number;
+  reasonForLoss: Array<string>;
+  kgInUnit: number;
+  dateFilledIn: Date;
+  checkout: number;
+  market?: string | null;
+  localMarket?: string | null;
+  crop: number;
 };

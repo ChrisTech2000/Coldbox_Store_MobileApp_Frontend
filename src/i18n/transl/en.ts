@@ -79,6 +79,8 @@ const en = {
     },
     history: {
       EditCheckIn: '{{code}}',
+      MarketSurvey: 'Market Survey for {{farmer}}',
+      BaseSurvey: 'Cooling user survey',
     },
   },
   actions: {
@@ -284,6 +286,7 @@ const en = {
           selectSpoilageReasonsPlaceholder: 'Select all reasons that apply',
           priceLabel: 'Price',
           priceUnit: 'per {{unit}}',
+          commodityShortlist: 'Commodity shortlist',
           unit: {
             kg: 'Kg',
             crates: 'Crates',
@@ -314,6 +317,7 @@ const en = {
             reasonsForSpoilage: 'Please introduce at least one reason.',
             totalMismatch:
               'The sum of Self-consumed, Sold and Lost or sold below market price should be equal to the total quantity produced.',
+            cropError: 'Please select a commodity',
           },
         },
       },
@@ -745,6 +749,40 @@ const en = {
         selectCropLabel: 'Select a commodity',
         successMessage: 'Check-in updated successfully!',
         errorMessage: 'Failed to update check-in. Please try again.',
+      },
+      survey: {
+        fillMessage: 'Please fill in the base survey for {{crop}}!',
+        baseSurvey: {
+          occupationQuestion: 'What defines you best?',
+          occupationFarmer: 'A farmer',
+          occupationTrader: 'A small vendor/trader/wholesaler',
+          usageQuestion: 'Have you used the cold room in the past?',
+          newUser: 'No, I am a new user',
+          oldUser: 'Yes, I have used the cold room',
+          mostUsedCommoditiesQuestion: 'Most harvested/traded commodities?',
+          commodity: 'Commodity',
+          newCommodity: 'Commodity {{index}}',
+          fillCommoditiesMessage:
+            'Please fill in the below questions for the commodities that you plan to bring to the room more often.',
+          addCommodityButton: 'Add commodity',
+          genericFormError: 'Please select an option',
+          experienceError: 'Please introduce a value',
+        },
+        marketSurvey: {
+          title:
+            'Please answer the following questions for the crates of {{crop}} you checked out.',
+          locationQuestion: 'Where did you sell your produce?',
+          locations: {
+            farm: 'Farm-gate',
+            market: 'Local market',
+            both: 'Both farm-gate and market',
+          },
+          priceQuestion: 'What price did you receive for it?',
+          spoiledProducesQuestion:
+            'How much of what was in storage last week was spoiled or sold below the average market price?',
+          spoilageReasonsQuestion: 'What is the main reason for crop spoilage?',
+          formError: 'Please select an option',
+        },
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - {{movementType}} Receipt: 
