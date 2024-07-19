@@ -638,10 +638,10 @@ export default {
           },
         },
         coolingUnitTypes: {
-          'farm-gate-storage-room': 'यह फार्म-गेट पर रखा गया भंडारण कक्ष है',
-          'market-storage-room': 'यह बाज़ार में रखा गया भंडारण कक्ष है',
-          'movable-unit': 'यह एक जंगम इकाई है (उदाहरण के लिए, एक प्रशीतित ट्रक)',
-          other: 'अन्य',
+          FARM_GATE_STORAGE_ROOM: 'यह फार्म-गेट पर रखा गया भंडारण कक्ष है',
+          MARKET_STORAGE_ROOM: 'यह बाज़ार में रखा गया भंडारण कक्ष है',
+          MOVABLE_UNIT: 'यह एक जंगम इकाई है (उदाहरण के लिए, एक प्रशीतित ट्रक)',
+          OTHER: 'अन्य',
         },
         pricing: {
           label: 'मूल्य का प्रकार',

@@ -1,25 +1,39 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native-paper';
+import { useSWRConfig } from 'swr';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import ColdRoom from '#assets/icons/coldroom.svg';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 
+import type { AddCoolingUnitParams } from '#types/api.params';
 import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { getQueryKey } from '#services/hooks/useAPiCall';
 
 import FormManager, { type FormValues } from './contexts/FormManager';
 import FormFields from './components/FormFields';
 import DataAggregator from './contexts/DataAggregator';
 import { METRIC_UNITS, PRICING_TYPE } from './constants';
 
-export default function ScreenContainer() {
-  const initialFormValues = useRef<FormValues | undefined>(undefined);
+type CropUpdates = AddCoolingUnitParams['cropUpdates'];
 
-  const { isLoading } = DataAggregator.useDataAggregator();
+type Props = {
+  companyId: number | undefined;
+};
+
+export default function ScreenContainer(props: Props) {
+  const initialFormValues = useRef<FormValues | undefined>(undefined);
+  const navigation = useNavigation();
+
+  const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
   const { t } = useTranslationUtils();
+  const { mutate } = useSWRConfig();
 
   if (isLoading) {
     return (
@@ -33,8 +47,91 @@ export default function ScreenContainer() {
     initialFormValues.current = _buildInitialValues();
   }
 
-  async function onSubmit(values: FormValues) {
-    console.log(values);
+  async function onSubmit(values: FormValues): Promise<void> {
+    const clone = cloneDeep(values) as FormValues & { cropUpdates: CropUpdates };
+    clone.cropUpdates = [];
+
+    if (!(clone.crops.length >= 1)) {
+      for (const cropId in companyCrops) {
+        clone.crops.push(parseInt(cropId));
+      }
+    }
+
+    for (const cropId of clone.crops) {
+      const struct = { id: cropId, pricingType: clone.priceType } as CropUpdates[0];
+      if (clone.priceType === 'PERIODICITY') {
+        clone.cropUpdates.push({
+          ...struct,
+          dailyRate: clone.price,
+          fixedRate: 0,
+        });
+        continue;
+      }
+      clone.cropUpdates.push({
+        ...struct,
+        dailyRate: 0,
+        fixedRate: clone.price,
+      });
+    }
+
+    try {
+      await ColdtivateService.addCoolingUnit({
+        name: clone.name,
+        location: clone.location as number,
+        metric: clone.metricUnit,
+        capacityInNumberCrates: clone.capacityInNumberCrates,
+        capacityInMetricTons: clone.capacityInMetricTons,
+        foodCapacityInMetricTons: clone.foodCapacityInMetricTons,
+        fixedPrice: clone.priceType === 'FIXED',
+        price: clone.price,
+        sensor: clone.sensor,
+        public: clone.public,
+        sensorData: '', // TODO: sensor integration
+        powerOptions: {
+          powerConsumptionInMt: clone.powerConsumptionInMt,
+          dailyRoomWattage: clone.dailyRoomWattage,
+          powerSourceDieselPercent: clone.powerSourceDieselPercent,
+          powerSourceGridPercent: clone.powerSourceGridPercent,
+          powerSourcePvPercent: clone.powerSourcePvPercent,
+          powerSourceBiomassPercent: clone.powerSourceBiomassPercent,
+          powerSourceDieselConsumptionKwh: clone.powerSourceDieselConsumptionKwh,
+          pvPanelCount: clone.pvPanelCount,
+          pvPanelSize: clone.pvPanelSize,
+          pvPanelWeight: clone.pvPanelWeight,
+          pvPanelMaxPower: clone.pvPanelMaxPower,
+          batteryCount: clone.batteryCount,
+          batteryWeight: clone.batteryWeight,
+          batteryCapacity: clone.batteryCapacity,
+          batteryMaxCurrent: clone.batteryMaxCurrent,
+          batteryPeakEnergyStorage: clone.batteryPeakEnergyStorage,
+          refrigerantType: clone.refrigerantType,
+          powerSource: clone.powerSource ?? '',
+          electricityStorageSystem: clone.electricityStorageSystem ?? '',
+          thermalStorageMethod: clone.thermalStorageMethod ?? '',
+          amountRefrigerant: clone.amountRefrigerant,
+          roomInsulator: clone.roomInsulator,
+          batteryType: clone.batteryType,
+          pvPanelType: clone.pvPanelType ?? '',
+        },
+        operators: clone.operators,
+        crops: clone.crops,
+        cropUpdates: clone.cropUpdates,
+        crateLength: clone.crateLength,
+        crateWidth: clone.crateWidth,
+        crateHeight: clone.crateHeight,
+        crateWeight: clone.crateWeight,
+        roomWeight: clone.roomWeight,
+        roomHeight: clone.roomHeight,
+        roomLength: clone.roomLength,
+        roomWidth: clone.roomWidth,
+        coolingUnitType: clone.coolingUnitType ?? '',
+      });
+
+      await mutate(getQueryKey('getLocations', props.companyId));
+      navigation.goBack();
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   return (
@@ -68,7 +165,7 @@ export default function ScreenContainer() {
   );
 }
 
-export function _buildInitialValues() {
+function _buildInitialValues() {
   return {
     name: '',
     location: null,
