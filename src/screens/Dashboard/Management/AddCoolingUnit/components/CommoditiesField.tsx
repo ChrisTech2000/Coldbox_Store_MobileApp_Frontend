@@ -26,7 +26,7 @@ export default function CommoditiesField() {
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
 
-  const selectedCrops = watch('crops', []);
+  const selectedCrops = watch('crops');
   const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedCrops);
 
   const datums = useMemo(() => {
