@@ -4,7 +4,6 @@ import {
   EPaymentType,
   ERoles,
   ESellingLocation,
-  EUnitOfMeasurement,
   type CommodityInfo,
   type CommodityTotal,
   type CommonPricingType,
@@ -229,7 +228,7 @@ export type GetMovementsHistoryResponse = Array<{
   cratesWeight: number;
   movementCrops: Array<Pick<Crop, 'name' | 'id'>>;
   checkoutId?: number;
-  hasMarketSurvey: Array<FarmerSurvey>; // TODO: confirm type
+  hasMarketSurvey: Array<number>;
   marketSurveyDelay: boolean;
   calculatedPrice: number;
   discount: number;
@@ -278,10 +277,10 @@ export type AddMarketSurveyResponse = {
   sellingPlace: ESellingLocation;
   price: number;
   currency: string;
-  sellingUnit: EUnitOfMeasurement;
+  sellingUnit: string;
   sellingDate: Date;
   loss: number;
-  reasonsForLoss: Array<string>;
+  reasonForLoss: Array<string>;
   kgInUnit: number;
   dateFilledIn: Date;
   checkout: number;

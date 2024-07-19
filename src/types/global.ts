@@ -344,9 +344,9 @@ export enum EMovementType {
 }
 
 export enum ESellingLocation {
-  FARM = 'farm',
+  FARM = 'farm-gate',
   MARKET = 'local-market',
-  BOTH = 'both',
+  BOTH = 'Both',
 }
 
 //////////////////////// MAPPERS
@@ -366,4 +366,12 @@ export const MAP_APP_GENDER_TO_API = {
   [EAppGender.FEMALE]: EApiGender.FEMALE,
   [EAppGender.MALE]: EApiGender.MALE,
   [EAppGender.OTHER]: EApiGender.OTHER,
+};
+
+export const MAP_APP_UNIT_OF_MEASUREMENT_TO_API = {
+  [EUnitOfMeasurement.KILOGRAMS]: 'KILOGRAMS',
+  [EUnitOfMeasurement.CRATES]: 'CRATES',
+  [EUnitOfMeasurement.BOXES]: 'BOXES',
+  [EUnitOfMeasurement.SACKS]: 'SACKS',
+  [EUnitOfMeasurement.BASKETS]: 'BASKETS',
 };

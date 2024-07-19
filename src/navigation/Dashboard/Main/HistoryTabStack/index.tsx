@@ -31,6 +31,7 @@ export type HistoryTabStackRoutes = {
       crops: Array<{ id: number; name: string }>;
       farmer: string;
       companyCurrency?: string;
+      checkoutId: number;
     };
   };
 };

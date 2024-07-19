@@ -3,7 +3,6 @@ import {
   EPaymentType,
   ERoles,
   ESellingLocation,
-  EUnitOfMeasurement,
   type Company,
   type FarmerSurvey,
   type User,
@@ -272,8 +271,8 @@ export interface AddMarketSurveyParams extends JsonObject {
   localMarket?: string | null;
   market?: string | null;
   price: number;
-  reasonsForLoss: Array<string>;
-  sellingUnit: EUnitOfMeasurement;
+  reasonForLoss: Array<string>;
+  sellingUnit: string;
   sellingDate: Date | null;
   kgInUnit: number;
   loss: number;

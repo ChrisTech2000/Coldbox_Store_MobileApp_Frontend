@@ -23,7 +23,11 @@ import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryT
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
-import { ESellingLocation, EUnitOfMeasurement } from '#types/global';
+import {
+  ESellingLocation,
+  EUnitOfMeasurement,
+  MAP_APP_UNIT_OF_MEASUREMENT_TO_API,
+} from '#types/global';
 import { HistoryTabStackRoutes } from '#navigation/Dashboard/Main/HistoryTabStack';
 
 import MultipleSelectWithStore, {
@@ -88,11 +92,10 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
         crop: crop?.id as number,
         checkout: checkoutId as number,
         sellingPlace: values.location,
-        localMarket: null,
-        market: null,
+        ...(values.location === ESellingLocation.BOTH ? { market: null } : { localMarket: null }),
         price: values.price,
-        reasonsForLoss: values.reasonsForSpoilage,
-        sellingUnit: values.unitOfMeasurement,
+        reasonForLoss: values.reasonsForSpoilage,
+        sellingUnit: MAP_APP_UNIT_OF_MEASUREMENT_TO_API[values.unitOfMeasurement],
         sellingDate: null,
         kgInUnit: values.unitaryWeight,
         loss: values.spoiledProduceAmount,
@@ -109,6 +112,10 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
   useEffect(() => {
     if (measureUnit) setValue('unitOfMeasurement', measureUnit);
   }, [measureUnit]);
+
+  useEffect(() => {
+    if (spoilageReasons) setValue('reasonsForSpoilage', spoilageReasons);
+  }, [spoilageReasons]);
 
   if (isCropsLoading) {
     return (
@@ -273,7 +280,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
       )}
 
       <Question question={t('Dashboard.History.survey.marketSurvey.spoilageReasonsQuestion')} />
-      <View tw={cn('flex flex-row items-end space-x-2', !errors.price && 'mb-4')}>
+      <View tw={cn('space-y-2', !errors.price && 'mb-4')}>
         <MultipleSelectWithStore<string>
           datums={[
             t('Dashboard.CrateManagement.FarmerSurvey.modal.reasonsForLoss.improperHarvest'),
@@ -296,12 +303,12 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
               : t('Dashboard.CrateManagement.FarmerSurvey.modal.selectSpoilageReasonsPlaceholder')
           }
         />
+        {errors.reasonsForSpoilage && (
+          <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
+            {errors.reasonsForSpoilage.message?.toString()}
+          </Text>
+        )}
       </View>
-      {errors.reasonsForSpoilage && (
-        <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
-          {errors.reasonsForSpoilage.message?.toString()}
-        </Text>
-      )}
 
       <Button
         uppercase

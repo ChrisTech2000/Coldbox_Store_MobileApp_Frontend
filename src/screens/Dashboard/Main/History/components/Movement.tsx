@@ -71,8 +71,8 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
       screen: 'MarketSurveyBase',
       params: {
         farmer: movement.farmer,
-        crops: movement.movementCrops,
-        checkoutId: movement.checkoutId,
+        crops: movement.movementCrops.filter((crop) => !movement.hasMarketSurvey.includes(crop.id)),
+        checkoutId: movement.checkoutId as number,
         companyCurrency: selectedCompany?.currency ?? company?.currency,
       },
     });
