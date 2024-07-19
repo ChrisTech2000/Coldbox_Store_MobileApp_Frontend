@@ -34,7 +34,7 @@ export default function CurrencyField() {
     [search]
   );
 
-  const fieldError = !!formState.errors.country;
+  const fieldError = !!formState.errors.currency;
 
   return (
     <React.Fragment>

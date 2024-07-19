@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef } from 'react';
 export const APP_EVENTS = {
   DISPATCH_CU_PROMPT: 'DISPATCH_CU_PROMPT',
   DISPATCH_CU_FORM_MODAL: 'DISPATCH_CU_FORM_MODAL',
+  DISPATCH_SENSOR_PROMPT: 'DISPATCH_SENSOR_PROMPT',
+  DISPATCH_SENSOR_MODAL: 'DISPATCH_SENSOR_MODAL',
 } as const;
 
 export const emitter = createNanoEvents();
