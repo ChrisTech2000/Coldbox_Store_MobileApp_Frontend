@@ -26,7 +26,7 @@ export default function TextFields(props: Props) {
           <TextInput
             tw="w-full bg-transparent"
             label={t('Auth.SignUp.commonForm.firstNameLabel')}
-            mode="outlined"
+            mode="flat"
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
@@ -44,7 +44,7 @@ export default function TextFields(props: Props) {
           <TextInput
             tw="w-full bg-transparent mt-4"
             label={t('Auth.SignUp.commonForm.lastNameLabel')}
-            mode="outlined"
+            mode="flat"
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
@@ -62,7 +62,7 @@ export default function TextFields(props: Props) {
           <TextInput
             tw="w-full bg-transparent mt-4"
             label="User ID"
-            mode="outlined"
+            mode="flat"
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}

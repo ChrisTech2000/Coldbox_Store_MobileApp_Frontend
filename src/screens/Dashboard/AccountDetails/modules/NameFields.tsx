@@ -21,7 +21,7 @@ export default function NameFields() {
           <TextInput
             tw="w-full bg-transparent mt-3"
             label={t('Dashboard.Management.CompanyDetails.labels.name')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -38,7 +38,7 @@ export default function NameFields() {
           <TextInput
             tw="w-full bg-transparent mt-3"
             label={t('Auth.SignUp.commonForm.lastNameLabel')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}

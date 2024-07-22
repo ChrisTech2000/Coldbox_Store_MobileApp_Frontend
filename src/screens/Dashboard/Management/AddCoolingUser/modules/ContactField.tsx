@@ -25,7 +25,7 @@ export default function ContactField(props: Props) {
           <TextInput
             tw="w-full bg-transparent mt-1"
             label={t('Auth.ForgotPassword.phoneInputLabel')}
-            mode="outlined"
+            mode="flat"
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}

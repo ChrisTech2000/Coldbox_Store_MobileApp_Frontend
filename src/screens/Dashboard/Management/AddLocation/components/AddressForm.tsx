@@ -20,7 +20,7 @@ export default function AddressForm() {
           <TextInput
             tw="w-full bg-transparent mt-3"
             label={t('Dashboard.Management.Location.fields.country')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -37,7 +37,7 @@ export default function AddressForm() {
           <TextInput
             tw="w-full bg-transparent mt-3"
             label={t('Dashboard.Management.Location.fields.state')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -54,7 +54,7 @@ export default function AddressForm() {
           <TextInput
             tw="w-full bg-transparent mt-3"
             label={t('Dashboard.Management.Location.fields.city')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -71,7 +71,7 @@ export default function AddressForm() {
           <TextInput
             tw="w-full bg-transparent mt-3"
             label={t('Dashboard.Management.Location.fields.zipCode')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -88,7 +88,7 @@ export default function AddressForm() {
           <TextInput
             tw="w-full bg-transparent mt-3"
             label={t('Dashboard.Management.Location.fields.street')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -105,7 +105,7 @@ export default function AddressForm() {
           <TextInput
             tw="w-full bg-transparent mt-3"
             label={t('Dashboard.Management.Location.fields.streetNumber')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}

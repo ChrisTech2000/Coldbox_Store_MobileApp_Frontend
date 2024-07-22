@@ -106,7 +106,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
             <TextInput
               tw="w-full bg-transparent"
               label={t('Auth.SignUp.commonForm.firstNameLabel')}
-              mode="outlined"
+              mode="flat"
               value={contextualOperator?.user.firstName}
               disabled
               dense
@@ -114,7 +114,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
             <TextInput
               tw="w-full bg-transparent"
               label={t('Auth.SignUp.commonForm.lastNameLabel')}
-              mode="outlined"
+              mode="flat"
               value={contextualOperator?.user.lastName}
               disabled
               dense
@@ -125,7 +125,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
             <TextInput
               tw="w-full bg-transparent"
               label={t('Auth.ForgotPassword.phoneInputLabel')}
-              mode="outlined"
+              mode="flat"
               value={contextualOperator?.user.phone}
               disabled
               dense
