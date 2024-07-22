@@ -10,6 +10,7 @@ import {
   SortingMenu,
 } from '#screens/Dashboard/Main/History/components/SortMenu';
 
+import { Button } from '#ui/components/Button';
 import {
   createDataRangeStore,
   DateRangePickerWithStore,
@@ -25,8 +26,8 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { type CoolingUnit, ERoles } from '#types/global';
-import { sortMovements } from './utils';
+import { type CoolingUnit, EPaymentType, ERoles } from '#types/global';
+import { sortMovements } from '../utils';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
@@ -35,7 +36,7 @@ const useSortingStore = createSortingStore();
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-function UsageAnalysis() {
+function RevenueAnalysis() {
   const { t } = useTranslationUtils();
 
   const { user } = useAuthStore();
@@ -64,10 +65,13 @@ function UsageAnalysis() {
     }
   );
 
-  const { data: usage, isLoading: usageDataLoading } = useApiCall(
-    'getUsageAnalysis',
-    ColdtivateService.getUsageAnalysis,
-    coolingUnit?.id as number,
+  const { data: revenueData, isLoading: usageDataLoading } = useApiCall(
+    'getRevenueAnalysis',
+    ColdtivateService.getRevenueAnalysis,
+    {
+      coolingUnits: coolingUnit?.id as number,
+      paymentMethods: [EPaymentType.CASH, EPaymentType.CREDIT_CARD],
+    },
     {
       skip: !coolingUnit?.id,
       defaultData: [],
@@ -75,8 +79,8 @@ function UsageAnalysis() {
   );
 
   const sortedMovements = useMemo(() => {
-    return (usage ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
-  }, [usage, sorting]);
+    return (revenueData ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
+  }, [revenueData, sorting]);
 
   const filteredMovements = useMemo(() => {
     if ((!startDate || !endDate) && !search) return sortedMovements;
@@ -101,33 +105,6 @@ function UsageAnalysis() {
       return isWithinDateRange && matchesSearchTerm;
     });
   }, [sortedMovements, startDate, endDate, search]);
-
-  const { totalCheckIns, totalCrates, totalUsers, totalWeight } = useMemo(() => {
-    const { totalCrates, totalWeight, users } = filteredMovements
-      .flatMap((movement) => ({
-        cratesNumber: movement.cratesNumber,
-        weight: movement.cratesWeight,
-        user: movement.farmer,
-      }))
-      .reduce(
-        (acc, current) => {
-          acc.totalCrates += current.cratesNumber;
-          acc.totalWeight += current.weight;
-          if (!acc.users.includes(current.user)) {
-            acc.users.push(current.user);
-          }
-          return acc;
-        },
-        { totalCrates: 0, totalWeight: 0, users: [] as string[] }
-      );
-
-    return {
-      totalCheckIns: filteredMovements.length,
-      totalCrates,
-      totalWeight,
-      totalUsers: users.length,
-    };
-  }, [filteredMovements]);
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">
@@ -170,7 +147,11 @@ function UsageAnalysis() {
         />
       </View>
 
-      <ScrollView tw="mx-4 mt-2 mb-1">
+      <Button mode="contained" uppercase>
+        {t('Dashboard.Management.UsageAnalysis.downloadDataButton')}
+      </Button>
+
+      <ScrollView tw="mx-4 mt-2 mb-1" showsVerticalScrollIndicator={false}>
         {usageDataLoading || coolingUnitsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -201,45 +182,16 @@ function UsageAnalysis() {
         )}
       </ScrollView>
 
-      <View tw="mb-4 mx-4">
-        <View tw="flex flex-row justify-between items-center">
-          <Text variant="TextBold" tw="text-base font-bold">
-            {t('Dashboard.Management.UsageAnalysis.summary.totalCheckIns')}
-          </Text>
-          <Text variant="TextBold" tw="text-base font-bold">
-            {totalCheckIns}
-          </Text>
-        </View>
-
-        <View tw="flex flex-row justify-between items-center">
-          <Text variant="TextBold" tw="text-base font-bold">
-            {t('Dashboard.Management.UsageAnalysis.summary.totalCrates')}
-          </Text>
-          <Text variant="TextBold" tw="text-base font-bold">
-            {totalCrates}
-          </Text>
-        </View>
-
-        <View tw="flex flex-row justify-between items-center">
-          <Text variant="TextBold" tw="text-base font-bold">
-            {t('Dashboard.Management.UsageAnalysis.summary.totalWeight')}
-          </Text>
-          <Text variant="TextBold" tw="text-base font-bold">
-            {totalWeight} {t('Dashboard.Management.UsageAnalysis.summary.weightUnit')}
-          </Text>
-        </View>
-
-        <View tw="flex flex-row justify-between items-center">
-          <Text variant="TextBold" tw="text-base font-bold">
-            {t('Dashboard.Management.UsageAnalysis.summary.totalUsers')}
-          </Text>
-          <Text variant="TextBold" tw="text-base font-bold">
-            {totalUsers}
-          </Text>
-        </View>
+      <View tw="flex flex-row justify-between items-center mb-4 mx-4">
+        <Text variant="TextBold" tw="text-base font-bold">
+          {t('Dashboard.Management.RevenueAnalysis.summary.total')}
+        </Text>
+        <Text variant="TextBold" tw="text-base font-bold">
+          {revenueData.reduce((acc, current) => (acc += current.totalPrice), 0)}
+        </Text>
       </View>
     </View>
   );
 }
 
-export default withSafeArea(UsageAnalysis);
+export default withSafeArea(RevenueAnalysis);

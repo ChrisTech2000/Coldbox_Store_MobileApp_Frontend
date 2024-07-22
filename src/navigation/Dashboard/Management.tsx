@@ -24,8 +24,8 @@ import Locations from '#screens/Dashboard/Management/Locations';
 import Operators from '#screens/Dashboard/Management/Operators';
 import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee';
 import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredEmployeeDetails';
-import RevenueAnalysis from '#screens/Dashboard/Management/RevenueAnalysis';
-import UsageAnalysis from '#screens/Dashboard/Management/UsageAnalysis';
+import RevenueAnalysis from '#screens/Dashboard/Management/Analysis/RevenueAnalysis';
+import UsageAnalysis from '#screens/Dashboard/Management/Analysis/UsageAnalysis';
 import EditCoolingUser from '#screens/Dashboard/Management/EditCoolingUser';
 
 import type { TranslationPaths } from '#i18n/index';

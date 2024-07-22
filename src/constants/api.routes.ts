@@ -39,8 +39,9 @@ export enum EOperationEndpoints {
   CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
   EDIT_CHECK_IN = '/operation/checkins/:id/',
-  GET_MOVEMENTS = '/operation/movements/',
+  GET_COOLING_UNIT_REVENUE = '/operation/movements/revenue/',
   GET_COOLING_UNIT_USAGE = '/operation/movements/usage/',
+  GET_MOVEMENTS = '/operation/movements/',
   MOVE_CHECKOUT = 'operation/move-checkout/',
 }
 

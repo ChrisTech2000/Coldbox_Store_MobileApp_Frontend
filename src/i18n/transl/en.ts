@@ -670,12 +670,18 @@ const en = {
         dateSelectionLabel: 'Select days:',
         empty:
           'Check-ins and check-outs will appear in the dashboard when you do at least one check-in in any room.',
+        downloadDataButton: 'Download data',
         summary: {
           totalCheckIns: 'Total number of check ins:',
           totalCrates: 'Total number of crates:',
           totalWeight: 'Total weight:',
           totalUsers: 'Total number of distinct users:',
           weightUnit: 'kg',
+        },
+      },
+      RevenueAnalysis: {
+        summary: {
+          total: 'Total revenue',
         },
       },
     },

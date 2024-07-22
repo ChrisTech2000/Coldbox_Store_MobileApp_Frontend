@@ -350,3 +350,8 @@ export interface AddMarketSurveyParams extends JsonObject {
   loss: number;
   currency: string;
 }
+
+export interface GetRevenueAnalysisParams extends JsonObject {
+  coolingUnits: number | Array<number>;
+  paymentMethods: Array<EPaymentType>;
+}
