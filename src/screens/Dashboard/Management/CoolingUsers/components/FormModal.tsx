@@ -91,7 +91,7 @@ export default function FormModal(props: Props) {
                 <TextInput
                   tw="bg-transparent mx-6"
                   placeholder="AS23F4AD"
-                  mode="outlined"
+                  mode="flat"
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}

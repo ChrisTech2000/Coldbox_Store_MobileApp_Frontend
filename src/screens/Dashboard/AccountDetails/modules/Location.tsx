@@ -21,7 +21,7 @@ export default function LocationField() {
           <TextInput
             tw="w-full bg-transparent mt-1"
             label={t('Dashboard.AccountDetails.fields.location')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
