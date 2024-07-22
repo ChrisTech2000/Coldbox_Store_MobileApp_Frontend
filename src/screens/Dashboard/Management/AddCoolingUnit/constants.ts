@@ -1,8 +1,8 @@
 export const COOLING_UNIT_TYPES = {
-  FARM_GATE_STORAGE_ROOM: 'farm-gate-storage-room',
-  MARKET_STORAGE_ROOM: 'market-storage-room',
-  MOVABLE_UNIT: 'movable-unit',
-  OTHER: 'other',
+  FARM_GATE_STORAGE_ROOM: 'FARM_GATE_STORAGE_ROOM',
+  MARKET_STORAGE_ROOM: 'MARKET_STORAGE_ROOM',
+  MOVABLE_UNIT: 'MOVABLE_UNIT',
+  OTHER: 'OTHER',
 } as const;
 
 export type CoolingUnitTypes = keyof typeof COOLING_UNIT_TYPES;

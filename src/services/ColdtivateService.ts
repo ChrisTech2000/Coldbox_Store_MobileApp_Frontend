@@ -36,6 +36,8 @@ import type {
   SendOperatorInvitationParams,
   AddMarketSurveyParams,
   AddCoolingUnitParams,
+  GetCoolingUnitParams,
+  EditCoolingUnitParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -57,6 +59,7 @@ import type {
   GetMovementOperatorsResponse,
   GetInvitedCompanyEmployeesResponse,
   EditCheckInResponse,
+  GetCoolingUnitResponse,
   AddMarketSurveyResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
@@ -768,9 +771,60 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public addCoolingUnit = async (params: AddCoolingUnitParams) => {
+  public addCoolingUnit = async (params: AddCoolingUnitParams): Promise<GetCoolingUnitResponse> => {
     try {
-      const { data } = await this.post(EStorageEndpoints.GET_COOLING_UNITS, params);
+      const { data } = await this.post<GetCoolingUnitResponse>(
+        EStorageEndpoints.GET_COOLING_UNITS,
+        params
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnit = async (params: GetCoolingUnitParams): Promise<GetCoolingUnitResponse> => {
+    try {
+      const url = subs(EStorageEndpoints.GET_COOLING_UNIT, { coolingUnitId: params.coolingUnitId });
+      const { data } = await this.get<GetCoolingUnitResponse>(url, {
+        params:
+          'companyId' in params ? { company: params.companyId } : { operator: params.operatorId },
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public editCoolingUnit = async (
+    params: EditCoolingUnitParams,
+    coolingUnitId: number
+  ): Promise<GetCoolingUnitResponse> => {
+    try {
+      const { data } = await this.put<GetCoolingUnitResponse>(
+        subs(EStorageEndpoints.GET_COOLING_UNIT, { coolingUnitId }),
+        params
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public deleteCoolingUnit = async (coolingUnitId: number) => {
+    try {
+      const { data } = await this.delete(
+        subs(EStorageEndpoints.GET_COOLING_UNIT, { coolingUnitId })
+      );
       return data;
     } catch (error) {
       console.log(error);

@@ -658,6 +658,12 @@ export default {
           CRATES: 'टोकरी',
         },
       },
+      EditCoolingUnit: {
+        modal: {
+          askDelete:
+            'यह कार्रवाई इसके इतिहास सहित इस शीतलन इकाई को हटा देगी। क्या आप जारी रखना चाहते हैं?',
+        },
+      },
     },
     AccountDetails: {
       popups: {
