@@ -25,6 +25,7 @@ export const useCoolingUnitStore = createSelectStore<CoolingUnitFilter>();
 
 export default function CoolingUnitsPlanner() {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [selectedColumn, setSelectedColumn] = useState<number>(0);
 
   const user = useAuthStore(useShallow((store) => store.user));
   const company = useManagementStore(useShallow((store) => store.company));
@@ -78,8 +79,6 @@ export default function CoolingUnitsPlanner() {
     return datums;
   }, [coolingUnitCapacity]);
 
-  const [selectedColumn, setSelectedColumn] = useState<WeekBarChartDatum>(capacity[0]);
-
   if (isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -125,8 +124,8 @@ export default function CoolingUnitsPlanner() {
 
       <SemiCircleChart
         maxCapacity={MAX_CAPACITY}
-        currentAmount={selectedColumn.amount}
-        currentDate={selectedColumn.timestamp}
+        currentAmount={capacity[selectedColumn].amount}
+        currentDate={capacity[selectedColumn].timestamp}
       />
 
       <Text tw="self-start mb-5 mt-10 ml-4" variant="titleMedium">
@@ -136,7 +135,7 @@ export default function CoolingUnitsPlanner() {
       <WeekBarChart
         maxCapacity={MAX_CAPACITY}
         datums={capacity}
-        selectedDatum={selectedColumn}
+        selectedIndex={selectedColumn}
         onSelect={setSelectedColumn}
       />
     </ScrollView>

@@ -310,7 +310,7 @@ export interface GetCoolingUnitResponse {
   crateWidth: number;
   crateLength: number;
   crateHeight: number;
-  commodityInfos: unknown; // TODO: confirm type
+  commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
   ubibotSensorChannel: unknown; // TODO: confirm type

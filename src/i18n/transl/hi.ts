@@ -422,6 +422,10 @@ export default {
       weight: 'वज़न',
       crates: 'टोकरी',
       optimalTemp: 'इष्टतम तापमान ° C',
+      messages: {
+        empty:
+          'जब आप किसी भी कक्ष में कम से कम एक बार चेक-इन करेंगे तो शीतल भंडार का अधिभोग और तापमान यहां दिखाई देगा।',
+      },
     },
     Company: {
       SelectCompany: {

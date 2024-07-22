@@ -420,6 +420,10 @@ const en = {
       weight: 'Weight',
       crates: 'Crates',
       optimalTemp: 'Optimal T°C',
+      messages: {
+        empty:
+          'Cooling units occupancy and temperature will appear here when you do at least one check-in in any room.',
+      },
     },
     Company: {
       SelectCompany: {
