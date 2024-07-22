@@ -18,11 +18,12 @@ import { createSelectStore } from '#ui/components/SelectWithStore';
 import { HistoryTabStackRouteProps } from 'navigation/Dashboard/Main/HistoryTabStack';
 import { Filters } from '../components/Filters';
 import { Movement } from './components/Movement';
-import { SortingMenu, useSortingStore } from './components/SortMenu';
+import { createSortingStore, ESortingOptions, SortingMenu } from './components/SortMenu';
 import { sortMovements } from './utils/sortMovements';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
+const useSortingStore = createSortingStore();
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -88,6 +89,8 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
           <SortingMenu
             isModalVisible={isSortingModalOpen}
             setIsModalVisible={setIsSortingModalOpen}
+            useSortingStore={useSortingStore}
+            hideableOptions={[ESortingOptions.COOLING_USER_NAME]}
           />
         }
         search={search}

@@ -110,6 +110,13 @@ export default {
     'update-success': 'सफलतापूर्वक उत्परिवर्तित',
     'save-changes': 'बदलाव सहेजें',
   },
+  components: {
+    datePicker: {
+      clearButtonLabel: 'साफ़ करें',
+      confirmButtonLabel: 'पुष्टि करें',
+      placeholder: 'dd/mm/yyyy',
+    },
+  },
   Auth: {
     Root: {
       welcome: 'स्वागतम',
@@ -663,6 +670,9 @@ export default {
           askDelete:
             'यह कार्रवाई इसके इतिहास सहित इस शीतलन इकाई को हटा देगी। क्या आप जारी रखना चाहते हैं?',
         },
+      },
+      UsageAnalysis: {
+        dateSelectionLabel: 'दिनों का चयन करें:',
       },
     },
     AccountDetails: {

@@ -129,7 +129,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
         ) : (
           <CheckOut width={25} height={25} fill={colors.orange[400]} stroke={colors.orange[400]} />
         )}
-        <View tw="w-full">
+        <View tw="w-full mr-4">
           <View tw="flex flex-row items-center">
             <Text variant="TextBold" tw="text-base font-bold">
               {movement.code}
@@ -144,7 +144,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           </Text>
         </View>
 
-        <View tw="w-full">
+        <View tw="w-[90%]">
           <Text
             variant="TextMedium"
             tw={cn('text-base', !isCheckIn && 'font-bold')}
@@ -157,7 +157,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           </Text>
         </View>
 
-        <TouchableOpacity onPress={() => setIsOptionsModalOpen(true)}>
+        <TouchableOpacity tw="w-5" onPress={() => setIsOptionsModalOpen(true)}>
           <Icon source="dots-vertical" size={20} />
         </TouchableOpacity>
       </View>

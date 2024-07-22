@@ -668,6 +668,15 @@ const en = {
       },
       UsageAnalysis: {
         dateSelectionLabel: 'Select days:',
+        empty:
+          'Check-ins and check-outs will appear in the dashboard when you do at least one check-in in any room.',
+        summary: {
+          totalCheckIns: 'Total number of check ins:',
+          totalCrates: 'Total number of crates:',
+          totalWeight: 'Total weight:',
+          totalUsers: 'Total number of distinct users:',
+          weightUnit: 'kg',
+        },
       },
     },
     AccountDetails: {
@@ -701,6 +710,7 @@ const en = {
         movementDateReverse: 'Movement date (latest to first)',
         checkInFirst: 'Check in first',
         checkOutFirst: 'Check out first',
+        coolingUser: "Cooling user's name",
       },
       optionsMenu: {
         common: {

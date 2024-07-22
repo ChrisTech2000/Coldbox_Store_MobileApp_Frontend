@@ -37,12 +37,16 @@ export const DateRangePickerWithStore = ({ useDateRangeStore }: DateRangePickerW
 
   const onStartDateChange = useCallback((date: Date) => {
     setIsStartDateCalendarOpen(false);
-    setStartDate(date);
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+    setStartDate(start);
   }, []);
 
   const onEndDateChange = useCallback((date: Date) => {
     setIsEndDateCalendarOpen(false);
-    setEndDate(date);
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+    setEndDate(end);
   }, []);
 
   const onClearEndDateChange = useCallback(() => {
