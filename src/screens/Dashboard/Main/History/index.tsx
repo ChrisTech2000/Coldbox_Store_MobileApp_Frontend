@@ -114,7 +114,12 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                 movement={movement}
                 coolingUnit={coolingUnit}
                 selectedCompany={company}
-                {...props}
+                navigateToCheckIn={(movement, id) =>
+                  props.navigation.navigate('EditCheckIn', {
+                    movement,
+                    coolingUnitId: id,
+                  })
+                }
               />
             )}
             estimatedItemSize={40}

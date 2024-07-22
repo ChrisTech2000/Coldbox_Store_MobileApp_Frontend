@@ -27,6 +27,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, ERoles } from '#types/global';
+import { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
 import { sortMovements } from '../utils';
 
@@ -37,7 +38,7 @@ const useSortingStore = createSortingStore();
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-function UsageAnalysis() {
+function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { t } = useTranslationUtils();
 
   const { user } = useAuthStore();
@@ -190,6 +191,12 @@ function UsageAnalysis() {
                 movement={movement}
                 coolingUnit={coolingUnit}
                 selectedCompany={company}
+                navigateToCheckIn={(movement, id) =>
+                  props.navigation.navigate('EditCheckIn', {
+                    movement,
+                    coolingUnitId: id,
+                  })
+                }
               />
             )}
             estimatedItemSize={40}

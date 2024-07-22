@@ -30,6 +30,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, EPaymentType, ERoles } from '#types/global';
+import { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
 import { sortMovements } from '../utils';
 
@@ -46,7 +47,7 @@ const useSortingStore = createSortingStore();
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-function RevenueAnalysis() {
+function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
   const { t } = useTranslationUtils();
 
   const { user } = useAuthStore();
@@ -198,6 +199,19 @@ function RevenueAnalysis() {
                 movement={movement}
                 coolingUnit={coolingUnit}
                 selectedCompany={company}
+                navigateToMarketSurvey={() => {
+                  props.navigation.navigate('MarketSurveyStack', {
+                    screen: 'MarketSurveyBase',
+                    params: {
+                      farmer: movement.farmer,
+                      crops: movement.movementCrops.filter(
+                        (crop) => !movement.hasMarketSurvey.includes(crop.id)
+                      ),
+                      checkoutId: movement.checkoutId as number,
+                      companyCurrency: company?.currency,
+                    },
+                  });
+                }}
               />
             )}
             estimatedItemSize={40}

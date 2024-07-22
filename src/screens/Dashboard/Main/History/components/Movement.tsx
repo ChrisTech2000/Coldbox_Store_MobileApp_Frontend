@@ -16,19 +16,33 @@ import { ManagementCompany, useManagementStore } from '#stores/management';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EMovementType, ERoles, type Company, type CoolingUnit } from '#types/global';
 
-import { HistoryTabStackRouteProps } from 'navigation/Dashboard/Main/HistoryTabStack';
 import { sendSMS } from '../utils/actions';
 import { isWithinLast24Hours } from '../utils/dates';
 import { DetailsModal } from './DetailsModal';
 import { PDFModal } from './PDFModal';
 
+type Movement = GetMovementsHistoryResponse[number];
+
 type MovementProps = {
-  movement: GetMovementsHistoryResponse[number];
+  movement: Movement;
   coolingUnit: CoolingUnit | null;
   selectedCompany: Company | ManagementCompany | null;
-} & Partial<HistoryTabStackRouteProps<'RootHistoryTabStack'>>;
+  navigateToCheckIn?: (movement: Movement, coolingUnitId?: number) => void;
+  navigateToMarketSurvey?: (
+    farmer: string,
+    crops: Movement['movementCrops'],
+    checkoutId?: number,
+    companyCurrency?: string
+  ) => void;
+};
 
-export function Movement({ movement, coolingUnit, selectedCompany, navigation }: MovementProps) {
+export function Movement({
+  movement,
+  coolingUnit,
+  selectedCompany,
+  navigateToCheckIn,
+  navigateToMarketSurvey,
+}: MovementProps) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
   const { user } = useAuthStore();
@@ -62,22 +76,19 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
   }, []);
 
   const editCheckIn = useCallback(() => {
-    navigation?.navigate('EditCheckIn', { movement, coolingUnitId: coolingUnit?.id });
+    navigateToCheckIn?.(movement, coolingUnit?.id);
     setIsOptionsModalOpen(false);
-  }, []);
+  }, [navigateToCheckIn]);
 
   const fillMarketSurvey = useCallback(() => {
-    navigation?.navigate('MarketSurveyStack', {
-      screen: 'MarketSurveyBase',
-      params: {
-        farmer: movement.farmer,
-        crops: movement.movementCrops.filter((crop) => !movement.hasMarketSurvey.includes(crop.id)),
-        checkoutId: movement.checkoutId as number,
-        companyCurrency: selectedCompany?.currency ?? company?.currency,
-      },
-    });
+    navigateToMarketSurvey?.(
+      movement.farmer,
+      movement.movementCrops.filter((crop) => !movement.hasMarketSurvey.includes(crop.id)),
+      movement.checkoutId as number,
+      selectedCompany?.currency ?? company?.currency
+    );
     setIsOptionsModalOpen(false);
-  }, [selectedCompany, company]);
+  }, [selectedCompany, company, navigateToMarketSurvey]);
 
   const optionsMenu = useMemo(() => {
     return [

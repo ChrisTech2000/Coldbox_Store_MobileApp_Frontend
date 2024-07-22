@@ -8,37 +8,56 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
+import EditCheckIn from '#screens/Dashboard/Main/History/EditCheckIn';
 import ManagementRoot from '#screens/Dashboard/Management';
 import AddCoolingUnit from '#screens/Dashboard/Management/AddCoolingUnit';
 import AddCoolingUser from '#screens/Dashboard/Management/AddCoolingUser';
 import AddLocation from '#screens/Dashboard/Management/AddLocation';
 import AddOperator from '#screens/Dashboard/Management/AddOperator';
 import AddRegisteredEmployee from '#screens/Dashboard/Management/AddRegisteredEmployee';
+import RevenueAnalysis from '#screens/Dashboard/Management/Analysis/RevenueAnalysis';
+import UsageAnalysis from '#screens/Dashboard/Management/Analysis/UsageAnalysis';
 import CompanyDetails from '#screens/Dashboard/Management/CompanyDetails';
 import CoolingUnits from '#screens/Dashboard/Management/CoolingUnits';
 import CoolingUsers from '#screens/Dashboard/Management/CoolingUsers';
 import EditCoolingUnit from '#screens/Dashboard/Management/EditCoolingUnit';
+import EditCoolingUser from '#screens/Dashboard/Management/EditCoolingUser';
 import EditLocation from '#screens/Dashboard/Management/EditLocation';
 import EditOperator from '#screens/Dashboard/Management/EditOperator';
 import Locations from '#screens/Dashboard/Management/Locations';
 import Operators from '#screens/Dashboard/Management/Operators';
 import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee';
 import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredEmployeeDetails';
-import RevenueAnalysis from '#screens/Dashboard/Management/Analysis/RevenueAnalysis';
-import UsageAnalysis from '#screens/Dashboard/Management/Analysis/UsageAnalysis';
-import EditCoolingUser from '#screens/Dashboard/Management/EditCoolingUser';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
+import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import NavigatorHeader, { type NavigationHeaderProps } from '../components/NavigatorHeader';
+import MarketSurveyStack, {
+  MarketSurveyStackRoutes,
+} from './Main/HistoryTabStack/MarketSurveyStack';
 
 export type ManagementRoutes = {
   Root: undefined;
   CompanyDetails: undefined;
+  // Location related routes
   RevenueAnalysis: undefined;
   UsageAnalysis: undefined;
+  EditCheckIn: {
+    movement: GetMovementsHistoryResponse[number];
+    coolingUnitId?: number;
+  };
+  MarketSurveyStack: {
+    screen: keyof MarketSurveyStackRoutes;
+    params: {
+      crops: Array<{ id: number; name: string }>;
+      farmer: string;
+      companyCurrency?: string;
+      checkoutId: number;
+    };
+  };
   // Location related routes
   Locations: undefined;
   AddLocation: undefined;
@@ -91,6 +110,8 @@ const NAVIGATOR_HEADERS: Record<ManagementRoutePaths, TranslationPaths | undefin
   CompanyDetails: 'navigation.management.CompanyDetails',
   RevenueAnalysis: 'navigation.management.RevenueAnalysis',
   UsageAnalysis: 'navigation.management.UsageAnalysis',
+  EditCheckIn: 'navigation.history.EditCheckIn',
+  MarketSurveyStack: 'navigation.history.MarketSurvey',
   Locations: 'navigation.management.Locations',
   AddLocation: 'navigation.management.AddLocation',
   EditLocation: 'navigation.management.EditLocation',
@@ -117,26 +138,31 @@ export default function ManagementStack() {
     // eslint-disable-next-line react/prop-types
     const routeName = props.route.name;
 
+    // eslint-disable-next-line react/prop-types
+    const code = (props.route.params as { movement: GetMovementsHistoryResponse[number] })?.movement
+      ?.code;
+
     const translationPath = NAVIGATOR_HEADERS[routeName];
-    const routeTitle = translationPath ? t(translationPath) : undefined;
+    const routeTitle = translationPath ? t(translationPath, { code }) : undefined;
 
     return {
       ...props,
-      header: (headerProps) => (
-        <NavigatorHeader
-          {...headerProps}
-          routeTitle={routeTitle}
-          leftContent={
-            <Appbar.BackAction
-              // eslint-disable-next-line react/prop-types
-              onPress={props.navigation.goBack}
-              size={22}
-            />
-          }
-          // eslint-disable-next-line react/prop-types
-          {..._rightContentFactory(routeName, props.navigation)}
-        />
-      ),
+      header: (headerProps) =>
+        translationPath !== NAVIGATOR_HEADERS.MarketSurveyStack && (
+          <NavigatorHeader
+            {...headerProps}
+            routeTitle={routeTitle}
+            leftContent={
+              <Appbar.BackAction
+                // eslint-disable-next-line react/prop-types
+                onPress={props.navigation.goBack}
+                size={22}
+              />
+            }
+            // eslint-disable-next-line react/prop-types
+            {..._rightContentFactory(routeName, props.navigation)}
+          />
+        ),
     };
   }, []);
 
@@ -149,6 +175,7 @@ export default function ManagementStack() {
       <Stack.Screen name="EditCoolingUser" component={EditCoolingUser} />
       <Stack.Screen name="RevenueAnalysis" component={RevenueAnalysis} />
       <Stack.Screen name="UsageAnalysis" component={UsageAnalysis} />
+      <Stack.Screen name="EditCheckIn" component={EditCheckIn} />
       <Stack.Screen name="Locations" component={Locations} />
       <Stack.Screen name="AddLocation" component={AddLocation} />
       <Stack.Screen name="EditLocation" component={EditLocation} />
@@ -161,6 +188,7 @@ export default function ManagementStack() {
       <Stack.Screen name="RegisteredEmployee" component={RegisteredEmployee} />
       <Stack.Screen name="AddRegisteredEmployee" component={AddRegisteredEmployee} />
       <Stack.Screen name="RegisteredEmployeeDetails" component={RegisteredEmployeeDetails} />
+      <Stack.Screen name="MarketSurveyStack" component={MarketSurveyStack} />
     </Stack.Navigator>
   );
 }
