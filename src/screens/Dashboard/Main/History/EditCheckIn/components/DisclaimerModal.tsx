@@ -19,7 +19,7 @@ export function DisclaimerModal({ isOpen, dismiss }: DetailsModalProps) {
   return (
     <Portal>
       <Modal visible={isOpen} onDismiss={dismiss}>
-        <View tw="w-[70%] bg-white mx-14 p-2 rounded-sm h-auto space-y-4">
+        <View tw="w-[70%] bg-white mx-14 p-2 rounded-3xl h-auto space-y-4">
           <Text variant="TextMedium" tw="text-base mt-2 px-4">
             {t('Dashboard.History.editCheckIn.disclaimerMessage')}
           </Text>

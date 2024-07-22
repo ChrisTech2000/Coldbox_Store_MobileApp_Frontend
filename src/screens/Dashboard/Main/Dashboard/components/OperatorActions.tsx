@@ -153,8 +153,8 @@ export function OperatorActions({
       )}
 
       <Portal>
-        <Modal tw="w-2/3" visible={isModalOpen} onDismiss={onModalClose}>
-          <View tw="w-full items-center mx-16 px-3 bg-white rounded-sm py-1 max-h-80">
+        <Modal visible={isModalOpen} onDismiss={onModalClose}>
+          <View tw="bg-white rounded-3xl h-auto space-y-2 items-center mx-16 px-3 py-1">
             <Text
               variant="TitleMedium"
               tw="my-2"

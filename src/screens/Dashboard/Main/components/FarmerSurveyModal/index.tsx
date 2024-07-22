@@ -121,7 +121,7 @@ export function FarmersSurveyModal({
   return (
     <Portal>
       <Modal visible={isModalVisible} onDismiss={onDismiss}>
-        <View tw="w-full bg-white rounded-sm w-[90%] max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
+        <View tw="rounded-3xl bg-white w-[90%] h-auto py-4 px-5 self-center space-y-2">
           {cropSelectionAvailable && (
             <View tw="space-y-2">
               <Text variant="TitleBold" tw="font-bold">

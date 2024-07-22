@@ -163,12 +163,8 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
       </View>
       <Divider tw="w-full bg-gray-400" />
       <Portal>
-        <Modal
-          tw="w-2/3"
-          visible={isOptionsModalOpen}
-          onDismiss={() => setIsOptionsModalOpen(false)}
-        >
-          <View tw="w-full mx-16 px-3 bg-white rounded-sm py-1 max-h-80">
+        <Modal visible={isOptionsModalOpen} onDismiss={() => setIsOptionsModalOpen(false)}>
+          <View tw="bg-white rounded-3xl h-auto space-y-2 mx-16 px-3 py-2">
             <FlatList
               data={optionsMenu}
               keyExtractor={(item, index) => `opt-${item.label}-#${index}`}

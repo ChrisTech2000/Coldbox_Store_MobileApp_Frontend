@@ -48,10 +48,10 @@ export function Select({
   return (
     <View>
       <Portal>
-        <Modal tw="w-1/2" visible={isModalOpen} onDismiss={onClick}>
+        <Modal visible={isModalOpen} onDismiss={onClick}>
           <View
             tw={cn(
-              'w-full mx-24 bg-white rounded-sm py-1',
+              'bg-white rounded-3xl w-2/3 max-w-2/3 h-auto pt-6 pb-4 self-center space-y-2',
               variant !== 'lg' ? 'max-h-72' : 'h-full'
             )}
           >
