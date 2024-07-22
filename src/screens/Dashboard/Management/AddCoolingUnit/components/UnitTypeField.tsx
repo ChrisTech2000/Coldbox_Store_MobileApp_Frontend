@@ -21,7 +21,7 @@ export default function UnitTypeField() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
 
-  const selectedUnitTypeId = watch('coolingUnitType', null);
+  const selectedUnitTypeId = watch('coolingUnitType');
   const [internalSelection, setInternalSelection] = useState<CoolingUnitTypes | null>(
     selectedUnitTypeId
   );

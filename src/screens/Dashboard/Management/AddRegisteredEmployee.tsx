@@ -117,7 +117,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
           <TextInput
             tw="w-full bg-transparent mt-6"
             label={t('Auth.ForgotPassword.phoneInputLabel')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}

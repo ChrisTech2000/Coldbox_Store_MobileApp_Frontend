@@ -321,6 +321,21 @@ export interface AddCoolingUnitParams extends JsonObject {
   coolingUnitType: string;
 }
 
+export type GetCoolingUnitParams = {
+  coolingUnitId: number;
+} & (
+  | {
+      operatorId: number;
+    }
+  | {
+      companyId: number;
+    }
+);
+
+export interface EditCoolingUnitParams extends AddCoolingUnitParams {
+  pricingId: number;
+}
+
 export interface AddMarketSurveyParams extends JsonObject {
   crop: number;
   checkout: number;

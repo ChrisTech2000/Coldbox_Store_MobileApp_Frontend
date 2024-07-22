@@ -660,6 +660,12 @@ const en = {
           CRATES: 'Crate',
         },
       },
+      EditCoolingUnit: {
+        modal: {
+          askDelete:
+            'This operation will delete this cooling unit including its history. Do you want to continue?',
+        },
+      },
       UsageAnalysis: {
         dateSelectionLabel: 'Select days:',
       },

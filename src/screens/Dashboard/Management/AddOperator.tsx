@@ -148,7 +148,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
             <TextInput
               tw="w-full bg-transparent my-7"
               label={t('Auth.ForgotPassword.phoneInputLabel')}
-              mode="outlined"
+              mode="flat"
               dense
               value={value}
               onChangeText={onChange}

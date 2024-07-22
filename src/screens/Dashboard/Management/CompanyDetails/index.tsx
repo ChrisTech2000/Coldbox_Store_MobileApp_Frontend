@@ -107,7 +107,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
           <TextInput
             tw="w-full bg-transparent mb-3"
             label={t('Dashboard.Management.CompanyDetails.labels.name')}
-            mode="outlined"
+            mode="flat"
             value={companyDetails.name}
             disabled
             dense

@@ -28,7 +28,7 @@ type Props = {
 };
 
 export default function ScreenContainer(props: Props) {
-  const initialFormValues = useRef<FormValues | undefined>(undefined);
+  const initialFormValues = useRef<FormValues>(_buildInitialValues());
   const navigation = useNavigation();
 
   const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
@@ -41,10 +41,6 @@ export default function ScreenContainer(props: Props) {
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
-  }
-
-  if (!initialFormValues.current) {
-    initialFormValues.current = _buildInitialValues();
   }
 
   async function onSubmit(values: FormValues): Promise<void> {
@@ -74,6 +70,8 @@ export default function ScreenContainer(props: Props) {
       });
     }
 
+    const safeValues = { ...initialFormValues.current };
+
     try {
       await ColdtivateService.addCoolingUnit({
         name: clone.name,
@@ -88,29 +86,33 @@ export default function ScreenContainer(props: Props) {
         public: clone.public,
         sensorData: '', // TODO: sensor integration
         powerOptions: {
-          powerConsumptionInMt: clone.powerConsumptionInMt,
-          dailyRoomWattage: clone.dailyRoomWattage,
-          powerSourceDieselPercent: clone.powerSourceDieselPercent,
-          powerSourceGridPercent: clone.powerSourceGridPercent,
-          powerSourcePvPercent: clone.powerSourcePvPercent,
-          powerSourceBiomassPercent: clone.powerSourceBiomassPercent,
-          powerSourceDieselConsumptionKwh: clone.powerSourceDieselConsumptionKwh,
-          pvPanelCount: clone.pvPanelCount,
-          pvPanelSize: clone.pvPanelSize,
-          pvPanelWeight: clone.pvPanelWeight,
-          pvPanelMaxPower: clone.pvPanelMaxPower,
-          batteryCount: clone.batteryCount,
-          batteryWeight: clone.batteryWeight,
-          batteryCapacity: clone.batteryCapacity,
-          batteryMaxCurrent: clone.batteryMaxCurrent,
-          batteryPeakEnergyStorage: clone.batteryPeakEnergyStorage,
-          refrigerantType: clone.refrigerantType,
+          powerConsumptionInMt: clone.powerConsumptionInMt ?? safeValues.powerConsumptionInMt,
+          dailyRoomWattage: clone.dailyRoomWattage ?? safeValues.dailyRoomWattage,
+          powerSourceDieselPercent:
+            clone.powerSourceDieselPercent ?? safeValues.powerSourceDieselPercent,
+          powerSourceGridPercent: clone.powerSourceGridPercent ?? safeValues.powerSourceGridPercent,
+          powerSourcePvPercent: clone.powerSourcePvPercent ?? safeValues.powerSourcePvPercent,
+          powerSourceBiomassPercent:
+            clone.powerSourceBiomassPercent ?? safeValues.powerSourceBiomassPercent,
+          powerSourceDieselConsumptionKwh:
+            clone.powerSourceDieselConsumptionKwh ?? safeValues.powerSourceDieselConsumptionKwh,
+          pvPanelCount: clone.pvPanelCount ?? safeValues.pvPanelCount,
+          pvPanelSize: clone.pvPanelSize ?? safeValues.pvPanelSize,
+          pvPanelWeight: clone.pvPanelWeight ?? safeValues.pvPanelWeight,
+          pvPanelMaxPower: clone.pvPanelMaxPower ?? safeValues.pvPanelMaxPower,
+          batteryCount: clone.batteryCount ?? safeValues.batteryCount,
+          batteryWeight: clone.batteryWeight ?? safeValues.batteryWeight,
+          batteryCapacity: clone.batteryCapacity ?? safeValues.batteryCapacity,
+          batteryMaxCurrent: clone.batteryMaxCurrent ?? safeValues.batteryMaxCurrent,
+          batteryPeakEnergyStorage:
+            clone.batteryPeakEnergyStorage ?? safeValues.batteryPeakEnergyStorage,
+          refrigerantType: clone.refrigerantType ?? safeValues.refrigerantType,
+          amountRefrigerant: clone.amountRefrigerant ?? safeValues.amountRefrigerant,
+          roomInsulator: clone.roomInsulator ?? safeValues.roomInsulator,
+          batteryType: clone.batteryType ?? safeValues.batteryType,
           powerSource: clone.powerSource ?? '',
           electricityStorageSystem: clone.electricityStorageSystem ?? '',
           thermalStorageMethod: clone.thermalStorageMethod ?? '',
-          amountRefrigerant: clone.amountRefrigerant,
-          roomInsulator: clone.roomInsulator,
-          batteryType: clone.batteryType,
           pvPanelType: clone.pvPanelType ?? '',
         },
         operators: clone.operators,
@@ -125,6 +127,7 @@ export default function ScreenContainer(props: Props) {
         roomLength: clone.roomLength,
         roomWidth: clone.roomWidth,
         coolingUnitType: clone.coolingUnitType ?? '',
+        editableCheckins: clone.editableCheckins,
       });
 
       await mutate(getQueryKey('getLocations', props.companyId));

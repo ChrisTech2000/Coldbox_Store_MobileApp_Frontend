@@ -32,7 +32,7 @@ function FAQ() {
       <TextInput
         tw="m-4 bg-transparent"
         label={t('actions.search')}
-        mode="outlined"
+        mode="flat"
         value={search}
         onChangeText={(value) => setSearch(value)}
         left={<TextInput.Icon icon="magnify" />}
