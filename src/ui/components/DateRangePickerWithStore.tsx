@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Icon } from 'react-native-paper';
@@ -7,6 +7,7 @@ import { create, StoreApi, UseBoundStore } from 'zustand';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
 import { Text } from './Text';
+import { cn } from '../lib/cn';
 
 export type DateRangeStoreType = {
   startDate: Date | null;
@@ -24,10 +25,22 @@ export const createDataRangeStore = () =>
   }));
 
 type DateRangePickerWithStoreProps = {
+  initialStartDate?: Date;
+  initialEndDate?: Date;
+  separator?: boolean;
+  showSelectionTitle?: boolean;
   useDateRangeStore: UseBoundStore<StoreApi<DateRangeStoreType>>;
+  variant?: 'text' | 'contained';
 };
 
-export const DateRangePickerWithStore = ({ useDateRangeStore }: DateRangePickerWithStoreProps) => {
+export const DateRangePickerWithStore = ({
+  useDateRangeStore,
+  separator,
+  showSelectionTitle,
+  variant = 'text',
+  initialEndDate,
+  initialStartDate,
+}: DateRangePickerWithStoreProps) => {
   const { t } = useTranslationUtils();
 
   const { startDate, endDate, setStartDate, setEndDate } = useDateRangeStore();
@@ -59,19 +72,43 @@ export const DateRangePickerWithStore = ({ useDateRangeStore }: DateRangePickerW
     setStartDate(null);
   }, []);
 
+  useEffect(() => {
+    if (initialStartDate) {
+      const start = new Date(initialStartDate);
+      start.setHours(0, 0, 0, 0);
+      setStartDate(start);
+    }
+
+    if (initialEndDate) {
+      const end = new Date(initialEndDate);
+      end.setHours(23, 59, 59, 999);
+      setEndDate(end);
+    }
+  }, []);
+
   return (
-    <View tw="flex flex-row items-center space-x-2">
-      <TouchableOpacity
-        tw="flex flex-row items-center"
-        onPress={() => setIsStartDateCalendarOpen(true)}
-      >
-        <Text variant="TextMedium" tw="text-base mr-1">
-          {startDate
-            ? dateFmt(startDate.toISOString(), 'dd/MM/yyyy')
-            : t('components.datePicker.placeholder')}
-        </Text>
-        <Icon source="calendar" size={16} />
-      </TouchableOpacity>
+    <View tw="flex flex-row items-center space-x-4">
+      <View>
+        {showSelectionTitle && (
+          <Text variant="TextMedium" tw="text-base my-2">
+            {t('components.datePicker.startDateSelection')}
+          </Text>
+        )}
+        <TouchableOpacity
+          tw={cn(
+            'flex flex-row items-center',
+            variant === 'contained' && 'bg-gray-200 rounded-md p-1'
+          )}
+          onPress={() => setIsStartDateCalendarOpen(true)}
+        >
+          <Text variant="TextMedium" tw="text-base mr-1">
+            {startDate
+              ? dateFmt(startDate.toISOString(), 'dd/MM/yyyy')
+              : t('components.datePicker.placeholder')}
+          </Text>
+          {variant === 'text' && <Icon source="calendar" size={16} />}
+        </TouchableOpacity>
+      </View>
       <DatePicker
         date={startDate ?? new Date()}
         mode="date"
@@ -84,19 +121,30 @@ export const DateRangePickerWithStore = ({ useDateRangeStore }: DateRangePickerW
         confirmText={t('components.datePicker.confirmButtonLabel')}
       />
 
-      <Text> - </Text>
+      {separator && <Text> - </Text>}
 
-      <TouchableOpacity
-        tw="flex flex-row items-center"
-        onPress={() => setIsEndDateCalendarOpen(true)}
-      >
-        <Text variant="TextMedium" tw="text-base mr-1">
-          {endDate
-            ? dateFmt(endDate.toISOString(), 'dd/MM/yyyy')
-            : t('components.datePicker.placeholder')}
-        </Text>
-        <Icon source="calendar" size={16} />
-      </TouchableOpacity>
+      <View>
+        {showSelectionTitle && (
+          <Text variant="TextMedium" tw="text-base my-2">
+            {t('components.datePicker.endDateSelection')}
+          </Text>
+        )}
+        <TouchableOpacity
+          tw={cn(
+            'flex flex-row items-center',
+            variant === 'contained' && 'bg-gray-200 rounded-md p-1'
+          )}
+          onPress={() => setIsEndDateCalendarOpen(true)}
+        >
+          <Text variant="TextMedium" tw="text-base mr-1">
+            {endDate
+              ? dateFmt(endDate.toISOString(), 'dd/MM/yyyy')
+              : t('components.datePicker.placeholder')}
+          </Text>
+          {variant === 'text' && <Icon source="calendar" size={16} />}
+        </TouchableOpacity>
+      </View>
+
       <DatePicker
         date={endDate ?? new Date()}
         mode="date"

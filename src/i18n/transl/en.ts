@@ -103,6 +103,7 @@ const en = {
     add: 'Add',
     edit: 'Edit',
     go: 'Go!',
+    done: 'Done',
     'not-available': 'N/A',
     'complete-later': 'Complete later',
     'update-success': 'Succesfully updated',
@@ -113,6 +114,8 @@ const en = {
       clearButtonLabel: 'Clear',
       confirmButtonLabel: 'Confirm',
       placeholder: 'dd/mm/yyyy',
+      startDateSelection: 'Select start date',
+      endDateSelection: 'Select end date',
     },
   },
   Auth: {
@@ -671,6 +674,10 @@ const en = {
         empty:
           'Check-ins and check-outs will appear in the dashboard when you do at least one check-in in any room.',
         downloadDataButton: 'Download data',
+        modal: {
+          title: 'Set configuration',
+          coolingUnitSelection: 'Select cooling unit:',
+        },
         summary: {
           totalCheckIns: 'Total number of check ins:',
           totalCrates: 'Total number of crates:',

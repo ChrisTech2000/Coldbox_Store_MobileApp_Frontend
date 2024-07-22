@@ -8,12 +8,12 @@ import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
 
-type DetailsModalProps = {
+type DisclaimerModalProps = {
   isOpen: boolean;
   dismiss: () => void;
 };
 
-export function DisclaimerModal({ isOpen, dismiss }: DetailsModalProps) {
+export function DisclaimerModal({ isOpen, dismiss }: DisclaimerModalProps) {
   const { t } = useTranslationUtils();
 
   return (

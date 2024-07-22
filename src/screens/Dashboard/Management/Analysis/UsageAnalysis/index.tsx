@@ -30,6 +30,7 @@ import { type CoolingUnit, ERoles } from '#types/global';
 import { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
 import { sortMovements } from '../utils';
+import { DownloadDataModal } from '../components/DownloadDataModal';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
@@ -49,6 +50,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
+  const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
 
   const { data: coolingUnits, isLoading: coolingUnitsLoading } = useApiCall(
@@ -154,7 +156,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
         <Text variant="TextMedium" tw="text-base ml-2">
           {t('Dashboard.Management.UsageAnalysis.dateSelectionLabel')}
         </Text>
-        <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} />
+        <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} separator />
       </View>
 
       <View tw="flex flex-row items-center justify-between">
@@ -173,7 +175,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
         />
       </View>
 
-      <Button mode="contained" uppercase>
+      <Button mode="contained" uppercase onPress={() => setIsPDFModalOpen(true)}>
         {t('Dashboard.Management.UsageAnalysis.downloadDataButton')}
       </Button>
 
@@ -251,6 +253,12 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
           </Text>
         </View>
       </View>
+
+      <DownloadDataModal
+        isOpen={isPDFModalOpen}
+        dismiss={() => setIsPDFModalOpen(false)}
+        coolingUnits={coolingUnits}
+      />
     </View>
   );
 }

@@ -140,7 +140,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         <Text variant="TextMedium" tw="text-base ml-2">
           {t('Dashboard.Management.UsageAnalysis.dateSelectionLabel')}
         </Text>
-        <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} />
+        <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} separator />
       </View>
 
       <MultipleSelectWithStore<PaymentOption>
