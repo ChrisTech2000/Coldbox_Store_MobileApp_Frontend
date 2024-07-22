@@ -9,6 +9,8 @@ import { paperTheme } from '#ui/lib/theme';
 import { dateFmt } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
+import { getCapacityColor } from './SemiCircleChart';
+
 export type WeekBarChartDatum = {
   amount: number;
   timestamp: string;
@@ -53,7 +55,7 @@ export default function WeekBarChart(props: WeekBarChartProps) {
             timestamp={item.timestamp}
             yPosition={yPosition}
             barHeight={hasExceeded ? CHART_MAX_HEIGHT : barHeight}
-            fill={hasExceeded ? paperTheme.colors.error : paperTheme.colors.primary}
+            fill={getCapacityColor(item.amount)}
           />
           <_SelectionIndicator isSelected={isSelected} />
         </TouchableOpacity>

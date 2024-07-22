@@ -87,6 +87,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
           label={rest.label}
           isModalOpen={isModalVisible}
           onClick={() => setIsModalVisible(!isModalVisible)}
+          useScrollView={false}
           content={{
             header: rest.modalHeader ?? '',
             options: (

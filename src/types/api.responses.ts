@@ -288,3 +288,8 @@ export type AddMarketSurveyResponse = {
   localMarket?: string | null;
   crop: number;
 };
+
+export type GetCoolingUnitCapacityResponse = Array<{
+  id: number;
+  usedCapacity: Array<number>;
+}>;

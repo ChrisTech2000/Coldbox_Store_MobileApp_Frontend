@@ -11,18 +11,16 @@ import { Button } from '#ui/components/Button';
 import { paperTheme } from '#ui/lib/theme';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
-import { useCoolingUnitStore } from '../Planner';
+import { type CoolingUnitFilter, useCoolingUnitStore } from '../Planner';
 import SelectWithStore from '../../components/SelectWithStore';
 import LineChart, { type LineChartEntry } from './components/LineChart';
 
-type MockedCoolingUnit = { name: string };
-
 const MOCKED_COOLING_UNITS = [
-  { name: 'CU098765' },
-  { name: 'CU38496' },
-  { name: 'unit_1' },
-  { name: 'unit_2' },
-] satisfies Array<MockedCoolingUnit>;
+  { name: 'CU098765', id: 1 },
+  { name: 'CU38496', id: 2 },
+  { name: 'unit_1', id: 3 },
+  { name: 'unit_2', id: 4 },
+] satisfies Array<CoolingUnitFilter>;
 const DATA = Array.from({ length: 7 }, (_, i) => {
   const date = new Date();
   date.setDate(date.getDate() + i);
@@ -39,7 +37,7 @@ function CoolingUnitsRoomConditions() {
 
   return (
     <ScrollView contentContainerStyle="mt-5 pb-10" showsVerticalScrollIndicator={false}>
-      <SelectWithStore<MockedCoolingUnit>
+      <SelectWithStore<CoolingUnitFilter>
         datums={MOCKED_COOLING_UNITS}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}

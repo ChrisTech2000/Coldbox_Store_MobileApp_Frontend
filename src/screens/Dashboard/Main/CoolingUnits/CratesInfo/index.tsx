@@ -7,16 +7,14 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTranslationUtils } from '#i18n/utils';
 
 import SelectWithStore from '../../components/SelectWithStore';
-import { useCoolingUnitStore } from '../Planner';
-
-type MockedCoolingUnit = { name: string };
+import { type CoolingUnitFilter, useCoolingUnitStore } from '../Planner';
 
 const MOCKED_COOLING_UNITS = [
-  { name: 'CU098765' },
-  { name: 'CU38496' },
-  { name: 'unit_1' },
-  { name: 'unit_2' },
-] satisfies Array<MockedCoolingUnit>;
+  { name: 'CU098765', id: 1 },
+  { name: 'CU38496', id: 2 },
+  { name: 'unit_1', id: 3 },
+  { name: 'unit_2', id: 4 },
+] satisfies Array<CoolingUnitFilter>;
 
 const DATA = [
   {
@@ -50,7 +48,7 @@ function CoolingUnitsCratesInfo() {
 
   return (
     <View tw="mt-5 pb-10">
-      <SelectWithStore<MockedCoolingUnit>
+      <SelectWithStore<CoolingUnitFilter>
         datums={MOCKED_COOLING_UNITS}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
