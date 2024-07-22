@@ -31,7 +31,7 @@ export default function FormFields() {
           <TextInput
             tw="w-full bg-transparent mt-1"
             label={t('Auth.ForgotPassword.phoneInputLabel')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -49,7 +49,7 @@ export default function FormFields() {
             <TextInput
               tw="w-full bg-transparent mt-1"
               label={t('Auth.SignUp.SignUpCompany.emailLabel')}
-              mode="outlined"
+              mode="flat"
               dense
               value={value}
               onChangeText={onChange}
@@ -67,7 +67,7 @@ export default function FormFields() {
           <TextInput
             tw="w-full bg-transparent mt-1"
             label={t('Auth.SignUp.commonForm.firstNameLabel')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -84,7 +84,7 @@ export default function FormFields() {
           <TextInput
             tw="w-full bg-transparent mt-1"
             label={t('Auth.SignUp.commonForm.lastNameLabel')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -102,7 +102,7 @@ export default function FormFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <PasswordField
             label={t('Auth.SignUp.commonForm.passwordLabel')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -121,7 +121,7 @@ export default function FormFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <PasswordField
             label={t('Auth.SignUp.commonForm.confirmPasswordLabel')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}

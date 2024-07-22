@@ -22,7 +22,7 @@ export default function OperatorsField() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
 
-  const selectedOperators = watch('operators', []);
+  const selectedOperators = watch('operators');
   const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedOperators);
 
   const fieldError = !!formState.errors.operators;

@@ -13,7 +13,7 @@ export default function Sensors() {
   const { watch } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
 
-  const integratedSensor = watch('sensor', false);
+  const integratedSensor = watch('sensor');
 
   return (
     <React.Fragment>

@@ -272,6 +272,58 @@ export type EditCheckInResponse = {
   message: string;
 };
 
+export interface GetCoolingUnitResponse {
+  id: number;
+  name: string;
+  location: number;
+  metric: string;
+  sensor: boolean;
+  sensorList: unknown; // TODO: confirm type
+  capacityInMetricTons: number;
+  capacityInNumberCrates: number;
+  occupancy: number;
+  occupancyModifiedDate: string;
+  dateLastModified: string;
+  dateCreation: string;
+  dateOperatorAssigned: Array<DateOperatorAssigned>;
+  coolingUnitType: string;
+  crops: Array<{
+    id: number;
+    cropId: number;
+    coolingUnitId: number;
+    pricingId: number;
+    active: boolean;
+    pricing: Array<{
+      id: number;
+      pricingType: string;
+      fixedRate: number;
+      dailyRate: number;
+    }>;
+  }>;
+  roomHeight: number;
+  roomLength: number;
+  roomWidth: number;
+  roomWeight: number;
+  operators: Array<number>;
+  latestTemperature: string;
+  crateWeight: number;
+  crateWidth: number;
+  crateLength: number;
+  crateHeight: number;
+  commodityInfos: unknown; // TODO: confirm type
+  foodCapacityInMetricTons: number;
+  public: boolean;
+  ubibotSensorChannel: unknown; // TODO: confirm type
+  commonPricingType: CommonPricingType;
+  sensorError: boolean;
+  latestTemperatureTimestamp: string;
+  lastCheckInDate: string;
+  canDelete: boolean;
+  commodityTotal: CommodityTotal;
+  powerOptions: Array<PowerOption>;
+  editableCheckins: boolean;
+}
+
 export type AddMarketSurveyResponse = {
   id: number;
   sellingPlace: ESellingLocation;

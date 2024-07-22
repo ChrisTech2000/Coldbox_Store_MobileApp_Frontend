@@ -90,7 +90,7 @@ export default function UnitSizeFields() {
             onChangeText={(v) => onChange(parseInt(v || '0'))}
             onBlur={onBlur}
             error={!!errors.roomWeight}
-            right={<TextInput.Affix text="m" />}
+            right={<TextInput.Affix text="kg" />}
             underlineColor="transparent"
           />
         )}

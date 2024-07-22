@@ -20,7 +20,7 @@ export default function LocationNameModule() {
           <TextInput
             tw="w-full bg-transparent"
             label={t('Dashboard.Management.Location.fields.name')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}

@@ -32,6 +32,7 @@ export enum EStorageEndpoints {
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
   GET_OPERATORS = 'user/v1/operators',
   GET_CAPACITY = 'storage/v1/cooling-unit-capacity/',
+  GET_COOLING_UNIT = 'storage/v1/cooling-units/:coolingUnitId/',
 }
 
 export enum EOperationEndpoints {

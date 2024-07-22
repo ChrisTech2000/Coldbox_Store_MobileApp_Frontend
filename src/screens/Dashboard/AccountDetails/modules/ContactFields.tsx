@@ -22,7 +22,7 @@ export default function ContactFields() {
           <TextInput
             tw="w-full bg-transparent mt-1"
             label={t('Auth.ForgotPassword.phoneInputLabel')}
-            mode="outlined"
+            mode="flat"
             dense
             value={value}
             onChangeText={onChange}
@@ -40,7 +40,7 @@ export default function ContactFields() {
             <TextInput
               tw="w-full bg-transparent mt-3"
               label={t('Auth.SignUp.SignUpCompany.emailLabel')}
-              mode="outlined"
+              mode="flat"
               dense
               value={value}
               onChangeText={onChange}
