@@ -683,6 +683,11 @@ const en = {
         summary: {
           total: 'Total revenue',
         },
+        paymentType: {
+          label: 'Select payment methods:',
+          cash: 'Cash',
+          creditCard: 'Credit Card',
+        },
       },
     },
     AccountDetails: {

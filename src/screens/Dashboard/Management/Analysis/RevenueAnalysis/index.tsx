@@ -16,6 +16,9 @@ import {
   DateRangePickerWithStore,
 } from '#ui/components/DateRangePickerWithStore';
 import { Input } from '#ui/components/Input';
+import MultipleSelectWithStore, {
+  createMultipleSelectStore,
+} from '#ui/components/MultipleSelectWithStore';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
@@ -29,7 +32,13 @@ import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, EPaymentType, ERoles } from '#types/global';
 import { sortMovements } from '../utils';
 
+type PaymentOption = {
+  label: string;
+  value: EPaymentType;
+};
+
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
+const usePaymentType = createMultipleSelectStore<PaymentOption>();
 const useDateRangeStore = createDataRangeStore();
 const useSortingStore = createSortingStore();
 
@@ -43,6 +52,7 @@ function RevenueAnalysis() {
   const { company } = useManagementStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { startDate, endDate } = useDateRangeStore();
+  const { selectedItems: paymentMethods } = usePaymentType();
   const { sorting } = useSortingStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
@@ -65,12 +75,12 @@ function RevenueAnalysis() {
     }
   );
 
-  const { data: revenueData, isLoading: usageDataLoading } = useApiCall(
+  const { data: revenueData, isLoading: revenueDataLoading } = useApiCall(
     'getRevenueAnalysis',
     ColdtivateService.getRevenueAnalysis,
     {
       coolingUnits: coolingUnit?.id as number,
-      paymentMethods: [EPaymentType.CASH, EPaymentType.CREDIT_CARD],
+      paymentMethods: paymentMethods.flatMap((method) => method.value),
     },
     {
       skip: !coolingUnit?.id,
@@ -124,12 +134,34 @@ function RevenueAnalysis() {
         occupyFullWidth
       />
 
-      <View tw="flex flex-row justify-between items-center">
+      <View tw="flex flex-row justify-between items-center mb-4">
         <Text variant="TextMedium" tw="text-base ml-2">
           {t('Dashboard.Management.UsageAnalysis.dateSelectionLabel')}
         </Text>
         <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} />
       </View>
+
+      <MultipleSelectWithStore<PaymentOption>
+        datums={[
+          {
+            label: t('Dashboard.Management.RevenueAnalysis.paymentType.cash'),
+            value: EPaymentType.CASH,
+          },
+          {
+            label: t('Dashboard.Management.RevenueAnalysis.paymentType.creditCard'),
+            value: EPaymentType.CREDIT_CARD,
+          },
+        ]}
+        isModalVisible={isUnitsModalOpen}
+        setIsModalVisible={setIsUnitsModalOpen}
+        itemName={(item) => item.label}
+        useSelectStore={usePaymentType}
+        label={`${t('Dashboard.Management.RevenueAnalysis.paymentType.label')} ${paymentMethods.flatMap((p) => p.label).join(', ')}`}
+        modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+        divider
+        autoSelectAll
+        occupyFullWidth
+      />
 
       <View tw="flex flex-row items-center justify-between">
         <Input
@@ -152,7 +184,7 @@ function RevenueAnalysis() {
       </Button>
 
       <ScrollView tw="mx-4 mt-2 mb-1" showsVerticalScrollIndicator={false}>
-        {usageDataLoading || coolingUnitsLoading ? (
+        {revenueDataLoading || coolingUnitsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
           </View>
