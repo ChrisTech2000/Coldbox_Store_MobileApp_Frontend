@@ -66,6 +66,19 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
     setIsOptionsModalOpen(false);
   }, []);
 
+  const fillMarketSurvey = useCallback(() => {
+    navigation.navigate('MarketSurveyStack', {
+      screen: 'MarketSurveyBase',
+      params: {
+        farmer: movement.farmer,
+        crops: movement.movementCrops.filter((crop) => !movement.hasMarketSurvey.includes(crop.id)),
+        checkoutId: movement.checkoutId as number,
+        companyCurrency: selectedCompany?.currency ?? company?.currency,
+      },
+    });
+    setIsOptionsModalOpen(false);
+  }, [selectedCompany, company]);
+
   const optionsMenu = useMemo(() => {
     return [
       {
@@ -100,8 +113,8 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
-              action: () => null,
-              disabled: true, // TODO: understand when and how this works
+              action: fillMarketSurvey,
+              disabled: !movement.marketSurveyDelay,
             },
           ]
         : []),
@@ -116,7 +129,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
         ) : (
           <CheckOut width={25} height={25} fill={colors.orange[400]} stroke={colors.orange[400]} />
         )}
-        <View>
+        <View tw="w-full">
           <View tw="flex flex-row items-center">
             <Text variant="TextBold" tw="text-base font-bold">
               {movement.code}
@@ -131,7 +144,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           </Text>
         </View>
 
-        <View>
+        <View tw="w-full">
           <Text
             variant="TextMedium"
             tw={cn('text-base', !isCheckIn && 'font-bold')}
@@ -144,11 +157,9 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           </Text>
         </View>
 
-        <View>
-          <TouchableOpacity onPress={() => setIsOptionsModalOpen(true)}>
-            <Icon source="dots-vertical" size={20} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => setIsOptionsModalOpen(true)}>
+          <Icon source="dots-vertical" size={20} />
+        </TouchableOpacity>
       </View>
       <Divider tw="w-full bg-gray-400" />
       <Portal>
@@ -160,7 +171,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           <View tw="w-full mx-16 px-3 bg-white rounded-sm py-1 max-h-80">
             <FlatList
               data={optionsMenu}
-              keyExtractor={(item, index) => `faq-${item.label}-#${index}`}
+              keyExtractor={(item, index) => `opt-${item.label}-#${index}`}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   tw="space-y-2 w-full my-1"

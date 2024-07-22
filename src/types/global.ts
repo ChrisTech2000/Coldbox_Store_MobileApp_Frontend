@@ -233,7 +233,7 @@ export interface FarmerSurvey {
   averageSeasonInMonths: number | null;
   currency: string;
   kgInUnit: number;
-  reasonForLoss: Array<string>;
+  reasonForLoss: Array<string> | string;
   dateFilledIn: Date;
   dateLastModified: Date;
 }
@@ -343,6 +343,12 @@ export enum EMovementType {
   IN = 'in',
 }
 
+export enum ESellingLocation {
+  FARM = 'farm-gate',
+  MARKET = 'local-market',
+  BOTH = 'Both',
+}
+
 //////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',
@@ -360,4 +366,12 @@ export const MAP_APP_GENDER_TO_API = {
   [EAppGender.FEMALE]: EApiGender.FEMALE,
   [EAppGender.MALE]: EApiGender.MALE,
   [EAppGender.OTHER]: EApiGender.OTHER,
+};
+
+export const MAP_APP_UNIT_OF_MEASUREMENT_TO_API = {
+  [EUnitOfMeasurement.KILOGRAMS]: 'KILOGRAMS',
+  [EUnitOfMeasurement.CRATES]: 'CRATES',
+  [EUnitOfMeasurement.BOXES]: 'BOXES',
+  [EUnitOfMeasurement.SACKS]: 'SACKS',
+  [EUnitOfMeasurement.BASKETS]: 'BASKETS',
 };

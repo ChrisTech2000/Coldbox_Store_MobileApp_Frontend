@@ -34,6 +34,7 @@ import type {
   GetMovementsHistoryParams,
   EditCheckInParams,
   SendOperatorInvitationParams,
+  AddMarketSurveyParams,
   AddCoolingUnitParams,
   GetCoolingUnitParams,
   EditCoolingUnitParams,
@@ -59,6 +60,7 @@ import type {
   GetInvitedCompanyEmployeesResponse,
   EditCheckInResponse,
   GetCoolingUnitResponse,
+  AddMarketSurveyResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -157,6 +159,17 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  public getFarmers = async (): Promise<GetFarmerResponse | undefined> => {
+    try {
+      const { data } = await this.get<GetFarmerResponse>(EUserEndpoints.GET_FARMER);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public getFarmerSurveys = async (
     params: GetFarmerSurveysParams
   ): Promise<GetFarmerSurveysResponse | undefined> => {
@@ -209,6 +222,23 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  }
+
+  async addMarketSurvey(
+    params: AddMarketSurveyParams
+  ): Promise<AddMarketSurveyResponse | undefined> {
+    try {
+      const { data } = await this.post<AddMarketSurveyResponse>(
+        EOperationEndpoints.ADD_MARKET_SURVEY,
+        params
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;

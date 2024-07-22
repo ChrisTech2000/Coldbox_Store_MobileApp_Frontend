@@ -12,7 +12,7 @@ function _Wrapper({ error, ...rest }: WrapperProps) {
     <>
       <TextInput error={!!error} {...rest} />
       {error && (
-        <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-4 w-[95%]">{error.message?.toString()}</Text>
+        <Text tw="text-xs text-red-600 mt-2 mb-2 pl-4 w-[95%]">{error.message?.toString()}</Text>
       )}
     </>
   );
