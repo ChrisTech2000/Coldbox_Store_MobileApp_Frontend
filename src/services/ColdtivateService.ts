@@ -61,6 +61,7 @@ import type {
   EditCheckInResponse,
   GetCoolingUnitResponse,
   AddMarketSurveyResponse,
+  GetCoolingUnitCapacityResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -824,6 +825,25 @@ class ColdtivateService extends HttpClient {
     try {
       const { data } = await this.delete(
         subs(EStorageEndpoints.GET_COOLING_UNIT, { coolingUnitId })
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnitCapacity = async (
+    coolingUnitId: number
+  ): Promise<GetCoolingUnitCapacityResponse> => {
+    try {
+      const { data } = await this.get<GetCoolingUnitCapacityResponse>(
+        EStorageEndpoints.GET_CAPACITY,
+        {
+          params: { coolingUnit: coolingUnitId },
+        }
       );
       return data;
     } catch (error) {
