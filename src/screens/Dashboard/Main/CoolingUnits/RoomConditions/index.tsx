@@ -1,58 +1,27 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { RefreshControl, View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
-import SelectWithStore from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { useAuthStore } from '#stores/auth';
-import { useManagementStore } from '#stores/management';
-import { ERoles } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import RBAC from '#common/RBAC';
 
-import { type CoolingUnitFilter, useCoolingUnitStore } from '../Planner';
 import LineChart from './components/LineChart';
 import TemperatureModal from './components/TemperatureModal';
 
 import { processTemperatures } from './utils';
+import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 
 function CoolingUnitsRoomConditions() {
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-
-  const user = useAuthStore(useShallow((store) => store.user));
-  const company = useManagementStore(useShallow((store) => store.company));
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
   const { t } = useTranslationUtils();
-
-  const { data: units, isLoading } = useApiCall(
-    'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
-    {
-      ...(user?.role === ERoles.OPERATOR
-        ? { operator: user?.id as number }
-        : { company: company?.id as number }),
-    },
-    {
-      skip:
-        !user || user.role === ERoles.OPERATOR
-          ? typeof company?.id === 'undefined'
-          : typeof user.id === 'undefined',
-      defaultData: [],
-    }
-  );
-
-  const coolingUnits: Array<CoolingUnitFilter> = useMemo(
-    () => units?.map((unit) => ({ id: unit.id, name: unit.name })) ?? [],
-    [units]
-  );
 
   const {
     data: temperatures,
@@ -70,14 +39,6 @@ function CoolingUnitsRoomConditions() {
 
   const chartDatums = useMemo(() => processTemperatures(temperatures), [temperatures]);
 
-  if (isLoading) {
-    return (
-      <View tw="flex-1 items-center justify-center">
-        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-      </View>
-    );
-  }
-
   return (
     <ScrollView
       tw="h-full"
@@ -90,18 +51,12 @@ function CoolingUnitsRoomConditions() {
         />
       }
     >
-      <SelectWithStore<CoolingUnitFilter>
-        datums={coolingUnits}
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-        itemName={(item) => item?.name}
-        useSelectStore={useCoolingUnitStore}
-        label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-          name: selectedCoolingUnit?.name ?? '',
-        })}
-        modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-        divider
-      />
+      <GenericFilter>
+        <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
+          <GenericFilter.Companies />
+        </RBAC.ProtectedResource>
+        <GenericFilter.CoolingUnits />
+      </GenericFilter>
 
       {typeof chartDatums.info !== 'undefined' && chartDatums.datums.length >= 1 ? (
         <React.Fragment>
