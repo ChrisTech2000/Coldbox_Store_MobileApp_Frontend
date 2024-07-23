@@ -45,4 +45,5 @@ export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'Planner',
   'RoomConditions',
   'CratesInfo',
+  'Maps',
 ];

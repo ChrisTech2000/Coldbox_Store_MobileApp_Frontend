@@ -55,6 +55,7 @@ const en = {
       Analytics: 'Analytics',
       CheckIn: 'Check In',
       CheckOut: 'Check Out',
+      Maps: 'Maps',
     },
     dashboard: {
       AccountDetails: 'Account details',
@@ -407,6 +408,7 @@ const en = {
       },
       occupancy: 'Current occupancy of the cooling unit',
       week: 'This week',
+      today: 'Today',
     },
     CoolingUnitsRoomConditions: {
       heading: 'Temperature history',

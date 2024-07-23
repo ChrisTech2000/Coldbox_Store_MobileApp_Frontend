@@ -16,6 +16,7 @@ import { paperTheme } from '#ui/lib/theme';
 import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
 import SemiCircleChart from './components/SemiCircleChart';
 import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
+
 import { weekSubsetArtisan } from './utils';
 
 const MAX_CAPACITY = 100;

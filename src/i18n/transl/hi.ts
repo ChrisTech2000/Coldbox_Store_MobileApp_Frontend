@@ -57,6 +57,7 @@ export default {
       Analytics: 'वैश्लेषिकी',
       CheckIn: 'चेक इन',
       CheckOut: 'चेक आउट',
+      Maps: 'नक्शा',
     },
     dashboard: {
       AccountDetails: 'अकाउंट डिटेल्स',
@@ -409,6 +410,7 @@ export default {
       },
       occupancy: 'शीतलन इकाई का वर्तमान अधिभोग',
       week: 'इस सप्ताह',
+      today: 'आज',
     },
     CoolingUnitsRoomConditions: {
       heading: 'पिछले तापमान को ट्रैक करें',

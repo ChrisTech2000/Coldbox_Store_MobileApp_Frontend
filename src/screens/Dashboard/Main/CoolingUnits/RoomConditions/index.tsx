@@ -15,6 +15,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { ERoles } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
+import RBAC from '#common/RBAC';
 
 import { type CoolingUnitFilter, useCoolingUnitStore } from '../Planner';
 import SelectWithStore from '../../components/SelectWithStore';
@@ -127,11 +128,14 @@ function CoolingUnitsRoomConditions() {
                 date: dateFmt(chartDatums.info.lastUpdated, 'E MMM dd yyyy HH:mm'),
               })}
             </Text>
-            <TemperatureModal
-              temp={chartDatums.info.temperature}
-              coolingUnitId={selectedCoolingUnit!.id}
-              revalidateTemperatures={revalidateTemperatures}
-            />
+
+            <RBAC.ProtectedResource action="SET" subject="Temperatures">
+              <TemperatureModal
+                temp={chartDatums.info.temperature}
+                coolingUnitId={selectedCoolingUnit!.id}
+                revalidateTemperatures={revalidateTemperatures}
+              />
+            </RBAC.ProtectedResource>
           </View>
         </React.Fragment>
       ) : (

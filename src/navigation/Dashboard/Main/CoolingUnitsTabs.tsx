@@ -9,15 +9,18 @@ import type { RouteProp } from '@react-navigation/native';
 import CoolingUnitsPlanner from '#screens/Dashboard/Main/CoolingUnits/Planner';
 import CoolingUnitsRoomConditions from '#screens/Dashboard/Main/CoolingUnits/RoomConditions';
 import CoolingUnitsCratesInfo from '#screens/Dashboard/Main/CoolingUnits/CratesInfo';
+import CoolingUnitsCratesMaps from '#screens/Dashboard/Main/CoolingUnits/Maps';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
+import RBAC from '#common/RBAC';
 
 export type CoolingUnitsTabsRoutes = {
   Planner: undefined;
   RoomConditions: undefined;
   CratesInfo: undefined;
+  Maps: undefined;
 };
 
 export type CoolingUnitsTabsRoutePaths = keyof CoolingUnitsTabsRoutes;
@@ -33,11 +36,13 @@ const TAB_HEADERS: Record<CoolingUnitsTabsRoutePaths, TranslationPaths | undefin
   Planner: 'navigation.bottomTabs.Planner',
   RoomConditions: 'navigation.bottomTabs.RoomConditions',
   CratesInfo: 'navigation.bottomTabs.CratesInfo',
+  Maps: 'navigation.bottomTabs.Maps',
 };
 
 const TopTabs = createMaterialTopTabNavigator<CoolingUnitsTabsRoutes>();
 
 export default function CoolingUnitsTabs() {
+  const { guard } = RBAC.useRBAC();
   const { t } = useTranslationUtils();
 
   const screenOptions: ScreenOptions = useCallback((props) => {
@@ -63,11 +68,15 @@ export default function CoolingUnitsTabs() {
     };
   }, []);
 
+  const maps = guard('NAVIGATE', 'Maps');
+  const cratesInfo = guard('NAVIGATE', 'CratesInfo');
+
   return (
     <TopTabs.Navigator screenOptions={screenOptions}>
+      {maps ? <TopTabs.Screen name="Maps" component={CoolingUnitsCratesMaps} /> : null}
       <TopTabs.Screen name="Planner" component={CoolingUnitsPlanner} />
       <TopTabs.Screen name="RoomConditions" component={CoolingUnitsRoomConditions} />
-      <TopTabs.Screen name="CratesInfo" component={CoolingUnitsCratesInfo} />
+      {cratesInfo ? <TopTabs.Screen name="CratesInfo" component={CoolingUnitsCratesInfo} /> : null}
     </TopTabs.Navigator>
   );
 }
