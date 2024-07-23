@@ -350,3 +350,10 @@ export interface AddMarketSurveyParams extends JsonObject {
   loss: number;
   currency: string;
 }
+
+export interface AddCoolingUnitTemperatureParams extends JsonObject {
+  value: number;
+  specificationType: 'TEMPERATURE';
+  datetimeStamp: string;
+  coolingUnit: number;
+}

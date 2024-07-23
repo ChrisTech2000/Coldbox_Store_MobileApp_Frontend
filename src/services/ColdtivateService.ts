@@ -38,6 +38,7 @@ import type {
   AddCoolingUnitParams,
   GetCoolingUnitParams,
   EditCoolingUnitParams,
+  AddCoolingUnitTemperatureParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -62,6 +63,7 @@ import type {
   GetCoolingUnitResponse,
   AddMarketSurveyResponse,
   GetCoolingUnitCapacityResponse,
+  GetCoolingUnitTemperaturesResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -845,6 +847,35 @@ class ColdtivateService extends HttpClient {
           params: { coolingUnit: coolingUnitId },
         }
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnitTemperatures = async (coolingUnitId: number) => {
+    try {
+      const { data } = await this.get<GetCoolingUnitTemperaturesResponse>(
+        EStorageEndpoints.GET_TEMPERATURES,
+        {
+          params: { coolingUnit: coolingUnitId },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public addCoolingUnitTemperature = async (params: AddCoolingUnitTemperatureParams) => {
+    try {
+      const { data } = await this.post(EStorageEndpoints.ADD_COOLING_UNIT_TEMPERATURE, params);
       return data;
     } catch (error) {
       console.log(error);
