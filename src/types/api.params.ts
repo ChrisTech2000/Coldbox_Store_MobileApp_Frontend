@@ -357,3 +357,8 @@ export interface AddCoolingUnitTemperatureParams extends JsonObject {
   datetimeStamp: string;
   coolingUnit: number;
 }
+
+export interface GetRevenueAnalysisParams extends JsonObject {
+  coolingUnits: number | Array<number>;
+  paymentMethods: Array<EPaymentType>;
+}

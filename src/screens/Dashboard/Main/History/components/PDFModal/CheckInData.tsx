@@ -147,7 +147,7 @@ export function CheckInData({
   }, [t, toast, movement, coolingUnit, currency, companyName]);
 
   return (
-    <View tw="w-[90%] bg-white mx-5 px-3 py-1 rounded-sm h-auto space-y-2">
+    <View tw="w-[90%] bg-white mx-5 px-3 py-1 rounded-sm h-auto space-y-2 rounded-3xl">
       <Text variant="TitleMedium">{t('Dashboard.History.pdfModal.checkIn.title')}</Text>
 
       <View tw="flex flex-row space-x-1">

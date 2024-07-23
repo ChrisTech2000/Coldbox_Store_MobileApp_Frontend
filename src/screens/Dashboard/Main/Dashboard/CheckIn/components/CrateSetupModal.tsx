@@ -93,8 +93,8 @@ export function CrateSetupModal({
 
   return (
     <Portal>
-      <Modal tw="w-[85%] pb-32" visible={isOpen} onDismiss={dismissModal}>
-        <View tw="w-full mx-8 items-center bg-white rounded-sm py-1 max-h-90">
+      <Modal visible={isOpen} onDismiss={dismissModal}>
+        <View tw="bg-white rounded-3xl max-h-90 space-y-2 mx-8 items-center py-1">
           <Text tw="text-lg font-bold mb-1 mt-2">{title}</Text>
           <Divider tw="w-full bg-gray-400 my-2" />
 
@@ -140,20 +140,6 @@ export function CrateSetupModal({
                           tw="w-8 mx-2"
                           onPress={() =>
                             onChangeNumericKeyboard(
-                              Number(
-                                modalCrates[index][weightMode ? 'crateWeight' : 'crateId'] ?? 0
-                              ) + 1,
-                              index
-                            )
-                          }
-                        >
-                          +
-                        </Button>
-                        <Button
-                          labelStyle="text-xl"
-                          tw="w-8 mx-2"
-                          onPress={() =>
-                            onChangeNumericKeyboard(
                               !modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
                                 ? 0
                                 : Number(
@@ -164,6 +150,20 @@ export function CrateSetupModal({
                           }
                         >
                           -
+                        </Button>
+                        <Button
+                          labelStyle="text-xl"
+                          tw="w-8 mx-2"
+                          onPress={() =>
+                            onChangeNumericKeyboard(
+                              Number(
+                                modalCrates[index][weightMode ? 'crateWeight' : 'crateId'] ?? 0
+                              ) + 1,
+                              index
+                            )
+                          }
+                        >
+                          +
                         </Button>
                       </View>
                     )}

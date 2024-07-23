@@ -13,16 +13,17 @@ import { Company, CoolingUnit, ERoles } from '#types/global';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { createSelectStore } from '#ui/components/SelectWithStore';
 
 import { HistoryTabStackRouteProps } from 'navigation/Dashboard/Main/HistoryTabStack';
 import { Filters } from '../components/Filters';
-import { createSelectStore } from '../components/SelectWithStore';
 import { Movement } from './components/Movement';
-import { SortingMenu, useSortingStore } from './components/SortMenu';
+import { createSortingStore, ESortingOptions, SortingMenu } from './components/SortMenu';
 import { sortMovements } from './utils/sortMovements';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
+const useSortingStore = createSortingStore();
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -33,7 +34,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const { user } = useAuthStore();
   const { sorting } = useSortingStore();
 
-  const { selectedItem: coolignUnit } = useCoolingUnitStore();
+  const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { selectedItem: company } = useCompanyStore();
 
   const [search, setSearch] = useState<string>('');
@@ -49,10 +50,10 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
     ColdtivateService.getMovementsHistory,
     {
       ...(user?.role === ERoles.COOLING_USER ? { farmerId: farmerId as number } : {}),
-      coolingUnit: coolignUnit?.id as number,
+      coolingUnit: coolingUnit?.id as number,
     },
     {
-      skip: (user?.role === ERoles.COOLING_USER && !farmerId) || !coolignUnit?.id,
+      skip: (user?.role === ERoles.COOLING_USER && !farmerId) || !coolingUnit?.id,
       defaultData: [],
     }
   );
@@ -88,6 +89,8 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
           <SortingMenu
             isModalVisible={isSortingModalOpen}
             setIsModalVisible={setIsSortingModalOpen}
+            useSortingStore={useSortingStore}
+            hideableOptions={[ESortingOptions.COOLING_USER_NAME]}
           />
         }
         search={search}
@@ -109,9 +112,14 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
               <Movement
                 key={`${movement.id}-${index}`}
                 movement={movement}
-                coolingUnit={coolignUnit}
+                coolingUnit={coolingUnit}
                 selectedCompany={company}
-                {...props}
+                navigateToCheckIn={(movement, id) =>
+                  props.navigation.navigate('EditCheckIn', {
+                    movement,
+                    coolingUnitId: id,
+                  })
+                }
               />
             )}
             estimatedItemSize={40}

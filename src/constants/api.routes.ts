@@ -15,20 +15,20 @@ export enum EUserEndpoints {
   GET_INVITED_COMPANY_EMPLOYEES = 'user/v1/service-provider-invite',
   GET_INVITED_OPERATORS = 'user/v1/operator-invite',
   GET_OPERATORS = 'user/v1/operators',
+  INVITE_EMPLOYEE = 'user/v1/service-provider-invite/',
+  INVITE_OPERATOR = 'user/v1/operator-invite/',
   UPDATE_FARMER = 'user/v1/farmers/:farmerId/',
   UPDATE_FARMER_SURVEYS = 'user/v1/farmer-survey/:farmerId/',
   UPDATE_USER = 'user/v1/users/:userId/',
-  INVITE_OPERATOR = 'user/v1/operator-invite/',
-  INVITE_EMPLOYEE = 'user/v1/service-provider-invite/',
 }
 
 export enum EStorageEndpoints {
+  GET_ALL_CROPS = '/storage/v1/crops/',
   GET_COOLING_UNIT_CROPS = 'storage/v1/cooling-unit-crops/',
   GET_COOLING_UNITS = 'storage/v1/cooling-units/',
   GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
   GET_FARMER_CRATES = '/storage/v1/crates/',
   GET_LOCATION = '/storage/v1/locations/:locationId/',
-  GET_ALL_CROPS = '/storage/v1/crops/',
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
   GET_OPERATORS = 'user/v1/operators',
   GET_CAPACITY = 'storage/v1/cooling-unit-capacity/',
@@ -41,8 +41,10 @@ export enum EOperationEndpoints {
   ADD_MARKET_SURVEY = 'operation/market-survey/',
   CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
-  GET_MOVEMENTS = '/operation/movements/',
   EDIT_CHECK_IN = '/operation/checkins/:id/',
+  GET_COOLING_UNIT_REVENUE = '/operation/movements/revenue/',
+  GET_COOLING_UNIT_USAGE = '/operation/movements/usage/',
+  GET_MOVEMENTS = '/operation/movements/',
   MOVE_CHECKOUT = 'operation/move-checkout/',
 }
 

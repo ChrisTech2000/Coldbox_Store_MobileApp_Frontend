@@ -38,6 +38,7 @@ import type {
   AddCoolingUnitParams,
   GetCoolingUnitParams,
   EditCoolingUnitParams,
+  GetRevenueAnalysisParams,
   AddCoolingUnitTemperatureParams,
 } from '#types/api.params';
 import type {
@@ -876,6 +877,51 @@ class ColdtivateService extends HttpClient {
   public addCoolingUnitTemperature = async (params: AddCoolingUnitTemperatureParams) => {
     try {
       const { data } = await this.post(EStorageEndpoints.ADD_COOLING_UNIT_TEMPERATURE, params);
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  ///////// ANALYSIS
+  public getUsageAnalysis = async (
+    coolingUnits: number | number[]
+  ): Promise<GetMovementsHistoryResponse> => {
+    try {
+      const params = {
+        coolingUnits: typeof coolingUnits === 'number' ? coolingUnits : coolingUnits.join(','),
+      };
+
+      const { data } = await this.get<GetMovementsHistoryResponse>(
+        EOperationEndpoints.GET_COOLING_UNIT_USAGE,
+        { params }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getRevenueAnalysis = async (
+    params: GetRevenueAnalysisParams
+  ): Promise<GetMovementsHistoryResponse> => {
+    try {
+      const { coolingUnits, paymentMethods } = params;
+      const _params = {
+        coolingUnits: typeof coolingUnits === 'number' ? coolingUnits : coolingUnits.join(','),
+        paymentMethods: paymentMethods.join(','),
+      };
+
+      const { data } = await this.get<GetMovementsHistoryResponse>(
+        EOperationEndpoints.GET_COOLING_UNIT_REVENUE,
+        { params: _params }
+      );
       return data;
     } catch (error) {
       console.log(error);

@@ -10,16 +10,16 @@ import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
+import { createSelectStore } from '#ui/components/SelectWithStore';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { Filters, type Search } from '../components/Filters';
-import { createSelectStore } from '../components/SelectWithStore';
-import { sortProduces } from './utils/sortProduces';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
 import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
+import { sortProduces } from './utils/sortProduces';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();

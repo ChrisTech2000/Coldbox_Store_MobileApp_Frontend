@@ -105,10 +105,20 @@ export default {
     search: 'खोजा जा रहा है...',
     or: 'या',
     go: 'चलो!',
+    done: 'पूर्ण',
     'not-available': 'अभी उपलब्ध नहीं है',
     'complete-later': 'बाद में पूरा करें',
     'update-success': 'सफलतापूर्वक उत्परिवर्तित',
     'save-changes': 'बदलाव सहेजें',
+  },
+  components: {
+    datePicker: {
+      clearButtonLabel: 'साफ़ करें',
+      confirmButtonLabel: 'पुष्टि करें',
+      placeholder: 'dd/mm/yyyy',
+      startDateSelection: 'प्रारंभ तिथि चुनें',
+      endDateSelection: 'समाप्ति तिथि चुनें',
+    },
   },
   Auth: {
     Root: {
@@ -668,6 +678,33 @@ export default {
             'यह कार्रवाई इसके इतिहास सहित इस शीतलन इकाई को हटा देगी। क्या आप जारी रखना चाहते हैं?',
         },
       },
+      UsageAnalysis: {
+        dateSelectionLabel: 'दिनों का चयन करें:',
+        empty:
+          'किसी भी कक्ष में कम से कम एक चेक-इन करने पर चेक-इन और चेक-आउट डैशबोर्ड में दिखाई देंगे।',
+        downloadDataButton: 'डेटा डाउनलोड करें',
+        modal: {
+          title: 'कॉन्फ़िगरेशन सेट करें',
+          coolingUnitSelection: 'कूलिंग यूनिट चुनें:',
+        },
+        summary: {
+          totalCheckIns: 'कुल चेक-इन की संख्या:',
+          totalCrates: 'कुल क्रेट्स की संख्या:',
+          totalWeight: 'कुल वजन:',
+          totalUsers: 'अलग-अलग उपयोगकर्ताओं की कुल संख्या:',
+          weightUnit: 'किग्रा',
+        },
+      },
+      RevenueAnalysis: {
+        summary: {
+          total: 'कुल राजस्व',
+        },
+        paymentType: {
+          label: 'भुगतान विधियाँ चुनें:',
+          cash: 'नकद',
+          creditCard: 'क्रेडिट कार्ड',
+        },
+      },
     },
     AccountDetails: {
       popups: {
@@ -700,6 +737,7 @@ export default {
         movementDateReverse: 'आवागमन की तिथि (नवीनतम से पहले)',
         checkInFirst: 'पहले चेक इन',
         checkOutFirst: 'पहले चेक आउट',
+        coolingUser: 'कूलिंग उपयोगकर्ता का नाम',
       },
       optionsMenu: {
         common: {

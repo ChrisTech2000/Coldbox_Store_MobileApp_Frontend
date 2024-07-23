@@ -129,7 +129,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
   }, [t, toast, movement]);
 
   return (
-    <View tw="w-[90%] bg-white mx-5 px-3 py-1 rounded-sm h-auto space-y-2">
+    <View tw="w-[90%] bg-white mx-5 px-3 py-1 rounded-sm h-auto space-y-2 rounded-3xl">
       <Text variant="TitleMedium">{t('Dashboard.History.pdfModal.checkOut.title')}</Text>
 
       <View tw="flex flex-row space-x-1">

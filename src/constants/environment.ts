@@ -1,3 +1,4 @@
-import { REACT_APP_BASE_API_URL } from '@env';
+import { REACT_APP_BASE_API_URL, REACT_APP_AIR_PROD_BASE_URL } from '@env';
 
 export const API_BASE_URL = REACT_APP_BASE_API_URL;
+export const AIR_PROD_BASE_URL = REACT_APP_AIR_PROD_BASE_URL;

@@ -25,6 +25,7 @@ export const createMultipleSelectStore = <T,>() =>
 
 type SelectItemProps<T> = {
   autoSelect?: boolean;
+  autoSelectAll?: boolean;
   datums: Array<T>;
   divider?: boolean;
   emptyMessage?: string;
@@ -50,11 +51,36 @@ export default function MultipleSelectWithStore<T>({
 
   const [internalSelection, setInternalSelection] = useState<T[]>(store.selectedItems);
 
+  const { t } = useTranslationUtils();
+
+  const handleSelect = useCallback(
+    (item: T) => {
+      const itemKey = rest.itemName(item);
+      if (internalSelection.some((selectedItem) => rest.itemName(selectedItem) === itemKey)) {
+        setInternalSelection(
+          internalSelection.filter((selectedItem) => rest.itemName(selectedItem) !== itemKey)
+        );
+      } else {
+        setInternalSelection([...internalSelection, item]);
+      }
+    },
+    [rest.itemName, internalSelection]
+  );
+
   useEffect(() => {
-    if (!store.selectedItems.length && rest.autoSelect && rest.datums.length > 0) {
-      const firstDatum = rest.datums[0];
-      store.onSelect([firstDatum]);
-      setInternalSelection([firstDatum]);
+    if (
+      !store.selectedItems.length &&
+      (rest.autoSelect || rest.autoSelectAll) &&
+      rest.datums.length > 0
+    ) {
+      if (rest.autoSelectAll) {
+        store.onSelect(rest.datums);
+        setInternalSelection(rest.datums);
+      } else {
+        const firstDatum = rest.datums[0];
+        store.onSelect([firstDatum]);
+        setInternalSelection([firstDatum]);
+      }
     }
   }, [rest.datums, store.selectedItems]);
 
@@ -66,8 +92,6 @@ export default function MultipleSelectWithStore<T>({
     }, [store.selectedItems])
   );
 
-  const { t } = useTranslationUtils();
-
   if (!rest.datums.length && rest.emptyMessage) {
     return (
       <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
@@ -78,14 +102,6 @@ export default function MultipleSelectWithStore<T>({
       </View>
     );
   }
-
-  const handleSelect = (item: T) => {
-    if (internalSelection.includes(item)) {
-      setInternalSelection(internalSelection.filter((selectedItem) => selectedItem !== item));
-    } else {
-      setInternalSelection([...internalSelection, item]);
-    }
-  };
 
   return (
     <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
@@ -101,14 +117,22 @@ export default function MultipleSelectWithStore<T>({
               <FlatList
                 data={rest.datums}
                 keyExtractor={(item, index) => `${item}-${index}`}
-                renderItem={({ item }) => (
-                  <CheckboxItem
-                    label={rest.itemName(item)}
-                    tw="flex flex-row-reverse ml-[-10]"
-                    status={internalSelection.includes(item) ? 'checked' : 'unchecked'}
-                    onPress={() => handleSelect(item)}
-                  />
-                )}
+                renderItem={({ item }) => {
+                  return (
+                    <CheckboxItem
+                      label={rest.itemName(item)}
+                      tw="flex flex-row-reverse ml-[-10]"
+                      status={
+                        internalSelection.some(
+                          (selectedItem) => rest.itemName(selectedItem) === rest.itemName(item)
+                        )
+                          ? 'checked'
+                          : 'unchecked'
+                      }
+                      onPress={() => handleSelect(item)}
+                    />
+                  );
+                }}
                 nestedScrollEnabled
               />
             ),

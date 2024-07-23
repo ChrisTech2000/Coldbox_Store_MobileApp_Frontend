@@ -316,15 +316,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 contentStyle="bg-green-50"
                 labelStyle="text-lg"
                 onPress={() =>
-                  onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'generalCrateWeight')
-                }
-              >
-                +
-              </Button>
-              <Button
-                contentStyle="bg-green-50"
-                labelStyle="text-lg"
-                onPress={() =>
                   onChangeNumericKeyboard(
                     !value ? 0 : Number(value) - 1,
                     onChange,
@@ -333,6 +324,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 }
               >
                 -
+              </Button>
+              <Button
+                contentStyle="bg-green-50"
+                labelStyle="text-lg"
+                onPress={() =>
+                  onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'generalCrateWeight')
+                }
+              >
+                +
               </Button>
             </View>
           )}

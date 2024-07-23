@@ -395,8 +395,8 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
 
       {/** USER WITHOUT PHONE MODAL */}
       <Portal>
-        <Modal tw="w-2/3" visible={isPhoneModalOpen} onDismiss={closePhoneWarningModal}>
-          <View tw="w-full items-center mx-16 bg-white rounded-sm py-1 max-h-80">
+        <Modal visible={isPhoneModalOpen} onDismiss={closePhoneWarningModal}>
+          <View tw="bg-white rounded-3xl w-2/3 max-w-2/3 self-center space-y-2 items-center mx-16 bg-white py-1 max-h-80">
             <Text tw="text-lg font-bold mb-1 mt-2">Warning</Text>
             <Danger tw="max-h-16 mb-1" />
             <Text tw="text-center mb-2">{t('Auth.SignUp.SignUpCompany.modal.warning')}</Text>
