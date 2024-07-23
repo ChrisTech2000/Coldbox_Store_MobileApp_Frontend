@@ -853,5 +853,10 @@ export default {
         },
       },
     },
+    Analytics: {
+      company: 'कंपनी',
+      aggregated: 'एकत्रित',
+      comparison: 'तुलना',
+    },
   },
 } satisfies Translations;

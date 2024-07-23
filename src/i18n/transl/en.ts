@@ -849,6 +849,11 @@ const en = {
         },
       },
     },
+    Analytics: {
+      company: 'Company',
+      aggregated: 'Aggregated',
+      comparison: 'Comparison',
+    },
   },
 };
 
