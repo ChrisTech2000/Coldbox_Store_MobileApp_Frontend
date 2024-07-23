@@ -345,3 +345,12 @@ export type GetCoolingUnitCapacityResponse = Array<{
   id: number;
   usedCapacity: Array<number>;
 }>;
+
+export type GetCoolingUnitTemperaturesResponse = Array<{
+  coolingUnit: number;
+  datetimeStamp: string;
+  id: number;
+  setPointValue: unknown | null; // TODO: confirm type
+  specificationType: string;
+  value: string;
+}>;

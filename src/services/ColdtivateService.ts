@@ -62,6 +62,7 @@ import type {
   GetCoolingUnitResponse,
   AddMarketSurveyResponse,
   GetCoolingUnitCapacityResponse,
+  GetCoolingUnitTemperaturesResponse,
 } from '#types/api.responses';
 import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -841,6 +842,23 @@ class ColdtivateService extends HttpClient {
     try {
       const { data } = await this.get<GetCoolingUnitCapacityResponse>(
         EStorageEndpoints.GET_CAPACITY,
+        {
+          params: { coolingUnit: coolingUnitId },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnitTemperatures = async (coolingUnitId: number) => {
+    try {
+      const { data } = await this.get<GetCoolingUnitTemperaturesResponse>(
+        EStorageEndpoints.GET_TEMPERATURES,
         {
           params: { coolingUnit: coolingUnitId },
         }

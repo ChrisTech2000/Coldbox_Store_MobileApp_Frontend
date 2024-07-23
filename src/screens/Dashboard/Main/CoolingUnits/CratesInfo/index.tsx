@@ -87,6 +87,7 @@ function CoolingUnitsCratesInfo() {
           name: selectedCoolingUnit?.name ?? '',
         })}
         modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+        divider
       />
 
       {!totalCrates || totalCrates === 0 ? (
