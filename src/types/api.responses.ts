@@ -310,7 +310,7 @@ export interface GetCoolingUnitResponse {
   crateWidth: number;
   crateLength: number;
   crateHeight: number;
-  commodityInfos: unknown; // TODO: confirm type
+  commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
   ubibotSensorChannel: unknown; // TODO: confirm type
@@ -340,3 +340,17 @@ export type AddMarketSurveyResponse = {
   localMarket?: string | null;
   crop: number;
 };
+
+export type GetCoolingUnitCapacityResponse = Array<{
+  id: number;
+  usedCapacity: Array<number>;
+}>;
+
+export type GetCoolingUnitTemperaturesResponse = Array<{
+  coolingUnit: number;
+  datetimeStamp: string;
+  id: number;
+  setPointValue: unknown | null; // TODO: confirm type
+  specificationType: string;
+  value: string;
+}>;

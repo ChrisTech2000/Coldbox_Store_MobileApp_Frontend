@@ -31,7 +31,10 @@ export default function LineChart(props: LineChartProps) {
   const tooltipFont = useSkiaFont(18);
   //
   // victory native gestures
-  const { state, isActive } = useChartPressState({ x: datums[0].timestamp, y: { temperature: 0 } });
+  const { state, isActive } = useChartPressState({
+    x: datums[0].timestamp,
+    y: { temperature: datums[0].temperature },
+  });
   // temperature
   // scope: animated text
   const textValue = useDerivedValue(
@@ -61,14 +64,14 @@ export default function LineChart(props: LineChartProps) {
       data={datums}
       xKey="timestamp"
       yKeys={['temperature']}
-      domainPadding={{ top: 35, left: 30, right: 30 }}
+      domainPadding={{ top: 30, left: 30, right: 30, bottom: 10 }}
       axisOptions={{
         font,
         lineColor: paperTheme.colors.outlineVariant,
         labelColor: paperTheme.colors.tertiary,
         lineWidth: StyleSheet.hairlineWidth,
         labelOffset: 12,
-        formatXLabel: (timestamp) => dateFmt(timestamp, 'eee'),
+        formatXLabel: (timestamp) => (timestamp ? dateFmt(timestamp, 'yyyy-MM-dd, hh:mm') : ''),
         formatYLabel: (temperature) => temperature + ' °C',
       }}
       chartPressState={state}

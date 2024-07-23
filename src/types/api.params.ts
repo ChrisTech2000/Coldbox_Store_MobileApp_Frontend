@@ -351,6 +351,13 @@ export interface AddMarketSurveyParams extends JsonObject {
   currency: string;
 }
 
+export interface AddCoolingUnitTemperatureParams extends JsonObject {
+  value: number;
+  specificationType: 'TEMPERATURE';
+  datetimeStamp: string;
+  coolingUnit: number;
+}
+
 export interface GetRevenueAnalysisParams extends JsonObject {
   coolingUnits: number | Array<number>;
   paymentMethods: Array<EPaymentType>;

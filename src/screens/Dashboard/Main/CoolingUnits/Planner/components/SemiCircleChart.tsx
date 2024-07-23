@@ -43,7 +43,7 @@ function SemiCircleChart(props: SemiCircleChartProps) {
           <Circle {...circleProps} stroke={paperTheme.colors.secondaryContainer} />
           <Circle
             {...circleProps}
-            stroke={hasExceeded ? paperTheme.colors.error : paperTheme.colors.primary}
+            stroke={getCapacityColor(currentAmount)}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
           />
@@ -55,6 +55,16 @@ function SemiCircleChart(props: SemiCircleChartProps) {
       </View>
     </View>
   );
+}
+
+export function getCapacityColor(amount: number): string {
+  if (amount < 60) {
+    return paperTheme.colors.primary;
+  } else if (amount >= 60 && amount < 80) {
+    return 'rgb(255, 196, 9)';
+  } else {
+    return paperTheme.colors.error;
+  }
 }
 
 export default memo(SemiCircleChart);

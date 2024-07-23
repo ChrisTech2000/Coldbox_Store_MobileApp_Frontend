@@ -9,6 +9,8 @@ import { paperTheme } from '#ui/lib/theme';
 import { dateFmt } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
+import { getCapacityColor } from './SemiCircleChart';
+
 export type WeekBarChartDatum = {
   amount: number;
   timestamp: string;
@@ -17,8 +19,8 @@ export type WeekBarChartDatum = {
 export type WeekBarChartProps = {
   maxCapacity: number;
   datums: Array<WeekBarChartDatum>;
-  selectedDatum: WeekBarChartDatum;
-  onSelect: (datum: SetStateAction<WeekBarChartDatum>) => void;
+  selectedIndex: number;
+  onSelect: (datum: SetStateAction<number>) => void;
 };
 
 const CHART_MAX_HEIGHT = 160;
@@ -27,25 +29,22 @@ const CORNER_RADIUS = 5;
 const COLUMN_GAP = Platform.select({ android: 10, ios: 4, default: 8 });
 
 export default function WeekBarChart(props: WeekBarChartProps) {
-  const { maxCapacity, datums, selectedDatum, onSelect } = props;
+  const { maxCapacity, datums, selectedIndex, onSelect } = props;
 
-  const [_selection, _setSelection] = useControlledState<WeekBarChartDatum>(
-    selectedDatum,
-    onSelect
-  );
+  const [_selection, _setSelection] = useControlledState<number>(selectedIndex, onSelect);
 
   const renderItem: ListRenderItem<WeekBarChartDatum> = useCallback(
-    ({ item }) => {
+    ({ item, index }) => {
       const barHeight = (item.amount / maxCapacity) * CHART_MAX_HEIGHT;
       const hasExceeded = barHeight >= CHART_MAX_HEIGHT;
       const yPosition = hasExceeded ? 0 : CHART_MAX_HEIGHT - barHeight;
-      const isSelected = _selection.timestamp === item.timestamp;
+      const isSelected = _selection === index;
 
       return (
         <TouchableOpacity
           onPress={(evt) => {
             evt.stopPropagation();
-            _setSelection(item);
+            _setSelection(index);
           }}
         >
           <_SVGColumn
@@ -53,13 +52,13 @@ export default function WeekBarChart(props: WeekBarChartProps) {
             timestamp={item.timestamp}
             yPosition={yPosition}
             barHeight={hasExceeded ? CHART_MAX_HEIGHT : barHeight}
-            fill={hasExceeded ? paperTheme.colors.error : paperTheme.colors.primary}
+            fill={getCapacityColor(item.amount)}
           />
           <_SelectionIndicator isSelected={isSelected} />
         </TouchableOpacity>
       );
     },
-    [maxCapacity, _selection.timestamp]
+    [maxCapacity, _selection]
   );
 
   return (
