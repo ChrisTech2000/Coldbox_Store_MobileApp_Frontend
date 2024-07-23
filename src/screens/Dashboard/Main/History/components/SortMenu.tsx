@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import React, { SetStateAction, useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon, Portal, RadioButton } from 'react-native-paper';
-import { create } from 'zustand';
+import { create, StoreApi, UseBoundStore } from 'zustand';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
@@ -17,6 +17,7 @@ export enum ESortingOptions {
   MOVEMENT_DATE_REVERSE = 'movement_date_reverse',
   CHECK_IN_FIRST = 'check_in_first',
   CHECK_OUT_FIRST = 'check_out_first',
+  COOLING_USER_NAME = 'cooling_user_name',
 }
 
 type SortingStore = {
@@ -26,15 +27,18 @@ type SortingStore = {
 
 type SortingMenuProps = {
   isModalVisible: boolean;
+  hideableOptions?: Array<ESortingOptions>;
+  useSortingStore: UseBoundStore<StoreApi<SortingStore>>;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
 };
 
-export const useSortingStore = create<SortingStore>((set) => ({
-  sorting: ESortingOptions.MOVEMENT_DATE_REVERSE,
-  onSelect: (sorting) => set({ sorting }),
-}));
+export const createSortingStore = () =>
+  create<SortingStore>((set) => ({
+    sorting: ESortingOptions.MOVEMENT_DATE_REVERSE,
+    onSelect: (sorting) => set({ sorting }),
+  }));
 
-export function SortingMenu(props: SortingMenuProps) {
+export function SortingMenu({ useSortingStore, ...props }: SortingMenuProps) {
   const store = useSortingStore();
   const { t } = useTranslationUtils();
 
@@ -46,25 +50,30 @@ export function SortingMenu(props: SortingMenuProps) {
   const [internalSelection, setInternalSelection] = useState<ESortingOptions>(store.sorting);
 
   const options = useMemo(
-    () => [
-      { label: t('Dashboard.History.sortMenuOptions.cropType'), id: ESortingOptions.CROP_TYPE },
-      {
-        label: t('Dashboard.History.sortMenuOptions.movementDate'),
-        id: ESortingOptions.MOVEMENT_DATE,
-      },
-      {
-        label: t('Dashboard.History.sortMenuOptions.movementDateReverse'),
-        id: ESortingOptions.MOVEMENT_DATE_REVERSE,
-      },
-      {
-        label: t('Dashboard.History.sortMenuOptions.checkInFirst'),
-        id: ESortingOptions.CHECK_IN_FIRST,
-      },
-      {
-        label: t('Dashboard.History.sortMenuOptions.checkOutFirst'),
-        id: ESortingOptions.CHECK_OUT_FIRST,
-      },
-    ],
+    () =>
+      [
+        { label: t('Dashboard.History.sortMenuOptions.cropType'), id: ESortingOptions.CROP_TYPE },
+        {
+          label: t('Dashboard.History.sortMenuOptions.movementDate'),
+          id: ESortingOptions.MOVEMENT_DATE,
+        },
+        {
+          label: t('Dashboard.History.sortMenuOptions.movementDateReverse'),
+          id: ESortingOptions.MOVEMENT_DATE_REVERSE,
+        },
+        {
+          label: t('Dashboard.History.sortMenuOptions.checkInFirst'),
+          id: ESortingOptions.CHECK_IN_FIRST,
+        },
+        {
+          label: t('Dashboard.History.sortMenuOptions.checkOutFirst'),
+          id: ESortingOptions.CHECK_OUT_FIRST,
+        },
+        {
+          label: t('Dashboard.History.sortMenuOptions.coolingUser'),
+          id: ESortingOptions.COOLING_USER_NAME,
+        },
+      ].filter((option) => !props.hideableOptions?.includes(option.id)),
     [t]
   );
 
@@ -82,8 +91,8 @@ export function SortingMenu(props: SortingMenuProps) {
         <Icon source="sort" size={32} />
       </TouchableOpacity>
       <Portal>
-        <Modal tw="w-2/3" visible={isModalVisible} onDismiss={() => setIsModalVisible(false)}>
-          <View tw="w-full items-center mx-16 bg-white rounded-sm py-1 max-h-80">
+        <Modal visible={isModalVisible} onDismiss={() => setIsModalVisible(false)}>
+          <View tw="bg-white rounded-3xl h-auto space-y-2 items-center mx-16 py-1">
             <Text variant="TitleBold">{t('Dashboard.SortMenu.title')}</Text>
             <Divider tw="w-full bg-grey-700 my-1" />
             <RadioButton.Group

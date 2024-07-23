@@ -104,10 +104,20 @@ const en = {
     add: 'Add',
     edit: 'Edit',
     go: 'Go!',
+    done: 'Done',
     'not-available': 'N/A',
     'complete-later': 'Complete later',
     'update-success': 'Succesfully updated',
     'save-changes': 'Save changes',
+  },
+  components: {
+    datePicker: {
+      clearButtonLabel: 'Clear',
+      confirmButtonLabel: 'Confirm',
+      placeholder: 'dd/mm/yyyy',
+      startDateSelection: 'Select start date',
+      endDateSelection: 'Select end date',
+    },
   },
   Auth: {
     Root: {
@@ -665,6 +675,33 @@ const en = {
             'This operation will delete this cooling unit including its history. Do you want to continue?',
         },
       },
+      UsageAnalysis: {
+        dateSelectionLabel: 'Select days:',
+        empty:
+          'Check-ins and check-outs will appear in the dashboard when you do at least one check-in in any room.',
+        downloadDataButton: 'Download data',
+        modal: {
+          title: 'Set configuration',
+          coolingUnitSelection: 'Select cooling unit:',
+        },
+        summary: {
+          totalCheckIns: 'Total number of check ins:',
+          totalCrates: 'Total number of crates:',
+          totalWeight: 'Total weight:',
+          totalUsers: 'Total number of distinct users:',
+          weightUnit: 'kg',
+        },
+      },
+      RevenueAnalysis: {
+        summary: {
+          total: 'Total revenue',
+        },
+        paymentType: {
+          label: 'Select payment methods:',
+          cash: 'Cash',
+          creditCard: 'Credit Card',
+        },
+      },
     },
     AccountDetails: {
       popups: {
@@ -697,6 +734,7 @@ const en = {
         movementDateReverse: 'Movement date (latest to first)',
         checkInFirst: 'Check in first',
         checkOutFirst: 'Check out first',
+        coolingUser: "Cooling user's name",
       },
       optionsMenu: {
         common: {

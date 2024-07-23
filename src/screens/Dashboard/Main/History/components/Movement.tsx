@@ -12,23 +12,37 @@ import { cn } from '#ui/lib/cn';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
-import { useManagementStore } from '#stores/management';
+import { ManagementCompany, useManagementStore } from '#stores/management';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EMovementType, ERoles, type Company, type CoolingUnit } from '#types/global';
 
-import { HistoryTabStackRouteProps } from 'navigation/Dashboard/Main/HistoryTabStack';
 import { sendSMS } from '../utils/actions';
 import { isWithinLast24Hours } from '../utils/dates';
 import { DetailsModal } from './DetailsModal';
 import { PDFModal } from './PDFModal';
 
-type MovementProps = {
-  movement: GetMovementsHistoryResponse[number];
-  coolingUnit: CoolingUnit | null;
-  selectedCompany: Company | null;
-} & HistoryTabStackRouteProps<'RootHistoryTabStack'>;
+type Movement = GetMovementsHistoryResponse[number];
 
-export function Movement({ movement, coolingUnit, selectedCompany, navigation }: MovementProps) {
+type MovementProps = {
+  movement: Movement;
+  coolingUnit: CoolingUnit | null;
+  selectedCompany: Company | ManagementCompany | null;
+  navigateToCheckIn?: (movement: Movement, coolingUnitId?: number) => void;
+  navigateToMarketSurvey?: (
+    farmer: string,
+    crops: Movement['movementCrops'],
+    checkoutId?: number,
+    companyCurrency?: string
+  ) => void;
+};
+
+export function Movement({
+  movement,
+  coolingUnit,
+  selectedCompany,
+  navigateToCheckIn,
+  navigateToMarketSurvey,
+}: MovementProps) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
   const { user } = useAuthStore();
@@ -62,22 +76,19 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
   }, []);
 
   const editCheckIn = useCallback(() => {
-    navigation.navigate('EditCheckIn', { movement, coolingUnitId: coolingUnit?.id });
+    navigateToCheckIn?.(movement, coolingUnit?.id);
     setIsOptionsModalOpen(false);
-  }, []);
+  }, [navigateToCheckIn]);
 
   const fillMarketSurvey = useCallback(() => {
-    navigation.navigate('MarketSurveyStack', {
-      screen: 'MarketSurveyBase',
-      params: {
-        farmer: movement.farmer,
-        crops: movement.movementCrops.filter((crop) => !movement.hasMarketSurvey.includes(crop.id)),
-        checkoutId: movement.checkoutId as number,
-        companyCurrency: selectedCompany?.currency ?? company?.currency,
-      },
-    });
+    navigateToMarketSurvey?.(
+      movement.farmer,
+      movement.movementCrops.filter((crop) => !movement.hasMarketSurvey.includes(crop.id)),
+      movement.checkoutId as number,
+      selectedCompany?.currency ?? company?.currency
+    );
     setIsOptionsModalOpen(false);
-  }, [selectedCompany, company]);
+  }, [selectedCompany, company, navigateToMarketSurvey]);
 
   const optionsMenu = useMemo(() => {
     return [
@@ -129,7 +140,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
         ) : (
           <CheckOut width={25} height={25} fill={colors.orange[400]} stroke={colors.orange[400]} />
         )}
-        <View tw="w-full">
+        <View tw="w-full mr-4">
           <View tw="flex flex-row items-center">
             <Text variant="TextBold" tw="text-base font-bold">
               {movement.code}
@@ -144,7 +155,7 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           </Text>
         </View>
 
-        <View tw="w-full">
+        <View tw="w-[90%]">
           <Text
             variant="TextMedium"
             tw={cn('text-base', !isCheckIn && 'font-bold')}
@@ -157,18 +168,14 @@ export function Movement({ movement, coolingUnit, selectedCompany, navigation }:
           </Text>
         </View>
 
-        <TouchableOpacity onPress={() => setIsOptionsModalOpen(true)}>
+        <TouchableOpacity tw="w-5" onPress={() => setIsOptionsModalOpen(true)}>
           <Icon source="dots-vertical" size={20} />
         </TouchableOpacity>
       </View>
       <Divider tw="w-full bg-gray-400" />
       <Portal>
-        <Modal
-          tw="w-2/3"
-          visible={isOptionsModalOpen}
-          onDismiss={() => setIsOptionsModalOpen(false)}
-        >
-          <View tw="w-full mx-16 px-3 bg-white rounded-sm py-1 max-h-80">
+        <Modal visible={isOptionsModalOpen} onDismiss={() => setIsOptionsModalOpen(false)}>
+          <View tw="bg-white rounded-3xl h-auto space-y-2 mx-16 px-3 py-2">
             <FlatList
               data={optionsMenu}
               keyExtractor={(item, index) => `opt-${item.label}-#${index}`}

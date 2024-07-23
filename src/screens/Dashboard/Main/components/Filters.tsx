@@ -13,10 +13,9 @@ import { Company, CoolingUnit, ERoles } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
+import SelectWithStore, { SelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
-
-import SelectWithStore, { SelectStore } from './SelectWithStore';
 
 export type Search = 'id' | 'details';
 

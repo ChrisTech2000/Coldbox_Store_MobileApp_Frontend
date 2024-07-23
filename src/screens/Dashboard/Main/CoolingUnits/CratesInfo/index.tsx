@@ -4,18 +4,18 @@ import { ActivityIndicator, DataTable } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
+import SelectWithStore from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
 import { ERoles } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 
-import SelectWithStore from '../../components/SelectWithStore';
 import { type CoolingUnitFilter, useCoolingUnitStore } from '../Planner';
 
 function CoolingUnitsCratesInfo() {

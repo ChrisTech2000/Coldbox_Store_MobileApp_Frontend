@@ -8,12 +8,13 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { CoolingUnit, Crate } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
+import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
 import { CheckoutCrate } from '../components/CheckOutCrate';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();

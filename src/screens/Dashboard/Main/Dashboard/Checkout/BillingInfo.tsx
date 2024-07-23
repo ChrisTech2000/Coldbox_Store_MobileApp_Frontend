@@ -16,10 +16,9 @@ import { EPaymentType, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
+import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-
-import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
 
 const usePaymentTypeStore = createSelectStore<EPaymentType>();
 

@@ -29,8 +29,8 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
 
   return (
     <Modal visible={isOpen} onDismiss={dismiss}>
-      <View tw="w-[90%] bg-white mx-5 py-1 rounded-sm max-h-[95%] space-y-2">
-        <View tw="flex flex-row space-x-2 px-2">
+      <View tw="w-[90%] bg-white mx-5 py-1 max-h-[95%] space-y-2 rounded-3xl">
+        <View tw="flex flex-row space-x-2 p-2">
           <TouchableOpacity onPress={dismiss}>
             <Icon source="arrow-left" size={25} />
           </TouchableOpacity>
@@ -40,7 +40,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
         </View>
         <Divider tw="w-full bg-gray-400" />
 
-        <ScrollView tw="px-2">
+        <ScrollView tw="px-2" showsHorizontalScrollIndicator={false}>
           <View tw="space-y-1">
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">

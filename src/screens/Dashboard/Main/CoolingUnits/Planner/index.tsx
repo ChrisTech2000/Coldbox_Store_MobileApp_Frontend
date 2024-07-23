@@ -4,16 +4,16 @@ import { ActivityIndicator, Text } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
-
-import { useAuthStore } from '#stores/auth';
-import { useManagementStore } from '#stores/management';
-import { useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
-import { ERoles } from '#types/global';
+import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { paperTheme } from '#ui/lib/theme';
 
-import SelectWithStore, { createSelectStore } from '../../components/SelectWithStore';
+import { useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
+import { ERoles } from '#types/global';
+
 import SemiCircleChart from './components/SemiCircleChart';
 import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
 
