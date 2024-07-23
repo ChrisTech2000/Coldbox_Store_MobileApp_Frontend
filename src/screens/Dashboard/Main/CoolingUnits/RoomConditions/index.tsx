@@ -1,12 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useAuthStore } from '#stores/auth';
@@ -20,6 +19,8 @@ import { paperTheme } from '#ui/lib/theme';
 import { type CoolingUnitFilter, useCoolingUnitStore } from '../Planner';
 import SelectWithStore from '../../components/SelectWithStore';
 import LineChart from './components/LineChart';
+import TemperatureModal from './components/TemperatureModal';
+
 import { processTemperatures } from './utils';
 
 function CoolingUnitsRoomConditions() {
@@ -52,7 +53,11 @@ function CoolingUnitsRoomConditions() {
     [units]
   );
 
-  const { data: temperatures } = useApiCall(
+  const {
+    data: temperatures,
+    isValidating: isValidatingTemperatures,
+    refetch: revalidateTemperatures,
+  } = useApiCall(
     'getCoolingUnitTemperatures',
     ColdtivateService.getCoolingUnitTemperatures,
     selectedCoolingUnit?.id as number,
@@ -73,7 +78,17 @@ function CoolingUnitsRoomConditions() {
   }
 
   return (
-    <ScrollView contentContainerStyle="mt-5 pb-10" showsVerticalScrollIndicator={false}>
+    <ScrollView
+      tw="h-full"
+      contentContainerStyle="pt-5 pb-8"
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={isValidatingTemperatures}
+          onRefresh={async () => await revalidateTemperatures()}
+        />
+      }
+    >
       <SelectWithStore<CoolingUnitFilter>
         datums={coolingUnits}
         isModalVisible={isModalVisible}
@@ -112,9 +127,11 @@ function CoolingUnitsRoomConditions() {
                 date: dateFmt(chartDatums.info.lastUpdated, 'E MMM dd yyyy HH:mm'),
               })}
             </Text>
-            <Button mode="contained" onPress={() => undefined}>
-              {t('Dashboard.CoolingUnitsRoomConditions.enterTemperature')}
-            </Button>
+            <TemperatureModal
+              temp={chartDatums.info.temperature}
+              coolingUnitId={selectedCoolingUnit!.id}
+              revalidateTemperatures={revalidateTemperatures}
+            />
           </View>
         </React.Fragment>
       ) : (

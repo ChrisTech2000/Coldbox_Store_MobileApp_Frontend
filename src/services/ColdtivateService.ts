@@ -38,6 +38,7 @@ import type {
   AddCoolingUnitParams,
   GetCoolingUnitParams,
   EditCoolingUnitParams,
+  AddCoolingUnitTemperatureParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -863,6 +864,18 @@ class ColdtivateService extends HttpClient {
           params: { coolingUnit: coolingUnitId },
         }
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public addCoolingUnitTemperature = async (params: AddCoolingUnitTemperatureParams) => {
+    try {
+      const { data } = await this.post(EStorageEndpoints.ADD_COOLING_UNIT_TEMPERATURE, params);
       return data;
     } catch (error) {
       console.log(error);

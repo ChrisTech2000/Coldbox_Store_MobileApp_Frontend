@@ -14,7 +14,7 @@ type ProcessedTemps = {
   info:
     | {
         lastUpdated: string;
-        temperature: string;
+        temperature: number;
       }
     | undefined;
   datums: Array<LineChartEntry>;
@@ -56,7 +56,7 @@ export function processTemperatures(
   return {
     info: {
       lastUpdated: lastEntry.datetimeStamp,
-      temperature: lastEntry.value,
+      temperature: parseInt(lastEntry.value),
     },
     datums: clone.map((item) => ({
       timestamp: item.datetimeStamp,
