@@ -238,6 +238,50 @@ export interface FarmerSurvey {
   dateLastModified: Date;
 }
 
+export interface CompanyData {
+  compAverageRoomOccupancy: { [key: string]: number };
+  compBeneficiaries: { [key: string]: number };
+  compBeneficiariesFem: { [key: string]: number };
+  compBeneficiariesMa: { [key: string]: number };
+  compCapNumCrates: { [key: string]: number };
+  compCapTons: { [key: string]: number };
+  compCoolUsers: { [key: string]: number };
+  compCoolUsersFem: { [key: string]: number };
+  compCoolUsersMa: { [key: string]: number };
+  compCoolUsersOt: { [key: string]: number };
+  compCountry: { [key: string]: string };
+  compCratesIn: { [key: string]: number };
+  compCratesOut: { [key: string]: number };
+  compFarmers: { [key: string]: number };
+  compKgIn: { [key: string]: number };
+  compKgOut: { [key: string]: number };
+  compLogo: { [key: string]: string };
+  compName: { [key: string]: string };
+  compOp: { [key: string]: number };
+  compOpFem: { [key: string]: number };
+  compOpMa: { [key: string]: number };
+  compOpOt: { [key: string]: number };
+  compOpsIn: { [key: string]: number };
+  compOpsOut: { [key: string]: number };
+  compRegUsers: { [key: string]: number };
+  compRegUsersFem: { [key: string]: number };
+  compRegUsersMa: { [key: string]: number };
+  compRegUsersOt: { [key: string]: number };
+  compRevenue: { [key: string]: number };
+  compRevenueUsd: { [key: string]: number };
+  compTraders: { [key: string]: number };
+  compUnspecUserType: { [key: string]: number };
+  companyId: { [key: string]: number };
+  coolingUnitTypes: {
+    [key: string]: {
+      farmGateStorageRoom: number;
+      // TODO: this might need completion
+    };
+  };
+  currency: { [key: string]: string };
+  reportDate: { [key: string]: string };
+}
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',

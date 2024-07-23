@@ -22,7 +22,7 @@ type RequestBody = JsonObject | JsonArray | FormData;
 
 export type HttpClientOptions = Pick<
   Options,
-  'onSessionRenewal' | 'onUnauthorized' | 'onForbidden'
+  'onSessionRenewal' | 'onUnauthorized' | 'onForbidden' | 'baseURL'
 >;
 
 export default class HttpClient {
@@ -31,8 +31,8 @@ export default class HttpClient {
 
   constructor(options?: HttpClientOptions) {
     this.updateOptions({
-      ...options,
       baseURL: API_BASE_URL,
+      ...options,
       getAuthTokens: () => {
         const storedTokens = useAuthStore.getState().tokens;
         if (storedTokens) return storedTokens;
@@ -96,6 +96,7 @@ export default class HttpClient {
     config?: AxiosRequestConfig,
     unserializable?: string[]
   ): Promise<AxiosResponse<T>> {
+    console.log(url, this._requestBodySerialization(data, unserializable), data);
     return this.axios.post<T>(url, this._requestBodySerialization(data, unserializable), config);
   }
 

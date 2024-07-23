@@ -56,3 +56,7 @@ export enum ECompanyEndpoints {
 export enum ESMSEndpoints {
   SEND_SMS = 'storage/v1/send-sms/',
 }
+
+export enum EImpactEndpoints {
+  GET_COMPANY = 'company-slice/',
+}
