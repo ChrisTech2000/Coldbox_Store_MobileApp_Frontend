@@ -33,6 +33,7 @@ import { type CoolingUnit, EPaymentType, ERoles } from '#types/global';
 import { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
 import { sortMovements } from '../utils';
+import { DownloadDataModal } from '../components/DownloadDataModal';
 
 type PaymentOption = {
   label: string;
@@ -59,6 +60,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
+  const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
 
   const { data: coolingUnits, isLoading: coolingUnitsLoading } = useApiCall(
@@ -181,7 +183,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         />
       </View>
 
-      <Button mode="contained" uppercase>
+      <Button mode="contained" uppercase onPress={() => setIsPDFModalOpen(true)}>
         {t('Dashboard.Management.UsageAnalysis.downloadDataButton')}
       </Button>
 
@@ -237,6 +239,13 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           {revenueData.reduce((acc, current) => (acc += current.totalPrice), 0)}
         </Text>
       </View>
+
+      <DownloadDataModal
+        isOpen={isPDFModalOpen}
+        dismiss={() => setIsPDFModalOpen(false)}
+        coolingUnits={coolingUnits}
+        mode="revenue"
+      />
     </View>
   );
 }

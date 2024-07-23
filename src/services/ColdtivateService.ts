@@ -836,9 +836,13 @@ class ColdtivateService extends HttpClient {
   };
 
   ///////// ANALYSIS
-  public getUsageAnalysis = async (coolingUnitId: number): Promise<GetMovementsHistoryResponse> => {
+  public getUsageAnalysis = async (
+    coolingUnits: number | number[]
+  ): Promise<GetMovementsHistoryResponse> => {
     try {
-      const params = { cooling_units: coolingUnitId };
+      const params = {
+        coolingUnits: typeof coolingUnits === 'number' ? coolingUnits : coolingUnits.join(','),
+      };
 
       const { data } = await this.get<GetMovementsHistoryResponse>(
         EOperationEndpoints.GET_COOLING_UNIT_USAGE,
@@ -857,7 +861,11 @@ class ColdtivateService extends HttpClient {
     params: GetRevenueAnalysisParams
   ): Promise<GetMovementsHistoryResponse> => {
     try {
-      const _params = { ...params, paymentMethods: params.paymentMethods.join(',') };
+      const { coolingUnits, paymentMethods } = params;
+      const _params = {
+        coolingUnits: typeof coolingUnits === 'number' ? coolingUnits : coolingUnits.join(','),
+        paymentMethods: paymentMethods.join(','),
+      };
 
       const { data } = await this.get<GetMovementsHistoryResponse>(
         EOperationEndpoints.GET_COOLING_UNIT_REVENUE,

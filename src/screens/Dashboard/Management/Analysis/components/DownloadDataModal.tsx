@@ -1,8 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { View } from 'react-native';
-import RNFS from 'react-native-fs';
+import React, { useCallback, useState } from 'react';
+import { Linking, View } from 'react-native';
 import { Divider, Portal } from 'react-native-paper';
-import XLSX from 'xlsx';
+import { format } from 'date-fns';
 
 import { Button } from '#ui/components/Button';
 import {
@@ -14,9 +13,9 @@ import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithSto
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
-import { useApiCall } from '#services/hooks/useAPiCall';
-import { CoolingUnit, EPaymentType } from '#types/global';
+import { useManagementStore } from '#stores/management';
+import { CoolingUnit } from '#types/global';
+import { AIR_PROD_BASE_URL } from '#constants/environment';
 
 type DownloadDataModalProps = {
   coolingUnits?: Array<CoolingUnit>;
@@ -32,79 +31,24 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
   const { t } = useTranslationUtils();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { startDate, endDate } = useDateRangeStore();
+  const { company } = useManagementStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
 
-  const { data: usageData, isLoading: usageDataLoading } = useApiCall(
-    'getUsageAnalysis',
-    ColdtivateService.getUsageAnalysis,
-    coolingUnit?.id as number,
-    {
-      skip: !coolingUnit?.id || mode === 'revenue',
-      defaultData: [],
-    }
-  );
-
-  const { data: revenueData, isLoading: revenueDataLoading } = useApiCall(
-    'getRevenueAnalysis',
-    ColdtivateService.getRevenueAnalysis,
-    {
-      coolingUnits: coolingUnit?.id as number,
-      paymentMethods: [EPaymentType.CASH, EPaymentType.CREDIT_CARD],
-    },
-    {
-      skip: !coolingUnit?.id || mode === 'usage',
-      defaultData: [],
-    }
-  );
-
-  const data = mode === 'usage' ? usageData : revenueData;
-
-  const filteredData = useMemo(() => {
-    if (!startDate || !endDate) return data;
-
-    return data.filter((movement) => {
-      const movementDate = new Date(movement.date);
-      return (!startDate || movementDate >= startDate) && (!endDate || movementDate <= endDate);
-    });
-  }, [data, startDate, endDate]);
-
   const downloadDataAsXlsx = useCallback(async () => {
-    const worksheetData = filteredData.flatMap((item) =>
-      item.cratesCheckin.map((crate) => ({
-        'Crate Id': item.id,
-        'Check-in Code': item.checkinCode,
-        'Check-in Date': item.checkinDate,
-        'Crop Name': crate.name,
-        Weight: crate.weight,
-        'Price per Crate': 0,
-        Currency: '£',
-        'First Name': item.farmer.split(' ')[0],
-        'Last Name': item.farmer.split(' ')[1],
-        'Phone Number': item.farmer,
-        Gender: '',
-        'Cooling Unit Number': coolingUnit?.id ?? '',
-        'Location Name': '',
-      }))
-    );
+    if (!startDate || !endDate) return;
 
-    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-    const xlsxData = XLSX.write(workbook, { type: 'binary', bookType: 'xlsx' });
+    const _company = company?.id;
+    const _mode = mode === 'usage' ? 'usage_analysis' : 'revenue_analysis';
+    const _startDate = format(new Date(startDate), 'yyyy-MM-dd');
+    const _endDate = format(new Date(endDate), 'yyyy-MM-dd');
 
-    const base64Data = btoa(xlsxData);
+    const url = `${AIR_PROD_BASE_URL}company/${_company}/${_mode}?start_date=${_startDate}&end_date=${_endDate}&cooling_unit_ids=${coolingUnit?.id}`;
 
-    const fileName = 'data.xlsx';
-    const filePath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
-
-    try {
-      await RNFS.writeFile(filePath, base64Data, 'base64');
-      console.log('File saved to', filePath);
-    } catch (error) {
-      console.log('Error saving file:', error);
-    }
-  }, [filteredData, coolingUnit]);
+    Linking.openURL(url).catch((err) => {
+      console.error('Failed to open URL: ', err);
+    });
+  }, [coolingUnit, startDate, endDate, company]);
 
   return (
     <Portal>
@@ -152,9 +96,6 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
             icon="check-circle-outline"
             contentStyle="flex flex-row-reverse"
             tw="w-[90%]"
-            disabled={
-              (mode === 'usage' && usageDataLoading) || (mode === 'revenue' && revenueDataLoading)
-            }
             onPress={() => {
               downloadDataAsXlsx();
               dismiss();

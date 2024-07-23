@@ -258,6 +258,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
         isOpen={isPDFModalOpen}
         dismiss={() => setIsPDFModalOpen(false)}
         coolingUnits={coolingUnits}
+        mode="usage"
       />
     </View>
   );
