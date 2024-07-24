@@ -68,15 +68,15 @@ export default function CoolingUnitsTabs() {
     };
   }, []);
 
-  const maps = guard('NAVIGATE', 'Maps');
-  const cratesInfo = guard('NAVIGATE', 'CratesInfo');
+  const navToMaps = guard('NAVIGATE', 'Maps');
+  const navToCrates = guard('NAVIGATE', 'CratesInfo');
 
   return (
     <TopTabs.Navigator screenOptions={screenOptions}>
-      {maps ? <TopTabs.Screen name="Maps" component={CoolingUnitsCratesMaps} /> : null}
+      {navToMaps ? <TopTabs.Screen name="Maps" component={CoolingUnitsCratesMaps} /> : null}
       <TopTabs.Screen name="Planner" component={CoolingUnitsPlanner} />
       <TopTabs.Screen name="RoomConditions" component={CoolingUnitsRoomConditions} />
-      {cratesInfo ? <TopTabs.Screen name="CratesInfo" component={CoolingUnitsCratesInfo} /> : null}
+      {navToCrates ? <TopTabs.Screen name="CratesInfo" component={CoolingUnitsCratesInfo} /> : null}
     </TopTabs.Navigator>
   );
 }
