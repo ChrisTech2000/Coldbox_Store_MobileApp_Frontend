@@ -3,19 +3,24 @@ import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-paper';
 
+import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { GeneralContent } from './components/GeneralContent';
 
-type Tab = 'users' | 'utilization' | 'impact';
-type TabProps = {
-  icon: string;
-  isActive: boolean;
-  name: Tab;
-  onSelect: () => void;
+import { GeneralContent } from './components/GeneralContent';
+import { InnerTabs } from './components/InnerTabs';
+import { UsersContent } from './components/UsersContent';
+import { UtilizationContent } from './components/UtilizationContent';
+import { ImpactContent } from './components/ImpactContent';
+
+export type Tab = 'users' | 'utilization' | 'impact';
+
+const TABS = {
+  users: <UsersContent key="users-content-section" />,
+  utilization: <UtilizationContent key="utilization-content-section" />,
+  impact: <ImpactContent key="impact-content-section" />,
 };
 
 export function CompanySection() {
@@ -24,7 +29,7 @@ export function CompanySection() {
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
 
   return (
-    <ScrollView tw="mt-8">
+    <ScrollView tw="mt-8" showsVerticalScrollIndicator={false}>
       {activeTab && (
         <TouchableOpacity
           tw="flex flex-row w-full items-center space-x-2 justify-start"
@@ -37,49 +42,29 @@ export function CompanySection() {
         </TouchableOpacity>
       )}
       <View tw="items-center mt-2 space-y-2">
-        <View tw="flex flex-row justify-center space-x-2 flex-wrap">
-          <Tab
-            name="users"
-            icon="account-multiple-outline"
-            isActive={activeTab === 'users'}
-            onSelect={() => setActiveTab('users')}
-          />
-          <Tab
-            name="utilization"
-            icon="fan"
-            isActive={activeTab === 'utilization'}
-            onSelect={() => setActiveTab('utilization')}
-          />
-          <Tab
-            name="impact"
-            icon="chart-line"
-            isActive={activeTab === 'impact'}
-            onSelect={() => setActiveTab('impact')}
-          />
-        </View>
-
-        {!activeTab && <GeneralContent />}
+        <InnerTabs
+          activeTab={activeTab}
+          onTabSelection={(tab: Tab) => setActiveTab(tab)}
+          compactMode
+        />
+        {!activeTab ? (
+          <View tw="w-full">
+            <GeneralContent />
+            <InnerTabs activeTab={activeTab} onTabSelection={(tab: Tab) => setActiveTab(tab)} />
+            <Button
+              mode="contained"
+              onPress={() => null}
+              tw="mt-2"
+              contentStyle="bg-gray-300"
+              labelStyle="text-black text-base"
+            >
+              {t('Dashboard.Analytics.companyTab.methodologyButton')}
+            </Button>
+          </View>
+        ) : (
+          [TABS[activeTab]]
+        )}
       </View>
     </ScrollView>
-  );
-}
-
-function Tab({ name, icon, isActive, onSelect }: TabProps) {
-  const { t } = useTranslationUtils();
-  return (
-    <TouchableOpacity
-      tw={cn(
-        'flex flex-row items-center mx-2 my-1 space-x-2 px-3 py-1.5 border border-gray-400 rounded-md',
-        isActive && 'bg-green-primary border-green-primary'
-      )}
-      onPress={onSelect}
-    >
-      <View tw={cn('p-1 bg-gray-300 rounded-3xl', isActive && 'bg-green-primary')}>
-        <Icon source={icon} size={18} color={isActive ? 'white' : 'black'} />
-      </View>
-      <Text variant="TextMedium" tw={cn('text-base text-gray-500', isActive && 'text-white')}>
-        {t(`Dashboard.Analytics.companyTab.${name}`)}
-      </Text>
-    </TouchableOpacity>
   );
 }

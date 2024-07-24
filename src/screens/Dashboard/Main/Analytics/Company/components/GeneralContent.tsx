@@ -1,5 +1,5 @@
 import { currencies } from 'currencies.json';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -15,9 +15,12 @@ import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
 import { ECoolingUnitType } from '#types/global';
 
+import { useCompanyData } from '../store';
+
 export function GeneralContent() {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
+  const { setCompanyData } = useCompanyData();
 
   const { data: coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
     'getCoolingUnits',
@@ -70,8 +73,14 @@ export function GeneralContent() {
     return counters;
   }, [coolingUnits]);
 
+  useEffect(() => {
+    if (impactCompany) {
+      setCompanyData(impactCompany);
+    }
+  }, [impactCompany]);
+
   return (
-    <View tw="bg-violet-100 items-center w-full rounded-lg py-2 mt-2">
+    <View tw="bg-violet-100 items-center w-full rounded-lg py-2 my-2">
       <Logo width={50} height={50} tw="mb-4" />
       {loadingCoolingUnits || loadingImpactCompany ? (
         <View tw="flex-1 items-center justify-center mt-2">
