@@ -362,3 +362,10 @@ export interface GetRevenueAnalysisParams extends JsonObject {
   coolingUnits: number | Array<number>;
   paymentMethods: Array<EPaymentType>;
 }
+
+export interface GetImpactParams extends JsonObject {
+  companyId: number;
+  coolingUnitId: number | number[];
+  startDate?: Date;
+  endDate?: Date;
+}

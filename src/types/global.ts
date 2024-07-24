@@ -282,6 +282,48 @@ export interface CompanyData {
   reportDate: { [key: string]: string };
 }
 
+type Co2Crops = {
+  co2From: number;
+  co2To: number;
+};
+
+type Co2Metrics = {
+  companyId: string;
+  co2Crops: Co2Crops;
+  coolingUnitId: string;
+};
+
+type ImpactMetrics = {
+  companyId: number;
+  unitName: number;
+  baselineQuantityTotalMonth: number;
+  avgBaselineKgSellingPriceMonth: number;
+  baselineKgLossMonth: number;
+  baselineKgSoldMonth: number;
+  avgBaselinePercLossMonth: number;
+  avgBaselineFarmerRevenueMonth: number;
+  avgMonthlyKgSellingPrice: number;
+  monthlyKgCheckin: number;
+  monthlyKgLoss: number;
+  avgMonthlyPercLoss: number;
+  avgMonthlyPercFoodlossEvolution: number;
+  avgMonthlyFarmerRevenue: number;
+  avgMonthlyPercRevenueIncreaseEvolution: number;
+  avgMonthlyPercRevenueIncreaseEvolution2: number;
+  avgMonthlyKgSellingPriceEvolution: number;
+  avgMonthlyPercUnitSellingPriceEvolution: number;
+  avgMonthlyFarmerRevenueEvolution: number;
+  latestSurveyDate: number;
+  numPostHarvestSurveys: number;
+  possiblePostCheckoutSurveyRoom: number;
+  totalPostCheckoutSurveyUnit: number;
+};
+
+export type ImpactData = {
+  impactMetrics: ImpactMetrics;
+  co2Metrics: Co2Metrics[];
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',

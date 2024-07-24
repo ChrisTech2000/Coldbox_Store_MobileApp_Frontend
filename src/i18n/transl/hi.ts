@@ -880,6 +880,18 @@ export default {
           checkedInLabel: 'चेक इन: {{amount}}',
           checkedOutLabel: 'चेक आउट: {{amount}}',
         },
+        impactTab: {
+          foodLossLabel: '🥗 खाद्य हानि विकास',
+          revenueLabel: '💰 कूलिंग उपयोगकर्ता राजस्व विकास',
+          co2Label: '💨 CO2e उत्सर्जन विकास',
+          surveysAmountLabel:
+            '📊 खाद्य हानि और राजस्व विकास की गणना के लिए उपयोग किए गए सर्वेक्षणों की संख्या',
+          co2Description: 'कूलिंग के साथ उत्पाद के प्रति किलोग्राम CO2e उत्सर्जन',
+          co2WithCooling: 'कूलिंग के साथ उत्पाद के प्रति किलोग्राम CO2e उत्सर्जित',
+          co2WithoutCooling: 'कूलिंग के बिना उत्पाद के प्रति किलोग्राम CO2e उत्सर्जन',
+          from: 'से',
+          to: 'तक',
+        },
         users: 'उपयोगकर्ता',
         utilization: 'उपयोग',
         impact: 'प्रभाव',

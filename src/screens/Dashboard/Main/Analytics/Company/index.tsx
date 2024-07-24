@@ -74,7 +74,7 @@ export function CompanySection() {
             </Button>
           </View>
         ) : (
-          [TABS[activeTab]]
+          TABS[activeTab]
         )}
       </View>
     </ScrollView>
