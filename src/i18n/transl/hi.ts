@@ -442,6 +442,8 @@ export default {
     CoolingUnitsMaps: {
       singleCommodity: 'सिंगल कमोडिटी रूम:  {{crop}}',
       multiCommodity: 'मल्टी कमोडिटी रूम',
+      publicMaker: 'सार्वजनिक शीतलन इकाई',
+      usedMarker: 'आपके द्वारा पहले से उपयोग की जा रही कूलिंग यूनिट',
     },
     Company: {
       SelectCompany: {

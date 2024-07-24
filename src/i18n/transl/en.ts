@@ -440,6 +440,8 @@ const en = {
     CoolingUnitsMaps: {
       singleCommodity: 'Single commodity room: {{crop}}',
       multiCommodity: 'Multicommodity room',
+      publicMaker: 'Public cooling unit',
+      usedMarker: 'Cooling unit you already used',
     },
     Company: {
       SelectCompany: {

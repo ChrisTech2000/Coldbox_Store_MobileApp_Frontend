@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import GetLocation from 'react-native-get-location';
 import MapView, { Marker, PROVIDER_GOOGLE, type Region } from 'react-native-maps';
 import { useShallow } from 'zustand/react/shallow';
 import ms from 'ms';
 
+import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -95,39 +97,52 @@ function CoolingUnitsMaps() {
 
   return (
     <View tw="flex-1">
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        mapType="standard"
-        zoomEnabled
-        showsUserLocation
-        rotateEnabled={false}
-        region={region}
-        onRegionChangeComplete={setRegion}
-        onMapReady={onMapReady}
-      >
-        {markersWithinBoundaries.map((marker, markerIdx) => (
-          <Marker
-            key={`location-marker-#${markerIdx}`}
-            coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
-            }}
-            title={marker.title}
-            pinColor={marker.hasBeenUsedByFarmer ? '#0000F0' : '#FB7D00'}
-          />
-        ))}
-      </MapView>
+      <View style={styles.container}>
+        <MapView
+          style={[styles.container, styles.map]}
+          provider={PROVIDER_GOOGLE}
+          mapType="standard"
+          zoomEnabled
+          showsUserLocation
+          rotateEnabled={false}
+          region={region}
+          onRegionChangeComplete={setRegion}
+          onMapReady={onMapReady}
+        >
+          {markersWithinBoundaries.map((marker, markerIdx) => (
+            <Marker
+              key={`location-marker-#${markerIdx}`}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              }}
+              title={marker.title}
+              pinColor={marker.hasBeenUsedByFarmer ? '#0000F0' : '#FB7D00'}
+            />
+          ))}
+        </MapView>
+      </View>
+
+      <View tw="space-y-3 p-3">
+        <View tw="flex-row items-center space-x-3">
+          <Icon name="map-marker" size={20} color="#FB7D00" />
+          <Text>{t('Dashboard.CoolingUnitsMaps.publicMaker')}</Text>
+        </View>
+        <View tw="flex-row items-center space-x-3">
+          <Icon name="map-marker" size={20} color="#0000F0" />
+          <Text>{t('Dashboard.CoolingUnitsMaps.usedMarker')}</Text>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  map: {
-    ...StyleSheet.absoluteFillObject,
+  container: {
     height: Dimensions.get('screen').height / 1.618,
     width: '100%',
   },
+  map: StyleSheet.absoluteFillObject,
 });
 
 export default withSafeArea(CoolingUnitsMaps);
