@@ -1,6 +1,2 @@
 ${PODS_ROOT}/Target Support Files/Pods-coldtivate/Pods-coldtivate-resources.sh
-${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.xcframework/ios-arm64/GoogleMaps.framework/Resources/GoogleMaps.bundle
-${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.xcframework/ios-arm64_x86_64-simulator/GoogleMaps.framework/Resources/GoogleMaps.bundle
 ${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle
-${PODS_CONFIGURATION_BUILD_DIR}/react-native-google-maps/GoogleMapsPrivacy.bundle
-${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps/ReactNativeMapsPrivacy.bundle

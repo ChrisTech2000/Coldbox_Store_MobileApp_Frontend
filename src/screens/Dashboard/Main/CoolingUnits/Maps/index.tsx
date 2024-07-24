@@ -1,11 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import GetLocation from 'react-native-get-location';
-import MapView, { Marker, PROVIDER_GOOGLE, type Region } from 'react-native-maps';
 import { useShallow } from 'zustand/react/shallow';
-import ms from 'ms';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -16,19 +13,11 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { paperTheme } from '#ui/lib/theme';
 
-import { processLocationMarkers, processMarkersWithinBoundaries } from './utils';
+import { processLocationMarkers } from './utils';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 
-const BASE_REGION = {
-  latitude: 0,
-  longitude: 0,
-  latitudeDelta: 0.005,
-  longitudeDelta: 0.005,
-} satisfies Region;
-
 function CoolingUnitsMaps() {
-  const [region, setRegion] = useState<Region | undefined>(undefined);
   const { t } = useTranslationUtils();
 
   const [farmerId, farmerCoolingUnits] = useDashboardStore(
@@ -40,7 +29,7 @@ function CoolingUnitsMaps() {
     defaultData: [],
   });
 
-  const { data: markers, isLoading } = useApiCall(
+  const { isLoading } = useApiCall(
     SWR_CACHE_KEY,
     async () => {
       const [locations, coolingUnits] = await Promise.allSettled([
@@ -62,31 +51,6 @@ function CoolingUnitsMaps() {
     }
   );
 
-  const onMapReady = useCallback(() => {
-    async function _setupInitialRegion(): Promise<void> {
-      const result = await GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: ms('6 seconds'),
-      });
-      setRegion({
-        latitude: result.latitude,
-        longitude: result.longitude,
-        latitudeDelta: BASE_REGION.latitudeDelta,
-        longitudeDelta: BASE_REGION.longitudeDelta,
-      });
-    }
-    try {
-      void _setupInitialRegion();
-    } catch (exception) {
-      console.error(exception);
-    }
-  }, []);
-
-  const markersWithinBoundaries = useMemo(
-    () => processMarkersWithinBoundaries(region, markers),
-    [region, markers]
-  );
-
   if (isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -97,32 +61,6 @@ function CoolingUnitsMaps() {
 
   return (
     <View tw="flex-1">
-      <View style={styles.container}>
-        <MapView
-          style={[styles.container, styles.map]}
-          provider={PROVIDER_GOOGLE}
-          mapType="standard"
-          zoomEnabled
-          showsUserLocation
-          rotateEnabled={false}
-          region={region}
-          onRegionChangeComplete={setRegion}
-          onMapReady={onMapReady}
-        >
-          {markersWithinBoundaries.map((marker, markerIdx) => (
-            <Marker
-              key={`location-marker-#${markerIdx}`}
-              coordinate={{
-                latitude: marker.latitude,
-                longitude: marker.longitude,
-              }}
-              title={marker.title}
-              pinColor={marker.hasBeenUsedByFarmer ? '#0000F0' : '#FB7D00'}
-            />
-          ))}
-        </MapView>
-      </View>
-
       <View tw="space-y-3 p-3">
         <View tw="flex-row items-center space-x-3">
           <Icon name="map-marker" size={20} color="#FB7D00" />
@@ -136,13 +74,5 @@ function CoolingUnitsMaps() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: Dimensions.get('screen').height / 1.618,
-    width: '100%',
-  },
-  map: StyleSheet.absoluteFillObject,
-});
 
 export default withSafeArea(CoolingUnitsMaps);
