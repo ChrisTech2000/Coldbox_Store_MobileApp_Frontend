@@ -892,6 +892,7 @@ export default {
           from: 'से',
           to: 'तक',
         },
+        downloadFileName: 'एनालिटिक्स-डाटा',
         users: 'उपयोगकर्ता',
         utilization: 'उपयोग',
         impact: 'प्रभाव',

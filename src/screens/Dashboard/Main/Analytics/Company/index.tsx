@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Platform, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Icon } from 'react-native-paper';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { ActivityIndicator, Icon } from 'react-native-paper';
+import { useToast } from 'react-native-toast-notifications';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import ImpactService from '#services/ImpactService';
+import { useManagementStore } from '#stores/management';
 
 import { GeneralContent } from './components/GeneralContent';
+import { ImpactContent } from './components/ImpactContent';
 import { InnerTabs } from './components/InnerTabs';
 import { UsersContent } from './components/UsersContent';
 import { UtilizationContent } from './components/UtilizationContent';
-import { ImpactContent } from './components/ImpactContent';
+import { useCompanyData } from './store';
+import { generatePDFContent } from './utils';
 
 export type Tab = 'users' | 'utilization' | 'impact';
 
@@ -25,8 +34,82 @@ const TABS = {
 
 export function CompanySection() {
   const { t } = useTranslationUtils();
+  const toast = useToast();
+  const { company } = useManagementStore();
+  const { setCompanyData, setImpactData, setCoolingUnits } = useCompanyData();
 
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
+
+  const { data: coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
+    'getCoolingUnits',
+    ColdtivateService.getCoolingUnits,
+    { company: company?.id as number },
+    {
+      skip: !company?.id,
+      defaultData: [],
+    }
+  );
+
+  const { data: impactCompany, isLoading: loadingImpactCompany } = useApiCall(
+    'getCompanyImpact',
+    ImpactService.getCompanyImpact,
+    company?.id as number,
+    {
+      skip: !company?.id,
+    }
+  );
+
+  const { data: impactData, isLoading: loadingImpactData } = useApiCall(
+    'getImpact',
+    ImpactService.getImpact,
+    {
+      companyId: company?.id as number,
+      coolingUnitId: coolingUnits?.map((unit) => unit.id) as number[],
+    },
+    {
+      skip: !company?.id || !coolingUnits?.length,
+    }
+  );
+
+  const onDownloadData = useCallback(async () => {
+    const html = generatePDFContent(t, coolingUnits, company, impactCompany, impactData);
+
+    const PDFOptions = {
+      html,
+      fileName: t('Dashboard.Analytics.companyTab.downloadFileName'),
+      directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+    };
+
+    try {
+      const file = await RNHTMLtoPDF.convert(PDFOptions);
+      if (!file.filePath) throw new Error();
+      toast.show(t('Dashboard.History.pdfModal.successMessage'), {
+        type: 'success',
+      });
+    } catch {
+      toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
+        type: 'danger',
+      });
+    }
+  }, [t, toast, coolingUnits, impactCompany, impactData, company]);
+
+  useEffect(() => {
+    if (impactCompany) {
+      setCompanyData(impactCompany);
+    }
+  }, [impactCompany]);
+
+  useEffect(() => {
+    if (impactData) {
+      setImpactData(impactData);
+    }
+  }, [impactData]);
+
+  useEffect(() => {
+    if (coolingUnits) {
+      setCoolingUnits(coolingUnits);
+    }
+  }, [coolingUnits]);
 
   return (
     <ScrollView tw="mt-8" showsVerticalScrollIndicator={false}>
@@ -41,6 +124,7 @@ export function CompanySection() {
           </Text>
         </TouchableOpacity>
       )}
+
       <View tw="items-center mt-2 space-y-2">
         <InnerTabs
           activeTab={activeTab}
@@ -51,7 +135,7 @@ export function CompanySection() {
           <Button
             mode="contained"
             uppercase
-            onPress={() => null}
+            onPress={onDownloadData}
             icon="check-circle-outline"
             contentStyle="flex flex-row-reverse"
             tw="w-[50%] mt-2"
@@ -61,7 +145,13 @@ export function CompanySection() {
         )}
         {!activeTab ? (
           <View tw="w-full">
-            <GeneralContent />
+            {loadingCoolingUnits || loadingImpactCompany || loadingImpactData ? (
+              <View tw="flex-1 items-center justify-center mt-2">
+                <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+              </View>
+            ) : (
+              <GeneralContent />
+            )}
             <InnerTabs activeTab={activeTab} onTabSelection={(tab: Tab) => setActiveTab(tab)} />
             <Button
               mode="contained"

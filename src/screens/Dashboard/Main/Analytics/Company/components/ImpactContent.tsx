@@ -1,18 +1,16 @@
+import { currencies as _currencies } from 'currencies.json';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { ActivityIndicator, Icon } from 'react-native-paper';
-import { currencies as _currencies } from 'currencies.json';
+import { Icon } from 'react-native-paper';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
-import { useApiCall } from '#services/hooks/useAPiCall';
-import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
+
+import { useCompanyData } from '../store';
 
 type SectionProps = {
   title: string;
@@ -23,28 +21,7 @@ type SectionProps = {
 export function ImpactContent() {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
-
-  const { data: coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
-    'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
-    { company: company?.id as number },
-    {
-      skip: !company?.id,
-      defaultData: [],
-    }
-  );
-
-  const { data: impactData, isLoading: loadingImpactData } = useApiCall(
-    'getImpact',
-    ImpactService.getImpact,
-    {
-      companyId: company?.id as number,
-      coolingUnitId: coolingUnits?.map((unit) => unit.id) as number[],
-    },
-    {
-      skip: !company?.id || !coolingUnits?.length,
-    }
-  );
+  const { impactData } = useCompanyData();
 
   const foodLoss = useMemo(() => {
     return {
@@ -71,124 +48,118 @@ export function ImpactContent() {
 
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
-      {loadingCoolingUnits || loadingImpactData ? (
-        <View tw="flex-1 items-center justify-center mt-2">
-          <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-        </View>
-      ) : (
-        <View tw="w-full">
-          <Section
-            title={t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
-            from={
-              <View tw="flex flex-row">
-                <Text variant="TextMedium" tw="text-lg font-bold">
-                  {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
-                </Text>
-                <Text variant="TextMedium" tw="text-lg font-bold">
-                  {foodLoss.from}
-                </Text>
-                <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
-                  %
-                </Text>
-              </View>
-            }
-            to={
-              <View tw="flex flex-row">
-                <Text variant="TextMedium" tw="text-lg font-bold">
-                  {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
-                </Text>
-                <Text variant="TextMedium" tw="text-lg font-bold">
-                  {foodLoss.to}
-                </Text>
-                <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
-                  %
-                </Text>
-              </View>
-            }
-          />
-
-          <Section
-            title={t('Dashboard.Analytics.companyTab.impactTab.revenueLabel')}
-            from={
-              <View tw="flex flex-row">
-                <Text variant="TextMedium" tw="text-lg font-bold">
-                  {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
-                </Text>
-                <Text variant="TextMedium" tw="text-lg font-bold">
-                  {revenue.from}
-                </Text>
-              </View>
-            }
-            to={
-              <View tw="flex flex-row">
-                <Text variant="TextMedium" tw="text-lg font-bold">
-                  {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
-                </Text>
-                <Text variant="TextMedium" tw="text-lg font-bold">
-                  {revenue.to}
-                </Text>
-              </View>
-            }
-          />
-
-          <Section
-            title={t('Dashboard.Analytics.companyTab.impactTab.co2Label')}
-            from={
-              <View tw="space-y-1 items-center">
-                <Text variant="TextMedium" tw="text-gray-700">
-                  {t('Dashboard.Analytics.companyTab.impactTab.co2Description')}
-                </Text>
-                <Text variant="TextMedium" tw="text-lg text-purple-500 text-center">
-                  <Text variant="TextMedium" tw="text-lg font-bold text-center">
-                    {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
-                  </Text>
-                  <Text variant="TextMedium" tw="text-lg font-bold text-center">
-                    {co2.from}{' '}
-                  </Text>
-                  {t('Dashboard.Analytics.companyTab.impactTab.co2WithoutCooling')}
-                </Text>
-              </View>
-            }
-            to={
-              <Text variant="TextMedium" tw="text-lg text-purple-500 text-center">
-                <Text variant="TextMedium" tw="text-lg font-bold text-center">
-                  {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
-                </Text>
-                <Text variant="TextMedium" tw="text-lg font-bold text-center">
-                  {co2.to}{' '}
-                </Text>
-                {t('Dashboard.Analytics.companyTab.impactTab.co2WithCooling')}
+      <View tw="w-full">
+        <Section
+          title={t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
+          from={
+            <View tw="flex flex-row">
+              <Text variant="TextMedium" tw="text-lg font-bold">
+                {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
               </Text>
-            }
-          />
-
-          <View tw="w-full bg-violet-100 p-2 items-center rounded-lg space-y-1 my-2">
-            <Text variant="TextMedium" tw="text-lg text-center">
-              {t('Dashboard.Analytics.companyTab.impactTab.surveysAmountLabel')}
-            </Text>
-
-            <View tw="flex flex-row items-center space-x-6">
-              <View tw="flex flex-row items-end">
-                <Text variant="TextMedium" tw="text-3xl font-bold">
-                  {impactData?.impactMetrics.numPostHarvestSurveys}
-                </Text>
-                <Text variant="TextMedium" tw="text-xl">
-                  /{impactData?.impactMetrics.possiblePostCheckoutSurveyRoom}
-                </Text>
-              </View>
-              <Text variant="TextMedium" tw="text-4xl font-bold text-purple-500">
-                (
-                {(
-                  ((impactData?.impactMetrics?.numPostHarvestSurveys || 0) /
-                    (impactData?.impactMetrics?.possiblePostCheckoutSurveyRoom || 1)) *
-                  100
-                ).toFixed(0)}
-                %)
+              <Text variant="TextMedium" tw="text-lg font-bold">
+                {foodLoss.from}
+              </Text>
+              <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
+                %
               </Text>
             </View>
+          }
+          to={
+            <View tw="flex flex-row">
+              <Text variant="TextMedium" tw="text-lg font-bold">
+                {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
+              </Text>
+              <Text variant="TextMedium" tw="text-lg font-bold">
+                {foodLoss.to}
+              </Text>
+              <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
+                %
+              </Text>
+            </View>
+          }
+        />
+
+        <Section
+          title={t('Dashboard.Analytics.companyTab.impactTab.revenueLabel')}
+          from={
+            <View tw="flex flex-row">
+              <Text variant="TextMedium" tw="text-lg font-bold">
+                {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
+              </Text>
+              <Text variant="TextMedium" tw="text-lg font-bold">
+                {revenue.from}
+              </Text>
+            </View>
+          }
+          to={
+            <View tw="flex flex-row">
+              <Text variant="TextMedium" tw="text-lg font-bold">
+                {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
+              </Text>
+              <Text variant="TextMedium" tw="text-lg font-bold">
+                {revenue.to}
+              </Text>
+            </View>
+          }
+        />
+
+        <Section
+          title={t('Dashboard.Analytics.companyTab.impactTab.co2Label')}
+          from={
+            <View tw="space-y-1 items-center">
+              <Text variant="TextMedium" tw="text-gray-700">
+                {t('Dashboard.Analytics.companyTab.impactTab.co2Description')}
+              </Text>
+              <Text variant="TextMedium" tw="text-lg text-purple-500 text-center">
+                <Text variant="TextMedium" tw="text-lg font-bold text-center">
+                  {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
+                </Text>
+                <Text variant="TextMedium" tw="text-lg font-bold text-center">
+                  {co2.from}{' '}
+                </Text>
+                {t('Dashboard.Analytics.companyTab.impactTab.co2WithoutCooling')}
+              </Text>
+            </View>
+          }
+          to={
+            <Text variant="TextMedium" tw="text-lg text-purple-500 text-center">
+              <Text variant="TextMedium" tw="text-lg font-bold text-center">
+                {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
+              </Text>
+              <Text variant="TextMedium" tw="text-lg font-bold text-center">
+                {co2.to}{' '}
+              </Text>
+              {t('Dashboard.Analytics.companyTab.impactTab.co2WithCooling')}
+            </Text>
+          }
+        />
+
+        <View tw="w-full bg-violet-100 p-2 items-center rounded-lg space-y-1 my-2">
+          <Text variant="TextMedium" tw="text-lg text-center">
+            {t('Dashboard.Analytics.companyTab.impactTab.surveysAmountLabel')}
+          </Text>
+
+          <View tw="flex flex-row items-center space-x-6">
+            <View tw="flex flex-row items-end">
+              <Text variant="TextMedium" tw="text-3xl font-bold">
+                {impactData?.impactMetrics.numPostHarvestSurveys}
+              </Text>
+              <Text variant="TextMedium" tw="text-xl">
+                /{impactData?.impactMetrics.possiblePostCheckoutSurveyRoom}
+              </Text>
+            </View>
+            <Text variant="TextMedium" tw="text-4xl font-bold text-purple-500">
+              (
+              {(
+                ((impactData?.impactMetrics?.numPostHarvestSurveys || 0) /
+                  (impactData?.impactMetrics?.possiblePostCheckoutSurveyRoom || 1)) *
+                100
+              ).toFixed(0)}
+              %)
+            </Text>
           </View>
         </View>
-      )}
+      </View>
     </ScrollView>
   );
 }

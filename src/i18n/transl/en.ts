@@ -887,6 +887,7 @@ const en = {
           from: 'From',
           to: 'To',
         },
+        downloadFileName: 'analytics-data',
         users: 'Users',
         utilization: 'Utilization',
         impact: 'Impact',
