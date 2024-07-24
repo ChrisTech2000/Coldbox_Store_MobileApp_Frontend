@@ -853,9 +853,9 @@ const en = {
       company: 'Company',
       aggregated: 'Aggregated',
       comparison: 'Comparison',
+      downloadDataButton: 'Download data',
       companyTab: {
         usersTab: {
-          downloadDataButton: 'Download data',
           employeesTotal: 'Total number of registered employees = {{amount}}',
           operatorsTotal: 'Total number of operators = {{amount}}',
           usersTotal: 'Total number of distinct cooling users = {{amount}}',
@@ -866,6 +866,15 @@ const en = {
           otherLabel: 'Other: {{amount}}',
           farmersLabel: '🧑🏽‍🌾 Farmers: {{amount}}',
           tradersLabel: '👩🏽‍💼 Traders: {{amount}}',
+        },
+        utilizationTab: {
+          occupancyLabel: 'Average occupancy of cooling units:',
+          occupancyContent: '🏘️ {{amount}}%',
+          totalCratesLabel: '🧺 Total crates:',
+          totalQuantityLabel: '📦 Total quantity (kg):',
+          totalOperations: '👷🏽‍♂️ Total operations:',
+          checkedInLabel: 'Checked In: {{amount}}',
+          checkedOutLabel: 'Checked Out: {{amount}}',
         },
         users: 'Users',
         utilization: 'Utilization',

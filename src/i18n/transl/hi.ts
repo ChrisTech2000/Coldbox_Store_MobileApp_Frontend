@@ -857,9 +857,9 @@ export default {
       company: 'कंपनी',
       aggregated: 'एकत्रित',
       comparison: 'तुलना',
+      downloadDataButton: 'डेटा डाउनलोड करें',
       companyTab: {
         usersTab: {
-          downloadDataButton: 'डेटा डाउनलोड करें',
           employeesTotal: 'कुल पंजीकृत कर्मचारियों की संख्या = {{amount}}',
           operatorsTotal: 'कुल ऑपरेटरों की संख्या = {{amount}}',
           usersTotal: 'अलग-अलग ठंडक उपयोगकर्ताओं की कुल संख्या = {{amount}}',
@@ -870,6 +870,15 @@ export default {
           otherLabel: 'अन्य: {{amount}}',
           farmersLabel: '🧑🏽‍🌾 किसान: {{amount}}',
           tradersLabel: '👩🏽‍💼 व्यापारी: {{amount}}',
+        },
+        utilizationTab: {
+          occupancyLabel: 'ठंडक इकाइयों की औसत अधिभोगिता:',
+          occupancyContent: '🏘️ {{amount}}%',
+          totalCratesLabel: '🧺 कुल क्रेट्स:',
+          totalQuantityLabel: '📦 कुल मात्रा (किलोग्राम):',
+          totalOperations: '👷🏽‍♂️ कुल संचालन:',
+          checkedInLabel: 'चेक इन: {{amount}}',
+          checkedOutLabel: 'चेक आउट: {{amount}}',
         },
         users: 'उपयोगकर्ता',
         utilization: 'उपयोग',

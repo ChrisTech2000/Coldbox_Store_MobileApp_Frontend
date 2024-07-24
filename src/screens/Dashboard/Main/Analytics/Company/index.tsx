@@ -47,6 +47,18 @@ export function CompanySection() {
           onTabSelection={(tab: Tab) => setActiveTab(tab)}
           compactMode
         />
+        {activeTab && (
+          <Button
+            mode="contained"
+            uppercase
+            onPress={() => null}
+            icon="check-circle-outline"
+            contentStyle="flex flex-row-reverse"
+            tw="w-[50%] mt-2"
+          >
+            {t('Dashboard.Analytics.downloadDataButton')}
+          </Button>
+        )}
         {!activeTab ? (
           <View tw="w-full">
             <GeneralContent />

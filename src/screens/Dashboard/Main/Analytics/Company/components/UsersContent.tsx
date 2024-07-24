@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
 
 import { ScrollView } from '#ui/components/ScrollView';
-import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Text } from '#ui/components/Text';
 import { View } from 'react-native';
-import { useCompanyData } from '../store';
 import { Divider } from 'react-native-paper';
+import { useCompanyData } from '../store';
 
 type SectionProps = {
   title: string;
@@ -64,17 +63,6 @@ export function UsersContent() {
 
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
-      <Button
-        mode="contained"
-        uppercase
-        onPress={() => null}
-        icon="check-circle-outline"
-        contentStyle="flex flex-row-reverse"
-        tw="w-[50%] my-2"
-      >
-        {t('Dashboard.Analytics.companyTab.usersTab.downloadDataButton')}
-      </Button>
-
       <Section
         title={t('Dashboard.Analytics.companyTab.usersTab.employeesTotal', {
           amount: employees.total ?? 0,
