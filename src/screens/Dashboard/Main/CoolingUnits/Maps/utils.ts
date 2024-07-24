@@ -1,3 +1,5 @@
+import type { Region } from 'react-native-maps';
+
 import type {
   GetAllCropsResponse,
   GetCoolingUnitResponse,
@@ -83,6 +85,24 @@ export function processLocationMarkers(args: {
   }
 
   return Array.from(markersMap.values());
+}
+
+export function processMarkersWithinBoundaries(
+  region: Region | undefined,
+  markers: Array<MarkerDatum>
+): Array<MarkerDatum> {
+  if (typeof region === 'undefined') return [];
+  const minLat = region.latitude - region.latitudeDelta / 2;
+  const maxLat = region.latitude + region.latitudeDelta / 2;
+  const minLng = region.longitude - region.longitudeDelta / 2;
+  const maxLng = region.longitude + region.longitudeDelta / 2;
+  return markers.filter(
+    (marker) =>
+      marker.latitude >= minLat &&
+      marker.latitude <= maxLat &&
+      marker.longitude >= minLng &&
+      marker.longitude <= maxLng
+  );
 }
 
 function _getSingleCommodityCropName(

@@ -14,7 +14,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { paperTheme } from '#ui/lib/theme';
 
-import { processLocationMarkers } from './utils';
+import { processLocationMarkers, processMarkersWithinBoundaries } from './utils';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 
@@ -80,20 +80,10 @@ function CoolingUnitsMaps() {
     }
   }, []);
 
-  const markersWithinBoundaries = useMemo(() => {
-    if (!region) return [];
-    const minLat = region.latitude - region.latitudeDelta / 2;
-    const maxLat = region.latitude + region.latitudeDelta / 2;
-    const minLng = region.longitude - region.longitudeDelta / 2;
-    const maxLng = region.longitude + region.longitudeDelta / 2;
-    return markers.filter(
-      (marker) =>
-        marker.latitude >= minLat &&
-        marker.latitude <= maxLat &&
-        marker.longitude >= minLng &&
-        marker.longitude <= maxLng
-    );
-  }, [region, markers]);
+  const markersWithinBoundaries = useMemo(
+    () => processMarkersWithinBoundaries(region, markers),
+    [region, markers]
+  );
 
   if (isLoading) {
     return (
