@@ -2,6 +2,7 @@
 
 #import <React/RCTLinkingManager.h>
 #import <React/RCTBundleURLProvider.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
@@ -33,6 +34,7 @@
    openURL:(NSURL *)url
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
+  [GMSServices provideAPIKey:@"***REMOVED***"];
   return [RCTLinkingManager application:application openURL:url options:options];
 }
 
