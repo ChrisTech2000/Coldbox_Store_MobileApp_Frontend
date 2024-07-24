@@ -437,6 +437,10 @@ const en = {
           'Cooling units occupancy and temperature will appear here when you do at least one check-in in any room.',
       },
     },
+    CoolingUnitsMaps: {
+      singleCommodity: 'Single commodity room: {{crop}}',
+      multiCommodity: 'Multicommodity room',
+    },
     Company: {
       SelectCompany: {
         label: 'Company: {{name}}',

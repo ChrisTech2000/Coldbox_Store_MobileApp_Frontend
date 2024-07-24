@@ -439,6 +439,10 @@ export default {
           'जब आप किसी भी कक्ष में कम से कम एक बार चेक-इन करेंगे तो शीतल भंडार का अधिभोग और तापमान यहां दिखाई देगा।',
       },
     },
+    CoolingUnitsMaps: {
+      singleCommodity: 'सिंगल कमोडिटी रूम:  {{crop}}',
+      multiCommodity: 'मल्टी कमोडिटी रूम',
+    },
     Company: {
       SelectCompany: {
         label: 'कंपनी: {{name}}',
