@@ -16,7 +16,7 @@ export type MarkerDatum = {
   title: string;
   latitude: number;
   longitude: number;
-  isFarmerVisitingLocation: boolean;
+  hasBeenUsedByFarmer: boolean;
   coolingUnitsInfo: Array<MarkerCoolingUnitsInfo>;
 };
 
@@ -47,7 +47,7 @@ export function processLocationMarkers(args: {
       title,
       latitude: location.latitude,
       longitude: location.longitude,
-      isFarmerVisitingLocation: farmerLocationsIds.has(location.id),
+      hasBeenUsedByFarmer: farmerLocationsIds.has(location.id),
       coolingUnitsInfo: [],
     });
 

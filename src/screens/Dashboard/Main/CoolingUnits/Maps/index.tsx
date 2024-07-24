@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { useFocusEffect } from '@react-navigation/native';
-import GetLocation, { type Location } from 'react-native-get-location';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import GetLocation from 'react-native-get-location';
+import MapView, { Marker, PROVIDER_GOOGLE, type Region } from 'react-native-maps';
 import { useShallow } from 'zustand/react/shallow';
 import ms from 'ms';
 
@@ -19,8 +18,15 @@ import { processLocationMarkers } from './utils';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 
+const BASE_REGION = {
+  latitude: 0,
+  longitude: 0,
+  latitudeDelta: 0.005,
+  longitudeDelta: 0.005,
+} satisfies Region;
+
 function CoolingUnitsMaps() {
-  const [coordinates, setCoordinates] = useState<Location | undefined>(undefined);
+  const [region, setRegion] = useState<Region | undefined>(undefined);
   const { t } = useTranslationUtils();
 
   const [farmerId, farmerCoolingUnits] = useDashboardStore(
@@ -59,23 +65,40 @@ function CoolingUnitsMaps() {
     }
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      async function getCoordinates() {
-        const result = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: ms('6 seconds'),
-        });
-        setCoordinates(result);
-      }
+  const onMapReady = useCallback(() => {
+    async function _setupInitialRegion(): Promise<void> {
+      const result = await GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: ms('6 seconds'),
+      });
+      setRegion({
+        latitude: result.latitude,
+        longitude: result.longitude,
+        latitudeDelta: BASE_REGION.latitudeDelta,
+        longitudeDelta: BASE_REGION.longitudeDelta,
+      });
+    }
+    try {
+      void _setupInitialRegion();
+    } catch (exception) {
+      console.error(exception);
+    }
+  }, []);
 
-      try {
-        void getCoordinates();
-      } catch (exception) {
-        console.error(exception);
-      }
-    }, [])
-  );
+  const markersWithinBoundaries = useMemo(() => {
+    if (!region) return [];
+    const minLat = region.latitude - region.latitudeDelta / 2;
+    const maxLat = region.latitude + region.latitudeDelta / 2;
+    const minLng = region.longitude - region.longitudeDelta / 2;
+    const maxLng = region.longitude + region.longitudeDelta / 2;
+    return markers.filter(
+      (marker) =>
+        marker.latitude >= minLat &&
+        marker.latitude <= maxLat &&
+        marker.longitude >= minLng &&
+        marker.longitude <= maxLng
+    );
+  }, [region, markers]);
 
   if (isLoading) {
     return (
@@ -91,17 +114,14 @@ function CoolingUnitsMaps() {
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         mapType="standard"
-        initialRegion={{
-          latitude: coordinates?.latitude ?? 0,
-          longitude: coordinates?.longitude ?? 0,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-        }}
-        rotateEnabled={false}
-        zoomEnabled={true}
+        zoomEnabled
         showsUserLocation
+        rotateEnabled={false}
+        region={region}
+        onRegionChangeComplete={setRegion}
+        onMapReady={onMapReady}
       >
-        {markers.map((marker, markerIdx) => (
+        {markersWithinBoundaries.map((marker, markerIdx) => (
           <Marker
             key={`location-marker-#${markerIdx}`}
             coordinate={{
@@ -109,7 +129,7 @@ function CoolingUnitsMaps() {
               longitude: marker.longitude,
             }}
             title={marker.title}
-            pinColor={marker.isFarmerVisitingLocation ? '#0000F0' : '#FB7D00'}
+            pinColor={marker.hasBeenUsedByFarmer ? '#0000F0' : '#FB7D00'}
           />
         ))}
       </MapView>
