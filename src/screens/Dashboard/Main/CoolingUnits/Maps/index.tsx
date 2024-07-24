@@ -33,17 +33,12 @@ function CoolingUnitsMaps() {
     useShallow((store) => [store.farmerId, store.coolingUnits])
   );
 
-  const { data: crops, isLoading } = useApiCall(
-    'getAllCrops',
-    ColdtivateService.getAllCrops,
-    undefined,
-    {
-      skip: !farmerId,
-      defaultData: [],
-    }
-  );
+  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
+    skip: !farmerId,
+    defaultData: [],
+  });
 
-  const { data: markers } = useApiCall(
+  const { data: markers, isLoading } = useApiCall(
     SWR_CACHE_KEY,
     async () => {
       const [locations, coolingUnits] = await Promise.allSettled([
