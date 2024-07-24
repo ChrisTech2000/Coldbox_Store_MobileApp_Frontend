@@ -28,7 +28,7 @@ function Analytics() {
   const [activeTab, setActiveTab] = useState<Tab>('company');
 
   return (
-    <View tw="space-y-4 my-2 mx-4">
+    <View tw="space-y-4 mt-4 mb-2 mx-4">
       <View tw="flex flex-row items-center justify-center">
         <Tab
           name="company"

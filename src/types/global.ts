@@ -435,6 +435,11 @@ export enum ESellingLocation {
   BOTH = 'Both',
 }
 
+export enum EImpactMode {
+  COMPANY = 'company',
+  COOLING_UNIT = 'cooling_unit',
+}
+
 //////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',

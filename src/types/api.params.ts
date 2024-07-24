@@ -1,5 +1,6 @@
 import { JsonObject } from '#services/utils';
 import {
+  EImpactMode,
   EPaymentType,
   ERoles,
   ESellingLocation,
@@ -368,4 +369,5 @@ export interface GetImpactParams extends JsonObject {
   coolingUnitId: number | number[];
   startDate?: Date;
   endDate?: Date;
+  mode: EImpactMode;
 }

@@ -6,7 +6,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 
 import { useTranslationUtils } from '#i18n/utils';
 
-import { useCompanyData } from '../store';
+import { useAnalyticsData } from '../store';
 
 type SectionProps = {
   title: string;
@@ -16,7 +16,7 @@ type SectionProps = {
 
 export function UtilizationContent() {
   const { t } = useTranslationUtils();
-  const { companyData } = useCompanyData();
+  const { companyData } = useAnalyticsData();
 
   const occupancy = useMemo(() => {
     return companyData?.compAverageRoomOccupancy?.[0] || 0;

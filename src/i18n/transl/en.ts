@@ -905,6 +905,10 @@ const en = {
         coolingUnitTypeMovable: '{{amount}} movable rooms',
         methodologyButton: 'View Methodology',
       },
+      aggregatedTab: {
+        configurationMessage: 'Please configure your dates & cooling units to have access',
+        configureButton: 'Configure',
+      },
     },
   },
 };

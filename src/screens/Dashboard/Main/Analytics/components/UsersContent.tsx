@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
-
-import { ScrollView } from '#ui/components/ScrollView';
-
-import { useTranslationUtils } from '#i18n/utils';
-import { Text } from '#ui/components/Text';
 import { View } from 'react-native';
 import { Divider } from 'react-native-paper';
-import { useCompanyData } from '../store';
+
+import { ScrollView } from '#ui/components/ScrollView';
+import { Text } from '#ui/components/Text';
+
+import { useTranslationUtils } from '#i18n/utils';
+
+import { useAnalyticsData } from '../store';
 
 type SectionProps = {
   title: string;
@@ -17,7 +18,7 @@ type SectionProps = {
 
 export function UsersContent() {
   const { t } = useTranslationUtils();
-  const { companyData } = useCompanyData();
+  const { companyData } = useAnalyticsData();
 
   const employees = useMemo(() => {
     return {

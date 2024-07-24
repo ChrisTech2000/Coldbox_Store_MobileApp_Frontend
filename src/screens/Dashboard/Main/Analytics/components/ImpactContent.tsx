@@ -10,7 +10,7 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 
-import { useCompanyData } from '../store';
+import { useCompanyData } from '../Company/store';
 
 type SectionProps = {
   title: string;

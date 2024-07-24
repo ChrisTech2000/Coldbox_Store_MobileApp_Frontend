@@ -10,12 +10,12 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { ECoolingUnitType } from '#types/global';
 
-import { useCompanyData } from '../store';
+import { useAnalyticsData } from '../../store';
 
 export function GeneralContent() {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
-  const { companyData, coolingUnits } = useCompanyData();
+  const { companyData, coolingUnits } = useAnalyticsData();
 
   const coolingUnitsCapacity = useMemo(() => {
     return coolingUnits?.reduce((acc, unit) => (acc += unit.capacityInMetricTons), 0);

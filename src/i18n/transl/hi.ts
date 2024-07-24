@@ -910,6 +910,11 @@ export default {
         coolingUnitTypeMovable: '{{amount}} मूवेबल कमरे',
         methodologyButton: 'कार्यप्रणाली देखें',
       },
+      aggregatedTab: {
+        configurationMessage:
+          'कृपया अपनी तिथियों और कूलिंग यूनिट्स को कॉन्फ़िगर करें ताकि आपको पहुँच मिल सके।',
+        configureButton: 'कॉन्फ़िगर करें',
+      },
     },
   },
 } satisfies Translations;
