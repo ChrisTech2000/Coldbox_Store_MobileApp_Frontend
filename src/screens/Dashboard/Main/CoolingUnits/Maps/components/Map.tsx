@@ -106,11 +106,11 @@ function _Markers(props: { markers: Array<MarkerDatum> }) {
         const hasBeenUsedByFarmer =
           typeof markerId === 'number' ? markers[markerId - 1].hasBeenUsedByFarmer : false;
         const color = hasBeenUsedByFarmer ? '#0000F0' : '#FB7D00';
-        const renderId = `cluster-node-${cluster_id}-#${nodeIdx}`;
 
         if (cluster) {
+          const attrId = `cluster-node-${cluster_id}`;
           return (
-            <PointAnnotation key={renderId} id={renderId} coordinate={coordinates}>
+            <PointAnnotation key={attrId} id={attrId} coordinate={coordinates}>
               <View
                 tw="h-7 w-7 rounded-full items-center justify-center"
                 style={{ backgroundColor: paperTheme.colors.primary }}
@@ -121,8 +121,16 @@ function _Markers(props: { markers: Array<MarkerDatum> }) {
           );
         }
 
+        const attrId = `cluster-node-#${nodeIdx}`;
         return (
-          <PointAnnotation key={renderId} id={renderId} coordinate={coordinates}>
+          <PointAnnotation
+            key={attrId}
+            id={attrId}
+            coordinate={coordinates}
+            onSelected={() => {
+              console.log(attrId);
+            }}
+          >
             <Icon name="map-marker" size={40} color={color} />
           </PointAnnotation>
         );
