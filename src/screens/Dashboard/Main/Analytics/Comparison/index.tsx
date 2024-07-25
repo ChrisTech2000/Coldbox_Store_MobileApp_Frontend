@@ -15,16 +15,16 @@ import { EImpactMode } from '#types/global';
 
 import { ConfigData, Configuration, ConfigurationModal } from '../components/Configuration';
 import { CommonFooter } from '../components/Footer';
-import { ImpactContent } from '../components/ImpactContent';
 import { useAnalyticsData } from '../store';
 import { CratesContent } from './components/CratesContent';
+import { ImpactContent } from './components/ImpactContent';
 import { InnerTabs, Tab } from './components/InnerTabs';
 import { UsersContent } from './components/UsersContent';
 import { useComparisonData } from './store';
 
 const TABS = {
   users: <UsersContent key="users-content-comparison-section" />,
-  impact: <ImpactContent useStore={useComparisonData} key="impact-content-comparison-section" />,
+  impact: <ImpactContent key="impact-content-comparison-section" />,
   crates: <CratesContent key="crates-content-comparison-section" />,
 };
 
@@ -101,15 +101,26 @@ export function ComparisonSection() {
                 {t(`Dashboard.Analytics.companyTab.goBackButton`)}
               </Text>
             </TouchableOpacity>
-            <Button
-              mode="contained"
-              contentStyle="bg-gray-800 h-8"
-              icon="cog"
-              onPress={() => setIsModalOpen(true)}
-              labelStyle="h-5"
-            >
-              {t('Dashboard.Analytics.tabsShared.configureButton')}
-            </Button>
+            <View tw="flex flex-row space-x-1">
+              <Button
+                mode="contained"
+                contentStyle="bg-gray-800 h-8"
+                icon="filter-variant"
+                onPress={() => null}
+                labelStyle="h-5"
+              >
+                {t('Dashboard.Analytics.comparisonTab.sortingLabel')}
+              </Button>
+              <Button
+                mode="contained"
+                contentStyle="bg-gray-800 h-8"
+                icon="cog"
+                onPress={() => setIsModalOpen(true)}
+                labelStyle="h-5"
+              >
+                {t('Dashboard.Analytics.tabsShared.configureButton')}
+              </Button>
+            </View>
           </View>
 
           <InnerTabs

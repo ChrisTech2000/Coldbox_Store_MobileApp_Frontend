@@ -913,6 +913,18 @@ const en = {
         selectedUnitsLabel: 'Selected cooling units:',
         totalCo2Label: '💨 Total CO2e emitted:',
       },
+      comparisonTab: {
+        sortingLabel: 'Sort',
+        coolingUnit: 'Cooling Unit',
+        genderHeader: 'Male | Female | Other',
+        genderSecondaryHeader: 'Male | Female',
+        total: 'total',
+        usersTab: {
+          operators: 'Operators',
+          users: 'Active cooling users',
+          beneficiaries: 'Indirect beneficiaries',
+        },
+      },
     },
   },
 };
