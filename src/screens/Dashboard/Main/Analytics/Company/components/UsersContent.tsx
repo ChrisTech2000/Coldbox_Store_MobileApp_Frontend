@@ -1,24 +1,15 @@
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
-import { Divider } from 'react-native-paper';
 
 import { ScrollView } from '#ui/components/ScrollView';
-import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
 
-import { useAnalyticsData } from '../store';
-
-type SectionProps = {
-  title: string;
-  userType1: string;
-  userType2: string;
-  otherType?: number;
-};
+import { useCompanyData } from '../store';
+import { UserSection } from '../../components/UserSection';
 
 export function UsersContent() {
   const { t } = useTranslationUtils();
-  const { companyData } = useAnalyticsData();
+  const { companyData } = useCompanyData();
 
   const employees = useMemo(() => {
     return {
@@ -64,46 +55,46 @@ export function UsersContent() {
 
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
-      <Section
+      <UserSection
         title={t('Dashboard.Analytics.companyTab.usersTab.employeesTotal', {
           amount: employees.total ?? 0,
         })}
-        userType1={t('Dashboard.Analytics.companyTab.usersTab.maleLabel', {
+        userType1={t('Dashboard.Analytics.maleLabel', {
           amount: employees.male ?? 0,
         })}
-        userType2={t('Dashboard.Analytics.companyTab.usersTab.femaleLabel', {
+        userType2={t('Dashboard.Analytics.femaleLabel', {
           amount: employees.female ?? 0,
         })}
         otherType={employees.other ?? 0}
       />
 
-      <Section
-        title={t('Dashboard.Analytics.companyTab.usersTab.operatorsTotal', {
+      <UserSection
+        title={t('Dashboard.Analytics.operatorsTotal', {
           amount: operators.total ?? 0,
         })}
-        userType1={t('Dashboard.Analytics.companyTab.usersTab.maleLabel', {
+        userType1={t('Dashboard.Analytics.maleLabel', {
           amount: operators.male ?? 0,
         })}
-        userType2={t('Dashboard.Analytics.companyTab.usersTab.femaleLabel', {
+        userType2={t('Dashboard.Analytics.femaleLabel', {
           amount: operators.female ?? 0,
         })}
         otherType={operators.other ?? 0}
       />
 
-      <Section
-        title={t('Dashboard.Analytics.companyTab.usersTab.usersTotal', {
+      <UserSection
+        title={t('Dashboard.Analytics.usersTotal', {
           amount: users.total ?? 0,
         })}
-        userType1={t('Dashboard.Analytics.companyTab.usersTab.maleLabel', {
+        userType1={t('Dashboard.Analytics.maleLabel', {
           amount: users.male ?? 0,
         })}
-        userType2={t('Dashboard.Analytics.companyTab.usersTab.femaleLabel', {
+        userType2={t('Dashboard.Analytics.femaleLabel', {
           amount: users.female ?? 0,
         })}
         otherType={users.other ?? 0}
       />
 
-      <Section
+      <UserSection
         title={t('Dashboard.Analytics.companyTab.usersTab.usersType')}
         userType1={t('Dashboard.Analytics.companyTab.usersTab.farmersLabel', {
           amount: usersTypes.farmer ?? 0,
@@ -113,43 +104,17 @@ export function UsersContent() {
         })}
       />
 
-      <Section
-        title={t('Dashboard.Analytics.companyTab.usersTab.beneficiariesTotal', {
+      <UserSection
+        title={t('Dashboard.Analytics.beneficiariesTotal', {
           amount: beneficiaries.total ?? 0,
         })}
-        userType1={t('Dashboard.Analytics.companyTab.usersTab.maleLabel', {
+        userType1={t('Dashboard.Analytics.maleLabel', {
           amount: beneficiaries.male,
         })}
-        userType2={t('Dashboard.Analytics.companyTab.usersTab.femaleLabel', {
+        userType2={t('Dashboard.Analytics.femaleLabel', {
           amount: beneficiaries.female,
         })}
       />
     </ScrollView>
-  );
-}
-
-function Section({ title, userType1, userType2, otherType }: SectionProps) {
-  const { t } = useTranslationUtils();
-
-  return (
-    <View tw="w-full bg-green-transparency px-2 py-1 items-center rounded-lg space-y-2 my-2">
-      <Text variant="TextMedium" tw="text-lg">
-        {title}
-      </Text>
-      <View tw="flex flex-row space-x-2 items-center">
-        <Text variant="TextMedium" tw="text-lg">
-          {userType1}
-        </Text>
-        <Divider tw="bg-green-primary w-0.5 h-8" />
-        <Text variant="TextMedium" tw="text-lg">
-          {userType2}
-        </Text>
-      </View>
-      {otherType !== undefined && (
-        <Text variant="TextMedium" tw="text-lg">
-          {t('Dashboard.Analytics.companyTab.usersTab.otherLabel', { amount: otherType })}
-        </Text>
-      )}
-    </View>
   );
 }

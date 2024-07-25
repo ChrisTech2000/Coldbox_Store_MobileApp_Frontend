@@ -60,4 +60,5 @@ export enum ESMSEndpoints {
 export enum EImpactEndpoints {
   GET_COMPANY = 'company-slice/',
   GET_IMPACT = '/impact-slice/',
+  GET_COOLING_UNIT = '/coolingunit-slice/',
 }

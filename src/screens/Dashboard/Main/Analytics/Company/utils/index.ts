@@ -138,11 +138,11 @@ export function generatePDFContent(
         </div>
         <div class="section-content">
           <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.usersTab.maleLabel', { amount: employees.male ?? 0 })}
+            ${t('Dashboard.Analytics.maleLabel', { amount: employees.male ?? 0 })}
           </div>
           <div class="divider"></div>
           <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.usersTab.femaleLabel', { amount: employees.female ?? 0 })}
+            ${t('Dashboard.Analytics.femaleLabel', { amount: employees.female ?? 0 })}
           </div>
         </div>
         ${employees.other ?? 0}
@@ -150,15 +150,15 @@ export function generatePDFContent(
 
       <div class="section">
         <div class="section-title">
-          ${t('Dashboard.Analytics.companyTab.usersTab.operatorsTotal', { amount: operators.total ?? 0 })}
+          ${t('Dashboard.Analytics.operatorsTotal', { amount: operators.total ?? 0 })}
         </div>
         <div class="section-content">
           <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.usersTab.maleLabel', { amount: operators.male ?? 0 })}
+            ${t('Dashboard.Analytics.maleLabel', { amount: operators.male ?? 0 })}
           </div>
           <div class="divider"></div>
           <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.usersTab.femaleLabel', { amount: operators.female ?? 0 })}
+            ${t('Dashboard.Analytics.femaleLabel', { amount: operators.female ?? 0 })}
           </div>
         </div>
         ${operators.other ?? 0}
@@ -166,15 +166,15 @@ export function generatePDFContent(
 
       <div class="section">
         <div class="section-title">
-          ${t('Dashboard.Analytics.companyTab.usersTab.usersTotal', { amount: users.total ?? 0 })}
+          ${t('Dashboard.Analytics.usersTotal', { amount: users.total ?? 0 })}
         </div>
         <div class="section-content">
           <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.usersTab.maleLabel', { amount: users.male ?? 0 })}
+            ${t('Dashboard.Analytics.maleLabel', { amount: users.male ?? 0 })}
           </div>
           <div class="divider"></div>
           <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.usersTab.femaleLabel', { amount: users.female ?? 0 })}
+            ${t('Dashboard.Analytics.femaleLabel', { amount: users.female ?? 0 })}
           </div>
         </div>
         ${users.other ?? 0}
@@ -197,15 +197,15 @@ export function generatePDFContent(
 
       <div class="section">
         <div class="section-title">
-          ${t('Dashboard.Analytics.companyTab.usersTab.beneficiariesTotal', { amount: beneficiaries.total ?? 0 })}
+          ${t('Dashboard.Analytics.beneficiariesTotal', { amount: beneficiaries.total ?? 0 })}
         </div>
         <div class="section-content">
           <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.usersTab.maleLabel', { amount: beneficiaries.male })}
+            ${t('Dashboard.Analytics.maleLabel', { amount: beneficiaries.male })}
           </div>
           <div class="divider"></div>
           <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.usersTab.femaleLabel', { amount: beneficiaries.female })}
+            ${t('Dashboard.Analytics.femaleLabel', { amount: beneficiaries.female })}
           </div>
         </div>
       </div>

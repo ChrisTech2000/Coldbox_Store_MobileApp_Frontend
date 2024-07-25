@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 
@@ -17,6 +17,8 @@ import { ConfigurationModal } from '../components/ConfigurationModal';
 import { useAnalyticsData } from '../store';
 import { InnerTabs, Tab } from './components/InnerTabs';
 import { useAggregatedData } from './store';
+import { UsersContent } from './components/UserContent';
+import { ImpactContent } from '../components/ImpactContent';
 
 export type ConfigData =
   | {
@@ -26,11 +28,17 @@ export type ConfigData =
     }
   | undefined;
 
+const TABS = {
+  users: <UsersContent key="users-content-aggregated-section" />,
+  impact: <ImpactContent useStore={useAggregatedData} key="impact-content-aggregated-section" />,
+  crates: null,
+};
+
 export function AggregatedSection() {
   const { t } = useTranslationUtils();
   const { coolingUnits } = useAnalyticsData();
   const { company } = useManagementStore();
-  const { configData, setConfigData, setImpactData } = useAggregatedData();
+  const { configData, setConfigData, setImpactData, setCoolingUnitData } = useAggregatedData();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
@@ -50,11 +58,38 @@ export function AggregatedSection() {
     }
   );
 
+  const { data: coolingUnitData } = useApiCall(
+    'getCoolingUnitImpact',
+    ImpactService.getCoolingUnitImpact,
+    {
+      unitIds: configData?.coolingUnit?.id as number,
+      startDate: configData?.startDate,
+      endDate: configData?.endDate,
+    },
+    {
+      skip: !configData,
+    }
+  );
+
+  const onBackToMain = useCallback(() => {
+    if (activeTab) {
+      setActiveTab(undefined);
+    } else {
+      setConfigData(null);
+    }
+  }, [activeTab]);
+
   useEffect(() => {
     if (impactData) {
       setImpactData(impactData);
     }
   }, [impactData]);
+
+  useEffect(() => {
+    if (coolingUnitData) {
+      setCoolingUnitData(coolingUnitData);
+    }
+  }, [coolingUnitData]);
 
   return (
     <ScrollView tw="mt-8" showsVerticalScrollIndicator={false}>
@@ -77,7 +112,7 @@ export function AggregatedSection() {
           <View tw="w-full flex flex-row justify-between items-center mb-2">
             <TouchableOpacity
               tw="flex flex-row items-center space-x-2 justify-start"
-              onPress={() => setActiveTab(undefined)}
+              onPress={onBackToMain}
             >
               <Icon source="arrow-left-circle-outline" size={15} />
               <Text variant="TextMedium" tw="text-base">
@@ -118,23 +153,23 @@ export function AggregatedSection() {
                 {t('Dashboard.Analytics.downloadDataButton')}
               </Button>
 
-              {!activeTab && (
-                <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
-                  <Text variant="TextMedium" tw="text-base font-bold">
-                    {t('Dashboard.Analytics.aggregatedTab.dateRangeLabel')}{' '}
-                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                      {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
-                      {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
-                    </Text>
+              <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
+                <Text variant="TextMedium" tw="text-base font-bold">
+                  {t('Dashboard.Analytics.aggregatedTab.dateRangeLabel')}{' '}
+                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                    {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
+                    {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
                   </Text>
-                  <Text variant="TextMedium" tw="text-base font-bold">
-                    {t('Dashboard.Analytics.aggregatedTab.selectedUnitsLabel')}{' '}
-                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                      {configData.coolingUnit.name}
-                    </Text>
+                </Text>
+                <Text variant="TextMedium" tw="text-base font-bold">
+                  {t('Dashboard.Analytics.aggregatedTab.selectedUnitsLabel')}{' '}
+                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                    {configData.coolingUnit.name}
                   </Text>
-                </View>
-              )}
+                </Text>
+              </View>
+
+              {activeTab && TABS[activeTab]}
             </View>
           )}
         </View>

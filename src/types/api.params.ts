@@ -371,3 +371,9 @@ export interface GetImpactParams extends JsonObject {
   endDate?: Date;
   mode: EImpactMode;
 }
+
+export interface GetCoolingUnitImpactParams extends JsonObject {
+  unitIds: number | number[];
+  startDate?: Date;
+  endDate?: Date;
+}

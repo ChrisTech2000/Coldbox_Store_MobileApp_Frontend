@@ -17,21 +17,21 @@ import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
 import { EImpactMode } from '#types/global';
 
-import { ImpactContent } from '../components/ImpactContent';
-import { UsersContent } from '../components/UsersContent';
+import { UsersContent } from './components/UsersContent';
 import { UtilizationContent } from '../components/UtilizationContent';
 import { useAnalyticsData } from '../store';
 import { GeneralContent } from './components/GeneralContent';
 import { InnerTabs } from './components/InnerTabs';
 import { generatePDFContent } from './utils';
 import { useCompanyData } from './store';
+import { ImpactContent } from '../components/ImpactContent';
 
 export type Tab = 'users' | 'utilization' | 'impact';
 
 const TABS = {
   users: <UsersContent key="users-content-section" />,
   utilization: <UtilizationContent key="utilization-content-section" />,
-  impact: <ImpactContent key="impact-content-section" />,
+  impact: <ImpactContent useStore={useCompanyData} key="impact-content-section" />,
 };
 
 export function CompanySection() {
