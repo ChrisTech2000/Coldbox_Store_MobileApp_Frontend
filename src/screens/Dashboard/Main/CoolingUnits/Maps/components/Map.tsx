@@ -67,8 +67,20 @@ type ClusterNode = {
   type: string;
 };
 
-function _Markers(props: { markers: Array<MarkerDatum> }) {
-  const { markers } = props;
+class _MarkerIdentifier {
+  static toId(value: number): number {
+    return value + 1;
+  }
+  static fromId(value: number): number {
+    return value - 1;
+  }
+}
+
+function _Markers(props: {
+  markers: Array<MarkerDatum>;
+  onSelect?: (markerDatumIndex: number) => void;
+}) {
+  const { markers, onSelect } = props;
 
   const state = useContext(_MapContext);
 
@@ -83,7 +95,7 @@ function _Markers(props: { markers: Array<MarkerDatum> }) {
           properties: {
             cluster: false,
             category: 'markers',
-            id: markerIdx + 1,
+            id: _MarkerIdentifier.toId(markerIdx),
           },
           geometry: {
             type: 'Point',
@@ -104,7 +116,9 @@ function _Markers(props: { markers: Array<MarkerDatum> }) {
         const { cluster, point_count, cluster_id, id: markerId } = node.properties;
 
         const hasBeenUsedByFarmer =
-          typeof markerId === 'number' ? markers[markerId - 1].hasBeenUsedByFarmer : false;
+          typeof markerId === 'number'
+            ? markers[_MarkerIdentifier.fromId(markerId)].hasBeenUsedByFarmer
+            : false;
         const color = hasBeenUsedByFarmer ? '#0000F0' : '#FB7D00';
 
         if (cluster) {
@@ -128,7 +142,8 @@ function _Markers(props: { markers: Array<MarkerDatum> }) {
             id={attrId}
             coordinate={coordinates}
             onSelected={() => {
-              console.log(attrId);
+              if (typeof markerId === 'undefined') return;
+              onSelect?.(_MarkerIdentifier.fromId(markerId));
             }}
           >
             <Icon name="map-marker" size={40} color={color} />

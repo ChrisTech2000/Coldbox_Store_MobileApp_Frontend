@@ -14,9 +14,11 @@ import { useDashboardStore } from '#stores/dashboard';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { paperTheme } from '#ui/lib/theme';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import { processLocationMarkers } from './utils';
 import * as Map from './components/Map';
+import PointAnnotationModal from './components/PointAnnotationModal';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 
@@ -83,8 +85,15 @@ function CoolingUnitsMaps() {
   return (
     <View tw="flex-1">
       <Map.Root coordinates={coordinates} style={styles.map}>
-        <Map.Markers markers={markers} />
+        <Map.Markers
+          markers={markers}
+          onSelect={(markerIdx) => {
+            emitter.emit(APP_EVENTS.DISPATCH_MAPS_TAB_MODAL, true, markerIdx);
+          }}
+        />
       </Map.Root>
+
+      <PointAnnotationModal markers={markers} />
 
       <View tw="space-y-3 p-3">
         <View tw="flex-row items-center space-x-3">

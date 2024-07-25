@@ -13,9 +13,11 @@ const CUSTOM_VARIANTS_DEFS = {
   },
   TitleSmall: {
     ...baseVariants.titleMedium,
+    fontFamily: 'Roboto-Medium',
   },
   TitleRegular: {
     ...baseVariants.titleLarge,
+    fontFamily: 'Roboto-Regular',
   },
   TitleMedium: {
     ...baseVariants.titleLarge,
@@ -27,6 +29,7 @@ const CUSTOM_VARIANTS_DEFS = {
   },
   HeadingRegular: {
     ...baseVariants.displayMedium,
+    fontFamily: 'Roboto-Medium',
   },
 } as const;
 
