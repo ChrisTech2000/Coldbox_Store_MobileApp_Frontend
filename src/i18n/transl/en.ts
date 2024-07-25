@@ -862,6 +862,11 @@ const en = {
       usersTotal: 'Total number of distinct cooling users = {{amount}}',
       operatorsTotal: 'Total number of operators = {{amount}}',
       beneficiariesTotal: 'Total number of indirect beneficiaries = {{amount}}',
+      totalCratesLabel: '🧺 Total crates:',
+      totalQuantityLabel: '📦 Total quantity (kg):',
+      totalOperations: '👷🏽‍♂️ Total operations:',
+      checkedInLabel: 'Checked In: {{amount}}',
+      checkedOutLabel: 'Checked Out: {{amount}}',
       companyTab: {
         usersTab: {
           employeesTotal: 'Total number of registered employees = {{amount}}',
@@ -872,11 +877,6 @@ const en = {
         utilizationTab: {
           occupancyLabel: 'Average occupancy of cooling units:',
           occupancyContent: '🏘️ {{amount}}%',
-          totalCratesLabel: '🧺 Total crates:',
-          totalQuantityLabel: '📦 Total quantity (kg):',
-          totalOperations: '👷🏽‍♂️ Total operations:',
-          checkedInLabel: 'Checked In: {{amount}}',
-          checkedOutLabel: 'Checked Out: {{amount}}',
         },
         impactTab: {
           foodLossLabel: '🥗 Food loss evolution',
@@ -911,6 +911,7 @@ const en = {
         crates: 'Crates',
         dateRangeLabel: 'Date range:',
         selectedUnitsLabel: 'Selected cooling units:',
+        totalCo2Label: '💨 Total CO2e emitted:',
       },
     },
   },

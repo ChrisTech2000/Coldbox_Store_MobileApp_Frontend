@@ -12,7 +12,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { ImpactData } from '#types/global';
 
-import { getMetricValue } from '../utils';
+import { getMetricValue } from '../utils/getMetricValue';
 
 type Store = {
   impactData: ImpactData | null;
@@ -54,6 +54,14 @@ export function ImpactContent<T extends Store>({ useStore }: ImpactContentProps<
       from: (impactData?.co2Metrics?.[0]?.['co2Crops']?.co2From || 0).toFixed(2),
       to: (impactData?.co2Metrics?.[0]?.['co2Crops']?.co2To || 0).toFixed(2),
     };
+  }, [impactData]);
+
+  const surveyPercentage = useMemo(() => {
+    const percentage =
+      (getMetricValue(impactData?.impactMetrics?.numPostHarvestSurveys) /
+        getMetricValue(impactData?.impactMetrics?.possiblePostCheckoutSurveyRoom)) *
+      100;
+    return Number.isNaN(percentage) ? 0 : percentage.toFixed(2);
   }, [impactData]);
 
   return (
@@ -159,13 +167,7 @@ export function ImpactContent<T extends Store>({ useStore }: ImpactContentProps<
               </Text>
             </View>
             <Text variant="TextMedium" tw="text-4xl font-bold text-purple-500">
-              (
-              {(
-                (getMetricValue(impactData?.impactMetrics?.numPostHarvestSurveys) /
-                  getMetricValue(impactData?.impactMetrics?.possiblePostCheckoutSurveyRoom)) *
-                100
-              ).toFixed(0)}
-              %)
+              ({surveyPercentage}%)
             </Text>
           </View>
         </View>

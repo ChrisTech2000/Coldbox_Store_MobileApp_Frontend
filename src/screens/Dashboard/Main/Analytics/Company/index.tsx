@@ -17,14 +17,14 @@ import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
 import { EImpactMode } from '#types/global';
 
-import { UsersContent } from './components/UsersContent';
-import { UtilizationContent } from '../components/UtilizationContent';
+import { ImpactContent } from '../components/ImpactContent';
 import { useAnalyticsData } from '../store';
+import { generatePDFContent } from '../utils/downloadData';
 import { GeneralContent } from './components/GeneralContent';
 import { InnerTabs } from './components/InnerTabs';
-import { generatePDFContent } from './utils';
+import { UsersContent } from './components/UsersContent';
+import { UtilizationContent } from './components/UtilizationContent';
 import { useCompanyData } from './store';
-import { ImpactContent } from '../components/ImpactContent';
 
 export type Tab = 'users' | 'utilization' | 'impact';
 
@@ -76,11 +76,11 @@ export function CompanySection() {
   );
 
   const onDownloadData = useCallback(async () => {
-    const html = generatePDFContent(t, coolingUnits, company, impactCompany, impactData);
+    const html = generatePDFContent(t, coolingUnits, company, impactCompany, impactData, 'company');
 
     const PDFOptions = {
       html,
-      fileName: t('Dashboard.Analytics.companyTab.downloadFileName'),
+      fileName: `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.company')}`,
       directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
     };
 

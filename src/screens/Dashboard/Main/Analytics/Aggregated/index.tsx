@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Platform, TouchableOpacity, View } from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator, Icon } from 'react-native-paper';
+import { useToast } from 'react-native-toast-notifications';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -14,11 +16,13 @@ import { useManagementStore } from '#stores/management';
 import { CoolingUnit, EImpactMode } from '#types/global';
 
 import { ConfigurationModal } from '../components/ConfigurationModal';
-import { useAnalyticsData } from '../store';
-import { InnerTabs, Tab } from './components/InnerTabs';
-import { useAggregatedData } from './store';
-import { UsersContent } from './components/UserContent';
 import { ImpactContent } from '../components/ImpactContent';
+import { useAnalyticsData } from '../store';
+import { generatePDFContent } from '../utils/downloadData';
+import { CratesContent } from './components/CratesContent';
+import { InnerTabs, Tab } from './components/InnerTabs';
+import { UsersContent } from './components/UserContent';
+import { useAggregatedData } from './store';
 
 export type ConfigData =
   | {
@@ -31,11 +35,12 @@ export type ConfigData =
 const TABS = {
   users: <UsersContent key="users-content-aggregated-section" />,
   impact: <ImpactContent useStore={useAggregatedData} key="impact-content-aggregated-section" />,
-  crates: null,
+  crates: <CratesContent key="crates-content-aggregated-section" />,
 };
 
 export function AggregatedSection() {
   const { t } = useTranslationUtils();
+  const toast = useToast();
   const { coolingUnits } = useAnalyticsData();
   const { company } = useManagementStore();
   const { configData, setConfigData, setImpactData, setCoolingUnitData } = useAggregatedData();
@@ -78,6 +83,35 @@ export function AggregatedSection() {
       setConfigData(null);
     }
   }, [activeTab]);
+
+  const onDownloadData = useCallback(async () => {
+    const html = generatePDFContent(
+      t,
+      coolingUnits,
+      company,
+      coolingUnitData,
+      impactData,
+      'aggregated'
+    );
+
+    const PDFOptions = {
+      html,
+      fileName: `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.aggregated')}`,
+      directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+    };
+
+    try {
+      const file = await RNHTMLtoPDF.convert(PDFOptions);
+      if (!file.filePath) throw new Error();
+      toast.show(t('Dashboard.History.pdfModal.successMessage'), {
+        type: 'success',
+      });
+    } catch {
+      toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
+        type: 'danger',
+      });
+    }
+  }, [t, toast, coolingUnits, coolingUnitData, impactData, company]);
 
   useEffect(() => {
     if (impactData) {
@@ -145,7 +179,7 @@ export function AggregatedSection() {
               <Button
                 mode="contained"
                 uppercase
-                onPress={() => null}
+                onPress={onDownloadData}
                 icon="check-circle-outline"
                 contentStyle="flex flex-row-reverse"
                 tw="w-[50%] mt-2"

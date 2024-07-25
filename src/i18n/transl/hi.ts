@@ -866,6 +866,11 @@ export default {
       operatorsTotal: 'कुल ऑपरेटरों की संख्या = {{amount}}',
       usersTotal: 'अलग-अलग ठंडक उपयोगकर्ताओं की कुल संख्या = {{amount}}',
       beneficiariesTotal: 'अप्रत्यक्ष लाभार्थियों की कुल संख्या = {{amount}}',
+      totalCratesLabel: '🧺 कुल क्रेट्स:',
+      totalQuantityLabel: '📦 कुल मात्रा (किलोग्राम):',
+      totalOperations: '👷🏽‍♂️ कुल संचालन:',
+      checkedInLabel: 'चेक इन: {{amount}}',
+      checkedOutLabel: 'चेक आउट: {{amount}}',
       companyTab: {
         usersTab: {
           employeesTotal: 'कुल पंजीकृत कर्मचारियों की संख्या = {{amount}}',
@@ -876,11 +881,6 @@ export default {
         utilizationTab: {
           occupancyLabel: 'ठंडक इकाइयों की औसत अधिभोगिता:',
           occupancyContent: '🏘️ {{amount}}%',
-          totalCratesLabel: '🧺 कुल क्रेट्स:',
-          totalQuantityLabel: '📦 कुल मात्रा (किलोग्राम):',
-          totalOperations: '👷🏽‍♂️ कुल संचालन:',
-          checkedInLabel: 'चेक इन: {{amount}}',
-          checkedOutLabel: 'चेक आउट: {{amount}}',
         },
         impactTab: {
           foodLossLabel: '🥗 खाद्य हानि विकास',
@@ -917,6 +917,7 @@ export default {
         crates: 'क्रेट्स',
         dateRangeLabel: 'तारीख सीमा:',
         selectedUnitsLabel: 'चयनित शीतलन इकाइयाँ:',
+        totalCo2Label: '💨 कुल CO2e उत्सर्जित:',
       },
     },
   },

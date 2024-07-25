@@ -5,8 +5,7 @@ import { Text } from '#ui/components/Text';
 import { ScrollView } from '#ui/components/ScrollView';
 
 import { useTranslationUtils } from '#i18n/utils';
-
-import { useAnalyticsData } from '../store';
+import { useCompanyData } from '../store';
 
 type SectionProps = {
   title: string;
@@ -16,7 +15,7 @@ type SectionProps = {
 
 export function UtilizationContent() {
   const { t } = useTranslationUtils();
-  const { companyData } = useAnalyticsData();
+  const { companyData } = useCompanyData();
 
   const occupancy = useMemo(() => {
     return companyData?.compAverageRoomOccupancy?.[0] || 0;
@@ -57,19 +56,19 @@ export function UtilizationContent() {
       </View>
 
       <Section
-        title={t('Dashboard.Analytics.companyTab.utilizationTab.totalCratesLabel')}
+        title={t('Dashboard.Analytics.totalCratesLabel')}
         checkedIn={crates.checkedIn}
         checkedOut={crates.checkedOut}
       />
 
       <Section
-        title={t('Dashboard.Analytics.companyTab.utilizationTab.totalQuantityLabel')}
+        title={t('Dashboard.Analytics.totalQuantityLabel')}
         checkedIn={quantity.checkedIn}
         checkedOut={quantity.checkedOut}
       />
 
       <Section
-        title={t('Dashboard.Analytics.companyTab.utilizationTab.totalOperations')}
+        title={t('Dashboard.Analytics.totalOperations')}
         checkedIn={operations.checkedIn}
         checkedOut={operations.checkedOut}
       />
@@ -86,10 +85,10 @@ function Section({ title, checkedIn, checkedOut }: SectionProps) {
         {title}
       </Text>
       <Text variant="TextBold" tw="text-lg font-bold">
-        {t('Dashboard.Analytics.companyTab.utilizationTab.checkedInLabel', { amount: checkedIn })}
+        {t('Dashboard.Analytics.checkedInLabel', { amount: checkedIn })}
       </Text>
       <Text variant="TextBold" tw="text-lg font-bold">
-        {t('Dashboard.Analytics.companyTab.utilizationTab.checkedOutLabel', { amount: checkedOut })}
+        {t('Dashboard.Analytics.checkedOutLabel', { amount: checkedOut })}
       </Text>
     </View>
   );
