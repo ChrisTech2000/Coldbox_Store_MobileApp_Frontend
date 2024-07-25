@@ -76,7 +76,7 @@ function CoolingUnitsMaps() {
     void _getCoordinates();
   }, []);
 
-  if (isLoadingCoords || isLoading) {
+  if (isLoading || isLoadingCoords) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
