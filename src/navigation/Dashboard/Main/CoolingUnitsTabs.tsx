@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import {
   createMaterialTopTabNavigator,
+  type MaterialTopTabNavigationProp,
   type MaterialTopTabNavigationOptions,
 } from '@react-navigation/material-top-tabs';
-import type { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { RouteProp } from '@react-navigation/native';
 
 import CoolingUnitsPlanner from '#screens/Dashboard/Main/CoolingUnits/Planner';
@@ -25,11 +25,11 @@ export type CoolingUnitsTabsRoutes = {
 
 export type CoolingUnitsTabsRoutePaths = keyof CoolingUnitsTabsRoutes;
 export type CoolingUnitsTabsRouteProps<Path extends CoolingUnitsTabsRoutePaths> =
-  BottomTabScreenProps<CoolingUnitsTabsRoutes, Path>;
+  MaterialTopTabNavigationProp<CoolingUnitsTabsRoutes, Path>;
 
 type ScreenOptions = (props: {
   route: RouteProp<CoolingUnitsTabsRoutes, CoolingUnitsTabsRoutePaths>;
-  navigation: BottomTabNavigationProp<CoolingUnitsTabsRoutes, CoolingUnitsTabsRoutePaths>;
+  navigation: MaterialTopTabNavigationProp<CoolingUnitsTabsRoutes, CoolingUnitsTabsRoutePaths>;
 }) => MaterialTopTabNavigationOptions;
 
 const TAB_HEADERS: Record<CoolingUnitsTabsRoutePaths, TranslationPaths | undefined> = {
@@ -54,6 +54,7 @@ export default function CoolingUnitsTabs() {
 
     return {
       ...props,
+      swipeEnabled: routeName !== 'Maps',
       tabBarLabel: routeTitle,
       tabBarIndicatorStyle: {
         backgroundColor: paperTheme.colors.secondary,

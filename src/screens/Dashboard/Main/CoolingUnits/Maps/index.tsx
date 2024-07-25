@@ -1,8 +1,10 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import GetLocation from 'react-native-get-location';
 import { useShallow } from 'zustand/react/shallow';
+import ms from 'ms';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -14,10 +16,12 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { paperTheme } from '#ui/lib/theme';
 
 import { processLocationMarkers } from './utils';
+import * as Map from './components/Map';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 
 function CoolingUnitsMaps() {
+  const [coords, setCoords] = useState<[number, number] | undefined>(undefined);
   const { t } = useTranslationUtils();
 
   const [farmerId, farmerCoolingUnits] = useDashboardStore(
@@ -29,7 +33,7 @@ function CoolingUnitsMaps() {
     defaultData: [],
   });
 
-  const { isLoading } = useApiCall(
+  const { data: markers, isLoading } = useApiCall(
     SWR_CACHE_KEY,
     async () => {
       const [locations, coolingUnits] = await Promise.allSettled([
@@ -51,6 +55,21 @@ function CoolingUnitsMaps() {
     }
   );
 
+  useEffect(() => {
+    async function _getCoordinates() {
+      try {
+        const result = await GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: ms('6 seconds'),
+        });
+        setCoords([result.longitude, result.latitude]);
+      } catch (exception) {
+        console.error(exception);
+      }
+    }
+    void _getCoordinates();
+  }, []);
+
   if (isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -59,8 +78,14 @@ function CoolingUnitsMaps() {
     );
   }
 
+  if (typeof coords === 'undefined') return null;
+
   return (
     <View tw="flex-1">
+      <Map.Root coords={coords} style={styles.map}>
+        <Map.Markers markers={markers} />
+      </Map.Root>
+
       <View tw="space-y-3 p-3">
         <View tw="flex-row items-center space-x-3">
           <Icon name="map-marker" size={20} color="#FB7D00" />
@@ -74,5 +99,12 @@ function CoolingUnitsMaps() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  map: {
+    width: '100%',
+    height: Dimensions.get('screen').height / 1.618,
+  },
+});
 
 export default withSafeArea(CoolingUnitsMaps);
