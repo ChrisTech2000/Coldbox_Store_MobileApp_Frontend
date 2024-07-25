@@ -31,7 +31,7 @@ function CoolingUnitsMaps() {
   );
 
   const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
-    skip: !farmerId,
+    skip: !farmerId || !coordinates,
     defaultData: [],
   });
 
@@ -52,7 +52,7 @@ function CoolingUnitsMaps() {
     },
     undefined,
     {
-      skip: !farmerId || crops.length === 0,
+      skip: !farmerId || !coordinates || crops.length === 0,
       defaultData: [],
     }
   );
