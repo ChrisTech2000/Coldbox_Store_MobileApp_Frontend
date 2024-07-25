@@ -51,6 +51,11 @@ function _Root(
   );
 }
 
+export const PIN_COLORS = {
+  USED: '#0000F0',
+  PUBLIC: '#FB7D00',
+} as const;
+
 type ClusterNode = {
   geometry: {
     coordinates: Array<number>;
@@ -119,7 +124,7 @@ function _Markers(props: {
           typeof markerId === 'number'
             ? markers[_MarkerIdentifier.fromId(markerId)].hasBeenUsedByFarmer
             : false;
-        const color = hasBeenUsedByFarmer ? '#0000F0' : '#FB7D00';
+        const color = hasBeenUsedByFarmer ? PIN_COLORS.USED : PIN_COLORS.PUBLIC;
 
         if (cluster) {
           const attrId = `cluster-node-${cluster_id}`;

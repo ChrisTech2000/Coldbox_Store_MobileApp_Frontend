@@ -97,11 +97,11 @@ function CoolingUnitsMaps() {
 
       <View tw="space-y-3 p-3">
         <View tw="flex-row items-center space-x-3">
-          <Icon name="map-marker" size={20} color="#FB7D00" />
+          <Icon name="map-marker" size={20} color={Map.PIN_COLORS.PUBLIC} />
           <Text>{t('Dashboard.CoolingUnitsMaps.publicMaker')}</Text>
         </View>
         <View tw="flex-row items-center space-x-3">
-          <Icon name="map-marker" size={20} color="#0000F0" />
+          <Icon name="map-marker" size={20} color={Map.PIN_COLORS.USED} />
           <Text>{t('Dashboard.CoolingUnitsMaps.usedMarker')}</Text>
         </View>
       </View>
