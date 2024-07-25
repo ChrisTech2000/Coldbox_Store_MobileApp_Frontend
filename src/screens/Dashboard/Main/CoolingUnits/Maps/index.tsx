@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import GetLocation from 'react-native-get-location';
@@ -23,6 +23,7 @@ import PointAnnotationModal from './components/PointAnnotationModal';
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 
 function CoolingUnitsMaps() {
+  const [isLoadingCoords, setLoadingCoords] = useState<boolean>(true);
   const [coordinates, setCoordinates] = useState<[number, number] | undefined>(undefined);
   const { t } = useTranslationUtils();
 
@@ -60,6 +61,7 @@ function CoolingUnitsMaps() {
   useEffect(() => {
     async function _getCoordinates() {
       try {
+        if (!isLoadingCoords) setLoadingCoords(true);
         const result = await GetLocation.getCurrentPosition({
           enableHighAccuracy: true,
           timeout: ms('6 seconds'),
@@ -67,12 +69,14 @@ function CoolingUnitsMaps() {
         setCoordinates([result.longitude, result.latitude]);
       } catch (exception) {
         console.error(exception);
+      } finally {
+        setLoadingCoords(false);
       }
     }
     void _getCoordinates();
   }, []);
 
-  if (isLoading) {
+  if (isLoadingCoords || isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -84,7 +88,7 @@ function CoolingUnitsMaps() {
 
   return (
     <View tw="flex-1">
-      <Map.Root coordinates={coordinates} style={styles.map}>
+      <Map.Root coordinates={coordinates} style={{ width: '100%', height: '88%' }}>
         <Map.Markers
           markers={markers}
           onSelect={(markerIdx) => {
@@ -108,12 +112,5 @@ function CoolingUnitsMaps() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  map: {
-    width: '100%',
-    height: Dimensions.get('screen').height / 1.55,
-  },
-});
 
 export default withSafeArea(CoolingUnitsMaps);

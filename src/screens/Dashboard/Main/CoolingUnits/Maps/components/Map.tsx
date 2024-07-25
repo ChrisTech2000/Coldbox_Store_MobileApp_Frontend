@@ -12,16 +12,15 @@ import useSupercluster from 'use-supercluster';
 
 import { Text } from '#ui/components/Text';
 
+import { MAPBOX_ACCESS_TOKEN } from '#constants/environment';
 import { paperTheme } from '#ui/lib/theme';
 
 import type { MarkerDatum } from '../utils';
 
-Mapbox.setAccessToken(
-  'pk.***REMOVED***.***REMOVED***'
-);
-
 const DEFAULT_STATE = {} as MapState;
 const MIN_ZOOM = 4;
+
+Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 const _MapContext = createContext<MapState>(DEFAULT_STATE);
 

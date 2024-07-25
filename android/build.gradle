@@ -27,7 +27,7 @@ allprojects {
             }
             credentials {
                 username = "mapbox"
-                password = "***REMOVED***"
+                password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
             }
         }
     }

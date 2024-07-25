@@ -62,7 +62,14 @@ export default function PointAnnotationModal(props: Props) {
             )}
           />
           <View tw="self-end pr-6">
-            <Button mode="text" onPress={toggleVisibility}>
+            <Button
+              mode="text"
+              onPress={(evt) => {
+                evt?.stopPropagation();
+                toggleVisibility();
+                setMarker(undefined);
+              }}
+            >
               {t('actions.close')}
             </Button>
           </View>
