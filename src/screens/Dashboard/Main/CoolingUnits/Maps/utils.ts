@@ -1,3 +1,9 @@
+import { useMemo } from 'react';
+import useSupercluster from 'use-supercluster';
+import type { MapState } from '@rnmapbox/maps';
+import type { PointFeature } from 'supercluster';
+import type { BBox, GeoJsonProperties } from 'geojson';
+
 import type {
   GetAllCropsResponse,
   GetCoolingUnitResponse,
@@ -90,4 +96,41 @@ function _getSingleCommodityCropName(
   cropId: number | undefined = undefined
 ): string | undefined {
   return crops.find((crop) => crop.id === cropId)?.name ?? '';
+}
+
+type PointProperties = {
+  cluster: boolean;
+  category: 'markers';
+  indexPos: number;
+};
+
+export function useMapCluster(
+  markers: Array<MarkerDatum>,
+  mapDatums: { bounds: MapState['properties']['bounds']; zoom: MapState['properties']['zoom'] }
+) {
+  const { bounds, zoom } = mapDatums;
+
+  const { clusters } = useSupercluster({
+    points: useMemo<Array<PointFeature<GeoJsonProperties & PointProperties>>>(
+      () =>
+        markers.map((marker, markerIdx) => ({
+          type: 'Feature',
+          properties: {
+            cluster: false,
+            category: 'markers',
+            indexPos: markerIdx,
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [marker.longitude, marker.latitude],
+          },
+        })),
+      [markers]
+    ),
+    bounds: [bounds.sw, bounds.ne].flat() as BBox,
+    zoom: zoom,
+    options: { radius: 20, maxZoom: 25 },
+  });
+
+  return clusters;
 }

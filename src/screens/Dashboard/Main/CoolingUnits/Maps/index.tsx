@@ -16,9 +16,11 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { paperTheme } from '#ui/lib/theme';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
-import { processLocationMarkers } from './utils';
 import * as Map from './components/Map';
 import PointAnnotationModal from './components/PointAnnotationModal';
+
+import { processLocationMarkers } from './utils';
+import { PIN_COLORS } from './constants';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 
@@ -31,12 +33,17 @@ function CoolingUnitsMaps() {
     useShallow((store) => [store.farmerId, store.coolingUnits])
   );
 
-  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
-    skip: !farmerId || !coordinates,
-    defaultData: [],
-  });
+  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+    'getAllCrops',
+    ColdtivateService.getAllCrops,
+    undefined,
+    {
+      skip: !farmerId,
+      defaultData: [],
+    }
+  );
 
-  const { data: markers, isLoading } = useApiCall(
+  const { data: markers, isLoading: isLoadingMarkers } = useApiCall(
     SWR_CACHE_KEY,
     async () => {
       const [locations, coolingUnits] = await Promise.allSettled([
@@ -53,7 +60,7 @@ function CoolingUnitsMaps() {
     },
     undefined,
     {
-      skip: !farmerId || !coordinates || crops.length === 0,
+      skip: !farmerId || isLoadingCrops,
       defaultData: [],
     }
   );
@@ -76,7 +83,7 @@ function CoolingUnitsMaps() {
     void _getCoordinates();
   }, []);
 
-  if (isLoading || isLoadingCoords) {
+  if (typeof farmerId === 'number' && (isLoadingMarkers || isLoadingCoords)) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -101,11 +108,11 @@ function CoolingUnitsMaps() {
 
       <View tw="space-y-3 p-3">
         <View tw="flex-row items-center space-x-3">
-          <Icon name="map-marker" size={20} color={Map.PIN_COLORS.PUBLIC} />
+          <Icon name="map-marker" size={20} color={PIN_COLORS.PUBLIC} />
           <Text>{t('Dashboard.CoolingUnitsMaps.publicMaker')}</Text>
         </View>
         <View tw="flex-row items-center space-x-3">
-          <Icon name="map-marker" size={20} color={Map.PIN_COLORS.USED} />
+          <Icon name="map-marker" size={20} color={PIN_COLORS.USED} />
           <Text>{t('Dashboard.CoolingUnitsMaps.usedMarker')}</Text>
         </View>
       </View>

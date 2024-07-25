@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react';
+import React, { createContext, useContext, useState, type PropsWithChildren } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import Mapbox, {
   MapView,
@@ -8,14 +8,14 @@ import Mapbox, {
   type MapState,
 } from '@rnmapbox/maps';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import useSupercluster from 'use-supercluster';
 
 import { Text } from '#ui/components/Text';
 
 import { MAPBOX_ACCESS_TOKEN } from '#constants/environment';
 import { paperTheme } from '#ui/lib/theme';
 
-import type { MarkerDatum } from '../utils';
+import { useMapCluster, type MarkerDatum } from '../utils';
+import { PIN_COLORS } from '../constants';
 
 const DEFAULT_STATE = {} as MapState;
 const MIN_ZOOM = 4;
@@ -50,36 +50,6 @@ function _Root(
   );
 }
 
-export const PIN_COLORS = {
-  USED: '#0000F0',
-  PUBLIC: '#FB7D00',
-} as const;
-
-type ClusterNode = {
-  geometry: {
-    coordinates: Array<number>;
-    type: string;
-  };
-  id: number;
-  properties: {
-    cluster: boolean;
-    cluster_id: number;
-    point_count: number;
-    point_count_abbreviated: number;
-    id?: number;
-  };
-  type: string;
-};
-
-class _MarkerIdentifier {
-  static toId(value: number): number {
-    return value + 1;
-  }
-  static fromId(value: number): number {
-    return value - 1;
-  }
-}
-
 function _Markers(props: {
   markers: Array<MarkerDatum>;
   onSelect?: (markerDatumIndex: number) => void;
@@ -91,38 +61,16 @@ function _Markers(props: {
   const bounds = state?.properties?.bounds ?? { ne: [], sw: [] };
   const zoom = state?.properties?.zoom ?? MIN_ZOOM;
 
-  const { clusters } = useSupercluster({
-    points: useMemo(
-      () =>
-        markers.map((marker, markerIdx) => ({
-          type: 'Feature',
-          properties: {
-            cluster: false,
-            category: 'markers',
-            id: _MarkerIdentifier.toId(markerIdx),
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: [marker.longitude, marker.latitude],
-          },
-        })),
-      [markers]
-    ),
-    bounds: [bounds.sw, bounds.ne].flat() as [number, number, number, number],
-    zoom: zoom,
-    options: { radius: 20, maxZoom: 25 },
-  });
+  const clusters = useMapCluster(markers, { bounds, zoom });
 
   return (
     <React.Fragment>
-      {clusters.map((node: ClusterNode, nodeIdx) => {
+      {clusters.map((node, nodeIdx) => {
         const { coordinates } = node.geometry;
-        const { cluster, point_count, cluster_id, id: markerId } = node.properties;
+        const { cluster, point_count, cluster_id, indexPos } = node.properties;
 
         const hasBeenUsedByFarmer =
-          typeof markerId === 'number'
-            ? markers[_MarkerIdentifier.fromId(markerId)].hasBeenUsedByFarmer
-            : false;
+          typeof indexPos === 'number' ? markers[indexPos].hasBeenUsedByFarmer : false;
         const color = hasBeenUsedByFarmer ? PIN_COLORS.USED : PIN_COLORS.PUBLIC;
 
         if (cluster) {
@@ -146,8 +94,8 @@ function _Markers(props: {
             id={attrId}
             coordinate={coordinates}
             onSelected={() => {
-              if (typeof markerId === 'undefined') return;
-              onSelect?.(_MarkerIdentifier.fromId(markerId));
+              if (typeof indexPos !== 'number') return;
+              onSelect?.(indexPos);
             }}
           >
             <Icon name="map-marker" size={40} color={color} />
