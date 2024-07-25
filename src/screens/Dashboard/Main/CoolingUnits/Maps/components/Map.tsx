@@ -61,6 +61,7 @@ type ClusterNode = {
     cluster_id: number;
     point_count: number;
     point_count_abbreviated: number;
+    id?: number;
   };
   type: string;
 };
@@ -99,8 +100,11 @@ function _Markers(props: { markers: Array<MarkerDatum> }) {
     <React.Fragment>
       {clusters.map((node: ClusterNode, nodeIdx) => {
         const { coordinates } = node.geometry;
-        const { cluster, point_count, cluster_id } = node.properties;
+        const { cluster, point_count, cluster_id, id: markerId } = node.properties;
 
+        const hasBeenUsedByFarmer =
+          typeof markerId === 'number' ? markers[markerId - 1].hasBeenUsedByFarmer : false;
+        const color = hasBeenUsedByFarmer ? '#0000F0' : '#FB7D00';
         const renderId = `cluster-node-${cluster_id}-#${nodeIdx}`;
 
         if (cluster) {
@@ -118,7 +122,7 @@ function _Markers(props: { markers: Array<MarkerDatum> }) {
 
         return (
           <PointAnnotation key={renderId} id={renderId} coordinate={coordinates}>
-            <Icon name="map-marker" size={40} color="red" />
+            <Icon name="map-marker" size={40} color={color} />
           </PointAnnotation>
         );
       })}
