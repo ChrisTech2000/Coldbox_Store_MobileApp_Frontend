@@ -547,7 +547,7 @@ function generateCratesHtmlContent(
 
       <div class="section section2">
        <div class="section-title">
-          ${t('Dashboard.Analytics.aggregatedTab.totalCo2Label')}
+          ${t('Dashboard.Analytics.tabsShared.totalCo2Label')}
         </div>
         <div class="section-content">
           <div class="section-text">

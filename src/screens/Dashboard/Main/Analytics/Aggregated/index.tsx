@@ -13,9 +13,10 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
-import { CoolingUnit, EImpactMode } from '#types/global';
+import { EImpactMode } from '#types/global';
 
-import { ConfigurationModal } from '../components/ConfigurationModal';
+import { ConfigData, Configuration, ConfigurationModal } from '../components/Configuration';
+import { CommonFooter } from '../components/Footer';
 import { ImpactContent } from '../components/ImpactContent';
 import { useAnalyticsData } from '../store';
 import { generatePDFContent } from '../utils/downloadData';
@@ -23,14 +24,6 @@ import { CratesContent } from './components/CratesContent';
 import { InnerTabs, Tab } from './components/InnerTabs';
 import { UsersContent } from './components/UserContent';
 import { useAggregatedData } from './store';
-
-export type ConfigData =
-  | {
-      startDate: Date;
-      endDate: Date;
-      coolingUnit: CoolingUnit;
-    }
-  | undefined;
 
 const TABS = {
   users: <UsersContent key="users-content-aggregated-section" />,
@@ -63,7 +56,7 @@ export function AggregatedSection() {
     }
   );
 
-  const { data: coolingUnitData } = useApiCall(
+  const { data: coolingUnitData, isLoading: loadingCoolingUnitData } = useApiCall(
     'getCoolingUnitImpact',
     ImpactService.getCoolingUnitImpact,
     {
@@ -128,19 +121,7 @@ export function AggregatedSection() {
   return (
     <ScrollView tw="mt-8" showsVerticalScrollIndicator={false}>
       {!configData ? (
-        <View tw="bg-gray-200 px-4 py-2 items-center w-full rounded-lg space-y-2">
-          <Text variant="TextMedium" tw="text-lg text-center">
-            {t('Dashboard.Analytics.aggregatedTab.configurationMessage')}
-          </Text>
-          <Button
-            mode="contained"
-            contentStyle="bg-gray-800"
-            icon="cog"
-            onPress={() => setIsModalOpen(true)}
-          >
-            {t('Dashboard.Analytics.aggregatedTab.configureButton')}
-          </Button>
-        </View>
+        <Configuration openModal={() => setIsModalOpen(true)} />
       ) : (
         <View tw="space-y-2">
           <View tw="w-full flex flex-row justify-between items-center mb-2">
@@ -160,7 +141,7 @@ export function AggregatedSection() {
               onPress={() => setIsModalOpen(true)}
               labelStyle="h-5"
             >
-              {t('Dashboard.Analytics.aggregatedTab.configureButton')}
+              {t('Dashboard.Analytics.tabsShared.configureButton')}
             </Button>
           </View>
 
@@ -170,7 +151,7 @@ export function AggregatedSection() {
             compactMode
           />
 
-          {loadingImpactData ? (
+          {loadingImpactData || loadingCoolingUnitData ? (
             <View tw="flex-1 items-center justify-center mt-2">
               <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
             </View>
@@ -189,14 +170,14 @@ export function AggregatedSection() {
 
               <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
                 <Text variant="TextMedium" tw="text-base font-bold">
-                  {t('Dashboard.Analytics.aggregatedTab.dateRangeLabel')}{' '}
+                  {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
                   <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
                     {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
                     {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
                   </Text>
                 </Text>
                 <Text variant="TextMedium" tw="text-base font-bold">
-                  {t('Dashboard.Analytics.aggregatedTab.selectedUnitsLabel')}{' '}
+                  {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
                   <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
                     {configData.coolingUnit.name}
                   </Text>
@@ -210,22 +191,15 @@ export function AggregatedSection() {
       )}
 
       {!activeTab && (
-        <View tw="w-full mt-2">
-          <InnerTabs
-            activeTab={activeTab}
-            onTabSelection={(tab: Tab) => setActiveTab(tab)}
-            disabled={!configData}
-          />
-          <Button
-            mode="contained"
-            onPress={() => null}
-            tw="mt-2"
-            contentStyle="bg-gray-300"
-            labelStyle="text-black text-base"
-          >
-            {t('Dashboard.Analytics.companyTab.methodologyButton')}
-          </Button>
-        </View>
+        <CommonFooter
+          tabs={
+            <InnerTabs
+              activeTab={activeTab}
+              onTabSelection={(tab: Tab) => setActiveTab(tab)}
+              disabled={!configData}
+            />
+          }
+        />
       )}
 
       <ConfigurationModal

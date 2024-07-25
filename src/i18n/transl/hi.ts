@@ -871,6 +871,7 @@ export default {
       totalOperations: '👷🏽‍♂️ कुल संचालन:',
       checkedInLabel: 'चेक इन: {{amount}}',
       checkedOutLabel: 'चेक आउट: {{amount}}',
+      methodologyButton: 'कार्यप्रणाली देखें',
       companyTab: {
         usersTab: {
           employeesTotal: 'कुल पंजीकृत कर्मचारियों की संख्या = {{amount}}',
@@ -908,9 +909,8 @@ export default {
         coolingUnitTypeMarket: '{{amount}} मार्केट कमरे',
         coolingUnitTypeFarmGate: '{{amount}} फार्म-गेट कमरे',
         coolingUnitTypeMovable: '{{amount}} मूवेबल कमरे',
-        methodologyButton: 'कार्यप्रणाली देखें',
       },
-      aggregatedTab: {
+      tabsShared: {
         configurationMessage:
           'कृपया अपनी तिथियों और कूलिंग यूनिट्स को कॉन्फ़िगर करें ताकि आपको पहुँच मिल सके।',
         configureButton: 'कॉन्फ़िगर करें',

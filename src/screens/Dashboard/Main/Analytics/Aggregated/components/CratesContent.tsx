@@ -65,7 +65,7 @@ export function CratesContent() {
 
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
         <Text variant="TextMedium" tw="text-lg">
-          {t('Dashboard.Analytics.aggregatedTab.totalCo2Label')}
+          {t('Dashboard.Analytics.tabsShared.totalCo2Label')}
         </Text>
         <Text variant="TextBold" tw="text-lg font-bold">
           {co2}

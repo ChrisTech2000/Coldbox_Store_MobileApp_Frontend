@@ -867,6 +867,7 @@ const en = {
       totalOperations: '👷🏽‍♂️ Total operations:',
       checkedInLabel: 'Checked In: {{amount}}',
       checkedOutLabel: 'Checked Out: {{amount}}',
+      methodologyButton: 'View Methodology',
       companyTab: {
         usersTab: {
           employeesTotal: 'Total number of registered employees = {{amount}}',
@@ -903,9 +904,8 @@ const en = {
         coolingUnitTypeMarket: '{{amount}} market rooms',
         coolingUnitTypeFarmGate: '{{amount}} farm-gate rooms',
         coolingUnitTypeMovable: '{{amount}} movable rooms',
-        methodologyButton: 'View Methodology',
       },
-      aggregatedTab: {
+      tabsShared: {
         configurationMessage: 'Please configure your dates & cooling units to have access',
         configureButton: 'Configure',
         crates: 'Crates',
