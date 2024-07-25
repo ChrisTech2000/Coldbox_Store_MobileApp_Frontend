@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
@@ -15,6 +15,8 @@ import { CoolingUnit, EImpactMode } from '#types/global';
 
 import { ConfigurationModal } from '../components/ConfigurationModal';
 import { useAnalyticsData } from '../store';
+import { InnerTabs, Tab } from './components/InnerTabs';
+import { useAggregatedData } from './store';
 
 export type ConfigData =
   | {
@@ -28,9 +30,10 @@ export function AggregatedSection() {
   const { t } = useTranslationUtils();
   const { coolingUnits } = useAnalyticsData();
   const { company } = useManagementStore();
+  const { configData, setConfigData, setImpactData } = useAggregatedData();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [configData, setConfigData] = useState<ConfigData>(undefined);
+  const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
 
   const { data: impactData, isLoading: loadingImpactData } = useApiCall(
     'getImpact',
@@ -47,9 +50,15 @@ export function AggregatedSection() {
     }
   );
 
+  useEffect(() => {
+    if (impactData) {
+      setImpactData(impactData);
+    }
+  }, [impactData]);
+
   return (
     <ScrollView tw="mt-8" showsVerticalScrollIndicator={false}>
-      {!configData && (
+      {!configData ? (
         <View tw="bg-gray-200 px-4 py-2 items-center w-full rounded-lg space-y-2">
           <Text variant="TextMedium" tw="text-lg text-center">
             {t('Dashboard.Analytics.aggregatedTab.configurationMessage')}
@@ -63,17 +72,93 @@ export function AggregatedSection() {
             {t('Dashboard.Analytics.aggregatedTab.configureButton')}
           </Button>
         </View>
+      ) : (
+        <View tw="space-y-2">
+          <View tw="w-full flex flex-row justify-between items-center mb-2">
+            <TouchableOpacity
+              tw="flex flex-row items-center space-x-2 justify-start"
+              onPress={() => setActiveTab(undefined)}
+            >
+              <Icon source="arrow-left-circle-outline" size={15} />
+              <Text variant="TextMedium" tw="text-base">
+                {t(`Dashboard.Analytics.companyTab.goBackButton`)}
+              </Text>
+            </TouchableOpacity>
+            <Button
+              mode="contained"
+              contentStyle="bg-gray-800 h-8"
+              icon="cog"
+              onPress={() => setIsModalOpen(true)}
+              labelStyle="h-5"
+            >
+              {t('Dashboard.Analytics.aggregatedTab.configureButton')}
+            </Button>
+          </View>
+
+          <InnerTabs
+            activeTab={activeTab}
+            onTabSelection={(tab: Tab) => setActiveTab(tab)}
+            compactMode
+          />
+
+          {loadingImpactData ? (
+            <View tw="flex-1 items-center justify-center mt-2">
+              <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+            </View>
+          ) : (
+            <View tw="items-center mt-2 space-y-2">
+              <Button
+                mode="contained"
+                uppercase
+                onPress={() => null}
+                icon="check-circle-outline"
+                contentStyle="flex flex-row-reverse"
+                tw="w-[50%] mt-2"
+              >
+                {t('Dashboard.Analytics.downloadDataButton')}
+              </Button>
+
+              {!activeTab && (
+                <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
+                  <Text variant="TextMedium" tw="text-base font-bold">
+                    {t('Dashboard.Analytics.aggregatedTab.dateRangeLabel')}{' '}
+                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                      {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
+                      {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
+                    </Text>
+                  </Text>
+                  <Text variant="TextMedium" tw="text-base font-bold">
+                    {t('Dashboard.Analytics.aggregatedTab.selectedUnitsLabel')}{' '}
+                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                      {configData.coolingUnit.name}
+                    </Text>
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+        </View>
       )}
 
-      {configData && loadingImpactData ? (
-        <View tw="flex-1 items-center justify-center mt-2">
-          <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-        </View>
-      ) : (
-        <View>
-          <Text>{impactData?.co2Metrics?.[0]?.companyId}</Text>
+      {!activeTab && (
+        <View tw="w-full mt-2">
+          <InnerTabs
+            activeTab={activeTab}
+            onTabSelection={(tab: Tab) => setActiveTab(tab)}
+            disabled={!configData}
+          />
+          <Button
+            mode="contained"
+            onPress={() => null}
+            tw="mt-2"
+            contentStyle="bg-gray-300"
+            labelStyle="text-black text-base"
+          >
+            {t('Dashboard.Analytics.companyTab.methodologyButton')}
+          </Button>
         </View>
       )}
+
       <ConfigurationModal
         isOpen={isModalOpen}
         dismiss={() => setIsModalOpen(false)}

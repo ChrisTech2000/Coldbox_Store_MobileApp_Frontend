@@ -854,6 +854,8 @@ const en = {
       aggregated: 'Aggregated',
       comparison: 'Comparison',
       downloadDataButton: 'Download data',
+      users: 'Users',
+      impact: 'Impact',
       companyTab: {
         usersTab: {
           employeesTotal: 'Total number of registered employees = {{amount}}',
@@ -888,9 +890,7 @@ const en = {
           to: 'To',
         },
         downloadFileName: 'analytics-data',
-        users: 'Users',
         utilization: 'Utilization',
-        impact: 'Impact',
         goBackButton: 'Back to main',
         companyNameLabel: 'Company Name',
         revenueLabel: 'Total Revenue',
@@ -908,6 +908,9 @@ const en = {
       aggregatedTab: {
         configurationMessage: 'Please configure your dates & cooling units to have access',
         configureButton: 'Configure',
+        crates: 'Crates',
+        dateRangeLabel: 'Date range:',
+        selectedUnitsLabel: 'Selected cooling units:',
       },
     },
   },

@@ -858,6 +858,8 @@ export default {
       aggregated: 'एकत्रित',
       comparison: 'तुलना',
       downloadDataButton: 'डेटा डाउनलोड करें',
+      users: 'उपयोगकर्ता',
+      impact: 'प्रभाव',
       companyTab: {
         usersTab: {
           employeesTotal: 'कुल पंजीकृत कर्मचारियों की संख्या = {{amount}}',
@@ -893,9 +895,7 @@ export default {
           to: 'तक',
         },
         downloadFileName: 'एनालिटिक्स-डाटा',
-        users: 'उपयोगकर्ता',
         utilization: 'उपयोग',
-        impact: 'प्रभाव',
         goBackButton: 'मुख्य पर लौटें',
         companyNameLabel: 'कंपनी का नाम',
         revenueLabel: 'कुल राजस्व',
@@ -914,6 +914,9 @@ export default {
         configurationMessage:
           'कृपया अपनी तिथियों और कूलिंग यूनिट्स को कॉन्फ़िगर करें ताकि आपको पहुँच मिल सके।',
         configureButton: 'कॉन्फ़िगर करें',
+        crates: 'क्रेट्स',
+        dateRangeLabel: 'तारीख सीमा:',
+        selectedUnitsLabel: 'चयनित शीतलन इकाइयाँ:',
       },
     },
   },
