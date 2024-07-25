@@ -14,25 +14,26 @@ import { Text } from '#ui/components/Text';
 
 import { paperTheme } from '#ui/lib/theme';
 
-import { type MarkerDatum } from '../utils';
+import type { MarkerDatum } from '../utils';
 
 Mapbox.setAccessToken(
   'pk.***REMOVED***.***REMOVED***'
 );
 
+const DEFAULT_STATE = {} as MapState;
 const MIN_ZOOM = 4;
 
-const _MapContext = createContext<MapState>({} as MapState);
+const _MapContext = createContext<MapState>(DEFAULT_STATE);
 
 function _Root(
   props: PropsWithChildren<{
-    coords: [number, number];
+    coordinates: [number, number];
     style?: StyleProp<ViewStyle>;
   }>
 ) {
-  const { style, coords, children } = props;
+  const { style, coordinates, children } = props;
 
-  const [state, setState] = useState<MapState>({} as MapState);
+  const [state, setState] = useState<MapState>(DEFAULT_STATE);
 
   return (
     <MapView
@@ -43,7 +44,7 @@ function _Root(
       onMapIdle={setState}
       zoomEnabled
     >
-      <Camera centerCoordinate={coords} maxZoomLevel={16} minZoomLevel={MIN_ZOOM} />
+      <Camera centerCoordinate={coordinates} maxZoomLevel={16} minZoomLevel={MIN_ZOOM} />
       <UserLocation />
       <_MapContext.Provider value={state}>{children}</_MapContext.Provider>
     </MapView>

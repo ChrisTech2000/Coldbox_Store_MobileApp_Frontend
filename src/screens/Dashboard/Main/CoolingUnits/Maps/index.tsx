@@ -21,7 +21,7 @@ import * as Map from './components/Map';
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 
 function CoolingUnitsMaps() {
-  const [coords, setCoords] = useState<[number, number] | undefined>(undefined);
+  const [coordinates, setCoordinates] = useState<[number, number] | undefined>(undefined);
   const { t } = useTranslationUtils();
 
   const [farmerId, farmerCoolingUnits] = useDashboardStore(
@@ -62,7 +62,7 @@ function CoolingUnitsMaps() {
           enableHighAccuracy: true,
           timeout: ms('6 seconds'),
         });
-        setCoords([result.longitude, result.latitude]);
+        setCoordinates([result.longitude, result.latitude]);
       } catch (exception) {
         console.error(exception);
       }
@@ -78,11 +78,11 @@ function CoolingUnitsMaps() {
     );
   }
 
-  if (typeof coords === 'undefined') return null;
+  if (typeof coordinates === 'undefined') return null;
 
   return (
     <View tw="flex-1">
-      <Map.Root coords={coords} style={styles.map}>
+      <Map.Root coordinates={coordinates} style={styles.map}>
         <Map.Markers markers={markers} />
       </Map.Root>
 
@@ -103,7 +103,7 @@ function CoolingUnitsMaps() {
 const styles = StyleSheet.create({
   map: {
     width: '100%',
-    height: Dimensions.get('screen').height / 1.618,
+    height: Dimensions.get('screen').height / 1.55,
   },
 });
 
