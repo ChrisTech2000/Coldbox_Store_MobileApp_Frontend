@@ -14,6 +14,7 @@ module.exports = {
         // }), // TODO: try to make this work (currently throws an error related to the import)
         green: {
           primary: 'rgb(7, 133, 126)',
+          transparency: 'rgba(7, 133, 126, 0.1)',
         },
       },
     },

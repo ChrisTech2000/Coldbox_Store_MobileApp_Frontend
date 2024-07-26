@@ -205,7 +205,7 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  async getFarmerByUserCode(userCode: string): Promise<Array<Farmer>> {
+  public getFarmerByUserCode = async (userCode: string): Promise<Array<Farmer>> => {
     try {
       const params = { user_code: userCode };
       const { data } = await this.get<Array<Farmer>>(EUserEndpoints.GET_FARMER, { params });
@@ -215,9 +215,9 @@ class ColdtivateService extends HttpClient {
       console.log(JSON.stringify(customError));
       throw customError;
     }
-  }
+  };
 
-  async updateFarmerCompany(params: UpdateFarmerCompany) {
+  public updateFarmerCompany = async (params: UpdateFarmerCompany) => {
     try {
       const url = subs(EUserEndpoints.UPDATE_FARMER, { farmerId: params.farmerId });
       const { data } = await this.put(url, {
@@ -230,11 +230,11 @@ class ColdtivateService extends HttpClient {
       console.log(JSON.stringify(customError));
       throw customError;
     }
-  }
+  };
 
-  async addMarketSurvey(
+  public addMarketSurvey = async (
     params: AddMarketSurveyParams
-  ): Promise<AddMarketSurveyResponse | undefined> {
+  ): Promise<AddMarketSurveyResponse | undefined> => {
     try {
       const { data } = await this.post<AddMarketSurveyResponse>(
         EOperationEndpoints.ADD_MARKET_SURVEY,
@@ -247,7 +247,7 @@ class ColdtivateService extends HttpClient {
       console.log(JSON.stringify(customError));
       throw customError;
     }
-  }
+  };
 
   ///////// CRATE MANAGEMENT
   public getOperatorFarmers = async (

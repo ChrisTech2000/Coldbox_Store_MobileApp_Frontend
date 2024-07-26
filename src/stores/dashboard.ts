@@ -84,7 +84,6 @@ export const useGlobalInformation = (isAuthenticated: boolean) => {
 
   useEffect(() => {
     if (!isAuthenticated || !user?.id || user.role !== ERoles.COOLING_USER) return;
-
     void fetchGlobalInformation({ userId: user?.id });
   }, [isAuthenticated, user]);
 };

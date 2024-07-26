@@ -238,6 +238,138 @@ export interface FarmerSurvey {
   dateLastModified: Date;
 }
 
+export interface CompanyData {
+  compAverageRoomOccupancy: { [key: string]: number };
+  compBeneficiaries: { [key: string]: number };
+  compBeneficiariesFem: { [key: string]: number };
+  compBeneficiariesMa: { [key: string]: number };
+  compCapNumCrates: { [key: string]: number };
+  compCapTons: { [key: string]: number };
+  compCoolUsers: { [key: string]: number };
+  compCoolUsersFem: { [key: string]: number };
+  compCoolUsersMa: { [key: string]: number };
+  compCoolUsersOt: { [key: string]: number };
+  compCountry: { [key: string]: string };
+  compCratesIn: { [key: string]: number };
+  compCratesOut: { [key: string]: number };
+  compFarmers: { [key: string]: number };
+  compKgIn: { [key: string]: number };
+  compKgOut: { [key: string]: number };
+  compLogo: { [key: string]: string };
+  compName: { [key: string]: string };
+  compOp: { [key: string]: number };
+  compOpFem: { [key: string]: number };
+  compOpMa: { [key: string]: number };
+  compOpOt: { [key: string]: number };
+  compOpsIn: { [key: string]: number };
+  compOpsOut: { [key: string]: number };
+  compRegUsers: { [key: string]: number };
+  compRegUsersFem: { [key: string]: number };
+  compRegUsersMa: { [key: string]: number };
+  compRegUsersOt: { [key: string]: number };
+  compRevenue: { [key: string]: number };
+  compRevenueUsd: { [key: string]: number };
+  compTraders: { [key: string]: number };
+  compUnspecUserType: { [key: string]: number };
+  companyId: { [key: string]: number };
+  coolingUnitTypes: {
+    [key: string]: {
+      farmGateStorageRoom: number;
+      // TODO: this might need completion
+    };
+  };
+  currency: { [key: string]: string };
+  reportDate: { [key: string]: string };
+}
+
+type Co2Crops = {
+  co2From: number;
+  co2To: number;
+};
+
+type Co2Metrics = {
+  companyId: string;
+  co2Crops: Co2Crops;
+  coolingUnitId: string;
+};
+
+export type ImpactMetric = {
+  name: string;
+  value: number | string;
+};
+
+type ImpactMetrics = {
+  companyId: ImpactMetric | number;
+  unitName: ImpactMetric | number;
+  baselineQuantityTotalMonth: ImpactMetric | number;
+  avgBaselineKgSellingPriceMonth: ImpactMetric | number;
+  baselineKgLossMonth: ImpactMetric | number;
+  baselineKgSoldMonth: ImpactMetric | number;
+  avgBaselinePercLossMonth: ImpactMetric | number;
+  avgBaselineFarmerRevenueMonth: ImpactMetric | number;
+  avgMonthlyKgSellingPrice: ImpactMetric | number;
+  monthlyKgCheckin: ImpactMetric | number;
+  monthlyKgLoss: ImpactMetric | number;
+  avgMonthlyPercLoss: ImpactMetric | number;
+  avgMonthlyPercFoodlossEvolution: ImpactMetric | number;
+  avgMonthlyFarmerRevenue: ImpactMetric | number;
+  avgMonthlyPercRevenueIncreaseEvolution: ImpactMetric | number;
+  avgMonthlyPercRevenueIncreaseEvolution2: ImpactMetric | number;
+  avgMonthlyKgSellingPriceEvolution: ImpactMetric | number;
+  avgMonthlyPercUnitSellingPriceEvolution: ImpactMetric | number;
+  avgMonthlyFarmerRevenueEvolution: ImpactMetric | number;
+  latestSurveyDate: ImpactMetric | number;
+  numPostHarvestSurveys: ImpactMetric | number;
+  possiblePostCheckoutSurveyRoom: ImpactMetric | number;
+  totalPostCheckoutSurveyUnit: ImpactMetric | number;
+};
+
+export type ImpactData = {
+  impactMetrics: ImpactMetrics;
+  co2Metrics: Co2Metrics[];
+};
+
+export type CoolingUnitImpact = {
+  averageRoomOccupancy: number;
+  capNumCrates: number;
+  capTons: number;
+  checkInCratesCrop: number;
+  checkInKgCrop: number;
+  checkOutCratesCrop: number;
+  checkOutKgCrop: number;
+  co2Crops: number;
+  compName: number;
+  compPricing: number;
+  companyId: number;
+  coolUnitType: number;
+  coolingUnitId: number;
+  currency: number;
+  isUnitDeleted: number;
+  roomActiveFem: number;
+  roomActiveMa: number;
+  roomActiveOt: number;
+  roomActiveUserIds: number;
+  roomActiveUsers: number;
+  roomBeneficiaries: number;
+  roomBeneficiariesFem: number;
+  roomBeneficiariesMa: number;
+  roomCratesIn: number;
+  roomCratesOut: number;
+  roomKgIn: number;
+  roomKgOut: number;
+  roomOp: number;
+  roomOpFem: number;
+  roomOpMa: number;
+  roomOpOt: number;
+  roomOpsIn: number;
+  roomOpsOut: number;
+  roomRevenue: number;
+  roomRevenueUsd: number;
+  state: number;
+  totCo2: number;
+  unitName: number;
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',
@@ -347,6 +479,11 @@ export enum ESellingLocation {
   FARM = 'farm-gate',
   MARKET = 'local-market',
   BOTH = 'Both',
+}
+
+export enum EImpactMode {
+  COMPANY = 'company',
+  COOLING_UNIT = 'cooling_unit',
 }
 
 //////////////////////// MAPPERS
