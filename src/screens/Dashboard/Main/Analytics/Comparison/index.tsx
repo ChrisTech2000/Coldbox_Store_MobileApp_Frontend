@@ -90,8 +90,8 @@ export function ComparisonSection() {
       {!configData ? (
         <Configuration openModal={() => setIsModalOpen(true)} />
       ) : (
-        <View tw="space-y-2">
-          <View tw="w-full flex flex-row justify-between items-center mb-2">
+        <View tw="space-y-4">
+          <View tw="w-full flex flex-row justify-between items-center mb-4">
             <TouchableOpacity
               tw="flex flex-row items-center space-x-2 justify-start"
               onPress={onBackToMain}
@@ -134,7 +134,7 @@ export function ComparisonSection() {
               <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
             </View>
           ) : (
-            <View tw="items-center mt-2 space-y-2">
+            <View tw="items-center">
               <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
                 <Text variant="TextMedium" tw="text-base font-bold">
                   {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
