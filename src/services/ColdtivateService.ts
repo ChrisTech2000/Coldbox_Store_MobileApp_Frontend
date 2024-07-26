@@ -886,6 +886,40 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  public getPublicAndVisitedLocations = async (farmerId: number) => {
+    try {
+      const { data } = await this.get<Array<GetLocationResponse>>(
+        EStorageEndpoints.GET_MANAGEMENT_LOCATIONS,
+        {
+          params: { farmerId },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getPublicAndVisitedCoolingUnits = async (farmerId: number) => {
+    try {
+      const { data } = await this.get<Array<GetCoolingUnitResponse>>(
+        EStorageEndpoints.GET_COOLING_UNITS,
+        {
+          params: { farmerId },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   ///////// ANALYSIS
   public getUsageAnalysis = async (
     coolingUnits: number | number[]

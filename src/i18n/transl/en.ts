@@ -55,6 +55,7 @@ const en = {
       Analytics: 'Analytics',
       CheckIn: 'Check In',
       CheckOut: 'Check Out',
+      Maps: 'Maps',
     },
     dashboard: {
       AccountDetails: 'Account details',
@@ -417,6 +418,7 @@ const en = {
       },
       occupancy: 'Current occupancy of the cooling unit',
       week: 'This week',
+      today: 'Today',
     },
     CoolingUnitsRoomConditions: {
       heading: 'Temperature history',
@@ -434,6 +436,12 @@ const en = {
         empty:
           'Cooling units occupancy and temperature will appear here when you do at least one check-in in any room.',
       },
+    },
+    CoolingUnitsMaps: {
+      singleCommodity: 'Single commodity room: {{crop}}',
+      multiCommodity: 'Multicommodity room',
+      publicMaker: 'Public cooling unit',
+      usedMarker: 'Cooling unit you already used',
     },
     Company: {
       SelectCompany: {

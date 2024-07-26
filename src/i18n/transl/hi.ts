@@ -57,6 +57,7 @@ export default {
       Analytics: 'वैश्लेषिकी',
       CheckIn: 'चेक इन',
       CheckOut: 'चेक आउट',
+      Maps: 'नक्शा',
     },
     dashboard: {
       AccountDetails: 'अकाउंट डिटेल्स',
@@ -419,6 +420,7 @@ export default {
       },
       occupancy: 'शीतलन इकाई का वर्तमान अधिभोग',
       week: 'इस सप्ताह',
+      today: 'आज',
     },
     CoolingUnitsRoomConditions: {
       heading: 'पिछले तापमान को ट्रैक करें',
@@ -436,6 +438,12 @@ export default {
         empty:
           'जब आप किसी भी कक्ष में कम से कम एक बार चेक-इन करेंगे तो शीतल भंडार का अधिभोग और तापमान यहां दिखाई देगा।',
       },
+    },
+    CoolingUnitsMaps: {
+      singleCommodity: 'सिंगल कमोडिटी रूम:  {{crop}}',
+      multiCommodity: 'मल्टी कमोडिटी रूम',
+      publicMaker: 'सार्वजनिक शीतलन इकाई',
+      usedMarker: 'आपके द्वारा पहले से उपयोग की जा रही कूलिंग यूनिट',
     },
     Company: {
       SelectCompany: {

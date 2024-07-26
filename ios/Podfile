@@ -23,6 +23,10 @@ target 'coldtivate' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pre_install do |installer|
+    $RNMapboxMaps.pre_install(installer)
+  end
+
   target 'coldtivateTests' do
     inherit! :complete
     # Pods for testing
@@ -36,5 +40,6 @@ target 'coldtivate' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    $RNMapboxMaps.post_install(installer)
   end
 end

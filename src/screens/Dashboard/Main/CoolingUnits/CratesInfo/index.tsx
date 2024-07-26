@@ -13,10 +13,10 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { ERoles } from '#types/global';
+import { type CoolingUnit, ERoles } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 
-import { type CoolingUnitFilter, useCoolingUnitStore } from '../Planner';
+import { useCoolingUnitStore } from '../components/GenericFilter';
 
 function CoolingUnitsCratesInfo() {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -44,15 +44,6 @@ function CoolingUnitsCratesInfo() {
     }
   );
 
-  const coolingUnits: Array<CoolingUnitFilter> = useMemo(
-    () =>
-      data?.map((unit) => ({
-        id: unit.id,
-        name: unit.name,
-      })) ?? [],
-    [data]
-  );
-
   const [commodityInfos, totalCrates] = useMemo(() => {
     if (!selectedCoolingUnit) return [[], 0];
 
@@ -77,8 +68,8 @@ function CoolingUnitsCratesInfo() {
         <RefreshControl refreshing={isValidating} onRefresh={async () => await refetch()} />
       }
     >
-      <SelectWithStore<CoolingUnitFilter>
-        datums={coolingUnits}
+      <SelectWithStore<CoolingUnit>
+        datums={data ?? []}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         itemName={(item) => item?.name}
