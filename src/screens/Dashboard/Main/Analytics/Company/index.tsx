@@ -17,6 +17,7 @@ import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
 import { EImpactMode } from '#types/global';
 
+import { CommonFooter } from '../components/Footer';
 import { ImpactContent } from '../components/ImpactContent';
 import { useAnalyticsData } from '../store';
 import { generatePDFContent } from '../utils/downloadData';
@@ -156,16 +157,11 @@ export function CompanySection() {
             ) : (
               <GeneralContent />
             )}
-            <InnerTabs activeTab={activeTab} onTabSelection={(tab: Tab) => setActiveTab(tab)} />
-            <Button
-              mode="contained"
-              onPress={() => null}
-              tw="mt-2"
-              contentStyle="bg-gray-300"
-              labelStyle="text-black text-base"
-            >
-              {t('Dashboard.Analytics.companyTab.methodologyButton')}
-            </Button>
+            <CommonFooter
+              tabs={
+                <InnerTabs activeTab={activeTab} onTabSelection={(tab: Tab) => setActiveTab(tab)} />
+              }
+            />
           </View>
         ) : (
           TABS[activeTab]

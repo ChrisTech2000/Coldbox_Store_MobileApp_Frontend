@@ -16,7 +16,7 @@ type Actions = {
   setCoolingUnitData: (coolingUnitData: State['coolingUnitData']) => void;
 };
 
-export const useAggregatedData = create<State & Actions>((set) => ({
+export const useComparisonData = create<State & Actions>((set) => ({
   configData: null,
   impactData: null,
   coolingUnitData: null,

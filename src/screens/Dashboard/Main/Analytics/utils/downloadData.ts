@@ -346,7 +346,7 @@ function generateUtilizationHtmlContent(t: Translator, companyData: CompanyData 
 
       <div class="section section2">
         <div class="section-title">
-          ${t('Dashboard.Analytics.totalCratesLabel')}
+          ${t('Dashboard.Analytics.totalCratesLabel')}:
         </div>
         <div class="section-content">
           ${generateUtilizationSectionContent(
@@ -362,7 +362,7 @@ function generateUtilizationHtmlContent(t: Translator, companyData: CompanyData 
 
       <div class="section section2">
         <div class="section-title">
-          ${t('Dashboard.Analytics.totalQuantityLabel')}
+          ${t('Dashboard.Analytics.totalQuantityLabel')}:
         </div>
         <div class="section-content">
           ${generateUtilizationSectionContent(
@@ -378,7 +378,7 @@ function generateUtilizationHtmlContent(t: Translator, companyData: CompanyData 
 
       <div class="section section2">
         <div class="section-title">
-          ${t('Dashboard.Analytics.totalOperations')}
+          ${t('Dashboard.Analytics.totalOperations')}:
         </div>
         <div class="section-content">
           ${generateUtilizationSectionContent(
@@ -499,7 +499,7 @@ function generateCratesHtmlContent(
     <div class="scroll-view">
       <div class="section section2">
         <div class="section-title">
-          ${t('Dashboard.Analytics.totalCratesLabel')}
+          ${t('Dashboard.Analytics.totalCratesLabel')}:
         </div>
         <div class="section-content">
           ${generateUtilizationSectionContent(
@@ -515,7 +515,7 @@ function generateCratesHtmlContent(
 
       <div class="section section2">
         <div class="section-title">
-          ${t('Dashboard.Analytics.totalQuantityLabel')}
+          ${t('Dashboard.Analytics.totalQuantityLabel')}:
         </div>
         <div class="section-content">
           ${generateUtilizationSectionContent(
@@ -531,7 +531,7 @@ function generateCratesHtmlContent(
 
       <div class="section section2">
         <div class="section-title">
-          ${t('Dashboard.Analytics.totalOperations')}
+          ${t('Dashboard.Analytics.totalOperations')}:
         </div>
         <div class="section-content">
           ${generateUtilizationSectionContent(
@@ -547,7 +547,7 @@ function generateCratesHtmlContent(
 
       <div class="section section2">
        <div class="section-title">
-          ${t('Dashboard.Analytics.aggregatedTab.totalCo2Label')}
+          ${t('Dashboard.Analytics.tabsShared.totalCo2Label')}
         </div>
         <div class="section-content">
           <div class="section-text">

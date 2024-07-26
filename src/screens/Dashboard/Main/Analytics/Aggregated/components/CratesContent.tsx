@@ -46,26 +46,26 @@ export function CratesContent() {
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
       <Section
-        title={t('Dashboard.Analytics.totalCratesLabel')}
+        title={`${t('Dashboard.Analytics.totalCratesLabel')}:`}
         checkedIn={crates.checkedIn}
         checkedOut={crates.checkedOut}
       />
 
       <Section
-        title={t('Dashboard.Analytics.totalQuantityLabel')}
+        title={`${t('Dashboard.Analytics.totalQuantityLabel')}:`}
         checkedIn={quantity.checkedIn}
         checkedOut={quantity.checkedOut}
       />
 
       <Section
-        title={t('Dashboard.Analytics.totalOperations')}
+        title={`${t('Dashboard.Analytics.totalOperations')}:`}
         checkedIn={operations.checkedIn}
         checkedOut={operations.checkedOut}
       />
 
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
         <Text variant="TextMedium" tw="text-lg">
-          {t('Dashboard.Analytics.aggregatedTab.totalCo2Label')}
+          {t('Dashboard.Analytics.tabsShared.totalCo2Label')}
         </Text>
         <Text variant="TextBold" tw="text-lg font-bold">
           {co2}

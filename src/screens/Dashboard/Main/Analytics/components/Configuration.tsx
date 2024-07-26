@@ -13,7 +13,12 @@ import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { CoolingUnit } from '#types/global';
-import { ConfigData } from '../Aggregated';
+
+export type ConfigData = {
+  startDate: Date;
+  endDate: Date;
+  coolingUnit: CoolingUnit;
+} | null;
 
 type ConfigurationModalProps = {
   coolingUnits: Array<CoolingUnit> | null;
@@ -99,5 +104,20 @@ export function ConfigurationModal({
         </View>
       </Modal>
     </Portal>
+  );
+}
+
+export function Configuration({ openModal }: { openModal: () => void }) {
+  const { t } = useTranslationUtils();
+
+  return (
+    <View tw="bg-gray-200 px-4 py-2 items-center w-full rounded-lg space-y-2">
+      <Text variant="TextMedium" tw="text-lg text-center">
+        {t('Dashboard.Analytics.tabsShared.configurationMessage')}
+      </Text>
+      <Button mode="contained" contentStyle="bg-gray-800" icon="cog" onPress={openModal}>
+        {t('Dashboard.Analytics.tabsShared.configureButton')}
+      </Button>
+    </View>
   );
 }
