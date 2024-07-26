@@ -1,11 +1,12 @@
 import React, { memo } from 'react';
 import { View } from 'react-native';
 import Svg, { G, Circle, type CircleProps } from 'react-native-svg';
+import { isToday } from 'date-fns/isToday';
 
 import { Text } from '#ui/components/Text';
 
 import { paperTheme } from '#ui/lib/theme';
-import { dateFmt } from '#i18n/utils';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
 export type SemiCircleChartProps = {
   currentAmount: number;
@@ -17,6 +18,8 @@ const RADIUS = 65;
 
 function SemiCircleChart(props: SemiCircleChartProps) {
   const { currentAmount, maxCapacity, currentDate } = props;
+
+  const { t } = useTranslationUtils();
 
   const circleCircumference = 2 * Math.PI * RADIUS;
   const semiCircleCircumference = circleCircumference / 2;
@@ -51,7 +54,11 @@ function SemiCircleChart(props: SemiCircleChartProps) {
       </Svg>
       <View tw="absolute bottom-0 items-center space-y-2">
         <Text variant="HeadingRegular">{percentage.toFixed(2)}%</Text>
-        <Text variant="TitleRegular">{dateFmt(currentDate, 'eeee')}</Text>
+        <Text variant="TitleRegular">
+          {!isToday(currentDate)
+            ? dateFmt(currentDate, 'eeee')
+            : t('Dashboard.CoolingUnitsPlanner.today')}
+        </Text>
       </View>
     </View>
   );

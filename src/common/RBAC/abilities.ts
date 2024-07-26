@@ -46,6 +46,11 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.SET, 'FormEmailField');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
+        // scope: cooling units
+        can(PERMISSION_KINDS.SET, 'Temperatures');
+        can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'Maps');
+        cannot(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
         break;
       }
 
@@ -70,6 +75,11 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         cannot(PERMISSION_KINDS.SET, 'FormEmailField');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
+        // scope: cooling units
+        can(PERMISSION_KINDS.SET, 'Temperatures');
+        can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'Maps');
+        cannot(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
         break;
       }
 
@@ -84,6 +94,11 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         cannot(PERMISSION_KINDS.SET, 'FormEmailField');
         can(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
         can(PERMISSION_KINDS.STORE, 'FarmerDetails');
+        // scope: cooling units
+        cannot(PERMISSION_KINDS.SET, 'Temperatures');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
+        can(PERMISSION_KINDS.NAVIGATE, 'Maps');
+        can(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
         break;
       }
 

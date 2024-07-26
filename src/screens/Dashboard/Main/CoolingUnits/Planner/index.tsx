@@ -1,65 +1,34 @@
 import React, { useMemo, useState } from 'react';
-import { RefreshControl, View } from 'react-native';
-import { ActivityIndicator, Text } from 'react-native-paper';
+import { RefreshControl } from 'react-native';
+import { Text } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
-import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
-import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { useAuthStore } from '#stores/auth';
-import { useManagementStore } from '#stores/management';
-import { ERoles } from '#types/global';
+import RBAC from '#common/RBAC';
 
 import SemiCircleChart from './components/SemiCircleChart';
 import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
+import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
+
 import { weekSubsetArtisan } from './utils';
 
 const MAX_CAPACITY = 100;
 
-export type CoolingUnitFilter = { id: number; name: string };
-export const useCoolingUnitStore = createSelectStore<CoolingUnitFilter>();
-
 export default function CoolingUnitsPlanner() {
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedColumn, setSelectedColumn] = useState<number>(0);
 
-  const user = useAuthStore(useShallow((store) => store.user));
-  const company = useManagementStore(useShallow((store) => store.company));
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
   const { t } = useTranslationUtils();
 
   const {
-    data,
-    isLoading,
+    data: coolingUnitCapacity,
     isValidating,
-    refetch: revalidateUnits,
+    refetch: revalidateCapacity,
   } = useApiCall(
-    'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
-    {
-      ...(user?.role === ERoles.OPERATOR
-        ? { operator: user?.id as number }
-        : { company: company?.id as number }),
-    },
-    {
-      skip:
-        !user || user.role === ERoles.OPERATOR
-          ? typeof company?.id === 'undefined'
-          : typeof user.id === 'undefined',
-      defaultData: [],
-    }
-  );
-
-  const coolingUnits: Array<CoolingUnitFilter> = useMemo(
-    () => data?.map((unit) => ({ id: unit.id, name: unit.name })) ?? [],
-    [data]
-  );
-
-  const { data: coolingUnitCapacity, refetch: revalidateCapacity } = useApiCall(
     'getCoolingUnitCapacity',
     ColdtivateService.getCoolingUnitCapacity,
     selectedCoolingUnit?.id as number,
@@ -79,14 +48,6 @@ export default function CoolingUnitsPlanner() {
     return datums;
   }, [coolingUnitCapacity]);
 
-  if (isLoading) {
-    return (
-      <View tw="flex-1 items-center justify-center">
-        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-      </View>
-    );
-  }
-
   return (
     <ScrollView
       contentContainerStyle="mt-5 items-center pb-10"
@@ -94,29 +55,20 @@ export default function CoolingUnitsPlanner() {
       refreshControl={
         <RefreshControl
           refreshing={isValidating}
-          onRefresh={async () =>
-            await Promise.all([
-              revalidateUnits(),
-              ...(typeof selectedCoolingUnit?.id !== 'undefined' ? [revalidateCapacity()] : []),
-            ])
-          }
+          onRefresh={async () => {
+            if (typeof selectedCoolingUnit?.id !== 'undefined') {
+              await revalidateCapacity();
+            }
+          }}
         />
       }
     >
-      <View tw="w-full">
-        <SelectWithStore<CoolingUnitFilter>
-          datums={coolingUnits}
-          isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}
-          itemName={(item) => item?.name}
-          useSelectStore={useCoolingUnitStore}
-          label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-            name: selectedCoolingUnit?.name ?? '',
-          })}
-          modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-          divider
-        />
-      </View>
+      <GenericFilter>
+        <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
+          <GenericFilter.Companies />
+        </RBAC.ProtectedResource>
+        <GenericFilter.CoolingUnits />
+      </GenericFilter>
 
       <Text tw="self-start mt-5 mb-4 ml-4" variant="titleLarge">
         {t('Dashboard.CoolingUnitsPlanner.occupancy')}
