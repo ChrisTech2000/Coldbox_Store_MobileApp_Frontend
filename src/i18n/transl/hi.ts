@@ -391,6 +391,7 @@ export default {
           numberOfCratesLabel: 'क्रेटों की संख्या',
           crateWeightLabel: 'क्रेट का सामान्य वजन',
           pricePerDayLabel: 'प्रति दिन / क्रेट की कीमत',
+          fixedPriceLabel: 'नियत मूल्य',
           totalPriceLabel: 'कुल मूल्य',
           plannedDaysLabel: 'भंडार में रखने की योजना की गई दिनों की संख्या',
           harvestDateLabel: 'फसल कब काटी गई थी?',

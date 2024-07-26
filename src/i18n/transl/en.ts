@@ -389,6 +389,7 @@ const en = {
           numberOfCratesLabel: 'Number of crates',
           crateWeightLabel: 'General weight of crate',
           pricePerDayLabel: 'Price per day / crate',
+          fixedPriceLabel: 'Fixed price',
           totalPriceLabel: 'Total price',
           plannedDaysLabel: 'Planned number of days in storage',
           harvestDateLabel: 'When was the crop harvested?',
