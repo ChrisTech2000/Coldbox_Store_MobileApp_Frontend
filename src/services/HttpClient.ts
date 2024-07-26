@@ -22,7 +22,7 @@ type RequestBody = JsonObject | JsonArray | FormData;
 
 export type HttpClientOptions = Pick<
   Options,
-  'onSessionRenewal' | 'onUnauthorized' | 'onForbidden'
+  'onSessionRenewal' | 'onUnauthorized' | 'onForbidden' | 'baseURL'
 >;
 
 export default class HttpClient {
@@ -31,8 +31,8 @@ export default class HttpClient {
 
   constructor(options?: HttpClientOptions) {
     this.updateOptions({
-      ...options,
       baseURL: API_BASE_URL,
+      ...options,
       getAuthTokens: () => {
         const storedTokens = useAuthStore.getState().tokens;
         if (storedTokens) return storedTokens;

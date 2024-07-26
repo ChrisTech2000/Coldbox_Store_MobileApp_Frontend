@@ -238,6 +238,92 @@ export interface FarmerSurvey {
   dateLastModified: Date;
 }
 
+export interface CompanyData {
+  compAverageRoomOccupancy: { [key: string]: number };
+  compBeneficiaries: { [key: string]: number };
+  compBeneficiariesFem: { [key: string]: number };
+  compBeneficiariesMa: { [key: string]: number };
+  compCapNumCrates: { [key: string]: number };
+  compCapTons: { [key: string]: number };
+  compCoolUsers: { [key: string]: number };
+  compCoolUsersFem: { [key: string]: number };
+  compCoolUsersMa: { [key: string]: number };
+  compCoolUsersOt: { [key: string]: number };
+  compCountry: { [key: string]: string };
+  compCratesIn: { [key: string]: number };
+  compCratesOut: { [key: string]: number };
+  compFarmers: { [key: string]: number };
+  compKgIn: { [key: string]: number };
+  compKgOut: { [key: string]: number };
+  compLogo: { [key: string]: string };
+  compName: { [key: string]: string };
+  compOp: { [key: string]: number };
+  compOpFem: { [key: string]: number };
+  compOpMa: { [key: string]: number };
+  compOpOt: { [key: string]: number };
+  compOpsIn: { [key: string]: number };
+  compOpsOut: { [key: string]: number };
+  compRegUsers: { [key: string]: number };
+  compRegUsersFem: { [key: string]: number };
+  compRegUsersMa: { [key: string]: number };
+  compRegUsersOt: { [key: string]: number };
+  compRevenue: { [key: string]: number };
+  compRevenueUsd: { [key: string]: number };
+  compTraders: { [key: string]: number };
+  compUnspecUserType: { [key: string]: number };
+  companyId: { [key: string]: number };
+  coolingUnitTypes: {
+    [key: string]: {
+      farmGateStorageRoom: number;
+      // TODO: this might need completion
+    };
+  };
+  currency: { [key: string]: string };
+  reportDate: { [key: string]: string };
+}
+
+type Co2Crops = {
+  co2From: number;
+  co2To: number;
+};
+
+type Co2Metrics = {
+  companyId: string;
+  co2Crops: Co2Crops;
+  coolingUnitId: string;
+};
+
+type ImpactMetrics = {
+  companyId: number;
+  unitName: number;
+  baselineQuantityTotalMonth: number;
+  avgBaselineKgSellingPriceMonth: number;
+  baselineKgLossMonth: number;
+  baselineKgSoldMonth: number;
+  avgBaselinePercLossMonth: number;
+  avgBaselineFarmerRevenueMonth: number;
+  avgMonthlyKgSellingPrice: number;
+  monthlyKgCheckin: number;
+  monthlyKgLoss: number;
+  avgMonthlyPercLoss: number;
+  avgMonthlyPercFoodlossEvolution: number;
+  avgMonthlyFarmerRevenue: number;
+  avgMonthlyPercRevenueIncreaseEvolution: number;
+  avgMonthlyPercRevenueIncreaseEvolution2: number;
+  avgMonthlyKgSellingPriceEvolution: number;
+  avgMonthlyPercUnitSellingPriceEvolution: number;
+  avgMonthlyFarmerRevenueEvolution: number;
+  latestSurveyDate: number;
+  numPostHarvestSurveys: number;
+  possiblePostCheckoutSurveyRoom: number;
+  totalPostCheckoutSurveyUnit: number;
+};
+
+export type ImpactData = {
+  impactMetrics: ImpactMetrics;
+  co2Metrics: Co2Metrics[];
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',
