@@ -1,5 +1,6 @@
 import { JsonObject } from '#services/utils';
 import {
+  EImpactMode,
   EPaymentType,
   ERoles,
   ESellingLocation,
@@ -366,6 +367,13 @@ export interface GetRevenueAnalysisParams extends JsonObject {
 export interface GetImpactParams extends JsonObject {
   companyId: number;
   coolingUnitId: number | number[];
+  startDate?: Date;
+  endDate?: Date;
+  mode: EImpactMode;
+}
+
+export interface GetCoolingUnitImpactParams extends JsonObject {
+  unitIds: number | number[];
   startDate?: Date;
   endDate?: Date;
 }

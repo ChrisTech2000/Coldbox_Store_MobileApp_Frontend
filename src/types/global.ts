@@ -293,35 +293,81 @@ type Co2Metrics = {
   coolingUnitId: string;
 };
 
+export type ImpactMetric = {
+  name: string;
+  value: number | string;
+};
+
 type ImpactMetrics = {
-  companyId: number;
-  unitName: number;
-  baselineQuantityTotalMonth: number;
-  avgBaselineKgSellingPriceMonth: number;
-  baselineKgLossMonth: number;
-  baselineKgSoldMonth: number;
-  avgBaselinePercLossMonth: number;
-  avgBaselineFarmerRevenueMonth: number;
-  avgMonthlyKgSellingPrice: number;
-  monthlyKgCheckin: number;
-  monthlyKgLoss: number;
-  avgMonthlyPercLoss: number;
-  avgMonthlyPercFoodlossEvolution: number;
-  avgMonthlyFarmerRevenue: number;
-  avgMonthlyPercRevenueIncreaseEvolution: number;
-  avgMonthlyPercRevenueIncreaseEvolution2: number;
-  avgMonthlyKgSellingPriceEvolution: number;
-  avgMonthlyPercUnitSellingPriceEvolution: number;
-  avgMonthlyFarmerRevenueEvolution: number;
-  latestSurveyDate: number;
-  numPostHarvestSurveys: number;
-  possiblePostCheckoutSurveyRoom: number;
-  totalPostCheckoutSurveyUnit: number;
+  companyId: ImpactMetric | number;
+  unitName: ImpactMetric | number;
+  baselineQuantityTotalMonth: ImpactMetric | number;
+  avgBaselineKgSellingPriceMonth: ImpactMetric | number;
+  baselineKgLossMonth: ImpactMetric | number;
+  baselineKgSoldMonth: ImpactMetric | number;
+  avgBaselinePercLossMonth: ImpactMetric | number;
+  avgBaselineFarmerRevenueMonth: ImpactMetric | number;
+  avgMonthlyKgSellingPrice: ImpactMetric | number;
+  monthlyKgCheckin: ImpactMetric | number;
+  monthlyKgLoss: ImpactMetric | number;
+  avgMonthlyPercLoss: ImpactMetric | number;
+  avgMonthlyPercFoodlossEvolution: ImpactMetric | number;
+  avgMonthlyFarmerRevenue: ImpactMetric | number;
+  avgMonthlyPercRevenueIncreaseEvolution: ImpactMetric | number;
+  avgMonthlyPercRevenueIncreaseEvolution2: ImpactMetric | number;
+  avgMonthlyKgSellingPriceEvolution: ImpactMetric | number;
+  avgMonthlyPercUnitSellingPriceEvolution: ImpactMetric | number;
+  avgMonthlyFarmerRevenueEvolution: ImpactMetric | number;
+  latestSurveyDate: ImpactMetric | number;
+  numPostHarvestSurveys: ImpactMetric | number;
+  possiblePostCheckoutSurveyRoom: ImpactMetric | number;
+  totalPostCheckoutSurveyUnit: ImpactMetric | number;
 };
 
 export type ImpactData = {
   impactMetrics: ImpactMetrics;
   co2Metrics: Co2Metrics[];
+};
+
+export type CoolingUnitImpact = {
+  averageRoomOccupancy: number;
+  capNumCrates: number;
+  capTons: number;
+  checkInCratesCrop: number;
+  checkInKgCrop: number;
+  checkOutCratesCrop: number;
+  checkOutKgCrop: number;
+  co2Crops: number;
+  compName: number;
+  compPricing: number;
+  companyId: number;
+  coolUnitType: number;
+  coolingUnitId: number;
+  currency: number;
+  isUnitDeleted: number;
+  roomActiveFem: number;
+  roomActiveMa: number;
+  roomActiveOt: number;
+  roomActiveUserIds: number;
+  roomActiveUsers: number;
+  roomBeneficiaries: number;
+  roomBeneficiariesFem: number;
+  roomBeneficiariesMa: number;
+  roomCratesIn: number;
+  roomCratesOut: number;
+  roomKgIn: number;
+  roomKgOut: number;
+  roomOp: number;
+  roomOpFem: number;
+  roomOpMa: number;
+  roomOpOt: number;
+  roomOpsIn: number;
+  roomOpsOut: number;
+  roomRevenue: number;
+  roomRevenueUsd: number;
+  state: number;
+  totCo2: number;
+  unitName: number;
 };
 
 //////////////////////// ENUMS
@@ -433,6 +479,11 @@ export enum ESellingLocation {
   FARM = 'farm-gate',
   MARKET = 'local-market',
   BOTH = 'Both',
+}
+
+export enum EImpactMode {
+  COMPANY = 'company',
+  COOLING_UNIT = 'cooling_unit',
 }
 
 //////////////////////// MAPPERS

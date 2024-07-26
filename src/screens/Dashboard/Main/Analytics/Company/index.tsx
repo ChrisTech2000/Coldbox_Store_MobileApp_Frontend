@@ -15,28 +15,31 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
+import { EImpactMode } from '#types/global';
 
+import { ImpactContent } from '../components/ImpactContent';
+import { useAnalyticsData } from '../store';
+import { generatePDFContent } from '../utils/downloadData';
 import { GeneralContent } from './components/GeneralContent';
-import { ImpactContent } from './components/ImpactContent';
 import { InnerTabs } from './components/InnerTabs';
 import { UsersContent } from './components/UsersContent';
 import { UtilizationContent } from './components/UtilizationContent';
 import { useCompanyData } from './store';
-import { generatePDFContent } from './utils';
 
 export type Tab = 'users' | 'utilization' | 'impact';
 
 const TABS = {
   users: <UsersContent key="users-content-section" />,
   utilization: <UtilizationContent key="utilization-content-section" />,
-  impact: <ImpactContent key="impact-content-section" />,
+  impact: <ImpactContent useStore={useCompanyData} key="impact-content-section" />,
 };
 
 export function CompanySection() {
   const { t } = useTranslationUtils();
   const toast = useToast();
   const { company } = useManagementStore();
-  const { setCompanyData, setImpactData, setCoolingUnits } = useCompanyData();
+  const { setCompanyData, setImpactData } = useCompanyData();
+  const { setCoolingUnits } = useAnalyticsData();
 
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
 
@@ -65,6 +68,7 @@ export function CompanySection() {
     {
       companyId: company?.id as number,
       coolingUnitId: coolingUnits?.map((unit) => unit.id) as number[],
+      mode: EImpactMode.COMPANY,
     },
     {
       skip: !company?.id || !coolingUnits?.length,
@@ -72,11 +76,11 @@ export function CompanySection() {
   );
 
   const onDownloadData = useCallback(async () => {
-    const html = generatePDFContent(t, coolingUnits, company, impactCompany, impactData);
+    const html = generatePDFContent(t, coolingUnits, company, impactCompany, impactData, 'company');
 
     const PDFOptions = {
       html,
-      fileName: t('Dashboard.Analytics.companyTab.downloadFileName'),
+      fileName: `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.company')}`,
       directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
     };
 

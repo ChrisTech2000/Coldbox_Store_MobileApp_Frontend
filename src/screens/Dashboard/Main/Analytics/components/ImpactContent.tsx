@@ -2,6 +2,7 @@ import { currencies as _currencies } from 'currencies.json';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { Icon } from 'react-native-paper';
+import { StoreApi, UseBoundStore } from 'zustand';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
@@ -9,8 +10,17 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
+import { ImpactData } from '#types/global';
 
-import { useCompanyData } from '../store';
+import { getMetricValue } from '../utils/getMetricValue';
+
+type Store = {
+  impactData: ImpactData | null;
+};
+
+type ImpactContentProps<T extends Store> = {
+  useStore: UseBoundStore<StoreApi<T>>;
+};
 
 type SectionProps = {
   title: string;
@@ -18,15 +28,15 @@ type SectionProps = {
   to: React.ReactNode;
 };
 
-export function ImpactContent() {
+export function ImpactContent<T extends Store>({ useStore }: ImpactContentProps<T>) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
-  const { impactData } = useCompanyData();
+  const { impactData } = useStore();
 
   const foodLoss = useMemo(() => {
     return {
-      from: impactData?.impactMetrics?.avgMonthlyPercLoss || 0,
-      to: impactData?.impactMetrics?.avgMonthlyPercFoodlossEvolution || 0,
+      from: getMetricValue(impactData?.impactMetrics?.avgMonthlyPercLoss) || 0,
+      to: getMetricValue(impactData?.impactMetrics?.avgMonthlyPercFoodlossEvolution) || 0,
     };
   }, [impactData]);
 
@@ -34,8 +44,8 @@ export function ImpactContent() {
     const currency = _currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
 
     return {
-      from: `${currency}${(impactData?.impactMetrics?.avgMonthlyPercRevenueIncreaseEvolution || 0).toFixed(2)}`,
-      to: `${currency}${(impactData?.impactMetrics?.avgMonthlyPercRevenueIncreaseEvolution2 || 0).toFixed(2)}`,
+      from: `${currency}${getMetricValue(impactData?.impactMetrics?.avgMonthlyPercRevenueIncreaseEvolution).toFixed(2)}`,
+      to: `${currency}${getMetricValue(impactData?.impactMetrics?.avgMonthlyPercRevenueIncreaseEvolution2).toFixed(2)}`,
     };
   }, [impactData, company]);
 
@@ -46,10 +56,18 @@ export function ImpactContent() {
     };
   }, [impactData]);
 
+  const surveyPercentage = useMemo(() => {
+    const percentage =
+      (getMetricValue(impactData?.impactMetrics?.numPostHarvestSurveys) /
+        getMetricValue(impactData?.impactMetrics?.possiblePostCheckoutSurveyRoom)) *
+      100;
+    return Number.isNaN(percentage) ? 0 : percentage.toFixed(2);
+  }, [impactData]);
+
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
       <View tw="w-full">
-        <Section
+        <ImpactSection
           title={t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
           from={
             <View tw="flex flex-row">
@@ -79,7 +97,7 @@ export function ImpactContent() {
           }
         />
 
-        <Section
+        <ImpactSection
           title={t('Dashboard.Analytics.companyTab.impactTab.revenueLabel')}
           from={
             <View tw="flex flex-row">
@@ -103,7 +121,7 @@ export function ImpactContent() {
           }
         />
 
-        <Section
+        <ImpactSection
           title={t('Dashboard.Analytics.companyTab.impactTab.co2Label')}
           from={
             <View tw="space-y-1 items-center">
@@ -142,20 +160,14 @@ export function ImpactContent() {
           <View tw="flex flex-row items-center space-x-6">
             <View tw="flex flex-row items-end">
               <Text variant="TextMedium" tw="text-3xl font-bold">
-                {impactData?.impactMetrics.numPostHarvestSurveys}
+                {getMetricValue(impactData?.impactMetrics.numPostHarvestSurveys)}
               </Text>
               <Text variant="TextMedium" tw="text-xl">
-                /{impactData?.impactMetrics.possiblePostCheckoutSurveyRoom}
+                /{getMetricValue(impactData?.impactMetrics.possiblePostCheckoutSurveyRoom)}
               </Text>
             </View>
             <Text variant="TextMedium" tw="text-4xl font-bold text-purple-500">
-              (
-              {(
-                ((impactData?.impactMetrics?.numPostHarvestSurveys || 0) /
-                  (impactData?.impactMetrics?.possiblePostCheckoutSurveyRoom || 1)) *
-                100
-              ).toFixed(0)}
-              %)
+              ({surveyPercentage}%)
             </Text>
           </View>
         </View>
@@ -164,7 +176,7 @@ export function ImpactContent() {
   );
 }
 
-function Section({ title, from, to }: SectionProps) {
+export function ImpactSection({ title, from, to }: SectionProps) {
   const colors = useTailwindColors();
 
   return (
