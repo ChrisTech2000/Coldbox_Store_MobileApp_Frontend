@@ -8,9 +8,9 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 import { DataTable } from 'react-native-paper';
 import { useComparisonData } from '../store';
-import { TabAccordion } from './TabAccordion';
+import { SectionAccordion } from './SectionAccordion';
 
-type Tab = 'users' | 'operators' | 'beneficiaries';
+type Section = 'users' | 'operators' | 'beneficiaries';
 
 type TableProps = {
   header: Array<string>;
@@ -25,10 +25,10 @@ export function UsersContent() {
   const { t } = useTranslationUtils();
   const { coolingUnitData, configData } = useComparisonData();
 
-  const [expanded, setExpanded] = useState<Tab | undefined>();
+  const [expanded, setExpanded] = useState<Section | undefined>();
 
   const expandTab = useCallback(
-    (tab: Tab) => {
+    (tab: Section) => {
       if (tab === expanded) {
         setExpanded(undefined);
         return;
@@ -41,10 +41,11 @@ export function UsersContent() {
 
   return (
     <View tw="w-full my-2">
-      <TabAccordion
+      <SectionAccordion
+        color="bg-green-transparency"
         expanded={expanded === 'operators'}
         setExpanded={() => expandTab('operators')}
-        title={t('Dashboard.Analytics.comparisonTab.usersTab.operators', { amount: '' })}
+        title={t('Dashboard.Analytics.comparisonTab.usersTab.operators')}
         content={
           <Table
             header={[
@@ -62,10 +63,11 @@ export function UsersContent() {
         }
       />
 
-      <TabAccordion
+      <SectionAccordion
+        color="bg-green-transparency"
         expanded={expanded === 'users'}
         setExpanded={() => expandTab('users')}
-        title={t('Dashboard.Analytics.comparisonTab.usersTab.users', { amount: '' })}
+        title={t('Dashboard.Analytics.comparisonTab.usersTab.users')}
         content={
           <Table
             header={[
@@ -83,10 +85,11 @@ export function UsersContent() {
         }
       />
 
-      <TabAccordion
+      <SectionAccordion
+        color="bg-green-transparency"
         expanded={expanded === 'beneficiaries'}
         setExpanded={() => expandTab('beneficiaries')}
-        title={t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries', { amount: '' })}
+        title={t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries')}
         content={
           <Table
             header={[
@@ -119,7 +122,7 @@ function Table({ items, header, total }: TableProps) {
           </Text>
         </DataTable.Title>
         <DataTable.Title>
-          <View tw="">
+          <View>
             {header.map((text, index) => (
               <Text key={`${text}-${index}`} variant="TextMedium" tw="text-white text-base">
                 {text}

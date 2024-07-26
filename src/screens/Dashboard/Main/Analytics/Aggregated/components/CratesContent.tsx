@@ -46,19 +46,19 @@ export function CratesContent() {
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
       <Section
-        title={t('Dashboard.Analytics.totalCratesLabel')}
+        title={`${t('Dashboard.Analytics.totalCratesLabel')}:`}
         checkedIn={crates.checkedIn}
         checkedOut={crates.checkedOut}
       />
 
       <Section
-        title={t('Dashboard.Analytics.totalQuantityLabel')}
+        title={`${t('Dashboard.Analytics.totalQuantityLabel')}:`}
         checkedIn={quantity.checkedIn}
         checkedOut={quantity.checkedOut}
       />
 
       <Section
-        title={t('Dashboard.Analytics.totalOperations')}
+        title={`${t('Dashboard.Analytics.totalOperations')}:`}
         checkedIn={operations.checkedIn}
         checkedOut={operations.checkedOut}
       />

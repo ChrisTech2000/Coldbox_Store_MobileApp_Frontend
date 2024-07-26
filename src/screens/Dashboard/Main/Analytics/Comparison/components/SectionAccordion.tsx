@@ -1,13 +1,15 @@
 import React from 'react';
 import { LayoutAnimation, Platform, TouchableWithoutFeedback, UIManager, View } from 'react-native';
 import { Icon } from 'react-native-paper';
-
-import { Text } from '#ui/components/Text';
 import colors from 'tailwindcss/colors';
 
-type TabAccordionProps = {
+import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
+
+type SectionAccordionProps = {
   expanded: boolean;
   title: string;
+  color: string;
   content: React.ReactNode;
   setExpanded: () => void;
 };
@@ -16,7 +18,13 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-export function TabAccordion({ expanded, setExpanded, title, content }: TabAccordionProps) {
+export function SectionAccordion({
+  expanded,
+  setExpanded,
+  title,
+  content,
+  color,
+}: SectionAccordionProps) {
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded();
@@ -25,7 +33,12 @@ export function TabAccordion({ expanded, setExpanded, title, content }: TabAccor
   return (
     <View tw="space-y-2 my-2">
       <TouchableWithoutFeedback onPress={toggleExpand}>
-        <View tw="flex flex-row items-center justify-between bg-green-transparency h-16 px-3 py-1 items-center justify-between rounded-lg">
+        <View
+          tw={cn(
+            'flex flex-row items-center justify-between h-16 px-3 py-1 items-center justify-between rounded-lg',
+            color
+          )}
+        >
           <Text variant="TitleMedium" tw="text-base font-bold">
             {title}
           </Text>
