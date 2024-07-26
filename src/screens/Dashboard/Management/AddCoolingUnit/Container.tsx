@@ -193,7 +193,7 @@ function _buildInitialValues() {
     public: false,
     operators: [],
     crops: [],
-    refrigerantType: '',
+    refrigerantType: 'Other',
     amountRefrigerant: 0,
     powerConsumptionInMt: 0,
     dailyRoomWattage: 0,

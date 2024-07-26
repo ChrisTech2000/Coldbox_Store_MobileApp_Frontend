@@ -70,9 +70,9 @@ export default function DataAggregator(props: PropsWithChildren<{ companyId?: nu
     }
 
     const operatorsList: Array<[number, string]> = [];
-    for (const { id, user } of operators) {
+    for (const { user } of operators) {
       if (!user?.phone) continue;
-      operatorsList.push([id, [user.firstName, user.lastName].join(' ')]);
+      operatorsList.push([user.id, [user.firstName, user.lastName].join(' ')]);
     }
 
     return [

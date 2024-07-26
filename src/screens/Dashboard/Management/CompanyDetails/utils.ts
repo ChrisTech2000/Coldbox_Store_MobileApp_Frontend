@@ -18,7 +18,7 @@ export function derivedSubjects(company: Company) {
   const bankNameValue: string | undefined =
     // eslint-disable-next-line
     // @ts-ignore
-    typeof company.bankDetails !== 'undefined' && 'bankName' in company.bankDetails
+    !!company.bankDetails && 'bankName' in company.bankDetails
       ? company.bankDetails.bankName === 'undefined'
         ? undefined
         : // eslint-disable-next-line
@@ -29,7 +29,7 @@ export function derivedSubjects(company: Company) {
   const accountNameValue: string | undefined =
     // eslint-disable-next-line
     // @ts-ignore
-    typeof company.bankDetails !== 'undefined' && 'accountName' in company.bankDetails
+    !!company.bankDetails && 'accountName' in company.bankDetails
       ? company.bankDetails.accountName === 'undefined'
         ? undefined
         : // eslint-disable-next-line
@@ -40,7 +40,7 @@ export function derivedSubjects(company: Company) {
   const accountNumberValue: string | undefined =
     // eslint-disable-next-line
     // @ts-ignore
-    typeof company.bankDetails !== 'undefined' && 'accountNumber' in company.bankDetails
+    !!company.bankDetails && 'accountNumber' in company.bankDetails
       ? company.bankDetails.accountNumber === 'undefined'
         ? undefined
         : // eslint-disable-next-line
