@@ -1,5 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 
@@ -54,7 +54,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
   const { user } = useAuthStore();
   const { company } = useManagementStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
-  const { startDate, endDate } = useDateRangeStore();
+  const { startDate, endDate, setEndDate, setStartDate } = useDateRangeStore();
   const { selectedItems: paymentMethods } = usePaymentType();
   const { sorting } = useSortingStore();
 
@@ -119,6 +119,17 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
       return isWithinDateRange && matchesSearchTerm;
     });
   }, [sortedMovements, startDate, endDate, search]);
+
+  const movementsWithCheckout = useMemo(() => {
+    return revenueData.map((movement) => movement.checkinCode ?? null).filter(Boolean);
+  }, [revenueData]);
+
+  useEffect(() => {
+    return () => {
+      setEndDate(null);
+      setStartDate(null);
+    };
+  }, []);
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">
@@ -214,6 +225,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
                     },
                   });
                 }}
+                movementsWithCheckout={movementsWithCheckout}
               />
             )}
             estimatedItemSize={40}

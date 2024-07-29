@@ -78,6 +78,10 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
     });
   }, [sortedMovements, search]);
 
+  const movementsWithCheckout = useMemo(() => {
+    return movements.map((movement) => movement.checkinCode ?? null).filter(Boolean);
+  }, [movements]);
+
   useEffect(() => {
     addRefreshDataFn(refetchHistoryMovements);
   }, []);
@@ -120,6 +124,20 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                     coolingUnitId: id,
                   })
                 }
+                navigateToMarketSurvey={() => {
+                  props.navigation.navigate('MarketSurveyStack', {
+                    screen: 'MarketSurveyBase',
+                    params: {
+                      farmer: movement.farmer,
+                      crops: movement.movementCrops.filter(
+                        (crop) => !movement.hasMarketSurvey.includes(crop.id)
+                      ),
+                      checkoutId: movement.checkoutId as number,
+                      companyCurrency: company?.currency,
+                    },
+                  });
+                }}
+                movementsWithCheckout={movementsWithCheckout}
               />
             )}
             estimatedItemSize={40}

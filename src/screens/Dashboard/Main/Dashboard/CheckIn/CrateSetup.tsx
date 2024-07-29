@@ -1,3 +1,4 @@
+import { currencies } from 'currencies.json';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
@@ -17,7 +18,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
-import { CoolingUnit, EDateCropped, Farmer } from '#types/global';
+import { CoolingUnit, EDateCropped, EPricingType, Farmer } from '#types/global';
 
 import { CrateSetupModal } from './components/CrateSetupModal';
 
@@ -63,7 +64,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           .min(1, {
             message: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightError'),
           })
-          .default(40),
+          .default(coolingUnit?.crateWeight ?? 0),
         crates: z
           .object({
             crateWeight: z.number(),
@@ -115,6 +116,10 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     [t]
   );
 
+  const currencySymbol = useMemo(() => {
+    return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
+  }, [company]);
+
   const onChangeNumericKeyboard = useCallback(
     (
       newVal: string | number,
@@ -141,7 +146,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
 
       if (field === 'numberOfCrates') {
         const numberOfCrates = value;
-        const weight = generalCrateWeight ?? 40;
+        const weight = generalCrateWeight ?? coolingUnit?.crateWeight ?? 25;
 
         let newCrates =
           !crates || crates.length === 0
@@ -168,7 +173,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         setValue('crates', newCrates);
       }
     },
-    [crates, generalCrateWeight]
+    [crates, generalCrateWeight, coolingUnit]
   );
 
   const onOpenModal = useCallback(
@@ -301,7 +306,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           rules={{
             required: true,
           }}
-          defaultValue={40}
+          defaultValue={coolingUnit?.crateWeight ?? 25}
           render={({ field: { onChange, value } }) => (
             <View tw="w-full flex flex-row justify-between items-center space-x-1">
               <Input
@@ -313,7 +318,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 keyboardType="numeric"
               />
               <Button
-                contentStyle="bg-green-50"
+                contentStyle="bg-green-transparency"
                 labelStyle="text-lg"
                 onPress={() =>
                   onChangeNumericKeyboard(
@@ -326,7 +331,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 -
               </Button>
               <Button
-                contentStyle="bg-green-50"
+                contentStyle="bg-green-transparency"
                 labelStyle="text-lg"
                 onPress={() =>
                   onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'generalCrateWeight')
@@ -391,10 +396,13 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       <View tw="bg-blue-50 p-2 rounded-sm space-y-1">
         <View tw="flex flex-row items-center justify-between">
           <Text variant="TextBold" tw="text-lg font-bold ml-2">
-            {t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayLabel')}
+            {coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+              ? t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayLabel')
+              : t('Dashboard.CrateManagement.CheckIn.Setup.fixedPriceLabel')}
           </Text>
           <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
-            {company?.currency} {coolingUnit?.commonPricingType.value.toFixed(2)}
+            {currencySymbol}
+            {coolingUnit?.commonPricingType.value.toFixed(2)}
           </Text>
         </View>
         <View tw="flex flex-row items-center justify-between">
@@ -402,11 +410,13 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             {t('Dashboard.CrateManagement.CheckIn.Setup.totalPriceLabel')}
           </Text>
           <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
-            {company?.currency}{' '}
+            {currencySymbol}
             {(
               (coolingUnit?.commonPricingType.value ?? 0) *
               (crates?.length ?? 0) *
-              (plannedDays ?? 1)
+              (coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+                ? plannedDays ?? 1
+                : 1)
             ).toFixed(2)}
           </Text>
         </View>

@@ -91,6 +91,7 @@ export function AggregatedSection() {
       html,
       fileName: `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.aggregated')}`,
       directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+      base64: true,
     };
 
     try {

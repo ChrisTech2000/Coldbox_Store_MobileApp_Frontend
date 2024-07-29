@@ -25,6 +25,7 @@ type Movement = GetMovementsHistoryResponse[number];
 
 type MovementProps = {
   movement: Movement;
+  movementsWithCheckout: Array<string>;
   coolingUnit: CoolingUnit | null;
   selectedCompany: Company | ManagementCompany | null;
   navigateToCheckIn?: (movement: Movement, coolingUnitId?: number) => void;
@@ -39,6 +40,7 @@ type MovementProps = {
 export function Movement({
   movement,
   coolingUnit,
+  movementsWithCheckout,
   selectedCompany,
   navigateToCheckIn,
   navigateToMarketSurvey,
@@ -101,7 +103,9 @@ export function Movement({
             {
               label: t('Dashboard.History.optionsMenu.checkIn.edit'),
               action: editCheckIn,
-              disabled: !isWithinLast24Hours(movement.date),
+              disabled:
+                !isWithinLast24Hours(movement.date) ||
+                movementsWithCheckout.includes(movement.code),
             },
           ]
         : []),

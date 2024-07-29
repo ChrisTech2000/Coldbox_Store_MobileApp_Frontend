@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, TouchableHighlight, View } from 'react-native';
@@ -17,15 +18,16 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import { EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CrateSetupModal } from './components/CrateSetupModal';
-import { FarmerSurvey } from '../FarmerSurvey';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -152,6 +154,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     }
   }, [user, produces, checkOutCode]);
 
+  const currencySymbol = useMemo(() => {
+    return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
+  }, [company]);
+
   useEffect(() => {
     if (coolingUnit) setCoolingUnit(coolingUnit);
     if (user) setUser(user);
@@ -207,9 +213,11 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                 <View tw="flex flex-row items-center space-x-2">
                   {coolingUnit && (
                     <Text variant="TextMedium">
-                      {company?.currency}{' '}
-                      {(coolingUnit.commonPricingType.value * item.crates.length).toFixed(2)} /{' '}
-                      {t('Dashboard.CrateManagement.CheckIn.day')}
+                      {currencySymbol}
+                      {(coolingUnit.commonPricingType.value * item.crates.length).toFixed(2)}
+                      {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY
+                        ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
+                        : ''}
                     </Text>
                   )}
                   <TouchableHighlight
@@ -286,7 +294,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           </Button>
         )}
 
-        {!allHavePlannedDays && (
+        {!allHavePlannedDays && coolingUnit.commonPricingType.type !== EPricingType.FIXED && (
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.CheckIn.noPlannedDaysMessage')}
           </Text>
@@ -299,8 +307,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
               : t('Dashboard.CrateManagement.CheckIn.pricing')}
           </Text>
           <Text variant="TextMedium" tw="text-lg font-bold">
-            {`${company?.currency} ${total}`}{' '}
-            {!allHavePlannedDays && `/ ${t('Dashboard.CrateManagement.CheckIn.day')}`}
+            {`${currencySymbol}${total}`}
+            {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY && !allHavePlannedDays
+              ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
+              : ''}
           </Text>
         </View>
         <View tw="w-full flex flex-row items-center justify-center space-x-1">

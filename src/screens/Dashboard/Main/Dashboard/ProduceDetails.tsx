@@ -173,7 +173,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
             <Text
               variant="TextMedium"
               tw="px-2"
-            >{`${produce.minimumRemainingShelfLife} ${t('Dashboard.ProduceDetails.days')}`}</Text>
+            >{`${produce.minimumRemainingShelfLife ?? 0} ${t('Dashboard.ProduceDetails.days')}`}</Text>
           </View>
         </View>
       ) : (

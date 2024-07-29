@@ -1,5 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 
@@ -45,7 +45,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { user } = useAuthStore();
   const { company } = useManagementStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
-  const { startDate, endDate } = useDateRangeStore();
+  const { startDate, endDate, setEndDate, setStartDate } = useDateRangeStore();
   const { sorting } = useSortingStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
@@ -134,6 +134,17 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     };
   }, [filteredMovements]);
 
+  const movementsWithCheckout = useMemo(() => {
+    return usage.map((movement) => movement.checkinCode ?? null).filter(Boolean);
+  }, [usage]);
+
+  useEffect(() => {
+    return () => {
+      setEndDate(null);
+      setStartDate(null);
+    };
+  }, []);
+
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">
       <SelectWithStore<CoolingUnit>
@@ -199,6 +210,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
                     coolingUnitId: id,
                   })
                 }
+                movementsWithCheckout={movementsWithCheckout}
               />
             )}
             estimatedItemSize={40}

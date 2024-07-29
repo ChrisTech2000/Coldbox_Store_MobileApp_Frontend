@@ -33,11 +33,16 @@ type SelectItemProps<T> = {
   modalHeader?: string;
   occupyFullWidth?: boolean;
   useSelectStore: ReturnType<typeof createSelectStore<T>>;
+  useScrollView?: boolean;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
   itemName: (item: T) => string;
 };
 
-export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectItemProps<T>) {
+export default function SelectWithStore<T>({
+  useSelectStore,
+  useScrollView = true,
+  ...rest
+}: SelectItemProps<T>) {
   const store = useSelectStore();
 
   const [isModalVisible, setIsModalVisible] = useControlledState<boolean>(
@@ -87,7 +92,7 @@ export default function SelectWithStore<T>({ useSelectStore, ...rest }: SelectIt
           label={rest.label}
           isModalOpen={isModalVisible}
           onClick={() => setIsModalVisible(!isModalVisible)}
-          useScrollView={false}
+          useScrollView={useScrollView}
           content={{
             header: rest.modalHeader ?? '',
             options: (

@@ -8,6 +8,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
 import { createSelectStore } from '#ui/components/SelectWithStore';
@@ -27,10 +28,11 @@ const useCompanyStore = createSelectStore<Company>();
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
   const { user } = useAuthStore();
+  const { company } = useManagementStore();
 
   const { sorting } = useSortingStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
-  const { selectedItem: company } = useCompanyStore();
+  const { selectedItem: selectedCompany } = useCompanyStore();
   const { farmerId, addRefreshDataFn } = useDashboardStore();
 
   const {
@@ -137,7 +139,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
               onNavigate={() =>
                 navigation.navigate('ProduceDetails', { produce, coolingUnit: coolingUnit })
               }
-              currency={company?.currency ?? ''}
+              currency={selectedCompany?.currency ?? company?.currency ?? ''}
             />
           )}
         />
