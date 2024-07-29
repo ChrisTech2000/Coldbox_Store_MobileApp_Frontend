@@ -25,7 +25,8 @@ export default function CoordinatesForm() {
               label={t('Dashboard.Management.Location.fields.latitude')}
               mode="flat"
               dense
-              value={value.toString()}
+              value={value}
+              keyboardType="numeric"
               onChangeText={onChange}
               onBlur={onBlur}
               error={!!errors.latitude}
@@ -43,7 +44,8 @@ export default function CoordinatesForm() {
               label={t('Dashboard.Management.Location.fields.longitude')}
               mode="flat"
               dense
-              value={value.toString()}
+              value={value}
+              keyboardType="numeric"
               onChangeText={onChange}
               onBlur={onBlur}
               error={!!errors.longitude}

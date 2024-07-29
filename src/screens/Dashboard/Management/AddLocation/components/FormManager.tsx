@@ -6,8 +6,8 @@ import { useTranslationUtils } from '#i18n/utils';
 export type FormValues = {
   _step: 'coordinates' | 'geolocation' | 'address';
   name: string;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
   country: string;
   state: string;
   city: string;
@@ -16,11 +16,16 @@ export type FormValues = {
   streetNumber: string;
 };
 
+export type PreprocessedFormValues = {
+  latitude: number;
+  longitude: number;
+} & FormValues;
+
 export const DEFAULT_VALUES = {
   _step: 'coordinates',
   name: '',
-  latitude: 0,
-  longitude: 0,
+  latitude: '',
+  longitude: '',
   country: '',
   state: '',
   city: '',
@@ -31,7 +36,7 @@ export const DEFAULT_VALUES = {
 
 type FormManagerProps = {
   initialValues?: FormValues;
-  onSubmit: (values: FormValues) => Promise<void>;
+  onSubmit: (values: PreprocessedFormValues) => Promise<void>;
   children: (
     submitHandler: (e?: React.BaseSyntheticEvent) => Promise<void>,
     isSubmitting: boolean
@@ -51,17 +56,13 @@ export default function FormManager(props: FormManagerProps) {
         name: z.string().min(1),
       });
 
-      const coordinatesSchema = z.object({
-        _step: z.literal('coordinates'),
-        latitude: z.number().min(-90).max(90),
-        longitude: z.number().min(-180).max(180),
+      const coordsSchema = z.object({
+        latitude: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().min(-90).max(90)),
+        longitude: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().min(-180).max(180)),
       });
 
-      const geolocationSchema = z.object({
-        _step: z.literal('geolocation'),
-        latitude: z.number().min(-90).max(90),
-        longitude: z.number().min(-180).max(180),
-      });
+      const coordinatesSchema = coordsSchema.extend({ _step: z.literal('coordinates') });
+      const geolocationSchema = coordsSchema.extend({ _step: z.literal('geolocation') });
 
       const addressSchema = z.object({
         _step: z.literal('address'),
@@ -86,7 +87,8 @@ export default function FormManager(props: FormManagerProps) {
 
   return (
     <FormProvider {...form}>
-      {props.children(form.handleSubmit(props.onSubmit), form.formState.isSubmitting)}
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      {props.children(form.handleSubmit(props.onSubmit as any), form.formState.isSubmitting)}
     </FormProvider>
   );
 }

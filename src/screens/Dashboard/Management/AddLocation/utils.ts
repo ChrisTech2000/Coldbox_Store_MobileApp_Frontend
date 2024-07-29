@@ -1,8 +1,10 @@
 import { getAllISOCodes } from 'iso-country-currency';
 
-import type { FormValues } from './components/FormManager';
+import type { PreprocessedFormValues } from './components/FormManager';
 
-export function pickFormValues(datums: FormValues): Partial<FormValues> | undefined {
+export function pickFormValues(
+  datums: PreprocessedFormValues
+): Partial<PreprocessedFormValues> | undefined {
   const { _step, name, latitude, longitude, ...rest } = datums;
   switch (_step) {
     case 'geolocation':
