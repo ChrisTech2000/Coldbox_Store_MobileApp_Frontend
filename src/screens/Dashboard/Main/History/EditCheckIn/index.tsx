@@ -101,8 +101,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         const promises = values.produces.map((produce) => {
           return ColdtivateService.editCheckIn({
             id: produce.id,
-            cropId: matchingProduces.find((_produce) => _produce.cropName === produce.crop)
-              ?.cropId as number,
+            cropId: crops.find((crop) => crop.name === produce.crop)?.id as number,
             plannedDays: Number(produce.plannedDays) as number,
             farmerId: farmer?.id as number,
           });
