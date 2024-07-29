@@ -83,6 +83,7 @@ export function CompanySection() {
       html,
       fileName: `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.company')}`,
       directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+      base64: true,
     };
 
     try {

@@ -67,7 +67,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const cratePrices = useMemo(() => {
     const type = coolingUnit?.commonPricingType.type;
     const price = coolingUnit?.commonPricingType.value;
-    // TODO: figure out how to deal with fixed price
+
     return (
       crates?.map((crate) =>
         type === EPricingType.PERIODICITY ? (price ?? 0) * crate.currentStorageDays : price

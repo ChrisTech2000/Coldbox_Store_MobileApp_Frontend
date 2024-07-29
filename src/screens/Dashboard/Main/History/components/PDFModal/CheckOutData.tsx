@@ -112,6 +112,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
       html,
       fileName: t('Dashboard.History.pdfModal.downloadName', { code: movement.code }),
       directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+      base64: true,
     };
 
     try {
