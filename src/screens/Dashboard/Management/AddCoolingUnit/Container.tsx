@@ -16,7 +16,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 
-import FormManager, { type FormValues } from './contexts/FormManager';
+import FormManager, { type PreprocessedFormValues, type FormValues } from './contexts/FormManager';
 import FormFields from './components/FormFields';
 import DataAggregator from './contexts/DataAggregator';
 import { METRIC_UNITS, PRICING_TYPE } from './constants';
@@ -43,8 +43,8 @@ export default function ScreenContainer(props: Props) {
     );
   }
 
-  async function onSubmit(values: FormValues): Promise<void> {
-    const clone = cloneDeep(values) as FormValues & { cropUpdates: CropUpdates };
+  async function onSubmit(values: PreprocessedFormValues): Promise<void> {
+    const clone = cloneDeep(values) as PreprocessedFormValues & { cropUpdates: CropUpdates };
     clone.cropUpdates = [];
 
     if (!(clone.crops.length >= 1)) {
@@ -70,8 +70,6 @@ export default function ScreenContainer(props: Props) {
       });
     }
 
-    const safeValues = { ...initialFormValues.current };
-
     try {
       await ColdtivateService.addCoolingUnit({
         name: clone.name,
@@ -86,30 +84,26 @@ export default function ScreenContainer(props: Props) {
         public: clone.public,
         sensorData: '', // TODO: sensor integration
         powerOptions: {
-          powerConsumptionInMt: clone.powerConsumptionInMt ?? safeValues.powerConsumptionInMt,
-          dailyRoomWattage: clone.dailyRoomWattage ?? safeValues.dailyRoomWattage,
-          powerSourceDieselPercent:
-            clone.powerSourceDieselPercent ?? safeValues.powerSourceDieselPercent,
-          powerSourceGridPercent: clone.powerSourceGridPercent ?? safeValues.powerSourceGridPercent,
-          powerSourcePvPercent: clone.powerSourcePvPercent ?? safeValues.powerSourcePvPercent,
-          powerSourceBiomassPercent:
-            clone.powerSourceBiomassPercent ?? safeValues.powerSourceBiomassPercent,
-          powerSourceDieselConsumptionKwh:
-            clone.powerSourceDieselConsumptionKwh ?? safeValues.powerSourceDieselConsumptionKwh,
-          pvPanelCount: clone.pvPanelCount ?? safeValues.pvPanelCount,
-          pvPanelSize: clone.pvPanelSize ?? safeValues.pvPanelSize,
-          pvPanelWeight: clone.pvPanelWeight ?? safeValues.pvPanelWeight,
-          pvPanelMaxPower: clone.pvPanelMaxPower ?? safeValues.pvPanelMaxPower,
-          batteryCount: clone.batteryCount ?? safeValues.batteryCount,
-          batteryWeight: clone.batteryWeight ?? safeValues.batteryWeight,
-          batteryCapacity: clone.batteryCapacity ?? safeValues.batteryCapacity,
-          batteryMaxCurrent: clone.batteryMaxCurrent ?? safeValues.batteryMaxCurrent,
-          batteryPeakEnergyStorage:
-            clone.batteryPeakEnergyStorage ?? safeValues.batteryPeakEnergyStorage,
-          refrigerantType: clone.refrigerantType ?? safeValues.refrigerantType,
-          amountRefrigerant: clone.amountRefrigerant ?? safeValues.amountRefrigerant,
-          roomInsulator: clone.roomInsulator ?? safeValues.roomInsulator,
-          batteryType: clone.batteryType ?? safeValues.batteryType,
+          powerConsumptionInMt: clone.powerConsumptionInMt ?? 0,
+          dailyRoomWattage: clone.dailyRoomWattage ?? 0,
+          powerSourceDieselPercent: clone.powerSourceDieselPercent ?? 0,
+          powerSourceGridPercent: clone.powerSourceGridPercent ?? 0,
+          powerSourcePvPercent: clone.powerSourcePvPercent ?? 0,
+          powerSourceBiomassPercent: clone.powerSourceBiomassPercent ?? 0,
+          powerSourceDieselConsumptionKwh: clone.powerSourceDieselConsumptionKwh ?? 0,
+          pvPanelCount: clone.pvPanelCount ?? 0,
+          pvPanelSize: clone.pvPanelSize ?? 0,
+          pvPanelWeight: clone.pvPanelWeight ?? 0,
+          pvPanelMaxPower: clone.pvPanelMaxPower ?? 0,
+          batteryCount: clone.batteryCount ?? 0,
+          batteryWeight: clone.batteryWeight ?? 0,
+          batteryCapacity: clone.batteryCapacity ?? 0,
+          batteryMaxCurrent: clone.batteryMaxCurrent ?? 0,
+          batteryPeakEnergyStorage: clone.batteryPeakEnergyStorage ?? 0,
+          refrigerantType: clone.refrigerantType ?? 'other',
+          amountRefrigerant: clone.amountRefrigerant ?? 0,
+          roomInsulator: clone.roomInsulator ?? 0,
+          batteryType: clone.batteryType ?? null,
           powerSource: clone.powerSource ?? '',
           electricityStorageSystem: clone.electricityStorageSystem ?? '',
           thermalStorageMethod: clone.thermalStorageMethod ?? '',
@@ -175,46 +169,46 @@ function _buildInitialValues() {
     coolingUnitType: null,
     priceType: PRICING_TYPE.PER_DAY,
     metricUnit: METRIC_UNITS.CRATES,
-    price: 0,
-    capacityInMetricTons: 0,
-    foodCapacityInMetricTons: 0,
-    roomLength: 0,
-    roomWidth: 0,
-    roomHeight: 0,
-    roomWeight: 0,
-    roomInsulator: 0,
-    capacityInNumberCrates: 0,
-    crateWeight: 25,
-    crateLength: 0,
-    crateWidth: 0,
-    crateHeight: 0,
+    price: '',
+    capacityInMetricTons: '',
+    foodCapacityInMetricTons: '',
+    roomLength: '',
+    roomWidth: '',
+    roomHeight: '',
+    roomWeight: '',
+    roomInsulator: '',
+    capacityInNumberCrates: '',
+    crateWeight: '25',
+    crateLength: '',
+    crateWidth: '',
+    crateHeight: '',
     editableCheckins: true,
     sensor: false,
     public: false,
     operators: [],
     crops: [],
-    refrigerantType: 'Other',
-    amountRefrigerant: 0,
-    powerConsumptionInMt: 0,
-    dailyRoomWattage: 0,
+    refrigerantType: 'other',
+    amountRefrigerant: '',
+    powerConsumptionInMt: '',
+    dailyRoomWattage: '',
     powerSource: null,
     electricityStorageSystem: null,
-    powerSourceDieselConsumptionKwh: 0,
-    pvPanelCount: 0,
+    powerSourceDieselConsumptionKwh: '',
+    pvPanelCount: '',
     pvPanelType: null,
-    pvPanelSize: 0,
-    pvPanelWeight: 0,
-    pvPanelMaxPower: 0,
-    powerSourceDieselPercent: 0,
-    powerSourceGridPercent: 0,
-    powerSourcePvPercent: 0,
-    powerSourceBiomassPercent: 0,
+    pvPanelSize: '',
+    pvPanelWeight: '',
+    pvPanelMaxPower: '',
+    powerSourceDieselPercent: '',
+    powerSourceGridPercent: '',
+    powerSourcePvPercent: '',
+    powerSourceBiomassPercent: '',
     batteryType: null,
-    batteryCount: 0,
-    batteryWeight: 0,
-    batteryCapacity: 0,
-    batteryMaxCurrent: 0,
-    batteryPeakEnergyStorage: 0,
+    batteryCount: '',
+    batteryWeight: '',
+    batteryCapacity: '',
+    batteryMaxCurrent: '',
+    batteryPeakEnergyStorage: '',
     thermalStorageMethod: null,
   } satisfies FormValues;
 }

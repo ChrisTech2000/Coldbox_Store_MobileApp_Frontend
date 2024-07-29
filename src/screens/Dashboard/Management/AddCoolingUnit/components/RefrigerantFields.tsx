@@ -103,9 +103,9 @@ export default function RefrigerantFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.amountRefrigerant')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.amountRefrigerant}
             right={<TextInput.Affix text="kg" />}

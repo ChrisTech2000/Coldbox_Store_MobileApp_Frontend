@@ -24,9 +24,9 @@ export default function PvPanelsFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelCount')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.pvPanelCount}
           />
@@ -42,9 +42,9 @@ export default function PvPanelsFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelSize')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.pvPanelSize}
             right={<TextInput.Affix text="m2" />}
@@ -60,9 +60,9 @@ export default function PvPanelsFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelWeight')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.pvPanelWeight}
             right={<TextInput.Affix text="kg" />}
@@ -78,9 +78,9 @@ export default function PvPanelsFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelMaxPower')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.pvPanelMaxPower}
             right={<TextInput.Affix text="W" />}

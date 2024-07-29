@@ -28,9 +28,9 @@ export default function UnitSizeFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.length')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomLength}
             right={<TextInput.Affix text="m" />}
@@ -47,9 +47,9 @@ export default function UnitSizeFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.width')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomWidth}
             right={<TextInput.Affix text="m" />}
@@ -66,9 +66,9 @@ export default function UnitSizeFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.height')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomHeight}
             right={<TextInput.Affix text="m" />}
@@ -85,9 +85,9 @@ export default function UnitSizeFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.weight')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomWeight}
             right={<TextInput.Affix text="kg" />}

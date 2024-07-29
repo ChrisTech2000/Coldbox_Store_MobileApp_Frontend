@@ -23,9 +23,9 @@ export default function VolumeFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.capacityInMetricTons')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.capacityInMetricTons}
             right={<TextInput.Affix text="MT" />}
@@ -42,9 +42,9 @@ export default function VolumeFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.foodCapacityInMetricTons')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.foodCapacityInMetricTons}
             right={<TextInput.Affix text="MT" />}
