@@ -28,9 +28,9 @@ export default function HybridFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceDieselPercent')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceDieselPercent}
             right={<TextInput.Affix text="%" />}
@@ -47,9 +47,9 @@ export default function HybridFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceGridPercent')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceGridPercent}
             right={<TextInput.Affix text="%" />}
@@ -66,9 +66,9 @@ export default function HybridFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourcePvPercent')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourcePvPercent}
             right={<TextInput.Affix text="%" />}
@@ -85,9 +85,9 @@ export default function HybridFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceBiomassPercent')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceBiomassPercent}
             right={<TextInput.Affix text="%" />}

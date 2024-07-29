@@ -17,7 +17,10 @@ import { paperTheme } from '#ui/lib/theme';
 import type { AddCoolingUnitParams } from '#types/api.params';
 import type { GetCoolingUnitResponse } from '#types/api.responses';
 
-import FormManager, { type FormValues } from '../AddCoolingUnit/contexts/FormManager';
+import FormManager, {
+  type PreprocessedFormValues,
+  type FormValues,
+} from '../AddCoolingUnit/contexts/FormManager';
 import DataAggregator from '../AddCoolingUnit/contexts/DataAggregator';
 import FormFields from '../AddCoolingUnit/components/FormFields';
 import { METRIC_UNITS, PRICING_TYPE } from '../AddCoolingUnit/constants';
@@ -81,10 +84,10 @@ export default function ScreenContainer(props: Props) {
     );
   }
 
-  async function onSubmit(values: FormValues): Promise<void> {
+  async function onSubmit(values: PreprocessedFormValues): Promise<void> {
     if (typeof formValuesBuilder.current === 'undefined') return;
 
-    const clone = cloneDeep(values) as FormValues & { cropUpdates: CropUpdates };
+    const clone = cloneDeep(values) as PreprocessedFormValues & { cropUpdates: CropUpdates };
     clone.cropUpdates = [];
 
     if (!(clone.crops.length >= 1)) {
@@ -110,8 +113,6 @@ export default function ScreenContainer(props: Props) {
       });
     }
 
-    const safeValues = formValuesBuilder.current.getFormValues();
-
     try {
       await ColdtivateService.editCoolingUnit(
         {
@@ -127,31 +128,26 @@ export default function ScreenContainer(props: Props) {
           public: clone.public,
           sensorData: '', // TODO: sensor integration
           powerOptions: {
-            powerConsumptionInMt: clone.powerConsumptionInMt ?? safeValues.powerConsumptionInMt,
-            dailyRoomWattage: clone.dailyRoomWattage ?? safeValues.dailyRoomWattage,
-            powerSourceDieselPercent:
-              clone.powerSourceDieselPercent ?? safeValues.powerSourceDieselPercent,
-            powerSourceGridPercent:
-              clone.powerSourceGridPercent ?? safeValues.powerSourceGridPercent,
-            powerSourcePvPercent: clone.powerSourcePvPercent ?? safeValues.powerSourcePvPercent,
-            powerSourceBiomassPercent:
-              clone.powerSourceBiomassPercent ?? safeValues.powerSourceBiomassPercent,
-            powerSourceDieselConsumptionKwh:
-              clone.powerSourceDieselConsumptionKwh ?? safeValues.powerSourceDieselConsumptionKwh,
-            pvPanelCount: clone.pvPanelCount ?? safeValues.pvPanelCount,
-            pvPanelSize: clone.pvPanelSize ?? safeValues.pvPanelSize,
-            pvPanelWeight: clone.pvPanelWeight ?? safeValues.pvPanelWeight,
-            pvPanelMaxPower: clone.pvPanelMaxPower ?? safeValues.pvPanelMaxPower,
-            batteryCount: clone.batteryCount ?? safeValues.batteryCount,
-            batteryWeight: clone.batteryWeight ?? safeValues.batteryWeight,
-            batteryCapacity: clone.batteryCapacity ?? safeValues.batteryCapacity,
-            batteryMaxCurrent: clone.batteryMaxCurrent ?? safeValues.batteryMaxCurrent,
-            batteryPeakEnergyStorage:
-              clone.batteryPeakEnergyStorage ?? safeValues.batteryPeakEnergyStorage,
-            refrigerantType: clone.refrigerantType ?? safeValues.refrigerantType,
-            amountRefrigerant: clone.amountRefrigerant ?? safeValues.amountRefrigerant,
-            roomInsulator: clone.roomInsulator ?? safeValues.roomInsulator,
-            batteryType: clone.batteryType ?? safeValues.batteryType,
+            powerConsumptionInMt: clone.powerConsumptionInMt ?? 0,
+            dailyRoomWattage: clone.dailyRoomWattage ?? 0,
+            powerSourceDieselPercent: clone.powerSourceDieselPercent ?? 0,
+            powerSourceGridPercent: clone.powerSourceGridPercent ?? 0,
+            powerSourcePvPercent: clone.powerSourcePvPercent ?? 0,
+            powerSourceBiomassPercent: clone.powerSourceBiomassPercent ?? 0,
+            powerSourceDieselConsumptionKwh: clone.powerSourceDieselConsumptionKwh ?? 0,
+            pvPanelCount: clone.pvPanelCount ?? 0,
+            pvPanelSize: clone.pvPanelSize ?? 0,
+            pvPanelWeight: clone.pvPanelWeight ?? 0,
+            pvPanelMaxPower: clone.pvPanelMaxPower ?? 0,
+            batteryCount: clone.batteryCount ?? 0,
+            batteryWeight: clone.batteryWeight ?? 0,
+            batteryCapacity: clone.batteryCapacity ?? 0,
+            batteryMaxCurrent: clone.batteryMaxCurrent ?? 0,
+            batteryPeakEnergyStorage: clone.batteryPeakEnergyStorage ?? 0,
+            refrigerantType: clone.refrigerantType ?? 'other',
+            amountRefrigerant: clone.amountRefrigerant ?? 0,
+            roomInsulator: clone.roomInsulator ?? 0,
+            batteryType: clone.batteryType ?? null,
             powerSource: clone.powerSource ?? '',
             electricityStorageSystem: clone.electricityStorageSystem ?? '',
             thermalStorageMethod: clone.thermalStorageMethod ?? '',
@@ -243,48 +239,49 @@ function _buildInitialValues(
         priceType: (unit.commonPricingType.type as FormValues['priceType']) ?? PRICING_TYPE.PER_DAY,
         metricUnit:
           (unit.commonPricingType.metric as FormValues['metricUnit']) ?? METRIC_UNITS.CRATES,
-        price: (unit.commonPricingType.value satisfies FormValues['price']) ?? 0,
-        capacityInMetricTons: unit.capacityInMetricTons ?? 0,
-        foodCapacityInMetricTons: unit.foodCapacityInMetricTons ?? 0,
-        roomLength: unit.roomLength ?? 0,
-        roomWidth: unit.roomWidth ?? 0,
-        roomHeight: unit.roomHeight ?? 0,
-        roomWeight: unit.roomWeight ?? 0,
-        roomInsulator: powerOptions?.roomInsulator ?? 0,
-        capacityInNumberCrates: unit.capacityInNumberCrates ?? 0,
-        crateWeight: unit.crateWeight ?? 25,
-        crateLength: unit.crateLength ?? 0,
-        crateWidth: unit.crateWidth ?? 0,
-        crateHeight: unit.crateHeight ?? 0,
+        price: unit.commonPricingType.value?.toString() ?? '',
+        capacityInMetricTons: unit.capacityInMetricTons?.toString() ?? '',
+        foodCapacityInMetricTons: unit.foodCapacityInMetricTons?.toString() ?? '',
+        roomLength: unit.roomLength?.toString() ?? '',
+        roomWidth: unit.roomWidth?.toString() ?? '',
+        roomHeight: unit.roomHeight?.toString() ?? '',
+        roomWeight: unit.roomWeight?.toString() ?? '',
+        roomInsulator: powerOptions?.roomInsulator?.toString() ?? '',
+        capacityInNumberCrates: unit.capacityInNumberCrates?.toString() ?? '',
+        crateWeight: unit.crateWeight?.toString() ?? '25',
+        crateLength: unit.crateLength?.toString() ?? '',
+        crateWidth: unit.crateWidth?.toString() ?? '',
+        crateHeight: unit.crateHeight?.toString() ?? '',
         editableCheckins: unit.editableCheckins ?? true,
         sensor: unit.sensor ?? false,
         public: unit.public ?? false,
         operators: unit.operators ?? [],
         crops,
         refrigerantType: powerOptions?.refrigerantType ?? '',
-        amountRefrigerant: powerOptions?.amountRefrigerant ?? 0,
-        powerConsumptionInMt: powerOptions?.powerConsumptionInMt ?? 0,
-        dailyRoomWattage: powerOptions?.dailyRoomWattage ?? 0,
+        amountRefrigerant: powerOptions?.amountRefrigerant?.toString() ?? '',
+        powerConsumptionInMt: powerOptions?.powerConsumptionInMt?.toString() ?? '',
+        dailyRoomWattage: powerOptions?.dailyRoomWattage?.toString() ?? '',
         powerSource: powerOptions?.powerSource ?? null,
         electricityStorageSystem:
           (powerOptions?.electricityStorageSystem as FormValues['electricityStorageSystem']) ??
           null,
-        powerSourceDieselConsumptionKwh: powerOptions?.powerSourceDieselConsumptionKwh ?? 0,
-        pvPanelCount: powerOptions?.pvPanelCount ?? 0,
+        powerSourceDieselConsumptionKwh:
+          powerOptions?.powerSourceDieselConsumptionKwh?.toString() ?? '',
+        pvPanelCount: powerOptions?.pvPanelCount?.toString() ?? '',
         pvPanelType: (powerOptions?.pvPanelType as FormValues['pvPanelType']) ?? null,
-        pvPanelSize: powerOptions?.pvPanelSize ?? 0,
-        pvPanelWeight: powerOptions?.pvPanelWeight ?? 0,
-        pvPanelMaxPower: powerOptions?.pvPanelMaxPower ?? 0,
-        powerSourceDieselPercent: powerOptions?.powerSourceDieselPercent ?? 0,
-        powerSourceGridPercent: powerOptions?.powerSourceGridPercent ?? 0,
-        powerSourcePvPercent: powerOptions?.powerSourcePvPercent ?? 0,
-        powerSourceBiomassPercent: powerOptions?.powerSourceBiomassPercent ?? 0,
+        pvPanelSize: powerOptions?.pvPanelSize?.toString() ?? '',
+        pvPanelWeight: powerOptions?.pvPanelWeight?.toString() ?? '',
+        pvPanelMaxPower: powerOptions?.pvPanelMaxPower?.toString() ?? '',
+        powerSourceDieselPercent: powerOptions?.powerSourceDieselPercent?.toString() ?? '',
+        powerSourceGridPercent: powerOptions?.powerSourceGridPercent?.toString() ?? '',
+        powerSourcePvPercent: powerOptions?.powerSourcePvPercent?.toString() ?? '',
+        powerSourceBiomassPercent: powerOptions?.powerSourceBiomassPercent?.toString() ?? '',
         batteryType: (powerOptions?.batteryType as FormValues['batteryType']) ?? null,
-        batteryCount: powerOptions?.batteryCount ?? 0,
-        batteryWeight: powerOptions?.batteryWeight ?? 0,
-        batteryCapacity: powerOptions?.batteryCapacity ?? 0,
-        batteryMaxCurrent: powerOptions?.batteryMaxCurrent ?? 0,
-        batteryPeakEnergyStorage: powerOptions?.batteryPeakEnergyStorage ?? 0,
+        batteryCount: powerOptions?.batteryCount?.toString() ?? '',
+        batteryWeight: powerOptions?.batteryWeight?.toString() ?? '',
+        batteryCapacity: powerOptions?.batteryCapacity?.toString() ?? '',
+        batteryMaxCurrent: powerOptions?.batteryMaxCurrent?.toString() ?? '',
+        batteryPeakEnergyStorage: powerOptions?.batteryPeakEnergyStorage?.toString() ?? '',
         thermalStorageMethod: powerOptions?.thermalStorageMethod ?? null,
       };
     },

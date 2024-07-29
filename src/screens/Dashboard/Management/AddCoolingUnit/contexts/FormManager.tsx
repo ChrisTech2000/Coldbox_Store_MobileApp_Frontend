@@ -14,7 +14,7 @@ import {
   type ThermalStorageTypes,
 } from '../constants';
 
-export type FormValues = {
+export type FormValues<T = string> = {
   //
   // Base Fields
   name: string; // cooling unit name
@@ -22,58 +22,60 @@ export type FormValues = {
   coolingUnitType: CoolingUnitTypes | null; // cooling unit description
   priceType: ValueOf<typeof PRICING_TYPE>;
   metricUnit: ValueOf<typeof METRIC_UNITS>;
-  price: number;
-  capacityInMetricTons: number; // total empty volume field
-  foodCapacityInMetricTons: number; // max volume of food field
-  roomLength: number; // cooling unit size → length
-  roomWidth: number; // cooling unit size → width
-  roomHeight: number; // cooling unit size → height
-  roomWeight: number; // cooling unit size → weight
-  roomInsulator: number; // insulator field
-  capacityInNumberCrates: number; // max number of crates field
-  crateWeight: number; // standard weight of a crate field
-  crateLength: number; // dimensions of a standard crate → length
-  crateWidth: number; // dimensions of a standard crate → width
-  crateHeight: number; // dimensions of a standard crate → height
+  price: T;
+  capacityInMetricTons: T; // total empty volume field
+  foodCapacityInMetricTons: T; // max volume of food field
+  roomLength: T; // cooling unit size → length
+  roomWidth: T; // cooling unit size → width
+  roomHeight: T; // cooling unit size → height
+  roomWeight: T; // cooling unit size → weight
+  roomInsulator: T; // insulator field
+  capacityInNumberCrates: T; // max number of crates field
+  crateWeight: T; // standard weight of a crate field
+  crateLength: T; // dimensions of a standard crate → length
+  crateWidth: T; // dimensions of a standard crate → width
+  crateHeight: T; // dimensions of a standard crate → height
   editableCheckins: boolean; // make check-ins editable by operators field
   sensor: boolean; // sensor available field (sensor type, aka ecozen, etc) integration state
   public: boolean; // make cooling unit publicly available for potential cooling users field
   operators: Array<number>;
   crops: Array<number>; // commodities field
   refrigerantType: string; // type of refrigerant used field → REFRIGERANTS item/id
-  amountRefrigerant: number; // amount of refrigerant field
-  powerConsumptionInMt: number; // power consumption of cooling unit per MT field
-  dailyRoomWattage: number; // daily wattage of the room field
+  amountRefrigerant: T; // amount of refrigerant field
+  powerConsumptionInMt: T; // power consumption of cooling unit per MT field
+  dailyRoomWattage: T; // daily wattage of the room field
   powerSource: PowerSourcesIds | null; // "how is the cooling unit powered?" field → POWER_SOURCE key/id
   electricityStorageSystem: ElectricityStorageIds | null; // electricity storage system field → ELECTRICITY_STORAGE key/id
   //
   // Power Source Conditional Fields
   // scope: generator
-  powerSourceDieselConsumptionKwh: number;
+  powerSourceDieselConsumptionKwh: T;
   // scope: pvpanels
-  pvPanelCount: number;
+  pvPanelCount: T;
   pvPanelType: PvPanelsTypes | null;
-  pvPanelSize: number;
-  pvPanelWeight: number;
-  pvPanelMaxPower: number;
+  pvPanelSize: T;
+  pvPanelWeight: T;
+  pvPanelMaxPower: T;
   // scope: hybrid → it is basically the union of the generator and pvpanels fields with these:
-  powerSourceDieselPercent: number;
-  powerSourceGridPercent: number;
-  powerSourcePvPercent: number;
-  powerSourceBiomassPercent: number;
+  powerSourceDieselPercent: T;
+  powerSourceGridPercent: T;
+  powerSourcePvPercent: T;
+  powerSourceBiomassPercent: T;
   //
   // Electricity Storage Conditional Fields
   // scope: hybrid → it is basically the union of the battery and thermal storage fields
   // scope: battery
   batteryType: BatteryTypes | null;
-  batteryCount: number;
-  batteryWeight: number;
-  batteryCapacity: number;
-  batteryMaxCurrent: number;
-  batteryPeakEnergyStorage: number;
+  batteryCount: T;
+  batteryWeight: T;
+  batteryCapacity: T;
+  batteryMaxCurrent: T;
+  batteryPeakEnergyStorage: T;
   // scope: thermal storage
   thermalStorageMethod: ThermalStorageTypes | null;
 };
+
+export type PreprocessedFormValues = FormValues<number>;
 
 type CallbackProps = {
   submitHandler: (evt?: React.BaseSyntheticEvent) => Promise<void>;
@@ -82,7 +84,7 @@ type CallbackProps = {
 
 type FormManagerProps = {
   initialValues: FormValues;
-  onSubmit: (values: FormValues) => Promise<void>;
+  onSubmit: (values: PreprocessedFormValues) => Promise<void>;
   children: (props: CallbackProps) => React.ReactNode;
 };
 
@@ -95,34 +97,40 @@ export default function FormManager(props: FormManagerProps) {
     defaultValues: initialValues,
     reValidateMode: 'onSubmit',
     resolver: zodResolver((z) => {
+      const greaterThanEqual = z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0));
+      const greaterThan = z.preprocess(
+        (v) => (v ? Number(v) : 0),
+        z.coerce.number().gt(0).positive()
+      );
+
       const baseSchema = z.object({
         name: z.string().min(1),
-        location: z.number().gt(0).positive(),
+        location: z.number().int().gt(0).positive(),
         coolingUnitType: z.string().min(1),
         priceType: z.string().min(1),
         metricUnit: z.string().min(1),
-        price: z.number().gt(0).positive(),
-        capacityInMetricTons: z.number().positive(),
-        foodCapacityInMetricTons: z.number().gt(0).positive(),
-        roomLength: z.number().gte(0).optional(),
-        roomWidth: z.number().gte(0).optional(),
-        roomHeight: z.number().gte(0).optional(),
-        roomWeight: z.number().gte(0).optional(),
-        roomInsulator: z.number().gte(0).optional(),
-        capacityInNumberCrates: z.number().gt(0).positive(),
-        crateWeight: z.number().gt(0).positive(),
-        crateLength: z.number().gte(0).optional(),
-        crateWidth: z.number().gte(0).optional(),
-        crateHeight: z.number().gte(0).optional(),
+        price: greaterThan,
+        capacityInMetricTons: greaterThan,
+        foodCapacityInMetricTons: greaterThan,
+        roomLength: greaterThanEqual.optional(),
+        roomWidth: greaterThanEqual.optional(),
+        roomHeight: greaterThanEqual.optional(),
+        roomWeight: greaterThanEqual.optional(),
+        roomInsulator: greaterThanEqual.optional(),
+        capacityInNumberCrates: greaterThan,
+        crateWeight: greaterThan,
+        crateLength: greaterThanEqual.optional(),
+        crateWidth: greaterThanEqual.optional(),
+        crateHeight: greaterThanEqual.optional(),
         editableCheckins: z.boolean(),
         sensor: z.boolean(),
         public: z.boolean(),
         operators: z.array(z.number()),
         crops: z.array(z.number()),
         refrigerantType: z.string().optional(),
-        amountRefrigerant: z.number().gte(0).optional(),
-        powerConsumptionInMt: z.number().gte(0).optional(),
-        dailyRoomWattage: z.number().gte(0).optional(),
+        amountRefrigerant: greaterThanEqual.optional(),
+        powerConsumptionInMt: greaterThanEqual.optional(),
+        dailyRoomWattage: greaterThanEqual.optional(),
         powerSource: z.union([
           z.literal('generator'),
           z.literal('pvpanels'),
@@ -141,15 +149,18 @@ export default function FormManager(props: FormManagerProps) {
       });
 
       const baseGeneratorPowerSource = z.object({
-        powerSourceDieselConsumptionKwh: z.number().positive(),
+        powerSourceDieselConsumptionKwh: z.preprocess(
+          (v) => (v ? Number(v) : 0),
+          z.coerce.number().positive()
+        ),
       });
 
       const basePvPanelsPowerSource = z.object({
-        pvPanelCount: z.number().gte(0).optional(),
+        pvPanelCount: greaterThanEqual.optional(),
         pvPanelType: z.string().nullable(),
-        pvPanelSize: z.number().gte(0).optional(),
-        pvPanelWeight: z.number().gte(0).optional(),
-        pvPanelMaxPower: z.number().gte(0).optional(),
+        pvPanelSize: greaterThanEqual.optional(),
+        pvPanelWeight: greaterThanEqual.optional(),
+        pvPanelMaxPower: greaterThanEqual.optional(),
       });
 
       const generatorPowerSource = baseGeneratorPowerSource.extend({
@@ -162,10 +173,10 @@ export default function FormManager(props: FormManagerProps) {
 
       const hybridPowerSource = baseGeneratorPowerSource.merge(basePvPanelsPowerSource).extend({
         powerSource: z.literal('hybrid'),
-        powerSourceDieselPercent: z.number().gte(0).optional(),
-        powerSourceGridPercent: z.number().gte(0).optional(),
-        powerSourcePvPercent: z.number().gte(0).optional(),
-        powerSourceBiomassPercent: z.number().gte(0).optional(),
+        powerSourceDieselPercent: greaterThanEqual.optional(),
+        powerSourceGridPercent: greaterThanEqual.optional(),
+        powerSourcePvPercent: greaterThanEqual.optional(),
+        powerSourceBiomassPercent: greaterThanEqual.optional(),
       });
 
       const powerSourceConditions = z.discriminatedUnion('powerSource', [
@@ -181,11 +192,11 @@ export default function FormManager(props: FormManagerProps) {
 
       const baseBatteryStorage = z.object({
         batteryType: z.string().nullable(),
-        batteryCount: z.number().gte(0).optional(),
-        batteryWeight: z.number().gte(0).optional(),
-        batteryCapacity: z.number().gte(0).optional(),
-        batteryMaxCurrent: z.number().gte(0).optional(),
-        batteryPeakEnergyStorage: z.number().gte(0).optional(),
+        batteryCount: greaterThanEqual.optional(),
+        batteryWeight: greaterThanEqual.optional(),
+        batteryCapacity: greaterThanEqual.optional(),
+        batteryMaxCurrent: greaterThanEqual.optional(),
+        batteryPeakEnergyStorage: greaterThanEqual.optional(),
       });
 
       const baseThermalStorage = z.object({
@@ -217,7 +228,8 @@ export default function FormManager(props: FormManagerProps) {
   });
 
   const callbackProps = {
-    submitHandler: form.handleSubmit(props.onSubmit),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    submitHandler: form.handleSubmit(props.onSubmit as any),
     isSubmitting: form.formState.isSubmitting,
   } satisfies CallbackProps;
 
