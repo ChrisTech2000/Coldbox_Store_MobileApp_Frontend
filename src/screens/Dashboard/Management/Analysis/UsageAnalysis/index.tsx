@@ -134,6 +134,10 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     };
   }, [filteredMovements]);
 
+  const movementsWithCheckout = useMemo(() => {
+    return usage.map((movement) => movement.checkinCode ?? null).filter(Boolean);
+  }, [usage]);
+
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">
       <SelectWithStore<CoolingUnit>
@@ -199,6 +203,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
                     coolingUnitId: id,
                   })
                 }
+                movementsWithCheckout={movementsWithCheckout}
               />
             )}
             estimatedItemSize={40}

@@ -1,3 +1,4 @@
+import { currencies } from 'currencies.json';
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -25,7 +26,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
   }, []);
 
   const getPricing = useCallback((produce: DashboardProduce, currency: string) => {
-    return `${produce.cratesCombinedCost} ${currency}${produce.crates[0]?.pricing[0]?.pricingType === EPricingType.PERIODICITY ? ' / Day' : ''}`;
+    return `${produce.cratesCombinedCost}${currencies.find((c) => c.code === currency)?.symbol ?? ''}${produce.crates[0]?.pricing[0]?.pricingType === EPricingType.PERIODICITY ? ' / Day' : ''}`;
   }, []);
 
   return (

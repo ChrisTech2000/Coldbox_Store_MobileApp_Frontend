@@ -78,6 +78,10 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
     });
   }, [sortedMovements, search]);
 
+  const movementsWithCheckout = useMemo(() => {
+    return movements.map((movement) => movement.checkinCode ?? null).filter(Boolean);
+  }, [movements]);
+
   useEffect(() => {
     addRefreshDataFn(refetchHistoryMovements);
   }, []);
@@ -120,6 +124,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                     coolingUnitId: id,
                   })
                 }
+                movementsWithCheckout={movementsWithCheckout}
               />
             )}
             estimatedItemSize={40}
