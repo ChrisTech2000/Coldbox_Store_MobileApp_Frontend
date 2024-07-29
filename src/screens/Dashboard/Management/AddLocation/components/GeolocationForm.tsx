@@ -23,8 +23,8 @@ export default function GeoLocationForm() {
       });
       form.reset((prev) => ({
         ...prev,
-        latitude: result.latitude,
-        longitude: result.longitude,
+        latitude: result.latitude.toString(),
+        longitude: result.longitude.toString(),
       }));
     } catch {
       // silent error
