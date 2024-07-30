@@ -20,11 +20,11 @@ export class CropPricingManager {
 
     const datums: CropSpecificPricing = [];
 
-    for (const [idx, cropId] of formCrops.entries()) {
+    for (const cropId of formCrops) {
       const datum = { id: cropId, pricingType: priceType } as PricingEntry;
       let price: number = parseFloat(commonPrice);
 
-      const previousPricing = previous.at(idx);
+      const previousPricing = previous.find((pricing) => pricing.id === cropId);
       if (typeof previousPricing !== 'undefined') {
         price = previousPricing.dailyRate || previousPricing.fixedRate;
       }

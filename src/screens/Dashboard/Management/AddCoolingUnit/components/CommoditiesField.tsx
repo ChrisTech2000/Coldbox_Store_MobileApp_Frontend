@@ -151,7 +151,7 @@ function _useCropPricingPatcher(formCrops: FormValues['crops']) {
   const { companyCrops } = DataAggregator.useDataAggregator();
 
   const _callback = useDebouncedCallback(() => {
-    const [priceType, commonPrice, preCropPricing] = getValues([
+    const [priceType, commonPrice, prevCropPricing] = getValues([
       'priceType',
       'price',
       'cropSpecificPricing',
@@ -167,12 +167,12 @@ function _useCropPricingPatcher(formCrops: FormValues['crops']) {
 
     const newCropPricing = CropPricingManager.patch({
       formCrops: formCropsShallow,
-      previous: preCropPricing,
+      previous: prevCropPricing,
       priceType,
       commonPrice,
     });
 
-    if (JSON.stringify(preCropPricing) !== JSON.stringify(newCropPricing)) {
+    if (JSON.stringify(prevCropPricing) !== JSON.stringify(newCropPricing)) {
       setValue('cropSpecificPricing', newCropPricing);
     }
   }, 480);
