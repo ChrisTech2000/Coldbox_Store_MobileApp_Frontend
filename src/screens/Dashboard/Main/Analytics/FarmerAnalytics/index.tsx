@@ -25,7 +25,7 @@ import { useFarmerAnalyticsData } from './store';
 export function FarmerAnalytics() {
   const { user } = useAuthStore();
   const { t } = useTranslationUtils();
-  const { configData, setConfigData } = useFarmerAnalyticsData();
+  const { configData, setConfigData, setFarmer } = useFarmerAnalyticsData();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
@@ -52,7 +52,7 @@ export function FarmerAnalytics() {
   );
 
   const { data: farmerImpact, isLoading: loadingFarmerImpact } = useApiCall(
-    'getFarmerImpact',
+    'getFarmerBaseImpact',
     FarmerImpactService.getFarmerBaseImpact,
     farmerResponse?.[0]?.id as number,
     {
@@ -78,6 +78,12 @@ export function FarmerAnalytics() {
     }
   }, [coolingUnits]);
 
+  useEffect(() => {
+    if (farmerResponse?.[0]) {
+      setFarmer(farmerResponse[0]);
+    }
+  }, [farmerResponse]);
+
   if (loadingFarmers || loadingFarmerImpact || loadingCoolingUnits) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -87,8 +93,8 @@ export function FarmerAnalytics() {
   }
 
   return (
-    <View tw="absolute bottom-0 items-center space-y-2">
-      <ScrollView tw="mx-4 space-y-4" showsVerticalScrollIndicator={false}>
+    <View tw="absolute bottom-0 top-0 pb-1">
+      <ScrollView tw="mx-4 mt-4 space-y-4" showsVerticalScrollIndicator={false}>
         {!configData ? (
           <Configuration openModal={() => setIsModalOpen(true)} />
         ) : (

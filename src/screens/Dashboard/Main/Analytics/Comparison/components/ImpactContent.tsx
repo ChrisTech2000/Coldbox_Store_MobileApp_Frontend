@@ -8,7 +8,7 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 import { DataTable, Icon } from 'react-native-paper';
 import { useComparisonData } from '../store';
-import { SectionAccordion } from './SectionAccordion';
+import { SectionAccordion } from '../../components/SectionAccordion';
 import { getMetricValue } from '../../utils/getMetricValue';
 
 type Section = 'occupancy' | 'foodLoss' | 'revenue' | 'revenuePerRoom' | 'co2' | 'surveys';

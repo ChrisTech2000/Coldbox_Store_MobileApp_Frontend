@@ -38,7 +38,7 @@ class FarmerImpactService extends HttpClient {
 
   public getFarmerImpact = async (
     params: GetFarmerImpactParams
-  ): Promise<FarmerData | undefined> => {
+  ): Promise<Array<FarmerData> | undefined> => {
     try {
       const { unitIds, farmerId } = params;
       const endDate = format(new Date(params.endDate ?? new Date()), 'yyyy-MM-dd');
@@ -54,7 +54,10 @@ class FarmerImpactService extends HttpClient {
 
       const query = qs.stringify(serialize(_params));
 
-      const { data } = await this.axios.post<FarmerData>(EFarmerImpactEndpoints.GET_FARMER, query);
+      const { data } = await this.axios.post<Array<FarmerData>>(
+        EFarmerImpactEndpoints.GET_FARMER,
+        query
+      );
       return data;
     } catch (error) {
       console.log(error);

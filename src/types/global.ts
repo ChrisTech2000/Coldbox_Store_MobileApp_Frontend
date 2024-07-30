@@ -384,24 +384,28 @@ type CropData = {
   [key: string]: number;
 };
 
+type RecordValue<T> = {
+  '0': T;
+};
+
 export type FarmerData = {
-  farmer_id: number;
-  first_name: string;
-  last_name: string;
-  gender: string;
-  user_type: string;
-  cooling_unit_id?: number;
-  room_crates_in?: number;
-  room_ops_in?: number;
-  room_kg_in?: number;
-  room_crates_out?: number;
-  room_ops_out?: number;
-  room_kg_out?: number;
-  check_in_crates_crop?: CropData;
-  check_in_kg_crop?: CropData;
-  check_out_crates_crop?: CropData;
-  check_out_kg_crop?: CropData;
-  unit_name?: string;
+  farmerId: RecordValue<number>;
+  firstName?: RecordValue<string>;
+  lastName?: RecordValue<string>;
+  gender: RecordValue<string>;
+  userType?: RecordValue<string>;
+  coolingUnitId?: RecordValue<number>;
+  roomCratesIn?: RecordValue<number>;
+  roomOpsIn?: RecordValue<number>;
+  roomKgIn?: RecordValue<number>;
+  roomCratesOut?: RecordValue<number>;
+  roomOpsOut?: RecordValue<number>;
+  roomKgOut?: RecordValue<number>;
+  checkInCratesCrop?: RecordValue<CropData>;
+  checkInKgCrop?: RecordValue<CropData>;
+  checkOutCratesCrop?: RecordValue<CropData>;
+  checkOutKgCrop?: RecordValue<CropData>;
+  unitName?: RecordValue<string>;
 };
 
 //////////////////////// ENUMS

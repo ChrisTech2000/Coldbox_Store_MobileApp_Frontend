@@ -8,7 +8,7 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 import { DataTable } from 'react-native-paper';
 import { useComparisonData } from '../store';
-import { SectionAccordion } from './SectionAccordion';
+import { SectionAccordion } from '../../components/SectionAccordion';
 
 type Section =
   | 'crates'
