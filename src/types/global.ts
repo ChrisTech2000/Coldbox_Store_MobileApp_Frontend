@@ -370,6 +370,40 @@ export type CoolingUnitImpact = {
   unitName: number;
 };
 
+export type FarmerBaseData = {
+  avgStorageDays: number;
+  farmerId: number;
+  firstName: string;
+  gender: EApiGender;
+  lastName: string;
+  totalStorageCost: number;
+  userType: ERoles;
+};
+
+type CropData = {
+  [key: string]: number;
+};
+
+export type FarmerData = {
+  farmer_id: number;
+  first_name: string;
+  last_name: string;
+  gender: string;
+  user_type: string;
+  cooling_unit_id?: number;
+  room_crates_in?: number;
+  room_ops_in?: number;
+  room_kg_in?: number;
+  room_crates_out?: number;
+  room_ops_out?: number;
+  room_kg_out?: number;
+  check_in_crates_crop?: CropData;
+  check_in_kg_crop?: CropData;
+  check_out_crates_crop?: CropData;
+  check_out_kg_crop?: CropData;
+  unit_name?: string;
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',

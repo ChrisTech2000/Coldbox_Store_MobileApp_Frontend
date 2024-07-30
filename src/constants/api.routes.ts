@@ -62,3 +62,9 @@ export enum EImpactEndpoints {
   GET_IMPACT = '/impact-slice/',
   GET_COOLING_UNIT = '/coolingunit-slice/',
 }
+
+export enum EFarmerImpactEndpoints {
+  GET_FARMER_BASE = '/farmer-base-slice/',
+  GET_FARMER = '/farmer-slice/',
+  GET_IMPACT = '/impact-slice/',
+}

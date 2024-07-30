@@ -377,3 +377,10 @@ export interface GetCoolingUnitImpactParams extends JsonObject {
   startDate?: Date;
   endDate?: Date;
 }
+
+export interface GetFarmerImpactParams extends JsonObject {
+  farmerId: number;
+  startDate: Date;
+  endDate: Date;
+  unitIds: number | number[];
+}

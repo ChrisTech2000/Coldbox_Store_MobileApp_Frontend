@@ -3,4 +3,5 @@ declare module '@env' {
   export const REACT_APP_AIR_PROD_BASE_URL: string;
   export const REACT_APP_MAPBOX_ACCESS_TOKEN: string;
   export const REACT_APP_IMPACT_BACKUP_BASE_URL: string;
+  export const REACT_APP_FARMER_IMPACT_BASE_URL: string;
 }

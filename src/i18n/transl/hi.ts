@@ -229,7 +229,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: 'रजिस्टर्ड कर्मचारी का साइन अप करें',
+        header: 'कूलिंग उपयोगकर्ता साइन अप करें',
         languageFieldName: 'भाषा',
       },
     },
@@ -881,6 +881,13 @@ export default {
       checkedInLabel: 'चेक इन: {{amount}}',
       checkedOutLabel: 'चेक आउट: {{amount}}',
       methodologyButton: 'कार्यप्रणाली देखें',
+      farmersAnalytics: {
+        coolingUserName: 'कूलिंग उपयोगकर्ता नाम',
+        coolingUserType: 'कूलिंग उपयोगकर्ता प्रकार',
+        avgStorageTime: 'औसत भंडारण समय',
+        coldStorageCost: 'कोल्ड स्टोरेज लागत',
+        days: 'दिन',
+      },
       companyTab: {
         usersTab: {
           employeesTotal: 'कुल पंजीकृत कर्मचारियों की संख्या = {{amount}}',

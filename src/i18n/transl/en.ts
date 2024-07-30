@@ -226,7 +226,7 @@ const en = {
         },
       },
       SignUpCoolingUser: {
-        header: 'Sign Up Registered Employee',
+        header: 'Sign Up Cooling User',
         languageFieldName: 'language',
       },
     },
@@ -877,6 +877,13 @@ const en = {
       checkedInLabel: 'Checked In: {{amount}}',
       checkedOutLabel: 'Checked Out: {{amount}}',
       methodologyButton: 'View Methodology',
+      farmersAnalytics: {
+        coolingUserName: 'Cooling User Name',
+        coolingUserType: 'Cooling User Type',
+        avgStorageTime: 'Average Storage Time',
+        coldStorageCost: 'Cold Storage Cost',
+        days: 'day(s)',
+      },
       companyTab: {
         usersTab: {
           employeesTotal: 'Total number of registered employees = {{amount}}',

@@ -8,7 +8,7 @@ import { getFocusedRouteNameFromRoute, type RouteProp } from '@react-navigation/
 import React, { useCallback } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Analytics from '#screens/Dashboard/Main/Analytics';
+import AnalyticsBase from '#screens/Dashboard/Main/Analytics';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -110,7 +110,7 @@ export default function DashboardMainBottomTabs() {
       <Tab.Screen name="History" component={HistoryTabStack} />
       <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
       <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
-      <Tab.Screen name="Analytics" component={Analytics} />
+      <Tab.Screen name="Analytics" component={AnalyticsBase} />
     </Tab.Navigator>
   );
 }
