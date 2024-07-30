@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { Checkbox, Divider, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import truncate from 'lodash/truncate';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
@@ -14,6 +15,8 @@ import { cn } from '#ui/lib/cn';
 
 import FormManager, { type FormValues } from '../contexts/FormManager';
 import DataAggregator from '../contexts/DataAggregator';
+
+import { CropPricingManager } from '../utils';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -28,6 +31,8 @@ export default function CommoditiesField() {
 
   const selectedCrops = watch('crops');
   const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedCrops);
+
+  _useCropPricingPatcher(selectedCrops);
 
   const datums = useMemo(() => {
     const entries: Array<[number, string]> = [];
@@ -139,4 +144,38 @@ export default function CommoditiesField() {
       />
     </React.Fragment>
   );
+}
+
+function _useCropPricingPatcher(formCrops: FormValues['crops']) {
+  const { getValues, setValue } = FormManager.useFormManager();
+  const { companyCrops } = DataAggregator.useDataAggregator();
+
+  const _callback = useDebouncedCallback(() => {
+    const [priceType, commonPrice, preCropPricing] = getValues([
+      'priceType',
+      'price',
+      'cropSpecificPricing',
+    ]);
+
+    const formCropsShallow = [...formCrops];
+
+    if (!(formCropsShallow.length >= 1)) {
+      for (const cropId in companyCrops) {
+        formCropsShallow.push(parseInt(cropId));
+      }
+    }
+
+    const newCropPricing = CropPricingManager.patch({
+      formCrops: formCropsShallow,
+      previous: preCropPricing,
+      priceType,
+      commonPrice,
+    });
+
+    if (JSON.stringify(preCropPricing) !== JSON.stringify(newCropPricing)) {
+      setValue('cropSpecificPricing', newCropPricing);
+    }
+  }, 480);
+
+  useEffect(_callback, [formCrops.length]);
 }

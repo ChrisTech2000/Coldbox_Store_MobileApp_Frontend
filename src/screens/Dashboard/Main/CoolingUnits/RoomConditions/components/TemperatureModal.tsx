@@ -10,7 +10,8 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import ColdtivateService from '#services/ColdtivateService';
 
-type FormValues = { temperature: number };
+type FormValues<T = string> = { temperature: T };
+type PreprocessedFormValues = FormValues<number>;
 
 type Props = {
   temp: number;
@@ -23,16 +24,16 @@ export default function TemperatureModal(props: Props) {
   const { t, zodResolver } = useTranslationUtils();
 
   const form = useForm<FormValues>({
-    defaultValues: { temperature: 0 },
+    defaultValues: { temperature: '' },
     resolver: zodResolver((z) =>
       z.object({
-        temperature: z.number().gt(0).positive(),
+        temperature: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gt(0)),
       })
     ),
     reValidateMode: 'onSubmit',
   });
 
-  async function onSubmit(values: FormValues): Promise<void> {
+  async function onSubmit(values: PreprocessedFormValues): Promise<void> {
     try {
       await ColdtivateService.addCoolingUnitTemperature({
         value: values.temperature,
@@ -69,8 +70,8 @@ export default function TemperatureModal(props: Props) {
                     label="Temperature"
                     mode="flat"
                     keyboardType="numeric"
-                    value={value.toString()}
-                    onChangeText={(v) => onChange(parseInt(v || '0'))}
+                    value={value}
+                    onChangeText={onChange}
                     onBlur={onBlur}
                     error={!!form.formState.errors.temperature}
                     left={<TextInput.Icon icon="thermometer" />}
@@ -85,7 +86,8 @@ export default function TemperatureModal(props: Props) {
             <View tw="self-center w-full">
               <Button
                 mode="contained"
-                onPress={form.handleSubmit(onSubmit)}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onPress={form.handleSubmit(onSubmit as any)}
                 icon={form.formState.isSubmitting ? undefined : 'check-circle-outline'}
                 disabled={form.formState.isSubmitting}
               >

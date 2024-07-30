@@ -55,7 +55,7 @@ export default function LineChart(props: LineChartProps) {
     [textValue]
   );
   const p2 = useDerivedValue(
-    () => vec(state.x.position.value, state.y.temperature.position.value * 8), // ← fyk: this multiplication by eight is made up :shurg:
+    () => vec(state.x.position.value, state.y.temperature.position.value * 12), // ← fyk: this multiplication by eight is made up :shurg:
     [textValue]
   );
 
@@ -83,7 +83,7 @@ export default function LineChart(props: LineChartProps) {
             color={paperTheme.colors.primary}
             strokeWidth={2}
             animate={{ type: 'timing', duration: 500 }}
-            curveType="natural"
+            curveType="linear"
             connectMissingData
             antiAlias
           />

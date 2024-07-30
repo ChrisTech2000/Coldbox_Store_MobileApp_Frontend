@@ -377,3 +377,19 @@ export interface GetCoolingUnitImpactParams extends JsonObject {
   startDate?: Date;
   endDate?: Date;
 }
+
+export type VerifyEcozenSensorConnectivityParams = {
+  username: string;
+  password: string;
+  machineID: string;
+};
+
+export type VerifyUbibotSensorConnectivityParams = {
+  accountKey: string;
+  channelId: string;
+};
+
+export type VerifyFigorrSensorConnectivityParams = {
+  apiKey: string;
+  deviceTag: string;
+};
