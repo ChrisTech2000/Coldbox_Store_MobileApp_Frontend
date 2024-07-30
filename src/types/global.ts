@@ -408,6 +408,68 @@ export type FarmerData = {
   unitName?: RecordValue<string>;
 };
 
+type AggregatedData = {
+  farmerId: number;
+  unitName: number;
+  baselineQuantityTotalMonth: number;
+  avgBaselineKgSellingPriceMonth: number;
+  baselineKgLossMonth: number;
+  baselineKgSoldMonth: number;
+  avgBaselinePercLossMonth: number;
+  avgBaselineFarmerRevenueMonth: number;
+  avgMonthlyKgSellingPrice: number;
+  monthlyKgCheckin: number;
+  monthlyKgLoss: number;
+  avgMonthlyPercLoss: number;
+  avgMonthlyPercFoodlossEvolution: number;
+  avgMonthlyFarmerRevenue: number;
+  avgMonthlyPercRevenueIncreaseEvolution: number;
+  avgMonthlyKgSellingPriceEvolution: number;
+  avgMonthlyPercUnitSellingPriceEvolution: number;
+  avgMonthlyFarmerRevenueEvolution: number;
+  latestSurveyDate: number;
+};
+
+type Top5Data = {
+  farmerId: number;
+  cropId: number;
+  cropName: number;
+  unitName: number;
+  baselineQuantityTotalMonth: number;
+  avgBaselineKgSellingPriceMonth: number;
+  baselineKgLossMonth: number;
+  baselineKgSoldMonth: number;
+  avgBaselinePercLossMonth: number;
+  avgBaselineFarmerRevenueMonth: number;
+  avgMonthlyKgSellingPrice: number;
+  monthlyKgCheckin: number;
+  monthlyKgLoss: number;
+  avgMonthlyPercLoss: number;
+  avgMonthlyPercFoodlossEvolution: number;
+  avgMonthlyFarmerRevenue: number;
+  avgMonthlyPercRevenueIncreaseEvolution: number;
+  avgMonthlyKgSellingPriceEvolution: number;
+  avgMonthlyPercUnitSellingPriceEvolution: number;
+  avgMonthlyFarmerRevenueEvolution: number;
+  latestSurveyDate: number;
+};
+
+type SurveyData = {
+  farmerId: number;
+  numFilledBaselineSurveys: number;
+  numOfPossibleBaselineSurveys: number;
+  numOfFilledPostcheckoutSurveys: number;
+  numOfPossiblePostcheckoutSurveys: number;
+  cropsWithBaselineSurveyToBeCompleted: string;
+};
+
+export type FarmerImpactData = {
+  aggregated: AggregatedData;
+  top5FoodLossEvolution: Record<string, Top5Data>;
+  top5RevenueEvolution: Record<string, Top5Data>;
+  surveys: SurveyData[];
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',
