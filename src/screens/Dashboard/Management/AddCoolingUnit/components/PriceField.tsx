@@ -12,12 +12,17 @@ import { currenciesDict } from '../../CompanyDetails/utils';
 const currencies = currenciesDict();
 
 export default function PriceField() {
-  const { control, formState } = FormManager.useFormManager();
+  const { control, formState, watch } = FormManager.useFormManager();
   const { companyCurrency } = DataAggregator.useDataAggregator();
   const { t } = useTranslationUtils();
 
+  const selectedPriceType = watch('priceType');
+
   const currencySymbol = companyCurrency ? currencies.getSymbolByCode(companyCurrency) : undefined;
-  const textInputAffix = currencySymbol ? `${currencySymbol}/day` : `/day`;
+  const textInputAffix =
+    selectedPriceType === 'PERIODICITY'
+      ? `${currencySymbol}/${t('Dashboard.Management.AddCoolingUnit.pricing.day')}`
+      : currencySymbol;
 
   const errors = formState.errors;
 
