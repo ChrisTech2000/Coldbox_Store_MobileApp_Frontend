@@ -160,7 +160,7 @@ export function CratesTab() {
 
   if (loadingFarmerImpact || isLoadingCrops) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );

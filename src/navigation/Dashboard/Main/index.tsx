@@ -18,13 +18,16 @@ import NavigatorHeader from '../../components/NavigatorHeader';
 import BottomNavigation from '../components/BottomNavigation';
 import { BOTTOM_NAV_ROUTES_SCOPE, dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 import CoolingUnitsTabs from './CoolingUnitsTabs';
-import HistoryTabStack from './HistoryTabStack';
+import HistoryTabStack, { HistoryTabStackRoutes } from './HistoryTabStack';
 import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
-  History: undefined;
+  History: {
+    screen?: keyof HistoryTabStackRoutes;
+    params?: HistoryTabStackRoutes['MarketSurveyStack'] | HistoryTabStackRoutes['EditCheckIn'];
+  };
   MarketPrice: undefined;
   CoolingUnits: undefined;
   Analytics: undefined;

@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, DataTable, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import { useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -37,6 +39,8 @@ type TableProps = {
 export function ImpactTab() {
   const { t } = useTranslationUtils();
   const { configData, farmer } = useFarmerAnalyticsData();
+  const { setSurveys, setFarmerId, setRefetchSurveys } = useMarketSurveyStore();
+
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const [expanded, setExpanded] = useState<Section | undefined>();
@@ -55,6 +59,36 @@ export function ImpactTab() {
     }
   );
 
+  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+    'getAllCrops',
+    ColdtivateService.getAllCrops,
+    undefined,
+    {
+      defaultData: [],
+    }
+  );
+
+  const { data: company } = useApiCall(
+    'getCompanyById',
+    ColdtivateService.getCompanyById,
+    farmer?.companies[0] as number,
+    {
+      skip: !farmer,
+    }
+  );
+
+  const { data: surveysData, refetch } = useApiCall(
+    'getFarmerSurveys',
+    ColdtivateService.getFarmerSurveys,
+    {
+      farmerId: farmer?.id as number,
+    },
+    {
+      skip: !farmer,
+      defaultData: [],
+    }
+  );
+
   const surveys = useMemo(() => {
     const basePossible = impact?.surveys?.[0].numOfPossibleBaselineSurveys ?? 0;
     const baseFilled = impact?.surveys?.[0].numFilledBaselineSurveys ?? 0;
@@ -68,6 +102,7 @@ export function ImpactTab() {
       postPossible,
       postFilled,
       postLeft: postPossible - postFilled,
+      idsNotFilled: impact?.surveys?.[0]?.cropsWithBaselineSurveyToBeCompleted.split(',') ?? [],
     };
   }, [impact]);
 
@@ -123,9 +158,17 @@ export function ImpactTab() {
     [expanded]
   );
 
-  if (loadingImpact) {
+  useEffect(() => {
+    if (surveysData?.length) {
+      setSurveys(surveysData);
+      setFarmerId(surveysData[0].farmer as number);
+      setRefetchSurveys(refetch);
+    }
+  }, [surveysData, refetch]);
+
+  if (loadingImpact || isLoadingCrops) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
@@ -136,7 +179,30 @@ export function ImpactTab() {
       <View tw="bg-green-transparency rounded-lg py-3 px-2 w-full mb-2">
         <View tw="flex flex-row items-center justify-center w-full space-x-1">
           <View tw="items-center w-1/2 space-y-2">
-            <Button mode="contained" tw="bg-gray-700">
+            <Button
+              mode="contained"
+              tw="bg-gray-700"
+              onPress={() =>
+                rootNavigation.navigate('History', {
+                  screen: 'MarketSurveyStack',
+                  params: {
+                    screen: 'MarketSurveyBase',
+                    params: {
+                      farmer: farmer?.user.firstName ?? '',
+                      crops: surveys.idsNotFilled.map((crop) => {
+                        const fullCrop = crops.find((c) => c.id.toString() === crop);
+
+                        return {
+                          id: fullCrop?.id as number,
+                          name: fullCrop?.name as string,
+                        };
+                      }),
+                      companyCurrency: company?.currency,
+                    },
+                  },
+                })
+              }
+            >
               {t('Dashboard.Analytics.farmersAnalytics.baselineSurveyButton')}
             </Button>
             <Text tw="text-xl flex flex-row">
@@ -155,7 +221,7 @@ export function ImpactTab() {
             <Button
               mode="contained"
               tw="bg-gray-700"
-              onPress={() => rootNavigation.navigate('History')}
+              onPress={() => rootNavigation.navigate('History', { screen: 'RootHistoryTabStack' })}
             >
               {t('Dashboard.Analytics.farmersAnalytics.postCheckOutSurveyButton')}
             </Button>
@@ -299,7 +365,30 @@ export function ImpactTab() {
             ({((surveys.baseFilled * 100) / surveys.basePossible).toFixed(2)}%)
           </Text>
         </View>
-        <Button mode="contained" tw="bg-gray-700">
+        <Button
+          mode="contained"
+          tw="bg-gray-700"
+          onPress={() =>
+            rootNavigation.navigate('History', {
+              screen: 'MarketSurveyStack',
+              params: {
+                screen: 'MarketSurveyBase',
+                params: {
+                  farmer: farmer?.user.firstName ?? '',
+                  crops: surveys.idsNotFilled.map((crop) => {
+                    const fullCrop = crops.find((c) => c.id.toString() === crop);
+
+                    return {
+                      id: fullCrop?.id as number,
+                      name: fullCrop?.name as string,
+                    };
+                  }),
+                  companyCurrency: company?.currency,
+                },
+              },
+            })
+          }
+        >
           {t('Dashboard.Analytics.farmersAnalytics.baselineSurveyButton')}
         </Button>
       </View>
@@ -319,7 +408,7 @@ export function ImpactTab() {
         <Button
           mode="contained"
           tw="bg-gray-700"
-          onPress={() => rootNavigation.navigate('History')}
+          onPress={() => rootNavigation.navigate('History', { screen: 'RootHistoryTabStack' })}
         >
           {t('Dashboard.Analytics.farmersAnalytics.postCheckOutSurveyButton')}
         </Button>
