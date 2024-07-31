@@ -58,22 +58,37 @@ export function CratesContent() {
     [expanded]
   );
 
-  const cratesData = useMemo(() => {    
+  const cratesData = useMemo(() => {
     return {
-      checkInCratesCrops: Object.values(coolingUnitData?.checkInCratesCrop?.['0'] ?? {}).reduce((acc, current) => acc += current, 0),
-      checkOutCratesCrops: Object.values(coolingUnitData?.checkOutCratesCrop?.['0'] ?? {}).reduce((acc, current) => acc += current, 0),
-    }
-  }, [coolingUnitData]);
-  
-  const kgData = useMemo(() => {    
-    return {
-      checkInKgCrops: Object.values(coolingUnitData?.checkInKgCrop?.['0'] ?? {}).reduce((acc, current) => acc += current, 0),
-      checkOutKgCrops: Object.values(coolingUnitData?.checkOutKgCrop?.['0'] ?? {}).reduce((acc, current) => acc += current, 0),
-    }
+      checkInCratesCrops: Object.values(coolingUnitData?.checkInCratesCrop?.['0'] ?? {}).reduce(
+        (acc, current) => (acc += current),
+        0
+      ),
+      checkOutCratesCrops: Object.values(coolingUnitData?.checkOutCratesCrop?.['0'] ?? {}).reduce(
+        (acc, current) => (acc += current),
+        0
+      ),
+    };
   }, [coolingUnitData]);
 
-  const co2crops = useMemo(() => {    
-    return  Object.values(coolingUnitData?.co2Crops?.['0'] ?? {}).reduce((acc, current) => acc += current, 0);
+  const kgData = useMemo(() => {
+    return {
+      checkInKgCrops: Object.values(coolingUnitData?.checkInKgCrop?.['0'] ?? {}).reduce(
+        (acc, current) => (acc += current),
+        0
+      ),
+      checkOutKgCrops: Object.values(coolingUnitData?.checkOutKgCrop?.['0'] ?? {}).reduce(
+        (acc, current) => (acc += current),
+        0
+      ),
+    };
+  }, [coolingUnitData]);
+
+  const co2crops = useMemo(() => {
+    return Object.values(coolingUnitData?.co2Crops?.['0'] ?? {}).reduce(
+      (acc, current) => (acc += current),
+      0
+    );
   }, [coolingUnitData]);
 
   return (
@@ -148,7 +163,7 @@ export function CratesContent() {
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
                 column1: coolingUnitData?.roomCratesIn?.[0] ?? 0,
-                column2: cratesData.checkInCratesCrops
+                column2: cratesData.checkInCratesCrops,
               },
             ]}
             total={1} // TODO: confirm data
@@ -172,7 +187,7 @@ export function CratesContent() {
                 column2: cratesData.checkOutCratesCrops,
               },
             ]}
-            total={1} 
+            total={1}
           />
         }
       />
@@ -193,7 +208,7 @@ export function CratesContent() {
                 column2: kgData.checkInKgCrops,
               },
             ]}
-            total={1} 
+            total={1}
           />
         }
       />
@@ -214,7 +229,7 @@ export function CratesContent() {
                 column2: cratesData.checkOutCratesCrops,
               },
             ]}
-            total={1} 
+            total={1}
           />
         }
       />

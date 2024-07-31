@@ -129,7 +129,12 @@ function Table({ items, header, total }: TableProps) {
         <DataTable.Cell>
           <View>
             {header.map((text, index) => (
-              <Text key={`${text}-${index}`} variant="TextMedium" tw="text-white text-base flex-wrap" numberOfLines={3}>
+              <Text
+                key={`${text}-${index}`}
+                variant="TextMedium"
+                tw="text-white text-base flex-wrap"
+                numberOfLines={3}
+              >
                 {text}
               </Text>
             ))}

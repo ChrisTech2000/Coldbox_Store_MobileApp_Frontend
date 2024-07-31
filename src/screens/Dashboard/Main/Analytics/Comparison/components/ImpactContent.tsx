@@ -132,7 +132,7 @@ export function ImpactContent() {
                 column2: `${foodLoss.from.toFixed(2)}% to ${foodLoss.to.toFixed(2)}%`,
               },
             ]}
-            total={1} 
+            total={1}
           />
         }
       />
@@ -176,10 +176,13 @@ export function ImpactContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: getMetricValue(impactData?.impactMetrics?.[0].avgMonthlyFarmerRevenue).toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: company?.currency,
-                }) ?? 0,
+                value:
+                  getMetricValue(
+                    impactData?.impactMetrics?.[0].avgMonthlyFarmerRevenue
+                  ).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: company?.currency,
+                  }) ?? 0,
               },
             ]}
             total={1}

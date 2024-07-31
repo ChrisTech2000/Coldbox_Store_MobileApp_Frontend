@@ -33,12 +33,7 @@ export function ComparisonSection() {
   const { t } = useTranslationUtils();
   const { coolingUnits } = useAnalyticsData();
   const { company } = useManagementStore();
-  const { 
-    configData, 
-    setConfigData, 
-    setImpactData, 
-    setCoolingUnitData,
-  } = useComparisonData();
+  const { configData, setConfigData, setImpactData, setCoolingUnitData } = useComparisonData();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
