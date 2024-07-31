@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { FlatList, View } from 'react-native';
 import { Divider, Modal, Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
@@ -180,7 +180,9 @@ function _useSyncLocalFormPricing(
   cb: (newState: Record<string, string>) => void
 ) {
   const { watch, getValues } = FormManager.useFormManager();
-  const cropSpecificPricing = watch('cropSpecificPricing');
+  const [cropSpecificPricing, commonPrice] = watch(['cropSpecificPricing', 'price']);
+
+  const previousPrice = useRef<string>(getValues('price'));
 
   const _effectCallback = useDebouncedCallback(() => {
     const keys = new Set<string>([
@@ -188,16 +190,23 @@ function _useSyncLocalFormPricing(
       ...cropSpecificPricing.map((cropPricing) => cropPricing.id.toString()),
     ]);
 
-    const commonPrice = getValues('price');
+    const _previousPrice = previousPrice.current;
+    previousPrice.current = commonPrice;
 
     const entries: Array<[string, string]> = [];
     for (const key of keys) {
-      const value = formValues.pricing?.[key] ?? commonPrice;
-      entries.push([key, value]);
+      const value = formValues.pricing?.[key];
+      if (typeof value === 'undefined') {
+        entries.push([key, commonPrice]);
+        continue;
+      }
+
+      if (value === _previousPrice) entries.push([key, commonPrice]);
+      else entries.push([key, value]);
     }
 
     cb(Object.fromEntries(entries));
   }, 480);
 
-  useEffect(_effectCallback, [cropSpecificPricing.length]);
+  useEffect(_effectCallback, [cropSpecificPricing.length, commonPrice]);
 }
