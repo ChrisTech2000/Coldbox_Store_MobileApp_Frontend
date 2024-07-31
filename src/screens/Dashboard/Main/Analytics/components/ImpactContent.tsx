@@ -168,7 +168,7 @@ export function ImpactContent<T extends Store>({
             </View>
           }
           change={
-            foodLoss.to === foodLoss.from ? (
+            revenueChange.to === revenueChange.from ? (
               <Icon source="equal" size={40} />
             ) : revenueChange.to < revenueChange.from ? (
               <DownChange

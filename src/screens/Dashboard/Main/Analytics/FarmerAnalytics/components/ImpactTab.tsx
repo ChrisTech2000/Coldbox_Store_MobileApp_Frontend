@@ -17,7 +17,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 import { DashboardMainRoutes } from 'navigation/Dashboard/Main';
-import { ImpactSection } from '../../components/ImpactContent';
+import { DownChange, ImpactSection, UpChange } from '../../components/ImpactContent';
 import { SectionAccordion } from '../../components/SectionAccordion';
 import { useFarmerAnalyticsData } from '../store';
 
@@ -126,7 +126,7 @@ export function ImpactTab() {
     };
   }, [impact]);
 
-  const revenue = useMemo(() => {
+  const revenueChange = useMemo(() => {
     const from = impact?.aggregated?.avgMonthlyFarmerRevenueEvolution || 0;
     const to = impact?.aggregated?.avgMonthlyPercRevenueIncreaseEvolution || 0;
     return {
@@ -274,6 +274,21 @@ export function ImpactTab() {
             </Text>
           </View>
         }
+        change={
+          foodLoss.to === foodLoss.from ? (
+            <Icon source="equal" size={40} />
+          ) : foodLoss.to < foodLoss.from ? (
+            <DownChange
+              value={`${foodLoss.change.toFixed(2)}%`}
+              message={t('Dashboard.Analytics.farmersAnalytics.decreaseInFoodLoss')}
+            />
+          ) : (
+            <UpChange
+              value={`${foodLoss.change.toFixed(2)}%`}
+              message={t('Dashboard.Analytics.farmersAnalytics.increaseInFoodLoss')}
+            />
+          )
+        }
       />
 
       <SectionAccordion
@@ -300,7 +315,7 @@ export function ImpactTab() {
         title={t('Dashboard.Analytics.farmersAnalytics.revenueEvolution')}
         from={
           <View>
-            {revenue.change === 0 && (
+            {revenueChange.change === 0 && (
               <Text variant="TextMedium" tw="text-base mb-1">
                 {t('Dashboard.Analytics.farmersAnalytics.noChangeRevenue')}
               </Text>
@@ -310,7 +325,7 @@ export function ImpactTab() {
                 {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
               </Text>
               <Text variant="TextMedium" tw="text-lg font-bold">
-                {revenue.from}
+                {revenueChange.from}
               </Text>
               <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
                 %
@@ -324,12 +339,29 @@ export function ImpactTab() {
               {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
             </Text>
             <Text variant="TextMedium" tw="text-lg font-bold">
-              {revenue.to}
+              {revenueChange.to}
             </Text>
             <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
               %
             </Text>
           </View>
+        }
+        change={
+          revenueChange.to === revenueChange.from ? (
+            <Icon source="equal" size={40} />
+          ) : revenueChange.to < revenueChange.from ? (
+            <DownChange
+              value={`${revenueChange.change.toFixed(2)}%`}
+              message={t('Dashboard.Analytics.farmersAnalytics.decreaseInRevenue')}
+              negative
+            />
+          ) : (
+            <UpChange
+              value={`${revenueChange.change.toFixed(2)}%`}
+              message={t('Dashboard.Analytics.farmersAnalytics.increaseInRevenue')}
+              positive
+            />
+          )
         }
       />
 
@@ -343,7 +375,7 @@ export function ImpactTab() {
             column1={t('Dashboard.Analytics.farmersAnalytics.crops')}
             column2={t('Dashboard.Analytics.farmersAnalytics.changePercentage')}
             column3={t('Dashboard.Analytics.farmersAnalytics.revenueLevels')}
-            items={revenue.crops.map((crop) => ({
+            items={revenueChange.crops.map((crop) => ({
               column1: crop.name,
               column2: `${crop.change.toFixed(2)}%`,
               column3: `${crop.from.toFixed(2)}% - ${crop.to.toFixed(2)}%`,
