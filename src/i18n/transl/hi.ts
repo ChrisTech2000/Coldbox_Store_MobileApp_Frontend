@@ -674,6 +674,7 @@ export default {
           label: 'मूल्य का प्रकार',
           PERIODICITY: 'प्रतिदिन',
           FIXED: 'फिक्स्ड',
+          day: 'दिन',
         },
         metricUnit: {
           label: 'मापीय',

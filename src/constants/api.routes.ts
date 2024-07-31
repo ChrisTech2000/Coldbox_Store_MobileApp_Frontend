@@ -63,6 +63,12 @@ export enum EImpactEndpoints {
   GET_COOLING_UNIT = '/coolingunit-slice/',
 }
 
+export enum ESensorEndpoints {
+  ECOZEN_CHECK = 'storage/v1/ecozen-test/',
+  UBIBOT_CHECK = 'storage/v1/ubibot/',
+  FIGORR_CHECK = 'storage/v1/figorr/',
+}
+
 export enum EFarmerImpactEndpoints {
   GET_FARMER_BASE = '/farmer-base-slice/',
   GET_FARMER = '/farmer-slice/',

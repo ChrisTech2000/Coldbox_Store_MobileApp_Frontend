@@ -7,6 +7,7 @@ import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useUnmount } from '#ui/hooks/useUnmount';
+import SensorsService from '#services/SensorsService';
 
 type FormValues = {
   accountKey: string;
@@ -29,7 +30,15 @@ export default function UbibotForm() {
   useUnmount(form.reset);
 
   async function onSubmit(values: FormValues) {
-    console.log(values);
+    try {
+      const result = await SensorsService.verifyUbibotSensorConnectivity({
+        accountKey: values.accountKey,
+        channelId: values.channelId,
+      });
+      console.log(result); // TODO
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   return (

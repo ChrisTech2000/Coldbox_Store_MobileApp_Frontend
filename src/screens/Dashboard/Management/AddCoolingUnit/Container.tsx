@@ -3,14 +3,12 @@ import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import ColdRoom from '#assets/icons/coldroom.svg';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 
-import type { AddCoolingUnitParams } from '#types/api.params';
 import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -21,8 +19,6 @@ import FormFields from './components/FormFields';
 import DataAggregator from './contexts/DataAggregator';
 import { METRIC_UNITS, PRICING_TYPE } from './constants';
 
-type CropUpdates = AddCoolingUnitParams['cropUpdates'];
-
 type Props = {
   companyId: number | undefined;
 };
@@ -31,7 +27,7 @@ export default function ScreenContainer(props: Props) {
   const initialFormValues = useRef<FormValues>(_buildInitialValues());
   const navigation = useNavigation();
 
-  const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
+  const { isLoading } = DataAggregator.useDataAggregator();
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
@@ -44,84 +40,58 @@ export default function ScreenContainer(props: Props) {
   }
 
   async function onSubmit(values: PreprocessedFormValues): Promise<void> {
-    const clone = cloneDeep(values) as PreprocessedFormValues & { cropUpdates: CropUpdates };
-    clone.cropUpdates = [];
-
-    if (!(clone.crops.length >= 1)) {
-      for (const cropId in companyCrops) {
-        clone.crops.push(parseInt(cropId));
-      }
-    }
-
-    for (const cropId of clone.crops) {
-      const struct = { id: cropId, pricingType: clone.priceType } as CropUpdates[0];
-      if (clone.priceType === 'PERIODICITY') {
-        clone.cropUpdates.push({
-          ...struct,
-          dailyRate: clone.price,
-          fixedRate: 0,
-        });
-        continue;
-      }
-      clone.cropUpdates.push({
-        ...struct,
-        dailyRate: 0,
-        fixedRate: clone.price,
-      });
-    }
-
     try {
       await ColdtivateService.addCoolingUnit({
-        name: clone.name,
-        location: clone.location as number,
-        metric: clone.metricUnit,
-        capacityInNumberCrates: clone.capacityInNumberCrates,
-        capacityInMetricTons: clone.capacityInMetricTons,
-        foodCapacityInMetricTons: clone.foodCapacityInMetricTons,
-        fixedPrice: clone.priceType === 'FIXED',
-        price: clone.price,
-        sensor: clone.sensor,
-        public: clone.public,
+        name: values.name,
+        location: values.location as number,
+        metric: values.metricUnit,
+        capacityInNumberCrates: values.capacityInNumberCrates,
+        capacityInMetricTons: values.capacityInMetricTons,
+        foodCapacityInMetricTons: values.foodCapacityInMetricTons,
+        fixedPrice: values.priceType === 'FIXED',
+        price: values.price,
+        sensor: values.sensor,
+        public: values.public,
         sensorData: '', // TODO: sensor integration
         powerOptions: {
-          powerConsumptionInMt: clone.powerConsumptionInMt ?? 0,
-          dailyRoomWattage: clone.dailyRoomWattage ?? 0,
-          powerSourceDieselPercent: clone.powerSourceDieselPercent ?? 0,
-          powerSourceGridPercent: clone.powerSourceGridPercent ?? 0,
-          powerSourcePvPercent: clone.powerSourcePvPercent ?? 0,
-          powerSourceBiomassPercent: clone.powerSourceBiomassPercent ?? 0,
-          powerSourceDieselConsumptionKwh: clone.powerSourceDieselConsumptionKwh ?? 0,
-          pvPanelCount: clone.pvPanelCount ?? 0,
-          pvPanelSize: clone.pvPanelSize ?? 0,
-          pvPanelWeight: clone.pvPanelWeight ?? 0,
-          pvPanelMaxPower: clone.pvPanelMaxPower ?? 0,
-          batteryCount: clone.batteryCount ?? 0,
-          batteryWeight: clone.batteryWeight ?? 0,
-          batteryCapacity: clone.batteryCapacity ?? 0,
-          batteryMaxCurrent: clone.batteryMaxCurrent ?? 0,
-          batteryPeakEnergyStorage: clone.batteryPeakEnergyStorage ?? 0,
-          refrigerantType: clone.refrigerantType ?? 'other',
-          amountRefrigerant: clone.amountRefrigerant ?? 0,
-          roomInsulator: clone.roomInsulator ?? 0,
-          batteryType: clone.batteryType ?? null,
-          powerSource: clone.powerSource ?? '',
-          electricityStorageSystem: clone.electricityStorageSystem ?? '',
-          thermalStorageMethod: clone.thermalStorageMethod ?? '',
-          pvPanelType: clone.pvPanelType ?? '',
+          powerConsumptionInMt: values.powerConsumptionInMt ?? 0,
+          dailyRoomWattage: values.dailyRoomWattage ?? 0,
+          powerSourceDieselPercent: values.powerSourceDieselPercent ?? 0,
+          powerSourceGridPercent: values.powerSourceGridPercent ?? 0,
+          powerSourcePvPercent: values.powerSourcePvPercent ?? 0,
+          powerSourceBiomassPercent: values.powerSourceBiomassPercent ?? 0,
+          powerSourceDieselConsumptionKwh: values.powerSourceDieselConsumptionKwh ?? 0,
+          pvPanelCount: values.pvPanelCount ?? 0,
+          pvPanelSize: values.pvPanelSize ?? 0,
+          pvPanelWeight: values.pvPanelWeight ?? 0,
+          pvPanelMaxPower: values.pvPanelMaxPower ?? 0,
+          batteryCount: values.batteryCount ?? 0,
+          batteryWeight: values.batteryWeight ?? 0,
+          batteryCapacity: values.batteryCapacity ?? 0,
+          batteryMaxCurrent: values.batteryMaxCurrent ?? 0,
+          batteryPeakEnergyStorage: values.batteryPeakEnergyStorage ?? 0,
+          refrigerantType: values.refrigerantType ?? 'other',
+          amountRefrigerant: values.amountRefrigerant ?? 0,
+          roomInsulator: values.roomInsulator ?? 0,
+          batteryType: values.batteryType ?? null,
+          powerSource: values.powerSource ?? '',
+          electricityStorageSystem: values.electricityStorageSystem ?? '',
+          thermalStorageMethod: values.thermalStorageMethod ?? '',
+          pvPanelType: values.pvPanelType ?? '',
         },
-        operators: clone.operators,
-        crops: clone.crops,
-        cropUpdates: clone.cropUpdates,
-        crateLength: clone.crateLength,
-        crateWidth: clone.crateWidth,
-        crateHeight: clone.crateHeight,
-        crateWeight: clone.crateWeight,
-        roomWeight: clone.roomWeight,
-        roomHeight: clone.roomHeight,
-        roomLength: clone.roomLength,
-        roomWidth: clone.roomWidth,
-        coolingUnitType: clone.coolingUnitType ?? '',
-        editableCheckins: clone.editableCheckins,
+        operators: values.operators,
+        crops: values.crops,
+        cropUpdates: values.cropSpecificPricing,
+        crateLength: values.crateLength,
+        crateWidth: values.crateWidth,
+        crateHeight: values.crateHeight,
+        crateWeight: values.crateWeight,
+        roomWeight: values.roomWeight,
+        roomHeight: values.roomHeight,
+        roomLength: values.roomLength,
+        roomWidth: values.roomWidth,
+        coolingUnitType: values.coolingUnitType ?? '',
+        editableCheckins: values.editableCheckins,
       });
 
       await mutate(getQueryKey('getLocations', props.companyId));
@@ -145,7 +115,7 @@ export default function ScreenContainer(props: Props) {
               <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
               <Text tw="text-lg">{t('Dashboard.Management.AddCoolingUnit.heading')}</Text>
             </View>
-            <FormFields />
+            <FormFields isEditMode={false} />
             <Button
               tw="w-11/12 self-center mt-7"
               mode="contained"
@@ -187,6 +157,7 @@ function _buildInitialValues() {
     public: false,
     operators: [],
     crops: [],
+    cropSpecificPricing: [],
     refrigerantType: 'other',
     amountRefrigerant: '',
     powerConsumptionInMt: '',
