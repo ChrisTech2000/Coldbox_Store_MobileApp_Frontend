@@ -16,7 +16,11 @@ import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
 
-import FormManager, { type FormValues, DEFAULT_VALUES } from './AddLocation/components/FormManager';
+import FormManager, {
+  type FormValues,
+  DEFAULT_VALUES,
+  type PreprocessedFormValues,
+} from './AddLocation/components/FormManager';
 import LocationNameModule from './AddLocation/modules/LocationNameModule';
 import StepModule from './AddLocation/modules/StepModule';
 import StepFactory from './AddLocation/modules/StepFactory';
@@ -55,7 +59,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     );
   }
 
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: PreprocessedFormValues) {
     try {
       const data = pickFormValues(values);
       if (!data) throw new Error();
@@ -94,8 +98,8 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     values.country = getCountryFullName(data.company.country) ?? '';
 
     if (data.latitude) {
-      values.latitude = data.latitude;
-      values.longitude = data.longitude;
+      values.latitude = data.latitude.toString();
+      values.longitude = data.longitude.toString();
     } else {
       values._step = 'address';
       values.city = data.city;

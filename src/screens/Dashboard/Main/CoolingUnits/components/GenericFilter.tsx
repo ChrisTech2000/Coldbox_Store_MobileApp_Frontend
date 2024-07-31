@@ -75,6 +75,7 @@ Filter.CoolingUnits = function _CoolingUnitsFilter() {
   return (
     <SelectWithStore<CoolingUnit>
       datums={data ?? []}
+      useScrollView={false}
       isModalVisible={isVisible}
       setIsModalVisible={setVisibility}
       itemName={(item) => item.name}
@@ -100,6 +101,7 @@ Filter.Companies = function _FarmerCompaniesFilter() {
     <SelectWithStore<Company>
       emptyMessage={t('Dashboard.noCompanyAvailable')}
       datums={farmerCompanies ?? []}
+      useScrollView={false}
       isModalVisible={isVisible}
       setIsModalVisible={setVisibility}
       itemName={(item) => item?.name}

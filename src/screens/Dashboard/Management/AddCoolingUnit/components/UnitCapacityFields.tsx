@@ -23,9 +23,9 @@ export default function UnitCapacityFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.roomInsulator')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomInsulator}
             right={<TextInput.Affix text="kg" />}
@@ -41,9 +41,9 @@ export default function UnitCapacityFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.capacityInNumberCrates')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.capacityInNumberCrates}
           />
@@ -58,9 +58,9 @@ export default function UnitCapacityFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.crateWeight')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateWeight}
             right={<TextInput.Affix text="kg" />}

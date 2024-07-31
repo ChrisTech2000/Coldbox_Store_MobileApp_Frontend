@@ -124,6 +124,19 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                     coolingUnitId: id,
                   })
                 }
+                navigateToMarketSurvey={() => {
+                  props.navigation.navigate('MarketSurveyStack', {
+                    screen: 'MarketSurveyBase',
+                    params: {
+                      farmer: movement.farmer,
+                      crops: movement.movementCrops.filter(
+                        (crop) => !movement.hasMarketSurvey.includes(crop.id)
+                      ),
+                      checkoutId: movement.checkoutId as number,
+                      companyCurrency: company?.currency,
+                    },
+                  });
+                }}
                 movementsWithCheckout={movementsWithCheckout}
               />
             )}

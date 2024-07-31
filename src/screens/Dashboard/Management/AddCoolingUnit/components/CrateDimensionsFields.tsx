@@ -28,9 +28,9 @@ export default function CrateDimensionsFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.length')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateLength}
             right={<TextInput.Affix text="cm" />}
@@ -47,9 +47,9 @@ export default function CrateDimensionsFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.width')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateWidth}
             right={<TextInput.Affix text="cm" />}
@@ -66,9 +66,9 @@ export default function CrateDimensionsFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.height')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateHeight}
             right={<TextInput.Affix text="cm" />}

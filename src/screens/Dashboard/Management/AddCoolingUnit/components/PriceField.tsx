@@ -32,9 +32,9 @@ export default function PriceField() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.price')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.price}
             right={<TextInput.Affix text={textInputAffix} />}

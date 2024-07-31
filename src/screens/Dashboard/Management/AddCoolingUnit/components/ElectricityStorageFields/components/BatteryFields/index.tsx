@@ -25,9 +25,9 @@ export default function BatteryFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryCount')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryCount}
           />
@@ -42,9 +42,9 @@ export default function BatteryFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryWeight')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryWeight}
             right={<TextInput.Affix text="kg" />}
@@ -60,9 +60,9 @@ export default function BatteryFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryCapacity')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryCapacity}
             right={<TextInput.Affix text="Ah" />}
@@ -78,9 +78,9 @@ export default function BatteryFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryMaxCurrent')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryMaxCurrent}
             right={<TextInput.Affix text="A" />}
@@ -96,9 +96,9 @@ export default function BatteryFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryPeakEnergyStorage')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryPeakEnergyStorage}
             right={<TextInput.Affix text="kWh" />}

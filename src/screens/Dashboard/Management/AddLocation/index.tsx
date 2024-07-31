@@ -13,7 +13,11 @@ import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useTranslationUtils } from '#i18n/utils';
 
-import FormManager, { type FormValues, DEFAULT_VALUES } from './components/FormManager';
+import FormManager, {
+  type FormValues,
+  DEFAULT_VALUES,
+  type PreprocessedFormValues,
+} from './components/FormManager';
 import LocationNameModule from './modules/LocationNameModule';
 import StepModule from './modules/StepModule';
 import StepFactory from './modules/StepFactory';
@@ -29,7 +33,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { mutate } = useSWRConfig();
   const company = useManagementStore(useShallow((store) => store.company));
 
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: PreprocessedFormValues) {
     try {
       const data = pickFormValues(values);
       if (!data) throw new Error();

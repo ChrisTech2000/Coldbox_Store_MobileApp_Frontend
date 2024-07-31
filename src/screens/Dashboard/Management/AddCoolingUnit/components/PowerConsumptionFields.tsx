@@ -23,9 +23,9 @@ export default function PowerConsumptionFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerConsumptionInMt')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerConsumptionInMt}
             right={<TextInput.Affix text="kW/MT" />}
@@ -41,9 +41,9 @@ export default function PowerConsumptionFields() {
             label={t('Dashboard.Management.AddCoolingUnit.fields.dailyRoomWattage')}
             mode="flat"
             dense
-            value={value.toString()}
+            value={value}
             keyboardType="numeric"
-            onChangeText={(v) => onChange(parseInt(v || '0'))}
+            onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.dailyRoomWattage}
             right={<TextInput.Affix text="kWh/day" />}
