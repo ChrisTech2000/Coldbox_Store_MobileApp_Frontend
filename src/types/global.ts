@@ -325,7 +325,7 @@ type ImpactMetrics = {
 };
 
 export type ImpactData = {
-  impactMetrics: ImpactMetrics;
+  impactMetrics: ImpactMetrics[];
   co2Metrics: Co2Metrics[];
 };
 

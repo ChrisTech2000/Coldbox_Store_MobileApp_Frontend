@@ -1,4 +1,3 @@
-import { currencies } from 'currencies.json';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 
@@ -69,8 +68,10 @@ export function GeneralContent() {
             {t(`Dashboard.Analytics.companyTab.revenueLabel`)}
           </Text>
           <Text variant="TextBold" tw="text-lg text-white font-bold">
-            {currencies.find((c) => c.code === company?.currency)?.symbol ?? ''}
-            {(companyData?.compRevenue?.[0] ?? 0).toFixed(2)}
+            {companyData?.compRevenue[0]?.toLocaleString('en-US', {
+              style: 'currency',
+              currency: companyData?.currency[0],
+            })}
           </Text>
         </View>
 

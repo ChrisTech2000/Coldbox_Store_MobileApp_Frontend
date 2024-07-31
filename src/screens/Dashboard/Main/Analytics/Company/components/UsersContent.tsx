@@ -46,10 +46,12 @@ export function UsersContent() {
   }, [companyData]);
 
   const beneficiaries = useMemo(() => {
+    const female = Math.round(companyData?.compBeneficiariesFem?.[0] || 0);
+    const male = Math.round(companyData?.compBeneficiariesMa?.[0] || 0);
     return {
-      total: companyData?.compBeneficiaries?.[0],
-      female: Math.round(companyData?.compBeneficiariesFem?.[0] || 0),
-      male: Math.round(companyData?.compBeneficiariesMa?.[0] || 0),
+      total: female + male,
+      female,
+      male,
     };
   }, [companyData]);
 

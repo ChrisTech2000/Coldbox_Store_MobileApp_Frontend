@@ -53,8 +53,8 @@ export function ImpactContent() {
   );
 
   const foodLoss = useMemo(() => {
-    const from = getMetricValue(impactData?.impactMetrics?.avgMonthlyPercLoss) || 0;
-    const to = getMetricValue(impactData?.impactMetrics?.avgMonthlyPercFoodlossEvolution) || 0;
+    const from = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercLoss) || 0;
+    const to = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution) || 0;
     return {
       from,
       to,
@@ -64,9 +64,9 @@ export function ImpactContent() {
 
   const revenue = useMemo(() => {
     const from =
-      getMetricValue(impactData?.impactMetrics?.avgMonthlyPercRevenueIncreaseEvolution) || 0;
+      getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercRevenueIncreaseEvolution) || 0;
     const to =
-      getMetricValue(impactData?.impactMetrics?.avgMonthlyPercRevenueIncreaseEvolution2) || 0;
+      getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercRevenueIncreaseEvolution2) || 0;
     return {
       from,
       to,
@@ -86,8 +86,8 @@ export function ImpactContent() {
 
   const surveyPercentage = useMemo(() => {
     const percentage =
-      (getMetricValue(impactData?.impactMetrics?.numPostHarvestSurveys) /
-        getMetricValue(impactData?.impactMetrics?.possiblePostCheckoutSurveyRoom)) *
+      (getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys) /
+        getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)) *
       100;
     return Number.isNaN(percentage) ? 0 : percentage.toFixed(2);
   }, [impactData]);
@@ -168,10 +168,10 @@ export function ImpactContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: getMetricValue(impactData?.impactMetrics.avgMonthlyFarmerRevenue) ?? 0,
+                value: getMetricValue(impactData?.impactMetrics?.[0].avgMonthlyFarmerRevenue) ?? 0,
               },
             ]}
-            total={getMetricValue(impactData?.impactMetrics.avgMonthlyFarmerRevenue) ?? 0}
+            total={getMetricValue(impactData?.impactMetrics?.[0].avgMonthlyFarmerRevenue) ?? 0}
           />
         }
       />
@@ -210,7 +210,7 @@ export function ImpactContent() {
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
                 column1: surveyPercentage,
-                column2: `${getMetricValue(impactData?.impactMetrics.numPostHarvestSurveys)} / ${getMetricValue(impactData?.impactMetrics.possiblePostCheckoutSurveyRoom)}`,
+                column2: `${getMetricValue(impactData?.impactMetrics?.[0].numPostHarvestSurveys)} / ${getMetricValue(impactData?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom)}`,
               },
             ]}
             total={1} // TODO: fix
