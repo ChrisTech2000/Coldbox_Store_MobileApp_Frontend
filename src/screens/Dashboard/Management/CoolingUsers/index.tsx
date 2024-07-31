@@ -126,7 +126,7 @@ function _propsFactory(
   }
   props.onPress = () => {
     navigation.navigate('EditCoolingUser', {
-      userId: datum.user.id,
+      farmerId: datum.id,
       createdByOperator: !datum.userCode,
     });
   };

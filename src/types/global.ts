@@ -14,7 +14,7 @@ export type User = {
 export type Farmer = {
   id: number;
   user: User;
-  birthday: Date;
+  birthday: Date | null;
   parentName: string;
   country: string;
   userCode: string | null;
