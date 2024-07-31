@@ -7,6 +7,7 @@ import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useUnmount } from '#ui/hooks/useUnmount';
+import SensorsService from '#services/SensorsService';
 
 type FormValues = {
   username: string;
@@ -31,7 +32,16 @@ export default function EcozenForm() {
   useUnmount(form.reset);
 
   async function onSubmit(values: FormValues) {
-    console.log(values);
+    try {
+      const result = await SensorsService.verifyEcozenSensorConnectivity({
+        username: values.username,
+        password: values.password,
+        machineID: values.machineId,
+      });
+      console.log(result); // TODO
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   return (

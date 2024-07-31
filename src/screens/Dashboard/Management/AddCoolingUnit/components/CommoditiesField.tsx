@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { Checkbox, Divider, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import truncate from 'lodash/truncate';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
@@ -14,6 +15,8 @@ import { cn } from '#ui/lib/cn';
 
 import FormManager, { type FormValues } from '../contexts/FormManager';
 import DataAggregator from '../contexts/DataAggregator';
+
+import { CropPricingManager } from '../utils';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -29,6 +32,8 @@ export default function CommoditiesField() {
   const selectedCrops = watch('crops');
   const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedCrops);
 
+  _useCropPricingPatcher();
+
   const datums = useMemo(() => {
     const entries: Array<[number, string]> = [];
     for (const [id, name] of Object.entries(companyCrops)) {
@@ -40,8 +45,8 @@ export default function CommoditiesField() {
   }, [companyCrops, search]);
 
   const selectLabel = useMemo(() => {
-    const selectedOptions = datums
-      .filter(([id]) => selectedCrops.includes(id))
+    const selectedOptions = Object.entries(companyCrops)
+      .filter(([id]) => selectedCrops.includes(Number(id)))
       .slice(0, 2)
       .map(([, name]) => truncate(name, { length: 7 }));
     return selectedOptions.length > 0 ? selectedOptions.join(', ') : '';
@@ -139,4 +144,36 @@ export default function CommoditiesField() {
       />
     </React.Fragment>
   );
+}
+
+function _useCropPricingPatcher() {
+  const { getValues, setValue, watch } = FormManager.useFormManager();
+  const { companyCrops } = DataAggregator.useDataAggregator();
+
+  const [selectedCrops, priceType, commonPrice] = watch(['crops', 'priceType', 'price']);
+
+  const _callback = useDebouncedCallback(() => {
+    const prevCropPricing = getValues('cropSpecificPricing');
+
+    const formCropsShallow = [...selectedCrops];
+
+    if (!(formCropsShallow.length >= 1)) {
+      for (const cropId in companyCrops) {
+        formCropsShallow.push(Number(cropId));
+      }
+    }
+
+    const newCropPricing = CropPricingManager.patch({
+      formCrops: formCropsShallow,
+      previous: prevCropPricing,
+      priceType,
+      commonPrice,
+    });
+
+    if (JSON.stringify(prevCropPricing) !== JSON.stringify(newCropPricing)) {
+      setValue('cropSpecificPricing', newCropPricing);
+    }
+  }, 480);
+
+  useEffect(_callback, [selectedCrops.length, priceType, commonPrice]);
 }

@@ -62,3 +62,9 @@ export enum EImpactEndpoints {
   GET_IMPACT = '/impact-slice/',
   GET_COOLING_UNIT = '/coolingunit-slice/',
 }
+
+export enum ESensorEndpoints {
+  ECOZEN_CHECK = 'storage/v1/ecozen-test/',
+  UBIBOT_CHECK = 'storage/v1/ubibot/',
+  FIGORR_CHECK = 'storage/v1/figorr/',
+}

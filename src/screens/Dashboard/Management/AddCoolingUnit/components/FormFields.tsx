@@ -24,8 +24,11 @@ import PowerConsumptionFields from './PowerConsumptionFields';
 import PowerSourceFields from './PowerSourceFields';
 import ElectricityStorageFields from './ElectricityStorageFields';
 import Sensors from './Sensors';
+import CropSpecificPricing from './CropSpecificPricing';
 
-export default function FormFields() {
+export default function FormFields(props: { isEditMode: boolean }) {
+  const { isEditMode } = props;
+
   const { control, formState } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
 
@@ -87,6 +90,7 @@ export default function FormFields() {
       />
       <OperatorsField />
       <CommoditiesField />
+      {isEditMode ? <CropSpecificPricing /> : null}
       <RefrigerantFields />
       <PowerConsumptionFields />
       <PowerSourceFields />

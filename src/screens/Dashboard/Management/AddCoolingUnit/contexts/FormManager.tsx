@@ -13,6 +13,7 @@ import {
   type BatteryTypes,
   type ThermalStorageTypes,
 } from '../constants';
+import type { AddCoolingUnitParams } from '#types/api.params';
 
 export type FormValues<T = string> = {
   //
@@ -40,6 +41,7 @@ export type FormValues<T = string> = {
   public: boolean; // make cooling unit publicly available for potential cooling users field
   operators: Array<number>;
   crops: Array<number>; // commodities field
+  cropSpecificPricing: AddCoolingUnitParams['cropUpdates'];
   refrigerantType: string; // type of refrigerant used field → REFRIGERANTS item/id
   amountRefrigerant: T; // amount of refrigerant field
   powerConsumptionInMt: T; // power consumption of cooling unit per MT field
@@ -127,6 +129,14 @@ export default function FormManager(props: FormManagerProps) {
         public: z.boolean(),
         operators: z.array(z.number()),
         crops: z.array(z.number()),
+        cropSpecificPricing: z.array(
+          z.object({
+            id: z.number().positive(),
+            pricingType: z.string().min(1),
+            dailyRate: z.coerce.number(),
+            fixedRate: z.coerce.number(),
+          })
+        ),
         refrigerantType: z.string().optional(),
         amountRefrigerant: greaterThanEqual.optional(),
         powerConsumptionInMt: greaterThanEqual.optional(),

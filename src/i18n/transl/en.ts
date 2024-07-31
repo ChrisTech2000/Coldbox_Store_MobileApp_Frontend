@@ -669,6 +669,7 @@ const en = {
           label: 'Price type',
           PERIODICITY: 'Per day',
           FIXED: 'Fixed',
+          day: 'day',
         },
         metricUnit: {
           label: 'Unit',
