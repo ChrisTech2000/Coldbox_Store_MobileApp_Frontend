@@ -18,15 +18,16 @@ export class CropPricingManager {
   }): CropSpecificPricing {
     const { formCrops, priceType, commonPrice, previous = [] } = args;
 
+    const defaultPrice = Number(commonPrice);
     const datums: CropSpecificPricing = [];
 
     for (const cropId of formCrops) {
       const datum = { id: cropId, pricingType: priceType } as PricingEntry;
-      let price: number = parseFloat(commonPrice);
+      let price: number = defaultPrice;
 
       const previousPricing = previous.find((pricing) => pricing.id === cropId);
       if (typeof previousPricing !== 'undefined') {
-        price = previousPricing.dailyRate || previousPricing.fixedRate;
+        price = previousPricing.dailyRate || previousPricing.fixedRate || defaultPrice;
       }
 
       if (priceType === PRICING_TYPE.PER_DAY) {
@@ -50,6 +51,7 @@ export class CropPricingManager {
   }): CropSpecificPricing {
     const { unitCrops, commonPrice } = args;
 
+    const defaultPrice = Number(commonPrice);
     const list: CropSpecificPricing = [];
 
     for (const unitCrop of cloneDeep(unitCrops)) {
@@ -57,9 +59,7 @@ export class CropPricingManager {
 
       if (pricing.pricingType === PRICING_TYPE.PER_DAY) {
         const safeValue: number =
-          !pricing.dailyRate || isNaN(pricing.dailyRate)
-            ? parseFloat(commonPrice)
-            : pricing.dailyRate;
+          !pricing.dailyRate || isNaN(pricing.dailyRate) ? defaultPrice : pricing.dailyRate;
         list.push({
           ...pricing,
           id: unitCrop.cropId,
@@ -70,9 +70,7 @@ export class CropPricingManager {
       }
 
       const safeValue: number =
-        !pricing.fixedRate || isNaN(pricing.fixedRate)
-          ? parseFloat(commonPrice)
-          : pricing.fixedRate;
+        !pricing.fixedRate || isNaN(pricing.fixedRate) ? defaultPrice : pricing.fixedRate;
       list.push({
         ...pricing,
         id: unitCrop.cropId,

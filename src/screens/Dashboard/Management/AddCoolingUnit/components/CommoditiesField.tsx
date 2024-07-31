@@ -32,7 +32,7 @@ export default function CommoditiesField() {
   const selectedCrops = watch('crops');
   const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedCrops);
 
-  _useCropPricingPatcher(selectedCrops);
+  _useCropPricingPatcher();
 
   const datums = useMemo(() => {
     const entries: Array<[number, string]> = [];
@@ -146,22 +146,20 @@ export default function CommoditiesField() {
   );
 }
 
-function _useCropPricingPatcher(formCrops: FormValues['crops']) {
-  const { getValues, setValue } = FormManager.useFormManager();
+function _useCropPricingPatcher() {
+  const { getValues, setValue, watch } = FormManager.useFormManager();
   const { companyCrops } = DataAggregator.useDataAggregator();
 
-  const _callback = useDebouncedCallback(() => {
-    const [priceType, commonPrice, prevCropPricing] = getValues([
-      'priceType',
-      'price',
-      'cropSpecificPricing',
-    ]);
+  const [selectedCrops, priceType, commonPrice] = watch(['crops', 'priceType', 'price']);
 
-    const formCropsShallow = [...formCrops];
+  const _callback = useDebouncedCallback(() => {
+    const prevCropPricing = getValues('cropSpecificPricing');
+
+    const formCropsShallow = [...selectedCrops];
 
     if (!(formCropsShallow.length >= 1)) {
       for (const cropId in companyCrops) {
-        formCropsShallow.push(parseInt(cropId));
+        formCropsShallow.push(Number(cropId));
       }
     }
 
@@ -177,5 +175,5 @@ function _useCropPricingPatcher(formCrops: FormValues['crops']) {
     }
   }, 480);
 
-  useEffect(_callback, [formCrops.length]);
+  useEffect(_callback, [selectedCrops.length, priceType, commonPrice]);
 }
