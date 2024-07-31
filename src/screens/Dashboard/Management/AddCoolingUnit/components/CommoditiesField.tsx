@@ -45,8 +45,8 @@ export default function CommoditiesField() {
   }, [companyCrops, search]);
 
   const selectLabel = useMemo(() => {
-    const selectedOptions = datums
-      .filter(([id]) => selectedCrops.includes(id))
+    const selectedOptions = Object.entries(companyCrops)
+      .filter(([id]) => selectedCrops.includes(Number(id)))
       .slice(0, 2)
       .map(([, name]) => truncate(name, { length: 7 }));
     return selectedOptions.length > 0 ? selectedOptions.join(', ') : '';
