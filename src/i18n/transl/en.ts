@@ -949,6 +949,7 @@ const en = {
         dateRangeLabel: 'Date range:',
         selectedUnitsLabel: 'Selected cooling units:',
         totalCo2Label: '💨 Total CO2e emitted:',
+        roomRevenue: '📈 Room revenue',
       },
       comparisonTab: {
         sortingLabel: 'Sort',

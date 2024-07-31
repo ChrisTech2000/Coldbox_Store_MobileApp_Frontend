@@ -19,6 +19,9 @@ type Store = {
 
 type ImpactContentProps<T extends Store> = {
   useStore: UseBoundStore<StoreApi<T>>;
+  type?: 'aggregated' | 'company' | 'comparison';
+  occupancy?: number;
+  revenue?: number;
 };
 
 type SectionProps = {
@@ -28,7 +31,12 @@ type SectionProps = {
   change: React.ReactNode;
 };
 
-export function ImpactContent<T extends Store>({ useStore }: ImpactContentProps<T>) {
+export function ImpactContent<T extends Store>({
+  useStore,
+  type,
+  occupancy,
+  revenue,
+}: ImpactContentProps<T>) {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
   const { impactData } = useStore();
@@ -43,7 +51,7 @@ export function ImpactContent<T extends Store>({ useStore }: ImpactContentProps<
     };
   }, [impactData]);
 
-  const revenue = useMemo(() => {
+  const revenueChange = useMemo(() => {
     const from = getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth);
     const to = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyFarmerRevenue);
     return {
@@ -79,6 +87,18 @@ export function ImpactContent<T extends Store>({ useStore }: ImpactContentProps<
 
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
+      {type === 'aggregated' && (
+        <View tw="w-full bg-violet-100 px-2 py-1 items-center rounded-lg space-y-3 my-2">
+          <Text variant="TextMedium" tw="text-lg">
+            {t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}
+          </Text>
+          <Text variant="HeadingRegular" tw="text-blue-800">
+            {t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
+              amount: occupancy,
+            })}
+          </Text>
+        </View>
+      )}
       <View tw="w-full">
         <ImpactSection
           title={t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
@@ -133,7 +153,7 @@ export function ImpactContent<T extends Store>({ useStore }: ImpactContentProps<
                 {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
               </Text>
               <Text variant="TextMedium" tw="text-lg font-bold">
-                {revenue.from}
+                {revenueChange.from}
               </Text>
             </View>
           }
@@ -143,28 +163,42 @@ export function ImpactContent<T extends Store>({ useStore }: ImpactContentProps<
                 {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
               </Text>
               <Text variant="TextMedium" tw="text-lg font-bold">
-                {revenue.to}
+                {revenueChange.to}
               </Text>
             </View>
           }
           change={
             foodLoss.to === foodLoss.from ? (
               <Icon source="equal" size={40} />
-            ) : revenue.to < revenue.from ? (
+            ) : revenueChange.to < revenueChange.from ? (
               <DownChange
-                value={`${revenue.evolution.toFixed(2)}%`}
+                value={`${revenueChange.evolution.toFixed(2)}%`}
                 message={t('Dashboard.Analytics.farmersAnalytics.decreaseInRevenue')}
                 negative
               />
             ) : (
               <UpChange
-                value={`${revenue.evolution.toFixed(2)}%`}
+                value={`${revenueChange.evolution.toFixed(2)}%`}
                 message={t('Dashboard.Analytics.farmersAnalytics.increaseInRevenue')}
                 positive
               />
             )
           }
         />
+
+        {type === 'aggregated' && (
+          <View tw="w-full bg-violet-100 px-2 py-1 items-center rounded-lg space-y-3 my-2">
+            <Text variant="TextMedium" tw="text-lg">
+              {t('Dashboard.Analytics.tabsShared.roomRevenue')}
+            </Text>
+            <Text variant="HeadingRegular" tw="text-blue-800">
+              {revenue?.toLocaleString('en-US', {
+                style: 'currency',
+                currency: company?.currency,
+              })}
+            </Text>
+          </View>
+        )}
 
         <ImpactSection
           title={t('Dashboard.Analytics.companyTab.impactTab.co2Label')}

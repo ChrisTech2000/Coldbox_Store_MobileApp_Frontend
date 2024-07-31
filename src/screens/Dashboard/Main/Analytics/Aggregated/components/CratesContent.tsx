@@ -20,27 +20,43 @@ export function CratesContent() {
 
   const crates = useMemo(() => {
     return {
-      checkedIn: coolingUnitData?.checkInCratesCrop ?? 0,
-      checkedOut: coolingUnitData?.checkOutCratesCrop ?? 0,
+      checkedIn:
+        Object.values(coolingUnitData?.checkInCratesCrop?.['0'] ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      checkedOut:
+        Object.values(coolingUnitData?.checkOutCratesCrop?.['0'] ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
     };
   }, [coolingUnitData]);
 
   const quantity = useMemo(() => {
     return {
-      checkedIn: coolingUnitData?.checkInKgCrop ?? 0,
-      checkedOut: coolingUnitData?.checkOutKgCrop ?? 0,
+      checkedIn:
+        Object.values(coolingUnitData?.checkInKgCrop?.['0'] ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      checkedOut:
+        Object.values(coolingUnitData?.checkOutKgCrop?.['0'] ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
     };
   }, []);
 
   const operations = useMemo(() => {
     return {
-      checkedIn: coolingUnitData?.roomCratesIn ?? 0,
-      checkedOut: coolingUnitData?.roomCratesOut ?? 0,
+      checkedIn: coolingUnitData?.roomCratesIn?.['0'] ?? 0,
+      checkedOut: coolingUnitData?.roomCratesOut?.['0'] ?? 0,
     };
   }, [coolingUnitData]);
 
   const co2 = useMemo(() => {
-    return coolingUnitData?.totCo2 ?? 0;
+    return coolingUnitData?.totCo2?.['0'] ?? 0;
   }, [coolingUnitData]);
 
   return (

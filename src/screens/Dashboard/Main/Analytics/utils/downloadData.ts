@@ -20,7 +20,10 @@ function getValue(
   if (data && companyKey in data) {
     return (data as CompanyData)[companyKey]?.[0] ?? 0;
   } else if (data && coolingUnitKey && coolingUnitKey in data) {
-    return (data as CoolingUnitImpact)[coolingUnitKey] ?? 0;
+    const val = (data as CoolingUnitImpact)[coolingUnitKey]['0'];
+    return typeof val === 'number'
+      ? val
+      : Object.values(val).reduce((acc, current) => (acc += current), 0);
   }
   return 0;
 }
@@ -116,8 +119,8 @@ export function generatePDFContent(
         ${mode === 'company' ? generateGeneralHtmlContent(t, company, companyData as CompanyData, coolingUnits) : ''}
         ${generateUsersHtmlContent(t, companyData, mode)}
         ${mode === 'company' ? generateUtilizationHtmlContent(t, companyData as CompanyData) : ''}
-        ${mode === 'aggregated' ? generateCratesHtmlContent(t, companyData as CompanyData) : ''}
-        ${generateImpactHtml(t, impactData, currencySymbol)}
+        ${mode === 'aggregated' ? generateCratesHtmlContent(t, companyData as CoolingUnitImpact) : ''}
+        ${generateImpactHtml(t, impactData, currencySymbol, mode, companyData as CoolingUnitImpact)}
       </body>
     </html>
   `;
@@ -404,7 +407,9 @@ function generateUtilizationHtmlContent(t: Translator, companyData: CompanyData 
 function generateImpactHtml(
   t: Translator,
   impactData: ImpactData | undefined,
-  currencySymbol: string
+  currencySymbol: string,
+  type: 'company' | 'aggregated' | 'comparison',
+  coolingUnitData: CoolingUnitImpact | undefined
 ) {
   const foodLossFrom =
     getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselinePercLossMonth) || 0;
@@ -425,8 +430,28 @@ function generateImpactHtml(
       getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)) *
     100;
 
+  const occupancy = coolingUnitData?.averageRoomOccupancy?.[0] || 0;
+  const revenue = coolingUnitData?.roomRevenue?.[0] || 0;
+
   return `
     <div class="scroll-view" style="width: 100%; padding: 16px; text-align: center;">
+      ${
+        type === 'aggregated'
+          ? `
+        <div class="section section3">
+          <div class="section-title">
+            ${t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}
+          </div>
+          <div class="section-content">
+            <div class="section-text">
+              ${t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', { amount: occupancy })}
+            </div>
+          </div>
+        </div>
+      `
+          : ''
+      }
+
       <div class="section section3" style="margin-bottom: 16px;">
         <div class="section-title">
           ${t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
@@ -477,6 +502,23 @@ function generateImpactHtml(
         </div>
       </div>
 
+       ${
+         type === 'aggregated'
+           ? `
+            <div class="section section3">
+              <div class="section-title">
+                ${t('Dashboard.Analytics.tabsShared.roomRevenue')}
+              </div>
+              <div class="section-content">
+                <div class="section-text">
+                  ${revenue}
+                </div>
+              </div>
+            </div>
+          `
+           : ''
+       }
+      
       <div class="section section3" style="margin-bottom: 16px;">
         <div class="section-title">
           ${t('Dashboard.Analytics.companyTab.impactTab.co2Label')}
@@ -583,7 +625,7 @@ function generateCratesHtmlContent(
         </div>
         <div class="section-content">
           <div class="section-text">
-            ${data && 'totCo2' in data ? data.totCo2 : 0}
+            ${data && 'totCo2' in data ? data.totCo2['0'] : 0}
           </div>
         </div>
       </div>

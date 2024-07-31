@@ -13,27 +13,27 @@ export function UsersContent() {
 
   const operators = useMemo(() => {
     return {
-      total: coolingUnitData?.roomOp ?? 0,
-      female: coolingUnitData?.roomOpFem ?? 0,
-      male: coolingUnitData?.roomOpMa ?? 0,
-      other: coolingUnitData?.roomOpOt ?? 0,
+      total: coolingUnitData?.roomOp?.['0'] ?? 0,
+      female: coolingUnitData?.roomOpFem?.['0'] ?? 0,
+      male: coolingUnitData?.roomOpMa?.['0'] ?? 0,
+      other: coolingUnitData?.roomOpOt?.['0'] ?? 0,
     };
   }, [coolingUnitData]);
 
   const users = useMemo(() => {
     return {
-      total: coolingUnitData?.roomActiveUsers ?? 0,
-      female: coolingUnitData?.roomActiveFem ?? 0,
-      male: coolingUnitData?.roomActiveMa ?? 0,
-      other: coolingUnitData?.roomActiveOt ?? 0,
+      total: coolingUnitData?.roomActiveUsers?.['0'] ?? 0,
+      female: coolingUnitData?.roomActiveFem?.['0'] ?? 0,
+      male: coolingUnitData?.roomActiveMa?.['0'] ?? 0,
+      other: coolingUnitData?.roomActiveOt?.['0'] ?? 0,
     };
   }, [coolingUnitData]);
 
   const beneficiaries = useMemo(() => {
     return {
-      total: coolingUnitData?.roomBeneficiaries ?? 0,
-      female: Math.round(coolingUnitData?.roomBeneficiariesFem || 0),
-      male: Math.round(coolingUnitData?.roomBeneficiariesMa || 0),
+      total: coolingUnitData?.roomBeneficiaries?.['0'] ?? 0,
+      female: Math.round(coolingUnitData?.roomBeneficiariesFem?.['0'] || 0),
+      male: Math.round(coolingUnitData?.roomBeneficiariesMa?.['0'] || 0),
     };
   }, [coolingUnitData]);
 
