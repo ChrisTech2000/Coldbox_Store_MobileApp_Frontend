@@ -5,6 +5,7 @@ import colors from 'tailwindcss/colors';
 import { useTranslationUtils } from '#i18n/utils';
 import { Text } from '#ui/components/Text';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { useManagementStore } from '#stores/management';
 
 import { DataTable, Icon } from 'react-native-paper';
 import { useComparisonData } from '../store';
@@ -17,7 +18,7 @@ type TableProps = {
   header: string;
   items: Array<{
     coolingUnitName: string;
-    value: number;
+    value: number | string;
   }>;
   total: number;
 };
@@ -37,6 +38,7 @@ type ExtendedTableProps = {
 export function ImpactContent() {
   const { t } = useTranslationUtils();
   const { impactData, coolingUnitData, configData } = useComparisonData();
+  const { company } = useManagementStore();
 
   const [expanded, setExpanded] = useState<Section | undefined>();
 
@@ -105,10 +107,10 @@ export function ImpactContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: coolingUnitData?.averageRoomOccupancy ?? 0,
+                value: coolingUnitData?.averageRoomOccupancy?.[0] ?? 0,
               },
             ]}
-            total={coolingUnitData?.averageRoomOccupancy ?? 0}
+            total={1}
           />
         }
       />
@@ -130,7 +132,7 @@ export function ImpactContent() {
                 column2: `${foodLoss.from.toFixed(2)}% to ${foodLoss.to.toFixed(2)}%`,
               },
             ]}
-            total={1} // TODO: fix
+            total={1} 
           />
         }
       />
@@ -149,10 +151,16 @@ export function ImpactContent() {
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
                 column1: `${revenue.total.toFixed(2)}%`,
-                column2: `${revenue.from.toFixed(2)}% to ${revenue.to.toFixed(2)}%`,
+                column2: `${revenue.from.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: company?.currency,
+                })} to ${revenue.to.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: company?.currency,
+                })}`,
               },
             ]}
-            total={1} // TODO: fix
+            total={1}
           />
         }
       />
@@ -168,10 +176,13 @@ export function ImpactContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: getMetricValue(impactData?.impactMetrics?.[0].avgMonthlyFarmerRevenue) ?? 0,
+                value: getMetricValue(impactData?.impactMetrics?.[0].avgMonthlyFarmerRevenue).toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: company?.currency,
+                }) ?? 0,
               },
             ]}
-            total={getMetricValue(impactData?.impactMetrics?.[0].avgMonthlyFarmerRevenue) ?? 0}
+            total={1}
           />
         }
       />
@@ -189,10 +200,10 @@ export function ImpactContent() {
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
                 column1: `${co2.total.toFixed(2)}%`,
-                column2: `${co2.from.toFixed(2)}% to ${co2.to.toFixed(2)}%`,
+                column2: `${co2.from.toFixed(2)} to ${co2.to.toFixed(2)}`,
               },
             ]}
-            total={1} // TODO: fix
+            total={1}
           />
         }
       />

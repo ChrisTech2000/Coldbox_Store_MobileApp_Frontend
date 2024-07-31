@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import colors from 'tailwindcss/colors';
 
@@ -58,6 +58,24 @@ export function CratesContent() {
     [expanded]
   );
 
+  const cratesData = useMemo(() => {    
+    return {
+      checkInCratesCrops: Object.values(coolingUnitData?.checkInCratesCrop?.['0'] ?? {}).reduce((acc, current) => acc += current, 0),
+      checkOutCratesCrops: Object.values(coolingUnitData?.checkOutCratesCrop?.['0'] ?? {}).reduce((acc, current) => acc += current, 0),
+    }
+  }, [coolingUnitData]);
+  
+  const kgData = useMemo(() => {    
+    return {
+      checkInKgCrops: Object.values(coolingUnitData?.checkInKgCrop?.['0'] ?? {}).reduce((acc, current) => acc += current, 0),
+      checkOutKgCrops: Object.values(coolingUnitData?.checkOutKgCrop?.['0'] ?? {}).reduce((acc, current) => acc += current, 0),
+    }
+  }, [coolingUnitData]);
+
+  const co2crops = useMemo(() => {    
+    return  Object.values(coolingUnitData?.co2Crops?.['0'] ?? {}).reduce((acc, current) => acc += current, 0);
+  }, [coolingUnitData]);
+
   return (
     <View tw="w-full my-2">
       <SectionAccordion
@@ -71,12 +89,10 @@ export function CratesContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: `${coolingUnitData?.checkInCratesCrop} | ${coolingUnitData?.checkOutCratesCrop}`,
+                value: `${cratesData.checkInCratesCrops} | ${cratesData.checkOutCratesCrops}`,
               },
             ]}
-            total={
-              (coolingUnitData?.checkInCratesCrop ?? 0) + (coolingUnitData?.checkOutCratesCrop ?? 0)
-            }
+            total={1}
           />
         }
       />
@@ -95,7 +111,7 @@ export function CratesContent() {
                 value: `${coolingUnitData?.checkInKgCrop} | ${coolingUnitData?.checkOutKgCrop}`,
               },
             ]}
-            total={(coolingUnitData?.checkInKgCrop ?? 0) + (coolingUnitData?.checkOutKgCrop ?? 0)}
+            total={1}
           />
         }
       />
@@ -111,10 +127,10 @@ export function CratesContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: `${coolingUnitData?.roomCratesIn} | ${coolingUnitData?.roomCratesOut}`,
+                value: `${coolingUnitData?.roomCratesIn?.[0]} | ${coolingUnitData?.roomCratesOut?.[0]}`,
               },
             ]}
-            total={(coolingUnitData?.roomCratesIn ?? 0) + (coolingUnitData?.roomCratesOut ?? 0)}
+            total={1}
           />
         }
       />
@@ -131,11 +147,11 @@ export function CratesContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                column1: coolingUnitData?.roomCratesIn ?? 0,
-                column2: coolingUnitData?.checkInCratesCrop ?? 0,
+                column1: coolingUnitData?.roomCratesIn?.[0] ?? 0,
+                column2: cratesData.checkInCratesCrops
               },
             ]}
-            total={coolingUnitData?.roomCratesIn ?? 0} // TODO: confirm data
+            total={1} // TODO: confirm data
           />
         }
       />
@@ -152,11 +168,11 @@ export function CratesContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                column1: coolingUnitData?.roomCratesOut ?? 0,
-                column2: coolingUnitData?.checkOutCratesCrop ?? 0,
+                column1: coolingUnitData?.roomCratesOut?.[0] ?? 0,
+                column2: cratesData.checkOutCratesCrops,
               },
             ]}
-            total={coolingUnitData?.roomCratesOut ?? 0} // TODO: confirm data
+            total={1} 
           />
         }
       />
@@ -173,11 +189,11 @@ export function CratesContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                column1: coolingUnitData?.roomKgIn ?? 0,
-                column2: coolingUnitData?.checkInKgCrop ?? 0,
+                column1: coolingUnitData?.roomKgIn?.[0] ?? 0,
+                column2: kgData.checkInKgCrops,
               },
             ]}
-            total={coolingUnitData?.roomKgIn ?? 0} // TODO: confirm data
+            total={1} 
           />
         }
       />
@@ -194,11 +210,11 @@ export function CratesContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                column1: coolingUnitData?.roomKgOut ?? 0,
-                column2: coolingUnitData?.checkOutKgCrop ?? 0,
+                column1: coolingUnitData?.roomKgOut?.[0] ?? 0,
+                column2: cratesData.checkOutCratesCrops,
               },
             ]}
-            total={coolingUnitData?.roomKgOut ?? 0} // TODO: confirm data
+            total={1} 
           />
         }
       />
@@ -215,11 +231,11 @@ export function CratesContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                column1: coolingUnitData?.totCo2 ?? 0,
-                column2: coolingUnitData?.co2Crops ?? 0,
+                column1: coolingUnitData?.totCo2?.[0] ?? 0,
+                column2: co2crops,
               },
             ]}
-            total={coolingUnitData?.totCo2 ?? 0} // TODO: confirm data
+            total={1}
           />
         }
       />

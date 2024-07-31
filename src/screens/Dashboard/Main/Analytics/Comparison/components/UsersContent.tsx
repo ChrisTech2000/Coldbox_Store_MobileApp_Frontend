@@ -9,6 +9,7 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { DataTable } from 'react-native-paper';
 import { useComparisonData } from '../store';
 import { SectionAccordion } from '../../components/SectionAccordion';
+import startCase from 'lodash/startCase';
 
 type Section = 'users' | 'operators' | 'beneficiaries';
 
@@ -17,6 +18,7 @@ type TableProps = {
   items: Array<{
     coolingUnitName: string;
     value: string;
+    total: number;
   }>;
   total: number;
 };
@@ -55,10 +57,11 @@ export function UsersContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: `${coolingUnitData?.roomOpMa} | ${coolingUnitData?.roomOpFem} | ${coolingUnitData?.roomOpOt}`,
+                value: `${coolingUnitData?.roomOpMa?.['0']} | ${coolingUnitData?.roomOpFem?.['0']} | ${coolingUnitData?.roomOpOt?.['0']}`,
+                total: coolingUnitData?.roomOp?.['0'] ?? 0,
               },
             ]}
-            total={coolingUnitData?.roomOp ?? 0}
+            total={1}
           />
         }
       />
@@ -77,10 +80,11 @@ export function UsersContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: `${coolingUnitData?.roomActiveMa} | ${coolingUnitData?.roomActiveFem} | ${coolingUnitData?.roomActiveOt}`,
+                value: `${coolingUnitData?.roomActiveMa?.['0']} | ${coolingUnitData?.roomActiveFem?.['0']} | ${coolingUnitData?.roomActiveOt?.['0']}`,
+                total: coolingUnitData?.roomActiveUsers?.['0'] ?? 0,
               },
             ]}
-            total={coolingUnitData?.roomActiveUsers ?? 0}
+            total={1}
           />
         }
       />
@@ -99,10 +103,11 @@ export function UsersContent() {
             items={[
               {
                 coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: `${coolingUnitData?.roomBeneficiariesMa} | ${coolingUnitData?.roomBeneficiariesFem}`,
+                value: `${coolingUnitData?.roomBeneficiariesMa?.['0']} | ${coolingUnitData?.roomBeneficiariesFem?.['0']}`,
+                total: coolingUnitData?.roomBeneficiaries?.['0'] ?? 0,
               },
             ]}
-            total={coolingUnitData?.roomBeneficiaries ?? 0}
+            total={1}
           />
         }
       />
@@ -115,27 +120,33 @@ function Table({ items, header, total }: TableProps) {
 
   return (
     <DataTable tw="py-4 px-2">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
-        <DataTable.Title>
+      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18">
+        <DataTable.Cell>
           <Text variant="TextMedium" tw="text-white text-base">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
-        </DataTable.Title>
-        <DataTable.Title>
+        </DataTable.Cell>
+        <DataTable.Cell>
           <View>
             {header.map((text, index) => (
-              <Text key={`${text}-${index}`} variant="TextMedium" tw="text-white text-base">
+              <Text key={`${text}-${index}`} variant="TextMedium" tw="text-white text-base flex-wrap" numberOfLines={3}>
                 {text}
               </Text>
             ))}
           </View>
-        </DataTable.Title>
+        </DataTable.Cell>
+        <DataTable.Cell tw="max-w-[20%]">
+          <Text variant="TextMedium" tw="text-white text-base">
+            {startCase(t('Dashboard.Analytics.comparisonTab.total'))}
+          </Text>
+        </DataTable.Cell>
       </DataTable.Header>
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
         {items.map((item, index) => (
           <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
             <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
             <DataTable.Cell>{item.value}</DataTable.Cell>
+            <DataTable.Cell tw="max-w-[20%]">{item.total}</DataTable.Cell>
           </DataTable.Row>
         ))}
 
