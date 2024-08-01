@@ -370,6 +370,30 @@ export type CoolingUnitImpact = {
   unitName: number;
 };
 
+export type FarmerImpactMetrics = {
+  farmerId: number;
+  cropId: number;
+  cropName: number;
+  unitName: number;
+  baselineQuantityTotalMonth: number;
+  avgBaselineKgSellingPriceMonth: number;
+  baselineKgLossMonth: number;
+  baselineKgSoldMonth: number;
+  avgBaselinePercLossMonth: number;
+  avgBaselineFarmerRevenueMonth: number;
+  avgMonthlyKgSellingPrice: number;
+  monthlyKgCheckin: number;
+  monthlyKgLoss: number;
+  avgMonthlyPercLoss: number;
+  avgMonthlyPercFoodlossEvolution: number;
+  avgMonthlyFarmerRevenue: number;
+  avgMonthlyPercRevenueIncreaseEvolution: number;
+  avgMonthlyKgSellingPriceEvolution: number;
+  avgMonthlyPercUnitSellingPriceEvolution: number;
+  avgMonthlyFarmerRevenueEvolution: number;
+  latestSurveyDate: number;
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',

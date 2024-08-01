@@ -56,6 +56,7 @@ export const useApiCall = <IData, IParams>(
     data: data || defaultData.current,
     isLoading: !data && isValidating,
     hasError: !!error,
+    error,
     isValidating,
     refetch,
   };

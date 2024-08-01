@@ -26,7 +26,7 @@ import LanguageField from '../AddCoolingUser/modules/LanguageField';
 import FarmerDashboardData from './components/FarmerDashboardData';
 import DeleteAction from './components/DeleteAction';
 
-import { CoolingUserLoader } from './utils';
+import { DataLoader } from './utils';
 
 export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
 
@@ -39,7 +39,7 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
 
   const { data, isLoading, refetch } = useApiCall(
     GET_FARMER_RECORD_SWR_KEY,
-    CoolingUserLoader.loadFarmerRecord,
+    DataLoader.loadFarmerRecord,
     params.farmerId,
     {
       skip: !params?.farmerId,
