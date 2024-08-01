@@ -4,7 +4,6 @@ import {
   EPaymentType,
   ERoles,
   ESellingLocation,
-  FarmerImpactMetrics,
   type CommodityInfo,
   type CommodityTotal,
   type CommonPricingType,
@@ -355,67 +354,3 @@ export type GetCoolingUnitTemperaturesResponse = Array<{
   specificationType: string;
   value: string;
 }>;
-
-export type FarmersBaseSliceResponse = {
-  farmerId: number;
-  firstName: number;
-  lastName: number;
-  gender: number;
-  userType: number;
-  avgStorageDays: number;
-  totalStorageCost: number;
-};
-
-export type FarmersSliceResponse = {
-  farmerId: Record<string, number>;
-  firstName?: Record<string, string>;
-  lastName?: Record<string, string>;
-  gender: Record<string, string>;
-  userType?: Record<string, string>;
-  coolingUnitId?: Record<string, number>;
-  roomCratesIn?: Record<string, number>;
-  roomOpsIn?: Record<string, number>;
-  roomKgIn?: Record<string, number>;
-  roomCratesOut?: Record<string, number>;
-  roomOpsOut?: Record<string, number>;
-  roomKgOut?: Record<string, number>;
-  checkInCratesCrop?: Record<string, object>; // TODO: confirm object value type
-  checkInKgCrop?: Record<string, object>; // TODO: confirm object value type
-  checkOutCratesCrop?: Record<string, object>; // TODO: confirm object value type
-  checkOutKgCrop?: Record<string, object>; // TODO: confirm object value type
-  unitName?: Record<string, string>;
-};
-
-export type FarmersImpactSliceResponse = {
-  aggregated: {
-    farmerId: number;
-    unitName: number;
-    baselineQuantityTotalMonth: number;
-    avgBaselineKgSellingPriceMonth: number;
-    baselineKgLossMonth: number;
-    baselineKgSoldMonth: number;
-    avgBaselinePercLossMonth: number;
-    avgBaselineFarmerRevenueMonth: number;
-    avgMonthlyKgSellingPrice: number;
-    monthlyKgCheckin: number;
-    monthlyKgLoss: number;
-    avgMonthlyPercLoss: number;
-    avgMonthlyPercFoodlossEvolution: number;
-    avgMonthlyFarmerRevenue: number;
-    avgMonthlyPercRevenueIncreaseEvolution: number;
-    avgMonthlyKgSellingPriceEvolution: number;
-    avgMonthlyPercUnitSellingPriceEvolution: number;
-    avgMonthlyFarmerRevenueEvolution: number;
-    latestSurveyDate: number;
-  };
-  top5FoodLossEvolution: Record<string, FarmerImpactMetrics>;
-  top5RevenueEvolution: Record<string, FarmerImpactMetrics>;
-  surveys: Array<{
-    farmerId: number;
-    numFilledBaselineSurveys: number;
-    numOfPossibleBaselineSurveys: number;
-    numOfFilledPostcheckoutSurveys: number;
-    numOfPossiblePostcheckoutSurveys: null | unknown; // TODO: confirm type
-    cropsWithBaselineSurveyToBeCompleted: string;
-  }>;
-};

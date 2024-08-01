@@ -1,17 +1,17 @@
 import cloneDeep from 'lodash/cloneDeep';
 import camelCase from 'lodash/camelCase';
 
-import type { Farmer, FarmerImpactMetrics } from '#types/global';
-import type { FarmersSliceResponse } from '#types/api.responses';
+import type { AggregatedData, Farmer, FarmerData } from '#types/global';
 import ColdtivateService from '#services/ColdtivateService';
-import FarmerService, { STATIC_START_DATE } from '#services/FarmerService';
+import FarmerImpactService from '#services/FarmerImpactService';
 import { useManagementStore } from '#stores/management';
 import { dateFmt } from '#i18n/utils';
 
 import { countriesDict } from '../CompanyDetails/utils';
+import { STATIC_START_DATE } from './index';
 
-type FarmerRevenueImpactMetrics = FarmerImpactMetrics & { currency: string };
-type FarmerCoolingUnitStats = Omit<FarmersSliceResponse, 'firstName' | 'lastName' | 'userType'>;
+type FarmerRevenueImpactMetrics = AggregatedData & { currency: string };
+type FarmerCoolingUnitStats = Omit<FarmerData, 'firstName' | 'lastName' | 'userType'>;
 type CropsLookupMap = Map<string, { cropId: number; name: string; imageURL: string }>;
 
 export class DataLoader {
@@ -52,7 +52,7 @@ export class DataLoader {
     const countryCurrency = countriesDict().getByValue(farmer.country);
 
     const tempUnitName: Record<string, string> = {};
-    const losses: Array<FarmerImpactMetrics> = [];
+    const losses: Array<AggregatedData> = [];
     const revenues: Array<FarmerRevenueImpactMetrics> = [];
 
     for (const key in impactSlice.top5FoodLossEvolution) {
@@ -132,7 +132,7 @@ export class DataLoader {
   private static async _loadFarmerInfoAndCompanies(farmer: Farmer) {
     const [baseStatsResult, allCompaniesResult] = await Promise.allSettled([
       // load farmer base stats
-      FarmerService.getFarmerBaseSlice(farmer.id),
+      FarmerImpactService.getFarmerBaseImpact(farmer.id),
       // load all companies
       ColdtivateService.getCompanies(),
     ]);
@@ -163,8 +163,18 @@ export class DataLoader {
 
   private static async _loadFarmerAnalytics(farmer: Farmer) {
     const [farmerSliceResult, impactSliceResult] = await Promise.allSettled([
-      FarmerService.getFarmerSlice(farmer),
-      FarmerService.getImpactSlice(farmer),
+      FarmerImpactService.getFarmerImpact({
+        startDate: new Date(STATIC_START_DATE),
+        endDate: new Date(),
+        farmerId: farmer.id,
+        unitIds: farmer.coolingUnits,
+      }),
+      FarmerImpactService.getImpact({
+        startDate: new Date(STATIC_START_DATE),
+        endDate: new Date(),
+        farmerId: farmer.id,
+        unitIds: farmer.coolingUnits,
+      }),
     ]);
 
     return {

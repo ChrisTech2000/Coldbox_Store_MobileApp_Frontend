@@ -385,7 +385,7 @@ type CropData = {
 };
 
 type RecordValue<T> = {
-  '0': T;
+  [key: string]: T;
 };
 
 export type FarmerData = {
@@ -408,7 +408,7 @@ export type FarmerData = {
   unitName?: RecordValue<string>;
 };
 
-type AggregatedData = {
+export type AggregatedData = {
   farmerId: number;
   unitName: number;
   baselineQuantityTotalMonth: number;
@@ -468,30 +468,6 @@ export type FarmerImpactData = {
   top5FoodLossEvolution: Record<string, Top5Data>;
   top5RevenueEvolution: Record<string, Top5Data>;
   surveys: SurveyData[];
-};
-
-export type FarmerImpactMetrics = {
-  farmerId: number;
-  cropId: number;
-  cropName: number;
-  unitName: number;
-  baselineQuantityTotalMonth: number;
-  avgBaselineKgSellingPriceMonth: number;
-  baselineKgLossMonth: number;
-  baselineKgSoldMonth: number;
-  avgBaselinePercLossMonth: number;
-  avgBaselineFarmerRevenueMonth: number;
-  avgMonthlyKgSellingPrice: number;
-  monthlyKgCheckin: number;
-  monthlyKgLoss: number;
-  avgMonthlyPercLoss: number;
-  avgMonthlyPercFoodlossEvolution: number;
-  avgMonthlyFarmerRevenue: number;
-  avgMonthlyPercRevenueIncreaseEvolution: number;
-  avgMonthlyKgSellingPriceEvolution: number;
-  avgMonthlyPercUnitSellingPriceEvolution: number;
-  avgMonthlyFarmerRevenueEvolution: number;
-  latestSurveyDate: number;
 };
 
 //////////////////////// ENUMS

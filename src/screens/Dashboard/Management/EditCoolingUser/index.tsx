@@ -28,6 +28,7 @@ import DeleteAction from './components/DeleteAction';
 
 import { DataLoader } from './utils';
 
+export const STATIC_START_DATE = '2022-10-01'; // copied from the web app :shrug:
 export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
 
 function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {

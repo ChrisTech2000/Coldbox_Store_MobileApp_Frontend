@@ -43,7 +43,9 @@ export const useApiCall = <IData, IParams>(
     errorRetryInterval: options?.errorRetryInterval,
   });
 
-  const refetch = useCallback(async () => await mutate(), [mutate]);
+  const refetch = useCallback(async () => {
+    await mutate();
+  }, [mutate]);
 
   return {
     data: data || defaultData.current,
