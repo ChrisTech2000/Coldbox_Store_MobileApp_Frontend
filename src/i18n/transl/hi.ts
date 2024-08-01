@@ -276,6 +276,17 @@ export default {
     noCoolingUnitAvailable: 'कोई कूलिंग यूनिट उपलब्ध नहीं है',
     noLocationsAvailable:
       'Coldtivate में आपका स्वागत है। प्रबंधन पैनल में अपने ऐप में स्थान जोड़कर शुरुआत करें।',
+    MarketPrice: {
+      emptyState: 'आपके देश में बाजार मूल्य उपलब्ध नहीं हैं',
+      Trend: {
+        title: 'मूल्य पूर्वानुमान प्राप्त करने के लिए एक वस्तु और एक राज्य का चयन करें',
+        commodityLabel: 'वस्तु',
+        commodityModalTitle: 'एक वस्तु का चयन करें',
+        stateLabel: 'राज्य',
+        stateModalTitle: 'एक राज्य का चयन करें',
+        emptyState: 'इस बाजार और वस्तु संयोजन के लिए कोई डेटा नहीं मिला',
+      },
+    },
     CrateManagement: {
       userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
       coolingUserLabel: 'कूलिंग उपयोगकर्ता',

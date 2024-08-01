@@ -470,6 +470,21 @@ export type FarmerImpactData = {
   surveys: SurveyData[];
 };
 
+export type PredictionCrop = {
+  id: number;
+  name: string;
+};
+
+export type PredictionState = {
+  id: number;
+  name: string;
+};
+
+export type PredictionParams = {
+  availableCrops: PredictionCrop[];
+  availableStates: PredictionState[];
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',

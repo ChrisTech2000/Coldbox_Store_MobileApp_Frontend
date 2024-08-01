@@ -273,6 +273,17 @@ const en = {
     noCoolingUnitAvailable: 'No cooling unit available',
     noLocationsAvailable:
       'Welcome to Coldtivate. Get started by adding locations to your app in the management panel.',
+    MarketPrice: {
+      emptyState: 'Market Prices are not available in your country',
+      Trend: {
+        title: 'Select a commodity and a state to get a price forecast',
+        commodityLabel: 'Commodity',
+        commodityModalTitle: 'Select a commodity',
+        stateLabel: 'State',
+        stateModalTitle: 'Select a state',
+        emptyState: 'No data found for this market and commodity combination',
+      },
+    },
     CrateManagement: {
       userModalTitle: 'Select a cooling user',
       coolingUserLabel: 'Cooling user',

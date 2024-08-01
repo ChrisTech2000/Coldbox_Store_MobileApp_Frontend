@@ -52,7 +52,7 @@ export function ImpactTab() {
       farmerId: farmer?.id as number,
       startDate: configData?.startDate as Date,
       endDate: configData?.endDate as Date,
-      unitIds: configData?.coolingUnit.id as number,
+      unitIds: configData?.coolingUnit?.id as number,
     },
     {
       skip: !configData || !farmer,

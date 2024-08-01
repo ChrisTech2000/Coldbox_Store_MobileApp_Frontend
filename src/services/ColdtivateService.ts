@@ -4,6 +4,7 @@ import snakeCase from 'lodash/snakeCase';
 import {
   ECompanyEndpoints,
   EOperationEndpoints,
+  EPredictionEndpoints,
   EStorageEndpoints,
   EUserEndpoints,
 } from '#constants/api.routes';
@@ -40,6 +41,7 @@ import type {
   EditCoolingUnitParams,
   GetRevenueAnalysisParams,
   AddCoolingUnitTemperatureParams,
+  GetPredictionParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -66,7 +68,15 @@ import type {
   GetCoolingUnitCapacityResponse,
   GetCoolingUnitTemperaturesResponse,
 } from '#types/api.responses';
-import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
+import type {
+  Company,
+  CoolingUnit,
+  Crate,
+  DashboardProduce,
+  Farmer,
+  PredictionParams,
+  User,
+} from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
@@ -955,6 +965,46 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.get<GetMovementsHistoryResponse>(
         EOperationEndpoints.GET_COOLING_UNIT_REVENUE,
         { params: _params }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  ///////// PREDICTION
+  public getPredictionParams = async (country: 'IN' | 'NG'): Promise<PredictionParams> => {
+    try {
+      const { data } = await this.get<PredictionParams>(
+        country === 'IN'
+          ? EPredictionEndpoints.GET_PREDICTION_PARAMS_IN
+          : EPredictionEndpoints.GET_PREDICTION_PARAMS_NG
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getPrediction = async (params: GetPredictionParams): Promise<PredictionParams> => {
+    try {
+      const { country, cropId, stateId } = params;
+      const { data } = await this.get<PredictionParams>(
+        country === 'IN'
+          ? EPredictionEndpoints.GET_PREDICTION_IN
+          : EPredictionEndpoints.GET_PREDICTION_NG,
+        {
+          params: {
+            cropId,
+            stateId,
+          },
+        }
       );
       return data;
     } catch (error) {
