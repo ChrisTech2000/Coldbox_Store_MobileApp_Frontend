@@ -110,11 +110,11 @@ export class DataLoader {
         surveys: { ...impactSlice.surveys.at(0) },
         loss: { ...impactSlice.top5FoodLossEvolution },
         revenue: { ...impactSlice.top5RevenueEvolution },
+        losses,
+        revenues,
         cools: farmerCoolingUnitsStats,
       },
       datums: {
-        losses,
-        revenues,
         units: coolingUnitsNames.join(', '),
         checkInCrates,
         checkInKg,
