@@ -19,7 +19,7 @@ export default function FarmerDashboardData(props: Props) {
 
   const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
 
-  const { data, isLoading } = useApiCall(
+  const { data, isLoading, hasError } = useApiCall(
     SWR_CACHE_KEY,
     DataLoader.aggregateFarmerData,
     contextualFarmer!,
@@ -29,13 +29,15 @@ export default function FarmerDashboardData(props: Props) {
     }
   );
 
+  console.log(data);
+
   return (
     <Button
       tw="w-full mb-4"
       mode="contained"
       icon="check-circle-outline"
       uppercase
-      disabled={isLoading || !data?.id}
+      disabled={isLoading || hasError}
     >
       Download farmer&apos;s dashboard data
     </Button>

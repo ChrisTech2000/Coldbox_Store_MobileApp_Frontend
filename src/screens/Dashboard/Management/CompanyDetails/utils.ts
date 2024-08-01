@@ -82,9 +82,9 @@ export function countriesDict() {
       return undefined;
     },
     getNameByISO: (countryISO: string): string | undefined => dict.get(countryISO)?.name,
-    getValueByName: (name: string) => {
-      for (const datum of dict.values()) {
-        if (datum.name === name) return datum;
+    getByValue: (value: string) => {
+      for (const [iso, datum] of dict.entries()) {
+        if (iso === value || datum.name === value) return datum;
       }
       return undefined;
     },
