@@ -325,49 +325,149 @@ type ImpactMetrics = {
 };
 
 export type ImpactData = {
-  impactMetrics: ImpactMetrics;
+  impactMetrics: ImpactMetrics[];
   co2Metrics: Co2Metrics[];
 };
 
 export type CoolingUnitImpact = {
-  averageRoomOccupancy: number;
-  capNumCrates: number;
-  capTons: number;
-  checkInCratesCrop: number;
-  checkInKgCrop: number;
-  checkOutCratesCrop: number;
-  checkOutKgCrop: number;
-  co2Crops: number;
-  compName: number;
-  compPricing: number;
-  companyId: number;
-  coolUnitType: number;
-  coolingUnitId: number;
-  currency: number;
-  isUnitDeleted: number;
-  roomActiveFem: number;
-  roomActiveMa: number;
-  roomActiveOt: number;
-  roomActiveUserIds: number;
-  roomActiveUsers: number;
-  roomBeneficiaries: number;
-  roomBeneficiariesFem: number;
-  roomBeneficiariesMa: number;
-  roomCratesIn: number;
-  roomCratesOut: number;
-  roomKgIn: number;
-  roomKgOut: number;
-  roomOp: number;
-  roomOpFem: number;
-  roomOpMa: number;
-  roomOpOt: number;
-  roomOpsIn: number;
-  roomOpsOut: number;
-  roomRevenue: number;
-  roomRevenueUsd: number;
-  state: number;
-  totCo2: number;
+  averageRoomOccupancy: { [key: string]: number };
+  capNumCrates: { [key: string]: number };
+  capTons: { [key: string]: number };
+  checkInCratesCrop: { [key: string]: { [key: string]: number } };
+  checkInKgCrop: { [key: string]: { [key: string]: number } };
+  checkOutCratesCrop: { [key: string]: { [key: string]: number } };
+  checkOutKgCrop: { [key: string]: { [key: string]: number } };
+  co2Crops: { [key: string]: { [key: string]: number } };
+  compName: { [key: string]: string };
+  compPricing: { [key: string]: string };
+  companyId: { [key: string]: number };
+  coolUnitType: { [key: string]: string };
+  coolingUnitId: { [key: string]: number };
+  currency: { [key: string]: string };
+  isUnitDeleted: { [key: string]: number };
+  roomActiveFem: { [key: string]: number };
+  roomActiveMa: { [key: string]: number };
+  roomActiveOt: { [key: string]: number };
+  roomActiveUserIds: { [key: string]: number[] };
+  roomActiveUsers: { [key: string]: number };
+  roomBeneficiaries: { [key: string]: number };
+  roomBeneficiariesFem: { [key: string]: number };
+  roomBeneficiariesMa: { [key: string]: number };
+  roomCratesIn: { [key: string]: number };
+  roomCratesOut: { [key: string]: number };
+  roomKgIn: { [key: string]: number };
+  roomKgOut: { [key: string]: number };
+  roomOp: { [key: string]: number };
+  roomOpFem: { [key: string]: number };
+  roomOpMa: { [key: string]: number };
+  roomOpOt: { [key: string]: number };
+  roomOpsIn: { [key: string]: number };
+  roomOpsOut: { [key: string]: number };
+  roomRevenue: { [key: string]: number };
+  roomRevenueUsd: { [key: string]: number };
+  state: { [key: string]: string };
+  totCo2: { [key: string]: number };
+  unitName: { [key: string]: string };
+};
+
+export type FarmerBaseData = {
+  avgStorageDays: number;
+  farmerId: number;
+  firstName: string;
+  gender: EApiGender;
+  lastName: string;
+  totalStorageCost: number;
+  userType: ERoles;
+};
+
+type CropData = {
+  [key: string]: number;
+};
+
+type RecordValue<T> = {
+  '0': T;
+};
+
+export type FarmerData = {
+  farmerId: RecordValue<number>;
+  firstName?: RecordValue<string>;
+  lastName?: RecordValue<string>;
+  gender: RecordValue<string>;
+  userType?: RecordValue<string>;
+  coolingUnitId?: RecordValue<number>;
+  roomCratesIn?: RecordValue<number>;
+  roomOpsIn?: RecordValue<number>;
+  roomKgIn?: RecordValue<number>;
+  roomCratesOut?: RecordValue<number>;
+  roomOpsOut?: RecordValue<number>;
+  roomKgOut?: RecordValue<number>;
+  checkInCratesCrop?: RecordValue<CropData>;
+  checkInKgCrop?: RecordValue<CropData>;
+  checkOutCratesCrop?: RecordValue<CropData>;
+  checkOutKgCrop?: RecordValue<CropData>;
+  unitName?: RecordValue<string>;
+};
+
+type AggregatedData = {
+  farmerId: number;
   unitName: number;
+  baselineQuantityTotalMonth: number;
+  avgBaselineKgSellingPriceMonth: number;
+  baselineKgLossMonth: number;
+  baselineKgSoldMonth: number;
+  avgBaselinePercLossMonth: number;
+  avgBaselineFarmerRevenueMonth: number;
+  avgMonthlyKgSellingPrice: number;
+  monthlyKgCheckin: number;
+  monthlyKgLoss: number;
+  avgMonthlyPercLoss: number;
+  avgMonthlyPercFoodlossEvolution: number;
+  avgMonthlyFarmerRevenue: number;
+  avgMonthlyPercRevenueIncreaseEvolution: number;
+  avgMonthlyKgSellingPriceEvolution: number;
+  avgMonthlyPercUnitSellingPriceEvolution: number;
+  avgMonthlyFarmerRevenueEvolution: number;
+  latestSurveyDate: number;
+};
+
+type Top5Data = {
+  farmerId: number;
+  cropId: number;
+  cropName: number;
+  unitName: number;
+  baselineQuantityTotalMonth: number;
+  avgBaselineKgSellingPriceMonth: number;
+  baselineKgLossMonth: number;
+  baselineKgSoldMonth: number;
+  avgBaselinePercLossMonth: number;
+  avgBaselineFarmerRevenueMonth: number;
+  avgMonthlyKgSellingPrice: number;
+  monthlyKgCheckin: number;
+  monthlyKgLoss: number;
+  avgMonthlyPercLoss: number;
+  avgMonthlyPercFoodlossEvolution: number;
+  avgMonthlyFarmerRevenue: number;
+  avgMonthlyPercRevenueIncreaseEvolution: number;
+  avgMonthlyKgSellingPriceEvolution: number;
+  avgMonthlyPercUnitSellingPriceEvolution: number;
+  avgMonthlyFarmerRevenueEvolution: number;
+  latestSurveyDate: number;
+};
+
+type SurveyData = {
+  farmerId: number;
+  numFilledBaselineSurveys: number;
+  numOfPossibleBaselineSurveys: number;
+  numOfFilledPostcheckoutSurveys: number;
+  numOfPossiblePostcheckoutSurveys: number;
+  cropsWithBaselineSurveyToBeCompleted: string;
+};
+
+export type FarmerImpactData = {
+  aggregated: AggregatedData;
+  top5FoodLossEvolution: Record<string, Top5Data>;
+  top5RevenueEvolution: Record<string, Top5Data>;
+  surveys: SurveyData[];
 };
 
 export type FarmerImpactMetrics = {

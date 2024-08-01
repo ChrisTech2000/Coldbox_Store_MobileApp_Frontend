@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -75,7 +76,12 @@ export function ComparisonSection() {
 
   useEffect(() => {
     if (impactData) {
-      setImpactData(impactData);
+      const impactDataClone = cloneDeep(impactData);
+      const metrics = Array.isArray(impactData.impactMetrics)
+        ? impactData.impactMetrics
+        : [impactData.impactMetrics];
+      impactDataClone.impactMetrics = metrics;
+      setImpactData(impactDataClone);
     }
   }, [impactData]);
 

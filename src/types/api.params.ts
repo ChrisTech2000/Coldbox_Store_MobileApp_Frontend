@@ -374,6 +374,13 @@ export interface GetCoolingUnitImpactParams extends JsonObject {
   endDate?: Date;
 }
 
+export interface GetFarmerImpactParams extends JsonObject {
+  farmerId: number;
+  startDate: Date;
+  endDate: Date;
+  unitIds: number | number[];
+}
+
 export type VerifyEcozenSensorConnectivityParams = {
   username: string;
   password: string;
