@@ -22,7 +22,6 @@ export const useApiCall = <IData, IParams>(
   options?: IApiQueryOptions<IData>
 ) => {
   const defaultData = useRef(options?.defaultData || ({} as IData));
-  const previousData = useRef<IData | undefined>(undefined);
   const key = useMemo(() => getQueryKey<IParams>(name, params), [method, params]);
 
   const fetcher = useCallback(async () => {
@@ -40,17 +39,11 @@ export const useApiCall = <IData, IParams>(
     revalidateOnFocus: options?.revalidateOnFocus,
     revalidateOnReconnect: options?.revalidateOnReconnect,
     dedupingInterval: options?.dedupingInterval,
-    errorRetryCount: options?.errorRetryCount,
+    errorRetryCount: options?.errorRetryCount ?? 0,
     errorRetryInterval: options?.errorRetryInterval,
   });
 
-  if (data) {
-    previousData.current = data;
-  }
-
-  const refetch = useCallback(async () => {
-    await mutate();
-  }, [mutate]);
+  const refetch = useCallback(async () => await mutate(), [mutate]);
 
   return {
     data: data || defaultData.current,

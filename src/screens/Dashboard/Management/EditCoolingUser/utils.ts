@@ -200,7 +200,7 @@ export class DataLoader {
       });
     }
 
-    return function getImagesFromEntries<V = number>(entries: Array<[string, V]>) {
+    return function lookupImages<V = number>(entries: Array<[string, V]>) {
       if (!(entries.length >= 1)) return [];
       const list: Array<string | null> = [];
       for (const [commodity] of entries) {
