@@ -18,7 +18,7 @@ export class DataLoader {
   //
   // Public Methods
   //
-  static async loadFarmerRecord(farmerId: number): Promise<Farmer> {
+  public static async loadFarmerRecord(farmerId: number): Promise<Farmer> {
     // load farmer record
     const farmer = await ColdtivateService.getFarmerById(farmerId);
     if (!farmer) throw new Error('farmer not found');
@@ -31,7 +31,7 @@ export class DataLoader {
     return contextualFarmer;
   }
 
-  static async aggregateFarmerData(farmer: Farmer) {
+  public static async aggregateFarmerData(farmer: Farmer) {
     const { farmerInfo, farmerCompanies, contextualCompanyId } =
       await DataLoader._loadFarmerInfoAndCompanies(farmer);
 
@@ -162,18 +162,21 @@ export class DataLoader {
   }
 
   private static async _loadFarmerAnalytics(farmer: Farmer) {
+    const startDate = new Date(STATIC_START_DATE);
+    const endDate = new Date();
+
     const [farmerSliceResult, impactSliceResult] = await Promise.allSettled([
       FarmerImpactService.getFarmerImpact({
-        startDate: new Date(STATIC_START_DATE),
-        endDate: new Date(),
         farmerId: farmer.id,
         unitIds: farmer.coolingUnits,
+        startDate,
+        endDate,
       }),
       FarmerImpactService.getImpact({
-        startDate: new Date(STATIC_START_DATE),
-        endDate: new Date(),
         farmerId: farmer.id,
         unitIds: farmer.coolingUnits,
+        startDate,
+        endDate,
       }),
     ]);
 
@@ -222,3 +225,5 @@ export class DataLoader {
     };
   }
 }
+
+export type AggregatedFarmerData = Awaited<ReturnType<typeof DataLoader.aggregateFarmerData>>;
