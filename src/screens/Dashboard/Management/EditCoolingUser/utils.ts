@@ -1,7 +1,8 @@
 import cloneDeep from 'lodash/cloneDeep';
+import set from 'lodash/set';
 import camelCase from 'lodash/camelCase';
 
-import type { AggregatedData, Farmer, FarmerData } from '#types/global';
+import type { Top5Data, Farmer, FarmerData } from '#types/global';
 import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useManagementStore } from '#stores/management';
@@ -10,7 +11,7 @@ import { dateFmt } from '#i18n/utils';
 import { countriesDict } from '../CompanyDetails/utils';
 import { STATIC_START_DATE } from './index';
 
-type FarmerRevenueImpactMetrics = AggregatedData & { currency: string };
+type FarmerRevenueImpactMetrics = Top5Data & { currency: string };
 type FarmerCoolingUnitStats = Omit<FarmerData, 'firstName' | 'lastName' | 'userType'>;
 type CropsLookupMap = Map<string, { cropId: number; name: string; imageURL: string }>;
 
@@ -52,29 +53,29 @@ export class DataLoader {
     const countryCurrency = countriesDict().getByValue(farmer.country);
 
     const tempUnitName: Record<string, string> = {};
-    const losses: Array<AggregatedData> = [];
+    const losses: Array<Top5Data> = [];
     const revenues: Array<FarmerRevenueImpactMetrics> = [];
 
     for (const key in impactSlice.top5FoodLossEvolution) {
       tempUnitName[key] = coolingUnitsNames[Number(key)];
-      losses.push(impactSlice.top5FoodLossEvolution[key]);
-      revenues.push({
-        ...impactSlice.top5RevenueEvolution[key],
-        currency: countryCurrency?.currencyCode ?? 'NGN',
-      });
+      // --
+      losses.push(cloneDeep(impactSlice.top5FoodLossEvolution[key]));
+      // --
+      const revenue = cloneDeep(impactSlice.top5RevenueEvolution[key]);
+      set(revenue, 'currency', countryCurrency?.currencyCode ?? 'NGN');
+      revenues.push(revenue as FarmerRevenueImpactMetrics);
     }
 
-    const farmerSliceCopy = cloneDeep(farmerSlice);
-    farmerSliceCopy[1].unitName = tempUnitName;
-    const slice = farmerSliceCopy[1];
+    const sliceCopy = cloneDeep(farmerSlice[1]);
+    sliceCopy.unitName = tempUnitName;
 
     const farmerCoolingUnitsStats: Array<FarmerCoolingUnitStats> = [];
     for (const lossKey in impactSlice.top5FoodLossEvolution) {
       const datum = {} as FarmerCoolingUnitStats;
-      for (const metric in slice) {
+      for (const metric in sliceCopy) {
         // eslint-disable-next-line
         // @ts-ignore
-        datum[metric] = slice[metric][lossKey];
+        datum[metric] = cloneDeep(sliceCopy[metric][lossKey]);
       }
       farmerCoolingUnitsStats.push(datum);
     }
@@ -112,6 +113,8 @@ export class DataLoader {
         cools: farmerCoolingUnitsStats,
       },
       datums: {
+        losses,
+        revenues,
         units: coolingUnitsNames.join(', '),
         checkInCrates,
         checkInKg,

@@ -408,7 +408,7 @@ export type FarmerData = {
   unitName?: RecordValue<string>;
 };
 
-export type AggregatedData = {
+type AggregatedData = {
   farmerId: number;
   unitName: number;
   baselineQuantityTotalMonth: number;
@@ -430,7 +430,7 @@ export type AggregatedData = {
   latestSurveyDate: number;
 };
 
-type Top5Data = {
+export type Top5Data = {
   farmerId: number;
   cropId: number;
   cropName: number;
