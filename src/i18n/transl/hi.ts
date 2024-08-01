@@ -285,6 +285,9 @@ export default {
         stateLabel: 'राज्य',
         stateModalTitle: 'एक राज्य का चयन करें',
         emptyState: 'इस बाजार और वस्तु संयोजन के लिए कोई डेटा नहीं मिला',
+        pastLabel: 'पिछला',
+        forecastLabel: 'पूर्वानुमान',
+        chartLabel: 'कीमत {{currency}}/किग्रा में',
       },
     },
     CrateManagement: {

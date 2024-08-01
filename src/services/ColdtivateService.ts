@@ -74,6 +74,7 @@ import type {
   Crate,
   DashboardProduce,
   Farmer,
+  PredictionData,
   PredictionParams,
   User,
 } from '#types/global';
@@ -992,19 +993,19 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getPrediction = async (params: GetPredictionParams): Promise<PredictionParams> => {
+  public getPrediction = async (params: GetPredictionParams): Promise<PredictionData> => {
     try {
       const { country, cropId, stateId } = params;
-      const { data } = await this.get<PredictionParams>(
+      const { data } = await this.post<PredictionData>(
         country === 'IN'
           ? EPredictionEndpoints.GET_PREDICTION_IN
           : EPredictionEndpoints.GET_PREDICTION_NG,
         {
-          params: {
-            cropId,
-            stateId,
-          },
-        }
+          cropId,
+          stateId,
+        },
+        undefined,
+        ['stateId', 'cropId']
       );
       return data;
     } catch (error) {

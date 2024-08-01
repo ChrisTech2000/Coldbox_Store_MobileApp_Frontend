@@ -282,6 +282,9 @@ const en = {
         stateLabel: 'State',
         stateModalTitle: 'Select a state',
         emptyState: 'No data found for this market and commodity combination',
+        pastLabel: 'Past',
+        forecastLabel: 'Forecast',
+        chartLabel: 'Price in {{currency}}/Kg',
       },
     },
     CrateManagement: {

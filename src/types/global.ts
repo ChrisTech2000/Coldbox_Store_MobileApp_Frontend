@@ -485,6 +485,22 @@ export type PredictionParams = {
   availableStates: PredictionState[];
 };
 
+export type PastValue = {
+  date: string;
+  price: number | null;
+};
+
+export type ForecastValue = {
+  date: string;
+  price: number | null;
+  onlyInterpolatedData: unknown | null;
+};
+
+export type PredictionData = {
+  pastValues: PastValue[];
+  forecastsValues: ForecastValue[];
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',

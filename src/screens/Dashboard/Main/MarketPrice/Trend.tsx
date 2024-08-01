@@ -14,7 +14,7 @@ import { useManagementStore } from '#stores/management';
 import { ERoles, PredictionCrop, PredictionState } from '#types/global';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { ScrollView } from 'react-native-gesture-handler';
-import { TrendGraph } from './components/TrendGraph';
+import { TrendChart } from './components/TrendChart';
 
 export type AllowedCountry = 'IN' | 'NG';
 
@@ -87,35 +87,38 @@ function MarketPriceTrend() {
   }
 
   return (
-    <ScrollView tw="h-full m-4 space-y-4">
-      <Text variant="TextBold" tw="text-lg font-bold mb-4">
-        {t('Dashboard.MarketPrice.Trend.title')}
-      </Text>
-      <SelectWithStore<PredictionCrop>
-        datums={predictionParams.availableCrops ?? []}
-        isModalVisible={isCommoditiesModalOpen}
-        setIsModalVisible={setIsCommoditiesModalOpen}
-        itemName={(item) => item?.name}
-        useSelectStore={useCommodityStore}
-        label={commodity ? commodity.name : t('Dashboard.MarketPrice.Trend.commodityLabel')}
-        modalHeader={t('Dashboard.MarketPrice.Trend.commodityModalTitle')}
-        occupyFullWidth
-      />
-      <Divider tw="w-full bg-gray-500 mb-4" />
-      <SelectWithStore<PredictionState>
-        datums={predictionParams.availableStates ?? []}
-        isModalVisible={isStatesModalOpen}
-        setIsModalVisible={setIsStatesModalOpen}
-        itemName={(item) => item?.name}
-        useSelectStore={useStateStore}
-        label={state ? state.name : t('Dashboard.MarketPrice.Trend.stateLabel')}
-        modalHeader={t('Dashboard.MarketPrice.Trend.stateModalTitle')}
-        occupyFullWidth
-      />
-      <Divider tw="w-full bg-gray-500" />
+    <View tw="absolute bottom-0 top-0 pb-1">
+      <ScrollView tw="h-full m-4 space-y-2" showsVerticalScrollIndicator={false}>
+        <Text variant="TextBold" tw="text-lg font-bold mb-4">
+          {t('Dashboard.MarketPrice.Trend.title')}
+        </Text>
 
-      <TrendGraph commodity={commodity} state={state} country={country} />
-    </ScrollView>
+        <SelectWithStore<PredictionCrop>
+          datums={predictionParams.availableCrops ?? []}
+          isModalVisible={isCommoditiesModalOpen}
+          setIsModalVisible={setIsCommoditiesModalOpen}
+          itemName={(item) => item?.name}
+          useSelectStore={useCommodityStore}
+          label={commodity ? commodity.name : t('Dashboard.MarketPrice.Trend.commodityLabel')}
+          modalHeader={t('Dashboard.MarketPrice.Trend.commodityModalTitle')}
+          occupyFullWidth
+        />
+        <Divider tw="w-full bg-gray-500 mb-4" />
+        <SelectWithStore<PredictionState>
+          datums={predictionParams.availableStates ?? []}
+          isModalVisible={isStatesModalOpen}
+          setIsModalVisible={setIsStatesModalOpen}
+          itemName={(item) => item?.name}
+          useSelectStore={useStateStore}
+          label={state ? state.name : t('Dashboard.MarketPrice.Trend.stateLabel')}
+          modalHeader={t('Dashboard.MarketPrice.Trend.stateModalTitle')}
+          occupyFullWidth
+        />
+        <Divider tw="w-full bg-gray-500" />
+
+        {commodity && state && <TrendChart commodity={commodity} state={state} country={country} />}
+      </ScrollView>
+    </View>
   );
 }
 
