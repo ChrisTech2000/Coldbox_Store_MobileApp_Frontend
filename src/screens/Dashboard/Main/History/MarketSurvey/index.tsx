@@ -99,6 +99,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
   return (
     <View tw="flex-1 justify-center space-y-4 mx-4 my-2">
       <FlatList
+        showsHorizontalScrollIndicator={false}
         data={cropsWithSurveyStatus}
         keyExtractor={(item, index) => `crop-${item.name}-#${index}`}
         renderItem={({ item }) => (

@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import cloneDeep from 'lodash/cloneDeep';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Platform, TouchableOpacity, View } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator, Icon } from 'react-native-paper';
@@ -25,18 +26,18 @@ import { InnerTabs, Tab } from './components/InnerTabs';
 import { UsersContent } from './components/UserContent';
 import { useAggregatedData } from './store';
 
-const TABS = {
-  users: <UsersContent key="users-content-aggregated-section" />,
-  impact: <ImpactContent useStore={useAggregatedData} key="impact-content-aggregated-section" />,
-  crates: <CratesContent key="crates-content-aggregated-section" />,
-};
-
 export function AggregatedSection() {
   const { t } = useTranslationUtils();
   const toast = useToast();
   const { coolingUnits } = useAnalyticsData();
   const { company } = useManagementStore();
-  const { configData, setConfigData, setImpactData, setCoolingUnitData } = useAggregatedData();
+  const {
+    configData,
+    setConfigData,
+    setImpactData,
+    setCoolingUnitData,
+    impactData: updatedImpactData,
+  } = useAggregatedData();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
@@ -69,6 +70,14 @@ export function AggregatedSection() {
     }
   );
 
+  const occupancy = useMemo(() => {
+    return coolingUnitData?.averageRoomOccupancy?.[0] || 0;
+  }, [coolingUnitData]);
+
+  const revenue = useMemo(() => {
+    return coolingUnitData?.roomRevenue?.[0] || 0;
+  }, [coolingUnitData]);
+
   const onBackToMain = useCallback(() => {
     if (activeTab) {
       setActiveTab(undefined);
@@ -78,12 +87,15 @@ export function AggregatedSection() {
   }, [activeTab]);
 
   const onDownloadData = useCallback(async () => {
+    if (!updatedImpactData) return;
+
+    console.log(updatedImpactData);
     const html = generatePDFContent(
       t,
       coolingUnits,
       company,
       coolingUnitData,
-      impactData,
+      updatedImpactData,
       'aggregated'
     );
 
@@ -105,11 +117,16 @@ export function AggregatedSection() {
         type: 'danger',
       });
     }
-  }, [t, toast, coolingUnits, coolingUnitData, impactData, company]);
+  }, [t, toast, coolingUnits, coolingUnitData, updatedImpactData, company]);
 
   useEffect(() => {
     if (impactData) {
-      setImpactData(impactData);
+      const impactDataClone = cloneDeep(impactData);
+      const metrics = Array.isArray(impactData.impactMetrics)
+        ? impactData.impactMetrics
+        : [impactData.impactMetrics];
+      impactDataClone.impactMetrics = metrics;
+      setImpactData(impactDataClone);
     }
   }, [impactData]);
 
@@ -185,7 +202,16 @@ export function AggregatedSection() {
                 </Text>
               </View>
 
-              {activeTab && TABS[activeTab]}
+              {activeTab === 'crates' && <CratesContent />}
+              {activeTab === 'users' && <UsersContent />}
+              {activeTab === 'impact' && (
+                <ImpactContent
+                  useStore={useAggregatedData}
+                  type="aggregated"
+                  occupancy={occupancy}
+                  revenue={revenue}
+                />
+              )}
             </View>
           )}
         </View>

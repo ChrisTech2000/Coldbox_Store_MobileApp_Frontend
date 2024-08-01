@@ -26,13 +26,11 @@ export type HistoryTabStackRoutes = {
     coolingUnitId?: number;
   };
   MarketSurveyStack: {
-    screen: keyof MarketSurveyStackRoutes;
-    params: {
-      crops: Array<{ id: number; name: string }>;
-      farmer: string;
-      companyCurrency?: string;
-      checkoutId: number;
-    };
+    screen?: keyof MarketSurveyStackRoutes;
+    params?:
+      | MarketSurveyStackRoutes['MarketSurveyBase']
+      | MarketSurveyStackRoutes['BaseSurvey']
+      | MarketSurveyStackRoutes['MarketSurvey'];
   };
 };
 

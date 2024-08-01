@@ -68,3 +68,9 @@ export enum ESensorEndpoints {
   UBIBOT_CHECK = 'storage/v1/ubibot/',
   FIGORR_CHECK = 'storage/v1/figorr/',
 }
+
+export enum EFarmerImpactEndpoints {
+  GET_FARMER_BASE = '/farmer-base-slice/',
+  GET_FARMER = '/farmer-slice/',
+  GET_IMPACT = '/impact-slice/',
+}
