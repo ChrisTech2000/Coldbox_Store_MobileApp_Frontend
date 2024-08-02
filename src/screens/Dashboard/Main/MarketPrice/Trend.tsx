@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 
@@ -9,55 +9,23 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { useAuthStore } from '#stores/auth';
-import { useManagementStore } from '#stores/management';
-import { ERoles, PredictionCrop, PredictionState } from '#types/global';
+import { PredictionCrop, PredictionState } from '#types/global';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { ScrollView } from 'react-native-gesture-handler';
 import { TrendChart } from './components/TrendChart';
-
-export type AllowedCountry = 'IN' | 'NG';
-
-const availableCountries = ['IN', 'NG'];
+import { AllowedCountry, usePriceTrendsStore } from './store';
 
 const useCommodityStore = createSelectStore<PredictionCrop>();
 const useStateStore = createSelectStore<PredictionState>();
 
 function MarketPriceTrend() {
   const { t } = useTranslationUtils();
-  const { user } = useAuthStore();
-  const { company } = useManagementStore();
+  const { country, loadingFarmer, setPredictionParams } = usePriceTrendsStore();
   const { selectedItem: commodity } = useCommodityStore();
   const { selectedItem: state } = useStateStore();
 
   const [isCommoditiesModalOpen, setIsCommoditiesModalOpen] = useState<boolean>(false);
   const [isStatesModalOpen, setIsStatesModalOpen] = useState<boolean>(false);
-
-  const { data: farmer, isLoading: loadingFarmer } = useApiCall(
-    'getFarmer',
-    ColdtivateService.getFarmer,
-    { userId: user?.id as number },
-    {
-      skip: !user?.id || user.role !== ERoles.COOLING_USER,
-      defaultData: [],
-    }
-  );
-
-  const country: AllowedCountry | null = useMemo(() => {
-    if (
-      user?.role === ERoles.COOLING_USER &&
-      farmer?.[0]?.country &&
-      availableCountries.includes(farmer[0].country)
-    ) {
-      return farmer[0].country as AllowedCountry;
-    }
-
-    if (company?.country && availableCountries.includes(company.country)) {
-      return company.country as AllowedCountry;
-    }
-
-    return null;
-  }, [user, company, farmer]);
 
   const { data: predictionParams, isLoading: loadingPredictionParams } = useApiCall(
     'getPredictionParams',
@@ -67,6 +35,12 @@ function MarketPriceTrend() {
       skip: !country,
     }
   );
+
+  useEffect(() => {
+    if (predictionParams) {
+      setPredictionParams(predictionParams);
+    }
+  }, [predictionParams]);
 
   if (loadingPredictionParams || loadingFarmer) {
     return (
@@ -99,8 +73,8 @@ function MarketPriceTrend() {
           setIsModalVisible={setIsCommoditiesModalOpen}
           itemName={(item) => item?.name}
           useSelectStore={useCommodityStore}
-          label={commodity ? commodity.name : t('Dashboard.MarketPrice.Trend.commodityLabel')}
-          modalHeader={t('Dashboard.MarketPrice.Trend.commodityModalTitle')}
+          label={commodity ? commodity.name : t('Dashboard.MarketPrice.commodityLabel')}
+          modalHeader={t('Dashboard.MarketPrice.commodityModalTitle')}
           occupyFullWidth
         />
         <Divider tw="w-full bg-gray-500 mb-4" />

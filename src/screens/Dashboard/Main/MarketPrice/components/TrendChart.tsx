@@ -20,8 +20,8 @@ import { Text } from '#ui/components/Text';
 import useSkiaFont from '#ui/hooks/useSkiaFont';
 import { paperTheme } from '#ui/lib/theme';
 
-import { AllowedCountry } from '../Trend';
 import colors from 'tailwindcss/colors';
+import { AllowedCountry } from '../store';
 
 type TrendChartProps = {
   commodity: PredictionCrop | null;

@@ -143,6 +143,26 @@ export default function MultipleSelectWithStore<T>({
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
+                    setInternalSelection(rest.datums);
+                  }}
+                >
+                  {t('actions.all')}
+                </Button>
+                <Button
+                  mode="text"
+                  uppercase
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    setInternalSelection([]);
+                  }}
+                >
+                  {t('actions.none')}
+                </Button>
+                <Button
+                  mode="text"
+                  uppercase
+                  onPress={(evt) => {
+                    evt.stopPropagation();
                     setInternalSelection(store.selectedItems);
                     setIsModalVisible(!isModalVisible);
                   }}

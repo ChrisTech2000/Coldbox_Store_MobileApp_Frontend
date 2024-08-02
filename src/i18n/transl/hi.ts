@@ -278,16 +278,23 @@ export default {
       'Coldtivate में आपका स्वागत है। प्रबंधन पैनल में अपने ऐप में स्थान जोड़कर शुरुआत करें।',
     MarketPrice: {
       emptyState: 'आपके देश में बाजार मूल्य उपलब्ध नहीं हैं',
+      commodityLabel: 'वस्तु',
+      commodityModalTitle: 'एक वस्तु का चयन करें',
       Trend: {
         title: 'मूल्य पूर्वानुमान प्राप्त करने के लिए एक वस्तु और एक राज्य का चयन करें',
-        commodityLabel: 'वस्तु',
-        commodityModalTitle: 'एक वस्तु का चयन करें',
         stateLabel: 'राज्य',
         stateModalTitle: 'एक राज्य का चयन करें',
         emptyState: 'इस बाजार और वस्तु संयोजन के लिए कोई डेटा नहीं मिला',
         pastLabel: 'पिछला',
         forecastLabel: 'पूर्वानुमान',
         chartLabel: 'कीमत {{currency}}/किग्रा में',
+      },
+      Ranking: {
+        filter: 'स्थान द्वारा फ़िल्टर करें',
+        monthLabel: 'महीने',
+        monthModalTitle: 'महीनों का चयन करें',
+        stateModalTitle: 'राज्यों का चयन करें',
+        stateLabel: 'राज्य',
       },
     },
     CrateManagement: {
