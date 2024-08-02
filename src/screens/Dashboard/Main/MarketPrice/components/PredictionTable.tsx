@@ -110,6 +110,10 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
     [predictionData]
   );
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [predictionData]);
+
   if (loadingPredictionData) {
     return (
       <View tw="flex-1 items-center justify-center">
