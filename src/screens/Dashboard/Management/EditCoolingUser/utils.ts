@@ -6,7 +6,6 @@ import type { Top5Data, Farmer, FarmerData } from '#types/global';
 import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useManagementStore } from '#stores/management';
-import { dateFmt } from '#i18n/utils';
 
 import { countriesDict } from '../CompanyDetails/utils';
 import { STATIC_START_DATE } from './index';
@@ -101,8 +100,8 @@ export class DataLoader {
 
     return {
       dateRange: {
-        start: dateFmt(STATIC_START_DATE, 'LL'),
-        end: dateFmt(new Date().toISOString(), 'LL'),
+        start: STATIC_START_DATE,
+        end: new Date().toISOString().split('T')[0],
       },
       farmerInfo,
       stats: {
@@ -110,11 +109,12 @@ export class DataLoader {
         surveys: { ...impactSlice.surveys.at(0) },
         loss: { ...impactSlice.top5FoodLossEvolution },
         revenue: { ...impactSlice.top5RevenueEvolution },
+        cools: farmerCoolingUnitsStats,
         losses,
         revenues,
-        cools: farmerCoolingUnitsStats,
       },
       datums: {
+        currencyCode: countryCurrency?.currencyCode ?? 'NGN',
         units: coolingUnitsNames.join(', '),
         checkInCrates,
         checkInKg,
