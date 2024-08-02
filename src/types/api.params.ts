@@ -406,3 +406,10 @@ export interface GetPredictionParams extends JsonObject {
   cropId: number;
   stateId: number;
 }
+
+export type GetPredictionTableParams = {
+  country: 'IN' | 'NG';
+  cropId: number;
+  days: Date[];
+  statesIds: number[];
+};

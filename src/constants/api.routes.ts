@@ -80,4 +80,6 @@ export enum EPredictionEndpoints {
   GET_PREDICTION_PARAMS_IN = '/prediction/states/get_parameters_for_prediction/',
   GET_PREDICTION_NG = '/prediction/predictions/get_data_graph_ng',
   GET_PREDICTION_IN = '/prediction/predictions/get_data_graph',
+  GET_PREDICTION_TABLE_NG = '/prediction/predictions/get_data_table_ng',
+  GET_PREDICTION_TABLE_IN = '/prediction/predictions/get_data_table',
 }

@@ -295,6 +295,12 @@ export default {
         monthModalTitle: 'महीनों का चयन करें',
         stateModalTitle: 'राज्यों का चयन करें',
         stateLabel: 'राज्य',
+        table: {
+          column1: 'राज्य',
+          column2: 'तारीख',
+          column3: 'कीमत {{currency}}/किलोग्राम में',
+          emptyState: 'कोई मूल्य उपलब्ध नहीं है',
+        },
       },
     },
     CrateManagement: {

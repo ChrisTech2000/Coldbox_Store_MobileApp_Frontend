@@ -13,9 +13,10 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { PredictionCrop, PredictionState } from '#types/global';
 
 import { usePriceTrendsStore } from './store';
-import { addMonths } from 'date-fns';
+import { addMonths, startOfMonth } from 'date-fns';
+import { PredictionTable } from './components/PredictionTable';
 
-type Month = {
+export type Month = {
   id: number;
   name: string;
   date: Date;
@@ -39,7 +40,7 @@ function MarketPriceRanking() {
 
   const months = useMemo(() => {
     return Array.from({ length: 12 }, (_, i) => {
-      const date = addMonths(new Date(), i);
+      const date = startOfMonth(addMonths(new Date(), i));
       return {
         id: i,
         name: dateFmt(date.toISOString(), 'MMM, yyyy'),
@@ -116,6 +117,15 @@ function MarketPriceRanking() {
           occupyFullWidth
         />
         <Divider tw="w-full bg-gray-500 mb-4" />
+
+        {predictionParams?.availableStates?.length && commodity && selectedMonths.length > 0 && (
+          <PredictionTable
+            states={states.length > 0 ? states : predictionParams.availableStates}
+            dates={selectedMonths}
+            commodity={commodity}
+            country={country}
+          />
+        )}
       </ScrollView>
     </View>
   );

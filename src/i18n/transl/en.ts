@@ -292,6 +292,12 @@ const en = {
         monthModalTitle: 'Select the months',
         stateModalTitle: 'Select the states',
         stateLabel: 'States',
+        table: {
+          column1: 'State',
+          column2: 'Date',
+          column3: 'Price in {{currency}}/Kg',
+          emptyState: 'No value available',
+        },
       },
     },
     CrateManagement: {

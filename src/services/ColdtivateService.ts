@@ -42,6 +42,7 @@ import type {
   GetRevenueAnalysisParams,
   AddCoolingUnitTemperatureParams,
   GetPredictionParams,
+  GetPredictionTableParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -76,6 +77,7 @@ import type {
   Farmer,
   PredictionData,
   PredictionParams,
+  PredictionTableData,
   User,
 } from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
@@ -83,6 +85,7 @@ import type { WithRequired } from '#types/miscellaneous';
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 import { serialize, subs } from './utils';
+import { format } from 'date-fns';
 
 class ColdtivateService extends HttpClient {
   constructor(options?: HttpClientOptions) {
@@ -1006,6 +1009,34 @@ class ColdtivateService extends HttpClient {
         },
         undefined,
         ['stateId', 'cropId']
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getPredictionTable = async (
+    params: GetPredictionTableParams
+  ): Promise<PredictionTableData> => {
+    try {
+      const { country, cropId, statesIds, days } = params;
+      const formattedDates = days.map((date) => format(new Date(date), 'yyyy-MM-dd'));
+
+      const { data } = await this.post<PredictionTableData>(
+        country === 'IN'
+          ? EPredictionEndpoints.GET_PREDICTION_TABLE_IN
+          : EPredictionEndpoints.GET_PREDICTION_TABLE_NG,
+        {
+          cropId,
+          statesIds: statesIds.map((id) => id.toString()),
+          days: formattedDates,
+        },
+        undefined,
+        ['statesIds', 'cropId']
       );
       return data;
     } catch (error) {

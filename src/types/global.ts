@@ -501,6 +501,12 @@ export type PredictionData = {
   forecastsValues: ForecastValue[];
 };
 
+export type PredictionTableData = Array<{
+  state: string;
+  date: string;
+  price: number | null;
+}>;
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',
