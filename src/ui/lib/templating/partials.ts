@@ -1,17 +1,12 @@
-import { template } from '#ui/lib/templating';
+import { template } from './internals';
 
 //
 // Details
 //
 
-export const DetailsContainer = template<{
-  start: string;
-  end: string;
-  coolingUnit: number | string;
-}>`
+export const DetailsContainer = template<{ datums: Array<{ label: string; value: string }> }>`
 <div class="w-full bg-teal-50 px-4 py-0.5 tracking-wide mb-2 rounded-md">
-    <p class="text-zinc-900">Date range: <span class="text-teal-600">${(p) => p.start} - ${(p) => p.end}.</span></p>
-    <p class="text-zinc-900">Selected cooling units: <span class="text-teal-600">${(p) => p.coolingUnit.toString()}</span></p>
+  ${(p) => p.datums.map((datum) => `<p class="text-zinc-900">${datum.label}: <span class="text-teal-600">${datum.value}.</span></p>`).join('')}
 </div>
 `;
 
