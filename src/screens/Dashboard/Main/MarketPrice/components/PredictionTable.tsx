@@ -1,5 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, DataTable, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -11,15 +11,19 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import type { PredictionCrop, PredictionState } from '#types/global';
+import type { PredictionCrop, PredictionState, PredictionTableData } from '#types/global';
 
 import { Month } from '../Ranking';
 import type { AllowedCountry } from '../store';
+import { changePage, compareAsc, compareDesc, parseDateString } from '../utils';
 
 enum ECurrency {
   NG = '₦',
   IN = 'Rs',
 }
+
+type Sorting = 'state' | 'date' | 'price';
+type Direction = 'ascending' | 'descending';
 
 type PredictionTableProps = {
   commodity: PredictionCrop;
@@ -28,8 +32,16 @@ type PredictionTableProps = {
   dates: Month[];
 };
 
+type TableHeaderProps = {
+  isSortingActive: boolean;
+  title: string;
+  onSort: (direction: Direction) => void;
+};
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
+
+const ITEMS_PER_PAGE = 10;
 
 export function PredictionTable({ commodity, states, country, dates }: PredictionTableProps) {
   const { t } = useTranslationUtils();
@@ -43,6 +55,59 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
       days: dates.map(({ date }) => date),
       country,
     }
+  );
+
+  const [sortingType, setSortingType] = useState<{ direction: Direction; sorting: Sorting }>({
+    direction: 'ascending',
+    sorting: 'state',
+  });
+
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  const paginatedData = useMemo(() => {
+    if (!predictionData || !predictionData.length) return [];
+
+    const startIndex = currentPage * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+
+    return predictionData.slice(startIndex, endIndex);
+  }, [predictionData, currentPage]);
+
+  const sortedData = useMemo(() => {
+    if (!paginatedData?.length) return [];
+
+    const { direction, sorting } = sortingType;
+    let data: PredictionTableData = [];
+
+    const compare = direction === 'descending' ? compareDesc : compareAsc;
+
+    switch (sorting) {
+      case 'date':
+        data = paginatedData
+          .slice()
+          .sort((a, b) =>
+            compare(
+              new Date(parseDateString(a.date)).getTime(),
+              new Date(parseDateString(b.date)).getTime()
+            )
+          );
+        break;
+      case 'state':
+        data = paginatedData.slice().sort((a, b) => compare(a.state, b.state));
+        break;
+      case 'price':
+        data = paginatedData
+          .slice()
+          .sort((a, b) => compare(a.price ?? Infinity, b.price ?? Infinity));
+        break;
+    }
+
+    return data;
+  }, [paginatedData, sortingType?.direction, sortingType?.sorting]);
+
+  const totalPages = useMemo(
+    () => Math.floor((predictionData?.length ?? 0) / ITEMS_PER_PAGE),
+    [predictionData]
   );
 
   if (loadingPredictionData) {
@@ -66,35 +131,43 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
   return (
     <View>
       <DataTable tw="py-4 px-2">
-        <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 py-2">
-          <DataTable.Cell>
-            <TouchableOpacity tw="flex flex-row items-center">
-              <Text variant="TextMedium" tw="text-white text-base">
-                {t('Dashboard.MarketPrice.Ranking.table.column1')}
-              </Text>
-              <Icon source="arrow-up-down" color={colors.white} size={14} />
-            </TouchableOpacity>
-          </DataTable.Cell>
-          <DataTable.Cell>
-            <TouchableOpacity tw="flex flex-row items-center">
-              <Text variant="TextMedium" tw="text-white text-base">
-                {t('Dashboard.MarketPrice.Ranking.table.column2')}
-              </Text>
-              <Icon source="arrow-up-down" color={colors.white} size={14} />
-            </TouchableOpacity>
-          </DataTable.Cell>
-          <DataTable.Cell>
-            <TouchableOpacity tw="flex flex-row items-center">
-              <Text variant="TextMedium" tw="text-white text-base">
-                {t('Dashboard.MarketPrice.Ranking.table.column3', { currency: ECurrency[country] })}
-              </Text>
-              <Icon source="arrow-up-down" color={colors.white} size={14} />
-            </TouchableOpacity>
-          </DataTable.Cell>
-        </DataTable.Header>
-        <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
+        <SkiaShadow blur={6} dx={2} dy={8} color={colors.zinc[300]} borderRadius={10}>
+          <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 py-2">
+            <Header
+              title={t('Dashboard.MarketPrice.Ranking.table.column1')}
+              onSort={(direction) =>
+                setSortingType({
+                  sorting: 'state',
+                  direction,
+                })
+              }
+              isSortingActive={sortingType.sorting === 'state'}
+            />
+            <Header
+              title={t('Dashboard.MarketPrice.Ranking.table.column2')}
+              onSort={(direction) =>
+                setSortingType({
+                  sorting: 'date',
+                  direction,
+                })
+              }
+              isSortingActive={sortingType.sorting === 'date'}
+            />
+            <Header
+              title={t('Dashboard.MarketPrice.Ranking.table.column3', {
+                currency: ECurrency[country],
+              })}
+              onSort={(direction) =>
+                setSortingType({
+                  sorting: 'price',
+                  direction,
+                })
+              }
+              isSortingActive={sortingType.sorting === 'price'}
+            />
+          </DataTable.Header>
           <FlashList
-            data={predictionData}
+            data={sortedData}
             keyExtractor={(item, index) => `${item.date}-#${index}-${item.price}`}
             renderItem={({ item }) => (
               <DataTable.Row tw="bg-white">
@@ -112,8 +185,60 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
               width: deviceWidth - 40,
             }}
           />
+          <DataTable.Pagination
+            tw="bg-gray-700 rounded-b-lg"
+            page={currentPage}
+            numberOfPages={totalPages}
+            onPageChange={(page) => changePage(page, totalPages, setCurrentPage)}
+            showFastPaginationControls
+            numberOfItemsPerPage={ITEMS_PER_PAGE}
+            theme={{
+              colors: {
+                text: 'white',
+                onSurface: 'white',
+                surfaceDisabled: colors.gray[500],
+                onSurfaceDisabled: colors.gray[500],
+              },
+            }}
+          />
         </SkiaShadow>
       </DataTable>
     </View>
+  );
+}
+
+function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
+  const [sortingDirection, setSortingDirection] = useState<Direction | undefined>();
+
+  const onPress = useCallback(() => {
+    const newSortingDirection =
+      sortingDirection && sortingDirection === 'ascending' ? 'descending' : 'ascending';
+    setSortingDirection(newSortingDirection);
+    onSort(newSortingDirection);
+  }, [sortingDirection]);
+
+  const sortingIcon = useMemo(() => {
+    if (!isSortingActive) {
+      return 'arrow-up-down';
+    }
+
+    return sortingDirection === 'ascending' ? 'arrow-up' : 'arrow-down';
+  }, [sortingDirection, isSortingActive]);
+
+  useEffect(() => {
+    if (!isSortingActive) {
+      setSortingDirection(undefined);
+    }
+  }, [isSortingActive]);
+
+  return (
+    <DataTable.Title>
+      <TouchableOpacity tw="flex flex-row items-center" onPress={onPress}>
+        <Text variant="TextMedium" tw="text-white text-base">
+          {title}
+        </Text>
+        <Icon source={sortingIcon} color={colors.white} size={14} />
+      </TouchableOpacity>
+    </DataTable.Title>
   );
 }
