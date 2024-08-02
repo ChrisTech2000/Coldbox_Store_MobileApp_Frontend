@@ -14,6 +14,7 @@ import EditCheckIn from '#screens/Dashboard/Main/History/EditCheckIn';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
+import { useAuthStore } from '#stores/auth';
 import type { GetMovementsHistoryResponse } from '#types/api.responses';
 
 import { dashboardHeaderFactory } from '../../lib/dashboardHeaderFactory';
@@ -63,8 +64,17 @@ export default function HistoryTabStack() {
     const code = (props.route.params as { movement: GetMovementsHistoryResponse[number] })?.movement
       ?.code;
 
+    const firstName = useAuthStore.getState().user?.firstName;
+
+    let routeTitle: string | undefined;
+
     const translationPath = NAVIGATOR_HEADERS[routeName];
-    const routeTitle = translationPath ? t(translationPath, { code }) : undefined;
+
+    if (routeName === 'RootHistoryTabStack') {
+      routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
+    } else {
+      routeTitle = translationPath ? t(translationPath, { code }) : undefined;
+    }
 
     return {
       ...props,

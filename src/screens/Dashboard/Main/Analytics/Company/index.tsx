@@ -118,7 +118,7 @@ export function CompanySection() {
   }, [coolingUnits]);
 
   return (
-    <ScrollView tw="mt-8" showsVerticalScrollIndicator={false}>
+    <ScrollView tw="mt-4" showsVerticalScrollIndicator={false}>
       {activeTab && (
         <TouchableOpacity
           tw="flex flex-row w-full items-center space-x-2 justify-start"

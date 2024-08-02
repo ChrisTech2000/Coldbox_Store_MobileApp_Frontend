@@ -41,7 +41,7 @@ const en = {
       RegisteredEmployeeDetails: 'Registered Employee Details',
     },
     bottomTabs: {
-      RootMainTabStack: '{{firstName}} Coldtivate',
+      RootMainTabStack: "{{firstName}}'s Coldtivate",
       ProduceDetails: '{{produceCode}}',
       PriceTrend: 'Price trend',
       PriceRanking: 'Price ranking',
@@ -82,6 +82,9 @@ const en = {
       EditCheckIn: '{{code}}',
       MarketSurvey: 'Market Survey for {{farmer}}',
       BaseSurvey: 'Cooling user survey',
+    },
+    analytics: {
+      methodology: 'Methodology',
     },
   },
   actions: {
