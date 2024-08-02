@@ -5,7 +5,7 @@ import { template } from './internals';
 //
 
 export const DetailsContainer = template<{ datums: Array<{ label: string; value: string }> }>`
-<div class="w-full bg-teal-50 px-4 py-0.5 tracking-wide mb-2 rounded-md">
+<div class="bg-teal-50 px-4 py-0.5 tracking-wide my-2 rounded-md">
   ${(p) => p.datums.map((datum) => `<p class="text-zinc-900">${datum.label}: <span class="text-teal-600">${datum.value}.</span></p>`).join('')}
 </div>
 `;
@@ -15,14 +15,14 @@ export const DetailsContainer = template<{ datums: Array<{ label: string; value:
 //
 
 export const PillCard = template<{ label: string; value: number | string }>`
-<div class="card">
-  <div class="label">${(p) => p.label}</div>
-  <div class="value">${(p) => p.value.toString()}</div>
+<div class="bg-violet-950 text-white h-14 flex flex-col items-center justify-center rounded-md px-4">
+  <p class="text-sm m-0 p-0">${(p) => p.label}</p>
+  <p class="text-sm m-0 p-0">${(p) => p.value.toString()}</p>
 </div>
 `;
 
 export const PillContainer = template<{ datums: Array<{ label: string; value: number | string }> }>`
-<div class="container">
+<div class="h-24 max-h-24 bg-zinc-100 rounded-md flex flex-row items-center justify-evenly my-2">
 ${(p) => p.datums.map((datum) => PillCard(datum)).join('')}
 </div>
 `;
@@ -32,7 +32,7 @@ ${(p) => p.datums.map((datum) => PillCard(datum)).join('')}
 //
 
 export const Section = template<{ label: string }>`
-<div class="w-full bg-sky-50 h-14 flex items-center px-4 my-2 rounded-md">
+<div class="bg-sky-50 h-14 flex items-center px-4 my-2 rounded-md">
   <p>${(p) => p.label}</p>
 </div>
 `;
@@ -67,8 +67,28 @@ const TableHead = template<{ columns: TableColumns }>`
 <thead class="text-center bg-zinc-700">
   <tr>
     ${({ columns }) => {
+      let hasSubHeaders = false;
+
+      for (const key in columns) {
+        const column = columns[key];
+        if (typeof column === 'object') {
+          hasSubHeaders = true;
+          break;
+        }
+      }
+
+      if (!hasSubHeaders) {
+        return Object.values(columns)
+          .map(
+            (column) =>
+              `<th class="whitespace-nowrap p-2 font-medium text-white border border-solid border-zinc-700">${column}</th>`
+          )
+          .join('');
+      }
+
       let headerRow = '';
       let subHeaderRow = '';
+
       for (const key in columns) {
         const column = columns[key];
         if (typeof column === 'string') {
@@ -77,11 +97,15 @@ const TableHead = template<{ columns: TableColumns }>`
         } else {
           const subHeadersCount = Object.keys(column.subHeaders).length;
           headerRow += `<th class="whitespace-nowrap p-2 font-medium text-white border border-solid border-zinc-700 align-middle" colspan="${subHeadersCount}">${column.name}</th>`;
-          for (const subKey in column.subHeaders) {
-            subHeaderRow += `<th class="whitespace-nowrap p-2 font-medium text-white border border-solid border-zinc-700">${column.subHeaders[subKey]}</th>`;
-          }
+          subHeaderRow += Object.values(column.subHeaders)
+            .map(
+              (subHeader) =>
+                `<th class="whitespace-nowrap p-2 font-medium text-white border border-solid border-zinc-700">${subHeader}</th>`
+            )
+            .join('');
         }
       }
+
       return `${headerRow}</tr><tr>${subHeaderRow}`;
     }}
   </tr>
