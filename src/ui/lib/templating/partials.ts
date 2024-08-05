@@ -31,8 +31,8 @@ ${(p) => p.datums.map((datum) => PillCard(datum)).join('')}
 // Section
 //
 
-export const Section = template<{ label: string }>`
-<div class="bg-sky-50 h-14 flex items-center px-4 my-2 rounded-md">
+export const Section = template<{ label: string; kind?: 'default' | 'impact' }>`
+<div class="${(p) => (p.kind === 'impact' ? 'bg-purple-50' : 'bg-sky-50')} h-14 flex items-center px-4 my-2 rounded-md">
   <p>${(p) => p.label}</p>
 </div>
 `;
@@ -194,14 +194,14 @@ export const SurveyStatsPercentage = template<{
   current: number;
   chipText: string;
 }>`
-<div class="flex flex-col items-center space-y-0.5 p-4 bg-purple-50 rounded-md my-2">
-  <p>${(p) => p.title}</p>
+<div class="flex flex-col items-center space-y-4 p-4 bg-purple-50 rounded-md my-2">
+  <p class="m-0 p-0">${(p) => p.title}</p>
   <div class="flex flex-row space-x-2 items-center">
-    <p class="text-xl"><span class="text-zinc-700 text-2xl font-semibold">${(p) => p.current.toString()}</span>/${(p) => p.max.toString()}</p>
-    <p class="text-2xl text-purple-700">(${(p) => ((p.current / p.max) * 100).toFixed(2)}%)</p>
+    <p class="text-xl m-0 p-0"><span class="text-zinc-700 text-2xl font-semibold">${(p) => p.current.toString()}</span>/${(p) => p.max.toString()}</p>
+    <p class="text-2xl text-purple-700 m-0 p-0">(${(p) => ((p.current / p.max) * 100).toFixed(2)}%)</p>
   </div>
   <div class="bg-zinc-700 h-14 px-4 rounded-md flex items-center justify-center">
-    <p class="text-white text-center text-sm">${(p) => p.chipText}</p>
+    <p class="text-white text-center text-sm m-0 p-0">${(p) => p.chipText}</p>
   </div>
 </div>
 `;

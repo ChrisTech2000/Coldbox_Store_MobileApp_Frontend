@@ -1,7 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import camelCase from 'lodash/camelCase';
-import startCase from 'lodash/startCase';
 
 import type { Top5Data, Farmer, FarmerData } from '#types/global';
 import ColdtivateService from '#services/ColdtivateService';
@@ -90,7 +89,7 @@ export class DataLoader {
     const sliceCopy = cloneDeep(farmerSlice[1]);
     sliceCopy.unitName = tempUnitName;
 
-    const lookupImages = await DataLoader._commoditiesLookupBuilder();
+    const builder = await DataLoader._commoditiesLookupBuilder();
 
     const farmerCoolingUnitsStats: Array<FarmerCoolingUnitStats> = [];
     for (const lossKey in impactSlice.top5FoodLossEvolution) {
@@ -108,10 +107,10 @@ export class DataLoader {
           case 'checkOutKgCrop': {
             // eslint-disable-next-line
             // @ts-ignore
-            datum[key] = DataLoader._sortStats(clonedSet);
+            datum[key] = builder.sort(clonedSet);
             // eslint-disable-next-line
             // @ts-ignore
-            datum[key.replace('Crop', 'Images')] = lookupImages(datum[key]);
+            datum[key.replace('Crop', 'Images')] = builder.lookupImages(datum[key]);
             continue;
           }
           default: {
@@ -211,32 +210,34 @@ export class DataLoader {
   //
   // - data transformation
   //
-  private static _sortStats(set: Record<string, number>): Array<[string, number]> {
-    const entries = Object.entries(set);
-    return entries.sort((a, b) => b[1] - a[1]);
-  }
-
   private static async _commoditiesLookupBuilder() {
     const allCrops = await ColdtivateService.getAllCrops();
 
-    const cropsMap: CropsLookupMap = new Map();
+    const _cropsMap: CropsLookupMap = new Map();
     for (const crop of allCrops) {
-      cropsMap.set(camelCase(crop.name), {
+      _cropsMap.set(camelCase(crop.name), {
         cropId: crop.id,
         name: crop.name,
         imageURL: crop.image,
       });
     }
 
-    return function lookupImages<V = number>(entries: Array<[string, V]>) {
-      if (!(entries.length >= 1)) return [];
-      const list: Array<string | null> = [];
-      for (const [commodity] of entries) {
-        const cropDatum = cropsMap.get(camelCase(commodity));
-        if (cropDatum) list.push(cropDatum.imageURL);
-        else list.push(null);
-      }
-      return list;
+    return {
+      sort(set: Record<string, number>): Array<[string, number]> {
+        return Object.entries(set)
+          .sort((a, b) => b[1] - a[1])
+          .map(([key, value]) => [_cropsMap.get(key)?.name ?? key, value]);
+      },
+      lookupImages<V = number>(entries: Array<[string, V]>) {
+        if (!(entries.length >= 1)) return [];
+        const list: Array<string | null> = [];
+        for (const [commodity] of entries) {
+          const cropDatum = _cropsMap.get(camelCase(commodity));
+          if (cropDatum) list.push(cropDatum.imageURL);
+          else list.push(null);
+        }
+        return list;
+      },
     };
   }
 }
@@ -345,7 +346,7 @@ export function getPdfContent(data: AggregatedFarmerData): string {
       rows: data?.stats.cools?.map((cool) => ({
         unit: cool.unitName ?? '',
         crates: cool.checkInCratesCrop.map((item) => item[1]),
-        crop: cool.checkInCratesCrop.map((item) => startCase(item[0])),
+        crop: cool.checkInCratesCrop.map((item) => item[0]),
       })),
     }),
     Section({ label: '🧺 Check-out crop distribution (crates)' }),
@@ -358,7 +359,7 @@ export function getPdfContent(data: AggregatedFarmerData): string {
       rows: data?.stats.cools?.map((cool) => ({
         unit: cool.unitName ?? '',
         crates: cool.checkOutCratesCrop.map((item) => item[1]),
-        crop: cool.checkOutCratesCrop.map((item) => startCase(item[0])),
+        crop: cool.checkOutCratesCrop.map((item) => item[0]),
       })),
     }),
     Section({ label: '⚖️ Check-in crop distribution (kg)' }),
@@ -371,7 +372,7 @@ export function getPdfContent(data: AggregatedFarmerData): string {
       rows: data?.stats.cools?.map((cool) => ({
         unit: cool.unitName ?? '',
         weight: cool.checkInKgCrop.map((item) => item[1]),
-        crop: cool.checkInKgCrop.map((item) => startCase(item[0])),
+        crop: cool.checkInKgCrop.map((item) => item[0]),
       })),
     }),
     Section({ label: '⚖️ Check-out crop distribution (kg)' }),
@@ -384,7 +385,7 @@ export function getPdfContent(data: AggregatedFarmerData): string {
       rows: data?.stats.cools?.map((cool) => ({
         unit: cool.unitName ?? '',
         weight: cool.checkOutKgCrop.map((item) => item[1]),
-        crop: cool.checkOutKgCrop.map((item) => startCase(item[0])),
+        crop: cool.checkOutKgCrop.map((item) => item[0]),
       })),
     }),
     SurveyStatsCounter({
@@ -409,11 +410,37 @@ export function getPdfContent(data: AggregatedFarmerData): string {
       from: `${data.stats.aggregatedImpactData.avgBaselinePercLossMonth.toFixed(2)}%`,
       to: `${data.stats.aggregatedImpactData.avgMonthlyPercLoss.toFixed(2)}%`,
     }),
+    Section({ label: '🥗 Food loss evolution per crop (top 5)', kind: 'impact' }),
+    Table({
+      columns: {
+        crop: 'Crop',
+        change: '% change',
+        loss: 'Food loss levels',
+      },
+      rows: data.stats.losses?.map((item) => ({
+        crop: item.cropName ?? '',
+        change: item.avgMonthlyPercFoodlossEvolution ?? 0,
+        loss: `${(item.avgBaselinePercLossMonth ?? 0).toFixed(2)}% to ${(item.avgMonthlyPercLoss ?? 0).toFixed(2)}%`,
+      })),
+    }),
     ImpactEvolution({
       title: '💰 Average revenue evolution',
       subtitle: `${revenueOutcome} in user revenue`,
       from: `${data.datums.currencyCode} ${data.stats.aggregatedImpactData.avgBaselineFarmerRevenueMonth.toFixed(2)}`,
       to: `${data.datums.currencyCode} ${data.stats.aggregatedImpactData.avgMonthlyFarmerRevenue.toFixed(2)}`,
+    }),
+    Section({ label: '💰 Average revenue evolution per crop (top 5)', kind: 'impact' }),
+    Table({
+      columns: {
+        crop: 'Crop',
+        change: '% change',
+        revenue: 'Revenue levels',
+      },
+      rows: data.stats.revenues?.map((item) => ({
+        crop: item.cropName ?? '',
+        change: item.avgMonthlyPercRevenueIncreaseEvolution ?? 0,
+        revenue: `${data.datums.currencyCode} ${(item.avgBaselineFarmerRevenueMonth ?? 0).toFixed(2)} to ${data.datums.currencyCode} ${(item.avgMonthlyFarmerRevenue ?? 0).toFixed(2)}`,
+      })),
     }),
     SurveyStatsPercentage({
       title: '📊 No. of baseline surveys completed',
