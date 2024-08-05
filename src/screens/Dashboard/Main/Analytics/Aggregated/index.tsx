@@ -89,7 +89,6 @@ export function AggregatedSection() {
   const onDownloadData = useCallback(async () => {
     if (!updatedImpactData) return;
 
-    console.log(updatedImpactData);
     const html = generatePDFContent(
       t,
       coolingUnits,

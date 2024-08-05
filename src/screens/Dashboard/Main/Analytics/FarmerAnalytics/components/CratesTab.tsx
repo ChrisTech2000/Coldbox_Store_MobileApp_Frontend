@@ -50,7 +50,7 @@ export function CratesTab() {
       farmerId: farmer?.id as number,
       startDate: configData?.startDate as Date,
       endDate: configData?.endDate as Date,
-      unitIds: configData?.coolingUnit.id as number,
+      unitIds: configData?.coolingUnit?.id as number,
     },
     {
       skip: !configData || !farmer,
@@ -178,7 +178,7 @@ export function CratesTab() {
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.crates')}
             items={[
               {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
+                coolingUnitName: configData?.coolingUnit?.name ?? '',
                 value: `${data.roomCratesIn} | ${data.roomCratesOut}`,
               },
             ]}
@@ -197,7 +197,7 @@ export function CratesTab() {
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.kg')}
             items={[
               {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
+                coolingUnitName: configData?.coolingUnit?.name ?? '',
                 value: `${data.roomKgIn} | ${data.roomKgOut}`,
               },
             ]}
@@ -216,7 +216,7 @@ export function CratesTab() {
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.operations')}
             items={[
               {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
+                coolingUnitName: configData?.coolingUnit?.name ?? '',
                 value: `${data.roomOpsIn} | ${data.roomOpsOut}`,
               },
             ]}
@@ -236,7 +236,7 @@ export function CratesTab() {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution')}
             items={[
               {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
+                coolingUnitName: configData?.coolingUnit?.name ?? '',
                 column1: data.cropsCratesIn.column1,
                 column2: data.cropsCratesIn.column2,
               },
@@ -257,7 +257,7 @@ export function CratesTab() {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkOutCropDistribution')}
             items={[
               {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
+                coolingUnitName: configData?.coolingUnit?.name ?? '',
                 column1: data.cropsCratesOut.column1,
                 column2: data.cropsCratesOut.column2,
               },
@@ -278,7 +278,7 @@ export function CratesTab() {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution')}
             items={[
               {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
+                coolingUnitName: configData?.coolingUnit?.name ?? '',
                 column1: data.cropsKgIn.column1,
                 column2: data.cropsKgIn.column2,
               },
@@ -299,7 +299,7 @@ export function CratesTab() {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkOutCropDistribution')}
             items={[
               {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
+                coolingUnitName: configData?.coolingUnit?.name ?? '',
                 column1: data.cropsKgOut.column1,
                 column2: data.cropsKgOut.column2,
               },

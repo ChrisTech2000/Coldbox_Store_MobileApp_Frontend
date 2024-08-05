@@ -45,7 +45,7 @@ export enum EOperationEndpoints {
   GET_COOLING_UNIT_REVENUE = '/operation/movements/revenue/',
   GET_COOLING_UNIT_USAGE = '/operation/movements/usage/',
   GET_MOVEMENTS = '/operation/movements/',
-  MOVE_CHECKOUT = 'operation/move-checkout/',
+  MOVE_CHECKOUT = '/operation/move-checkout/',
 }
 
 export enum ECompanyEndpoints {
@@ -58,7 +58,7 @@ export enum ESMSEndpoints {
 }
 
 export enum EImpactEndpoints {
-  GET_COMPANY = 'company-slice/',
+  GET_COMPANY = '/company-slice/',
   GET_IMPACT = '/impact-slice/',
   GET_COOLING_UNIT = '/coolingunit-slice/',
 }
@@ -73,4 +73,13 @@ export enum EFarmerImpactEndpoints {
   GET_FARMER_BASE = '/farmer-base-slice/',
   GET_FARMER = '/farmer-slice/',
   GET_IMPACT = '/impact-slice/',
+}
+
+export enum EPredictionEndpoints {
+  GET_PREDICTION_PARAMS_NG = '/prediction/statesng/get_parameters_for_prediction/',
+  GET_PREDICTION_PARAMS_IN = '/prediction/states/get_parameters_for_prediction/',
+  GET_PREDICTION_NG = '/prediction/predictions/get_data_graph_ng',
+  GET_PREDICTION_IN = '/prediction/predictions/get_data_graph',
+  GET_PREDICTION_TABLE_NG = '/prediction/predictions/get_data_table_ng',
+  GET_PREDICTION_TABLE_IN = '/prediction/predictions/get_data_table',
 }
