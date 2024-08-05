@@ -4,6 +4,7 @@ import snakeCase from 'lodash/snakeCase';
 import {
   ECompanyEndpoints,
   EOperationEndpoints,
+  EPredictionEndpoints,
   EStorageEndpoints,
   EUserEndpoints,
 } from '#constants/api.routes';
@@ -39,6 +40,8 @@ import type {
   EditCoolingUnitParams,
   GetRevenueAnalysisParams,
   AddCoolingUnitTemperatureParams,
+  GetPredictionParams,
+  GetPredictionTableParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -65,12 +68,23 @@ import type {
   GetCoolingUnitCapacityResponse,
   GetCoolingUnitTemperaturesResponse,
 } from '#types/api.responses';
-import type { Company, CoolingUnit, Crate, DashboardProduce, Farmer, User } from '#types/global';
+import type {
+  Company,
+  CoolingUnit,
+  Crate,
+  DashboardProduce,
+  Farmer,
+  PredictionData,
+  PredictionParams,
+  PredictionTableData,
+  User,
+} from '#types/global';
 import type { WithRequired } from '#types/miscellaneous';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 import { serialize, subs } from './utils';
+import { format } from 'date-fns';
 
 class ColdtivateService extends HttpClient {
   constructor(options?: HttpClientOptions) {
@@ -967,6 +981,74 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.get<GetMovementsHistoryResponse>(
         EOperationEndpoints.GET_COOLING_UNIT_REVENUE,
         { params: _params }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  ///////// PREDICTION
+  public getPredictionParams = async (country: 'IN' | 'NG'): Promise<PredictionParams> => {
+    try {
+      const { data } = await this.get<PredictionParams>(
+        country === 'IN'
+          ? EPredictionEndpoints.GET_PREDICTION_PARAMS_IN
+          : EPredictionEndpoints.GET_PREDICTION_PARAMS_NG
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getPrediction = async (params: GetPredictionParams): Promise<PredictionData> => {
+    try {
+      const { country, cropId, stateId } = params;
+      const { data } = await this.post<PredictionData>(
+        country === 'IN'
+          ? EPredictionEndpoints.GET_PREDICTION_IN
+          : EPredictionEndpoints.GET_PREDICTION_NG,
+        {
+          cropId,
+          stateId,
+        },
+        undefined,
+        ['stateId', 'cropId']
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getPredictionTable = async (
+    params: GetPredictionTableParams
+  ): Promise<PredictionTableData> => {
+    try {
+      const { country, cropId, statesIds, days } = params;
+      const formattedDates = days.map((date) => format(new Date(date), 'yyyy-MM-dd'));
+
+      const { data } = await this.post<PredictionTableData>(
+        country === 'IN'
+          ? EPredictionEndpoints.GET_PREDICTION_TABLE_IN
+          : EPredictionEndpoints.GET_PREDICTION_TABLE_NG,
+        {
+          cropId,
+          statesIds: statesIds.map((id) => id.toString()),
+          days: formattedDates,
+        },
+        undefined,
+        ['statesIds', 'cropId']
       );
       return data;
     } catch (error) {

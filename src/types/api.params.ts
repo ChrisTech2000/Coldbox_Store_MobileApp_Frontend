@@ -396,3 +396,16 @@ export type VerifyFigorrSensorConnectivityParams = {
   apiKey: string;
   deviceTag: string;
 };
+
+export interface GetPredictionParams extends JsonObject {
+  country: 'IN' | 'NG';
+  cropId: number;
+  stateId: number;
+}
+
+export type GetPredictionTableParams = {
+  country: 'IN' | 'NG';
+  cropId: number;
+  days: Date[];
+  statesIds: number[];
+};

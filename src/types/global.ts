@@ -470,6 +470,43 @@ export type FarmerImpactData = {
   surveys: SurveyData[];
 };
 
+export type PredictionCrop = {
+  id: number;
+  name: string;
+};
+
+export type PredictionState = {
+  id: number;
+  name: string;
+};
+
+export type PredictionParams = {
+  availableCrops: PredictionCrop[];
+  availableStates: PredictionState[];
+};
+
+export type PastValue = {
+  date: string;
+  price: number | null;
+};
+
+export type ForecastValue = {
+  date: string;
+  price: number | null;
+  onlyInterpolatedData: unknown | null;
+};
+
+export type PredictionData = {
+  pastValues: PastValue[];
+  forecastsValues: ForecastValue[];
+};
+
+export type PredictionTableData = Array<{
+  state: string;
+  date: string;
+  price: number | null;
+}>;
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',

@@ -9,6 +9,7 @@ import { MainTabStackRoutePaths } from '../Main/MainTabStack';
 import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import { useRightDrawerStore } from '../index';
 import { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
+import { AnalyticsStackRoutePaths } from '../Main/AnalyticsStack';
 
 export function dashboardHeaderFactory<Params extends Record<string, unknown>, Path extends string>(
   navigation: NavigationProp<Params, Path>
@@ -35,7 +36,8 @@ type BottomNavRoutePaths =
   | MainTabStackRoutePaths
   | HistoryTabStackRoutePaths
   | MarketPriceTabsRoutePaths
-  | CoolingUnitsTabsRoutePaths;
+  | CoolingUnitsTabsRoutePaths
+  | AnalyticsStackRoutePaths;
 
 export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'RootMainTabStack',
@@ -46,4 +48,5 @@ export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'RoomConditions',
   'CratesInfo',
   'Maps',
+  'Analytics',
 ];

@@ -138,7 +138,7 @@ export function FarmerAnalytics() {
                 <Text variant="TextMedium" tw="text-base font-bold">
                   {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
                   <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {configData.coolingUnit.name}
+                    {configData.coolingUnit?.name ?? ''}
                   </Text>
                 </Text>
               </View>

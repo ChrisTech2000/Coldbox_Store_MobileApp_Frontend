@@ -43,7 +43,7 @@ export default {
       RegisteredEmployeeDetails: 'पंजीकृत कर्मचारी विवरण',
     },
     bottomTabs: {
-      RootMainTabStack: '{{firstName}} Coldtivate',
+      RootMainTabStack: '{{firstName}} का Coldtivate',
       ProduceDetails: '{{produceCode}}',
       PriceTrend: 'मूल्य प्रवृत्ति',
       PriceRanking: 'मूल्य रैंकिंग',
@@ -84,6 +84,9 @@ export default {
       EditCheckIn: '{{code}}',
       MarketSurvey: '{{farmer}} के लिए बाजार सर्वेक्षण',
       BaseSurvey: 'कूलिंग उपयोगकर्ता सर्वेक्षण',
+    },
+    analytics: {
+      methodology: 'कार्यप्रणाली',
     },
   },
   actions: {
@@ -276,6 +279,33 @@ export default {
     noCoolingUnitAvailable: 'कोई कूलिंग यूनिट उपलब्ध नहीं है',
     noLocationsAvailable:
       'Coldtivate में आपका स्वागत है। प्रबंधन पैनल में अपने ऐप में स्थान जोड़कर शुरुआत करें।',
+    MarketPrice: {
+      emptyState: 'आपके देश में बाजार मूल्य उपलब्ध नहीं हैं',
+      commodityLabel: 'वस्तु',
+      commodityModalTitle: 'एक वस्तु का चयन करें',
+      Trend: {
+        title: 'मूल्य पूर्वानुमान प्राप्त करने के लिए एक वस्तु और एक राज्य का चयन करें',
+        stateLabel: 'राज्य',
+        stateModalTitle: 'एक राज्य का चयन करें',
+        emptyState: 'इस बाजार और वस्तु संयोजन के लिए कोई डेटा नहीं मिला',
+        pastLabel: 'पिछला',
+        forecastLabel: 'पूर्वानुमान',
+        chartLabel: 'कीमत {{currency}}/किग्रा में',
+      },
+      Ranking: {
+        filter: 'स्थान द्वारा फ़िल्टर करें',
+        monthLabel: 'महीने',
+        monthModalTitle: 'महीनों का चयन करें',
+        stateModalTitle: 'राज्यों का चयन करें',
+        stateLabel: 'राज्य',
+        table: {
+          column1: 'राज्य',
+          column2: 'तारीख',
+          column3: 'कीमत {{currency}}/किलोग्राम में',
+          emptyState: 'कोई मूल्य उपलब्ध नहीं है',
+        },
+      },
+    },
     CrateManagement: {
       userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
       coolingUserLabel: 'कूलिंग उपयोगकर्ता',
