@@ -1,6 +1,7 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import Clipboard from '@react-native-clipboard/clipboard';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 import { Button } from '#ui/components/Button';
 
@@ -34,9 +35,18 @@ export default function FarmerDashboardData(props: Props) {
     }
   );
 
-  function downloadData() {
-    // TODO: download PDF
-    Clipboard.setString(getPdfContent(data));
+  async function downloadData() {
+    try {
+      const file = await RNHTMLtoPDF.convert({
+        html: getPdfContent(data),
+        fileName: 'farmer',
+        directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+        base64: true,
+      });
+      if (!file.filePath) throw new Error();
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   return (
