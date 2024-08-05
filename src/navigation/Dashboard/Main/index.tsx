@@ -8,8 +8,6 @@ import { getFocusedRouteNameFromRoute, type RouteProp } from '@react-navigation/
 import React, { useCallback } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import AnalyticsBase from '#screens/Dashboard/Main/Analytics';
-
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
@@ -21,6 +19,7 @@ import CoolingUnitsTabs from './CoolingUnitsTabs';
 import HistoryTabStack, { HistoryTabStackRoutes } from './HistoryTabStack';
 import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
+import AnalyticsStack from './AnalyticsStack';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
@@ -76,7 +75,10 @@ export default function DashboardMainBottomTabs() {
       focusedRoute !== 'RootMainTabStack' &&
       routeName !== 'Dashboard' &&
       focusedRoute !== 'RootHistoryTabStack' &&
-      routeName !== 'History';
+      routeName !== 'History' &&
+      focusedRoute !== 'Analytics' &&
+      routeName !== 'Analytics';
+
     // eslint-disable-next-line
     // @ts-ignore
     const showBottomNav = !focusedRoute || BOTTOM_NAV_ROUTES_SCOPE.includes(focusedRoute);
@@ -113,7 +115,7 @@ export default function DashboardMainBottomTabs() {
       <Tab.Screen name="History" component={HistoryTabStack} />
       <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
       <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
-      <Tab.Screen name="Analytics" component={AnalyticsBase} />
+      <Tab.Screen name="Analytics" component={AnalyticsStack} />
     </Tab.Navigator>
   );
 }

@@ -43,7 +43,7 @@ export default {
       RegisteredEmployeeDetails: 'पंजीकृत कर्मचारी विवरण',
     },
     bottomTabs: {
-      RootMainTabStack: '{{firstName}} Coldtivate',
+      RootMainTabStack: '{{firstName}} का Coldtivate',
       ProduceDetails: '{{produceCode}}',
       PriceTrend: 'मूल्य प्रवृत्ति',
       PriceRanking: 'मूल्य रैंकिंग',
@@ -84,6 +84,9 @@ export default {
       EditCheckIn: '{{code}}',
       MarketSurvey: '{{farmer}} के लिए बाजार सर्वेक्षण',
       BaseSurvey: 'कूलिंग उपयोगकर्ता सर्वेक्षण',
+    },
+    analytics: {
+      methodology: 'कार्यप्रणाली',
     },
   },
   actions: {
