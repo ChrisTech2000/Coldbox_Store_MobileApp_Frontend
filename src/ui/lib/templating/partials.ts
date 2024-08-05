@@ -112,9 +112,32 @@ const TableHead = template<{ columns: TableColumns }>`
 </thead>
 `;
 
-const TableRow = template<{ values: Array<string> }>`
+const TableRow = template<{ values: Array<number | string> | Array<Array<number | string>> }>`
 <tr>
-  ${(p) => p.values.map((value) => `<td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border border-t-0 border-solid border-zinc-300">${value}</td>`).join('')}
+  ${(p) =>
+    p.values
+      .map(
+        (value) => `
+    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border border-t-0 border-solid border-zinc-300">
+      ${
+        Array.isArray(value)
+          ? `
+        <div class="flex flex-col">
+          ${value
+            .map(
+              (v) => `
+            <div class="flex justify-center items-center h-8 w-full">${v}</div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : value
+      }
+    </td>
+  `
+      )
+      .join('')}
 </tr>
 `;
 
@@ -130,9 +153,7 @@ export const Table = template<{
         rows
           .map((row) =>
             TableRow({
-              values: Object.keys(_unGroupColumns(columns)).map((columnKey) =>
-                row[columnKey].toString()
-              ),
+              values: Object.keys(_unGroupColumns(columns)).map((columnKey) => row[columnKey]),
             })
           )
           .join('')}
@@ -140,6 +161,70 @@ export const Table = template<{
   </table>
   <div class="px-4 py-3">
     <small class="text-gray-500">${(p) => p.rows.length.toString()} total</small>
+  </div>
+</div>
+`;
+
+//
+// Survey Stats
+//
+
+export const SurveyStatsCounter = template<{
+  datums: Array<{ max: number; current: number; message: string; title: string }>;
+}>`
+<div class="flex flex-row justify-evenly items-center bg-teal-50 p-4 tracking-wide my-2 rounded-md">
+${(p) =>
+  p.datums
+    .map(
+      (datum) => `<div class="flex flex-col items-center space-y-3">
+  <div class="bg-zinc-700 h-14 px-4 rounded-md flex items-center justify-center">
+    <p class="text-white text-center text-sm">${datum.title}</p>
+  </div>
+    <p class="text-xl"><span class="text-rose-600 text-3xl">${datum.current}</span>/${datum.max}</p>
+    <p class="text-base">${datum.message}</p>
+  </div>`
+    )
+    .join('')}
+</div>
+`;
+
+export const SurveyStatsPercentage = template<{
+  title: string;
+  max: number;
+  current: number;
+  chipText: string;
+}>`
+<div class="flex flex-col items-center space-y-0.5 p-4 bg-purple-50 rounded-md my-2">
+  <p>${(p) => p.title}</p>
+  <div class="flex flex-row space-x-2 items-center">
+    <p class="text-xl"><span class="text-zinc-700 text-2xl font-semibold">${(p) => p.current.toString()}</span>/${(p) => p.max.toString()}</p>
+    <p class="text-2xl text-purple-700">(${(p) => ((p.current / p.max) * 100).toFixed(2)}%)</p>
+  </div>
+  <div class="bg-zinc-700 h-14 px-4 rounded-md flex items-center justify-center">
+    <p class="text-white text-center text-sm">${(p) => p.chipText}</p>
+  </div>
+</div>
+`;
+
+//
+// Impact Evolution
+//
+
+export const ImpactEvolution = template<{
+  title: string;
+  subtitle: string;
+  from: string;
+  to: string;
+}>`
+<div class="flex flex-col items-center space-y-2 p-4 bg-purple-50 rounded-md my-2">
+  <p>${(p) => p.title}</p>
+  <div class="flex flex-row items-center space-x-3 h-14 max-h-14">
+    <p>${(p) => p.subtitle}</p>
+    <div class="w-0.5 h-full bg-zinc-500"></div>
+    <div class="flex flex-col items-start">
+      <p class="m-0 p-0 font-semibold">From ${(p) => p.from}</p>
+      <p class="m-0 p-0 font-semibold">To ${(p) => p.to}</p>
+    </div>
   </div>
 </div>
 `;
