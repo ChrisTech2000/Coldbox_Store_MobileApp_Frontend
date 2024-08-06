@@ -3,6 +3,7 @@ import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation
 import { Drawer } from 'react-native-drawer-layout';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
+import ms from 'ms';
 
 import AccountDetails from '#screens/Dashboard/AccountDetails';
 import FAQ from '#screens/Dashboard/FAQ';
@@ -89,10 +90,10 @@ export const useRightDrawerStore = create<{
 }));
 
 export default function DashboardNavigator() {
+  const { data } = useNotifications({ refreshInterval: ms('10 seconds') });
+
   const isOpen = useRightDrawerStore((store) => store.isOpen);
   const toggle = useRightDrawerStore((store) => store.toggle);
-
-  const { data } = useNotifications();
 
   return (
     <RBAC>

@@ -1,10 +1,11 @@
 import useSWR, { useSWRConfig } from 'swr';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import ms from 'ms';
 
 import ErrorUtil from '../utils/ErrorUtil';
 import { useCallback, useMemo, useRef } from 'react';
 
-interface IApiQueryOptions<IData> {
+export interface IApiQueryOptions<IData> {
   skip?: boolean;
   defaultData?: IData;
   refreshInterval?: number;
@@ -38,7 +39,7 @@ export const useApiCall = <IData, IParams>(
     refreshInterval: options?.refreshInterval,
     revalidateOnFocus: options?.revalidateOnFocus,
     revalidateOnReconnect: options?.revalidateOnReconnect,
-    dedupingInterval: options?.dedupingInterval,
+    dedupingInterval: options?.dedupingInterval ?? ms('3 seconds'),
     errorRetryCount: options?.errorRetryCount ?? 1,
     errorRetryInterval: options?.errorRetryInterval,
   });
