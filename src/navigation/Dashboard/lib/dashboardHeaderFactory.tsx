@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { type NavigationProp, DrawerActions, useNavigation } from '@react-navigation/native';
 import { Appbar, Badge } from 'react-native-paper';
 
@@ -40,9 +40,10 @@ export function useDashboardHeader() {
   const dispatch = useNavigation().dispatch;
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
 
-  return function dashboardHeaderFactory() {
-    return _dashboardHeaderFactory(dispatch, newNotificationsCount);
-  };
+  return useCallback(
+    () => _dashboardHeaderFactory(dispatch, newNotificationsCount),
+    [newNotificationsCount]
+  );
 }
 
 export type DashboardHeaderFactory = ReturnType<typeof useDashboardHeader>;
