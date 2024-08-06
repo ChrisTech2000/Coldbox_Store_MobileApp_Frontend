@@ -3,10 +3,10 @@ import { View, Text } from 'react-native';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { GetNotificationsResponse } from '#types/api.responses';
+import type { ProcessedNotifications } from '../lib/notifications';
 
 type Props = {
-  notifications: GetNotificationsResponse;
+  notifications: ProcessedNotifications['notifications'];
 };
 
 function NotificationsDrawerContent(props: Props) {

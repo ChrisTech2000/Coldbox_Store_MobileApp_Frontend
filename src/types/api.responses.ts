@@ -368,6 +368,11 @@ export type GetNotificationsResponse = Array<{
   seen: boolean;
   date: string;
   specificId: number;
-  eventType: string;
+  eventType:
+    | 'SENSOR_ERROR'
+    | 'TIME_TO_PICKUP'
+    | 'MARKET_SURVEY'
+    | 'FARMER_SURVEY'
+    | 'CHECKIN_EDITED';
   user: number;
 }>;
