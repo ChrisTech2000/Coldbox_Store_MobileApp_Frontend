@@ -354,3 +354,20 @@ export type GetCoolingUnitTemperaturesResponse = Array<{
   specificationType: string;
   value: string;
 }>;
+
+export type GetNotificationsResponse = Array<{
+  id: number;
+  coolingUnitName: string | null;
+  crates: {
+    crop: string;
+    farmer: string;
+    checkinDate: string;
+    coolingUnit: string;
+  };
+  movementCode: string;
+  seen: boolean;
+  date: string;
+  specificId: number;
+  eventType: string;
+  user: number;
+}>;

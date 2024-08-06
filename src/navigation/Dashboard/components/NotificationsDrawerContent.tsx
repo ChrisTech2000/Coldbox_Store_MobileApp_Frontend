@@ -3,10 +3,18 @@ import { View, Text } from 'react-native';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-function NotificationsDrawerContent() {
+import type { GetNotificationsResponse } from '#types/api.responses';
+
+type Props = {
+  notifications: GetNotificationsResponse;
+};
+
+function NotificationsDrawerContent(props: Props) {
+  const { notifications } = props;
+
   return (
     <View>
-      <Text>Notifications Drawer Content</Text>
+      <Text>{JSON.stringify(notifications, null, 2)}</Text>
     </View>
   );
 }

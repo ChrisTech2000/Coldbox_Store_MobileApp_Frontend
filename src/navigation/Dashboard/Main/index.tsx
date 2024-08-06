@@ -14,7 +14,7 @@ import { useAuthStore } from '#stores/auth';
 
 import NavigatorHeader from '../../components/NavigatorHeader';
 import BottomNavigation from '../components/BottomNavigation';
-import { BOTTOM_NAV_ROUTES_SCOPE, dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
+import { BOTTOM_NAV_ROUTES_SCOPE, useDashboardHeader } from '../lib/dashboardHeaderFactory';
 import CoolingUnitsTabs from './CoolingUnitsTabs';
 import HistoryTabStack, { HistoryTabStackRoutes } from './HistoryTabStack';
 import MainTabStack from './MainTabStack';
@@ -64,46 +64,47 @@ const Tab = createBottomTabNavigator<DashboardMainRoutes>();
 
 export default function DashboardMainBottomTabs() {
   const { t } = useTranslationUtils();
+  const dashboardHeaderFactory = useDashboardHeader();
 
-  const screenOptions: ScreenOptions = useCallback((props) => {
-    // eslint-disable-next-line react/prop-types
-    const routeName = props.route.name;
+  const screenOptions: ScreenOptions = useCallback(
+    (props) => {
+      // eslint-disable-next-line react/prop-types
+      const routeName = props.route.name;
 
-    // eslint-disable-next-line react/prop-types
-    const focusedRoute = getFocusedRouteNameFromRoute(props.route);
-    const showHeader =
-      focusedRoute !== 'RootMainTabStack' &&
-      routeName !== 'Dashboard' &&
-      focusedRoute !== 'RootHistoryTabStack' &&
-      routeName !== 'History' &&
-      focusedRoute !== 'Analytics' &&
-      routeName !== 'Analytics';
+      // eslint-disable-next-line react/prop-types
+      const focusedRoute = getFocusedRouteNameFromRoute(props.route);
+      const showHeader =
+        focusedRoute !== 'RootMainTabStack' &&
+        routeName !== 'Dashboard' &&
+        focusedRoute !== 'RootHistoryTabStack' &&
+        routeName !== 'History' &&
+        focusedRoute !== 'Analytics' &&
+        routeName !== 'Analytics';
 
-    // eslint-disable-next-line
-    // @ts-ignore
-    const showBottomNav = !focusedRoute || BOTTOM_NAV_ROUTES_SCOPE.includes(focusedRoute);
+      // eslint-disable-next-line
+      // @ts-ignore
+      const showBottomNav = !focusedRoute || BOTTOM_NAV_ROUTES_SCOPE.includes(focusedRoute);
 
-    const translationPath = TAB_METADATA[routeName].translationPath;
+      const translationPath = TAB_METADATA[routeName].translationPath;
 
-    const firstName = useAuthStore.getState().user?.firstName;
-    const routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
+      const firstName = useAuthStore.getState().user?.firstName;
+      const routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
 
-    return {
-      ...props,
-      headerShown: showHeader,
-      tabBarStyle: { display: showBottomNav ? 'flex' : 'none' },
-      tabBarLabel: t(translationPath),
-      tabBarIcon: (iconProps) => <Icon name={TAB_METADATA[routeName].tabBarIcon} {...iconProps} />,
-      header: (headerProps) => (
-        <NavigatorHeader
-          {...headerProps}
-          routeTitle={routeTitle}
-          // eslint-disable-next-line react/prop-types
-          {...dashboardHeaderFactory(props.navigation)}
-        />
-      ),
-    };
-  }, []);
+      return {
+        ...props,
+        headerShown: showHeader,
+        tabBarStyle: { display: showBottomNav ? 'flex' : 'none' },
+        tabBarLabel: t(translationPath),
+        tabBarIcon: (iconProps) => (
+          <Icon name={TAB_METADATA[routeName].tabBarIcon} {...iconProps} />
+        ),
+        header: (headerProps) => (
+          <NavigatorHeader {...headerProps} routeTitle={routeTitle} {...dashboardHeaderFactory()} />
+        ),
+      };
+    },
+    [dashboardHeaderFactory]
+  );
 
   return (
     <Tab.Navigator

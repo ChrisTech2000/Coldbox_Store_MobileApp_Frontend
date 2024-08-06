@@ -57,6 +57,10 @@ export enum ESMSEndpoints {
   SEND_SMS = 'storage/v1/send-sms/',
 }
 
+export enum ENotificationsEndpoints {
+  GET_NOTIFICATIONS = '/user/v1/notification',
+}
+
 export enum EImpactEndpoints {
   GET_COMPANY = '/company-slice/',
   GET_IMPACT = '/impact-slice/',

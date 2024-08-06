@@ -24,6 +24,8 @@ import ManagementStack, { ManagementRoutes } from './Management';
 import NotificationsDrawerContent from './components/NotificationsDrawerContent';
 import AboutStack from './About';
 
+import { useNotifications } from './lib/notifications';
+
 export type DashboardRoutes = {
   Main: undefined;
   AccountDetails: undefined;
@@ -90,6 +92,8 @@ export default function DashboardNavigator() {
   const isOpen = useRightDrawerStore((store) => store.isOpen);
   const toggle = useRightDrawerStore((store) => store.toggle);
 
+  const { data } = useNotifications();
+
   return (
     <RBAC>
       <Drawer
@@ -99,7 +103,7 @@ export default function DashboardNavigator() {
         drawerPosition="right"
         renderDrawerContent={() => (
           <React.Fragment>
-            <NotificationsDrawerContent />
+            <NotificationsDrawerContent notifications={data} />
           </React.Fragment>
         )}
       >
