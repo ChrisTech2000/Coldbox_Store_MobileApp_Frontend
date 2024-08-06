@@ -37,12 +37,11 @@ function _dashboardHeaderFactory<Params extends Record<string, unknown>, Path ex
 }
 
 export function useDashboardHeader() {
-  const navigation = useNavigation();
-  const { data } = useNotifications();
+  const dispatch = useNavigation().dispatch;
+  const newNotificationsCount = useNotifications().data.newNotificationsCount;
 
   return function dashboardHeaderFactory() {
-    const newNotificationsCount = data.filter((item) => !item.seen).length;
-    return _dashboardHeaderFactory(navigation.dispatch, newNotificationsCount);
+    return _dashboardHeaderFactory(dispatch, newNotificationsCount);
   };
 }
 

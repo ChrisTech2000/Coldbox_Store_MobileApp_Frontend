@@ -104,7 +104,7 @@ export default function DashboardNavigator() {
         drawerPosition="right"
         renderDrawerContent={() => (
           <React.Fragment>
-            <NotificationsDrawerContent notifications={data} />
+            <NotificationsDrawerContent notifications={data.notifications} />
           </React.Fragment>
         )}
       >
