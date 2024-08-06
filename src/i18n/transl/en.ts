@@ -620,6 +620,11 @@ const en = {
           confirmation:
             'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
         },
+        pdf: {
+          dateRange: 'Date range',
+          selectedUnits: 'Selected cooling units',
+          coolingUnit: 'Cooling unit',
+        },
       },
       AddCoolingUnit: {
         heading: 'Cooling unit properties',

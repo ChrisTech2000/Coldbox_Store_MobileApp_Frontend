@@ -7,6 +7,7 @@ import { Button } from '#ui/components/Button';
 
 import type { Farmer } from '#types/global';
 import { useApiCache, useApiCall } from '#services/hooks/useAPiCall';
+import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
@@ -24,6 +25,7 @@ export default function FarmerDashboardData(props: Props) {
   const { farmerId } = props;
 
   const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
+  const { t } = useTranslationUtils();
 
   const { data, isLoading, hasError } = useApiCall(
     SWR_CACHE_KEY,
@@ -35,20 +37,6 @@ export default function FarmerDashboardData(props: Props) {
     }
   );
 
-  async function downloadData() {
-    try {
-      const file = await RNHTMLtoPDF.convert({
-        html: getPdfContent(data),
-        fileName: 'farmer',
-        directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
-        base64: true,
-      });
-      if (!file.filePath) throw new Error();
-    } catch (exception) {
-      console.error(exception);
-    }
-  }
-
   return (
     <Button
       tw="w-full mb-4"
@@ -56,7 +44,20 @@ export default function FarmerDashboardData(props: Props) {
       icon={isLoading ? undefined : 'check-circle-outline'}
       uppercase
       disabled={isLoading || hasError}
-      onPress={downloadData}
+      onPress={async (evt) => {
+        evt.stopPropagation();
+        try {
+          const file = await RNHTMLtoPDF.convert({
+            html: getPdfContent(data, t),
+            fileName: 'farmer',
+            directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+            base64: true,
+          });
+          if (!file.filePath) throw new Error();
+        } catch (exception) {
+          console.error(exception);
+        }
+      }}
     >
       {isLoading ? <_ButtonLoader /> : "Download farmer's dashboard data"}
     </Button>

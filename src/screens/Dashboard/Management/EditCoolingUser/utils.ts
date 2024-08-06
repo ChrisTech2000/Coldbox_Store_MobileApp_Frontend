@@ -17,7 +17,7 @@ import {
   SurveyStatsPercentage,
   Table,
 } from '#ui/lib/templating/partials';
-import { dateFmt } from '#i18n/utils';
+import { dateFmt, type Translator } from '#i18n/utils';
 
 import { countriesDict } from '../CompanyDetails/utils';
 import { STATIC_START_DATE } from './index';
@@ -244,24 +244,47 @@ export class DataLoader {
 
 export type AggregatedFarmerData = Awaited<ReturnType<typeof DataLoader.aggregateFarmerData>>;
 
-export function getPdfContent(data: AggregatedFarmerData): string {
+export function getPdfContent(data: AggregatedFarmerData, t: Translator): string {
   const foodLossEvolution = data.stats.aggregatedImpactData.avgMonthlyPercFoodlossEvolution;
   const foodLossOutcome =
-    foodLossEvolution > 0 ? 'increase' : foodLossEvolution < 0 ? 'reduction' : 'no-change';
+    foodLossEvolution > 0
+      ? t('Dashboard.Analytics.farmersAnalytics.increaseInFoodLoss')
+      : foodLossEvolution < 0
+        ? t('Dashboard.Analytics.farmersAnalytics.decreaseInFoodLoss')
+        : t('Dashboard.Analytics.farmersAnalytics.noChangeFoodLoss');
 
   const revenueEvolution = data.stats.aggregatedImpactData.avgMonthlyPercRevenueIncreaseEvolution;
   const revenueOutcome =
     revenueEvolution > 0 ? 'increase' : revenueEvolution < 0 ? 'reduction' : 'no-change';
 
+  const baselineSurveyOutcome =
+    data.stats.surveys.numFilledBaselineSurveys === data.stats.surveys.numOfPossibleBaselineSurveys
+      ? '🤝'
+      : t('Dashboard.Analytics.farmersAnalytics.baseLineSurveyMessage', {
+          amount:
+            (data.stats.surveys.numOfPossibleBaselineSurveys ?? 0) -
+            (data.stats.surveys.numFilledBaselineSurveys ?? 0),
+        });
+
+  const postcheckoutSurveyOutcome =
+    data.stats.surveys.numOfFilledPostcheckoutSurveys ===
+    data.stats.surveys.numOfPossiblePostcheckoutSurveys
+      ? '🤝'
+      : t('Dashboard.Analytics.farmersAnalytics.postCheckOutSurveyMessage', {
+          amount:
+            (data.stats.surveys.numOfPossiblePostcheckoutSurveys ?? 0) -
+            (data.stats.surveys.numOfFilledPostcheckoutSurveys ?? 0),
+        });
+
   return html(
     DetailsContainer({
       datums: [
         {
-          label: 'Date range',
+          label: t('Dashboard.Management.EditCoolingUsers.pdf.dateRange'),
           value: `${dateFmt(data.dateRange.start, 'MMMM dd, yyyy')} - ${dateFmt(data.dateRange.end, 'MMMM dd, yyyy')}`,
         },
         {
-          label: 'Selected cooling units',
+          label: t('Dashboard.Management.EditCoolingUsers.pdf.selectedUnits'),
           value: data.datums.units,
         },
       ],
@@ -269,32 +292,35 @@ export function getPdfContent(data: AggregatedFarmerData): string {
     PillContainer({
       datums: [
         {
-          label: 'Cooling User Name',
+          label: t('Dashboard.Analytics.farmersAnalytics.coolingUserName'),
           value: [data.farmerInfo?.firstName?.[0] ?? '', data.farmerInfo?.lastName?.[0] ?? ''].join(
             ' '
           ),
         },
         {
-          label: 'Cooling User Type',
+          label: t('Dashboard.Analytics.farmersAnalytics.coolingUserType'),
           value: data.farmerInfo?.userType?.[0] ?? '',
         },
         {
-          label: 'Avg Storage Time',
+          label: t('Dashboard.Analytics.farmersAnalytics.avgStorageTime'),
           value: `${data.farmerInfo?.avgStorageDays?.toFixed(2)} day(s)`,
         },
         {
-          label: 'Cold Storage Cost',
+          label: t('Dashboard.Analytics.farmersAnalytics.coldStorageCost'),
           value: [data.datums.currencyCode, data.farmerInfo?.totalStorageCost].join(' '),
         },
       ],
     }),
-    Section({ label: '🧺 Total crates' }),
+    Section({ label: t('Dashboard.Analytics.totalCratesLabel') }),
     Table({
       columns: {
-        unit: 'Cooling unit',
+        unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
         crates: {
-          name: 'Crates',
-          subHeaders: { checkIn: 'Checked In', checkOut: 'Checked Out' },
+          name: t('Dashboard.Analytics.comparisonTab.cratesTab.crates'),
+          subHeaders: {
+            checkIn: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn'),
+            checkOut: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOut'),
+          },
         },
       },
       rows:
@@ -304,13 +330,16 @@ export function getPdfContent(data: AggregatedFarmerData): string {
           checkOut: cool.roomCratesOut,
         })) ?? [],
     }),
-    Section({ label: '📦 Total quantity (kg)' }),
+    Section({ label: t('Dashboard.Analytics.totalQuantityLabel') }),
     Table({
       columns: {
-        unit: 'Cooling unit',
+        unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
         metric: {
-          name: 'Kg',
-          subHeaders: { checkIn: 'Checked In', checkOut: 'Checked Out' },
+          name: t('Dashboard.Analytics.comparisonTab.cratesTab.kg'),
+          subHeaders: {
+            checkIn: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn'),
+            checkOut: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOut'),
+          },
         },
       },
       rows:
@@ -320,13 +349,16 @@ export function getPdfContent(data: AggregatedFarmerData): string {
           checkOut: cool.roomKgOut,
         })) ?? [],
     }),
-    Section({ label: '👷🏽‍♂️ Total operations' }),
+    Section({ label: t('Dashboard.Analytics.totalOperations') }),
     Table({
       columns: {
-        unit: 'Cooling unit',
+        unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
         operations: {
-          name: 'Operations',
-          subHeaders: { checkIn: 'Checked In', checkOut: 'Checked Out' },
+          name: t('Dashboard.Analytics.comparisonTab.cratesTab.operations'),
+          subHeaders: {
+            checkIn: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn'),
+            checkOut: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOut'),
+          },
         },
       },
       rows:
@@ -336,12 +368,12 @@ export function getPdfContent(data: AggregatedFarmerData): string {
           checkOut: cool.roomOpsOut,
         })) ?? [],
     }),
-    Section({ label: '🧺 Check-in crop distribution (crates)' }),
+    Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInCropDistribution') }),
     Table({
       columns: {
-        unit: 'Cooling unit',
-        crates: 'Crates',
-        crop: 'Check-in crop distribution',
+        unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+        crates: t('Dashboard.Analytics.comparisonTab.cratesTab.crates'),
+        crop: t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution'),
       },
       rows: data?.stats.cools?.map((cool) => ({
         unit: cool.unitName ?? '',
@@ -349,12 +381,12 @@ export function getPdfContent(data: AggregatedFarmerData): string {
         crop: cool.checkInCratesCrop.map((item) => item[0]),
       })),
     }),
-    Section({ label: '🧺 Check-out crop distribution (crates)' }),
+    Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution') }),
     Table({
       columns: {
-        unit: 'Cooling unit',
-        crates: 'Crates',
-        crop: 'Check-out crop distribution',
+        unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+        crates: t('Dashboard.Analytics.comparisonTab.cratesTab.crates'),
+        crop: t('Dashboard.Analytics.comparisonTab.cratesTab.checkOutCropDistribution'),
       },
       rows: data?.stats.cools?.map((cool) => ({
         unit: cool.unitName ?? '',
@@ -362,12 +394,12 @@ export function getPdfContent(data: AggregatedFarmerData): string {
         crop: cool.checkOutCratesCrop.map((item) => item[0]),
       })),
     }),
-    Section({ label: '⚖️ Check-in crop distribution (kg)' }),
+    Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution') }),
     Table({
       columns: {
-        unit: 'Cooling unit',
-        weight: 'kg',
-        crop: 'Check-in crop distribution',
+        unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+        weight: t('Dashboard.Analytics.comparisonTab.cratesTab.kg'),
+        crop: t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution'),
       },
       rows: data?.stats.cools?.map((cool) => ({
         unit: cool.unitName ?? '',
@@ -375,12 +407,12 @@ export function getPdfContent(data: AggregatedFarmerData): string {
         crop: cool.checkInKgCrop.map((item) => item[0]),
       })),
     }),
-    Section({ label: '⚖️ Check-out crop distribution (kg)' }),
+    Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutKgDistribution') }),
     Table({
       columns: {
-        unit: 'Cooling unit',
-        weight: 'kg',
-        crop: 'Check-out crop distribution',
+        unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+        weight: t('Dashboard.Analytics.comparisonTab.cratesTab.kg'),
+        crop: t('Dashboard.Analytics.comparisonTab.cratesTab.checkOutCropDistribution'),
       },
       rows: data?.stats.cools?.map((cool) => ({
         unit: cool.unitName ?? '',
@@ -391,31 +423,31 @@ export function getPdfContent(data: AggregatedFarmerData): string {
     SurveyStatsCounter({
       datums: [
         {
-          title: 'Fill Baseline Surveys',
+          title: t('Dashboard.Analytics.farmersAnalytics.baselineSurveyButton'),
           max: data.stats.surveys.numOfPossibleBaselineSurveys ?? 0,
           current: data.stats.surveys.numFilledBaselineSurveys ?? 0,
-          message: `You have ${(data.stats.surveys.numOfPossibleBaselineSurveys ?? 0) - (data.stats.surveys.numFilledBaselineSurveys ?? 0)} surveys to complete 😟`,
+          message: baselineSurveyOutcome,
         },
         {
-          title: 'Fill Post Checkouts Surveys',
+          title: t('Dashboard.Analytics.farmersAnalytics.postCheckOutSurveyButton'),
           max: data.stats.surveys.numOfPossiblePostcheckoutSurveys ?? 0,
           current: data.stats.surveys.numOfFilledPostcheckoutSurveys ?? 0,
-          message: `You have ${(data.stats.surveys.numOfPossiblePostcheckoutSurveys ?? 0) - (data.stats.surveys.numOfFilledPostcheckoutSurveys ?? 0)} surveys to complete 😟`,
+          message: postcheckoutSurveyOutcome,
         },
       ],
     }),
     ImpactEvolution({
-      title: '🥗 Food loss evolution',
-      subtitle: `${foodLossOutcome} in food loss`,
+      title: t('Dashboard.Analytics.comparisonTab.impactTab.foodLossLabel'),
+      subtitle: foodLossOutcome,
       from: `${data.stats.aggregatedImpactData.avgBaselinePercLossMonth.toFixed(2)}%`,
       to: `${data.stats.aggregatedImpactData.avgMonthlyPercLoss.toFixed(2)}%`,
     }),
-    Section({ label: '🥗 Food loss evolution per crop (top 5)', kind: 'impact' }),
+    Section({ label: t('Dashboard.Analytics.farmersAnalytics.foodLossEvolution'), kind: 'impact' }),
     Table({
       columns: {
-        crop: 'Crop',
-        change: '% change',
-        loss: 'Food loss levels',
+        crop: t('Dashboard.Analytics.farmersAnalytics.crops'),
+        change: t('Dashboard.Analytics.farmersAnalytics.changePercentage'),
+        loss: t('Dashboard.Analytics.farmersAnalytics.foodLossLevels'),
       },
       rows: data.stats.losses?.map((item) => ({
         crop: item.cropName ?? '',
@@ -424,17 +456,20 @@ export function getPdfContent(data: AggregatedFarmerData): string {
       })),
     }),
     ImpactEvolution({
-      title: '💰 Average revenue evolution',
+      title: t('Dashboard.Analytics.farmersAnalytics.revenueEvolution'),
       subtitle: `${revenueOutcome} in user revenue`,
       from: `${data.datums.currencyCode} ${data.stats.aggregatedImpactData.avgBaselineFarmerRevenueMonth.toFixed(2)}`,
       to: `${data.datums.currencyCode} ${data.stats.aggregatedImpactData.avgMonthlyFarmerRevenue.toFixed(2)}`,
     }),
-    Section({ label: '💰 Average revenue evolution per crop (top 5)', kind: 'impact' }),
+    Section({
+      label: t('Dashboard.Analytics.farmersAnalytics.revenueCropEvolution'),
+      kind: 'impact',
+    }),
     Table({
       columns: {
-        crop: 'Crop',
-        change: '% change',
-        revenue: 'Revenue levels',
+        crop: t('Dashboard.Analytics.farmersAnalytics.crops'),
+        change: t('Dashboard.Analytics.farmersAnalytics.changePercentage'),
+        revenue: t('Dashboard.Analytics.farmersAnalytics.revenueLevels'),
       },
       rows: data.stats.revenues?.map((item) => ({
         crop: item.cropName ?? '',
@@ -443,14 +478,14 @@ export function getPdfContent(data: AggregatedFarmerData): string {
       })),
     }),
     SurveyStatsPercentage({
-      title: '📊 No. of baseline surveys completed',
-      chipText: 'Fill Baseline Surveys',
+      title: t('Dashboard.Analytics.farmersAnalytics.baselineSurveyLabel'),
+      chipText: t('Dashboard.Analytics.farmersAnalytics.baselineSurveyButton'),
       current: data.stats.surveys.numFilledBaselineSurveys ?? 0,
       max: data.stats.surveys.numOfPossibleBaselineSurveys ?? 0,
     }),
     SurveyStatsPercentage({
-      title: '📊 No. of post-checkout surveys completed',
-      chipText: 'Fill Post Checkout Surveys',
+      title: t('Dashboard.Analytics.farmersAnalytics.postCheckoutSurveyLabel'),
+      chipText: t('Dashboard.Analytics.farmersAnalytics.postCheckOutSurveyButton'),
       current: data.stats.surveys.numOfFilledPostcheckoutSurveys ?? 0,
       max: data.stats.surveys.numOfPossiblePostcheckoutSurveys ?? 0,
     })
