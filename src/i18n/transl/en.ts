@@ -625,6 +625,9 @@ const en = {
           selectedUnits: 'Selected cooling units',
           coolingUnit: 'Cooling unit',
         },
+        actions: {
+          downloadFarmers: "Download farmer's dashboard data",
+        },
       },
       AddCoolingUnit: {
         heading: 'Cooling unit properties',

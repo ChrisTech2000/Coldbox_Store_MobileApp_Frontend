@@ -59,7 +59,11 @@ export default function FarmerDashboardData(props: Props) {
         }
       }}
     >
-      {isLoading ? <_ButtonLoader /> : "Download farmer's dashboard data"}
+      {isLoading ? (
+        <_ButtonLoader />
+      ) : (
+        t('Dashboard.Management.EditCoolingUsers.actions.downloadFarmers')
+      )}
     </Button>
   );
 }

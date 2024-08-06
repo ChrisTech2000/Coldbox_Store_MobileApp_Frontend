@@ -630,6 +630,9 @@ export default {
           selectedUnits: 'चयनित शीतलन कक्ष',
           coolingUnit: 'प्रशीतलन इकई',
         },
+        actions: {
+          downloadFarmers: "Download farmer's dashboard data",
+        },
       },
       AddCoolingUnit: {
         heading: 'प्रशीतलन इकई के गुण',
