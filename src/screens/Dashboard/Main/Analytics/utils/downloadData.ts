@@ -182,9 +182,9 @@ function generateGeneralHtmlContent(
 
         <div class="card">
           <div class="label">${t('Dashboard.Analytics.companyTab.revenueLabel')}</div>
-          <div class="value">${companyData?.compRevenue[0]?.toLocaleString('en-US', {
+          <div class="value">${companyData?.compRevenue?.[0]?.toLocaleString('en-US', {
             style: 'currency',
-            currency: companyData?.currency[0],
+            currency: companyData?.currency?.[0] ?? 'NGN',
           })}</div>
         </div>
 
