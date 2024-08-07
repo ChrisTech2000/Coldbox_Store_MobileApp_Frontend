@@ -75,10 +75,12 @@ function _NotificationItem({
           variant={item.seen ? undefined : 'TextMedium'}
           tw={cn(item.seen ? 'text-zinc-600' : 'text-black')}
         >
-          {item.message}&nbsp;
-          <Text variant={item.seen ? undefined : 'TextMedium'} tw="text-blue-500">
-            {item.link}
-          </Text>
+          {item.message}
+          {item.link ? (
+            <Text variant={item.seen ? undefined : 'TextMedium'} tw="text-blue-500">
+              &nbsp;{item.link}
+            </Text>
+          ) : null}
         </Text>
       </TouchableOpacity>
       <Divider tw="w-full bg-zinc-500 mt-1.5" />
