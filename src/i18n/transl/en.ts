@@ -1027,8 +1027,9 @@ const en = {
     Notifications: {
       sensorError:
         'The sensor for cold room {{unitName}} has not sent any data in the last 12 hours. Please enter data manually until it is fixed.',
-      survey: 'Please fill in the market survey for {{farmer}}, for the movement, {{movementCode}}',
-      link: 'Please go here to complete it',
+      survey:
+        'Please fill in the market survey for {{farmer}}, for the movement, {{movementCode}}.',
+      link: 'Please go here to complete it.',
       coolingUserSurvey:
         'You have checked in {{crop}} but you have not completed the survey for this crop.',
       operatorSurvey:

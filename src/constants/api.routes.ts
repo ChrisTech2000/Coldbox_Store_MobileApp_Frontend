@@ -59,6 +59,7 @@ export enum ESMSEndpoints {
 
 export enum ENotificationsEndpoints {
   GET_NOTIFICATIONS = '/user/v1/notification',
+  UPDATE_NOTIFICATION = 'user/v1/notification/:notificationId/',
 }
 
 export enum EImpactEndpoints {
