@@ -10,7 +10,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useAuthStore } from '#stores/auth';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import NotificationService from '#services/NotificationService';
-import { dateFmt } from '#i18n/utils';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
 import type { ProcessedNotifications } from '../lib/notifications';
@@ -23,6 +23,7 @@ function NotificationsDrawerContent(props: Props) {
   const { notifications } = props;
 
   const user = useAuthStore(useShallow((store) => store.user));
+  const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
   const revalidate = useCallback(async () => {
@@ -32,7 +33,7 @@ function NotificationsDrawerContent(props: Props) {
   return (
     <View tw="flex-1 justify-start">
       <View tw="p-4 bg-zinc-100 border-b-0.5 border-zinc-500">
-        <Text variant="TitleRegular">Notifications</Text>
+        <Text variant="TitleRegular">{t('Dashboard.Notifications.text.notifications')}</Text>
       </View>
 
       <FlatList

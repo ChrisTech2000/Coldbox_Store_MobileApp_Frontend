@@ -1025,6 +1025,9 @@ const en = {
       },
     },
     Notifications: {
+      text: {
+        notifications: 'Notifications',
+      },
       sensorError:
         'The sensor for cold room {{unitName}} has not sent any data in the last 12 hours. Please enter data manually until it is fixed.',
       survey:
