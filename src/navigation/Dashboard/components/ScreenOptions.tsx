@@ -18,7 +18,7 @@ const NAVIGATOR_HEADERS: Record<DashboardRoutePaths, TranslationPaths | undefine
   Main: undefined,
   AccountDetails: 'navigation.dashboard.AccountDetails',
   Management: undefined,
-  KnowledgeHub: 'navigation.dashboard.KnowledgeHub',
+  KnowledgeHub: undefined,
   Tutorial: 'navigation.dashboard.QuitTutorial',
   FAQ: 'navigation.dashboard.FAQ',
   About: undefined,

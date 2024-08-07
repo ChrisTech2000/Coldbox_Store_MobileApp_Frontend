@@ -764,6 +764,18 @@ const en = {
       privacyPolicy: 'Privacy Policy',
       comsolAbout: 'Comsol About',
     },
+    KnowledgeHub: {
+      comic: "Farmer's journey: Comic Strip",
+      cooling: 'What is Cooling-as-a-Service?',
+      quality: 'How to maximize crop quality',
+      optimal: 'Optimal storage conditions in multi-commodity cold rooms',
+      table: 'Crop storage table',
+      sensors: 'Temperature sensors and Time-to-Pick-Up model',
+      tips: 'Tips for checking in crates',
+      glitches: 'How to respond to technical glitches in the cold room',
+      source: 'Source: please refer to the Operators’ Manual for further information:',
+      clickHere: 'Click here',
+    },
     History: {
       priceLabel: 'Price',
       sortMenuOptions: {

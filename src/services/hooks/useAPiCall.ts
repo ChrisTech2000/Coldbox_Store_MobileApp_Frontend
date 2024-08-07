@@ -40,7 +40,7 @@ export const useApiCall = <IData, IParams>(
     revalidateOnFocus: options?.revalidateOnFocus,
     revalidateOnReconnect: options?.revalidateOnReconnect,
     dedupingInterval: options?.dedupingInterval,
-    errorRetryCount: options?.errorRetryCount,
+    errorRetryCount: options?.errorRetryCount ?? 1,
     errorRetryInterval: options?.errorRetryInterval,
   });
 
