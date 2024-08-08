@@ -8,7 +8,7 @@ import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView'
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import { useAuthStore } from '#stores/auth';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
@@ -25,7 +25,7 @@ import LanguageField from '../AddCoolingUser/modules/LanguageField';
 
 import DeleteAction from './components/DeleteAction';
 
-function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
+function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const { params } = props.route;
 
   const operator = useAuthStore(useShallow((store) => store.user));
@@ -101,6 +101,22 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
             <LanguageField />
           </View>
           <View tw="mt-5">
+            <Button
+              tw="w-full mb-4"
+              mode="contained"
+              onPress={(evt) => {
+                evt.stopPropagation();
+                props.navigation.navigate('CoolingUsersSurvey', {
+                  farmerId: contextualFarmer!.id,
+                });
+              }}
+              disabled={!contextualFarmer}
+              icon="newspaper"
+              uppercase
+            >
+              {t('navigation.history.BaseSurvey')}
+            </Button>
+
             <Button
               tw="w-full mb-4"
               mode="contained"
