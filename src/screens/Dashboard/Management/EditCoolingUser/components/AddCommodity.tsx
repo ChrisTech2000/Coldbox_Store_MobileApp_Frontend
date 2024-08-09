@@ -1,27 +1,54 @@
-import React from 'react';
-import { useShallow } from 'zustand/react/shallow';
+import React, { useCallback, useMemo } from 'react';
 
 import { Button } from '#ui/components/Button';
 
-import { useManagementStore } from '#stores/management';
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import type { GetAllCropsResponse } from '#types/api.responses';
 
-import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
+import type { CommoditySurveyPatcher } from '../CoolingUsersSurvey';
+import {
+  FarmersSurveyModal,
+  type FarmerSurveySchemaType,
+} from '#screens/Dashboard/Main/components/FarmerSurveyModal';
 
 type Props = {
+  companyCurrency: string;
   farmerSurveysLength: number;
   crops: Array<GetAllCropsResponse>;
+  commodityPatcher: ReturnType<CommoditySurveyPatcher>;
 };
 
 export default function AddCommodity(props: Props) {
-  const { farmerSurveysLength, crops } = props;
+  const { companyCurrency, farmerSurveysLength, crops, commodityPatcher } = props;
 
-  const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
 
   const [isVisible, toggleVisibility] = useToggle(false);
+
+  const cropSelectionAvailable = useMemo(
+    () => ({
+      title: t('Dashboard.History.survey.baseSurvey.newCommodity', {
+        index: farmerSurveysLength + 1,
+      }),
+      crops,
+    }),
+    [farmerSurveysLength, crops.length]
+  );
+
+  const onSubmit = useCallback(
+    async (values: FarmerSurveySchemaType) => {
+      const contextualCropId = values.crop?.id;
+      if (!contextualCropId) return; // safe guard
+      try {
+        const result = await commodityPatcher(contextualCropId)(values);
+        if (result) toggleVisibility();
+      } catch (exception) {
+        console.error(exception);
+      }
+    },
+    [commodityPatcher, toggleVisibility]
+  );
 
   return (
     <React.Fragment>
@@ -41,16 +68,11 @@ export default function AddCommodity(props: Props) {
 
       {isVisible ? (
         <FarmersSurveyModal
-          companyCurrency={company?.currency}
-          cropSelectionAvailable={{
-            title: t('Dashboard.History.survey.baseSurvey.newCommodity', {
-              index: farmerSurveysLength + 1,
-            }),
-            crops,
-          }}
           isModalVisible={isVisible}
+          companyCurrency={companyCurrency}
+          cropSelectionAvailable={cropSelectionAvailable}
           onDismiss={toggleVisibility}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={onSubmit}
         />
       ) : null}
     </React.Fragment>

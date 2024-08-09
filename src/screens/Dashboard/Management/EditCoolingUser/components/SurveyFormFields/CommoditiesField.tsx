@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon } from 'react-native-paper';
 
@@ -8,24 +8,70 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import { paperTheme } from '#ui/lib/theme';
 
-import type { CoolingUserSurveyAggregatedData } from '../../CoolingUsersSurvey';
-import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
+import type {
+  CommoditySurveyPatcher,
+  CoolingUserSurveyAggregatedData,
+} from '../../CoolingUsersSurvey';
+import {
+  FarmersSurveyModal,
+  type FarmerSurveySchemaType,
+} from '#screens/Dashboard/Main/components/FarmerSurveyModal';
 import { sanitizeString } from '#screens/Dashboard/Main/History/MarketSurvey/utils';
 
 type FarmerSurveysList = CoolingUserSurveyAggregatedData['surveys'];
 type FarmerSurveyItem = FarmerSurveysList[0];
 
 type Props = {
+  companyCurrency: string;
   farmerSurveys: FarmerSurveysList;
+  commodityPatcher: ReturnType<CommoditySurveyPatcher>;
 };
 
 export default function CommoditiesField(props: Props) {
-  const { farmerSurveys } = props;
+  const { companyCurrency, farmerSurveys, commodityPatcher } = props;
 
   const { t } = useTranslationUtils();
 
   const [selectedSurvey, setSelectedSurvey] = useState<FarmerSurveyItem | null>(null);
   const [isVisible, toggleVisibility] = useToggle(false);
+
+  const defaultSurveyValues = useMemo(
+    () =>
+      selectedSurvey
+        ? {
+            weightDistribution: {
+              totalProducedWeekly: selectedSurvey!.quantityTotal,
+              quantitySelfConsumed: selectedSurvey!.quantitySelfConsumed,
+              quantitySold: selectedSurvey!.quantitySold,
+              quantityLost: selectedSurvey!.quantityBelowMarketPrice,
+            },
+            unitOfMeasurement: selectedSurvey!.unit,
+            unitaryWeight: selectedSurvey!.kgInUnit,
+            reasonsForSpoilage: sanitizeString(selectedSurvey?.reasonForLoss as string),
+            averagePrice: selectedSurvey!.averagePrice,
+          }
+        : undefined,
+    [selectedSurvey?.id]
+  );
+
+  const onDismissHandler = useCallback(() => {
+    toggleVisibility();
+    setSelectedSurvey(null);
+  }, []);
+
+  const onSubmit = useCallback(
+    async (values: FarmerSurveySchemaType) => {
+      const contextualCropId = selectedSurvey?.cropId;
+      if (!contextualCropId) return; // safe guard
+      try {
+        const result = await commodityPatcher(contextualCropId)(values);
+        if (result) onDismissHandler();
+      } catch (exception) {
+        console.error(exception);
+      }
+    },
+    [selectedSurvey?.cropId, commodityPatcher, onDismissHandler]
+  );
 
   return (
     <React.Fragment>
@@ -68,28 +114,14 @@ export default function CommoditiesField(props: Props) {
         )}
       />
 
-      {isVisible ? (
+      {isVisible && typeof defaultSurveyValues === 'object' ? (
         <FarmersSurveyModal
-          companyCurrency="EUR"
-          cropName={selectedSurvey!.cropName}
           isModalVisible={isVisible}
-          onDismiss={() => {
-            toggleVisibility();
-            setSelectedSurvey(null);
-          }}
-          onSubmit={(value) => console.log(value)}
-          defaultValues={{
-            weightDistribution: {
-              totalProducedWeekly: selectedSurvey!.quantityTotal,
-              quantitySelfConsumed: selectedSurvey!.quantitySelfConsumed,
-              quantitySold: selectedSurvey!.quantitySold,
-              quantityLost: selectedSurvey!.quantityBelowMarketPrice,
-            },
-            unitOfMeasurement: selectedSurvey!.unit,
-            unitaryWeight: selectedSurvey!.kgInUnit,
-            reasonsForSpoilage: sanitizeString(selectedSurvey?.reasonForLoss as string),
-            averagePrice: selectedSurvey!.averagePrice,
-          }}
+          companyCurrency={companyCurrency}
+          cropName={selectedSurvey!.cropName}
+          defaultValues={defaultSurveyValues}
+          onDismiss={onDismissHandler}
+          onSubmit={onSubmit}
         />
       ) : null}
     </React.Fragment>

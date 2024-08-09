@@ -3,12 +3,7 @@ import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
-
-export type SurveyFormValues<T = string> = {
-  occupation: EOccupation;
-  experience: EExperience;
-  experienceInMonths: T;
-};
+import type { CommoditiesBaseDatums as SurveyFormValues } from '../CoolingUsersSurvey';
 
 export type PreprocessedSurveyFormValues = SurveyFormValues<number>;
 
