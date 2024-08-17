@@ -7,3 +7,8 @@ ruby ">= 2.6.10"
 # bound in the template on Cocoapods with next React Native release.
 gem 'cocoapods', '>= 1.13', '< 1.15'
 gem 'activesupport', '>= 6.1.7.5', '< 7.1.0'
+
+# Add fastlane and Pluginfile support
+gem "fastlane", "2.219.0"
+plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
+eval_gemfile(plugins_path) if File.exist?(plugins_path)
