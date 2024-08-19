@@ -114,6 +114,7 @@ export default {
     'complete-later': 'बाद में पूरा करें',
     'update-success': 'सफलतापूर्वक उत्परिवर्तित',
     'save-changes': 'बदलाव सहेजें',
+    continue: 'जारी रखना',
   },
   components: {
     datePicker: {
@@ -688,6 +689,9 @@ export default {
           ubibot: {
             accountKey: 'खाता कुंजी',
             channelId: 'चैनल आईडी',
+            sensorFieldTitle: 'अपना सेंसर क्षेत्र चुनें',
+            sensorFieldDesc: 'केवल तापमान क्षेत्र समर्थित हैं',
+            field: 'खेत',
           },
           figorr: {
             apiKey: 'API Key',

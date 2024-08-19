@@ -354,3 +354,34 @@ export type GetCoolingUnitTemperaturesResponse = Array<{
   specificationType: string;
   value: string;
 }>;
+
+export type VerifyFigorrSensorConnectivityResponse = Array<{
+  id: string;
+  deviceTag: string;
+  imei: string;
+  type: string;
+  status: string;
+  settings: {
+    name: string;
+  };
+  stat: {
+    id: string;
+    device: string;
+    temperature: number;
+    humidity: number;
+    latitude: number;
+    longitude: number;
+    battery: number;
+    deviceSettings: {
+      name: string;
+    };
+    notes: Array<unknown>; // TODO: confirm type
+    deviceRtcTime: number;
+    deviceTimeStamp: string;
+  };
+}>;
+
+export type VerifyUbibotSensorConnectivityResponse = {
+  success: string;
+  data: Array<string>;
+};

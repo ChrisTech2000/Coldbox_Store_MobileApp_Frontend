@@ -35,7 +35,23 @@ export default function FigorrForm() {
         apiKey: values.apiKey,
         deviceTag: values.deviceTag,
       });
-      console.log(result); // TODO
+      const contextualSensor = result?.at(0);
+      if (!contextualSensor) {
+        // TODO -> show a toast with an error message
+        return;
+      }
+      const sensorData = {
+        machineID: contextualSensor.deviceTag,
+        id: contextualSensor.imei,
+        username: contextualSensor.id,
+        settings: contextualSensor.settings,
+        stat: contextualSensor.stat,
+        status: contextualSensor.status,
+        password: values.apiKey,
+        type: 'figorr',
+      };
+      console.log(sensorData);
+      // TODO -> mutate the global FormManager sensorData field (that needs to be created)
     } catch (exception) {
       console.error(exception);
     }
