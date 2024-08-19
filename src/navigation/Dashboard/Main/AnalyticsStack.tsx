@@ -8,7 +8,7 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
-import { Analytics } from '#screens/Dashboard/Main/Analytics/Analytics';
+import AnalyticsBase from '#screens/Dashboard/Main/Analytics';
 import Methodology from '#screens/Dashboard/Main/Analytics/Methodology';
 
 import type { TranslationPaths } from '#i18n/index';
@@ -74,7 +74,7 @@ export default function AnalyticsStack() {
 
   return (
     <Stack.Navigator initialRouteName="RootAnalytics" screenOptions={screenOptions}>
-      <Stack.Screen name="RootAnalytics" component={Analytics} />
+      <Stack.Screen name="RootAnalytics" component={AnalyticsBase} />
       <Stack.Screen name="Methodology" component={Methodology} />
     </Stack.Navigator>
   );
