@@ -68,6 +68,7 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-toast-notifications": "^3.4.0",
     "react-native-vector-icons": "^10.1.0",
+    "react-native-webview": "^13.10.5",
     "supercluster": "^8.0.1",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.3.0",

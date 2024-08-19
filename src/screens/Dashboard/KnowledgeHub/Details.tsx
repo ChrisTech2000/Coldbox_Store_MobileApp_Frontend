@@ -1,16 +1,19 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
+import { ActivityIndicator } from 'react-native-paper';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { KNOWLEDGE_HUB_URL } from '#constants/environment';
+
+import type { KnowledgeHubStackRouteProps } from '#navigation/Dashboard/KnowledgeHub';
 import { paperTheme } from '#ui/lib/theme';
 
-function ComsolAgreement() {
+function KnowledgeHubDetails(props: KnowledgeHubStackRouteProps<'Details'>) {
+  const { params } = props.route;
+
   return (
     <WebView
-      source={{ uri: KNOWLEDGE_HUB_URL }}
+      source={{ uri: params.uri }}
       style={{ flex: 1 }}
       renderLoading={() => (
         <View tw="flex-1 items-center justify-center">
@@ -21,4 +24,4 @@ function ComsolAgreement() {
   );
 }
 
-export default withSafeArea(ComsolAgreement);
+export default withSafeArea(KnowledgeHubDetails);

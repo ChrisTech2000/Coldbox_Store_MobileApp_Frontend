@@ -36,9 +36,9 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   const { mutate } = useSWRConfig();
 
   const { data, isLoading } = useApiCall(
-    'getFarmer',
-    ColdtivateService.getFarmer,
-    { userId: params?.userId as number },
+    'getFarmerByUserId',
+    ColdtivateService.getFarmerByUserId,
+    params?.userId as number,
     {
       skip: !params?.userId,
       defaultData: [],

@@ -17,6 +17,7 @@ import { Modal } from '#ui/components/Modal';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { AuthRouteProps } from 'navigation/Auth';
 
+import { currenciesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
@@ -118,7 +119,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
       company: {
         name,
         country,
-        currency,
+        currency: currenciesDict().getCodeByName(currency) ?? 'NGN',
         language: LanguageStorage.read(),
         crop: [],
       },
@@ -129,11 +130,11 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
     }
   }, []);
 
-  const checkPhoneNumber = useCallback(() => {
+  const checkPhoneNumber = useCallback(async () => {
     if (!phoneNumber) {
       setIsPhoneModalOpen(true);
     } else {
-      handleSubmit(onSubmit);
+      await handleSubmit(onSubmit)();
     }
   }, [phoneNumber]);
 
