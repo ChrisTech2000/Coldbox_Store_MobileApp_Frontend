@@ -61,22 +61,33 @@ export function derivedSubjects(company: Company) {
   };
 }
 
+type CountryDatum = { name: string; currencyCode: string };
+
 export function countriesDict() {
-  const dict = new Map<string, string>();
+  const dict = new Map<string, CountryDatum>();
 
   for (const entry of getAllISOCodes()) {
-    dict.set(entry.iso, entry.countryName);
+    dict.set(entry.iso, {
+      name: entry.countryName,
+      currencyCode: entry.symbol,
+    });
   }
 
   return {
     values: () => Array.from(dict.values()),
-    getISOByValue: (value: string): string | undefined => {
-      for (const [countryISO, countryName] of dict) {
-        if (countryName === value) return countryISO;
+    getISOByName: (value: string): string | undefined => {
+      for (const [countryISO, { name }] of dict) {
+        if (name === value) return countryISO;
       }
       return undefined;
     },
-    getValueByISO: (countryISO: string): string | undefined => dict.get(countryISO),
+    getNameByISO: (countryISO: string): string | undefined => dict.get(countryISO)?.name,
+    getByValue: (value: string) => {
+      for (const [iso, datum] of dict.entries()) {
+        if (iso === value || datum.name === value) return datum;
+      }
+      return undefined;
+    },
   };
 }
 

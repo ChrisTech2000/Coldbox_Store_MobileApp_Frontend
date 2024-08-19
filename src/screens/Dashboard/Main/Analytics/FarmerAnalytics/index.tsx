@@ -31,11 +31,9 @@ export function FarmerAnalytics() {
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
 
   const { data: farmerResponse, isLoading: loadingFarmers } = useApiCall(
-    'getFarmer',
-    ColdtivateService.getFarmer,
-    {
-      userId: user?.id as number,
-    },
+    'getFarmerByUserId',
+    ColdtivateService.getFarmerByUserId,
+    user!.id,
     {
       skip: !user?.id,
     }

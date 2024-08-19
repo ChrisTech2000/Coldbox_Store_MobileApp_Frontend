@@ -625,6 +625,14 @@ export default {
           confirmation:
             'क्या आप वाकई इस उपयोगकर्ता को कूलिंग उपयोगकर्ताओं की सूची से हटाना चाहते हैं? यह ऑपरेशन इस कूलिंग यूजर को हटा देगा और इसे वापस नहीं किया जा सकता है!',
         },
+        pdf: {
+          dateRange: 'तारीख की अबधि',
+          selectedUnits: 'चयनित शीतलन कक्ष',
+          coolingUnit: 'प्रशीतलन इकई',
+        },
+        actions: {
+          downloadFarmers: "Download farmer's dashboard data",
+        },
       },
       AddCoolingUnit: {
         heading: 'प्रशीतलन इकई के गुण',

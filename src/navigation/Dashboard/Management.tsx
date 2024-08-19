@@ -89,7 +89,7 @@ export type ManagementRoutes = {
     userId: number;
   };
   EditCoolingUser: {
-    userId: number;
+    farmerId: number;
     createdByOperator: boolean;
   };
 };
