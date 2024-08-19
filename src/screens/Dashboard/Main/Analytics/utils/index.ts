@@ -1,4 +1,5 @@
 import { ImpactMetric, ImpactMetricType } from '#types/global';
+import isNil from 'lodash/isNil';
 
 export type Variation = 'equal' | 'increase' | 'decrease';
 
@@ -12,9 +13,10 @@ export const getMetricValue = (
     return metric;
   }
 
-  if (index && (metric as Array<ImpactMetricType>).length) {
+  if (!isNil(index) && (metric as Array<ImpactMetricType>).length) {
     return (metric as Array<ImpactMetricType>)?.[index].value as number;
   }
+
   return (metric as ImpactMetricType)?.value as number;
 };
 
