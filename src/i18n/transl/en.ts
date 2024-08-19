@@ -620,6 +620,14 @@ const en = {
           confirmation:
             'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
         },
+        pdf: {
+          dateRange: 'Date range',
+          selectedUnits: 'Selected cooling units',
+          coolingUnit: 'Cooling unit',
+        },
+        actions: {
+          downloadFarmers: "Download farmer's dashboard data",
+        },
       },
       AddCoolingUnit: {
         heading: 'Cooling unit properties',
@@ -763,6 +771,18 @@ const en = {
       userLicense: 'End User License Agreement',
       privacyPolicy: 'Privacy Policy',
       comsolAbout: 'Comsol About',
+    },
+    KnowledgeHub: {
+      comic: "Farmer's journey: Comic Strip",
+      cooling: 'What is Cooling-as-a-Service?',
+      quality: 'How to maximize crop quality',
+      optimal: 'Optimal storage conditions in multi-commodity cold rooms',
+      table: 'Crop storage table',
+      sensors: 'Temperature sensors and Time-to-Pick-Up model',
+      tips: 'Tips for checking in crates',
+      glitches: 'How to respond to technical glitches in the cold room',
+      source: 'Source: please refer to the Operators’ Manual for further information:',
+      clickHere: 'Click here',
     },
     History: {
       priceLabel: 'Price',

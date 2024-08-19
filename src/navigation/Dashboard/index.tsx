@@ -6,7 +6,6 @@ import { useShallow } from 'zustand/react/shallow';
 
 import AccountDetails from '#screens/Dashboard/AccountDetails';
 import FAQ from '#screens/Dashboard/FAQ';
-import KnowledgeHub from '#screens/Dashboard/KnowledgeHub';
 import Tutorial from '#screens/Dashboard/Tutorial';
 
 import { useAuthStore } from '#stores/auth';
@@ -23,6 +22,7 @@ import DashboardMainBottomTabs from './Main';
 import ManagementStack, { ManagementRoutes } from './Management';
 import NotificationsDrawerContent from './components/NotificationsDrawerContent';
 import AboutStack from './About';
+import KnowledgeHubStack from './KnowledgeHub';
 
 export type DashboardRoutes = {
   Main: undefined;
@@ -70,7 +70,7 @@ function DashboardNavigationRouter() {
       <NavigationDrawer.Screen name="Main" component={DashboardMainBottomTabs} />
       <NavigationDrawer.Screen name="AccountDetails" component={AccountDetails} />
       <NavigationDrawer.Screen name="Management" component={ManagementStack} />
-      <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHub} />
+      <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHubStack} />
       <NavigationDrawer.Screen name="Tutorial" component={Tutorial} />
       <NavigationDrawer.Screen name="FAQ" component={FAQ} />
       <NavigationDrawer.Screen name="About" component={AboutStack} />

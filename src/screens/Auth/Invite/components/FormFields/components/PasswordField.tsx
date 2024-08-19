@@ -10,7 +10,7 @@ export default function PasswordField(props: TextInputProps) {
     <TextInput
       {...props}
       tw="w-full bg-transparent mt-1"
-      secureTextEntry={isPasswordVisible}
+      secureTextEntry={!isPasswordVisible}
       left={<TextInput.Icon icon="lock" />}
       right={
         <TextInput.Icon

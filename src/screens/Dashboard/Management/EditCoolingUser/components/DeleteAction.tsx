@@ -7,17 +7,19 @@ import { useShallow } from 'zustand/react/shallow';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
+import type { Farmer } from '#types/global';
 import { useManagementStore } from '#stores/management';
 import { useTranslationUtils } from '#i18n/utils';
 import { useApiCache } from '#services/hooks/useAPiCall';
-import type { GetFarmerParams } from '#types/api.params';
-import type { GetFarmerResponse } from '#types/api.responses';
 import { usePopup } from '#screens/Dashboard/AccountDetails/components/DeleteAccountAction/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 
+import { GET_FARMER_RECORD_SWR_KEY } from '../index';
+
 type Props = {
+  farmerId: number;
   userId: number;
   isSubmitting: boolean;
   goBack: () => void;
@@ -25,11 +27,9 @@ type Props = {
 };
 
 export default function DeleteAction(props: Props) {
-  const { userId, isSubmitting, goBack, revalidateCache } = props;
+  const { farmerId, userId, isSubmitting, goBack, revalidateCache } = props;
 
-  const cachedData = useApiCache<GetFarmerParams, GetFarmerResponse>('getFarmer', {
-    userId,
-  });
+  const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
 
   const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
@@ -64,15 +64,12 @@ export default function DeleteAction(props: Props) {
   }
 
   async function onConfirm(): Promise<void> {
-    const contextualDatum = cachedData?.at(0);
-    if (typeof contextualDatum === 'undefined' || !company) return;
-    const farmerId = contextualDatum.id;
-    const companyId = company.id;
+    if (typeof contextualFarmer === 'undefined' || !company) return; // safe guard
     try {
       resetPopup();
       toggleProcessing();
-      if (!contextualDatum.userCode) await ColdtivateService.deleteUser(userId);
-      else await ColdtivateService.removeCompany({ farmerId, companyId });
+      if (!contextualFarmer.userCode) await ColdtivateService.deleteUser(userId);
+      else await ColdtivateService.removeCompany({ farmerId, companyId: company.id });
       await revalidateCache();
       goBack();
     } catch (exception) {
