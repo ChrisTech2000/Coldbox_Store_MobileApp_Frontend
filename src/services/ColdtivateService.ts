@@ -793,7 +793,16 @@ class ColdtivateService extends HttpClient {
     try {
       const { data } = await this.post<GetCoolingUnitResponse>(
         EStorageEndpoints.GET_COOLING_UNITS,
-        params
+        params,
+        undefined,
+        [
+          'machineID',
+          'deviceRtcTime',
+          'deviceSettings',
+          'deviceTimeStamp',
+          'accountKey',
+          'channelId',
+        ]
       );
       return data;
     } catch (error) {
@@ -827,7 +836,16 @@ class ColdtivateService extends HttpClient {
     try {
       const { data } = await this.put<GetCoolingUnitResponse>(
         subs(EStorageEndpoints.GET_COOLING_UNIT, { coolingUnitId }),
-        params
+        params,
+        undefined,
+        [
+          'machineID',
+          'deviceRtcTime',
+          'deviceSettings',
+          'deviceTimeStamp',
+          'accountKey',
+          'channelId',
+        ]
       );
       return data;
     } catch (error) {
