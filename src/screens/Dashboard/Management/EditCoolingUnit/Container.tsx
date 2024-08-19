@@ -97,7 +97,7 @@ export default function ScreenContainer(props: Props) {
           price: values.price,
           sensor: values.sensor,
           public: values.public,
-          sensorData: '', // TODO: sensor integration
+          sensorData: values.sensorData ?? '',
           powerOptions: {
             powerConsumptionInMt: values.powerConsumptionInMt ?? 0,
             dailyRoomWattage: values.dailyRoomWattage ?? 0,
@@ -231,6 +231,7 @@ function _buildInitialValues(
         crateHeight: unit.crateHeight?.toString() ?? '',
         editableCheckins: unit.editableCheckins ?? true,
         sensor: unit.sensor ?? false,
+        sensorData: undefined,
         public: unit.public ?? false,
         operators: unit.operators ?? [],
         crops,

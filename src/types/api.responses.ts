@@ -278,7 +278,15 @@ export interface GetCoolingUnitResponse {
   location: number;
   metric: string;
   sensor: boolean;
-  sensorList: unknown; // TODO: confirm type
+  sensorList: Array<{
+    id: number;
+    machineId: string;
+    type: string;
+    field: null | string;
+    dateSensorFirstLinked: string;
+    username: string;
+    channelId: string;
+  }>;
   capacityInMetricTons: number;
   capacityInNumberCrates: number;
   occupancy: number;

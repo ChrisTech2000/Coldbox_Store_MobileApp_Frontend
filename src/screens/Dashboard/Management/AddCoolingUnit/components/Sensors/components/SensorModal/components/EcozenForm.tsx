@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Button } from '#ui/components/Button';
@@ -8,6 +8,9 @@ import { Button } from '#ui/components/Button';
 import { useTranslationUtils } from '#i18n/utils';
 import { useUnmount } from '#ui/hooks/useUnmount';
 import SensorsService from '#services/SensorsService';
+import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
 
 type FormValues = {
   username: string;
@@ -38,11 +41,26 @@ export default function EcozenForm() {
         password: values.password,
         machineID: values.machineId,
       });
-      console.log(result); // TODO
+
+      if (!result) {
+        // TODO -> show a toast with an error message
+        return;
+      }
+
+      const sensorData = {
+        machineID: values.machineId,
+        username: values.username,
+        password: values.password,
+        type: 'ecozen',
+      } satisfies SensorDatum;
+
+      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
     } catch (exception) {
       console.error(exception);
     }
   }
+
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <React.Fragment>
@@ -94,8 +112,12 @@ export default function EcozenForm() {
         />
       </View>
       <View tw="self-end px-6">
-        <Button mode="text" onPress={form.handleSubmit(onSubmit)}>
-          {t('actions.save-changes')}
+        <Button mode="text" onPress={form.handleSubmit(onSubmit)} disabled={isSubmitting}>
+          {isSubmitting ? (
+            <ActivityIndicator color={paperTheme.colors.primary} size={16} animating />
+          ) : (
+            t('actions.save-changes')
+          )}
         </Button>
       </View>
     </React.Fragment>

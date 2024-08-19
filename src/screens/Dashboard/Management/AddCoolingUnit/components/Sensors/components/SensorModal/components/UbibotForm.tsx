@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Divider, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -11,6 +11,8 @@ import { Text } from '#ui/components/Text';
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import SensorsService from '#services/SensorsService';
+import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
 
@@ -98,9 +100,9 @@ export default function UbibotForm() {
           channelId: values.channelId,
           field: values.temperatureField,
           type: 'ubibot',
-        };
-        console.log(sensorData);
-        // TODO -> implement the UI layer and then mutate the global FormManager sensorData field (that needs to be created)
+        } satisfies SensorDatum;
+
+        emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
         return;
       }
 
@@ -108,6 +110,8 @@ export default function UbibotForm() {
         return;
     }
   }
+
+  const isSubmitting = form.formState.isSubmitting;
 
   switch (form.watch('_step')) {
     case 'check':
@@ -154,8 +158,12 @@ export default function UbibotForm() {
             />
           </View>
           <View tw="self-end px-6">
-            <Button mode="text" onPress={form.handleSubmit(onSubmit)}>
-              {t('actions.continue')}
+            <Button mode="text" onPress={form.handleSubmit(onSubmit)} disabled={isSubmitting}>
+              {isSubmitting ? (
+                <ActivityIndicator color={paperTheme.colors.primary} size={16} animating />
+              ) : (
+                t('actions.continue')
+              )}
             </Button>
           </View>
         </React.Fragment>
@@ -260,8 +268,12 @@ export default function UbibotForm() {
             />
           </View>
           <View tw="self-end px-6">
-            <Button mode="text" onPress={form.handleSubmit(onSubmit)}>
-              {t('actions.save-changes')}
+            <Button mode="text" onPress={form.handleSubmit(onSubmit)} disabled={isSubmitting}>
+              {isSubmitting ? (
+                <ActivityIndicator color={paperTheme.colors.primary} size={16} animating />
+              ) : (
+                t('actions.save-changes')
+              )}
             </Button>
           </View>
         </React.Fragment>
