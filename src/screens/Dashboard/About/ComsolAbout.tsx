@@ -1,15 +1,23 @@
 import React from 'react';
 import { View } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { ActivityIndicator } from 'react-native-paper';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-
-import { Text } from '#ui/components/Text';
+import { KNOWLEDGE_HUB_URL } from '#constants/environment';
+import { paperTheme } from '#ui/lib/theme';
 
 function ComsolAbout() {
   return (
-    <View tw="flex-1 items-center justify-center">
-      <Text>Comsol About Screen</Text>
-    </View>
+    <WebView
+      source={{ uri: KNOWLEDGE_HUB_URL }}
+      style={{ flex: 1 }}
+      renderLoading={() => (
+        <View tw="flex-1 items-center justify-center">
+          <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+        </View>
+      )}
+    />
   );
 }
 
