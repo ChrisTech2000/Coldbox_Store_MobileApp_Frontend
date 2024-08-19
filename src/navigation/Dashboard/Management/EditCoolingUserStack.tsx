@@ -17,7 +17,7 @@ import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
 export type EditCoolingUserStackRoutes = {
   Root: {
-    userId: number;
+    farmerId: number;
     createdByOperator: boolean;
   };
   CoolingUsersSurvey: {
