@@ -3,18 +3,19 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import { useTranslationUtils } from '#i18n/utils';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
+import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
 import { useFarmerAnalyticsData } from '../store';
-import { generateSecondColumnContent, sortAndMapData } from '../utils';
 import { ExtendedTable, Table, TableData } from './Table';
+import { sortAndMapData } from '../../utils';
+import { generateSecondColumnContent } from '../../utils/generateSecondColumnContent';
 
 type Section =
   | 'crates'

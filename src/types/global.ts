@@ -293,10 +293,12 @@ type Co2Metrics = {
   coolingUnitId: string;
 };
 
-export type ImpactMetric = {
+export type ImpactMetricType = {
   name: string;
   value: number | string;
 };
+
+export type ImpactMetric = ImpactMetricType | Array<ImpactMetricType>;
 
 type ImpactMetrics = {
   companyId: ImpactMetric | number;
@@ -621,6 +623,11 @@ export enum ESellingLocation {
 export enum EImpactMode {
   COMPANY = 'company',
   COOLING_UNIT = 'cooling_unit',
+}
+
+export enum EView {
+  COMPARISON = 'comparison',
+  AGGREGATED = 'aggregated',
 }
 
 //////////////////////// MAPPERS

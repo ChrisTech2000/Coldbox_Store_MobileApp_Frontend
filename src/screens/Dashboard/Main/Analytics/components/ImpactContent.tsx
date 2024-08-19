@@ -11,7 +11,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { ImpactData } from '#types/global';
 
-import { getMetricValue } from '../utils/getMetricValue';
+import { getMetricValue } from '../utils';
 
 type Store = {
   impactData: ImpactData | null;
@@ -42,12 +42,11 @@ export function ImpactContent<T extends Store>({
   const { impactData } = useStore();
 
   const foodLoss = useMemo(() => {
-    const to = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercLoss) || 0;
-    const from = getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselinePercLossMonth) || 0;
     return {
-      from,
-      to,
-      evolution: ((to - from) / from) * 100,
+      from: getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselinePercLossMonth) || 0,
+      to: getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercLoss) || 0,
+      evolution:
+        getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution) || 0,
     };
   }, [impactData]);
 

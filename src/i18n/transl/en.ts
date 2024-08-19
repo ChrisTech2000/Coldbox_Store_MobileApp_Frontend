@@ -1010,6 +1010,7 @@ const en = {
         usersTab: {
           operators: 'Operators',
           users: 'Active cooling users',
+          activeUsers: 'Active users',
           beneficiaries: 'Indirect beneficiaries',
         },
         cratesTab: {
