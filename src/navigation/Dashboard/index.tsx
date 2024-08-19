@@ -3,6 +3,7 @@ import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation
 import { Drawer } from 'react-native-drawer-layout';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
+import ms from 'ms';
 
 import AccountDetails from '#screens/Dashboard/AccountDetails';
 import FAQ from '#screens/Dashboard/FAQ';
@@ -23,6 +24,8 @@ import ManagementStack, { ManagementRoutes } from './Management';
 import NotificationsDrawerContent from './components/NotificationsDrawerContent';
 import AboutStack from './About';
 import KnowledgeHubStack from './KnowledgeHub';
+
+import { useNotifications } from './lib/notifications';
 
 export type DashboardRoutes = {
   Main: undefined;
@@ -87,6 +90,8 @@ export const useRightDrawerStore = create<{
 }));
 
 export default function DashboardNavigator() {
+  const { data } = useNotifications({ refreshInterval: ms('10 seconds') });
+
   const isOpen = useRightDrawerStore((store) => store.isOpen);
   const toggle = useRightDrawerStore((store) => store.toggle);
 
@@ -99,7 +104,7 @@ export default function DashboardNavigator() {
         drawerPosition="right"
         renderDrawerContent={() => (
           <React.Fragment>
-            <NotificationsDrawerContent />
+            <NotificationsDrawerContent notifications={data.notifications} />
           </React.Fragment>
         )}
       >

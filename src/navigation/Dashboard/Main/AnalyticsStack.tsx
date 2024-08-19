@@ -16,7 +16,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
 
-import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
+import { useDashboardHeader, type DashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 
 export type AnalyticsStackRoutes = {
   RootAnalytics: undefined;
@@ -42,35 +42,39 @@ const Stack = createNativeStackNavigator<AnalyticsStackRoutes>();
 
 export default function AnalyticsStack() {
   const { t } = useTranslationUtils();
+  const dashboardHeaderFactory = useDashboardHeader();
 
-  const screenOptions: ScreenOptions = useCallback((props) => {
-    // eslint-disable-next-line react/prop-types
-    const routeName = props.route.name;
+  const screenOptions: ScreenOptions = useCallback(
+    (props) => {
+      // eslint-disable-next-line react/prop-types
+      const routeName = props.route.name;
 
-    const firstName = useAuthStore.getState().user?.firstName;
+      const firstName = useAuthStore.getState().user?.firstName;
 
-    const translationPath = NAVIGATOR_HEADERS[routeName];
-    let routeTitle: string | undefined;
-    if (routeName === 'RootAnalytics') {
-      routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
-    } else {
-      routeTitle = translationPath ? t(translationPath) : undefined;
-    }
+      const translationPath = NAVIGATOR_HEADERS[routeName];
+      let routeTitle: string | undefined;
+      if (routeName === 'RootAnalytics') {
+        routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
+      } else {
+        routeTitle = translationPath ? t(translationPath) : undefined;
+      }
 
-    return {
-      ...props,
-      header: (headerProps) => (
-        <NavigatorHeader
-          {...headerProps}
-          routeTitle={routeTitle}
-          // eslint-disable-next-line react/prop-types
-          {..._renderContentFactory(routeName, props.navigation)}
-        />
-      ),
-      gestureDirection: 'vertical',
-      animationDuration: 180,
-    };
-  }, []);
+      return {
+        ...props,
+        header: (headerProps) => (
+          <NavigatorHeader
+            {...headerProps}
+            routeTitle={routeTitle}
+            // eslint-disable-next-line react/prop-types
+            {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory)}
+          />
+        ),
+        gestureDirection: 'vertical',
+        animationDuration: 180,
+      };
+    },
+    [dashboardHeaderFactory]
+  );
 
   return (
     <Stack.Navigator initialRouteName="RootAnalytics" screenOptions={screenOptions}>
@@ -82,7 +86,8 @@ export default function AnalyticsStack() {
 
 function _renderContentFactory(
   routeName: AnalyticsStackRoutePaths,
-  navigation: NativeStackNavigationProp<AnalyticsStackRoutes, AnalyticsStackRoutePaths>
+  navigation: NativeStackNavigationProp<AnalyticsStackRoutes, AnalyticsStackRoutePaths>,
+  dashboardHeaderFactory: DashboardHeaderFactory
 ): NavigationHeaderProps {
   switch (routeName) {
     case 'Methodology':
@@ -90,6 +95,6 @@ function _renderContentFactory(
         leftContent: <Appbar.BackAction onPress={navigation.goBack} size={22} />,
       };
     default:
-      return dashboardHeaderFactory(navigation);
+      return dashboardHeaderFactory();
   }
 }
