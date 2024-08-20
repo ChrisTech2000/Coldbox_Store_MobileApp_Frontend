@@ -15,7 +15,7 @@ import { useAuthStore } from '#stores/auth';
 
 import NavigatorHeader from '../../components/NavigatorHeader';
 import BottomNavigation from '../components/BottomNavigation';
-import { BOTTOM_NAV_ROUTES_SCOPE, dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
+import { BOTTOM_NAV_ROUTES_SCOPE, useDashboardHeader } from '../lib/dashboardHeaderFactory';
 import CoolingUnitsTabs from './CoolingUnitsTabs';
 import HistoryTabStack, { HistoryTabStackRoutes } from './HistoryTabStack';
 import MainTabStack from './MainTabStack';
@@ -66,6 +66,7 @@ const Tab = createBottomTabNavigator<DashboardMainRoutes>();
 export default function DashboardMainBottomTabs() {
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
+  const dashboardHeaderFactory = useDashboardHeader();
 
   const screenOptions: ScreenOptions = useCallback(
     (props) => {
@@ -102,7 +103,7 @@ export default function DashboardMainBottomTabs() {
               firstName: user?.firstName ?? '',
             })}
             // eslint-disable-next-line react/prop-types
-            {...dashboardHeaderFactory(props.navigation)}
+            {...dashboardHeaderFactory()}
           />
         ),
       };

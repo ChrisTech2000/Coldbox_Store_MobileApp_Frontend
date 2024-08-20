@@ -1044,6 +1044,25 @@ const en = {
         },
       },
     },
+    Notifications: {
+      text: {
+        notifications: 'Notifications',
+      },
+      sensorError:
+        'The sensor for cold room {{unitName}} has not sent any data in the last 12 hours. Please enter data manually until it is fixed.',
+      survey:
+        'Please fill in the market survey for {{farmer}}, for the movement, {{movementCode}}.',
+      link: 'Please go here to complete it.',
+      coolingUserSurvey:
+        'You have checked in {{crop}} but you have not completed the survey for this crop.',
+      operatorSurvey:
+        'You have checked in {{crop}} for {{farmer}} but you have not completed the survey for this crop.',
+      pickup:
+        'Your crates of {{crop}} should be picked up as soon as possible! (check in date: {{checkIn}}, cooling unit ID: {{unitId}}, check in ID: {{movementCode}}).',
+      notifyCoolingUser:
+        'Please notify the user {{farmer}} that his/her crates of {{crop}} should be picked up as soon as possible! (check in date: {{checkIn}}, cooling unit ID: {{unitId}}, check in ID: {{movementCode}}).',
+      checkIn: 'Operator {{farmer}} has edited check-in {{movementCode}} on {{date}}.',
+    },
   },
 };
 
