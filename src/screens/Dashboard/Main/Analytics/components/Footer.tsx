@@ -20,11 +20,10 @@ export function CommonFooter({ tabs }: CommonFooterProps) {
       {tabs}
       <Button
         mode="contained"
-        onPress={() => null}
         tw="mt-2"
         contentStyle="bg-gray-300"
         labelStyle="text-black text-base"
-        onPressIn={() => navigation.navigate('Methodology')}
+        onPress={() => navigation.navigate('Methodology')}
       >
         {t('Dashboard.Analytics.methodologyButton')}
       </Button>

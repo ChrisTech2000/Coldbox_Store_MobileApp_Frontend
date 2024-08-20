@@ -8,7 +8,7 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
-import { Analytics } from '#screens/Dashboard/Main/Analytics/Analytics';
+import AnalyticsBase from '#screens/Dashboard/Main/Analytics';
 import Methodology from '#screens/Dashboard/Main/Analytics/Methodology';
 
 import type { TranslationPaths } from '#i18n/index';
@@ -19,7 +19,7 @@ import { useAuthStore } from '#stores/auth';
 import { useDashboardHeader, type DashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 
 export type AnalyticsStackRoutes = {
-  Analytics: undefined;
+  RootAnalytics: undefined;
   Methodology: undefined;
 };
 
@@ -29,7 +29,7 @@ export type AnalyticsStackRouteProps<Path extends AnalyticsStackRoutePaths> =
   NativeStackScreenProps<AnalyticsStackRoutes, Path>;
 
 export const NAVIGATOR_HEADERS: Record<AnalyticsStackRoutePaths, TranslationPaths | undefined> = {
-  Analytics: 'navigation.bottomTabs.Analytics',
+  RootAnalytics: 'navigation.bottomTabs.Analytics',
   Methodology: 'navigation.analytics.methodology',
 };
 
@@ -53,7 +53,7 @@ export default function AnalyticsStack() {
 
       const translationPath = NAVIGATOR_HEADERS[routeName];
       let routeTitle: string | undefined;
-      if (routeName === 'Analytics') {
+      if (routeName === 'RootAnalytics') {
         routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
       } else {
         routeTitle = translationPath ? t(translationPath) : undefined;
@@ -77,8 +77,8 @@ export default function AnalyticsStack() {
   );
 
   return (
-    <Stack.Navigator initialRouteName="Analytics" screenOptions={screenOptions}>
-      <Stack.Screen name="Analytics" component={Analytics} />
+    <Stack.Navigator initialRouteName="RootAnalytics" screenOptions={screenOptions}>
+      <Stack.Screen name="RootAnalytics" component={AnalyticsBase} />
       <Stack.Screen name="Methodology" component={Methodology} />
     </Stack.Navigator>
   );

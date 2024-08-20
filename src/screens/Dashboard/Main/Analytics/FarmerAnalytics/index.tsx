@@ -69,7 +69,7 @@ export function FarmerAnalytics() {
   useEffect(() => {
     if (coolingUnits) {
       setConfigData({
-        coolingUnit: coolingUnits[0],
+        coolingUnits,
         endDate: new Date(),
         startDate: new Date(2022, 9),
       });
@@ -138,7 +138,7 @@ export function FarmerAnalytics() {
                 <Text variant="TextMedium" tw="text-base font-bold">
                   {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
                   <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {configData.coolingUnit?.name ?? ''}
+                    {configData.coolingUnits?.map((unit) => unit.name).join(', ') ?? ''}
                   </Text>
                 </Text>
               </View>

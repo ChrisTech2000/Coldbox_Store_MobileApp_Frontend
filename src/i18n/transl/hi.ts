@@ -1016,6 +1016,7 @@ export default {
         usersTab: {
           operators: 'ऑपरेटर्स',
           users: 'सक्रिय शीतलन उपयोगकर्ता',
+          activeUsers: 'सक्रिय उपयोगकर्ता',
           beneficiaries: 'अप्रत्यक्ष लाभार्थी',
         },
         cratesTab: {

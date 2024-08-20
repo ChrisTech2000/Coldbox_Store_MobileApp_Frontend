@@ -67,7 +67,7 @@ export function UsersContent() {
 
       <UserSection
         title={t('Dashboard.Analytics.beneficiariesTotal', {
-          amount: beneficiaries.total ?? 0,
+          amount: Math.round(beneficiaries.total) ?? 0,
         })}
         userType1={t('Dashboard.Analytics.maleLabel', {
           amount: beneficiaries.male,

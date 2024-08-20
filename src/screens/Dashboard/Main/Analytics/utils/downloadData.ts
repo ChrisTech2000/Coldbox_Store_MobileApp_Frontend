@@ -9,7 +9,7 @@ import {
   ECoolingUnitType,
 } from '#types/global';
 import { ManagementCompany } from '#stores/management';
-import { getMetricValue } from './getMetricValue';
+import { getMetricValue } from '.';
 
 ///////////////////// UTILS
 function getValue(

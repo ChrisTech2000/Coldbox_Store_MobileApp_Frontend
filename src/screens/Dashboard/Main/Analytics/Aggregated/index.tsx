@@ -47,7 +47,7 @@ export function AggregatedSection() {
     ImpactService.getImpact,
     {
       companyId: company?.id as number,
-      coolingUnitId: configData?.coolingUnit?.id as number,
+      coolingUnitId: configData?.coolingUnits?.map((unit) => unit.id) as number[],
       startDate: configData?.startDate,
       endDate: configData?.endDate,
       mode: EImpactMode.COOLING_UNIT,
@@ -61,7 +61,7 @@ export function AggregatedSection() {
     'getCoolingUnitImpact',
     ImpactService.getCoolingUnitImpact,
     {
-      unitIds: configData?.coolingUnit?.id as number,
+      unitIds: configData?.coolingUnits?.map((unit) => unit.id) as number[],
       startDate: configData?.startDate,
       endDate: configData?.endDate,
     },
@@ -71,7 +71,7 @@ export function AggregatedSection() {
   );
 
   const occupancy = useMemo(() => {
-    return coolingUnitData?.averageRoomOccupancy?.[0] || 0;
+    return Math.round(coolingUnitData?.averageRoomOccupancy?.[0] || 0);
   }, [coolingUnitData]);
 
   const revenue = useMemo(() => {
@@ -196,7 +196,7 @@ export function AggregatedSection() {
                 <Text variant="TextMedium" tw="text-base font-bold">
                   {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
                   <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {configData.coolingUnit.name}
+                    {configData.coolingUnits?.map((unit) => unit.name).join(', ')}
                   </Text>
                 </Text>
               </View>

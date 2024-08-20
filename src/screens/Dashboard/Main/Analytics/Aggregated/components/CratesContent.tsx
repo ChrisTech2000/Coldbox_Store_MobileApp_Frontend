@@ -50,8 +50,8 @@ export function CratesContent() {
 
   const operations = useMemo(() => {
     return {
-      checkedIn: coolingUnitData?.roomCratesIn?.['0'] ?? 0,
-      checkedOut: coolingUnitData?.roomCratesOut?.['0'] ?? 0,
+      checkedIn: coolingUnitData?.roomOpsIn?.['0'] ?? 0,
+      checkedOut: coolingUnitData?.roomOpsOut?.['0'] ?? 0,
     };
   }, [coolingUnitData]);
 

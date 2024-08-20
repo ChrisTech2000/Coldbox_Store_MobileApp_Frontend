@@ -12,7 +12,7 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
-import { EImpactMode } from '#types/global';
+import { EImpactMode, EView } from '#types/global';
 
 import { ConfigData, Configuration, ConfigurationModal } from '../components/Configuration';
 import { CommonFooter } from '../components/Footer';
@@ -43,10 +43,11 @@ export function ComparisonSection() {
     ImpactService.getImpact,
     {
       companyId: company?.id as number,
-      coolingUnitId: configData?.coolingUnit?.id as number,
+      coolingUnitId: configData?.coolingUnits?.map((unit) => unit.id) as number[],
       startDate: configData?.startDate,
       endDate: configData?.endDate,
       mode: EImpactMode.COOLING_UNIT,
+      view: EView.COMPARISON,
     },
     {
       skip: !company?.id || !configData,
@@ -57,7 +58,7 @@ export function ComparisonSection() {
     'getCoolingUnitImpact',
     ImpactService.getCoolingUnitImpact,
     {
-      unitIds: configData?.coolingUnit?.id as number,
+      unitIds: configData?.coolingUnits?.map((unit) => unit.id) as number[],
       startDate: configData?.startDate,
       endDate: configData?.endDate,
     },
@@ -152,7 +153,7 @@ export function ComparisonSection() {
                 <Text variant="TextMedium" tw="text-base font-bold">
                   {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
                   <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {configData.coolingUnit.name}
+                    {configData.coolingUnits.map((unit) => unit.name).join(', ')}
                   </Text>
                 </Text>
               </View>

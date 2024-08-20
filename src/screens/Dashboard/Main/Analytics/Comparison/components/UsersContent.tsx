@@ -54,14 +54,14 @@ export function UsersContent() {
               t('Dashboard.Analytics.comparisonTab.usersTab.operators'),
               t('Dashboard.Analytics.comparisonTab.genderHeader'),
             ]}
-            items={[
-              {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: `${coolingUnitData?.roomOpMa?.['0']} | ${coolingUnitData?.roomOpFem?.['0']} | ${coolingUnitData?.roomOpOt?.['0']}`,
-                total: coolingUnitData?.roomOp?.['0'] ?? 0,
-              },
-            ]}
-            total={1}
+            items={
+              configData?.coolingUnits.map((unit, index) => ({
+                coolingUnitName: unit.name,
+                value: `${coolingUnitData?.roomOpMa?.[index] ?? 0} | ${coolingUnitData?.roomOpFem?.[index]} | ${coolingUnitData?.roomOpOt?.[index]}`,
+                total: coolingUnitData?.roomOp?.[index] ?? 0,
+              })) ?? []
+            }
+            total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
@@ -74,17 +74,17 @@ export function UsersContent() {
         content={
           <Table
             header={[
-              t('Dashboard.Analytics.comparisonTab.usersTab.users'),
+              t('Dashboard.Analytics.comparisonTab.usersTab.activeUsers'),
               t('Dashboard.Analytics.comparisonTab.genderHeader'),
             ]}
-            items={[
-              {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: `${coolingUnitData?.roomActiveMa?.['0']} | ${coolingUnitData?.roomActiveFem?.['0']} | ${coolingUnitData?.roomActiveOt?.['0']}`,
-                total: coolingUnitData?.roomActiveUsers?.['0'] ?? 0,
-              },
-            ]}
-            total={1}
+            items={
+              configData?.coolingUnits.map((unit, index) => ({
+                coolingUnitName: unit.name,
+                value: `${coolingUnitData?.roomActiveMa?.[index] ?? 0} | ${coolingUnitData?.roomActiveFem?.[index]} | ${coolingUnitData?.roomActiveOt?.[index]}`,
+                total: coolingUnitData?.roomActiveUsers?.[index] ?? 0,
+              })) ?? []
+            }
+            total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
@@ -100,14 +100,14 @@ export function UsersContent() {
               t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries'),
               t('Dashboard.Analytics.comparisonTab.genderSecondaryHeader'),
             ]}
-            items={[
-              {
-                coolingUnitName: configData?.coolingUnit.name ?? '',
-                value: `${coolingUnitData?.roomBeneficiariesMa?.['0']} | ${coolingUnitData?.roomBeneficiariesFem?.['0']}`,
-                total: coolingUnitData?.roomBeneficiaries?.['0'] ?? 0,
-              },
-            ]}
-            total={1}
+            items={
+              configData?.coolingUnits.map((unit, index) => ({
+                coolingUnitName: unit.name,
+                value: `${Math.round(coolingUnitData?.roomBeneficiariesMa?.[index] ?? 0)} | ${Math.round(coolingUnitData?.roomBeneficiariesFem?.[index] ?? 0)}`,
+                total: Math.round(coolingUnitData?.roomBeneficiaries?.[index] ?? 0),
+              })) ?? []
+            }
+            total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
