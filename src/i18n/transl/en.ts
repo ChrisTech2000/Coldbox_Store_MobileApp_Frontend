@@ -112,6 +112,7 @@ const en = {
     'complete-later': 'Complete later',
     'update-success': 'Succesfully updated',
     'save-changes': 'Save changes',
+    continue: 'Continue',
   },
   components: {
     datePicker: {
@@ -691,6 +692,9 @@ const en = {
           ubibot: {
             accountKey: 'Account Key',
             channelId: 'Channel Id',
+            sensorFieldTitle: 'Select your sensor field',
+            sensorFieldDesc: 'Select your sensor field',
+            field: 'Field',
           },
           figorr: {
             apiKey: 'API Key',
@@ -719,6 +723,10 @@ const en = {
         modal: {
           askDelete:
             'This operation will delete this cooling unit including its history. Do you want to continue?',
+        },
+        buttons: {
+          viewExisting: 'View Existing',
+          editPricing: 'Edit Pricing',
         },
       },
       UsageAnalysis: {

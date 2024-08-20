@@ -1,4 +1,5 @@
 import { JsonObject } from '#services/utils';
+import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import {
   EImpactMode,
   EPaymentType,
@@ -272,7 +273,7 @@ export interface AddCoolingUnitParams extends JsonObject {
   price: number;
   sensor: boolean;
   public: boolean;
-  sensorData: unknown;
+  sensorData: SensorDatum | string;
   powerOptions: {
     powerConsumptionInMt: number;
     dailyRoomWattage: number;

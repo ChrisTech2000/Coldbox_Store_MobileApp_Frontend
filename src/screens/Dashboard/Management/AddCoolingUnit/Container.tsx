@@ -52,7 +52,7 @@ export default function ScreenContainer(props: Props) {
         price: values.price,
         sensor: values.sensor,
         public: values.public,
-        sensorData: '', // TODO: sensor integration
+        sensorData: values.sensorData ?? '',
         powerOptions: {
           powerConsumptionInMt: values.powerConsumptionInMt ?? 0,
           dailyRoomWattage: values.dailyRoomWattage ?? 0,
@@ -115,7 +115,7 @@ export default function ScreenContainer(props: Props) {
               <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
               <Text tw="text-lg">{t('Dashboard.Management.AddCoolingUnit.heading')}</Text>
             </View>
-            <FormFields isEditMode={false} />
+            <FormFields />
             <Button
               tw="w-11/12 self-center mt-7"
               mode="contained"
@@ -154,6 +154,7 @@ function _buildInitialValues() {
     crateHeight: '',
     editableCheckins: true,
     sensor: false,
+    sensorData: undefined,
     public: false,
     operators: [],
     crops: [],

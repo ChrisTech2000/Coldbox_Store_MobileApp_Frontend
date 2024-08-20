@@ -114,6 +114,7 @@ export default {
     'complete-later': 'बाद में पूरा करें',
     'update-success': 'सफलतापूर्वक उत्परिवर्तित',
     'save-changes': 'बदलाव सहेजें',
+    continue: 'जारी रखना',
   },
   components: {
     datePicker: {
@@ -696,6 +697,9 @@ export default {
           ubibot: {
             accountKey: 'खाता कुंजी',
             channelId: 'चैनल आईडी',
+            sensorFieldTitle: 'अपना सेंसर क्षेत्र चुनें',
+            sensorFieldDesc: 'केवल तापमान क्षेत्र समर्थित हैं',
+            field: 'खेत',
           },
           figorr: {
             apiKey: 'API Key',
@@ -724,6 +728,10 @@ export default {
         modal: {
           askDelete:
             'यह कार्रवाई इसके इतिहास सहित इस शीतलन इकाई को हटा देगी। क्या आप जारी रखना चाहते हैं?',
+        },
+        buttons: {
+          viewExisting: 'मौजूदा देखें',
+          editPricing: 'Edit Pricing',
         },
       },
       UsageAnalysis: {

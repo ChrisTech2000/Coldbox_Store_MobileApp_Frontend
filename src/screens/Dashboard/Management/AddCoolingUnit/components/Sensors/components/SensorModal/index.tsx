@@ -14,8 +14,6 @@ import UbibotForm from './components/UbibotForm';
 import FigorrForm from './components/FigorrForm';
 
 export default function SensorModal() {
-  const { t } = useTranslationUtils();
-
   const [isVisible, toggleVisibility, setModalVisibility] = useToggle(false);
   const [selectedSensor, setSelectedSensor] = useState<SensorTypes | undefined>(undefined);
 
@@ -28,15 +26,6 @@ export default function SensorModal() {
     <Portal>
       <Modal visible={isVisible} onDismiss={toggleVisibility}>
         <View tw="w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2">
-          <Text variant="TitleRegular" tw="px-6">
-            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
-          </Text>
-          <Text tw="px-6">
-            {t([
-              'Dashboard.Management.AddCoolingUnit.fields.sensorDesc',
-              selectedSensor === 'ubibot' ? 'ubibot' : 'default',
-            ])}
-          </Text>
           <_SensorFactory sensorType={selectedSensor} />
         </View>
       </Modal>
@@ -45,13 +34,38 @@ export default function SensorModal() {
 }
 
 function _SensorFactory(props: { sensorType: SensorTypes | undefined }) {
+  const { t } = useTranslationUtils();
+
   switch (props.sensorType) {
     case 'ecozen':
-      return <EcozenForm />;
+      return (
+        <React.Fragment>
+          <Text variant="TitleRegular" tw="px-6">
+            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
+          </Text>
+          <Text tw="px-6 mt-2">
+            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
+          </Text>
+          <EcozenForm />
+        </React.Fragment>
+      );
+
     case 'ubibot':
       return <UbibotForm />;
+
     case 'figorr':
-      return <FigorrForm />;
+      return (
+        <React.Fragment>
+          <Text variant="TitleRegular" tw="px-6">
+            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
+          </Text>
+          <Text tw="px-6 mt-2">
+            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
+          </Text>
+          <FigorrForm />
+        </React.Fragment>
+      );
+
     default:
       return null;
   }

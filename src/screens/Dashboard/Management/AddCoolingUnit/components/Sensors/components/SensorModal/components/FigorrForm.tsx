@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Button } from '#ui/components/Button';
@@ -8,6 +8,9 @@ import { Button } from '#ui/components/Button';
 import { useTranslationUtils } from '#i18n/utils';
 import { useUnmount } from '#ui/hooks/useUnmount';
 import SensorsService from '#services/SensorsService';
+import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
 
 type FormValues = {
   apiKey: string;
@@ -35,11 +38,29 @@ export default function FigorrForm() {
         apiKey: values.apiKey,
         deviceTag: values.deviceTag,
       });
-      console.log(result); // TODO
+      const contextualSensor = result?.at(0);
+      if (!contextualSensor) {
+        // TODO -> show a toast with an error message
+        return;
+      }
+      const sensorData = {
+        machineID: contextualSensor.deviceTag,
+        id: contextualSensor.imei,
+        username: contextualSensor.id,
+        settings: contextualSensor.settings,
+        stat: contextualSensor.stat,
+        status: contextualSensor.status,
+        password: values.apiKey,
+        type: contextualSensor.type,
+      } satisfies SensorDatum;
+
+      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
     } catch (exception) {
       console.error(exception);
     }
   }
+
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <React.Fragment>
@@ -76,8 +97,12 @@ export default function FigorrForm() {
         />
       </View>
       <View tw="self-end px-6">
-        <Button mode="text" onPress={form.handleSubmit(onSubmit)}>
-          {t('actions.save-changes')}
+        <Button mode="text" onPress={form.handleSubmit(onSubmit)} disabled={isSubmitting}>
+          {isSubmitting ? (
+            <ActivityIndicator color={paperTheme.colors.primary} size={16} animating />
+          ) : (
+            t('actions.save-changes')
+          )}
         </Button>
       </View>
     </React.Fragment>
