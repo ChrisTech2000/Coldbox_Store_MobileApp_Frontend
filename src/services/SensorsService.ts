@@ -21,10 +21,15 @@ class SensorsService extends HttpClient {
 
   public verifyEcozenSensorConnectivity = async (params: VerifyEcozenSensorConnectivityParams) => {
     try {
-      const { data } = await this.post(ESensorEndpoints.ECOZEN_CHECK, {
-        ...params,
-        type: 'ecozen',
-      });
+      const { data } = await this.post(
+        ESensorEndpoints.ECOZEN_CHECK,
+        {
+          ...params,
+          type: 'ecozen',
+        },
+        undefined,
+        ['machineID']
+      );
       return data;
     } catch (error) {
       console.log(error);
