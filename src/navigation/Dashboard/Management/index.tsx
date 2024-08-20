@@ -21,7 +21,6 @@ import CompanyDetails from '#screens/Dashboard/Management/CompanyDetails';
 import CoolingUnits from '#screens/Dashboard/Management/CoolingUnits';
 import CoolingUsers from '#screens/Dashboard/Management/CoolingUsers';
 import EditCoolingUnit from '#screens/Dashboard/Management/EditCoolingUnit';
-import EditCoolingUser from '#screens/Dashboard/Management/EditCoolingUser';
 import EditLocation from '#screens/Dashboard/Management/EditLocation';
 import EditOperator from '#screens/Dashboard/Management/EditOperator';
 import Locations from '#screens/Dashboard/Management/Locations';
@@ -34,10 +33,11 @@ import { useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
-import NavigatorHeader, { type NavigationHeaderProps } from '../components/NavigatorHeader';
+import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';
 import MarketSurveyStack, {
   MarketSurveyStackRoutes,
-} from './Main/HistoryTabStack/MarketSurveyStack';
+} from '../Main/HistoryTabStack/MarketSurveyStack';
+import EditCoolingUserStack, { type EditCoolingUserStackRoutes } from './EditCoolingUserStack';
 
 export type ManagementRoutes = {
   Root: undefined;
@@ -51,12 +51,7 @@ export type ManagementRoutes = {
   };
   MarketSurveyStack: {
     screen: keyof MarketSurveyStackRoutes;
-    params: {
-      crops: Array<{ id: number; name: string }>;
-      farmer: string;
-      companyCurrency?: string;
-      checkoutId: number;
-    };
+    params: MarketSurveyStackRoutes[keyof MarketSurveyStackRoutes];
   };
   // Location related routes
   Locations: undefined;
@@ -88,9 +83,9 @@ export type ManagementRoutes = {
   AddCoolingUser?: {
     userId: number;
   };
-  EditCoolingUser: {
-    farmerId: number;
-    createdByOperator: boolean;
+  EditCoolingUserStack: {
+    screen: keyof EditCoolingUserStackRoutes;
+    params: EditCoolingUserStackRoutes[keyof EditCoolingUserStackRoutes];
   };
 };
 
@@ -111,14 +106,14 @@ const NAVIGATOR_HEADERS: Record<ManagementRoutePaths, TranslationPaths | undefin
   RevenueAnalysis: 'navigation.management.RevenueAnalysis',
   UsageAnalysis: 'navigation.management.UsageAnalysis',
   EditCheckIn: 'navigation.history.EditCheckIn',
-  MarketSurveyStack: 'navigation.history.MarketSurvey',
+  MarketSurveyStack: undefined,
   Locations: 'navigation.management.Locations',
   AddLocation: 'navigation.management.AddLocation',
   EditLocation: 'navigation.management.EditLocation',
   CoolingUnits: 'navigation.management.CoolingUnits',
   CoolingUsers: 'navigation.management.CoolingUsers',
   AddCoolingUser: 'navigation.management.AddCoolingUser',
-  EditCoolingUser: 'navigation.management.EditCoolingUser',
+  EditCoolingUserStack: undefined,
   AddCoolingUnit: 'navigation.management.AddCoolingUnit',
   EditCoolingUnit: 'navigation.management.EditCoolingUnit',
   Operators: 'navigation.management.Operators',
@@ -147,22 +142,22 @@ export default function ManagementStack() {
 
     return {
       ...props,
-      header: (headerProps) =>
-        translationPath !== NAVIGATOR_HEADERS.MarketSurveyStack && (
-          <NavigatorHeader
-            {...headerProps}
-            routeTitle={routeTitle}
-            leftContent={
-              <Appbar.BackAction
-                // eslint-disable-next-line react/prop-types
-                onPress={props.navigation.goBack}
-                size={22}
-              />
-            }
-            // eslint-disable-next-line react/prop-types
-            {..._rightContentFactory(routeName, props.navigation)}
-          />
-        ),
+      headerShown: !!translationPath,
+      header: (headerProps) => (
+        <NavigatorHeader
+          {...headerProps}
+          routeTitle={routeTitle}
+          leftContent={
+            <Appbar.BackAction
+              // eslint-disable-next-line react/prop-types
+              onPress={props.navigation.goBack}
+              size={22}
+            />
+          }
+          // eslint-disable-next-line react/prop-types
+          {..._rightContentFactory(routeName, props.navigation)}
+        />
+      ),
     };
   }, []);
 
@@ -172,7 +167,7 @@ export default function ManagementStack() {
       <Stack.Screen name="CompanyDetails" component={CompanyDetails} />
       <Stack.Screen name="CoolingUsers" component={CoolingUsers} />
       <Stack.Screen name="AddCoolingUser" component={AddCoolingUser} />
-      <Stack.Screen name="EditCoolingUser" component={EditCoolingUser} />
+      <Stack.Screen name="EditCoolingUserStack" component={EditCoolingUserStack} />
       <Stack.Screen name="RevenueAnalysis" component={RevenueAnalysis} />
       <Stack.Screen name="UsageAnalysis" component={UsageAnalysis} />
       <Stack.Screen name="EditCheckIn" component={EditCheckIn} />
