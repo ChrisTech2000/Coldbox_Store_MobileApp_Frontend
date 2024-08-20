@@ -16,7 +16,7 @@ type Props = {
 
 const NAVIGATOR_HEADERS: Record<DashboardRoutePaths, TranslationPaths | undefined> = {
   Main: undefined,
-  AccountDetails: 'navigation.dashboard.AccountDetails',
+  AccountDetails: undefined,
   Management: undefined,
   KnowledgeHub: undefined,
   Tutorial: 'navigation.dashboard.QuitTutorial',
