@@ -716,6 +716,10 @@ const en = {
           askDelete:
             'This operation will delete this cooling unit including its history. Do you want to continue?',
         },
+        buttons: {
+          viewExisting: 'View Existing',
+          editPricing: 'Edit Pricing',
+        },
       },
       UsageAnalysis: {
         dateSelectionLabel: 'Select days:',

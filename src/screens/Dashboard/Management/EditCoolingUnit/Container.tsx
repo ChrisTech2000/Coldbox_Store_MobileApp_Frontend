@@ -163,7 +163,7 @@ export default function ScreenContainer(props: Props) {
               <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
               <Text tw="text-lg">{t('Dashboard.Management.AddCoolingUnit.heading')}</Text>
             </View>
-            <FormFields isEditMode />
+            <FormFields isEditMode sensorList={unit?.sensorList} />
             <View tw="w-full flex-row items-center justify-around mt-5 px-2">
               <DeleteAction coolingUnitId={coolingUnitId} companyId={companyId} />
               <Button

@@ -721,6 +721,10 @@ export default {
           askDelete:
             'यह कार्रवाई इसके इतिहास सहित इस शीतलन इकाई को हटा देगी। क्या आप जारी रखना चाहते हैं?',
         },
+        buttons: {
+          viewExisting: 'मौजूदा देखें',
+          editPricing: 'Edit Pricing',
+        },
       },
       UsageAnalysis: {
         dateSelectionLabel: 'दिनों का चयन करें:',

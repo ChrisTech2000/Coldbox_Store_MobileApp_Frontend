@@ -5,6 +5,7 @@ import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
 
+import type { GetCoolingUnitResponse } from '#types/api.responses';
 import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../contexts/FormManager';
@@ -25,9 +26,13 @@ import PowerSourceFields from './PowerSourceFields';
 import ElectricityStorageFields from './ElectricityStorageFields';
 import Sensors from './Sensors';
 import CropSpecificPricing from './CropSpecificPricing';
+import TableModal from './Sensors/components/TableModal';
 
-export default function FormFields(props: { isEditMode: boolean }) {
-  const { isEditMode } = props;
+export default function FormFields(props: {
+  isEditMode?: boolean;
+  sensorList?: GetCoolingUnitResponse['sensorList'];
+}) {
+  const { isEditMode, sensorList } = props;
 
   const { control, formState } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
@@ -74,7 +79,11 @@ export default function FormFields(props: { isEditMode: boolean }) {
           </React.Fragment>
         )}
       />
-      <Sensors />
+      <Sensors>
+        {typeof sensorList === 'undefined' || sensorList.length === 0 ? null : (
+          <TableModal datums={sensorList} />
+        )}
+      </Sensors>
       <Controller
         name="public"
         control={control}
@@ -90,7 +99,7 @@ export default function FormFields(props: { isEditMode: boolean }) {
       />
       <OperatorsField />
       <CommoditiesField />
-      {isEditMode ? <CropSpecificPricing /> : null}
+      {typeof isEditMode === 'undefined' || !isEditMode ? null : <CropSpecificPricing />}
       <RefrigerantFields />
       <PowerConsumptionFields />
       <PowerSourceFields />
