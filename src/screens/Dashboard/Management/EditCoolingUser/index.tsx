@@ -8,7 +8,7 @@ import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView'
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import { useAuthStore } from '#stores/auth';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
@@ -28,17 +28,17 @@ import DeleteAction from './components/DeleteAction';
 
 import { DataLoader } from './utils';
 
-export const STATIC_START_DATE = '2022-10-01'; // copied from the web app :shrug:
+export const STATIC_START_DATE = '2022-10-01';
 export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
 
-function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
+function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const { params } = props.route;
 
   const currentUser = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
-  const { data, isLoading, refetch } = useApiCall(
+  const { data, isLoading, refetch, hasError } = useApiCall(
     GET_FARMER_RECORD_SWR_KEY,
     DataLoader.loadFarmerRecord,
     params.farmerId,
@@ -105,6 +105,22 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
           </View>
           <View tw="mt-5">
             <FarmerDashboardData farmerId={params.farmerId} />
+
+            <Button
+              tw="w-full mb-4"
+              mode="contained"
+              onPress={(evt) => {
+                evt.stopPropagation();
+                props.navigation.navigate('CoolingUsersSurvey', {
+                  farmerId: params.farmerId,
+                });
+              }}
+              disabled={!data || hasError}
+              icon="newspaper"
+              uppercase
+            >
+              {t('navigation.history.BaseSurvey')}
+            </Button>
 
             <Button
               tw="w-full mb-4"

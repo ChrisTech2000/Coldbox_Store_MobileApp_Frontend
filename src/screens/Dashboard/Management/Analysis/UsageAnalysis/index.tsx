@@ -29,7 +29,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, ERoles } from '#types/global';
-import { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
 import { sortMovements } from '../utils';
 import { DownloadDataModal } from '../components/DownloadDataModal';

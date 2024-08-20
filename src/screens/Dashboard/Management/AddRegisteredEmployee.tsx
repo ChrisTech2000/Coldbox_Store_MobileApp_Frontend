@@ -11,7 +11,7 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';

@@ -7,6 +7,7 @@ import {
 import { getFocusedRouteNameFromRoute, type RouteProp } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useShallow } from 'zustand/react/shallow';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -63,6 +64,7 @@ const TAB_METADATA: Record<
 const Tab = createBottomTabNavigator<DashboardMainRoutes>();
 
 export default function DashboardMainBottomTabs() {
+  const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const dashboardHeaderFactory = useDashboardHeader();
 
@@ -84,11 +86,7 @@ export default function DashboardMainBottomTabs() {
       // eslint-disable-next-line
       // @ts-ignore
       const showBottomNav = !focusedRoute || BOTTOM_NAV_ROUTES_SCOPE.includes(focusedRoute);
-
       const translationPath = TAB_METADATA[routeName].translationPath;
-
-      const firstName = useAuthStore.getState().user?.firstName;
-      const routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
 
       return {
         ...props,
@@ -99,11 +97,18 @@ export default function DashboardMainBottomTabs() {
           <Icon name={TAB_METADATA[routeName].tabBarIcon} {...iconProps} />
         ),
         header: (headerProps) => (
-          <NavigatorHeader {...headerProps} routeTitle={routeTitle} {...dashboardHeaderFactory()} />
+          <NavigatorHeader
+            {...headerProps}
+            routeTitle={t('navigation.bottomTabs.RootMainTabStack', {
+              firstName: user?.firstName ?? '',
+            })}
+            // eslint-disable-next-line react/prop-types
+            {...dashboardHeaderFactory()}
+          />
         ),
       };
     },
-    [dashboardHeaderFactory]
+    [user?.firstName]
   );
 
   return (

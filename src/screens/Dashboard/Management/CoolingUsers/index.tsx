@@ -127,9 +127,12 @@ function _propsFactory(
     props.right = (props) => <List.Icon {...props} icon="cellphone" />;
   }
   props.onPress = () => {
-    navigation.navigate('EditCoolingUser', {
-      farmerId: datum.id,
-      createdByOperator: !datum.userCode,
+    navigation.navigate('EditCoolingUserStack', {
+      screen: 'Root',
+      params: {
+        farmerId: datum.id,
+        createdByOperator: !datum.userCode,
+      },
     });
   };
   return props;
