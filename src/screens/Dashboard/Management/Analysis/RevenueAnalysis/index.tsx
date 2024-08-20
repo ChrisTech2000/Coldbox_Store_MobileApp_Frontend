@@ -19,7 +19,6 @@ import { Input } from '#ui/components/Input';
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
 } from '#ui/components/MultipleSelectWithStore';
-import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -40,7 +39,7 @@ type PaymentOption = {
   value: EPaymentType;
 };
 
-const useCoolingUnitStore = createSelectStore<CoolingUnit>();
+const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
 const usePaymentType = createMultipleSelectStore<PaymentOption>();
 const useDateRangeStore = createDataRangeStore();
 const useSortingStore = createSortingStore();
@@ -53,12 +52,13 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
   const { user } = useAuthStore();
   const { company } = useManagementStore();
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
+  const { selectedItems: selectedUnits } = useCoolingUnitStore();
   const { startDate, endDate, setEndDate, setStartDate } = useDateRangeStore();
   const { selectedItems: paymentMethods } = usePaymentType();
   const { sorting } = useSortingStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
@@ -83,11 +83,11 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     'getRevenueAnalysis',
     ColdtivateService.getRevenueAnalysis,
     {
-      coolingUnits: coolingUnit?.id as number,
+      coolingUnits: selectedUnits?.map((unit) => unit.id) as number[],
       paymentMethods: paymentMethods.flatMap((method) => method.value),
     },
     {
-      skip: !coolingUnit?.id,
+      skip: !selectedUnits || !selectedUnits.length,
       defaultData: [],
     }
   );
@@ -133,7 +133,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">
-      <SelectWithStore<CoolingUnit>
+      <MultipleSelectWithStore<CoolingUnit>
         emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
         datums={coolingUnits ?? []}
         isModalVisible={isUnitsModalOpen}
@@ -141,7 +141,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         itemName={(item) => item?.name}
         useSelectStore={useCoolingUnitStore}
         label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-          name: coolingUnit ? coolingUnit.name : '',
+          name: selectedUnits ? selectedUnits.map((unit) => unit.name).join(', ') : '',
         })}
         modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
         divider
@@ -167,8 +167,8 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
             value: EPaymentType.CREDIT_CARD,
           },
         ]}
-        isModalVisible={isUnitsModalOpen}
-        setIsModalVisible={setIsUnitsModalOpen}
+        isModalVisible={isPaymentModalOpen}
+        setIsModalVisible={setIsPaymentModalOpen}
         itemName={(item) => item.label}
         useSelectStore={usePaymentType}
         label={`${t('Dashboard.Management.RevenueAnalysis.paymentType.label')} ${paymentMethods.flatMap((p) => p.label).join(', ')}`}
@@ -210,7 +210,9 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
               <Movement
                 key={`${movement.id}-${index}`}
                 movement={movement}
-                coolingUnit={coolingUnit}
+                coolingUnit={
+                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
+                }
                 selectedCompany={company}
                 navigateToMarketSurvey={() => {
                   props.navigation.navigate('MarketSurveyStack', {
