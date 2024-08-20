@@ -1,6 +1,6 @@
 import axios, {
-  AxiosRequestConfig,
-  AxiosResponse,
+  type AxiosRequestConfig,
+  type AxiosResponse,
   type AxiosError,
   type AxiosRequestHeaders,
 } from 'axios';
@@ -35,8 +35,10 @@ export default class HttpClient {
       ...options,
       getAuthTokens: () => {
         const storedTokens = useAuthStore.getState().tokens;
-        if (storedTokens) return storedTokens;
-        return { accessToken: '', refreshToken: '' };
+        return {
+          accessToken: storedTokens?.accessToken ?? '',
+          refreshToken: storedTokens?.refreshToken ?? '',
+        };
       },
     });
 

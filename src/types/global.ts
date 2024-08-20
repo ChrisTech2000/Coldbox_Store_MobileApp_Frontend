@@ -14,7 +14,7 @@ export type User = {
 export type Farmer = {
   id: number;
   user: User;
-  birthday: Date;
+  birthday: Date | null;
   parentName: string;
   country: string;
   userCode: string | null;
@@ -385,7 +385,7 @@ type CropData = {
 };
 
 type RecordValue<T> = {
-  '0': T;
+  [key: string]: T;
 };
 
 export type FarmerData = {
@@ -430,7 +430,7 @@ type AggregatedData = {
   latestSurveyDate: number;
 };
 
-type Top5Data = {
+export type Top5Data = {
   farmerId: number;
   cropId: number;
   cropName: number;

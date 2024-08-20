@@ -53,10 +53,6 @@ export interface ResetPasswordParams extends JsonObject {
   password: string;
 }
 
-export interface GetFarmerParams extends JsonObject {
-  userId: number;
-}
-
 export interface GetOperatorFarmersParams extends JsonObject {
   operator: number;
 }

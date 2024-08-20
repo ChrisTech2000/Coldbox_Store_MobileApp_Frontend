@@ -3,7 +3,6 @@ import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
 import ColdtivateService from '#services/ColdtivateService';
-import type { GetFarmerParams } from '#types/api.params';
 import { ERoles, type Farmer, type Company, type CoolingUnit } from '#types/global';
 
 import { useAuthStore } from './auth';
@@ -26,7 +25,7 @@ type FarmerDatum = Partial<Pick<State, 'farmerCountry' | 'farmerParentName'>>;
 
 type Actions = {
   addRefreshDataFn: (fn: () => void) => void;
-  fetchGlobalInformation: (params: GetFarmerParams) => Promise<void>;
+  fetchGlobalInformation: (userId: number) => Promise<void>;
   setCoolingUnits: (units: Array<CoolingUnit>) => void;
   patchFarmer: (datum: FarmerDatum) => void;
 };
@@ -41,10 +40,10 @@ export const useDashboardStore = create<State & Actions>((set) => ({
   coolingUnits: null,
   refreshData: [],
 
-  fetchGlobalInformation: async (params: GetFarmerParams) => {
+  fetchGlobalInformation: async (userId: number) => {
     try {
       const [farmerResult, companiesResult] = await Promise.allSettled([
-        ColdtivateService.getFarmer(params),
+        ColdtivateService.getFarmerByUserId(userId),
         ColdtivateService.getCompanies(),
       ]);
 
@@ -84,6 +83,6 @@ export const useGlobalInformation = (isAuthenticated: boolean) => {
 
   useEffect(() => {
     if (!isAuthenticated || !user?.id || user.role !== ERoles.COOLING_USER) return;
-    void fetchGlobalInformation({ userId: user?.id });
+    void fetchGlobalInformation(user?.id);
   }, [isAuthenticated, user]);
 };

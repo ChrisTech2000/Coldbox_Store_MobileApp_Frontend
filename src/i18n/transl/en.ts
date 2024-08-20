@@ -621,6 +621,14 @@ const en = {
           confirmation:
             'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
         },
+        pdf: {
+          dateRange: 'Date range',
+          selectedUnits: 'Selected cooling units',
+          coolingUnit: 'Cooling unit',
+        },
+        actions: {
+          downloadFarmers: "Download farmer's dashboard data",
+        },
       },
       AddCoolingUnit: {
         heading: 'Cooling unit properties',
@@ -771,6 +779,18 @@ const en = {
       userLicense: 'End User License Agreement',
       privacyPolicy: 'Privacy Policy',
       comsolAbout: 'Comsol About',
+    },
+    KnowledgeHub: {
+      comic: "Farmer's journey: Comic Strip",
+      cooling: 'What is Cooling-as-a-Service?',
+      quality: 'How to maximize crop quality',
+      optimal: 'Optimal storage conditions in multi-commodity cold rooms',
+      table: 'Crop storage table',
+      sensors: 'Temperature sensors and Time-to-Pick-Up model',
+      tips: 'Tips for checking in crates',
+      glitches: 'How to respond to technical glitches in the cold room',
+      source: 'Source: please refer to the Operators’ Manual for further information:',
+      clickHere: 'Click here',
     },
     History: {
       priceLabel: 'Price',
@@ -1031,6 +1051,25 @@ const en = {
           co2EmissionsLabel: 'CO2e (kg)',
         },
       },
+    },
+    Notifications: {
+      text: {
+        notifications: 'Notifications',
+      },
+      sensorError:
+        'The sensor for cold room {{unitName}} has not sent any data in the last 12 hours. Please enter data manually until it is fixed.',
+      survey:
+        'Please fill in the market survey for {{farmer}}, for the movement, {{movementCode}}.',
+      link: 'Please go here to complete it.',
+      coolingUserSurvey:
+        'You have checked in {{crop}} but you have not completed the survey for this crop.',
+      operatorSurvey:
+        'You have checked in {{crop}} for {{farmer}} but you have not completed the survey for this crop.',
+      pickup:
+        'Your crates of {{crop}} should be picked up as soon as possible! (check in date: {{checkIn}}, cooling unit ID: {{unitId}}, check in ID: {{movementCode}}).',
+      notifyCoolingUser:
+        'Please notify the user {{farmer}} that his/her crates of {{crop}} should be picked up as soon as possible! (check in date: {{checkIn}}, cooling unit ID: {{unitId}}, check in ID: {{movementCode}}).',
+      checkIn: 'Operator {{farmer}} has edited check-in {{movementCode}} on {{date}}.',
     },
   },
 };

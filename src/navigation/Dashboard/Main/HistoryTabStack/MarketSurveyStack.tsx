@@ -16,7 +16,7 @@ import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 
-import { dashboardHeaderFactory } from '../../lib/dashboardHeaderFactory';
+import { useDashboardHeader, type DashboardHeaderFactory } from '../../lib/dashboardHeaderFactory';
 
 export type MarketSurveyStackRoutes = {
   MarketSurveyBase: {
@@ -56,31 +56,35 @@ const Stack = createNativeStackNavigator<MarketSurveyStackRoutes>();
 
 export default function MarketSurveyStack() {
   const { t } = useTranslationUtils();
+  const dashboardHeaderFactory = useDashboardHeader();
 
-  const screenOptions: ScreenOptions = useCallback((props) => {
-    // eslint-disable-next-line react/prop-types
-    const routeName = props.route.name;
+  const screenOptions: ScreenOptions = useCallback(
+    (props) => {
+      // eslint-disable-next-line react/prop-types
+      const routeName = props.route.name;
 
-    // eslint-disable-next-line react/prop-types
-    const farmer = (props.route.params as { farmer: string })?.farmer;
+      // eslint-disable-next-line react/prop-types
+      const farmer = (props.route.params as { farmer: string })?.farmer;
 
-    const translationPath = NAVIGATOR_HEADERS[routeName];
-    const routeTitle = translationPath ? t(translationPath, { farmer }) : undefined;
+      const translationPath = NAVIGATOR_HEADERS[routeName];
+      const routeTitle = translationPath ? t(translationPath, { farmer }) : undefined;
 
-    return {
-      ...props,
-      header: (headerProps) => (
-        <NavigatorHeader
-          {...headerProps}
-          routeTitle={routeTitle}
-          // eslint-disable-next-line react/prop-types
-          {..._renderContentFactory(routeName, props.navigation)}
-        />
-      ),
-      gestureDirection: 'vertical',
-      animationDuration: 180,
-    };
-  }, []);
+      return {
+        ...props,
+        header: (headerProps) => (
+          <NavigatorHeader
+            {...headerProps}
+            routeTitle={routeTitle}
+            // eslint-disable-next-line react/prop-types
+            {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory)}
+          />
+        ),
+        gestureDirection: 'vertical',
+        animationDuration: 180,
+      };
+    },
+    [dashboardHeaderFactory]
+  );
 
   return (
     <Stack.Navigator initialRouteName="MarketSurveyBase" screenOptions={screenOptions}>
@@ -93,7 +97,8 @@ export default function MarketSurveyStack() {
 
 function _renderContentFactory(
   routeName: MarketSurveyStackRoutePaths,
-  navigation: NativeStackNavigationProp<MarketSurveyStackRoutes, MarketSurveyStackRoutePaths>
+  navigation: NativeStackNavigationProp<MarketSurveyStackRoutes, MarketSurveyStackRoutePaths>,
+  dashboardHeaderFactory: DashboardHeaderFactory
 ): NavigationHeaderProps {
   switch (routeName) {
     case 'MarketSurveyBase':
@@ -103,6 +108,6 @@ function _renderContentFactory(
         leftContent: <Appbar.BackAction onPress={navigation.goBack} size={22} />,
       };
     default:
-      return dashboardHeaderFactory(navigation);
+      return dashboardHeaderFactory();
   }
 }

@@ -68,7 +68,7 @@ export function GeneralContent() {
             {t(`Dashboard.Analytics.companyTab.revenueLabel`)}
           </Text>
           <Text variant="TextBold" tw="text-lg text-white font-bold">
-            {companyData?.compRevenue[0]?.toLocaleString('en-US', {
+            {companyData?.compRevenue?.[0]?.toLocaleString('en-US', {
               style: 'currency',
               currency: companyData?.currency[0],
             })}

@@ -14,7 +14,10 @@ import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
-import { dashboardHeaderFactory } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
+import {
+  useDashboardHeader,
+  type DashboardHeaderFactory,
+} from '#navigation/Dashboard/lib/dashboardHeaderFactory';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
 import type { CoolingUnit, Crate, DashboardProduce, Farmer } from '#types/global';
@@ -68,34 +71,38 @@ const Stack = createNativeStackNavigator<MainTabStackRoutes>();
 
 export default function MainTabStack() {
   const { t } = useTranslationUtils();
+  const dashboardHeaderFactory = useDashboardHeader();
 
-  const screenOptions: ScreenOptions = useCallback((props) => {
-    // eslint-disable-next-line react/prop-types
-    const routeName = props.route.name;
-    // eslint-disable-next-line react/prop-types
-    const produce = (props.route.params as { produce: DashboardProduce })?.produce;
+  const screenOptions: ScreenOptions = useCallback(
+    (props) => {
+      // eslint-disable-next-line react/prop-types
+      const routeName = props.route.name;
+      // eslint-disable-next-line react/prop-types
+      const produce = (props.route.params as { produce: DashboardProduce })?.produce;
 
-    const firstName = useAuthStore.getState().user?.firstName;
+      const firstName = useAuthStore.getState().user?.firstName;
 
-    const translationPath = NAVIGATOR_HEADERS[routeName];
-    const datums = produce ? { produceCode: produce.movementCode } : { firstName };
-    const routeTitle = translationPath ? t(translationPath, datums) : undefined;
+      const translationPath = NAVIGATOR_HEADERS[routeName];
+      const datums = produce ? { produceCode: produce.movementCode } : { firstName };
+      const routeTitle = translationPath ? t(translationPath, datums) : undefined;
 
-    return {
-      ...props,
-      header: (headerProps) =>
-        translationPath !== NAVIGATOR_HEADERS.CheckInStack && (
-          <NavigatorHeader
-            {...headerProps}
-            routeTitle={routeTitle}
-            // eslint-disable-next-line react/prop-types
-            {..._renderContentFactory(routeName, props.navigation, t)}
-          />
-        ),
-      gestureDirection: 'vertical',
-      animationDuration: 180,
-    };
-  }, []);
+      return {
+        ...props,
+        header: (headerProps) =>
+          translationPath !== NAVIGATOR_HEADERS.CheckInStack && (
+            <NavigatorHeader
+              {...headerProps}
+              routeTitle={routeTitle}
+              // eslint-disable-next-line react/prop-types
+              {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory, t)}
+            />
+          ),
+        gestureDirection: 'vertical',
+        animationDuration: 180,
+      };
+    },
+    [dashboardHeaderFactory]
+  );
 
   return (
     <Stack.Navigator initialRouteName="RootMainTabStack" screenOptions={screenOptions}>
@@ -110,6 +117,7 @@ export default function MainTabStack() {
 function _renderContentFactory(
   routeName: MainTabStackRoutePaths,
   navigation: NativeStackNavigationProp<MainTabStackRoutes, MainTabStackRoutePaths>,
+  dashboardHeaderFactory: DashboardHeaderFactory,
   t: Translator
 ): NavigationHeaderProps {
   switch (routeName) {
@@ -128,6 +136,6 @@ function _renderContentFactory(
         ),
       };
     default:
-      return dashboardHeaderFactory(navigation);
+      return dashboardHeaderFactory();
   }
 }

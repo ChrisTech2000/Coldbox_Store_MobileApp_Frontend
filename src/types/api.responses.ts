@@ -363,6 +363,28 @@ export type GetCoolingUnitTemperaturesResponse = Array<{
   value: string;
 }>;
 
+export type GetNotificationsResponse = Array<{
+  id: number;
+  coolingUnitName: string | null;
+  crates: {
+    crop: string;
+    farmer: string;
+    checkinDate: string;
+    coolingUnit: string;
+  };
+  movementCode: string;
+  seen: boolean;
+  date: string;
+  specificId: number;
+  eventType:
+    | 'SENSOR_ERROR'
+    | 'TIME_TO_PICKUP'
+    | 'MARKET_SURVEY'
+    | 'FARMER_SURVEY'
+    | 'CHECKIN_EDITED';
+  user: number;
+}>;
+
 export type VerifyFigorrSensorConnectivityResponse = Array<{
   id: string;
   deviceTag: string;

@@ -16,7 +16,6 @@ import type {
   GetDashboardProducesParams,
   GetFarmerCratesParams,
   GetFarmerDashboardProducesParams,
-  GetFarmerParams,
   GetOperatorFarmersParams,
   GetLocationParams,
   CheckInParams,
@@ -164,11 +163,24 @@ class ColdtivateService extends HttpClient {
   };
 
   ///////// FARMER
-  public getFarmer = async (params: GetFarmerParams): Promise<GetFarmerResponse | undefined> => {
+  public getFarmerByUserId = async (userId: number): Promise<GetFarmerResponse | undefined> => {
     try {
       const { data } = await this.get<GetFarmerResponse>(EUserEndpoints.GET_FARMER, {
-        params,
+        params: { userId },
       });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getFarmerById = async (farmerId: number) => {
+    try {
+      const { data } = await this.get<Omit<Farmer, 'coolingUnits' | 'companies'> | undefined>(
+        subs(EUserEndpoints.UPDATE_FARMER, { farmerId })
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

@@ -8,7 +8,7 @@ import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView'
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import { useAuthStore } from '#stores/auth';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
@@ -23,23 +23,28 @@ import GenderField from '../AddCoolingUser/modules/GenderField';
 import ContactField from '../AddCoolingUser/modules/ContactField';
 import LanguageField from '../AddCoolingUser/modules/LanguageField';
 
+import FarmerDashboardData from './components/FarmerDashboardData';
 import DeleteAction from './components/DeleteAction';
 
-function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
+import { DataLoader } from './utils';
+
+export const STATIC_START_DATE = '2022-10-01';
+export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
+
+function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const { params } = props.route;
 
-  const operator = useAuthStore(useShallow((store) => store.user));
-
+  const currentUser = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
-  const { data, isLoading, refetch } = useApiCall(
-    'getFarmer',
-    ColdtivateService.getFarmer,
-    { userId: params?.userId as number },
+  const { data, isLoading, refetch, hasError } = useApiCall(
+    GET_FARMER_RECORD_SWR_KEY,
+    DataLoader.loadFarmerRecord,
+    params.farmerId,
     {
-      skip: !params?.userId,
-      defaultData: [],
+      skip: !params?.farmerId,
+      defaultData: undefined,
     }
   );
 
@@ -51,16 +56,14 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
     );
   }
 
-  const contextualFarmer = data?.at(0);
-
   async function revalidateCUCache(): Promise<void> {
-    await mutate(getQueryKey('getOperatorFarmers', { operator: operator?.id }));
+    await mutate(getQueryKey('getOperatorFarmers', { operator: currentUser?.id }));
   }
 
   async function onSubmit(values: FormValues): Promise<void> {
     try {
       const userDatum = await ColdtivateService.updateUser({
-        userId: params.userId,
+        userId: data?.user.id as number,
         firstName: values.firstName,
         lastName: values.lastName,
         phone: values.phone,
@@ -69,10 +72,10 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
         parentName: values.parentName,
       });
 
-      if (typeof userDatum !== 'undefined' && typeof contextualFarmer !== 'undefined') {
+      if (typeof userDatum !== 'undefined' && typeof data !== 'undefined') {
         await ColdtivateService.updateFarmer({
-          farmerId: contextualFarmer.id,
-          country: contextualFarmer.country,
+          farmerId: data.id,
+          country: data.country,
           parentName: values.parentName,
           updateUser: true,
         });
@@ -85,7 +88,7 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
   }
 
   return (
-    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(contextualFarmer)}>
+    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(data)}>
       {({ submitHandler, isSubmitting }) => (
         <KeyboardAwareScrollView
           contentContainerStyle="flex-1 justify-between pt-6 pb-8 mx-4"
@@ -101,6 +104,24 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
             <LanguageField />
           </View>
           <View tw="mt-5">
+            <FarmerDashboardData farmerId={params.farmerId} />
+
+            <Button
+              tw="w-full mb-4"
+              mode="contained"
+              onPress={(evt) => {
+                evt.stopPropagation();
+                props.navigation.navigate('CoolingUsersSurvey', {
+                  farmerId: params.farmerId,
+                });
+              }}
+              disabled={!data || hasError}
+              icon="newspaper"
+              uppercase
+            >
+              {t('navigation.history.BaseSurvey')}
+            </Button>
+
             <Button
               tw="w-full mb-4"
               mode="contained"
@@ -116,7 +137,8 @@ function EditCoolingUser(props: ManagementRouteProps<'EditCoolingUser'>) {
             </Button>
 
             <DeleteAction
-              userId={params.userId}
+              farmerId={params.farmerId}
+              userId={data?.user.id as number}
               isSubmitting={isSubmitting}
               goBack={props.navigation.goBack}
               revalidateCache={revalidateCUCache}
