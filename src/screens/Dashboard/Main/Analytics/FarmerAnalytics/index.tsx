@@ -42,7 +42,7 @@ export function FarmerAnalytics() {
   const { data: coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
     'getCoolingUnits',
     ColdtivateService.getCoolingUnits,
-    { company: farmerResponse?.[0]?.companies[0] as number }, // TODO: are we supposed to get all
+    { company: farmerResponse?.[0]?.companies[0] as number }, // TODO: are we supposed to get all?
     {
       skip: !farmerResponse?.[0]?.companies[0],
       defaultData: [],
