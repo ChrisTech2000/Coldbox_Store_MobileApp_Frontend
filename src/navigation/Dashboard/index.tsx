@@ -25,7 +25,7 @@ import NotificationsDrawerContent from './components/NotificationsDrawerContent'
 import AboutStack from './About';
 import KnowledgeHubStack from './KnowledgeHub';
 
-import { useNotifications } from './lib/notifications';
+import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
 
 export type DashboardRoutes = {
   Main: undefined;
@@ -63,6 +63,8 @@ function DashboardNavigationRouter() {
       defaultData: undefined,
     }
   );
+
+  useNotificationOpenSurveyListener();
 
   return (
     <NavigationDrawer.Navigator

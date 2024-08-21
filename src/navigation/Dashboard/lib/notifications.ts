@@ -1,10 +1,15 @@
 import { useShallow } from 'zustand/react/shallow';
+import { useNavigation } from '@react-navigation/native';
 
 import { dateFmt, type Translator, useTranslationUtils } from '#i18n/utils';
 import { ERoles, type User } from '#types/global';
 import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
 import { type IApiQueryOptions, useApiCall } from '#services/hooks/useAPiCall';
+
+import type { EditCoolingUserStackRoutes } from '../Management/EditCoolingUserStack';
+import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
+import { useAppEventListener } from '#ui/lib/emitter';
 
 function _buildFetcher(t: Translator) {
   return async function fetchNotifications(user: User) {
@@ -85,4 +90,54 @@ export function useNotifications(opts?: IApiQueryOptions<ProcessedNotifications>
     skip: !user?.id,
     defaultData: { notifications: [], newNotificationsCount: 0 },
   });
+}
+
+export type NotificationOpenSurveyEventDatums =
+  | {
+      eventType: 'FARMER_SURVEY';
+      datums: EditCoolingUserStackRoutes['CoolingUsersSurvey'];
+    }
+  | {
+      eventType: 'MARKET_SURVEY';
+      datums: MarketSurveyStackRoutes['MarketSurveyBase'];
+    };
+
+export function useNotificationOpenSurveyListener() {
+  // eslint-disable-next-line
+  const navigation = useNavigation<any>();
+
+  useAppEventListener<[NotificationOpenSurveyEventDatums]>(
+    'DISPATCH_NOTIFICATION_OPEN_SURVEY',
+    ({ eventType, datums }) => {
+      switch (eventType) {
+        case 'MARKET_SURVEY': {
+          navigation.navigate('Main', {
+            screen: 'History',
+            params: {
+              screen: 'MarketSurveyStack',
+              params: {
+                screen: 'MarketSurveyBase',
+                params: datums,
+              },
+            },
+          });
+          break;
+        }
+
+        case 'FARMER_SURVEY': {
+          navigation.navigate('Management', {
+            screen: 'EditCoolingUserStack',
+            params: {
+              screen: 'CoolingUsersSurvey',
+              params: datums,
+            },
+          });
+          break;
+        }
+
+        default:
+          break;
+      }
+    }
+  );
 }
