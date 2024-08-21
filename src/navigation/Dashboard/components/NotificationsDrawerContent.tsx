@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
+import { create } from 'zustand';
 import { View, FlatList, TouchableOpacity } from 'react-native';
-import { Divider } from 'react-native-paper';
+import { ActivityIndicator, Divider } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
 
@@ -11,6 +12,7 @@ import { useAuthStore } from '#stores/auth';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import NotificationService from '#services/NotificationService';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
 import { useManagementStore } from '#stores/management';
 
@@ -29,12 +31,22 @@ type Props = {
   notifications: Notifications;
 };
 
+const _useSettingUpSurvey = create<{
+  isLoading: boolean;
+  toggle: (value?: boolean) => void;
+}>((set) => ({
+  isLoading: false,
+  toggle: (value) => set((state) => ({ isLoading: value ?? !state.isLoading })),
+}));
+
 function NotificationsDrawerContent(props: Props) {
   const { notifications } = props;
 
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+
+  const isSettingUpSurvey = _useSettingUpSurvey(useShallow((store) => store.isLoading));
 
   const revalidate = useCallback(async () => {
     await mutate(getQueryKey('getNotifications', user));
@@ -48,8 +60,11 @@ function NotificationsDrawerContent(props: Props) {
 
   return (
     <View tw="flex-1 justify-start">
-      <View tw="p-4 bg-zinc-100 border-b-0.5 border-zinc-500">
+      <View tw="p-4 bg-zinc-100 border-b-0.5 border-zinc-500 flex flex-row items-center justify-between">
         <Text variant="TitleRegular">{t('Dashboard.Notifications.text.notifications')}</Text>
+        {isSettingUpSurvey ? (
+          <ActivityIndicator size={18} color={paperTheme.colors.backdrop} animating />
+        ) : null}
       </View>
 
       <FlatList
@@ -79,14 +94,18 @@ function _NotificationItem({
 }) {
   const managementCompany = useManagementStore(useShallow((store) => store.company)); // RE & OP
 
+  const isSettingUpSurvey = _useSettingUpSurvey(useShallow((store) => store.isLoading));
+  const toggleSettingUpSurveyStatus = _useSettingUpSurvey((store) => store.toggle);
+
   async function updateStatusHandler(notificationId: number): Promise<void> {
+    toggleSettingUpSurveyStatus();
     if (!item.seen) {
       const result = await NotificationService.updateNotificationStatus(item.id);
       if (result?.id) await revalidate();
     }
 
     const notification = findNotificationById(notificationId);
-    if (typeof notification === 'undefined') return;
+    if (typeof notification === 'undefined') return toggleSettingUpSurveyStatus();
 
     const farmers = await ColdtivateService.getFarmers();
 
@@ -102,7 +121,7 @@ function _NotificationItem({
 
     switch (notification.eventType) {
       case 'FARMER_SURVEY': {
-        if (typeof contextualFarmerId === 'undefined') return;
+        if (typeof contextualFarmerId === 'undefined') return toggleSettingUpSurveyStatus();
 
         const datums = {
           eventType: 'FARMER_SURVEY',
@@ -110,6 +129,7 @@ function _NotificationItem({
         } satisfies NotificationOpenSurveyEventDatums;
 
         emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY, datums);
+        toggleSettingUpSurveyStatus();
         useRightDrawerStore.getState().toggle(false);
         break;
       }
@@ -125,7 +145,7 @@ function _NotificationItem({
           }
           continue;
         }
-        if (typeof contextualUnitId === 'undefined') return;
+        if (typeof contextualUnitId === 'undefined') return toggleSettingUpSurveyStatus();
 
         const movements = await ColdtivateService.getMovementsHistory({
           coolingUnit: contextualUnitId,
@@ -135,11 +155,11 @@ function _NotificationItem({
         const movementDetails = movements.find(
           (movement) => movement.code === notification.movementCode
         );
-        if (typeof movementDetails === 'undefined') return;
+        if (typeof movementDetails === 'undefined') return toggleSettingUpSurveyStatus();
 
         if (!movementDetails.marketSurveyDelay) {
           // TODO -> show toast notification because the survey cannot be filled at this time
-          return;
+          return toggleSettingUpSurveyStatus();
         }
 
         const movementCropsForSurvey = movementDetails.movementCrops
@@ -157,6 +177,7 @@ function _NotificationItem({
         } satisfies NotificationOpenSurveyEventDatums;
 
         emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY, datums);
+        toggleSettingUpSurveyStatus();
         useRightDrawerStore.getState().toggle(false);
         break;
       }
@@ -178,6 +199,7 @@ function _NotificationItem({
             console.error(exception);
           }
         }}
+        disabled={isSettingUpSurvey}
       >
         <Text
           variant={item.seen ? undefined : 'TextMedium'}
