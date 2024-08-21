@@ -129,7 +129,6 @@ function _NotificationItem({
         } satisfies NotificationOpenSurveyEventDatums;
 
         emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY, datums);
-        toggleSettingUpSurveyStatus();
         useRightDrawerStore.getState().toggle(false);
         break;
       }
@@ -177,11 +176,15 @@ function _NotificationItem({
         } satisfies NotificationOpenSurveyEventDatums;
 
         emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY, datums);
-        toggleSettingUpSurveyStatus();
         useRightDrawerStore.getState().toggle(false);
         break;
       }
+
+      default:
+        break;
     }
+
+    toggleSettingUpSurveyStatus();
   }
 
   return (
