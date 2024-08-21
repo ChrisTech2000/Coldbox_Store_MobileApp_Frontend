@@ -25,7 +25,9 @@ import LocationField from './modules/Location';
 import CountryField from './modules/CountryField';
 import DeleteAccountAction from './components/DeleteAccountAction';
 
-function AccountDetails() {
+import type { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
+
+function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   const user = useAuthStore(useShallow((store) => store.user));
   const [farmerParentName, farmerUserCode, farmerCountry, farmerId] = useDashboardStore(
     useShallow((store) => [
@@ -104,7 +106,7 @@ function AccountDetails() {
           <ContactFields />
           <GenderField />
 
-          <RBAC.ProtectedResource action="VIEW" subject="FarmerFormFields">
+          <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
             <LocationField />
             <CountryField />
             <View tw="w-full bg-zinc-200 flex-row items-center justify-between p-3 rounded-md my-1.5">
@@ -114,7 +116,24 @@ function AccountDetails() {
           </RBAC.ProtectedResource>
 
           <View tw="space-y-4 mt-4">
+            <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
+              <Button
+                tw="w-full mb-4"
+                mode="outlined"
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  if (!farmerId) return; // safe guard
+                  props.navigation.navigate('CoolingUsersSurvey', { farmerId });
+                }}
+                icon="newspaper"
+                uppercase
+              >
+                {t('navigation.history.BaseSurvey')}
+              </Button>
+            </RBAC.ProtectedResource>
+
             <DeleteAccountAction />
+
             <Button
               tw="w-full"
               mode="contained"
