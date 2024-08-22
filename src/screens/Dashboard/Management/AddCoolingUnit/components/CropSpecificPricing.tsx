@@ -100,8 +100,7 @@ export default function CropSpecificPricing() {
         <Modal visible={isVisible} onDismiss={toggleVisibility}>
           <View
             tw={cn(
-              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2',
-              datums.length > 4 && 'h-2/3'
+              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2'
             )}
           >
             <Text variant="TitleRegular" tw="px-6">
