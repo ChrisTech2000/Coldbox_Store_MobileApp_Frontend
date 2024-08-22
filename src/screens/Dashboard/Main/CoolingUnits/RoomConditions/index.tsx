@@ -95,7 +95,7 @@ function CoolingUnitsRoomConditions() {
         </React.Fragment>
       ) : (
         <View tw="mx-2 mt-4">
-          <Text style={{ color: paperTheme.colors.primary }}>
+          <Text tw="text-green-primary text-center">
             {t('Dashboard.CoolingUnitsCratesInfo.messages.empty')}
           </Text>
         </View>
