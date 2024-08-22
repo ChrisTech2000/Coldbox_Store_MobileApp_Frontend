@@ -13,8 +13,9 @@ import { useRightDrawerStore } from '#navigation/Dashboard';
 import { cn } from '#ui/lib/cn';
 import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
 
-import { _useSettingUpSurvey, type CommoditySurveyDatum, type Notification } from '../index';
+import { useSettingUpSurvey, type CommoditySurveyDatum, type Notification } from '../index';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 
 export default function NotificationItem({
   item,
@@ -27,8 +28,8 @@ export default function NotificationItem({
 }) {
   const managementCompany = useManagementStore(useShallow((store) => store.company));
 
-  const isSettingUpSurvey = _useSettingUpSurvey(useShallow((store) => store.isLoading));
-  const toggleSettingUpSurveyStatus = _useSettingUpSurvey((store) => store.toggle);
+  const isSettingUpSurvey = useSettingUpSurvey(useShallow((store) => store.isLoading));
+  const toggleSettingUpSurveyStatus = useSettingUpSurvey((store) => store.toggle);
 
   async function updateStatusHandler(notificationId: number): Promise<void> {
     toggleSettingUpSurveyStatus();
@@ -83,11 +84,17 @@ export default function NotificationItem({
     const contextualCrop = crops.find((crop) => crop.name === notification.crates.crop);
     if (!contextualCrop) return toggleSettingUpSurveyStatus();
 
+    const contextualFarmerSurvey = surveys?.at(0);
     const datum: CommoditySurveyDatum = {
       farmerSurveysLength: list.length + 1,
       companyCurrency: managementCompany?.currency ?? 'NGN',
       crops,
       contextualCrop,
+      farmerId,
+      commoditySurveys: list,
+      userType: (contextualFarmerSurvey?.userType as EOccupation) ?? EOccupation.FARMER,
+      experience: contextualFarmerSurvey?.experience ? EExperience.OLD : EExperience.NEW,
+      experienceInMonths: contextualFarmerSurvey?.experienceDuration?.toString() ?? '1',
     };
 
     emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_COMMODITY_MODAL, datum);

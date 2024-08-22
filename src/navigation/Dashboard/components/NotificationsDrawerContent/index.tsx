@@ -8,7 +8,7 @@ import { useSWRConfig } from 'swr';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { Crop } from '#types/global';
+import type { Crop, FarmerSurvey } from '#types/global';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { useAuthStore } from '#stores/auth';
 import { getQueryKey } from '#services/hooks/useAPiCall';
@@ -19,6 +19,8 @@ import { type ProcessedNotifications } from '../../lib/notifications';
 import { useAppEventListener } from '#ui/lib/emitter';
 import NotificationItem from './components/NotificationItem';
 import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
+import ColdtivateService from '#services/ColdtivateService';
+import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 
 export type Notifications = ProcessedNotifications['notifications'];
 export type Notification = Notifications[0];
@@ -28,13 +30,18 @@ export type CommoditySurveyDatum = {
   companyCurrency: string;
   crops: Array<Crop | GetAllCropsResponse>;
   contextualCrop: Crop | GetAllCropsResponse;
+  userType: EOccupation;
+  experience: EExperience;
+  experienceInMonths: string;
+  farmerId: number;
+  commoditySurveys: Array<FarmerSurvey & { cropName: string }>;
 };
 
 type Props = {
   notifications: Notifications;
 };
 
-export const _useSettingUpSurvey = create<{
+export const useSettingUpSurvey = create<{
   isLoading: boolean;
   toggle: (value?: boolean) => void;
 }>((set) => ({
@@ -50,7 +57,7 @@ function NotificationsDrawerContent(props: Props) {
   const { mutate } = useSWRConfig();
 
   const [modalDatums, setModalDatums] = useState<CommoditySurveyDatum | undefined>(undefined);
-  const isSettingUpSurvey = _useSettingUpSurvey(useShallow((store) => store.isLoading));
+  const isSettingUpSurvey = useSettingUpSurvey(useShallow((store) => store.isLoading));
 
   const revalidate = useCallback(async () => {
     await mutate(getQueryKey('getNotifications', user));
@@ -100,8 +107,39 @@ function NotificationsDrawerContent(props: Props) {
             crops: modalDatums.crops,
           }}
           onDismiss={() => setModalDatums(undefined)}
-          onSubmit={console.log}
           initialCropSelection={modalDatums.contextualCrop}
+          onSubmit={async (values) => {
+            try {
+              await ColdtivateService.updateFarmerSurveys({
+                farmer: modalDatums.farmerId,
+                userType: modalDatums.userType,
+                experience: modalDatums.experience ? 'yes' : 'no',
+                experienceDuration: Number(modalDatums.experienceInMonths),
+                commodities: [
+                  ...modalDatums.commoditySurveys.filter(
+                    (commoditySurvey) => commoditySurvey.cropId !== modalDatums.contextualCrop.id
+                  ),
+                  {
+                    averagePrice: values.averagePrice,
+                    unit: values.unitOfMeasurement,
+                    quantityTotal: values.weightDistribution.totalProducedWeekly,
+                    quantityBelowMarketPrice: values.weightDistribution.quantityLost,
+                    quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
+                    quantitySold: values.weightDistribution.quantitySold,
+                    averageSeasonInMonths: null,
+                    kgInUnit: values.unitaryWeight as number,
+                    currency: modalDatums.companyCurrency,
+                    reasonForLoss: values.reasonsForSpoilage,
+                    cropId: modalDatums.contextualCrop.id,
+                  },
+                ],
+              });
+
+              setModalDatums(undefined);
+            } catch (error) {
+              console.error(error);
+            }
+          }}
         />
       ) : null}
     </View>
