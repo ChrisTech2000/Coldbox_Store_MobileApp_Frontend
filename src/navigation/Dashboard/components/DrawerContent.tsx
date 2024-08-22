@@ -3,16 +3,19 @@ import {
   type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { styled } from 'nativewind';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Drawer } from 'react-native-paper';
 
+import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
+
+import { Image } from '#ui/components/Image';
+
+import RBAC from '#common/RBAC';
 import type { TranslationPaths } from '#i18n/index';
 import type { Translator } from '#i18n/utils';
-import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 import { useAuthStore } from '#stores/auth';
-import { Image } from '#ui/components/Image';
-import RBAC from '#common/RBAC';
+import { useManagementStore } from '#stores/management';
 
 import type { DashboardRoutes } from '../index';
 
@@ -50,6 +53,12 @@ type Props = {
 export default function DrawerContent(props: Props) {
   const { routeNames, index } = props.state;
   const focusedRoute = routeNames[index];
+  const { reset: resetManagementStore } = useManagementStore();
+
+  const onLogout = useCallback(() => {
+    resetManagementStore();
+    useAuthStore.getState().revokeSession();
+  }, []);
 
   return (
     <StyledDrawerContentScrollView {...props} tw="flex-1">
@@ -81,11 +90,7 @@ export default function DrawerContent(props: Props) {
         ))}
       </Drawer.Section>
 
-      <Drawer.Item
-        label="Log-out"
-        onPress={() => useAuthStore.getState().revokeSession()}
-        icon="logout-variant"
-      />
+      <Drawer.Item label="Log-out" onPress={onLogout} icon="logout-variant" />
     </StyledDrawerContentScrollView>
   );
 }

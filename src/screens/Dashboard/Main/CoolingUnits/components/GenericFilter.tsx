@@ -66,14 +66,15 @@ Filter.CoolingUnits = function _CoolingUnitsFilter() {
     {
       skip:
         !userRole || userRole === ERoles.OPERATOR
-          ? typeof companyId === 'undefined'
-          : typeof userId === 'undefined',
+          ? typeof userId === 'undefined'
+          : typeof companyId === 'undefined',
       defaultData: [],
     }
   );
 
   return (
     <SelectWithStore<CoolingUnit>
+      emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
       datums={data ?? []}
       useScrollView={false}
       isModalVisible={isVisible}
