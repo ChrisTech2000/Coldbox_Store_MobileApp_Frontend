@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Divider, Portal, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
@@ -49,9 +49,13 @@ export function Select({
     <View>
       <Portal>
         <Modal visible={isModalOpen} onDismiss={onClick}>
+          <TouchableWithoutFeedback tw="bg-green-primary h-full" onPress={onClick}>
+            {/** This acts as the backdrop */}
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+          </TouchableWithoutFeedback>
           <View
             tw={cn(
-              'bg-white rounded-3xl w-2/3 max-w-2/3 h-auto py-2 self-center space-y-2',
+              'bg-white rounded-3xl w-2/3 max-w-2/3 py-2 self-center space-y-2',
               variant !== 'lg' ? 'max-h-72' : 'h-full'
             )}
           >
