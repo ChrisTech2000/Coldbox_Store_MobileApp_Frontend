@@ -136,6 +136,7 @@ function NotificationsDrawerContent(props: Props) {
               });
 
               setModalDatums(undefined);
+              await revalidate();
             } catch (error) {
               console.error(error);
             }
