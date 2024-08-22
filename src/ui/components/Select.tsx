@@ -49,9 +49,9 @@ export function Select({
     <View>
       <Portal>
         <Modal visible={isModalOpen} onDismiss={onClick}>
-          <TouchableWithoutFeedback tw="bg-green-primary h-full" onPress={onClick}>
+          <TouchableWithoutFeedback onPress={onClick}>
             {/** This acts as the backdrop */}
-            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+            <View tw="absolute top-0 bottom-0 left-o right-0" />
           </TouchableWithoutFeedback>
           <View
             tw={cn(
