@@ -83,7 +83,7 @@ export function Select({
       >
         <Text
           tw={cn(
-            variant === 'sm' ? 'text-green-primary' : 'text-gray-600 text-base w-[90%]',
+            variant === 'sm' ? 'text-green-primary' : 'text-gray-600 text-base',
             minifyLabel && currentValue && 'text-xs',
             error && 'text-red-700',
             props.disabled && 'text-gray-400'

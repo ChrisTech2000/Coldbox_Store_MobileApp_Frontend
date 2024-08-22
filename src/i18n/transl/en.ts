@@ -17,7 +17,7 @@ const en = {
       SignUp: 'Sign up',
       ForgotPassword: 'Forgot Password',
       PasswordReset: 'Reset',
-      AppInfo: 'सामान्यतःपूछे जाने वाले प्रश्न',
+      AppInfo: 'App info',
     },
     management: {
       Root: 'Management',
@@ -794,6 +794,8 @@ const en = {
     },
     History: {
       priceLabel: 'Price',
+      empty:
+        'Check-ins and check-outs will appear in the dashboard when you do at least one check-in in any room.',
       sortMenuOptions: {
         cropType: 'Crop type',
         movementDate: 'Movement date (first to latest)',
