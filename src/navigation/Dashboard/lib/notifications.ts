@@ -7,7 +7,6 @@ import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
 import { type IApiQueryOptions, useApiCall } from '#services/hooks/useAPiCall';
 
-import type { EditCoolingUserStackRoutes } from '../Management/EditCoolingUserStack';
 import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
 import { useAppEventListener } from '#ui/lib/emitter';
 
@@ -92,15 +91,10 @@ export function useNotifications(opts?: IApiQueryOptions<ProcessedNotifications>
   });
 }
 
-export type NotificationOpenSurveyEventDatums =
-  | {
-      eventType: 'FARMER_SURVEY';
-      datums: EditCoolingUserStackRoutes['CoolingUsersSurvey'];
-    }
-  | {
-      eventType: 'MARKET_SURVEY';
-      datums: MarketSurveyStackRoutes['MarketSurveyBase'];
-    };
+export type NotificationOpenSurveyEventDatums = {
+  eventType: 'MARKET_SURVEY';
+  datums: MarketSurveyStackRoutes['MarketSurveyBase'];
+};
 
 export function useNotificationOpenSurveyListener() {
   // eslint-disable-next-line
@@ -110,8 +104,8 @@ export function useNotificationOpenSurveyListener() {
     'DISPATCH_NOTIFICATION_OPEN_SURVEY',
     ({ eventType, datums }) => {
       switch (eventType) {
-        case 'MARKET_SURVEY': {
-          navigation.navigate('Main', {
+        case 'MARKET_SURVEY':
+          return navigation.navigate('Main', {
             screen: 'History',
             params: {
               screen: 'MarketSurveyStack',
@@ -121,22 +115,8 @@ export function useNotificationOpenSurveyListener() {
               },
             },
           });
-          break;
-        }
-
-        case 'FARMER_SURVEY': {
-          navigation.navigate('Management', {
-            screen: 'EditCoolingUserStack',
-            params: {
-              screen: 'CoolingUsersSurvey',
-              params: datums,
-            },
-          });
-          break;
-        }
-
         default:
-          break;
+          return;
       }
     }
   );

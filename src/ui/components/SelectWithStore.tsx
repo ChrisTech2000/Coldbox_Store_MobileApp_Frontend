@@ -17,9 +17,9 @@ export type SelectStore<T> = {
   onSelect: (item: T) => void;
 };
 
-export const createSelectStore = <T,>() =>
+export const createSelectStore = <T,>(initialState?: T) =>
   create<SelectStore<T>>((set) => ({
-    selectedItem: null,
+    selectedItem: initialState ?? null,
     onSelect: (item) => set({ selectedItem: item }),
   }));
 
