@@ -30,7 +30,10 @@ const _FilterContext = createContext<FilterContext>({
 export default function Filter(props: PropsWithChildren) {
   const user = useAuthStore(useShallow((store) => store.user));
   const managementCompany = useManagementStore(useShallow((store) => store.company)); // RE & OP
-  const company = useCompanyStore(useShallow((store) => store.selectedItem)); // CU
+  const farmerCompanies = useDashboardStore(useShallow((store) => store.farmerCompanies));
+  const company = farmerCompanies?.length
+    ? useCompanyStore(useShallow((store) => store.selectedItem))
+    : null; // CU
 
   const values = useMemo(
     () => ({

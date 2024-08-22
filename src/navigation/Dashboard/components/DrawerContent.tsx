@@ -53,7 +53,7 @@ type Props = {
 export default function DrawerContent(props: Props) {
   const { routeNames, index } = props.state;
   const focusedRoute = routeNames[index];
-  const { reset: resetManagementStore } = useManagementStore();
+  const resetManagementStore = useManagementStore((store) => store.reset);
 
   const onLogout = useCallback(() => {
     resetManagementStore();
