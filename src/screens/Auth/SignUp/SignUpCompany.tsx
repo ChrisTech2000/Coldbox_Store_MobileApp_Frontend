@@ -36,7 +36,6 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
     watch,
     setValue,
     clearErrors,
-    reset,
     formState: { errors },
   } = useForm<SignUpCompanySchemaType>({
     resolver: zodResolver(() => SignUpAsCompanySchema(t)),
@@ -128,7 +127,6 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
 
     if (result) {
       closePhoneWarningModal();
-      reset();
       navigation.navigate('SignIn');
     }
   }, []);
