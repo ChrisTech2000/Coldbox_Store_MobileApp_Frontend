@@ -735,6 +735,9 @@ export default {
           KILOGRAMS: 'किलोग्राम',
           CRATES: 'टोकरी',
         },
+        toasts: {
+          addSuccess: 'शीतलन इकाई को सफलतापूर्वक जोड़ा गया',
+        },
       },
       EditCoolingUnit: {
         modal: {
@@ -744,6 +747,11 @@ export default {
         buttons: {
           viewExisting: 'मौजूदा देखें',
           editPricing: 'Edit Pricing',
+        },
+        toasts: {
+          editSuccess: 'शीतलन इकाई को सफलतापूर्वक संपादित किया गया',
+          cantDelete: 'इस शीतलन इकाई को हटाया नहीं जा सकता क्योंकि इसमें सक्रिय चेक-इन हैं।',
+          successDelete: 'कूलिंग यूनिट {{name}} को सफलतापूर्वक मिटा दिया गया।',
         },
       },
       UsageAnalysis: {

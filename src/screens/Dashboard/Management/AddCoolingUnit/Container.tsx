@@ -18,6 +18,7 @@ import FormManager, { type PreprocessedFormValues, type FormValues } from './con
 import FormFields from './components/FormFields';
 import DataAggregator from './contexts/DataAggregator';
 import { METRIC_UNITS, PRICING_TYPE } from './constants';
+import InAppNotifications from '#common/InAppNotifications';
 
 type Props = {
   companyId: number | undefined;
@@ -30,6 +31,8 @@ export default function ScreenContainer(props: Props) {
   const { isLoading } = DataAggregator.useDataAggregator();
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+
+  const toast = InAppNotifications.useToast();
 
   if (isLoading) {
     return (
@@ -92,6 +95,10 @@ export default function ScreenContainer(props: Props) {
         roomWidth: values.roomWidth,
         coolingUnitType: values.coolingUnitType ?? '',
         editableCheckins: values.editableCheckins,
+      });
+
+      toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.addSuccess'), {
+        type: 'md_success',
       });
 
       await mutate(getQueryKey('getLocations', props.companyId));

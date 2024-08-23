@@ -25,10 +25,7 @@ type ToastContentProps = {
 function _ToastContent(props: ToastContentProps) {
   const { message, backgroundColor, textColor, style } = props;
   return (
-    <View
-      tw="w-auto max-w-5/6 rounded-md p-3 shadow-black/20 my-2"
-      style={[style, { backgroundColor }]}
-    >
+    <View tw="w-auto max-w-5/6 rounded-md p-3 my-2" style={[style, { backgroundColor }]}>
       <Text variant="TextMedium" tw="text-md" style={{ color: textColor }}>
         {message}
       </Text>

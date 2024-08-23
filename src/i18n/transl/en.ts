@@ -731,6 +731,9 @@ const en = {
           KILOGRAMS: 'kg',
           CRATES: 'Crate',
         },
+        toasts: {
+          addSuccess: 'Successfully added cooling unit',
+        },
       },
       EditCoolingUnit: {
         modal: {
@@ -740,6 +743,11 @@ const en = {
         buttons: {
           viewExisting: 'View Existing',
           editPricing: 'Edit Pricing',
+        },
+        toasts: {
+          editSuccess: 'Successfully edited cooling unit',
+          cantDelete: "This cooling unit can't be deleted because it has active check-ins.",
+          successDelete: 'Cooling unit {{name}} was successfully deleted.',
         },
       },
       UsageAnalysis: {
