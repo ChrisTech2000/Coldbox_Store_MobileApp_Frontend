@@ -581,6 +581,15 @@ const en = {
         messages: {
           operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
         },
+        toasts: {
+          error: 'Phone already assigned. Try a different one',
+          success: 'Successfully invited operator',
+        },
+      },
+      EditOperator: {
+        toasts: {
+          success: 'Successfully edited operator',
+        },
       },
       CompanyDetails: {
         labels: {
@@ -612,6 +621,9 @@ const en = {
       },
       AddRegisteredEmployee: {
         message: 'To join the Coldtivate app as a Registered Employee, go to: {{link}}',
+        toasts: {
+          success: 'Successfully invited registered employee',
+        },
       },
       CoolingUsers: {
         modals: {

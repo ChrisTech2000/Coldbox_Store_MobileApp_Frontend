@@ -19,6 +19,7 @@ import { EApiGender } from '#types/global';
 import FormManager, { type FormValues } from './components/FormManager';
 import GenderField from './modules/GenderField';
 import CoolingUnitsField from './modules/CoolingUnitsField';
+import InAppNotifications from '#common/InAppNotifications';
 
 const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
 
@@ -28,6 +29,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
 
   const { mutate } = useSWRConfig();
   const company = useManagementStore(useShallow((store) => store.company));
+  const toast = InAppNotifications.useToast();
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const { t } = useTranslationUtils();
@@ -72,6 +74,8 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
         coolingUnits: values.coolingUnits,
         userId,
       });
+
+      toast.show(t('Dashboard.Management.EditOperator.toasts.success'), { type: 'md_success' });
 
       await Promise.all([
         mutate(getQueryKey('getOperatorByUserId', userId)),

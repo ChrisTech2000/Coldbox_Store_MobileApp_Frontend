@@ -583,6 +583,15 @@ export default {
         messages: {
           operator: 'एक ऑपरेटर के रूप में Coldtivate ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
         },
+        toasts: {
+          error: 'Phone already assigned. Try a different one',
+          success: 'ऑपरेटर को सफलतापूर्वक आमंत्रित किया गया',
+        },
+      },
+      EditOperator: {
+        toasts: {
+          success: 'परिचालक को सफलतापूर्वक संपादित किया गया',
+        },
       },
       CompanyDetails: {
         labels: {
@@ -616,6 +625,9 @@ export default {
       AddRegisteredEmployee: {
         message:
           'एक पंजीकृत कर्मचारी के रूप में कोल्डटिवेट ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
+        toasts: {
+          success: 'पंजीकृत कर्मचारी को सफलतापूर्वक आमंत्रित किया गया',
+        },
       },
       CoolingUsers: {
         modals: {
