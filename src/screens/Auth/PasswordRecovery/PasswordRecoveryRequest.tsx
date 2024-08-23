@@ -60,7 +60,7 @@ function PasswordRecoveryRequest() {
         render={({ field: { onChange, value } }) => (
           <TextInput
             tw="w-[95%] text-base border bg-white rounded-sm h-12"
-            label={t('Auth.ForgotPassword.instructions')}
+            label={t('Auth.ForgotPassword.phoneInputLabel')}
             left={<TextInput.Icon icon="phone" />}
             onChangeText={onChange}
             value={value}

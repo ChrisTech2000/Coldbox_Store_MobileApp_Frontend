@@ -23,9 +23,13 @@ import { InnerTabs, Tab } from './components/InnerTabs';
 import { useFarmerAnalyticsData } from './store';
 
 export function FarmerAnalytics() {
-  const { user } = useAuthStore();
   const { t } = useTranslationUtils();
-  const { configData, setConfigData, setFarmer } = useFarmerAnalyticsData();
+  const user = useAuthStore((store) => store.user);
+  const { configData, setConfigData, setFarmer } = useFarmerAnalyticsData((store) => ({
+    configData: store.configData,
+    setConfigData: store.setConfigData,
+    setFarmer: store.setFarmer,
+  }));
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
@@ -124,6 +128,7 @@ export function FarmerAnalytics() {
               activeTab={activeTab}
               onTabSelection={(tab: Tab) => setActiveTab(tab)}
               compactMode
+              disabled={!coolingUnits?.length}
             />
 
             <View tw="items-center">
@@ -197,7 +202,7 @@ export function FarmerAnalytics() {
                 <InnerTabs
                   activeTab={activeTab}
                   onTabSelection={(tab: Tab) => setActiveTab(tab)}
-                  disabled={!configData}
+                  disabled={!configData || !coolingUnits?.length}
                 />
               }
             />

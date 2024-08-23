@@ -8,6 +8,8 @@ import { ERoles, type Farmer, type Company, type CoolingUnit } from '#types/glob
 import { useAuthStore } from './auth';
 
 type State = {
+  isLoading: boolean;
+
   farmerId: number | null;
   farmerParentName: string | null;
   farmerCountry: string | null;
@@ -28,9 +30,11 @@ type Actions = {
   fetchGlobalInformation: (userId: number) => Promise<void>;
   setCoolingUnits: (units: Array<CoolingUnit>) => void;
   patchFarmer: (datum: FarmerDatum) => void;
+  setIsLoading: (val: boolean) => void;
 };
 
 export const useDashboardStore = create<State & Actions>((set) => ({
+  isLoading: false,
   farmerId: null,
   farmerCountry: null,
   farmerParentName: null,
@@ -75,14 +79,24 @@ export const useDashboardStore = create<State & Actions>((set) => ({
       refreshData: state.refreshData ? [...state.refreshData, fn] : [fn],
     })),
   patchFarmer: (datum) => set((prev) => ({ ...prev, ...datum })),
+  setIsLoading: (isLoading) => set({ isLoading }),
 }));
 
 export const useGlobalInformation = (isAuthenticated: boolean) => {
-  const fetchGlobalInformation = useDashboardStore((store) => store.fetchGlobalInformation);
+  const { isLoading, setIsLoading, fetchGlobalInformation } = useDashboardStore((store) => ({
+    isLoading: store.isLoading,
+    setIsLoading: store.setIsLoading,
+    fetchGlobalInformation: store.fetchGlobalInformation,
+  }));
+
   const user = useAuthStore(useShallow((store) => store.user));
 
   useEffect(() => {
     if (!isAuthenticated || !user?.id || user.role !== ERoles.COOLING_USER) return;
-    void fetchGlobalInformation(user?.id);
+
+    setIsLoading(true);
+    fetchGlobalInformation(user?.id).finally(() => setIsLoading(false));
   }, [isAuthenticated, user]);
+
+  return { isLoading };
 };

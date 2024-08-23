@@ -15,7 +15,8 @@ type State = {
 };
 
 type Actions = {
-  setCompany: (companyId: State['company']) => void;
+  setCompany: (company: ManagementCompany) => void;
+  reset: () => void;
 };
 
 export const useManagementStore = create(
@@ -23,7 +24,11 @@ export const useManagementStore = create(
     (set) => ({
       company: null,
       setCompany: (company) => set({ company }),
+      reset: () => set({ company: null }),
     }),
-    { name: 'management', storage }
+    {
+      name: 'management',
+      storage,
+    }
   )
 );

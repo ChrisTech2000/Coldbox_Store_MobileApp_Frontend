@@ -116,6 +116,26 @@ export default function CommoditiesField() {
                         uppercase
                         onPress={(evt) => {
                           evt.stopPropagation();
+                          setInternalSelection(datums.map(([id]) => id));
+                        }}
+                      >
+                        {t('actions.all')}
+                      </Button>
+                      <Button
+                        mode="text"
+                        uppercase
+                        onPress={(evt) => {
+                          evt.stopPropagation();
+                          setInternalSelection([]);
+                        }}
+                      >
+                        {t('actions.none')}
+                      </Button>
+                      <Button
+                        mode="text"
+                        uppercase
+                        onPress={(evt) => {
+                          evt.stopPropagation();
                           setInternalSelection(selectedCrops);
                           toggleVisibility();
                         }}
