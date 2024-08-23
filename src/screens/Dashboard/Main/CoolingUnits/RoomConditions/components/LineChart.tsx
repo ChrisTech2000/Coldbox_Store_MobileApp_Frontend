@@ -71,7 +71,7 @@ export default function LineChart(props: LineChartProps) {
         labelColor: paperTheme.colors.tertiary,
         lineWidth: StyleSheet.hairlineWidth,
         labelOffset: 12,
-        formatXLabel: (timestamp) => (timestamp ? dateFmt(timestamp, 'yyyy-MM-dd, hh:mm') : ''),
+        formatXLabel: (timestamp) => (timestamp ? dateFmt(timestamp, 'MM-dd, hh:mm') : ''),
         formatYLabel: (temperature) => temperature + ' °C',
       }}
       chartPressState={state}

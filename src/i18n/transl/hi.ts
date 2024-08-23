@@ -463,6 +463,9 @@ export default {
       temperature: 'तापमान',
       lastUpdated: 'पिछली बार {{date}} पर अपडेट किया गया',
       enterTemperature: 'तापमान दर्ज करें',
+      toasts: {
+        confirmation: 'तापमान और आर्द्रता सही ढंग से संशोधित हो गए है',
+      },
     },
     CoolingUnitsCratesInfo: {
       commodity: 'सामग्री',

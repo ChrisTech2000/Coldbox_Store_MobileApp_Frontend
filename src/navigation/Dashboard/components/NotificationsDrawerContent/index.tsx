@@ -21,6 +21,7 @@ import NotificationItem from './components/NotificationItem';
 import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
 import ColdtivateService from '#services/ColdtivateService';
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
+import InAppNotifications from '#common/InAppNotifications';
 
 export type Notifications = ProcessedNotifications['notifications'];
 export type Notification = Notifications[0];
@@ -55,6 +56,7 @@ function NotificationsDrawerContent(props: Props) {
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const [modalDatums, setModalDatums] = useState<CommoditySurveyDatum | undefined>(undefined);
   const isSettingUpSurvey = useSettingUpSurvey(useShallow((store) => store.isLoading));
@@ -136,6 +138,10 @@ function NotificationsDrawerContent(props: Props) {
               });
 
               setModalDatums(undefined);
+              toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.updateSuccess'), {
+                type: 'md_success',
+              });
+
               await revalidate();
             } catch (error) {
               console.error(error);

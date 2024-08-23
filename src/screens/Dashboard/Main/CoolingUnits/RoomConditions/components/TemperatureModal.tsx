@@ -9,6 +9,7 @@ import { Button } from '#ui/components/Button';
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import ColdtivateService from '#services/ColdtivateService';
+import InAppNotifications from '#common/InAppNotifications';
 
 type FormValues<T = string> = { temperature: T };
 type PreprocessedFormValues = FormValues<number>;
@@ -22,6 +23,7 @@ type Props = {
 export default function TemperatureModal(props: Props) {
   const [isModalOpen, toggleModalVisibility] = useToggle(false);
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const form = useForm<FormValues>({
     defaultValues: { temperature: '' },
@@ -40,6 +42,10 @@ export default function TemperatureModal(props: Props) {
         specificationType: 'TEMPERATURE',
         datetimeStamp: new Date().toISOString(),
         coolingUnit: props.coolingUnitId,
+      });
+
+      toast.show(t('Dashboard.CoolingUnitsRoomConditions.toasts.confirmation'), {
+        type: 'md_success',
       });
 
       await props.revalidateTemperatures();

@@ -462,6 +462,9 @@ const en = {
       temperature: 'Temperature',
       lastUpdated: 'Last updated at {{date}}',
       enterTemperature: 'Enter temperature',
+      toasts: {
+        confirmation: 'Temperature modified correctly',
+      },
     },
     CoolingUnitsCratesInfo: {
       commodity: 'Commodity',
