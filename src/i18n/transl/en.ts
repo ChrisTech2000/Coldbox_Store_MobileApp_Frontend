@@ -149,6 +149,11 @@ const en = {
           description:
             'The cold room user. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator.',
         },
+        toasts: {
+          login:
+            'The username or password are not correct. Please confirm you have selected the right user role',
+          success: 'Successfully logged in',
+        },
       },
       form: {
         user: {
@@ -548,6 +553,11 @@ const en = {
         actions: {
           currentLocation: 'Choose current location',
         },
+        toasts: {
+          addLocationSuccess: 'Successfully added location',
+          editLocationSuccess: 'Successfully edited location',
+          removeLocationSuccess: 'Location {{name}} was successfully deleted.',
+        },
       },
       Operators: {
         banner:
@@ -587,6 +597,9 @@ const en = {
         },
         actions: {
           save: 'Save Changes',
+        },
+        toasts: {
+          success: 'Successfully edited',
         },
       },
       RegisteredEmployee: {

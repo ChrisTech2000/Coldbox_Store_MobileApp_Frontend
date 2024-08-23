@@ -151,6 +151,10 @@ export default {
           description:
             'कोल्ड रूम उपयोगकर्ता। किसान, व्यापारी, खुदरा विक्रेता जिनके पास स्मार्टफोन है, वे यहां लॉग इन कर सकते हैं। स्मार्टफोन के बिना कोल्ड रूम के उपयोगकर्ता कोल्ड रूम में जाकर और ऑपरेटर के साथ बातचीत करके ऐप की जानकारी तक पहुंच सकते हैं',
         },
+        toasts: {
+          login: 'उपयोगकर्ता नाम या पासवर्ड सही नहीं हैं',
+          success: 'सफलतापूर्वक लॉग इन',
+        },
       },
       form: {
         user: {
@@ -551,6 +555,11 @@ export default {
         actions: {
           currentLocation: 'वर्त्तमान स्थान चुनिए',
         },
+        toasts: {
+          addLocationSuccess: 'स्थान सफलतापूर्वक जोड़ा गया',
+          editLocationSuccess: 'स्थान सफलतापूर्वक संपादित किया गया',
+          removeLocationSuccess: 'स्थान {{name}} सफलतापूर्वक हटा दिया गया था।',
+        },
       },
       Operators: {
         banner:
@@ -590,6 +599,9 @@ export default {
         },
         actions: {
           save: 'सेव चंगेस',
+        },
+        toasts: {
+          success: 'सफलतापूर्वक संपादित किया गया',
         },
       },
       RegisteredEmployee: {

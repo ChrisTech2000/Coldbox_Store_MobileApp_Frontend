@@ -23,12 +23,14 @@ import StepModule from './modules/StepModule';
 import StepFactory from './modules/StepFactory';
 
 import { getCountryFullName, pickFormValues } from './utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { navigation } = props;
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const { mutate } = useSWRConfig();
   const company = useManagementStore(useShallow((store) => store.company));
@@ -39,6 +41,10 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
       if (!data) throw new Error();
 
       await ColdtivateService.addLocation(data);
+
+      toast.show(t('Dashboard.Management.Location.toasts.addLocationSuccess'), {
+        type: 'md_success',
+      });
 
       await mutate(getQueryKey('getLocations', company?.id));
       navigation.goBack();

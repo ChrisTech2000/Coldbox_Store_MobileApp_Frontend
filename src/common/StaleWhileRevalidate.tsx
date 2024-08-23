@@ -2,8 +2,10 @@ import React, { type PropsWithChildren, useEffect, useMemo, useRef, useState } f
 import { AppState, type AppStateStatus } from 'react-native';
 import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
 import { SWRConfig, type SWRConfiguration } from 'swr';
+import { useShallow } from 'zustand/react/shallow';
 
 import InAppNotifications, { type ToastType } from './InAppNotifications';
+import { useAuthStore } from '#stores/auth';
 
 type BinaryToastTypes = Exclude<ToastType, 'md_default'>;
 
@@ -15,6 +17,7 @@ const TOAST_MESSAGE = {
 export default function StaleWhileRevalidate(props: PropsWithChildren) {
   const [cache] = useState(new Map());
   const toastTypeRef = useRef<BinaryToastTypes | undefined>(undefined);
+  const isAuthenticated = useAuthStore(useShallow((store) => store.isAuthenticated));
 
   const { isConnected } = useNetInfo();
   const toast = InAppNotifications.useToast();
@@ -30,10 +33,16 @@ export default function StaleWhileRevalidate(props: PropsWithChildren) {
         toastTypeRef.current = toastType;
 
         // TODO: maybe we should show a different message based on the network type and it's changes (cellular ↔ wifi)
-        if (isToastLoaded) toast.show(TOAST_MESSAGE[toastType], { type: toastType });
+        if (isToastLoaded)
+          toast.show(TOAST_MESSAGE[toastType], {
+            type: toastType,
+            style: {
+              marginBottom: isAuthenticated ? 80 : 20,
+            },
+          });
       }
     });
-  }, [toastTypeRef.current, toast, isToastLoaded]);
+  }, [toastTypeRef.current, toast, isToastLoaded, isAuthenticated]);
 
   const config = useMemo(
     () =>

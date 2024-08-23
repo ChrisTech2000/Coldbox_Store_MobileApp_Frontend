@@ -1,9 +1,12 @@
 import React, { useCallback, useMemo, type PropsWithChildren } from 'react';
 import { View } from 'react-native';
-import { type ToastOptions, ToastProvider, useToast } from 'react-native-toast-notifications';
+import { ToastProvider, useToast } from 'react-native-toast-notifications';
+import type {
+  ToastProps,
+  ToastOptions,
+} from 'react-native-toast-notifications/lib/typescript/toast';
 
 import { Text } from '#ui/components/Text';
-import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { paperTheme } from '#ui/lib/theme';
 
 export type ToastType = 'md_success' | 'md_danger' | 'md_default';
@@ -12,55 +15,57 @@ type CustomToastOptions = {
   type?: ToastType;
 } & ToastOptions;
 
-interface ToastContentProps {
+type ToastContentProps = {
   message: string | JSX.Element;
   backgroundColor: string;
   textColor: string;
-  shadowColor: string;
-}
+  style: ToastProps['style'];
+};
 
 function _ToastContent(props: ToastContentProps) {
-  const { message, backgroundColor, textColor, shadowColor } = props;
+  const { message, backgroundColor, textColor, style } = props;
   return (
-    <SkiaShadow blur={30} dx={0} dy={10} color={shadowColor} borderRadius={20}>
-      <View tw="w-5/6 rounded-md p-4 shadow-black/20 my-2" style={{ backgroundColor }}>
-        <Text tw="text-md font-medium" style={{ color: textColor }}>
-          {message}
-        </Text>
-      </View>
-    </SkiaShadow>
+    <View
+      tw="w-auto max-w-5/6 rounded-md p-3 shadow-black/20 my-2"
+      style={[style, { backgroundColor }]}
+    >
+      <Text variant="TextMedium" tw="text-md" style={{ color: textColor }}>
+        {message}
+      </Text>
+    </View>
   );
 }
 
 function _toastClosure(type: ToastType) {
-  return function ToastFactory(toast: Pick<ToastContentProps, 'message'>) {
+  return function ToastFactory(props: ToastProps) {
+    const { message, style } = props;
     switch (type) {
       case 'md_success':
         return (
           <_ToastContent
-            message={toast.message}
+            style={style}
+            message={message}
             backgroundColor={paperTheme.colors.secondaryContainer}
             textColor={paperTheme.colors.onSecondaryContainer}
-            shadowColor={paperTheme.colors.onSecondary}
           />
         );
       case 'md_danger':
         return (
           <_ToastContent
-            message={toast.message}
+            style={style}
+            message={message}
             backgroundColor={paperTheme.colors.errorContainer}
             textColor={paperTheme.colors.onErrorContainer}
-            shadowColor={paperTheme.colors.onError}
           />
         );
       case 'md_default':
       default:
         return (
           <_ToastContent
-            message={toast.message}
+            style={style}
+            message={message}
             backgroundColor={paperTheme.colors.surfaceVariant}
             textColor={paperTheme.colors.onSurfaceVariant}
-            shadowColor={paperTheme.colors.elevation.level1}
           />
         );
     }
