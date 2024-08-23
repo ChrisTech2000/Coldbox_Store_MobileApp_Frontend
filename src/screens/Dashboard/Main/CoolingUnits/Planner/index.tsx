@@ -5,16 +5,15 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
 
+import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import RBAC from '#common/RBAC';
 
-import SemiCircleChart from './components/SemiCircleChart';
-import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
 import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
-
+import SemiCircleChart from './components/SemiCircleChart';
 import { weekSubsetArtisan } from './utils';
+import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart';
 
 const MAX_CAPACITY = 100;
 

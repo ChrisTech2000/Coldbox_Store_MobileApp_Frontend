@@ -149,7 +149,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         ) : (
           <View tw="flex-1 items-center text-center mx-4 mt-4">
             <Text variant="TextBold" tw="text-base text-green-primary text-center">
-              {t('Dashboard.emptyCoolingUser')}
+              {t('Dashboard.History.empty')}
             </Text>
           </View>
         )}

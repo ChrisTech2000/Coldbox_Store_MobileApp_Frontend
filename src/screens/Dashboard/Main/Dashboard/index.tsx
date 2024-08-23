@@ -33,7 +33,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { sorting } = useSortingStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { selectedItem: selectedCompany } = useCompanyStore();
-  const { farmerId, addRefreshDataFn } = useDashboardStore();
+  const { isLoading: isGlobalInfoLoading, farmerId, addRefreshDataFn } = useDashboardStore();
 
   const {
     data: farmerDashboardProduces,
@@ -121,7 +121,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
       />
 
-      {loadingFarmerDashboardProduces ||
+      {isGlobalInfoLoading ||
+      loadingFarmerDashboardProduces ||
       loadingOperatorDashboardProduces ||
       areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">

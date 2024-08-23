@@ -19,7 +19,7 @@ export default {
       SignUp: 'साईन अप',
       ForgotPassword: 'पासवर्ड भूल गए',
       PasswordReset: 'रीसेट',
-      AppInfo: 'App info',
+      AppInfo: 'सामान्यतःपूछे जाने वाले प्रश्न',
     },
     management: {
       Root: 'प्रबंधन',
@@ -799,6 +799,8 @@ export default {
     },
     History: {
       priceLabel: 'कीमत',
+      empty:
+        'किसी भी कक्ष में कम से कम एक चेक-इन करने पर चेक-इन और चेक-आउट डैशबोर्ड में दिखाई देंगे।',
       sortMenuOptions: {
         cropType: 'फसल का प्रकार',
         movementDate: 'आवागमन की तिथि (पहले से नवीनतम)',

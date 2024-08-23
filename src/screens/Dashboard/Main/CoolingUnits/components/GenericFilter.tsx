@@ -30,7 +30,10 @@ const _FilterContext = createContext<FilterContext>({
 export default function Filter(props: PropsWithChildren) {
   const user = useAuthStore(useShallow((store) => store.user));
   const managementCompany = useManagementStore(useShallow((store) => store.company)); // RE & OP
-  const company = useCompanyStore(useShallow((store) => store.selectedItem)); // CU
+  const farmerCompanies = useDashboardStore(useShallow((store) => store.farmerCompanies));
+  const company = farmerCompanies?.length
+    ? useCompanyStore(useShallow((store) => store.selectedItem))
+    : null; // CU
 
   const values = useMemo(
     () => ({
@@ -66,14 +69,15 @@ Filter.CoolingUnits = function _CoolingUnitsFilter() {
     {
       skip:
         !userRole || userRole === ERoles.OPERATOR
-          ? typeof companyId === 'undefined'
-          : typeof userId === 'undefined',
+          ? typeof userId === 'undefined'
+          : typeof companyId === 'undefined',
       defaultData: [],
     }
   );
 
   return (
     <SelectWithStore<CoolingUnit>
+      emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
       datums={data ?? []}
       useScrollView={false}
       isModalVisible={isVisible}

@@ -23,7 +23,7 @@ function getValue(
     const val = (data as CoolingUnitImpact)[coolingUnitKey]['0'];
     return typeof val === 'number'
       ? val
-      : Object.values(val).reduce((acc, current) => (acc += current), 0);
+      : Object.values(val ?? {}).reduce((acc, current) => (acc += current), 0);
   }
   return 0;
 }
@@ -236,8 +236,8 @@ function generateUsersHtmlContent(
   data: CompanyData | CoolingUnitImpact | undefined,
   mode: 'company' | 'aggregated' | 'comparison'
 ) {
-  const femaleBen = getValue(data, 'compBeneficiariesFem', 'roomBeneficiariesFem') ?? 0;
-  const maleBen = getValue(data, 'compBeneficiariesMa', 'roomBeneficiariesMa') ?? 0;
+  const femaleBen = Math.round(getValue(data, 'compBeneficiariesFem', 'roomBeneficiariesFem') ?? 0);
+  const maleBen = Math.round(getValue(data, 'compBeneficiariesMa', 'roomBeneficiariesMa') ?? 0);
 
   const { employees, operators, users, userTypes, beneficiaries } = {
     employees: {
@@ -459,7 +459,7 @@ function generateImpactHtml(
         <div style="margin-top: 8px; margin-bottom: 8px;">
           ${
             foodLossTo === foodLossFrom
-              ? `<span style="color: gray;">${foodLossEvolution.toFixed(2)}% =</span>`
+              ? `<span style="color: gray;">=</span>`
               : foodLossTo > foodLossFrom
                 ? `<span style="color: red;">${foodLossEvolution.toFixed(2)}% ↑</span>`
                 : `<span style="color: green;">${foodLossEvolution.toFixed(2)}% ↓</span>`
@@ -625,7 +625,7 @@ function generateCratesHtmlContent(
         </div>
         <div class="section-content">
           <div class="section-text">
-            ${data && 'totCo2' in data ? data.totCo2['0'] : 0}
+            ${data && 'totCo2' in data ? data.totCo2['0'] ?? 0 : 0}
           </div>
         </div>
       </div>
