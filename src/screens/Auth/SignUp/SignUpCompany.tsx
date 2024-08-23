@@ -126,6 +126,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
     });
 
     if (result) {
+      closePhoneWarningModal();
       navigation.navigate('SignIn');
     }
   }, []);
