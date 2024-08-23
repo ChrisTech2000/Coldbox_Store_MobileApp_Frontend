@@ -756,6 +756,9 @@ const en = {
         },
         toasts: {
           addSuccess: 'Successfully added cooling unit',
+          integrationError:
+            'Unable to connect to the sensor. Validate your data or contact your sensor provider.',
+          integrationSuccess: 'Successfully authenticated the sensor credentials.',
         },
       },
       EditCoolingUnit: {
