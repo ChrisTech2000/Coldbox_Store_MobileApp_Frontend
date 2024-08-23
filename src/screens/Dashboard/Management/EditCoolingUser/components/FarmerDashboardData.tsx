@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Platform } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
@@ -12,6 +12,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
 import { DataLoader, getPdfContent } from '../utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 const SWR_CACHE_KEY = 'getFarmerRelatedEntities';
 
@@ -26,14 +27,31 @@ export default function FarmerDashboardData(props: Props) {
 
   const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const { data, isLoading, hasError } = useApiCall(
     SWR_CACHE_KEY,
-    DataLoader.aggregateFarmerData,
+    useCallback(async (farmer: Farmer) => {
+      try {
+        return await DataLoader.aggregateFarmerData(farmer);
+      } catch (exception) {
+        // intercept
+        if (exception instanceof Error) {
+          if (exception.message === 'farmer does not have any check-ins') {
+            toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'), {
+              type: 'md_danger',
+            });
+          }
+        }
+        // let it bubble up
+        throw exception;
+      }
+    }, []),
     contextualFarmer!,
     {
       skip: !farmerId || !contextualFarmer?.id,
       defaultData: undefined,
+      errorRetryCount: 0,
     }
   );
 
@@ -46,6 +64,7 @@ export default function FarmerDashboardData(props: Props) {
       disabled={isLoading || hasError}
       onPress={async (evt) => {
         evt.stopPropagation();
+        if (typeof data === 'undefined') return; // safe guard
         try {
           const file = await RNHTMLtoPDF.convert({
             html: getPdfContent(data, t),

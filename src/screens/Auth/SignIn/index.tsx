@@ -129,7 +129,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
 
         toast.show(t('Auth.SignIn.accounts.toasts.success'), {
           type: 'md_success',
-          style: { marginBottom: 80 },
+          style: { marginBottom: 50 },
         });
       }
     } catch (exception) {

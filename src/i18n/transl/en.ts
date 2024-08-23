@@ -591,6 +591,11 @@ const en = {
           success: 'Successfully edited operator',
         },
       },
+      AddCoolingUser: {
+        toasts: {
+          add: 'Add Cooling user',
+        },
+      },
       CompanyDetails: {
         labels: {
           name: 'Name',
@@ -645,6 +650,8 @@ const en = {
             'This account cannot be deleted because the user has active check-ins in the cooling unit(s) {{names}}. Please notify the user to come to the room to pick up these items and complete the check-outs before deleting the account!',
           confirmation:
             'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
+          edit: 'Successfully edited cooling user',
+          noCoolingUnits: "You don't have any cooling units yet",
         },
         pdf: {
           dateRange: 'Date range',
@@ -805,6 +812,9 @@ const en = {
       fields: {
         location: 'Location',
         userCode: 'Cooling User Import Code',
+      },
+      toasts: {
+        success: 'Successfully updated user',
       },
     },
     About: {

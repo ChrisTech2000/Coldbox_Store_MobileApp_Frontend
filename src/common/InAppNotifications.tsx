@@ -93,5 +93,5 @@ InAppNotifications.useToast = function _useToast() {
     [toastCtx]
   );
 
-  return { ...toastCtx, show: showFunc };
+  return useMemo(() => ({ ...toastCtx, show: showFunc }), [showFunc]);
 };

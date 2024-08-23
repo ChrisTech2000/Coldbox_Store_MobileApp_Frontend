@@ -37,7 +37,7 @@ export default function StaleWhileRevalidate(props: PropsWithChildren) {
           toast.show(TOAST_MESSAGE[toastType], {
             type: toastType,
             style: {
-              marginBottom: isAuthenticated ? 80 : 20,
+              marginBottom: isAuthenticated ? 50 : 20,
             },
           });
       }

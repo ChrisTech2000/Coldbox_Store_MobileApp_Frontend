@@ -56,7 +56,7 @@ export default function DeleteAction(props: Props) {
       toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.cantDelete'), {
         type: 'md_danger',
         style: {
-          marginBottom: 80,
+          marginBottom: 50,
         },
       });
       toggleModalVisibility();

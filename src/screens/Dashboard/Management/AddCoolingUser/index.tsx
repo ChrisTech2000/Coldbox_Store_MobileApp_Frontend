@@ -24,6 +24,7 @@ import TextFields from './modules/TextFields';
 import GenderField from './modules/GenderField';
 import ContactField from './modules/ContactField';
 import LanguageField from './modules/LanguageField';
+import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('screen').width - 42) / 2;
 
@@ -34,6 +35,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const { data, isLoading } = useApiCall(
     'getFarmerByUserId',
@@ -92,6 +94,8 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
           companyId: company.id,
         });
       }
+
+      toast.show(t('Dashboard.Management.AddCoolingUser.toasts.add'), { type: 'md_success' });
 
       await revalidateCUCache();
       return props.navigation.goBack(); // TODO: redirect operator to the farmer survey instead
