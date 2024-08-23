@@ -21,6 +21,7 @@ import OccupationField from './components/SurveyFormFields/OccupationField';
 import ExperienceField from './components/SurveyFormFields/ExperienceField';
 import CommoditiesField from './components/SurveyFormFields/CommoditiesField';
 import AddCommodity from './components/AddCommodity';
+import InAppNotifications from '#common/InAppNotifications';
 
 const SWR_CACHE_KEY = 'getCoolingUsersSurveyAggregatedData';
 const width = (Dimensions.get('screen').width - 42) / 2;
@@ -47,6 +48,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
 
   const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const companyCurrency: string = company?.currency ?? 'NGN';
 
@@ -92,6 +94,11 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
               },
             ],
           });
+
+          toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.updateSuccess'), {
+            type: 'md_success',
+          });
+
           if (response) await refetch();
           return response;
         };

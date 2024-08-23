@@ -652,6 +652,7 @@ const en = {
             'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
           edit: 'Successfully edited cooling user',
           noCoolingUnits: "You don't have any cooling units yet",
+          updateSuccess: 'Successfully updated',
         },
         pdf: {
           dateRange: 'Date range',
