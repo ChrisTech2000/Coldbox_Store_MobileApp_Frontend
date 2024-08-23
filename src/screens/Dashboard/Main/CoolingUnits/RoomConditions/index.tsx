@@ -40,17 +40,7 @@ function CoolingUnitsRoomConditions() {
   const chartDatums = useMemo(() => processTemperatures(temperatures), [temperatures]);
 
   return (
-    <ScrollView
-      tw="h-full"
-      contentContainerStyle="pt-5 pb-8"
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          refreshing={isValidatingTemperatures}
-          onRefresh={async () => await revalidateTemperatures()}
-        />
-      }
-    >
+    <View tw="pt-5">
       <GenericFilter>
         <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
           <GenericFilter.Companies />
@@ -58,49 +48,63 @@ function CoolingUnitsRoomConditions() {
         <GenericFilter.CoolingUnits />
       </GenericFilter>
 
-      {typeof chartDatums.info !== 'undefined' && chartDatums.datums.length >= 1 ? (
-        <React.Fragment>
-          <View tw="mx-4 mt-4 space-y-4">
-            <View tw="flex flex-row items-center space-x-2">
-              <Icon name="snowflake" size={34} color={paperTheme.colors.primary} />
-              <Text variant="TitleMedium">{t('Dashboard.CoolingUnitsRoomConditions.heading')}</Text>
-            </View>
+      <ScrollView
+        tw="h-full"
+        contentContainerStyle="pb-8"
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isValidatingTemperatures}
+            onRefresh={async () => await revalidateTemperatures()}
+          />
+        }
+      >
+        {typeof chartDatums.info !== 'undefined' && chartDatums.datums.length >= 1 ? (
+          <React.Fragment>
+            <View tw="mx-4 mt-4 space-y-4">
+              <View tw="flex flex-row items-center space-x-2">
+                <Icon name="snowflake" size={34} color={paperTheme.colors.primary} />
+                <Text variant="TitleMedium">
+                  {t('Dashboard.CoolingUnitsRoomConditions.heading')}
+                </Text>
+              </View>
 
-            <View tw="h-96 w-full">
-              <LineChart datums={chartDatums.datums} />
+              <View tw="h-96 w-full">
+                <LineChart datums={chartDatums.datums} />
+              </View>
             </View>
-          </View>
-          <View tw="bg-zinc-200 py-4 mt-8 items-center space-y-3">
-            <View tw="flex-row items-center space-x-4">
-              <Icon name="thermometer" size={30} color={paperTheme.colors.scrim} />
-              <Text variant="TitleRegular">
-                {t('Dashboard.CoolingUnitsRoomConditions.temperature')}
+            <View tw="bg-zinc-200 py-4 mt-8 items-center space-y-3">
+              <View tw="flex-row items-center space-x-4">
+                <Icon name="thermometer" size={30} color={paperTheme.colors.scrim} />
+                <Text variant="TitleRegular">
+                  {t('Dashboard.CoolingUnitsRoomConditions.temperature')}
+                </Text>
+                <Text variant="TitleMedium">{chartDatums.info.temperature}°C</Text>
+              </View>
+              <Text tw="text-zinc-500" variant="TitleSmall">
+                {t('Dashboard.CoolingUnitsRoomConditions.lastUpdated', {
+                  date: dateFmt(chartDatums.info.lastUpdated, 'E MMM dd yyyy HH:mm'),
+                })}
               </Text>
-              <Text variant="TitleMedium">{chartDatums.info.temperature}°C</Text>
-            </View>
-            <Text tw="text-zinc-500" variant="TitleSmall">
-              {t('Dashboard.CoolingUnitsRoomConditions.lastUpdated', {
-                date: dateFmt(chartDatums.info.lastUpdated, 'E MMM dd yyyy HH:mm'),
-              })}
-            </Text>
 
-            <RBAC.ProtectedResource action="SET" subject="Temperatures">
-              <TemperatureModal
-                temp={chartDatums.info.temperature}
-                coolingUnitId={selectedCoolingUnit!.id}
-                revalidateTemperatures={revalidateTemperatures}
-              />
-            </RBAC.ProtectedResource>
+              <RBAC.ProtectedResource action="SET" subject="Temperatures">
+                <TemperatureModal
+                  temp={chartDatums.info.temperature}
+                  coolingUnitId={selectedCoolingUnit!.id}
+                  revalidateTemperatures={revalidateTemperatures}
+                />
+              </RBAC.ProtectedResource>
+            </View>
+          </React.Fragment>
+        ) : (
+          <View tw="mx-2 mt-4">
+            <Text tw="text-green-primary text-center">
+              {t('Dashboard.CoolingUnitsCratesInfo.messages.empty')}
+            </Text>
           </View>
-        </React.Fragment>
-      ) : (
-        <View tw="mx-2 mt-4">
-          <Text tw="text-green-primary text-center">
-            {t('Dashboard.CoolingUnitsCratesInfo.messages.empty')}
-          </Text>
-        </View>
-      )}
-    </ScrollView>
+        )}
+      </ScrollView>
+    </View>
   );
 }
 
