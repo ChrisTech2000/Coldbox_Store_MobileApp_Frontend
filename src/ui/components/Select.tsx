@@ -51,7 +51,7 @@ export function Select({
         <Modal visible={isModalOpen} onDismiss={onClick}>
           <TouchableWithoutFeedback onPress={onClick}>
             {/** This acts as the backdrop */}
-            <View tw="absolute top-0 bottom-0 left-o right-0" />
+            <View tw="absolute top-0 bottom-0 left-0 right-0" />
           </TouchableWithoutFeedback>
           <View
             tw={cn(
