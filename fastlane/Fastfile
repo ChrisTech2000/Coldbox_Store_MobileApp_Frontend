@@ -43,6 +43,8 @@ platform :android do
             properties: {
                 "versionCode" => build_id,
                 "versionName" => version_id,
+                "MAPBOX_DOWNLOADS_TOKEN" => ENV["MAPBOX_DOWNLOADS_TOKEN"],
+
             },
         )
     end
