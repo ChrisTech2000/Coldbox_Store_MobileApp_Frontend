@@ -125,6 +125,12 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
     );
   }
 
+  function redirect() {
+    if (typeof params.redirectTo === 'undefined') props.navigation.goBack();
+    // eslint-disable-next-line
+    else props.navigation.navigate(params.redirectTo as any);
+  }
+
   return (
     <View tw="space-y-4 mx-4 pt-2 pb-8">
       <SurveyFormManager
@@ -140,7 +146,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
             });
             if (response) {
               await refetch();
-              props.navigation.goBack();
+              redirect();
             }
           } catch (exception) {
             console.error(exception);
@@ -169,12 +175,17 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
                 <Button
                   style={{ width }}
                   mode="contained"
-                  onPress={props.navigation.goBack}
+                  onPress={(evt) => {
+                    evt?.stopPropagation();
+                    redirect();
+                  }}
                   icon="close-circle-outline"
                   buttonColor={paperTheme.colors.error}
                   uppercase
                 >
-                  {t('actions.cancel')}
+                  {typeof params.redirectTo === 'undefined'
+                    ? t('actions.cancel')
+                    : t('Dashboard.Management.EditCoolingUsers.actions.completeLater')}
                 </Button>
                 <Button
                   style={{ width }}

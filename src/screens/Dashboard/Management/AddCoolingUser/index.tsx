@@ -88,17 +88,19 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
         parentName: values.parentName,
       });
 
-      if (typeof result !== 'undefined') {
-        await ColdtivateService.updateFarmerCompany({
-          farmerId: result.id,
-          companyId: company.id,
-        });
-      }
+      await ColdtivateService.updateFarmerCompany({
+        farmerId: result!.id,
+        companyId: company.id,
+      });
+
+      await revalidateCUCache();
 
       toast.show(t('Dashboard.Management.AddCoolingUser.toasts.add'), { type: 'md_success' });
 
-      await revalidateCUCache();
-      return props.navigation.goBack(); // TODO: redirect operator to the farmer survey instead
+      props.navigation.navigate('EditCoolingUserStack', {
+        screen: 'CoolingUsersSurvey',
+        params: { farmerId: result!.id, redirectTo: 'CoolingUsers' },
+      });
     } catch (exception) {
       console.error(exception);
     }

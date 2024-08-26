@@ -664,6 +664,7 @@ const en = {
         },
         actions: {
           downloadFarmers: "Download farmer's dashboard data",
+          completeLater: 'Complete later',
         },
       },
       AddCoolingUnit: {

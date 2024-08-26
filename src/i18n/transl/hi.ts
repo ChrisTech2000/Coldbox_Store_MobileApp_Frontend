@@ -668,6 +668,7 @@ export default {
         },
         actions: {
           downloadFarmers: "Download farmer's dashboard data",
+          completeLater: 'बाद में पूरा करें',
         },
       },
       AddCoolingUnit: {
