@@ -1,25 +1,26 @@
 import React, { type PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
-import { useToast } from 'react-native-toast-notifications';
 import { SWRConfig, type SWRConfiguration } from 'swr';
+import { useShallow } from 'zustand/react/shallow';
 
-enum ToastType {
-  SUCCESS = 'success',
-  DANGER = 'danger',
-}
+import InAppNotifications, { type ToastType } from './InAppNotifications';
+import { useAuthStore } from '#stores/auth';
 
-const TOAST_MESSAGE: Record<ToastType, string> = {
-  [ToastType.SUCCESS]: 'Online',
-  [ToastType.DANGER]: 'Offline',
-};
+type BinaryToastTypes = Exclude<ToastType, 'md_default'>;
+
+const TOAST_MESSAGE = {
+  md_success: 'Online',
+  md_danger: 'Offline',
+} satisfies Readonly<Record<BinaryToastTypes, string>>;
 
 export default function StaleWhileRevalidate(props: PropsWithChildren) {
   const [cache] = useState(new Map());
-  const toastTypeRef = useRef<ToastType | undefined>(undefined);
+  const toastTypeRef = useRef<BinaryToastTypes | undefined>(undefined);
+  const isAuthenticated = useAuthStore(useShallow((store) => store.isAuthenticated));
 
   const { isConnected } = useNetInfo();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
   const isToastLoaded = useMemo(() => Object.entries(toast).length > 0, []);
 
   useEffect(() => {
@@ -27,15 +28,21 @@ export default function StaleWhileRevalidate(props: PropsWithChildren) {
       const isConnected = !!state.isConnected;
       const previousToast = toastTypeRef.current;
 
-      const toastType = isConnected ? ToastType.SUCCESS : ToastType.DANGER;
+      const toastType: BinaryToastTypes = isConnected ? 'md_success' : 'md_danger';
       if (previousToast !== toastType) {
         toastTypeRef.current = toastType;
 
         // TODO: maybe we should show a different message based on the network type and it's changes (cellular ↔ wifi)
-        if (isToastLoaded) toast.show(TOAST_MESSAGE[toastType], { type: toastType });
+        if (isToastLoaded)
+          toast.show(TOAST_MESSAGE[toastType], {
+            type: toastType,
+            style: {
+              marginBottom: isAuthenticated ? 50 : 20,
+            },
+          });
       }
     });
-  }, [toastTypeRef.current, toast, isToastLoaded]);
+  }, [toastTypeRef.current, toast, isToastLoaded, isAuthenticated]);
 
   const config = useMemo(
     () =>

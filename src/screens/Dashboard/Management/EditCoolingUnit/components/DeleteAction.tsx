@@ -15,6 +15,7 @@ import { getQueryKey } from '#services/hooks/useAPiCall';
 import { paperTheme } from '#ui/lib/theme';
 
 import FormManager from '../../AddCoolingUnit/contexts/FormManager';
+import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('screen').width - 42) / 2;
 
@@ -26,6 +27,7 @@ type Props = {
 export default function DeleteAction(props: Props) {
   const navigation = useNavigation();
   const { mutate, cache } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const {
     formState: { isSubmitting },
@@ -44,9 +46,20 @@ export default function DeleteAction(props: Props) {
       await mutate(getQueryKey('getLocations', props.companyId));
       cache.delete(getQueryKey('getCoolingUnit', { ...props }));
 
+      toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.successDelete'), {
+        type: 'md_success',
+      });
+
       toggleModalVisibility();
       navigation.goBack();
     } catch (exception) {
+      toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.cantDelete'), {
+        type: 'md_danger',
+        style: {
+          marginBottom: 50,
+        },
+      });
+      toggleModalVisibility();
       console.error(exception);
     } finally {
       toggleProcessing();

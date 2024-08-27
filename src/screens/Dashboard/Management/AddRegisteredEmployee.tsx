@@ -20,6 +20,7 @@ import { useAuthStore } from '#stores/auth';
 import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
 import { ERoles, MAP_ROLES } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
+import InAppNotifications from '#common/InAppNotifications';
 
 type FormValues = {
   phoneNumber: string;
@@ -31,6 +32,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
   const { t, zodResolver } = useTranslationUtils();
   const company = useManagementStore(useShallow((store) => store.company));
   const { mutate } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const { data, isLoading } = useApiCall(
     'getCoolingUnits',
@@ -78,9 +80,14 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
         userId,
       });
 
+      toast.show(t('Dashboard.Management.AddRegisteredEmployee.toasts.success'), {
+        type: 'md_success',
+      });
+
       await mutate(getQueryKey('getInvitedCompanyEmployees', company?.id));
       navigation.goBack();
     } catch (exception) {
+      toast.show(t('Dashboard.Management.AddOperator.toasts.error'), { type: 'md_danger' });
       console.error(exception);
     }
   }

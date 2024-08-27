@@ -151,6 +151,10 @@ export default {
           description:
             'कोल्ड रूम उपयोगकर्ता। किसान, व्यापारी, खुदरा विक्रेता जिनके पास स्मार्टफोन है, वे यहां लॉग इन कर सकते हैं। स्मार्टफोन के बिना कोल्ड रूम के उपयोगकर्ता कोल्ड रूम में जाकर और ऑपरेटर के साथ बातचीत करके ऐप की जानकारी तक पहुंच सकते हैं',
         },
+        toasts: {
+          login: 'उपयोगकर्ता नाम या पासवर्ड सही नहीं हैं',
+          success: 'सफलतापूर्वक लॉग इन',
+        },
       },
       form: {
         user: {
@@ -459,6 +463,9 @@ export default {
       temperature: 'तापमान',
       lastUpdated: 'पिछली बार {{date}} पर अपडेट किया गया',
       enterTemperature: 'तापमान दर्ज करें',
+      toasts: {
+        confirmation: 'तापमान और आर्द्रता सही ढंग से संशोधित हो गए है',
+      },
     },
     CoolingUnitsCratesInfo: {
       commodity: 'सामग्री',
@@ -551,6 +558,11 @@ export default {
         actions: {
           currentLocation: 'वर्त्तमान स्थान चुनिए',
         },
+        toasts: {
+          addLocationSuccess: 'स्थान सफलतापूर्वक जोड़ा गया',
+          editLocationSuccess: 'स्थान सफलतापूर्वक संपादित किया गया',
+          removeLocationSuccess: 'स्थान {{name}} सफलतापूर्वक हटा दिया गया था।',
+        },
       },
       Operators: {
         banner:
@@ -574,6 +586,20 @@ export default {
         messages: {
           operator: 'एक ऑपरेटर के रूप में Coldtivate ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
         },
+        toasts: {
+          error: 'Phone already assigned. Try a different one',
+          success: 'ऑपरेटर को सफलतापूर्वक आमंत्रित किया गया',
+        },
+      },
+      EditOperator: {
+        toasts: {
+          success: 'परिचालक को सफलतापूर्वक संपादित किया गया',
+        },
+      },
+      AddCoolingUser: {
+        toasts: {
+          add: 'किसान जोड़ें',
+        },
       },
       CompanyDetails: {
         labels: {
@@ -591,6 +617,9 @@ export default {
         actions: {
           save: 'सेव चंगेस',
         },
+        toasts: {
+          success: 'सफलतापूर्वक संपादित किया गया',
+        },
       },
       RegisteredEmployee: {
         invited: 'आमंत्रित ({{amount}})',
@@ -604,6 +633,9 @@ export default {
       AddRegisteredEmployee: {
         message:
           'एक पंजीकृत कर्मचारी के रूप में कोल्डटिवेट ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
+        toasts: {
+          success: 'पंजीकृत कर्मचारी को सफलतापूर्वक आमंत्रित किया गया',
+        },
       },
       CoolingUsers: {
         modals: {
@@ -625,6 +657,9 @@ export default {
             'इस खाते को हटाया नहीं जा सकता क्योंकि प्रयोक्ता ने कूलिंग यूनिट(इकाइयों) {{names}} में सक्रिय चेक-इन किया है। कृपया उपयोगकर्ता को इन वस्तुओं को लेने के लिए कमरे में आने और खाता हटाने से पहले चेक-आउट पूरा करने के लिए सूचित करें!',
           confirmation:
             'क्या आप वाकई इस उपयोगकर्ता को कूलिंग उपयोगकर्ताओं की सूची से हटाना चाहते हैं? यह ऑपरेशन इस कूलिंग यूजर को हटा देगा और इसे वापस नहीं किया जा सकता है!',
+          edit: 'कूलिंग उपयोगकर्ता को सफलतापूर्वक संपादित किया गया',
+          noCoolingUnits: 'आपके पास अभी तक कोई प्रशीतलन इकई नही है',
+          updateSuccess: 'सफलतापूर्वक उत्परिवर्तित',
         },
         pdf: {
           dateRange: 'तारीख की अबधि',
@@ -633,6 +668,7 @@ export default {
         },
         actions: {
           downloadFarmers: "Download farmer's dashboard data",
+          completeLater: 'बाद में पूरा करें',
         },
       },
       AddCoolingUnit: {
@@ -723,6 +759,12 @@ export default {
           KILOGRAMS: 'किलोग्राम',
           CRATES: 'टोकरी',
         },
+        toasts: {
+          addSuccess: 'शीतलन इकाई को सफलतापूर्वक जोड़ा गया',
+          integrationError:
+            'सेंसर से कनेक्ट करने में असमर्थ। अपने डेटा की पुष्टि करें या अपने सेंसर प्रदाता से संपर्क करें',
+          integrationSuccess: 'सेंसर क्रेडेंशियल्स को सफलतापूर्वक प्रमाणित किया गया',
+        },
       },
       EditCoolingUnit: {
         modal: {
@@ -732,6 +774,11 @@ export default {
         buttons: {
           viewExisting: 'मौजूदा देखें',
           editPricing: 'Edit Pricing',
+        },
+        toasts: {
+          editSuccess: 'शीतलन इकाई को सफलतापूर्वक संपादित किया गया',
+          cantDelete: 'इस शीतलन इकाई को हटाया नहीं जा सकता क्योंकि इसमें सक्रिय चेक-इन हैं।',
+          successDelete: 'कूलिंग यूनिट {{name}} को सफलतापूर्वक मिटा दिया गया।',
         },
       },
       UsageAnalysis: {
@@ -777,6 +824,9 @@ export default {
       fields: {
         location: 'स्थान',
         userCode: 'शीतलक उपयोगकर्ता आयात कोड',
+      },
+      toasts: {
+        success: 'उपयोगकर्ता को सफलतापूर्वक अद्यतन किया गया',
       },
     },
     About: {

@@ -3,7 +3,6 @@ import { Platform, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator, Icon } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -26,6 +25,7 @@ import { InnerTabs } from './components/InnerTabs';
 import { UsersContent } from './components/UsersContent';
 import { UtilizationContent } from './components/UtilizationContent';
 import { useCompanyData } from './store';
+import InAppNotifications from '#common/InAppNotifications';
 
 export type Tab = 'users' | 'utilization' | 'impact';
 
@@ -37,7 +37,7 @@ const TABS = {
 
 export function CompanySection() {
   const { t } = useTranslationUtils();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
   const { company } = useManagementStore();
   const { setCompanyData, setImpactData } = useCompanyData();
   const { setCoolingUnits } = useAnalyticsData();
@@ -90,11 +90,11 @@ export function CompanySection() {
       const file = await RNHTMLtoPDF.convert(PDFOptions);
       if (!file.filePath) throw new Error();
       toast.show(t('Dashboard.History.pdfModal.successMessage'), {
-        type: 'success',
+        type: 'md_success',
       });
     } catch {
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
-        type: 'danger',
+        type: 'md_danger',
       });
     }
   }, [t, toast, coolingUnits, impactCompany, impactData, company]);

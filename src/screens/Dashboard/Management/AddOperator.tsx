@@ -23,6 +23,7 @@ import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
 import { ERoles, MAP_ROLES } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import InAppNotifications from '#common/InAppNotifications';
 
 type FormValues = {
   phoneNumber: string;
@@ -35,6 +36,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
   const company = useManagementStore(useShallow((store) => store.company));
   const { t, zodResolver } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const [isModalVisible, toggleModalVisibility] = useToggle();
 
@@ -110,9 +112,16 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
         userId,
       });
 
+      toast.show(t('Dashboard.Management.AddOperator.toasts.success'), {
+        type: 'md_success',
+      });
+
       await mutate(getQueryKey('getInvitedOperators', company?.id));
       navigation.goBack();
     } catch (exception) {
+      toast.show(t('Dashboard.Management.AddOperator.toasts.error'), {
+        type: 'md_danger',
+      });
       console.error(exception);
     }
   }

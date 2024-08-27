@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { RefreshControl } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -48,20 +48,7 @@ export default function CoolingUnitsPlanner() {
   }, [coolingUnitCapacity]);
 
   return (
-    <ScrollView
-      contentContainerStyle="mt-5 items-center pb-10"
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          refreshing={isValidating}
-          onRefresh={async () => {
-            if (typeof selectedCoolingUnit?.id !== 'undefined') {
-              await revalidateCapacity();
-            }
-          }}
-        />
-      }
-    >
+    <View tw="pt-5">
       <GenericFilter>
         <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
           <GenericFilter.Companies />
@@ -69,26 +56,41 @@ export default function CoolingUnitsPlanner() {
         <GenericFilter.CoolingUnits />
       </GenericFilter>
 
-      <Text tw="self-start mt-5 mb-4 ml-4" variant="titleLarge">
-        {t('Dashboard.CoolingUnitsPlanner.occupancy')}
-      </Text>
+      <ScrollView
+        contentContainerStyle="items-center pb-10"
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isValidating}
+            onRefresh={async () => {
+              if (typeof selectedCoolingUnit?.id !== 'undefined') {
+                await revalidateCapacity();
+              }
+            }}
+          />
+        }
+      >
+        <Text tw="self-start mt-5 mb-4 ml-4" variant="titleLarge">
+          {t('Dashboard.CoolingUnitsPlanner.occupancy')}
+        </Text>
 
-      <SemiCircleChart
-        maxCapacity={MAX_CAPACITY}
-        currentAmount={capacity[selectedColumn].amount}
-        currentDate={capacity[selectedColumn].timestamp}
-      />
+        <SemiCircleChart
+          maxCapacity={MAX_CAPACITY}
+          currentAmount={capacity[selectedColumn].amount}
+          currentDate={capacity[selectedColumn].timestamp}
+        />
 
-      <Text tw="self-start mb-5 mt-10 ml-4" variant="titleMedium">
-        {t('Dashboard.CoolingUnitsPlanner.week')}
-      </Text>
+        <Text tw="self-start mb-5 mt-10 ml-4" variant="titleMedium">
+          {t('Dashboard.CoolingUnitsPlanner.week')}
+        </Text>
 
-      <WeekBarChart
-        maxCapacity={MAX_CAPACITY}
-        datums={capacity}
-        selectedIndex={selectedColumn}
-        onSelect={setSelectedColumn}
-      />
-    </ScrollView>
+        <WeekBarChart
+          maxCapacity={MAX_CAPACITY}
+          datums={capacity}
+          selectedIndex={selectedColumn}
+          onSelect={setSelectedColumn}
+        />
+      </ScrollView>
+    </View>
   );
 }

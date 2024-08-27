@@ -25,6 +25,7 @@ import LocationNameModule from './AddLocation/modules/LocationNameModule';
 import StepModule from './AddLocation/modules/StepModule';
 import StepFactory from './AddLocation/modules/StepFactory';
 import { getCountryFullName, pickFormValues } from './AddLocation/utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('screen').width - 42) / 2;
 
@@ -40,6 +41,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
 
   const { t } = useTranslationUtils();
   const { mutate, cache } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const { data, isLoading } = useApiCall(
     'getLocation',
@@ -66,6 +68,10 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
 
       await ColdtivateService.editLocation({ ...data, locationId });
 
+      toast.show(t('Dashboard.Management.Location.toasts.editLocationSuccess'), {
+        type: 'md_success',
+      });
+
       await Promise.all([
         mutate(getQueryKey('getLocation', { locationId, companyId })),
         mutate(getQueryKey('getLocations', companyId)),
@@ -81,6 +87,11 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       toggleModalVisibility();
       toggleProcessing();
       await ColdtivateService.deleteLocation(locationId);
+
+      toast.show(
+        t('Dashboard.Management.Location.toasts.removeLocationSuccess', { name: data.name }),
+        { type: 'md_success' }
+      );
 
       await mutate(getQueryKey('getLocations', companyId));
       cache.delete(getQueryKey('getLocation', { locationId, companyId }));

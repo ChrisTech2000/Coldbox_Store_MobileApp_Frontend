@@ -22,6 +22,7 @@ export type EditCoolingUserStackRoutes = {
   };
   CoolingUsersSurvey: {
     farmerId: number;
+    redirectTo?: string;
   };
 };
 

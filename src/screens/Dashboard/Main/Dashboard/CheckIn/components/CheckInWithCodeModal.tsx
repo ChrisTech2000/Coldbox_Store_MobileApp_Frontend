@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { Portal } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -14,6 +13,7 @@ import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import InAppNotifications from '#common/InAppNotifications';
 
 type CheckInWithCodeModalProps = {
   isModalOpen: boolean;
@@ -29,7 +29,8 @@ type GroupedProduce = { [produceId: number]: CheckOut };
 
 export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCodeModalProps) {
   const { t, zodResolver } = useTranslationUtils();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
+
   const { addProduce, coolingUnit, setCheckOutCode } = useCheckInStore();
 
   const {
@@ -75,7 +76,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
 
       if (!isArray(result) && result.message) {
         toast.show(result.message, {
-          type: 'danger',
+          type: 'md_danger',
         });
         return;
       }

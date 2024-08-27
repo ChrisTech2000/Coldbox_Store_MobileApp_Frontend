@@ -149,6 +149,11 @@ const en = {
           description:
             'The cold room user. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator.',
         },
+        toasts: {
+          login:
+            'The username or password are not correct. Please confirm you have selected the right user role',
+          success: 'Successfully logged in',
+        },
       },
       form: {
         user: {
@@ -457,6 +462,9 @@ const en = {
       temperature: 'Temperature',
       lastUpdated: 'Last updated at {{date}}',
       enterTemperature: 'Enter temperature',
+      toasts: {
+        confirmation: 'Temperature modified correctly',
+      },
     },
     CoolingUnitsCratesInfo: {
       commodity: 'Commodity',
@@ -548,6 +556,11 @@ const en = {
         actions: {
           currentLocation: 'Choose current location',
         },
+        toasts: {
+          addLocationSuccess: 'Successfully added location',
+          editLocationSuccess: 'Successfully edited location',
+          removeLocationSuccess: 'Location {{name}} was successfully deleted.',
+        },
       },
       Operators: {
         banner:
@@ -571,6 +584,20 @@ const en = {
         messages: {
           operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
         },
+        toasts: {
+          error: 'Phone already assigned. Try a different one',
+          success: 'Successfully invited operator',
+        },
+      },
+      EditOperator: {
+        toasts: {
+          success: 'Successfully edited operator',
+        },
+      },
+      AddCoolingUser: {
+        toasts: {
+          add: 'Add Cooling user',
+        },
       },
       CompanyDetails: {
         labels: {
@@ -588,6 +615,9 @@ const en = {
         actions: {
           save: 'Save Changes',
         },
+        toasts: {
+          success: 'Successfully edited',
+        },
       },
       RegisteredEmployee: {
         invited: 'Invited ({{amount}})',
@@ -599,6 +629,9 @@ const en = {
       },
       AddRegisteredEmployee: {
         message: 'To join the Coldtivate app as a Registered Employee, go to: {{link}}',
+        toasts: {
+          success: 'Successfully invited registered employee',
+        },
       },
       CoolingUsers: {
         modals: {
@@ -620,6 +653,9 @@ const en = {
             'This account cannot be deleted because the user has active check-ins in the cooling unit(s) {{names}}. Please notify the user to come to the room to pick up these items and complete the check-outs before deleting the account!',
           confirmation:
             'Are you sure you want to delete this user from your list of cooling users? This operation will delete this cooling user and can not be reversed!',
+          edit: 'Successfully edited cooling user',
+          noCoolingUnits: "You don't have any cooling units yet",
+          updateSuccess: 'Successfully updated',
         },
         pdf: {
           dateRange: 'Date range',
@@ -628,6 +664,7 @@ const en = {
         },
         actions: {
           downloadFarmers: "Download farmer's dashboard data",
+          completeLater: 'Complete later',
         },
       },
       AddCoolingUnit: {
@@ -718,6 +755,12 @@ const en = {
           KILOGRAMS: 'kg',
           CRATES: 'Crate',
         },
+        toasts: {
+          addSuccess: 'Successfully added cooling unit',
+          integrationError:
+            'Unable to connect to the sensor. Validate your data or contact your sensor provider.',
+          integrationSuccess: 'Successfully authenticated the sensor credentials.',
+        },
       },
       EditCoolingUnit: {
         modal: {
@@ -727,6 +770,11 @@ const en = {
         buttons: {
           viewExisting: 'View Existing',
           editPricing: 'Edit Pricing',
+        },
+        toasts: {
+          editSuccess: 'Successfully edited cooling unit',
+          cantDelete: "This cooling unit can't be deleted because it has active check-ins.",
+          successDelete: 'Cooling unit {{name}} was successfully deleted.',
         },
       },
       UsageAnalysis: {
@@ -772,6 +820,9 @@ const en = {
       fields: {
         location: 'Location',
         userCode: 'Cooling User Import Code',
+      },
+      toasts: {
+        success: 'Successfully updated user',
       },
     },
     About: {

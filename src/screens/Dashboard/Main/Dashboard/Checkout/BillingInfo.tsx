@@ -3,7 +3,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import { Divider, Icon, Switch } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
@@ -19,6 +18,7 @@ import { Input } from '#ui/components/Input';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import InAppNotifications from '#common/InAppNotifications';
 
 const usePaymentTypeStore = createSelectStore<EPaymentType>();
 
@@ -27,7 +27,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const { t } = useTranslationUtils();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
 
   const { company } = useManagementStore();
   const { selectedItem: paymentType } = usePaymentTypeStore();
@@ -89,7 +89,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const checkout = useCallback(async () => {
     if (!crates || !user) {
       toast.show(t('Dashboard.CrateManagement.operationError'), {
-        type: 'danger',
+        type: 'md_danger',
       });
       return;
     }

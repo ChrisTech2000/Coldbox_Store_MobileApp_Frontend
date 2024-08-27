@@ -11,6 +11,7 @@ import SensorsService from '#services/SensorsService';
 import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import InAppNotifications from '#common/InAppNotifications';
 
 type FormValues = {
   username: string;
@@ -20,6 +21,7 @@ type FormValues = {
 
 export default function EcozenForm() {
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const form = useForm<FormValues>({
     reValidateMode: 'onSubmit',
@@ -43,7 +45,9 @@ export default function EcozenForm() {
       });
 
       if (!result) {
-        // TODO -> show a toast with an error message
+        toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
+          type: 'md_danger',
+        });
         return;
       }
 
@@ -53,6 +57,10 @@ export default function EcozenForm() {
         password: values.password,
         type: 'ecozen',
       } satisfies SensorDatum;
+
+      toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationSuccess'), {
+        type: 'md_danger',
+      });
 
       emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
     } catch (exception) {

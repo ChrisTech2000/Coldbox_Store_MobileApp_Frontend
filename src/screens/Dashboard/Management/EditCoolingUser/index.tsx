@@ -27,6 +27,7 @@ import FarmerDashboardData from './components/FarmerDashboardData';
 import DeleteAction from './components/DeleteAction';
 
 import { DataLoader } from './utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 export const STATIC_START_DATE = '2022-10-01';
 export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
@@ -37,6 +38,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const currentUser = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const { data, isLoading, refetch, hasError } = useApiCall(
     GET_FARMER_RECORD_SWR_KEY,
@@ -80,6 +82,9 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
           updateUser: true,
         });
       }
+
+      toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.edit'), { type: 'md_success' });
+
       await Promise.all([refetch(), revalidateCUCache()]);
       props.navigation.goBack();
     } catch (exception) {

@@ -3,7 +3,6 @@ import React, { useCallback, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import { API_BASE_URL } from '#constants/environment';
@@ -18,12 +17,13 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import InAppNotifications from '#common/InAppNotifications';
 
 function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDetails'>) {
   const { produce, coolingUnit } = route.params;
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
 
   const { data: farmers } = useApiCall(
     'getOperatorFarmers',
@@ -42,7 +42,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
   const copyToClipboard = useCallback(
     (text: string) => {
       Clipboard.setString(text);
-      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'success' });
+      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
     },
     [toast]
   );

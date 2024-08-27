@@ -42,20 +42,28 @@ export default function NotificationItem({
     const notification = findNotificationById(notificationId);
     if (!notification) return toggleSettingUpSurveyStatus();
 
-    const farmers = await ColdtivateService.getFarmers();
-    const contextualFarmer = farmers?.find(
-      (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
-    );
-    if (!contextualFarmer) return toggleSettingUpSurveyStatus();
-
     switch (notification.eventType) {
-      case 'FARMER_SURVEY':
+      case 'FARMER_SURVEY': {
+        const farmers = await ColdtivateService.getFarmers();
+        const contextualFarmer = farmers?.find(
+          (farmer) =>
+            `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
+        );
+        if (!contextualFarmer) return toggleSettingUpSurveyStatus();
         await _handleFarmerSurvey(notification, contextualFarmer.id);
         break;
+      }
 
-      case 'MARKET_SURVEY':
+      case 'MARKET_SURVEY': {
+        const farmers = await ColdtivateService.getFarmers();
+        const contextualFarmer = farmers?.find(
+          (farmer) =>
+            `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
+        );
+        if (!contextualFarmer) return toggleSettingUpSurveyStatus();
         await _handleMarketSurvey(notification, contextualFarmer.id);
         break;
+      }
 
       default:
         break;
@@ -85,7 +93,7 @@ export default function NotificationItem({
     if (!contextualCrop) return toggleSettingUpSurveyStatus();
 
     const contextualFarmerSurvey = surveys?.at(0);
-    const datum: CommoditySurveyDatum = {
+    const datum = {
       farmerSurveysLength: list.length + 1,
       companyCurrency: managementCompany?.currency ?? 'NGN',
       crops,
@@ -95,7 +103,7 @@ export default function NotificationItem({
       userType: (contextualFarmerSurvey?.userType as EOccupation) ?? EOccupation.FARMER,
       experience: contextualFarmerSurvey?.experience ? EExperience.OLD : EExperience.NEW,
       experienceInMonths: contextualFarmerSurvey?.experienceDuration?.toString() ?? '1',
-    };
+    } satisfies CommoditySurveyDatum;
 
     emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_COMMODITY_MODAL, datum);
     useRightDrawerStore.getState().toggle(false);
@@ -124,7 +132,7 @@ export default function NotificationItem({
       .filter((crop) => !movementDetails.hasMarketSurvey.includes(crop.id))
       .map((crop) => ({ id: crop.id, name: crop.name }));
 
-    const datums: NotificationOpenSurveyEventDatums = {
+    const datums = {
       eventType: 'MARKET_SURVEY',
       datums: {
         checkoutId: movementDetails.checkoutId,
@@ -132,7 +140,7 @@ export default function NotificationItem({
         crops: movementCropsForSurvey,
         farmer: movementDetails.farmer,
       },
-    };
+    } satisfies NotificationOpenSurveyEventDatums;
 
     emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY, datums);
     useRightDrawerStore.getState().toggle(false);

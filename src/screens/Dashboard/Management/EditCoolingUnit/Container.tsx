@@ -25,6 +25,7 @@ import { METRIC_UNITS, PRICING_TYPE } from '../AddCoolingUnit/constants';
 
 import DeleteAction from './components/DeleteAction';
 import { CropPricingManager } from '../AddCoolingUnit/utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('screen').width - 42) / 2;
 
@@ -48,6 +49,8 @@ export default function ScreenContainer(props: Props) {
   const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+
+  const toast = InAppNotifications.useToast();
 
   const {
     data: unit,
@@ -141,6 +144,10 @@ export default function ScreenContainer(props: Props) {
         },
         coolingUnitId
       );
+
+      toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.editSuccess'), {
+        type: 'md_success',
+      });
 
       await Promise.all([refetch(), mutate(getQueryKey('getLocations', props.companyId))]);
       navigation.goBack();

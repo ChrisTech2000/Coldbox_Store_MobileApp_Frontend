@@ -26,6 +26,7 @@ import CountryField from './modules/CountryField';
 import DeleteAccountAction from './components/DeleteAccountAction';
 
 import type { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
+import InAppNotifications from '#common/InAppNotifications';
 
 function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   const user = useAuthStore(useShallow((store) => store.user));
@@ -42,6 +43,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   const patchFarmer = useDashboardStore((store) => store.patchFarmer);
   const { t } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
+  const toast = InAppNotifications.useToast();
 
   async function onSubmit(values: FormValues) {
     if (!user) return; // safe guard
@@ -72,6 +74,11 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
           farmerParentName: farmerDatum.parentName,
         });
       }
+
+      toast.show(t('Dashboard.AccountDetails.toasts.success'), {
+        type: 'md_success',
+        style: { marginBottom: 50 },
+      });
     } catch (exception) {
       console.error(exception);
     }

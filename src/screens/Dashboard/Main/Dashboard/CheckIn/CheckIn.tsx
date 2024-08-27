@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, TouchableHighlight, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon, IconButton } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 import colors from 'tailwindcss/colors';
 
 import { API_BASE_URL } from '#constants/environment';
@@ -28,6 +27,7 @@ import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CrateSetupModal } from './components/CrateSetupModal';
+import InAppNotifications from '#common/InAppNotifications';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -48,7 +48,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   } = useCheckInStore();
 
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
 
   const { data: surveys } = useApiCall(
     'getFarmerSurveys',
@@ -111,7 +111,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const onSubmit = useCallback(async () => {
     if (!produces || !produces.length) {
       toast.show(t('Dashboard.CrateManagement.CheckIn.emptyMessage'), {
-        type: 'danger',
+        type: 'md_danger',
       });
       return;
     }
@@ -146,7 +146,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     if (result) {
       resetCheckInStore();
       toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), {
-        type: 'success',
+        type: 'md_success',
       });
 
       setTimeout(() => refreshData.forEach((fn) => fn()), 1000);

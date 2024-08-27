@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Platform, TouchableOpacity, View } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator, Icon } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -25,10 +24,11 @@ import { CratesContent } from './components/CratesContent';
 import { InnerTabs, Tab } from './components/InnerTabs';
 import { UsersContent } from './components/UserContent';
 import { useAggregatedData } from './store';
+import InAppNotifications from '#common/InAppNotifications';
 
 export function AggregatedSection() {
   const { t } = useTranslationUtils();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
   const { coolingUnits } = useAnalyticsData();
   const { company } = useManagementStore();
   const {
@@ -109,11 +109,11 @@ export function AggregatedSection() {
       const file = await RNHTMLtoPDF.convert(PDFOptions);
       if (!file.filePath) throw new Error();
       toast.show(t('Dashboard.History.pdfModal.successMessage'), {
-        type: 'success',
+        type: 'md_success',
       });
     } catch {
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
-        type: 'danger',
+        type: 'md_danger',
       });
     }
   }, [t, toast, coolingUnits, coolingUnitData, updatedImpactData, company]);

@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 
 import type { AuthRouteProps } from '#navigation/Auth';
 import { passwordRegex } from '#constants/schemas';
@@ -20,7 +19,6 @@ type PasswordResetSchema = {
 function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
   const { navigation, route } = props;
 
-  const toast = useToast();
   const { t, zodResolver } = useTranslationUtils();
 
   const [hidePass, setHidePass] = useState<boolean>(true);
@@ -57,24 +55,21 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
     ),
   });
 
-  const onSubmit: SubmitHandler<PasswordResetSchema> = useCallback(
-    async (data) => {
-      try {
-        const { resetCode, phoneNumber } = route.params;
+  const onSubmit: SubmitHandler<PasswordResetSchema> = useCallback(async (data) => {
+    try {
+      const { resetCode, phoneNumber } = route.params;
 
-        await AuthService.resetPassword({
-          phoneNumber,
-          code: resetCode,
-          password: data.password,
-        });
+      await AuthService.resetPassword({
+        phoneNumber,
+        code: resetCode,
+        password: data.password,
+      });
 
-        navigation.navigate('SignIn');
-      } catch {
-        // silent error
-      }
-    },
-    [toast]
-  );
+      navigation.navigate('SignIn');
+    } catch {
+      // silent error
+    }
+  }, []);
 
   return (
     <View tw="flex-1 items-center mt-4 space-y-4">

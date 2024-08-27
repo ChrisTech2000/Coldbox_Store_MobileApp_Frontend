@@ -15,6 +15,7 @@ import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/c
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import InAppNotifications from '#common/InAppNotifications';
 
 type FormValues = {
   // contextual fields
@@ -30,6 +31,7 @@ type FormValues = {
 
 export default function UbibotForm() {
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -77,10 +79,14 @@ export default function UbibotForm() {
             accountKey: values.accountKey,
             channelId: values.channelId,
           });
+
           if (!(result?.data?.length >= 1)) {
-            // TODO -> show a toast with an error message
+            toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
+              type: 'md_danger',
+            });
             return;
           }
+
           form.reset((prev) => ({
             ...prev,
             _step: 'save',
@@ -101,6 +107,10 @@ export default function UbibotForm() {
           field: values.temperatureField,
           type: 'ubibot',
         } satisfies SensorDatum;
+
+        toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationSuccess'), {
+          type: 'md_danger',
+        });
 
         emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
         return;

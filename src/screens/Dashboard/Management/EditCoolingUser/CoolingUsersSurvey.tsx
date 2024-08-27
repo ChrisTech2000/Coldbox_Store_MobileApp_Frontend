@@ -21,6 +21,7 @@ import OccupationField from './components/SurveyFormFields/OccupationField';
 import ExperienceField from './components/SurveyFormFields/ExperienceField';
 import CommoditiesField from './components/SurveyFormFields/CommoditiesField';
 import AddCommodity from './components/AddCommodity';
+import InAppNotifications from '#common/InAppNotifications';
 
 const SWR_CACHE_KEY = 'getCoolingUsersSurveyAggregatedData';
 const width = (Dimensions.get('screen').width - 42) / 2;
@@ -47,6 +48,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
 
   const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const companyCurrency: string = company?.currency ?? 'NGN';
 
@@ -92,6 +94,11 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
               },
             ],
           });
+
+          toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.updateSuccess'), {
+            type: 'md_success',
+          });
+
           if (response) await refetch();
           return response;
         };
@@ -118,6 +125,12 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
     );
   }
 
+  function redirect() {
+    if (typeof params.redirectTo === 'undefined') props.navigation.goBack();
+    // eslint-disable-next-line
+    else props.navigation.navigate(params.redirectTo as any);
+  }
+
   return (
     <View tw="space-y-4 mx-4 pt-2 pb-8">
       <SurveyFormManager
@@ -133,7 +146,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
             });
             if (response) {
               await refetch();
-              props.navigation.goBack();
+              redirect();
             }
           } catch (exception) {
             console.error(exception);
@@ -162,12 +175,17 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
                 <Button
                   style={{ width }}
                   mode="contained"
-                  onPress={props.navigation.goBack}
+                  onPress={(evt) => {
+                    evt?.stopPropagation();
+                    redirect();
+                  }}
                   icon="close-circle-outline"
                   buttonColor={paperTheme.colors.error}
                   uppercase
                 >
-                  {t('actions.cancel')}
+                  {typeof params.redirectTo === 'undefined'
+                    ? t('actions.cancel')
+                    : t('Dashboard.Management.EditCoolingUsers.actions.completeLater')}
                 </Button>
                 <Button
                   style={{ width }}

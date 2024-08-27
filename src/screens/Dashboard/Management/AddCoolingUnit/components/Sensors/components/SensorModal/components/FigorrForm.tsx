@@ -11,6 +11,7 @@ import SensorsService from '#services/SensorsService';
 import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import InAppNotifications from '#common/InAppNotifications';
 
 type FormValues = {
   apiKey: string;
@@ -19,6 +20,7 @@ type FormValues = {
 
 export default function FigorrForm() {
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const form = useForm<FormValues>({
     reValidateMode: 'onSubmit',
@@ -38,11 +40,15 @@ export default function FigorrForm() {
         apiKey: values.apiKey,
         deviceTag: values.deviceTag,
       });
+
       const contextualSensor = result?.at(0);
       if (!contextualSensor) {
-        // TODO -> show a toast with an error message
+        toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
+          type: 'md_danger',
+        });
         return;
       }
+
       const sensorData = {
         machineID: contextualSensor.deviceTag,
         id: contextualSensor.imei,
@@ -53,6 +59,10 @@ export default function FigorrForm() {
         password: values.apiKey,
         type: contextualSensor.type,
       } satisfies SensorDatum;
+
+      toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationSuccess'), {
+        type: 'md_danger',
+      });
 
       emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
     } catch (exception) {

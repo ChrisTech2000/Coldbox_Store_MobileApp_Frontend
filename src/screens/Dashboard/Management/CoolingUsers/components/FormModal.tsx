@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { type NavigationProp } from '@react-navigation/native';
 import { Modal, Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
-import { useToast } from 'react-native-toast-notifications';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
@@ -13,6 +12,7 @@ import { useToggle } from '#ui/hooks/useToggle';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAppEventListener } from '#ui/lib/emitter';
 import ColdtivateService from '#services/ColdtivateService';
+import InAppNotifications from '#common/InAppNotifications';
 
 type FormValues = {
   code: string;
@@ -32,7 +32,7 @@ export default function FormModal(props: Props) {
 
   const [isVisible, toggleVisibility, setModalVisibility] = useToggle(false);
   const { t, zodResolver } = useTranslationUtils();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
 
   useAppEventListener<[boolean]>('DISPATCH_CU_FORM_MODAL', setModalVisibility);
 
@@ -57,12 +57,12 @@ export default function FormModal(props: Props) {
       const coolingUser = result?.at(0);
 
       if (!coolingUser) {
-        toast.show(t('Dashboard.Management.CoolingUsers.toasts.notFound'), { type: 'danger' });
+        toast.show(t('Dashboard.Management.CoolingUsers.toasts.notFound'), { type: 'md_danger' });
         return;
       }
 
       if (coolingUsersIds.includes(coolingUser.id)) {
-        toast.show(t('Dashboard.Management.CoolingUsers.toasts.taken'), { type: 'danger' });
+        toast.show(t('Dashboard.Management.CoolingUsers.toasts.taken'), { type: 'md_danger' });
         return;
       }
 

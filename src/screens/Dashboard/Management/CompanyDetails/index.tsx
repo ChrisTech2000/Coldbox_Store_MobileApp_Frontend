@@ -22,6 +22,7 @@ import CommodityField from './modules/CommodityField';
 import CurrencyField from './modules/CurrencyField';
 
 import { derivedSubjects } from './utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('screen').width - 42) / 2;
 
@@ -29,6 +30,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
   const { navigation } = props;
 
   const { mutate } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
   const company = useManagementStore(useShallow((store) => store.company));
@@ -72,6 +74,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
         logo: values.logo.uri !== subjects.companyLogo ? values.logo : null,
       });
 
+      toast.show(t('Dashboard.Management.CompanyDetails.toasts.success'), { type: 'md_success' });
       await mutate(getQueryKey('getCompanyById', company.id));
       navigation.goBack();
     } catch (exception) {
