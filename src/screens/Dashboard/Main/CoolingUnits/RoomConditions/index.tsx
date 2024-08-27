@@ -92,6 +92,7 @@ function CoolingUnitsRoomConditions() {
                   temp={chartDatums.info.temperature}
                   coolingUnitId={selectedCoolingUnit!.id}
                   revalidateTemperatures={revalidateTemperatures}
+                  hasSensorIntegration={selectedCoolingUnit?.sensor ?? false}
                 />
               </RBAC.ProtectedResource>
             </View>

@@ -6,6 +6,7 @@ import type { NavigationHeaderProps } from '#navigation/components/NavigatorHead
 
 import { useRightDrawerStore } from '../index';
 import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
+import type { DashboardMainRoutePaths } from '../Main';
 import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
 import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
@@ -49,6 +50,7 @@ export function useDashboardHeader() {
 export type DashboardHeaderFactory = ReturnType<typeof useDashboardHeader>;
 
 type BottomNavRoutePaths =
+  | DashboardMainRoutePaths
   | MainTabStackRoutePaths
   | HistoryTabStackRoutePaths
   | MarketPriceTabsRoutePaths
