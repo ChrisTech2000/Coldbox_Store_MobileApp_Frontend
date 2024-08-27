@@ -51,7 +51,6 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       defaultData: [],
     }
   );
-
   const {
     data: operatorDashboardProduces,
     refetch: refreshOperatorDashboardProduces,
