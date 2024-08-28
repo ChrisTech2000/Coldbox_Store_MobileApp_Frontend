@@ -107,6 +107,8 @@ platform :ios do
 
     desc "Build the app"
     lane :build do |options|
+        require 'tempfile'
+
         # variables
         apple_id = CredentialsManager::AppfileConfig.try_fetch_value(:apple_id) || "jmoreira@mosano.eu"
         app_identifier = options[:app_identifier] || CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) || "com.base.coldtivate"
@@ -134,10 +136,29 @@ platform :ios do
             # force: true,
         )
 
-        cocoapods(
-            podfile: 'ios/Podfile',
-            use_bundle_exec: false,
-        )
+        netrc_file = Tempfile.new('netrc')
+        ENV['NETRC'] = netrc_file.path
+        #begin
+            netrc_file.write <<~CONTENT
+                machine api.mapbox.com
+                login mapbox
+                password #{ENV['MAPBOX_DOWNLOADS_TOKEN']}
+            CONTENT
+
+            # Ensure the content is flushed to the file
+            netrc_file.flush
+
+            puts "Using temporary .netrc file at: #{netrc_file.path}"
+
+            cocoapods(
+                podfile: 'ios/Podfile',
+                use_bundle_exec: false,
+            )
+        #ensure
+            #ENV.delete('NETRC')
+            #netrc_file.close
+            #netrc_file.unlink
+        #end
 
         increment_version_number(
             xcodeproj: "ios/coldtivate.xcodeproj",
@@ -200,7 +221,6 @@ platform :ios do
             beta_app_feedback_email: "jmoreira@mosano.eu", # TODO: use the Appfile.apple_id, or coldtivate's public email
         )
     end
-
 
   ################################################################################
 
