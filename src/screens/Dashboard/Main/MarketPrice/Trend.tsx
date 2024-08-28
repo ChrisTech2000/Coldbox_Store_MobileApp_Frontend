@@ -18,6 +18,15 @@ import { AllowedCountry, usePriceTrendsStore } from './store';
 const useCommodityStore = createSelectStore<PredictionCrop>();
 const useStateStore = createSelectStore<PredictionState>();
 
+type QueryCountry = 'IN' | 'NG';
+
+const MAP_ALLOWED_COUNTRY: Record<AllowedCountry, QueryCountry> = {
+  IN: 'IN',
+  NG: 'NG',
+  India: 'IN',
+  Nigeria: 'NG',
+};
+
 function MarketPriceTrend() {
   const { t } = useTranslationUtils();
   const { country, loadingFarmer, setPredictionParams } = usePriceTrendsStore();
@@ -30,7 +39,7 @@ function MarketPriceTrend() {
   const { data: predictionParams, isLoading: loadingPredictionParams } = useApiCall(
     'getPredictionParams',
     ColdtivateService.getPredictionParams,
-    country as AllowedCountry,
+    MAP_ALLOWED_COUNTRY[country ?? ('' as AllowedCountry)] as QueryCountry,
     {
       skip: !country,
     }

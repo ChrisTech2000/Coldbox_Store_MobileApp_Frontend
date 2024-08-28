@@ -250,10 +250,10 @@ export function ImpactContent<T extends Store>({
           <View tw="flex flex-row items-center space-x-6">
             <View tw="flex flex-row items-end">
               <Text variant="TextMedium" tw="text-3xl font-bold">
-                {getMetricValue(impactData?.impactMetrics?.[0].numPostHarvestSurveys)}
+                {getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys)}
               </Text>
               <Text variant="TextMedium" tw="text-xl">
-                /{getMetricValue(impactData?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom)}
+                /{getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)}
               </Text>
             </View>
             <Text variant="TextMedium" tw="text-4xl font-bold text-purple-500">

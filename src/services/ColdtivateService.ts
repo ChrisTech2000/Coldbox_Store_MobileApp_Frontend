@@ -770,9 +770,10 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public deleteUser = async (userId: number) => {
+  public deleteUser = async (userId: number): Promise<Record<string, string>> => {
     try {
-      const { data } = await this.delete(subs(EUserEndpoints.UPDATE_USER, { userId }));
+      const url = subs(EUserEndpoints.UPDATE_USER, { userId });
+      const { data } = await this.delete<Record<string, string>>(url);
       return data;
     } catch (error) {
       console.log(error);
