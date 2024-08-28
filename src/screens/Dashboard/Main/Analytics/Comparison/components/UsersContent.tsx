@@ -57,7 +57,7 @@ export function UsersContent() {
             items={
               configData?.coolingUnits.map((unit, index) => ({
                 coolingUnitName: unit.name,
-                value: `${coolingUnitData?.roomOpMa?.[index] ?? 0} | ${coolingUnitData?.roomOpFem?.[index]} | ${coolingUnitData?.roomOpOt?.[index]}`,
+                value: `${coolingUnitData?.roomOpMa?.[index] ?? 0} | ${coolingUnitData?.roomOpFem?.[index] ?? 0} | ${coolingUnitData?.roomOpOt?.[index] ?? 0}`,
                 total: coolingUnitData?.roomOp?.[index] ?? 0,
               })) ?? []
             }
@@ -80,7 +80,7 @@ export function UsersContent() {
             items={
               configData?.coolingUnits.map((unit, index) => ({
                 coolingUnitName: unit.name,
-                value: `${coolingUnitData?.roomActiveMa?.[index] ?? 0} | ${coolingUnitData?.roomActiveFem?.[index]} | ${coolingUnitData?.roomActiveOt?.[index]}`,
+                value: `${coolingUnitData?.roomActiveMa?.[index] ?? 0} | ${coolingUnitData?.roomActiveFem?.[index] ?? 0} | ${coolingUnitData?.roomActiveOt?.[index] ?? 0}`,
                 total: coolingUnitData?.roomActiveUsers?.[index] ?? 0,
               })) ?? []
             }
