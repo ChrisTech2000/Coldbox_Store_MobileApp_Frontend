@@ -12,16 +12,16 @@ export function getCountryFullName(companyCountry?: string): string | undefined 
 }
 
 class Geocoder {
-  private client: GeocodeService;
+  private _client: GeocodeService;
 
   constructor() {
-    this.client = geocodingService({ accessToken: MAPBOX_ACCESS_TOKEN });
+    this._client = geocodingService({ accessToken: MAPBOX_ACCESS_TOKEN });
   }
 
   async getCoordsFromAddress(datums: Omit<PreprocessedFormValues, '_step'>) {
     const address = `${datums.streetNumber} ${datums.street}, ${datums.city}, ${datums.state}, ${datums.zipCode}, ${datums.country}`;
 
-    const result = await this.client.forwardGeocode({ query: address, limit: 1 }).send();
+    const result = await this._client.forwardGeocode({ query: address, limit: 1 }).send();
 
     const location = result?.body?.features?.at(0)?.center;
     if (typeof location === 'undefined' || location.length !== 1) {
@@ -33,35 +33,32 @@ class Geocoder {
   }
 
   async getAddressFromCoords(datums: Pick<PreprocessedFormValues, 'latitude' | 'longitude'>) {
-    const result = await this.client
+    const result = await this._client
       .reverseGeocode({ query: [datums.longitude, datums.latitude], limit: 1 })
       .send();
 
     const feature = result?.body?.features?.at(0);
-    if (!feature) {
+    if (typeof feature === 'undefined') {
       throw new Error('No results found');
     }
 
-    const _dict: Readonly<Record<string, string>> = Object.freeze({
+    const _lookupMap: Readonly<Record<string, string>> = {
       postcode: 'zipCode',
       place: 'city',
       region: 'state',
       country: 'country',
-    });
+    };
 
-    const entries: Array<[string, string]> = [];
+    const final = {} as Pick<PreprocessedFormValues, 'zipCode' | 'city' | 'state' | 'country'>;
 
     for (const item of feature.context) {
-      const normalizedKey = item.id.split('.')[0];
-      if (normalizedKey in _dict) {
-        entries.push([_dict[normalizedKey], item.text]);
-      }
+      const targetKey = item.id.split('.')[0];
+      const key = _lookupMap?.[targetKey] as keyof typeof final | undefined;
+      if (typeof key === 'undefined') continue;
+      final[key] = item.text;
     }
 
-    return Object.fromEntries(entries) as Pick<
-      PreprocessedFormValues,
-      'zipCode' | 'city' | 'state' | 'country'
-    >;
+    return final;
   }
 }
 
