@@ -17,6 +17,7 @@
   "dependencies": {
     "@casl/ability": "^6.7.1",
     "@hookform/resolvers": "^3.6.0",
+    "@mapbox/mapbox-sdk": "^0.16.0",
     "@react-native-clipboard/clipboard": "^1.14.1",
     "@react-native-community/geolocation": "^3.2.1",
     "@react-native-community/netinfo": "^11.3.2",
@@ -89,6 +90,7 @@
     "@react-native/metro-config": "0.74.84",
     "@react-native/typescript-config": "0.74.84",
     "@types/lodash": "^4.17.5",
+    "@types/mapbox__mapbox-sdk": "^0.15.1",
     "@types/ms": "^0.7.34",
     "@types/react": "^18.2.6",
     "@types/react-native-html-to-pdf": "^0.8.3",
