@@ -3,6 +3,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator, Portal } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
+import merge from 'lodash/merge';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -24,7 +25,7 @@ import FormManager, {
 import LocationNameModule from './AddLocation/modules/LocationNameModule';
 import StepModule from './AddLocation/modules/StepModule';
 import StepFactory from './AddLocation/modules/StepFactory';
-import { getCountryFullName, pickFormValues } from './AddLocation/utils';
+import { geocoder, getCountryFullName } from './AddLocation/utils';
 import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('screen').width - 42) / 2;
@@ -63,10 +64,30 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
 
   async function onSubmit(values: PreprocessedFormValues) {
     try {
-      const data = pickFormValues(values);
-      if (!data) throw new Error();
+      const { _step, ...rest } = values;
 
-      await ColdtivateService.editLocation({ ...data, locationId });
+      let datums: Partial<PreprocessedFormValues> = {};
+
+      switch (_step) {
+        case 'geolocation':
+        case 'coordinates': {
+          const address = await geocoder.getAddressFromCoords({
+            latitude: rest.latitude,
+            longitude: rest.longitude,
+          });
+          datums = merge(rest, address);
+          break;
+        }
+        case 'address': {
+          const coordinates = await geocoder.getCoordsFromAddress(rest);
+          datums = merge(rest, coordinates);
+          break;
+        }
+        default:
+          break;
+      }
+
+      await ColdtivateService.editLocation({ ...datums, locationId });
 
       toast.show(t('Dashboard.Management.Location.toasts.editLocationSuccess'), {
         type: 'md_success',
@@ -108,18 +129,15 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     values.name = data.name;
     values.country = getCountryFullName(data.company.country) ?? '';
 
-    if (data.latitude) {
-      values.latitude = data.latitude.toString();
-      values.longitude = data.longitude.toString();
-    } else {
-      values._step = 'address';
-      values.city = data.city;
-      values.street = data.street;
-      values.state = data.state;
-      values.zipCode = data.zipCode;
-      values.street = data.street;
-      values.streetNumber = data.streetNumber ?? '';
-    }
+    values._step = 'coordinates';
+    values.latitude = data.latitude.toString();
+    values.longitude = data.longitude.toString();
+    values.city = data.city ?? '';
+    values.street = data.street ?? '';
+    values.state = data.state ?? '';
+    values.zipCode = data.zipCode ?? '';
+    values.street = data.street ?? '';
+    values.streetNumber = data.streetNumber ?? '';
 
     formInitialValues.current = values;
   }
