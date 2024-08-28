@@ -19,7 +19,7 @@ export type FormValues = {
 export type PreprocessedFormValues = {
   latitude: number;
   longitude: number;
-} & FormValues;
+} & Omit<FormValues, 'latitude' | 'longitude'>;
 
 export const DEFAULT_VALUES = {
   _step: 'coordinates',
@@ -69,9 +69,9 @@ export default function FormManager(props: FormManagerProps) {
         country: z.string().min(1),
         state: z.string().min(1),
         city: z.string().min(1),
-        zipCode: z.string().min(1),
-        street: z.string().min(1),
-        streetNumber: z.string().min(1),
+        zipCode: z.string().optional(),
+        street: z.string().optional(),
+        streetNumber: z.string().optional(),
       });
 
       const schemaConditions = z.discriminatedUnion('_step', [

@@ -3,6 +3,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
+import merge from 'lodash/merge';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -22,7 +23,7 @@ import LocationNameModule from './modules/LocationNameModule';
 import StepModule from './modules/StepModule';
 import StepFactory from './modules/StepFactory';
 
-import { getCountryFullName, pickFormValues } from './utils';
+import { geocoder, getCountryFullName } from './utils';
 import InAppNotifications from '#common/InAppNotifications';
 
 function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
@@ -37,10 +38,30 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
 
   async function onSubmit(values: PreprocessedFormValues) {
     try {
-      const data = pickFormValues(values);
-      if (!data) throw new Error();
+      const { _step, ...rest } = values;
 
-      await ColdtivateService.addLocation(data);
+      let datums: Partial<PreprocessedFormValues> = {};
+
+      switch (_step) {
+        case 'geolocation':
+        case 'coordinates': {
+          const address = await geocoder.getAddressFromCoords({
+            latitude: rest.latitude,
+            longitude: rest.longitude,
+          });
+          datums = merge(rest, address);
+          break;
+        }
+        case 'address': {
+          const coordinates = await geocoder.getCoordsFromAddress(rest);
+          datums = merge(rest, coordinates);
+          break;
+        }
+        default:
+          break;
+      }
+
+      await ColdtivateService.addLocation(datums);
 
       toast.show(t('Dashboard.Management.Location.toasts.addLocationSuccess'), {
         type: 'md_success',
