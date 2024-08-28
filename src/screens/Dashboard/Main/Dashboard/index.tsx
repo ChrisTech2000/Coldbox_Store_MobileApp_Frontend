@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -39,6 +39,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     data: farmerDashboardProduces,
     refetch: refreshFarmerDashboardProduces,
     isLoading: loadingFarmerDashboardProduces,
+    isValidating: isValidatingFarmerProduces,
   } = useApiCall(
     'getFarmerDashboardProduces',
     ColdtivateService.getFarmerDashboardProduces,
@@ -55,6 +56,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     data: operatorDashboardProduces,
     refetch: refreshOperatorDashboardProduces,
     isLoading: loadingOperatorDashboardProduces,
+    isValidating: isValidatingProduces,
   } = useApiCall(
     'getDashboardProduces',
     ColdtivateService.getDashboardProduces,
@@ -131,6 +133,20 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         <DashboardEmptyState />
       ) : (
         <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={
+                user?.role === ERoles.COOLING_USER
+                  ? isValidatingFarmerProduces
+                  : isValidatingProduces
+              }
+              onRefresh={async () =>
+                user?.role === ERoles.COOLING_USER
+                  ? await refreshFarmerDashboardProduces()
+                  : await refreshOperatorDashboardProduces()
+              }
+            />
+          }
           data={filteredProduces}
           renderItem={({ item: produce, index }) => (
             <Produce
