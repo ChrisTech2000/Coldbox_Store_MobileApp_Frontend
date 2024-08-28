@@ -11,6 +11,7 @@ import type {
   SignupOperatorByInviteParams,
 } from '#types/api.params';
 import type {
+  RefreshSessionResponse,
   SignInResponse,
   SignUpAsCompanyResponse,
   SignUpAsCoolingUserResponse,
@@ -72,6 +73,23 @@ class AuthService extends HttpClient {
       );
 
       if (!data.access || !data.refresh) throw new Error('No valid token pair provided');
+
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public refreshToken = async (refreshToken: string): Promise<RefreshSessionResponse> => {
+    try {
+      const { data } = await this.post<RefreshSessionResponse>(
+        EAuthenticationEndpoints.REFRESH_TOKEN_ENDPOINT,
+        { refresh: refreshToken }
+      );
+
+      if (!data?.access) throw new Error('No valid access token provided');
 
       return data;
     } catch (error) {
