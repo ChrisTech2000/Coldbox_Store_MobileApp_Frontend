@@ -18,6 +18,7 @@ type Props = {
   temp: number;
   coolingUnitId: number;
   revalidateTemperatures: () => Promise<void>;
+  hasSensorIntegration: boolean;
 };
 
 export default function TemperatureModal(props: Props) {
@@ -57,9 +58,20 @@ export default function TemperatureModal(props: Props) {
 
   return (
     <React.Fragment>
-      <Button mode="contained" tw="mt-3" onPress={toggleModalVisibility}>
+      <Button
+        mode="contained"
+        tw="mt-3"
+        onPress={toggleModalVisibility}
+        disabled={props.hasSensorIntegration}
+      >
         {t('Dashboard.CoolingUnitsRoomConditions.enterTemperature')}
       </Button>
+
+      {props.hasSensorIntegration ? (
+        <Text tw="px-16 mt-2 text-zinc-500 text-center">
+          {t('Dashboard.TemperatureAlert.sensorHint')}
+        </Text>
+      ) : null}
 
       <Portal>
         <Modal visible={isModalOpen} onDismiss={toggleModalVisibility}>
@@ -73,7 +85,7 @@ export default function TemperatureModal(props: Props) {
                 control={form.control}
                 render={({ field: { onChange, value, onBlur } }) => (
                   <TextInput
-                    label="Temperature"
+                    label={t('Dashboard.TemperatureAlert.temperature')}
                     mode="flat"
                     keyboardType="numeric"
                     value={value}

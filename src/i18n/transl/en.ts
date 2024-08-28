@@ -275,6 +275,16 @@ const en = {
     },
   },
   Dashboard: {
+    TemperatureAlert: {
+      title: 'Temperature alert',
+      subtitle: 'We noticed there was a change. These are the commodities currently in storage.',
+      edit: 'Do you want to edit the temperature ?',
+      temperature: 'Temperature',
+      newTemperature: 'New temperature',
+      confirm: 'Confirm new temperature',
+      continueWithoutUpdate: 'Continue without update',
+      sensorHint: 'Cannot add temperature because a sensor is connected to the cooling unit.',
+    },
     emptyGeneral: 'At the moment, there is no available data.',
     emptyCoolingUser:
       'Items in storage will appear in the dashboard when you do at least one check-in in any room.',

@@ -19,6 +19,9 @@ import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithSto
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
 
 const usePaymentTypeStore = createSelectStore<EPaymentType>();
 
@@ -28,6 +31,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
+  const { guard } = RBAC.useRBAC();
 
   const { company } = useManagementStore();
   const { selectedItem: paymentType } = usePaymentTypeStore();
@@ -104,8 +108,18 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     });
 
     refreshData.forEach((fn) => fn());
+
+    if (guard('VIEW', 'TemperatureAlertModal')) {
+      const temperatureAlertDatum = {
+        coolingUnitId: coolingUnit!.id,
+        companyId: company!.id,
+      } satisfies TemperatureAlertEvtDatum;
+
+      emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
+    }
+
     rootNavigation.navigate('RootMainTabStack');
-  }, [user, crates, discount, currency, paymentType, isPaid, refreshData]);
+  }, [user, crates, discount, currency, paymentType, isPaid, refreshData, guard, coolingUnit?.id]);
 
   return (
     <View tw="flex-1 p-4">
