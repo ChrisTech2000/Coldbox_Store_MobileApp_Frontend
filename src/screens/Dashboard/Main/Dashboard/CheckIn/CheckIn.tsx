@@ -28,6 +28,9 @@ import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CrateSetupModal } from './components/CrateSetupModal';
 import InAppNotifications from '#common/InAppNotifications';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
+import RBAC from '#common/RBAC';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -49,6 +52,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const toast = InAppNotifications.useToast();
+  const { guard } = RBAC.useRBAC();
 
   const { data: surveys } = useApiCall(
     'getFarmerSurveys',
@@ -150,9 +154,19 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       });
 
       setTimeout(() => refreshData.forEach((fn) => fn()), 1000);
+
+      if (guard('VIEW', 'TemperatureAlertModal')) {
+        const temperatureAlertDatum = {
+          coolingUnitId: coolingUnit.id,
+          companyId: company!.id,
+        } satisfies TemperatureAlertEvtDatum;
+
+        emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
+      }
+
       rootNavigation.navigate('RootMainTabStack');
     }
-  }, [user, produces, checkOutCode]);
+  }, [user, produces, checkOutCode, coolingUnit?.id, guard]);
 
   const currencySymbol = useMemo(() => {
     return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';

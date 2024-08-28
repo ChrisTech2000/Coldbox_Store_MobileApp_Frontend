@@ -27,6 +27,7 @@ import AccountDetailsStack from './AccountDetails';
 
 import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
 import type { AccountDetailsRoutes } from './AccountDetails';
+import TemperatureAlert from './components/TemperatureAlert';
 
 export type DashboardRoutes = {
   Main: undefined;
@@ -116,6 +117,10 @@ export default function DashboardNavigator() {
       >
         <DashboardNavigationRouter />
       </Drawer>
+
+      <RBAC.ProtectedResource action="VIEW" subject="TemperatureAlertModal">
+        <TemperatureAlert />
+      </RBAC.ProtectedResource>
     </RBAC>
   );
 }
