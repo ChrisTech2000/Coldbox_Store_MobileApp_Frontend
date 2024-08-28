@@ -26,6 +26,10 @@ export type SignInResponse = {
   company: Company;
 };
 
+export type RefreshSessionResponse = {
+  access: string;
+};
+
 export type SignUpAsCompanyResponse = {
   company: Company;
   user: User;
