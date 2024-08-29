@@ -135,7 +135,8 @@ export function OperatorActions({
         <View tw="flex flex-row">
           <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
             <TouchableOpacity
-              tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-green-100"
+              tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl"
+              style={{ backgroundColor: paperTheme.colors.secondaryContainer }}
               onPress={onCheckIn}
             >
               <CheckIn width={20} height={20} />
@@ -143,7 +144,7 @@ export function OperatorActions({
           </SkiaShadow>
           <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
             <TouchableOpacity
-              tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-orange-100"
+              tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-red-200"
               onPress={onCheckOut}
             >
               <CheckOut width={20} height={20} />

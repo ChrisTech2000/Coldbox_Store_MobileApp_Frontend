@@ -1,11 +1,11 @@
 export enum EAuthenticationEndpoints {
   RESET_PASSWORD = 'user/v1/reset-password/',
+  REFRESH_TOKEN_ENDPOINT = 'user/token/refresh/',
   SIGN_IN_ENDPOINT = 'user/v1/login/',
   SIGN_UP_AS_COMPANY_ENDPOINT = 'user/v1/service-provider-signup/',
   SIGN_UP_AS_COOLING_USER = 'user/v1/farmers/',
   SIGN_UP_EMPLOYEE_BY_INVITE = 'user/v1/service-provider-invite-signup/',
   SIGN_UP_OPERATOR_BY_INVITE = 'user/v1/operator-invite-signup/',
-  REFRESH_TOKEN_ENDPOINT = 'user/token/refresh/',
 }
 
 export enum EUserEndpoints {

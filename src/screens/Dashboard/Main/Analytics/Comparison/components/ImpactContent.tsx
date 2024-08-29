@@ -255,7 +255,7 @@ export function ImpactContent() {
               configData?.coolingUnits.map((unit, index) => ({
                 coolingUnitName: unit.name,
                 column1: `${getSurveyPercentage(index)}%`,
-                column2: `${getMetricValue(impactData?.impactMetrics?.[0].numPostHarvestSurveys, index) ?? 0} / ${getMetricValue(impactData?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom, index) ?? 0}`,
+                column2: `${getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys, index) ?? 0} / ${getMetricValue(impactData?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom, index) ?? 0}`,
               })) ?? []
             }
             total={configData?.coolingUnits.length ?? 0}

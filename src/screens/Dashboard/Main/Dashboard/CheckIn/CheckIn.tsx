@@ -81,7 +81,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const total = useMemo(() => {
     const dailyPricePerCrate = coolingUnit.commonPricingType.value;
 
-    if (!allHavePlannedDays) return (dailyPricePerCrate * allCrates.length).toFixed(2);
+    if (!allHavePlannedDays || coolingUnit.commonPricingType.type === EPricingType.FIXED)
+      return (dailyPricePerCrate * allCrates.length).toFixed(2);
 
     return allCrates
       .reduce((acc, current) => {

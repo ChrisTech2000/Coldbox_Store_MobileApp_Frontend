@@ -15,9 +15,9 @@ type Actions = {
   setPredictionParams: (predictionParams: PredictionParams | null) => void;
 };
 
-export type AllowedCountry = 'IN' | 'NG';
+export type AllowedCountry = 'IN' | 'NG' | 'India' | 'Nigeria';
 
-const availableCountries: AllowedCountry[] = ['IN', 'NG'];
+const availableCountries: AllowedCountry[] = ['IN', 'NG', 'India', 'Nigeria'];
 
 const useStore = create<State & Actions>((set) => ({
   predictionParams: null,

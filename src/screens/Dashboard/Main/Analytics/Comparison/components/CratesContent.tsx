@@ -258,7 +258,7 @@ export function CratesContent() {
               configData?.coolingUnits.map((unit, index) => {
                 return {
                   coolingUnitName: unit.name,
-                  value: `${coolingUnitData?.roomOpsIn?.[index]} | ${coolingUnitData?.roomOpsOut?.[index]}`,
+                  value: `${coolingUnitData?.roomOpsIn?.[index] ?? 0} | ${coolingUnitData?.roomOpsOut?.[index] ?? 0}`,
                 };
               }) ?? []
             }
