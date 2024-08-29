@@ -5,7 +5,6 @@ import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 import { Easing, useSharedValue } from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
-import { useToast } from 'react-native-toast-notifications';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 
@@ -26,6 +25,7 @@ import { Pagination } from './components/Pagination';
 import { ProduceDetailsOption } from './components/ProduceDetailsOption';
 import { EditCheckInSchema, Schema } from './schema';
 import { generateData } from './utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -34,7 +34,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   const { movement, coolingUnitId } = props.route.params;
 
   const { t, zodResolver } = useTranslationUtils();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
   const { user } = useAuthStore();
   const { refreshData } = useDashboardStore();
 
@@ -90,7 +90,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   const copyToClipboard = useCallback(
     (text: string) => {
       Clipboard.setString(text);
-      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'success' });
+      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
     },
     [toast]
   );
@@ -109,11 +109,11 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
         await Promise.all(promises);
 
-        toast.show(t('Dashboard.History.editCheckIn.successMessage'), { type: 'success' });
+        toast.show(t('Dashboard.History.editCheckIn.successMessage'), { type: 'md_success' });
         refreshData.forEach((fn) => fn());
         props.navigation.navigate('RootHistoryTabStack');
       } catch (error) {
-        toast.show(t('Dashboard.History.editCheckIn.errorMessage'), { type: 'danger' });
+        toast.show(t('Dashboard.History.editCheckIn.errorMessage'), { type: 'md_danger' });
         console.log(error);
       }
     },

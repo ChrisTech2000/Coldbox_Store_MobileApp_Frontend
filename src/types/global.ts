@@ -14,7 +14,7 @@ export type User = {
 export type Farmer = {
   id: number;
   user: User;
-  birthday: Date;
+  birthday: Date | null;
   parentName: string;
   country: string;
   userCode: string | null;
@@ -293,10 +293,12 @@ type Co2Metrics = {
   coolingUnitId: string;
 };
 
-export type ImpactMetric = {
+export type ImpactMetricType = {
   name: string;
   value: number | string;
 };
+
+export type ImpactMetric = ImpactMetricType | Array<ImpactMetricType>;
 
 type ImpactMetrics = {
   companyId: ImpactMetric | number;
@@ -385,7 +387,7 @@ type CropData = {
 };
 
 type RecordValue<T> = {
-  '0': T;
+  [key: string]: T;
 };
 
 export type FarmerData = {
@@ -430,7 +432,7 @@ type AggregatedData = {
   latestSurveyDate: number;
 };
 
-type Top5Data = {
+export type Top5Data = {
   farmerId: number;
   cropId: number;
   cropName: number;
@@ -621,6 +623,11 @@ export enum ESellingLocation {
 export enum EImpactMode {
   COMPANY = 'company',
   COOLING_UNIT = 'cooling_unit',
+}
+
+export enum EView {
+  COMPARISON = 'comparison',
+  AGGREGATED = 'aggregated',
 }
 
 //////////////////////// MAPPERS

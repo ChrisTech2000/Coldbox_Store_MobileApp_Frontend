@@ -27,6 +27,7 @@ type SelectItemProps<T> = {
   autoSelect?: boolean;
   autoSelectAll?: boolean;
   datums: Array<T>;
+  disableOnEmpty?: boolean;
   divider?: boolean;
   emptyMessage?: string;
   isModalVisible: boolean;
@@ -172,6 +173,7 @@ export default function MultipleSelectWithStore<T>({
                 <Button
                   mode="text"
                   uppercase
+                  disabled={rest.disableOnEmpty && !internalSelection.length}
                   onPress={(evt) => {
                     evt.stopPropagation();
                     store.onSelect(internalSelection);

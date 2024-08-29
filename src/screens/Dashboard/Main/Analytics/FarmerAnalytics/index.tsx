@@ -23,19 +23,21 @@ import { InnerTabs, Tab } from './components/InnerTabs';
 import { useFarmerAnalyticsData } from './store';
 
 export function FarmerAnalytics() {
-  const { user } = useAuthStore();
   const { t } = useTranslationUtils();
-  const { configData, setConfigData, setFarmer } = useFarmerAnalyticsData();
+  const user = useAuthStore((store) => store.user);
+  const { configData, setConfigData, setFarmer } = useFarmerAnalyticsData((store) => ({
+    configData: store.configData,
+    setConfigData: store.setConfigData,
+    setFarmer: store.setFarmer,
+  }));
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
 
   const { data: farmerResponse, isLoading: loadingFarmers } = useApiCall(
-    'getFarmer',
-    ColdtivateService.getFarmer,
-    {
-      userId: user?.id as number,
-    },
+    'getFarmerByUserId',
+    ColdtivateService.getFarmerByUserId,
+    user!.id,
     {
       skip: !user?.id,
     }
@@ -44,7 +46,7 @@ export function FarmerAnalytics() {
   const { data: coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
     'getCoolingUnits',
     ColdtivateService.getCoolingUnits,
-    { company: farmerResponse?.[0]?.companies[0] as number }, // TODO: are we supposed to get all
+    { company: farmerResponse?.[0]?.companies[0] as number }, // TODO: are we supposed to get all?
     {
       skip: !farmerResponse?.[0]?.companies[0],
       defaultData: [],
@@ -71,7 +73,7 @@ export function FarmerAnalytics() {
   useEffect(() => {
     if (coolingUnits) {
       setConfigData({
-        coolingUnit: coolingUnits[0],
+        coolingUnits,
         endDate: new Date(),
         startDate: new Date(2022, 9),
       });
@@ -126,6 +128,7 @@ export function FarmerAnalytics() {
               activeTab={activeTab}
               onTabSelection={(tab: Tab) => setActiveTab(tab)}
               compactMode
+              disabled={!coolingUnits?.length}
             />
 
             <View tw="items-center">
@@ -140,7 +143,7 @@ export function FarmerAnalytics() {
                 <Text variant="TextMedium" tw="text-base font-bold">
                   {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
                   <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {configData.coolingUnit?.name ?? ''}
+                    {configData.coolingUnits?.map((unit) => unit.name).join(', ') ?? ''}
                   </Text>
                 </Text>
               </View>
@@ -199,7 +202,7 @@ export function FarmerAnalytics() {
                 <InnerTabs
                   activeTab={activeTab}
                   onTabSelection={(tab: Tab) => setActiveTab(tab)}
-                  disabled={!configData}
+                  disabled={!configData || !coolingUnits?.length}
                 />
               }
             />

@@ -2,13 +2,13 @@ import React, { useCallback } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { DataTable, Divider } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
+import InAppNotifications from '#common/InAppNotifications';
 
 type CheckOutDataProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -17,7 +17,7 @@ type CheckOutDataProps = {
 
 export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
   const { t } = useTranslationUtils();
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
 
   const generatePDF = useCallback(async () => {
     const html = `
@@ -119,12 +119,12 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
       const file = await RNHTMLtoPDF.convert(PDFOptions);
       if (!file.filePath) throw new Error();
       toast.show(t('Dashboard.History.pdfModal.successMessage'), {
-        type: 'success',
+        type: 'md_success',
       });
       dismissModal();
     } catch {
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
-        type: 'danger',
+        type: 'md_danger',
       });
     }
   }, [t, toast, movement]);

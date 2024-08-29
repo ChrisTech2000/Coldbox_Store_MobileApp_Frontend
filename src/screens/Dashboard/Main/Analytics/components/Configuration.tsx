@@ -8,7 +8,9 @@ import {
   DateRangePickerWithStore,
 } from '#ui/components/DateRangePickerWithStore';
 import { Modal } from '#ui/components/Modal';
-import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
+import MultipleSelectWithStore, {
+  createMultipleSelectStore,
+} from '#ui/components/MultipleSelectWithStore';
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -17,7 +19,7 @@ import { CoolingUnit } from '#types/global';
 export type ConfigData = {
   startDate: Date;
   endDate: Date;
-  coolingUnit: CoolingUnit;
+  coolingUnits: Array<CoolingUnit>;
 } | null;
 
 type ConfigurationModalProps = {
@@ -27,7 +29,7 @@ type ConfigurationModalProps = {
   dismiss: () => void;
 };
 
-const useCoolingUnitStore = createSelectStore<CoolingUnit>();
+const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
 
 export function ConfigurationModal({
@@ -37,7 +39,7 @@ export function ConfigurationModal({
   confirm,
 }: ConfigurationModalProps) {
   const { t } = useTranslationUtils();
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
+  const { selectedItems: selectedUnits } = useCoolingUnitStore();
   const { startDate, endDate } = useDateRangeStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
@@ -65,7 +67,7 @@ export function ConfigurationModal({
             <Text variant="TextMedium" tw="text-base mt-2 px-2">
               {t('Dashboard.Management.UsageAnalysis.modal.coolingUnitSelection')}
             </Text>
-            <SelectWithStore<CoolingUnit>
+            <MultipleSelectWithStore<CoolingUnit>
               emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
               datums={coolingUnits ?? []}
               isModalVisible={isUnitsModalOpen}
@@ -73,10 +75,11 @@ export function ConfigurationModal({
               itemName={(item) => item?.name}
               useSelectStore={useCoolingUnitStore}
               label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-                name: coolingUnit ? coolingUnit.name : '',
+                name: selectedUnits.length ? selectedUnits.map((unit) => unit.name).join(', ') : '',
               })}
               modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
               divider
+              disableOnEmpty
               autoSelect
               occupyFullWidth
             />
@@ -89,11 +92,11 @@ export function ConfigurationModal({
             contentStyle="flex flex-row-reverse"
             tw="w-[90%]"
             onPress={() => {
-              if (startDate && endDate && coolingUnit) {
+              if (startDate && endDate && selectedUnits.length) {
                 confirm({
                   startDate,
                   endDate,
-                  coolingUnit,
+                  coolingUnits: selectedUnits.sort((unit1, unit2) => unit1.id - unit2.id),
                 });
               }
               dismiss();

@@ -14,12 +14,12 @@ import { useTranslationUtils } from '#i18n/utils';
 
 export type SelectStore<T> = {
   selectedItem: T | null;
-  onSelect: (item: T) => void;
+  onSelect: (item: T | null) => void;
 };
 
-export const createSelectStore = <T,>() =>
+export const createSelectStore = <T,>(initialState?: T) =>
   create<SelectStore<T>>((set) => ({
-    selectedItem: null,
+    selectedItem: initialState ?? null,
     onSelect: (item) => set({ selectedItem: item }),
   }));
 
@@ -53,6 +53,11 @@ export default function SelectWithStore<T>({
   const [internalSelection, setInternalSelection] = useState<T | null>(store.selectedItem);
 
   useEffect(() => {
+    if (!rest.datums.length && store.selectedItem) {
+      setInternalSelection(null);
+      store.onSelect(null);
+    }
+
     if (!store.selectedItem && rest.autoSelect && rest.datums.length > 0) {
       const firstDatum = rest.datums[0];
       store.onSelect(firstDatum);

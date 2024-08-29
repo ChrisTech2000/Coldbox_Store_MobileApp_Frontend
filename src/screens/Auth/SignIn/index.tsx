@@ -18,6 +18,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { AccountCard } from './components/AccountCard';
 import { useManagementStore } from '#stores/management';
+import InAppNotifications from '#common/InAppNotifications';
 
 const IMG_SIZE = Dimensions.get('screen').width / 2.5;
 const ACCOUNT_TYPE_SIZE = Dimensions.get('screen').width / 5;
@@ -44,6 +45,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   }));
 
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const descriptions = useMemo(
     () => ({
@@ -102,27 +104,36 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   const activeProfile = watch('activeProfile');
 
   const onSubmit: SubmitHandler<SignInSchema> = useCallback(async (data) => {
-    const result = await AuthService.signIn({
-      userType: MAP_ROLES[data.activeProfile],
-      password: data.password,
-      username: data.user,
-      language: LanguageStorage.read(),
-    });
+    try {
+      const result = await AuthService.signIn({
+        userType: MAP_ROLES[data.activeProfile],
+        password: data.password,
+        username: data.user,
+        language: LanguageStorage.read(),
+      });
 
-    if (result) {
-      if (typeof result.company !== 'undefined') {
-        setCompany({
-          id: result.company.id,
-          country: result.company.country,
-          currency: result.company.currency,
-          name: result.company.name,
+      if (result) {
+        if (typeof result.company !== 'undefined') {
+          setCompany({
+            id: result.company.id,
+            country: result.company.country,
+            currency: result.company.currency,
+            name: result.company.name,
+          });
+        }
+        setSession({
+          accessToken: result.access,
+          refreshToken: result.refresh,
+        });
+        setUser({ ...result.user, role: result.role });
+
+        toast.show(t('Auth.SignIn.accounts.toasts.success'), {
+          type: 'md_success',
+          style: { marginBottom: 50 },
         });
       }
-      setSession({
-        accessToken: result.access,
-        refreshToken: result.refresh,
-      });
-      setUser({ ...result.user, role: result.role });
+    } catch (exception) {
+      toast.show(t('Auth.SignIn.accounts.toasts.login'), { type: 'md_danger' });
     }
   }, []);
 

@@ -70,35 +70,37 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
 
   return (
     <View tw="flex-1 justify-start">
-      <View tw="m-4">
-        <Button
-          mode="contained"
-          uppercase
-          onPress={async () => {
-            if (!company) return;
-            toggleDownloading();
-            const url = [AIR_PROD_BASE_URL, 'company/', company.id, '/cusers'].join('');
-            try {
-              await Linking.openURL(url);
-            } catch (exception) {
-              console.error(exception);
-            } finally {
-              toggleDownloading();
-            }
-          }}
-          disabled={isDownloading}
-        >
-          {isDownloading ? (
-            <ActivityIndicator animating size="small" color="white" />
-          ) : (
-            t('Dashboard.Management.UsageAnalysis.downloadDataButton')
-          )}
-        </Button>
-      </View>
-
       <FlatList
         data={datums}
         keyExtractor={(item) => `cooling-user-item-#${item.id}`}
+        ListHeaderComponent={
+          <View tw="m-4">
+            <Button
+              mode="contained"
+              uppercase
+              onPress={async (evt) => {
+                evt.stopPropagation();
+                if (!company) return;
+                toggleDownloading();
+                const url = [AIR_PROD_BASE_URL, 'company/', company.id, '/cusers'].join('');
+                try {
+                  await Linking.openURL(url);
+                } catch (exception) {
+                  console.error(exception);
+                } finally {
+                  toggleDownloading();
+                }
+              }}
+              disabled={isDownloading}
+            >
+              {isDownloading ? (
+                <ActivityIndicator animating size="small" color="white" />
+              ) : (
+                t('Dashboard.Management.UsageAnalysis.downloadDataButton')
+              )}
+            </Button>
+          </View>
+        }
         renderItem={({ item }) => (
           <React.Fragment>
             <List.Item {..._propsFactory(item, props.navigation)} />
@@ -125,9 +127,12 @@ function _propsFactory(
     props.right = (props) => <List.Icon {...props} icon="cellphone" />;
   }
   props.onPress = () => {
-    navigation.navigate('EditCoolingUser', {
-      userId: datum.user.id,
-      createdByOperator: !datum.userCode,
+    navigation.navigate('EditCoolingUserStack', {
+      screen: 'Root',
+      params: {
+        farmerId: datum.id,
+        createdByOperator: !datum.userCode,
+      },
     });
   };
   return props;

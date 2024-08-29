@@ -25,6 +25,7 @@ import { METRIC_UNITS, PRICING_TYPE } from '../AddCoolingUnit/constants';
 
 import DeleteAction from './components/DeleteAction';
 import { CropPricingManager } from '../AddCoolingUnit/utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('screen').width - 42) / 2;
 
@@ -48,6 +49,8 @@ export default function ScreenContainer(props: Props) {
   const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+
+  const toast = InAppNotifications.useToast();
 
   const {
     data: unit,
@@ -97,7 +100,7 @@ export default function ScreenContainer(props: Props) {
           price: values.price,
           sensor: values.sensor,
           public: values.public,
-          sensorData: '', // TODO: sensor integration
+          sensorData: values.sensorData ?? '',
           powerOptions: {
             powerConsumptionInMt: values.powerConsumptionInMt ?? 0,
             dailyRoomWattage: values.dailyRoomWattage ?? 0,
@@ -142,6 +145,10 @@ export default function ScreenContainer(props: Props) {
         coolingUnitId
       );
 
+      toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.editSuccess'), {
+        type: 'md_success',
+      });
+
       await Promise.all([refetch(), mutate(getQueryKey('getLocations', props.companyId))]);
       navigation.goBack();
     } catch (exception) {
@@ -163,7 +170,7 @@ export default function ScreenContainer(props: Props) {
               <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
               <Text tw="text-lg">{t('Dashboard.Management.AddCoolingUnit.heading')}</Text>
             </View>
-            <FormFields isEditMode />
+            <FormFields isEditMode sensorList={unit?.sensorList} />
             <View tw="w-full flex-row items-center justify-around mt-5 px-2">
               <DeleteAction coolingUnitId={coolingUnitId} companyId={companyId} />
               <Button
@@ -231,6 +238,7 @@ function _buildInitialValues(
         crateHeight: unit.crateHeight?.toString() ?? '',
         editableCheckins: unit.editableCheckins ?? true,
         sensor: unit.sensor ?? false,
+        sensorData: undefined,
         public: unit.public ?? false,
         operators: unit.operators ?? [],
         crops,

@@ -3,10 +3,9 @@ import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation
 import { Drawer } from 'react-native-drawer-layout';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
+import ms from 'ms';
 
-import AccountDetails from '#screens/Dashboard/AccountDetails';
 import FAQ from '#screens/Dashboard/FAQ';
-import KnowledgeHub from '#screens/Dashboard/KnowledgeHub';
 import Tutorial from '#screens/Dashboard/Tutorial';
 
 import { useAuthStore } from '#stores/auth';
@@ -23,10 +22,19 @@ import DashboardMainBottomTabs from './Main';
 import ManagementStack, { ManagementRoutes } from './Management';
 import NotificationsDrawerContent from './components/NotificationsDrawerContent';
 import AboutStack from './About';
+import KnowledgeHubStack from './KnowledgeHub';
+import AccountDetailsStack from './AccountDetails';
+
+import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
+import type { AccountDetailsRoutes } from './AccountDetails';
+import TemperatureAlert from './components/TemperatureAlert';
 
 export type DashboardRoutes = {
   Main: undefined;
-  AccountDetails: undefined;
+  AccountDetails: {
+    screen: keyof AccountDetailsRoutes;
+    params: AccountDetailsRoutes[keyof AccountDetailsRoutes];
+  };
   Management:
     | {
         screen: keyof ManagementRoutes;
@@ -61,6 +69,8 @@ function DashboardNavigationRouter() {
     }
   );
 
+  useNotificationOpenSurveyListener();
+
   return (
     <NavigationDrawer.Navigator
       initialRouteName="Main"
@@ -68,9 +78,9 @@ function DashboardNavigationRouter() {
       screenOptions={(opts) => DashboardScreenOptions(opts, t)}
     >
       <NavigationDrawer.Screen name="Main" component={DashboardMainBottomTabs} />
-      <NavigationDrawer.Screen name="AccountDetails" component={AccountDetails} />
+      <NavigationDrawer.Screen name="AccountDetails" component={AccountDetailsStack} />
       <NavigationDrawer.Screen name="Management" component={ManagementStack} />
-      <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHub} />
+      <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHubStack} />
       <NavigationDrawer.Screen name="Tutorial" component={Tutorial} />
       <NavigationDrawer.Screen name="FAQ" component={FAQ} />
       <NavigationDrawer.Screen name="About" component={AboutStack} />
@@ -87,6 +97,8 @@ export const useRightDrawerStore = create<{
 }));
 
 export default function DashboardNavigator() {
+  const { data } = useNotifications({ refreshInterval: ms('10 seconds') });
+
   const isOpen = useRightDrawerStore((store) => store.isOpen);
   const toggle = useRightDrawerStore((store) => store.toggle);
 
@@ -99,12 +111,16 @@ export default function DashboardNavigator() {
         drawerPosition="right"
         renderDrawerContent={() => (
           <React.Fragment>
-            <NotificationsDrawerContent />
+            <NotificationsDrawerContent notifications={data.notifications} />
           </React.Fragment>
         )}
       >
         <DashboardNavigationRouter />
       </Drawer>
+
+      <RBAC.ProtectedResource action="VIEW" subject="TemperatureAlertModal">
+        <TemperatureAlert />
+      </RBAC.ProtectedResource>
     </RBAC>
   );
 }

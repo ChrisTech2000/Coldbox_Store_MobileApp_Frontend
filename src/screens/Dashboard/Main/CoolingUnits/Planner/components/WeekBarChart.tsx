@@ -1,5 +1,5 @@
-import React, { memo, useCallback, type SetStateAction } from 'react';
-import { FlatList, type ListRenderItem, Platform, TouchableOpacity, View } from 'react-native';
+import React, { memo, type SetStateAction } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import Svg, { Rect, type RectProps } from 'react-native-svg';
 
 import { Text } from '#ui/components/Text';
@@ -26,49 +26,40 @@ export type WeekBarChartProps = {
 const CHART_MAX_HEIGHT = 160;
 const BAR_WIDTH = 12;
 const CORNER_RADIUS = 5;
-const COLUMN_GAP = Platform.select({ android: 10, ios: 4, default: 8 });
 
 export default function WeekBarChart(props: WeekBarChartProps) {
   const { maxCapacity, datums, selectedIndex, onSelect } = props;
 
   const [_selection, _setSelection] = useControlledState<number>(selectedIndex, onSelect);
 
-  const renderItem: ListRenderItem<WeekBarChartDatum> = useCallback(
-    ({ item, index }) => {
-      const barHeight = (item.amount / maxCapacity) * CHART_MAX_HEIGHT;
-      const hasExceeded = barHeight >= CHART_MAX_HEIGHT;
-      const yPosition = hasExceeded ? 0 : CHART_MAX_HEIGHT - barHeight;
-      const isSelected = _selection === index;
-
-      return (
-        <TouchableOpacity
-          onPress={(evt) => {
-            evt.stopPropagation();
-            _setSelection(index);
-          }}
-        >
-          <_SVGColumn
-            isSelected={isSelected}
-            timestamp={item.timestamp}
-            yPosition={yPosition}
-            barHeight={hasExceeded ? CHART_MAX_HEIGHT : barHeight}
-            fill={getCapacityColor(item.amount)}
-          />
-          <_SelectionIndicator isSelected={isSelected} />
-        </TouchableOpacity>
-      );
-    },
-    [maxCapacity, _selection]
-  );
-
   return (
-    <FlatList
-      horizontal
-      data={datums}
-      keyExtractor={(_, itemIdx) => `week-bar-chart-${itemIdx}`}
-      renderItem={renderItem}
-      contentContainerStyle={{ gap: COLUMN_GAP }}
-    />
+    <View tw="w-full flex flex-row items-center justify-between px-4">
+      {datums.map((item, itemIdx) => {
+        const barHeight = (item.amount / maxCapacity) * CHART_MAX_HEIGHT;
+        const hasExceeded = barHeight >= CHART_MAX_HEIGHT;
+        const yPosition = hasExceeded ? 0 : CHART_MAX_HEIGHT - barHeight;
+        const isSelected = _selection === itemIdx;
+
+        return (
+          <TouchableOpacity
+            key={`week-bar-chart-${itemIdx}`}
+            onPress={(evt) => {
+              evt.stopPropagation();
+              _setSelection(itemIdx);
+            }}
+          >
+            <_SVGColumn
+              isSelected={isSelected}
+              timestamp={item.timestamp}
+              yPosition={yPosition}
+              barHeight={hasExceeded ? CHART_MAX_HEIGHT : barHeight}
+              fill={getCapacityColor(item.amount)}
+            />
+            <_SelectionIndicator isSelected={isSelected} />
+          </TouchableOpacity>
+        );
+      })}
+    </View>
   );
 }
 

@@ -1,6 +1,6 @@
 import axios, {
-  AxiosRequestConfig,
-  AxiosResponse,
+  type AxiosRequestConfig,
+  type AxiosResponse,
   type AxiosError,
   type AxiosRequestHeaders,
 } from 'axios';
@@ -12,18 +12,14 @@ import { deserialize, Json, serialize, type JsonArray, type JsonObject } from '.
 
 type Options = {
   baseURL: string;
-  getAuthTokens: () => Tokens;
-  onSessionRenewal: () => Promise<void>;
-  onUnauthorized?: () => void;
+  getTokens: () => Tokens;
+  onUnauthorized?: () => Promise<void>;
   onForbidden?: () => void;
 };
 
 type RequestBody = JsonObject | JsonArray | FormData;
 
-export type HttpClientOptions = Pick<
-  Options,
-  'onSessionRenewal' | 'onUnauthorized' | 'onForbidden' | 'baseURL'
->;
+export type HttpClientOptions = Pick<Options, 'onUnauthorized' | 'onForbidden' | 'baseURL'>;
 
 export default class HttpClient {
   public axios = axios.create();
@@ -32,12 +28,17 @@ export default class HttpClient {
   constructor(options?: HttpClientOptions) {
     this.updateOptions({
       baseURL: API_BASE_URL,
-      ...options,
-      getAuthTokens: () => {
+      getTokens: () => {
         const storedTokens = useAuthStore.getState().tokens;
-        if (storedTokens) return storedTokens;
-        return { accessToken: '', refreshToken: '' };
+        return {
+          accessToken: storedTokens?.accessToken ?? '',
+          refreshToken: storedTokens?.refreshToken ?? '',
+        };
       },
+      onUnauthorized: async () => {
+        await useAuthStore.getState().renewSession();
+      },
+      ...options,
     });
 
     this.axios.interceptors.request.use(async (config) => {
@@ -52,15 +53,11 @@ export default class HttpClient {
       },
       async (exception: AxiosError) => {
         if (exception.response?.status === 401) {
-          if (typeof this.options.onUnauthorized === 'function') {
-            this.options.onUnauthorized();
-          }
-
-          if (typeof this.options.onSessionRenewal !== 'function') {
+          if (typeof this.options.onUnauthorized !== 'function') {
             throw exception;
           }
 
-          await this.options.onSessionRenewal();
+          await this.options.onUnauthorized();
           const headers = this._buildHeaders();
 
           return this.axios.request({
@@ -73,11 +70,9 @@ export default class HttpClient {
         }
 
         if (exception.response?.status === 403) {
-          if (typeof this.options.onForbidden !== 'function') {
-            throw exception;
+          if (typeof this.options.onForbidden === 'function') {
+            this.options.onForbidden();
           }
-
-          this.options.onForbidden();
         }
 
         return Promise.reject(exception);
@@ -134,7 +129,7 @@ export default class HttpClient {
 
   private _buildHeaders = (prevHeaders?: AxiosRequestHeaders) => {
     const headers = { ...prevHeaders } as AxiosRequestHeaders;
-    const tokens = this.options.getAuthTokens();
+    const tokens = this.options.getTokens();
     if (tokens.accessToken && !headers.Authorization) {
       headers.Authorization = `Bearer ${tokens.accessToken}`;
     }

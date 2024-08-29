@@ -26,6 +26,10 @@ export type SignInResponse = {
   company: Company;
 };
 
+export type RefreshSessionResponse = {
+  access: string;
+};
+
 export type SignUpAsCompanyResponse = {
   company: Company;
   user: User;
@@ -278,7 +282,15 @@ export interface GetCoolingUnitResponse {
   location: number;
   metric: string;
   sensor: boolean;
-  sensorList: unknown; // TODO: confirm type
+  sensorList: Array<{
+    id: number;
+    machineId: string;
+    type: string;
+    field: null | string;
+    dateSensorFirstLinked: string;
+    username: string;
+    channelId: string;
+  }>;
   capacityInMetricTons: number;
   capacityInNumberCrates: number;
   occupancy: number;
@@ -354,3 +366,56 @@ export type GetCoolingUnitTemperaturesResponse = Array<{
   specificationType: string;
   value: string;
 }>;
+
+export type GetNotificationsResponse = Array<{
+  id: number;
+  coolingUnitName: string | null;
+  crates: {
+    crop: string;
+    farmer: string;
+    checkinDate: string;
+    coolingUnit: string;
+  };
+  movementCode: string;
+  seen: boolean;
+  date: string;
+  specificId: number;
+  eventType:
+    | 'SENSOR_ERROR'
+    | 'TIME_TO_PICKUP'
+    | 'MARKET_SURVEY'
+    | 'FARMER_SURVEY'
+    | 'CHECKIN_EDITED';
+  user: number;
+}>;
+
+export type VerifyFigorrSensorConnectivityResponse = Array<{
+  id: string;
+  deviceTag: string;
+  imei: string;
+  type: string;
+  status: string;
+  settings: {
+    name: string;
+  };
+  stat: {
+    id: string;
+    device: string;
+    temperature: number;
+    humidity: number;
+    latitude: number;
+    longitude: number;
+    battery: number;
+    deviceSettings: {
+      name: string;
+    };
+    notes: Array<unknown>; // TODO: confirm type
+    deviceRtcTime: number;
+    deviceTimeStamp: string;
+  };
+}>;
+
+export type VerifyUbibotSensorConnectivityResponse = {
+  success: string;
+  data: Array<string>;
+};

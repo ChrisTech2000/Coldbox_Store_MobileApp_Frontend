@@ -1,10 +1,11 @@
 import useSWR, { useSWRConfig } from 'swr';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import ms from 'ms';
 
 import ErrorUtil from '../utils/ErrorUtil';
 import { useCallback, useMemo, useRef } from 'react';
 
-interface IApiQueryOptions<IData> {
+export interface IApiQueryOptions<IData> {
   skip?: boolean;
   defaultData?: IData;
   refreshInterval?: number;
@@ -22,7 +23,6 @@ export const useApiCall = <IData, IParams>(
   options?: IApiQueryOptions<IData>
 ) => {
   const defaultData = useRef(options?.defaultData || ({} as IData));
-  const previousData = useRef<IData | undefined>(undefined);
   const key = useMemo(() => getQueryKey<IParams>(name, params), [method, params]);
 
   const fetcher = useCallback(async () => {
@@ -39,14 +39,10 @@ export const useApiCall = <IData, IParams>(
     refreshInterval: options?.refreshInterval,
     revalidateOnFocus: options?.revalidateOnFocus,
     revalidateOnReconnect: options?.revalidateOnReconnect,
-    dedupingInterval: options?.dedupingInterval,
-    errorRetryCount: options?.errorRetryCount,
+    dedupingInterval: options?.dedupingInterval ?? ms('3 seconds'),
+    errorRetryCount: options?.errorRetryCount ?? 1,
     errorRetryInterval: options?.errorRetryInterval,
   });
-
-  if (data) {
-    previousData.current = data;
-  }
 
   const refetch = useCallback(async () => {
     await mutate();
@@ -56,6 +52,7 @@ export const useApiCall = <IData, IParams>(
     data: data || defaultData.current,
     isLoading: !data && isValidating,
     hasError: !!error,
+    error,
     isValidating,
     refetch,
   };
@@ -68,10 +65,11 @@ export function getQueryKey<T>(name: string, params?: T): string {
 export function useApiCache<P, T>(name: string, params?: P): T | undefined {
   const { cache } = useSWRConfig();
   const queryCache = cache.get(getQueryKey(name, params));
+
   return useMemo(() => {
     if (typeof queryCache?.data === 'undefined') return undefined;
-    if (typeof queryCache.data === 'object') return { ...queryCache.data };
     if (Array.isArray(queryCache.data)) return [...queryCache.data];
+    if (typeof queryCache.data === 'object') return { ...queryCache.data };
     return queryCache.data; // null, string, number, etc
   }, [queryCache?.data]);
 }

@@ -27,13 +27,13 @@ export default function CountryField() {
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
 
-  const selectedCountry = countriesMeta.getValueByISO(watch('country'));
+  const selectedCountry = countriesMeta.getNameByISO(watch('country'));
   const datums = useMemo(
     () =>
       countriesMeta
         .values()
-        .filter((value) => value.toLowerCase().includes(search.toLowerCase()))
-        .sort(customCountrySort),
+        .filter((value) => value.name.toLowerCase().includes(search.toLowerCase()))
+        .sort((a, b) => customCountrySort(a.name, b.name)),
     [search]
   );
 
@@ -67,12 +67,12 @@ export default function CountryField() {
                         <TouchableOpacity
                           key={`country-list-item-${item}-#${index}`}
                           onPress={() => {
-                            const countryISO = countriesMeta.getISOByValue(item);
+                            const countryISO = countriesMeta.getISOByName(item.name);
                             if (countryISO) onChange(countryISO);
                             toggleVisibility();
                           }}
                         >
-                          <List.Item title={item} />
+                          <List.Item title={item.name} />
                           <Divider tw="mx-4" />
                         </TouchableOpacity>
                       )}

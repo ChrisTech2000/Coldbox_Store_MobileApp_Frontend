@@ -63,19 +63,18 @@ class ImpactService extends HttpClient {
 
   public getImpact = async (params: GetImpactParams): Promise<ImpactData | undefined> => {
     try {
-      const { coolingUnitId, mode } = params;
+      const { coolingUnitId } = params;
 
       const endDate = format(new Date(params.endDate ?? new Date()), 'yyyy-MM-dd');
       const _startDate = params.startDate ?? new Date(2022, 9);
       const startDate = format(new Date(_startDate), 'yyyy-MM-dd');
 
       const _params = {
+        view: 'aggregated',
         ...params,
-        coolingUnitIds: typeof coolingUnitId === 'number' ? coolingUnitId : coolingUnitId.join(','),
+        coolingUnitId: typeof coolingUnitId === 'number' ? coolingUnitId : coolingUnitId.join(','),
         startDate,
         endDate,
-        mode,
-        view: 'aggregated',
       };
 
       const query = qs.stringify(serialize(_params));

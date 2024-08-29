@@ -5,8 +5,13 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 
+import { sortAndMapData } from '../../utils';
+import { generateSecondColumnContent } from '../../utils/generateSecondColumnContent';
 import { useAggregatedData } from '../store';
+import { sumCropValues } from '../utils';
 
 type SectionProps = {
   title: string;
@@ -17,6 +22,10 @@ type SectionProps = {
 export function CratesContent() {
   const { t } = useTranslationUtils();
   const { coolingUnitData } = useAggregatedData();
+
+  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
+    defaultData: [],
+  });
 
   const crates = useMemo(() => {
     return {
@@ -50,8 +59,8 @@ export function CratesContent() {
 
   const operations = useMemo(() => {
     return {
-      checkedIn: coolingUnitData?.roomCratesIn?.['0'] ?? 0,
-      checkedOut: coolingUnitData?.roomCratesOut?.['0'] ?? 0,
+      checkedIn: coolingUnitData?.roomOpsIn?.['0'] ?? 0,
+      checkedOut: coolingUnitData?.roomOpsOut?.['0'] ?? 0,
     };
   }, [coolingUnitData]);
 
@@ -86,6 +95,50 @@ export function CratesContent() {
         <Text variant="TextBold" tw="text-lg font-bold">
           {co2}
         </Text>
+      </View>
+
+      <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
+        <Text variant="TextMedium" tw="text-lg">
+          {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInCropDistribution')}
+        </Text>
+        {generateSecondColumnContent(
+          sortAndMapData(sumCropValues(coolingUnitData?.checkInCratesCrop ?? {})),
+          crops,
+          true
+        )}
+      </View>
+
+      <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
+        <Text variant="TextMedium" tw="text-lg">
+          {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution')}
+        </Text>
+        {generateSecondColumnContent(
+          sortAndMapData(sumCropValues(coolingUnitData?.checkOutCratesCrop ?? {})),
+          crops,
+          true
+        )}
+      </View>
+
+      <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
+        <Text variant="TextMedium" tw="text-lg">
+          {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution')}
+        </Text>
+        {generateSecondColumnContent(
+          sortAndMapData(sumCropValues(coolingUnitData?.checkInKgCrop ?? {})),
+          crops,
+          true
+        )}
+      </View>
+
+      <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
+        <Text variant="TextMedium" tw="text-lg">
+          {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution')}
+        </Text>
+        {generateSecondColumnContent(
+          sortAndMapData(sumCropValues(coolingUnitData?.checkOutKgCrop ?? {})),
+          crops,
+          true
+        )}
       </View>
     </ScrollView>
   );

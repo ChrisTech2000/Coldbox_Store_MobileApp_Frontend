@@ -3,7 +3,6 @@ import { Dimensions, FlatList, RefreshControl, StyleSheet, View } from 'react-na
 import { ActivityIndicator, DataTable } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
-import { ScrollView } from '#ui/components/ScrollView';
 import SelectWithStore from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -62,12 +61,7 @@ function CoolingUnitsCratesInfo() {
   }
 
   return (
-    <ScrollView
-      contentContainerStyle="mt-5 pb-10"
-      refreshControl={
-        <RefreshControl refreshing={isValidating} onRefresh={async () => await refetch()} />
-      }
-    >
+    <View tw="pt-5">
       <SelectWithStore<CoolingUnit>
         datums={data ?? []}
         isModalVisible={isModalVisible}
@@ -89,15 +83,21 @@ function CoolingUnitsCratesInfo() {
         </View>
       ) : (
         <DataTable style={styles.dataTable}>
-          <DataTable.Header>
-            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.commodity')}</DataTable.Title>
-            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.percentage')}</DataTable.Title>
-            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.weight')}</DataTable.Title>
-            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.crates')}</DataTable.Title>
-            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.optimalTemp')}</DataTable.Title>
-          </DataTable.Header>
-
           <FlatList
+            nestedScrollEnabled
+            ListHeaderComponent={
+              <DataTable.Header>
+                <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.commodity')}</DataTable.Title>
+                <DataTable.Title>
+                  {t('Dashboard.CoolingUnitsCratesInfo.percentage')}
+                </DataTable.Title>
+                <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.weight')}</DataTable.Title>
+                <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.crates')}</DataTable.Title>
+                <DataTable.Title>
+                  {t('Dashboard.CoolingUnitsCratesInfo.optimalTemp')}
+                </DataTable.Title>
+              </DataTable.Header>
+            }
             data={commodityInfos}
             keyExtractor={(item) => `data-table-row-${item.commodity}`}
             renderItem={({ item }) => (
@@ -109,11 +109,13 @@ function CoolingUnitsCratesInfo() {
                 <DataTable.Cell>{item.optimalStorageTemperature}</DataTable.Cell>
               </DataTable.Row>
             )}
-            nestedScrollEnabled
+            refreshControl={
+              <RefreshControl refreshing={isValidating} onRefresh={async () => await refetch()} />
+            }
           />
         </DataTable>
       )}
-    </ScrollView>
+    </View>
   );
 }
 
@@ -121,6 +123,7 @@ const styles = StyleSheet.create({
   dataTable: {
     marginTop: 20, // equivalent to "mt-5"
     width: Dimensions.get('screen').width,
+    paddingBottom: 40, // equivalent to "pb-10"
   },
 });
 

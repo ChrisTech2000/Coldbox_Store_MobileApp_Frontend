@@ -8,7 +8,7 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
-import { Analytics } from '#screens/Dashboard/Main/Analytics/Analytics';
+import AnalyticsBase from '#screens/Dashboard/Main/Analytics';
 import Methodology from '#screens/Dashboard/Main/Analytics/Methodology';
 
 import type { TranslationPaths } from '#i18n/index';
@@ -16,10 +16,10 @@ import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
 
-import { dashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
+import { useDashboardHeader, type DashboardHeaderFactory } from '../lib/dashboardHeaderFactory';
 
 export type AnalyticsStackRoutes = {
-  Analytics: undefined;
+  RootAnalytics: undefined;
   Methodology: undefined;
 };
 
@@ -29,7 +29,7 @@ export type AnalyticsStackRouteProps<Path extends AnalyticsStackRoutePaths> =
   NativeStackScreenProps<AnalyticsStackRoutes, Path>;
 
 export const NAVIGATOR_HEADERS: Record<AnalyticsStackRoutePaths, TranslationPaths | undefined> = {
-  Analytics: 'navigation.bottomTabs.Analytics',
+  RootAnalytics: 'navigation.bottomTabs.Analytics',
   Methodology: 'navigation.analytics.methodology',
 };
 
@@ -42,39 +42,43 @@ const Stack = createNativeStackNavigator<AnalyticsStackRoutes>();
 
 export default function AnalyticsStack() {
   const { t } = useTranslationUtils();
+  const dashboardHeaderFactory = useDashboardHeader();
 
-  const screenOptions: ScreenOptions = useCallback((props) => {
-    // eslint-disable-next-line react/prop-types
-    const routeName = props.route.name;
+  const screenOptions: ScreenOptions = useCallback(
+    (props) => {
+      // eslint-disable-next-line react/prop-types
+      const routeName = props.route.name;
 
-    const firstName = useAuthStore.getState().user?.firstName;
+      const firstName = useAuthStore.getState().user?.firstName;
 
-    const translationPath = NAVIGATOR_HEADERS[routeName];
-    let routeTitle: string | undefined;
-    if (routeName === 'Analytics') {
-      routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
-    } else {
-      routeTitle = translationPath ? t(translationPath) : undefined;
-    }
+      const translationPath = NAVIGATOR_HEADERS[routeName];
+      let routeTitle: string | undefined;
+      if (routeName === 'RootAnalytics') {
+        routeTitle = t('navigation.bottomTabs.RootMainTabStack', { firstName });
+      } else {
+        routeTitle = translationPath ? t(translationPath) : undefined;
+      }
 
-    return {
-      ...props,
-      header: (headerProps) => (
-        <NavigatorHeader
-          {...headerProps}
-          routeTitle={routeTitle}
-          // eslint-disable-next-line react/prop-types
-          {..._renderContentFactory(routeName, props.navigation)}
-        />
-      ),
-      gestureDirection: 'vertical',
-      animationDuration: 180,
-    };
-  }, []);
+      return {
+        ...props,
+        header: (headerProps) => (
+          <NavigatorHeader
+            {...headerProps}
+            routeTitle={routeTitle}
+            // eslint-disable-next-line react/prop-types
+            {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory)}
+          />
+        ),
+        gestureDirection: 'vertical',
+        animationDuration: 180,
+      };
+    },
+    [dashboardHeaderFactory]
+  );
 
   return (
-    <Stack.Navigator initialRouteName="Analytics" screenOptions={screenOptions}>
-      <Stack.Screen name="Analytics" component={Analytics} />
+    <Stack.Navigator initialRouteName="RootAnalytics" screenOptions={screenOptions}>
+      <Stack.Screen name="RootAnalytics" component={AnalyticsBase} />
       <Stack.Screen name="Methodology" component={Methodology} />
     </Stack.Navigator>
   );
@@ -82,7 +86,8 @@ export default function AnalyticsStack() {
 
 function _renderContentFactory(
   routeName: AnalyticsStackRoutePaths,
-  navigation: NativeStackNavigationProp<AnalyticsStackRoutes, AnalyticsStackRoutePaths>
+  navigation: NativeStackNavigationProp<AnalyticsStackRoutes, AnalyticsStackRoutePaths>,
+  dashboardHeaderFactory: DashboardHeaderFactory
 ): NavigationHeaderProps {
   switch (routeName) {
     case 'Methodology':
@@ -90,6 +95,6 @@ function _renderContentFactory(
         leftContent: <Appbar.BackAction onPress={navigation.goBack} size={22} />,
       };
     default:
-      return dashboardHeaderFactory(navigation);
+      return dashboardHeaderFactory();
   }
 }

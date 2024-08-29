@@ -1,5 +1,5 @@
 import startCase from 'lodash/startCase';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { TouchableOpacity, View } from 'react-native';
 import { Divider, Icon, Portal, TextInput } from 'react-native-paper';
@@ -49,11 +49,13 @@ type FarmersSurveyModalProps = {
   };
   onDismiss: () => void;
   onSubmit: SubmitHandler<FarmerSurveySchemaType>;
+  initialCropSelection?: Crop | GetAllCropsResponse;
 };
 
 const useMeasurementStore = createSelectStore<EUnitOfMeasurement>();
 const useSpoilageReasonsStore = createMultipleSelectStore<string>();
-const useCropStore = createSelectStore<Crop | GetAllCropsResponse>();
+const instantiateCropStore = (initialState?: Crop | GetAllCropsResponse) =>
+  createSelectStore(initialState);
 
 export function FarmersSurveyModal({
   company,
@@ -64,9 +66,15 @@ export function FarmersSurveyModal({
   cropSelectionAvailable,
   onDismiss,
   onSubmit,
+  ...props
 }: FarmersSurveyModalProps) {
   const { t, zodResolver } = useTranslationUtils();
   const colors = useTailwindColors();
+
+  const useCropStore = useMemo(
+    () => instantiateCropStore(props.initialCropSelection),
+    [isModalVisible]
+  );
 
   const { selectedItem: measureUnit } = useMeasurementStore();
   const { selectedItem: crop } = useCropStore();

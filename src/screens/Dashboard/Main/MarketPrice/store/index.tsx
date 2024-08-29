@@ -31,8 +31,8 @@ export function usePriceTrendsStore() {
 
   const { data: farmer, isLoading: loadingFarmer } = useApiCall(
     'getFarmer',
-    ColdtivateService.getFarmer,
-    { userId: user?.id as number },
+    ColdtivateService.getFarmerByUserId,
+    user?.id as number,
     {
       skip: !user?.id || user.role !== ERoles.COOLING_USER,
       defaultData: [],

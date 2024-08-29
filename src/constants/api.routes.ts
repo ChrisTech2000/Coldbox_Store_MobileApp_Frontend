@@ -5,6 +5,7 @@ export enum EAuthenticationEndpoints {
   SIGN_UP_AS_COOLING_USER = 'user/v1/farmers/',
   SIGN_UP_EMPLOYEE_BY_INVITE = 'user/v1/service-provider-invite-signup/',
   SIGN_UP_OPERATOR_BY_INVITE = 'user/v1/operator-invite-signup/',
+  REFRESH_TOKEN_ENDPOINT = 'user/token/refresh/',
 }
 
 export enum EUserEndpoints {
@@ -55,6 +56,11 @@ export enum ECompanyEndpoints {
 
 export enum ESMSEndpoints {
   SEND_SMS = 'storage/v1/send-sms/',
+}
+
+export enum ENotificationsEndpoints {
+  GET_NOTIFICATIONS = '/user/v1/notification',
+  UPDATE_NOTIFICATION = 'user/v1/notification/:notificationId/',
 }
 
 export enum EImpactEndpoints {

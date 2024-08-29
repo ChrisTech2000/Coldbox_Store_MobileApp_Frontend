@@ -44,13 +44,15 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // actions
         // scope: account details
         can(PERMISSION_KINDS.SET, 'FormEmailField');
-        cannot(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
+        cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
         // scope: cooling units
         can(PERMISSION_KINDS.SET, 'Temperatures');
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Maps');
         cannot(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
+        // scope: check-in temperature alert
+        cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         break;
       }
 
@@ -73,13 +75,15 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // actions
         // scope: account details
         cannot(PERMISSION_KINDS.SET, 'FormEmailField');
-        cannot(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
+        cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
         // scope: cooling units
         can(PERMISSION_KINDS.SET, 'Temperatures');
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Maps');
         cannot(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
+        // scope: check-in temperature alert
+        can(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         break;
       }
 
@@ -92,13 +96,15 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // actions
         // scope: account details
         cannot(PERMISSION_KINDS.SET, 'FormEmailField');
-        can(PERMISSION_KINDS.VIEW, 'FarmerFormFields');
+        can(PERMISSION_KINDS.VIEW, 'FarmerFields');
         can(PERMISSION_KINDS.STORE, 'FarmerDetails');
         // scope: cooling units
         cannot(PERMISSION_KINDS.SET, 'Temperatures');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         can(PERMISSION_KINDS.NAVIGATE, 'Maps');
         can(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
+        // scope: check-in temperature alert
+        cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         break;
       }
 

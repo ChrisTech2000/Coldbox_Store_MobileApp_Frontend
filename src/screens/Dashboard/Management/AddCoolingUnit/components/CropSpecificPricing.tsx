@@ -91,7 +91,7 @@ export default function CropSpecificPricing() {
       <View tw="flex flex-row items-center justify-between h-14 px-3">
         <Text tw="text-gray-600 text-base truncate">Crop-specific pricing</Text>
         <Button mode="contained" icon="eye-outline" onPress={toggleVisibility}>
-          Edit Pricing
+          {t('Dashboard.Management.EditCoolingUnit.buttons.editPricing')}
         </Button>
       </View>
       <Divider tw="w-full bg-gray-700" />
@@ -100,8 +100,7 @@ export default function CropSpecificPricing() {
         <Modal visible={isVisible} onDismiss={toggleVisibility}>
           <View
             tw={cn(
-              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2',
-              datums.length > 4 && 'h-2/3'
+              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2'
             )}
           >
             <Text variant="TitleRegular" tw="px-6">

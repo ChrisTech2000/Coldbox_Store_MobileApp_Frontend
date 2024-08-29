@@ -52,7 +52,7 @@ export function ImpactTab() {
       farmerId: farmer?.id as number,
       startDate: configData?.startDate as Date,
       endDate: configData?.endDate as Date,
-      unitIds: configData?.coolingUnit?.id as number,
+      unitIds: configData?.coolingUnits.map((unit) => unit.id) as number[],
     },
     {
       skip: !configData || !farmer,
@@ -306,7 +306,7 @@ export function ImpactTab() {
               column2: `${crop.change.toFixed(2)}%`,
               column3: `${crop.from.toFixed(2)}% - ${crop.to.toFixed(2)}%`,
             }))}
-            total={1} // TODO: fix when getting multiple cooling units
+            total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
@@ -380,7 +380,7 @@ export function ImpactTab() {
               column2: `${crop.change.toFixed(2)}%`,
               column3: `${crop.from.toFixed(2)}% - ${crop.to.toFixed(2)}%`,
             }))}
-            total={1} // TODO: fix when getting multiple cooling units
+            total={configData?.coolingUnits.length ?? 0}
           />
         }
       />

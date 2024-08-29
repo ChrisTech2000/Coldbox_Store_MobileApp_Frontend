@@ -16,7 +16,9 @@ import {
   DateRangePickerWithStore,
 } from '#ui/components/DateRangePickerWithStore';
 import { Input } from '#ui/components/Input';
-import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
+import MultipleSelectWithStore, {
+  createMultipleSelectStore,
+} from '#ui/components/MultipleSelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -27,12 +29,12 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, ERoles } from '#types/global';
-import { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
 import { sortMovements } from '../utils';
 import { DownloadDataModal } from '../components/DownloadDataModal';
 
-const useCoolingUnitStore = createSelectStore<CoolingUnit>();
+const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
 const useSortingStore = createSortingStore();
 
@@ -44,7 +46,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
 
   const { user } = useAuthStore();
   const { company } = useManagementStore();
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
+  const { selectedItems: selectedUnits } = useCoolingUnitStore();
   const { startDate, endDate, setEndDate, setStartDate } = useDateRangeStore();
   const { sorting } = useSortingStore();
 
@@ -72,9 +74,9 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { data: usage, isLoading: usageDataLoading } = useApiCall(
     'getUsageAnalysis',
     ColdtivateService.getUsageAnalysis,
-    coolingUnit?.id as number,
+    selectedUnits.map((unit) => unit.id) as number[],
     {
-      skip: !coolingUnit?.id,
+      skip: !selectedUnits || !selectedUnits.length,
       defaultData: [],
     }
   );
@@ -147,7 +149,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">
-      <SelectWithStore<CoolingUnit>
+      <MultipleSelectWithStore<CoolingUnit>
         emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
         datums={coolingUnits ?? []}
         isModalVisible={isUnitsModalOpen}
@@ -155,7 +157,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
         itemName={(item) => item?.name}
         useSelectStore={useCoolingUnitStore}
         label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-          name: coolingUnit ? coolingUnit.name : '',
+          name: selectedUnits ? selectedUnits.map((unit) => unit.name).join(', ') : '',
         })}
         modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
         divider
@@ -202,7 +204,9 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
               <Movement
                 key={`${movement.id}-${index}`}
                 movement={movement}
-                coolingUnit={coolingUnit}
+                coolingUnit={
+                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
+                }
                 selectedCompany={company}
                 navigateToCheckIn={(movement, id) =>
                   props.navigation.navigate('EditCheckIn', {

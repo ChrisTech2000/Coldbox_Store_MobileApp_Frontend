@@ -85,8 +85,9 @@ export default function AuthNavigator() {
           leftContent={
             <Appbar.BackAction
               onPress={() => {
-                // eslint-disable-next-line react/prop-types
-                if (routeName !== 'Invite') return props.navigation.goBack();
+                if (routeName !== 'Invite' && routeName !== 'SignIn')
+                  // eslint-disable-next-line react/prop-types
+                  return props.navigation.goBack();
                 // eslint-disable-next-line react/prop-types
                 return props.navigation.navigate('Root');
               }}

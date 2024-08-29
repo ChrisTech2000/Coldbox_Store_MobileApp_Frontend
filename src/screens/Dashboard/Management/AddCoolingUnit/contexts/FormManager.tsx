@@ -14,6 +14,31 @@ import {
   type ThermalStorageTypes,
 } from '../constants';
 import type { AddCoolingUnitParams } from '#types/api.params';
+import type { VerifyFigorrSensorConnectivityResponse } from '#types/api.responses';
+
+export type SensorDatum =
+  | {
+      machineID: string;
+      username: string;
+      password: string;
+      type: 'ecozen';
+    }
+  | {
+      machineID: string;
+      id: string;
+      username: string;
+      settings: VerifyFigorrSensorConnectivityResponse[0]['settings'];
+      stat: VerifyFigorrSensorConnectivityResponse[0]['stat'];
+      status: string;
+      password: string;
+      type: string; // lora, mote
+    }
+  | {
+      accountKey: string;
+      channelId: string;
+      field: string;
+      type: 'ubibot';
+    };
 
 export type FormValues<T = string> = {
   //
@@ -38,6 +63,7 @@ export type FormValues<T = string> = {
   crateHeight: T; // dimensions of a standard crate → height
   editableCheckins: boolean; // make check-ins editable by operators field
   sensor: boolean; // sensor available field (sensor type, aka ecozen, etc) integration state
+  sensorData: SensorDatum | undefined;
   public: boolean; // make cooling unit publicly available for potential cooling users field
   operators: Array<number>;
   crops: Array<number>; // commodities field
@@ -126,6 +152,48 @@ export default function FormManager(props: FormManagerProps) {
         crateHeight: greaterThanEqual.optional(),
         editableCheckins: z.boolean(),
         sensor: z.boolean(),
+        sensorData: z
+          .union([
+            z.object({
+              machineID: z.string(),
+              username: z.string(),
+              password: z.string(),
+              type: z.literal('ecozen'),
+            }),
+            z.object({
+              accountKey: z.string(),
+              channelId: z.string(),
+              field: z.string(),
+              type: z.literal('ubibot'),
+            }),
+            z.object({
+              machineID: z.string(),
+              id: z.string(),
+              username: z.string(),
+              settings: z.object({
+                name: z.string(),
+              }),
+              stat: z.object({
+                id: z.string(),
+                device: z.string(),
+                temperature: z.number(),
+                humidity: z.number(),
+                latitude: z.number(),
+                longitude: z.number(),
+                battery: z.number(),
+                deviceSettings: z.object({
+                  name: z.string(),
+                }),
+                notes: z.array(z.unknown()),
+                deviceRtcTime: z.number(),
+                deviceTimeStamp: z.string(),
+              }),
+              status: z.string(),
+              password: z.string(),
+              type: z.string(),
+            }),
+          ])
+          .optional(),
         public: z.boolean(),
         operators: z.array(z.number()),
         crops: z.array(z.number()),

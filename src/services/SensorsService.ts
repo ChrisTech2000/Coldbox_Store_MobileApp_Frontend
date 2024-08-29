@@ -6,17 +6,30 @@ import type {
   VerifyUbibotSensorConnectivityParams,
 } from '#types/api.params';
 import { ESensorEndpoints } from '#constants/api.routes';
+import type {
+  VerifyFigorrSensorConnectivityResponse,
+  VerifyUbibotSensorConnectivityResponse,
+} from '#types/api.responses';
 
-import HttpClient from './HttpClient';
-import ErrorUtil, { CustomError } from './utils/ErrorUtil';
+import HttpClient, { type HttpClientOptions } from './HttpClient';
+import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 
 class SensorsService extends HttpClient {
+  constructor(options?: HttpClientOptions) {
+    super(options);
+  }
+
   public verifyEcozenSensorConnectivity = async (params: VerifyEcozenSensorConnectivityParams) => {
     try {
-      const { data } = await this.post(ESensorEndpoints.ECOZEN_CHECK, {
-        ...params,
-        type: 'ecozen',
-      });
+      const { data } = await this.post(
+        ESensorEndpoints.ECOZEN_CHECK,
+        {
+          ...params,
+          type: 'ecozen',
+        },
+        undefined,
+        ['machineID']
+      );
       return data;
     } catch (error) {
       console.log(error);
@@ -28,10 +41,15 @@ class SensorsService extends HttpClient {
 
   public verifyUbibotSensorConnectivity = async (params: VerifyUbibotSensorConnectivityParams) => {
     try {
-      const { data } = await this.post(ESensorEndpoints.UBIBOT_CHECK, {
-        ...params,
-        type: 'ubibot',
-      });
+      const { data } = await this.post<VerifyUbibotSensorConnectivityResponse>(
+        ESensorEndpoints.UBIBOT_CHECK,
+        {
+          ...params,
+          type: 'ubibot',
+        },
+        undefined,
+        ['accountKey', 'channelId']
+      );
       return data;
     } catch (error) {
       console.log(error);
@@ -43,7 +61,12 @@ class SensorsService extends HttpClient {
 
   public verifyFigorrSensorConnectivity = async (params: VerifyFigorrSensorConnectivityParams) => {
     try {
-      const { data } = await this.post(ESensorEndpoints.FIGORR_CHECK, params);
+      const { data } = await this.post<VerifyFigorrSensorConnectivityResponse>(
+        ESensorEndpoints.FIGORR_CHECK,
+        params,
+        undefined,
+        ['apiKey', 'deviceTag']
+      );
       return data;
     } catch (error) {
       console.log(error);

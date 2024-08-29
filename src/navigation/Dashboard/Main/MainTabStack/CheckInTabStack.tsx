@@ -52,7 +52,7 @@ const Stack = createNativeStackNavigator<CheckInStackRoutes>();
 
 export default function CheckInStack() {
   const { t } = useTranslationUtils();
-  const { resetCheckInStore } = useCheckInStore();
+  const resetCheckInStore = useCheckInStore((store) => store.resetCheckInStore);
 
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types

@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { Text, TextInput } from 'react-native-paper';
-import { useToast } from 'react-native-toast-notifications';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -10,11 +9,12 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
 import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
+import InAppNotifications from '#common/InAppNotifications';
 
 type PasswordRecoverySchema = { phone: string };
 
 function PasswordRecoveryRequest() {
-  const toast = useToast();
+  const toast = InAppNotifications.useToast();
   const { t, zodResolver } = useTranslationUtils();
 
   const { control, handleSubmit } = useForm<PasswordRecoverySchema>({
@@ -38,7 +38,7 @@ function PasswordRecoveryRequest() {
 
       // For security reasons, we don't want to inform the user whether the introduced phone exists in our DB or not
       toast.show(t('Auth.ForgotPassword.messageSentNotification'), {
-        type: 'success',
+        type: 'md_success',
       });
     },
     [toast]
@@ -60,7 +60,7 @@ function PasswordRecoveryRequest() {
         render={({ field: { onChange, value } }) => (
           <TextInput
             tw="w-[95%] text-base border bg-white rounded-sm h-12"
-            label={t('Auth.ForgotPassword.instructions')}
+            label={t('Auth.ForgotPassword.phoneInputLabel')}
             left={<TextInput.Icon icon="phone" />}
             onChangeText={onChange}
             value={value}
