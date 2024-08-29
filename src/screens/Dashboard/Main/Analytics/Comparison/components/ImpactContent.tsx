@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { DataTable, Icon } from 'react-native-paper';
 
@@ -12,6 +12,8 @@ import { useManagementStore } from '#stores/management';
 import { SectionAccordion } from '../../components/SectionAccordion';
 import { getMetricValue, getVariationValue, type Variation } from '../../utils';
 import { useComparisonData } from '../store';
+import { sortData } from '../utils';
+import { ESortingOptions } from './SortMenu';
 
 type Section = 'occupancy' | 'foodLoss' | 'revenue' | 'revenuePerRoom' | 'co2' | 'surveys';
 
@@ -38,7 +40,7 @@ type ExtendedTableProps = {
   total: number;
 };
 
-export function ImpactContent() {
+export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
   const { t } = useTranslationUtils();
   const { impactData, coolingUnitData, configData } = useComparisonData();
   const { company } = useManagementStore();
@@ -57,68 +59,122 @@ export function ImpactContent() {
     [expanded]
   );
 
-  const getFoodLoss = useCallback(
-    (index: number) => {
+  const occupancyData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      return {
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        value: `${(coolingUnitData?.averageRoomOccupancy?.[i] ?? 0).toFixed(2)}%`,
+        sum:
+          getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution, i) || 0,
+      };
+    });
+
+    return sortData(data, sorting);
+  }, [impactData, sorting, configData]);
+
+  const foodLossData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      const from = getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselinePercLossMonth, i) || 0;
+      const to = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercLoss, i) || 0;
+      const sum =
+        getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution, i) || 0;
+
+      return {
+        column1: `${sum.toFixed(2)}%`,
+        column2: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
+        column3: getVariationValue(from, to),
+        negative: true,
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        sum,
+      };
+    });
+
+    return sortData(data, sorting);
+  }, [impactData, sorting, configData]);
+
+  const revenueData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
       const from =
-        getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselinePercLossMonth, index) || 0;
-      const to = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercLoss, index) || 0;
+        getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) || 0;
+      const to = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyFarmerRevenue, i) || 0;
+      const sum =
+        getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercRevenueIncreaseEvolution, i) ||
+        0;
 
       return {
-        from,
-        to,
-        total:
-          getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution, index) ||
-          0,
-        variation: getVariationValue(from, to),
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        column1: `${sum.toFixed(2)}%`,
+        column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
+        column3: getVariationValue(from, to),
+        sum,
       };
-    },
-    [impactData]
-  );
+    });
 
-  const getRevenue = useCallback(
-    (index: number) => {
-      const from =
-        getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, index) || 0;
-      const to =
-        getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyFarmerRevenue, index) || 0;
+    return sortData(data, sorting);
+  }, [impactData, sorting, configData]);
+
+  const revenueRoomData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
       return {
-        from,
-        to,
-        total:
-          getMetricValue(
-            impactData?.impactMetrics?.[0]?.avgMonthlyPercRevenueIncreaseEvolution,
-            index
-          ) || 0,
-        variation: getVariationValue(from, to),
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        value: (coolingUnitData?.roomRevenue?.[i] ?? 0).toLocaleString('en-US', {
+          style: 'currency',
+          currency: company?.currency,
+        }),
+        sum: coolingUnitData?.roomRevenue?.[i] ?? 0,
       };
-    },
-    [impactData]
-  );
+    });
 
-  const getCo2 = useCallback(
-    (index: number) => {
-      const from = impactData?.co2Metrics?.[index]?.co2Crops?.co2From || 0;
-      const to = impactData?.co2Metrics?.[index]?.co2Crops?.co2To || 0;
+    return sortData(data, sorting);
+  }, [impactData, sorting, configData, company]);
+
+  const co2Data = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      const from = impactData?.co2Metrics?.[i]?.co2Crops?.co2From || 0;
+      const to = impactData?.co2Metrics?.[i]?.co2Crops?.co2To || 0;
+      const sum = ((to - from) / (from || 1)) * 100;
+
       return {
-        from,
-        to,
-        total: ((to - from) / (from || 1)) * 100,
-        variation: getVariationValue(from, to),
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        column1: `${sum.toFixed(2)}%`,
+        column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
+        column3: getVariationValue(from, to),
+        sum,
       };
-    },
-    [impactData]
-  );
+    });
 
-  const getSurveyPercentage = useCallback(
-    (index: number) => {
+    return sortData(data, sorting);
+  }, [impactData, sorting, configData]);
+
+  const surveyPercentageData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
       const percentage =
-        (getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys, index) /
-          getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom, index)) *
+        (getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys, i) /
+          getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom, i)) *
         100;
-      return Number.isNaN(percentage) ? 0 : percentage.toFixed(2);
-    },
-    [impactData]
-  );
+
+      return {
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        column1: `${Number.isNaN(percentage) ? 0 : percentage.toFixed(2)}%`,
+        column2: `${getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys, i) ?? 0} / ${getMetricValue(impactData?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom, i) ?? 0}`,
+        sum: Number.isNaN(percentage) ? 0 : percentage,
+      };
+    });
+
+    return sortData(data, sorting);
+  }, [impactData, sorting, configData]);
 
   return (
     <View tw="w-full my-2">
@@ -130,12 +186,7 @@ export function ImpactContent() {
         content={
           <Table
             header={t('Dashboard.Analytics.comparisonTab.impactTab.occupancy')}
-            items={
-              configData?.coolingUnits.map((unit, index) => ({
-                coolingUnitName: unit.name,
-                value: `${(coolingUnitData?.averageRoomOccupancy?.[index] ?? 0).toFixed(2)}%`,
-              })) ?? []
-            }
+            items={occupancyData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
@@ -151,18 +202,7 @@ export function ImpactContent() {
             column1={t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage')}
             column2={t('Dashboard.Analytics.comparisonTab.impactTab.foodLossLevels')}
             fourColumnsVersion
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { total, from, to, variation } = getFoodLoss(index);
-                return {
-                  coolingUnitName: unit.name,
-                  column1: `${total.toFixed(2)}%`,
-                  column2: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
-                  column3: variation,
-                  negative: true,
-                };
-              }) ?? []
-            }
+            items={foodLossData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
@@ -178,17 +218,7 @@ export function ImpactContent() {
             column1={t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage')}
             column2={t('Dashboard.Analytics.comparisonTab.impactTab.revenueLevels')}
             fourColumnsVersion
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { total, from, to, variation } = getRevenue(index);
-                return {
-                  coolingUnitName: unit.name,
-                  column1: `${total.toFixed(2)}%`,
-                  column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
-                  column3: variation,
-                };
-              }) ?? []
-            }
+            items={revenueData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
@@ -202,15 +232,7 @@ export function ImpactContent() {
         content={
           <Table
             header={t('Dashboard.Analytics.comparisonTab.impactTab.revenueLevels')}
-            items={
-              configData?.coolingUnits.map((unit, index) => ({
-                coolingUnitName: unit.name,
-                value: (coolingUnitData?.roomRevenue?.[index] ?? 0).toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: company?.currency,
-                }),
-              })) ?? []
-            }
+            items={revenueRoomData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
@@ -225,17 +247,7 @@ export function ImpactContent() {
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage')}
             column2={t('Dashboard.Analytics.comparisonTab.impactTab.co2EmissionsLabel')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { total, from, to, variation } = getCo2(index);
-                return {
-                  coolingUnitName: unit.name,
-                  column1: `${total.toFixed(2)}%`,
-                  column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
-                  column3: variation,
-                };
-              }) ?? []
-            }
+            items={co2Data}
             fourColumnsVersion
             total={configData?.coolingUnits.length ?? 0}
           />
@@ -251,13 +263,7 @@ export function ImpactContent() {
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.impactTab.completePercentage')}
             column2={t('Dashboard.Analytics.impact')}
-            items={
-              configData?.coolingUnits.map((unit, index) => ({
-                coolingUnitName: unit.name,
-                column1: `${getSurveyPercentage(index)}%`,
-                column2: `${getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys, index) ?? 0} / ${getMetricValue(impactData?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom, index) ?? 0}`,
-              })) ?? []
-            }
+            items={surveyPercentageData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }

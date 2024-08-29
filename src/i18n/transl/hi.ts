@@ -1083,6 +1083,11 @@ export default {
         genderHeader: 'पुरुष | महिला | अन्य',
         genderSecondaryHeader: 'पुरुष | महिला',
         total: 'कुल',
+        sortingMenuOptions: {
+          descending: 'घटते क्रम में',
+          ascending: 'बढ़ते क्रम में',
+          coolingUnitName: 'कूलिंग यूनिट का नाम',
+        },
         usersTab: {
           operators: 'ऑपरेटर्स',
           users: 'सक्रिय शीतलन उपयोगकर्ता',
