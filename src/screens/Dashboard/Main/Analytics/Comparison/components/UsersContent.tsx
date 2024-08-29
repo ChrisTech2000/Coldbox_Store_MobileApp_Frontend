@@ -1,15 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import startCase from 'lodash/startCase';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
+import { DataTable } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Text } from '#ui/components/Text';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
-import { DataTable } from 'react-native-paper';
-import { useComparisonData } from '../store';
 import { SectionAccordion } from '../../components/SectionAccordion';
-import startCase from 'lodash/startCase';
+import { useComparisonData } from '../store';
+import { sortData } from '../utils';
+import { ESortingOptions } from './SortMenu';
 
 type Section = 'users' | 'operators' | 'beneficiaries';
 
@@ -18,12 +20,12 @@ type TableProps = {
   items: Array<{
     coolingUnitName: string;
     value: string;
-    total: number;
+    sum: number;
   }>;
   total: number;
 };
 
-export function UsersContent() {
+export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
   const { t } = useTranslationUtils();
   const { coolingUnitData, configData } = useComparisonData();
 
@@ -41,6 +43,56 @@ export function UsersContent() {
     [expanded]
   );
 
+  const operatorsData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      const fem = coolingUnitData?.roomOpFem?.[i] ?? 0;
+      const male = coolingUnitData?.roomOpMa?.[i] ?? 0;
+      const ot = coolingUnitData?.roomOpOt?.[i] ?? 0;
+
+      return {
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        value: `${male} | ${fem} | ${ot}`,
+        sum: coolingUnitData?.roomOp?.[i] ?? 0,
+      };
+    });
+
+    return sortData(data, sorting);
+  }, [coolingUnitData, sorting, configData]);
+
+  const usersData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      const fem = coolingUnitData?.roomActiveFem?.[i] ?? 0;
+      const male = coolingUnitData?.roomActiveMa?.[i] ?? 0;
+      const ot = coolingUnitData?.roomActiveOt?.[i] ?? 0;
+
+      return {
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        value: `${male} | ${fem} | ${ot}`,
+        sum: coolingUnitData?.roomActiveUsers?.[i] ?? 0,
+      };
+    });
+
+    return sortData(data, sorting);
+  }, [coolingUnitData, sorting, configData]);
+
+  const beneficiariesData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      const fem = Math.floor(coolingUnitData?.roomBeneficiariesFem?.[i] ?? 0);
+      const male = Math.floor(coolingUnitData?.roomBeneficiariesMa?.[i] ?? 0);
+
+      return {
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        value: `${male} | ${fem}`,
+        sum: male + fem,
+      };
+    });
+
+    return sortData(data, sorting);
+  }, [coolingUnitData, sorting, configData]);
+
   return (
     <View tw="w-full my-2">
       <SectionAccordion
@@ -54,13 +106,7 @@ export function UsersContent() {
               t('Dashboard.Analytics.comparisonTab.usersTab.operators'),
               t('Dashboard.Analytics.comparisonTab.genderHeader'),
             ]}
-            items={
-              configData?.coolingUnits.map((unit, index) => ({
-                coolingUnitName: unit.name,
-                value: `${coolingUnitData?.roomOpMa?.[index] ?? 0} | ${coolingUnitData?.roomOpFem?.[index] ?? 0} | ${coolingUnitData?.roomOpOt?.[index] ?? 0}`,
-                total: coolingUnitData?.roomOp?.[index] ?? 0,
-              })) ?? []
-            }
+            items={operatorsData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
@@ -77,13 +123,7 @@ export function UsersContent() {
               t('Dashboard.Analytics.comparisonTab.usersTab.activeUsers'),
               t('Dashboard.Analytics.comparisonTab.genderHeader'),
             ]}
-            items={
-              configData?.coolingUnits.map((unit, index) => ({
-                coolingUnitName: unit.name,
-                value: `${coolingUnitData?.roomActiveMa?.[index] ?? 0} | ${coolingUnitData?.roomActiveFem?.[index] ?? 0} | ${coolingUnitData?.roomActiveOt?.[index] ?? 0}`,
-                total: coolingUnitData?.roomActiveUsers?.[index] ?? 0,
-              })) ?? []
-            }
+            items={usersData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
@@ -100,13 +140,7 @@ export function UsersContent() {
               t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries'),
               t('Dashboard.Analytics.comparisonTab.genderSecondaryHeader'),
             ]}
-            items={
-              configData?.coolingUnits.map((unit, index) => ({
-                coolingUnitName: unit.name,
-                value: `${Math.round(coolingUnitData?.roomBeneficiariesMa?.[index] ?? 0)} | ${Math.round(coolingUnitData?.roomBeneficiariesFem?.[index] ?? 0)}`,
-                total: Math.round(coolingUnitData?.roomBeneficiaries?.[index] ?? 0),
-              })) ?? []
-            }
+            items={beneficiariesData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
@@ -151,7 +185,7 @@ function Table({ items, header, total }: TableProps) {
           <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
             <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
             <DataTable.Cell>{item.value}</DataTable.Cell>
-            <DataTable.Cell tw="max-w-[20%]">{item.total}</DataTable.Cell>
+            <DataTable.Cell tw="max-w-[20%]">{item.sum}</DataTable.Cell>
           </DataTable.Row>
         ))}
 

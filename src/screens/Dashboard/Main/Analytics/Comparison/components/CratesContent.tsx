@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -7,13 +7,16 @@ import { Text } from '#ui/components/Text';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import { GetAllCropsResponse } from '#types/api.responses';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
 import { sortAndMapData } from '../../utils';
-import { useComparisonData } from '../store';
 import { generateSecondColumnContent } from '../../utils/generateSecondColumnContent';
+import { useComparisonData } from '../store';
+import { sortData } from '../utils';
+import { ESortingOptions } from './SortMenu';
 
 type Section =
   | 'crates'
@@ -50,9 +53,12 @@ type ExtendedTableProps = {
   total: number;
 };
 
-export function CratesContent() {
+export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
   const { t } = useTranslationUtils();
-  const { coolingUnitData, configData } = useComparisonData();
+  const { coolingUnitData, configData } = useComparisonData((store) => ({
+    coolingUnitData: store.coolingUnitData,
+    configData: store.configData,
+  }));
 
   const [expanded, setExpanded] = useState<Section | undefined>();
 
@@ -62,126 +68,71 @@ export function CratesContent() {
 
   const expandTab = useCallback(
     (tab: Section) => {
-      if (tab === expanded) {
-        setExpanded(undefined);
-        return;
-      }
-
-      setExpanded(tab);
+      setExpanded(expanded === tab ? undefined : tab);
     },
     [expanded]
   );
 
-  const getCratesData = useCallback(
-    (index: number) => {
+  const totalCratesData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      const checkInCratesCrop = coolingUnitData?.roomCratesIn?.[i] ?? 0;
+      const checkOutCratesCrop = coolingUnitData?.roomCratesOut?.[i] ?? 0;
+      const sum = checkInCratesCrop + checkOutCratesCrop;
+
       return {
-        checkInCratesCrops: Object.values(coolingUnitData?.checkInCratesCrop?.[index] ?? {}).reduce(
-          (acc, current) => (acc += current),
-          0
-        ),
-        checkOutCratesCrops: Object.values(
-          coolingUnitData?.checkOutCratesCrop?.[index] ?? {}
-        ).reduce((acc, current) => (acc += current), 0),
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        value: `${checkInCratesCrop} | ${checkOutCratesCrop}`,
+        sum,
       };
-    },
-    [coolingUnitData]
-  );
+    });
 
-  const getQuantityData = useCallback(
-    (index: number) => {
+    return sortData(data, sorting);
+  }, [coolingUnitData, sorting, configData]);
+
+  const totalKgData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      const checkIn = coolingUnitData?.roomKgIn?.[i] ?? 0;
+      const checkOut = coolingUnitData?.roomKgOut?.[i] ?? 0;
+      const sum = checkIn + checkOut;
+
       return {
-        checkIn: Object.values(coolingUnitData?.checkInKgCrop?.[index] ?? {}).reduce(
-          (acc, current) => (acc += current),
-          0
-        ),
-        checkOut: Object.values(coolingUnitData?.checkOutKgCrop?.[index] ?? {}).reduce(
-          (acc, current) => (acc += current),
-          0
-        ),
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        value: `${checkIn} | ${checkOut}`,
+        sum,
       };
-    },
-    [coolingUnitData]
-  );
+    });
 
-  const getDistributionData = useCallback(
-    (index: number, tableName: string) => {
-      const data = {
-        cropsCratesIn: { column1: undefined, column2: undefined } as TableData,
-        cropsCratesOut: { column1: undefined, column2: undefined } as TableData,
-        cropsKgIn: { column1: undefined, column2: undefined } as TableData,
-        cropsKgOut: { column1: undefined, column2: undefined } as TableData,
-        co2: { column1: undefined, column2: undefined } as TableData,
+    return sortData(data, sorting);
+  }, [coolingUnitData, sorting, configData]);
+
+  const operationsData = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+    const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+      const checkIn = coolingUnitData?.roomOpsIn?.[i] ?? 0;
+      const checkOut = coolingUnitData?.roomOpsOut?.[i] ?? 0;
+      const sum = checkIn + checkOut;
+
+      return {
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        value: `${checkIn} | ${checkOut}`,
+        sum,
       };
+    });
 
-      if (!coolingUnitData) return data;
+    return sortData(data, sorting);
+  }, [coolingUnitData, sorting, configData]);
 
-      if (coolingUnitData.checkInCratesCrop && tableName === 'cropsCratesIn') {
-        const sortedData = sortAndMapData(coolingUnitData.checkInCratesCrop[index]);
-        data.cropsCratesIn.column1 = (
-          <View tw="space-y-1 my-1 items-center">
-            {sortedData.map(({ val, index }) => (
-              <Text key={`checkInCrates-${index}`} variant="TextMedium">
-                {val}
-              </Text>
-            ))}
-          </View>
-        );
-        data.cropsCratesIn.column2 = (
-          <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
-        );
-      }
+  const distributionCo2Data = useMemo(() => {
+    const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+    const data = [];
 
-      if (coolingUnitData.checkOutCratesCrop && tableName === 'cropsCratesOut') {
-        const sortedData = sortAndMapData(coolingUnitData.checkOutCratesCrop[index]);
-        data.cropsCratesOut.column1 = (
-          <View tw="space-y-1 my-1 items-center">
-            {sortedData.map(({ val, index }) => (
-              <Text key={`checkOutCrates-${index}`} variant="TextMedium">
-                {val}
-              </Text>
-            ))}
-          </View>
-        );
-        data.cropsCratesOut.column2 = (
-          <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
-        );
-      }
-
-      if (coolingUnitData.checkInKgCrop && tableName === 'cropsKgIn') {
-        const sortedData = sortAndMapData(coolingUnitData.checkInKgCrop[index]);
-        data.cropsKgIn.column1 = (
-          <View tw="space-y-1 my-1 items-center">
-            {sortedData.map(({ val, index }) => (
-              <Text key={`checkInKg-${index}`} variant="TextMedium">
-                {val}
-              </Text>
-            ))}
-          </View>
-        );
-        data.cropsKgIn.column2 = (
-          <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
-        );
-      }
-
-      if (coolingUnitData.checkOutKgCrop && tableName === 'cropsKgOut') {
-        const sortedData = sortAndMapData(coolingUnitData.checkOutKgCrop[index]);
-        data.cropsKgOut.column1 = (
-          <View tw="space-y-1 my-1 items-center">
-            {sortedData.map(({ val, index }) => (
-              <Text key={`checkOutKg-${index}`} variant="TextMedium">
-                {val}
-              </Text>
-            ))}
-          </View>
-        );
-        data.cropsKgOut.column2 = (
-          <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
-        );
-      }
-
-      if (coolingUnitData.co2Crops && tableName === 'co2') {
-        const sortedData = sortAndMapData(coolingUnitData.co2Crops[index]);
-        data.co2.column1 = (
+    for (let i = 0; i < coolingUnitsLength; i++) {
+      const sortedData = sortAndMapData(coolingUnitData?.co2Crops?.[i] ?? {});
+      data.push({
+        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        column1: (
           <View tw="space-y-1 my-1 items-center">
             {sortedData.map(({ val, index }) => (
               <Text key={`co2-${index}`} variant="TextMedium">
@@ -189,15 +140,62 @@ export function CratesContent() {
               </Text>
             ))}
           </View>
-        );
-        data.co2.column2 = (
-          <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
-        );
-      }
+        ),
+        column2: <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>,
+        sum: sortedData.reduce((acc, current) => (acc += current.val), 0),
+      });
+    }
 
-      return data;
+    return sortData(data, sorting);
+  }, [coolingUnitData, crops, sorting, configData]);
+
+  const generateDistributionData = useCallback(
+    (
+      dataKey: 'checkInCratesCrop' | 'checkOutCratesCrop' | 'checkInKgCrop' | 'checkOutKgCrop',
+      crops: GetAllCropsResponse[],
+      sorting: ESortingOptions
+    ) => {
+      const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+      const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
+        const sortedData = sortAndMapData(coolingUnitData?.[dataKey]?.[i] ?? {});
+        return {
+          coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+          column1: (
+            <View tw="space-y-1 my-1 items-center">
+              {sortedData.map(({ val, index }) => (
+                <Text key={`${dataKey}-${index}`} variant="TextMedium">
+                  {val}
+                </Text>
+              ))}
+            </View>
+          ),
+          column2: (
+            <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
+          ),
+          sum: sortedData.reduce((acc, current) => acc + current.val, 0),
+        };
+      });
+
+      return sortData(data, sorting);
     },
-    [coolingUnitData, crops]
+    [coolingUnitData, sorting, configData]
+  );
+
+  const distributionCratesIn = useMemo(
+    () => generateDistributionData('checkInCratesCrop', crops, sorting),
+    [coolingUnitData, crops, sorting]
+  );
+  const distributionCratesOut = useMemo(
+    () => generateDistributionData('checkOutCratesCrop', crops, sorting),
+    [coolingUnitData, crops, sorting]
+  );
+  const distributionKgIn = useMemo(
+    () => generateDistributionData('checkInKgCrop', crops, sorting),
+    [coolingUnitData, crops, sorting]
+  );
+  const distributionKgOut = useMemo(
+    () => generateDistributionData('checkOutKgCrop', crops, sorting),
+    [coolingUnitData, crops, sorting]
   );
 
   return (
@@ -210,20 +208,11 @@ export function CratesContent() {
         content={
           <Table
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.crates')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { checkInCratesCrops, checkOutCratesCrops } = getCratesData(index);
-                return {
-                  coolingUnitName: unit.name,
-                  value: `${checkInCratesCrops} | ${checkOutCratesCrops}`,
-                };
-              }) ?? []
-            }
+            items={totalCratesData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
-
       <SectionAccordion
         color="bg-gray-200"
         expanded={expanded === 'quantity'}
@@ -232,20 +221,11 @@ export function CratesContent() {
         content={
           <Table
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.kg')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { checkIn, checkOut } = getQuantityData(index);
-                return {
-                  coolingUnitName: unit.name,
-                  value: `${checkIn} | ${checkOut}`,
-                };
-              }) ?? []
-            }
+            items={totalKgData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
-
       <SectionAccordion
         color="bg-gray-200"
         expanded={expanded === 'operations'}
@@ -254,19 +234,11 @@ export function CratesContent() {
         content={
           <Table
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.operations')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                return {
-                  coolingUnitName: unit.name,
-                  value: `${coolingUnitData?.roomOpsIn?.[index] ?? 0} | ${coolingUnitData?.roomOpsOut?.[index] ?? 0}`,
-                };
-              }) ?? []
-            }
+            items={operationsData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
-
       <SectionAccordion
         color="bg-gray-200"
         expanded={expanded === 'checkedInCropDistribution'}
@@ -276,21 +248,11 @@ export function CratesContent() {
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.crates')}
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { cropsCratesIn } = getDistributionData(index, 'cropsCratesIn');
-                return {
-                  coolingUnitName: unit.name,
-                  column1: cropsCratesIn.column1,
-                  column2: cropsCratesIn.column2,
-                };
-              }) ?? []
-            }
+            items={distributionCratesIn}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
-
       <SectionAccordion
         color="bg-gray-200"
         expanded={expanded === 'checkedOutCropDistribution'}
@@ -299,22 +261,12 @@ export function CratesContent() {
         content={
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.crates')}
-            column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkOutCropDistribution')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { cropsCratesOut } = getDistributionData(index, 'cropsCratesOut');
-                return {
-                  coolingUnitName: unit.name,
-                  column1: cropsCratesOut.column1,
-                  column2: cropsCratesOut.column2,
-                };
-              }) ?? []
-            }
+            column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution')}
+            items={distributionCratesOut}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
-
       <SectionAccordion
         color="bg-gray-200"
         expanded={expanded === 'checkedInKgDistribution'}
@@ -323,22 +275,12 @@ export function CratesContent() {
         content={
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.kg')}
-            column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { cropsKgIn } = getDistributionData(index, 'cropsKgIn');
-                return {
-                  coolingUnitName: unit.name,
-                  column1: cropsKgIn.column1,
-                  column2: cropsKgIn.column2,
-                };
-              }) ?? []
-            }
+            column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution')}
+            items={distributionKgIn}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
-
       <SectionAccordion
         color="bg-gray-200"
         expanded={expanded === 'checkedOutKgDistribution'}
@@ -347,22 +289,12 @@ export function CratesContent() {
         content={
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.kg')}
-            column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkOutCropDistribution')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { cropsKgOut } = getDistributionData(index, 'cropsKgOut');
-                return {
-                  coolingUnitName: unit.name,
-                  column1: cropsKgOut.column1,
-                  column2: cropsKgOut.column2,
-                };
-              }) ?? []
-            }
+            column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutKgDistribution')}
+            items={distributionKgOut}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
-
       <SectionAccordion
         color="bg-gray-200"
         expanded={expanded === 'co2'}
@@ -372,16 +304,7 @@ export function CratesContent() {
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.co2EmissionsLabel')}
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.co2DistributionLabel')}
-            items={
-              configData?.coolingUnits.map((unit, index) => {
-                const { co2 } = getDistributionData(index, 'co2');
-                return {
-                  coolingUnitName: unit.name,
-                  column1: co2.column1,
-                  column2: co2.column2,
-                };
-              }) ?? []
-            }
+            items={distributionCo2Data}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
