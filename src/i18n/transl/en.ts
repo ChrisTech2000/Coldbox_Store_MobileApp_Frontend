@@ -1078,6 +1078,11 @@ const en = {
         genderHeader: 'Male | Female | Other',
         genderSecondaryHeader: 'Male | Female',
         total: 'total',
+        sortingMenuOptions: {
+          descending: 'Descending',
+          ascending: 'Ascending',
+          coolingUnitName: 'Cooling Unit Name',
+        },
         usersTab: {
           operators: 'Operators',
           users: 'Active cooling users',
