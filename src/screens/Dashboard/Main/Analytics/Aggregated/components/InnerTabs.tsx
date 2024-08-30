@@ -30,7 +30,7 @@ export function InnerTabs({ activeTab, compactMode, disabled, onTabSelection }: 
       />
       <Tab
         name={t(`Dashboard.Analytics.tabsShared.crates`)}
-        icon="fan"
+        icon="basket"
         isActive={activeTab === 'crates'}
         onSelect={() => onTabSelection('crates')}
         compactMode={compactMode}
