@@ -22,7 +22,7 @@ export function InnerTabs({ activeTab, compactMode, disabled, onTabSelection }: 
     <View tw={cn('w-full', compactMode && 'flex flex-row justify-center space-x-2 flex-wrap')}>
       <Tab
         name={t(`Dashboard.Analytics.tabsShared.crates`)}
-        icon="fan"
+        icon="basket"
         isActive={activeTab === 'crates'}
         onSelect={() => onTabSelection('crates')}
         compactMode={compactMode}
