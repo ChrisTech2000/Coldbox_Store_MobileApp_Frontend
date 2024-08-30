@@ -74,7 +74,7 @@ export default {
       Tutorial: 'Tutorial',
     },
     checkIn: {
-      SelectCropType: 'Selecionar Tipo de Cultura',
+      SelectCropType: 'Selecione Tipo de Cultura',
       CheckIn: 'Check-In',
       CropList: '{{cropType}}',
       CrateSetup: 'Check-In',
@@ -101,7 +101,7 @@ export default {
     import: 'Importar',
     yes: 'Sim',
     no: 'Não',
-    select: 'Selecionar',
+    select: 'Selecione',
     close: 'Fechar',
     delete: 'Eliminar',
     ok: 'Ok',
@@ -126,8 +126,8 @@ export default {
       clearButtonLabel: 'Limpar',
       confirmButtonLabel: 'Confirmar',
       placeholder: 'dd/mm/aaaa',
-      startDateSelection: 'Selecionar data de início',
-      endDateSelection: 'Selecionar data de fim',
+      startDateSelection: 'Selecione data de início',
+      endDateSelection: 'Selecione data de fim',
     },
   },
   Auth: {
@@ -304,21 +304,21 @@ export default {
     MarketPrice: {
       emptyState: 'Os preços de mercado não estão disponíveis no seu país',
       commodityLabel: 'Produto',
-      commodityModalTitle: 'Selecionar um produto',
+      commodityModalTitle: 'Selecione um produto',
       Trend: {
         title: 'Selecione um produto e um estado para obter uma previsão de preço',
         emptyState: 'Nenhum dado encontrado para esta combinação de mercado e produto',
         pastLabel: 'Passado',
         stateLabel: 'Estado',
-        stateModalTitle: 'Selecionar um estado',
+        stateModalTitle: 'Selecione um estado',
         forecastLabel: 'Previsão',
         chartLabel: 'Preço em {{currency}}/Kg',
       },
       Ranking: {
         filter: 'Filtrar por localização',
         monthLabel: 'Meses',
-        monthModalTitle: 'Selecionar os meses',
-        stateModalTitle: 'Selecionar os estados',
+        monthModalTitle: 'Selecione os meses',
+        stateModalTitle: 'Selecione os estados',
         stateLabel: 'Estados',
         table: {
           column1: 'Estado',
@@ -329,9 +329,9 @@ export default {
       },
     },
     CrateManagement: {
-      userModalTitle: 'Selecionar um utilizador de refrigeração',
+      userModalTitle: 'Selecione um utilizador de refrigeração',
       coolingUserLabel: 'Utilizador de refrigeração',
-      selectCoolingUnitLabel: 'Selecionar uma unidade de refrigeração',
+      selectCoolingUnitLabel: 'Selecione uma unidade de refrigeração',
       coolingUnitLabel: 'Unidade de refrigeração',
       noUnitWarning: 'Por favor, selecione uma unidade de refrigeração',
       noCratesWarning:
@@ -390,7 +390,7 @@ export default {
       },
       CheckOut: {
         selectCrateMessage: 'Selecione as paletes que deseja remover',
-        selectAll: 'Selecionar Todos',
+        selectAll: 'Selecione Todos',
         checkIn: 'Check-in',
         days: 'dias',
         day: 'dia',
@@ -435,7 +435,7 @@ export default {
           other: 'Outros Itens',
         },
         SelectCrop: {
-          additionalInfo: 'Informações adicionais',
+          additionalInfo: 'Info adicional',
         },
         Setup: {
           selectedCrop: 'Produto selecionado',
@@ -471,7 +471,7 @@ export default {
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {
         label: 'Unidade de refrigeração: {{name}}',
-        header: 'Selecionar uma unidade de refrigeração',
+        header: 'Selecione uma unidade de refrigeração',
       },
       occupancy: 'Ocupação atual da unidade de refrigeração',
       week: 'Esta semana',
@@ -506,10 +506,11 @@ export default {
     Company: {
       SelectCompany: {
         label: 'Empresa: {{name}}',
-        header: 'Selecionar uma empresa',
+        header: 'Selecione uma empresa',
       },
     },
     ProduceDetails: {
+      seeDetails: 'Ver detalhes',
       kilogram: 'kg',
       coolingUser: 'Utilizador de Refrigeração',
       contact: 'Contacto',
@@ -593,7 +594,7 @@ export default {
           ot: 'Outro',
         },
         fields: {
-          selectCoolingUnit: 'Selecionar uma unidade de refrigeração',
+          selectCoolingUnit: 'Selecione uma unidade de refrigeração',
           coolingUnits: 'Unidade(s) de refrigeração',
         },
         actions: {
@@ -629,9 +630,9 @@ export default {
           currency: 'Moeda',
         },
         headings: {
-          country: 'Selecionar um país',
-          commodity: 'Selecionar um produto',
-          currency: 'Selecionar uma moeda',
+          country: 'Selecione um país',
+          commodity: 'Selecione um produto',
+          currency: 'Selecione uma moeda',
         },
         actions: {
           save: 'Guardar Alterações',
@@ -713,7 +714,7 @@ export default {
           public:
             'Deseja tornar a sua unidade de refrigeração visível para potenciais utilizadores (informações de localização, tipo de sala, capacidade e preço)?',
           crops: 'Comodidades',
-          selectCrops: 'Selecionar comodidades',
+          selectCrops: 'Selecione comodidades',
           refrigerantType: 'Tipo de refrigerante utilizado',
           amountRefrigerant: 'Quantidade de refrigerante',
           powerConsumptionInMt: 'Consumo de energia da unidade de refrigeração por MT',
@@ -737,7 +738,7 @@ export default {
           batteryMaxCurrent: 'Corrente máxima de carga de uma bateria',
           batteryPeakEnergyStorage: 'Armazenamento de energia no nível máximo de uma bateria',
           batteryType: 'Tipo de baterias',
-          selectSensorType: 'Selecionar tipo de sensor',
+          selectSensorType: 'Selecione tipo de sensor',
           addTempSensor: 'Adicionar um sensor de temperatura à sua unidade de refrigeração.',
           sensorDesc: {
             default: 'Solicite esta informação ao seu fornecedor de sensores se não a tiver.',
@@ -801,13 +802,13 @@ export default {
         },
       },
       UsageAnalysis: {
-        dateSelectionLabel: 'Selecionar dias:',
+        dateSelectionLabel: 'Selecione dias:',
         empty:
           'Os check-ins e check-outs aparecerão no painel quando você fizer pelo menos um check-in em qualquer sala.',
         downloadDataButton: 'Baixar dados',
         modal: {
           title: 'Definir configuração',
-          coolingUnitSelection: 'Selecionar unidade de refrigeração:',
+          coolingUnitSelection: 'Selecione unidade de refrigeração:',
         },
         summary: {
           totalCheckIns: 'Número total de check-ins:',
@@ -822,7 +823,7 @@ export default {
           total: 'Receita total',
         },
         paymentType: {
-          label: 'Selecionar métodos de pagamento:',
+          label: 'Selecione métodos de pagamento:',
           cash: 'Dinheiro',
           creditCard: 'Cartão de Crédito',
         },
@@ -938,7 +939,7 @@ export default {
         disclaimer: 'Aviso: O tempo para recolha é uma estimativa do número de dias.',
         disclaimerMessage:
           'Aviso. Note que o tempo para recolha é uma estimativa do número de dias. Esta estimativa foi baseada em modelos calibrados para as espécies de frutas ou vegetais e uma simulação numérica. A degradação real da qualidade do produto, no entanto, também depende das condições meteorológicas locais, condições de cultivo, data de colheita e outros fatores. Portanto, podem ocorrer desvios em relação ao tempo previsto para os dias de recolha.',
-        selectCropLabel: 'Selecionar um produto',
+        selectCropLabel: 'Selecione um produto',
         successMessage: 'Check-in atualizado com sucesso!',
         errorMessage: 'Falha ao atualizar o check-in. Por favor, tente novamente.',
       },

@@ -124,14 +124,15 @@ export function Filters({
       {searchType && (
         <View tw="flex flex-row items-center justify-center space-x-2 mt-4">
           <Button
-            tw={searchType === 'details' ? 'bg-gray-700' : 'bg-gray-400'}
+            tw={cn('w-[50%]', searchType === 'details' ? 'bg-gray-700' : 'bg-gray-400')}
             mode="contained"
             onPress={() => onSearchTypeChange?.('details')}
+            labelStyle="text-wrap"
           >
             {t('Dashboard.SearchFilter.crateDetailsButton')}
           </Button>
           <Button
-            tw={searchType === 'id' ? 'bg-gray-700' : 'bg-gray-400'}
+            tw={cn('w-[50%]', searchType === 'id' ? 'bg-gray-700' : 'bg-gray-400')}
             mode="contained"
             onPress={() => onSearchTypeChange?.('id')}
           >

@@ -505,6 +505,7 @@ const en = {
       },
     },
     ProduceDetails: {
+      seeDetails: 'See Details',
       kilogram: 'kg',
       coolingUser: 'Cooling User',
       contact: 'Contact',
