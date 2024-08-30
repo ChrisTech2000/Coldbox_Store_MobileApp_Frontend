@@ -99,7 +99,7 @@ export function ComparisonSection() {
   }, [coolingUnitData]);
 
   return (
-    <ScrollView tw="mt-8" showsVerticalScrollIndicator={false}>
+    <ScrollView tw="mt-8 h-full" showsVerticalScrollIndicator={false}>
       {!configData ? (
         <Configuration openModal={() => setIsModalOpen(true)} />
       ) : (
