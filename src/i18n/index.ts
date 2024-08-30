@@ -6,6 +6,7 @@ import { getLocales } from 'react-native-localize';
 import type { RecursiveKeyOf } from '#types/miscellaneous';
 import englishTranslations, { type Translations } from './transl/en';
 import hindiTranslations from './transl/hi';
+import portugueseTranslations from './transl/pt';
 import { APP_LOCALES } from './constants';
 import { LanguageStorage } from './utils';
 
@@ -27,6 +28,9 @@ function _optionsFactory() {
       },
       [APP_LOCALES.HINDI]: {
         translation: hindiTranslations,
+      },
+      [APP_LOCALES.PORTUGUESE]: {
+        translation: portugueseTranslations,
       },
     },
     lng: initialLanguage,

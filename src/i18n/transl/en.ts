@@ -11,6 +11,11 @@ const en = {
       pt: 'Portuguese',
     },
   },
+  gender: {
+    female: 'Female',
+    male: 'Male',
+    other: 'Other',
+  },
   navigation: {
     auth: {
       SignIn: 'Log in',
