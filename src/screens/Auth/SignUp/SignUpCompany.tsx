@@ -20,7 +20,7 @@ import { AuthRouteProps } from 'navigation/Auth';
 import { currenciesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
-import { SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
+import { GENDERS, SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
 import { customCountrySort } from './utils';
 
 const allCountries = getAllISOCodes();
@@ -289,7 +289,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         }}
         isModalOpen={isGenderModalOpen}
         closeModal={closeGenderModal}
-        data={[EAppGender.FEMALE, EAppGender.MALE, EAppGender.OTHER]}
+        data={GENDERS(t)}
       />
       {errors.gender && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">

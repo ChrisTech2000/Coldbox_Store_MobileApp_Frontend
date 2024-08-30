@@ -138,7 +138,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   }, []);
 
   return (
-    <KeyboardAwareScrollView tw="mt-[-8]">
+    <KeyboardAwareScrollView tw="mt-[-24]">
       <View tw="flex-1 items-center justify-center">
         <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-4" />
         <Text tw="mb-2 text-xl font-bold">{t('Auth.SignIn.heading')}</Text>
@@ -208,7 +208,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
               )}
               name="activeProfile"
             />
-            <View tw="w-12 max-w-12">
+            <View tw="w-16 max-w-16">
               <Text tw="mt-4 text-xs text-center">
                 {t('Auth.SignIn.accounts.coolingUser.label')}
               </Text>

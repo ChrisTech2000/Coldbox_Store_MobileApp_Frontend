@@ -13,6 +13,11 @@ export default {
       pt: 'पुर्तगाली',
     },
   },
+  gender: {
+    female: 'महिला',
+    male: 'पुरुष',
+    other: 'अन्य',
+  },
   navigation: {
     auth: {
       SignIn: 'लॉगिन',

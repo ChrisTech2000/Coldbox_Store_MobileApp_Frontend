@@ -37,9 +37,8 @@ export class LanguageStorage {
 // Translation Related
 ///
 
-type Path = TranslationPaths | [basePath: TranslationPaths, dynamicKey: string];
 type ZodResolverCb<T> = (zod: typeof z, t: T) => z.ZodSchema;
-
+export type Path = TranslationPaths | [basePath: TranslationPaths, dynamicKey: string];
 export type Translator = (path: Path, opts?: TOptions) => string;
 
 export function useTranslationUtils() {
