@@ -2,17 +2,20 @@ import React, { useMemo } from 'react';
 import { FlatList, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { Text } from '#ui/components/Text';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { LanguageStorage } from '#i18n/utils';
 import { FAQ_CONTENT } from '#constants/faq';
+import { TranslationLocales } from '#i18n/constants';
+import { mmkv } from '#stores/lib/storage';
 import { ERoles } from '#types/global';
 
 function AppInfo() {
+  const language = mmkv.getString('i18n-locale');
   const faq = useMemo(
-    () => FAQ_CONTENT[LanguageStorage.read()].filter((faq) => faq.role.includes(ERoles.AUTH)),
-    []
+    () =>
+      FAQ_CONTENT[language as TranslationLocales].filter((faq) => faq.role.includes(ERoles.AUTH)),
+    [language]
   );
 
   return (

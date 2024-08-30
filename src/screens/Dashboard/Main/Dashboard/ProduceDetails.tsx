@@ -11,7 +11,7 @@ import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack'
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import { ECoolingUnitMetric, EPricingType } from '#types/global';
+import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -208,23 +208,25 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
         />
       </View>
 
-      <Button
-        mode="contained"
-        uppercase
-        tw="w-[85%]"
-        onPress={() => {
-          navigation.navigate('CheckOutStack', {
-            screen: 'CrateSelection',
-            params: {
-              coolingUnit,
-              user: farmer,
-              crates: produce.crates,
-            },
-          });
-        }}
-      >
-        {t('Dashboard.ProduceDetails.checkOutButton')}
-      </Button>
+      {user?.role === ERoles.OPERATOR && (
+        <Button
+          mode="contained"
+          uppercase
+          tw="w-[85%]"
+          onPress={() => {
+            navigation.navigate('CheckOutStack', {
+              screen: 'CrateSelection',
+              params: {
+                coolingUnit,
+                user: farmer,
+                crates: produce.crates,
+              },
+            });
+          }}
+        >
+          {t('Dashboard.ProduceDetails.checkOutButton')}
+        </Button>
+      )}
     </View>
   );
 }
