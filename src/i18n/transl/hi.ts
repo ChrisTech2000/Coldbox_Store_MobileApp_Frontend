@@ -506,6 +506,7 @@ export default {
       },
     },
     ProduceDetails: {
+      seeDetails: 'विवरण देखें',
       kilogram: 'किग्रा',
       coolingUser: 'ठंडाई उपयोगकर्ता',
       contact: 'संपर्क',

@@ -26,7 +26,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
   }, []);
 
   const getPricing = useCallback((produce: DashboardProduce, currency: string) => {
-    return `${produce.cratesCombinedCost}${currencies.find((c) => c.code === currency)?.symbol ?? ''}${produce.crates[0]?.pricing[0]?.pricingType === EPricingType.PERIODICITY ? ' / Day' : ''}`;
+    return `${produce.cratesCombinedCost}${currencies.find((c) => c.code === currency)?.symbol ?? ''}${produce.crates[0]?.pricing[0]?.pricingType === EPricingType.PERIODICITY ? ` / ${t('Dashboard.CrateManagement.CheckOut.day')}` : ''}`;
   }, []);
 
   return (
@@ -42,7 +42,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
             'bg-gray-300 border-gray-300'
         )}
       />
-      <View tw="flex flex-row h-full w-full space-x-2 p-1 bg-white rounded-sm border border-l-0 border-gray-300">
+      <View tw="flex flex-row h-full w-full space-x-2 px-1 py-2 bg-white rounded-sm border border-l-0 border-gray-300">
         <View tw="justify-between items-center">
           <FastImage
             resizeMode="contain"
@@ -77,7 +77,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
                 </Text>
               )}
               <Text variant="TextMedium" tw="underline text-green-primary" onPress={onNavigate}>
-                See Details
+                {t('Dashboard.ProduceDetails.seeDetails')}
               </Text>
             </View>
           </View>

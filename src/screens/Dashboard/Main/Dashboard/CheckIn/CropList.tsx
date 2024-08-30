@@ -1,5 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
@@ -24,7 +24,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
   const { t } = useTranslationUtils();
   const { coolingUnit } = useCheckInStore();
 
-  const [additionalInfo, setAdditionalInfo] = useState<string>('');
+  const additionalInfoRef = useRef<string>('');
 
   const { data, isLoading } = useApiCall(
     'getCoolingUnitCrops',
@@ -67,17 +67,16 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
                 </Text>
                 <Input
                   tw="w-32 text-base bg-transparent rounded-sm h-12 truncate"
-                  onChangeText={(val) => setAdditionalInfo(val)}
-                  value={additionalInfo}
+                  onChangeText={(text) => (additionalInfoRef.current = text)}
                   placeholder={t('Dashboard.CrateManagement.CheckIn.SelectCrop.additionalInfo')}
                 />
                 <TouchableOpacity
-                  onPress={() =>
+                  onPress={() => {
                     navigation.navigate('CrateSetup', {
                       crop: item.fullCrop,
-                      additionalInfo,
-                    })
-                  }
+                      additionalInfo: additionalInfoRef.current,
+                    });
+                  }}
                 >
                   <Icon source="plus-circle-outline" size={20} />
                 </TouchableOpacity>
