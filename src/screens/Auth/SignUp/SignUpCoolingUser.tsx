@@ -3,13 +3,18 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Checkbox, Text, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Checkbox, Text, TextInput } from 'react-native-paper';
 
+import { useTranslationUtils } from '#i18n/utils';
+import { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
 import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+import { EAccountProfile } from '../SignIn';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import {
@@ -20,8 +25,6 @@ import {
   SignUpCoolingUserSchemaType,
 } from './schemas';
 import { customCountrySort } from './utils';
-import { AuthRouteProps } from 'navigation/Auth';
-import { useTranslationUtils } from '#i18n/utils';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -36,7 +39,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
     watch,
     setValue,
     clearErrors,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignUpCoolingUserSchemaType>({
     resolver: zodResolver(() => SignUpAsCoolingUserSchema(t)),
   });
@@ -108,7 +111,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
     });
 
     if (result) {
-      navigation.navigate('SignIn');
+      navigation.navigate('SignIn', { accountProfile: EAccountProfile.FARMER });
     }
   }, []);
 
@@ -316,9 +319,13 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         mode="contained"
         uppercase
         onPress={handleSubmit(onSubmit)}
-        disabled={!termsAgreement}
+        disabled={!termsAgreement || isSubmitting}
       >
-        {t('Auth.SignUp.commonForm.submit')}
+        {isSubmitting ? (
+          <ActivityIndicator size="small" color="white" />
+        ) : (
+          t('Auth.SignUp.commonForm.submit')
+        )}
       </Button>
     </KeyboardAwareScrollView>
   );

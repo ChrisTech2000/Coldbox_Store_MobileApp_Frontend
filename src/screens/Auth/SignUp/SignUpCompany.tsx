@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Checkbox, Portal, Text, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Checkbox, Portal, Text, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Danger from '#assets/icons/danger.svg';
@@ -36,7 +36,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
     watch,
     setValue,
     clearErrors,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignUpCompanySchemaType>({
     resolver: zodResolver(() => SignUpAsCompanySchema(t)),
   });
@@ -390,9 +390,13 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         mode="contained"
         uppercase
         onPress={handleSubmit(checkPhoneNumber)}
-        disabled={!termsAgreement}
+        disabled={!termsAgreement || isSubmitting}
       >
-        {t('Auth.SignUp.commonForm.submit')}
+        {isSubmitting ? (
+          <ActivityIndicator size="small" color="white" />
+        ) : (
+          t('Auth.SignUp.commonForm.submit')
+        )}
       </Button>
 
       {/** USER WITHOUT PHONE MODAL */}
@@ -419,7 +423,11 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
               icon="close-circle-outline"
               contentStyle="flex flex-row-reverse items-center"
             >
-              {t('Auth.SignUp.SignUpCompany.modal.buttons.continue')}
+              {isSubmitting ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                t('Auth.SignUp.SignUpCompany.modal.buttons.continue')
+              )}
             </Button>
             <Button
               tw="border-2 border-green-primary mb-2"
