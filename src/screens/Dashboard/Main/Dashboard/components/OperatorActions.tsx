@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
@@ -9,6 +11,7 @@ import CheckOut from '#assets/icons/check-out.svg';
 import CratesManagement from '#assets/icons/crates-management.svg';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardRoutes } from '#navigation/Dashboard';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -20,8 +23,8 @@ import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
-import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { paperTheme } from '#ui/lib/theme';
+import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 type ManagementMode = 'check-in' | 'check-out';
 
@@ -34,6 +37,7 @@ export function OperatorActions({
 }: MainTabStackRouteProps<'RootMainTabStack'> & { coolingUnit: CoolingUnit | null }) {
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const [isCrateManagementOpen, setIsCrateManagementOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -114,6 +118,20 @@ export function OperatorActions({
     setSelectedUser(undefined);
   }, [selectedUser]);
 
+  const navigateToCoolingUsers = useCallback(() => {
+    dashboardNavigation.navigate('Management');
+    setIsModalOpen(false);
+    setSearch('');
+    setSelectedUser(undefined);
+  }, []);
+
+  const combinedUsers = [
+    ...filteredUsers,
+    ...(!isLoading && (!search || noPhoneUser?.user.firstName.includes(search))
+      ? [noPhoneUser]
+      : []),
+  ];
+
   return (
     <View tw="absolute right-4 bottom-2 flex flex-row-reverse items-center">
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
@@ -156,10 +174,9 @@ export function OperatorActions({
       <Portal>
         <Modal visible={isModalOpen} onDismiss={onModalClose}>
           <View tw="bg-white rounded-3xl h-auto space-y-2 items-center mx-16 px-3 py-1">
-            <Text
-              variant="TitleMedium"
-              tw="my-2"
-            >{`${t('Dashboard.CrateManagement.userModalTitle')}:`}</Text>
+            <Text variant="TitleMedium" tw="my-2">
+              {`${t('Dashboard.CrateManagement.userModalTitle')}:`}
+            </Text>
             <Input
               tw="border bg-white border-gray-700 rounded-sm mt-2 mb-3 h-11 w-full"
               label={`${t('Dashboard.SearchFilter.searchLabel')}...`}
@@ -175,22 +192,22 @@ export function OperatorActions({
                 </View>
               ) : (
                 <FlashList
-                  data={filteredUsers}
+                  data={combinedUsers}
                   extraData={selectedUser}
+                  keyExtractor={(item) => item?.id?.toString() ?? ''}
                   renderItem={({ item }) => (
                     <TouchableOpacity
                       onPress={() => setSelectedUser(item)}
                       tw={cn(
                         'my-1 border-b border-gray-300 p-1',
-                        (selectedUser as Farmer)?.id === item.id
+                        (selectedUser as Farmer)?.id === item?.id
                           ? 'border-2 border-green-primary'
                           : ''
                       )}
                     >
-                      <Text
-                        variant="TextMedium"
-                        tw="text-base"
-                      >{`${item.user.firstName} ${item.user.lastName}`}</Text>
+                      <Text variant="TextMedium" tw="text-base">
+                        {`${item?.user.firstName} ${item?.user.lastName}`}
+                      </Text>
                     </TouchableOpacity>
                   )}
                   estimatedItemSize={20}
@@ -200,23 +217,10 @@ export function OperatorActions({
                   }}
                 />
               )}
-              {!isLoading && (!search || noPhoneUser?.user.firstName.includes(search)) && (
-                <TouchableOpacity
-                  onPress={() => setSelectedUser(noPhoneUser)}
-                  tw={cn(
-                    'my-1 border-b border-gray-300 p-1',
-                    selectedUser?.id === noPhoneUser?.id ? 'border-2 border-green-primary' : ''
-                  )}
-                >
-                  <Text variant="TextMedium" tw="text-base">
-                    {noPhoneUser?.user.firstName}
-                  </Text>
-                </TouchableOpacity>
-              )}
             </ScrollView>
 
             <Button
-              tw="w-[85%] my-4"
+              tw="w-[85%] mt-4 mb-1"
               mode="contained"
               uppercase
               onPress={onNavigate}
@@ -226,6 +230,14 @@ export function OperatorActions({
             >
               {t('actions.confirm')}
             </Button>
+
+            {managementMode === 'check-in' && (
+              <TouchableOpacity onPress={navigateToCoolingUsers} tw="mb-3">
+                <Text variant="TextMedium" tw="text-base text-green-primary">
+                  {t('Dashboard.CrateManagement.addUserLink')}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </Modal>
       </Portal>

@@ -330,6 +330,8 @@ export default {
     },
     CrateManagement: {
       userModalTitle: 'Selecione um utilizador de refrigeração',
+      addUserLink:
+        'Utilizador não está na lista? Adicione o utilizador em Gestão ➜ Utilizadores de arrefecimento ➜ +.',
       coolingUserLabel: 'Utilizador de refrigeração',
       selectCoolingUnitLabel: 'Selecione uma unidade de refrigeração',
       coolingUnitLabel: 'Unidade de refrigeração',
