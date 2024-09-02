@@ -547,6 +547,7 @@ export default {
         timeToPick: 'Tempo até recolha',
         checkInDate: 'Data de check-in (primeiro para último)',
         checkInDateReverse: 'Data de check-in (último para primeiro)',
+        coolingUser: 'Nome do utilizador de refrigeração',
       },
     },
     Management: {

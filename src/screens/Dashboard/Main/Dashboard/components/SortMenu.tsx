@@ -1,10 +1,13 @@
 import { useFocusEffect } from '@react-navigation/native';
-import React, { SetStateAction, useCallback, useMemo, useState } from 'react';
+import React, { SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon, Portal, RadioButton } from 'react-native-paper';
 import { create } from 'zustand';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
+import { ERoles } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { Modal } from '#ui/components/Modal';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -16,6 +19,7 @@ export enum ESortingOptions {
   PICK_UP_TIME = 'pick_up_time',
   CHECK_IN_DATE = 'check_in_date',
   CHECK_IN_DATE_REVERSE = 'check_in_date_reverse',
+  COOLING_USER = 'cooling_user',
 }
 
 type SortingStore = {
@@ -35,6 +39,7 @@ export const useSortingStore = create<SortingStore>((set) => ({
 
 export function SortingMenu(props: SortingMenuProps) {
   const store = useSortingStore();
+  const user = useAuthStore((store) => store.user);
   const { t } = useTranslationUtils();
 
   const [isModalVisible, setIsModalVisible] = useControlledState<boolean>(
@@ -54,7 +59,7 @@ export function SortingMenu(props: SortingMenuProps) {
         id: ESortingOptions.CHECK_IN_DATE_REVERSE,
       },
     ],
-    [t]
+    [t, user]
   );
 
   useFocusEffect(
@@ -64,6 +69,15 @@ export function SortingMenu(props: SortingMenuProps) {
       }
     }, [store.sorting])
   );
+
+  useEffect(() => {
+    if (user?.role !== ERoles.COOLING_USER) {
+      options.push({
+        label: t('Dashboard.SortMenu.options.coolingUser'),
+        id: ESortingOptions.COOLING_USER,
+      });
+    }
+  }, [user?.role]);
 
   return (
     <View>

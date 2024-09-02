@@ -30,6 +30,8 @@ export function sortProduces(a: DashboardProduce, b: DashboardProduce, sorting: 
       return (
         new Date(b.crates[0].checkInDate).getTime() - new Date(a.crates[0].checkInDate).getTime()
       );
+    case ESortingOptions.COOLING_USER:
+      return a.farmer.toLowerCase().localeCompare(b.farmer.toLowerCase());
     default:
       return 0;
   }
