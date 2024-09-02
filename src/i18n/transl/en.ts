@@ -605,6 +605,7 @@ const en = {
           error: 'Phone already assigned. Try a different one',
           success: 'Successfully invited operator',
         },
+        phoneFormat: 'Make sure the entered phone number has a country code.',
       },
       EditOperator: {
         toasts: {
