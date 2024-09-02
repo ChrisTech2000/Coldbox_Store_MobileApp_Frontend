@@ -541,6 +541,7 @@ const en = {
         timeToPick: 'Time to pick up',
         checkInDate: 'Check in date (first to latest)',
         checkInDateReverse: 'Check in date (latest to first)',
+        coolingUser: "Cooling user's name",
       },
     },
     Management: {
