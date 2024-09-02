@@ -32,7 +32,12 @@ export default function LogoField() {
           ) : (
             <Image
               tw="h-14 w-14"
-              source={{ uri: currentLogo.uri.replace('http:', 'https:') }}
+              source={{
+                uri: currentLogo.uri.replace(
+                  'http:',
+                  'https:'
+                ) /** TODO: maybe handle this in the BE */,
+              }}
               resizeMode="contain"
             />
           )}

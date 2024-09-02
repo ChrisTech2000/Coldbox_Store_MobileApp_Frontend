@@ -68,7 +68,12 @@ export default function DrawerContent(props: Props) {
         ) : (
           <Image
             tw="h-14 w-14"
-            source={{ uri: props.logoURI.replace('http:', 'https:') }}
+            source={{
+              uri: props.logoURI.replace(
+                'http:',
+                'https:'
+              ) /** TODO: maybe handle this in the BE */,
+            }}
             resizeMode="contain"
           />
         )}
