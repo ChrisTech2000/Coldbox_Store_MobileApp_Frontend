@@ -328,6 +328,8 @@ export default {
     },
     CrateManagement: {
       userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
+      addUserLink:
+        'सूची में उपयोगकर्ता नहीं है? उपयोगकर्ता को जोड़ने के लिए प्रबंधन ➜ कूलिंग उपयोगकर्ता ➜ + पर जाएं।',
       coolingUserLabel: 'कूलिंग उपयोगकर्ता',
       selectCoolingUnitLabel: 'कूलिंग यूनिट चुनें',
       coolingUnitLabel: 'कूलिंग यूनिट',

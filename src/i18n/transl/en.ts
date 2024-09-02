@@ -326,6 +326,7 @@ const en = {
     },
     CrateManagement: {
       userModalTitle: 'Select a cooling user',
+      addUserLink: 'Cooling user not in list? Add the user from Management ➜ Cooling users ➜ +',
       coolingUserLabel: 'Cooling user',
       selectCoolingUnitLabel: 'Select a cooling unit',
       coolingUnitLabel: 'Cooling unit',
