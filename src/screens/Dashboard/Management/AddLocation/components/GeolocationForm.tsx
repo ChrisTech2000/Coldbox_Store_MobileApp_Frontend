@@ -52,8 +52,18 @@ export default function GeoLocationForm() {
       </Button>
       {coordinates.latitude && coordinates.longitude && (
         <View tw="flex flex-row justify-between mx-6 mb-4">
-          <Input label="Latitude" value={coordinates.latitude} disabled tw="flex-1 mr-2" />
-          <Input label="Longitude" value={coordinates.longitude} disabled tw="flex-1 ml-2" />
+          <Input
+            label={t('Dashboard.Management.Location.fields.latitude')}
+            value={coordinates.latitude}
+            disabled
+            tw="flex-1 mr-2"
+          />
+          <Input
+            label={t('Dashboard.Management.Location.fields.longitude')}
+            value={coordinates.longitude}
+            disabled
+            tw="flex-1 ml-2"
+          />
         </View>
       )}
     </View>
