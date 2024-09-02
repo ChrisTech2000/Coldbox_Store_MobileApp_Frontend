@@ -12,7 +12,13 @@ import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
-import { LANGUAGES, SignUpAsCoolingUserSchema, SignUpCoolingUserSchemaType } from './schemas';
+import {
+  GENDERS,
+  getLanguageCode,
+  LANGUAGES,
+  SignUpAsCoolingUserSchema,
+  SignUpCoolingUserSchemaType,
+} from './schemas';
 import { customCountrySort } from './utils';
 import { AuthRouteProps } from 'navigation/Auth';
 import { useTranslationUtils } from '#i18n/utils';
@@ -86,6 +92,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       password: { password },
       gender,
       country,
+      language,
     } = data;
 
     const result = await AuthService.signUpAsCoolingUser({
@@ -94,6 +101,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         lastName,
         phone,
         password,
+        language: getLanguageCode(language, t),
         country,
         gender: MAP_APP_GENDER_TO_API[gender],
       },
@@ -222,7 +230,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         }}
         isModalOpen={isGenderModalOpen}
         closeModal={closeGenderModal}
-        data={[EAppGender.FEMALE, EAppGender.MALE, EAppGender.OTHER]}
+        data={GENDERS(t)}
       />
       {errors.gender && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">

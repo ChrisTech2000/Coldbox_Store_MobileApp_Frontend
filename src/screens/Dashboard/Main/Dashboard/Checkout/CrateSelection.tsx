@@ -104,9 +104,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           useSelectStore={useCoolingUnitStore}
           label={
             coolingUnit
-              ? t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-                  name: coolingUnit.name,
-                })
+              ? coolingUnit.name
               : `${t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}...`
           }
           modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}

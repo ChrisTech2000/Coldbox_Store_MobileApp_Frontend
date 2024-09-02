@@ -13,6 +13,11 @@ export default {
       pt: 'पुर्तगाली',
     },
   },
+  gender: {
+    female: 'महिला',
+    male: 'पुरुष',
+    other: 'अन्य',
+  },
   navigation: {
     auth: {
       SignIn: 'लॉगिन',
@@ -501,6 +506,7 @@ export default {
       },
     },
     ProduceDetails: {
+      seeDetails: 'विवरण देखें',
       kilogram: 'किग्रा',
       coolingUser: 'ठंडाई उपयोगकर्ता',
       contact: 'संपर्क',

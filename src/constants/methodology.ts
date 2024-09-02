@@ -197,5 +197,99 @@ export const METHODOLOGY_CONTENT: Record<TranslationLocales, MethodologyEntry[]>
   [APP_LOCALES.ORIYA]: [],
   [APP_LOCALES.GUJARATI]: [],
   [APP_LOCALES.FRENCH]: [],
-  [APP_LOCALES.PORTUGUESE]: [],
+  [APP_LOCALES.PORTUGUESE]: [
+    {
+      title: 'Nome da empresa',
+      text: 'O nome da empresa conforme registado na Coldtivate.',
+    },
+    {
+      title: 'Receita total',
+      text: 'A receita total da empresa gerada pela cobrança de taxas de armazenamento das caixas registadas na app Coldtivate.',
+    },
+    {
+      title: 'Capacidade total de refrigeração',
+      text: 'A capacidade total somada de todas as unidades de refrigeração registadas na aplicação para a sua empresa.',
+    },
+    {
+      title: 'N.º de unidades de refrigeração',
+      text: 'O número total de unidades de refrigeração registadas na aplicação para a sua empresa.',
+    },
+    {
+      title: 'Tipo de unidade de refrigeração',
+      text: 'Número total de unidades de refrigeração localizadas na exploração agrícola, no mercado ou em camiões frigoríficos. A informação é inserida pelo funcionário registado que cria a unidade de refrigeração na aplicação.',
+    },
+    {
+      title: 'Número total de funcionários registados',
+      text: "Número de utilizadores ligados à sua empresa que se inscreveram como 'Funcionário Registado', ou seja, membros da equipa de gestão que supervisionam as operações nas unidades de refrigeração. Todos os utilizadores que se registam são convidados a declarar o seu género como 'Masculino', 'Feminino' ou 'Outro'. Este indicador está presente apenas na vista 'Empresa' porque os funcionários registados não estão ligados a uma única unidade de refrigeração, mas sim a toda a empresa.",
+    },
+    {
+      title: 'Número total de operadores',
+      text: "Número de utilizadores ligados à sua empresa que se inscreveram como 'Operadores', ou seja, funcionários presentes fisicamente nas unidades de refrigeração e que interagem com os clientes de refrigeração. Todos os utilizadores que se registam são convidados a declarar o seu género como 'Masculino', 'Feminino' ou 'Outro'. Nas vistas 'Agregado' e 'Comparação', apenas os operadores atribuídos às unidades de refrigeração selecionadas são considerados.",
+    },
+    {
+      title: 'Número total de utilizadores de refrigeração distintos',
+      text: "Número de clientes de refrigeração em todas as unidades de refrigeração de uma empresa desde a adesão à aplicação. Todos os utilizadores que se registam são convidados a declarar o seu género como 'Masculino', 'Feminino' ou 'Outro'. Este indicador está presente apenas na vista 'Empresa'. Nas vistas 'Agregado' e 'Comparação', relatamos o número de utilizadores ativos de refrigeração.",
+    },
+    {
+      title: 'Número total de utilizadores de refrigeração ativos',
+      text: "Número de utilizadores distintos que realizaram uma operação de check-in ou check-out em pelo menos uma das unidades de refrigeração no período de tempo selecionado. A divisão por género é calculada a partir do género dos utilizadores de refrigeração, conforme declarado durante o registo. Este indicador está presente apenas nas vistas 'Agregado' e 'Comparação'.",
+    },
+    {
+      title: 'Tipo de utilizadores de refrigeração',
+      text: "Os utilizadores de refrigeração que preenchem o 'Inquérito ao Utilizador de Refrigeração' são convidados a especificar se se identificam como 'agricultores', ou como 'pequenos vendedores/comerciantes/grossistas'. Este indicador mostra as estatísticas resumidas para o subconjunto de utilizadores de refrigeração que responderam a esta pergunta no inquérito.",
+    },
+    {
+      title: 'Número total de beneficiários indiretos',
+      text: "O número de beneficiários indiretos é calculado multiplicando o número total de utilizadores de refrigeração pelo tamanho médio da família para o país onde a empresa está localizada. Na vista 'Empresa', é utilizado o 'Número total de utilizadores de refrigeração do distrito', enquanto nas vistas 'Agregado' e 'Comparação', é utilizado o 'Número total de utilizadores de refrigeração ativos'. A divisão por género masculino-feminino é calculada utilizando a média da razão de género para o país da empresa. A informação sobre o tamanho médio da família e a razão de género são extraídas de https://population.un.org/Household/index.html#/countries/.",
+    },
+    {
+      title: 'Distribuição das colheitas no check-in (caixas)',
+      text: 'Número de caixas registadas na aplicação Coldtivate para cada tipo de produto. A lista de produtos é ordenada pelo número de caixas registadas.',
+    },
+    {
+      title: 'Distribuição das colheitas no check-out (caixas)',
+      text: 'Número de caixas registadas na aplicação Coldtivate para cada tipo de produto. A lista de produtos é ordenada pelo número de caixas registadas.',
+    },
+    {
+      title: 'Distribuição das colheitas no check-in (kg)',
+      text: 'Quantidades totais, em quilogramas, registadas na aplicação Coldtivate para cada tipo de produto. A lista de produtos é ordenada pelo número de caixas registadas.',
+    },
+    {
+      title: 'Distribuição das colheitas no check-out (kg)',
+      text: 'Quantidades totais, em quilogramas, registadas na aplicação Coldtivate para cada tipo de produto. A lista de produtos é ordenada pelo número de caixas registadas.',
+    },
+    {
+      title: 'Ocupação média das unidades de refrigeração',
+      text: "Para cada unidade, a ocupação média diária é calculada como o número de caixas armazenadas na unidade dividido pelo número total de caixas que podem ser armazenadas na unidade, que é definido pelo funcionário registado que cria a unidade de refrigeração na aplicação. Este valor é então calculado para todas as unidades da empresa e para o período de tempo. Na vista 'Empresa', são consideradas todas as unidades e dias desde a criação da empresa na Coldtivate. Nas vistas 'Agregado' e 'Comparação', as unidades e o período de tempo podem ser configurados clicando em 'Configurar'.",
+    },
+    {
+      title: 'Caixas totais',
+      text: "Número total de caixas registadas na aplicação. Na vista 'Empresa', são consideradas todas as unidades e dias desde a criação da empresa na Coldtivate. Nas vistas 'Agregado' e 'Comparação', as unidades e o período de tempo podem ser configurados clicando em 'Configurar'.",
+    },
+    {
+      title: 'Quantidade total (kg)',
+      text: "Quantidade total, em quilogramas, de produtos registados na aplicação. Os quilogramas por caixa são definidos no momento do check-in. Na vista 'Empresa', são consideradas todas as unidades e dias desde a criação da empresa na Coldtivate. Nas vistas 'Agregado' e 'Comparação', as unidades e o período de tempo podem ser configurados clicando em 'Configurar'.",
+    },
+    {
+      title: 'Operações totais',
+      text: "Número total de operações de check-in e check-out registadas na aplicação. Cada operação pode incluir o check-in ou check-out de várias caixas de diferentes produtos. Na vista 'Empresa', são consideradas todas as unidades e dias desde a criação da empresa na Coldtivate. Nas vistas 'Agregado' e 'Comparação', as unidades e o período de tempo podem ser configurados clicando em 'Configurar'.",
+    },
+    {
+      title: 'Evolução das perdas alimentares',
+      text: "A evolução das perdas alimentares é expressa em percentagem para descrever a quantidade média de alimentos perdidos/salvos por mês para cada utilizador e tipo de produto. Para estimar este valor, os dados de perdas de base (ou seja, os dados recolhidos dos utilizadores de refrigeração quando se registam na aplicação) são comparados com os dados de perdas pós-colheita recolhidos regularmente à medida que o utilizador armazena produtos na unidade de refrigeração. Os dados de base são recolhidos através do 'Inquérito ao Utilizador de Refrigeração', onde os agricultores e comerciantes são questionados sobre a quantidade semanal de alimentos produzidos, vendidos e perdidos que experienciam (sem armazenamento a frio) para cada produto. À medida que os agricultores e comerciantes utilizam as unidades de refrigeração, são realizados inquéritos 'Pós-check-out' semanalmente para cada tipo de produto armazenado. Neste inquérito, o utilizador é questionado sobre as quantidades vendidas e perdidas após o armazenamento a frio. Os dados dos inquéritos pós-check-out são agregados mensalmente para estimar o nível de perda pós-colheita experienciado por cada utilizador e tipo de produto à medida que utilizam o armazenamento a frio, e comparados com a base. Os dados entre produtos e utilizadores de cada unidade de refrigeração são calculados ao longo de períodos de tempo e unidades de refrigeração para produzir as percentagens apresentadas no Impact Dashboard. A evolução das perdas alimentares é a diferença percentual entre a percentagem perdida nos inquéritos 'pós-check-out' (ou seja, enquanto utilizam a refrigeração) e a percentagem perdida na base (ou seja, antes do armazenamento a frio).",
+    },
+    {
+      title: 'Evolução da receita dos utilizadores de refrigeração',
+      text: "A evolução da receita para os utilizadores de refrigeração descreve a variação percentual média na receita do agricultor calculada comparando a receita gerada pela venda de produtos armazenados na câmara frigorífica e pela venda de produtos antes do agricultor começar a utilizar o armazenamento a frio (dados de 'base'). Os dados de base são recolhidos através do 'Inquérito ao Utilizador de Refrigeração', onde os agricultores e comerciantes são questionados sobre a quantidade e o preço de venda dos produtos vendidos por semana quando se inscrevem na aplicação, ou seja, antes de começarem a utilizar o armazenamento a frio. À medida que os agricultores e comerciantes utilizam as unidades de refrigeração, são realizados inquéritos 'Pós-check-out' semanalmente para cada tipo de produto armazenado. Neste inquérito, o utilizador é questionado sobre as quantidades vendidas e o preço de venda após o armazenamento a frio. Os dados dos inquéritos pós-check-out são agregados mensalmente para estimar qual é a receita mensal total experienciada por cada utilizador e tipo de produto à medida que utilizam o armazenamento a frio, e este valor é comparado com a base. Os dados entre produtos e utilizadores de cada unidade de refrigeração são calculados ao longo de períodos de tempo e unidades de refrigeração para produzir os valores apresentados no Impact Dashboard. A evolução da receita é a diferença percentual entre a receita média estimada a partir dos inquéritos 'pós-check-out' (ou seja, enquanto utilizam a refrigeração) e a receita média estimada a partir da base (ou seja, antes do armazenamento a frio).",
+    },
+    {
+      title:
+        'N.º de inquéritos utilizados para calcular a evolução das perdas alimentares e da receita',
+      text: "As métricas sobre perdas alimentares e evolução da receita baseiam-se nos inquéritos que os utilizadores de refrigeração são convidados a preencher enquanto estão ativos na aplicação. Para ter uma ideia da quantidade de dados que está a ser agregada para calcular estas percentagens, aqui contamos o número total de inquéritos 'Pós-check-out' preenchidos pelos utilizadores de refrigeração desde a criação da empresa até ao mês atual, em comparação com o número máximo possível de inquéritos que poderiam ser preenchidos para a empresa no mês atual. O número máximo de inquéritos que poderiam ser preenchidos é estimado utilizando o número total de produtos distintos verificados para cada utilizador de refrigeração desde a criação da empresa.",
+    },
+    {
+      title: 'Evolução do CO2',
+      text: 'O Relatório Diário de Emissões de CO2 apresentado no Impact Dashboard é meticulosamente derivado de uma combinação de análises em tempo real do armazenamento da câmara frigorífica e de modelos robustos de Avaliação do Ciclo de Vida (LCA) fornecidos pela Eco-Invent. Ao integrar os dados de check-in ao vivo da nossa aplicação, monitorizamos sistematicamente o volume de cada tipo de produto armazenado nas câmaras frigoríficas diariamente. Estes dados relevantes, juntamente com parâmetros auxiliares extraídos das bases de dados LCA abrangentes da Eco-Invent, são utilizados para recalcular com precisão as emissões diárias de CO2 atribuíveis a cada produto armazenado. Os insights resultantes são então elegantemente visualizados e disponibilizados para exportação através do Impact Dashboard, garantindo que os nossos utilizadores têm à sua disposição dados transparentes e acionáveis sobre o impacto ambiental.',
+    },
+  ],
 };

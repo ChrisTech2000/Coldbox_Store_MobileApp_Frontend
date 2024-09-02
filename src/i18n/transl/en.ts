@@ -11,6 +11,11 @@ const en = {
       pt: 'Portuguese',
     },
   },
+  gender: {
+    female: 'Female',
+    male: 'Male',
+    other: 'Other',
+  },
   navigation: {
     auth: {
       SignIn: 'Log in',
@@ -500,6 +505,7 @@ const en = {
       },
     },
     ProduceDetails: {
+      seeDetails: 'See Details',
       kilogram: 'kg',
       coolingUser: 'Cooling User',
       contact: 'Contact',
