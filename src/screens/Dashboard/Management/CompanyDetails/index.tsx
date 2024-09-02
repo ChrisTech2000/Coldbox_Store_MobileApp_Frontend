@@ -71,7 +71,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
         accountNumber: subjects.accountNumber ?? '',
         bankName: subjects.bankName ?? '',
         companyId: company.id,
-        logo: values.logo.uri !== subjects.companyLogo ? values.logo : null,
+        logo: values.logo.uri && values.logo.uri !== subjects.companyLogo ? values.logo : null,
       });
 
       toast.show(t('Dashboard.Management.CompanyDetails.toasts.success'), { type: 'md_success' });
