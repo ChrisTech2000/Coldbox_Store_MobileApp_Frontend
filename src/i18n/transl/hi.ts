@@ -607,6 +607,7 @@ export default {
           error: 'Phone already assigned. Try a different one',
           success: 'ऑपरेटर को सफलतापूर्वक आमंत्रित किया गया',
         },
+        phoneFormat: 'फोन नंबर में कंट्री कोड ज़रूर होना चाहिए।',
       },
       EditOperator: {
         toasts: {

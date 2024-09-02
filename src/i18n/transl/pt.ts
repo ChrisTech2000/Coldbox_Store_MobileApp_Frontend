@@ -611,6 +611,7 @@ export default {
           error: 'Telefone já atribuído. Tente outro',
           success: 'Operador convidado com sucesso',
         },
+        phoneFormat: 'Certifique-se de que o número de telefone inserido tem um código de país.',
       },
       EditOperator: {
         toasts: {
