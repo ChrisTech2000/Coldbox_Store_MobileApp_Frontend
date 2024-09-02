@@ -66,7 +66,11 @@ export default function DrawerContent(props: Props) {
         {!props.logoURI ? (
           <ColdtivateLogo width={60} height={60} />
         ) : (
-          <Image tw="h-14 w-14" source={{ uri: props.logoURI }} resizeMode="contain" />
+          <Image
+            tw="h-14 w-14"
+            source={{ uri: props.logoURI.replace('http:', 'https:') }}
+            resizeMode="contain"
+          />
         )}
       </View>
 
