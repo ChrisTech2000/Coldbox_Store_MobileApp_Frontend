@@ -149,7 +149,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             {t('Dashboard.CrateManagement.CheckOut.totalWeight')}
           </Text>
           <Text variant="TextMedium" tw="text-lg">
-            {totalWeight}
+            {totalWeight} {t('Dashboard.ProduceDetails.kilogram')}
           </Text>
         </View>
         <Divider tw="bg-gray-400 mt-2 mb-10" />
@@ -184,10 +184,13 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
                   <Text
                     variant="TextMedium"
                     tw="text-lg"
-                  >{`${crate.name} () — ${crate.weight}${t('Dashboard.ProduceDetails.kilogram')}/${crate.currentStorageDays} ${t('Dashboard.CrateManagement.CheckOut.days')}`}</Text>
+                  >{`${crate.name} (${crate.tag ?? ''}) — ${crate.weight}${t('Dashboard.ProduceDetails.kilogram')}/${crate.currentStorageDays} ${t('Dashboard.CrateManagement.CheckOut.days')}`}</Text>
                 </View>
                 <Text variant="TextMedium" tw="text-lg">
-                  {cratePrices[index]?.toFixed(2)}
+                  {(cratePrices[index] ?? 0).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: company?.currency,
+                  })}
                 </Text>
               </View>
             )}
@@ -200,7 +203,10 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             {t('Dashboard.CrateManagement.CheckOut.calculatedPrice')}
           </Text>
           <Text variant="TextMedium" tw="text-lg">
-            {total.toFixed(2)}
+            {total.toLocaleString('en-US', {
+              style: 'currency',
+              currency: company?.currency,
+            })}
           </Text>
         </View>
         <Divider tw="bg-gray-400 mt-2" />
@@ -230,7 +236,10 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             {t('Dashboard.CrateManagement.CheckOut.priceWithDiscount')}
           </Text>
           <Text variant="TextMedium" tw="text-lg">
-            {(total - discount).toFixed(2)}
+            {(Number.isNaN(discount) ? total : total - discount).toLocaleString('en-US', {
+              style: 'currency',
+              currency: company?.currency,
+            })}
           </Text>
         </View>
         <Divider tw="bg-gray-400 my-2" />
