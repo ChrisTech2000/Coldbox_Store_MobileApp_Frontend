@@ -82,7 +82,10 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
       },
       {
         label: t('Dashboard.ProduceDetails.crateIds'),
-        value: produce.crates.map((crate) => crate.id).join(', '),
+        value: produce.crates
+          .map((crate) => crate.tag)
+          .filter(Boolean)
+          .join(', '),
       },
       {
         label: t('Dashboard.ProduceDetails.combinedWeight'),
@@ -165,7 +168,6 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
           <View tw="flex flex-row items-center justify-between">
             <Text variant="TextMedium" tw="px-2">
               {percentage}%
-              {/**NOTE: figure out what's the behaviour here; currently does nothing in original app */}
             </Text>
             <Text variant="TextMedium" tw="px-2">
               {t('Dashboard.ProduceDetails.pickUp')}
