@@ -1,14 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Divider } from 'react-native-paper';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { Divider } from 'react-native-paper';
 
-import { Text } from '#ui/components/Text';
-import { Image } from '#ui/components/Image';
 import { Button } from '#ui/components/Button';
+import { Image } from '#ui/components/Image';
+import { Text } from '#ui/components/Text';
 
-import { useTranslationUtils } from '#i18n/utils';
 import DefaultLogo from '#assets/images/coldtivate_logo.svg';
+import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../components/FormManager';
 
@@ -21,18 +21,30 @@ export default function LogoField() {
   return (
     <React.Fragment>
       <View tw="flex-row items-center justify-between px-4">
-        <Text tw="text-gray-600 text-base truncate">
-          {t('Dashboard.Management.CompanyDetails.labels.uploadLogo')}
-        </Text>
+        <View tw="flex-1 pr-2">
+          <Text tw="text-gray-600 text-base truncate">
+            {t('Dashboard.Management.CompanyDetails.labels.uploadLogo')}
+          </Text>
+        </View>
         <View tw="flex-row items-center space-x-2">
           {!currentLogo.uri ? (
             <DefaultLogo width={56} height={56} />
           ) : (
-            <Image tw="h-14 w-14" source={{ uri: currentLogo.uri }} resizeMode="contain" />
+            <Image
+              tw="h-14 w-14"
+              source={{
+                uri: currentLogo.uri.replace(
+                  'http:',
+                  'https:'
+                ) /** TODO: maybe handle this in the BE */,
+              }}
+              resizeMode="contain"
+            />
           )}
           <Button
             uppercase
             mode="contained-tonal"
+            tw="flex-shrink-0"
             onPress={async (evt) => {
               evt.stopPropagation();
               await launchImageLibrary(

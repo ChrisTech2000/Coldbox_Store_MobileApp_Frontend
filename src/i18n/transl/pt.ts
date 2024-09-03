@@ -330,6 +330,8 @@ export default {
     },
     CrateManagement: {
       userModalTitle: 'Selecione um utilizador de refrigeração',
+      addUserLink:
+        'Utilizador não está na lista? Adicione o utilizador em Gestão ➜ Utilizadores de arrefecimento ➜ +.',
       coolingUserLabel: 'Utilizador de refrigeração',
       selectCoolingUnitLabel: 'Selecione uma unidade de refrigeração',
       coolingUnitLabel: 'Unidade de refrigeração',
@@ -547,6 +549,7 @@ export default {
         timeToPick: 'Tempo até recolha',
         checkInDate: 'Data de check-in (primeiro para último)',
         checkInDateReverse: 'Data de check-in (último para primeiro)',
+        coolingUser: 'Nome do utilizador de refrigeração',
       },
     },
     Management: {
@@ -610,6 +613,7 @@ export default {
           error: 'Telefone já atribuído. Tente outro',
           success: 'Operador convidado com sucesso',
         },
+        phoneFormat: 'Certifique-se de que o número de telefone inserido tem um código de país.',
       },
       EditOperator: {
         toasts: {

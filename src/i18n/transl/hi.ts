@@ -328,6 +328,8 @@ export default {
     },
     CrateManagement: {
       userModalTitle: 'कूलिंग उपयोगकर्ता चुनें',
+      addUserLink:
+        'सूची में उपयोगकर्ता नहीं है? उपयोगकर्ता को जोड़ने के लिए प्रबंधन ➜ कूलिंग उपयोगकर्ता ➜ + पर जाएं।',
       coolingUserLabel: 'कूलिंग उपयोगकर्ता',
       selectCoolingUnitLabel: 'कूलिंग यूनिट चुनें',
       coolingUnitLabel: 'कूलिंग यूनिट',
@@ -543,6 +545,7 @@ export default {
         timeToPick: 'उठाने का समय',
         checkInDate: 'चेक-इन तिथि (पहले से नवीनतम)',
         checkInDateReverse: 'चेक-इन तिथि (नवीनतम से पहले)',
+        coolingUser: 'कूलिंग उपयोगकर्ता का नाम',
       },
     },
     Management: {
@@ -606,6 +609,7 @@ export default {
           error: 'Phone already assigned. Try a different one',
           success: 'ऑपरेटर को सफलतापूर्वक आमंत्रित किया गया',
         },
+        phoneFormat: 'फोन नंबर में कंट्री कोड ज़रूर होना चाहिए।',
       },
       EditOperator: {
         toasts: {

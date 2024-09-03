@@ -1,29 +1,30 @@
 import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import { Banner, Checkbox, Divider, TextInput } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Controller, useForm } from 'react-hook-form';
-import colors from 'tailwindcss/colors';
+import { ActivityIndicator, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Banner, Checkbox, Divider, TextInput } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
+import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
-import { SkiaShadow } from '#ui/primitives/SkiaShadow';
-
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { useManagementStore } from '#stores/management';
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import { Select } from '#ui/components/Select';
+import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
-import { useTranslationUtils } from '#i18n/utils';
-import { useAuthStore } from '#stores/auth';
-import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
-import { ERoles, MAP_ROLES } from '#types/global';
-import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
+import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+
 import InAppNotifications from '#common/InAppNotifications';
+import { useTranslationUtils } from '#i18n/utils';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
+import ColdtivateService from '#services/ColdtivateService';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
+import { ERoles, MAP_ROLES } from '#types/global';
 
 type FormValues = {
   phoneNumber: string;
@@ -155,7 +156,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           control={control}
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
-              tw="w-full bg-transparent my-7"
+              tw="w-full bg-transparent mt-7 mb-2"
               label={t('Auth.ForgotPassword.phoneInputLabel')}
               mode="flat"
               dense
@@ -167,8 +168,11 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           )}
           name="phoneNumber"
         />
+        <Text variant="TextMedium" tw="text-gray-400 text-center mb-7">
+          {t('Dashboard.Management.AddOperator.phoneFormat')}
+        </Text>
 
-        <View tw="space-y-4">
+        <View tw="space-y-4 mx-4">
           <Select
             variant="md"
             label={selectLabel}
@@ -224,10 +228,10 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
               ),
             }}
           />
-          <Divider
-            tw={cn('w-full bg-gray-700 mt-2 my-2', !!errors.coolingUnits && 'bg-red-700 h-0.5')}
-          />
         </View>
+        <Divider
+          tw={cn('w-full bg-gray-700 mt-2 my-2', !!errors.coolingUnits && 'bg-red-700 h-0.5')}
+        />
       </View>
 
       <Button

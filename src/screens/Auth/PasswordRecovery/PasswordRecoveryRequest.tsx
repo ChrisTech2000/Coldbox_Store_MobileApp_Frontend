@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
-import { Text, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Text, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -17,7 +17,11 @@ function PasswordRecoveryRequest() {
   const toast = InAppNotifications.useToast();
   const { t, zodResolver } = useTranslationUtils();
 
-  const { control, handleSubmit } = useForm<PasswordRecoverySchema>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<PasswordRecoverySchema>({
     resolver: zodResolver((z) => z.object({ phone: z.string().default('') })),
   });
 
@@ -76,8 +80,13 @@ function PasswordRecoveryRequest() {
         onPress={handleSubmit(onSubmit)}
         icon="refresh"
         contentStyle="flex flex-row-reverse items-center"
+        disabled={isSubmitting}
       >
-        {t('Auth.ForgotPassword.resetButton')}
+        {isSubmitting ? (
+          <ActivityIndicator size="small" color="white" />
+        ) : (
+          t('Auth.ForgotPassword.resetButton')
+        )}
       </Button>
     </View>
   );

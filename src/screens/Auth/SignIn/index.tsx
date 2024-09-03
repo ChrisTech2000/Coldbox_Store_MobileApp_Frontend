@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Dimensions, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Divider, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 
 import Employee from '#assets/icons/employee.svg';
 import Farmer from '#assets/icons/farmer.svg';
@@ -61,7 +61,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
     handleSubmit,
     watch,
     clearErrors,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignInSchema>({
     resolver: zodResolver((z, t) =>
       z
@@ -282,8 +282,13 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           mode="contained"
           uppercase
           onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
         >
-          {t('Auth.SignIn.form.actions.logIn')}
+          {isSubmitting ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            t('Auth.SignIn.form.actions.logIn')
+          )}
         </Button>
         <Button
           mode="text"

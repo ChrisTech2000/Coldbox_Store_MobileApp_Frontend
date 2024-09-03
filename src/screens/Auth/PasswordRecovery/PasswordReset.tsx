@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { ActivityIndicator, TextInput } from 'react-native-paper';
 
 import type { AuthRouteProps } from '#navigation/Auth';
 import { passwordRegex } from '#constants/schemas';
@@ -27,7 +27,7 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<PasswordResetSchema>({
     resolver: zodResolver((z, t) =>
       z
@@ -129,8 +129,13 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
         onPress={handleSubmit(onSubmit)}
         icon="refresh"
         contentStyle="flex flex-row-reverse items-center"
+        disabled={isSubmitting}
       >
-        {t('Auth.ResetPassword.resetButton')}
+        {isSubmitting ? (
+          <ActivityIndicator size="small" color="white" />
+        ) : (
+          t('Auth.ResetPassword.resetButton')
+        )}
       </Button>
     </View>
   );
