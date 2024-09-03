@@ -17,7 +17,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
-import { EPricingType } from '#types/global';
+import { ECoolingUnitMetric, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -79,14 +79,22 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [produces, produces.length]);
 
   const total = useMemo(() => {
-    const dailyPricePerCrate = coolingUnit.commonPricingType.value;
+    const price = coolingUnit.commonPricingType.value;
 
-    if (!allHavePlannedDays || coolingUnit.commonPricingType.type === EPricingType.FIXED)
-      return (dailyPricePerCrate * allCrates.length).toFixed(2);
+    if (!allHavePlannedDays || coolingUnit.commonPricingType.type === EPricingType.FIXED) {
+      if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+        return allCrates.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
+      }
+      return (price * allCrates.length).toFixed(2);
+    }
 
     return allCrates
       .reduce((acc, current) => {
-        acc += (current.plannedDays ?? 1) * dailyPricePerCrate;
+        if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+          acc += (current.plannedDays ?? 1) * price * current.weight;
+        } else {
+          acc += (current.plannedDays ?? 1) * price;
+        }
         return acc;
       }, 0)
       .toFixed(2);
@@ -111,6 +119,19 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       }
     },
     [produces, produces.length]
+  );
+
+  const getCratePrice = useCallback(
+    (crates: ProduceCrate['crates']) => {
+      const price = coolingUnit.commonPricingType.value;
+
+      if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.CRATES) {
+        return (price * crates.length).toFixed(2);
+      }
+
+      return crates.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
+    },
+    [coolingUnit]
   );
 
   const onSubmit = useCallback(async () => {
@@ -229,7 +250,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                   {coolingUnit && (
                     <Text variant="TextMedium">
                       {currencySymbol}
-                      {(coolingUnit.commonPricingType.value * item.crates.length).toFixed(2)}
+                      {getCratePrice(item.crates)}
                       {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY
                         ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
                         : ''}

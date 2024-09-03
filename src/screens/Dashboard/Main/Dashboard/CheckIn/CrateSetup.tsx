@@ -18,7 +18,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
-import { CoolingUnit, EDateCropped, EPricingType, Farmer } from '#types/global';
+import { CoolingUnit, ECoolingUnitMetric, EDateCropped, EPricingType, Farmer } from '#types/global';
 
 import { CrateSetupModal } from './components/CrateSetupModal';
 
@@ -119,6 +119,31 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   const currencySymbol = useMemo(() => {
     return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
   }, [company]);
+
+  const totalPrice = useMemo(() => {
+    const price = coolingUnit?.commonPricingType.value ?? 0;
+    const multiplier =
+      coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY ? plannedDays ?? 0 : 1;
+
+    if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+      if (!crates) return '0.00';
+      const dailyPrice =
+        crates?.reduce((acc, current) => (acc += current.crateWeight * price), 0) ?? 0;
+      return (dailyPrice * multiplier).toFixed(2);
+    }
+
+    return (price * (crates?.length ?? 0) * multiplier).toFixed(2);
+  }, [crates, coolingUnit, plannedDays]);
+
+  const dailyPriceLabel = useMemo(() => {
+    if (coolingUnit?.commonPricingType.type === EPricingType.FIXED) {
+      return t('Dashboard.CrateManagement.CheckIn.Setup.fixedPriceLabel');
+    }
+    if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+      return t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayAndKilogramLabel');
+    }
+    return t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayAndCrateLabel');
+  }, [coolingUnit]);
 
   const onChangeNumericKeyboard = useCallback(
     (
@@ -396,13 +421,11 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       <View tw="bg-blue-50 p-2 rounded-sm space-y-1">
         <View tw="flex flex-row items-center justify-between">
           <Text variant="TextBold" tw="text-lg font-bold ml-2">
-            {coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
-              ? t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayLabel')
-              : t('Dashboard.CrateManagement.CheckIn.Setup.fixedPriceLabel')}
+            {dailyPriceLabel}
           </Text>
           <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
             {currencySymbol}
-            {coolingUnit?.commonPricingType.value.toFixed(2)}
+            {(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
           </Text>
         </View>
         <View tw="flex flex-row items-center justify-between">
@@ -411,13 +434,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           </Text>
           <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
             {currencySymbol}
-            {(
-              (coolingUnit?.commonPricingType.value ?? 0) *
-              (crates?.length ?? 0) *
-              (coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
-                ? plannedDays ?? 1
-                : 1)
-            ).toFixed(2)}
+            {totalPrice}
           </Text>
         </View>
       </View>
