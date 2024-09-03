@@ -268,7 +268,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -329,7 +328,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.post<CheckOutResponse>(EOperationEndpoints.CHECK_OUT, params);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -346,7 +344,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.post<CheckInResponse>(EOperationEndpoints.CHECK_IN, _params);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -365,7 +362,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -379,7 +375,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.put<EditCheckInResponse>(url, rest);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -393,7 +388,6 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -412,7 +406,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -432,7 +425,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -448,7 +440,6 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -478,7 +469,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -492,7 +482,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.put<AddLocationResponse>(url, rest);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -505,7 +494,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.delete<Record<string, string>>(url);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -521,7 +509,6 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -539,7 +526,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -554,7 +540,6 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -579,7 +564,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -604,7 +588,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -621,7 +604,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.put<User>(url, rest);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -633,7 +615,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.get<Array<GetAllCropsResponse>>(EStorageEndpoints.GET_ALL_CROPS);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -671,7 +652,6 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -688,7 +668,6 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -704,7 +683,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -722,7 +700,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -740,7 +717,6 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -763,7 +739,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -776,7 +751,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.delete<Record<string, string>>(url);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -795,7 +769,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -819,7 +792,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -835,7 +807,6 @@ class ColdtivateService extends HttpClient {
       });
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -862,7 +833,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -876,7 +846,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -895,7 +864,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -912,7 +880,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -924,7 +891,6 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.post(EStorageEndpoints.ADD_COOLING_UNIT_TEMPERATURE, params);
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -941,7 +907,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -958,7 +923,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -980,7 +944,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -1003,7 +966,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -1020,7 +982,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -1043,7 +1004,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;
@@ -1071,7 +1031,6 @@ class ColdtivateService extends HttpClient {
       );
       return data;
     } catch (error) {
-      console.log(error);
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
       throw customError;

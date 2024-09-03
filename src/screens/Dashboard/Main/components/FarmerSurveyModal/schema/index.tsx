@@ -3,6 +3,10 @@ import { z } from 'zod';
 import { Translator } from '#i18n/utils';
 import { EUnitOfMeasurement } from '#types/global';
 
+export const formatFloat = (value: string | number) => {
+  return typeof value === 'string' ? value.replace(/,/g, '.').trim() : value;
+};
+
 export const FarmerSurveySchema = (t: Translator) =>
   z
     .object({
@@ -15,34 +19,28 @@ export const FarmerSurveySchema = (t: Translator) =>
       ]),
       unitaryWeight: z
         .number({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
-        .positive({
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        })
         .min(1, {
           message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
         }),
       weightDistribution: z
         .object({
           totalProducedWeekly: z
-            .number({
-              message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-            })
-            .positive({
+            .string({
               message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
             })
             .min(1, {
               message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
             }),
-          quantitySelfConsumed: z.number(),
-          quantitySold: z.number(),
-          quantityLost: z.number(),
+          quantitySelfConsumed: z.string(),
+          quantitySold: z.string(),
+          quantityLost: z.string(),
         })
         .superRefine((data, ctx) => {
           if (
-            (data.quantitySelfConsumed ?? 0) +
-              (data.quantitySold ?? 0) +
-              (data.quantityLost ?? 0) !==
-            data.totalProducedWeekly
+            Number(formatFloat(data.quantitySelfConsumed ?? 0)) +
+              Number(formatFloat(data.quantitySold ?? 0)) +
+              Number(formatFloat(data.quantityLost ?? 0)) !==
+            Number(formatFloat(data.totalProducedWeekly))
           ) {
             ctx.addIssue({
               code: 'custom',
@@ -62,10 +60,7 @@ export const FarmerSurveySchema = (t: Translator) =>
           ),
         }),
       averagePrice: z
-        .number({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
-        .positive({
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        })
+        .string({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
         .min(1, {
           message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
         }),
