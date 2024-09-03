@@ -27,6 +27,7 @@ type SelectItemProps<T> = {
   autoSelect?: boolean;
   datums: Array<T>;
   divider?: boolean;
+  disabled?: boolean;
   emptyMessage?: string;
   isModalVisible: boolean;
   label: string;
@@ -98,6 +99,7 @@ export default function SelectWithStore<T>({
           isModalOpen={isModalVisible}
           onClick={() => setIsModalVisible(!isModalVisible)}
           useScrollView={useScrollView}
+          disabled={rest.disabled}
           content={{
             header: rest.modalHeader ?? '',
             options: (
