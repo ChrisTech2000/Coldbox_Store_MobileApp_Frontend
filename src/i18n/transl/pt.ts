@@ -32,6 +32,7 @@ export default {
       RevenueAnalysis: 'Análise de Receita',
       UsageAnalysis: 'Análise de Utilização',
       Locations: 'Localizações',
+      DisabledCoolingUnitsDescription: 'Adicione pelo menos uma localização',
       AddLocation: 'Adicionar Localização',
       EditLocation: 'Editar Localização',
       CoolingUnits: 'Unidades de Refrigeração',
