@@ -101,6 +101,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           isModalVisible={isUnitsModalOpen}
           setIsModalVisible={setIsUnitsModalOpen}
           itemName={(item) => item?.name}
+          disabled={!!_crates?.length}
           useSelectStore={useCoolingUnitStore}
           label={
             coolingUnit
