@@ -1150,6 +1150,7 @@ const en = {
       notifyCoolingUser:
         'Please notify the user {{farmer}} that his/her crates of {{crop}} should be picked up as soon as possible! (check in date: {{checkIn}}, cooling unit ID: {{unitId}}, check in ID: {{movementCode}}).',
       checkIn: 'Operator {{farmer}} has edited check-in {{movementCode}} on {{date}}.',
+      surveyAlreadyFilled: 'Survey has already been filled',
     },
   },
 };

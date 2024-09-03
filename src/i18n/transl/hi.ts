@@ -1156,6 +1156,7 @@ export default {
       notifyCoolingUser:
         'कृपया उपयोगकर्ता {{farmer}} को सूचित करें कि उसके {{crop}} के टोकरी को जल्द से जल्द उठाया जाना चाहिए! (चेक-इन तिथि: {{checkIn}}, कूलिंग यूनिट आईडी: {{unitId}}, ପ୍ରବେଶ ପରିଚୟ ସଂଖ୍ୟା: {{movementCode}}).',
       checkIn: 'Operator {{farmer}} has edited check-in {{movementCode}} on {{date}}.',
+      surveyAlreadyFilled: 'सर्वेक्षण पहले ही भरा जा चुका है',
     },
   },
 } satisfies Translations;
