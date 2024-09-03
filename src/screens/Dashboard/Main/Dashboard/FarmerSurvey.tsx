@@ -65,7 +65,7 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurv
     <View tw="w-full flex flex-row items-center justify-between space-x-2 mt-1 mb-2">
       <View tw="flex flex-row flex-1 items-center space-x-2">
         <Danger tw="w-7 h-7" />
-        <Text variant="TextMedium" tw="text-base">
+        <Text variant="TextMedium" tw="text-base w-56" numberOfLines={2}>
           {t('Dashboard.CrateManagement.FarmerSurvey.warningMessage', { crop: cropName })}
         </Text>
       </View>
