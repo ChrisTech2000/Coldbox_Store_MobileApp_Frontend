@@ -32,6 +32,7 @@ export default {
       RevenueAnalysis: 'राजस्व विश्लेषण',
       UsageAnalysis: 'उपयोग विश्लेषण',
       Locations: 'स्थान',
+      DisabledCoolingUnitsDescription: 'कम से कम एक स्थान जोड़ें',
       AddLocation: 'स्थान जोड़ें',
       EditLocation: 'स्थान बदले',
       CoolingUnits: 'शीतलन इकाइयाँ',

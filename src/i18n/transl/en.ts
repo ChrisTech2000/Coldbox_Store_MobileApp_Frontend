@@ -33,6 +33,7 @@ const en = {
       AddLocation: 'Add Location',
       EditLocation: 'Edit Location',
       CoolingUnits: 'Cooling Units',
+      DisabledCoolingUnitsDescription: 'Add at least one location',
       CoolingUsers: 'Cooling Users',
       AddCoolingUser: 'Add Cooling User',
       EditCoolingUser: 'Edit Cooling User',
