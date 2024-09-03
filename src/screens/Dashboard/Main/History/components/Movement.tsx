@@ -14,7 +14,14 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { ManagementCompany, useManagementStore } from '#stores/management';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { EMovementType, ERoles, type Company, type CoolingUnit } from '#types/global';
+import {
+  ECoolingUnitMetric,
+  EMovementType,
+  EPricingType,
+  ERoles,
+  type Company,
+  type CoolingUnit,
+} from '#types/global';
 
 import { sendSMS } from '../utils/actions';
 import { isWithinLast24Hours } from '../utils/dates';
@@ -62,10 +69,20 @@ export function Movement({
   }, [movement]);
 
   const price = useMemo(() => {
-    return isCheckIn
-      ? `${coolingUnit?.commonPricingType.value ?? 0} ${company?.currency} / ${t('Dashboard.CrateManagement.CheckIn.day')}`
-      : `${movement.totalPrice} ${company?.currency}`;
-  }, [isCheckIn]);
+    if (!isCheckIn) return `${movement.totalPrice} ${company?.currency}`;
+
+    const price = coolingUnit?.commonPricingType.value ?? 0;
+    const suffix =
+      coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+        ? `/ ${t('Dashboard.CrateManagement.CheckIn.day')}`
+        : '';
+
+    if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.CRATES) {
+      return `${price * movement.cratesNumber} ${company?.currency} ${suffix}`;
+    }
+
+    return `${movement.cratesWeight * price} ${company?.currency} ${suffix}`;
+  }, [isCheckIn, movement]);
 
   const seePDFModal = useCallback(() => {
     setIsPDFModalOpen(true);
