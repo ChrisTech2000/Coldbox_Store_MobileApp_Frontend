@@ -6,7 +6,7 @@ import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { FAQ_CONTENT } from '#constants/faq';
-import { TranslationLocales } from '#i18n/constants';
+import { APP_LOCALES, TranslationLocales } from '#i18n/constants';
 import { mmkv } from '#stores/lib/storage';
 import { ERoles } from '#types/global';
 
@@ -14,7 +14,9 @@ function AppInfo() {
   const language = mmkv.getString('i18n-locale');
   const faq = useMemo(
     () =>
-      FAQ_CONTENT[language as TranslationLocales].filter((faq) => faq.role.includes(ERoles.AUTH)),
+      FAQ_CONTENT[(language ?? APP_LOCALES.ENGLISH) as TranslationLocales].filter((faq) =>
+        faq.role.includes(ERoles.AUTH)
+      ),
     [language]
   );
 
