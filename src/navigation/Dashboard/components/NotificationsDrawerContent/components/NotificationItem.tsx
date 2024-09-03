@@ -1,21 +1,22 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Text } from '#ui/components/Text';
-
-import NotificationService from '#services/NotificationService';
-import ColdtivateService from '#services/ColdtivateService';
-import { dateFmt } from '#i18n/utils';
-import { useManagementStore } from '#stores/management';
-import { useRightDrawerStore } from '#navigation/Dashboard';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+
+import InAppNotifications from '#common/InAppNotifications';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { useRightDrawerStore } from '#navigation/Dashboard';
 import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
+import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
+import ColdtivateService from '#services/ColdtivateService';
+import NotificationService from '#services/NotificationService';
+import { useManagementStore } from '#stores/management';
 
 import { useSettingUpSurvey, type CommoditySurveyDatum, type Notification } from '../index';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 
 export default function NotificationItem({
   item,
@@ -26,8 +27,10 @@ export default function NotificationItem({
   revalidate: () => Promise<void>;
   findNotificationById: (notificationId: number) => Notification | undefined;
 }) {
-  const managementCompany = useManagementStore(useShallow((store) => store.company));
+  const toast = InAppNotifications.useToast();
+  const { t } = useTranslationUtils();
 
+  const managementCompany = useManagementStore(useShallow((store) => store.company));
   const isSettingUpSurvey = useSettingUpSurvey(useShallow((store) => store.isLoading));
   const toggleSettingUpSurveyStatus = useSettingUpSurvey((store) => store.toggle);
 
@@ -88,6 +91,17 @@ export default function NotificationItem({
           cropName: crops.find((crop) => crop.id === item.cropId)?.name ?? '',
         }))
       ) || [];
+
+    if (
+      list
+        .flatMap((el) => el.cropName.toLowerCase())
+        .includes(notification.crates.crop.toLowerCase())
+    ) {
+      toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
+        type: 'md_danger',
+      });
+      return;
+    }
 
     const contextualCrop = crops.find((crop) => crop.name === notification.crates.crop);
     if (!contextualCrop) return toggleSettingUpSurveyStatus();
