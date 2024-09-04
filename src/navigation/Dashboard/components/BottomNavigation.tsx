@@ -1,15 +1,20 @@
-import React from 'react';
-import { type StyleProp, type ViewStyle } from 'react-native';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { BottomTabDescriptorMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import { BottomNavigation as MDBottomNavigation, Text } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
+import React from 'react';
+import { Dimensions, type StyleProp, type ViewStyle } from 'react-native';
+import { BottomNavigation as MDBottomNavigation } from 'react-native-paper';
+
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { Text } from '#ui/components/Text';
 
 import type { DashboardMainRoutes } from '../Main';
 
 function useStyles(descriptors: BottomTabDescriptorMap, routeKey: string) {
   return descriptors[routeKey].options.tabBarStyle as StyleProp<ViewStyle>;
 }
+
+const screenHeight = Dimensions.get('screen').height;
 
 export default function BottomNavigation(props: BottomTabBarProps) {
   const { navigation, state, descriptors, insets } = props;
@@ -20,7 +25,10 @@ export default function BottomNavigation(props: BottomTabBarProps) {
     <MDBottomNavigation.Bar
       style={styles}
       navigationState={state}
-      safeAreaInsets={insets}
+      safeAreaInsets={{
+        ...insets,
+        ...(screenHeight <= SMALL_SCREEN_THRESHOLD ? { bottom: 10 } : {}),
+      }}
       onTabPress={({ route, preventDefault }) => {
         const event = navigation.emit({
           type: 'tabPress',
@@ -60,7 +68,7 @@ export default function BottomNavigation(props: BottomTabBarProps) {
         const label =
           descriptors[route.key].options.tabBarLabel || descriptors[route.key].options.title;
         return (label as string)?.split(' ').map((label: string, id) => (
-          <Text key={`${label}-${id}`} tw="text-center">
+          <Text key={`${label}-${id}`} tw="text-center" numberOfLines={2}>
             {label}
           </Text>
         ));

@@ -158,7 +158,11 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
   }, [selectedCountry]);
 
   return (
-    <KeyboardAwareScrollView tw="flex-1 h-full" keyboardOpeningTime={Number.MAX_SAFE_INTEGER}>
+    <KeyboardAwareScrollView
+      tw="flex-1 h-full"
+      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+      showsVerticalScrollIndicator={false}
+    >
       <Text tw="mb-4 text-5xl font-bold self-center text-center">{t('Auth.SignUp.welcome')}</Text>
 
       {/** SIGNUP COMPANY */}
