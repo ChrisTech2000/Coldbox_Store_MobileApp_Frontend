@@ -20,6 +20,19 @@ export const getMetricValue = (
   return (metric as ImpactMetricType)?.value as number;
 };
 
+export const getMetricName = (
+  metric: ImpactMetric | number | undefined,
+  index?: number
+): string => {
+  if (!metric) return '';
+
+  if (!isNil(index) && (metric as Array<ImpactMetricType>).length) {
+    return (metric as Array<ImpactMetricType>)?.[index].name as string;
+  }
+
+  return (metric as ImpactMetricType)?.name as string;
+};
+
 export function getVariationValue(from: number, to: number): Variation {
   if (from === to) return 'equal';
   if (from > to) return 'decrease';

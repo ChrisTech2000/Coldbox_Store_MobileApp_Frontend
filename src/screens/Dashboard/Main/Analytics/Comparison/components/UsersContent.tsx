@@ -17,6 +17,7 @@ type Section = 'users' | 'operators' | 'beneficiaries';
 
 type TableProps = {
   header: Array<string>;
+  empty: boolean;
   items: Array<{
     coolingUnitName: string;
     value: string;
@@ -42,6 +43,12 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
     },
     [expanded]
   );
+
+  const noDataAvailable = useMemo(() => {
+    // eslint-disable-next-line
+    // @ts-ignore
+    return Object.values(coolingUnitData ?? {}).every((value) => value === 0);
+  }, [coolingUnitData]);
 
   const operatorsData = useMemo(() => {
     const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
@@ -106,6 +113,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
               t('Dashboard.Analytics.comparisonTab.usersTab.operators'),
               t('Dashboard.Analytics.comparisonTab.genderHeader'),
             ]}
+            empty={noDataAvailable}
             items={operatorsData}
             total={configData?.coolingUnits.length ?? 0}
           />
@@ -123,6 +131,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
               t('Dashboard.Analytics.comparisonTab.usersTab.activeUsers'),
               t('Dashboard.Analytics.comparisonTab.genderHeader'),
             ]}
+            empty={noDataAvailable}
             items={usersData}
             total={configData?.coolingUnits.length ?? 0}
           />
@@ -140,6 +149,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
               t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries'),
               t('Dashboard.Analytics.comparisonTab.genderSecondaryHeader'),
             ]}
+            empty={noDataAvailable}
             items={beneficiariesData}
             total={configData?.coolingUnits.length ?? 0}
           />
@@ -149,7 +159,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
   );
 }
 
-function Table({ items, header, total }: TableProps) {
+function Table({ items, header, total, empty }: TableProps) {
   const { t } = useTranslationUtils();
 
   return (
@@ -181,19 +191,33 @@ function Table({ items, header, total }: TableProps) {
         </DataTable.Cell>
       </DataTable.Header>
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-        {items.map((item, index) => (
-          <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
-            <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
-            <DataTable.Cell>{item.value}</DataTable.Cell>
-            <DataTable.Cell tw="max-w-[20%]">{item.sum}</DataTable.Cell>
-          </DataTable.Row>
-        ))}
+        {empty ? (
+          <React.Fragment>
+            <DataTable.Row tw="bg-white">
+              <DataTable.Cell>{t('Dashboard.Analytics.emptyState')}</DataTable.Cell>
+            </DataTable.Row>
 
-        <DataTable.Row tw="bg-white rounded-b-lg">
-          <DataTable.Cell>
-            {total} {t('Dashboard.Analytics.comparisonTab.total')}
-          </DataTable.Cell>
-        </DataTable.Row>
+            <DataTable.Row tw="bg-white rounded-b-lg">
+              <DataTable.Cell>0 {t('Dashboard.Analytics.comparisonTab.total')}</DataTable.Cell>
+            </DataTable.Row>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {items.map((item, index) => (
+              <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
+                <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
+                <DataTable.Cell>{item.value}</DataTable.Cell>
+                <DataTable.Cell tw="max-w-[20%]">{item.sum}</DataTable.Cell>
+              </DataTable.Row>
+            ))}
+
+            <DataTable.Row tw="bg-white rounded-b-lg">
+              <DataTable.Cell>
+                {total} {t('Dashboard.Analytics.comparisonTab.total')}
+              </DataTable.Cell>
+            </DataTable.Row>
+          </React.Fragment>
+        )}
       </SkiaShadow>
     </DataTable>
   );

@@ -10,7 +10,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
-import { getMetricValue, getVariationValue, type Variation } from '../../utils';
+import { getMetricName, getMetricValue, getVariationValue, type Variation } from '../../utils';
 import { useComparisonData } from '../store';
 import { sortData } from '../utils';
 import { ESortingOptions } from './SortMenu';
@@ -64,10 +64,10 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
 
     const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
       return {
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        coolingUnitName:
+          getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
         value: `${(coolingUnitData?.averageRoomOccupancy?.[i] ?? 0).toFixed(2)}%`,
-        sum:
-          getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution, i) || 0,
+        sum: coolingUnitData?.averageRoomOccupancy?.[i] ?? 0,
       };
     });
 
@@ -88,7 +88,8 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
         column2: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
         column3: getVariationValue(from, to),
         negative: true,
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        coolingUnitName:
+          getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
         sum,
       };
     });
@@ -108,7 +109,8 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
         0;
 
       return {
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        coolingUnitName:
+          getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
         column1: `${sum.toFixed(2)}%`,
         column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
         column3: getVariationValue(from, to),
@@ -124,7 +126,8 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
 
     const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
       return {
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        coolingUnitName:
+          getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
         value: (coolingUnitData?.roomRevenue?.[i] ?? 0).toLocaleString('en-US', {
           style: 'currency',
           currency: company?.currency,
@@ -145,7 +148,8 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
       const sum = ((to - from) / (from || 1)) * 100;
 
       return {
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        coolingUnitName:
+          getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
         column1: `${sum.toFixed(2)}%`,
         column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
         column3: getVariationValue(from, to),
@@ -166,7 +170,8 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
         100;
 
       return {
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
+        coolingUnitName:
+          getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
         column1: `${Number.isNaN(percentage) ? 0 : percentage.toFixed(2)}%`,
         column2: `${getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys, i) ?? 0} / ${getMetricValue(impactData?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom, i) ?? 0}`,
         sum: Number.isNaN(percentage) ? 0 : percentage,
