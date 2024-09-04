@@ -53,8 +53,8 @@ export function Movement({
   navigateToMarketSurvey,
 }: MovementProps) {
   const { t } = useTranslationUtils();
-  const { company } = useManagementStore();
-  const { user } = useAuthStore();
+  const company = useManagementStore((store) => store.company);
+  const user = useAuthStore((store) => store.user);
 
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
@@ -69,7 +69,8 @@ export function Movement({
   }, [movement]);
 
   const price = useMemo(() => {
-    if (!isCheckIn) return `${movement.totalPrice} ${company?.currency}`;
+    if (!isCheckIn)
+      return `${movement.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
 
     const price = coolingUnit?.commonPricingType.value ?? 0;
     const suffix =
@@ -78,11 +79,11 @@ export function Movement({
         : '';
 
     if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.CRATES) {
-      return `${price * movement.cratesNumber} ${company?.currency} ${suffix}`;
+      return `${price * movement.cratesNumber} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
     }
 
-    return `${movement.cratesWeight * price} ${company?.currency} ${suffix}`;
-  }, [isCheckIn, movement]);
+    return `${movement.cratesWeight * price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+  }, [isCheckIn, movement, selectedCompany]);
 
   const seePDFModal = useCallback(() => {
     setIsPDFModalOpen(true);

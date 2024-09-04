@@ -39,8 +39,8 @@ export function ConfigurationModal({
   confirm,
 }: ConfigurationModalProps) {
   const { t } = useTranslationUtils();
-  const { selectedItems: selectedUnits } = useCoolingUnitStore();
   const { startDate, endDate } = useDateRangeStore();
+  const { selectedItems: selectedUnits } = useCoolingUnitStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
 

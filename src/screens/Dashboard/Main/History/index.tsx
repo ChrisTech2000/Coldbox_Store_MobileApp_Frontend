@@ -30,12 +30,15 @@ const deviceHeight = Dimensions.get('screen').height;
 
 function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const { t } = useTranslationUtils();
-  const { farmerId, addRefreshDataFn } = useDashboardStore();
-  const { user } = useAuthStore();
-  const { sorting } = useSortingStore();
+  const user = useAuthStore((store) => store.user);
+  const sorting = useSortingStore((store) => store.sorting);
+  const { farmerId, addRefreshDataFn } = useDashboardStore((store) => ({
+    farmerId: store.farmerId,
+    addRefreshDataFn: store.addRefreshDataFn,
+  }));
 
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
-  const { selectedItem: company } = useCompanyStore();
+  const coolingUnit = useCoolingUnitStore((store) => store.selectedItem);
+  const company = useCompanyStore((store) => store.selectedItem);
 
   const [search, setSearch] = useState<string>('');
   const [areCoolingUnitsLoading, setAreCoolingUnitsLoading] = useState<boolean>(false);
