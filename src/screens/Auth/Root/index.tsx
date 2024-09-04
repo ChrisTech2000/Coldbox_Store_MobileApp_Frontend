@@ -1,16 +1,22 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import { Text } from 'react-native-paper';
 
-import type { AuthRouteProps } from '#navigation/Auth';
-import { Button } from '#ui/components/Button';
 import RootHero from '#assets/images/root_hero.svg';
+
+import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
 import { useTranslationUtils } from '#i18n/utils';
+import type { AuthRouteProps } from '#navigation/Auth';
 
 import { SelectLanguage } from './components/SelectLanguage';
 
-const HERO_IMG_SIZE = Dimensions.get('screen').width / 1.1;
+const screenHeight = Dimensions.get('screen').height;
+const screenWidth = Dimensions.get('screen').width;
+
+const SMALL_SCREEN_THRESHOLD = 667;
+const HERO_IMG_SIZE = screenHeight > SMALL_SCREEN_THRESHOLD ? screenWidth / 1.1 : screenWidth / 1.4;
 
 function AuthRoot(props: AuthRouteProps<'Root'>) {
   const { navigation } = props;
@@ -18,7 +24,7 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
 
   return (
-    <View tw="flex-1 items-center justify-center space-y-4 mx-4">
+    <View tw="space-y-4 mx-4 flex-col items-center justify-center">
       <RootHero width={HERO_IMG_SIZE} height={HERO_IMG_SIZE} />
       <Text tw="mb-3 text-xl font-bold">{t('Auth.Root.welcome')}</Text>
       <Button
