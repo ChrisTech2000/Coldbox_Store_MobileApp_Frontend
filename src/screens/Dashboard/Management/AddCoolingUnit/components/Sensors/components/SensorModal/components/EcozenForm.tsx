@@ -1,17 +1,17 @@
 import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
-import { Controller, useForm } from 'react-hook-form';
 
 import { Button } from '#ui/components/Button';
-
-import { useTranslationUtils } from '#i18n/utils';
 import { useUnmount } from '#ui/hooks/useUnmount';
-import SensorsService from '#services/SensorsService';
-import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+
 import InAppNotifications from '#common/InAppNotifications';
+import { useTranslationUtils } from '#i18n/utils';
+import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
+import SensorsService from '#services/SensorsService';
 
 type FormValues = {
   username: string;
@@ -59,7 +59,7 @@ export default function EcozenForm() {
       } satisfies SensorDatum;
 
       toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationSuccess'), {
-        type: 'md_danger',
+        type: 'md_success',
       });
 
       emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
@@ -98,6 +98,7 @@ export default function EcozenForm() {
               mode="flat"
               value={value}
               onChangeText={onChange}
+              secureTextEntry
               onBlur={onBlur}
               error={!!form.formState.errors.password}
             />

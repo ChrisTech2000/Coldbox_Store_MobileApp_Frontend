@@ -556,6 +556,8 @@ export default {
     },
     Management: {
       Location: {
+        emptyState:
+          'Ainda não foram adicionadas localizações. Clique no sinal de + para adicionar uma.',
         text: {
           invited: 'Convidados ({{amount}})',
           registered: 'Registados ({{amount}})',
@@ -695,6 +697,10 @@ export default {
           downloadFarmers: 'Descarregar dados do painel dos agricultores',
           completeLater: 'Completar mais tarde',
         },
+      },
+      CoolingUnit: {
+        emptyState:
+          'Nenhuma unidade de refrigeração adicionada nesta localização. Clique no sinal de + para adicionar uma.',
       },
       AddCoolingUnit: {
         heading: 'Propriedades da unidade de refrigeração',
