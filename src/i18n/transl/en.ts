@@ -33,6 +33,7 @@ const en = {
       AddLocation: 'Add Location',
       EditLocation: 'Edit Location',
       CoolingUnits: 'Cooling Units',
+      DisabledCoolingUnitsDescription: 'Add at least one location',
       CoolingUsers: 'Cooling Users',
       AddCoolingUser: 'Add Cooling User',
       EditCoolingUser: 'Edit Cooling User',
@@ -440,7 +441,8 @@ const en = {
           individualCrateIdButton: 'Click here to edit individual crate IDs',
           numberOfCratesLabel: 'Number of crates',
           crateWeightLabel: 'General weight of crate',
-          pricePerDayLabel: 'Price per day / crate',
+          pricePerDayAndCrateLabel: 'Price per day / crate',
+          pricePerDayAndKilogramLabel: 'Price per day / kg',
           fixedPriceLabel: 'Fixed price',
           totalPriceLabel: 'Total price',
           plannedDaysLabel: 'Planned number of days in storage',
@@ -1148,6 +1150,7 @@ const en = {
       notifyCoolingUser:
         'Please notify the user {{farmer}} that his/her crates of {{crop}} should be picked up as soon as possible! (check in date: {{checkIn}}, cooling unit ID: {{unitId}}, check in ID: {{movementCode}}).',
       checkIn: 'Operator {{farmer}} has edited check-in {{movementCode}} on {{date}}.',
+      surveyAlreadyFilled: 'Survey has already been filled',
     },
   },
 };

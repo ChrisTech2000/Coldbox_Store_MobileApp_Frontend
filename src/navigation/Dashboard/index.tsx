@@ -109,6 +109,7 @@ export default function DashboardNavigator() {
         onOpen={() => toggle(true)}
         onClose={() => toggle(false)}
         drawerPosition="right"
+        swipeEnabled={false}
         renderDrawerContent={() => (
           <React.Fragment>
             <NotificationsDrawerContent notifications={data.notifications} />

@@ -32,6 +32,7 @@ export default {
       RevenueAnalysis: 'राजस्व विश्लेषण',
       UsageAnalysis: 'उपयोग विश्लेषण',
       Locations: 'स्थान',
+      DisabledCoolingUnitsDescription: 'कम से कम एक स्थान जोड़ें',
       AddLocation: 'स्थान जोड़ें',
       EditLocation: 'स्थान बदले',
       CoolingUnits: 'शीतलन इकाइयाँ',
@@ -442,7 +443,8 @@ export default {
           individualCrateIdButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट आईडी संपादित करने के लिए',
           numberOfCratesLabel: 'क्रेटों की संख्या',
           crateWeightLabel: 'क्रेट का सामान्य वजन',
-          pricePerDayLabel: 'प्रति दिन / क्रेट की कीमत',
+          pricePerDayAndCrateLabel: 'प्रति दिन / क्रेट की कीमत',
+          pricePerDayAndKilogramLabel: 'प्रति दिन / किलोग्राम की कीमत',
           fixedPriceLabel: 'नियत मूल्य',
           totalPriceLabel: 'कुल मूल्य',
           plannedDaysLabel: 'भंडार में रखने की योजना की गई दिनों की संख्या',
@@ -1154,6 +1156,7 @@ export default {
       notifyCoolingUser:
         'कृपया उपयोगकर्ता {{farmer}} को सूचित करें कि उसके {{crop}} के टोकरी को जल्द से जल्द उठाया जाना चाहिए! (चेक-इन तिथि: {{checkIn}}, कूलिंग यूनिट आईडी: {{unitId}}, ପ୍ରବେଶ ପରିଚୟ ସଂଖ୍ୟା: {{movementCode}}).',
       checkIn: 'Operator {{farmer}} has edited check-in {{movementCode}} on {{date}}.',
+      surveyAlreadyFilled: 'सर्वेक्षण पहले ही भरा जा चुका है',
     },
   },
 } satisfies Translations;

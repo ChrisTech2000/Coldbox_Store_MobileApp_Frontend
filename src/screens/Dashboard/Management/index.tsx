@@ -1,17 +1,37 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { useTranslationUtils } from '#i18n/utils';
 import RBAC from '#common/RBAC';
+import { useTranslationUtils } from '#i18n/utils';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import { useManagementStore } from '#stores/management';
 
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
-
   const { t } = useTranslationUtils();
+  const colors = useTailwindColors();
+
+  const company = useManagementStore(useShallow((store) => store.company));
+
+  const { data, isLoading } = useApiCall(
+    'getLocations',
+    ColdtivateService.getLocations,
+    company?.id as number,
+    {
+      skip: !company?.id,
+      defaultData: [],
+    }
+  );
+
+  const disabledCoolingUnits = isLoading || !data.length;
+  const coolingUnitsColor = disabledCoolingUnits ? colors.gray[400] : colors.gray[800];
 
   return (
     <View tw="flex-1 justify-start">
@@ -52,11 +72,19 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
       <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUnits">
         <List.Item
           title={t('navigation.management.CoolingUnits')}
+          description={
+            disabledCoolingUnits ? t('navigation.management.DisabledCoolingUnitsDescription') : ''
+          }
+          disabled={disabledCoolingUnits}
           onPress={() => {
             navigation.navigate('CoolingUnits');
           }}
-          left={(props) => <List.Icon {...props} icon="coolant-temperature" />}
-          right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          left={(props) => (
+            <List.Icon {...props} icon="coolant-temperature" color={coolingUnitsColor} />
+          )}
+          right={(props) => <List.Icon {...props} icon="chevron-right" color={coolingUnitsColor} />}
+          titleStyle={{ color: coolingUnitsColor }}
+          descriptionStyle={{ color: coolingUnitsColor }}
         />
         <Divider />
       </RBAC.ProtectedResource>

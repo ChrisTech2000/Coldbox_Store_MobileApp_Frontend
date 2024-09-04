@@ -32,6 +32,7 @@ export default {
       RevenueAnalysis: 'Análise de Receita',
       UsageAnalysis: 'Análise de Utilização',
       Locations: 'Localizações',
+      DisabledCoolingUnitsDescription: 'Adicione pelo menos uma localização',
       AddLocation: 'Adicionar Localização',
       EditLocation: 'Editar Localização',
       CoolingUnits: 'Unidades de Refrigeração',
@@ -446,7 +447,8 @@ export default {
           individualCrateIdButton: 'Clique aqui para editar os IDs individuais das paletes',
           numberOfCratesLabel: 'Número de paletes',
           crateWeightLabel: 'Peso geral da palete',
-          pricePerDayLabel: 'Preço por dia / palete',
+          pricePerDayAndCrateLabel: 'Preço por dia / palete',
+          pricePerDayAndKilogramLabel: 'Preço por dia / kg',
           fixedPriceLabel: 'Preço fixo',
           totalPriceLabel: 'Preço total',
           plannedDaysLabel: 'Número planeado de dias em armazenamento',
@@ -1160,6 +1162,7 @@ export default {
       notifyCoolingUser:
         'Por favor, notifique o usuário {{farmer}} que suas paletes de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
       checkIn: 'O operador {{farmer}} editou o check-in {{movementCode}} em {{date}}.',
+      surveyAlreadyFilled: 'O questionário já foi preenchido',
     },
   },
 } satisfies Translations;
