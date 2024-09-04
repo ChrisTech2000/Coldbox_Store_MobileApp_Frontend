@@ -51,8 +51,9 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Maps');
         cannot(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
-        // scope: check-in temperature alert
+        // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
+        cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
         break;
       }
 
@@ -82,8 +83,9 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Maps');
         cannot(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
-        // scope: check-in temperature alert
+        // scope: check-in
         can(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
+        can(PERMISSION_KINDS.VIEW, 'OperatorActions');
         break;
       }
 
@@ -103,8 +105,9 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         cannot(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         can(PERMISSION_KINDS.NAVIGATE, 'Maps');
         can(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
-        // scope: check-in temperature alert
+        // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
+        cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
         break;
       }
 

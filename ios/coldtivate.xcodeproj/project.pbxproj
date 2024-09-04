@@ -35,7 +35,7 @@
 		261B7CCA0EA14619A1439FB0 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C94D89D7CB2842F0B86F5212 /* Roboto-Bold.ttf */; };
 		30B1644DDCBB4BA7A333EAE2 /* danger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 9FAB9E1065924CA7A333D97C /* danger.svg */; };
 		3B840A1F873040EEB2D6DBCB /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8FE04C60CBE446FE8F1BDD15 /* Roboto-Regular.ttf */; };
-		66726D000AEB4A4987306433 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		66726D000AEB4A4987306433 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		7522F1BBA8235EDC84A1BA30 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EBF3B6864E19E58B0A22F9E5 /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-coldtivate-coldtivateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-coldtivate-coldtivateTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -395,7 +395,7 @@
 				9F62F2FE1F8E45E18126CDD3 /* mine-cart.svg in Resources */,
 				F379F59D95304B5187AD43D6 /* crates-management.svg in Resources */,
 				9BAEE555919A4B0FAD80278B /* check-in.svg in Resources */,
-				66726D000AEB4A4987306433 /* (null) in Resources */,
+				66726D000AEB4A4987306433 /* BuildFile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,7 +739,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -811,7 +814,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

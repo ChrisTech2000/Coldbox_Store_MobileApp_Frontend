@@ -21,6 +21,7 @@ import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { sortProduces } from './utils/sortProduces';
+import RBAC from '#common/RBAC';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
@@ -160,7 +161,10 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           )}
         />
       )}
-      {user?.role === ERoles.OPERATOR && <OperatorActions {...props} coolingUnit={coolingUnit} />}
+
+      <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
+        <OperatorActions {...props} coolingUnit={coolingUnit} />
+      </RBAC.ProtectedResource>
     </View>
   );
 }

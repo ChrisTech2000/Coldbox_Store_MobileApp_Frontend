@@ -2,8 +2,7 @@ import { currencies } from 'currencies.json';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import FastImage from 'react-native-fast-image';
-import { IconButton, RadioButton } from 'react-native-paper';
+import { Divider, IconButton, List, RadioButton, Switch } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
@@ -11,9 +10,9 @@ import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView'
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { Sup } from '#ui/components/SuperscriptText';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useCheckInStore } from '#stores/checkIn';
@@ -21,6 +20,7 @@ import { useManagementStore } from '#stores/management';
 import { CoolingUnit, ECoolingUnitMetric, EDateCropped, EPricingType, Farmer } from '#types/global';
 
 import { CrateSetupModal } from './components/CrateSetupModal';
+import { paperTheme } from '#ui/lib/theme';
 
 export type SetupSchema = {
   numberOfCrates: number;
@@ -259,249 +259,351 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   );
 
   return (
-    <KeyboardAwareScrollView tw="p-4 bg-white space-y-6">
-      <View tw="bg-blue-50 p-2 rounded-sm space-y-2">
-        <View tw="flex flex-row items-center justify-between space-y-1">
-          <Text variant="TextBold" tw="text-lg font-bold ml-2">
-            {t('Dashboard.CrateManagement.CheckIn.Setup.selectedCrop')}
-          </Text>
-          <View tw="flex flex-row space-x-1">
-            <Text variant="TextBold" tw="text-lg font-bold ml-2">
-              {crop.name}
-            </Text>
-            <FastImage
-              tw="w-10 h-6"
-              source={{
-                uri: `${API_BASE_URL}media/${crop.image}`,
+    <React.Fragment>
+      <KeyboardAwareScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
+        <View tw="flex-1 pb-48">
+          <View tw="flex-col">
+            <Text tw="text-base text-green-primary font-bold">Crop</Text>
+            <List.Item
+              tw="p-0 m-0 mt-3"
+              title={undefined}
+              onPress={(evt) => {
+                evt?.stopPropagation();
+                navigation.goBack();
               }}
-              resizeMode={FastImage.resizeMode.contain}
+              left={() => (
+                <Text tw="text-base self-center">
+                  {t('Dashboard.CrateManagement.CheckIn.Setup.selectedCrop')}
+                </Text>
+              )}
+              right={(props) => (
+                <View tw="flex-row items-center space-x-5">
+                  <View tw="flex-col items-end space-y-1">
+                    <Text tw="text-base">{crop.name}</Text>
+                    {additionalInfo ? <Text tw="text-gray-500">{additionalInfo}</Text> : null}
+                  </View>
+                  <List.Icon {...props} icon="chevron-right" />
+                </View>
+              )}
             />
+            <Divider tw={cn('bg-gray-400', !additionalInfo && 'mt-2')} />
+          </View>
+
+          <View tw="mt-8">
+            <Text tw="text-base text-green-primary font-bold">Details</Text>
+            <View tw="flex-col mt-3">
+              <Text tw="text-base">
+                {t('Dashboard.CrateManagement.CheckIn.Setup.numberOfCratesLabel')}
+              </Text>
+              <Controller
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <View tw="w-full flex flex-row items-center justify-between">
+                    <Input
+                      tw={cn(
+                        'w-1/2 px-4 bg-white border border-b-0 rounded-sm h-12 mt-1',
+                        errors.numberOfCrates && 'border-red-300'
+                      )}
+                      keyboardType="numeric"
+                      onChangeText={(newVal) =>
+                        onChangeNumericKeyboard(newVal, onChange, 'numberOfCrates')
+                      }
+                      value={value?.toString() ?? ''}
+                    />
+                    <IconButton
+                      mode="contained-tonal"
+                      icon="minus"
+                      size={30}
+                      tw="rounded-md"
+                      iconColor={paperTheme.colors.primary}
+                      containerColor={paperTheme.colors.secondaryContainer}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        onChangeNumericKeyboard(
+                          !value ? 0 : Number(value) - 1,
+                          onChange,
+                          'numberOfCrates'
+                        );
+                      }}
+                    />
+                    <IconButton
+                      mode="contained-tonal"
+                      icon="plus"
+                      size={30}
+                      tw="rounded-md"
+                      iconColor={paperTheme.colors.primary}
+                      containerColor={paperTheme.colors.secondaryContainer}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'numberOfCrates');
+                      }}
+                    />
+                  </View>
+                )}
+                name="numberOfCrates"
+              />
+              {errors.numberOfCrates ? (
+                <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
+                  {errors.numberOfCrates.message?.toString()}
+                </Text>
+              ) : null}
+              <Divider tw="bg-gray-400 mt-4" />
+            </View>
+
+            <View tw="flex-col">
+              <List.Item
+                tw="p-0 m-0 mt-3"
+                title={undefined}
+                onPress={(evt) => evt?.stopPropagation()}
+                left={() => <Text tw="text-base self-center">Sellable</Text>}
+                right={() => <Switch value={false} onValueChange={() => undefined} />}
+              />
+              <Divider tw="bg-gray-400 mt-2" />
+            </View>
+
+            <View tw="flex-col mt-3">
+              <View tw="flex flex-row">
+                <Text tw="text-base">
+                  {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel')}
+                </Text>
+                <Sup>({t('Dashboard.ProduceDetails.kilogram').toUpperCase()})</Sup>
+              </View>
+              <Controller
+                control={control}
+                rules={{ required: true }}
+                defaultValue={coolingUnit?.crateWeight ?? 25}
+                render={({ field: { onChange, value } }) => (
+                  <View tw="w-full flex flex-row justify-between items-center space-x-1">
+                    <Input
+                      tw="w-1/2 px-4 bg-white border rounded-sm h-12 mt-1"
+                      onChangeText={(newVal) =>
+                        onChangeNumericKeyboard(newVal, onChange, 'generalCrateWeight')
+                      }
+                      value={value?.toString() ?? ''}
+                      keyboardType="numeric"
+                    />
+                    <IconButton
+                      mode="contained-tonal"
+                      icon="minus"
+                      size={30}
+                      tw="rounded-md"
+                      iconColor={paperTheme.colors.primary}
+                      containerColor={paperTheme.colors.secondaryContainer}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        onChangeNumericKeyboard(
+                          !value ? 0 : Number(value) - 1,
+                          onChange,
+                          'generalCrateWeight'
+                        );
+                      }}
+                    />
+                    <IconButton
+                      mode="contained-tonal"
+                      icon="plus"
+                      size={30}
+                      tw="rounded-md"
+                      iconColor={paperTheme.colors.primary}
+                      containerColor={paperTheme.colors.secondaryContainer}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        onChangeNumericKeyboard(
+                          Number(value ?? 0) + 1,
+                          onChange,
+                          'generalCrateWeight'
+                        );
+                      }}
+                    />
+                  </View>
+                )}
+                name="generalCrateWeight"
+              />
+              {errors.generalCrateWeight ? (
+                <Text tw="text-xs text-red-600 mt-[-2] pl-3 w-[95%]">
+                  {errors.generalCrateWeight.message?.toString()}
+                </Text>
+              ) : null}
+              <Divider tw="bg-gray-400 mt-4" />
+            </View>
+
+            <View tw="flex-col">
+              <List.Item
+                tw="px-0 m-0"
+                title={undefined}
+                onPress={(evt) => {
+                  evt?.stopPropagation();
+                  onOpenModal('weight');
+                }}
+                left={() => (
+                  <Text tw="text-base self-center">
+                    {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateWeightButton')}
+                  </Text>
+                )}
+                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
+            <View tw="flex-col">
+              <List.Item
+                tw="px-0 m-0"
+                title={undefined}
+                onPress={(evt) => {
+                  evt?.stopPropagation();
+                  onOpenModal('id');
+                }}
+                left={() => (
+                  <Text tw="text-base self-center">
+                    {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateIdButton')}
+                  </Text>
+                )}
+                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
+          </View>
+
+          <View tw="mt-8">
+            <Text tw="text-base text-green-primary font-bold">Storage</Text>
+            <View tw="flex-col mt-3">
+              <Text tw="text-base">
+                {t('Dashboard.CrateManagement.CheckIn.Setup.plannedDaysLabel')}
+              </Text>
+              <Controller
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <View tw="w-full flex flex-row items-center justify-between">
+                    <Input
+                      tw="w-1/2 px-4 bg-white border rounded-sm h-12"
+                      keyboardType="numeric"
+                      onChangeText={(newVal) =>
+                        onChangeNumericKeyboard(newVal, onChange, 'plannedDays')
+                      }
+                      value={value?.toString() ?? ''}
+                    />
+                    <IconButton
+                      mode="contained-tonal"
+                      icon="minus"
+                      size={30}
+                      tw="rounded-md"
+                      iconColor={paperTheme.colors.primary}
+                      containerColor={paperTheme.colors.secondaryContainer}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        onChangeNumericKeyboard(
+                          !value ? 0 : Number(value) - 1,
+                          onChange,
+                          'plannedDays'
+                        );
+                      }}
+                    />
+                    <IconButton
+                      mode="contained-tonal"
+                      icon="plus"
+                      size={30}
+                      tw="rounded-md"
+                      iconColor={paperTheme.colors.primary}
+                      containerColor={paperTheme.colors.secondaryContainer}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'plannedDays');
+                      }}
+                    />
+                  </View>
+                )}
+                name="plannedDays"
+              />
+              <Divider tw="bg-gray-400 mt-4" />
+            </View>
+
+            <View tw="flex-col mt-3">
+              <Text tw="text-base mb-1">
+                {t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateLabel')}
+              </Text>
+              {errors.dateHarvested ? (
+                <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
+                  {errors.dateHarvested.message?.toString()}
+                </Text>
+              ) : null}
+              <Controller
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <RadioButton.Group value={value?.toString() ?? ''} onValueChange={onChange}>
+                    {harvestDateOptions.map((option, optionIdx) => (
+                      <RadioButtonItem
+                        key={`${option}-${optionIdx}`}
+                        label={option.label}
+                        value={option.value}
+                        tw="flex flex-row-reverse ml-[-10]"
+                      />
+                    ))}
+                  </RadioButton.Group>
+                )}
+                name="dateHarvested"
+              />
+            </View>
           </View>
         </View>
-        <Button
-          mode="contained"
-          tw="bg-gray-300"
-          labelStyle="text-black text-base font-bold"
-          onPress={() => navigation.goBack()}
-        >
-          {t('Dashboard.CrateManagement.CheckIn.Setup.changeCropButton')}
-        </Button>
-      </View>
 
-      <View>
-        <Text variant="TextMedium" tw="text-lg font-bold">
-          {t('Dashboard.CrateManagement.CheckIn.Setup.numberOfCratesLabel')}
-        </Text>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, value } }) => (
-            <Input
-              tw={cn(
-                'w-full px-4 bg-white border rounded-sm h-12 mt-1',
-                errors.numberOfCrates && 'border-red-300'
-              )}
-              keyboardType="numeric"
-              onChangeText={(newVal) => onChangeNumericKeyboard(newVal, onChange, 'numberOfCrates')}
-              value={value?.toString() ?? ''}
-            />
-          )}
-          name="numberOfCrates"
+        <CrateSetupModal
+          setValue={(crates: SetupSchema['crates']) => setValue('crates', crates)}
+          crates={crates}
+          mode={openModal}
+          isOpen={openModal !== undefined}
+          numberOfCrates={numberOfCrates}
+          closeModal={() => setOpenModal(undefined)}
+          title={openModal ? t(`Dashboard.CrateManagement.CheckIn.Setup.modals.${openModal}`) : ''}
         />
-        {errors.numberOfCrates && (
-          <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
-            {errors.numberOfCrates.message?.toString()}
-          </Text>
-        )}
-      </View>
+      </KeyboardAwareScrollView>
 
-      <View>
-        <View tw="flex flex-row space-x-1">
-          <Text variant="TextMedium" tw="text-lg font-bold">
-            {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel')}
-          </Text>
-          <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
-            ({t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
-          </Text>
-        </View>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          defaultValue={coolingUnit?.crateWeight ?? 25}
-          render={({ field: { onChange, value } }) => (
-            <View tw="w-full flex flex-row justify-between items-center space-x-1">
-              <Input
-                tw="w-1/2 px-4 bg-white border rounded-sm h-12 mt-1"
-                onChangeText={(newVal) =>
-                  onChangeNumericKeyboard(newVal, onChange, 'generalCrateWeight')
-                }
-                value={value?.toString() ?? ''}
-                keyboardType="numeric"
-              />
-              <Button
-                contentStyle="bg-green-transparency"
-                labelStyle="text-lg"
-                onPress={() =>
-                  onChangeNumericKeyboard(
-                    !value ? 0 : Number(value) - 1,
-                    onChange,
-                    'generalCrateWeight'
-                  )
-                }
-              >
-                -
-              </Button>
-              <Button
-                contentStyle="bg-green-transparency"
-                labelStyle="text-lg"
-                onPress={() =>
-                  onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'generalCrateWeight')
-                }
-              >
-                +
-              </Button>
-            </View>
-          )}
-          name="generalCrateWeight"
-        />
-        {errors.generalCrateWeight && (
-          <Text tw="text-xs text-red-600 mt-[-2] pl-3 w-[95%]">
-            {errors.generalCrateWeight.message?.toString()}
-          </Text>
-        )}
-      </View>
-
-      <View tw="flex flex-row w-full justify-between space-x-0.5 ml-[-10]">
-        <IconButton
-          tw="bg-gray-300 w-[50%]"
-          icon={() => (
-            <Text tw="w-full text-center font-bold text-wrap">
-              {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateWeightButton')}
+      <View tw="absolute bottom-0 right-0 w-full">
+        <View tw="bg-teal-50 px-2 py-4 rounded-sm space-y-1">
+          <View tw="flex flex-row items-center justify-between">
+            <Text tw="text-lg ml-2">{dailyPriceLabel}</Text>
+            <Text tw="text-lg ml-2 text-green-primary">
+              {currencySymbol}
+              {(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
             </Text>
-          )}
-          onPress={() => onOpenModal('weight')}
-        />
-
-        <IconButton
-          tw="bg-gray-300 w-[50%] px-1"
-          icon={() => (
-            <Text tw="w-full text-center font-bold text-wrap">
-              {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateIdButton')}
+          </View>
+          <View tw="flex flex-row items-center justify-between">
+            <Text tw="text-lg ml-2">
+              {t('Dashboard.CrateManagement.CheckIn.Setup.totalPriceLabel')}
             </Text>
-          )}
-          onPress={() => onOpenModal('id')}
-        />
-      </View>
-
-      <View>
-        <Text variant="TextMedium" tw="text-lg font-bold">
-          {t('Dashboard.CrateManagement.CheckIn.Setup.plannedDaysLabel')}
-        </Text>
-        <Controller
-          control={control}
-          rules={{
-            required: false,
-          }}
-          render={({ field: { onChange, value } }) => (
-            <Input
-              tw="w-full px-4 bg-white border rounded-sm h-12 mt-1"
-              onChangeText={(newVal) => onChangeNumericKeyboard(newVal, onChange)}
-              value={value?.toString() ?? ''}
-              keyboardType="numeric"
-            />
-          )}
-          name="plannedDays"
-        />
-      </View>
-
-      <View tw="bg-blue-50 p-2 rounded-sm space-y-1">
-        <View tw="flex flex-row items-center justify-between">
-          <Text variant="TextBold" tw="text-lg font-bold ml-2">
-            {dailyPriceLabel}
-          </Text>
-          <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
-            {currencySymbol}
-            {(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
-          </Text>
+            <Text tw="text-lg ml-2 text-green-primary">
+              {currencySymbol}
+              {totalPrice}
+            </Text>
+          </View>
         </View>
-        <View tw="flex flex-row items-center justify-between">
-          <Text variant="TextBold" tw="text-lg font-bold ml-2">
-            {t('Dashboard.CrateManagement.CheckIn.Setup.totalPriceLabel')}
-          </Text>
-          <Text variant="TextBold" tw="text-lg font-bold ml-2 text-green-primary">
-            {currencySymbol}
-            {totalPrice}
-          </Text>
+        <View tw="py-3 bg-white flex flex-row items-center justify-evenly border-t-0.5 border-gray-600 border-solid">
+          <Button
+            mode="outlined"
+            tw="border border-red-400"
+            labelStyle="text-red-400 text-lg"
+            contentStyle="flex flex-row-reverse"
+            icon="close-circle-outline"
+            onPress={() =>
+              navigation.navigate('CheckIn', {
+                user: user as Farmer,
+                coolingUnit: coolingUnit as CoolingUnit,
+              })
+            }
+          >
+            {t('actions.cancel')}
+          </Button>
+          <Button
+            mode="contained"
+            labelStyle="text-lg"
+            contentStyle="flex flex-row-reverse"
+            icon="check-circle-outline"
+            onPress={handleSubmit(onSubmit)}
+          >
+            {t('actions.save-changes')}
+          </Button>
         </View>
       </View>
-
-      <View>
-        <Text variant="TextMedium" tw="text-lg font-bold">
-          {t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateLabel')}
-        </Text>
-        <Controller
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <RadioButton.Group value={value?.toString() ?? ''} onValueChange={onChange}>
-              {harvestDateOptions.map((option, optionIdx) => (
-                <RadioButtonItem
-                  key={`${option}-${optionIdx}`}
-                  label={option.label}
-                  value={option.value}
-                  tw="flex flex-row-reverse ml-[-10]"
-                />
-              ))}
-            </RadioButton.Group>
-          )}
-          name="dateHarvested"
-        />
-      </View>
-      {errors.dateHarvested && (
-        <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
-          {errors.dateHarvested.message?.toString()}
-        </Text>
-      )}
-
-      <View tw="flex flex-row self-center space-x-2 mb-8">
-        <Button
-          mode="outlined"
-          tw="border border-red-400"
-          labelStyle="text-red-400 text-lg"
-          contentStyle="flex flex-row-reverse"
-          icon="close-circle-outline"
-          onPress={() =>
-            navigation.navigate('CheckIn', {
-              user: user as Farmer,
-              coolingUnit: coolingUnit as CoolingUnit,
-            })
-          }
-        >
-          {t('actions.cancel')}
-        </Button>
-        <Button
-          mode="contained"
-          labelStyle="text-lg"
-          contentStyle="flex flex-row-reverse"
-          icon="check-circle-outline"
-          onPress={handleSubmit(onSubmit)}
-        >
-          {t('actions.save-changes')}
-        </Button>
-      </View>
-      <CrateSetupModal
-        setValue={(crates: SetupSchema['crates']) => setValue('crates', crates)}
-        crates={crates}
-        mode={openModal}
-        isOpen={openModal !== undefined}
-        numberOfCrates={numberOfCrates}
-        closeModal={() => setOpenModal(undefined)}
-        title={openModal ? t(`Dashboard.CrateManagement.CheckIn.Setup.modals.${openModal}`) : ''}
-      />
-    </KeyboardAwareScrollView>
+    </React.Fragment>
   );
 }
 

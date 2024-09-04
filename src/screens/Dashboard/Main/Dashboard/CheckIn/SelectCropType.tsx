@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList } from 'react-native';
+import { Divider, List } from 'react-native-paper';
 
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useTranslationUtils } from '#i18n/utils';
 import { ECropType } from '#types/global';
-import { Text } from '#ui/components/Text';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Divider } from 'react-native-paper';
-import { CheckInStackRouteProps } from 'navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 
 type Option = {
   id: ECropType;
@@ -38,25 +38,24 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
   }, []);
 
   return (
-    <View tw="mt-2">
-      <FlatList
-        data={options}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity
-            key={`${item.id}-${index}`}
-            tw="mx-2"
-            onPress={() =>
+    <FlatList
+      data={options}
+      keyExtractor={(item) => `select-crop-type-#${item.id}`}
+      renderItem={({ item }) => (
+        <React.Fragment>
+          <List.Item
+            title={item.name}
+            onPress={() => {
               navigation.navigate('CropList', {
                 type: item.id,
-              })
-            }
-          >
-            <Text variant="TitleMedium">{item.name}</Text>
-            <Divider tw="bg-gray-400 my-2" />
-          </TouchableOpacity>
-        )}
-      />
-    </View>
+              });
+            }}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+          <Divider tw="bg-gray-400" />
+        </React.Fragment>
+      )}
+    />
   );
 }
 

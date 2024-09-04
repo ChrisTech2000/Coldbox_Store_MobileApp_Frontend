@@ -307,7 +307,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       </ScrollView>
 
       <View tw="space-y-2">
-        {!checkOutCode && (
+        {!checkOutCode ? (
           <Button
             tw="w-full border-2 border-green-primary"
             mode="outlined"
@@ -317,8 +317,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           >
             {t('Dashboard.CrateManagement.CheckIn.addCrates')}
           </Button>
-        )}
-        {(!produces || produces.length === 0) && (
+        ) : null}
+        {!produces || produces.length === 0 ? (
           <Button
             tw="w-full border-2 border-green-primary"
             mode="outlined"
@@ -328,13 +328,13 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           >
             {t('Dashboard.CrateManagement.CheckIn.checkInWithCode')}
           </Button>
-        )}
+        ) : null}
 
-        {!allHavePlannedDays && coolingUnit.commonPricingType.type !== EPricingType.FIXED && (
+        {!allHavePlannedDays && coolingUnit.commonPricingType.type !== EPricingType.FIXED ? (
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.CheckIn.noPlannedDaysMessage')}
           </Text>
-        )}
+        ) : null}
 
         <View tw="w-full flex flex-row items-center justify-between mb-2">
           <Text variant="TextMedium" tw="text-lg font-bold">
@@ -374,12 +374,13 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           </Button>
         </View>
       </View>
-      {(!produces || produces.length === 0) && (
+
+      {!produces || produces.length === 0 ? (
         <CheckInWithCodeModal
           closeModal={() => setIsCodeModalOpen(false)}
           isModalOpen={isCodeModalOpen}
         />
-      )}
+      ) : null}
     </View>
   );
 }
