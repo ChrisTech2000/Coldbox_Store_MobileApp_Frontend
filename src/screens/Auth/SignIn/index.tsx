@@ -138,7 +138,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   }, []);
 
   return (
-    <KeyboardAwareScrollView tw="mt-[-24]">
+    <KeyboardAwareScrollView tw="mt-[-24]" showsVerticalScrollIndicator={false}>
       <View tw="flex-1 items-center justify-center">
         <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-4" />
         <Text tw="mb-2 text-xl font-bold">{t('Auth.SignIn.heading')}</Text>
@@ -242,7 +242,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           </Text>
         )}
 
-        <Text tw="text-xs w-[95%] my-2 px-3">
+        <Text tw="text-xs w-[95%] mt-1 mb-2 px-3">
           {activeProfile === EAccountProfile.EMPLOYEE
             ? t('Auth.SignIn.form.user.description.registeredEmployee')
             : t('Auth.SignIn.form.user.description.default')}
@@ -294,6 +294,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           mode="text"
           rippleColor="white"
           labelStyle="text-xs"
+          tw="mb-8"
           onPress={(evt) => {
             evt.stopPropagation();
             navigation.navigate('PasswordRecoveryRequest');
