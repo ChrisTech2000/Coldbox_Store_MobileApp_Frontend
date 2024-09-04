@@ -996,6 +996,7 @@ const en = {
       },
     },
     Analytics: {
+      emptyState: 'No data to display',
       company: 'Company',
       aggregated: 'Aggregated',
       comparison: 'Comparison',
