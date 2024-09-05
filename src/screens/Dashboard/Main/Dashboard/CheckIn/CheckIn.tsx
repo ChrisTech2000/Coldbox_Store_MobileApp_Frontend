@@ -36,9 +36,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
 
   const { t } = useTranslationUtils();
-  const { company } = useManagementStore();
+  const company = useManagementStore((store) => store.company);
 
-  const { refreshData } = useDashboardStore();
+  const refreshData = useDashboardStore((store) => store.refreshData);
   const {
     checkOutCode,
     produces,

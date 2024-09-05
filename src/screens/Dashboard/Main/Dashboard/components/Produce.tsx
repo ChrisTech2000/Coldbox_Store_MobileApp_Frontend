@@ -30,7 +30,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
   }, []);
 
   return (
-    <View tw="flex flex-row w-[90%] mr-2 self-center h-24 mt-3">
+    <View tw="flex flex-row w-[90%] mr-2 self-center mt-3">
       <View
         tw={cn(
           'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
