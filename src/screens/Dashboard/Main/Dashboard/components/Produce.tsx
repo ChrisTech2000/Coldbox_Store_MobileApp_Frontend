@@ -37,7 +37,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
           produce.minimumRemainingShelfLife <= 7 &&
             produce.minimumRemainingShelfLife > 2 &&
             'bg-yellow-400 border-yellow-400',
-          produce.minimumRemainingShelfLife < 2 && 'bg-red-500 border-red-500',
+          produce.minimumRemainingShelfLife <= 2 && 'bg-red-500 border-red-500',
           (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
             'bg-gray-300 border-gray-300'
         )}
@@ -70,7 +70,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
                     produce.minimumRemainingShelfLife <= 7 &&
                       produce.minimumRemainingShelfLife > 2 &&
                       'text-yellow-400',
-                    produce.minimumRemainingShelfLife < 2 && 'text-red-500'
+                    produce.minimumRemainingShelfLife <= 2 && 'text-red-500'
                   )}
                 >
                   {generateDaysString(produce.minimumRemainingShelfLife)}

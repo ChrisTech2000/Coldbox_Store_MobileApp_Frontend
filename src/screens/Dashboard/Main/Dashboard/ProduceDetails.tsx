@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { Divider, Icon } from 'react-native-paper';
 
 import MineCart from '#assets/icons/mine-cart.svg';
+import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
@@ -14,10 +15,10 @@ import { useAuthStore } from '#stores/auth';
 import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
 
 import { Button } from '#ui/components/Button';
+import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import InAppNotifications from '#common/InAppNotifications';
 
 function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDetails'>) {
   const { produce, coolingUnit } = route.params;
@@ -47,8 +48,6 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
     [toast]
   );
 
-  // @NOTE: need to test for fixed price
-  // but need to wait until original app allows to create new cooling units
   const pricing = useMemo(() => {
     const pricing = produce.crates[0].pricing[0];
     const metric =
@@ -124,7 +123,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
   }, [produce, farmers]);
 
   return (
-    <View tw="flex-1 items-center justify-center space-y-4">
+    <ScrollView contentContainerStyle="flex-col items-center justify-center py-2" tw="space-y-4">
       <View tw="flex flex-row items-center space-x-3">
         <FastImage
           resizeMode="contain"
@@ -154,17 +153,38 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
 
       {produce.runDt && produce.qualityDt !== -1 ? (
         <View tw="w-full px-2">
-          <View
-            tw={cn(
-              'w-full bg-green-300 rounded-lg h-3',
-              produce.minimumRemainingShelfLife <= 7 &&
-                produce.minimumRemainingShelfLife > 2 &&
-                'bg-yellow-400',
-              produce.minimumRemainingShelfLife < 2 && 'bg-red-500',
-              (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
-                'bg-gray-300'
-            )}
-          />
+          <View tw="relative w-full h-3 bg-gray-300 rounded-lg">
+            <View
+              tw={cn(
+                'absolute top-0 left-0 w-full bg-green-100 rounded-l-lg h-3',
+                produce.minimumRemainingShelfLife <= 7 &&
+                  produce.minimumRemainingShelfLife > 2 &&
+                  'bg-yellow-400',
+                produce.minimumRemainingShelfLife <= 2 && 'bg-red-300',
+                (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
+                  'bg-gray-300'
+              )}
+              style={{
+                width: `${100 - percentage}%`,
+                opacity: 0.4,
+              }}
+            />
+            <View
+              tw={cn(
+                'absolute top-0 right-0 w-full bg-green-300 rounded-r-lg h-3',
+                produce.minimumRemainingShelfLife <= 7 &&
+                  produce.minimumRemainingShelfLife > 2 &&
+                  'bg-yellow-400',
+                produce.minimumRemainingShelfLife <= 2 && 'bg-red-500',
+                (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
+                  'bg-gray-300'
+              )}
+              style={{
+                width: `${percentage}%`,
+              }}
+            />
+          </View>
+
           <View tw="flex flex-row items-center justify-between">
             <Text variant="TextMedium" tw="px-2">
               {percentage}%
@@ -194,6 +214,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
       <View tw="w-full px-3">
         <FlatList
           data={data}
+          scrollEnabled={false}
           renderItem={({ item, index }) => (
             <View tw="space-y-1 my-2" key={`${item.label}-${index}`}>
               <View tw="flex flex-row justify-between items-center">
@@ -229,7 +250,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
           {t('Dashboard.ProduceDetails.checkOutButton')}
         </Button>
       )}
-    </View>
+    </ScrollView>
   );
 }
 

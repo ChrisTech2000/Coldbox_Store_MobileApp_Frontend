@@ -38,8 +38,15 @@ type TableProps = {
 
 export function ImpactTab() {
   const { t } = useTranslationUtils();
-  const { configData, farmer } = useFarmerAnalyticsData();
-  const { setSurveys, setFarmerId, setRefetchSurveys } = useMarketSurveyStore();
+  const { configData, farmer } = useFarmerAnalyticsData((store) => ({
+    configData: store.configData,
+    farmer: store.farmer,
+  }));
+  const { setSurveys, setFarmerId, setRefetchSurveys } = useMarketSurveyStore((store) => ({
+    setSurveys: store.setSurveys,
+    setFarmerId: store.setFarmerId,
+    setRefetchSurveys: store.setRefetchSurveys,
+  }));
 
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
@@ -434,7 +441,11 @@ export function ImpactTab() {
             <Text tw="text-3xl">{surveys.postFilled}</Text>/{surveys.postPossible}
           </Text>
           <Text tw="text-4xl text-purple-600">
-            ({((surveys.postFilled * 100) / surveys.postPossible).toFixed(2)}%)
+            (
+            {(surveys.postFilled ? (surveys.postFilled * 100) / surveys.postPossible : 0).toFixed(
+              2
+            )}
+            %)
           </Text>
         </View>
         <Button

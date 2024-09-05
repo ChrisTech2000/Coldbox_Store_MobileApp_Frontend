@@ -373,13 +373,13 @@ export type CoolingUnitImpact = {
 };
 
 export type FarmerBaseData = {
-  avgStorageDays: number;
-  farmerId: number;
-  firstName: string;
-  gender: EApiGender;
-  lastName: string;
-  totalStorageCost: number;
-  userType: ERoles;
+  avgStorageDays: RecordValue<number>;
+  farmerId: RecordValue<number>;
+  firstName: RecordValue<string>;
+  gender: RecordValue<EApiGender>;
+  lastName: RecordValue<string>;
+  totalStorageCost: RecordValue<number>;
+  userType: RecordValue<ERoles>;
 };
 
 type CropData = {

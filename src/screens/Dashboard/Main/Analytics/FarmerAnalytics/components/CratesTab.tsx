@@ -28,7 +28,10 @@ type Section =
 
 export function CratesTab() {
   const { t } = useTranslationUtils();
-  const { configData, farmer } = useFarmerAnalyticsData();
+  const { configData, farmer } = useFarmerAnalyticsData((store) => ({
+    configData: store.configData,
+    farmer: store.farmer,
+  }));
 
   const [expanded, setExpanded] = useState<Section | undefined>();
 

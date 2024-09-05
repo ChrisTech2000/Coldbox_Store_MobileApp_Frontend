@@ -552,6 +552,7 @@ export default {
     },
     Management: {
       Location: {
+        emptyState: 'अभी तक कोई स्थान नहीं जोड़ा गया है। एक जोड़ने के लिए + चिह्न पर क्लिक करें।',
         text: {
           invited: 'आमंत्रित ({{amount}})',
           registered: 'पंजीकृत ({{amount}})',
@@ -692,6 +693,10 @@ export default {
           downloadFarmers: "Download farmer's dashboard data",
           completeLater: 'बाद में पूरा करें',
         },
+      },
+      CoolingUnit: {
+        emptyState:
+          'इस स्थान पर कोई शीतलन इकाई नहीं जोड़ी गई है। एक जोड़ने के लिए + चिह्न पर क्लिक करें।',
       },
       AddCoolingUnit: {
         heading: 'प्रशीतलन इकई के गुण',

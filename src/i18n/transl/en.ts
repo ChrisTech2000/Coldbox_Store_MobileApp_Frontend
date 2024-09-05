@@ -549,6 +549,7 @@ const en = {
     },
     Management: {
       Location: {
+        emptyState: 'No locations added yet. Click on the + sign to add one.',
         text: {
           invited: 'Invited ({{amount}})',
           registered: 'Registered ({{amount}})',
@@ -687,6 +688,9 @@ const en = {
           downloadFarmers: "Download farmer's dashboard data",
           completeLater: 'Complete later',
         },
+      },
+      CoolingUnit: {
+        emptyState: 'No cooling units added in this location. Click on the + sign to add one.',
       },
       AddCoolingUnit: {
         heading: 'Cooling unit properties',
@@ -992,6 +996,7 @@ const en = {
       },
     },
     Analytics: {
+      emptyState: 'No data to display',
       company: 'Company',
       aggregated: 'Aggregated',
       comparison: 'Comparison',
