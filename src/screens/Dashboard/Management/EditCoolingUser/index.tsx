@@ -1,36 +1,40 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
+import { useShallow } from 'zustand/react/shallow';
 
-import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Button } from '#ui/components/Button';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
-import { useAuthStore } from '#stores/auth';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
-import { EApiGender, type Farmer } from '#types/global';
+import InAppNotifications from '#common/InAppNotifications';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import type { TranslationLocales } from '#i18n/constants';
-import { paperTheme } from '#ui/lib/theme';
+import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
+import ColdtivateService from '#services/ColdtivateService';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
+import { EApiGender, type Farmer } from '#types/global';
 
 import FormManager, { type FormValues } from '../AddCoolingUser/components/FormManager';
-import TextFields from '../AddCoolingUser/modules/TextFields';
-import GenderField from '../AddCoolingUser/modules/GenderField';
 import ContactField from '../AddCoolingUser/modules/ContactField';
+import GenderField from '../AddCoolingUser/modules/GenderField';
 import LanguageField from '../AddCoolingUser/modules/LanguageField';
+import TextFields from '../AddCoolingUser/modules/TextFields';
 
-import FarmerDashboardData from './components/FarmerDashboardData';
 import DeleteAction from './components/DeleteAction';
+import FarmerDashboardData from './components/FarmerDashboardData';
 
 import { DataLoader } from './utils';
-import InAppNotifications from '#common/InAppNotifications';
 
 export const STATIC_START_DATE = '2022-10-01';
 export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
+
+const screenHeight = Dimensions.get('screen').height;
 
 function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const { params } = props.route;
@@ -96,7 +100,10 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
     <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(data)}>
       {({ submitHandler, isSubmitting }) => (
         <KeyboardAwareScrollView
-          contentContainerStyle="flex-1 justify-between pt-6 pb-8 mx-4"
+          contentContainerStyle={cn(
+            'justify-between pt-6 pb-8 mx-4',
+            screenHeight > SMALL_SCREEN_THRESHOLD ? 'flex-1' : 'flex-col'
+          )}
           keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           showsVerticalScrollIndicator={false}
         >
