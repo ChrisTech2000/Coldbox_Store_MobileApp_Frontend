@@ -1,15 +1,11 @@
 import { currencies } from 'currencies.json';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { Divider, IconButton, List, RadioButton, Switch } from 'react-native-paper';
+import { Divider, List, Switch } from 'react-native-paper';
 
-import { Button } from '#ui/components/Button';
-import { Input } from '#ui/components/Input';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
-import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 import { Sup } from '#ui/components/SuperscriptText';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -17,10 +13,20 @@ import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
-import { CoolingUnit, ECoolingUnitMetric, EDateCropped, EPricingType, Farmer } from '#types/global';
+import {
+  type CoolingUnit,
+  type Farmer,
+  ECoolingUnitMetric,
+  EDateCropped,
+  EPricingType,
+} from '#types/global';
 
-import { CrateSetupModal } from './components/CrateSetupModal';
-import { paperTheme } from '#ui/lib/theme';
+import { CrateSetupModal } from '../components/CrateSetupModal';
+import CropDetails from './CropDetails';
+import CratesAmount from './CratesAmount';
+import PlannedDays from './PlannedDays';
+import CropHarvest from './CropHarvest';
+import FloatingFooter from './FloatingFooter';
 
 export type SetupSchema = {
   numberOfCrates: number;
@@ -93,28 +99,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   const numberOfCrates = watch('numberOfCrates');
   const generalCrateWeight = watch('generalCrateWeight');
   const crates = watch('crates');
-
-  const harvestDateOptions = useMemo(
-    () => [
-      {
-        label: t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateValues.today'),
-        value: EDateCropped.TODAY,
-      },
-      {
-        label: t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateValues.yesterday'),
-        value: EDateCropped.YESTERDAY,
-      },
-      {
-        label: t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateValues.dayBefore'),
-        value: EDateCropped.DAY_BEFORE,
-      },
-      {
-        label: t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateValues.evenBefore'),
-        value: EDateCropped.EVEN_BEFORE,
-      },
-    ],
-    [t]
-  );
 
   const currencySymbol = useMemo(() => {
     return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
@@ -262,94 +246,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     <React.Fragment>
       <KeyboardAwareScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
         <View tw="flex-1 pb-48">
-          <View tw="flex-col">
-            <Text tw="text-base text-green-primary font-bold">Crop</Text>
-            <List.Item
-              tw="p-0 m-0 mt-3"
-              title={undefined}
-              onPress={(evt) => {
-                evt?.stopPropagation();
-                navigation.goBack();
-              }}
-              left={() => (
-                <Text tw="text-base self-center">
-                  {t('Dashboard.CrateManagement.CheckIn.Setup.selectedCrop')}
-                </Text>
-              )}
-              right={(props) => (
-                <View tw="flex-row items-center space-x-5">
-                  <View tw="flex-col items-end space-y-1">
-                    <Text tw="text-base">{crop.name}</Text>
-                    {additionalInfo ? <Text tw="text-gray-500">{additionalInfo}</Text> : null}
-                  </View>
-                  <List.Icon {...props} icon="chevron-right" />
-                </View>
-              )}
-            />
-            <Divider tw={cn('bg-gray-400', !additionalInfo && 'mt-2')} />
-          </View>
+          <CropDetails cropName={crop.name} additionalInfo={additionalInfo} />
 
           <View tw="mt-8">
             <Text tw="text-base text-green-primary font-bold">Details</Text>
-            <View tw="flex-col mt-3">
-              <Text tw="text-base">
-                {t('Dashboard.CrateManagement.CheckIn.Setup.numberOfCratesLabel')}
-              </Text>
-              <Controller
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { onChange, value } }) => (
-                  <View tw="w-full flex flex-row items-center justify-between">
-                    <Input
-                      tw={cn(
-                        'w-1/2 px-4 bg-white border border-b-0 rounded-sm h-12 mt-1',
-                        errors.numberOfCrates && 'border-red-300'
-                      )}
-                      keyboardType="numeric"
-                      onChangeText={(newVal) =>
-                        onChangeNumericKeyboard(newVal, onChange, 'numberOfCrates')
-                      }
-                      value={value?.toString() ?? ''}
-                    />
-                    <IconButton
-                      mode="contained-tonal"
-                      icon="minus"
-                      size={30}
-                      tw="rounded-md"
-                      iconColor={paperTheme.colors.primary}
-                      containerColor={paperTheme.colors.secondaryContainer}
-                      onPress={(evt) => {
-                        evt.stopPropagation();
-                        onChangeNumericKeyboard(
-                          !value ? 0 : Number(value) - 1,
-                          onChange,
-                          'numberOfCrates'
-                        );
-                      }}
-                    />
-                    <IconButton
-                      mode="contained-tonal"
-                      icon="plus"
-                      size={30}
-                      tw="rounded-md"
-                      iconColor={paperTheme.colors.primary}
-                      containerColor={paperTheme.colors.secondaryContainer}
-                      onPress={(evt) => {
-                        evt.stopPropagation();
-                        onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'numberOfCrates');
-                      }}
-                    />
-                  </View>
-                )}
-                name="numberOfCrates"
-              />
-              {errors.numberOfCrates ? (
-                <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
-                  {errors.numberOfCrates.message?.toString()}
-                </Text>
-              ) : null}
-              <Divider tw="bg-gray-400 mt-4" />
-            </View>
+            <CratesAmount
+              onChangeNumericKeyboard={onChangeNumericKeyboard}
+              formControl={control}
+              errorMessage={errors.numberOfCrates?.message}
+            />
 
             <View tw="flex-col">
               <List.Item
@@ -404,84 +309,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
 
           <View tw="mt-8">
             <Text tw="text-base text-green-primary font-bold">Storage</Text>
-            <View tw="flex-col mt-3">
-              <Text tw="text-base">
-                {t('Dashboard.CrateManagement.CheckIn.Setup.plannedDaysLabel')}
-              </Text>
-              <Controller
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { onChange, value } }) => (
-                  <View tw="w-full flex flex-row items-center justify-between">
-                    <Input
-                      tw="w-1/2 px-4 bg-white border rounded-sm h-12"
-                      keyboardType="numeric"
-                      onChangeText={(newVal) =>
-                        onChangeNumericKeyboard(newVal, onChange, 'plannedDays')
-                      }
-                      value={value?.toString() ?? ''}
-                    />
-                    <IconButton
-                      mode="contained-tonal"
-                      icon="minus"
-                      size={30}
-                      tw="rounded-md"
-                      iconColor={paperTheme.colors.primary}
-                      containerColor={paperTheme.colors.secondaryContainer}
-                      onPress={(evt) => {
-                        evt.stopPropagation();
-                        onChangeNumericKeyboard(
-                          !value ? 0 : Number(value) - 1,
-                          onChange,
-                          'plannedDays'
-                        );
-                      }}
-                    />
-                    <IconButton
-                      mode="contained-tonal"
-                      icon="plus"
-                      size={30}
-                      tw="rounded-md"
-                      iconColor={paperTheme.colors.primary}
-                      containerColor={paperTheme.colors.secondaryContainer}
-                      onPress={(evt) => {
-                        evt.stopPropagation();
-                        onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'plannedDays');
-                      }}
-                    />
-                  </View>
-                )}
-                name="plannedDays"
-              />
-              <Divider tw="bg-gray-400 mt-4" />
-            </View>
-
-            <View tw="flex-col mt-3">
-              <Text tw="text-base mb-1">
-                {t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateLabel')}
-              </Text>
-              {errors.dateHarvested ? (
-                <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
-                  {errors.dateHarvested.message?.toString()}
-                </Text>
-              ) : null}
-              <Controller
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <RadioButton.Group value={value?.toString() ?? ''} onValueChange={onChange}>
-                    {harvestDateOptions.map((option, optionIdx) => (
-                      <RadioButtonItem
-                        key={`${option}-${optionIdx}`}
-                        label={option.label}
-                        value={option.value}
-                        tw="flex flex-row-reverse ml-[-10]"
-                      />
-                    ))}
-                  </RadioButton.Group>
-                )}
-                name="dateHarvested"
-              />
-            </View>
+            <PlannedDays onChangeNumericKeyboard={onChangeNumericKeyboard} formControl={control} />
+            <CropHarvest formControl={control} errorMessage={errors.dateHarvested?.message} />
           </View>
         </View>
 
@@ -496,50 +325,20 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         />
       </KeyboardAwareScrollView>
 
-      <View tw="absolute bottom-0 right-0 w-full">
-        <View tw="bg-teal-50 p-4 rounded-sm space-y-1">
-          <View tw="flex flex-row items-center justify-between">
-            <Text tw="text-lg">{dailyPriceLabel}</Text>
-            <Text tw="text-lg text-green-primary">
-              {currencySymbol}
-              {(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
-            </Text>
-          </View>
-          <View tw="flex flex-row items-center justify-between">
-            <Text tw="text-lg">{t('Dashboard.CrateManagement.CheckIn.Setup.totalPriceLabel')}</Text>
-            <Text tw="text-lg text-green-primary">
-              {currencySymbol}
-              {totalPrice}
-            </Text>
-          </View>
-        </View>
-        <View tw="py-3 bg-white flex flex-row items-center justify-evenly border-t-0.5 border-gray-600 border-solid">
-          <Button
-            mode="outlined"
-            tw="border border-red-400"
-            labelStyle="text-red-400 text-lg"
-            contentStyle="flex flex-row-reverse"
-            icon="close-circle-outline"
-            onPress={() =>
-              navigation.navigate('CheckIn', {
-                user: user as Farmer,
-                coolingUnit: coolingUnit as CoolingUnit,
-              })
-            }
-          >
-            {t('actions.cancel')}
-          </Button>
-          <Button
-            mode="contained"
-            labelStyle="text-lg"
-            contentStyle="flex flex-row-reverse"
-            icon="check-circle-outline"
-            onPress={handleSubmit(onSubmit)}
-          >
-            {t('actions.save-changes')}
-          </Button>
-        </View>
-      </View>
+      <FloatingFooter
+        dailyPriceLabel={dailyPriceLabel}
+        currencySymbol={currencySymbol}
+        commonPrice={(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
+        totalPrice={totalPrice}
+        cancelFunc={(evt) => {
+          evt.stopPropagation();
+          navigation.navigate('CheckIn', {
+            user: user as Farmer,
+            coolingUnit: coolingUnit as CoolingUnit,
+          });
+        }}
+        saveFunc={handleSubmit(onSubmit)}
+      />
     </React.Fragment>
   );
 }
