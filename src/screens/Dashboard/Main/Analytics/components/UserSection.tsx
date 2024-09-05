@@ -18,7 +18,7 @@ export function UserSection({ title, userType1, userType2, otherType }: SectionP
 
   return (
     <View tw="w-full bg-green-transparency px-2 py-1 items-center rounded-lg space-y-2 my-2">
-      <Text variant="TextMedium" tw="text-lg">
+      <Text variant="TextMedium" tw="text-lg text-center">
         {title}
       </Text>
       <View tw="flex flex-row space-x-2 items-center">

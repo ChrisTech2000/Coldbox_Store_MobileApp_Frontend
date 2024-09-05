@@ -150,7 +150,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
       />
 
       <View tw="flex flex-row justify-between items-center mb-4">
-        <Text variant="TextMedium" tw="text-base ml-2">
+        <Text variant="TextMedium" tw="text-base mx-2" numberOfLines={2}>
           {t('Dashboard.Management.UsageAnalysis.dateSelectionLabel')}
         </Text>
         <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} separator />
@@ -198,7 +198,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         {t('Dashboard.Management.UsageAnalysis.downloadDataButton')}
       </Button>
 
-      <ScrollView tw="mx-4 mt-2 mb-1" showsVerticalScrollIndicator={false}>
+      <ScrollView tw="mx-2 mt-2 mb-1" showsVerticalScrollIndicator={false}>
         {revenueDataLoading || coolingUnitsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />

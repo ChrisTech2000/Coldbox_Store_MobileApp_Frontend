@@ -192,7 +192,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
         {t('Dashboard.Management.UsageAnalysis.downloadDataButton')}
       </Button>
 
-      <ScrollView tw="mx-4 mt-2 mb-1" showsVerticalScrollIndicator={false}>
+      <ScrollView tw="mx-2 mt-2 mb-1" showsVerticalScrollIndicator={false}>
         {usageDataLoading || coolingUnitsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />

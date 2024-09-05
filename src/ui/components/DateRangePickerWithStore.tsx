@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Icon } from 'react-native-paper';
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
-import { Text } from './Text';
 import { cn } from '../lib/cn';
+import { Text } from './Text';
 
 export type DateRangeStoreType = {
   startDate: Date | null;
@@ -32,6 +33,8 @@ type DateRangePickerWithStoreProps = {
   useDateRangeStore: UseBoundStore<StoreApi<DateRangeStoreType>>;
   variant?: 'text' | 'contained';
 };
+
+const screenHeight = Dimensions.get('screen').height;
 
 export const DateRangePickerWithStore = ({
   useDateRangeStore,
@@ -68,7 +71,7 @@ export const DateRangePickerWithStore = ({
   }, []);
 
   const onClearStartDateChange = useCallback(() => {
-    setIsEndDateCalendarOpen(false);
+    setIsStartDateCalendarOpen(false);
     setStartDate(null);
   }, []);
 
@@ -87,7 +90,12 @@ export const DateRangePickerWithStore = ({
   }, []);
 
   return (
-    <View tw="flex flex-row items-center space-x-4">
+    <View
+      tw={cn(
+        'flex flex-row items-center',
+        (screenHeight > SMALL_SCREEN_THRESHOLD || variant === 'contained') && 'space-x-3'
+      )}
+    >
       <View>
         {showSelectionTitle && (
           <Text variant="TextMedium" tw="text-base my-2">

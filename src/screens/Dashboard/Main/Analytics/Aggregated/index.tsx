@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Platform, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Platform, TouchableOpacity, View } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 
@@ -9,6 +9,8 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ImpactService from '#services/ImpactService';
@@ -24,7 +26,8 @@ import { CratesContent } from './components/CratesContent';
 import { InnerTabs, Tab } from './components/InnerTabs';
 import { UsersContent } from './components/UserContent';
 import { useAggregatedData } from './store';
-import InAppNotifications from '#common/InAppNotifications';
+
+const screenHeight = Dimensions.get('screen').height;
 
 export function AggregatedSection() {
   const { t } = useTranslationUtils();
@@ -137,103 +140,105 @@ export function AggregatedSection() {
 
   return (
     <ScrollView tw="mt-8 h-full" showsVerticalScrollIndicator={false}>
-      {!configData ? (
-        <Configuration openModal={() => setIsModalOpen(true)} />
-      ) : (
-        <View tw="space-y-2">
-          <View tw="w-full flex flex-row justify-between items-center mb-2">
-            <TouchableOpacity
-              tw="flex flex-row items-center space-x-2 justify-start"
-              onPress={onBackToMain}
-            >
-              <Icon source="arrow-left-circle-outline" size={15} />
-              <Text variant="TextMedium" tw="text-base">
-                {t(`Dashboard.Analytics.companyTab.goBackButton`)}
-              </Text>
-            </TouchableOpacity>
-            <Button
-              mode="contained"
-              contentStyle="bg-gray-800 h-8"
-              icon="cog"
-              onPress={() => setIsModalOpen(true)}
-              labelStyle="h-5"
-            >
-              {t('Dashboard.Analytics.tabsShared.configureButton')}
-            </Button>
-          </View>
-
-          <InnerTabs
-            activeTab={activeTab}
-            onTabSelection={(tab: Tab) => setActiveTab(tab)}
-            compactMode
-          />
-
-          {loadingImpactData || loadingCoolingUnitData ? (
-            <View tw="flex-1 items-center justify-center mt-2">
-              <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-            </View>
-          ) : (
-            <View tw="items-center mt-2 space-y-2">
+      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-12' : ''}>
+        {!configData ? (
+          <Configuration openModal={() => setIsModalOpen(true)} />
+        ) : (
+          <View tw="space-y-2">
+            <View tw="w-full flex flex-row justify-between items-center mb-2">
+              <TouchableOpacity
+                tw="flex flex-row items-center space-x-2 justify-start"
+                onPress={onBackToMain}
+              >
+                <Icon source="arrow-left-circle-outline" size={15} />
+                <Text variant="TextMedium" tw="text-base">
+                  {t(`Dashboard.Analytics.companyTab.goBackButton`)}
+                </Text>
+              </TouchableOpacity>
               <Button
                 mode="contained"
-                uppercase
-                onPress={onDownloadData}
-                icon="check-circle-outline"
-                contentStyle="flex flex-row-reverse"
-                tw="w-[50%] mt-2"
+                contentStyle="bg-gray-800 h-8"
+                icon="cog"
+                onPress={() => setIsModalOpen(true)}
+                labelStyle="h-5"
               >
-                {t('Dashboard.Analytics.downloadDataButton')}
+                {t('Dashboard.Analytics.tabsShared.configureButton')}
               </Button>
-
-              <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
-                <Text variant="TextMedium" tw="text-base font-bold">
-                  {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
-                    {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
-                  </Text>
-                </Text>
-                <Text variant="TextMedium" tw="text-base font-bold">
-                  {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {configData.coolingUnits?.map((unit) => unit.name).join(', ')}
-                  </Text>
-                </Text>
-              </View>
-
-              {activeTab === 'crates' && <CratesContent />}
-              {activeTab === 'users' && <UsersContent />}
-              {activeTab === 'impact' && (
-                <ImpactContent
-                  useStore={useAggregatedData}
-                  type="aggregated"
-                  occupancy={occupancy}
-                  revenue={revenue}
-                />
-              )}
             </View>
-          )}
-        </View>
-      )}
 
-      {!activeTab && (
-        <CommonFooter
-          tabs={
             <InnerTabs
               activeTab={activeTab}
               onTabSelection={(tab: Tab) => setActiveTab(tab)}
-              disabled={!configData}
+              compactMode
             />
-          }
-        />
-      )}
 
-      <ConfigurationModal
-        isOpen={isModalOpen}
-        dismiss={() => setIsModalOpen(false)}
-        confirm={(config: ConfigData) => setConfigData(config)}
-        coolingUnits={coolingUnits}
-      />
+            {loadingImpactData || loadingCoolingUnitData ? (
+              <View tw="flex-1 items-center justify-center mt-2">
+                <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+              </View>
+            ) : (
+              <View tw="items-center mt-2 space-y-2">
+                <Button
+                  mode="contained"
+                  uppercase
+                  onPress={onDownloadData}
+                  icon="check-circle-outline"
+                  contentStyle="flex flex-row-reverse"
+                  tw="w-[50%] mt-2"
+                >
+                  {t('Dashboard.Analytics.downloadDataButton')}
+                </Button>
+
+                <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
+                  <Text variant="TextMedium" tw="text-base font-bold">
+                    {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
+                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                      {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
+                      {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
+                    </Text>
+                  </Text>
+                  <Text variant="TextMedium" tw="text-base font-bold">
+                    {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
+                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                      {configData.coolingUnits?.map((unit) => unit.name).join(', ')}
+                    </Text>
+                  </Text>
+                </View>
+
+                {activeTab === 'crates' && <CratesContent />}
+                {activeTab === 'users' && <UsersContent />}
+                {activeTab === 'impact' && (
+                  <ImpactContent
+                    useStore={useAggregatedData}
+                    type="aggregated"
+                    occupancy={occupancy}
+                    revenue={revenue}
+                  />
+                )}
+              </View>
+            )}
+          </View>
+        )}
+
+        {!activeTab && (
+          <CommonFooter
+            tabs={
+              <InnerTabs
+                activeTab={activeTab}
+                onTabSelection={(tab: Tab) => setActiveTab(tab)}
+                disabled={!configData}
+              />
+            }
+          />
+        )}
+
+        <ConfigurationModal
+          isOpen={isModalOpen}
+          dismiss={() => setIsModalOpen(false)}
+          confirm={(config: ConfigData) => setConfigData(config)}
+          coolingUnits={coolingUnits}
+        />
+      </View>
     </ScrollView>
   );
 }
