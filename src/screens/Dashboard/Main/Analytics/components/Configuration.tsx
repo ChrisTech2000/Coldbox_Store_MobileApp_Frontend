@@ -47,7 +47,7 @@ export function ConfigurationModal({
   return (
     <Portal>
       <Modal visible={isOpen} onDismiss={dismiss}>
-        <View tw="items-center bg-white mx-14 p-2 rounded-3xl h-auto space-y-4">
+        <View tw="items-center bg-white mx-12 p-2 rounded-3xl h-auto space-y-4">
           <Text variant="TextMedium" tw="text-base mt-2 px-2">
             {t('Dashboard.Management.UsageAnalysis.modal.title')}
           </Text>
