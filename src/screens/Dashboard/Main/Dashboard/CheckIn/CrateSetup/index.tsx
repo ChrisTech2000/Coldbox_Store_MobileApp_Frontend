@@ -2,7 +2,7 @@ import { currencies } from 'currencies.json';
 import React, { useCallback, useMemo, useState } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { Divider, List, Switch } from 'react-native-paper';
+import { Divider, List } from 'react-native-paper';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
@@ -27,6 +27,7 @@ import CratesAmount from './CratesAmount';
 import PlannedDays from './PlannedDays';
 import CropHarvest from './CropHarvest';
 import FloatingFooter from './FloatingFooter';
+import Sellable from './Sellable';
 
 export type SetupSchema = {
   numberOfCrates: number;
@@ -255,17 +256,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
               formControl={control}
               errorMessage={errors.numberOfCrates?.message}
             />
-
-            <View tw="flex-col">
-              <List.Item
-                tw="p-0 m-0 mt-3"
-                title={undefined}
-                onPress={(evt) => evt?.stopPropagation()}
-                left={() => <Text tw="text-base self-center">Sellable</Text>}
-                right={() => <Switch value={false} onValueChange={() => undefined} />}
-              />
-              <Divider tw="bg-gray-400 mt-2" />
-            </View>
+            <Sellable formControl={control} />
 
             <View tw="flex-col">
               <List.Item

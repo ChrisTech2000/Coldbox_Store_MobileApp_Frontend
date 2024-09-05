@@ -18,7 +18,7 @@ export default function CropDetails(props: { cropName: string; additionalInfo: s
     <View tw="flex-col">
       <Text tw="text-base text-green-primary font-bold">Crop</Text>
       <List.Item
-        tw="p-0 m-0 mt-3"
+        tw="p-0 m-0"
         title={undefined}
         onPress={(evt) => {
           evt.stopPropagation();

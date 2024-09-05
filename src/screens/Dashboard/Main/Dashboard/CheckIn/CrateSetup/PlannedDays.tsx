@@ -9,7 +9,7 @@ import { Text } from '#ui/components/Text';
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 
-import type { SetupSchema } from '../CrateSetup';
+import type { SetupSchema } from './index';
 
 export default function PlannedDays(props: {
   onChangeNumericKeyboard: (

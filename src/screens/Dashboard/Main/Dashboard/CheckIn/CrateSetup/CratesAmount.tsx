@@ -10,7 +10,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 
-import type { SetupSchema } from '../CrateSetup';
+import type { SetupSchema } from './index';
 
 export default function CratesAmount(props: {
   onChangeNumericKeyboard: (

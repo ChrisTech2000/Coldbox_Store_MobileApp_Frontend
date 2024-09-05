@@ -9,7 +9,7 @@ import { RadioButtonItem } from '#ui/components/RadioButton';
 import { useTranslationUtils } from '#i18n/utils';
 import { EDateCropped } from '#types/global';
 
-import type { SetupSchema } from '../CrateSetup';
+import type { SetupSchema } from './index';
 
 export default function CropHarvest(props: {
   formControl: Control<SetupSchema, unknown>;
