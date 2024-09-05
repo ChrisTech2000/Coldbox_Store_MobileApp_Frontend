@@ -27,7 +27,7 @@ export default function CountryField() {
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
 
-  const selectedCountry = countriesMeta.getNameByISO(watch('country'));
+  const selectedCountry = countriesMeta.getByValue(watch('country'))?.name;
   const datums = useMemo(
     () =>
       countriesMeta

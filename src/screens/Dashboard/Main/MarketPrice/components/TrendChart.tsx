@@ -22,6 +22,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 import colors from 'tailwindcss/colors';
 import { AllowedCountry } from '../store';
+import { MAP_ALLOWED_COUNTRY, QueryCountry } from '../Trend';
 
 type TrendChartProps = {
   commodity: PredictionCrop | null;
@@ -41,6 +42,7 @@ enum ECurrency {
 
 export function TrendChart({ commodity, state, country }: TrendChartProps) {
   const { t } = useTranslationUtils();
+  const mappedCountry = MAP_ALLOWED_COUNTRY[country ?? ('' as AllowedCountry)] as QueryCountry;
 
   const { data: predictionData, isLoading: loadingPredictionData } = useApiCall(
     'getPrediction',
@@ -48,7 +50,7 @@ export function TrendChart({ commodity, state, country }: TrendChartProps) {
     {
       cropId: commodity?.id as number,
       stateId: state?.id as number,
-      country,
+      country: mappedCountry,
     },
     { skip: !commodity || !state }
   );
@@ -71,7 +73,7 @@ export function TrendChart({ commodity, state, country }: TrendChartProps) {
     );
   }
 
-  return <Chart predictionData={predictionData} currency={ECurrency[country]} />;
+  return <Chart predictionData={predictionData} currency={ECurrency[mappedCountry]} />;
 }
 
 function Chart({ predictionData, currency }: ChartProps) {
@@ -100,12 +102,9 @@ function Chart({ predictionData, currency }: ChartProps) {
       }
     });
 
-    const combinedDataArray = Array.from(combinedDataMap.values());
-
-    return combinedDataArray;
+    return Array.from(combinedDataMap.values());
   }, [predictionData]);
 
-  // TODO: find a way to add tooltip to forecast line as well
   const { state, isActive } = useChartPressState({
     x: groupedData[0].date,
     y: {
@@ -114,24 +113,44 @@ function Chart({ predictionData, currency }: ChartProps) {
     },
   });
 
-  const textValue = useDerivedValue(() => state.y.pastPrice.value.value.toFixed(1), [state]);
-
-  const textXPosition = useDerivedValue(() => {
+  const pastTextValue = useDerivedValue(() => state.y.pastPrice.value.value.toFixed(1), [state]);
+  const pastTextXPosition = useDerivedValue(() => {
     if (!tooltipFont) return 0;
-    const textWidth = tooltipFont.measureText(textValue.value).width;
+    const textWidth = tooltipFont.measureText(pastTextValue.value).width;
     return state.x.position.value - textWidth / 2;
-  }, [tooltipFont, textValue]);
-
-  const textYPosition = useDerivedValue(() => state.y.pastPrice.position.value - 25, [textValue]);
-
-  const p1 = useDerivedValue(
-    () => vec(state.x.position.value, state.y.pastPrice.position.value),
-    [textValue]
+  }, [tooltipFont, pastTextValue]);
+  const pastTextYPosition = useDerivedValue(
+    () => state.y.pastPrice.position.value - 25,
+    [pastTextValue]
   );
 
-  const p2 = useDerivedValue(
+  const forecastTextValue = useDerivedValue(() => state.y.forecast.value.value.toFixed(1), [state]);
+  const forecastTextXPosition = useDerivedValue(() => {
+    if (!tooltipFont) return 0;
+    const textWidth = tooltipFont.measureText(forecastTextValue.value).width;
+    return state.x.position.value - textWidth / 2;
+  }, [tooltipFont, forecastTextValue]);
+  const forecastTextYPosition = useDerivedValue(
+    () => state.y.forecast.position.value - 25,
+    [forecastTextValue]
+  );
+
+  const pastP1 = useDerivedValue(
+    () => vec(state.x.position.value, state.y.pastPrice.position.value),
+    [pastTextValue]
+  );
+  const pastP2 = useDerivedValue(
     () => vec(state.x.position.value, state.y.pastPrice.position.value * 12),
-    [textValue]
+    [pastTextValue]
+  );
+
+  const forecastP1 = useDerivedValue(
+    () => vec(state.x.position.value, state.y.forecast.position.value),
+    [forecastTextValue]
+  );
+  const forecastP2 = useDerivedValue(
+    () => vec(state.x.position.value, state.y.forecast.position.value * 12),
+    [forecastTextValue]
   );
 
   return (
@@ -161,70 +180,92 @@ function Chart({ predictionData, currency }: ChartProps) {
         <CartesianChart
           data={groupedData}
           xKey="date"
+          domainPadding={{ top: 45, left: 25, right: 25, bottom: 10 }}
           yKeys={['pastPrice', 'forecast']}
           axisOptions={{
             font,
             lineColor: paperTheme.colors.outlineVariant,
             labelColor: paperTheme.colors.tertiary,
             lineWidth: StyleSheet.hairlineWidth,
-            labelOffset: 12,
-            formatXLabel: (date) => (date ? dateFmt(date, 'MMM yyyy') : ''),
+            labelOffset: 10,
+            formatXLabel: (date) => (date ? dateFmt(date, 'MMM yy') : ''),
             formatYLabel: (val) => `${val}`,
           }}
           chartPressState={state}
         >
-          {({ points }) => {
-            return (
-              <React.Fragment>
-                <Line
-                  points={points.pastPrice}
-                  color={paperTheme.colors.primary}
-                  strokeWidth={2}
-                  animate={{ type: 'timing', duration: 500 }}
-                  curveType="linear"
-                  connectMissingData
-                  antiAlias
-                />
+          {({ points }) => (
+            <>
+              <Line
+                points={points.pastPrice}
+                color={paperTheme.colors.primary}
+                strokeWidth={2}
+                animate={{ type: 'timing', duration: 500 }}
+                curveType="linear"
+                connectMissingData
+                antiAlias
+              />
+              <Line
+                points={points.forecast}
+                color={colors.yellow[500]}
+                strokeWidth={2}
+                animate={{ type: 'timing', duration: 500 }}
+                curveType="linear"
+                connectMissingData
+                antiAlias
+              />
+              {isActive && (
+                <>
+                  {/* Past Price Tooltip */}
+                  <SkiaText
+                    x={pastTextXPosition}
+                    y={pastTextYPosition}
+                    text={pastTextValue}
+                    font={tooltipFont}
+                    color={paperTheme.colors.tertiary}
+                    style="fill"
+                  />
+                  <Circle
+                    cx={state.x.position}
+                    cy={state.y.pastPrice.position}
+                    r={8}
+                    color={paperTheme.colors.backdrop}
+                  />
+                  <SkiaLine
+                    p1={pastP1}
+                    p2={pastP2}
+                    color={paperTheme.colors.onPrimaryContainer}
+                    strokeWidth={StyleSheet.hairlineWidth}
+                  >
+                    <DashPathEffect intervals={[8, 4]} />
+                  </SkiaLine>
 
-                <Line
-                  points={points.forecast}
-                  color={colors.yellow[500]}
-                  strokeWidth={2}
-                  animate={{ type: 'timing', duration: 500 }}
-                  curveType="linear"
-                  connectMissingData
-                  antiAlias
-                />
-
-                {isActive ? (
-                  <React.Fragment>
-                    <SkiaText
-                      x={textXPosition}
-                      y={textYPosition}
-                      text={textValue}
-                      font={tooltipFont}
-                      color={paperTheme.colors.tertiary}
-                      style="fill"
-                    />
-                    <Circle
-                      cx={state.x.position}
-                      cy={state.y.pastPrice.position}
-                      r={8}
-                      color={paperTheme.colors.backdrop}
-                    />
-                    <SkiaLine
-                      p1={p1}
-                      p2={p2}
-                      color={paperTheme.colors.onPrimaryContainer}
-                      strokeWidth={StyleSheet.hairlineWidth}
-                    >
-                      <DashPathEffect intervals={[8, 4]} />
-                    </SkiaLine>
-                  </React.Fragment>
-                ) : null}
-              </React.Fragment>
-            );
-          }}
+                  {/* Forecast Tooltip */}
+                  <SkiaText
+                    x={forecastTextXPosition}
+                    y={forecastTextYPosition}
+                    text={forecastTextValue}
+                    font={tooltipFont}
+                    color={paperTheme.colors.tertiary}
+                    style="fill"
+                  />
+                  <Circle
+                    cx={state.x.position}
+                    cy={state.y.forecast.position}
+                    r={8}
+                    color={paperTheme.colors.backdrop}
+                  />
+                  <SkiaLine
+                    p1={forecastP1}
+                    p2={forecastP2}
+                    color={paperTheme.colors.onPrimaryContainer}
+                    strokeWidth={StyleSheet.hairlineWidth}
+                  >
+                    <DashPathEffect intervals={[8, 4]} />
+                  </SkiaLine>
+                </>
+              )}
+            </>
+          )}
         </CartesianChart>
       </View>
     </View>
