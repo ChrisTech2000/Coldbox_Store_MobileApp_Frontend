@@ -55,7 +55,7 @@ export function Select({
           </TouchableWithoutFeedback>
           <View
             tw={cn(
-              'bg-white rounded-3xl w-2/3 max-w-2/3 py-2 self-center space-y-2',
+              'bg-white rounded-3xl w-3/4 max-w-3/4 py-2 self-center space-y-2',
               variant !== 'lg' ? 'max-h-72' : 'h-full'
             )}
           >
