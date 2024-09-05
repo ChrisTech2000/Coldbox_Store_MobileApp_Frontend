@@ -5,7 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, TouchableHighlight, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { Divider, Icon, IconButton } from 'react-native-paper';
+import { Divider, Icon, IconButton, List } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import { API_BASE_URL } from '#constants/environment';
@@ -201,31 +201,28 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   return (
     <View tw="flex-1 p-4">
-      <View tw="flex flex-row w-full justify-between items-center">
-        <Text variant="TextMedium" tw="text-lg">
-          {t('Dashboard.CrateManagement.coolingUserLabel')}
-        </Text>
-        <Text variant="TextMedium" tw="text-lg">
-          {user?.user.firstName}
-        </Text>
-      </View>
-      <Divider tw="bg-gray-400 my-2" />
-      <View tw="flex flex-row w-full justify-between items-center">
-        <Text variant="TextMedium" tw="text-lg">
-          {t('Dashboard.CrateManagement.coolingUnitLabel')}
-        </Text>
-        <Text variant="TextMedium" tw="text-lg">
-          {coolingUnit?.name}
-        </Text>
-      </View>
-      <Divider tw="bg-gray-400 my-2" />
+      <List.Item
+        tw="p-0 m-0"
+        title={undefined}
+        left={() => <Text tw="text-base">{t('Dashboard.CrateManagement.coolingUserLabel')}</Text>}
+        right={() => <Text tw="text-base">{user?.user.firstName}</Text>}
+      />
+      <Divider tw="bg-gray-400 mt-2" />
+      <List.Item
+        tw="p-0 m-0 mt-3"
+        title={undefined}
+        left={() => <Text tw="text-base">{t('Dashboard.CrateManagement.coolingUnitLabel')}</Text>}
+        right={() => <Text tw="text-base">{coolingUnit?.name}</Text>}
+      />
+      <Divider tw="bg-gray-400 mt-2" />
 
       <ScrollView>
-        {produces.length === 0 && (
-          <Text variant="TextMedium" tw="text-lg mt-3">
+        {produces.length === 0 ? (
+          <Text tw="text-base mt-6 self-center text-gray-600">
             {t('Dashboard.CrateManagement.CheckIn.emptyState')}
           </Text>
-        )}
+        ) : null}
+
         <FlatList
           data={produces}
           extraData={surveys}
@@ -266,15 +263,15 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                   </TouchableHighlight>
                 </View>
               </View>
-              {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) && (
+              {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) ? (
                 <FarmerSurvey
                   cropId={item.crop.id}
                   cropName={item.crop.name}
                   farmerId={user.id}
                   surveys={surveys}
                 />
-              )}
-              {checkOutCode && (
+              ) : null}
+              {checkOutCode ? (
                 <React.Fragment>
                   <IconButton
                     tw="bg-gray-300 w-full px-1 self-center"
@@ -298,8 +295,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                     title={t('Dashboard.CrateManagement.CheckIn.Setup.modals.id')}
                   />
                 </React.Fragment>
-              )}
-              <Divider tw="w-full bg-grey-400" />
+              ) : null}
+              <Divider tw="w-full bg-gray-400" />
             </View>
           )}
           nestedScrollEnabled
@@ -336,20 +333,25 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           </Text>
         ) : null}
 
-        <View tw="w-full flex flex-row items-center justify-between mb-2">
-          <Text variant="TextMedium" tw="text-lg font-bold">
-            {allHavePlannedDays
-              ? t('Dashboard.CrateManagement.CheckIn.estimatedCost')
-              : t('Dashboard.CrateManagement.CheckIn.pricing')}
-          </Text>
-          <Text variant="TextMedium" tw="text-lg font-bold">
-            {`${currencySymbol}${total}`}
-            {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY && !allHavePlannedDays
-              ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
-              : ''}
-          </Text>
+        <View tw="flex-col mb-2">
+          <View tw="w-full flex flex-row items-center justify-between mb-2">
+            <Text variant="TextMedium" tw="text-lg font-bold">
+              {allHavePlannedDays
+                ? t('Dashboard.CrateManagement.CheckIn.estimatedCost')
+                : t('Dashboard.CrateManagement.CheckIn.pricing')}
+            </Text>
+            <Text variant="TextMedium" tw="text-lg font-bold">
+              {`${currencySymbol}${total}`}
+              {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY &&
+              !allHavePlannedDays
+                ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
+                : ''}
+            </Text>
+          </View>
+          <Divider tw="w-full bg-gray-400 mt-2" />
         </View>
-        <View tw="w-full flex flex-row items-center justify-center space-x-1">
+
+        <View tw="w-full flex flex-row items-center justify-center space-x-1 py-1.5">
           <Button
             tw="w-1/2 border-2 border-red-400"
             mode="outlined"
@@ -369,6 +371,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             onPress={onSubmit}
             icon="check-circle-outline"
             contentStyle="flex flex-row-reverse items-center"
+            disabled={!produces || produces.length === 0}
           >
             {t('actions.confirm')}
           </Button>

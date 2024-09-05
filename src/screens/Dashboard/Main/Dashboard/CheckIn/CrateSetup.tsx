@@ -362,71 +362,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
               <Divider tw="bg-gray-400 mt-2" />
             </View>
 
-            <View tw="flex-col mt-3">
-              <View tw="flex flex-row">
-                <Text tw="text-base">
-                  {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel')}
-                </Text>
-                <Sup>({t('Dashboard.ProduceDetails.kilogram').toUpperCase()})</Sup>
-              </View>
-              <Controller
-                control={control}
-                rules={{ required: true }}
-                defaultValue={coolingUnit?.crateWeight ?? 25}
-                render={({ field: { onChange, value } }) => (
-                  <View tw="w-full flex flex-row justify-between items-center space-x-1">
-                    <Input
-                      tw="w-1/2 px-4 bg-white border rounded-sm h-12 mt-1"
-                      onChangeText={(newVal) =>
-                        onChangeNumericKeyboard(newVal, onChange, 'generalCrateWeight')
-                      }
-                      value={value?.toString() ?? ''}
-                      keyboardType="numeric"
-                    />
-                    <IconButton
-                      mode="contained-tonal"
-                      icon="minus"
-                      size={30}
-                      tw="rounded-md"
-                      iconColor={paperTheme.colors.primary}
-                      containerColor={paperTheme.colors.secondaryContainer}
-                      onPress={(evt) => {
-                        evt.stopPropagation();
-                        onChangeNumericKeyboard(
-                          !value ? 0 : Number(value) - 1,
-                          onChange,
-                          'generalCrateWeight'
-                        );
-                      }}
-                    />
-                    <IconButton
-                      mode="contained-tonal"
-                      icon="plus"
-                      size={30}
-                      tw="rounded-md"
-                      iconColor={paperTheme.colors.primary}
-                      containerColor={paperTheme.colors.secondaryContainer}
-                      onPress={(evt) => {
-                        evt.stopPropagation();
-                        onChangeNumericKeyboard(
-                          Number(value ?? 0) + 1,
-                          onChange,
-                          'generalCrateWeight'
-                        );
-                      }}
-                    />
-                  </View>
-                )}
-                name="generalCrateWeight"
-              />
-              {errors.generalCrateWeight ? (
-                <Text tw="text-xs text-red-600 mt-[-2] pl-3 w-[95%]">
-                  {errors.generalCrateWeight.message?.toString()}
-                </Text>
-              ) : null}
-              <Divider tw="bg-gray-400 mt-4" />
-            </View>
-
             <View tw="flex-col">
               <List.Item
                 tw="px-0 m-0"
@@ -436,14 +371,18 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                   onOpenModal('weight');
                 }}
                 left={() => (
-                  <Text tw="text-base self-center">
-                    {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateWeightButton')}
-                  </Text>
+                  <View tw="flex-row">
+                    <Text tw="text-base">Crate weight</Text>
+                    <Sup>({t('Dashboard.ProduceDetails.kilogram').toUpperCase()})</Sup>
+                    <Text tw="text-base">and pricing</Text>
+                    <Sup>({company?.currency?.toUpperCase() ?? 'NGN'})</Sup>
+                  </View>
                 )}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
               />
               <Divider tw="bg-gray-400" />
             </View>
+
             <View tw="flex-col">
               <List.Item
                 tw="px-0 m-0"
@@ -558,19 +497,17 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       </KeyboardAwareScrollView>
 
       <View tw="absolute bottom-0 right-0 w-full">
-        <View tw="bg-teal-50 px-2 py-4 rounded-sm space-y-1">
+        <View tw="bg-teal-50 p-4 rounded-sm space-y-1">
           <View tw="flex flex-row items-center justify-between">
-            <Text tw="text-lg ml-2">{dailyPriceLabel}</Text>
-            <Text tw="text-lg ml-2 text-green-primary">
+            <Text tw="text-lg">{dailyPriceLabel}</Text>
+            <Text tw="text-lg text-green-primary">
               {currencySymbol}
               {(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
             </Text>
           </View>
           <View tw="flex flex-row items-center justify-between">
-            <Text tw="text-lg ml-2">
-              {t('Dashboard.CrateManagement.CheckIn.Setup.totalPriceLabel')}
-            </Text>
-            <Text tw="text-lg ml-2 text-green-primary">
+            <Text tw="text-lg">{t('Dashboard.CrateManagement.CheckIn.Setup.totalPriceLabel')}</Text>
+            <Text tw="text-lg text-green-primary">
               {currencySymbol}
               {totalPrice}
             </Text>
