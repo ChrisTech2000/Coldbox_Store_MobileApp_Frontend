@@ -54,6 +54,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
+        cannot(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
         break;
       }
 
@@ -86,6 +87,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         can(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         can(PERMISSION_KINDS.VIEW, 'OperatorActions');
+        can(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
         break;
       }
 
@@ -108,6 +110,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
+        can(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
         break;
       }
 

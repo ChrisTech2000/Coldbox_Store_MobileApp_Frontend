@@ -1,8 +1,9 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon } from 'react-native-paper';
+import { Modalize } from 'react-native-modalize';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import { API_BASE_URL } from '#constants/environment';
@@ -11,13 +12,15 @@ import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack'
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
+import { ECoolingUnitMetric, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
+import * as SellingSettings from './SellingSettingsModal';
 
 function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDetails'>) {
   const { produce, coolingUnit } = route.params;
@@ -123,6 +126,8 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
     );
   }, [produce, farmers]);
 
+  const modalRef = useRef<Modalize>(null);
+
   return (
     <View tw="flex-1 items-center justify-center space-y-4">
       <View tw="flex flex-row items-center space-x-3">
@@ -210,12 +215,40 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
         />
       </View>
 
-      {user?.role === ERoles.OPERATOR && (
+      <RBAC.ProtectedResource action="VIEW" subject="EditSellingSettings">
+        <Button
+          mode="outlined"
+          uppercase
+          tw="w-[85%] my-4"
+          onPress={(evt) => {
+            evt.stopPropagation();
+            modalRef.current?.open();
+          }}
+        >
+          Edit Selling Settings
+        </Button>
+        <SellingSettings.Root>
+          <SellingSettings.Modal
+            modalRef={modalRef}
+            closeFunc={modalRef.current?.close}
+            movementCode={produce.movementCode}
+          >
+            <SellingSettings.ModalContent
+              crates={produce.crates}
+              shelfLife={produce.minimumRemainingShelfLife ?? 0}
+              closeFunc={modalRef.current?.close}
+            />
+          </SellingSettings.Modal>
+        </SellingSettings.Root>
+      </RBAC.ProtectedResource>
+
+      <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
         <Button
           mode="contained"
           uppercase
           tw="w-[85%]"
-          onPress={() => {
+          onPress={(evt) => {
+            evt.stopPropagation();
             navigation.navigate('CheckOutStack', {
               screen: 'CrateSelection',
               params: {
@@ -228,7 +261,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
         >
           {t('Dashboard.ProduceDetails.checkOutButton')}
         </Button>
-      )}
+      </RBAC.ProtectedResource>
     </View>
   );
 }
