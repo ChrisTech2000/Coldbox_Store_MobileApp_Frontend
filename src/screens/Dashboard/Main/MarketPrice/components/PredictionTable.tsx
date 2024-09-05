@@ -16,6 +16,7 @@ import type { PredictionCrop, PredictionState, PredictionTableData } from '#type
 import { Month } from '../Ranking';
 import type { AllowedCountry } from '../store';
 import { changePage, compareAsc, compareDesc, parseDateString } from '../utils';
+import { MAP_ALLOWED_COUNTRY, QueryCountry } from '../Trend';
 
 enum ECurrency {
   NG = '₦',
@@ -45,6 +46,7 @@ const ITEMS_PER_PAGE = 10;
 
 export function PredictionTable({ commodity, states, country, dates }: PredictionTableProps) {
   const { t } = useTranslationUtils();
+  const mappedCountry = MAP_ALLOWED_COUNTRY[country ?? ('' as AllowedCountry)] as QueryCountry;
 
   const { data: predictionData, isLoading: loadingPredictionData } = useApiCall(
     'getPredictionTable',
@@ -53,7 +55,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
       cropId: commodity.id,
       statesIds: states.map(({ id }) => id),
       days: dates.map(({ date }) => date),
-      country,
+      country: mappedCountry,
     }
   );
 
@@ -159,7 +161,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
             />
             <Header
               title={t('Dashboard.MarketPrice.Ranking.table.column3', {
-                currency: ECurrency[country],
+                currency: ECurrency[mappedCountry],
               })}
               onSort={(direction) =>
                 setSortingType({

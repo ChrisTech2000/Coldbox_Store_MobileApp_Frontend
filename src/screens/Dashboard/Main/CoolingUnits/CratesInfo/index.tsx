@@ -86,7 +86,7 @@ function CoolingUnitsCratesInfo() {
           <FlatList
             nestedScrollEnabled
             ListHeaderComponent={
-              <DataTable.Header>
+              <DataTable.Header tw="space-x-1">
                 <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.commodity')}</DataTable.Title>
                 <DataTable.Title>
                   {t('Dashboard.CoolingUnitsCratesInfo.percentage')}
@@ -101,7 +101,7 @@ function CoolingUnitsCratesInfo() {
             data={commodityInfos}
             keyExtractor={(item) => `data-table-row-${item.commodity}`}
             renderItem={({ item }) => (
-              <DataTable.Row>
+              <DataTable.Row tw="space-x-1">
                 <DataTable.Cell>{item.commodity}</DataTable.Cell>
                 <DataTable.Cell>{item.percentage}%</DataTable.Cell>
                 <DataTable.Cell>{item.combinedWeight}kg</DataTable.Cell>

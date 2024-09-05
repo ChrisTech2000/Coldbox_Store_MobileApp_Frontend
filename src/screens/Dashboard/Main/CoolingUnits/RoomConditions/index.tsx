@@ -73,29 +73,6 @@ function CoolingUnitsRoomConditions() {
                 <LineChart datums={chartDatums.datums} />
               </View>
             </View>
-            <View tw="bg-zinc-200 py-4 mt-8 items-center space-y-3">
-              <View tw="flex-row items-center space-x-4">
-                <Icon name="thermometer" size={30} color={paperTheme.colors.scrim} />
-                <Text variant="TitleRegular">
-                  {t('Dashboard.CoolingUnitsRoomConditions.temperature')}
-                </Text>
-                <Text variant="TitleMedium">{chartDatums.info.temperature}°C</Text>
-              </View>
-              <Text tw="text-zinc-500" variant="TitleSmall">
-                {t('Dashboard.CoolingUnitsRoomConditions.lastUpdated', {
-                  date: dateFmt(chartDatums.info.lastUpdated, 'E MMM dd yyyy HH:mm'),
-                })}
-              </Text>
-
-              <RBAC.ProtectedResource action="SET" subject="Temperatures">
-                <TemperatureModal
-                  temp={chartDatums.info.temperature}
-                  coolingUnitId={selectedCoolingUnit!.id}
-                  revalidateTemperatures={revalidateTemperatures}
-                  hasSensorIntegration={selectedCoolingUnit?.sensor ?? false}
-                />
-              </RBAC.ProtectedResource>
-            </View>
           </React.Fragment>
         ) : (
           <View tw="mx-2 mt-4">
@@ -104,6 +81,36 @@ function CoolingUnitsRoomConditions() {
             </Text>
           </View>
         )}
+        {selectedCoolingUnit ? (
+          <View tw="bg-zinc-200 py-4 mt-8 items-center space-y-3">
+            <View tw="flex-row items-center space-x-4">
+              <Icon name="thermometer" size={30} color={paperTheme.colors.scrim} />
+              <Text variant="TitleRegular">
+                {t('Dashboard.CoolingUnitsRoomConditions.temperature')}
+              </Text>
+              {chartDatums.info ? (
+                <Text variant="TitleMedium">{chartDatums.info.temperature}°C</Text>
+              ) : null}
+            </View>
+
+            {chartDatums.info ? (
+              <Text tw="text-zinc-500" variant="TitleSmall">
+                {t('Dashboard.CoolingUnitsRoomConditions.lastUpdated', {
+                  date: dateFmt(chartDatums.info.lastUpdated, 'E MMM dd yyyy HH:mm'),
+                })}
+              </Text>
+            ) : null}
+
+            <RBAC.ProtectedResource action="SET" subject="Temperatures">
+              <TemperatureModal
+                temp={chartDatums.info?.temperature ?? 0}
+                coolingUnitId={selectedCoolingUnit.id}
+                revalidateTemperatures={revalidateTemperatures}
+                hasSensorIntegration={selectedCoolingUnit?.sensor ?? false}
+              />
+            </RBAC.ProtectedResource>
+          </View>
+        ) : null}
       </ScrollView>
     </View>
   );

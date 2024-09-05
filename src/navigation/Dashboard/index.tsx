@@ -1,33 +1,32 @@
-import React from 'react';
 import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
+import ms from 'ms';
+import React from 'react';
 import { Drawer } from 'react-native-drawer-layout';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
-import ms from 'ms';
 
 import FAQ from '#screens/Dashboard/FAQ';
 import Tutorial from '#screens/Dashboard/Tutorial';
 
+import RBAC from '#common/RBAC';
+import { useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
 import { ERoles } from '#types/global';
-import RBAC from '#common/RBAC';
 
+import AboutStack from './About';
+import type { AccountDetailsRoutes } from './AccountDetails';
+import AccountDetailsStack from './AccountDetails';
 import DrawerContent from './components/DrawerContent';
+import NotificationsDrawerContent from './components/NotificationsDrawerContent';
 import DashboardScreenOptions from './components/ScreenOptions';
+import TemperatureAlert from './components/TemperatureAlert';
+import KnowledgeHubStack from './KnowledgeHub';
+import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
 import DashboardMainBottomTabs from './Main';
 import ManagementStack, { ManagementRoutes } from './Management';
-import NotificationsDrawerContent from './components/NotificationsDrawerContent';
-import AboutStack from './About';
-import KnowledgeHubStack from './KnowledgeHub';
-import AccountDetailsStack from './AccountDetails';
-
-import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
-import type { AccountDetailsRoutes } from './AccountDetails';
-import TemperatureAlert from './components/TemperatureAlert';
 
 export type DashboardRoutes = {
   Main: undefined;

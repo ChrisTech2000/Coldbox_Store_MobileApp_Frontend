@@ -18,9 +18,9 @@ import { AllowedCountry, usePriceTrendsStore } from './store';
 const useCommodityStore = createSelectStore<PredictionCrop>();
 const useStateStore = createSelectStore<PredictionState>();
 
-type QueryCountry = 'IN' | 'NG';
+export type QueryCountry = 'IN' | 'NG';
 
-const MAP_ALLOWED_COUNTRY: Record<AllowedCountry, QueryCountry> = {
+export const MAP_ALLOWED_COUNTRY: Record<AllowedCountry, QueryCountry> = {
   IN: 'IN',
   NG: 'NG',
   India: 'IN',
