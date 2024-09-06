@@ -194,9 +194,261 @@ export const METHODOLOGY_CONTENT: Record<TranslationLocales, MethodologyEntry[]>
       text: `प्रभाव डैशबोर्ड पर प्रदर्शित CO2 उत्सर्जन दैनिक रिपोर्ट वास्तविक समय के ठंडे कक्ष भंडारण विश्लेषण और Eco-Invent द्वारा प्रदान किए गए मजबूत जीवन चक्र मूल्यांकन (LCA) मॉडलों के संयोजन से सावधानीपूर्वक व्युत्पन्न की जाती है। हमारे एप्लिकेशन से लाइव चेक-इन डेटा को एकीकृत करके, हम प्रतिदिन ठंडे कमरों में संग्रहीत प्रत्येक प्रकार की उपज की मात्रा को व्यवस्थित रूप से ट्रैक करते हैं। यह प्रासंगिक डेटा, Eco-Invent के व्यापक LCA डेटाबेस से प्राप्त सहायक मापदंडों के साथ मिलकर, प्रतिदिन संग्रहीत प्रत्येक फसल के लिए जिम्मेदार CO2 उत्सर्जन की सटीक पुन: गणना के लिए उपयोग किया जाता है। परिणामी अंतर्दृष्टि को प्रभाव डैशबोर्ड के माध्यम से निर्यात के लिए उपलब्ध कराया जाता है, जिससे हमारे उपयोगकर्ताओं के पास पारदर्शी और क्रियाशील पर्यावरणीय प्रभाव डेटा उनकी उंगलियों पर होता है।`,
     },
   ],
-  [APP_LOCALES.ORIYA]: [],
-  [APP_LOCALES.GUJARATI]: [],
-  [APP_LOCALES.FRENCH]: [],
+  [APP_LOCALES.ORIYA]: [
+    {
+      title: 'କମ୍ପାନୀର ନାମ',
+      text: 'କୋଲ୍ଡଟିଭେଟରେ ନୋଟ୍ କରାଯାଇଥିବା କମ୍ପାନୀର ନାମ।',
+    },
+    {
+      title: 'ମୋଟ ଆବକା',
+      text: 'କୋଲ୍ଡଟିଭେଟ ଆପ୍ଲିକେସନ୍ ମାଧ୍ୟମରେ ଚେକ୍-ଇନ୍ ହୋଇଥିବା କ୍ରେଟ୍‌ସ ପାଇଁ ସଂଗ୍ରହ ଫୀ ହାସଲ କରାଯାଇଥିବା କମ୍ପାନୀର ମୋଟ ଆବକା।',
+    },
+    {
+      title: 'ମୋଟ କୁଲିଙ୍ଗ କ୍ଷମତା',
+      text: 'ଆପ୍ଲିକେସନ୍‌ରେ ଆପଣଙ୍କର କମ୍ପାନୀ ପାଇଁ ନୋଟ୍ କରାଯାଇଥିବା ସମସ୍ତ କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସର ସଙ୍ଗ୍ରହ କ୍ଷମତା।',
+    },
+    {
+      title: 'କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସର ସଂଖ୍ୟା',
+      text: 'ଆପ୍ଲିକେସନ୍‌ରେ ଆପଣଙ୍କର କମ୍ପାନୀ ପାଇଁ ନୋଟ୍ କରାଯାଇଥିବା ମୋଟ କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସ।',
+    },
+    {
+      title: 'କୁଲିଙ୍ଗ ଇୁନିଟ୍ ର ପ୍ରକାର',
+      text: 'ଫାର୍ମ-ଗେଟ୍‌, ବଜାରରେ ବସିଥିବା କିମ୍ବା ରେଫ୍ରିଜରେଟେଡ୍ ଟ୍ରକ୍‌ରେ ଥିବା ମୋଟ କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସର ସଂଖ୍ୟା। ମାନିତା ପ୍ରଦାନକାରୀ କର୍ମଚାରୀ ଦ୍ୱାରା ଆପ୍ଲିକେସନ୍‌ରେ କୁଲିଙ୍ଗ ଇୁନିଟ୍ ତିଆରି କରାଯାଇଛି।',
+    },
+    {
+      title: 'ନୋଟ୍ କରାଯାଇଥିବା କର୍ମଚାରୀଙ୍କର ମୋଟ ସଂଖ୍ୟା',
+      text: 'ଆପଣଙ୍କର କମ୍ପାନୀ ସହିତ ସଂଯୋଗ ଥିବା ବ୍ୟବହାରକାରୀଙ୍କର ସଂଖ୍ୟା ଯେଉଁମାନେ ‘ନୋଟ୍ କରାଯାଇଥିବା କର୍ମଚାରୀ’ ଭାବରେ ସାଇନ୍ ଅପ୍ କରିଛନ୍ତି, ଯାହାକି କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସର ଓପରେସନ୍‌କୁ ନିରୀକ୍ଷଣ କରେଥିବା ବ୍ୟବସ୍ଥାପନ ଟୀମ୍‌ର ସଦସ୍ୟମାନେ। ସମସ୍ତ ବ୍ୟବହାରକାରୀଙ୍କୁ ନୋଟ୍ କରାଯାଇଥିବା ସମୟରେ ‘ପୁରୁଷ’, ‘ସ୍ତ୍ରୀ’, କିମ୍ବା ‘ଅନ୍ୟ’ ଭାବରେ ଲିଙ୍ଗ ସୂଚନା ଦିଆଯିବାକୁ କହାଯାଇଛି। ଏହି ସୂଚକ ସେବେ ‘କମ୍ପାନୀ’ ଦୃଶ୍ୟରେ ଉପସ୍ଥିତ, କାରଣ ନୋଟ୍ କରାଯାଇଥିବା କର୍ମଚାରୀମାନେ ଏକେକ କୁଲିଙ୍ଗ ଇୁନିଟ୍ ସହିତ ନୁହେଁ, ବରଂ ସମସ୍ତ କମ୍ପାନୀ ସହିତ ସଂଯୋଗ ରହିଛି।',
+    },
+    {
+      title: 'ଓପରେଟର୍‌ମାନେର ମୋଟ ସଂଖ୍ୟା',
+      text: 'ଆପଣଙ୍କର କମ୍ପାନୀ ସହିତ ସଂଯୋଗ ଥିବା ବ୍ୟବହାରକାରୀଙ୍କର ସଂଖ୍ୟା ଯେଉଁମାନେ ‘ଓପରେଟର୍’ ଭାବରେ ସାଇନ୍ ଅପ୍ କରିଛନ୍ତି, ଯାହାକି କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସରେ ଶାରୀରିକ ଭାବରେ ଉପସ୍ଥିତ ଥିବା କର୍ମଚାରୀ ଏବଂ କୁଲିଙ୍ଗ ଗ୍ରାହକମାନେ ସହିତ ସମ୍ପର୍କ ରଖିଥିବା କର୍ମଚାରୀ। ସମସ୍ତ ବ୍ୟବହାରକାରୀଙ୍କୁ ନୋଟ୍ କରାଯାଇଥିବା ସମୟରେ ‘ପୁରୁଷ’, ‘ସ୍ତ୍ରୀ’, କିମ୍ବା ‘ଅନ୍ୟ’ ଭାବରେ ଲିଙ୍ଗ ସୂଚନା ଦିଆଯିବାକୁ କହାଯାଇଛି। ‘ଏଗ୍ରିଗେଟ୍‌ଡ୍’ ଏବଂ ‘ତୁଲନା’ ଦୃଶ୍ୟରେ, କେବଳ ଚୟନ କରାଯାଇଥିବା କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସ ପାଇଁ ଏହି ସଂଖ୍ୟା ଗଣାଯାଇଛି।',
+    },
+    {
+      title: 'ସ୍ୱତନ୍ତ୍ର କୁଲିଙ୍ଗ ବ୍ୟବହାରକାରୀଙ୍କର ମୋଟ ସଂଖ୍ୟା',
+      text: 'ଆପ୍ଲିକେସନ୍‌ରେ ସଂଯୋଗ କରିବା ପରେ କମ୍ପାନୀର ସମସ୍ତ କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସରେ କୁଲିଙ୍ଗ ଗ୍ରାହକମାନେର ସଂଖ୍ୟା। ସମସ୍ତ ବ୍ୟବହାରକାରୀଙ୍କୁ ନୋଟ୍ କରାଯାଇଥିବା ସମୟରେ ‘ପୁରୁଷ’, ‘ସ୍ତ୍ରୀ’, କିମ୍ବା ‘ଅନ୍ୟ’ ଭାବରେ ଲିଙ୍ଗ ସୂଚନା ଦିଆଯିବାକୁ କହାଯାଇଛି। ଏହି ସୂଚକ କେବଳ ‘କମ୍ପାନୀ’ ଦୃଶ୍ୟରେ ଉପସ୍ଥିତ ଅଛି। ‘ଏଗ୍ରିଗେଟ୍‌ଡ୍’ ଏବଂ ‘ତୁଲନା’ ଦୃଶ୍ୟରେ, ଆମେ ପ୍ରତିଟି କୁଲିଙ୍ଗ ଗ୍ରାହକର ସଂଖ୍ୟା ଦର୍ଶାଉଛୁ।',
+    },
+    {
+      title: 'ସକ୍ରିୟ କୁଲିଙ୍ଗ ବ୍ୟବହାରକାରୀଙ୍କର ମୋଟ ସଂଖ୍ୟା',
+      text: 'ଚୟନ କରାଯାଇଥିବା ଉତ୍ପାଦର ପ୍ରକାର ଅନୁସାରେ ଏବଂ ସମୟର ଅନୁସାରେ କୁଲିଙ୍ଗ ବ୍ୟବହାରକାରୀଙ୍କର ସଂଖ୍ୟା। ସମସ୍ତ ବ୍ୟବହାରକାରୀଙ୍କୁ ନୋଟ୍ କରାଯାଇଥିବା ସମୟରେ ‘ପୁରୁଷ’, ‘ସ୍ତ୍ରୀ’, କିମ୍ବା ‘ଅନ୍ୟ’ ଭାବରେ ଲିଙ୍ଗ ସୂଚନା ଦିଆଯିବାକୁ କହାଯାଇଛି। ‘କମ୍ପାନୀ’ ଦୃଶ୍ୟରେ, ଆମେ ସକ୍ରିୟ କୁଲିଙ୍ଗ ବ୍ୟବହାରକାରୀଙ୍କର ସଂଖ୍ୟା ଦର୍ଶାଉଛୁ।',
+    },
+    {
+      title: 'କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସର ସମସ୍ତ ପ୍ରକାର',
+      text: 'ଆପ୍ଲିକେସନ୍‌ରେ ନୋଟ୍ କରାଯାଇଥିବା ମୋଟ କୁଲିଙ୍ଗ ଇୁନିଟ୍‌ସ ଏବଂ ସେମାନଙ୍କର ପ୍ରକାର।',
+    },
+    {
+      title: 'କୋଲ୍ଡଟିଭେଟରେ ରିପୋର୍ଟର ସ୍ଥିତି',
+      text: 'ଏକ ପ୍ରତିବେଦନ କିମ୍ବା ତ୍ୟାଗର ସ୍ଥିତି ଯାହାକି ଆପଣଙ୍କର କମ୍ପାନୀ ସହିତ ସଂଯୋଗ ରହିଥିବା କୋଲ୍ଡଟିଭେଟ ରେପୋର୍ଟର ସ୍ଥିତିକୁ ଦର୍ଶାଏ।',
+    },
+    {
+      title: 'କୋଲ୍ଡଟିଭେଟରେ ଅଭିବ୍ୟକ୍ତ ପ୍ରଦାନ',
+      text: 'ଆପ୍ଲିକେସନ୍‌ରେ ଆପଣଙ୍କର କମ୍ପାନୀ ପାଇଁ ତିଆରି କରାଯାଇଥିବା ପ୍ରସ୍ତାବର ପ୍ରକାର ଏବଂ ସେହି ପ୍ରସ୍ତାବର ଆବଶ୍ୟକତା।',
+    },
+    {
+      title: 'ମୋଟ ପ୍ରସ୍ତାବ ଆରମ୍ଭ',
+      text: 'ଏହି ସୂଚକ ଆପଣଙ୍କର କମ୍ପାନୀ ପାଇଁ ଆପ୍ଲିକେସନ୍‌ରେ ରିପୋର୍ଟ ଆରମ୍ଭ କରାଯିବା ପ୍ରସ୍ତାବର ସଂଖ୍ୟା ଦର୍ଶାଏ।',
+    },
+    {
+      title: 'ସହାୟତା ମେଟ୍ରିକ୍ସ',
+      text: 'ଆପ୍ଲିକେସନ୍‌ରେ ସହାୟତା ମେଟ୍ରିକ୍ସ ପ୍ରଦାନ କରାଯାଇଛି।',
+    },
+    {
+      title: 'କ୍ରେଟ୍ ପରିମାଣ',
+      text: 'କୋଲ୍ଡଟିଭେଟରେ କ୍ରେଟ୍ ପରିମାଣ କିମ୍ବା ସହାୟତା ପ୍ରଦାନ କରାଯିବା କ୍ରେଟ୍ ସହିତ ସମ୍ପର୍କ ରହିଥିବା ଆଲୋଚନା କରାଯାଇଛି।',
+    },
+    {
+      title: 'କମ୍ପାନୀ ତଥ୍ୟ',
+      text: 'ଆପ୍ଲିକେସନ୍‌ରେ କମ୍ପାନୀ ପାଇଁ ନୋଟ୍ କରାଯାଇଥିବା ସାଧାରଣ ତଥ୍ୟ ଏବଂ ସେହି ତଥ୍ୟକୁ ତିଆରି କରାଯିବା ତାରିଖ।',
+    },
+  ],
+  [APP_LOCALES.GUJARATI]: [
+    {
+      title: 'કંપનીનું નામ',
+      text: 'કોલ્ડટિવેટમાં નોંધાયેલી કંપનીનું નામ.',
+    },
+    {
+      title: 'કુલ આવક',
+      text: 'કોલ્ડટિવેટ એપ્લિકેશનમાં ચેક-ઇન થયેલા ક્રેટ્સ માટે સંગ્રહ ફી વસૂલ કરીને કંપનીની કુલ આવક.',
+    },
+    {
+      title: 'કુલ કૂલિંગ ક્ષમતા',
+      text: 'એપ્લિકેશનમાં вашей કંપની માટે નોંધાયેલ તમામ કૂલિંગ યુનિટ્સની સંકલિત ક્ષમતા.',
+    },
+    {
+      title: 'કૂલિંગ યુનિટ્સની સંખ્યા',
+      text: 'એપ્લિકેશનમાં вашей કંપની માટે નોંધાયેલ કુલ કૂલિંગ યુનિટ્સ.',
+    },
+    {
+      title: 'કૂલિંગ યુનિટનો પ્રકાર',
+      text: 'ફાર્મ-ગેટ, બજાર પર આવેલી અથવા રેફ્રિજરેટેડ ટ્રક પર આવેલા કુલ કૂલિંગ યુનિટ્સની સંખ્યા. માહિતી નોંધાવનાર કર્મચારી દ્વારા આપેલ છે જે એપ્લિકેશનમાં કૂલિંગ યુનિટ બનાવે છે.',
+    },
+    {
+      title: 'નોંધાયેલા કર્મચારીઓની કુલ સંખ્યા',
+      text: 'તમારી કંપની સાથે જોડાયેલા વપરાશકર્તાઓની સંખ્યા જેમણે ‘નોંધાયેલ કર્મચારી’ તરીકે સાઇન અપ કર્યું છે, એટલે કે, મેનેજમેન્ટ ટીમના સભ્યો જે કૂલિંગ યુનિટ્સ પર ઓપરેશન્સને દેખરેખ કરે છે. બધા વપરાશકર્તાઓને નોંધણી સમયે ‘પુરુષ’, ‘સ્ત્રી’, અથવા ‘અન્ય’ તરીકે લિંગ જાહેર કરવાનું કહેવામાં આવે છે. આ સંકેત માત્ર ‘કંપની’ દૃશ્યમાં હાજર છે કારણ કે નોંધાયેલા કર્મચારીઓ એક જ કૂલિંગ યુનિટ સાથે નહીં પરંતુ સમગ્ર કંપની સાથે જોડાયેલા હોય છે.',
+    },
+    {
+      title: 'ઓપરેટરોની કુલ સંખ્યા',
+      text: 'તમારી કંપની સાથે જોડાયેલા વપરાશકર્તાઓની સંખ્યા જેમણે ‘ઓપરેટર’ તરીકે સાઇન અપ કર્યું છે, એટલે કે, કૂલિંગ યુનિટ્સ પર શારીરિક રીતે હાજર કર્મચારી અને કૂલિંગ ગ્રાહકો સાથે સંપર્કમાં રહેતા કર્મચારી. બધા વપરાશકર્તાઓને નોંધણી વખતે ‘પુરુષ’, ‘સ્ત્રી’, અથવા ‘અન્ય’ તરીકે લિંગ જાહેર કરવાનું કહેવામાં આવે છે. ‘એગ્રેગેટેડ’ અને ‘તુલના’ દૃશ્યમાં, માત્ર પસંદ કરેલ કૂલિંગ યુનિટ્સ માટે ફાળવાયેલા ઓપરેટરોને જ ગણવામાં આવે છે.',
+    },
+    {
+      title: 'અલગ કૂલિંગ વપરાશકર્તાઓની કુલ સંખ્યા',
+      text: 'એપ્લિકેશનમાં જોડાવા પછી કંપનીની તમામ કૂલિંગ યુનિટ્સમાં કૂલિંગ ગ્રાહકોની સંખ્યા. બધા વપરાશકર્તાઓને નોંધણી સમયે ‘પુરુષ’, ‘સ્ત્રી’, અથવા ‘અન્ય’ તરીકે લિંગ જાહેર કરવાનું કહેવામાં આવે છે. આ સંકેત માત્ર ‘કંપની’ દૃશ્યમાં હાજર છે. ‘એગ્રેગેટેડ’ અને ‘તુલના’ દૃશ્યમાં, અમે બદલે સક્રિય કૂલિંગ વપરાશકર્તાઓની સંખ્યા બતાવીએ છીએ.',
+    },
+    {
+      title: 'સક્રિય કૂલિંગ વપરાશકર્તાઓની કુલ સંખ્યા',
+      text: 'પસંદ કરેલ સમયગાળામાં ઓછામાં ઓછા એક કૂલિંગ યુનિટમાં ચેક-ઇન અથવા ચેક-આઉટ ઓપરેશન કરનારા અલગ વપરાશકર્તાઓની સંખ્યા. લિંગ વિભાજન કૂલિંગ વપરાશકર્તાઓના લિંગથી ગણવામાં આવે છે, જેમણે નોંધણી દરમિયાન જાહેર કર્યું હતું. આ સંકેત માત્ર ‘એગ્રેગેટેડ’ અને ‘તુલના’ દૃશ્યમાં હાજર છે.',
+    },
+    {
+      title: 'કૂલિંગ વપરાશકર્તાઓનો પ્રકાર',
+      text: '‘કૂલિંગ વપરાશકર્તા સર્વેક્ષણ’ ભરતા કૂલિંગ વપરાશકર્તાઓને પુછવામાં આવે છે કે તેઓ પોતાની ઓળખ ‘કૃષક’ અથવા ‘અન્ય નાના વેપારીઓ / વાણિજ્યક / હોલસેલર્સ’ તરીકે કરે છે. આ સંકેત આ પ્રશ્નનો જવાબ આપનારા કૂલિંગ વપરાશકર્તાઓ માટેના તારણ બતાવે છે.',
+    },
+    {
+      title: 'અડક લાભાર્થીઓની કુલ સંખ્યા',
+      text: 'અડક લાભાર્થીઓની સંખ્યા કૂલિંગ વપરાશકર્તાઓની કુલ સંખ્યાને કંપની所在 દેશ માટેની સરેરાશ ઘરઘરની આકૃતિ સાથે ગુણાકાર કરીને ગણવામાં આવે છે. ‘કંપની’ દૃશ્યમાં, ‘વિશેષ ક્ષેત્ર કૂલિંગ વપરાશકર્તાઓની કુલ સંખ્યા’નો ઉપયોગ કરવામાં આવે છે, જ્યારે ‘એગ્રેગેટેડ’ અને ‘તુલના’ દૃશ્યોમાં, ‘સક્રિય કૂલિંગ વપરાશકર્તાઓની કુલ સંખ્યા’નો ઉપયોગ કરવામાં આવે છે. પુરુષ-સ્ત્રી વિભાજન કંપનીના દેશ માટેની સરેરાશ લિંગ રેશિયોનો ઉપયોગ કરીને ગણવામાં આવે છે. સરેરાશ ઘરઘરની આકૃતિ અને લિંગ રેશિયાની માહિતી https://population.un.org/Household/index.html#/countries/ પરથી ખેંચવામાં આવે છે.',
+    },
+    {
+      title: 'ચેક-ઇન કૃષિ વિતરણ (ક્રેટ્સ)',
+      text: 'કોલ્ડટિવેટ એપ્લિકેશન દ્વારા દરેક પ્રકારની ખાદ્ય પદાર્થ માટે ચેક-ઇન થયેલા ક્રેટ્સની સંખ્યા. ઉત્પાદનોની સૂચિ ચેક-ઇન થયેલ ક્રેટ્સની સંખ્યાના આધાર પર ક્રમબદ્ધ છે.',
+    },
+    {
+      title: 'ચેક-આઉટ કૃષિ વિતરણ (ક્રેટ્સ)',
+      text: 'કોલ્ડટિવેટ એપ્લિકેશન દ્વારા દરેક પ્રકારની ખાદ્ય પદાર્થ માટે ચેક-આઉટ થયેલા ક્રેટ્સની સંખ્યા. ઉત્પાદનોની સૂચિ ચેક-આઉટ થયેલ ક્રેટ્સની સંખ્યાના આધાર પર ક્રમબદ્ધ છે.',
+    },
+    {
+      title: 'ચેક-ઇન કૃષિ વિતરણ (કિ.ગ્રા.)',
+      text: 'કોલ્ડટિવેટ એપ્લિકેશન દ્વારા દરેક પ્રકારની ખાદ્ય પદાર્થ માટે ચેક-ઇન થયેલ કુલ માત્રા, કિલોગ્રામમાં. ઉત્પાદનોની સૂચિ ચેક-ઇન થયેલ ક્રેટ્સની સંખ્યાના આધાર પર ક્રમબદ્ધ છે.',
+    },
+    {
+      title: 'ચેક-આઉટ કૃષિ વિતરણ (કિ.ગ્રા.)',
+      text: 'કોલ્ડટિવેટ એપ્લિકેશન દ્વારા દરેક પ્રકારની ખાદ્ય પદાર્થ માટે ચેક-આઉટ થયેલ કુલ માત્રા, કિલોગ્રામમાં. ઉત્પાદનોની સૂચિ ચેક-આઉટ થયેલ ક્રેટ્સની સંખ્યાના આધાર પર ક્રમબદ્ધ છે.',
+    },
+    {
+      title: 'કૂલિંગ યુનિટ્સની સરેરાશ_OCCUPANCY',
+      text: 'દરેક યુનિટ માટે, દૈનિક સરેરાશ OCCUPANCY ગુણાકારથી ગણવામાં આવે છે, જેમાં યુનિટમાં સંગ્રહિત ક્રેટ્સની સંખ્યા અને યુનિટમાં સંગ્રહિત કરી શકાય તેવા ક્રેટ્સની કુલ સંખ્યા, જે નોંધાયેલ કર્મચારી દ્વારા આલેખિત છે, સરેરાશ લશ્કર છે. આ મૂલ્ય પછી સમગ્ર કંપની અને સમયગાળાની અવધિ માટે બધું મળીને સરેરાશ કરવામાં આવે છે. ‘કંપની’ દૃશ્યમાં, કોલ્ડટિવેટમાં કંપનીની રચનાની તારીખથી તમામ યુનિટ અને દિવસો માનવામાં આવે છે. ‘એગ્રેગેટેડ’ અને ‘તુલના’ દૃશ્યમાં, યુનિટ અને સમયગાળા પર ક્લિક કરીને ‘કૉન્ફિગર’ કરવા માટે સેટ કરી શકાય છે.',
+    },
+    {
+      title: 'કુલ ક્રેટ્સ',
+      text: 'એપ્લિકેશન દ્વારા ચેક-ઇન અને ચેક-આઉટ થયેલ કુલ ક્રેટ્સની સંખ્યા. ‘કંપની’ દૃશ્યમાં, કોલ્ડટિવેટમાં કંપનીની રચનાની તારીખથી તમામ યુનિટ અને દિવસો માનવામાં આવે છે. ‘એગ્રેગેટેડ’ અને ‘તુલના’ દૃશ્યમાં, યુનિટ અને સમયગાળા પર ક્લિક કરીને ‘કૉન્ફિગર’ કરવા માટે સેટ કરી શકાય છે.',
+    },
+    {
+      title: 'કુલ માત્રા (કિ.ગ્રા.)',
+      text: 'એપ્લિકેશન દ્વારા ચેક-ઇન અને ચેક-આઉટ થયેલ કુલ ઉત્પાદન કિલોગ્રામમાં. કિલોગ્રામ પ્રત્યેક ક્રેટની નોંધણી સમયે નિર્ધારિત છે. ‘કંપની’ દૃશ્યમાં, કોલ્ડટિવેટમાં કંપનીની રચનાની તારીખથી તમામ યુનિટ અને દિવસો માનવામાં આવે છે. ‘એગ્રેગેટેડ’ અને ‘તુલના’ દૃશ્યમાં, યુનિટ અને સમયગાળા પર ક્લિક કરીને ‘કૉન્ફિગર’ કરવા માટે સેટ કરી શકાય છે.',
+    },
+    {
+      title: 'કુલ ઓપરેશન્સ',
+      text: 'એપ્લિકેશન દ્વારા નોંધાયેલ કુલ ચેક-ઇન અને ચેક-આઉટ ઓપરેશન્સની સંખ્યા. દરેક ઓપરેશનમાં વિવિધ ખાદ્ય પદાર્થોના અનેક ક્રેટ્સનો ચેક-ઇન અથવા ચેક-આઉટ સમાવેશ થઈ શકે છે. ‘કંપની’ દૃશ્યમાં, કોલ્ડટિવેટમાં કંપનીની રચનાની તારીખથી તમામ યુનિટ અને દિવસો માનવામાં આવે છે. ‘એગ્રેગેટેડ’ અને ‘તુલના’ દૃશ્યમાં, યુનિટ અને સમયગાળા પર ક્લિક કરીને ‘કૉન્ફિગર’ કરવા માટે સેટ કરી શકાય છે.',
+    },
+    {
+      title: 'ખોરાક નષ્ટની વૃદ્ધિ',
+      text: 'ખોરાક નષ્ટની વૃદ્ધિ એ દરેક વપરાશકર્તા અને પાક પ્રકાર માટે મહિને ખોરાકની સરેરાશ નષ્ટ/સેવ કરવામાં આવેલા રકમનો વર્ણન કરતી ટકાવારીમાં વ્યક્ત થાય છે. આ મૂલ્યને અંદાજવા માટે, દરેક વપરાશકર્તા અને પાક માટે આધારભૂત નષ્ટની માહિતી (જે સંદર્ભે ક્લાયંટ એફિલિયેટ દ્વારા પ્રાપ્ત કરવામાં આવે છે)ને ખરીદી પછીના નષ્ટની માહિતી સાથે તુલના કરવામાં આવે છે. આધારભૂત માહિતી ‘કૂલિંગ યુઝર સર્વે’માંથી એકત્ર કરવામાં આવે છે, જ્યાં ખેડૂતો અને વેપારીઓને પૂછવામાં આવે છે કે તેઓ મહિનામાં કેટલા ખોરાકનું ઉત્પાદન, વેચાણ અને નષ્ટ કરે છે (ઠંડા સ્ટોરેજ વિના) દરેક પાક માટે. ખેડૂત અને વેપારીઓએ કૂલિંગ યુનિટ્સનો ઉપયોગ કરતાં વખતે, ‘પોસ્ટ-ચેકઆઉટ’ સર્વેની સાતમાથી દરેક પ્રકારની પાક માટે સવાર થાય છે. આ સર્વેમાં, વપરાશકર્તાને ઠંડા સ્ટોરેજ પછી વેચાણ અને નષ્ટ કરવામાં આવેલી માત્રા વિશે પૂછવામાં આવે છે. પોસ્ટ-ચેકઆઉટ સર્વેમાંથી પ્રાપ્ત માહિતી માસિક રીતે જોડાય છે જેથી દરેક વપરાશકર્તા અને પાક પ્રકાર દ્વારા ઉપયોગ કરનાર ઠંડા સ્ટોરેજનો ઉપયોગ કરતી વખતે શું છે તે અંદાજવામાં આવે છે, અને આધારભૂત માહિતી સાથે તુલના કરવામાં આવે છે. વિવિધ પાકો અને દરેક કૂલિંગ યુનિટના વપરાશકર્તાઓ વચ્ચે મળેલી માહિતી સમયગાળાના અને કૂલિંગ યુનિટ્સના આધારે સરેરાશ કરવામાં આવે છે અને અસરકારક ડેશબોર્ડ પર દર્શાવાય છે. ખોરાકની ખોટની વૃદ્ધિ એ ‘પોસ્ટ-ચેકઆઉટ’ સર્વેમાં ખોટ (યાની ઠંડા સ્ટોરેજ દરમિયાન) અને આધારભૂત માહિતીમાં ખોટ (અથવા ઠંડા સ્ટોરેજ પહેલાં) વચ્ચેના ટકાવારીનો ફરક છે.',
+    },
+    {
+      title: 'કૂલિંગ વપરાશકર્તા આવકની વૃદ્ધિ',
+      text: 'કૂલિંગ વપરાશકર્તાઓ માટે આવકની વૃદ્ધિ એ કૃષક આવકમાં સરેરાશ ટકાવારીના બદલાવને વર્ણવે છે, જે તે આવકની તુલના કરીને ગણાય છે જે ઠંડા રૂમમાં સંગ્રહિત ઉત્પાદનોને વેચી અને ખેતરના પહેલાના (અથવા આધારભૂત માહિતી) પહેલા વેચી છે. આધારભૂત માહિતી ‘કૂલિંગ યુઝર સર્વે’માંથી એકત્ર કરવામાં આવે છે, જ્યાં ખેડૂત અને વેપારીઓને પૂછીને મળતી માહિતી કે કેટલી ખોરાકની માત્રા અને વેચાણ ભાવ છે જેમાં તેઓ દર અઠવાડિયે એપ્લિકેશન સાથે જોડાય છે, તે ખોટા સ્ટોરેજ પહેલાં છે. જેમને ખેડૂત અને વેપારીઓ કૂલિંગ યુનિટ્સનો ઉપયોગ કરે છે, ‘પોસ્ટ-ચેકઆઉટ’ સર્વેની સાતમાથી દરેક પ્રકારના પાક માટે સવાર થાય છે. આ સર્વેમાં, વપરાશકર્તાને ઠંડા સ્ટોરેજ પછી વેચાણ અને વેચાણ કિંમત વિશે પૂછવામાં આવે છે. પોસ્ટ-ચેકઆઉટ સર્વેમાંથી મળેલ માહિતી માસિક રીતે જોડાય છે જેથી દરેક વપરાશકર્તા અને પાક પ્રકાર દ્વારા ઉપનામના વપરાશકર્તા દ્વારા મેળવવામાં આવેલી કુલ માસિક આવકનો અંદાજ કરવામાં આવે છે, અને આ મૂલ્ય આધારભૂત માહિતી સાથે તુલના કરવામાં આવે છે. વિવિધ પાકો અને દરેક કૂલિંગ યુનિટના વપરાશકર્તાઓ વચ્ચે મળેલી માહિતી સમયગાળાના અને કૂલિંગ યુનિટ્સના આધારે સરેરાશ કરવામાં આવે છે અને અસરકારક ડેશબોર્ડ પર દર્શાવાય છે. આવકની વૃદ્ધિ એ ‘પોસ્ટ-ચેકઆઉટ’ સર્વેમાંથી અંદાજિત સરેરાશ આવક (યાની ઠંડા સ્ટોરેજ દરમિયાન) અને આધારભૂત માહિતી (અથવા ઠંડા સ્ટોરેજ પહેલાં)માંથી અંદાજિત સરેરાશ આવક વચ્ચેનો ટકાવારીનો ફરક છે.',
+    },
+    {
+      title: 'ખોરાક નષ્ટ અને આવક વૃદ્ધિ ગણવામાં આવેલ સર્વેની સંખ્યા',
+      text: 'ખોરાક નષ્ટ અને આવક વૃદ્ધિ પરના મેટ્રિક્સ તે સર્વે છે જે કૂલિંગ વપરાશકર્તાઓને પ્રવૃત્ત રીતે એપ્લિકેશન પર પ્રોત્સાહિત કરવામાં આવે છે. આ ટકાવારીઓની ગણતરી માટે સંકલિત કરવામાં આવેલી માહિતીની માત્રા વિશેની છબી મેળવવા માટે, અમે અહીં કૂલિંગ વપરાશકર્તાઓ દ્વારા પૂર્ણ કરવામાં આવેલી કુલ ‘પોસ્ટ-ચેકઆઉટ’ સર્વેની સંખ્યા ગણે છે, કંપનીની રચનાની તારીખથી હાલના મહિને સુધી, વર્તમાન મહિનામાં કંપની માટે પૂર્ણ થનારી મહત્તમ સંખ્યાની સરખામણી કરવામાં આવે છે. પૂર્ણ થનારી મહત્તમ સંખ્યા એ છે જે દરેક કૂલિંગ વપરાશકર્તા માટે નોટિસ કરેલા વિવિધ પાકોની કુલ સંખ્યાનો ઉપયોગ કરીને અંદાજવામાં આવે છે.',
+    },
+    {
+      title: 'CO2 વૃદ્ધિ',
+      text: 'અસલવેઇ મિશ્રિત CO2 પ્રવૃત્તિ ડેટા અને લાઇફ સાયકલ એસેસમેન્ટ (LCA) મોડલ્સમાંથી પ્રાપ્ત કરવામાં આવે છે જે Eco-Invent દ્વારા ઉપલબ્ધ છે. અમારી એપ્લિકેશનમાંથી લાઇવ ચેક-ઇન ડેટા સંકલિત કરીને, અમે દરરોજ કૂલિંગ રૂમમાં સંગ્રહિત વિવિધ પ્રકારની ઉત્પાદનોની માત્રા ટ્રેક કરીએ છીએ. આ સંબંધિત માહિતી, Eco-Invent ના વિસ્તૃત LCA ડેટાબેસમાંથી પ્રાપ્ત પુરક પરિમાણો સાથે જોડાય છે, કૂલિંગ રૂમમાં સંગ્રહિત દરેક પાક માટે દરરોજ CO2 ઉત્સર્જનને પુનઃગણવા માટે ઉપયોગ કરવામાં આવે છે. પરિણામની માહિતીને અસરકારક ડેશબોર્ડ દ્વારા એડમિન અને સસ્તી પ્રસ્તુતિ માટે તૈયાર કરવામાં આવે છે, જે અમારાં વપરાશકર્તાઓને પારદર્શક અને કાર્યક્ષમ પર્યાવરણ અસર માહિતી ઉપલબ્ધ કરે છે.',
+    },
+  ],
+  [APP_LOCALES.FRENCH]: [
+    {
+      title: "Nom de l'entreprise",
+      text: "Le nom de l'entreprise tel qu'il est enregistré dans Coldtivate.",
+    },
+    {
+      title: 'Revenu total',
+      text: "Le revenu total de l'entreprise généré par la collecte des frais de stockage pour les caisses qui ont été enregistrées dans l'application Coldtivate.",
+    },
+    {
+      title: 'Capacité de refroidissement totale',
+      text: "La capacité totale de toutes les unités de refroidissement enregistrées dans l'application pour votre entreprise.",
+    },
+    {
+      title: "Nombre d'unités de refroidissement",
+      text: "Le nombre total d'unités de refroidissement enregistrées dans l'application pour votre entreprise.",
+    },
+    {
+      title: "Type d'unité de refroidissement",
+      text: "Nombre total d'unités de refroidissement situées à la porte de la ferme, au marché ou dans des camions réfrigérés. Les informations sont insérées par l'employé enregistré qui crée l'unité de refroidissement dans l'application.",
+    },
+    {
+      title: "Nombre total d'employés enregistrés",
+      text: "Nombre d'utilisateurs liés à votre entreprise qui se sont inscrits en tant qu'‘Employé enregistré’, c'est-à-dire membres de l'équipe de gestion supervisant les opérations des unités de refroidissement. Tous les utilisateurs qui s'inscrivent sont invités à déclarer leur sexe comme ‘Homme’, ‘Femme’ ou ‘Autre’. Cet indicateur est uniquement présent dans la vue ‘Entreprise’ car les employés enregistrés ne sont pas liés à une seule unité de refroidissement, mais à l'ensemble de l'entreprise.",
+    },
+    {
+      title: "Nombre total d'opérateurs",
+      text: "Nombre d'utilisateurs liés à votre entreprise qui se sont inscrits en tant qu‘Opérateurs’, c'est-à-dire employés physiquement présents dans les unités de refroidissement et interagissant avec les clients de refroidissement. Tous les utilisateurs qui s'inscrivent sont invités à déclarer leur sexe comme ‘Homme’, ‘Femme’ ou ‘Autre’. Dans les vues ‘Agrégée’ et ‘Comparaison’, seuls les opérateurs affectés aux unités de refroidissement sélectionnées sont pris en compte.",
+    },
+    {
+      title: "Nombre total d'utilisateurs distincts de refroidissement",
+      text: "Nombre de clients de refroidissement à travers toutes les unités de refroidissement d'une entreprise depuis l'inscription dans l'application. Tous les utilisateurs qui s'inscrivent sont invités à déclarer leur sexe comme ‘Homme’, ‘Femme’ ou ‘Autre’. Cet indicateur est uniquement présent dans la vue ‘Entreprise’. Dans les vues ‘Agrégée’ et ‘Comparaison’, nous rapportons plutôt le nombre d'utilisateurs actifs de refroidissement.",
+    },
+    {
+      title: "Nombre total d'utilisateurs actifs de refroidissement",
+      text: "Nombre d'utilisateurs distincts qui ont effectué une opération de check-in ou check-out dans au moins une des unités de refroidissement pendant la période sélectionnée. La répartition par sexe est calculée à partir du sexe des utilisateurs de refroidissement, tel que déclaré lors de l'inscription. Cet indicateur est uniquement présent dans les vues ‘Agrégée’ et ‘Comparaison’.",
+    },
+    {
+      title: "Type d'utilisateurs de refroidissement",
+      text: "Les utilisateurs de refroidissement qui remplissent le ‘Questionnaire sur les utilisateurs de refroidissement’ sont invités à préciser s'ils se considèrent comme des ‘fermiers’ ou des ‘petits vendeurs / commerçants / grossistes’. Cet indicateur montre les statistiques résumées pour le sous-ensemble d'utilisateurs de refroidissement ayant répondu à cette question dans le questionnaire.",
+    },
+    {
+      title: 'Nombre total de bénéficiaires indirects',
+      text: "Le nombre de bénéficiaires indirects est calculé en multipliant le nombre total d'utilisateurs de refroidissement par la taille moyenne des foyers pour le pays où l'entreprise est située. Dans la vue ‘Entreprise’, le ‘Nombre total d'utilisateurs de refroidissement au district’ est utilisé, tandis que dans les vues ‘Agrégée’ et ‘Comparaison’, le ‘Nombre total d'utilisateurs actifs de refroidissement’ est utilisé. La répartition homme-femme est calculée en utilisant le ratio moyen des sexes pour le pays de l'entreprise. Les informations sur la taille moyenne des foyers et le ratio des sexes sont extraites de https://population.un.org/Household/index.html#/countries/.",
+    },
+    {
+      title: "Répartition des cultures à l'enregistrement (caisses)",
+      text: "Nombre de caisses qui ont été enregistrées via l'application Coldtivate pour chaque type de produit. La liste des produits est classée par nombre de caisses enregistrées.",
+    },
+    {
+      title: 'Répartition des cultures au retrait (caisses)',
+      text: "Nombre de caisses qui ont été retirées via l'application Coldtivate pour chaque type de produit. La liste des produits est classée par nombre de caisses retirées.",
+    },
+    {
+      title: "Répartition des cultures à l'enregistrement (kg)",
+      text: "Quantités totales, en kilogrammes, qui ont été enregistrées via l'application Coldtivate pour chaque type de produit. La liste des produits est classée par nombre de caisses enregistrées.",
+    },
+    {
+      title: 'Répartition des cultures au retrait (kg)',
+      text: "Quantités totales, en kilogrammes, qui ont été retirées via l'application Coldtivate pour chaque type de produit. La liste des produits est classée par nombre de caisses retirées.",
+    },
+    {
+      title: 'Occupation moyenne des unités de refroidissement',
+      text: "Pour chaque unité, l'occupation quotidienne moyenne est calculée comme le nombre de caisses stockées dans l'unité divisé par le nombre total de caisses pouvant être stockées dans l'unité, défini par l'employé enregistré qui crée l'unité de refroidissement dans l'application. Cette valeur est ensuite moyennée à travers toutes les unités pour l'entreprise et la période. Dans la vue ‘Entreprise’, toutes les unités et jours depuis la création de l'entreprise dans Coldtivate sont pris en compte. Dans les vues ‘Agrégée’ et ‘Comparaison’, les unités et la période peuvent être configurées en cliquant sur ‘Configurer’.",
+    },
+    {
+      title: 'Total des caisses',
+      text: "Nombre total de caisses qui ont été enregistrées et retirées via l'application. Dans la vue ‘Entreprise’, toutes les unités et jours depuis la création de l'entreprise dans Coldtivate sont pris en compte. Dans les vues ‘Agrégée’ et ‘Comparaison’, les unités et la période peuvent être configurées en cliquant sur ‘Configurer’.",
+    },
+    {
+      title: 'Quantité totale (kg)',
+      text: "Kilogrammes totaux de produits qui ont été enregistrés et retirés via l'application. Les kilogrammes par caisse sont définis au moment de l'enregistrement. Dans la vue ‘Entreprise’, toutes les unités et jours depuis la création de l'entreprise dans Coldtivate sont pris en compte. Dans les vues ‘Agrégée’ et ‘Comparaison’, les unités et la période peuvent être configurées en cliquant sur ‘Configurer’.",
+    },
+    {
+      title: 'Total des opérations',
+      text: "Nombre total d'opérations d'enregistrement et de retrait qui ont été enregistrées via l'application. Chaque opération peut inclure l'enregistrement ou le retrait de plusieurs caisses de différents produits. Dans la vue ‘Entreprise’, toutes les unités et jours depuis la création de l'entreprise dans Coldtivate sont pris en compte. Dans les vues ‘Agrégée’ et ‘Comparaison’, les unités et la période peuvent être configurées en cliquant sur ‘Configurer’.",
+    },
+    {
+      title: 'Évolution des pertes alimentaires',
+      text: "L'évolution des pertes alimentaires est exprimée en pourcentage pour décrire la quantité moyenne de nourriture perdue/économisée par mois pour chaque utilisateur et type de culture. Pour estimer cette valeur, les données de perte de base (c'est-à-dire les données collectées auprès des utilisateurs de refroidissement lors de leur inscription sur l'application) sont comparées aux données de perte après récolte collectées régulièrement à mesure que l'utilisateur stocke des cultures dans l'unité de refroidissement. Les données de base sont collectées via le ‘Questionnaire sur les utilisateurs de refroidissement’, où les agriculteurs et commerçants répondent à des questions sur la quantité de nourriture produite, vendue et perdue par semaine sans stockage au froid pour chaque culture. À mesure que les agriculteurs et commerçants utilisent les unités de refroidissement, des enquêtes ‘Post-retrait’ sont menées chaque semaine pour chaque type de culture que l'utilisateur a stockée dans la pièce. Dans ce questionnaire, l'utilisateur est interrogé sur les quantités vendues et perdues après stockage au froid. Les données des enquêtes post-retrait sont agrégées mensuellement pour estimer le niveau de perte après récolte que chaque utilisateur et type de culture subit en utilisant le stockage au froid, et comparées aux données de base. Les données à travers les cultures et les utilisateurs de chaque unité de refroidissement sont moyennées sur les périodes et unités de refroidissement pour donner les pourcentages affichés sur le Tableau de bord d'impact. L'évolution des pertes alimentaires est la différence en pourcentage entre le pourcentage perdu dans les enquêtes ‘post-retrait’ (c'est-à-dire lors de l'utilisation du refroidissement) et le pourcentage perdu dans les données de base (c'est-à-dire avant stockage au froid).",
+    },
+    {
+      title: 'Évolution des revenus des utilisateurs de refroidissement',
+      text: "L'évolution des revenus pour les utilisateurs de refroidissement décrit le changement moyen en pourcentage des revenus des agriculteurs calculé en comparant les revenus générés par la vente de produits stockés dans la chambre froide et par la vente de produits avant que l'agriculteur ne commence à utiliser le stockage au froid (‘données de base’). Les données de base sont collectées via le ‘Questionnaire sur les utilisateurs de refroidissement’, où les agriculteurs et commerçants sont interrogés sur la quantité et le prix de vente des cultures vendues par semaine lors de leur inscription sur l'application, c'est-à-dire avant de commencer à utiliser le stockage au froid. À mesure que les agriculteurs et commerçants utilisent les unités de refroidissement, des enquêtes ‘Post-retrait’ sont menées chaque semaine pour chaque type de culture que l'utilisateur a stockée dans la pièce. Dans ce questionnaire, l'utilisateur est interrogé sur les quantités vendues et le prix de vente après stockage au froid. Les données des enquêtes post-retrait sont agrégées mensuellement pour estimer les revenus mensuels totaux expérimentés par chaque utilisateur et type de culture pendant l'utilisation du stockage au froid, et cette valeur est comparée aux données de base. Les données à travers les cultures et les utilisateurs de chaque unité de refroidissement sont moyennées sur les périodes et unités de refroidissement pour donner les valeurs affichées sur le Tableau de bord d'impact. L'évolution des revenus est la différence en pourcentage entre le revenu moyen estimé à partir des enquêtes ‘post-retrait’ (c'est-à-dire lors de l'utilisation du refroidissement) et le revenu moyen estimé à partir des données de base (c'est-à-dire avant stockage au froid).",
+    },
+    {
+      title:
+        "Nombre d'enquêtes utilisées pour calculer l'évolution des pertes alimentaires et des revenus",
+      text: "Les indicateurs sur l'évolution des pertes alimentaires et des revenus reposent sur les enquêtes que les utilisateurs de refroidissement sont invités à remplir lorsqu'ils sont actifs sur l'application. Pour avoir un aperçu de la quantité de données agrégées pour calculer ces pourcentages, nous comptons ici le nombre total d'enquêtes ‘Post-retrait’ remplies par les utilisateurs de refroidissement depuis la création de l'entreprise jusqu'au mois en cours, comparé au nombre maximal possible d'enquêtes pouvant être remplies pour l'entreprise au cours du mois actuel. Le nombre maximal d'enquêtes pouvant être remplies est estimé en utilisant le nombre total de cultures distinctes vérifiées pour chaque utilisateur de refroidissement depuis la création de l'entreprise.",
+    },
+    {
+      title: 'Évolution du CO2',
+      text: "Le Rapport quotidien des émissions de CO2 présenté sur le Tableau de bord d'impact est méticuleusement dérivé d'une combinaison d'analytique en temps réel du stockage en chambre froide et de modèles d'Évaluation du Cycle de Vie (ACV) robustes fournis par Eco-Invent. En intégrant les données d'enregistrement en temps réel de notre application, nous suivons systématiquement le volume de chaque type de produit stocké dans les chambres froides quotidiennement. Ces données pertinentes, couplées avec des paramètres auxiliaires provenant des bases de données ACV complètes d'Eco-Invent, sont utilisées pour recalculer avec précision les émissions quotidiennes de CO2 attribuables à chaque culture stockée. Les informations résultantes sont ensuite élégamment visualisées et mises à disposition pour exportation via le Tableau de bord d'impact, garantissant que nos utilisateurs disposent de données transparentes et exploitables sur l'impact environnemental à leur portée.",
+    },
+  ],
   [APP_LOCALES.PORTUGUESE]: [
     {
       title: 'Nome da empresa',
