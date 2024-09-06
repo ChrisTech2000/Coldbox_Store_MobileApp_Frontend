@@ -21,7 +21,7 @@ import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDetails'>) {
-  const { produce, coolingUnit } = route.params;
+  const { produce, coolingUnit, currency } = route.params;
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
   const toast = InAppNotifications.useToast();
@@ -69,6 +69,15 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
     return quality;
   }, [produce]);
 
+  const dailyPrice = useMemo(() => {
+    return (
+      produce.crates[0].pricing[0].dailyRate *
+      (produce.crates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
+        ? produce.cratesCombinedWeight
+        : produce.cratesAmount)
+    );
+  }, [produce]);
+
   const data = useMemo(
     () => [
       {
@@ -88,7 +97,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
       },
       {
         label: t('Dashboard.ProduceDetails.combinedWeight'),
-        value: produce.cratesCombinedWeight,
+        value: `${produce.cratesCombinedWeight}${t('Dashboard.ProduceDetails.kilogram')}`,
       },
       {
         label: t('Dashboard.ProduceDetails.remainingTime'),
@@ -105,15 +114,21 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
       produce.crates[0].pricing[0].pricingType === EPricingType.PERIODICITY
         ? {
             label: t('Dashboard.ProduceDetails.pricePerDay'),
-            value: produce.crates[0].pricing[0].dailyRate,
+            value: dailyPrice?.toLocaleString('en-US', {
+              style: 'currency',
+              currency: currency,
+            }),
           }
         : {},
       {
         label: t('Dashboard.ProduceDetails.plannedStorageCost'),
-        value: pricing,
+        value: pricing.toLocaleString('en-US', {
+          style: 'currency',
+          currency: currency,
+        }),
       },
     ],
-    [produce, pricing]
+    [produce, pricing, currency, dailyPrice]
   );
 
   const farmer = useMemo(() => {

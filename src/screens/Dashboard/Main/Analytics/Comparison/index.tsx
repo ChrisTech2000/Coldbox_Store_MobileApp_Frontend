@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -8,6 +8,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ImpactService from '#services/ImpactService';
@@ -25,6 +26,8 @@ import { UsersContent } from './components/UsersContent';
 import { useComparisonData } from './store';
 
 export const useSortingStore = createSortingStore();
+
+const screenHeight = Dimensions.get('screen').height;
 
 export function ComparisonSection() {
   const { t } = useTranslationUtils();
@@ -99,98 +102,100 @@ export function ComparisonSection() {
   }, [coolingUnitData]);
 
   return (
-    <ScrollView tw="mt-8 h-full" showsVerticalScrollIndicator={false}>
-      {!configData ? (
-        <Configuration openModal={() => setIsModalOpen(true)} />
-      ) : (
-        <View tw="space-y-4">
-          <View tw="w-full flex flex-row justify-between items-center mb-4">
-            <TouchableOpacity
-              tw="flex flex-row items-center space-x-2 justify-start"
-              onPress={onBackToMain}
-            >
-              <Icon source="arrow-left-circle-outline" size={15} />
-              <Text variant="TextMedium" tw="text-base">
-                {t(`Dashboard.Analytics.companyTab.goBackButton`)}
-              </Text>
-            </TouchableOpacity>
-            <View tw="flex flex-row space-x-1">
-              <SortingMenu
-                isModalVisible={isSortModalOpen}
-                setIsModalVisible={setIsSortModalOpen}
-                useSortingStore={useSortingStore}
-              />
-              <Button
-                mode="contained"
-                contentStyle="bg-gray-800 h-8"
-                icon="cog"
-                onPress={() => setIsModalOpen(true)}
-                labelStyle="h-5"
+    <ScrollView tw="mt-8 h-full w-full" showsVerticalScrollIndicator={false}>
+      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-12' : ''}>
+        {!configData ? (
+          <Configuration openModal={() => setIsModalOpen(true)} />
+        ) : (
+          <View tw="w-full space-y-4 justify-between">
+            <View tw="w-full flex flex-row justify-between items-center mb-4">
+              <TouchableOpacity
+                tw="flex flex-row items-center space-x-2 justify-start"
+                onPress={onBackToMain}
               >
-                {t('Dashboard.Analytics.tabsShared.configureButton')}
-              </Button>
-            </View>
-          </View>
-
-          <InnerTabs
-            activeTab={activeTab}
-            onTabSelection={(tab: Tab) => setActiveTab(tab)}
-            compactMode
-          />
-
-          {loadingImpactData || loadingCoolingUnitData ? (
-            <View tw="flex-1 items-center justify-center mt-2">
-              <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-            </View>
-          ) : (
-            <View tw="items-center">
-              <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
-                <Text variant="TextMedium" tw="text-base font-bold">
-                  {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
-                    {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
-                  </Text>
+                <Icon source="arrow-left-circle-outline" size={15} />
+                <Text variant="TextMedium" tw="text-base">
+                  {t(`Dashboard.Analytics.companyTab.goBackButton`)}
                 </Text>
-                <Text variant="TextMedium" tw="text-base font-bold">
-                  {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                    {configData.coolingUnits.map((unit) => unit.name).join(', ')}
-                  </Text>
-                </Text>
+              </TouchableOpacity>
+              <View tw="flex flex-row flex-wrap items-center space-x-1 space-y-1 w-[60%] justify-end">
+                <SortingMenu
+                  isModalVisible={isSortModalOpen}
+                  setIsModalVisible={setIsSortModalOpen}
+                  useSortingStore={useSortingStore}
+                />
+                <Button
+                  mode="contained"
+                  contentStyle="bg-gray-800 h-8"
+                  icon="cog"
+                  onPress={() => setIsModalOpen(true)}
+                  labelStyle="h-5"
+                >
+                  {t('Dashboard.Analytics.tabsShared.configureButton')}
+                </Button>
               </View>
-              {activeTab === 'users' && (
-                <UsersContent key="users-content-comparison-section" sorting={sorting} />
-              )}
-              {activeTab === 'crates' && (
-                <CratesContent key="crates-content-comparison-section" sorting={sorting} />
-              )}
-              {activeTab === 'impact' && (
-                <ImpactContent key="impact-content-comparison-section" sorting={sorting} />
-              )}
             </View>
-          )}
-        </View>
-      )}
 
-      {!activeTab && (
-        <CommonFooter
-          tabs={
             <InnerTabs
               activeTab={activeTab}
               onTabSelection={(tab: Tab) => setActiveTab(tab)}
-              disabled={!configData}
+              compactMode
             />
-          }
-        />
-      )}
 
-      <ConfigurationModal
-        isOpen={isModalOpen}
-        dismiss={() => setIsModalOpen(false)}
-        confirm={(config: ConfigData) => setConfigData(config)}
-        coolingUnits={coolingUnits}
-      />
+            {loadingImpactData || loadingCoolingUnitData ? (
+              <View tw="flex-1 items-center justify-center mt-2">
+                <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+              </View>
+            ) : (
+              <View tw="items-center">
+                <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
+                  <Text variant="TextMedium" tw="text-base font-bold">
+                    {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
+                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                      {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
+                      {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
+                    </Text>
+                  </Text>
+                  <Text variant="TextMedium" tw="text-base font-bold">
+                    {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
+                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                      {configData.coolingUnits.map((unit) => unit.name).join(', ')}
+                    </Text>
+                  </Text>
+                </View>
+                {activeTab === 'users' && (
+                  <UsersContent key="users-content-comparison-section" sorting={sorting} />
+                )}
+                {activeTab === 'crates' && (
+                  <CratesContent key="crates-content-comparison-section" sorting={sorting} />
+                )}
+                {activeTab === 'impact' && (
+                  <ImpactContent key="impact-content-comparison-section" sorting={sorting} />
+                )}
+              </View>
+            )}
+          </View>
+        )}
+
+        {!activeTab && (
+          <CommonFooter
+            tabs={
+              <InnerTabs
+                activeTab={activeTab}
+                onTabSelection={(tab: Tab) => setActiveTab(tab)}
+                disabled={!configData}
+              />
+            }
+          />
+        )}
+
+        <ConfigurationModal
+          isOpen={isModalOpen}
+          dismiss={() => setIsModalOpen(false)}
+          confirm={(config: ConfigData) => setConfigData(config)}
+          coolingUnits={coolingUnits}
+        />
+      </View>
     </ScrollView>
   );
 }

@@ -76,18 +76,12 @@ export const MarketSurveySchema = (t: Translator) =>
         message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.reasonsForSpoilage'),
       }),
     spoiledProduceAmount: z
-      .number({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
-      .positive({
-        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-      })
+      .string({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
       .min(1, {
         message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
       }),
     price: z
-      .number({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
-      .positive({
-        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-      })
+      .string({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
       .min(1, {
         message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
       }),

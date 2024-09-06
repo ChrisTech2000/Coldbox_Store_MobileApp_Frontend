@@ -1,17 +1,18 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { CartesianChart, Line, useChartPressState } from 'victory-native';
-import { useDerivedValue } from 'react-native-reanimated';
 import {
   Circle,
-  Text as SkiaText,
-  Line as SkiaLine,
   DashPathEffect,
+  Line as SkiaLine,
+  Text as SkiaText,
   vec,
 } from '@shopify/react-native-skia';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { useDerivedValue } from 'react-native-reanimated';
+import { CartesianChart, Line, useChartPressState } from 'victory-native';
 
 import useSkiaFont from '#ui/hooks/useSkiaFont';
 import { paperTheme } from '#ui/lib/theme';
+
 import { dateFmt } from '#i18n/utils';
 
 export type LineChartEntry = {
@@ -64,14 +65,14 @@ export default function LineChart(props: LineChartProps) {
       data={datums}
       xKey="timestamp"
       yKeys={['temperature']}
-      domainPadding={{ top: 30, left: 30, right: 30, bottom: 10 }}
+      domainPadding={{ top: 35, left: 30, right: 30, bottom: 10 }}
       axisOptions={{
         font,
         lineColor: paperTheme.colors.outlineVariant,
         labelColor: paperTheme.colors.tertiary,
         lineWidth: StyleSheet.hairlineWidth,
         labelOffset: 12,
-        formatXLabel: (timestamp) => (timestamp ? dateFmt(timestamp, 'MM-dd, hh:mm') : ''),
+        formatXLabel: (timestamp) => (timestamp ? dateFmt(timestamp, 'MM-dd') : ''),
         formatYLabel: (temperature) => temperature + ' °C',
       }}
       chartPressState={state}
