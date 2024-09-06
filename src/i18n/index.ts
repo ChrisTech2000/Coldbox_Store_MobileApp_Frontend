@@ -1,13 +1,17 @@
-import { I18nManager } from 'react-native';
 import i18n, { type InitOptions } from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { I18nManager } from 'react-native';
 import { getLocales } from 'react-native-localize';
 
 import type { RecursiveKeyOf } from '#types/miscellaneous';
-import englishTranslations, { type Translations } from './transl/en';
-import hindiTranslations from './transl/hi';
-import portugueseTranslations from './transl/pt';
 import { APP_LOCALES } from './constants';
+import englishTranslations, { type Translations } from './transl/en';
+import frenchTranslations from './transl/fr';
+import gujaratiTranslations from './transl/gu';
+import hindiTranslations from './transl/hi';
+import oriyaTranslations from './transl/or';
+import portugueseTranslations from './transl/pt';
+
 import { LanguageStorage } from './utils';
 
 export type TranslationPaths = RecursiveKeyOf<Translations>;
@@ -31,6 +35,15 @@ function _optionsFactory() {
       },
       [APP_LOCALES.PORTUGUESE]: {
         translation: portugueseTranslations,
+      },
+      [APP_LOCALES.FRENCH]: {
+        translation: frenchTranslations,
+      },
+      [APP_LOCALES.GUJARATI]: {
+        translation: gujaratiTranslations,
+      },
+      [APP_LOCALES.ORIYA]: {
+        translation: oriyaTranslations,
       },
     },
     lng: initialLanguage,

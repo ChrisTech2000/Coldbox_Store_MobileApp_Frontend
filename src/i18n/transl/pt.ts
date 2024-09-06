@@ -1007,6 +1007,7 @@ export default {
       },
     },
     Analytics: {
+      emptyState: 'Sem dados para exibir',
       company: 'Empresa',
       aggregated: 'Agregado',
       comparison: 'Comparação',
@@ -1050,6 +1051,8 @@ export default {
         revenueLevels: 'Níveis de receita',
         baselineSurveyLabel: '📊 Nº de inquéritos base preenchidos',
         postCheckoutSurveyLabel: '📊 Nº de inquéritos pós-checkout preenchidos',
+        allBaselineSurveysCompleted: 'Todos os inquéritos de referência concluídos 🤝',
+        allPostCheckoutSurveysCompleted: 'Todos os inquéritos pós-checkout concluídos 🤝',
       },
       companyTab: {
         usersTab: {
