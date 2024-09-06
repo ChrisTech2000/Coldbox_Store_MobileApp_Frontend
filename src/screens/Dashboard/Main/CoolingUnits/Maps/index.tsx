@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import GetLocation from 'react-native-get-location';
@@ -21,8 +21,10 @@ import PointAnnotationModal from './components/PointAnnotationModal';
 
 import { processLocationMarkers } from './utils';
 import { PIN_COLORS } from './constants';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
+const screenHeight = Dimensions.get('screen').height;
 
 function CoolingUnitsMaps() {
   const [isLoadingCoords, setLoadingCoords] = useState<boolean>(true);
@@ -94,8 +96,8 @@ function CoolingUnitsMaps() {
   if (typeof coordinates === 'undefined') return null;
 
   return (
-    <View tw="flex-1">
-      <Map.Root coordinates={coordinates} style={{ width: '100%', height: '88%' }}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Map.Root coordinates={coordinates} style={{ width: '100%', height: screenHeight * 0.55 }}>
         <Map.Markers
           markers={markers}
           onSelect={(markerIdx) => {
@@ -106,7 +108,7 @@ function CoolingUnitsMaps() {
 
       <PointAnnotationModal markers={markers} />
 
-      <View tw="space-y-3 p-3">
+      <View tw="space-y-3 p-3 mb-6">
         <View tw="flex-row items-center space-x-3">
           <Icon name="map-marker" size={20} color={PIN_COLORS.PUBLIC} />
           <Text>{t('Dashboard.CoolingUnitsMaps.publicMaker')}</Text>
@@ -116,7 +118,7 @@ function CoolingUnitsMaps() {
           <Text>{t('Dashboard.CoolingUnitsMaps.usedMarker')}</Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

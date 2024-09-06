@@ -154,7 +154,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
             <LocationNameModule />
             <StepModule />
             <StepFactory />
-            <View tw="w-full flex-row items-center justify-between mt-5">
+            <View tw="w-full flex-row items-center justify-between mt-5 mb-6">
               <Button
                 style={{ width }}
                 mode="contained"
@@ -180,7 +180,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       </FormManager>
       <Portal>
         <Modal visible={isModalVisible} onDismiss={toggleModalVisibility}>
-          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-48 max-h-48 p-8 self-center space-y-6">
+          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto p-8 self-center space-y-6">
             <Text variant="TitleSmall">{t('Dashboard.Management.Location.modal.message')}</Text>
             <View tw="flex-row self-end space-x-2">
               <Button mode="text" onPress={toggleModalVisibility}>
