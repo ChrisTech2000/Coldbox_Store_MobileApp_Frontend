@@ -237,6 +237,8 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
               crates={produce.crates}
               shelfLife={produce.minimumRemainingShelfLife ?? 0}
               closeFunc={modalRef.current?.close}
+              cropName={produce.cropName}
+              combinedWeight={produce.cratesCombinedWeight}
             />
           </SellingSettings.Modal>
         </SellingSettings.Root>

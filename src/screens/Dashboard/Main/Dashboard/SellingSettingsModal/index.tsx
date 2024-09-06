@@ -11,8 +11,10 @@ import type { Crate } from '#types/global';
 import { useTranslationUtils } from '#i18n/utils';
 
 import CrateSelectionStep from './CrateSelectionStep';
+import CrateSettingsStep from './CrateSettingsStep';
 
 const modalHeight = Dimensions.get('window').height;
+const width = (Dimensions.get('screen').width - 42) / 2;
 
 function _PlatformSpecificHeader(props: {
   movementCode: string;
@@ -122,20 +124,54 @@ export function ModalContent(props: {
   crates: Array<Crate>;
   shelfLife: number;
   closeFunc: ModalizeProps['onClose'];
+  cropName: string;
+  combinedWeight: number;
 }) {
   const { watch, setValue } = useFormContext<SellingSettingsFormValues>();
   const { t } = useTranslationUtils();
 
   switch (watch('_step')) {
     case 'settings':
-      return null;
+      return (
+        <CrateSettingsStep
+          cropName={props.cropName}
+          combinedWeight={props.combinedWeight}
+          amountOfCrates={props.crates.length}
+        >
+          <View tw="flex flex-row w-full mt-4 justify-evenly">
+            <Button
+              mode="outlined"
+              style={{ width }}
+              uppercase
+              onPress={(evt) => {
+                evt.stopPropagation();
+                setValue('_step', 'selection');
+              }}
+            >
+              {t('actions.back')}
+            </Button>
+            <Button
+              mode="contained"
+              style={{ width }}
+              uppercase
+              onPress={(evt) => {
+                evt.stopPropagation();
+                // TODO
+              }}
+            >
+              {t('actions.confirm')}
+            </Button>
+          </View>
+        </CrateSettingsStep>
+      );
     case 'selection':
     default:
       return (
         <CrateSelectionStep crates={props.crates} shelfLife={props.shelfLife}>
-          <View tw="flex flex-row space-x-2 w-full mt-4 justify-center">
+          <View tw="flex flex-row w-full mt-4 justify-evenly">
             <Button
               mode="outlined"
+              style={{ width }}
               uppercase
               onPress={(evt) => {
                 evt.stopPropagation();
@@ -146,6 +182,7 @@ export function ModalContent(props: {
             </Button>
             <Button
               mode="contained"
+              style={{ width }}
               uppercase
               onPress={(evt) => {
                 evt.stopPropagation();
