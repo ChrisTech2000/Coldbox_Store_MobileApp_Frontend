@@ -40,7 +40,7 @@ function CoolingUnitsRoomConditions() {
   const chartDatums = useMemo(() => processTemperatures(temperatures), [temperatures]);
 
   return (
-    <View tw="pt-5">
+    <View tw="pt-5 space-x-3">
       <GenericFilter>
         <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
           <GenericFilter.Companies />
@@ -82,7 +82,7 @@ function CoolingUnitsRoomConditions() {
           </View>
         )}
         {selectedCoolingUnit ? (
-          <View tw="bg-zinc-200 py-4 mt-8 items-center space-y-3">
+          <View tw="bg-zinc-200 py-4 mt-8 items-center space-y-3 mb-10">
             <View tw="flex-row items-center space-x-4">
               <Icon name="thermometer" size={30} color={paperTheme.colors.scrim} />
               <Text variant="TitleRegular">

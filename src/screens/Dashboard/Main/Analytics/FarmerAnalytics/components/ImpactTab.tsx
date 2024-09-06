@@ -185,62 +185,88 @@ export function ImpactTab() {
     <View tw="w-full mt-4">
       <View tw="bg-green-transparency rounded-lg py-3 px-2 w-full mb-2">
         <View tw="flex flex-row items-center justify-center w-full space-x-1">
-          <View tw="items-center w-1/2 space-y-2">
-            <Button
-              mode="contained"
-              tw="bg-gray-700"
-              onPress={() =>
-                rootNavigation.navigate('History', {
-                  screen: 'MarketSurveyStack',
-                  params: {
-                    screen: 'MarketSurveyBase',
-                    params: {
-                      farmer: farmer?.user.firstName ?? '',
-                      crops: surveys.idsNotFilled.map((crop) => {
-                        const fullCrop = crops.find((c) => c.id.toString() === crop);
+          <View tw="items-center justify-start w-1/2 space-y-2 h-full">
+            {surveys.baseLeft ? (
+              <React.Fragment>
+                <Button
+                  mode="contained"
+                  tw="bg-gray-700"
+                  onPress={() =>
+                    rootNavigation.navigate('History', {
+                      screen: 'MarketSurveyStack',
+                      params: {
+                        screen: 'MarketSurveyBase',
+                        params: {
+                          farmer: farmer?.user.firstName ?? '',
+                          crops: surveys.idsNotFilled.map((crop) => {
+                            const fullCrop = crops.find((c) => c.id.toString() === crop);
 
-                        return {
-                          id: fullCrop?.id as number,
-                          name: fullCrop?.name as string,
-                        };
-                      }),
-                      companyCurrency: company?.currency,
-                    },
-                  },
-                })
-              }
-            >
-              {t('Dashboard.Analytics.farmersAnalytics.baselineSurveyButton')}
-            </Button>
-            <Text tw="text-xl flex flex-row">
-              <Text tw="text-red-600 text-4xl">{surveys.baseFilled}</Text>/{surveys.basePossible}
-            </Text>
-            {surveys.baseLeft && (
-              <Text variant="TextMedium" tw="text-base">
-                {t('Dashboard.Analytics.farmersAnalytics.baseLineSurveyMessage', {
-                  amount: surveys.baseLeft,
-                })}
-              </Text>
+                            return {
+                              id: fullCrop?.id as number,
+                              name: fullCrop?.name as string,
+                            };
+                          }),
+                          companyCurrency: company?.currency,
+                        },
+                      },
+                    })
+                  }
+                >
+                  {t('Dashboard.Analytics.farmersAnalytics.baselineSurveyButton')}
+                </Button>
+                <Text tw="text-xl flex flex-row">
+                  <Text tw="text-red-600 text-4xl">{surveys.baseFilled}</Text>/
+                  {surveys.basePossible}
+                </Text>
+                <Text variant="TextMedium" tw="text-base text-center">
+                  {t('Dashboard.Analytics.farmersAnalytics.baseLineSurveyMessage', {
+                    amount: surveys.baseLeft,
+                  })}
+                </Text>
+              </React.Fragment>
+            ) : (
+              <View tw="bg-gray-700 rounded-md w-full h-40 items-center p-2 justify-center">
+                <Text tw="text-green-400 text-4xl">
+                  {surveys.baseFilled}/{surveys.basePossible}
+                </Text>
+                <Text variant="TextMedium" tw="text-base text-white text-center">
+                  {t('Dashboard.Analytics.farmersAnalytics.allBaselineSurveysCompleted')}
+                </Text>
+              </View>
             )}
           </View>
 
-          <View tw="items-center w-1/2 space-y-2">
-            <Button
-              mode="contained"
-              tw="bg-gray-700"
-              onPress={() => rootNavigation.navigate('History', { screen: 'RootHistoryTabStack' })}
-            >
-              {t('Dashboard.Analytics.farmersAnalytics.postCheckOutSurveyButton')}
-            </Button>
-            <Text tw="text-xl flex flex-row">
-              <Text tw="text-red-600 text-4xl">{surveys.postFilled}</Text>/{surveys.postPossible}
-            </Text>
-            {surveys.postLeft && (
-              <Text variant="TextMedium" tw="text-base">
-                {t('Dashboard.Analytics.farmersAnalytics.baseLineSurveyMessage', {
-                  amount: surveys.postLeft,
-                })}
-              </Text>
+          <View tw="items-center w-1/2 space-y-2 justify-start h-full">
+            {surveys.postLeft ? (
+              <React.Fragment>
+                <Button
+                  mode="contained"
+                  tw="bg-gray-700"
+                  onPress={() =>
+                    rootNavigation.navigate('History', { screen: 'RootHistoryTabStack' })
+                  }
+                >
+                  {t('Dashboard.Analytics.farmersAnalytics.postCheckOutSurveyButton')}
+                </Button>
+                <Text tw="text-xl flex flex-row">
+                  <Text tw="text-red-600 text-4xl">{surveys.postFilled}</Text>/
+                  {surveys.postPossible}
+                </Text>
+                <Text variant="TextMedium" tw="text-base text-center">
+                  {t('Dashboard.Analytics.farmersAnalytics.baseLineSurveyMessage', {
+                    amount: surveys.postLeft,
+                  })}
+                </Text>
+              </React.Fragment>
+            ) : (
+              <View tw="bg-gray-700 rounded-md w-full h-40 items-center p-2 justify-center">
+                <Text tw="text-green-400 text-4xl">
+                  {surveys.postFilled}/{surveys.postPossible}
+                </Text>
+                <Text variant="TextMedium" tw="text-base text-white text-center">
+                  {t('Dashboard.Analytics.farmersAnalytics.allPostCheckoutSurveysCompleted')}
+                </Text>
+              </View>
             )}
           </View>
         </View>
