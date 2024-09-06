@@ -1,18 +1,21 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { type GestureResponderEvent, View } from 'react-native';
 import { Button, RadioButton } from 'react-native-paper';
 
-import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
+import { Select } from '#ui/components/Select';
 
 import { APP_LOCALES, type TranslationLocales } from '#i18n/constants';
-import { useTranslationUtils, LanguageStorage } from '#i18n/utils';
+import { useTranslationUtils } from '#i18n/utils';
+import { mmkv } from '#stores/lib/storage';
 
 const LANGUAGE_OPTIONS = Object.values(APP_LOCALES) as Array<TranslationLocales>;
 
 export function SelectLanguage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [activeLanguage, setActiveLanguage] = useState<TranslationLocales>(LanguageStorage.read());
+  const [activeLanguage, setActiveLanguage] = useState<TranslationLocales>(
+    (mmkv.getString('i18n-locale') ?? APP_LOCALES.ENGLISH) as TranslationLocales
+  );
   const [selectedLanguage, setSelectedLanguage] = useState<TranslationLocales>(activeLanguage);
 
   const { mutate, t } = useTranslationUtils();
@@ -39,7 +42,7 @@ export function SelectLanguage() {
   return (
     <View tw="mt-8">
       <Select
-        label={t('languages.current')}
+        label={t(['languages.options', activeLanguage])}
         isModalOpen={isModalOpen}
         onClick={() => setIsModalOpen(!isModalOpen)}
         content={{
