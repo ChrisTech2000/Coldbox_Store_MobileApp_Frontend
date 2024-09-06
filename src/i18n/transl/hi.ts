@@ -1001,6 +1001,7 @@ export default {
       },
     },
     Analytics: {
+      emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',
       company: 'कंपनी',
       aggregated: 'एकत्रित',
       comparison: 'तुलना',
@@ -1044,6 +1045,8 @@ export default {
         revenueLevels: 'राजस्व के स्तर',
         baselineSurveyLabel: '📊 पूर्ण किए गए बेसलाइन सर्वेक्षण की संख्या',
         postCheckoutSurveyLabel: '📊 पूर्ण किए गए पोस्ट-चेकआउट सर्वेक्षण की संख्या',
+        allBaselineSurveysCompleted: 'सभी आधारभूत सर्वेक्षण पूरे हो गए 🤝',
+        allPostCheckoutSurveysCompleted: 'सभी पोस्ट-चेकआउट सर्वेक्षण पूरे हो गए 🤝',
       },
       companyTab: {
         usersTab: {
