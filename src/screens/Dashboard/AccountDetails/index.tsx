@@ -142,7 +142,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             <DeleteAccountAction />
 
             <Button
-              tw="w-full"
+              tw="w-full mb-6"
               mode="contained"
               onPress={submitHandler}
               icon={isSubmitting ? undefined : 'check-circle-outline'}

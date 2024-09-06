@@ -84,7 +84,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
     <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
       {(handler, isSubmitting) => (
         <KeyboardAwareScrollView
-          tw="h-full pt-5 mx-4"
+          tw="pt-5 mx-4"
           keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           showsVerticalScrollIndicator={false}
         >
@@ -92,7 +92,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
           <StepModule />
           <StepFactory />
           <Button
-            tw="w-full mt-6"
+            tw="w-full my-6"
             mode="contained"
             onPress={handler}
             icon={isSubmitting ? undefined : 'plus-circle'}

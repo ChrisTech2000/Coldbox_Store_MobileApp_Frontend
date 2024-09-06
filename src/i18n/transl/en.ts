@@ -1040,6 +1040,8 @@ const en = {
         revenueLevels: 'Revenue levels',
         baselineSurveyLabel: '📊 No. of baseline surveys completed',
         postCheckoutSurveyLabel: '📊 No. of post-checkout surveys completed',
+        allPostCheckoutSurveysCompleted: 'All post-checkout surveys completed 🤝',
+        allBaselineSurveysCompleted: 'All baseline surveys completed 🤝',
       },
       companyTab: {
         usersTab: {

@@ -51,7 +51,7 @@ export default function CoolingUnitsPlanner() {
   }, [coolingUnitCapacity]);
 
   return (
-    <View tw="pt-5">
+    <View tw="pt-5 space-y-3">
       <GenericFilter>
         <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
           <GenericFilter.Companies />
@@ -74,7 +74,7 @@ export default function CoolingUnitsPlanner() {
         }
       >
         <Text
-          tw={cn('self-start mt-5 mb-4', screenHeight > SMALL_SCREEN_THRESHOLD ? 'ml-4' : 'mx-2')}
+          tw={cn('self-start mb-4', screenHeight > SMALL_SCREEN_THRESHOLD ? 'ml-4' : 'mx-2')}
           variant="titleLarge"
           numberOfLines={2}
         >
