@@ -1,20 +1,23 @@
-import moize from 'moize';
-import ms from 'ms';
-import { useTranslation } from 'react-i18next';
-import { useCallback, useMemo } from 'react';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { TOptions } from 'i18next';
 import type { Locale } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
-import { parseISO } from 'date-fns/parseISO';
 import { enGB as englishLocale } from 'date-fns/locale/en-GB';
+import { fr as frenchLocale } from 'date-fns/locale/fr';
+import { gu as gujaratiLocale } from 'date-fns/locale/gu';
 import { hi as hindiLocale } from 'date-fns/locale/hi';
+import { pt as portugueseLocale } from 'date-fns/locale';
+import { parseISO } from 'date-fns/parseISO';
+import type { TOptions } from 'i18next';
+import moize from 'moize';
+import ms from 'ms';
+import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getTimeZone } from 'react-native-localize';
+import { z } from 'zod';
 
 import { mmkv } from '#stores/lib/storage';
-import type { TranslationPaths } from './index';
 import { APP_LOCALES, type TranslationLocales } from './constants';
+import type { TranslationPaths } from './index';
 
 ///
 // Storage Manager
@@ -76,6 +79,12 @@ function _derivedLocale(): Locale {
   switch (LanguageStorage.read()) {
     case 'hi':
       return hindiLocale;
+    case 'pt':
+      return portugueseLocale;
+    case 'gu':
+      return gujaratiLocale;
+    case 'fr':
+      return frenchLocale;
     default:
       return englishLocale;
   }
