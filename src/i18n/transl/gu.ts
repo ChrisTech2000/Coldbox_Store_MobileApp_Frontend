@@ -25,6 +25,7 @@ export default {
       ForgotPassword: 'પાસવર્ડ ભૂલી ગયા છો',
       PasswordReset: 'રીસેટ કરો',
       AppInfo: 'એપ્લિકેશન માહિતી',
+      Logout: 'લૉગ આઉટ',
     },
     management: {
       Root: 'વ્યવસ્થાપન',

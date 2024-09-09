@@ -1,27 +1,29 @@
+import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useMemo } from 'react';
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
+import { ScrollView } from '#ui/components/ScrollView';
+import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
-import { useManagementStore } from '#stores/management';
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
+import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import ColdtivateService from '#services/ColdtivateService';
-import { paperTheme } from '#ui/lib/theme';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import { useManagementStore } from '#stores/management';
 
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 import type { FarmerSurveySchemaType } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
-import SurveyFormManager from './components/SurveyFormManager';
-import OccupationField from './components/SurveyFormFields/OccupationField';
-import ExperienceField from './components/SurveyFormFields/ExperienceField';
-import CommoditiesField from './components/SurveyFormFields/CommoditiesField';
+
 import AddCommodity from './components/AddCommodity';
-import InAppNotifications from '#common/InAppNotifications';
+import CommoditiesField from './components/SurveyFormFields/CommoditiesField';
+import ExperienceField from './components/SurveyFormFields/ExperienceField';
+import OccupationField from './components/SurveyFormFields/OccupationField';
+import SurveyFormManager from './components/SurveyFormManager';
 
 const SWR_CACHE_KEY = 'getCoolingUsersSurveyAggregatedData';
 const width = (Dimensions.get('screen').width - 42) / 2;
@@ -132,7 +134,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
   }
 
   return (
-    <View tw="space-y-4 mx-4 pt-2 pb-8">
+    <ScrollView tw="space-y-4 mx-4 pt-2 pb-8">
       <SurveyFormManager
         initialValues={baseDatums}
         onSubmit={async (values): Promise<void> => {
@@ -171,7 +173,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
                 crops={data.crops}
               />
 
-              <View tw="w-full flex-row items-center justify-between">
+              <View tw="w-full flex-row items-center justify-between mb-4">
                 <Button
                   style={{ width }}
                   mode="contained"
@@ -205,7 +207,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
           </React.Fragment>
         )}
       </SurveyFormManager>
-    </View>
+    </ScrollView>
   );
 }
 

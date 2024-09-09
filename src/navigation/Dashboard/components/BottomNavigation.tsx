@@ -2,7 +2,7 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { BottomTabDescriptorMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import { CommonActions } from '@react-navigation/native';
 import React from 'react';
-import { Dimensions, type StyleProp, type ViewStyle } from 'react-native';
+import { Dimensions, View, type StyleProp, type ViewStyle } from 'react-native';
 import { BottomNavigation as MDBottomNavigation } from 'react-native-paper';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -13,6 +13,8 @@ import type { DashboardMainRoutes } from '../Main';
 function useStyles(descriptors: BottomTabDescriptorMap, routeKey: string) {
   return descriptors[routeKey].options.tabBarStyle as StyleProp<ViewStyle>;
 }
+
+const MAX_CHARACTERS_FIRST_LINE = 9;
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -67,11 +69,37 @@ export default function BottomNavigation(props: BottomTabBarProps) {
       renderLabel={({ route }) => {
         const label =
           descriptors[route.key].options.tabBarLabel || descriptors[route.key].options.title;
-        return (label as string)?.split(' ').map((label: string, id) => (
-          <Text key={`${label}-${id}`} tw="text-center" numberOfLines={2}>
-            {label}
-          </Text>
-        ));
+
+        if (typeof label !== 'string') return null;
+
+        const words = label.trim().split(' ');
+
+        let firstLine = '';
+        let secondLine = '';
+
+        for (let i = 0; i < words.length; i++) {
+          if (
+            firstLine.length + words[i].length + 1 <= MAX_CHARACTERS_FIRST_LINE ||
+            words.length === 1
+          ) {
+            firstLine += (firstLine.length ? ' ' : '') + words[i];
+          } else {
+            secondLine += (secondLine.length ? ' ' : '') + words[i];
+          }
+        }
+
+        return (
+          <View>
+            <Text numberOfLines={1} tw="text-center">
+              {firstLine}
+            </Text>
+            {secondLine ? (
+              <Text numberOfLines={1} tw="text-center">
+                {secondLine}
+              </Text>
+            ) : null}
+          </View>
+        );
       }}
     />
   );
