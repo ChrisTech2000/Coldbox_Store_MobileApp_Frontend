@@ -444,8 +444,8 @@ export default {
         Setup: {
           selectedCrop: 'Produto selecionado',
           changeCropButton: 'Clique aqui para mudar o produto',
-          individualCrateWeightButton: 'Clique aqui para editar o peso individual da palete',
-          individualCrateIdButton: 'Clique aqui para editar os IDs individuais das paletes',
+          individualCrateWeightButton: 'Clique aqui para editar o peso das paletes',
+          individualCrateIdButton: 'Clique aqui para editar os IDs das paletes',
           numberOfCratesLabel: 'Número de paletes',
           crateWeightLabel: 'Peso geral da palete',
           pricePerDayAndCrateLabel: 'Preço por dia / palete',

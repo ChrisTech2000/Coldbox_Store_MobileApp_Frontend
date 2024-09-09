@@ -446,7 +446,7 @@ export default {
         Setup: {
           selectedCrop: 'Culture sélectionnée',
           changeCropButton: 'Cliquez ici pour changer la culture',
-          individualCrateWeightButton: 'Cliquez ici pour modifier le poids individuel des caisses',
+          individualCrateWeightButton: 'Cliquez ici pour modifier le poids des caisses',
           individualCrateIdButton: 'Cliquez ici pour modifier les ID des caisses',
           numberOfCratesLabel: 'Nombre de caisses',
           crateWeightLabel: 'Poids général de la caisse',

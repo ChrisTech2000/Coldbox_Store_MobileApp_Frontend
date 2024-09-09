@@ -1,12 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 
 import Danger from '#assets/icons/danger.svg';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useManagementStore } from '#stores/management';
@@ -21,6 +23,8 @@ type FarmerSurveyProps = {
   farmerId: number;
   surveys: GetFarmerSurveysResponse | undefined;
 };
+
+const screenHeight = Dimensions.get('screen').height;
 
 export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurveyProps) {
   const { t } = useTranslationUtils();
@@ -65,7 +69,11 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurv
     <View tw="w-full flex flex-row items-center justify-between space-x-2 mt-1 mb-2">
       <View tw="flex flex-row flex-1 items-center space-x-2">
         <Danger tw="w-7 h-7" />
-        <Text variant="TextMedium" tw="text-base w-56" numberOfLines={2}>
+        <Text
+          variant="TextMedium"
+          tw={cn('text-base', screenHeight <= SMALL_SCREEN_THRESHOLD ? 'w-44' : 'w-56')}
+          numberOfLines={4}
+        >
           {t('Dashboard.CrateManagement.FarmerSurvey.warningMessage', { crop: cropName })}
         </Text>
       </View>
