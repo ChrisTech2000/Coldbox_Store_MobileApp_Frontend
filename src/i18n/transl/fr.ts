@@ -63,7 +63,7 @@ export default {
       CoolingUnits: 'Unités de refroidissement',
       Analytics: 'Analytique',
       CheckIn: 'Enregistrement',
-      CheckOut: 'Départ',
+      CheckOut: 'Retirer',
       Maps: 'Cartes',
     },
     dashboard: {
@@ -428,9 +428,9 @@ export default {
         noPlannedDaysMessage:
           'Des jours planifiés manquent pour certains articles. Impossible de calculer le coût estimé.',
         WithCode: {
-          modalTitle: "Créer un enregistrement à partir d'un départ existant",
+          modalTitle: "Créer un enregistrement à partir d'un retrait existant",
           modalDescription:
-            "Vous aurez besoin du code de départ pour commencer un nouvel enregistrement de cette manière. Si vous ne l'avez pas, envisagez de commencer un nouvel enregistrement. Si vous savez combien de temps vous prévoyez de stocker, envisagez d'ajouter le nombre de jours ici.",
+            "Vous aurez besoin du code de retrait pour commencer un nouvel enregistrement de cette manière. Si vous ne l'avez pas, envisagez de commencer un nouvel enregistrement. Si vous savez combien de temps vous prévoyez de stocker, envisagez d'ajouter le nombre de jours ici.",
           codeLabel: 'Ajouter le code',
           codeErrorMessage: 'Le code est requis',
         },
@@ -469,7 +469,7 @@ export default {
             weight: 'Définir le poids individuel des caisses',
             id: "Définir l'ID individuel des caisses",
             crateLabel: 'Caisse',
-            selectInitialId: "Veuillez définir l'ID de départ des caisses",
+            selectInitialId: "Veuillez définir l'ID de retrait des caisses",
             serialize: 'Sérialiser',
           },
         },
@@ -537,7 +537,7 @@ export default {
       days: 'Jours',
       noDTMessage:
         "Un modèle de durée de conservation n'est pas disponible pour cette marchandise particulière.",
-      checkOutButton: 'Départ',
+      checkOutButton: 'Retirer',
     },
     SearchFilter: {
       detailsMessage:

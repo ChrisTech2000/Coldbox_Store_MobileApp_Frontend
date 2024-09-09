@@ -92,8 +92,8 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
         </Text>
       </View>
       <Divider tw="bg-gray-400 my-2" />
-      <View tw="flex flex-row w-full justify-between items-center">
-        <Text variant="TextMedium" tw="text-lg">
+      <View tw="flex flex-row w-full justify-between items-center flex-wrap">
+        <Text variant="TextMedium" tw="text-lg" numberOfLines={2}>
           {t('Dashboard.CrateManagement.selectCoolingUnitLabel')}
         </Text>
         <SelectWithStore<CoolingUnit>
