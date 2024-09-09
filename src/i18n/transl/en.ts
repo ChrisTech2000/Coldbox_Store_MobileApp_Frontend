@@ -23,6 +23,7 @@ const en = {
       ForgotPassword: 'Forgot Password',
       PasswordReset: 'Reset',
       AppInfo: 'App info',
+      Logout: 'Log-out',
     },
     management: {
       Root: 'Management',
@@ -532,7 +533,7 @@ const en = {
     SearchFilter: {
       detailsMessage:
         'Search for a check-in using crop type, farmer name, days in storage, days left in storage, or check-in code',
-      idMessage: 'Search for a crate using the crate ID number used to identify a specific crate',
+      idMessage: 'Search for a crate using the ID number used to identify a specific crate',
       crateDetailsButton: 'Search for Crate Details',
       crateIdButton: 'Search for Crate ID',
       searchLabel: 'Search',

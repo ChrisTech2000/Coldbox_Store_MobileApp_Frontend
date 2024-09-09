@@ -25,6 +25,7 @@ export default {
       ForgotPassword: 'ପାସୱାର୍ଡ ଭୁଲି ଯାଇଛି',
       PasswordReset: 'ପୁନଃସେଟ୍',
       AppInfo: 'ଆପ୍ ସୂଚନା',
+      Logout: 'ଲଗ୍ ଆଉଟ୍',
     },
     management: {
       Root: 'ପରିଚାଳନା',

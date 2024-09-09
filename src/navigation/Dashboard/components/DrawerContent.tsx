@@ -13,7 +13,7 @@ import { Image } from '#ui/components/Image';
 
 import RBAC from '#common/RBAC';
 import type { TranslationPaths } from '#i18n/index';
-import type { Translator } from '#i18n/utils';
+import { useTranslationUtils, type Translator } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 
@@ -52,6 +52,7 @@ type Props = {
 
 export default function DrawerContent(props: Props) {
   const { routeNames, index } = props.state;
+  const { t } = useTranslationUtils();
   const focusedRoute = routeNames[index];
   const resetManagementStore = useManagementStore((store) => store.reset);
 
@@ -99,7 +100,7 @@ export default function DrawerContent(props: Props) {
         ))}
       </Drawer.Section>
 
-      <Drawer.Item label="Log-out" onPress={onLogout} icon="logout-variant" />
+      <Drawer.Item label={t('navigation.auth.Logout')} onPress={onLogout} icon="logout-variant" />
     </StyledDrawerContentScrollView>
   );
 }
