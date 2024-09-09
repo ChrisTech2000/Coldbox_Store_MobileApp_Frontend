@@ -171,7 +171,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
           <View tw="relative w-full h-3 bg-gray-300 rounded-lg">
             <View
               tw={cn(
-                'absolute top-0 left-0 w-full bg-green-100 rounded-l-lg h-3',
+                'absolute top-0 left-0 w-full bg-green-100 rounded-lg h-3',
                 produce.minimumRemainingShelfLife <= 7 &&
                   produce.minimumRemainingShelfLife > 2 &&
                   'bg-yellow-400',
@@ -180,24 +180,27 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
                   'bg-gray-300'
               )}
               style={{
-                width: `${100 - percentage}%`,
+                width: `${100 - percentage + (percentage > 1 ? 10 : 0)}%`,
                 opacity: 0.4,
               }}
             />
-            <View
-              tw={cn(
-                'absolute top-0 right-0 w-full bg-green-300 rounded-r-lg h-3',
-                produce.minimumRemainingShelfLife <= 7 &&
-                  produce.minimumRemainingShelfLife > 2 &&
-                  'bg-yellow-400',
-                produce.minimumRemainingShelfLife <= 2 && 'bg-red-500',
-                (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
-                  'bg-gray-300'
-              )}
-              style={{
-                width: `${percentage}%`,
-              }}
-            />
+            {percentage > 0 && (
+              <View
+                tw={cn(
+                  'absolute top-0 right-0 w-full bg-green-300 rounded-lg h-3',
+                  produce.minimumRemainingShelfLife <= 7 &&
+                    produce.minimumRemainingShelfLife > 2 &&
+                    'bg-yellow-400',
+                  produce.minimumRemainingShelfLife <= 2 && 'bg-red-500',
+                  (!produce.minimumRemainingShelfLife ||
+                    produce.minimumRemainingShelfLife === -1) &&
+                    'bg-gray-300'
+                )}
+                style={{
+                  width: `${percentage}%`,
+                }}
+              />
+            )}
           </View>
 
           <View tw="flex flex-row items-center justify-between">

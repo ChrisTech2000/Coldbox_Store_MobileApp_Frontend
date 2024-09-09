@@ -279,7 +279,7 @@ export function FarmersSurveyModal({
               2. {t('Dashboard.CrateManagement.FarmerSurvey.modal.quantityDistributionQuestion')}
             </Text>
             <View tw="flex flex-row space-between space-x-2 w-[90%] mb-2">
-              <View tw="w-1/3">
+              <View tw="w-1/3 justify-between">
                 <Text variant="TextMedium" tw="text-base">
                   {t('Dashboard.CrateManagement.FarmerSurvey.modal.selfConsumed', {
                     unit: measureUnit,
@@ -319,7 +319,7 @@ export function FarmersSurveyModal({
                 />
               </View>
               <Divider tw="h-full w-[0.25%] bg-gray-400" />
-              <View tw="w-1/3">
+              <View tw="w-1/3 justify-between">
                 <Text variant="TextMedium" tw="text-base">
                   {t('Dashboard.CrateManagement.FarmerSurvey.modal.lost', { unit: measureUnit })}
                 </Text>
