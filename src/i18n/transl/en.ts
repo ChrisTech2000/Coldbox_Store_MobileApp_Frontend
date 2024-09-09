@@ -584,6 +584,7 @@ const en = {
         },
       },
       Operators: {
+        // HERE
         banner:
           'After adding the user, they will receive an sms with an invitation link, where they can activate their account.',
         text: {

@@ -121,7 +121,9 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
       showsVerticalScrollIndicator={false}
     >
-      <Text tw="mb-4 text-5xl font-bold self-center text-center">{t('Auth.SignUp.welcome')}</Text>
+      <Text tw="mx-4 text-5xl font-bold self-center text-center py-4 mb-4" numberOfLines={2}>
+        {t('Auth.SignUp.welcome')}
+      </Text>
 
       {/** SIGNUP COMPANY */}
       <Text tw="mb-2 px-4 text-xl font-bold">{t('Auth.SignUp.SignUpCoolingUser.header')}</Text>
