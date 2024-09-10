@@ -10,15 +10,38 @@ import { Appbar } from 'react-native-paper';
 
 import AccountDetails from '#screens/Dashboard/AccountDetails';
 import CoolingUsersSurvey from '#screens/Dashboard/Management/EditCoolingUser/CoolingUsersSurvey';
+import PersonalDetails from '#screens/Dashboard/AccountDetails/PersonalDetails';
+import LocalizationPreferences from '#screens/Dashboard/AccountDetails/LocalizationPreferences';
+import ContactsSharing from '#screens/Dashboard/AccountDetails/ContactsSharing';
 
 import type { TranslationPaths } from '#i18n/index';
+import type { TranslationLocales } from '#i18n/constants';
+import type { EApiGender, ERoles } from '#types/global';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
 import type { EditCoolingUserStackRoutes } from './Management/EditCoolingUserStack';
 
+export type DetailsSectionParams = {
+  kind: ERoles;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  language: TranslationLocales;
+  gender: EApiGender;
+  email: string;
+  parentName: string;
+  country: string;
+  userCode: string;
+  userId: number;
+  farmerId: number;
+};
+
 export type AccountDetailsRoutes = {
   Root: undefined;
+  PersonalDetails: DetailsSectionParams;
+  LocalizationPreferences: DetailsSectionParams;
+  ContactsSharing: undefined;
   CoolingUsersSurvey: EditCoolingUserStackRoutes['CoolingUsersSurvey'];
 };
 
@@ -30,6 +53,9 @@ export type AccountDetailsRouteProps<Path extends AccountDetailsRoutePaths> =
 export const NAVIGATOR_HEADERS: Record<AccountDetailsRoutePaths, TranslationPaths> = {
   Root: 'navigation.dashboard.AccountDetails',
   CoolingUsersSurvey: 'navigation.history.BaseSurvey',
+  PersonalDetails: 'navigation.dashboard.PersonalDetails',
+  LocalizationPreferences: 'navigation.dashboard.LocalizationPreferences',
+  ContactsSharing: 'navigation.dashboard.ContactsSharing',
 };
 
 type ScreenOptions = (props: {
@@ -60,6 +86,9 @@ export default function AccountDetailsStack() {
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={AccountDetails} />
+      <Stack.Screen name="PersonalDetails" component={PersonalDetails} />
+      <Stack.Screen name="LocalizationPreferences" component={LocalizationPreferences} />
+      <Stack.Screen name="ContactsSharing" component={ContactsSharing} />
       <Stack.Screen name="CoolingUsersSurvey" component={CoolingUsersSurvey} />
     </Stack.Navigator>
   );

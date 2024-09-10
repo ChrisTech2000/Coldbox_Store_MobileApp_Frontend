@@ -67,6 +67,9 @@ export default {
     },
     dashboard: {
       AccountDetails: 'Detalhes da Conta',
+      PersonalDetails: 'Personal details', // TODO
+      LocalizationPreferences: 'Localization preferences', // TODO
+      ContactsSharing: 'Contacts sharing', // TODO
       KnowledgeHub: 'Centro de Conhecimento',
       QuitTutorial: 'Sair do Tutorial',
       FAQ: 'Perguntas Frequentes',

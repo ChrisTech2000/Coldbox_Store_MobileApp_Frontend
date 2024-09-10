@@ -1,34 +1,32 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
+import colors from 'tailwindcss/colors';
 
+import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { EApiGender, ERoles } from '#types/global';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
 import type { TranslationLocales } from '#i18n/constants';
 import RBAC from '#common/RBAC';
+import { cn } from '#ui/lib/cn';
 
-import FormManager, { type FormValues } from './components/FormManager';
-import NameFields from './modules/NameFields';
-import LanguageField from './modules/LanguageField';
-import ContactFields from './modules/ContactFields';
-import GenderField from './modules/GenderField';
-import LocationField from './modules/Location';
-import CountryField from './modules/CountryField';
-import DeleteAccountAction from './components/DeleteAccountAction';
+import type {
+  AccountDetailsRouteProps,
+  DetailsSectionParams,
+} from '#navigation/Dashboard/AccountDetails';
 
-import type { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
-import InAppNotifications from '#common/InAppNotifications';
+import { countriesDict } from '../Management/CompanyDetails/utils';
 
 function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
+  const { t } = useTranslationUtils();
+  const { guard } = RBAC.useRBAC();
+
   const user = useAuthStore(useShallow((store) => store.user));
   const [farmerParentName, farmerUserCode, farmerCountry, farmerId] = useDashboardStore(
     useShallow((store) => [
@@ -39,52 +37,9 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
     ])
   );
 
-  const setUser = useAuthStore((store) => store.setUser);
-  const patchFarmer = useDashboardStore((store) => store.patchFarmer);
-  const { t } = useTranslationUtils();
-  const { guard } = RBAC.useRBAC();
-  const toast = InAppNotifications.useToast();
+  const disabledLocationPreferences = !guard('VIEW', 'FarmerFields');
 
-  async function onSubmit(values: FormValues) {
-    if (!user) return; // safe guard
-    try {
-      const userDatum = await ColdtivateService.updateUser({
-        userId: user.id,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        phone: values.phone,
-        email: values.email,
-        gender: values.gender,
-        language: values.language,
-      });
-
-      setUser({ ...userDatum, role: user.role });
-
-      if (guard('STORE', 'FarmerDetails')) {
-        if (!farmerId) return; // safe guard
-        const farmerDatum = await ColdtivateService.updateFarmer({
-          farmerId,
-          country: values.country,
-          parentName: values.parentName,
-          updateUser: true,
-        });
-
-        patchFarmer({
-          farmerCountry: farmerDatum.country,
-          farmerParentName: farmerDatum.parentName,
-        });
-      }
-
-      toast.show(t('Dashboard.AccountDetails.toasts.success'), {
-        type: 'md_success',
-        style: { marginBottom: 50 },
-      });
-    } catch (exception) {
-      console.error(exception);
-    }
-  }
-
-  function buildInitialValues(): FormValues {
+  function buildDetailsSectionParams() {
     return {
       kind: user?.role ?? ERoles.COOLING_USER,
       firstName: user?.firstName ?? '',
@@ -95,69 +50,94 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       gender: user?.gender ?? EApiGender.OTHER,
       parentName: farmerParentName ?? '',
       userCode: farmerUserCode ?? '',
-      country: farmerCountry ?? '',
-      location: '', // @Note: this is not even implemented in the web app
-    };
+      country: farmerCountry ? countriesDict().getISOByName(farmerCountry) ?? '' : '',
+      userId: user!.id,
+      farmerId: farmerId!,
+    } satisfies DetailsSectionParams;
   }
 
   return (
-    <FormManager onSubmit={onSubmit} initialValues={buildInitialValues()}>
-      {({ submitHandler, isSubmitting }) => (
-        <KeyboardAwareScrollView
-          tw="h-full pt-5 mx-4"
-          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-          showsVerticalScrollIndicator={false}
-        >
-          <NameFields />
-          <LanguageField />
-          <ContactFields />
-          <GenderField />
-
+    <ScrollView tw="flex-1 p-4 space-y-6" showsVerticalScrollIndicator={false}>
+      <View tw="space-y-3">
+        <Text tw="text-base text-green-primary font-bold">Details</Text>
+        <View>
+          <View>
+            <List.Item
+              tw="p-0 py-2"
+              title={undefined}
+              left={() => <Text tw="text-base">{t('navigation.dashboard.PersonalDetails')}</Text>}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                if (!user || !farmerId) return; // safe guard
+                props.navigation.navigate('PersonalDetails', buildDetailsSectionParams());
+              }}
+            />
+            <Divider tw="bg-gray-400" />
+          </View>
+          <View>
+            <List.Item
+              tw="p-0 py-2"
+              title={undefined}
+              disabled={disabledLocationPreferences}
+              left={() => (
+                <Text tw={cn('text-base', disabledLocationPreferences && 'text-gray-400')}>
+                  {t('navigation.dashboard.LocalizationPreferences')}
+                </Text>
+              )}
+              right={(props) => (
+                <List.Icon
+                  {...props}
+                  icon="chevron-right"
+                  color={disabledLocationPreferences ? colors.gray[400] : colors.gray[800]}
+                />
+              )}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                if (!user || !farmerId) return; // safe guard
+                props.navigation.navigate('LocalizationPreferences', buildDetailsSectionParams());
+              }}
+            />
+            <Divider tw="bg-gray-400" />
+          </View>
           <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
-            <LocationField />
-            <CountryField />
-            <View tw="w-full bg-zinc-200 flex-row items-center justify-between p-3 rounded-md my-1.5">
-              <Text variant="TitleSmall">{t('Dashboard.AccountDetails.fields.userCode')}</Text>
-              <Text variant="TitleSmall">{farmerUserCode}</Text>
-            </View>
-          </RBAC.ProtectedResource>
-
-          <View tw="space-y-4 mt-4">
-            <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
-              <Button
-                tw="w-full mb-4"
-                mode="outlined"
+            <View>
+              <List.Item
+                tw="p-0 py-2"
+                title={undefined}
+                left={() => <Text tw="text-base">{t('navigation.history.BaseSurvey')}</Text>}
+                right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
                   evt.stopPropagation();
                   if (!farmerId) return; // safe guard
                   props.navigation.navigate('CoolingUsersSurvey', { farmerId });
                 }}
-                icon="newspaper"
-                uppercase
-              >
-                {t('navigation.history.BaseSurvey')}
-              </Button>
-            </RBAC.ProtectedResource>
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
+          </RBAC.ProtectedResource>
+        </View>
+      </View>
 
-            <DeleteAccountAction />
-
-            <Button
-              tw="w-full"
-              mode="contained"
-              onPress={submitHandler}
-              icon={isSubmitting ? undefined : 'check-circle-outline'}
-              uppercase
-            >
-              {isSubmitting ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                t('Dashboard.Management.CompanyDetails.actions.save')
-              )}
-            </Button>
+      <View tw="space-y-3">
+        <Text tw="text-base text-green-primary font-bold">Seller Settings</Text>
+        <View>
+          <View>
+            <List.Item
+              tw="p-0 py-2"
+              title={undefined}
+              left={() => <Text tw="text-base">{t('navigation.dashboard.ContactsSharing')}</Text>}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                props.navigation.navigate('ContactsSharing');
+              }}
+            />
+            <Divider tw="bg-gray-400" />
           </View>
-        </KeyboardAwareScrollView>
-      )}
-    </FormManager>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 

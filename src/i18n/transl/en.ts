@@ -65,6 +65,9 @@ const en = {
     },
     dashboard: {
       AccountDetails: 'Account details',
+      PersonalDetails: 'Personal details',
+      LocalizationPreferences: 'Localization preferences',
+      ContactsSharing: 'Contacts sharing',
       KnowledgeHub: 'Knowledge Hub',
       QuitTutorial: 'Quit Tutorial',
       FAQ: 'FAQ',

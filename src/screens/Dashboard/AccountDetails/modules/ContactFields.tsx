@@ -20,7 +20,7 @@ export default function ContactFields() {
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full bg-transparent mt-1"
+            tw="w-full bg-transparent mt-2"
             label={t('Auth.ForgotPassword.phoneInputLabel')}
             mode="flat"
             dense

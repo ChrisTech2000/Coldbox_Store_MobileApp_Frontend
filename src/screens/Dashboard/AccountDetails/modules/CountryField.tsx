@@ -38,7 +38,7 @@ export default function CountryField() {
   );
 
   return (
-    <View tw="mt-4">
+    <React.Fragment>
       <Controller<FormValues>
         name="country"
         control={control}
@@ -89,7 +89,7 @@ export default function CountryField() {
           </View>
         )}
       />
-      <Divider tw="w-full bg-gray-700 my-3" />
-    </View>
+      <Divider tw="w-full bg-gray-700 mt-3" />
+    </React.Fragment>
   );
 }
