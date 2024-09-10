@@ -75,7 +75,7 @@ export function SignUpFormSelectMd<T extends FieldValues>({
               </View>
             ),
             options: (
-              <ScrollView>
+              <ScrollView showsVerticalScrollIndicator={false}>
                 <RadioButton.Group
                   value={selectedValue}
                   onValueChange={(value) => setSelectedValue(value)}

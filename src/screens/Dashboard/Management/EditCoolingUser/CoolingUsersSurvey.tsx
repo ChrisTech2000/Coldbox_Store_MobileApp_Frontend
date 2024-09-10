@@ -134,7 +134,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
   }
 
   return (
-    <ScrollView tw="space-y-4 mx-4 pt-2 pb-8">
+    <ScrollView tw="space-y-4 mx-4 pt-2 pb-8" showsVerticalScrollIndicator={false}>
       <SurveyFormManager
         initialValues={baseDatums}
         onSubmit={async (values): Promise<void> => {

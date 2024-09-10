@@ -69,7 +69,7 @@ export function CratesContent() {
   }, [coolingUnitData]);
 
   return (
-    <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
+    <ScrollView tw="w-full mt-2" contentContainerStyle="items-center" showsVerticalScrollIndicator={false}>
       <Section
         title={`${t('Dashboard.Analytics.totalCratesLabel')}:`}
         checkedIn={crates.checkedIn}

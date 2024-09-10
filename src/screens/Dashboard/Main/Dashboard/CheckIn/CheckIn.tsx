@@ -220,7 +220,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       </View>
       <Divider tw="bg-gray-400 my-2" />
 
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {produces.length === 0 && (
           <Text variant="TextMedium" tw="text-lg mt-3">
             {t('Dashboard.CrateManagement.CheckIn.emptyState')}
