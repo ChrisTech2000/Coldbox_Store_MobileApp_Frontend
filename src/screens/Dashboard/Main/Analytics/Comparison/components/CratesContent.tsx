@@ -35,6 +35,7 @@ type TableProps = {
     value: string;
   }>;
   total: number;
+  empty: boolean;
 };
 
 type TableData = {
@@ -51,6 +52,7 @@ type ExtendedTableProps = {
     } & TableData
   >;
   total: number;
+  empty: boolean;
 };
 
 export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
@@ -72,6 +74,12 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
     },
     [expanded]
   );
+
+  const noDataAvailable = useMemo(() => {
+    // eslint-disable-next-line
+    // @ts-ignore
+    return Object.values(coolingUnitData ?? {}).every((value) => value === 0);
+  }, [coolingUnitData]);
 
   const totalCratesData = useMemo(() => {
     const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
@@ -210,6 +218,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.crates')}
             items={totalCratesData}
             total={configData?.coolingUnits.length ?? 0}
+            empty={noDataAvailable}
           />
         }
       />
@@ -223,6 +232,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.kg')}
             items={totalKgData}
             total={configData?.coolingUnits.length ?? 0}
+            empty={noDataAvailable}
           />
         }
       />
@@ -236,6 +246,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.operations')}
             items={operationsData}
             total={configData?.coolingUnits.length ?? 0}
+            empty={noDataAvailable}
           />
         }
       />
@@ -249,6 +260,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.crates')}
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution')}
             items={distributionCratesIn}
+            empty={noDataAvailable}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
@@ -264,6 +276,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution')}
             items={distributionCratesOut}
             total={configData?.coolingUnits.length ?? 0}
+            empty={noDataAvailable}
           />
         }
       />
@@ -278,6 +291,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution')}
             items={distributionKgIn}
             total={configData?.coolingUnits.length ?? 0}
+            empty={noDataAvailable}
           />
         }
       />
@@ -292,6 +306,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutKgDistribution')}
             items={distributionKgOut}
             total={configData?.coolingUnits.length ?? 0}
+            empty={noDataAvailable}
           />
         }
       />
@@ -306,6 +321,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.co2DistributionLabel')}
             items={distributionCo2Data}
             total={configData?.coolingUnits.length ?? 0}
+            empty={noDataAvailable}
           />
         }
       />
@@ -313,14 +329,14 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
   );
 }
 
-function Table({ items, header, total }: TableProps) {
+function Table({ items, header, total, empty }: TableProps) {
   const { t } = useTranslationUtils();
 
   return (
-    <DataTable tw="py-4 px-2">
+    <DataTable tw="py-4 px-2 w-full">
       <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
         <DataTable.Title>
-          <Text variant="TextMedium" tw="text-white text-base">
+          <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Title>
@@ -329,7 +345,7 @@ function Table({ items, header, total }: TableProps) {
             <Text variant="TextMedium" tw="text-white text-base">
               {header}
             </Text>
-            <View tw="flex flex-row w-full">
+            <View tw="flex flex-row">
               <Text variant="TextMedium" tw="text-white text-base">
                 {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn')} |{' '}
               </Text>
@@ -341,31 +357,45 @@ function Table({ items, header, total }: TableProps) {
         </DataTable.Title>
       </DataTable.Header>
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-        {items.map((item, index) => (
-          <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
-            <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
-            <DataTable.Cell>{item.value}</DataTable.Cell>
-          </DataTable.Row>
-        ))}
+        {empty ? (
+          <React.Fragment>
+            <DataTable.Row tw="bg-white">
+              <DataTable.Cell>{t('Dashboard.Analytics.emptyState')}</DataTable.Cell>
+            </DataTable.Row>
 
-        <DataTable.Row tw="bg-white rounded-b-lg">
-          <DataTable.Cell>
-            {total} {t('Dashboard.Analytics.comparisonTab.total')}
-          </DataTable.Cell>
-        </DataTable.Row>
+            <DataTable.Row tw="bg-white rounded-b-lg">
+              <DataTable.Cell>0 {t('Dashboard.Analytics.comparisonTab.total')}</DataTable.Cell>
+            </DataTable.Row>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {items.map((item, index) => (
+              <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
+                <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
+                <DataTable.Cell>{item.value}</DataTable.Cell>
+              </DataTable.Row>
+            ))}
+
+            <DataTable.Row tw="bg-white rounded-b-lg">
+              <DataTable.Cell>
+                {total} {t('Dashboard.Analytics.comparisonTab.total')}
+              </DataTable.Cell>
+            </DataTable.Row>
+          </React.Fragment>
+        )}
       </SkiaShadow>
     </DataTable>
   );
 }
 
-function ExtendedTable({ items, column1, column2, total }: ExtendedTableProps) {
+function ExtendedTable({ items, column1, column2, total, empty }: ExtendedTableProps) {
   const { t } = useTranslationUtils();
 
   return (
     <DataTable tw="py-4 px-2">
       <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
         <DataTable.Cell>
-          <Text variant="TextMedium" tw="text-white text-base">
+          <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
@@ -381,19 +411,33 @@ function ExtendedTable({ items, column1, column2, total }: ExtendedTableProps) {
         </DataTable.Cell>
       </DataTable.Header>
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-        {items.map((item, index) => (
-          <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
-            <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
-            <DataTable.Cell>{item.column1}</DataTable.Cell>
-            <DataTable.Cell>{item.column2}</DataTable.Cell>
-          </DataTable.Row>
-        ))}
+        {empty ? (
+          <React.Fragment>
+            <DataTable.Row tw="bg-white">
+              <DataTable.Cell>{t('Dashboard.Analytics.emptyState')}</DataTable.Cell>
+            </DataTable.Row>
 
-        <DataTable.Row tw="bg-white rounded-b-lg">
-          <DataTable.Cell>
-            {total} {t('Dashboard.Analytics.comparisonTab.total')}
-          </DataTable.Cell>
-        </DataTable.Row>
+            <DataTable.Row tw="bg-white rounded-b-lg">
+              <DataTable.Cell>0 {t('Dashboard.Analytics.comparisonTab.total')}</DataTable.Cell>
+            </DataTable.Row>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {items.map((item, index) => (
+              <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
+                <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
+                <DataTable.Cell>{item.column1}</DataTable.Cell>
+                <DataTable.Cell>{item.column2}</DataTable.Cell>
+              </DataTable.Row>
+            ))}
+
+            <DataTable.Row tw="bg-white rounded-b-lg">
+              <DataTable.Cell>
+                {total} {t('Dashboard.Analytics.comparisonTab.total')}
+              </DataTable.Cell>
+            </DataTable.Row>
+          </React.Fragment>
+        )}
       </SkiaShadow>
     </DataTable>
   );

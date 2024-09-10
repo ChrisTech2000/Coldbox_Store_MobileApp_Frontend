@@ -1,6 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState, type SetStateAction } from 'react';
-import { FlatList, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { create } from 'zustand';
 
@@ -8,9 +8,11 @@ import { Button } from '#ui/components/Button';
 import { CheckboxItem } from '#ui/components/Checkbox';
 import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
-
-import { useTranslationUtils } from '#i18n/utils';
 import { useControlledState } from '#ui/hooks/useControlledState';
+import { cn } from '#ui/lib/cn';
+
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { useTranslationUtils } from '#i18n/utils';
 
 type SelectStore<T> = {
   selectedItems: T[];
@@ -38,6 +40,8 @@ type SelectItemProps<T> = {
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
   itemName: (item: T) => string;
 };
+
+const screenHeight = Dimensions.get('screen').height;
 
 export default function MultipleSelectWithStore<T>({
   useSelectStore,
@@ -138,50 +142,70 @@ export default function MultipleSelectWithStore<T>({
               />
             ),
             footer: (
-              <View tw="flex flex-row items-center justify-end">
-                <Button
-                  mode="text"
-                  uppercase
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    setInternalSelection(rest.datums);
-                  }}
+              <View
+                tw={
+                  screenHeight > SMALL_SCREEN_THRESHOLD
+                    ? 'flex flex-row items-center justify-end'
+                    : 'items-center'
+                }
+              >
+                <View
+                  tw={cn(
+                    'flex flex-row items-center',
+                    screenHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2'
+                  )}
                 >
-                  {t('actions.all')}
-                </Button>
-                <Button
-                  mode="text"
-                  uppercase
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    setInternalSelection([]);
-                  }}
+                  <Button
+                    mode="text"
+                    uppercase
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      setInternalSelection(rest.datums);
+                    }}
+                  >
+                    {t('actions.all')}
+                  </Button>
+                  <Button
+                    mode="text"
+                    uppercase
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      setInternalSelection([]);
+                    }}
+                  >
+                    {t('actions.none')}
+                  </Button>
+                </View>
+                <View
+                  tw={cn(
+                    'flex flex-row items-center',
+                    screenHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2'
+                  )}
                 >
-                  {t('actions.none')}
-                </Button>
-                <Button
-                  mode="text"
-                  uppercase
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    setInternalSelection(store.selectedItems);
-                    setIsModalVisible(!isModalVisible);
-                  }}
-                >
-                  {t('actions.cancel')}
-                </Button>
-                <Button
-                  mode="text"
-                  uppercase
-                  disabled={rest.disableOnEmpty && !internalSelection.length}
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    store.onSelect(internalSelection);
-                    setIsModalVisible(!isModalVisible);
-                  }}
-                >
-                  {t('actions.ok')}
-                </Button>
+                  <Button
+                    mode="text"
+                    uppercase
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      setInternalSelection(store.selectedItems);
+                      setIsModalVisible(!isModalVisible);
+                    }}
+                  >
+                    {t('actions.cancel')}
+                  </Button>
+                  <Button
+                    mode="text"
+                    uppercase
+                    disabled={rest.disableOnEmpty && !internalSelection.length}
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      store.onSelect(internalSelection);
+                      setIsModalVisible(!isModalVisible);
+                    }}
+                  >
+                    {t('actions.ok')}
+                  </Button>
+                </View>
               </View>
             ),
           }}

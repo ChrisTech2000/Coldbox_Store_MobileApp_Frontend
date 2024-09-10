@@ -1,21 +1,21 @@
 import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
-import { Controller, useForm } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Button } from '#ui/components/Button';
 import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
-
-import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
-import SensorsService from '#services/SensorsService';
-import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
+import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
-import { cn } from '#ui/lib/cn';
+
 import InAppNotifications from '#common/InAppNotifications';
+import { useTranslationUtils } from '#i18n/utils';
+import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
+import SensorsService from '#services/SensorsService';
 
 type FormValues = {
   // contextual fields
@@ -109,7 +109,7 @@ export default function UbibotForm() {
         } satisfies SensorDatum;
 
         toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationSuccess'), {
-          type: 'md_danger',
+          type: 'md_success',
         });
 
         emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);

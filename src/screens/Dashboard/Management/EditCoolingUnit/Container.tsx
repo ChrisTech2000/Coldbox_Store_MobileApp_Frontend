@@ -166,9 +166,11 @@ export default function ScreenContainer(props: Props) {
       <FormManager onSubmit={onSubmit} initialValues={formValuesBuilder.current?.getFormValues()}>
         {({ submitHandler, isSubmitting }) => (
           <React.Fragment>
-            <View tw="flex-row items-center space-x-3 mb-3 mx-3.5">
+            <View tw="flex-row items-center space-x-3 mb-3 mx-3.5 w-[85%]">
               <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
-              <Text tw="text-lg">{t('Dashboard.Management.AddCoolingUnit.heading')}</Text>
+              <Text tw="text-lg" numberOfLines={1}>
+                {t('Dashboard.Management.AddCoolingUnit.heading')}
+              </Text>
             </View>
             <FormFields isEditMode sensorList={unit?.sensorList} />
             <View tw="w-full flex-row items-center justify-around mt-5 px-2">

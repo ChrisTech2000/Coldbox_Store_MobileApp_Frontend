@@ -36,9 +36,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
 
   const { t } = useTranslationUtils();
-  const { company } = useManagementStore();
+  const company = useManagementStore((store) => store.company);
 
-  const { refreshData } = useDashboardStore();
+  const refreshData = useDashboardStore((store) => store.refreshData);
   const {
     checkOutCode,
     produces,
@@ -216,7 +216,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       />
       <Divider tw="bg-gray-400 mt-2" />
 
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {produces.length === 0 ? (
           <Text tw="text-base mt-6 self-center text-gray-600">
             {t('Dashboard.CrateManagement.CheckIn.emptyState')}

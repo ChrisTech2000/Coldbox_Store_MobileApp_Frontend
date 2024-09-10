@@ -82,8 +82,10 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
             <GenderField />
             <ContactFields />
             <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
-              <View tw="w-full bg-zinc-200 flex-row items-center justify-between p-3 rounded-md mt-4">
-                <Text variant="TitleSmall">{t('Dashboard.AccountDetails.fields.userCode')}</Text>
+              <View tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md my-1.5">
+                <Text variant="TitleSmall" tw="flex-shrink" numberOfLines={2}>
+                  {t('Dashboard.AccountDetails.fields.userCode')}
+                </Text>
                 <Text variant="TitleSmall">{initialFormValues.userCode}</Text>
               </View>
             </RBAC.ProtectedResource>

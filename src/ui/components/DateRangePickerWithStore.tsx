@@ -6,8 +6,8 @@ import { create, StoreApi, UseBoundStore } from 'zustand';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
-import { Text } from './Text';
 import { cn } from '../lib/cn';
+import { Text } from './Text';
 
 export type DateRangeStoreType = {
   startDate: Date | null;
@@ -68,7 +68,7 @@ export const DateRangePickerWithStore = ({
   }, []);
 
   const onClearStartDateChange = useCallback(() => {
-    setIsEndDateCalendarOpen(false);
+    setIsStartDateCalendarOpen(false);
     setStartDate(null);
   }, []);
 
@@ -87,8 +87,8 @@ export const DateRangePickerWithStore = ({
   }, []);
 
   return (
-    <View tw="flex flex-row items-center space-x-4">
-      <View>
+    <View tw="flex flex-row flex-wrap items-center">
+      <View tw={variant === 'contained' ? 'mr-6' : ''}>
         {showSelectionTitle && (
           <Text variant="TextMedium" tw="text-base my-2">
             {t('components.datePicker.startDateSelection')}
@@ -97,7 +97,7 @@ export const DateRangePickerWithStore = ({
         <TouchableOpacity
           tw={cn(
             'flex flex-row items-center',
-            variant === 'contained' && 'bg-gray-200 rounded-md p-1'
+            variant === 'contained' && 'bg-gray-200 rounded-md p-1 w-28'
           )}
           onPress={() => setIsStartDateCalendarOpen(true)}
         >
@@ -132,7 +132,7 @@ export const DateRangePickerWithStore = ({
         <TouchableOpacity
           tw={cn(
             'flex flex-row items-center',
-            variant === 'contained' && 'bg-gray-200 rounded-md p-1'
+            variant === 'contained' && 'bg-gray-200 rounded-md p-1 w-28'
           )}
           onPress={() => setIsEndDateCalendarOpen(true)}
         >

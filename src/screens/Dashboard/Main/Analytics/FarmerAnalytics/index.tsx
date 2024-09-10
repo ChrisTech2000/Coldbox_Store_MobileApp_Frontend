@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 
@@ -43,10 +43,10 @@ export function FarmerAnalytics() {
     }
   );
 
-  const { data: coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
+  const { data: _coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
     'getCoolingUnits',
     ColdtivateService.getCoolingUnits,
-    { company: farmerResponse?.[0]?.companies[0] as number }, // TODO: are we supposed to get all?
+    { company: farmerResponse?.[0]?.companies[0] as number },
     {
       skip: !farmerResponse?.[0]?.companies[0],
       defaultData: [],
@@ -69,6 +69,10 @@ export function FarmerAnalytics() {
       setConfigData(null);
     }
   }, [activeTab]);
+
+  const coolingUnits = useMemo(() => {
+    return _coolingUnits?.filter((unit) => farmerResponse?.[0].coolingUnits.includes(unit.id));
+  }, [_coolingUnits, farmerResponse]);
 
   useEffect(() => {
     if (coolingUnits) {
@@ -182,7 +186,7 @@ export function FarmerAnalytics() {
                     {t(`Dashboard.Analytics.farmersAnalytics.avgStorageTime`)}
                   </Text>
                   <Text variant="TextBold" tw="text-lg text-white font-bold">
-                    {farmerImpact?.avgStorageDays ?? 0}{' '}
+                    {farmerImpact?.avgStorageDays?.[0] ?? 0}{' '}
                     {t(`Dashboard.Analytics.farmersAnalytics.days`)}
                   </Text>
                 </View>
@@ -192,7 +196,7 @@ export function FarmerAnalytics() {
                     {t(`Dashboard.Analytics.farmersAnalytics.coldStorageCost`)}
                   </Text>
                   <Text variant="TextBold" tw="text-lg text-white font-bold">
-                    {(farmerImpact?.totalStorageCost ?? 0).toFixed(2)}
+                    {(farmerImpact?.totalStorageCost?.['0'] ?? 0).toFixed(2)}
                   </Text>
                 </View>
               </View>

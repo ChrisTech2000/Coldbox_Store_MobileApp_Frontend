@@ -173,7 +173,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.stringTemplates.movementType.checkedIn')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {dateFmt(crate.date.toString(), 'dd-MM-yyyy')}
+                    {crate.date ? dateFmt(crate.date.toString(), 'dd-MM-yyyy') : ''}
                   </Text>
                 </View>
               </View>

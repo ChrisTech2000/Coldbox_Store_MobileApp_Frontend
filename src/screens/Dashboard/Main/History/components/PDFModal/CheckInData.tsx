@@ -209,15 +209,19 @@ export function CheckInData({
         </View>
       </View>
 
-      <ScrollView tw="max-h-[70%]">
+      <ScrollView tw="max-h-[70%]" showsVerticalScrollIndicator={false}>
         <DataTable>
-          <DataTable.Header tw="bg-gray-200">
-            <DataTable.Title>{t('Dashboard.History.pdfModal.checkIn.cropLabel')}</DataTable.Title>
-            <DataTable.Title numeric>
+          <DataTable.Header tw="bg-gray-200 space-x-1">
+            <DataTable.Title numberOfLines={2}>
+              {t('Dashboard.History.pdfModal.checkIn.cropLabel')}
+            </DataTable.Title>
+            <DataTable.Title numeric numberOfLines={2}>
               {t('Dashboard.History.pdfModal.checkIn.numberOfCratesLabel')}
             </DataTable.Title>
-            <DataTable.Title>{t('Dashboard.History.pdfModal.weightLabel')}</DataTable.Title>
-            <DataTable.Title>
+            <DataTable.Title numeric numberOfLines={2}>
+              {t('Dashboard.History.pdfModal.weightLabel')}
+            </DataTable.Title>
+            <DataTable.Title numeric numberOfLines={2}>
               {t('Dashboard.History.pdfModal.checkIn.priceLabel', { currency })}
             </DataTable.Title>
           </DataTable.Header>

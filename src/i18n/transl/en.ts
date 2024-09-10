@@ -23,6 +23,7 @@ const en = {
       ForgotPassword: 'Forgot Password',
       PasswordReset: 'Reset',
       AppInfo: 'App info',
+      Logout: 'Log-out',
     },
     management: {
       Root: 'Management',
@@ -128,8 +129,8 @@ const en = {
       clearButtonLabel: 'Clear',
       confirmButtonLabel: 'Confirm',
       placeholder: 'dd/mm/yyyy',
-      startDateSelection: 'Select start date',
-      endDateSelection: 'Select end date',
+      startDateSelection: 'Select start date:',
+      endDateSelection: 'Select end date:',
     },
   },
   Auth: {
@@ -535,7 +536,7 @@ const en = {
     SearchFilter: {
       detailsMessage:
         'Search for a check-in using crop type, farmer name, days in storage, days left in storage, or check-in code',
-      idMessage: 'Search for a crate using the crate ID number used to identify a specific crate',
+      idMessage: 'Search for a crate using the ID number used to identify a specific crate',
       crateDetailsButton: 'Search for Crate Details',
       crateIdButton: 'Search for Crate ID',
       searchLabel: 'Search',
@@ -552,6 +553,7 @@ const en = {
     },
     Management: {
       Location: {
+        emptyState: 'No locations added yet. Click on the + sign to add one.',
         text: {
           invited: 'Invited ({{amount}})',
           registered: 'Registered ({{amount}})',
@@ -586,6 +588,7 @@ const en = {
         },
       },
       Operators: {
+        // HERE
         banner:
           'After adding the user, they will receive an sms with an invitation link, where they can activate their account.',
         text: {
@@ -627,6 +630,7 @@ const en = {
         labels: {
           name: 'Name',
           uploadLogo: 'Upload Logo',
+          logo: 'Logo',
           country: 'Country',
           commodity: 'Commodity Shortlist',
           currency: 'Currency',
@@ -690,6 +694,9 @@ const en = {
           downloadFarmers: "Download farmer's dashboard data",
           completeLater: 'Complete later',
         },
+      },
+      CoolingUnit: {
+        emptyState: 'No cooling units added in this location. Click on the + sign to add one.',
       },
       AddCoolingUnit: {
         heading: 'Cooling unit properties',
@@ -995,6 +1002,7 @@ const en = {
       },
     },
     Analytics: {
+      emptyState: 'No data to display',
       company: 'Company',
       aggregated: 'Aggregated',
       comparison: 'Comparison',
@@ -1038,6 +1046,8 @@ const en = {
         revenueLevels: 'Revenue levels',
         baselineSurveyLabel: '📊 No. of baseline surveys completed',
         postCheckoutSurveyLabel: '📊 No. of post-checkout surveys completed',
+        allPostCheckoutSurveysCompleted: 'All post-checkout surveys completed 🤝',
+        allBaselineSurveysCompleted: 'All baseline surveys completed 🤝',
       },
       companyTab: {
         usersTab: {

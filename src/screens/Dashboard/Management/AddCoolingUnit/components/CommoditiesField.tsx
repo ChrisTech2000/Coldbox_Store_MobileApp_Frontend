@@ -1,21 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, View } from 'react-native';
-import { Controller } from 'react-hook-form';
-import { Checkbox, Divider, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import truncate from 'lodash/truncate';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Controller } from 'react-hook-form';
+import { Dimensions, View } from 'react-native';
+import { Checkbox, Divider, TextInput } from 'react-native-paper';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
-
+import { Select } from '#ui/components/Select';
 import { useToggle } from '#ui/hooks/useToggle';
-import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
-import FormManager, { type FormValues } from '../contexts/FormManager';
-import DataAggregator from '../contexts/DataAggregator';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { useTranslationUtils } from '#i18n/utils';
 
+import DataAggregator from '../contexts/DataAggregator';
+import FormManager, { type FormValues } from '../contexts/FormManager';
 import { CropPricingManager } from '../utils';
 
 const deviceWidth = Dimensions.get('screen').width;
@@ -110,49 +110,69 @@ export default function CommoditiesField() {
                     />
                   ),
                   footer: (
-                    <View tw="flex flex-row items-center justify-end">
-                      <Button
-                        mode="text"
-                        uppercase
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          setInternalSelection(datums.map(([id]) => id));
-                        }}
+                    <View
+                      tw={
+                        deviceHeight > SMALL_SCREEN_THRESHOLD
+                          ? 'flex flex-row items-center justify-end'
+                          : 'items-center'
+                      }
+                    >
+                      <View
+                        tw={cn(
+                          'flex flex-row items-center',
+                          deviceHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2'
+                        )}
                       >
-                        {t('actions.all')}
-                      </Button>
-                      <Button
-                        mode="text"
-                        uppercase
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          setInternalSelection([]);
-                        }}
+                        <Button
+                          mode="text"
+                          uppercase
+                          onPress={(evt) => {
+                            evt.stopPropagation();
+                            setInternalSelection(datums.map(([id]) => id));
+                          }}
+                        >
+                          {t('actions.all')}
+                        </Button>
+                        <Button
+                          mode="text"
+                          uppercase
+                          onPress={(evt) => {
+                            evt.stopPropagation();
+                            setInternalSelection([]);
+                          }}
+                        >
+                          {t('actions.none')}
+                        </Button>
+                      </View>
+                      <View
+                        tw={cn(
+                          'flex flex-row items-center',
+                          deviceHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2'
+                        )}
                       >
-                        {t('actions.none')}
-                      </Button>
-                      <Button
-                        mode="text"
-                        uppercase
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          setInternalSelection(selectedCrops);
-                          toggleVisibility();
-                        }}
-                      >
-                        {t('actions.cancel')}
-                      </Button>
-                      <Button
-                        mode="text"
-                        uppercase
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          onChange(internalSelection);
-                          toggleVisibility();
-                        }}
-                      >
-                        {t('actions.ok')}
-                      </Button>
+                        <Button
+                          mode="text"
+                          uppercase
+                          onPress={(evt) => {
+                            evt.stopPropagation();
+                            setInternalSelection(selectedCrops);
+                            toggleVisibility();
+                          }}
+                        >
+                          {t('actions.cancel')}
+                        </Button>
+                        <Button
+                          mode="text"
+                          uppercase
+                          onPress={(evt) => {
+                            evt.stopPropagation();
+                            onChange(internalSelection);
+                            toggleVisibility();
+                          }}
+                        >
+                          {t('actions.ok')}
+                        </Button>
+                      </View>
                     </View>
                   ),
                 }}

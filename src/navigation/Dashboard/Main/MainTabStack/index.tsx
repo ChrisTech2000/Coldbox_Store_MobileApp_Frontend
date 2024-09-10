@@ -31,6 +31,7 @@ export type MainTabStackRoutes = {
   ProduceDetails: {
     produce: DashboardProduce;
     coolingUnit: CoolingUnit | null;
+    currency: string;
   };
   CheckInStack: {
     screen: keyof CheckInStackRoutes;

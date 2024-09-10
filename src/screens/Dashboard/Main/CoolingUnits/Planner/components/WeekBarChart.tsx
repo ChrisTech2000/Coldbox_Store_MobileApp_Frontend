@@ -80,7 +80,7 @@ const _SVGColumn = memo(function Component(props: {
   return (
     <View
       tw={cn(
-        'items-center space-y-2.5 w-12 py-3 rounded-md',
+        'items-center space-y-2.5 w-12 py-3 rounded-md mb-6',
         props.isSelected ? 'bg-zinc-200' : 'bg-transparent'
       )}
     >

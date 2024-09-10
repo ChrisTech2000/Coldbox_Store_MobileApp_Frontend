@@ -3,11 +3,15 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import startCase from 'lodash/startCase';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Icon, RadioButton, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import MultipleSelectWithStore, {
+  createMultipleSelectStore,
+} from '#ui/components/MultipleSelectWithStore';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
@@ -25,16 +29,16 @@ import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryT
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
+import { useDashboardStore } from '#stores/dashboard';
+
 import {
   ESellingLocation,
   EUnitOfMeasurement,
   MAP_APP_UNIT_OF_MEASUREMENT_TO_API,
 } from '#types/global';
 
-import MultipleSelectWithStore, {
-  createMultipleSelectStore,
-} from '../../../../../ui/components/MultipleSelectWithStore';
 import { MarketSurveySchema, MarketSurveySchemaType } from './schema';
+import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 
 const useMeasurementStore = createSelectStore<EUnitOfMeasurement>();
 const useSpoilageReasonsStore = createMultipleSelectStore<string>();
@@ -45,8 +49,9 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
   const colors = useTailwindColors();
   const rootNavigation = useNavigation<NativeStackNavigationProp<HistoryTabStackRoutes>>();
   const { t, zodResolver } = useTranslationUtils();
-  const { selectedItem: measureUnit } = useMeasurementStore();
-  const { selectedItems: spoilageReasons } = useSpoilageReasonsStore();
+  const measureUnit = useMeasurementStore((store) => store.selectedItem);
+  const spoilageReasons = useSpoilageReasonsStore((store) => store.selectedItems);
+  const refreshData = useDashboardStore((store) => store.refreshData);
 
   const { checkoutId } = useMarketSurveyStore();
   const [isUnitModalVisible, setIsUnitModalVisible] = useState<boolean>(false);
@@ -79,9 +84,13 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
 
   const onChangeNumericKeyboard = useCallback(
     (newVal: string | number | undefined, onChange: (...event: unknown[]) => void) => {
-      const value = Number(newVal);
-      if (isNaN(value) || newVal === undefined) return;
-      onChange(value);
+      if (newVal === undefined) return;
+
+      const value = typeof newVal === 'string' ? newVal.trim() : String(newVal);
+
+      if (value === '' || /^-?\d*[.,]?\d*$/.test(value)) {
+        onChange(value);
+      }
     },
     []
   );
@@ -93,16 +102,17 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
         checkout: checkoutId as number,
         sellingPlace: values.location,
         ...(values.location === ESellingLocation.BOTH ? { market: null } : { localMarket: null }),
-        price: values.price,
+        price: Number(formatFloat(values.price)),
         reasonForLoss: values.reasonsForSpoilage,
         sellingUnit: MAP_APP_UNIT_OF_MEASUREMENT_TO_API[values.unitOfMeasurement],
         sellingDate: null,
         kgInUnit: values.unitaryWeight,
-        loss: values.spoiledProduceAmount,
+        loss: Number(formatFloat(values.spoiledProduceAmount)),
         currency: companyCurrency ?? '',
       });
 
       if (result) {
+        refreshData.forEach((fn) => fn());
         rootNavigation.navigate('RootHistoryTabStack');
       }
     },
@@ -126,7 +136,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
   }
 
   return (
-    <ScrollView tw="space-y-4 mx-4 my-2" showsVerticalScrollIndicator={false}>
+    <KeyboardAwareScrollView tw="space-y-4 mx-4 my-2" showsVerticalScrollIndicator={false}>
       <View tw="w-[70%] flex flex-row space-x-2 items-center mb-2">
         <FastImage
           resizeMode="contain"
@@ -180,7 +190,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="h-8 bg-transparent w-20"
-              keyboardType="number-pad"
+              keyboardType="decimal-pad"
               value={value?.toString()}
               onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
               onBlur={onBlur}
@@ -260,7 +270,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="h-8 bg-transparent w-20"
-              keyboardType="number-pad"
+              keyboardType="decimal-pad"
               value={value?.toString()}
               onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
               onBlur={onBlur}
@@ -319,7 +329,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
       >
         {t('actions.confirm')}
       </Button>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 

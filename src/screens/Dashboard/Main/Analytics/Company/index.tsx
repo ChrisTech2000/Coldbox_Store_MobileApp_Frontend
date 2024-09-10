@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Platform, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator, Icon } from 'react-native-paper';
@@ -9,6 +9,8 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -25,7 +27,6 @@ import { InnerTabs } from './components/InnerTabs';
 import { UsersContent } from './components/UsersContent';
 import { UtilizationContent } from './components/UtilizationContent';
 import { useCompanyData } from './store';
-import InAppNotifications from '#common/InAppNotifications';
 
 export type Tab = 'users' | 'utilization' | 'impact';
 
@@ -34,6 +35,8 @@ const TABS = {
   utilization: <UtilizationContent key="utilization-content-section" />,
   impact: <ImpactContent useStore={useCompanyData} key="impact-content-section" />,
 };
+
+const screenHeight = Dimensions.get('screen').height;
 
 export function CompanySection() {
   const { t } = useTranslationUtils();
@@ -119,54 +122,59 @@ export function CompanySection() {
 
   return (
     <ScrollView tw="mt-4 h-full" showsVerticalScrollIndicator={false}>
-      {activeTab && (
-        <TouchableOpacity
-          tw="flex flex-row w-full items-center space-x-2 justify-start"
-          onPress={() => setActiveTab(undefined)}
-        >
-          <Icon source="arrow-left-circle-outline" size={15} />
-          <Text variant="TextMedium" tw="text-base">
-            {t(`Dashboard.Analytics.companyTab.goBackButton`)}
-          </Text>
-        </TouchableOpacity>
-      )}
-
-      <View tw="items-center mt-2 space-y-2">
-        <InnerTabs
-          activeTab={activeTab}
-          onTabSelection={(tab: Tab) => setActiveTab(tab)}
-          compactMode
-        />
+      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-10' : ''}>
         {activeTab && (
-          <Button
-            mode="contained"
-            uppercase
-            onPress={onDownloadData}
-            icon="check-circle-outline"
-            contentStyle="flex flex-row-reverse"
-            tw="w-[50%] mt-2"
+          <TouchableOpacity
+            tw="flex flex-row w-full items-center space-x-2 justify-start"
+            onPress={() => setActiveTab(undefined)}
           >
-            {t('Dashboard.Analytics.downloadDataButton')}
-          </Button>
+            <Icon source="arrow-left-circle-outline" size={15} />
+            <Text variant="TextMedium" tw="text-base">
+              {t(`Dashboard.Analytics.companyTab.goBackButton`)}
+            </Text>
+          </TouchableOpacity>
         )}
-        {!activeTab ? (
-          <View tw="w-full">
-            {loadingCoolingUnits || loadingImpactCompany || loadingImpactData ? (
-              <View tw="flex-1 items-center justify-center mt-2">
-                <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-              </View>
-            ) : (
-              <GeneralContent />
-            )}
-            <CommonFooter
-              tabs={
-                <InnerTabs activeTab={activeTab} onTabSelection={(tab: Tab) => setActiveTab(tab)} />
-              }
-            />
-          </View>
-        ) : (
-          TABS[activeTab]
-        )}
+
+        <View tw="items-center mt-2 space-y-2">
+          <InnerTabs
+            activeTab={activeTab}
+            onTabSelection={(tab: Tab) => setActiveTab(tab)}
+            compactMode
+          />
+          {activeTab && (
+            <Button
+              mode="contained"
+              uppercase
+              onPress={onDownloadData}
+              icon="check-circle-outline"
+              contentStyle="flex flex-row-reverse"
+              tw="w-[50%] mt-2"
+            >
+              {t('Dashboard.Analytics.downloadDataButton')}
+            </Button>
+          )}
+          {!activeTab ? (
+            <View tw="w-full">
+              {loadingCoolingUnits || loadingImpactCompany || loadingImpactData ? (
+                <View tw="flex-1 items-center justify-center mt-2">
+                  <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+                </View>
+              ) : (
+                <GeneralContent />
+              )}
+              <CommonFooter
+                tabs={
+                  <InnerTabs
+                    activeTab={activeTab}
+                    onTabSelection={(tab: Tab) => setActiveTab(tab)}
+                  />
+                }
+              />
+            </View>
+          ) : (
+            TABS[activeTab]
+          )}
+        </View>
       </View>
     </ScrollView>
   );

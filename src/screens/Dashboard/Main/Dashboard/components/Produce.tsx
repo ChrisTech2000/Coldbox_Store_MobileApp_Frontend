@@ -30,14 +30,14 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
   }, []);
 
   return (
-    <View tw="flex flex-row w-[90%] mr-2 self-center h-24 mt-3">
+    <View tw="flex flex-row w-[90%] mr-2 self-center mt-3">
       <View
         tw={cn(
           'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
           produce.minimumRemainingShelfLife <= 7 &&
             produce.minimumRemainingShelfLife > 2 &&
             'bg-yellow-400 border-yellow-400',
-          produce.minimumRemainingShelfLife < 2 && 'bg-red-500 border-red-500',
+          produce.minimumRemainingShelfLife <= 2 && 'bg-red-500 border-red-500',
           (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
             'bg-gray-300 border-gray-300'
         )}
@@ -70,7 +70,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
                     produce.minimumRemainingShelfLife <= 7 &&
                       produce.minimumRemainingShelfLife > 2 &&
                       'text-yellow-400',
-                    produce.minimumRemainingShelfLife < 2 && 'text-red-500'
+                    produce.minimumRemainingShelfLife <= 2 && 'text-red-500'
                   )}
                 >
                   {generateDaysString(produce.minimumRemainingShelfLife)}

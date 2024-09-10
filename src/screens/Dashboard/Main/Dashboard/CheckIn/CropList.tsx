@@ -11,6 +11,7 @@ import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useCheckInStore } from '#stores/checkIn';
+
 import { Input } from '#ui/components/Input';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';

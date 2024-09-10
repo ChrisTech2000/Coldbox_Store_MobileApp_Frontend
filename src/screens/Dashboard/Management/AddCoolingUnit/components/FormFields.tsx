@@ -34,9 +34,11 @@ export default function FormFields(props: {
 }) {
   const { isEditMode, sensorList } = props;
 
-  const { control, formState } = FormManager.useFormManager();
+  const { control, watch, formState } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
 
+  const integratedSensor = watch('sensor');
+  const sensorData = watch('sensorData');
   const errors = formState.errors;
 
   return (
@@ -72,7 +74,9 @@ export default function FormFields(props: {
         render={({ field: { onChange, value } }) => (
           <React.Fragment>
             <View tw="flex-row items-center justify-between px-3 py-3.5">
-              <Text>{t('Dashboard.Management.AddCoolingUnit.fields.editableCheckins')}</Text>
+              <Text tw="max-w-[80%]" numberOfLines={2}>
+                {t('Dashboard.Management.AddCoolingUnit.fields.editableCheckins')}
+              </Text>
               <Switch value={value} onValueChange={onChange} />
             </View>
             <Divider tw="w-full bg-gray-700" />
@@ -80,8 +84,10 @@ export default function FormFields(props: {
         )}
       />
       <Sensors>
-        {typeof sensorList === 'undefined' || sensorList.length === 0 ? null : (
-          <TableModal datums={sensorList} />
+        {!sensorList?.length ||
+        (sensorData && sensorList[0].type !== sensorData?.type) ||
+        !integratedSensor ? null : (
+          <TableModal datums={sensorList ?? []} />
         )}
       </Sensors>
       <Controller

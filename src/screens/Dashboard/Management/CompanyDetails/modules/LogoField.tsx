@@ -20,12 +20,10 @@ export default function LogoField() {
 
   return (
     <React.Fragment>
-      <View tw="flex-row items-center justify-between px-4">
-        <View tw="flex-1 pr-2">
-          <Text tw="text-gray-600 text-base truncate">
-            {t('Dashboard.Management.CompanyDetails.labels.uploadLogo')}
-          </Text>
-        </View>
+      <View tw="flex-row items-center justify-between px-4 flex-wrap">
+        <Text tw="text-gray-600 text-base">
+          {t('Dashboard.Management.CompanyDetails.labels.logo')}
+        </Text>
         <View tw="flex-row items-center space-x-2">
           {!currentLogo.uri ? (
             <DefaultLogo width={56} height={56} />

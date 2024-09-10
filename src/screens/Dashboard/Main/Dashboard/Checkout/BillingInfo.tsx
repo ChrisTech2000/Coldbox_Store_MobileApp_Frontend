@@ -123,7 +123,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
   return (
     <View tw="flex-1 p-4">
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View tw="flex flex-row w-full justify-between items-center">
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.coolingUserLabel')}

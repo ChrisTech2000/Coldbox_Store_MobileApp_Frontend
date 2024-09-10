@@ -94,22 +94,22 @@ export function CrateSetupModal({
   return (
     <Portal>
       <Modal visible={isOpen} onDismiss={dismissModal}>
-        <View tw="bg-white rounded-3xl max-h-90 space-y-2 mx-8 items-center py-1">
+        <View tw="bg-white rounded-3xl max-h-[90%] w-[90%] self-center space-y-2 items-center py-1">
           <Text tw="text-lg font-bold mb-1 mt-2">{title}</Text>
           <Divider tw="w-full bg-gray-400 my-2" />
 
-          <ScrollView tw="w-full">
+          <ScrollView tw="w-full h-[60%]" showsVerticalScrollIndicator={false}>
             <FlashList
               data={modalCrates}
               extraData={crates}
               renderItem={({ index }) => (
                 <View
                   key={`crate-${mode}-${index}`}
-                  tw="w-full flex flex-row items-center px-2 my-1"
+                  tw="w-full flex flex-row items-center justify-between px-2 my-1"
                 >
                   <View tw="flex flex-row items-center space-x-1">
                     {weightMode && <Icon source="basket" size={15} />}
-                    <Text tw="mr-4 ml-1">
+                    <Text tw="mr-4 ml-1 w-14">
                       {t('Dashboard.CrateManagement.CheckIn.Setup.modals.crateLabel')} {index + 1}
                     </Text>
                   </View>
@@ -137,7 +137,7 @@ export function CrateSetupModal({
                       <View tw="flex flex-row items-center">
                         <Button
                           labelStyle="text-xl"
-                          tw="w-8 mx-2"
+                          tw="w-8 ml-4 mr-6"
                           onPress={() =>
                             onChangeNumericKeyboard(
                               !modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
@@ -153,7 +153,7 @@ export function CrateSetupModal({
                         </Button>
                         <Button
                           labelStyle="text-xl"
-                          tw="w-8 mx-2"
+                          tw="w-8 mr-6"
                           onPress={() =>
                             onChangeNumericKeyboard(
                               Number(

@@ -25,6 +25,7 @@ export default {
       ForgotPassword: 'पासवर्ड भूल गए',
       PasswordReset: 'रीसेट',
       AppInfo: 'सामान्यतःपूछे जाने वाले प्रश्न',
+      Logout: 'लॉग आउट',
     },
     management: {
       Root: 'प्रबंधन',
@@ -130,8 +131,8 @@ export default {
       clearButtonLabel: 'साफ़ करें',
       confirmButtonLabel: 'पुष्टि करें',
       placeholder: 'dd/mm/yyyy',
-      startDateSelection: 'प्रारंभ तिथि चुनें',
-      endDateSelection: 'समाप्ति तिथि चुनें',
+      startDateSelection: 'प्रारंभ तिथि चुनें:',
+      endDateSelection: 'समाप्ति तिथि चुनें:',
     },
   },
   Auth: {
@@ -555,6 +556,7 @@ export default {
     },
     Management: {
       Location: {
+        emptyState: 'अभी तक कोई स्थान नहीं जोड़ा गया है। एक जोड़ने के लिए + चिह्न पर क्लिक करें।',
         text: {
           invited: 'आमंत्रित ({{amount}})',
           registered: 'पंजीकृत ({{amount}})',
@@ -630,6 +632,7 @@ export default {
         labels: {
           name: 'नाम',
           uploadLogo: 'लोगो अपलोड करें',
+          logo: 'लोगो',
           country: 'देश',
           commodity: 'सामग्री',
           currency: 'मुद्रा',
@@ -695,6 +698,10 @@ export default {
           downloadFarmers: "Download farmer's dashboard data",
           completeLater: 'बाद में पूरा करें',
         },
+      },
+      CoolingUnit: {
+        emptyState:
+          'इस स्थान पर कोई शीतलन इकाई नहीं जोड़ी गई है। एक जोड़ने के लिए + चिह्न पर क्लिक करें।',
       },
       AddCoolingUnit: {
         heading: 'प्रशीतलन इकई के गुण',
@@ -999,6 +1006,7 @@ export default {
       },
     },
     Analytics: {
+      emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',
       company: 'कंपनी',
       aggregated: 'एकत्रित',
       comparison: 'तुलना',
@@ -1042,6 +1050,8 @@ export default {
         revenueLevels: 'राजस्व के स्तर',
         baselineSurveyLabel: '📊 पूर्ण किए गए बेसलाइन सर्वेक्षण की संख्या',
         postCheckoutSurveyLabel: '📊 पूर्ण किए गए पोस्ट-चेकआउट सर्वेक्षण की संख्या',
+        allBaselineSurveysCompleted: 'सभी आधारभूत सर्वेक्षण पूरे हो गए 🤝',
+        allPostCheckoutSurveysCompleted: 'सभी पोस्ट-चेकआउट सर्वेक्षण पूरे हो गए 🤝',
       },
       companyTab: {
         usersTab: {

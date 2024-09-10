@@ -27,7 +27,7 @@ export default function CountryField() {
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
 
-  const selectedCountry = countriesMeta.getNameByISO(watch('country'));
+  const selectedCountry = countriesMeta.getByValue(watch('country'))?.name;
   const datums = useMemo(
     () =>
       countriesMeta
@@ -53,7 +53,7 @@ export default function CountryField() {
               content={{
                 header: t('Dashboard.Management.CompanyDetails.headings.country'),
                 options: (
-                  <ScrollView>
+                  <ScrollView showsVerticalScrollIndicator={false}>
                     <TextInput
                       tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600"
                       label={t('actions.search')}

@@ -138,12 +138,13 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   }, []);
 
   return (
-    <KeyboardAwareScrollView tw="mt-[-24]">
-      <View tw="flex-1 items-center justify-center">
+    <KeyboardAwareScrollView tw="mt-[-24]" showsVerticalScrollIndicator={false}>
+      <View tw="flex-1 items-center">
         <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-4" />
         <Text tw="mb-2 text-xl font-bold">{t('Auth.SignIn.heading')}</Text>
-        <View tw="w-full flex flex-row justify-between mb-2 px-4">
-          <View tw="items-center">
+
+        <View tw="w-full flex-row mb-2 justify-between px-2 mt-1" id="this-one">
+          <View tw="items-center w-1/3">
             <Controller
               control={control}
               rules={{
@@ -162,13 +163,12 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
               )}
               name="activeProfile"
             />
-            <View tw="w-16 max-w-16">
-              <Text tw="mt-4 text-xs text-center">
-                {t('Auth.SignIn.accounts.registeredEmployee.label')}
-              </Text>
-            </View>
+            <Text tw="mt-4 text-xs text-center">
+              {t('Auth.SignIn.accounts.registeredEmployee.label')}
+            </Text>
           </View>
-          <View tw="items-center">
+
+          <View tw="items-center w-1/3">
             <Controller
               control={control}
               rules={{
@@ -187,9 +187,10 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
               )}
               name="activeProfile"
             />
-            <Text tw="mt-4 text-xs">{t('Auth.SignIn.accounts.operator.label')}</Text>
+            <Text tw="mt-4 text-xs text-center">{t('Auth.SignIn.accounts.operator.label')}</Text>
           </View>
-          <View tw="items-center">
+
+          <View tw="items-center w-1/3">
             <Controller
               control={control}
               rules={{
@@ -208,11 +209,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
               )}
               name="activeProfile"
             />
-            <View tw="w-16 max-w-16">
-              <Text tw="mt-4 text-xs text-center">
-                {t('Auth.SignIn.accounts.coolingUser.label')}
-              </Text>
-            </View>
+            <Text tw="mt-4 text-xs text-center">{t('Auth.SignIn.accounts.coolingUser.label')}</Text>
           </View>
         </View>
 
@@ -242,7 +239,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           </Text>
         )}
 
-        <Text tw="text-xs w-[95%] my-2 px-3">
+        <Text tw="text-xs w-[95%] mt-1 mb-2 px-3">
           {activeProfile === EAccountProfile.EMPLOYEE
             ? t('Auth.SignIn.form.user.description.registeredEmployee')
             : t('Auth.SignIn.form.user.description.default')}
@@ -294,6 +291,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           mode="text"
           rippleColor="white"
           labelStyle="text-xs"
+          tw="mb-8"
           onPress={(evt) => {
             evt.stopPropagation();
             navigation.navigate('PasswordRecoveryRequest');
