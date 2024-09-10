@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Icon } from 'react-native-paper';
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
 import { cn } from '../lib/cn';
@@ -33,8 +32,6 @@ type DateRangePickerWithStoreProps = {
   useDateRangeStore: UseBoundStore<StoreApi<DateRangeStoreType>>;
   variant?: 'text' | 'contained';
 };
-
-const screenHeight = Dimensions.get('screen').height;
 
 export const DateRangePickerWithStore = ({
   useDateRangeStore,
@@ -90,13 +87,8 @@ export const DateRangePickerWithStore = ({
   }, []);
 
   return (
-    <View
-      tw={cn(
-        'flex flex-row items-center',
-        (screenHeight > SMALL_SCREEN_THRESHOLD || variant === 'contained') && 'space-x-3'
-      )}
-    >
-      <View>
+    <View tw="flex flex-row flex-wrap items-center">
+      <View tw={variant === 'contained' ? 'mr-6' : ''}>
         {showSelectionTitle && (
           <Text variant="TextMedium" tw="text-base my-2">
             {t('components.datePicker.startDateSelection')}
@@ -105,7 +97,7 @@ export const DateRangePickerWithStore = ({
         <TouchableOpacity
           tw={cn(
             'flex flex-row items-center',
-            variant === 'contained' && 'bg-gray-200 rounded-md p-1'
+            variant === 'contained' && 'bg-gray-200 rounded-md p-1 w-28'
           )}
           onPress={() => setIsStartDateCalendarOpen(true)}
         >
@@ -140,7 +132,7 @@ export const DateRangePickerWithStore = ({
         <TouchableOpacity
           tw={cn(
             'flex flex-row items-center',
-            variant === 'contained' && 'bg-gray-200 rounded-md p-1'
+            variant === 'contained' && 'bg-gray-200 rounded-md p-1 w-28'
           )}
           onPress={() => setIsEndDateCalendarOpen(true)}
         >

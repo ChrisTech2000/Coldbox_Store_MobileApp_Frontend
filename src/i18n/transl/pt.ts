@@ -128,8 +128,8 @@ export default {
       clearButtonLabel: 'Limpar',
       confirmButtonLabel: 'Confirmar',
       placeholder: 'dd/mm/aaaa',
-      startDateSelection: 'Selecione data de início',
-      endDateSelection: 'Selecione data de fim',
+      startDateSelection: 'Selecione data de início:',
+      endDateSelection: 'Selecione data de fim:',
     },
   },
   Auth: {
@@ -814,7 +814,7 @@ export default {
         },
       },
       UsageAnalysis: {
-        dateSelectionLabel: 'Selecione dias:',
+        dateSelectionLabel: 'Selecione os dias:',
         empty:
           'Os check-ins e check-outs aparecerão no painel quando fizer pelo menos um check-in em qualquer sala.',
         downloadDataButton: 'Baixar dados',

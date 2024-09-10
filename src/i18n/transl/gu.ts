@@ -128,8 +128,8 @@ export default {
       clearButtonLabel: 'ક્લિયર',
       confirmButtonLabel: 'પષ્ટ કરો',
       placeholder: 'ડ્ડ/મ્મ/yyyy',
-      startDateSelection: 'આરંભ તારીખ પસંદ કરો',
-      endDateSelection: 'અંતિમ તારીખ પસંદ કરો',
+      startDateSelection: 'આરંભ તારીખ પસંદ કરો:',
+      endDateSelection: 'અંતિમ તારીખ પસંદ કરો:',
     },
   },
   Auth: {

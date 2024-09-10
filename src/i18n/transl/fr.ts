@@ -128,8 +128,8 @@ export default {
       clearButtonLabel: 'Effacer',
       confirmButtonLabel: 'Confirmer',
       placeholder: 'jj/mm/aaaa',
-      startDateSelection: 'Sélectionner la date de début',
-      endDateSelection: 'Sélectionner la date de fin',
+      startDateSelection: 'Sélectionner la date de début:',
+      endDateSelection: 'Sélectionner la date de fin:',
     },
   },
   Auth: {
@@ -819,7 +819,7 @@ export default {
         },
       },
       UsageAnalysis: {
-        dateSelectionLabel: 'Sélectionner les jours :',
+        dateSelectionLabel: 'Sélectionner les jours:',
         empty:
           'Les enregistrements et les sorties apparaîtront dans le tableau de bord après avoir effectué au moins un enregistrement dans une pièce.',
         downloadDataButton: 'Télécharger les données',
