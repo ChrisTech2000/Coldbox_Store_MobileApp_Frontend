@@ -627,6 +627,7 @@ const en = {
         labels: {
           name: 'Name',
           uploadLogo: 'Upload Logo',
+          logo: 'Logo',
           country: 'Country',
           commodity: 'Commodity Shortlist',
           currency: 'Currency',

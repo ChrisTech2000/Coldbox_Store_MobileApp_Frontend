@@ -636,6 +636,7 @@ export default {
         labels: {
           name: 'Nom',
           uploadLogo: 'Télécharger le logo',
+          logo: 'Logo',
           country: 'Pays',
           commodity: 'Liste des marchandises',
           currency: 'Devise',
@@ -710,7 +711,7 @@ export default {
         fields: {
           name: "ID de l'unité de refroidissement",
           location: 'Emplacement',
-          coolingUnitType: "Comment décririez-vous le mieux l'unité de refroidissement?",
+          coolingUnitType: "Comment décririez-vous l'unité?",
           metricUnit: 'Unité',
           price: 'Prix',
           capacityInMetricTons: 'Volume total vide',

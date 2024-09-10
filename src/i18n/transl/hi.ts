@@ -629,6 +629,7 @@ export default {
         labels: {
           name: 'नाम',
           uploadLogo: 'लोगो अपलोड करें',
+          logo: 'लोगो',
           country: 'देश',
           commodity: 'सामग्री',
           currency: 'मुद्रा',
