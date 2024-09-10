@@ -128,8 +128,8 @@ export default {
       clearButtonLabel: 'ସଫା କରନ୍ତୁ',
       confirmButtonLabel: 'ନିଶ୍ଚିତ କରନ୍ତୁ',
       placeholder: 'ଡ୍ଡ/ମ୍ମ/yyyy',
-      startDateSelection: 'ଆରମ୍ଭ ତାରିଖ ଚୟନ କରନ୍ତୁ',
-      endDateSelection: 'ଅନ୍ତିମ ତାରିଖ ଚୟନ କରନ୍ତୁ',
+      startDateSelection: 'ଆରମ୍ଭ ତାରିଖ ଚୟନ କରନ୍ତୁ:',
+      endDateSelection: 'ଅନ୍ତିମ ତାରିଖ ଚୟନ କରନ୍ତୁ:',
     },
   },
   Auth: {

@@ -149,34 +149,36 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         occupyFullWidth
       />
 
-      <View tw="flex flex-row justify-between items-center mb-4">
-        <Text variant="TextMedium" tw="text-base mx-2" numberOfLines={2}>
+      <View>
+        <MultipleSelectWithStore<PaymentOption>
+          datums={[
+            {
+              label: t('Dashboard.Management.RevenueAnalysis.paymentType.cash'),
+              value: EPaymentType.CASH,
+            },
+            {
+              label: t('Dashboard.Management.RevenueAnalysis.paymentType.creditCard'),
+              value: EPaymentType.CREDIT_CARD,
+            },
+          ]}
+          isModalVisible={isPaymentModalOpen}
+          setIsModalVisible={setIsPaymentModalOpen}
+          itemName={(item) => item.label}
+          useSelectStore={usePaymentType}
+          label={`${t('Dashboard.Management.RevenueAnalysis.paymentType.label')} ${paymentMethods.flatMap((p) => p.label).join(', ')}`}
+          modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+          divider
+          autoSelectAll
+          occupyFullWidth
+        />
+      </View>
+
+      <View tw="flex flex-row items-center flex-wrap ml-2">
+        <Text variant="TextMedium" tw="text-base mr-2">
           {t('Dashboard.Management.UsageAnalysis.dateSelectionLabel')}
         </Text>
         <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} separator />
       </View>
-
-      <MultipleSelectWithStore<PaymentOption>
-        datums={[
-          {
-            label: t('Dashboard.Management.RevenueAnalysis.paymentType.cash'),
-            value: EPaymentType.CASH,
-          },
-          {
-            label: t('Dashboard.Management.RevenueAnalysis.paymentType.creditCard'),
-            value: EPaymentType.CREDIT_CARD,
-          },
-        ]}
-        isModalVisible={isPaymentModalOpen}
-        setIsModalVisible={setIsPaymentModalOpen}
-        itemName={(item) => item.label}
-        useSelectStore={usePaymentType}
-        label={`${t('Dashboard.Management.RevenueAnalysis.paymentType.label')} ${paymentMethods.flatMap((p) => p.label).join(', ')}`}
-        modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-        divider
-        autoSelectAll
-        occupyFullWidth
-      />
 
       <View tw="flex flex-row items-center justify-between">
         <Input

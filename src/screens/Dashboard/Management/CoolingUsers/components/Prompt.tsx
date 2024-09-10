@@ -42,6 +42,7 @@ export default function Prompt(props: Props) {
             <List.Item
               title={t('Dashboard.Management.CoolingUsers.modals.addWithDetails')}
               tw="px-2"
+              titleNumberOfLines={2}
               onPress={() => {
                 toggleVisibility();
                 navigation.navigate('AddCoolingUser');
@@ -52,6 +53,7 @@ export default function Prompt(props: Props) {
             <List.Item
               title={t('Dashboard.Management.CoolingUsers.modals.addByCode')}
               tw="px-2"
+              titleNumberOfLines={2}
               onPress={() => {
                 toggleVisibility();
                 timeoutRef.current = setTimeout(

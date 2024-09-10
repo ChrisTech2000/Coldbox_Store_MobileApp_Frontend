@@ -165,8 +165,8 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
         occupyFullWidth
       />
 
-      <View tw="flex flex-row justify-between items-center">
-        <Text variant="TextMedium" tw="text-base ml-2">
+      <View tw="flex flex-row items-center flex-wrap ml-2">
+        <Text variant="TextMedium" tw="text-base mr-2">
           {t('Dashboard.Management.UsageAnalysis.dateSelectionLabel')}
         </Text>
         <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} separator />

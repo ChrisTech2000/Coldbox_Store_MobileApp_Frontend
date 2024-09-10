@@ -126,8 +126,8 @@ const en = {
       clearButtonLabel: 'Clear',
       confirmButtonLabel: 'Confirm',
       placeholder: 'dd/mm/yyyy',
-      startDateSelection: 'Select start date',
-      endDateSelection: 'Select end date',
+      startDateSelection: 'Select start date:',
+      endDateSelection: 'Select end date:',
     },
   },
   Auth: {

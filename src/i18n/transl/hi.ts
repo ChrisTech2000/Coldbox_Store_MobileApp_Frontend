@@ -128,8 +128,8 @@ export default {
       clearButtonLabel: 'साफ़ करें',
       confirmButtonLabel: 'पुष्टि करें',
       placeholder: 'dd/mm/yyyy',
-      startDateSelection: 'प्रारंभ तिथि चुनें',
-      endDateSelection: 'समाप्ति तिथि चुनें',
+      startDateSelection: 'प्रारंभ तिथि चुनें:',
+      endDateSelection: 'समाप्ति तिथि चुनें:',
     },
   },
   Auth: {

@@ -333,10 +333,10 @@ function Table({ items, header, total, empty }: TableProps) {
   const { t } = useTranslationUtils();
 
   return (
-    <DataTable tw="py-4 px-2">
+    <DataTable tw="py-4 px-2 w-full">
       <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
         <DataTable.Title>
-          <Text variant="TextMedium" tw="text-white text-base">
+          <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Title>
@@ -345,7 +345,7 @@ function Table({ items, header, total, empty }: TableProps) {
             <Text variant="TextMedium" tw="text-white text-base">
               {header}
             </Text>
-            <View tw="flex flex-row w-full">
+            <View tw="flex flex-row">
               <Text variant="TextMedium" tw="text-white text-base">
                 {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn')} |{' '}
               </Text>
@@ -395,7 +395,7 @@ function ExtendedTable({ items, column1, column2, total, empty }: ExtendedTableP
     <DataTable tw="py-4 px-2">
       <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
         <DataTable.Cell>
-          <Text variant="TextMedium" tw="text-white text-base">
+          <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
