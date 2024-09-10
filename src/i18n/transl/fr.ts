@@ -25,6 +25,7 @@ export default {
       ForgotPassword: 'Mot de passe oublié',
       PasswordReset: 'Réinitialiser',
       AppInfo: "Infos sur l'application",
+      Logout: 'Déconnexion',
     },
     management: {
       Root: 'Gestion',
@@ -62,7 +63,7 @@ export default {
       CoolingUnits: 'Unités de refroidissement',
       Analytics: 'Analytique',
       CheckIn: 'Enregistrement',
-      CheckOut: 'Départ',
+      CheckOut: 'Retirer',
       Maps: 'Cartes',
     },
     dashboard: {
@@ -105,7 +106,7 @@ export default {
     select: 'Sélectionner',
     close: 'Fermer',
     delete: 'Supprimer',
-    ok: 'D’accord',
+    ok: "D'accord",
     all: 'Tout',
     none: 'Aucun',
     next: 'Suivant',
@@ -127,16 +128,16 @@ export default {
       clearButtonLabel: 'Effacer',
       confirmButtonLabel: 'Confirmer',
       placeholder: 'jj/mm/aaaa',
-      startDateSelection: 'Sélectionner la date de début',
-      endDateSelection: 'Sélectionner la date de fin',
+      startDateSelection: 'Sélectionner la date de début:',
+      endDateSelection: 'Sélectionner la date de fin:',
     },
   },
   Auth: {
     Root: {
       welcome: 'Bienvenue sur Coldtivate',
       signIn: 'Se connecter',
-      signUpCompany: "S'inscrire en tant qu'entreprise",
-      signUpCoolingUser: "S'inscrire en tant qu'utilisateur de refroidissement",
+      signUpCompany: "S'inscrire comme entreprise",
+      signUpCoolingUser: "S'inscrire comme utilisateur de refroidissement",
       appInfo: "Informations sur l'application",
     },
     SignIn: {
@@ -207,28 +208,28 @@ export default {
         invalidPhoneError: 'Le numéro de téléphone est invalide',
         languageError: 'La langue est obligatoire.',
         genderError: 'La sélection du genre est obligatoire.',
-        termsError: 'Vous devez accepter les Conditions d’utilisation.',
-        companyError: 'Le nom de l’entreprise est obligatoire.',
+        termsError: "Vous devez accepter les Conditions d'utilisation.",
+        companyError: "Le nom de l'entreprise est obligatoire.",
         currencyError: 'La sélection de la devise est obligatoire.',
-        emailError: 'L’email est obligatoire.',
+        emailError: "L'email est obligatoire.",
         malformedEmailError: 'Email invalide.',
       },
       commonForm: {
         firstNameLabel: 'Prénom',
         lastNameLabel: 'Nom',
-        phoneLabel: 'Numéro de téléphone (avec l’indicatif du pays)',
+        phoneLabel: "Numéro de téléphone (avec l'indicatif du pays)",
         passwordLabel: 'Mot de passe',
         confirmPasswordLabel: 'Confirmer le mot de passe',
         countryFieldName: 'pays',
         genderFieldName: 'genre',
         terms:
-          'J’accepte l’Accord de licence utilisateur Coldtivate, la Politique de confidentialité et les Conditions d’utilisation COMSOL',
-        submit: 'S’inscrire',
+          "J'accepte l'Accord de licence utilisateur Coldtivate, la Politique de confidentialité et les Conditions d'utilisation COMSOL",
+        submit: "S'inscrire",
       },
       SignUpCompany: {
-        companyHeader: 'S’inscrire en tant qu’entreprise',
-        userHeader: 'S’inscrire en tant qu’employé enregistré',
-        companyNameLabel: 'Nom de l’entreprise',
+        companyHeader: "S'inscrire comme entreprise",
+        userHeader: "S'inscrire comme employé enregistré",
+        companyNameLabel: "Nom de l'entreprise",
         emailLabel: 'Email',
         currencyFieldName: 'devise',
         modal: {
@@ -245,7 +246,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: 'S’inscrire en tant qu’utilisateur de refroidissement',
+        header: "S'inscrire comme utilisateur de refroidissement",
         languageFieldName: 'langue',
       },
     },
@@ -334,16 +335,16 @@ export default {
     CrateManagement: {
       userModalTitle: 'Sélectionnez un utilisateur de refroidissement',
       addUserLink:
-        'Utilisateur de refroidissement non dans la liste ? Ajoutez l’utilisateur depuis Gestion ➜ Utilisateurs de refroidissement ➜ +',
+        "Utilisateur de refroidissement non dans la liste ? Ajoutez l'utilisateur depuis Gestion ➜ Utilisateurs de refroidissement ➜ +",
       coolingUserLabel: 'Utilisateur de refroidissement',
       selectCoolingUnitLabel: 'Sélectionnez une unité de refroidissement',
       coolingUnitLabel: 'Unité de refroidissement',
       noUnitWarning: 'Veuillez sélectionner une unité de refroidissement',
       noCratesWarning:
-        'L’utilisateur de refroidissement sélectionné n’a aucun crate dans cette unité de refroidissement',
+        "L'utilisateur de refroidissement sélectionné n'a aucun crate dans cette unité de refroidissement",
       operationError: 'Une erreur est survenue. Veuillez réessayer plus tard.',
       FarmerSurvey: {
-        warningMessage: 'Veuillez remplir l’enquête de base pour {{crop}} !',
+        warningMessage: "Veuillez remplir l'enquête de base pour {{crop}} !",
         modal: {
           weeklyQuantityQuestion:
             'Quelle est la quantité de {{crop}} que vous produisez ou commercialisez par semaine ?',
@@ -427,9 +428,9 @@ export default {
         noPlannedDaysMessage:
           'Des jours planifiés manquent pour certains articles. Impossible de calculer le coût estimé.',
         WithCode: {
-          modalTitle: 'Créer un enregistrement à partir d’un départ existant',
+          modalTitle: "Créer un enregistrement à partir d'un retrait existant",
           modalDescription:
-            'Vous aurez besoin du code de départ pour commencer un nouvel enregistrement de cette manière. Si vous ne l’avez pas, envisagez de commencer un nouvel enregistrement. Si vous savez combien de temps vous prévoyez de stocker, envisagez d’ajouter le nombre de jours ici.',
+            "Vous aurez besoin du code de retrait pour commencer un nouvel enregistrement de cette manière. Si vous ne l'avez pas, envisagez de commencer un nouvel enregistrement. Si vous savez combien de temps vous prévoyez de stocker, envisagez d'ajouter le nombre de jours ici.",
           codeLabel: 'Ajouter le code',
           codeErrorMessage: 'Le code est requis',
         },
@@ -445,7 +446,7 @@ export default {
         Setup: {
           selectedCrop: 'Culture sélectionnée',
           changeCropButton: 'Cliquez ici pour changer la culture',
-          individualCrateWeightButton: 'Cliquez ici pour modifier le poids individuel des caisses',
+          individualCrateWeightButton: 'Cliquez ici pour modifier le poids des caisses',
           individualCrateIdButton: 'Cliquez ici pour modifier les ID des caisses',
           numberOfCratesLabel: 'Nombre de caisses',
           crateWeightLabel: 'Poids général de la caisse',
@@ -456,7 +457,7 @@ export default {
           plannedDaysLabel: 'Nombre de jours prévus en stockage',
           harvestDateLabel: 'Quand la culture a-t-elle été récoltée ?',
           harvestDateValues: {
-            today: 'Aujourd’hui',
+            today: "Aujourd'hui",
             yesterday: 'Hier',
             dayBefore: 'Il y a deux jours',
             evenBefore: 'Même avant',
@@ -466,9 +467,9 @@ export default {
           harvestDateError: 'La date de récolte est requise',
           modals: {
             weight: 'Définir le poids individuel des caisses',
-            id: 'Définir l’ID individuel des caisses',
+            id: "Définir l'ID individuel des caisses",
             crateLabel: 'Caisse',
-            selectInitialId: 'Veuillez définir l’ID de départ des caisses',
+            selectInitialId: "Veuillez définir l'ID de retrait des caisses",
             serialize: 'Sérialiser',
           },
         },
@@ -479,9 +480,9 @@ export default {
         label: 'Unité de refroidissement : {{name}}',
         header: 'Sélectionnez une unité de refroidissement',
       },
-      occupancy: 'Occupation actuelle de l’unité de refroidissement',
+      occupancy: "Occupation actuelle de l'unité de refroidissement",
       week: 'Cette semaine',
-      today: 'Aujourd’hui',
+      today: "Aujourd'hui",
     },
     CoolingUnitsRoomConditions: {
       heading: 'Historique de la température',
@@ -500,7 +501,7 @@ export default {
       optimalTemp: 'Température optimale (°C)',
       messages: {
         empty:
-          'L’occupation des unités de refroidissement et la température apparaîtront ici lorsque vous effectuerez au moins un enregistrement dans une chambre.',
+          "L'occupation des unités de refroidissement et la température apparaîtront ici lorsque vous effectuerez au moins un enregistrement dans une chambre.",
       },
     },
     CoolingUnitsMaps: {
@@ -535,16 +536,15 @@ export default {
       pickUp: 'Retirer dans',
       days: 'Jours',
       noDTMessage:
-        'Un modèle de durée de conservation n’est pas disponible pour cette marchandise particulière.',
-      checkOutButton: 'Départ',
+        "Un modèle de durée de conservation n'est pas disponible pour cette marchandise particulière.",
+      checkOutButton: 'Retirer',
     },
     SearchFilter: {
       detailsMessage:
-        'Recherchez un enregistrement en utilisant le type de culture, le nom de l’agriculteur, les jours en stockage, les jours restants en stockage ou le code d’enregistrement',
-      idMessage:
-        'Recherchez une caisse en utilisant le numéro ID de la caisse pour identifier une caisse spécifique',
+        "Recherchez un enregistrement en utilisant le type de culture, le nom de l'agriculteur, les jours en stockage, les jours restants en stockage ou le code d'enregistrement",
+      idMessage: 'Recherchez une caisse en utilisant le ID pour identifier une caisse spécifique',
       crateDetailsButton: 'Rechercher les détails de la caisse',
-      crateIdButton: 'Rechercher l’ID de la caisse',
+      crateIdButton: "Rechercher l'ID de la caisse",
       searchLabel: 'Recherche',
     },
     SortMenu: {
@@ -554,12 +554,12 @@ export default {
         timeToPick: 'Temps de ramassage',
         checkInDate: 'Date de check-in (du premier au dernier)',
         checkInDateReverse: 'Date de check-in (du dernier au premier)',
-        coolingUser: 'Nom de l’utilisateur de refroidissement',
+        coolingUser: "Nom de l'utilisateur de refroidissement",
       },
     },
     Management: {
       Location: {
-        emptyState: 'Aucun lieu ajouté pour l’instant. Cliquez sur le signe + pour en ajouter un.',
+        emptyState: "Aucun lieu ajouté pour l'instant. Cliquez sur le signe + pour en ajouter un.",
         text: {
           invited: 'Invité ({{amount}})',
           registered: 'Enregistré ({{amount}})',
@@ -595,7 +595,7 @@ export default {
       },
       Operators: {
         banner:
-          'Après avoir ajouté l’utilisateur, il recevra un SMS avec un lien d’invitation, où il pourra activer son compte.',
+          "Après avoir ajouté l'utilisateur, il recevra un SMS avec un lien d'invitation, où il pourra activer son compte.",
         text: {
           gender: 'Genre',
           ma: 'Homme',
@@ -614,7 +614,7 @@ export default {
       AddOperator: {
         messages: {
           operator:
-            'Pour rejoindre l’application Coldtivate en tant qu’Opérateur, rendez-vous sur : {{link}}',
+            "Pour rejoindre l'application Coldtivate en tant qu'Opérateur, rendez-vous sur : {{link}}",
         },
         toasts: {
           error: 'Le téléphone est déjà attribué. Essayez un autre numéro',
@@ -636,6 +636,7 @@ export default {
         labels: {
           name: 'Nom',
           uploadLogo: 'Télécharger le logo',
+          logo: 'Logo',
           country: 'Pays',
           commodity: 'Liste des marchandises',
           currency: 'Devise',
@@ -669,26 +670,26 @@ export default {
       },
       CoolingUsers: {
         modals: {
-          selectMethod: 'Comment souhaitez-vous ajouter l’utilisateur ?',
+          selectMethod: "Comment souhaitez-vous ajouter l'utilisateur ?",
           userCode: 'Entrez un code utilisateur',
           userCodeDesc:
-            'Vous pouvez trouver le code dans les détails de votre compte si vous êtes enregistré en tant qu’utilisateur de refroidissement.',
+            "Vous pouvez trouver le code dans les détails de votre compte si vous êtes enregistré en tant qu'utilisateur de refroidissement.",
           addByCode: 'Ajouter un utilisateur par code',
           addWithDetails: 'Ajouter un utilisateur avec des détails',
         },
         toasts: {
-          notFound: 'Aucun utilisateur de refroidissement avec ce code utilisateur n’a été trouvé.',
-          taken: 'Cet utilisateur est déjà dans votre liste d’utilisateurs de refroidissement.',
+          notFound: "Aucun utilisateur de refroidissement avec ce code utilisateur n'a été trouvé.",
+          taken: "Cet utilisateur est déjà dans votre liste d'utilisateurs de refroidissement.",
         },
       },
       EditCoolingUsers: {
         toasts: {
           warning:
-            'Ce compte ne peut pas être supprimé car l’utilisateur a des check-ins actifs dans les unités de refroidissement {{names}}. Veuillez informer l’utilisateur de venir dans la pièce pour récupérer ces articles et compléter les check-outs avant de supprimer le compte !',
+            "Ce compte ne peut pas être supprimé car l'utilisateur a des check-ins actifs dans les unités de refroidissement {{names}}. Veuillez informer l'utilisateur de venir dans la pièce pour récupérer ces articles et compléter les check-outs avant de supprimer le compte !",
           confirmation:
-            'Êtes-vous sûr de vouloir supprimer cet utilisateur de votre liste d’utilisateurs de refroidissement ? Cette opération supprimera cet utilisateur de refroidissement et ne pourra pas être annulée !',
+            "Êtes-vous sûr de vouloir supprimer cet utilisateur de votre liste d'utilisateurs de refroidissement ? Cette opération supprimera cet utilisateur de refroidissement et ne pourra pas être annulée !",
           edit: 'Utilisateur de refroidissement modifié avec succès',
-          noCoolingUnits: 'Vous n’avez pas encore d’unités de refroidissement',
+          noCoolingUnits: "Vous n'avez pas encore d'unités de refroidissement",
           updateSuccess: 'Mise à jour réussie',
         },
         pdf: {
@@ -710,7 +711,7 @@ export default {
         fields: {
           name: "ID de l'unité de refroidissement",
           location: 'Emplacement',
-          coolingUnitType: "Comment décririez-vous le mieux l'unité de refroidissement?",
+          coolingUnitType: "Comment décririez-vous l'unité?",
           metricUnit: 'Unité',
           price: 'Prix',
           capacityInMetricTons: 'Volume total vide',
@@ -819,7 +820,7 @@ export default {
         },
       },
       UsageAnalysis: {
-        dateSelectionLabel: 'Sélectionner les jours :',
+        dateSelectionLabel: 'Sélectionner les jours:',
         empty:
           'Les enregistrements et les sorties apparaîtront dans le tableau de bord après avoir effectué au moins un enregistrement dans une pièce.',
         downloadDataButton: 'Télécharger les données',
@@ -850,17 +851,17 @@ export default {
       popups: {
         default: 'Êtes-vous sûr de vouloir supprimer votre compte ?',
         lastRegisteredEmployee:
-          'Vous êtes le seul Employé enregistré de l’entreprise, cette action supprimera l’entreprise !',
+          "Vous êtes le seul Employé enregistré de l'entreprise, cette action supprimera l'entreprise !",
         activeCheckInOP:
           "Les unités de refroidissement {{names}} auxquelles vous êtes affecté ont des check-ins actifs et vous êtes le dernier opérateur dans celle-ci. Vous devez vérifier tous les produits ou demander à un Employé enregistré d'assigner un autre opérateur à cette unité de refroidissement avant de pouvoir supprimer votre compte !",
         activeCheckInRE:
           "Vous ne pouvez pas supprimer votre compte si vous êtes le dernier Employé enregistré et qu'il y a des check-ins actifs sur certaines unités de refroidissement, car cette action supprimerait votre entreprise. Veuillez vous assurer que tous les check-ins actifs dans les unités de refroidissement {{names}} sont effectués avant de tenter de supprimer votre compte.",
         activeCheckInCU:
-          'Vous ne pouvez pas supprimer votre compte car vous avez des check-ins actifs dans les unités de refroidissement {{names}}. Veuillez vérifier ces articles avant d’essayer à nouveau de supprimer votre compte !',
+          "Vous ne pouvez pas supprimer votre compte car vous avez des check-ins actifs dans les unités de refroidissement {{names}}. Veuillez vérifier ces articles avant d'essayer à nouveau de supprimer votre compte !",
       },
       fields: {
         location: 'Emplacement',
-        userCode: 'Code d’importation de l’utilisateur de refroidissement',
+        userCode: "Code d'importation de l'utilisateur de refroidissement",
       },
       toasts: {
         success: 'Mise à jour réussie',
@@ -874,25 +875,25 @@ export default {
     },
     KnowledgeHub: {
       comic: 'Voyage du fermier : Bande dessinée',
-      cooling: 'Qu’est-ce que le Cooling-as-a-Service ?',
+      cooling: "Qu'est-ce que le Cooling-as-a-Service ?",
       quality: 'Comment maximiser la qualité des cultures',
       optimal: 'Conditions de stockage optimales dans des chambres froides multi-produits',
       table: 'Tableau de stockage des cultures',
       sensors: 'Capteurs de température et modèle Time-to-Pick-Up',
-      tips: 'Conseils pour l’enregistrement des caisses',
+      tips: "Conseils pour l'enregistrement des caisses",
       glitches: 'Comment réagir aux problèmes techniques dans la chambre froide',
-      source: 'Source : veuillez consulter le Manuel des Opérateurs pour plus d’informations :',
+      source: "Source : veuillez consulter le Manuel des Opérateurs pour plus d'informations :",
       clickHere: 'Cliquez ici',
     },
     History: {
       priceLabel: 'Prix',
       empty:
-        'Les enregistrements d’entrée et de sortie apparaîtront sur le tableau de bord lorsque vous aurez effectué au moins un enregistrement d’entrée dans une chambre.',
+        "Les enregistrements d'entrée et de sortie apparaîtront sur le tableau de bord lorsque vous aurez effectué au moins un enregistrement d'entrée dans une chambre.",
       sortMenuOptions: {
         cropType: 'Type de culture',
         movementDate: 'Date de mouvement (du plus ancien au plus récent)',
         movementDateReverse: 'Date de mouvement (du plus récent au plus ancien)',
-        checkInFirst: 'Enregistrement d’entrée en premier',
+        checkInFirst: "Enregistrement d'entrée en premier",
         checkOutFirst: 'Enregistrement de sortie en premier',
         coolingUser: "Nom de l'utilisateur de refroidissement",
       },
@@ -903,22 +904,22 @@ export default {
         checkOut: {
           seeDetails: 'Voir les détails',
           smsReceipt: 'Télécharger le reçu SMS',
-          marketSurvey: 'Remplir l’enquête de marché',
+          marketSurvey: "Remplir l'enquête de marché",
         },
         checkIn: {
-          edit: 'Modifier l’enregistrement d’entrée',
+          edit: "Modifier l'enregistrement d'entrée",
         },
       },
       detailsModal: {
-        operatorNameLabel: 'Nom de l’opérateur de sortie',
-        operatorNumberLabel: 'Numéro de l’opérateur de sortie',
+        operatorNameLabel: "Nom de l'opérateur de sortie",
+        operatorNumberLabel: "Numéro de l'opérateur de sortie",
         checkOutDateLabel: 'Date de sortie',
         marketSurveyLabel: 'Enquête de marché complétée',
         cratesLabel: 'Caisses',
         combinedWeightLabel: 'Poids total',
         paymentMethodLabel: 'Méthode de paiement',
         cropTypeLabel: 'Type de culture',
-        checkInCodeLabel: 'Code d’entrée',
+        checkInCodeLabel: "Code d'entrée",
         crateIdsLabel: 'IDs des caisses',
       },
       pdfModal: {
@@ -939,9 +940,9 @@ export default {
           totalPrice: 'Prix total',
         },
         checkIn: {
-          title: 'Reçu d’entrée',
+          title: "Reçu d'entrée",
           operatorLabel: 'Opérateur',
-          codeLabel: 'Code d’entrée',
+          codeLabel: "Code d'entrée",
           companyLabel: 'Entreprise',
           coolingUnitLabel: 'Unité de refroidissement',
           priceLabel: 'Prix {{currency}} / Jour',
@@ -955,25 +956,25 @@ export default {
         coolingUserLabel: 'Utilisateur de refroidissement',
         disclaimer: 'Avertissement : Le temps de collecte est un nombre estimé de jours.',
         disclaimerMessage:
-          'Avertissement : Notez que le temps de collecte est un nombre estimé de jours. Cette estimation est basée sur des modèles calibrés pour l’espèce de fruit ou de légume et une simulation numérique. La qualité réelle du produit dépend également des conditions climatiques locales, des conditions de croissance, de la date de récolte et d’autres facteurs. Par conséquent, des écarts par rapport à notre estimation du temps de collecte peuvent se produire.',
+          "Avertissement : Notez que le temps de collecte est un nombre estimé de jours. Cette estimation est basée sur des modèles calibrés pour l'espèce de fruit ou de légume et une simulation numérique. La qualité réelle du produit dépend également des conditions climatiques locales, des conditions de croissance, de la date de récolte et d'autres facteurs. Par conséquent, des écarts par rapport à notre estimation du temps de collecte peuvent se produire.",
         selectCropLabel: 'Sélectionner une culture',
-        successMessage: 'Enregistrement d’entrée mis à jour avec succès !',
-        errorMessage: 'Échec de la mise à jour de l’enregistrement d’entrée. Veuillez réessayer.',
+        successMessage: "Enregistrement d'entrée mis à jour avec succès !",
+        errorMessage: "Échec de la mise à jour de l'enregistrement d'entrée. Veuillez réessayer.",
       },
       survey: {
-        fillMessage: 'Veuillez remplir l’enquête de base pour {{crop}} !',
+        fillMessage: "Veuillez remplir l'enquête de base pour {{crop}} !",
         baseSurvey: {
           occupationQuestion: 'Quelle est la meilleure description de votre occupation ?',
           occupationFarmer: 'Un agriculteur',
-          occupationTrader: 'Un petit commerçant/vendeur/wholesaler',
+          occupationTrader: 'Un petit commerçant/vendeur/grossiste',
           usageQuestion: 'Avez-vous utilisé la chambre froide dans le passé ?',
           newUser: 'Non, je suis un nouvel utilisateur',
-          oldUser: 'Oui, j’ai utilisé la chambre froide',
+          oldUser: "Oui, j'ai utilisé la chambre froide",
           mostUsedCommoditiesQuestion: 'Cultures les plus récoltées/commercialisées ?',
           commodity: 'Culture',
           newCommodity: 'Culture {{index}}',
           fillCommoditiesMessage:
-            'Veuillez répondre aux questions ci-dessous pour les cultures que vous prévoyez d’apporter plus souvent dans la chambre.',
+            "Veuillez répondre aux questions ci-dessous pour les cultures que vous prévoyez d'apporter plus souvent dans la chambre.",
           addCommodityButton: 'Ajouter une culture',
           genericFormError: 'Veuillez sélectionner une option',
           experienceError: 'Veuillez entrer une valeur',

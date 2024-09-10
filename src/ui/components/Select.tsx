@@ -66,7 +66,13 @@ export function Select({
               </>
             )}
             {headerComponent ? headerComponent : null}
-            {useScrollView ? <ScrollView tw="py-0.5">{options}</ScrollView> : options}
+            {useScrollView ? (
+              <ScrollView tw="py-0.5" showsVerticalScrollIndicator={false}>
+                {options}
+              </ScrollView>
+            ) : (
+              options
+            )}
             {footer && (
               <>
                 <Divider />
@@ -78,32 +84,33 @@ export function Select({
       </Portal>
       <TouchableOpacity
         tw={cn(
-          'flex flex-row items-center',
-          variant === 'sm' ? 'space-x-0.5' : 'justify-between',
+          'flex flex-row items-center space-x-0.5',
+          variant !== 'sm' && 'justify-between',
           minifyLabel && currentValue && 'flex flex-col items-start'
         )}
         disabled={props.disabled}
         onPress={onClick}
       >
-        <Text
-          tw={cn(
-            variant === 'sm' ? 'text-green-primary' : 'text-gray-600 text-base',
-            minifyLabel && currentValue && 'text-xs',
-            error && 'text-red-700',
-            props.disabled && 'text-gray-400'
-          )}
-          numberOfLines={1}
-        >
-          {label}
-        </Text>
-        <View
-          tw={cn(
-            'flex flex-row items-center',
-            minifyLabel && currentValue ? 'w-full justify-between' : 'space-x-2'
-          )}
-        >
+        <View tw="flex flex-row items-center justify-between flex-1">
+          <Text
+            tw={cn(
+              variant === 'sm' ? 'text-green-primary' : 'text-gray-600 text-base',
+              minifyLabel && currentValue && 'text-xs',
+              error && 'text-red-700',
+              props.disabled && 'text-gray-400',
+              'flex-shrink'
+            )}
+            numberOfLines={1}
+          >
+            {label}
+          </Text>
           {currentValue && (
-            <Text tw={cn('text-base', props.disabled && 'text-gray-400')}>{currentValue}</Text>
+            <Text
+              tw={cn('text-base ml-2 flex-1 text-right', props.disabled && 'text-gray-400')}
+              numberOfLines={1}
+            >
+              {currentValue}
+            </Text>
           )}
           <Icon
             name={variant !== 'lg' ? 'arrow-drop-down' : 'keyboard-arrow-down'}

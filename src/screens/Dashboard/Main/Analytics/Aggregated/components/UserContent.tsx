@@ -38,7 +38,11 @@ export function UsersContent() {
   }, [coolingUnitData]);
 
   return (
-    <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
+    <ScrollView
+      tw="w-full mt-2"
+      contentContainerStyle="items-center"
+      showsVerticalScrollIndicator={false}
+    >
       <UserSection
         title={t('Dashboard.Analytics.operatorsTotal', {
           amount: operators.total ?? 0,

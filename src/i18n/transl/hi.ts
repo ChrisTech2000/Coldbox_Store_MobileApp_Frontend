@@ -25,6 +25,7 @@ export default {
       ForgotPassword: 'पासवर्ड भूल गए',
       PasswordReset: 'रीसेट',
       AppInfo: 'सामान्यतःपूछे जाने वाले प्रश्न',
+      Logout: 'लॉग आउट',
     },
     management: {
       Root: 'प्रबंधन',
@@ -127,8 +128,8 @@ export default {
       clearButtonLabel: 'साफ़ करें',
       confirmButtonLabel: 'पुष्टि करें',
       placeholder: 'dd/mm/yyyy',
-      startDateSelection: 'प्रारंभ तिथि चुनें',
-      endDateSelection: 'समाप्ति तिथि चुनें',
+      startDateSelection: 'प्रारंभ तिथि चुनें:',
+      endDateSelection: 'समाप्ति तिथि चुनें:',
     },
   },
   Auth: {
@@ -628,6 +629,7 @@ export default {
         labels: {
           name: 'नाम',
           uploadLogo: 'लोगो अपलोड करें',
+          logo: 'लोगो',
           country: 'देश',
           commodity: 'सामग्री',
           currency: 'मुद्रा',

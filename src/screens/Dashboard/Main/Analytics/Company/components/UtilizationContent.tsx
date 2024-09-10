@@ -43,7 +43,11 @@ export function UtilizationContent() {
   }, [companyData]);
 
   return (
-    <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
+    <ScrollView
+      tw="w-full mt-2"
+      contentContainerStyle="items-center"
+      showsVerticalScrollIndicator={false}
+    >
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-3 my-2">
         <Text variant="TextMedium" tw="text-lg">
           {t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}

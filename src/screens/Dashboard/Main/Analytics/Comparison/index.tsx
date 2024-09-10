@@ -108,7 +108,7 @@ export function ComparisonSection() {
           <Configuration openModal={() => setIsModalOpen(true)} />
         ) : (
           <View tw="w-full space-y-4 justify-between">
-            <View tw="w-full flex flex-row justify-between items-center mb-4">
+            <View tw="w-full flex flex-row flex-wrap justify-between items-center mb-4">
               <TouchableOpacity
                 tw="flex flex-row items-center space-x-2 justify-start"
                 onPress={onBackToMain}
@@ -118,7 +118,7 @@ export function ComparisonSection() {
                   {t(`Dashboard.Analytics.companyTab.goBackButton`)}
                 </Text>
               </TouchableOpacity>
-              <View tw="flex flex-row flex-wrap items-center space-x-1 space-y-1 w-[60%] justify-end">
+              <View tw="flex flex-row items-center space-x-1 space-y-1">
                 <SortingMenu
                   isModalVisible={isSortModalOpen}
                   setIsModalVisible={setIsSortModalOpen}

@@ -185,7 +185,7 @@ export function OperatorActions({
               left={<TextInput.Icon icon="magnify" />}
               disabled={isLoading}
             />
-            <ScrollView tw="w-full">
+            <ScrollView tw="w-full" showsVerticalScrollIndicator={false}>
               {isLoading ? (
                 <View tw="w-full flex-1 items-center justify-center">
                   <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />

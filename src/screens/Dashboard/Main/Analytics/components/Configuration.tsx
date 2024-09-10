@@ -47,7 +47,7 @@ export function ConfigurationModal({
   return (
     <Portal>
       <Modal visible={isOpen} onDismiss={dismiss}>
-        <View tw="items-center bg-white mx-12 p-2 rounded-3xl h-auto space-y-4">
+        <View tw="bg-white mx-10 p-2 rounded-3xl h-auto space-y-4">
           <Text variant="TextMedium" tw="text-base mt-2 px-2">
             {t('Dashboard.Management.UsageAnalysis.modal.title')}
           </Text>
@@ -63,7 +63,7 @@ export function ConfigurationModal({
             />
           </View>
 
-          <View tw="w-[90%]">
+          <View tw="w-[98%]">
             <Text variant="TextMedium" tw="text-base mt-2 px-2">
               {t('Dashboard.Management.UsageAnalysis.modal.coolingUnitSelection')}
             </Text>
@@ -90,7 +90,7 @@ export function ConfigurationModal({
             uppercase
             icon="check-circle-outline"
             contentStyle="flex flex-row-reverse"
-            tw="w-[90%]"
+            tw="w-[90%] self-center"
             onPress={() => {
               if (startDate && endDate && selectedUnits.length) {
                 confirm({

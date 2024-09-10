@@ -98,7 +98,7 @@ export function CrateSetupModal({
           <Text tw="text-lg font-bold mb-1 mt-2">{title}</Text>
           <Divider tw="w-full bg-gray-400 my-2" />
 
-          <ScrollView tw="w-full">
+          <ScrollView tw="w-full h-[60%]" showsVerticalScrollIndicator={false}>
             <FlashList
               data={modalCrates}
               extraData={crates}

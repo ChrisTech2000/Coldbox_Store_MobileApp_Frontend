@@ -25,6 +25,7 @@ export default {
       ForgotPassword: 'Esqueceu-se da Palavra-passe?',
       PasswordReset: 'Redefinir',
       AppInfo: 'Informações da App',
+      Logout: 'Sair',
     },
     management: {
       Root: 'Gestão',
@@ -56,7 +57,7 @@ export default {
       Planner: 'Planeador',
       RoomConditions: 'Condições da Sala',
       CratesInfo: 'Informação das Caixas',
-      Dashboard: 'Painel de Controlo',
+      Dashboard: 'Painel',
       History: 'Histórico',
       MarketPrice: 'Preço de Mercado',
       CoolingUnits: 'Unidades de Refrigeração',
@@ -127,8 +128,8 @@ export default {
       clearButtonLabel: 'Limpar',
       confirmButtonLabel: 'Confirmar',
       placeholder: 'dd/mm/aaaa',
-      startDateSelection: 'Selecione data de início',
-      endDateSelection: 'Selecione data de fim',
+      startDateSelection: 'Selecione data de início:',
+      endDateSelection: 'Selecione data de fim:',
     },
   },
   Auth: {
@@ -297,7 +298,7 @@ export default {
     },
     emptyGeneral: 'No momento, não há dados disponíveis.',
     emptyCoolingUser:
-      'Os itens em armazenamento aparecerão no painel quando você realizar pelo menos um check-in em qualquer sala.',
+      'Os itens em armazenamento aparecerão no painel quando realizar pelo menos um check-in em qualquer sala.',
     noCompanyAvailable: 'Nenhuma empresa disponível',
     noCoolingUnitAvailable: 'Nenhuma unidade de refrigeração disponível',
     noLocationsAvailable:
@@ -344,7 +345,7 @@ export default {
         warningMessage: 'Por favor, preencha o questionário de referência para {{crop}}!',
         modal: {
           weeklyQuantityQuestion:
-            'Qual é a quantidade de {{crop}} que você produz ou comercializa por semana?',
+            'Qual é a quantidade de {{crop}} que produz ou comercializa por semana?',
           cropSpoilageQuestion: 'Qual é a principal razão para o desperdício de colheitas?',
           marketPriceQuestion: 'Preço médio de mercado por semana ao vender {{crop}}',
           quantityDistributionQuestion: 'Quanto disso é:',
@@ -443,8 +444,8 @@ export default {
         Setup: {
           selectedCrop: 'Produto selecionado',
           changeCropButton: 'Clique aqui para mudar o produto',
-          individualCrateWeightButton: 'Clique aqui para editar o peso individual da palete',
-          individualCrateIdButton: 'Clique aqui para editar os IDs individuais das paletes',
+          individualCrateWeightButton: 'Clique aqui para editar o peso das paletes',
+          individualCrateIdButton: 'Clique aqui para editar os IDs das paletes',
           numberOfCratesLabel: 'Número de paletes',
           crateWeightLabel: 'Peso geral da palete',
           pricePerDayAndCrateLabel: 'Preço por dia / palete',
@@ -498,14 +499,14 @@ export default {
       optimalTemp: 'Temp. Óptima °C',
       messages: {
         empty:
-          'A ocupação e a temperatura das unidades de refrigeração aparecerão aqui quando você realizar pelo menos um check-in em qualquer sala.',
+          'A ocupação e a temperatura das unidades de refrigeração aparecerão aqui quando realizar pelo menos um check-in em qualquer sala.',
       },
     },
     CoolingUnitsMaps: {
-      singleCommodity: 'Sala de produto único: {{crop}}',
-      multiCommodity: 'Sala de múltiplos produtos',
+      singleCommodity: 'Unidade de produto único: {{crop}}',
+      multiCommodity: 'Unidade de múltiplos produtos',
       publicMaker: 'Unidade de refrigeração pública',
-      usedMarker: 'Unidade de refrigeração que você já usou',
+      usedMarker: 'Unidade de refrigeração que já usou',
     },
     Company: {
       SelectCompany: {
@@ -537,9 +538,8 @@ export default {
     },
     SearchFilter: {
       detailsMessage:
-        'Procure um check-in usando tipo de produto, nome do agricultor, dias em armazenamento, dias restantes em armazenamento ou código de check-in',
-      idMessage:
-        'Procure uma palete usando o número de ID da palete utilizado para identificar uma palete específica',
+        'Procure um check-in pelo tipo de produto, nome do agricultor, dias em armazenamento, dias restantes em armazenamento ou código de check-in',
+      idMessage: 'Procure uma palete pelo o ID que identifica uma palete específica',
       crateDetailsButton: 'Pesquisar Detalhes da Palete',
       crateIdButton: 'Pesquisar ID da Palete',
       searchLabel: 'Pesquisar',
@@ -632,7 +632,8 @@ export default {
       CompanyDetails: {
         labels: {
           name: 'Nome',
-          uploadLogo: 'Carregar Logotipo',
+          uploadLogo: 'Carregar Logo',
+          logo: 'Logo',
           country: 'País',
           commodity: 'Lista de Produtos',
           currency: 'Moeda',
@@ -707,7 +708,7 @@ export default {
         fields: {
           name: 'ID da unidade de refrigeração',
           location: 'Localização',
-          coolingUnitType: 'Como descreve melhor a unidade de refrigeração?',
+          coolingUnitType: 'Como descreve melhor a unidade?',
           metricUnit: 'Unidade',
           price: 'Preço',
           capacityInMetricTons: 'Volume total vazio',
@@ -814,9 +815,9 @@ export default {
         },
       },
       UsageAnalysis: {
-        dateSelectionLabel: 'Selecione dias:',
+        dateSelectionLabel: 'Selecione os dias:',
         empty:
-          'Os check-ins e check-outs aparecerão no painel quando você fizer pelo menos um check-in em qualquer sala.',
+          'Os check-ins e check-outs aparecerão no painel quando fizer pelo menos um check-in em qualquer sala.',
         downloadDataButton: 'Baixar dados',
         modal: {
           title: 'Definir configuração',
@@ -847,7 +848,7 @@ export default {
         lastRegisteredEmployee:
           'Você é o único Funcionário Registrado na empresa; esta ação irá apagar a empresa!',
         activeCheckInOP:
-          'A(s) unidade(s) de refrigeração {{names}} a que está atribuído tem check-ins ativos e você é o último operador. Precisa de verificar todos os produtos ou notificar um Funcionário Registrado para atribuir um operador diferente a esta unidade de refrigeração antes de poder apagar a sua conta!',
+          'A(s) unidade(s) de refrigeração {{names}} a que está atribuído tem check-ins ativos e você é o último operador. Precisa de fazer checkout de todos os produtos ou notificar um Funcionário Registrado para atribuir um operador diferente a esta unidade de refrigeração antes de poder apagar a sua conta!',
         activeCheckInRE:
           'Não pode apagar a sua conta se for o último Funcionário Registrado e houver check-ins ativos em algumas unidades de refrigeração, pois esta ação apagará a sua empresa. Certifique-se de que todos os check-ins ativos nas unidades de refrigeração {{names}} estão verificados primeiro.',
         activeCheckInCU:
@@ -882,7 +883,7 @@ export default {
     History: {
       priceLabel: 'Preço',
       empty:
-        'Os check-ins e check-outs aparecerão no painel quando você realizar pelo menos um check-in em qualquer sala.',
+        'Os check-ins e check-outs aparecerão no painel quando realizar pelo menos um check-in em qualquer sala.',
       sortMenuOptions: {
         cropType: 'Tipo de produto',
         movementDate: 'Data de movimentação (primeiro para mais recente)',
@@ -958,9 +959,9 @@ export default {
       survey: {
         fillMessage: 'Por favor, preencha o inquérito base para {{crop}}!',
         baseSurvey: {
-          occupationQuestion: 'O que melhor define você?',
+          occupationQuestion: 'O que melhor o define?',
           occupationFarmer: 'Um agricultor',
-          occupationTrader: 'Um pequeno vendedor/comerciante/atacadista',
+          occupationTrader: 'Um pequeno vendedor/comerciante/grossista',
           usageQuestion: 'Você já usou a sala fria no passado?',
           newUser: 'Não, sou um novo usuário',
           oldUser: 'Sim, já usei a sala fria',
@@ -968,21 +969,21 @@ export default {
           commodity: 'Produto',
           newCommodity: 'Produto {{index}}',
           fillCommoditiesMessage:
-            'Por favor, preencha as perguntas abaixo para os produtos que você planeja trazer para a sala com mais frequência.',
+            'Por favor, preencha as perguntas abaixo para os produtos que planeia trazer para a sala com mais frequência.',
           addCommodityButton: 'Adicionar produto',
           genericFormError: 'Por favor, selecione uma opção',
           experienceError: 'Por favor, introduza um valor',
         },
         marketSurvey: {
           title:
-            'Por favor, responda às seguintes perguntas sobre as paletes de {{crop}} que você fez check-out.',
-          locationQuestion: 'Onde você vendeu sua produção?',
+            'Por favor, responda às seguintes perguntas sobre as paletes de {{crop}} de que fez check-out.',
+          locationQuestion: 'Onde vendeu a sua produção?',
           locations: {
             farm: 'Na propriedade',
             market: 'Mercado local',
             both: 'Tanto na propriedade quanto no mercado',
           },
-          priceQuestion: 'Qual foi o preço que você recebeu por isso?',
+          priceQuestion: 'Qual foi o preço que recebeu por isso?',
           spoiledProducesQuestion:
             'Quanto do que estava armazenado na semana passada foi estragado ou vendido abaixo do preço médio de mercado?',
           spoilageReasonsQuestion: 'Qual é a principal razão para o estrago da colheita?',

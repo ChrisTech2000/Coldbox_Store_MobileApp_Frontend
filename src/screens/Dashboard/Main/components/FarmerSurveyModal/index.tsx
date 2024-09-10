@@ -146,7 +146,10 @@ export function FarmersSurveyModal({
     <Portal>
       <Modal visible={isModalVisible} onDismiss={onDismiss}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <KeyboardAwareScrollView tw="rounded-3xl bg-white w-[90%] h-auto py-4 px-5 self-center space-y-2">
+          <KeyboardAwareScrollView
+            tw="rounded-3xl bg-white w-[90%] h-auto max-h-[90%] py-4 px-5 self-center space-y-2"
+            showsVerticalScrollIndicator={false}
+          >
             {cropSelectionAvailable && (
               <View tw="space-y-2">
                 <Text variant="TitleBold" tw="font-bold">
@@ -279,7 +282,7 @@ export function FarmersSurveyModal({
               2. {t('Dashboard.CrateManagement.FarmerSurvey.modal.quantityDistributionQuestion')}
             </Text>
             <View tw="flex flex-row space-between space-x-2 w-[90%] mb-2">
-              <View tw="w-1/3">
+              <View tw="w-1/3 justify-between">
                 <Text variant="TextMedium" tw="text-base">
                   {t('Dashboard.CrateManagement.FarmerSurvey.modal.selfConsumed', {
                     unit: measureUnit,
@@ -319,7 +322,7 @@ export function FarmersSurveyModal({
                 />
               </View>
               <Divider tw="h-full w-[0.25%] bg-gray-400" />
-              <View tw="w-1/3">
+              <View tw="w-1/3 justify-between">
                 <Text variant="TextMedium" tw="text-base">
                   {t('Dashboard.CrateManagement.FarmerSurvey.modal.lost', { unit: measureUnit })}
                 </Text>
@@ -427,6 +430,7 @@ export function FarmersSurveyModal({
               icon="check-circle-outline"
               contentStyle="flex flex-row-reverse"
               onPress={handleSubmit(submit)}
+              tw="mb-6"
             >
               {t('actions.confirm')}
             </Button>
