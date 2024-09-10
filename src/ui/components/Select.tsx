@@ -66,7 +66,7 @@ export function Select({
               </>
             )}
             {headerComponent ? headerComponent : null}
-            {useScrollView ? <ScrollView tw="py-0.5">{options}</ScrollView> : options}
+            {useScrollView ? <ScrollView tw="py-0.5" showsVerticalScrollIndicator={false}>{options}</ScrollView> : options}
             {footer && (
               <>
                 <Divider />

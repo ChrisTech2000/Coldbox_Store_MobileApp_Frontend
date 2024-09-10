@@ -85,7 +85,7 @@ export function ImpactContent<T extends Store>({
   }, [impactData]);
 
   return (
-    <ScrollView tw="w-full mt-2" contentContainerStyle="items-center">
+    <ScrollView tw="w-full mt-2" contentContainerStyle="items-center" showsVerticalScrollIndicator={false}>
       {type === 'aggregated' && (
         <View tw="w-full bg-violet-100 px-2 py-1 items-center rounded-lg space-y-3 my-2">
           <Text variant="TextMedium" tw="text-lg">

@@ -56,7 +56,7 @@ export default function CountryField() {
               content={{
                 header: t('Dashboard.Management.CompanyDetails.headings.country'),
                 options: (
-                  <ScrollView>
+                  <ScrollView showsVerticalScrollIndicator={false}>
                     <TextInput
                       tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600"
                       label={t('actions.search')}
