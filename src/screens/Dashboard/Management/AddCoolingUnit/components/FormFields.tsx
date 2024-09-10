@@ -74,7 +74,9 @@ export default function FormFields(props: {
         render={({ field: { onChange, value } }) => (
           <React.Fragment>
             <View tw="flex-row items-center justify-between px-3 py-3.5">
-              <Text>{t('Dashboard.Management.AddCoolingUnit.fields.editableCheckins')}</Text>
+              <Text tw="max-w-[80%]" numberOfLines={2}>
+                {t('Dashboard.Management.AddCoolingUnit.fields.editableCheckins')}
+              </Text>
               <Switch value={value} onValueChange={onChange} />
             </View>
             <Divider tw="w-full bg-gray-700" />

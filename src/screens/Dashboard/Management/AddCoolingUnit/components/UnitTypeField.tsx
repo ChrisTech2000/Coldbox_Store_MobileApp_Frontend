@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { Divider, RadioButton } from 'react-native-paper';
-import truncate from 'lodash/truncate';
 
 import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -43,7 +42,7 @@ export default function UnitTypeField() {
               <Select
                 variant="md"
                 label={t('Dashboard.Management.AddCoolingUnit.fields.coolingUnitType')}
-                currentValue={truncate(currentValue, { length: 16 })}
+                currentValue={currentValue}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}
                 content={{

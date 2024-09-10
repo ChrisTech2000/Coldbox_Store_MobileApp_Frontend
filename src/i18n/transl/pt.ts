@@ -632,7 +632,8 @@ export default {
       CompanyDetails: {
         labels: {
           name: 'Nome',
-          uploadLogo: 'Carregar Logotipo',
+          uploadLogo: 'Carregar Logo',
+          logo: 'Logo',
           country: 'País',
           commodity: 'Lista de Produtos',
           currency: 'Moeda',
@@ -707,7 +708,7 @@ export default {
         fields: {
           name: 'ID da unidade de refrigeração',
           location: 'Localização',
-          coolingUnitType: 'Como descreve melhor a unidade de refrigeração?',
+          coolingUnitType: 'Como descreve melhor a unidade?',
           metricUnit: 'Unidade',
           price: 'Preço',
           capacityInMetricTons: 'Volume total vazio',
