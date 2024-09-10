@@ -259,7 +259,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   );
 
   return (
-    <KeyboardAwareScrollView tw="p-4 bg-white space-y-6">
+    <KeyboardAwareScrollView tw="p-4 bg-white space-y-6" showsVerticalScrollIndicator={false}>
       <View tw="bg-blue-50 p-2 rounded-sm space-y-2">
         <View tw="flex flex-row items-center justify-between flex-wrap">
           <Text variant="TextBold" tw="text-lg font-bold ml-2">

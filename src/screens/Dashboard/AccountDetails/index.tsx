@@ -119,7 +119,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             <View tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md my-1.5">
               <Text variant="TitleSmall" tw="flex-shrink" numberOfLines={2}>
                 {t('Dashboard.AccountDetails.fields.userCode')}
-                </Text>
+              </Text>
               <Text variant="TitleSmall">{farmerUserCode}</Text>
             </View>
           </RBAC.ProtectedResource>
