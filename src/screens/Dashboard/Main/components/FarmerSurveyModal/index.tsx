@@ -146,7 +146,10 @@ export function FarmersSurveyModal({
     <Portal>
       <Modal visible={isModalVisible} onDismiss={onDismiss}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <KeyboardAwareScrollView tw="rounded-3xl bg-white w-[90%] h-auto max-h-[90%] py-4 px-5 self-center space-y-2">
+          <KeyboardAwareScrollView
+            tw="rounded-3xl bg-white w-[90%] h-auto max-h-[90%] py-4 px-5 self-center space-y-2"
+            showsVerticalScrollIndicator={false}
+          >
             {cropSelectionAvailable && (
               <View tw="space-y-2">
                 <Text variant="TitleBold" tw="font-bold">

@@ -56,7 +56,11 @@ export function UsersContent() {
   }, [companyData]);
 
   return (
-    <ScrollView tw="w-full mt-2" contentContainerStyle="items-center" showsVerticalScrollIndicator={false}>
+    <ScrollView
+      tw="w-full mt-2"
+      contentContainerStyle="items-center"
+      showsVerticalScrollIndicator={false}
+    >
       <UserSection
         title={t('Dashboard.Analytics.companyTab.usersTab.employeesTotal', {
           amount: employees.total ?? 0,
