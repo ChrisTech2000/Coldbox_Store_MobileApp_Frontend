@@ -69,7 +69,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={(evt) => {
                 evt.stopPropagation();
-                if (!user || !farmerId) return; // safe guard
+                if (!user) return; // safe guard
                 props.navigation.navigate('PersonalDetails', buildDetailsSectionParams());
               }}
             />
