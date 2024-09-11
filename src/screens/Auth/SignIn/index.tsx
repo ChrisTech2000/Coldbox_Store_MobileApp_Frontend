@@ -119,6 +119,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
             country: result.company.country,
             currency: result.company.currency,
             name: result.company.name,
+            hasDigitalTwin: result.company.digitalTwin,
           });
         }
         setSession({

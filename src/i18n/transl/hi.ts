@@ -293,6 +293,7 @@ export default {
       confirm: 'नए तापमान की पुष्टि करें',
       continueWithoutUpdate: 'अपडेट के बिना जारी रखें',
       sensorHint: 'तापमान नहीं जोड़ा जा सकता क्योंकि एक सेंसर शीतलन इकाई से जुड़ा है।',
+      latestTemperature: '{{date}} को नवीनतम तापमान दर्ज किया गया था.',
     },
     emptyGeneral: 'इस समय, कोई उपलब्ध डेटा नहीं है।',
     emptyCoolingUser:

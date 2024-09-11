@@ -84,32 +84,38 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   return (
     <View tw="flex-1 p-4">
       <View tw="flex flex-row w-full justify-between items-center">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-lg max-w-[70%]" numberOfLines={1}>
           {t('Dashboard.CrateManagement.coolingUserLabel')}
         </Text>
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-lg max-w-[30%]" numberOfLines={1}>
           {user?.user.firstName}
         </Text>
       </View>
       <Divider tw="bg-gray-400 my-2" />
-      <View tw="flex flex-row w-full justify-between items-center flex-wrap">
-        <Text variant="TextMedium" tw="text-lg" numberOfLines={2}>
+      <View tw="flex flex-row w-full justify-between items-center">
+        <Text
+          variant="TextMedium"
+          tw="text-lg max-w-[70%]"
+          numberOfLines={1}
+        >
           {t('Dashboard.CrateManagement.selectCoolingUnitLabel')}
         </Text>
-        <SelectWithStore<CoolingUnit>
-          datums={coolingUnits ?? []}
-          isModalVisible={isUnitsModalOpen}
-          setIsModalVisible={setIsUnitsModalOpen}
-          itemName={(item) => item?.name}
-          disabled={!!_crates?.length}
-          useSelectStore={useCoolingUnitStore}
-          label={
-            coolingUnit
-              ? coolingUnit.name
-              : `${t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}...`
-          }
-          modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-        />
+        <View tw="max-w-[30%]">
+          <SelectWithStore<CoolingUnit>
+            datums={coolingUnits ?? []}
+            isModalVisible={isUnitsModalOpen}
+            setIsModalVisible={setIsUnitsModalOpen}
+            itemName={(item) => item?.name}
+            disabled={!!_crates?.length}
+            useSelectStore={useCoolingUnitStore}
+            label={
+              coolingUnit
+                ? coolingUnit.name
+                : `${t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}...`
+            }
+            modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+          />
+        </View>
       </View>
       <Divider tw="bg-gray-400 my-2" />
       {!coolingUnit && (
@@ -143,6 +149,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           </TouchableOpacity>
 
           <FlatList
+            showsHorizontalScrollIndicator={false}
             data={crates ?? []}
             extraData={selectedCrates.length}
             renderItem={({ item: crate, index }) => (

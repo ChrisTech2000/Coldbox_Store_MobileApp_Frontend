@@ -100,6 +100,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       .toFixed(2);
   }, [produces, produces.length, coolingUnit, allHavePlannedDays, allCrates]);
 
+  const currencySymbol = useMemo(() => {
+    return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
+  }, [company]);
+
   const setCrateIDs = useCallback(
     (modalCrates: SetupSchema['crates'], item: ProduceCrate) => {
       const _produce = cloneDeep(item);
@@ -144,30 +148,30 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
     const result = checkOutCode
       ? await ColdtivateService.checkInWithCode({
-          params: {
-            code: checkOutCode,
-            farmer: user.id,
-            coolingUnitId: coolingUnit?.id as number,
-            days: produces[0].crates[0].plannedDays,
-            tags: produces
-              .flatMap((produce) => produce.crates)
-              .map((crate) => {
-                return crate.tag;
-              })
-              .filter((tag) => typeof tag === 'string'),
-          },
-        })
+        params: {
+          code: checkOutCode,
+          farmer: user.id,
+          coolingUnitId: coolingUnit?.id as number,
+          days: produces[0].crates[0].plannedDays,
+          tags: produces
+            .flatMap((produce) => produce.crates)
+            .map((crate) => {
+              return crate.tag;
+            })
+            .filter((tag) => typeof tag === 'string'),
+        },
+      })
       : await ColdtivateService.checkIn({
-          farmerId: user.id,
-          id: undefined,
-          produces: produces.map((produce) => ({
-            ...produce,
-            crop: {
-              id: produce.crop.id as number,
-            },
-            harvestDate: produce.harvestDate as number,
-          })),
-        });
+        farmerId: user.id,
+        id: undefined,
+        produces: produces.map((produce) => ({
+          ...produce,
+          crop: {
+            id: produce.crop.id as number,
+          },
+          harvestDate: produce.harvestDate as number,
+        })),
+      });
 
     if (result) {
       resetCheckInStore();
@@ -181,6 +185,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         const temperatureAlertDatum = {
           coolingUnitId: coolingUnit.id,
           companyId: company!.id,
+          showCompleteInfo: true,
         } satisfies TemperatureAlertEvtDatum;
 
         emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
@@ -190,9 +195,32 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     }
   }, [user, produces, checkOutCode, coolingUnit?.id, guard]);
 
-  const currencySymbol = useMemo(() => {
-    return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
-  }, [company]);
+  const navigateToCropSelection = useCallback(() => {
+    const now = new Date();
+    const tempDate = new Date(coolingUnit.latestTemperatureTimestamp);
+    const checkInDate = new Date(coolingUnit.lastCheckInDate);
+    const lastTemperatureChangeSinceCheckIn =
+      (checkInDate.getTime() - tempDate.getTime()) / 3600000;
+    const lastCheckInChangeInHours =
+      Math.abs(now.getTime() - checkInDate.getTime()) / 3600000;
+
+    navigation.navigate('SelectCropType');
+    
+    if (
+      guard('VIEW', 'TemperatureAlertModal') &&
+      (!coolingUnit.sensor || coolingUnit.sensorError) &&
+      (lastCheckInChangeInHours > 6 || lastTemperatureChangeSinceCheckIn < 0) &&
+      company?.hasDigitalTwin
+    ) {
+      const temperatureAlertDatum = {
+        coolingUnitId: coolingUnit.id,
+        companyId: company!.id,
+        showCompleteInfo: false,
+      } satisfies TemperatureAlertEvtDatum;
+
+      emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
+    }
+  }, [coolingUnit, company, emitter]);
 
   useEffect(() => {
     if (coolingUnit) setCoolingUnit(coolingUnit);
@@ -202,10 +230,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   return (
     <View tw="flex-1 p-4">
       <View tw="flex flex-row w-full justify-between items-center">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-lg max-w-[70%]" numberOfLines={1}>
           {t('Dashboard.CrateManagement.coolingUserLabel')}
         </Text>
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-lg max-w-[30%]" numberOfLines={1}>
           {user?.user.firstName}
         </Text>
       </View>
@@ -227,6 +255,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           </Text>
         )}
         <FlatList
+          showsHorizontalScrollIndicator={false}
           data={produces}
           extraData={surveys}
           keyExtractor={(item, itemIdx) => `crate-${item.crop.id}-#${itemIdx}`}
@@ -311,7 +340,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           <Button
             tw="w-full border-2 border-green-primary"
             mode="outlined"
-            onPress={() => navigation.navigate('SelectCropType')}
+            onPress={navigateToCropSelection}
             icon="basket"
             contentStyle="flex flex-row-reverse items-center"
           >

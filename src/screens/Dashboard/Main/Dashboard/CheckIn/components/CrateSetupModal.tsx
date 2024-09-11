@@ -100,6 +100,7 @@ export function CrateSetupModal({
 
           <ScrollView tw="w-full h-[60%]" showsVerticalScrollIndicator={false}>
             <FlashList
+              showsHorizontalScrollIndicator={false}
               data={modalCrates}
               extraData={crates}
               renderItem={({ index }) => (
@@ -143,8 +144,8 @@ export function CrateSetupModal({
                               !modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
                                 ? 0
                                 : Number(
-                                    modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
-                                  ) - 1,
+                                  modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
+                                ) - 1,
                               index
                             )
                           }

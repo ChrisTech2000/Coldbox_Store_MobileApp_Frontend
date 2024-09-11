@@ -118,38 +118,38 @@ export function Movement({
       },
       ...(isCheckIn && user?.role === ERoles.OPERATOR
         ? [
-            {
-              label: t('Dashboard.History.optionsMenu.checkIn.edit'),
-              action: editCheckIn,
-              disabled:
-                !isWithinLast24Hours(movement.date) ||
-                movementsWithCheckout.includes(movement.code),
-            },
-          ]
+          {
+            label: t('Dashboard.History.optionsMenu.checkIn.edit'),
+            action: editCheckIn,
+            disabled:
+              !isWithinLast24Hours(movement.date) ||
+              movementsWithCheckout.includes(movement.code),
+          },
+        ]
         : []),
       ...(!isCheckIn
         ? [
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-              action: seeDetailsModal,
-            },
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-              action: async () =>
-                await sendSMS(
-                  user?.phone ?? '',
-                  movement,
-                  company?.name ?? selectedCompany?.name ?? '',
-                  price,
-                  t
-                ),
-            },
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
-              action: fillMarketSurvey,
-              disabled: !movement.marketSurveyDelay,
-            },
-          ]
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+            action: seeDetailsModal,
+          },
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
+            action: async () =>
+              await sendSMS(
+                user?.phone ?? '',
+                movement,
+                company?.name ?? selectedCompany?.name ?? '',
+                price,
+                t
+              ),
+          },
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
+            action: fillMarketSurvey,
+            disabled: !movement.marketSurveyDelay,
+          },
+        ]
         : []),
     ];
   }, [isCheckIn, movement, user, company, selectedCompany, price, t]);
@@ -199,6 +199,7 @@ export function Movement({
         <Modal visible={isOptionsModalOpen} onDismiss={() => setIsOptionsModalOpen(false)}>
           <View tw="bg-white rounded-3xl h-auto space-y-2 mx-16 px-3 py-2">
             <FlatList
+              showsHorizontalScrollIndicator={false}
               data={optionsMenu}
               keyExtractor={(item, index) => `opt-${item.label}-#${index}`}
               renderItem={({ item }) => (

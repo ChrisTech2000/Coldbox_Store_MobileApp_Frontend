@@ -123,9 +123,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-      loadingFarmerDashboardProduces ||
-      loadingOperatorDashboardProduces ||
-      areCoolingUnitsLoading ? (
+        loadingFarmerDashboardProduces ||
+        loadingOperatorDashboardProduces ||
+        areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>
@@ -133,6 +133,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         <DashboardEmptyState />
       ) : (
         <FlatList
+          showsHorizontalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               refreshing={

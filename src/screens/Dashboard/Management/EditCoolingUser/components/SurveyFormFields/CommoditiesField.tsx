@@ -39,17 +39,17 @@ export default function CommoditiesField(props: Props) {
     () =>
       selectedSurvey
         ? {
-            weightDistribution: {
-              totalProducedWeekly: selectedSurvey!.quantityTotal,
-              quantitySelfConsumed: selectedSurvey!.quantitySelfConsumed,
-              quantitySold: selectedSurvey!.quantitySold,
-              quantityLost: selectedSurvey!.quantityBelowMarketPrice,
-            },
-            unitOfMeasurement: selectedSurvey!.unit,
-            unitaryWeight: selectedSurvey!.kgInUnit,
-            reasonsForSpoilage: sanitizeString(selectedSurvey?.reasonForLoss as string),
-            averagePrice: selectedSurvey!.averagePrice,
-          }
+          weightDistribution: {
+            totalProducedWeekly: selectedSurvey!.quantityTotal,
+            quantitySelfConsumed: selectedSurvey!.quantitySelfConsumed,
+            quantitySold: selectedSurvey!.quantitySold,
+            quantityLost: selectedSurvey!.quantityBelowMarketPrice,
+          },
+          unitOfMeasurement: selectedSurvey!.unit,
+          unitaryWeight: selectedSurvey!.kgInUnit,
+          reasonsForSpoilage: sanitizeString(selectedSurvey?.reasonForLoss as string),
+          averagePrice: selectedSurvey!.averagePrice,
+        }
         : undefined,
     [selectedSurvey?.id]
   );
@@ -76,6 +76,7 @@ export default function CommoditiesField(props: Props) {
   return (
     <React.Fragment>
       <FlatList
+        showsHorizontalScrollIndicator={false}
         nestedScrollEnabled
         data={farmerSurveys}
         keyExtractor={(item, index) => `${item.id}-${index}`}

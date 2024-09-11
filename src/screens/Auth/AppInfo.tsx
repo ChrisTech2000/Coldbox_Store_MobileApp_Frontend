@@ -24,6 +24,7 @@ function AppInfo() {
     <View tw="w-full h-full space-y-4">
       <List.AccordionGroup>
         <FlatList
+          showsHorizontalScrollIndicator={false}
           data={faq}
           keyExtractor={(item, itemIdx) => `faq-${item.id}-#${itemIdx}`}
           renderItem={({ item }) => (

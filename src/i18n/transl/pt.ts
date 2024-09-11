@@ -295,6 +295,7 @@ export default {
       continueWithoutUpdate: 'Continuar sem atualizar',
       sensorHint:
         'Não é possível adicionar a temperatura porque um sensor está conectado à unidade de refrigeração.',
+      latestTemperature: 'A última temperatura foi registada em {{date}}.',
     },
     emptyGeneral: 'No momento, não há dados disponíveis.',
     emptyCoolingUser:
