@@ -4,10 +4,10 @@ import { Text } from './Text';
 import { paperTheme } from '#ui/lib/theme';
 import { StyleSheet } from 'react-native';
 
-function _SuperscriptText(props: React.PropsWithChildren) {
-  const { children } = props;
+function _SuperscriptText(props: React.PropsWithChildren<{ disabled?: boolean }>) {
+  const { disabled, children } = props;
 
-  return <Text style={styles.base}>&nbsp;{children}&nbsp;</Text>;
+  return <Text style={[styles.base, disabled && styles.disabled]}>&nbsp;{children}&nbsp;</Text>;
 }
 
 const styles = StyleSheet.create({
@@ -15,6 +15,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlignVertical: 'top',
     color: paperTheme.colors.primary,
+  },
+  disabled: {
+    opacity: 0.6,
   },
 });
 

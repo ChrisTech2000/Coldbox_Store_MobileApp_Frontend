@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -42,7 +42,7 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
       data={options}
       keyExtractor={(item) => `select-crop-type-#${item.id}`}
       renderItem={({ item }) => (
-        <React.Fragment>
+        <View tw="px-3">
           <List.Item
             title={item.name}
             onPress={() => {
@@ -53,7 +53,7 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
           />
           <Divider tw="bg-gray-400" />
-        </React.Fragment>
+        </View>
       )}
     />
   );

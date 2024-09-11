@@ -264,7 +264,12 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 title={undefined}
                 onPress={(evt) => {
                   evt?.stopPropagation();
-                  onOpenModal('weight');
+                  navigation.navigate('CrateWeightAndPricing', {
+                    isSellableInMarketplace: false,
+                    companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
+                    currencySymbol,
+                    crates,
+                  });
                 }}
                 left={() => (
                   <View tw="flex-row">

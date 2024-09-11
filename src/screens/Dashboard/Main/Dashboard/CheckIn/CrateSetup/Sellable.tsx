@@ -2,6 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { Divider, List, Switch } from 'react-native-paper';
 import { type Control } from 'react-hook-form';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
 
@@ -16,7 +18,12 @@ export default function Sellable(props: { formControl: Control<SetupSchema, unkn
       <List.Item
         tw="p-0 m-0 mt-3"
         title={undefined}
-        left={() => <Text tw="text-base self-center">Sellable</Text>}
+        left={() => (
+          <View tw="flex-row items-center space-x-2">
+            <Icon name="information-outline" size={20} color={colors.gray[600]} />
+            <Text tw="text-base self-center">Sell in the Marketplace</Text>
+          </View>
+        )}
         right={() => <Switch value={false} onValueChange={() => undefined} />}
       />
       <Divider tw="bg-gray-400 mt-2" />
