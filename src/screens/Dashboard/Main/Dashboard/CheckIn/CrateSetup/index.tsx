@@ -7,6 +7,7 @@ import { Divider, List } from 'react-native-paper';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
 import { Sup } from '#ui/components/SuperscriptText';
+import HideWithKeyboard from '#ui/components/HideWithKeyboard';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -321,20 +322,22 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         />
       </KeyboardAwareScrollView>
 
-      <FloatingFooter
-        dailyPriceLabel={dailyPriceLabel}
-        currencySymbol={currencySymbol}
-        commonPrice={(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
-        totalPrice={totalPrice}
-        cancelFunc={(evt) => {
-          evt.stopPropagation();
-          navigation.navigate('CheckIn', {
-            user: user as Farmer,
-            coolingUnit: coolingUnit as CoolingUnit,
-          });
-        }}
-        saveFunc={handleSubmit(onSubmit)}
-      />
+      <HideWithKeyboard>
+        <FloatingFooter
+          dailyPriceLabel={dailyPriceLabel}
+          currencySymbol={currencySymbol}
+          commonPrice={(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
+          totalPrice={totalPrice}
+          cancelFunc={(evt) => {
+            evt.stopPropagation();
+            navigation.navigate('CheckIn', {
+              user: user as Farmer,
+              coolingUnit: coolingUnit as CoolingUnit,
+            });
+          }}
+          saveFunc={handleSubmit(onSubmit)}
+        />
+      </HideWithKeyboard>
     </React.Fragment>
   );
 }
