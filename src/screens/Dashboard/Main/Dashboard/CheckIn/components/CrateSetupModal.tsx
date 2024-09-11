@@ -144,8 +144,8 @@ export function CrateSetupModal({
                               !modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
                                 ? 0
                                 : Number(
-                                  modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
-                                ) - 1,
+                                    modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
+                                  ) - 1,
                               index
                             )
                           }

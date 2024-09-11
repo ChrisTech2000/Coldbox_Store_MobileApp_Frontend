@@ -101,7 +101,9 @@ export default function TemperatureAlert() {
           coolingUnitId,
           coolingUnitHasSensorIntegration: result.sensor,
           showCompleteInfo: showCompleteInfo === undefined ? false : showCompleteInfo,
-          lastUpdated: result.latestTemperatureTimestamp ? new Date(result.latestTemperatureTimestamp) : undefined,
+          lastUpdated: result.latestTemperatureTimestamp
+            ? new Date(result.latestTemperatureTimestamp)
+            : undefined,
           datums: cloneDeep(result.commodityInfos).sort((a, b) => b.percentage - a.percentage),
         });
       } catch (exception) {
@@ -186,12 +188,16 @@ export default function TemperatureAlert() {
 
           <View tw="items-start w-full mt-3">
             {!showCompleteInfo && latestTemperatureTimestamp && (
-              <Text variant="TitleSmall" tw="text-center">{
-                t('Dashboard.TemperatureAlert.latestTemperature', { date: dateFmt(latestTemperatureTimestamp.toISOString(), 'dd-MM-yyyy HH:mm') })
-              }</Text>
+              <Text variant="TitleSmall" tw="text-center">
+                {t('Dashboard.TemperatureAlert.latestTemperature', {
+                  date: dateFmt(latestTemperatureTimestamp.toISOString(), 'dd-MM-yyyy HH:mm'),
+                })}
+              </Text>
             )}
             {/** ADD LAST TEMPERATURE REGISTERED */}
-            <Text variant="TitleSmall" tw="text-center w-full">{t('Dashboard.TemperatureAlert.edit')}</Text>
+            <Text variant="TitleSmall" tw="text-center w-full">
+              {t('Dashboard.TemperatureAlert.edit')}
+            </Text>
             <Controller
               name="temperature"
               control={form.control}
@@ -232,6 +238,6 @@ export default function TemperatureAlert() {
           </View>
         </KeyboardAwareScrollView>
       </Modal>
-    </Portal >
+    </Portal>
   );
 }
