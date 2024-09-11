@@ -292,26 +292,24 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
         </View>
       </KeyboardAwareScrollView>
 
-      <HideWithKeyboard>
-        <View tw="absolute bottom-0 left-0 w-full">
-          <View tw="flex flex-row items-center justify-between bg-teal-50 p-4 rounded-sm">
-            <Text tw="text-lg">Potential selling value</Text>
-            <Text tw="text-lg text-green-primary">
-              {params.currencySymbol} {potentialPrice.toFixed(2)}
-            </Text>
-          </View>
-          <View tw="w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
-            <Button
-              tw="w-5/6 my-4"
-              mode="contained"
-              uppercase
-              // eslint-disable-next-line
-              onPress={form.handleSubmit(onSubmit as any)}
-              disabled={typeof form.formState.errors.crates !== 'undefined'}
-            >
-              {t('actions.save-changes')}
-            </Button>
-          </View>
+      <HideWithKeyboard tw="absolute bottom-0 left-0 w-full">
+        <View tw="flex flex-row items-center justify-between bg-teal-50 p-4 rounded-sm">
+          <Text tw="text-lg">Potential selling value</Text>
+          <Text tw="text-lg text-green-primary">
+            {params.currencySymbol} {potentialPrice.toFixed(2)}
+          </Text>
+        </View>
+        <View tw="w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
+          <Button
+            tw="w-5/6 my-4"
+            mode="contained"
+            uppercase
+            // eslint-disable-next-line
+            onPress={form.handleSubmit(onSubmit as any)}
+            disabled={typeof form.formState.errors.crates !== 'undefined'}
+          >
+            {t('actions.save-changes')}
+          </Button>
         </View>
       </HideWithKeyboard>
     </React.Fragment>
