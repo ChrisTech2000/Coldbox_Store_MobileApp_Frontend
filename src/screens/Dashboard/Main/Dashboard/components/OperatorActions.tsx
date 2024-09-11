@@ -192,6 +192,7 @@ export function OperatorActions({
                 </View>
               ) : (
                 <FlashList
+                  showsHorizontalScrollIndicator={false}
                   data={combinedUsers}
                   extraData={selectedUser}
                   keyExtractor={(item) => item?.id?.toString() ?? ''}

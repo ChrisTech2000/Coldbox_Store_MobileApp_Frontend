@@ -55,6 +55,7 @@ export default function OperatorsField() {
                   header: t('navigation.management.Operators'),
                   options: (
                     <FlatList
+                      showsHorizontalScrollIndicator={false}
                       nestedScrollEnabled
                       data={Object.keys(companyOperators)}
                       keyExtractor={(item, itemIdx) => `operator-item-${item}-#${itemIdx}`}

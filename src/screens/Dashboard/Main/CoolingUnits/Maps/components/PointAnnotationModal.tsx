@@ -44,6 +44,7 @@ export default function PointAnnotationModal(props: Props) {
             {marker?.title}
           </Text>
           <FlatList
+            showsHorizontalScrollIndicator={false}
             data={safeValue}
             nestedScrollEnabled
             keyExtractor={(_, itemIdx) => `marker-cooling-unit-info-#${itemIdx}`}

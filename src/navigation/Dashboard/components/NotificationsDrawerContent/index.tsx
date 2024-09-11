@@ -86,6 +86,7 @@ function NotificationsDrawerContent(props: Props) {
       </View>
 
       <FlatList
+        showsHorizontalScrollIndicator={false}
         data={notifications}
         keyExtractor={(item) => `notification-#${item.id}`}
         renderItem={({ item }) => (

@@ -113,6 +113,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       const temperatureAlertDatum = {
         coolingUnitId: coolingUnit!.id,
         companyId: company!.id,
+        showCompleteInfo: true,
       } satisfies TemperatureAlertEvtDatum;
 
       emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
@@ -176,6 +177,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
         <View>
           <FlatList
+            showsHorizontalScrollIndicator={false}
             data={crates}
             renderItem={({ item: crate, index }) => (
               <View key={`${crate.id}-${index}`} tw="flex flex-row items-center justify-between">

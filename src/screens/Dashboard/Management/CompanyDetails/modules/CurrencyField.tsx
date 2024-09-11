@@ -61,6 +61,7 @@ export default function CurrencyField() {
                       left={<TextInput.Icon icon="magnify" />}
                     />
                     <FlashList
+                      showsHorizontalScrollIndicator={false}
                       data={datums}
                       renderItem={({ item, index }) => (
                         <TouchableOpacity

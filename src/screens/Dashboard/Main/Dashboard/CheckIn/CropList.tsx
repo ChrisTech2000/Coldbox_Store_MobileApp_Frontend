@@ -56,6 +56,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
       showsVerticalScrollIndicator={false}
     >
       <FlashList
+        showsHorizontalScrollIndicator={false}
         data={data}
         renderItem={({ item, index }) => (
           <View key={`${item}-${index}`} tw="w-full px-2">

@@ -173,6 +173,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
             />
           </DataTable.Header>
           <FlashList
+            showsHorizontalScrollIndicator={false}
             data={sortedData}
             keyExtractor={(item, index) => `${item.date}-#${index}-${item.price}`}
             renderItem={({ item }) => (

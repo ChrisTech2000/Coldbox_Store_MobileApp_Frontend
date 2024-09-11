@@ -290,13 +290,14 @@ export default {
       title: 'Alerte de température',
       subtitle:
         "Nous avons remarqué qu'il y avait un changement. Voici les produits actuellement en stockage.",
-      edit: 'Voulez-vous modifier la température ?',
+      edit: 'Voulez-vous modifier la température?',
       temperature: 'Température',
       newTemperature: 'Nouvelle température',
       confirm: 'Confirmer la nouvelle température',
       continueWithoutUpdate: 'Continuer sans mise à jour',
       sensorHint:
         "Impossible d'ajouter la température car un capteur est connecté à l'unité de refroidissement.",
+      latestTemperature: 'La dernière température a été enregistrée le {{date}}.',
     },
     emptyGeneral: "Pour l'instant, aucune donnée disponible.",
     emptyCoolingUser:
@@ -335,7 +336,7 @@ export default {
     CrateManagement: {
       userModalTitle: 'Sélectionnez un utilisateur de refroidissement',
       addUserLink:
-        "Utilisateur de refroidissement non dans la liste ? Ajoutez l'utilisateur depuis Gestion ➜ Utilisateurs de refroidissement ➜ +",
+        "Utilisateur de refroidissement non dans la liste? Ajoutez l'utilisateur depuis Gestion ➜ Utilisateurs de refroidissement ➜ +",
       coolingUserLabel: 'Utilisateur de refroidissement',
       selectCoolingUnitLabel: 'Sélectionnez une unité de refroidissement',
       coolingUnitLabel: 'Unité de refroidissement',
@@ -347,8 +348,8 @@ export default {
         warningMessage: "Veuillez remplir l'enquête de base pour {{crop}} !",
         modal: {
           weeklyQuantityQuestion:
-            'Quelle est la quantité de {{crop}} que vous produisez ou commercialisez par semaine ?',
-          cropSpoilageQuestion: 'Quelle est la principale raison du gaspillage des cultures ?',
+            'Quelle est la quantité de {{crop}} que vous produisez ou commercialisez par semaine?',
+          cropSpoilageQuestion: 'Quelle est la principale raison du gaspillage des cultures?',
           marketPriceQuestion: 'Prix moyen du marché par semaine lors de la vente de {{crop}}',
           quantityDistributionQuestion: 'Combien de cela est :',
           selfConsumed: 'Auto-consommé ({{unit}})',
@@ -455,7 +456,7 @@ export default {
           fixedPriceLabel: 'Prix fixe',
           totalPriceLabel: 'Prix total',
           plannedDaysLabel: 'Nombre de jours prévus en stockage',
-          harvestDateLabel: 'Quand la culture a-t-elle été récoltée ?',
+          harvestDateLabel: 'Quand la culture a-t-elle été récoltée?',
           harvestDateValues: {
             today: "Aujourd'hui",
             yesterday: 'Hier',
@@ -582,7 +583,7 @@ export default {
         },
         modal: {
           message:
-            'Cette opération supprimera toutes les unités de refroidissement associées à ce lieu. Voulez-vous continuer ?',
+            'Cette opération supprimera toutes les unités de refroidissement associées à ce lieu. Voulez-vous continuer?',
         },
         actions: {
           currentLocation: 'Choisir le lieu actuel',
@@ -670,7 +671,7 @@ export default {
       },
       CoolingUsers: {
         modals: {
-          selectMethod: "Comment souhaitez-vous ajouter l'utilisateur ?",
+          selectMethod: "Comment souhaitez-vous ajouter l'utilisateur?",
           userCode: 'Entrez un code utilisateur',
           userCodeDesc:
             "Vous pouvez trouver le code dans les détails de votre compte si vous êtes enregistré en tant qu'utilisateur de refroidissement.",
@@ -687,7 +688,7 @@ export default {
           warning:
             "Ce compte ne peut pas être supprimé car l'utilisateur a des check-ins actifs dans les unités de refroidissement {{names}}. Veuillez informer l'utilisateur de venir dans la pièce pour récupérer ces articles et compléter les check-outs avant de supprimer le compte !",
           confirmation:
-            "Êtes-vous sûr de vouloir supprimer cet utilisateur de votre liste d'utilisateurs de refroidissement ? Cette opération supprimera cet utilisateur de refroidissement et ne pourra pas être annulée !",
+            "Êtes-vous sûr de vouloir supprimer cet utilisateur de votre liste d'utilisateurs de refroidissement? Cette opération supprimera cet utilisateur de refroidissement et ne pourra pas être annulée !",
           edit: 'Utilisateur de refroidissement modifié avec succès',
           noCoolingUnits: "Vous n'avez pas encore d'unités de refroidissement",
           updateSuccess: 'Mise à jour réussie',
@@ -806,7 +807,7 @@ export default {
       EditCoolingUnit: {
         modal: {
           askDelete:
-            'Cette opération supprimera cette unité de refroidissement ainsi que son historique. Voulez-vous continuer ?',
+            'Cette opération supprimera cette unité de refroidissement ainsi que son historique. Voulez-vous continuer?',
         },
         buttons: {
           viewExisting: "Voir l'existant",
@@ -849,7 +850,7 @@ export default {
     },
     AccountDetails: {
       popups: {
-        default: 'Êtes-vous sûr de vouloir supprimer votre compte ?',
+        default: 'Êtes-vous sûr de vouloir supprimer votre compte?',
         lastRegisteredEmployee:
           "Vous êtes le seul Employé enregistré de l'entreprise, cette action supprimera l'entreprise !",
         activeCheckInOP:
@@ -875,7 +876,7 @@ export default {
     },
     KnowledgeHub: {
       comic: 'Voyage du fermier : Bande dessinée',
-      cooling: "Qu'est-ce que le Cooling-as-a-Service ?",
+      cooling: "Qu'est-ce que le Cooling-as-a-Service?",
       quality: 'Comment maximiser la qualité des cultures',
       optimal: 'Conditions de stockage optimales dans des chambres froides multi-produits',
       table: 'Tableau de stockage des cultures',
@@ -964,13 +965,13 @@ export default {
       survey: {
         fillMessage: "Veuillez remplir l'enquête de base pour {{crop}} !",
         baseSurvey: {
-          occupationQuestion: 'Quelle est la meilleure description de votre occupation ?',
+          occupationQuestion: 'Quelle est la meilleure description de votre occupation?',
           occupationFarmer: 'Un agriculteur',
           occupationTrader: 'Un petit commerçant/vendeur/grossiste',
-          usageQuestion: 'Avez-vous utilisé la chambre froide dans le passé ?',
+          usageQuestion: 'Avez-vous utilisé la chambre froide dans le passé?',
           newUser: 'Non, je suis un nouvel utilisateur',
           oldUser: "Oui, j'ai utilisé la chambre froide",
-          mostUsedCommoditiesQuestion: 'Cultures les plus récoltées/commercialisées ?',
+          mostUsedCommoditiesQuestion: 'Cultures les plus récoltées/commercialisées?',
           commodity: 'Culture',
           newCommodity: 'Culture {{index}}',
           fillCommoditiesMessage:
@@ -982,16 +983,16 @@ export default {
         marketSurvey: {
           title:
             'Veuillez répondre aux questions suivantes pour les caisses de {{crop}} que vous avez sorties.',
-          locationQuestion: 'Où avez-vous vendu votre production ?',
+          locationQuestion: 'Où avez-vous vendu votre production?',
           locations: {
             farm: 'A la ferme',
             market: 'Marché local',
             both: 'À la ferme et au marché',
           },
-          priceQuestion: 'Quel prix avez-vous reçu ?',
+          priceQuestion: 'Quel prix avez-vous reçu?',
           spoiledProducesQuestion:
-            'Combien de ce qui était en stockage la semaine dernière a été gâté ou vendu en dessous du prix moyen du marché ?',
-          spoilageReasonsQuestion: 'Quelle est la principale raison du gâtage des cultures ?',
+            'Combien de ce qui était en stockage la semaine dernière a été gâté ou vendu en dessous du prix moyen du marché?',
+          spoilageReasonsQuestion: 'Quelle est la principale raison du gâtage des cultures?',
           formError: 'Veuillez sélectionner une option',
         },
       },
