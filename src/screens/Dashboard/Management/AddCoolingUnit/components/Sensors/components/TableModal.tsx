@@ -80,6 +80,7 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
               </DataTable.Header>
 
               <FlatList
+                showsHorizontalScrollIndicator={false}
                 data={rows}
                 keyExtractor={(_, idx) => `data-table-row-#${idx}`}
                 renderItem={({ item }) => (

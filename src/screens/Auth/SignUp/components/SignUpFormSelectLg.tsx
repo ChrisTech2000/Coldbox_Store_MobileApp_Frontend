@@ -65,6 +65,7 @@ export function SignUpFormSelectLg<T extends FieldValues>({
                       left={<TextInput.Icon icon="magnify" />}
                     />
                     <FlashList
+                      showsHorizontalScrollIndicator={false}
                       data={data}
                       renderItem={({ item, index }) => (
                         <TouchableOpacity

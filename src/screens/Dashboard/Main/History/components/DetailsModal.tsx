@@ -132,6 +132,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
           </Text>
 
           <FlatList
+            showsHorizontalScrollIndicator={false}
             data={movement.cratesCheckin}
             keyExtractor={(item, index) => `${item.code}-${index}`}
             renderItem={({ item: crate }) => (

@@ -84,6 +84,7 @@ function CoolingUnitsCratesInfo() {
       ) : (
         <DataTable style={styles.dataTable}>
           <FlatList
+            showsHorizontalScrollIndicator={false}
             nestedScrollEnabled
             ListHeaderComponent={
               <DataTable.Header tw="space-x-1">

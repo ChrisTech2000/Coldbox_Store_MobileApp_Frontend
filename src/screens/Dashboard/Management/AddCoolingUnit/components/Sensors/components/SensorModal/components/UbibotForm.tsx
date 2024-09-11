@@ -213,6 +213,7 @@ export default function UbibotForm() {
                         header: t('Dashboard.Management.AddCoolingUnit.fields.ubibot.field'),
                         options: (
                           <FlatList
+                            showsHorizontalScrollIndicator={false}
                             nestedScrollEnabled
                             data={form.watch('temperatureOptions')}
                             keyExtractor={(temperatureOption, idx) =>

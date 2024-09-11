@@ -114,6 +114,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
           </View>
         ) : movements.length > 0 ? (
           <FlashList
+            showsHorizontalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
               <Movement

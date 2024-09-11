@@ -76,6 +76,7 @@ export default function CommoditiesField(props: Props) {
   return (
     <React.Fragment>
       <FlatList
+        showsHorizontalScrollIndicator={false}
         nestedScrollEnabled
         data={farmerSurveys}
         keyExtractor={(item, index) => `${item.id}-${index}`}

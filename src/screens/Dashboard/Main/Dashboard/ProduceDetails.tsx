@@ -235,6 +235,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
 
       <View tw="w-full px-3">
         <FlatList
+          showsHorizontalScrollIndicator={false}
           data={data}
           scrollEnabled={false}
           renderItem={({ item, index }) => (

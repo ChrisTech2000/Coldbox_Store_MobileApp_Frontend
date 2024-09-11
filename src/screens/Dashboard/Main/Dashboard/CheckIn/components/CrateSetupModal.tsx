@@ -100,6 +100,7 @@ export function CrateSetupModal({
 
           <ScrollView tw="w-full h-[60%]" showsVerticalScrollIndicator={false}>
             <FlashList
+              showsHorizontalScrollIndicator={false}
               data={modalCrates}
               extraData={crates}
               renderItem={({ index }) => (

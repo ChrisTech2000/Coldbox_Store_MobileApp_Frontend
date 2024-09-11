@@ -133,6 +133,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         <DashboardEmptyState />
       ) : (
         <FlatList
+          showsHorizontalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               refreshing={

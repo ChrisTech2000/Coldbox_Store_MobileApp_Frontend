@@ -40,6 +40,7 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
   return (
     <View tw="mt-2">
       <FlatList
+        showsHorizontalScrollIndicator={false}
         data={options}
         renderItem={({ item, index }) => (
           <TouchableOpacity

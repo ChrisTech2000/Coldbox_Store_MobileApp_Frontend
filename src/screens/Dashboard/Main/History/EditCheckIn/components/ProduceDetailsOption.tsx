@@ -56,6 +56,7 @@ export function ProduceDetailsOption({ option, index, crops, control }: ProduceD
                         }}
                       >
                         <FlatList
+                          showsHorizontalScrollIndicator={false}
                           data={crops}
                           keyExtractor={(item, idx) => `rb-${item.name}-${idx}-${index}`}
                           renderItem={({ item }) => (
