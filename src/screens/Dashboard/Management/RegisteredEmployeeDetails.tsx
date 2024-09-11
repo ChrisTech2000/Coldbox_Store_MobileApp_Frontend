@@ -94,8 +94,8 @@ function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmploy
           {isCurrentUser
             ? t('Dashboard.Management.RegisteredEmployeeDetails.deletePersonal')
             : t('Dashboard.Management.RegisteredEmployeeDetails.deleteOther', {
-              contact: 'app@yourvcca.org',
-            })}
+                contact: 'app@yourvcca.org',
+              })}
         </Text>
       </View>
     </View>

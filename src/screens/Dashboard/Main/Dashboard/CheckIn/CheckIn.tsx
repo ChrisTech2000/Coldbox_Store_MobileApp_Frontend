@@ -148,30 +148,30 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
     const result = checkOutCode
       ? await ColdtivateService.checkInWithCode({
-        params: {
-          code: checkOutCode,
-          farmer: user.id,
-          coolingUnitId: coolingUnit?.id as number,
-          days: produces[0].crates[0].plannedDays,
-          tags: produces
-            .flatMap((produce) => produce.crates)
-            .map((crate) => {
-              return crate.tag;
-            })
-            .filter((tag) => typeof tag === 'string'),
-        },
-      })
-      : await ColdtivateService.checkIn({
-        farmerId: user.id,
-        id: undefined,
-        produces: produces.map((produce) => ({
-          ...produce,
-          crop: {
-            id: produce.crop.id as number,
+          params: {
+            code: checkOutCode,
+            farmer: user.id,
+            coolingUnitId: coolingUnit?.id as number,
+            days: produces[0].crates[0].plannedDays,
+            tags: produces
+              .flatMap((produce) => produce.crates)
+              .map((crate) => {
+                return crate.tag;
+              })
+              .filter((tag) => typeof tag === 'string'),
           },
-          harvestDate: produce.harvestDate as number,
-        })),
-      });
+        })
+      : await ColdtivateService.checkIn({
+          farmerId: user.id,
+          id: undefined,
+          produces: produces.map((produce) => ({
+            ...produce,
+            crop: {
+              id: produce.crop.id as number,
+            },
+            harvestDate: produce.harvestDate as number,
+          })),
+        });
 
     if (result) {
       resetCheckInStore();
@@ -201,11 +201,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     const checkInDate = new Date(coolingUnit.lastCheckInDate);
     const lastTemperatureChangeSinceCheckIn =
       (checkInDate.getTime() - tempDate.getTime()) / 3600000;
-    const lastCheckInChangeInHours =
-      Math.abs(now.getTime() - checkInDate.getTime()) / 3600000;
+    const lastCheckInChangeInHours = Math.abs(now.getTime() - checkInDate.getTime()) / 3600000;
 
     navigation.navigate('SelectCropType');
-    
+
     if (
       guard('VIEW', 'TemperatureAlertModal') &&
       (!coolingUnit.sensor || coolingUnit.sensorError) &&
