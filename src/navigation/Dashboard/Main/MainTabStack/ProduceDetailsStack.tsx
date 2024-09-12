@@ -8,10 +8,11 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
-import type { CoolingUnit, DashboardProduce } from '#types/global';
+import type { CoolingUnit, Crate, DashboardProduce } from '#types/global';
 import type { TranslationPaths } from '#i18n/index';
 
 import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
+import MarketplaceSettings from '#screens/Dashboard/Main/Dashboard/ProduceDetails/MarketplaceSettings';
 
 import NavigatorHeader, {
   type NavigationHeaderProps,
@@ -24,6 +25,10 @@ export type ProduceDetailsStackRoutes = {
     produce: DashboardProduce;
     coolingUnit: CoolingUnit | null;
     currency: string;
+  };
+  MarketplaceSettings: {
+    crates: Array<Crate>;
+    produceShelfLife: number;
   };
 };
 
@@ -39,6 +44,7 @@ type ScreenOptions = (props: {
 
 const NAVIGATOR_HEADERS: Record<ProduceDetailsStackRoutePaths, TranslationPaths | undefined> = {
   Root: 'navigation.bottomTabs.ProduceDetails',
+  MarketplaceSettings: 'navigation.bottomTabs.MarketplaceSettings',
 };
 
 const Stack = createNativeStackNavigator<ProduceDetailsStackRoutes>();
@@ -54,7 +60,7 @@ export default function ProduceDetailsStack() {
 
     const translationPath = NAVIGATOR_HEADERS[routeName];
     const routeTitle = translationPath
-      ? t(translationPath, { produceCode: produce.movementCode })
+      ? t(translationPath, { produceCode: produce?.movementCode })
       : undefined;
 
     return {
@@ -73,6 +79,7 @@ export default function ProduceDetailsStack() {
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={ProduceDetails} />
+      <Stack.Screen name="MarketplaceSettings" component={MarketplaceSettings} />
     </Stack.Navigator>
   );
 }
