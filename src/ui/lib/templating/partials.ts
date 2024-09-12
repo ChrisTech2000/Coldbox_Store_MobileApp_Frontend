@@ -22,7 +22,7 @@ export const PillCard = template<{ label: string; value: number | string }>`
 `;
 
 export const PillContainer = template<{ datums: Array<{ label: string; value: number | string }> }>`
-<div class="h-24 max-h-24 bg-zinc-100 rounded-md flex flex-row items-center justify-evenly my-2">
+<div class="bg-zinc-100 rounded-md flex flex-row items-center justify-center space-x-2 space-y-1 flex-wrap my-2 p-2">
 ${(p) => p.datums.map((datum) => PillCard(datum)).join('')}
 </div>
 `;

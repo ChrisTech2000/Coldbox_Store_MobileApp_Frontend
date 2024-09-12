@@ -82,7 +82,7 @@ export class DataLoader {
       losses.push(cloneDeep(impactSlice.top5FoodLossEvolution[key]));
       // --
       const revenue = cloneDeep(impactSlice.top5RevenueEvolution[key]);
-      set(revenue, 'currency', countryCurrency?.currencyCode ?? 'NGN');
+      set(revenue, 'currency', countryCurrency?.currency ?? 'NGN');
       revenues.push(revenue as FarmerRevenueImpactMetrics);
     }
 
@@ -141,7 +141,7 @@ export class DataLoader {
         revenues,
       },
       datums: {
-        currencyCode: countryCurrency?.currencyCode ?? 'NGN',
+        currencyCode: countryCurrency?.currency ?? 'NGN',
         units: coolingUnitsNames.join(', '),
       },
     };
@@ -303,11 +303,15 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         },
         {
           label: t('Dashboard.Analytics.farmersAnalytics.avgStorageTime'),
-          value: `${data.farmerInfo?.avgStorageDays?.toFixed(2)} day(s)`,
+          value: `${data.farmerInfo?.avgStorageDays?.['0']?.toFixed(2)} day(s)`,
         },
         {
           label: t('Dashboard.Analytics.farmersAnalytics.coldStorageCost'),
-          value: [data.datums.currencyCode, data.farmerInfo?.totalStorageCost].join(' '),
+          value:
+            data.farmerInfo?.totalStorageCost?.['0']?.toLocaleString('en-US', {
+              style: 'currency',
+              currency: data.datums.currencyCode,
+            }) ?? '',
         },
       ],
     }),
@@ -324,10 +328,10 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         },
       },
       rows:
-        data?.stats?.cools?.map((cool) => ({
-          unit: cool.unitName ?? '',
-          checkIn: cool.roomCratesIn,
-          checkOut: cool.roomCratesOut,
+        data?.stats?.cools?.map((cool, index) => ({
+          unit: cool.unitName?.[index] ?? '',
+          checkIn: cool.roomCratesIn?.[index] ?? 0,
+          checkOut: cool.roomCratesOut?.[index] ?? 0,
         })) ?? [],
     }),
     Section({ label: t('Dashboard.Analytics.totalQuantityLabel') }),
@@ -343,10 +347,10 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         },
       },
       rows:
-        data?.stats?.cools?.map((cool) => ({
-          unit: cool.unitName ?? '',
-          checkIn: cool.roomKgIn,
-          checkOut: cool.roomKgOut,
+        data?.stats?.cools?.map((cool, index) => ({
+          unit: cool.unitName?.[index] ?? '',
+          checkIn: cool.roomKgIn?.[index] ?? 0,
+          checkOut: cool.roomKgOut?.[index] ?? 0,
         })) ?? [],
     }),
     Section({ label: t('Dashboard.Analytics.totalOperations') }),
@@ -362,10 +366,10 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         },
       },
       rows:
-        data?.stats?.cools?.map((cool) => ({
-          unit: cool.unitName ?? '',
-          checkIn: cool.roomOpsIn,
-          checkOut: cool.roomOpsOut,
+        data?.stats?.cools?.map((cool, index) => ({
+          unit: cool.unitName?.[index] ?? '',
+          checkIn: cool.roomOpsIn?.[index] ?? 0,
+          checkOut: cool.roomOpsOut?.[index] ?? 0,
         })) ?? [],
     }),
     Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInCropDistribution') }),
@@ -375,8 +379,10 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         crates: t('Dashboard.Analytics.comparisonTab.cratesTab.crates'),
         crop: t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution'),
       },
-      rows: data?.stats.cools?.map((cool) => ({
-        unit: cool.unitName ?? '',
+      // eslint-disable-next-line
+      // @ts-ignore
+      rows: data?.stats.cools?.map((cool, index) => ({
+        unit: cool.unitName?.[index] ?? '',
         crates: cool.checkInCratesCrop.map((item) => item[1]),
         crop: cool.checkInCratesCrop.map((item) => item[0]),
       })),
@@ -388,8 +394,10 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         crates: t('Dashboard.Analytics.comparisonTab.cratesTab.crates'),
         crop: t('Dashboard.Analytics.comparisonTab.cratesTab.checkOutCropDistribution'),
       },
-      rows: data?.stats.cools?.map((cool) => ({
-        unit: cool.unitName ?? '',
+      // eslint-disable-next-line
+      // @ts-ignore
+      rows: data?.stats.cools?.map((cool, index) => ({
+        unit: cool.unitName?.[index] ?? '',
         crates: cool.checkOutCratesCrop.map((item) => item[1]),
         crop: cool.checkOutCratesCrop.map((item) => item[0]),
       })),
@@ -401,8 +409,10 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         weight: t('Dashboard.Analytics.comparisonTab.cratesTab.kg'),
         crop: t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution'),
       },
-      rows: data?.stats.cools?.map((cool) => ({
-        unit: cool.unitName ?? '',
+      // eslint-disable-next-line
+      // @ts-ignore
+      rows: data?.stats.cools?.map((cool, index) => ({
+        unit: cool.unitName?.[index] ?? '',
         weight: cool.checkInKgCrop.map((item) => item[1]),
         crop: cool.checkInKgCrop.map((item) => item[0]),
       })),
@@ -414,8 +424,10 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         weight: t('Dashboard.Analytics.comparisonTab.cratesTab.kg'),
         crop: t('Dashboard.Analytics.comparisonTab.cratesTab.checkOutCropDistribution'),
       },
-      rows: data?.stats.cools?.map((cool) => ({
-        unit: cool.unitName ?? '',
+      // eslint-disable-next-line
+      // @ts-ignore
+      rows: data?.stats.cools?.map((cool, index) => ({
+        unit: cool.unitName?.[index] ?? '',
         weight: cool.checkOutKgCrop.map((item) => item[1]),
         crop: cool.checkOutKgCrop.map((item) => item[0]),
       })),
