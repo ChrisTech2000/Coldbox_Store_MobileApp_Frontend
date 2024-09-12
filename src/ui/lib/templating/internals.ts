@@ -21,12 +21,19 @@ const __htmlDocument: string = `
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-      <style>*{font-family: "Roboto", sans-serif;font-weight: 400;font-style: normal;}</style>
+      <style>
+        * { 
+            font-family: "Roboto", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+          }
+        html { -webkit-print-color-adjust: exact; }
+      </style>
     </head>
     <body><!--body-outlet--></body>
     <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
   </html>
-  `;
+`;
 
 export const html = (...bodyPartials: Array<string>) =>
   __htmlDocument.replace('<!--body-outlet-->', bodyPartials.join(''));
