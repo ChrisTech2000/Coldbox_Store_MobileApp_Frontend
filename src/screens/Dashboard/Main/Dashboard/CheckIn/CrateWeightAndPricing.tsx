@@ -334,12 +334,14 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
       </KeyboardAwareScrollView>
 
       <HideWithKeyboardView tw="absolute bottom-0 left-0 w-full">
-        <View tw="flex flex-row items-center justify-between bg-teal-50 p-4 rounded-sm">
-          <Text tw="text-lg">Potential selling value</Text>
-          <Text tw="text-lg text-green-primary">
-            {params.currencySymbol} {potentialPrice.toFixed(2)}
-          </Text>
-        </View>
+        {isSellable ? (
+          <View tw="flex flex-row items-center justify-between bg-teal-50 p-4 rounded-sm">
+            <Text tw="text-lg">Potential selling value</Text>
+            <Text tw="text-lg text-green-primary">
+              {params.currencySymbol} {potentialPrice.toFixed(2)}
+            </Text>
+          </View>
+        ) : null}
         <View tw="w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
           <Button
             tw="w-5/6 my-4"
@@ -348,9 +350,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             // eslint-disable-next-line
             onPress={form.handleSubmit(onSubmit as any)}
             disabled={
-              typeof form.formState.errors.crates !== 'undefined' ||
-              !form.formState.isDirty ||
-              form.formState.isSubmitting
+              typeof form.formState.errors.crates !== 'undefined' || form.formState.isSubmitting
             }
           >
             {t('actions.save-changes')}
