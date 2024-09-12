@@ -44,8 +44,6 @@ export type SetupSchema = {
   isSellableInMarketplace: boolean;
 };
 
-export type ModalMode = 'weight' | 'id' | undefined;
-
 // TODO → add text content to translations
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
   const { additionalInfo, crop } = route.params;
@@ -102,7 +100,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     ),
   });
 
-  const [openModal, setOpenModal] = useState<ModalMode>(undefined);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   useCrateWeightPricingBridge((values) => {
     // TODO → include the crate pricing in the future
@@ -204,18 +202,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     [crates, generalCrateWeight, coolingUnit]
   );
 
-  const onOpenModal = useCallback(
-    (mode: ModalMode) => {
-      if (!numberOfCrates || numberOfCrates < 1) {
-        setError('numberOfCrates', {
-          message: t('Dashboard.CrateManagement.CheckIn.Setup.cratesError'),
-        });
-      } else {
-        setOpenModal(mode);
-      }
-    },
-    [numberOfCrates]
-  );
+  const onOpenModal = useCallback(() => {
+    if (!numberOfCrates || numberOfCrates < 1) {
+      setError('numberOfCrates', {
+        message: t('Dashboard.CrateManagement.CheckIn.Setup.cratesError'),
+      });
+    } else {
+      setOpenModal((state) => !state);
+    }
+  }, [numberOfCrates]);
 
   const onSubmit: SubmitHandler<SetupSchema> = useCallback(
     (values) => {
@@ -309,7 +304,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 title={undefined}
                 onPress={(evt) => {
                   evt?.stopPropagation();
-                  onOpenModal('id');
+                  onOpenModal();
                 }}
                 left={() => (
                   <Text tw="text-base self-center">
@@ -332,11 +327,10 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         <CrateSetupModal
           setValue={(crates: SetupSchema['crates']) => setValue('crates', crates)}
           crates={crates}
-          mode={openModal}
-          isOpen={openModal !== undefined}
+          isOpen={openModal}
           numberOfCrates={numberOfCrates}
-          closeModal={() => setOpenModal(undefined)}
-          title={openModal ? t(`Dashboard.CrateManagement.CheckIn.Setup.modals.${openModal}`) : ''}
+          closeModal={() => setOpenModal(false)}
+          title={openModal ? t(`Dashboard.CrateManagement.CheckIn.Setup.modals.id`) : ''}
         />
       </KeyboardAwareScrollView>
 
