@@ -92,7 +92,7 @@ export function CompanySection() {
     try {
       const file = await RNHTMLtoPDF.convert(PDFOptions);
       if (!file.filePath) throw new Error();
-      toast.show(t('Dashboard.History.pdfModal.successMessage'), {
+      toast.show(`${t('actions.done')}!`, {
         type: 'md_success',
       });
     } catch {
