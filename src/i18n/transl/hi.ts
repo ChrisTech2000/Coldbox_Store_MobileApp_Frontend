@@ -83,6 +83,7 @@ export default {
       CheckIn: 'चेक इन',
       CropList: '{{cropType}}',
       CrateSetup: 'चेक इन',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'COMSOL Runtime License Agreement 6.0',

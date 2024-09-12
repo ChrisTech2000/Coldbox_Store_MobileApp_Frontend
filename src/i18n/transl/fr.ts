@@ -68,6 +68,9 @@ export default {
     },
     dashboard: {
       AccountDetails: 'Détails du compte',
+      PersonalDetails: 'Personal details', // TODO
+      LocalizationPreferences: 'Localization preferences', // TODO
+      ContactsSharing: 'Contacts sharing', // TODO
       KnowledgeHub: 'Centre de connaissances',
       QuitTutorial: 'Quitter le tutoriel',
       FAQ: 'FAQ',
@@ -80,6 +83,7 @@ export default {
       CheckIn: 'Enregistrement',
       CropList: '{{cropType}}',
       CrateSetup: 'Enregistrement',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'Contrat de Licence Runtime COMSOL 6.0',

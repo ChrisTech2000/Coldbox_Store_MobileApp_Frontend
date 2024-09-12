@@ -68,6 +68,9 @@ export default {
     },
     dashboard: {
       AccountDetails: 'ખાતાનો વિગતવાર',
+      PersonalDetails: 'Personal details', // TODO
+      LocalizationPreferences: 'Localization preferences', // TODO
+      ContactsSharing: 'Contacts sharing', // TODO
       KnowledgeHub: 'જ્ઞાન કેન્દ્ર',
       QuitTutorial: 'ટ્યુટોરિયલ છોડો',
       FAQ: 'વારંવાર પુછાતા પ્રશ્નો',
@@ -80,6 +83,7 @@ export default {
       CheckIn: 'ચેક-ઇન',
       CropList: '{{cropType}}',
       CrateSetup: 'ચેક-ઇન',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'COMSOL રનટાઇમ લાઇસેન્સ સમજૂતિ 6.0',

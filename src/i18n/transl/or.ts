@@ -68,6 +68,9 @@ export default {
     },
     dashboard: {
       AccountDetails: 'ଖାତା ବିବରଣୀ',
+      PersonalDetails: 'Personal details', // TODO
+      LocalizationPreferences: 'Localization preferences', // TODO
+      ContactsSharing: 'Contacts sharing', // TODO
       KnowledgeHub: 'ଜ୍ଞାନ କେନ୍ଦ୍ର',
       QuitTutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍ ଛାଡ଼ନ୍ତୁ',
       FAQ: 'ପ୍ରଶ୍ନ ଓ ଉତ୍ତର',
@@ -80,6 +83,7 @@ export default {
       CheckIn: 'ଚେକ୍-ଇନ୍',
       CropList: '{{cropType}}',
       CrateSetup: 'ଚେକ୍-ଇନ୍',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'COMSOL ରଣଟାଇମ୍ ଲାଇସେନ୍ସ ସମ୍ମତି 6.0',

@@ -53,7 +53,7 @@ export const NAVIGATOR_HEADERS: Record<CheckInStackRoutePaths, TranslationPaths 
   CheckIn: 'navigation.checkIn.CheckIn',
   CropList: 'navigation.checkIn.CropList',
   CrateSetup: 'navigation.checkIn.CrateSetup',
-  CrateWeightAndPricing: 'navigation.checkIn.CrateSetup', // TODO
+  CrateWeightAndPricing: 'navigation.checkIn.CrateWeightAndPricing',
 };
 
 type ScreenOptions = (props: {
