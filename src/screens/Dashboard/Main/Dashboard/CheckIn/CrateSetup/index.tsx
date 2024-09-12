@@ -7,7 +7,7 @@ import { Divider, List } from 'react-native-paper';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
 import { Sup } from '#ui/components/SuperscriptText';
-import HideWithKeyboard from '#ui/components/HideWithKeyboard';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -30,6 +30,8 @@ import CropHarvest from './CropHarvest';
 import FloatingFooter from './FloatingFooter';
 import Sellable from './Sellable';
 
+import { useCrateWeightPricingBridge } from '../CrateWeightAndPricing';
+
 export type SetupSchema = {
   numberOfCrates: number;
   generalCrateWeight: number;
@@ -39,6 +41,7 @@ export type SetupSchema = {
   }>;
   plannedDays: number | undefined;
   dateHarvested: EDateCropped;
+  isSellableInMarketplace: boolean;
 };
 
 export type ModalMode = 'weight' | 'id' | undefined;
@@ -57,6 +60,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     setValue,
     setError,
     clearErrors,
+    reset,
+    getValues,
     formState: { errors },
   } = useForm<SetupSchema>({
     resolver: zodResolver((z, t) =>
@@ -91,11 +96,21 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           .refine((date) => !!date, {
             message: t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateError'),
           }),
+        isSellableInMarketplace: z.boolean(),
       })
     ),
   });
 
   const [openModal, setOpenModal] = useState<ModalMode>(undefined);
+
+  useCrateWeightPricingBridge((values) => {
+    reset((state) => ({
+      ...state,
+      crates: values.crates.map((crate) => ({ crateId: crate.id, crateWeight: crate.weight })),
+      numberOfCrates: values.crates.length,
+      isSellableInMarketplace: values.isSellable,
+    }));
+  });
 
   const plannedDays = watch('plannedDays');
   const numberOfCrates = watch('numberOfCrates');
@@ -266,7 +281,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 onPress={(evt) => {
                   evt?.stopPropagation();
                   navigation.navigate('CrateWeightAndPricing', {
-                    isSellableInMarketplace: false,
+                    isSellableInMarketplace: getValues('isSellableInMarketplace'),
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
                     currencySymbol,
                     crates,
@@ -322,7 +337,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         />
       </KeyboardAwareScrollView>
 
-      <HideWithKeyboard>
+      <HideWithKeyboardView>
         <FloatingFooter
           dailyPriceLabel={dailyPriceLabel}
           currencySymbol={currencySymbol}
@@ -337,7 +352,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           }}
           saveFunc={handleSubmit(onSubmit)}
         />
-      </HideWithKeyboard>
+      </HideWithKeyboardView>
     </React.Fragment>
   );
 }

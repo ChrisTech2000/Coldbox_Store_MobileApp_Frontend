@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Keyboard, View, type ViewProps } from 'react-native';
 
-export default function HideWithKeyboard({ children, ...props }: ViewProps) {
+export default function HideWithKeyboardView({ children, ...props }: ViewProps) {
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
 
   useEffect(() => {

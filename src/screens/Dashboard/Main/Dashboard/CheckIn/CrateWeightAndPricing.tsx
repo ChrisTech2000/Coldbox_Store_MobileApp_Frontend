@@ -1,16 +1,18 @@
-import React, { useRef, type PropsWithChildren } from 'react';
+import React, { useEffect, useRef, type PropsWithChildren } from 'react';
 import { FlatList, View } from 'react-native';
 import { Checkbox, Divider, IconButton, List, Switch, TextInput } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
+import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Text } from '#ui/components/Text';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Input } from '#ui/components/Input';
 import { Button } from '#ui/components/Button';
-import HideWithKeyboard from '#ui/components/HideWithKeyboard';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
@@ -27,6 +29,28 @@ type FormValues<T = string> = {
     price: T;
   }>;
 };
+
+type StoreState = Omit<FormValues<number>, 'applyToAll'>;
+type StoreActions = { mutate: (values: StoreState) => void };
+
+const useCrateWeightPricingStore = create<StoreState & StoreActions>((set) => ({
+  isSellable: false,
+  crates: [],
+  mutate: (values: StoreState) => set(values),
+}));
+
+export function useCrateWeightPricingBridge(cb: (values: StoreState) => void) {
+  const [isSellable, crates] = useCrateWeightPricingStore(
+    useShallow((store) => [store.isSellable, store.crates])
+  );
+  useEffect(() => {
+    cb({ isSellable, crates });
+  }, [isSellable, crates]);
+}
+
+export function resetCrateWeightPricingBridge() {
+  useCrateWeightPricingStore.getState().mutate({ isSellable: false, crates: [] });
+}
 
 function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPricing'>) {
   const { params } = props.route;
@@ -65,8 +89,9 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   });
 
   function onSubmit(values: FormValues<number>): void {
-    console.log(values);
-    // TODO
+    const { isSellable, crates } = values;
+    useCrateWeightPricingStore.getState().mutate({ isSellable, crates });
+    props.navigation.goBack();
   }
 
   const crateFields = useFieldArray({ control: form.control, name: 'crates' });
@@ -292,7 +317,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
         </View>
       </KeyboardAwareScrollView>
 
-      <HideWithKeyboard tw="absolute bottom-0 left-0 w-full">
+      <HideWithKeyboardView tw="absolute bottom-0 left-0 w-full">
         <View tw="flex flex-row items-center justify-between bg-teal-50 p-4 rounded-sm">
           <Text tw="text-lg">Potential selling value</Text>
           <Text tw="text-lg text-green-primary">
@@ -306,12 +331,16 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             uppercase
             // eslint-disable-next-line
             onPress={form.handleSubmit(onSubmit as any)}
-            disabled={typeof form.formState.errors.crates !== 'undefined'}
+            disabled={
+              typeof form.formState.errors.crates !== 'undefined' ||
+              !form.formState.isDirty ||
+              form.formState.isSubmitting
+            }
           >
             {t('actions.save-changes')}
           </Button>
         </View>
-      </HideWithKeyboard>
+      </HideWithKeyboardView>
     </React.Fragment>
   );
 }
