@@ -1,14 +1,24 @@
 import { currencies } from 'currencies.json';
 
 import { Translator } from '#i18n/utils';
+import { ManagementCompany } from '#stores/management';
 import {
   type CompanyData,
   type CoolingUnit,
-  type ImpactData,
   type CoolingUnitImpact,
   ECoolingUnitType,
+  type ImpactData,
 } from '#types/global';
-import { ManagementCompany } from '#stores/management';
+import { html } from '#ui/lib/templating/internals';
+import {
+  ImpactEvolution,
+  ImpactGeneralSection,
+  PillContainer,
+  ScrollView,
+  UsersSection,
+  UtilizationSection,
+} from '#ui/lib/templating/partials';
+
 import { getMetricValue } from '.';
 
 ///////////////////// UTILS
@@ -39,91 +49,15 @@ export function generatePDFContent(
 ) {
   const currencySymbol = currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
 
-  return `
-    <html>
-      <head>
-         <style>
-          html { -webkit-print-color-adjust: exact; }
-          body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-          }
-          .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-          }
-          .card {
-            background-color: #4b0082; 
-            border-radius: 4px;
-            padding: 8px 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-          .label {
-            font-size: 18px; 
-            color: #ffffff;
-          }
-          .value {
-            font-size: 18px; 
-            color: #ffffff; 
-            font-weight: bold;
-          }
-          .scroll-view {
-            width: 100%;
-            margin-top: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-          .section {
-            width: 100%;
-            background-color: rgba(0, 128, 0, 0.2);
-            padding: 8px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 8px 0;
-          }
-          .section2 {
-            background-color: #e5e7eb;
-          }
-          .section3 {
-            background-color: #eee9fd;
-          }
-          .section-title {
-            font-size: 18px;
-            margin-bottom: 8px;
-          }
-          .section-content {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 8px;
-          }
-          .divider {
-            background-color: #008000;
-            width: 1px;
-            height: 32px;
-          }
-          .section-text {
-            font-size: 18px;
-          }
-        </style>
-      </head>
-      <body>
-        ${mode === 'company' ? generateGeneralHtmlContent(t, company, companyData as CompanyData, coolingUnits) : ''}
-        ${generateUsersHtmlContent(t, companyData, mode)}
-        ${mode === 'company' ? generateUtilizationHtmlContent(t, companyData as CompanyData) : ''}
-        ${mode === 'aggregated' ? generateCratesHtmlContent(t, companyData as CoolingUnitImpact) : ''}
-        ${generateImpactHtml(t, impactData, currencySymbol, mode, companyData as CoolingUnitImpact)}
-      </body>
-    </html>
-  `;
+  return html(
+    mode === 'company'
+      ? generateGeneralHtmlContent(t, company, companyData as CompanyData, coolingUnits)
+      : '',
+    generateUsersHtmlContent(t, companyData, mode),
+    mode === 'company' ? generateUtilizationHtmlContent(t, companyData as CompanyData) : '',
+    mode === 'aggregated' ? generateCratesHtmlContent(t, companyData as CoolingUnitImpact) : '',
+    generateImpactHtml(t, impactData, currencySymbol, mode, companyData as CoolingUnitImpact)
+  );
 }
 
 ///////////////////// GENERAL CONTENT — COMPANY TAB
@@ -173,39 +107,44 @@ function generateGeneralHtmlContent(
 
   const counters = generateCounters(coolingUnits ?? []);
 
-  return `
-    <div class="container">
-        <div class="card">
-          <div class="label">${t('Dashboard.Analytics.companyTab.companyNameLabel')}</div>
-          <div class="value">${company?.name}</div>
-        </div>
-
-        <div class="card">
-          <div class="label">${t('Dashboard.Analytics.companyTab.revenueLabel')}</div>
-          <div class="value">${companyData?.compRevenue?.[0]?.toLocaleString('en-US', {
+  return PillContainer({
+    datums: [
+      {
+        label: t('Dashboard.Analytics.companyTab.companyNameLabel'),
+        value: company?.name ?? '',
+      },
+      {
+        label: t('Dashboard.Analytics.companyTab.revenueLabel'),
+        value:
+          companyData?.compRevenue?.[0]?.toLocaleString('en-US', {
             style: 'currency',
             currency: companyData?.currency?.[0] ?? 'NGN',
-          })}</div>
-        </div>
-
-        <div class="card">
-          <div class="label">${t('Dashboard.Analytics.companyTab.coolingUnitsLabel')}</div>
-          <div class="value">${coolingUnitsContent}</div>
-        </div>
-
-        <div class="card">
-          <div class="label">${t('Dashboard.Analytics.companyTab.capacityLabel')}</div>
-          <div class="value">${coolingUnitsCapacity}</div>
-        </div>
-
-        <div class="card">
-          <div class="label">${t('Dashboard.Analytics.companyTab.coolingUnitTypeLabel')}</div>
-          <div class="value">${t('Dashboard.Analytics.companyTab.coolingUnitTypeMarket', { amount: counters.marketUnits })}</div>
-          <div class="value">${t('Dashboard.Analytics.companyTab.coolingUnitTypeFarmGate', { amount: counters.farmGateUnits })}</div>
-          <div class="value">${t('Dashboard.Analytics.companyTab.coolingUnitTypeMovable', { amount: counters.movableUnits })}</div>
-        </div>
-      </div>
-  `;
+          }) ?? '',
+      },
+      {
+        label: t('Dashboard.Analytics.companyTab.coolingUnitsLabel'),
+        value: coolingUnitsContent,
+      },
+      {
+        label: t('Dashboard.Analytics.companyTab.capacityLabel'),
+        value: coolingUnitsCapacity ?? '',
+      },
+      {
+        label: t('Dashboard.Analytics.companyTab.coolingUnitTypeLabel'),
+        value: [
+          t('Dashboard.Analytics.companyTab.coolingUnitTypeMarket', {
+            amount: counters.marketUnits,
+          }),
+          t('Dashboard.Analytics.companyTab.coolingUnitTypeFarmGate', {
+            amount: counters.farmGateUnits,
+          }),
+          t('Dashboard.Analytics.companyTab.coolingUnitTypeMovable', {
+            amount: counters.movableUnits,
+          }),
+        ],
+      },
+    ],
+  });
 }
 
 ///////////////////// USERS CONTENT — MULTIPLE TABS
@@ -213,22 +152,10 @@ function generateUsersSection(
   title: string,
   data: { male: string; female: string; other?: string }
 ) {
-  return `
-  <div class="section">
-    <div class="section-title">
-      ${title}
-    </div>
-    <div class="section-content">
-      <div class="section-text">
-        ${data.male}
-      </div>
-      <div class="divider"></div>
-      <div class="section-text">
-        ${data.female}
-      </div>
-    </div>
-    ${data.other ?? ''}
-  </div>`;
+  return UsersSection({
+    title,
+    data,
+  });
 }
 
 function generateUsersHtmlContent(
@@ -269,138 +196,111 @@ function generateUsersHtmlContent(
     },
   };
 
-  return `
-    <div class="scroll-view">
-      ${
-        mode === 'company'
-          ? generateUsersSection(
-              t('Dashboard.Analytics.companyTab.usersTab.employeesTotal', {
-                amount: employees.total ?? 0,
-              }),
-              {
-                male: t('Dashboard.Analytics.maleLabel', { amount: employees.male ?? 0 }),
-                female: t('Dashboard.Analytics.femaleLabel', { amount: employees.female ?? 0 }),
-                other: t('Dashboard.Analytics.otherLabel', { amount: employees.other }),
-              }
-            )
-          : ''
-      }
-
-      ${generateUsersSection(
+  return ScrollView({
+    divs: [
+      mode === 'company'
+        ? generateUsersSection(
+            t('Dashboard.Analytics.companyTab.usersTab.employeesTotal', {
+              amount: employees.total ?? 0,
+            }),
+            {
+              male: t('Dashboard.Analytics.maleLabel', { amount: employees.male ?? 0 }),
+              female: t('Dashboard.Analytics.femaleLabel', { amount: employees.female ?? 0 }),
+              other: t('Dashboard.Analytics.otherLabel', { amount: employees.other }),
+            }
+          )
+        : '',
+      generateUsersSection(
         t('Dashboard.Analytics.operatorsTotal', { amount: operators.total ?? 0 }),
         {
           male: t('Dashboard.Analytics.maleLabel', { amount: operators.male ?? 0 }),
           female: t('Dashboard.Analytics.femaleLabel', { amount: operators.female ?? 0 }),
           other: t('Dashboard.Analytics.otherLabel', { amount: employees.other }),
         }
-      )}
-
-      ${generateUsersSection(t('Dashboard.Analytics.usersTotal', { amount: users.total ?? 0 }), {
+      ),
+      generateUsersSection(t('Dashboard.Analytics.usersTotal', { amount: users.total ?? 0 }), {
         male: t('Dashboard.Analytics.maleLabel', { amount: users.male ?? 0 }),
         female: t('Dashboard.Analytics.femaleLabel', { amount: users.female ?? 0 }),
         other: t('Dashboard.Analytics.otherLabel', { amount: users.other }),
-      })}
-
-      ${
-        mode === 'company'
-          ? generateUsersSection(t('Dashboard.Analytics.companyTab.usersTab.usersType'), {
-              male: t('Dashboard.Analytics.companyTab.usersTab.farmersLabel', {
-                amount: userTypes.farmer ?? 0,
-              }),
-              female: t('Dashboard.Analytics.companyTab.usersTab.tradersLabel', {
-                amount: userTypes.trader ?? 0,
-              }),
-            })
-          : ''
-      }
-
-      ${generateUsersSection(
+      }),
+      mode === 'company'
+        ? generateUsersSection(t('Dashboard.Analytics.companyTab.usersTab.usersType'), {
+            male: t('Dashboard.Analytics.companyTab.usersTab.farmersLabel', {
+              amount: userTypes.farmer ?? 0,
+            }),
+            female: t('Dashboard.Analytics.companyTab.usersTab.tradersLabel', {
+              amount: userTypes.trader ?? 0,
+            }),
+          })
+        : '',
+      generateUsersSection(
         t('Dashboard.Analytics.beneficiariesTotal', { amount: beneficiaries.total ?? 0 }),
         {
           male: t('Dashboard.Analytics.maleLabel', { amount: beneficiaries.male }),
           female: t('Dashboard.Analytics.femaleLabel', { amount: beneficiaries.female }),
         }
-      )}
-    </div>
-  `;
+      ),
+    ],
+  });
 }
 
 ///////////////////// UTILIZATION CONTENT — COMPANY TAB
 function generateUtilizationSectionContent(checkedInText: string, checkedOutText: string) {
   return `
-    <div class="section-text">
+    <div class="text-lg">
       ${checkedInText}
     </div>
-    <div class="divider"></div>
-    <div class="section-text">
+    <div class="bg-green-800 w-px h-8"></div>
+    <div class="text-lg">
       ${checkedOutText}
     </div>
   `;
 }
 
 function generateUtilizationHtmlContent(t: Translator, companyData: CompanyData | undefined) {
-  return `
-    <div class="scroll-view">
-      <div class="section section2">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}
-        </div>
-        <div class="section-content">
-          <div class="section-text">
-            ${t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', { amount: companyData?.compAverageRoomOccupancy?.[0] || 0 })}
-          </div>
-        </div>
-      </div>
-
-      <div class="section section2">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.totalCratesLabel')}:
-        </div>
-        <div class="section-content">
-          ${generateUtilizationSectionContent(
-            t('Dashboard.Analytics.checkedInLabel', {
-              amount: companyData?.compCratesIn?.[0] || 0,
-            }),
-            t('Dashboard.Analytics.checkedOutLabel', {
-              amount: companyData?.compCratesOut?.[0] || 0,
-            })
-          )}
-        </div>
-      </div>
-
-      <div class="section section2">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.totalQuantityLabel')}:
-        </div>
-        <div class="section-content">
-          ${generateUtilizationSectionContent(
-            t('Dashboard.Analytics.checkedInLabel', {
-              amount: companyData?.compKgIn?.[0] || 0,
-            }),
-            t('Dashboard.Analytics.checkedOutLabel', {
-              amount: companyData?.compKgOut?.[0] || 0,
-            })
-          )}
-        </div>
-      </div>
-
-      <div class="section section2">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.totalOperations')}:
-        </div>
-        <div class="section-content">
-          ${generateUtilizationSectionContent(
-            t('Dashboard.Analytics.checkedInLabel', {
-              amount: companyData?.compOpsIn?.[0] || 0,
-            }),
-            t('Dashboard.Analytics.checkedOutLabel', {
-              amount: companyData?.compOpsOut?.[0] || 0,
-            })
-          )}
-        </div>
-      </div>
-    </div>
-  `;
+  return ScrollView({
+    divs: [
+      UtilizationSection({
+        title: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel'),
+        content: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
+          amount: companyData?.compAverageRoomOccupancy?.[0] || 0,
+        }),
+      }),
+      UtilizationSection({
+        title: t('Dashboard.Analytics.totalCratesLabel'),
+        content: generateUtilizationSectionContent(
+          t('Dashboard.Analytics.checkedInLabel', {
+            amount: companyData?.compCratesIn?.[0] || 0,
+          }),
+          t('Dashboard.Analytics.checkedOutLabel', {
+            amount: companyData?.compCratesOut?.[0] || 0,
+          })
+        ),
+      }),
+      UtilizationSection({
+        title: t('Dashboard.Analytics.totalQuantityLabel'),
+        content: generateUtilizationSectionContent(
+          t('Dashboard.Analytics.checkedInLabel', {
+            amount: companyData?.compKgIn?.[0] || 0,
+          }),
+          t('Dashboard.Analytics.checkedOutLabel', {
+            amount: companyData?.compKgOut?.[0] || 0,
+          })
+        ),
+      }),
+      UtilizationSection({
+        title: t('Dashboard.Analytics.totalOperations'),
+        content: generateUtilizationSectionContent(
+          t('Dashboard.Analytics.checkedInLabel', {
+            amount: companyData?.compOpsIn?.[0] || 0,
+          }),
+          t('Dashboard.Analytics.checkedOutLabel', {
+            amount: companyData?.compOpsOut?.[0] || 0,
+          })
+        ),
+      }),
+    ],
+  });
 }
 
 ///////////////////// IMPACT CONTENT — MULTIPLE TABS
@@ -414,12 +314,15 @@ function generateImpactHtml(
   const foodLossFrom =
     getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselinePercLossMonth) || 0;
   const foodLossTo = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercLoss) || 0;
-  const foodLossEvolution = ((foodLossTo - foodLossFrom) / (foodLossFrom || 1)) * 100;
+  const foodLossEvolution =
+    getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution) || 0;
 
   const revenueFrom =
     getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth) || 0;
   const revenueTo = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyFarmerRevenue) || 0;
-  const revenueEvolution = ((revenueTo - revenueFrom) / (revenueFrom || 1)) * 100;
+  const revenueEvolution = getMetricValue(
+    impactData?.impactMetrics?.[0]?.avgMonthlyPercRevenueIncreaseEvolution
+  );
 
   const co2From = getMetricValue(impactData?.co2Metrics?.[0]?.['co2Crops']?.co2From) || 0;
   const co2To = getMetricValue(impactData?.co2Metrics?.[0]?.['co2Crops']?.co2To) || 0;
@@ -430,138 +333,71 @@ function generateImpactHtml(
       getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)) *
     100;
 
-  const occupancy = coolingUnitData?.averageRoomOccupancy?.[0] || 0;
+  const occupancy = Math.round(coolingUnitData?.averageRoomOccupancy?.[0] || 0);
   const revenue = coolingUnitData?.roomRevenue?.[0] || 0;
 
-  return `
-    <div class="scroll-view" style="width: 100%; padding: 16px; text-align: center;">
-      ${
-        type === 'aggregated'
-          ? `
-        <div class="section section3">
-          <div class="section-title">
-            ${t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}
-          </div>
-          <div class="section-content">
-            <div class="section-text">
-              ${t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', { amount: occupancy })}
+  return ScrollView({
+    divs: [
+      type === 'aggregated'
+        ? ImpactGeneralSection({
+            title: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel'),
+            content: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
+              amount: occupancy,
+            }),
+          })
+        : '',
+      ImpactEvolution({
+        title: t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel'),
+        subtitle:
+          foodLossTo === foodLossFrom
+            ? `<span style="color: gray;">=</span>`
+            : foodLossTo > foodLossFrom
+              ? `<span style="color: red;">${foodLossEvolution.toFixed(2)}% ↑</span>`
+              : `<span style="color: green;">${foodLossEvolution.toFixed(2)}% ↓</span>`,
+        from: `<strong>${foodLossFrom.toFixed(2)}</strong>%`,
+        to: `<strong>${foodLossTo.toFixed(2)}</strong>%`,
+      }),
+      ImpactEvolution({
+        title: t('Dashboard.Analytics.companyTab.impactTab.revenueLabel'),
+        subtitle:
+          revenueTo === revenueFrom
+            ? `<span style="color: gray;">${revenueEvolution.toFixed(2)}% =</span>`
+            : revenueTo < revenueFrom
+              ? `<span style="color: red;">${revenueEvolution.toFixed(2)}% ↓</span>`
+              : `<span style="color: green;">${revenueEvolution.toFixed(2)}% ↑</span>`,
+        from: `<strong>${currencySymbol} ${revenueFrom.toFixed(2)}</strong>`,
+        to: `<strong>${currencySymbol} ${revenueTo.toFixed(2)}</strong>`,
+      }),
+      type === 'aggregated'
+        ? ImpactGeneralSection({
+            title: t('Dashboard.Analytics.tabsShared.roomRevenue'),
+            content: `${revenue}`,
+          })
+        : '',
+      ImpactEvolution({
+        title: t('Dashboard.Analytics.companyTab.impactTab.co2Label'),
+        subtitle:
+          co2To === co2From
+            ? `<span style="color: gray;">${co2Evolution.toFixed(2)} Kg =</span>`
+            : co2To < co2From
+              ? `<span style="color: green;">${co2Evolution.toFixed(2)} Kg ↓</span>`
+              : `<span style="color: red;">${co2Evolution.toFixed(2)} Kg ↑</span>`,
+        from: `<strong>${co2From.toFixed(2)}</strong> ${t('Dashboard.Analytics.companyTab.impactTab.co2WithoutCooling')}`,
+        to: `<strong>${co2To.toFixed(2)}</strong> ${t('Dashboard.Analytics.companyTab.impactTab.co2WithCooling')}`,
+      }),
+      ImpactGeneralSection({
+        title: t('Dashboard.Analytics.companyTab.impactTab.surveysAmountLabel'),
+        content: `
+            <div class="flex justify-center items-baseline">
+              <strong class="text-2xl">${getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys)}</strong>
+              <span class="text-base ml-1">/${getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)}</span>
             </div>
-          </div>
-        </div>
-      `
-          : ''
-      }
-
-      <div class="section section3" style="margin-bottom: 16px;">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
-        </div>
-        <div style="margin-top: 8px; margin-bottom: 8px;">
-          ${
-            foodLossTo === foodLossFrom
-              ? `<span style="color: gray;">=</span>`
-              : foodLossTo > foodLossFrom
-                ? `<span style="color: red;">${foodLossEvolution.toFixed(2)}% ↑</span>`
-                : `<span style="color: green;">${foodLossEvolution.toFixed(2)}% ↓</span>`
-          }
-        </div>
-        <div class="section-content">
-          <div class="section-text">
-            <div>
-              ${t('Dashboard.Analytics.companyTab.impactTab.from')} <strong>${foodLossFrom.toFixed(2)}</strong>%
-            </div>
-            <div>
-              ${t('Dashboard.Analytics.companyTab.impactTab.to')} <strong>${foodLossTo.toFixed(2)}</strong>%
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section section3" style="margin-bottom: 16px;">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.companyTab.impactTab.revenueLabel')}
-        </div>
-        <div style="margin-top: 8px; margin-bottom: 8px;">
-          ${
-            revenueTo === revenueFrom
-              ? `<span style="color: gray;">${revenueEvolution.toFixed(2)}% =</span>`
-              : revenueTo < revenueFrom
-                ? `<span style="color: red;">${revenueEvolution.toFixed(2)}% ↓</span>`
-                : `<span style="color: green;">${revenueEvolution.toFixed(2)}% ↑</span>`
-          }
-        </div>
-        <div class="section-content">
-          <div class="section-text">
-            <div>
-              ${t('Dashboard.Analytics.companyTab.impactTab.from')} <strong>${currencySymbol}${revenueFrom.toFixed(2)}</strong>
-            </div>
-            <div>
-              ${t('Dashboard.Analytics.companyTab.impactTab.to')} <strong>${currencySymbol}${revenueTo.toFixed(2)}</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-       ${
-         type === 'aggregated'
-           ? `
-            <div class="section section3">
-              <div class="section-title">
-                ${t('Dashboard.Analytics.tabsShared.roomRevenue')}
-              </div>
-              <div class="section-content">
-                <div class="section-text">
-                  ${revenue}
-                </div>
-              </div>
-            </div>
-          `
-           : ''
-       }
-      
-      <div class="section section3" style="margin-bottom: 16px;">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.companyTab.impactTab.co2Label')}
-        </div>
-        <div style="margin-top: 8px; margin-bottom: 8px;">
-          ${
-            co2To === co2From
-              ? `<span style="color: gray;">${co2Evolution.toFixed(2)} Kg =</span>`
-              : co2To < co2From
-                ? `<span style="color: green;">${co2Evolution.toFixed(2)} Kg ↓</span>`
-                : `<span style="color: red;">${co2Evolution.toFixed(2)} Kg ↑</span>`
-          }
-        </div>
-        <div class="section-content">
-          <div class="section-text">
-            <div>
-              ${t('Dashboard.Analytics.companyTab.impactTab.from')} <strong>${co2From.toFixed(2)}</strong> ${t('Dashboard.Analytics.companyTab.impactTab.co2WithoutCooling')}
-            </div>
-            <div>
-              ${t('Dashboard.Analytics.companyTab.impactTab.to')} <strong>${co2To.toFixed(2)}</strong> ${t('Dashboard.Analytics.companyTab.impactTab.co2WithCooling')}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section section3" style="margin-bottom: 16px; background-color: #EDE9FE; padding: 16px; border-radius: 8px;">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.companyTab.impactTab.surveysAmountLabel')}
-        </div>
-        <div class="section-content">
-          <div class="section-text">
-            <div style="display: flex; justify-content: center; align-items: baseline;">
-              <strong style="font-size: 24px;">${getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys)}</strong>
-              <span style="font-size: 16px; margin-left: 4px;">/${getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)}</span>
-            </div>
-            <div style="font-size: 36px; color: #9B5DE5; margin-top: 8px;">
+            <div class="text-4xl text-[#9B5DE5] mt-2">
               (${Number.isNaN(surveyPercentage) ? 0 : surveyPercentage.toFixed(2)}%)
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+            </div>`,
+      }),
+    ],
+  });
 }
 
 ///////////////////// CRATES CONTENT — AGGREGATED TAB
@@ -569,66 +405,53 @@ function generateCratesHtmlContent(
   t: Translator,
   data: CompanyData | CoolingUnitImpact | undefined
 ) {
-  return `
-    <div class="scroll-view">
-      <div class="section section2">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.totalCratesLabel')}:
-        </div>
-        <div class="section-content">
-          ${generateUtilizationSectionContent(
+  return ScrollView({
+    divs: [
+      UtilizationSection({
+        title: t('Dashboard.Analytics.totalCratesLabel'),
+        content: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
+          amount: generateUtilizationSectionContent(
             t('Dashboard.Analytics.checkedInLabel', {
-              amount: getValue(data, 'compCratesIn', 'checkInCratesCrop'),
+              amount: getValue(data, 'compCratesIn', 'roomCratesIn'),
             }),
             t('Dashboard.Analytics.checkedOutLabel', {
-              amount: getValue(data, 'compCratesOut', 'checkOutCratesCrop'),
+              amount: getValue(data, 'compCratesOut', 'roomCratesOut'),
             })
-          )}
-        </div>
-      </div>
-
-      <div class="section section2">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.totalQuantityLabel')}:
-        </div>
-        <div class="section-content">
-          ${generateUtilizationSectionContent(
+          ),
+        }).split('%')[0],
+      }),
+      UtilizationSection({
+        title: t('Dashboard.Analytics.totalQuantityLabel'),
+        content: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
+          amount: generateUtilizationSectionContent(
             t('Dashboard.Analytics.checkedInLabel', {
-              amount: getValue(data, 'compKgIn', 'checkInKgCrop'),
+              amount: getValue(data, 'compKgIn', 'roomKgIn'),
             }),
             t('Dashboard.Analytics.checkedOutLabel', {
-              amount: getValue(data, 'compKgOut', 'checkOutKgCrop'),
+              amount: getValue(data, 'compKgOut', 'roomKgOut'),
             })
-          )}
-        </div>
-      </div>
-
-      <div class="section section2">
-        <div class="section-title">
-          ${t('Dashboard.Analytics.totalOperations')}:
-        </div>
-        <div class="section-content">
-          ${generateUtilizationSectionContent(
+          ),
+        }).split('%')[0],
+      }),
+      UtilizationSection({
+        title: `${t('Dashboard.Analytics.totalOperations')}:`,
+        content: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
+          amount: generateUtilizationSectionContent(
             t('Dashboard.Analytics.checkedInLabel', {
-              amount: getValue(data, 'compOpsIn', 'roomCratesIn'),
+              amount: getValue(data, 'compOpsIn', 'roomOpsIn'),
             }),
             t('Dashboard.Analytics.checkedOutLabel', {
-              amount: getValue(data, 'compOpsOut', 'roomCratesOut'),
+              amount: getValue(data, 'compOpsOut', 'roomOpsOut'),
             })
-          )}
-        </div>
-      </div>
-
-      <div class="section section2">
-       <div class="section-title">
-          ${t('Dashboard.Analytics.tabsShared.totalCo2Label')}
-        </div>
-        <div class="section-content">
-          <div class="section-text">
-            ${data && 'totCo2' in data ? data.totCo2['0'] ?? 0 : 0}
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+          ),
+        }).split('%')[0],
+      }),
+      UtilizationSection({
+        title: t('Dashboard.Analytics.tabsShared.totalCo2Label'),
+        content: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
+          amount: `${(data && 'totCo2' in data ? data.totCo2['0'] ?? 0 : 0).toFixed(2)}`,
+        }).split('%')[0],
+      }),
+    ],
+  });
 }

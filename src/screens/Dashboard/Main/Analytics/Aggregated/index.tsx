@@ -111,7 +111,7 @@ export function AggregatedSection() {
     try {
       const file = await RNHTMLtoPDF.convert(PDFOptions);
       if (!file.filePath) throw new Error();
-      toast.show(t('Dashboard.History.pdfModal.successMessage'), {
+      toast.show(`${t('actions.done')}!`, {
         type: 'md_success',
       });
     } catch {
@@ -138,6 +138,7 @@ export function AggregatedSection() {
     }
   }, [coolingUnitData]);
 
+  console.log(impactData, updatedImpactData);
   return (
     <ScrollView tw="mt-8 h-full" showsVerticalScrollIndicator={false}>
       <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-12' : ''}>
