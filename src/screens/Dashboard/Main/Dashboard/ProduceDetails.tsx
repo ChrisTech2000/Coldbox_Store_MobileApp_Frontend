@@ -4,16 +4,17 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
+import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import { ECoolingUnitMetric, EPricingType } from '#types/global';
+import { CoolingUnit, Crate, ECoolingUnitMetric, EPricingType, Farmer } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -23,8 +24,8 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import RBAC from '#common/RBAC';
 import * as SellingSettings from './SellingSettingsModal';
 
-function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDetails'>) {
-  const { produce, coolingUnit, currency } = route.params;
+function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
+  const { produce, coolingUnit, currency } = props.route.params;
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
   const toast = InAppNotifications.useToast();
@@ -288,26 +289,52 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
       </RBAC.ProtectedResource>
 
       <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
-        <Button
-          mode="contained"
-          uppercase
-          tw="w-[85%]"
-          onPress={(evt) => {
-            evt.stopPropagation();
-            navigation.navigate('CheckOutStack', {
+        <_CheckoutButtonRedirect
+          coolingUnit={coolingUnit}
+          farmer={farmer}
+          crates={produce.crates}
+        />
+      </RBAC.ProtectedResource>
+    </ScrollView>
+  );
+}
+
+function _CheckoutButtonRedirect(props: {
+  coolingUnit: CoolingUnit | null;
+  farmer?: Farmer;
+  crates: Array<Crate>;
+}) {
+  const { coolingUnit, farmer, crates } = props;
+
+  // eslint-disable-next-line
+  const navigation = useNavigation<NavigationProp<any>>();
+  const { t } = useTranslationUtils();
+
+  return (
+    <Button
+      mode="contained"
+      uppercase
+      tw="w-[85%]"
+      onPress={(evt) => {
+        evt.stopPropagation();
+        navigation.navigate('Main', {
+          screen: 'Dashboard',
+          params: {
+            screen: 'CheckOutStack',
+            params: {
               screen: 'CrateSelection',
               params: {
                 coolingUnit,
                 user: farmer,
-                crates: produce.crates,
+                crates,
               },
-            });
-          }}
-        >
-          {t('Dashboard.ProduceDetails.checkOutButton')}
-        </Button>
-      </RBAC.ProtectedResource>
-    </ScrollView>
+            },
+          },
+        });
+      }}
+    >
+      {t('Dashboard.ProduceDetails.checkOutButton')}
+    </Button>
   );
 }
 
