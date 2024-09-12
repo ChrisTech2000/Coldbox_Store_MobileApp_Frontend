@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, type PropsWithChildren } from 'react';
+import React, { useEffect, useRef, useState, type PropsWithChildren } from 'react';
 import { FlatList, View } from 'react-native';
 import { Checkbox, Divider, IconButton, List, Switch, TextInput } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -19,6 +19,8 @@ import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabS
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+
+import SellInMarketplaceModal from './components/SellInMarketplaceModal';
 
 type FormValues<T = string> = {
   isSellable: boolean;
@@ -52,11 +54,13 @@ export function resetCrateWeightPricingBridge() {
   useCrateWeightPricingStore.getState().mutate({ isSellable: false, crates: [] });
 }
 
+// TODO → add text content to translations
 function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPricing'>) {
   const { params } = props.route;
 
   const { t, zodResolver } = useTranslationUtils();
 
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const form = useForm<FormValues>({
@@ -108,6 +112,8 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
 
   return (
     <React.Fragment>
+      <SellInMarketplaceModal visible={isModalVisible} onChangeVisible={setIsModalVisible} />
+
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         tw="px-3 pt-3 bg-white"
@@ -120,7 +126,17 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               title={undefined}
               left={() => (
                 <View tw="flex-row items-center space-x-2">
-                  <Icon name="information-outline" size={20} color={colors.gray[600]} />
+                  <IconButton
+                    tw="p-0 m-0"
+                    icon="information-outline"
+                    size={20}
+                    iconColor={colors.gray[600]}
+                    containerColor={colors.white}
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      setIsModalVisible(true);
+                    }}
+                  />
                   <Text tw="text-base self-center">Sell in the Marketplace</Text>
                 </View>
               )}

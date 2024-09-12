@@ -46,6 +46,7 @@ export type SetupSchema = {
 
 export type ModalMode = 'weight' | 'id' | undefined;
 
+// TODO → add text content to translations
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
   const { additionalInfo, crop } = route.params;
   const { company } = useManagementStore();
@@ -104,6 +105,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   const [openModal, setOpenModal] = useState<ModalMode>(undefined);
 
   useCrateWeightPricingBridge((values) => {
+    // TODO → include the crate pricing in the future
     reset((state) => ({
       ...state,
       crates: values.crates.map((crate) => ({ crateId: crate.id, crateWeight: crate.weight })),
@@ -232,6 +234,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         harvestDate = crop.harvestedBefore;
       }
 
+      // TODO → include crate weight, pricing and sellable state in the future
       addProduce({
         crop: {
           id: crop.id,
