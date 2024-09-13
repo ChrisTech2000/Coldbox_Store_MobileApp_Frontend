@@ -7,6 +7,7 @@ import {
 } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import Coupons from '#screens/Dashboard/AccountDetails/Coupons';
 
@@ -15,10 +16,10 @@ import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
 import CouponStatusTabs from './CouponStatusTabs';
+import { useCouponStore } from '#screens/Dashboard/AccountDetails/Coupons/store';
 
 export type CouponsSettingsRoutes = {
   Root: undefined;
-  CouponStatus: undefined;
 };
 
 export type CouponsSettingsRoutePaths = keyof CouponsSettingsRoutes;
@@ -28,7 +29,6 @@ export type CouponsSettingsRouteProps<Path extends CouponsSettingsRoutePaths> =
 
 export const NAVIGATOR_HEADERS: Record<CouponsSettingsRoutePaths, TranslationPaths> = {
   Root: 'navigation.dashboard.Coupons',
-  CouponStatus: 'navigation.dashboard.Coupons',
 };
 
 type ScreenOptions = (props: {
@@ -57,10 +57,16 @@ export default function CouponsSettingsStack() {
     []
   );
 
+  // TODO → replace this with SWR hook
+  const couponsLength = useCouponStore(useShallow((store) => store.coupons)).length;
+
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
-      <Stack.Screen name="Root" component={Coupons} />
-      <Stack.Screen name="CouponStatus" component={CouponStatusTabs} />
+      {couponsLength === 0 ? (
+        <Stack.Screen name="Root" component={Coupons} />
+      ) : (
+        <Stack.Screen name="Root" component={CouponStatusTabs} />
+      )}
     </Stack.Navigator>
   );
 }

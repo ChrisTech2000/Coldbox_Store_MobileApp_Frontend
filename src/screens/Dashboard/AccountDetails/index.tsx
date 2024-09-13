@@ -130,10 +130,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={(evt) => {
                 evt.stopPropagation();
-                props.navigation.navigate('CouponStack', {
-                  screen: 'Root',
-                  params: undefined,
-                });
+                props.navigation.navigate('CouponStack');
               }}
             />
             <Divider tw="bg-gray-400" />

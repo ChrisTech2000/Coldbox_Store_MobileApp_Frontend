@@ -8,8 +8,11 @@ import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { paperTheme } from '#ui/lib/theme';
-import CouponModal from './components/CouponModal';
 
+import CouponModal from './components/CouponModal';
+import { useCouponStore } from './store';
+
+// TODO → add text content to translations
 function CouponsRoot() {
   const modalRef = useRef<Modalize>(null);
 
@@ -24,7 +27,17 @@ function CouponsRoot() {
         <Text tw="text-base">No coupons has been added yet</Text>
       </View>
 
-      <CouponModal modalRef={modalRef} />
+      <CouponModal
+        modalRef={modalRef}
+        onSubmit={(values) => {
+          modalRef.current?.close();
+          // TODO → replace this with api call
+          useCouponStore.getState().append({
+            ...values,
+            isActive: true,
+          });
+        }}
+      />
 
       <Button
         tw="w-5/6 my-4"

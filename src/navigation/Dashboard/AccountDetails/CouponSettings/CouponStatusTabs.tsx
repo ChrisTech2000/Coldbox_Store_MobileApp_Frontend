@@ -6,7 +6,8 @@ import {
 } from '@react-navigation/material-top-tabs';
 import type { RouteProp } from '@react-navigation/native';
 
-import Coupons from '#screens/Dashboard/AccountDetails/Coupons';
+import ActiveCouponsTab from '#screens/Dashboard/AccountDetails/Coupons/ActiveCouponsTab';
+import RevokedCouponsTab from '#screens/Dashboard/AccountDetails/Coupons/RevokedCouponsTab';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -57,8 +58,8 @@ export default function CouponStatusTabs() {
 
   return (
     <TopTabs.Navigator screenOptions={screenOptions}>
-      <TopTabs.Screen name="Active" component={Coupons} />
-      <TopTabs.Screen name="Revoked" component={Coupons} />
+      <TopTabs.Screen name="Active" component={ActiveCouponsTab} />
+      <TopTabs.Screen name="Revoked" component={RevokedCouponsTab} />
     </TopTabs.Navigator>
   );
 }

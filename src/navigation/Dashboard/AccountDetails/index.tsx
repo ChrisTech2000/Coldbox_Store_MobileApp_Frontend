@@ -21,7 +21,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
 import type { EditCoolingUserStackRoutes } from '../Management/EditCoolingUserStack';
-import CouponsSettingsStack, { CouponsSettingsRoutes } from './CouponSettings';
+import CouponsSettingsStack from './CouponSettings';
 
 export type DetailsSectionParams = {
   kind: ERoles;
@@ -44,10 +44,7 @@ export type AccountDetailsRoutes = {
   LocalizationPreferences: DetailsSectionParams;
   ContactsSharing: undefined;
   CoolingUsersSurvey: EditCoolingUserStackRoutes['CoolingUsersSurvey'];
-  CouponStack: {
-    screen: keyof CouponsSettingsRoutes;
-    params: CouponsSettingsRoutes[keyof CouponsSettingsRoutes];
-  };
+  CouponStack: undefined;
 };
 
 export type AccountDetailsRoutePaths = keyof AccountDetailsRoutes;
