@@ -6,6 +6,7 @@ import type { Crate } from '#types/global';
 import type { ProduceDetailsStackRoutes } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import RBAC from '#common/RBAC';
 
+// TODO → add text content to translations
 export default function MarketplaceSettingsButton(props: {
   crates: Array<Crate>;
   produceShelfLife: number;

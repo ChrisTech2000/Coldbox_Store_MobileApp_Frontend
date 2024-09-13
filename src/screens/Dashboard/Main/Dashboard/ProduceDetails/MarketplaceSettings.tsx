@@ -19,6 +19,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 import { useMarketplaceSettingsStore } from './store';
 
+// TODO → add text content to translations
 function MarketplaceSettings(props: ProduceDetailsStackRouteProps<'MarketplaceSettings'>) {
   const { crates, produceShelfLife, companyCurrency } = props.route.params;
 

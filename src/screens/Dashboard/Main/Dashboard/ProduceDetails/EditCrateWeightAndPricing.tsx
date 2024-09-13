@@ -28,6 +28,7 @@ type FormValues<T = string> = {
   price: T;
 };
 
+// TODO → add text content to translations
 function EditCrateWeightAndPricing(
   props: ProduceDetailsStackRouteProps<'EditCrateWeightAndPricing'>
 ) {
