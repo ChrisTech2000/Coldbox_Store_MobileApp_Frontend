@@ -13,11 +13,14 @@ import type { TranslationPaths } from '#i18n/index';
 
 import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
 import MarketplaceSettings from '#screens/Dashboard/Main/Dashboard/ProduceDetails/MarketplaceSettings';
+import EditCrateWeightAndPricing from '#screens/Dashboard/Main/Dashboard/ProduceDetails/EditCrateWeightAndPricing';
 
-import NavigatorHeader, {
-  type NavigationHeaderProps,
-} from '#navigation/components/NavigatorHeader';
+import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
+import {
+  type MarketplaceCrateDatum,
+  useMarketplaceSettingsStore,
+} from '#screens/Dashboard/Main/Dashboard/ProduceDetails/store';
 import { useTranslationUtils } from '#i18n/utils';
 
 export type ProduceDetailsStackRoutes = {
@@ -29,7 +32,11 @@ export type ProduceDetailsStackRoutes = {
   MarketplaceSettings: {
     crates: Array<Crate>;
     produceShelfLife: number;
+    companyCurrency: string;
   };
+  EditCrateWeightAndPricing: {
+    companyCurrency: string;
+  } & MarketplaceCrateDatum;
 };
 
 export type ProduceDetailsStackRoutePaths = keyof ProduceDetailsStackRoutes;
@@ -45,6 +52,7 @@ type ScreenOptions = (props: {
 const NAVIGATOR_HEADERS: Record<ProduceDetailsStackRoutePaths, TranslationPaths | undefined> = {
   Root: 'navigation.bottomTabs.ProduceDetails',
   MarketplaceSettings: 'navigation.bottomTabs.MarketplaceSettings',
+  EditCrateWeightAndPricing: 'navigation.checkIn.CrateWeightAndPricing',
 };
 
 const Stack = createNativeStackNavigator<ProduceDetailsStackRoutes>();
@@ -69,8 +77,21 @@ export default function ProduceDetailsStack() {
         <NavigatorHeader
           {...headerProps}
           routeTitle={routeTitle}
-          // eslint-disable-next-line react/prop-types
-          {..._renderContentFactory(routeName, props.navigation)}
+          leftContent={
+            <Appbar.BackAction
+              onPress={() => {
+                // eslint-disable-next-line react/prop-types
+                props.navigation.goBack();
+                switch (routeName) {
+                  case 'MarketplaceSettings':
+                    return useMarketplaceSettingsStore.getState().reset();
+                  default:
+                    return;
+                }
+              }}
+              size={22}
+            />
+          }
         />
       ),
     };
@@ -80,19 +101,7 @@ export default function ProduceDetailsStack() {
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={ProduceDetails} />
       <Stack.Screen name="MarketplaceSettings" component={MarketplaceSettings} />
+      <Stack.Screen name="EditCrateWeightAndPricing" component={EditCrateWeightAndPricing} />
     </Stack.Navigator>
   );
-}
-
-function _renderContentFactory(
-  routeName: ProduceDetailsStackRoutePaths,
-  navigation: NativeStackNavigationProp<ProduceDetailsStackRoutes, ProduceDetailsStackRoutePaths>
-): NavigationHeaderProps {
-  switch (routeName) {
-    case 'Root':
-    default:
-      return {
-        leftContent: <Appbar.BackAction onPress={navigation.goBack} size={22} />,
-      };
-  }
 }

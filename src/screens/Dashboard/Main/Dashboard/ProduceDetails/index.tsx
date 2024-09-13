@@ -258,6 +258,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       <MarketplaceSettingsButton
         crates={produce.crates}
         produceShelfLife={produce.minimumRemainingShelfLife ?? 0}
+        companyCurrency={currency}
       />
       <CheckoutButtonRedirect coolingUnit={coolingUnit} farmer={farmer} crates={produce.crates} />
     </ScrollView>

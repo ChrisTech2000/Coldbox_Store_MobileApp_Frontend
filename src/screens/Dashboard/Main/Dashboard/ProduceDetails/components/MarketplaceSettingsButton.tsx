@@ -9,8 +9,9 @@ import RBAC from '#common/RBAC';
 export default function MarketplaceSettingsButton(props: {
   crates: Array<Crate>;
   produceShelfLife: number;
+  companyCurrency: string;
 }) {
-  const { crates, produceShelfLife } = props;
+  const { crates, produceShelfLife, companyCurrency } = props;
 
   const navigation = useNavigation<NavigationProp<ProduceDetailsStackRoutes>>();
 
@@ -25,6 +26,7 @@ export default function MarketplaceSettingsButton(props: {
           navigation.navigate('MarketplaceSettings', {
             crates,
             produceShelfLife,
+            companyCurrency,
           });
         }}
       >
