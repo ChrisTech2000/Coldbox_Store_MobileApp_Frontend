@@ -22,6 +22,7 @@ export const useCouponStore = create<{
     for (const item of shallowCopy) {
       if (item.code !== code) continue;
       item.isActive = !item.isActive;
+      break;
     }
     set({ coupons: shallowCopy });
   },
