@@ -83,6 +83,7 @@ export default {
       CheckIn: 'Check-In',
       CropList: '{{cropType}}',
       CrateSetup: 'Check-In',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'Acordo de Licença COMSOL Runtime 6.0',

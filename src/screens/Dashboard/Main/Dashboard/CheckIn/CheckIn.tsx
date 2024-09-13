@@ -288,7 +288,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                       crateId: Number(crate.tag),
                       crateWeight: crate.weight,
                     }))}
-                    mode={'id'}
                     isOpen={isIdsModalOpen === index}
                     numberOfCrates={allCrates.length}
                     closeModal={() => setIsIdsModalOpen(undefined)}

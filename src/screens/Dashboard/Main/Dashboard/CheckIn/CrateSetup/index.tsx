@@ -7,6 +7,7 @@ import { Divider, List } from 'react-native-paper';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
 import { Sup } from '#ui/components/SuperscriptText';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -29,6 +30,8 @@ import CropHarvest from './CropHarvest';
 import FloatingFooter from './FloatingFooter';
 import Sellable from './Sellable';
 
+import { useCrateWeightPricingBridge } from '../CrateWeightAndPricing';
+
 export type SetupSchema = {
   numberOfCrates: number;
   generalCrateWeight: number;
@@ -38,10 +41,10 @@ export type SetupSchema = {
   }>;
   plannedDays: number | undefined;
   dateHarvested: EDateCropped;
+  isSellableInMarketplace: boolean;
 };
 
-export type ModalMode = 'weight' | 'id' | undefined;
-
+// TODO → add text content to translations
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
   const { additionalInfo, crop } = route.params;
   const { company } = useManagementStore();
@@ -56,6 +59,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     setValue,
     setError,
     clearErrors,
+    reset,
+    getValues,
     formState: { errors },
   } = useForm<SetupSchema>({
     resolver: zodResolver((z, t) =>
@@ -90,11 +95,22 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           .refine((date) => !!date, {
             message: t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateError'),
           }),
+        isSellableInMarketplace: z.boolean(),
       })
     ),
   });
 
-  const [openModal, setOpenModal] = useState<ModalMode>(undefined);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
+  useCrateWeightPricingBridge((values) => {
+    // TODO → include the crate pricing in the future
+    reset((state) => ({
+      ...state,
+      crates: values.crates.map((crate) => ({ crateId: crate.id, crateWeight: crate.weight })),
+      numberOfCrates: values.crates.length,
+      isSellableInMarketplace: values.isSellable,
+    }));
+  });
 
   const plannedDays = watch('plannedDays');
   const numberOfCrates = watch('numberOfCrates');
@@ -186,18 +202,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     [crates, generalCrateWeight, coolingUnit]
   );
 
-  const onOpenModal = useCallback(
-    (mode: ModalMode) => {
-      if (!numberOfCrates || numberOfCrates < 1) {
-        setError('numberOfCrates', {
-          message: t('Dashboard.CrateManagement.CheckIn.Setup.cratesError'),
-        });
-      } else {
-        setOpenModal(mode);
-      }
-    },
-    [numberOfCrates]
-  );
+  const onOpenModal = useCallback(() => {
+    if (!numberOfCrates || numberOfCrates < 1) {
+      setError('numberOfCrates', {
+        message: t('Dashboard.CrateManagement.CheckIn.Setup.cratesError'),
+      });
+    } else {
+      setOpenModal((state) => !state);
+    }
+  }, [numberOfCrates]);
 
   const onSubmit: SubmitHandler<SetupSchema> = useCallback(
     (values) => {
@@ -216,6 +229,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         harvestDate = crop.harvestedBefore;
       }
 
+      // TODO → include crate weight, pricing and sellable state in the future
       addProduce({
         crop: {
           id: crop.id,
@@ -264,7 +278,12 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 title={undefined}
                 onPress={(evt) => {
                   evt?.stopPropagation();
-                  onOpenModal('weight');
+                  navigation.navigate('CrateWeightAndPricing', {
+                    isSellableInMarketplace: getValues('isSellableInMarketplace'),
+                    companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
+                    currencySymbol,
+                    crates,
+                  });
                 }}
                 left={() => (
                   <View tw="flex-row">
@@ -285,7 +304,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 title={undefined}
                 onPress={(evt) => {
                   evt?.stopPropagation();
-                  onOpenModal('id');
+                  onOpenModal();
                 }}
                 left={() => (
                   <Text tw="text-base self-center">
@@ -308,28 +327,29 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         <CrateSetupModal
           setValue={(crates: SetupSchema['crates']) => setValue('crates', crates)}
           crates={crates}
-          mode={openModal}
-          isOpen={openModal !== undefined}
+          isOpen={openModal}
           numberOfCrates={numberOfCrates}
-          closeModal={() => setOpenModal(undefined)}
-          title={openModal ? t(`Dashboard.CrateManagement.CheckIn.Setup.modals.${openModal}`) : ''}
+          closeModal={() => setOpenModal(false)}
+          title={openModal ? t(`Dashboard.CrateManagement.CheckIn.Setup.modals.id`) : ''}
         />
       </KeyboardAwareScrollView>
 
-      <FloatingFooter
-        dailyPriceLabel={dailyPriceLabel}
-        currencySymbol={currencySymbol}
-        commonPrice={(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
-        totalPrice={totalPrice}
-        cancelFunc={(evt) => {
-          evt.stopPropagation();
-          navigation.navigate('CheckIn', {
-            user: user as Farmer,
-            coolingUnit: coolingUnit as CoolingUnit,
-          });
-        }}
-        saveFunc={handleSubmit(onSubmit)}
-      />
+      <HideWithKeyboardView>
+        <FloatingFooter
+          dailyPriceLabel={dailyPriceLabel}
+          currencySymbol={currencySymbol}
+          commonPrice={(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
+          totalPrice={totalPrice}
+          cancelFunc={(evt) => {
+            evt.stopPropagation();
+            navigation.navigate('CheckIn', {
+              user: user as Farmer,
+              coolingUnit: coolingUnit as CoolingUnit,
+            });
+          }}
+          saveFunc={handleSubmit(onSubmit)}
+        />
+      </HideWithKeyboardView>
     </React.Fragment>
   );
 }

@@ -81,6 +81,7 @@ const en = {
       CheckIn: 'CheckIn',
       CropList: '{{cropType}}',
       CrateSetup: 'CheckIn',
+      CrateWeightAndPricing: 'Crate weight and pricing',
     },
     about: {
       comsolAgreement: 'COMSOL Runtime License Agreement 6.0',

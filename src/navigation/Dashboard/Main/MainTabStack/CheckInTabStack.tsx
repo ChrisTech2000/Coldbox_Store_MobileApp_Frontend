@@ -12,6 +12,9 @@ import CheckIn from '#screens/Dashboard/Main/Dashboard/CheckIn/CheckIn';
 import CrateSetup from '#screens/Dashboard/Main/Dashboard/CheckIn/CrateSetup';
 import CropList from '#screens/Dashboard/Main/Dashboard/CheckIn/CropList';
 import SelectCropType from '#screens/Dashboard/Main/Dashboard/CheckIn/SelectCropType';
+import CrateWeightAndPricing, {
+  resetCrateWeightPricingBridge,
+} from '#screens/Dashboard/Main/Dashboard/CheckIn/CrateWeightAndPricing';
 
 import { TranslationPaths } from '#i18n/index';
 import { Translator, useTranslationUtils } from '#i18n/utils';
@@ -27,6 +30,15 @@ export type CheckInStackRoutes = {
     crop: Crop;
     additionalInfo: string;
   };
+  CrateWeightAndPricing: {
+    isSellableInMarketplace: boolean;
+    companyCurrency: string;
+    currencySymbol: string;
+    crates: Array<{
+      crateWeight: number;
+      crateId: number | undefined;
+    }>;
+  };
 };
 
 export type CheckInStackRoutePaths = keyof CheckInStackRoutes;
@@ -41,6 +53,7 @@ export const NAVIGATOR_HEADERS: Record<CheckInStackRoutePaths, TranslationPaths 
   CheckIn: 'navigation.checkIn.CheckIn',
   CropList: 'navigation.checkIn.CropList',
   CrateSetup: 'navigation.checkIn.CrateSetup',
+  CrateWeightAndPricing: 'navigation.checkIn.CrateWeightAndPricing',
 };
 
 type ScreenOptions = (props: {
@@ -74,7 +87,14 @@ export default function CheckInStack() {
               onPress={() => {
                 // eslint-disable-next-line react/prop-types
                 props.navigation.goBack();
-                if (routeName === 'CheckIn') resetCheckInStore();
+                switch (routeName) {
+                  case 'CheckIn':
+                    return resetCheckInStore();
+                  case 'CrateSetup':
+                    return resetCrateWeightPricingBridge();
+                  default:
+                    return;
+                }
               }}
               size={22}
             />
@@ -92,6 +112,7 @@ export default function CheckInStack() {
       <Stack.Screen name="SelectCropType" component={SelectCropType} />
       <Stack.Screen name="CropList" component={CropList} />
       <Stack.Screen name="CrateSetup" component={CrateSetup} />
+      <Stack.Screen name="CrateWeightAndPricing" component={CrateWeightAndPricing} />
     </Stack.Navigator>
   );
 }
