@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Platform, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 import Logo from '#assets/images/coldtivate_logo.svg';
 
@@ -9,11 +10,15 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
+import { Farmer } from '#types/global';
+
+import { DataLoader, getPdfContent } from '#screens/Dashboard/Management/EditCoolingUser/utils';
 
 import { ConfigData, Configuration, ConfigurationModal } from '../components/Configuration';
 import { CommonFooter } from '../components/Footer';
@@ -24,6 +29,7 @@ import { useFarmerAnalyticsData } from './store';
 
 export function FarmerAnalytics() {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
   const user = useAuthStore((store) => store.user);
   const { configData, setConfigData, setFarmer } = useFarmerAnalyticsData((store) => ({
     configData: store.configData,
@@ -62,6 +68,34 @@ export function FarmerAnalytics() {
     }
   );
 
+  const { data, isLoading } = useApiCall(
+    'getFarmerRelatedEntities',
+    useCallback(async (farmer: Farmer) => {
+      try {
+        return await DataLoader.aggregateFarmerData(farmer);
+      } catch (exception) {
+        if (exception instanceof Error) {
+          if (exception.message === 'farmer does not have any check-ins') {
+            toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'), {
+              type: 'md_danger',
+            });
+          }
+        }
+        throw exception;
+      }
+    }, []),
+    farmerResponse?.[0] as Farmer,
+    {
+      skip: !farmerResponse,
+      defaultData: undefined,
+      errorRetryCount: 0,
+    }
+  );
+
+  const coolingUnits = useMemo(() => {
+    return _coolingUnits?.filter((unit) => farmerResponse?.[0].coolingUnits.includes(unit.id));
+  }, [_coolingUnits, farmerResponse]);
+
   const onBackToMain = useCallback(() => {
     if (activeTab) {
       setActiveTab(undefined);
@@ -70,9 +104,25 @@ export function FarmerAnalytics() {
     }
   }, [activeTab]);
 
-  const coolingUnits = useMemo(() => {
-    return _coolingUnits?.filter((unit) => farmerResponse?.[0].coolingUnits.includes(unit.id));
-  }, [_coolingUnits, farmerResponse]);
+  const download = useCallback(async () => {
+    if (!data) return;
+
+    try {
+      const file = await RNHTMLtoPDF.convert({
+        html: getPdfContent(data, t),
+        fileName: 'farmer',
+        directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+        base64: true,
+      });
+
+      if (!file.filePath) throw new Error();
+      toast.show(`${t('actions.done')}!`, {
+        type: 'md_success',
+      });
+    } catch (exception) {
+      console.error(exception);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (coolingUnits) {
@@ -136,6 +186,18 @@ export function FarmerAnalytics() {
             />
 
             <View tw="items-center">
+              <Button
+                mode="contained"
+                uppercase
+                onPress={download}
+                icon="check-circle-outline"
+                contentStyle="flex flex-row-reverse"
+                tw="w-[50%] mb-4"
+                disabled={isLoading}
+              >
+                {t('Dashboard.Analytics.downloadDataButton')}
+              </Button>
+
               <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
                 <Text variant="TextMedium" tw="text-base font-bold">
                   {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
