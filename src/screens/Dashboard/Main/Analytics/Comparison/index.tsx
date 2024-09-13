@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Platform, TouchableOpacity, View } from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -8,6 +9,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -18,6 +20,7 @@ import { EImpactMode, EView } from '#types/global';
 import { ConfigData, Configuration, ConfigurationModal } from '../components/Configuration';
 import { CommonFooter } from '../components/Footer';
 import { useAnalyticsData } from '../store';
+import { generatePDFContent } from '../utils/downloadData';
 import { CratesContent } from './components/CratesContent';
 import { ImpactContent } from './components/ImpactContent';
 import { InnerTabs, Tab } from './components/InnerTabs';
@@ -31,17 +34,18 @@ const screenHeight = Dimensions.get('screen').height;
 
 export function ComparisonSection() {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
   const coolingUnits = useAnalyticsData((store) => store.coolingUnits);
   const company = useManagementStore((store) => store.company);
   const sorting = useSortingStore?.((store) => store.sorting);
-  const { configData, setConfigData, setImpactData, setCoolingUnitData } = useComparisonData(
-    (store) => ({
+  const { updatedImpactData, configData, setConfigData, setImpactData, setCoolingUnitData } =
+    useComparisonData((store) => ({
       configData: store.configData,
       setConfigData: store.setConfigData,
       setImpactData: store.setImpactData,
       setCoolingUnitData: store.setCoolingUnitData,
-    })
-  );
+      updatedImpactData: store.impactData,
+    }));
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSortModalOpen, setIsSortModalOpen] = useState<boolean>(false);
@@ -83,6 +87,39 @@ export function ComparisonSection() {
       setConfigData(null);
     }
   }, [activeTab]);
+
+  const onDownloadData = useCallback(async () => {
+    if (!updatedImpactData) return;
+
+    const html = generatePDFContent(
+      t,
+      coolingUnits,
+      company,
+      coolingUnitData,
+      updatedImpactData,
+      'comparison',
+      configData
+    );
+
+    const PDFOptions = {
+      html,
+      fileName: `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.comparison')}`,
+      directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
+      base64: true,
+    };
+
+    try {
+      const file = await RNHTMLtoPDF.convert(PDFOptions);
+      if (!file.filePath) throw new Error();
+      toast.show(`${t('actions.done')}!`, {
+        type: 'md_success',
+      });
+    } catch {
+      toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
+        type: 'md_danger',
+      });
+    }
+  }, [t, toast, coolingUnits, configData, coolingUnitData, updatedImpactData, company]);
 
   useEffect(() => {
     if (impactData) {
@@ -148,6 +185,16 @@ export function ComparisonSection() {
               </View>
             ) : (
               <View tw="items-center">
+                <Button
+                  mode="contained"
+                  uppercase
+                  onPress={onDownloadData}
+                  icon="check-circle-outline"
+                  contentStyle="flex flex-row-reverse"
+                  tw="w-[50%] mb-4"
+                >
+                  {t('Dashboard.Analytics.downloadDataButton')}
+                </Button>
                 <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
                   <Text variant="TextMedium" tw="text-base font-bold">
                     {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}

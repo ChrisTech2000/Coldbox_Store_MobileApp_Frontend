@@ -1,6 +1,6 @@
 import { currencies } from 'currencies.json';
 
-import { Translator } from '#i18n/utils';
+import { dateFmt, Translator } from '#i18n/utils';
 import { ManagementCompany } from '#stores/management';
 import {
   type CompanyData,
@@ -11,15 +11,20 @@ import {
 } from '#types/global';
 import { html } from '#ui/lib/templating/internals';
 import {
+  DetailsContainer,
   ImpactEvolution,
   ImpactGeneralSection,
   PillContainer,
   ScrollView,
+  Section,
+  Table,
   UsersSection,
   UtilizationSection,
 } from '#ui/lib/templating/partials';
 
 import { getMetricValue } from '.';
+import { ConfigData } from '../components/Configuration';
+import startCase from 'lodash/startCase';
 
 ///////////////////// UTILS
 function getValue(
@@ -45,7 +50,8 @@ export function generatePDFContent(
   company: ManagementCompany | undefined,
   companyData: CompanyData | CoolingUnitImpact | undefined,
   impactData: ImpactData | undefined,
-  mode: 'company' | 'aggregated' | 'comparison'
+  mode: 'company' | 'aggregated' | 'comparison',
+  configData?: ConfigData
 ) {
   const currencySymbol = currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
 
@@ -53,10 +59,21 @@ export function generatePDFContent(
     mode === 'company'
       ? generateGeneralHtmlContent(t, company, companyData as CompanyData, coolingUnits)
       : '',
-    generateUsersHtmlContent(t, companyData, mode),
+    mode !== 'comparison' ? generateUsersHtmlContent(t, companyData, mode) : '',
     mode === 'company' ? generateUtilizationHtmlContent(t, companyData as CompanyData) : '',
     mode === 'aggregated' ? generateCratesHtmlContent(t, companyData as CoolingUnitImpact) : '',
-    generateImpactHtml(t, impactData, currencySymbol, mode, companyData as CoolingUnitImpact)
+    mode !== 'comparison'
+      ? generateImpactHtml(t, impactData, currencySymbol, mode, companyData as CoolingUnitImpact)
+      : '',
+    mode === 'comparison'
+      ? generateComparisonHtmlContent(
+          t,
+          companyData as CoolingUnitImpact,
+          impactData as ImpactData,
+          configData!,
+          currencySymbol
+        )
+      : ''
   );
 }
 
@@ -451,6 +468,441 @@ function generateCratesHtmlContent(
         content: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
           amount: `${(data && 'totCo2' in data ? data.totCo2['0'] ?? 0 : 0).toFixed(2)}`,
         }).split('%')[0],
+      }),
+    ],
+  });
+}
+
+///////////////////// COMPARISON TAB
+function generateComparisonHtmlContent(
+  t: Translator,
+  cuData: CoolingUnitImpact | undefined,
+  data: ImpactData | undefined,
+  configData: ConfigData,
+  currency: string
+) {
+  if (!configData) return '';
+
+  const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
+
+  return ScrollView({
+    divs: [
+      DetailsContainer({
+        datums: [
+          {
+            label: t('Dashboard.Management.EditCoolingUsers.pdf.dateRange'),
+            value: `${dateFmt(configData.startDate.toISOString(), 'MMMM dd, yyyy')} - ${dateFmt(configData.endDate.toISOString(), 'MMMM dd, yyyy')}`,
+          },
+          {
+            label: t('Dashboard.Management.EditCoolingUsers.pdf.selectedUnits'),
+            value: configData.coolingUnits.map((unit) => unit.name).join(', '),
+          },
+        ],
+      }),
+
+      Section({ label: t('Dashboard.Analytics.comparisonTab.usersTab.operators') }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          operators: {
+            name: t('Dashboard.Analytics.comparisonTab.usersTab.operators'),
+            subHeaders: {
+              male: t('gender.male'),
+              female: t('gender.female'),
+              other: t('gender.other'),
+            },
+          },
+          total: t('Dashboard.Analytics.comparisonTab.total'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const female = cuData?.roomOpFem?.[i] ?? 0;
+          const male = cuData?.roomOpMa?.[i] ?? 0;
+          const other = cuData?.roomOpOt?.[i] ?? 0;
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            male,
+            female,
+            other,
+            total: female + male + other,
+          };
+        }),
+      }),
+
+      Section({ label: t('Dashboard.Analytics.comparisonTab.usersTab.activeUsers') }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          users: {
+            name: t('Dashboard.Analytics.comparisonTab.usersTab.activeUsers'),
+            subHeaders: {
+              male: t('gender.male'),
+              female: t('gender.female'),
+              other: t('gender.other'),
+            },
+          },
+          total: t('Dashboard.Analytics.comparisonTab.total'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const female = cuData?.roomActiveMa?.[i] ?? 0;
+          const male = cuData?.roomActiveFem?.[i] ?? 0;
+          const other = cuData?.roomActiveOt?.[i] ?? 0;
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            male,
+            female,
+            other,
+            total: female + male + other,
+          };
+        }),
+      }),
+
+      Section({ label: t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries') }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          users: {
+            name: t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries'),
+            subHeaders: {
+              male: t('gender.male'),
+              female: t('gender.female'),
+            },
+          },
+          total: t('Dashboard.Analytics.comparisonTab.total'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const female = Math.floor(cuData?.roomBeneficiariesFem?.[i] ?? 0);
+          const male = Math.floor(cuData?.roomBeneficiariesMa?.[i] ?? 0);
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            male,
+            female,
+            total: female + male,
+          };
+        }),
+      }),
+
+      Section({ label: t('Dashboard.Analytics.totalCratesLabel'), kind: 'aggregated' }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          data: {
+            name: t('Dashboard.Analytics.tabsShared.crates'),
+            subHeaders: {
+              checkIn: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn'),
+              checkOut: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOut'),
+            },
+          },
+          total: t('Dashboard.Analytics.comparisonTab.total'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const checkIn = cuData?.roomCratesIn?.[i] ?? 0;
+          const checkOut = cuData?.roomCratesOut?.[i] ?? 0;
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            checkIn,
+            checkOut,
+            total: checkIn + checkOut,
+          };
+        }),
+      }),
+
+      Section({ label: t('Dashboard.Analytics.totalQuantityLabel'), kind: 'aggregated' }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          data: {
+            name: t('Dashboard.Analytics.comparisonTab.cratesTab.kg'),
+            subHeaders: {
+              checkIn: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn'),
+              checkOut: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOut'),
+            },
+          },
+          total: t('Dashboard.Analytics.comparisonTab.total'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const checkIn = cuData?.roomKgIn?.[i] ?? 0;
+          const checkOut = cuData?.roomKgOut?.[i] ?? 0;
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            checkIn,
+            checkOut,
+            total: checkIn + checkOut,
+          };
+        }),
+      }),
+
+      Section({ label: t('Dashboard.Analytics.totalOperations'), kind: 'aggregated' }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          data: {
+            name: t('Dashboard.Analytics.comparisonTab.cratesTab.operations'),
+            subHeaders: {
+              checkIn: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn'),
+              checkOut: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOut'),
+            },
+          },
+          total: t('Dashboard.Analytics.comparisonTab.total'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const checkIn = cuData?.roomOpsIn?.[i] ?? 0;
+          const checkOut = cuData?.roomOpsOut?.[i] ?? 0;
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            checkIn,
+            checkOut,
+            total: checkIn + checkOut,
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInCropDistribution'),
+        kind: 'aggregated',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          crates: t('Dashboard.Analytics.comparisonTab.cratesTab.crates'),
+          distribution: t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution'),
+        },
+        // eslint-disable-next-line
+        // @ts-ignore
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            crates: Object.values(cuData?.checkInCratesCrop?.[i] ?? {})?.map((item) => item),
+            distribution: Object.keys(cuData?.checkInCratesCrop?.[i] ?? {})?.map((item) =>
+              startCase(item)
+            ),
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution'),
+        kind: 'aggregated',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          crates: t('Dashboard.Analytics.comparisonTab.cratesTab.crates'),
+          distribution: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution'),
+        },
+        // eslint-disable-next-line
+        // @ts-ignore
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            crates: Object.values(cuData?.checkOutCratesCrop?.[i] ?? {})?.map((item) => item),
+            distribution: Object.keys(cuData?.checkOutCratesCrop?.[i] ?? {})?.map((item) =>
+              startCase(item)
+            ),
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution'),
+        kind: 'aggregated',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          crates: t('Dashboard.Analytics.comparisonTab.cratesTab.kg'),
+          distribution: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution'),
+        },
+        // eslint-disable-next-line
+        // @ts-ignore
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            crates: Object.values(cuData?.checkInKgCrop?.[i] ?? {})?.map((item) => item),
+            distribution: Object.keys(cuData?.checkInKgCrop?.[i] ?? {})?.map((item) =>
+              startCase(item)
+            ),
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutKgDistribution'),
+        kind: 'aggregated',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          crates: t('Dashboard.Analytics.comparisonTab.cratesTab.kg'),
+          distribution: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutKgDistribution'),
+        },
+        // eslint-disable-next-line
+        // @ts-ignore
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            crates: Object.values(cuData?.checkOutKgCrop?.[i] ?? {})?.map((item) => item),
+            distribution: Object.keys(cuData?.checkOutKgCrop?.[i] ?? {})?.map((item) =>
+              startCase(item)
+            ),
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.cratesTab.co2'),
+        kind: 'aggregated',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          crates: t('Dashboard.Analytics.comparisonTab.cratesTab.co2EmissionsLabel'),
+          distribution: t('Dashboard.Analytics.comparisonTab.cratesTab.co2DistributionLabel'),
+        },
+        // eslint-disable-next-line
+        // @ts-ignore
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            crates: Object.values(cuData?.co2Crops?.[i] ?? {})?.map((item) => item.toFixed(2)),
+            distribution: Object.keys(cuData?.co2Crops?.[i] ?? {})?.map((item) => startCase(item)),
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.impactTab.occupancyLabel'),
+        kind: 'impact',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          data: t('Dashboard.Analytics.comparisonTab.impactTab.occupancy'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            data: `${(cuData?.averageRoomOccupancy?.[i] ?? 0).toFixed(2)}%`,
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.impactTab.foodLossLabel'),
+        kind: 'impact',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          change: t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage'),
+          levels: t('Dashboard.Analytics.comparisonTab.impactTab.foodLossLevels'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const from = getMetricValue(data?.impactMetrics?.[0]?.avgBaselinePercLossMonth, i) || 0;
+          const to = getMetricValue(data?.impactMetrics?.[0]?.avgMonthlyPercLoss, i) || 0;
+          const sum =
+            getMetricValue(data?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution, i) || 0;
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            change: `${sum.toFixed(2)}%`,
+            levels: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.impactTab.revenueLabel'),
+        kind: 'impact',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          change: t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage'),
+          levels: t('Dashboard.Analytics.comparisonTab.impactTab.revenueLevels'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const from =
+            getMetricValue(data?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) || 0;
+          const to = getMetricValue(data?.impactMetrics?.[0]?.avgMonthlyFarmerRevenue, i) || 0;
+          const sum =
+            getMetricValue(data?.impactMetrics?.[0]?.avgMonthlyPercRevenueIncreaseEvolution, i) ||
+            0;
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            change: `${sum.toFixed(2)}%`,
+            levels: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.impactTab.revenuePerRoomLabel'),
+        kind: 'impact',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          data: t('Dashboard.Analytics.comparisonTab.impactTab.revenueLevels'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            data: `${currency}${(cuData?.roomRevenue?.[i] ?? 0).toFixed(2)}`,
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.impactTab.co2Label'),
+        kind: 'impact',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          change: t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage'),
+          levels: t('Dashboard.Analytics.comparisonTab.impactTab.co2EmissionsLabel'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const from = data?.co2Metrics?.[i]?.co2Crops?.co2From || 0;
+          const to = data?.co2Metrics?.[i]?.co2Crops?.co2To || 0;
+          const sum = ((to - from) / (from || 1)) * 100;
+
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            change: `${sum.toFixed(2)}%`,
+            levels: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
+          };
+        }),
+      }),
+
+      Section({
+        label: t('Dashboard.Analytics.comparisonTab.impactTab.surveysAmountLabel'),
+        kind: 'impact',
+      }),
+      Table({
+        columns: {
+          unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
+          percentage: t('Dashboard.Analytics.comparisonTab.impactTab.completePercentage'),
+          impact: t('Dashboard.Analytics.impact'),
+        },
+        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
+          const percentage =
+            (getMetricValue(data?.impactMetrics?.[0]?.numPostHarvestSurveys, i) /
+              getMetricValue(data?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom, i)) *
+            100;
+          return {
+            unit: cuData?.unitName?.[i] ?? '',
+            percentage: `${Number.isNaN(percentage) ? 0 : percentage.toFixed(2)}%`,
+            impact: `${getMetricValue(data?.impactMetrics?.[0]?.numPostHarvestSurveys, i) ?? 0} / ${getMetricValue(data?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom, i) ?? 0}`,
+          };
+        }),
       }),
     ],
   });
