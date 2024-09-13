@@ -122,19 +122,21 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       <View tw="space-y-3">
         <Text tw="text-base text-green-primary font-bold">Seller Settings</Text>
         <View>
-          <View>
-            <List.Item
-              tw="p-0 py-2"
-              title={undefined}
-              left={() => <Text tw="text-base">Discount coupons</Text>}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                props.navigation.navigate('CouponStack');
-              }}
-            />
-            <Divider tw="bg-gray-400" />
-          </View>
+          <RBAC.ProtectedResource action="SET" subject="ManageCouponsSettings">
+            <View>
+              <List.Item
+                tw="p-0 py-2"
+                title={undefined}
+                left={() => <Text tw="text-base">Discount coupons</Text>}
+                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  props.navigation.navigate('CouponStack');
+                }}
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
+          </RBAC.ProtectedResource>
           <View>
             <List.Item
               tw="p-0 py-2"
