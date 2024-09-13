@@ -1,5 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Platform } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator } from 'react-native-paper';
@@ -29,6 +29,8 @@ export default function FarmerDashboardData(props: Props) {
   const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
+
+  const [isCreatingPdf, setIsCreatingPdf] = useState<boolean>(false);
 
   const { data, isLoading, hasError } = useApiCall(
     SWR_CACHE_KEY,
@@ -66,6 +68,7 @@ export default function FarmerDashboardData(props: Props) {
       onPress={async (evt) => {
         evt.stopPropagation();
         if (typeof data === 'undefined') return; // safe guard
+        setIsCreatingPdf(true);
         try {
           const file = await RNHTMLtoPDF.convert({
             html: getPdfContent(data, t),
@@ -75,15 +78,17 @@ export default function FarmerDashboardData(props: Props) {
           });
 
           if (!file.filePath) throw new Error();
+          setIsCreatingPdf(false);
           toast.show(`${t('actions.done')}!`, {
             type: 'md_success',
           });
         } catch (exception) {
+          setIsCreatingPdf(false);
           console.error(exception);
         }
       }}
     >
-      {isLoading ? (
+      {isLoading || isCreatingPdf ? (
         <_ButtonLoader />
       ) : (
         t('Dashboard.Management.EditCoolingUsers.actions.downloadFarmers')

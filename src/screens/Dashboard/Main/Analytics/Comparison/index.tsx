@@ -50,6 +50,7 @@ export function ComparisonSection() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSortModalOpen, setIsSortModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
+  const [isCreatingPdf, setIsCreatingPdf] = useState<boolean>(false);
 
   const { data: impactData, isLoading: loadingImpactData } = useApiCall(
     'getImpact',
@@ -91,6 +92,7 @@ export function ComparisonSection() {
   const onDownloadData = useCallback(async () => {
     if (!updatedImpactData) return;
 
+    setIsCreatingPdf(true);
     const html = generatePDFContent(
       t,
       coolingUnits,
@@ -111,10 +113,13 @@ export function ComparisonSection() {
     try {
       const file = await RNHTMLtoPDF.convert(PDFOptions);
       if (!file.filePath) throw new Error();
+      setIsCreatingPdf(false);
+
       toast.show(`${t('actions.done')}!`, {
         type: 'md_success',
       });
     } catch {
+      setIsCreatingPdf(false);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
@@ -192,8 +197,13 @@ export function ComparisonSection() {
                   icon="check-circle-outline"
                   contentStyle="flex flex-row-reverse"
                   tw="w-[50%] mb-4"
+                  disabled={isCreatingPdf}
                 >
-                  {t('Dashboard.Analytics.downloadDataButton')}
+                  {isCreatingPdf ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    t('Dashboard.Analytics.downloadDataButton')
+                  )}
                 </Button>
                 <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
                   <Text variant="TextMedium" tw="text-base font-bold">

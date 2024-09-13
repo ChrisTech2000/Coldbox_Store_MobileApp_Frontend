@@ -39,6 +39,7 @@ export function FarmerAnalytics() {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
+  const [isCreatingPdf, setIsCreatingPdf] = useState<boolean>(false);
 
   const { data: farmerResponse, isLoading: loadingFarmers } = useApiCall(
     'getFarmerByUserId',
@@ -108,18 +109,25 @@ export function FarmerAnalytics() {
     if (!data) return;
 
     try {
-      const file = await RNHTMLtoPDF.convert({
+      setIsCreatingPdf(true);
+
+      const params = {
         html: getPdfContent(data, t),
         fileName: 'farmer',
         directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
         base64: true,
-      });
+      };
+
+      const file = await RNHTMLtoPDF.convert(params);
 
       if (!file.filePath) throw new Error();
+      setIsCreatingPdf(false);
+
       toast.show(`${t('actions.done')}!`, {
         type: 'md_success',
       });
     } catch (exception) {
+      setIsCreatingPdf(false);
       console.error(exception);
     }
   }, [data]);
@@ -190,12 +198,16 @@ export function FarmerAnalytics() {
                 mode="contained"
                 uppercase
                 onPress={download}
-                icon="check-circle-outline"
+                icon={isCreatingPdf ? '' : 'check-circle-outline'}
                 contentStyle="flex flex-row-reverse"
                 tw="w-[50%] mb-4"
-                disabled={isLoading}
+                disabled={isLoading || isCreatingPdf}
               >
-                {t('Dashboard.Analytics.downloadDataButton')}
+                {isCreatingPdf ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  t('Dashboard.Analytics.downloadDataButton')
+                )}
               </Button>
 
               <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
