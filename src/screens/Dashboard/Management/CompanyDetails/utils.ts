@@ -61,7 +61,7 @@ export function derivedSubjects(company: Company) {
   };
 }
 
-type CountryDatum = { name: string; currencyCode: string };
+type CountryDatum = { name: string; currencyCode: string; currency: string };
 
 export function countriesDict() {
   const dict = new Map<string, CountryDatum>();
@@ -70,6 +70,7 @@ export function countriesDict() {
     dict.set(entry.iso, {
       name: entry.countryName,
       currencyCode: entry.symbol,
+      currency: entry.currency,
     });
   }
 

@@ -62,7 +62,9 @@ export function ImpactContent<T extends Store>({
         style: 'currency',
         currency: company?.currency,
       }),
-      evolution: ((to - from) / from) * 100,
+      evolution: getMetricValue(
+        impactData?.impactMetrics?.[0]?.avgMonthlyPercRevenueIncreaseEvolution
+      ),
     };
   }, [impactData, company]);
 
