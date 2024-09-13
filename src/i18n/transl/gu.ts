@@ -72,6 +72,9 @@ export default {
       PersonalDetails: 'Personal details', // TODO
       LocalizationPreferences: 'Localization preferences', // TODO
       ContactsSharing: 'Contacts sharing', // TODO
+      Coupons: 'Coupons', // TODO
+      CouponsActiveTab: 'Active', // TODO
+      CouponsRevokedTab: 'Revoked', // TODO
       KnowledgeHub: 'જ્ઞાન કેન્દ્ર',
       QuitTutorial: 'ટ્યુટોરિયલ છોડો',
       FAQ: 'વારંવાર પુછાતા પ્રશ્નો',

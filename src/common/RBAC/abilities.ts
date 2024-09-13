@@ -55,6 +55,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
         cannot(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
+        cannot(PERMISSION_KINDS.SET, 'ManageCouponsSettings');
         break;
       }
 
@@ -88,6 +89,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         can(PERMISSION_KINDS.VIEW, 'OperatorActions');
         can(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
+        can(PERMISSION_KINDS.SET, 'ManageCouponsSettings');
         break;
       }
 
@@ -111,6 +113,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
         can(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
+        can(PERMISSION_KINDS.SET, 'ManageCouponsSettings');
         break;
       }
 

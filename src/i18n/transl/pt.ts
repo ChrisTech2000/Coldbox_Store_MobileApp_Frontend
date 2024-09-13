@@ -72,6 +72,9 @@ export default {
       PersonalDetails: 'Personal details', // TODO
       LocalizationPreferences: 'Localization preferences', // TODO
       ContactsSharing: 'Contacts sharing', // TODO
+      Coupons: 'Coupons', // TODO
+      CouponsActiveTab: 'Active', // TODO
+      CouponsRevokedTab: 'Revoked', // TODO
       KnowledgeHub: 'Centro de Conhecimento',
       QuitTutorial: 'Sair do Tutorial',
       FAQ: 'Perguntas Frequentes',
