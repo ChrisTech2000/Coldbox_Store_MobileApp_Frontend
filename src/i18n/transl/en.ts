@@ -50,6 +50,7 @@ const en = {
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
       ProduceDetails: '{{produceCode}}',
+      MarketplaceSettings: 'Marketplace settings',
       PriceTrend: 'Price trend',
       PriceRanking: 'Price ranking',
       Planner: 'Planner',

@@ -7,10 +7,8 @@ import {
 } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Appbar } from 'react-native-paper';
 
 import DashboardMain from '#screens/Dashboard/Main/Dashboard';
-import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
@@ -20,18 +18,18 @@ import {
 } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
-import type { CoolingUnit, Crate, DashboardProduce, Farmer } from '#types/global';
+import type { CoolingUnit, Crate, Farmer } from '#types/global';
 import { Text } from '#ui/components/Text';
 
-import CheckInStack, { CheckInStackRoutes } from './CheckInTabStack';
-import CheckOutStack, { CheckOutStackRoutes } from './CheckOutTabStack';
+import CheckInStack, { type CheckInStackRoutes } from './CheckInTabStack';
+import CheckOutStack, { type CheckOutStackRoutes } from './CheckOutTabStack';
+import ProduceDetailsStack, { type ProduceDetailsStackRoutes } from './ProduceDetailsStack';
 
 export type MainTabStackRoutes = {
   RootMainTabStack: undefined;
-  ProduceDetails: {
-    produce: DashboardProduce;
-    coolingUnit: CoolingUnit | null;
-    currency: string;
+  ProduceDetailsStack: {
+    screen: keyof ProduceDetailsStackRoutes;
+    params: ProduceDetailsStackRoutes[keyof ProduceDetailsStackRoutes];
   };
   CheckInStack: {
     screen: keyof CheckInStackRoutes;
@@ -63,7 +61,7 @@ type ScreenOptions = (props: {
 
 export const NAVIGATOR_HEADERS: Record<MainTabStackRoutePaths, TranslationPaths | undefined> = {
   RootMainTabStack: 'navigation.bottomTabs.RootMainTabStack',
-  ProduceDetails: 'navigation.bottomTabs.ProduceDetails',
+  ProduceDetailsStack: undefined,
   CheckInStack: 'navigation.bottomTabs.CheckIn',
   CheckOutStack: 'navigation.bottomTabs.CheckOut',
 };
@@ -78,17 +76,14 @@ export default function MainTabStack() {
     (props) => {
       // eslint-disable-next-line react/prop-types
       const routeName = props.route.name;
-      // eslint-disable-next-line react/prop-types
-      const produce = (props.route.params as { produce: DashboardProduce })?.produce;
-
       const firstName = useAuthStore.getState().user?.firstName;
 
       const translationPath = NAVIGATOR_HEADERS[routeName];
-      const datums = produce ? { produceCode: produce.movementCode } : { firstName };
-      const routeTitle = translationPath ? t(translationPath, datums) : undefined;
+      const routeTitle = translationPath ? t(translationPath, { firstName }) : undefined;
 
       return {
         ...props,
+        headerShown: !!translationPath,
         header: (headerProps) =>
           translationPath !== NAVIGATOR_HEADERS.CheckInStack && (
             <NavigatorHeader
@@ -108,7 +103,7 @@ export default function MainTabStack() {
   return (
     <Stack.Navigator initialRouteName="RootMainTabStack" screenOptions={screenOptions}>
       <Stack.Screen name="RootMainTabStack" component={DashboardMain} />
-      <Stack.Screen name="ProduceDetails" component={ProduceDetails} />
+      <Stack.Screen name="ProduceDetailsStack" component={ProduceDetailsStack} />
       <Stack.Screen name="CheckInStack" component={CheckInStack} />
       <Stack.Screen name="CheckOutStack" component={CheckOutStack} />
     </Stack.Navigator>
@@ -122,10 +117,6 @@ function _renderContentFactory(
   t: Translator
 ): NavigationHeaderProps {
   switch (routeName) {
-    case 'ProduceDetails':
-      return {
-        leftContent: <Appbar.BackAction onPress={navigation.goBack} size={22} />,
-      };
     case 'CheckOutStack':
       return {
         rightContent: (

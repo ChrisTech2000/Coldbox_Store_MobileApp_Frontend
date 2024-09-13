@@ -1,30 +1,29 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon } from 'react-native-paper';
-import { Modalize } from 'react-native-modalize';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
+import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { ECoolingUnitMetric, EPricingType } from '#types/global';
 
-import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import RBAC from '#common/RBAC';
-import * as SellingSettings from './SellingSettingsModal';
 
-function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDetails'>) {
-  const { produce, coolingUnit, currency } = route.params;
+import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
+import MarketplaceSettingsButton from './components/MarketplaceSettingsButton';
+
+function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
+  const { produce, coolingUnit, currency } = props.route.params;
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
   const toast = InAppNotifications.useToast();
@@ -139,8 +138,6 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
       (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === produce.farmer
     );
   }, [produce, farmers]);
-
-  const modalRef = useRef<Modalize>(null);
 
   return (
     <ScrollView
@@ -258,55 +255,12 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
         />
       </View>
 
-      <RBAC.ProtectedResource action="VIEW" subject="EditSellingSettings">
-        <Button
-          mode="outlined"
-          uppercase
-          tw="w-[85%] my-4"
-          onPress={(evt) => {
-            evt.stopPropagation();
-            modalRef.current?.open();
-          }}
-        >
-          Edit Selling Settings
-        </Button>
-        <SellingSettings.Root>
-          <SellingSettings.Modal
-            modalRef={modalRef}
-            closeFunc={modalRef.current?.close}
-            movementCode={produce.movementCode}
-          >
-            <SellingSettings.ModalContent
-              crates={produce.crates}
-              shelfLife={produce.minimumRemainingShelfLife ?? 0}
-              closeFunc={modalRef.current?.close}
-              cropName={produce.cropName}
-              combinedWeight={produce.cratesCombinedWeight}
-            />
-          </SellingSettings.Modal>
-        </SellingSettings.Root>
-      </RBAC.ProtectedResource>
-
-      <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
-        <Button
-          mode="contained"
-          uppercase
-          tw="w-[85%]"
-          onPress={(evt) => {
-            evt.stopPropagation();
-            navigation.navigate('CheckOutStack', {
-              screen: 'CrateSelection',
-              params: {
-                coolingUnit,
-                user: farmer,
-                crates: produce.crates,
-              },
-            });
-          }}
-        >
-          {t('Dashboard.ProduceDetails.checkOutButton')}
-        </Button>
-      </RBAC.ProtectedResource>
+      <MarketplaceSettingsButton
+        crates={produce.crates}
+        produceShelfLife={produce.minimumRemainingShelfLife ?? 0}
+        companyCurrency={currency}
+      />
+      <CheckoutButtonRedirect coolingUnit={coolingUnit} farmer={farmer} crates={produce.crates} />
     </ScrollView>
   );
 }

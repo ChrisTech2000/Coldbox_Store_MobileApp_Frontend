@@ -52,6 +52,7 @@ export default {
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
       ProduceDetails: '{{produceCode}}',
+      MarketplaceSettings: 'Marketplace settings', // TODO
       PriceTrend: 'Tendance des prix',
       PriceRanking: 'Classement des prix',
       Planner: 'Planificateur',

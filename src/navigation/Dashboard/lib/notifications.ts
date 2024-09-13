@@ -1,5 +1,5 @@
 import { useShallow } from 'zustand/react/shallow';
-import { useNavigation } from '@react-navigation/native';
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 
 import { dateFmt, type Translator, useTranslationUtils } from '#i18n/utils';
 import { ERoles, type User } from '#types/global';
@@ -98,7 +98,7 @@ export type NotificationOpenSurveyEventDatums = {
 
 export function useNotificationOpenSurveyListener() {
   // eslint-disable-next-line
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   useAppEventListener<[NotificationOpenSurveyEventDatums]>(
     'DISPATCH_NOTIFICATION_OPEN_SURVEY',
