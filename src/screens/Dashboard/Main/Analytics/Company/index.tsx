@@ -46,6 +46,7 @@ export function CompanySection() {
   const { setCoolingUnits } = useAnalyticsData();
 
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
+  const [isCreatingPdf, setIsCreatingPdf] = useState<boolean>(false);
 
   const { data: coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
     'getCoolingUnits',
@@ -80,6 +81,7 @@ export function CompanySection() {
   );
 
   const onDownloadData = useCallback(async () => {
+    setIsCreatingPdf(true);
     const html = generatePDFContent(t, coolingUnits, company, impactCompany, impactData, 'company');
 
     const PDFOptions = {
@@ -92,10 +94,13 @@ export function CompanySection() {
     try {
       const file = await RNHTMLtoPDF.convert(PDFOptions);
       if (!file.filePath) throw new Error();
+      setIsCreatingPdf(false);
+
       toast.show(`${t('actions.done')}!`, {
         type: 'md_success',
       });
     } catch {
+      setIsCreatingPdf(false);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
@@ -149,8 +154,13 @@ export function CompanySection() {
               icon="check-circle-outline"
               contentStyle="flex flex-row-reverse"
               tw="w-[50%] mt-2"
+              disabled={isCreatingPdf}
             >
-              {t('Dashboard.Analytics.downloadDataButton')}
+              {isCreatingPdf ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                t('Dashboard.Analytics.downloadDataButton')
+              )}
             </Button>
           )}
           {!activeTab ? (
