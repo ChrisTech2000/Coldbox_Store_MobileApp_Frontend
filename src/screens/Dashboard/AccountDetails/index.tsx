@@ -126,6 +126,22 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             <List.Item
               tw="p-0 py-2"
               title={undefined}
+              left={() => <Text tw="text-base">Discount coupons</Text>}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                props.navigation.navigate('CouponStack', {
+                  screen: 'Root',
+                  params: undefined,
+                });
+              }}
+            />
+            <Divider tw="bg-gray-400" />
+          </View>
+          <View>
+            <List.Item
+              tw="p-0 py-2"
+              title={undefined}
               left={() => <Text tw="text-base">{t('navigation.dashboard.ContactsSharing')}</Text>}
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={(evt) => {

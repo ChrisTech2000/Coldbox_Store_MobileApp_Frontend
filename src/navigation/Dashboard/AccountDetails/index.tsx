@@ -20,7 +20,8 @@ import type { EApiGender, ERoles } from '#types/global';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
-import type { EditCoolingUserStackRoutes } from './Management/EditCoolingUserStack';
+import type { EditCoolingUserStackRoutes } from '../Management/EditCoolingUserStack';
+import CouponsSettingsStack, { CouponsSettingsRoutes } from './CouponSettings';
 
 export type DetailsSectionParams = {
   kind: ERoles;
@@ -43,6 +44,10 @@ export type AccountDetailsRoutes = {
   LocalizationPreferences: DetailsSectionParams;
   ContactsSharing: undefined;
   CoolingUsersSurvey: EditCoolingUserStackRoutes['CoolingUsersSurvey'];
+  CouponStack: {
+    screen: keyof CouponsSettingsRoutes;
+    params: CouponsSettingsRoutes[keyof CouponsSettingsRoutes];
+  };
 };
 
 export type AccountDetailsRoutePaths = keyof AccountDetailsRoutes;
@@ -50,12 +55,13 @@ export type AccountDetailsRoutePaths = keyof AccountDetailsRoutes;
 export type AccountDetailsRouteProps<Path extends AccountDetailsRoutePaths> =
   NativeStackScreenProps<AccountDetailsRoutes, Path>;
 
-export const NAVIGATOR_HEADERS: Record<AccountDetailsRoutePaths, TranslationPaths> = {
+export const NAVIGATOR_HEADERS: Record<AccountDetailsRoutePaths, TranslationPaths | undefined> = {
   Root: 'navigation.dashboard.AccountDetails',
   CoolingUsersSurvey: 'navigation.history.BaseSurvey',
   PersonalDetails: 'navigation.dashboard.PersonalDetails',
   LocalizationPreferences: 'navigation.dashboard.LocalizationPreferences',
   ContactsSharing: 'navigation.dashboard.ContactsSharing',
+  CouponStack: undefined,
 };
 
 type ScreenOptions = (props: {
@@ -69,13 +75,16 @@ export default function AccountDetailsStack() {
   const { t } = useTranslationUtils();
 
   const screenOptions: ScreenOptions = useCallback((props) => {
+    // eslint-disable-next-line react/prop-types
+    const translationPath = NAVIGATOR_HEADERS[props.route.name];
+
     return {
       ...props,
+      headerShown: !!translationPath,
       header: (headerProps) => (
         <NavigatorHeader
           {...headerProps}
-          // eslint-disable-next-line react/prop-types
-          routeTitle={t(NAVIGATOR_HEADERS[props.route.name])}
+          routeTitle={t(translationPath!)}
           // eslint-disable-next-line react/prop-types
           leftContent={<Appbar.BackAction onPress={props.navigation.goBack} size={22} />}
         />
@@ -90,6 +99,7 @@ export default function AccountDetailsStack() {
       <Stack.Screen name="LocalizationPreferences" component={LocalizationPreferences} />
       <Stack.Screen name="ContactsSharing" component={ContactsSharing} />
       <Stack.Screen name="CoolingUsersSurvey" component={CoolingUsersSurvey} />
+      <Stack.Screen name="CouponStack" component={CouponsSettingsStack} />
     </Stack.Navigator>
   );
 }

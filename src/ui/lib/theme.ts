@@ -60,6 +60,6 @@ export const navigatorTheme = {
   ...NavigationDefaultTheme,
   colors: {
     ...NavigationDefaultTheme.colors,
-    background: colors.zinc[100],
+    background: colors.zinc[50],
   },
 } satisfies NavigationTheme;
