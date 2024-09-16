@@ -38,6 +38,7 @@ function Methodology() {
 
       <List.AccordionGroup>
         <FlatList
+          showsHorizontalScrollIndicator={false}
           data={methodologyContent}
           keyExtractor={(item, itemIdx) => `methodology-${item.title}-#${itemIdx}`}
           renderItem={({ item }) => (

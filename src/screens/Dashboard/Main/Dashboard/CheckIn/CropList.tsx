@@ -64,6 +64,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
         contentContainerStyle={styles.list}
         data={filteredData}
         keyExtractor={(item) => `crop-list-item-#${item.id}`}
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <React.Fragment>
             <List.Item

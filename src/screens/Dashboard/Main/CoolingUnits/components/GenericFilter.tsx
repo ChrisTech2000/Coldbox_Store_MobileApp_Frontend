@@ -79,7 +79,6 @@ Filter.CoolingUnits = function _CoolingUnitsFilter() {
     <SelectWithStore<CoolingUnit>
       emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
       datums={data ?? []}
-      useScrollView={false}
       isModalVisible={isVisible}
       setIsModalVisible={setVisibility}
       itemName={(item) => item.name}
@@ -105,7 +104,6 @@ Filter.Companies = function _FarmerCompaniesFilter() {
     <SelectWithStore<Company>
       emptyMessage={t('Dashboard.noCompanyAvailable')}
       datums={farmerCompanies ?? []}
-      useScrollView={false}
       isModalVisible={isVisible}
       setIsModalVisible={setVisibility}
       itemName={(item) => item?.name}
@@ -116,6 +114,7 @@ Filter.Companies = function _FarmerCompaniesFilter() {
       modalHeader={t('Dashboard.Company.SelectCompany.header')}
       divider
       autoSelect
+      occupyFullWidth
     />
   );
 };

@@ -45,6 +45,7 @@ function Locations(props: ManagementRouteProps<'Locations'>) {
         </Text>
       ) : (
         <FlatList
+          showsHorizontalScrollIndicator={false}
           data={data}
           keyExtractor={(item) => `location-item-#${item.id}`}
           renderItem={({ item }) => (

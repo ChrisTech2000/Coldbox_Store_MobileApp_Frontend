@@ -82,16 +82,14 @@ export function Select({
           </View>
         </Modal>
       </Portal>
-      <TouchableOpacity
-        tw={cn(
-          'flex flex-row items-center space-x-0.5',
-          variant !== 'sm' && 'justify-between',
-          minifyLabel && currentValue && 'flex flex-col items-start'
-        )}
-        disabled={props.disabled}
-        onPress={onClick}
-      >
-        <View tw="flex flex-row items-center justify-between flex-1">
+      <TouchableOpacity disabled={props.disabled} onPress={onClick}>
+        <View
+          tw={cn(
+            'flex flex-row items-center space-x-0.5',
+            variant !== 'sm' && 'justify-between',
+            minifyLabel && currentValue && 'flex flex-col items-start'
+          )}
+        >
           <Text
             tw={cn(
               variant === 'sm' ? 'text-green-primary' : 'text-gray-600 text-base',

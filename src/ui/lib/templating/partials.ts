@@ -5,7 +5,7 @@ import { template } from './internals';
 //
 
 export const DetailsContainer = template<{ datums: Array<{ label: string; value: string }> }>`
-<div class="bg-teal-50 px-4 py-0.5 tracking-wide my-2 rounded-md">
+<div class="w-full bg-teal-50 px-4 py-0.5 tracking-wide my-2 rounded-md">
   ${(p) => p.datums.map((datum) => `<p class="text-zinc-900">${datum.label}: <span class="text-teal-600">${datum.value}.</span></p>`).join('')}
 </div>
 `;
@@ -14,16 +14,24 @@ export const DetailsContainer = template<{ datums: Array<{ label: string; value:
 // Pills
 //
 
-export const PillCard = template<{ label: string; value: number | string }>`
-<div class="bg-violet-950 text-white h-14 flex flex-col items-center justify-center rounded-md px-4">
+export const PillCard = template<{
+  label: string;
+  value: number | string | Array<string | number>;
+}>`
+<div class="bg-violet-950 text-white h-auto flex flex-col items-center justify-center rounded-md px-4">
   <p class="text-sm m-0 p-0">${(p) => p.label}</p>
-  <p class="text-sm m-0 p-0">${(p) => p.value.toString()}</p>
+  ${(p) =>
+    Array.isArray(p.value)
+      ? p.value.map((str) => `<p class="text-sm m-0 p-0">${str}</p>`).join('')
+      : `<p class="text-sm m-0 p-0">${p.value.toString()}</p>`}
 </div>
 `;
 
-export const PillContainer = template<{ datums: Array<{ label: string; value: number | string }> }>`
-<div class="h-24 max-h-24 bg-zinc-100 rounded-md flex flex-row items-center justify-evenly my-2">
-${(p) => p.datums.map((datum) => PillCard(datum)).join('')}
+export const PillContainer = template<{
+  datums: Array<{ label: string; value: number | string | Array<string | number> }>;
+}>`
+<div class="bg-zinc-100 rounded-md flex flex-row items-center justify-center space-x-2 space-y-1 flex-wrap my-2 p-2">
+  ${(p) => p.datums.map((datum) => PillCard(datum)).join('')}
 </div>
 `;
 
@@ -31,10 +39,59 @@ ${(p) => p.datums.map((datum) => PillCard(datum)).join('')}
 // Section
 //
 
-export const Section = template<{ label: string; kind?: 'default' | 'impact' }>`
-<div class="${(p) => (p.kind === 'impact' ? 'bg-purple-50' : 'bg-sky-50')} h-14 flex items-center px-4 my-2 rounded-md">
+export const Section = template<{ label: string; kind?: 'default' | 'impact' | 'aggregated' }>`
+<div class="${(p) => (p.kind === 'impact' ? 'bg-purple-50' : p.kind === 'aggregated' ? 'bg-gray-200' : 'bg-teal-50')} h-14 flex items-center px-4 my-2 rounded-md w-full">
   <p>${(p) => p.label}</p>
 </div>
+`;
+
+export const UsersSection = template<{
+  title: string;
+  data: { male: string; female: string; other?: string };
+}>`
+<div class="w-full bg-green-200 p-2 rounded-md flex flex-col items-center my-2">
+    <div class="text-lg mb-2">
+      ${(p) => p.title}
+    </div>
+    <div class="flex flex-row items-center gap-2">
+      <div class="text-lg">
+        ${(p) => p.data.male}
+      </div>
+      <div class="bg-green-700 w-px h-8"></div>
+      <div class="text-lg">
+        ${(p) => p.data.female}
+      </div>
+    </div>
+    ${(p) => (p.data.other ? `<div class="text-lg">${p.data.other}</div>` : '')}
+  </div>
+`;
+
+export const UtilizationSection = template<{
+  title: string;
+  content: string;
+}>`
+  <div class="w-full bg-gray-200 p-2 rounded-md flex flex-col items-center my-2">
+    <div class="text-lg mb-2">
+      ${(p) => p.title}
+    </div>
+    <div class="flex flex-row items-center gap-2">
+      ${(p) => p.content}
+    </div>
+  </div>
+`;
+
+export const ImpactGeneralSection = template<{
+  title: string;
+  content: string;
+}>`
+  <div class="w-full bg-purple-50 p-2 rounded-md flex flex-col items-center my-2">
+    <div class="text-lg mb-2">
+      ${(p) => p.title}
+    </div>
+    <div class="flex flex-row items-center gap-2">
+      ${(p) => p.content}
+    </div>
+  </div>
 `;
 
 //
@@ -64,7 +121,7 @@ function _unGroupColumns(columns: TableColumns): Record<string, string> {
 }
 
 const TableHead = template<{ columns: TableColumns }>`
-<thead class="text-center bg-zinc-700">
+<thead class="w-full text-center bg-zinc-700">
   <tr>
     ${({ columns }) => {
       let hasSubHeaders = false;
@@ -113,7 +170,7 @@ const TableHead = template<{ columns: TableColumns }>`
 `;
 
 const TableRow = template<{ values: Array<number | string> | Array<Array<number | string>> }>`
-<tr>
+<tr tw="w-full">
   ${(p) =>
     p.values
       .map(
@@ -145,7 +202,7 @@ export const Table = template<{
   columns: TableColumns;
   rows: Array<Record<string, number | string>>;
 }>`
-<div class="overflow-x-auto my-2">
+<div class="w-full overflow-x-auto my-2">
   <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm border-collapse">
     ${({ columns }) => TableHead({ columns })}
     <tbody class="divide-y divide-gray-200">
@@ -216,7 +273,7 @@ export const ImpactEvolution = template<{
   from: string;
   to: string;
 }>`
-<div class="flex flex-col items-center space-y-2 p-4 bg-purple-50 rounded-md my-2">
+<div class="w-full flex flex-col items-center space-y-2 p-4 bg-purple-50 rounded-md my-2">
   <p>${(p) => p.title}</p>
   <div class="flex flex-row items-center space-x-3 h-14 max-h-14">
     <p>${(p) => p.subtitle}</p>
@@ -228,3 +285,16 @@ export const ImpactEvolution = template<{
   </div>
 </div>
 `;
+
+//
+// Scroll View
+//
+export const ScrollView = template<{ divs: string[] }>`
+<div class="w-full mt-4 flex flex-col items-center">
+  ${(p) => p.divs.join(' ')}
+</div>
+`;
+
+//
+// Table Footer
+//

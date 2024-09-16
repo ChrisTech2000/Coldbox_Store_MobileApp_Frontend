@@ -71,6 +71,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   return (
     <View tw="flex-1 justify-start">
       <FlatList
+        showsHorizontalScrollIndicator={false}
         data={datums}
         keyExtractor={(item) => `cooling-user-item-#${item.id}`}
         ListHeaderComponent={

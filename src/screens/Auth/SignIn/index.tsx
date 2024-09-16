@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 
@@ -14,11 +14,12 @@ import AuthService from '#services/AuthService';
 import { useAuthStore } from '#stores/auth';
 import { ERoles, MAP_ROLES } from '#types/global';
 import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { AccountCard } from './components/AccountCard';
-import { useManagementStore } from '#stores/management';
 import InAppNotifications from '#common/InAppNotifications';
+import { useManagementStore } from '#stores/management';
+import { AccountCard } from './components/AccountCard';
 
 const IMG_SIZE = Dimensions.get('screen').width / 2.5;
 const ACCOUNT_TYPE_SIZE = Dimensions.get('screen').width / 5;
@@ -119,6 +120,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
             country: result.company.country,
             currency: result.company.currency,
             name: result.company.name,
+            hasDigitalTwin: result.company.digitalTwin,
           });
         }
         setSession({

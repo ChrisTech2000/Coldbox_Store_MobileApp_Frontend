@@ -299,6 +299,7 @@ const en = {
       confirm: 'Confirm new temperature',
       continueWithoutUpdate: 'Continue without update',
       sensorHint: 'Cannot add temperature because a sensor is connected to the cooling unit.',
+      latestTemperature: 'The latest temperature was registered on {{date}}.',
     },
     emptyGeneral: 'At the moment, there is no available data.',
     emptyCoolingUser:

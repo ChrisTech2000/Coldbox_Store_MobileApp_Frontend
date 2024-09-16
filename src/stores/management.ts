@@ -8,6 +8,7 @@ export type ManagementCompany = {
   country?: string;
   currency?: string;
   name?: string;
+  hasDigitalTwin?: boolean;
 } | null;
 
 type State = {

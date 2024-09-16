@@ -301,6 +301,7 @@ export default {
       confirm: 'નવી તાપમાનની પુષ્ટિ કરો',
       continueWithoutUpdate: 'અપડેટ વિના આગળ વધો',
       sensorHint: 'તાપમાન ઉમેરવું શક્ય નથી કારણ કે એક સેન્સર કૂલિંગ યુનિટ સાથે જોડાયેલું છે.',
+      latestTemperature: 'છેલ્લું તાપમાન {{date}} ના રોજ નોંધાયું હતું.',
     },
     emptyGeneral: 'હવે, ઉપલબ્ધ ડેટા નથી.',
     emptyCoolingUser:

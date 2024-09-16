@@ -39,8 +39,10 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
 
   return (
     <FlatList
+      tw="mt-2"
       data={options}
       keyExtractor={(item) => `select-crop-type-#${item.id}`}
+      showsHorizontalScrollIndicator={false}
       renderItem={({ item }) => (
         <View tw="px-3">
           <List.Item
