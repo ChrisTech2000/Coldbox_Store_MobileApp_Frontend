@@ -81,6 +81,7 @@ export default {
       About: 'વિશે',
       Management: 'કુશળતા',
       Tutorial: 'ટ્યુટોરિયલ',
+      PayoutOptions: 'ચુકવણી વિકલ્પો',
     },
     checkIn: {
       SelectCropType: 'કૃષિ પ્રકાર પસંદ કરો',
@@ -130,6 +131,7 @@ export default {
     'update-success': 'સફળતાપૂર્વક અપડેટ',
     'save-changes': 'પરિવર્તનો સાચવો',
     continue: 'જારી રાખો',
+    save: 'સાચવો',
   },
   components: {
     datePicker: {
@@ -859,6 +861,25 @@ export default {
       },
       toasts: {
         success: 'સફળતાપૂર્વક અપડેટ થયું',
+      },
+      PayoutSettings: {
+        addTitle: 'કૃપા કરીને તમારી બેંક એકાઉન્ટની માહિતી દાખલ કરો',
+        editTitle: 'તમારી બેંક એકાઉન્ટની માહિતી',
+        form: {
+          nameLabel: 'મૂળ નામ',
+          namePlaceholder: 'જેમ કે: John Doe',
+          accountNumberLabel: 'એકાઉન્ટ નંબર',
+          accountNumberPlaceholder: 'એકાઉન્ટ નંબર દાખલ કરો',
+          bankLabel: 'બેંકનું નામ',
+          bankPlaceholder: 'બેંકનું નામ દાખલ કરો',
+          errors: {
+            name: 'પૂરું નામ જરૂરી છે',
+            account: 'ખાતાનો નંબર જરૂરી છે',
+            bank: 'બેંકનું નામ જરૂરી છે',
+          },
+        },
+        successMessage: 'બેંક એકાઉન્ટ સફળતાપૂર્વક ઉમેરાયું.',
+        errorMessage: 'કંઇક ખોટું થયું. કૃપા કરીને પછી ફરી પ્રયાસ કરો.',
       },
     },
     About: {
