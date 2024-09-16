@@ -122,7 +122,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       <View tw="space-y-3">
         <Text tw="text-base text-green-primary font-bold">Seller Settings</Text>
         <View>
-          <RBAC.ProtectedResource action="SET" subject="ManageCouponsSettings">
+          <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
             <View>
               <List.Item
                 tw="p-0 py-2"
