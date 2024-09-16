@@ -82,6 +82,12 @@ export default {
       Management: 'Gestion',
       Tutorial: 'Tutoriel',
       PayoutOptions: 'Options de paiement',
+      PaymentOptions: 'Options de paiement',
+      Wallet: 'Portefeuille',
+      Transactions: 'Transactions',
+      AddCard: 'Ajouter une carte de crédit',
+      EditCard: 'Modifier une carte de crédit',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'Sélectionner le type de culture',
@@ -876,6 +882,11 @@ export default {
       },
       toasts: {
         success: 'Mise à jour réussie',
+      },
+      sections: {
+        sellerSettings: 'Paramètres du vendeur',
+        buyerSettings: "Paramètres de l'acheteur",
+        details: 'Détails',
       },
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',

@@ -80,6 +80,12 @@ const en = {
       Management: 'Management',
       Tutorial: 'Tutorial',
       PayoutOptions: 'Payout options',
+      PaymentOptions: 'Payment options',
+      Wallet: 'Wallet',
+      Transactions: 'Transactions',
+      AddCard: 'Add a Credit Card',
+      EditCard: 'Edit a Credit Card',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'Select Crop Type',
@@ -862,6 +868,11 @@ const en = {
       },
       toasts: {
         success: 'Successfully updated user',
+      },
+      sections: {
+        sellerSettings: 'Seller Settings',
+        buyerSettings: 'Buyer Settings',
+        details: 'Details',
       },
       PayoutSettings: {
         addTitle: 'Please insert your bank account information',

@@ -82,6 +82,12 @@ export default {
       Management: 'Gestão',
       Tutorial: 'Tutorial',
       PayoutOptions: 'Opções de pagamento',
+      PaymentOptions: 'Opções de pagamento',
+      Wallet: 'Carteira',
+      Transactions: 'Transações',
+      AddCard: 'Adicionar Cartão de Crédito',
+      EditCard: 'Editar Cartão de Crédito',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'Selecione Tipo de Cultura',
@@ -868,6 +874,11 @@ export default {
       fields: {
         location: 'Localização',
         userCode: 'Código de Importação do Utilizador de Refrigeração',
+      },
+      sections: {
+        sellerSettings: 'Configurações do vendedor',
+        buyerSettings: 'Configurações do comprador',
+        details: 'Detalhes',
       },
       toasts: {
         success: 'Utilizador atualizado com sucesso',

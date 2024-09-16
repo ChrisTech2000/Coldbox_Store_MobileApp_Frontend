@@ -82,6 +82,12 @@ export default {
       Management: 'ପରିଚାଳନା',
       Tutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍',
       PayoutOptions: 'ପ୍ରଦାନ ବିକଳ୍ପ',
+      PaymentOptions: 'ପେମେଣ୍ଟ ଅପ୍ସନ୍ସ',
+      Wallet: 'ୱାଲେଟ',
+      Transactions: 'ଲେନଦେନ',
+      AddCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ ଯୋଗ କରନ୍ତୁ',
+      EditCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ ସମ୍ପାଦନ କରନ୍ତୁ',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'ବର୍ଗ ପ୍ରକାର ଚୟନ କରନ୍ତୁ',
@@ -866,6 +872,11 @@ export default {
       },
       toasts: {
         success: 'ସଫଳତାର ସହିତ ଅଦ୍ୟତନ କରାଗଲା',
+      },
+      sections: {
+        sellerSettings: 'ବିକ୍ରେତା ସେଟିଂସ୍',
+        buyerSettings: 'କ୍ରେତା ସେଟିଂସ୍',
+        details: 'ବିବରଣୀ',
       },
       PayoutSettings: {
         addTitle: 'ଦୟାକରି ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା ପ୍ରବେଶ କରାନ୍ତୁ',

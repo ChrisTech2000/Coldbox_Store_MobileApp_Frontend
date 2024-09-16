@@ -82,6 +82,12 @@ export default {
       Management: 'કુશળતા',
       Tutorial: 'ટ્યુટોરિયલ',
       PayoutOptions: 'ચુકવણી વિકલ્પો',
+      PaymentOptions: 'ચુકવણી વિકલ્પો',
+      Wallet: 'વૉલેટ',
+      Transactions: 'લેનદેન',
+      AddCard: 'ક્રેડિટ કાર્ડ ઉમેરો',
+      EditCard: 'ક્રેડિટ કાર્ડ સંપાદિત કરો',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'કૃષિ પ્રકાર પસંદ કરો',
@@ -861,6 +867,11 @@ export default {
       },
       toasts: {
         success: 'સફળતાપૂર્વક અપડેટ થયું',
+      },
+      sections: {
+        sellerSettings: 'વિક્રેતા સેટિંગ્સ',
+        buyerSettings: 'ખરીદદાર સેટિંગ્સ',
+        details: 'વિગતવાર',
       },
       PayoutSettings: {
         addTitle: 'કૃપા કરીને તમારી બેંક એકાઉન્ટની માહિતી દાખલ કરો',

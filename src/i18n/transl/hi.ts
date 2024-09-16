@@ -82,6 +82,12 @@ export default {
       Management: 'प्रबंधन',
       Tutorial: 'ट्यूटोरियल',
       PayoutOptions: 'भुगतान विकल्प',
+      PaymentOptions: 'भुगतान विकल्प',
+      Wallet: 'वॉलेट',
+      Transactions: 'लेनदेन',
+      AddCard: 'क्रेडिट कार्ड जोड़ें',
+      EditCard: 'क्रेडिट कार्ड संपादित करें',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'फसल प्रकार चुनें',
@@ -867,6 +873,11 @@ export default {
       },
       toasts: {
         success: 'उपयोगकर्ता को सफलतापूर्वक अद्यतन किया गया',
+      },
+      sections: {
+        sellerSettings: 'विक्रेता सेटिंग्स',
+        buyerSettings: 'खरीदार सेटिंग्स',
+        details: 'विवरण',
       },
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',

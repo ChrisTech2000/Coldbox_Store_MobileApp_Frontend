@@ -23,6 +23,7 @@ import type { EApiGender, ERoles } from '#types/global';
 
 import type { EditCoolingUserStackRoutes } from '../Management/EditCoolingUserStack';
 import CouponsSettingsStack from './CouponSettings';
+import PaymentSettings from './PaymentSettingsStack';
 
 export type DetailsSectionParams = {
   kind: ERoles;
@@ -47,6 +48,7 @@ export type AccountDetailsRoutes = {
   CoolingUsersSurvey: EditCoolingUserStackRoutes['CoolingUsersSurvey'];
   CouponStack: undefined;
   PayoutSettings: undefined;
+  PaymentSettings: undefined;
 };
 
 export type AccountDetailsRoutePaths = keyof AccountDetailsRoutes;
@@ -62,6 +64,7 @@ export const NAVIGATOR_HEADERS: Record<AccountDetailsRoutePaths, TranslationPath
   ContactsSharing: 'navigation.dashboard.ContactsSharing',
   CouponStack: undefined,
   PayoutSettings: 'navigation.dashboard.PayoutOptions',
+  PaymentSettings: undefined,
 };
 
 type ScreenOptions = (props: {
@@ -101,6 +104,7 @@ export default function AccountDetailsStack() {
       <Stack.Screen name="CoolingUsersSurvey" component={CoolingUsersSurvey} />
       <Stack.Screen name="CouponStack" component={CouponsSettingsStack} />
       <Stack.Screen name="PayoutSettings" component={PayoutSettings} />
+      <Stack.Screen name="PaymentSettings" component={PaymentSettings} />
     </Stack.Navigator>
   );
 }
