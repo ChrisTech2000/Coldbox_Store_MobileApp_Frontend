@@ -15,6 +15,7 @@ import type { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
 import type { AnalyticsStackRoutePaths } from '../Main/AnalyticsStack';
 
 import { useNotifications } from './notifications';
+import { useCartItems } from '#screens/Dashboard/Main/ShoppingCart/store';
 
 function _buildLeftContent<Params extends Record<string, unknown>, Path extends string>(
   dispatch: NavigationProp<Params, Path>['dispatch'],
@@ -28,7 +29,11 @@ function _buildLeftContent<Params extends Record<string, unknown>, Path extends 
   );
 }
 
-function _buildRightContent(notificationCount: number, goToShoppingCart?: () => void) {
+function _buildRightContent(
+  notificationCount: number,
+  cartItemsCount: number,
+  goToShoppingCart?: () => void
+) {
   return (
     <View tw="flex-row items-center space-x-1.5">
       <View tw="relative">
@@ -47,8 +52,8 @@ function _buildRightContent(notificationCount: number, goToShoppingCart?: () => 
       {typeof goToShoppingCart === 'function' ? (
         <View tw="relative">
           <Appbar.Action icon="cart-outline" size={27} onPress={() => goToShoppingCart()} />
-          <Badge visible tw="absolute top-1.5 right-1.5">
-            4
+          <Badge visible={cartItemsCount > 0} tw="absolute top-1.5 right-1.5">
+            {cartItemsCount}
           </Badge>
         </View>
       ) : null}
@@ -61,6 +66,7 @@ export function useDashboardHeader() {
   const { dispatch, navigate } = useNavigation<NavigationProp<DashboardMainRoutes>>();
 
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
+  const cartItemsCount = useCartItems().length;
 
   return useCallback(
     (goBackFunc?: () => void): NavigationHeaderProps => {
@@ -69,11 +75,12 @@ export function useDashboardHeader() {
         leftContent: _buildLeftContent(dispatch, goBackFunc),
         rightContent: _buildRightContent(
           newNotificationsCount,
+          cartItemsCount,
           showShoppingCart ? () => navigate('ShoppingCart', { screen: 'Root' }) : undefined
         ),
       };
     },
-    [newNotificationsCount]
+    [newNotificationsCount, cartItemsCount]
   );
 }
 

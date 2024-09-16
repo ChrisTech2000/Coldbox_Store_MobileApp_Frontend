@@ -116,7 +116,7 @@ export default function DashboardMainBottomTabs() {
         ),
       };
     },
-    [user?.firstName]
+    [user?.firstName, dashboardHeaderFactory]
   );
 
   return (
