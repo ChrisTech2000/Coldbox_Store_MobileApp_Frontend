@@ -32,7 +32,7 @@ const FAKE_CARDS = [
   },
 ];
 
-function Wallet() {
+function PaymentMethods() {
   const { t } = useTranslationUtils();
   const navigation = useNavigation<NativeStackNavigationProp<PaymentSettingsRoutes>>();
 
@@ -52,4 +52,4 @@ function Wallet() {
   );
 }
 
-export default withSafeArea(Wallet);
+export default withSafeArea(PaymentMethods);

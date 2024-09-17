@@ -82,7 +82,7 @@ export default {
       Management: 'Gestão',
       Tutorial: 'Tutorial',
       PayoutOptions: 'Opções de pagamento',
-      PaymentOptions: 'Opções de pagamento',
+      PaymentMethods: 'Métodos de pagamento',
       Wallet: 'Carteira',
       Transactions: 'Transações',
       AddCard: 'Adicionar Cartão de Crédito',

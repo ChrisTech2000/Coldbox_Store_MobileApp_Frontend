@@ -80,7 +80,7 @@ const en = {
       Management: 'Management',
       Tutorial: 'Tutorial',
       PayoutOptions: 'Payout options',
-      PaymentOptions: 'Payment options',
+      PaymentMethods: 'Payment methods',
       Wallet: 'Wallet',
       Transactions: 'Transactions',
       AddCard: 'Add a Credit Card',

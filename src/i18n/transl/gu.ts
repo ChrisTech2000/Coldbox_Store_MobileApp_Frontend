@@ -82,7 +82,7 @@ export default {
       Management: 'કુશળતા',
       Tutorial: 'ટ્યુટોરિયલ',
       PayoutOptions: 'ચુકવણી વિકલ્પો',
-      PaymentOptions: 'ચુકવણી વિકલ્પો',
+      PaymentMethods: 'પેમેન્ટ પદ્ધતિઓ',
       Wallet: 'વૉલેટ',
       Transactions: 'લેનદેન',
       AddCard: 'ક્રેડિટ કાર્ડ ઉમેરો',

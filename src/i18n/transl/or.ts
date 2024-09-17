@@ -82,7 +82,7 @@ export default {
       Management: 'ପରିଚାଳନା',
       Tutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍',
       PayoutOptions: 'ପ୍ରଦାନ ବିକଳ୍ପ',
-      PaymentOptions: 'ପେମେଣ୍ଟ ଅପ୍ସନ୍ସ',
+      PaymentMethods: 'ପେମେଣ୍ଟ ପଧତିଗୁଡିକ',
       Wallet: 'ୱାଲେଟ',
       Transactions: 'ଲେନଦେନ',
       AddCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ ଯୋଗ କରନ୍ତୁ',

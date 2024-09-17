@@ -82,7 +82,7 @@ export default {
       Management: 'प्रबंधन',
       Tutorial: 'ट्यूटोरियल',
       PayoutOptions: 'भुगतान विकल्प',
-      PaymentOptions: 'भुगतान विकल्प',
+      PaymentMethods: 'भुगतान विधियाँ',
       Wallet: 'वॉलेट',
       Transactions: 'लेनदेन',
       AddCard: 'क्रेडिट कार्ड जोड़ें',

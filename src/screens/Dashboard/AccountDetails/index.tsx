@@ -138,7 +138,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                 tw="p-0 py-2"
                 title={undefined}
                 left={() => (
-                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.PaymentOptions')}</Text>
+                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.PaymentMethods')}</Text>
                 )}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
