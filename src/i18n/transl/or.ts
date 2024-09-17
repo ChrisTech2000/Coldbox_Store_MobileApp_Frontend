@@ -81,6 +81,7 @@ export default {
       About: 'ସମ୍ପର୍କରେ',
       Management: 'ପରିଚାଳନା',
       Tutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍',
+      PayoutOptions: 'ପ୍ରଦାନ ବିକଳ୍ପ',
     },
     checkIn: {
       SelectCropType: 'ବର୍ଗ ପ୍ରକାର ଚୟନ କରନ୍ତୁ',
@@ -130,6 +131,7 @@ export default {
     'update-success': 'ସଫଳତାର ସହ ଅଦ୍ୟତନ',
     'save-changes': 'ପରିବର୍ତ୍ତନ ସଞ୍ଚୟ କରନ୍ତୁ',
     continue: 'ଜାରି ରଖନ୍ତୁ',
+    save: 'ସଞ୍ଚୟ କରନ୍ତୁ',
   },
   components: {
     datePicker: {
@@ -864,6 +866,25 @@ export default {
       },
       toasts: {
         success: 'ସଫଳତାର ସହିତ ଅଦ୍ୟତନ କରାଗଲା',
+      },
+      PayoutSettings: {
+        addTitle: 'ଦୟାକରି ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା ପ୍ରବେଶ କରାନ୍ତୁ',
+        editTitle: 'ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା',
+        form: {
+          nameLabel: 'ପୂରା ନାମ',
+          namePlaceholder: 'ଉଦାହରଣ ସ୍ୱରୂପ: ଜନ୍ ଡୋ',
+          accountNumberLabel: 'ଖାତା ନମ୍ବର',
+          accountNumberPlaceholder: 'ଖାତା ନମ୍ବର ପ୍ରବେଶ କରାନ୍ତୁ',
+          bankLabel: 'ବ୍ୟାଙ୍କର ନାମ',
+          bankPlaceholder: 'ବ୍ୟାଙ୍କର ନାମ ପ୍ରବେଶ କରାନ୍ତୁ',
+          errors: {
+            name: 'ପୂର୍ଣ୍ଣ ନାମ ଆବଶ୍ୟକ',
+            account: 'ଖାତା ସଂଖ୍ୟା ଆବଶ୍ୟକ',
+            bank: 'ବ୍ୟାଙ୍କ ନାମ ଆବଶ୍ୟକ',
+          },
+        },
+        successMessage: 'ବ୍ୟାଙ୍କ ଖାତା ସଫଳତାର ସହିତ ଯୋଡା ହୋଇଛି।',
+        errorMessage: 'କିଛି ଭୁଲ ହେଲା। ଦୟାକରି ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।',
       },
     },
     About: {
