@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { Divider, IconButton, Portal } from 'react-native-paper';
+import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
 
 import { paperTheme } from '#ui/lib/theme';
-import { Modalize } from 'react-native-modalize';
 
 // TODO → add text content to translations
 export default function OrderDetailsCard() {
