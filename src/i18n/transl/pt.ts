@@ -902,6 +902,15 @@ export default {
         successMessage: 'Conta bancária adicionada com sucesso.',
         errorMessage: 'Algo correu mal. Por favor, tente novamente mais tarde.',
       },
+      PaymentSettings: {
+        cards: 'Cartões',
+        creditCard: {
+          predefined: 'Pré-definido',
+          owner: 'Nome do Titular',
+          date: 'Data de Expiração',
+          cvv: 'CVV',
+        },
+      },
     },
     About: {
       runtimeAgree: 'Acordo de Execução Comsol',

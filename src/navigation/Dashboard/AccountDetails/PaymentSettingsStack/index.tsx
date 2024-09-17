@@ -12,10 +12,17 @@ import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
+import AddCard from '#screens/Dashboard/AccountDetails/PaymentSettings/AddCard';
+import EditCard from '#screens/Dashboard/AccountDetails/PaymentSettings/EditCard';
+import TransactionDetails from '#screens/Dashboard/AccountDetails/PaymentSettings/TransactionDetails';
+
 import PaymentSettingsTabs from './PaymentSettingsTabs';
 
 export type PaymentSettingsRoutes = {
   Root: undefined;
+  AddCard: undefined;
+  EditCard: undefined;
+  TransactionDetails: undefined;
 };
 
 export type PaymentSettingsRoutePaths = keyof PaymentSettingsRoutes;
@@ -25,6 +32,9 @@ export type PaymentSettingsRouteProps<Path extends PaymentSettingsRoutePaths> =
 
 export const NAVIGATOR_HEADERS: Record<PaymentSettingsRoutePaths, TranslationPaths> = {
   Root: 'navigation.dashboard.PaymentOptions',
+  AddCard: 'navigation.dashboard.AddCard',
+  EditCard: 'navigation.dashboard.EditCard',
+  TransactionDetails: 'navigation.dashboard.Transaction',
 };
 
 type ScreenOptions = (props: {
@@ -56,6 +66,9 @@ export default function PaymentSettings() {
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={PaymentSettingsTabs} />
+      <Stack.Screen name="AddCard" component={AddCard} />
+      <Stack.Screen name="EditCard" component={EditCard} />
+      <Stack.Screen name="TransactionDetails" component={TransactionDetails} />
     </Stack.Navigator>
   );
 }

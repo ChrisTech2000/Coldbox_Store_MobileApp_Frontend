@@ -898,6 +898,15 @@ export default {
         successMessage: 'Compte bancaire ajouté avec succès.',
         errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
       },
+      PaymentSettings: {
+        cards: 'कार्ड्स',
+        creditCard: {
+          predefined: 'पूर्व निर्धारित',
+          owner: 'कार्ड धारक का नाम',
+          date: 'समाप्ति तिथि',
+          cvv: 'CVV',
+        },
+      },
     },
     About: {
       runtimeAgree: 'कॉमसोल रनटाइम समझौता',

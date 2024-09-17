@@ -892,6 +892,15 @@ export default {
         successMessage: 'બેંક એકાઉન્ટ સફળતાપૂર્વક ઉમેરાયું.',
         errorMessage: 'કંઇક ખોટું થયું. કૃપા કરીને પછી ફરી પ્રયાસ કરો.',
       },
+      PaymentSettings: {
+        cards: 'કાર્ડ્સ',
+        creditCard: {
+          predefined: 'પૂર્વ નક્કી કરેલ',
+          owner: 'કાર્ડ ધારકનું નામ',
+          date: 'સમાપ્ત તારીખ',
+          cvv: 'સિવીવિવી',
+        },
+      },
     },
     About: {
       runtimeAgree: 'કમ્સોલ રનટાઇમ સોદા',

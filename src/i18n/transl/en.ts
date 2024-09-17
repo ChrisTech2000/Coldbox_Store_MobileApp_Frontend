@@ -893,6 +893,15 @@ const en = {
         successMessage: 'Bank account added successfully.',
         errorMessage: 'Something went wrong. Please try again later.',
       },
+      PaymentSettings: {
+        cards: 'Cards',
+        creditCard: {
+          predefined: 'Predefined',
+          owner: 'Card Holder Name',
+          date: 'Expiration Date',
+          cvv: 'CVV',
+        },
+      },
     },
     About: {
       runtimeAgree: 'Comsol Runtime Agreement',

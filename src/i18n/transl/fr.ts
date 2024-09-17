@@ -907,6 +907,15 @@ export default {
         successMessage: 'Compte bancaire ajouté avec succès.',
         errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
       },
+      PaymentSettings: {
+        cards: 'Cartes',
+        creditCard: {
+          predefined: 'Prédéfinie',
+          owner: 'Nom du Titulaire',
+          date: "Date d'Expiration",
+          cvv: 'CVV',
+        },
+      },
     },
     About: {
       runtimeAgree: 'Accord de Runtime Comsol',

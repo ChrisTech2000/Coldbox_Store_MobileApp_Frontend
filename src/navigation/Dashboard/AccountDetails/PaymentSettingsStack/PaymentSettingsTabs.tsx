@@ -8,10 +8,11 @@ import React, { useCallback } from 'react';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
+
 import { paperTheme } from '#ui/lib/theme';
 
-import TransactionsStack from './TransactionsStack';
-import WalletStack from './WalletStack';
+import Wallet from '#screens/Dashboard/AccountDetails/PaymentSettings/Wallet';
+import Transactions from '#screens/Dashboard/AccountDetails/PaymentSettings/Transactions';
 
 export type PaymentSettingsTabsRoutes = {
   Wallet: undefined;
@@ -40,8 +41,8 @@ const TopTabs = createMaterialTopTabNavigator<PaymentSettingsTabsRoutes>();
 export default function PaymentSettingsTabs() {
   const { t } = useTranslationUtils();
 
-  const screenOptions: ScreenOptions = useCallback(
-    (props) => ({
+  const screenOptions: ScreenOptions = useCallback((props) => {
+    return {
       ...props,
       // eslint-disable-next-line react/prop-types
       tabBarLabel: t(TAB_HEADERS[props.route.name]),
@@ -55,14 +56,13 @@ export default function PaymentSettingsTabs() {
         color: paperTheme.colors.secondary,
         ...paperTheme.fonts.labelMedium,
       },
-    }),
-    []
-  );
+    };
+  }, []);
 
   return (
     <TopTabs.Navigator screenOptions={screenOptions}>
-      <TopTabs.Screen name="Wallet" component={WalletStack} />
-      <TopTabs.Screen name="Transactions" component={TransactionsStack} />
+      <TopTabs.Screen name="Wallet" component={Wallet} />
+      <TopTabs.Screen name="Transactions" component={Transactions} />
     </TopTabs.Navigator>
   );
 }

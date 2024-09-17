@@ -897,6 +897,15 @@ export default {
         successMessage: 'ବ୍ୟାଙ୍କ ଖାତା ସଫଳତାର ସହିତ ଯୋଡା ହୋଇଛି।',
         errorMessage: 'କିଛି ଭୁଲ ହେଲା। ଦୟାକରି ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।',
       },
+      PaymentSettings: {
+        cards: 'କାର୍ଡସ୍',
+        creditCard: {
+          predefined: 'ପୂର୍ବନିର୍ଦ୍ଧାରିତ',
+          owner: 'କାର୍ଡ ଧାରକର ନାମ',
+          date: 'ମାତ୍ରା ସମାପ୍ତି',
+          cvv: 'CVV',
+        },
+      },
     },
     About: {
       runtimeAgree: 'କମ୍ସୋଲ ରଣଟାଇମ୍ ସହମତି',
