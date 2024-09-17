@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { create } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
 
 type CartItem<T> = T & {
   id: number;
@@ -54,9 +53,12 @@ export const useMarketplaceCartStore = createCartStore<{
   coolingUnitId: number;
   coolingUnitName: string;
   pickupDistance: number;
+  coolingUserCode: string;
+  companyName: string;
+  currencySymbol: string;
 }>();
 
 export function useCartItems() {
-  const items = useMarketplaceCartStore(useShallow((store) => store.items));
+  const items = useMarketplaceCartStore((store) => store.items);
   return useMemo(() => Array.from(items.values()), [items]);
 }

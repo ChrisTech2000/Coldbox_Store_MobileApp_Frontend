@@ -40,7 +40,7 @@ export default function CartItemInput(props: { itemId: number; initialValue: num
       name="quantity"
       render={({ field: { value, onChange } }) => (
         <Input
-          tw="bg-white border rounded-sm h-14 text-center"
+          tw="bg-white border rounded-sm h-12 text-center rounded-md"
           keyboardType="numeric"
           placeholder="0"
           value={value}

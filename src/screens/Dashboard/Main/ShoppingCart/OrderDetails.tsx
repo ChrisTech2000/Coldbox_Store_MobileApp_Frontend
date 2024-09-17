@@ -1,17 +1,50 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Divider } from 'react-native-paper';
 
+import { ScrollView } from '#ui/components/ScrollView';
+import { Text } from '#ui/components/Text';
+import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
-import { Button } from 'react-native';
+import OrderDetailsCard from './components/OrderDetailsCard';
+import OrderPickupMethod from './components/OrderPickupMethod';
+import PaymentMethod from './components/PaymentMethod';
 
-function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
+// TODO → add text content to translations
+function OrderDetails() {
   return (
-    <View tw="flex-1 items-center justify-center">
-      <Text>Shopping Cart</Text>
-      <Button onPress={() => props.navigation.goBack()} title="Go back" />
-    </View>
+    <ScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
+      <View tw="flex-1 pb-8 space-y-6">
+        <View>
+          <OrderDetailsCard />
+        </View>
+        <View>
+          <OrderPickupMethod />
+        </View>
+        <View>
+          <PaymentMethod />
+        </View>
+        <View tw="flex-col w-full mt-6">
+          <View tw="flex-row items-center justify-between">
+            <Text tw="text-lg">Subtotal</Text>
+            <Text tw="text-lg">$ 0.00</Text>
+          </View>
+          <Divider tw="bg-zinc-400 my-3" />
+          <Button
+            tw="w-5/6 self-center my-4"
+            mode="contained"
+            uppercase
+            onPress={(evt) => {
+              evt.stopPropagation();
+              // TODO
+            }}
+          >
+            Pay
+          </Button>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
