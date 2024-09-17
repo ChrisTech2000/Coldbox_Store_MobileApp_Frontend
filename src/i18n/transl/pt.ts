@@ -81,6 +81,7 @@ export default {
       About: 'Sobre',
       Management: 'Gestão',
       Tutorial: 'Tutorial',
+      PayoutOptions: 'Opções de pagamento',
     },
     checkIn: {
       SelectCropType: 'Selecione Tipo de Cultura',
@@ -130,6 +131,7 @@ export default {
     'update-success': 'Atualizado com sucesso',
     'save-changes': 'Guardar alterações',
     continue: 'Continuar',
+    save: 'Salvar',
   },
   components: {
     datePicker: {
@@ -869,6 +871,25 @@ export default {
       },
       toasts: {
         success: 'Utilizador atualizado com sucesso',
+      },
+      PayoutSettings: {
+        addTitle: 'Por favor, insira as informações da sua conta bancária',
+        editTitle: 'Informações da sua conta bancária',
+        form: {
+          nameLabel: 'Nome completo',
+          namePlaceholder: 'Ex.: João Silva',
+          accountNumberLabel: 'Número da conta',
+          accountNumberPlaceholder: 'Insira o número da conta',
+          bankLabel: 'Nome do banco',
+          bankPlaceholder: 'Insira o nome do banco',
+          errors: {
+            name: 'Nome completo é obrigatório',
+            account: 'Número da conta é obrigatório',
+            bank: 'Nome do banco é obrigatório',
+          },
+        },
+        successMessage: 'Conta bancária adicionada com sucesso.',
+        errorMessage: 'Algo correu mal. Por favor, tente novamente mais tarde.',
       },
     },
     About: {

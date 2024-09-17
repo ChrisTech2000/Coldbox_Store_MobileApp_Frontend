@@ -65,7 +65,9 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             <List.Item
               tw="p-0 py-2"
               title={undefined}
-              left={() => <Text tw="text-base">{t('navigation.dashboard.PersonalDetails')}</Text>}
+              left={() => (
+                <Text tw="text-base w-[80%]">{t('navigation.dashboard.PersonalDetails')}</Text>
+              )}
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={(evt) => {
                 evt.stopPropagation();
@@ -81,7 +83,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
               title={undefined}
               disabled={disabledLocationPreferences}
               left={() => (
-                <Text tw={cn('text-base', disabledLocationPreferences && 'text-gray-400')}>
+                <Text tw={cn('text-base w-[80%]', disabledLocationPreferences && 'text-gray-400')}>
                   {t('navigation.dashboard.LocalizationPreferences')}
                 </Text>
               )}
@@ -105,7 +107,11 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
               <List.Item
                 tw="p-0 py-2"
                 title={undefined}
-                left={() => <Text tw="text-base">{t('navigation.history.BaseSurvey')}</Text>}
+                left={() => (
+                  <Text tw="text-base w-[80%]" numberOfLines={1}>
+                    {t('navigation.history.BaseSurvey')}
+                  </Text>
+                )}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
                   evt.stopPropagation();
@@ -122,12 +128,29 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       <View tw="space-y-3">
         <Text tw="text-base text-green-primary font-bold">Seller Settings</Text>
         <View>
+          <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
+            <List.Item
+              tw="p-0 py-2"
+              title={undefined}
+              left={() => (
+                <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
+              )}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                props.navigation.navigate('PayoutSettings');
+              }}
+            />
+            <Divider tw="bg-gray-400" />
+          </RBAC.ProtectedResource>
+        </View>
+        <View>
           <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
             <View>
               <List.Item
-                tw="p-0 py-2"
+                tw="p-0 pb-2"
                 title={undefined}
-                left={() => <Text tw="text-base">Discount coupons</Text>}
+                left={() => <Text tw="text-base w-[80%]">Discount coupons</Text>}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
                   evt.stopPropagation();
@@ -141,7 +164,9 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             <List.Item
               tw="p-0 py-2"
               title={undefined}
-              left={() => <Text tw="text-base">{t('navigation.dashboard.ContactsSharing')}</Text>}
+              left={() => (
+                <Text tw="text-base w-[80%]">{t('navigation.dashboard.ContactsSharing')}</Text>
+              )}
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={(evt) => {
                 evt.stopPropagation();

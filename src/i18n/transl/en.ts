@@ -79,6 +79,7 @@ const en = {
       About: 'About',
       Management: 'Management',
       Tutorial: 'Tutorial',
+      PayoutOptions: 'Payout options',
     },
     checkIn: {
       SelectCropType: 'Select Crop Type',
@@ -127,6 +128,7 @@ const en = {
     'complete-later': 'Complete later',
     'update-success': 'Succesfully updated',
     'save-changes': 'Save changes',
+    save: 'Save',
     continue: 'Continue',
   },
   components: {
@@ -860,6 +862,25 @@ const en = {
       },
       toasts: {
         success: 'Successfully updated user',
+      },
+      PayoutSettings: {
+        addTitle: 'Please insert your bank account information',
+        editTitle: 'Your bank account information',
+        form: {
+          nameLabel: 'Full name',
+          namePlaceholder: 'E.g. John Doe',
+          accountNumberLabel: 'Account number',
+          accountNumberPlaceholder: 'Insert account number',
+          bankLabel: 'Bank name',
+          bankPlaceholder: 'Insert bank name',
+          errors: {
+            name: 'Full name is required',
+            account: 'Account number is required',
+            bank: 'Bank name is required',
+          },
+        },
+        successMessage: 'Bank account added successfully.',
+        errorMessage: 'Something went wrong. Please try again later.',
       },
     },
     About: {

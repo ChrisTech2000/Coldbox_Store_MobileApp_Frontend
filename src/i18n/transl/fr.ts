@@ -81,6 +81,7 @@ export default {
       About: 'À propos',
       Management: 'Gestion',
       Tutorial: 'Tutoriel',
+      PayoutOptions: 'Options de paiement',
     },
     checkIn: {
       SelectCropType: 'Sélectionner le type de culture',
@@ -130,6 +131,7 @@ export default {
     'update-success': 'Mis à jour avec succès',
     'save-changes': 'Enregistrer les modifications',
     continue: 'Continuer',
+    save: 'Enregistrer',
   },
   components: {
     datePicker: {
@@ -874,6 +876,25 @@ export default {
       },
       toasts: {
         success: 'Mise à jour réussie',
+      },
+      PayoutSettings: {
+        addTitle: 'Veuillez insérer les informations de votre compte bancaire',
+        editTitle: 'Les informations de votre compte bancaire',
+        form: {
+          nameLabel: 'Nom complet',
+          namePlaceholder: 'Ex. : John Doe',
+          accountNumberLabel: 'Numéro de compte',
+          accountNumberPlaceholder: 'Insérez le numéro de compte',
+          bankLabel: 'Nom de la banque',
+          bankPlaceholder: 'Insérez le nom de la banque',
+          errors: {
+            name: 'Le nom complet est requis',
+            account: 'Le numéro de compte est requis',
+            bank: 'Le nom de la banque est requis',
+          },
+        },
+        successMessage: 'Compte bancaire ajouté avec succès.',
+        errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
       },
     },
     About: {

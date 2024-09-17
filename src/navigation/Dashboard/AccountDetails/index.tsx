@@ -9,16 +9,17 @@ import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
 import AccountDetails from '#screens/Dashboard/AccountDetails';
-import CoolingUsersSurvey from '#screens/Dashboard/Management/EditCoolingUser/CoolingUsersSurvey';
-import PersonalDetails from '#screens/Dashboard/AccountDetails/PersonalDetails';
-import LocalizationPreferences from '#screens/Dashboard/AccountDetails/LocalizationPreferences';
 import ContactsSharing from '#screens/Dashboard/AccountDetails/ContactsSharing';
+import LocalizationPreferences from '#screens/Dashboard/AccountDetails/LocalizationPreferences';
+import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
+import PersonalDetails from '#screens/Dashboard/AccountDetails/PersonalDetails';
+import CoolingUsersSurvey from '#screens/Dashboard/Management/EditCoolingUser/CoolingUsersSurvey';
 
-import type { TranslationPaths } from '#i18n/index';
 import type { TranslationLocales } from '#i18n/constants';
-import type { EApiGender, ERoles } from '#types/global';
+import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
+import type { EApiGender, ERoles } from '#types/global';
 
 import type { EditCoolingUserStackRoutes } from '../Management/EditCoolingUserStack';
 import CouponsSettingsStack from './CouponSettings';
@@ -45,6 +46,7 @@ export type AccountDetailsRoutes = {
   ContactsSharing: undefined;
   CoolingUsersSurvey: EditCoolingUserStackRoutes['CoolingUsersSurvey'];
   CouponStack: undefined;
+  PayoutSettings: undefined;
 };
 
 export type AccountDetailsRoutePaths = keyof AccountDetailsRoutes;
@@ -59,6 +61,7 @@ export const NAVIGATOR_HEADERS: Record<AccountDetailsRoutePaths, TranslationPath
   LocalizationPreferences: 'navigation.dashboard.LocalizationPreferences',
   ContactsSharing: 'navigation.dashboard.ContactsSharing',
   CouponStack: undefined,
+  PayoutSettings: 'navigation.dashboard.PayoutOptions',
 };
 
 type ScreenOptions = (props: {
@@ -97,6 +100,7 @@ export default function AccountDetailsStack() {
       <Stack.Screen name="ContactsSharing" component={ContactsSharing} />
       <Stack.Screen name="CoolingUsersSurvey" component={CoolingUsersSurvey} />
       <Stack.Screen name="CouponStack" component={CouponsSettingsStack} />
+      <Stack.Screen name="PayoutSettings" component={PayoutSettings} />
     </Stack.Navigator>
   );
 }
