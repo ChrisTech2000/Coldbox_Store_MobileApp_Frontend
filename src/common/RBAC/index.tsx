@@ -11,8 +11,10 @@ import { useAuthStore } from '#stores/auth';
 
 import permissionsFactory, { type PermissionKinds } from './abilities';
 
+export type RBACGuardFunc = (action: PermissionKinds, subject: string) => boolean;
+
 type Context = {
-  guard: (action: PermissionKinds, subject: string) => boolean;
+  guard: RBACGuardFunc;
 };
 
 const RBACContext = createContext<Context>({

@@ -1,6 +1,10 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { BottomTabDescriptorMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import { CommonActions } from '@react-navigation/native';
+import {
+  CommonActions,
+  type ParamListBase,
+  type TabNavigationState,
+} from '@react-navigation/native';
 import React from 'react';
 import { Dimensions, View, type StyleProp, type ViewStyle } from 'react-native';
 import { BottomNavigation as MDBottomNavigation } from 'react-native-paper';
@@ -14,6 +18,15 @@ function useStyles(descriptors: BottomTabDescriptorMap, routeKey: string) {
   return descriptors[routeKey].options.tabBarStyle as StyleProp<ViewStyle>;
 }
 
+function useNavigationState(state: TabNavigationState<DashboardMainRoutes>) {
+  const filteredRoutes = state.routes.filter((route) => route.name !== 'ShoppingCart');
+  return {
+    ...state,
+    routes: filteredRoutes,
+    index: state.index >= filteredRoutes.length ? filteredRoutes.length - 1 : state.index,
+  } satisfies TabNavigationState<ParamListBase>;
+}
+
 const MAX_CHARACTERS_FIRST_LINE = 9;
 
 const screenHeight = Dimensions.get('screen').height;
@@ -22,11 +35,13 @@ export default function BottomNavigation(props: BottomTabBarProps) {
   const { navigation, state, descriptors, insets } = props;
 
   const styles = useStyles(descriptors, state.routes[state.index].key);
+  // eslint-disable-next-line
+  const navigationState = useNavigationState(state as any);
 
   return (
     <MDBottomNavigation.Bar
       style={styles}
-      navigationState={state}
+      navigationState={navigationState}
       safeAreaInsets={{
         ...insets,
         ...(screenHeight <= SMALL_SCREEN_THRESHOLD ? { bottom: 10 } : {}),
