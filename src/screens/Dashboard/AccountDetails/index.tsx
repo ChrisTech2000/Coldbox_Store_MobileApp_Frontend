@@ -59,7 +59,9 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   return (
     <ScrollView tw="flex-1 p-4 space-y-6" showsVerticalScrollIndicator={false}>
       <View tw="space-y-3">
-        <Text tw="text-base text-green-primary font-bold">Details</Text>
+        <Text tw="text-base text-green-primary font-bold">
+          {t('Dashboard.AccountDetails.sections.details')}
+        </Text>
         <View>
           <View>
             <List.Item
@@ -125,8 +127,35 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
         </View>
       </View>
 
+      <View>
+        <RBAC.ProtectedResource action="SET" subject="BuyerSettings">
+          <View tw="space-y-3">
+            <Text tw="text-base text-green-primary font-bold">
+              {t('Dashboard.AccountDetails.sections.buyerSettings')}
+            </Text>
+            <View>
+              <List.Item
+                tw="p-0 py-2"
+                title={undefined}
+                left={() => (
+                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.PaymentMethods')}</Text>
+                )}
+                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  props.navigation.navigate('PaymentSettings');
+                }}
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
+          </View>
+        </RBAC.ProtectedResource>
+      </View>
+
       <View tw="space-y-3">
-        <Text tw="text-base text-green-primary font-bold">Seller Settings</Text>
+        <Text tw="text-base text-green-primary font-bold">
+          {t('Dashboard.AccountDetails.sections.sellerSettings')}
+        </Text>
         <View>
           <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
             <List.Item

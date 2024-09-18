@@ -99,6 +99,7 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
                 tw="w-full bg-transparent mt-2"
                 label={t('Dashboard.AccountDetails.PayoutSettings.form.accountNumberLabel')}
                 mode="flat"
+                keyboardType="numeric"
                 dense
                 error={!!errors.accountNumber}
                 placeholder={t(

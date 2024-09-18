@@ -82,6 +82,12 @@ export default {
       Management: 'કુશળતા',
       Tutorial: 'ટ્યુટોરિયલ',
       PayoutOptions: 'ચુકવણી વિકલ્પો',
+      PaymentMethods: 'પેમેન્ટ પદ્ધતિઓ',
+      Wallet: 'વૉલેટ',
+      Transactions: 'લેનદેન',
+      AddCard: 'ક્રેડિટ કાર્ડ ઉમેરો',
+      EditCard: 'ક્રેડિટ કાર્ડ સંપાદિત કરો',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'કૃષિ પ્રકાર પસંદ કરો',
@@ -862,6 +868,11 @@ export default {
       toasts: {
         success: 'સફળતાપૂર્વક અપડેટ થયું',
       },
+      sections: {
+        sellerSettings: 'વિક્રેતા સેટિંગ્સ',
+        buyerSettings: 'ખરીદદાર સેટિંગ્સ',
+        details: 'વિગતવાર',
+      },
       PayoutSettings: {
         addTitle: 'કૃપા કરીને તમારી બેંક એકાઉન્ટની માહિતી દાખલ કરો',
         editTitle: 'તમારી બેંક એકાઉન્ટની માહિતી',
@@ -880,6 +891,32 @@ export default {
         },
         successMessage: 'બેંક એકાઉન્ટ સફળતાપૂર્વક ઉમેરાયું.',
         errorMessage: 'કંઇક ખોટું થયું. કૃપા કરીને પછી ફરી પ્રયાસ કરો.',
+      },
+      PaymentSettings: {
+        cards: 'કાર્ડ્સ',
+        creditCard: {
+          predefined: 'પૂર્વ નક્કી કરેલ',
+          owner: 'કાર્ડ ધારકનું નામ',
+          date: 'સમાપ્ત તારીખ',
+          cvv: 'સિવીવિવી',
+        },
+        AddCreditCard: {
+          title: 'કૃપા કરીને તમારા કાર્ડની માહિતી દાખલ કરો',
+          form: {
+            cardName: 'કાર્ડનું નામ',
+            cardNamePlaceholder: 'કાર્ડનું નામ દાખલ કરો',
+            cardNumber: 'કાર્ડ નંબર',
+            cardNumberPlaceholder: 'કાર્ડ નંબર દાખલ કરો',
+            expiryDate: 'સમાપ્તિ તારીખ',
+            securityCode: 'સુરક્ષા કોડ',
+            securityCodePlaceholder: 'કાર્ડનો સુરક્ષા કોડ દાખલ કરો',
+            predefinedMethod: 'પૂર્વનિર્ધારિત ચુકવણી પદ્ધતિ',
+            successMessage: 'કાર્ડ સફળતાપૂર્વક ઉમેરાયું',
+            cardNameError: 'કાર્ડનું નામ જરૂરી છે',
+            cardNumberError: 'કાર્ડ નંબર જરૂરી છે',
+            securityCodeError: 'સિક્યુરિટી કોડ જરૂરી છે',
+          },
+        },
       },
     },
     About: {

@@ -82,6 +82,12 @@ export default {
       Management: 'Gestion',
       Tutorial: 'Tutoriel',
       PayoutOptions: 'Options de paiement',
+      PaymentMethods: 'Méthodes de paiement',
+      Wallet: 'Portefeuille',
+      Transactions: 'Transactions',
+      AddCard: 'Ajouter une carte de crédit',
+      EditCard: 'Modifier une carte de crédit',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'Sélectionner le type de culture',
@@ -877,6 +883,11 @@ export default {
       toasts: {
         success: 'Mise à jour réussie',
       },
+      sections: {
+        sellerSettings: 'Paramètres du vendeur',
+        buyerSettings: "Paramètres de l'acheteur",
+        details: 'Détails',
+      },
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',
         editTitle: 'Les informations de votre compte bancaire',
@@ -895,6 +906,32 @@ export default {
         },
         successMessage: 'Compte bancaire ajouté avec succès.',
         errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+      },
+      PaymentSettings: {
+        cards: 'Cartes',
+        creditCard: {
+          predefined: 'Prédéfinie',
+          owner: 'Nom du Titulaire',
+          date: "Date d'Expiration",
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'Veuillez insérer les informations de votre carte',
+          form: {
+            cardName: 'Nom de la carte',
+            cardNamePlaceholder: 'Insérez le nom de la carte',
+            cardNumber: 'Numéro de carte',
+            cardNumberPlaceholder: 'Insérez le numéro de la carte',
+            expiryDate: "Date d'expiration",
+            securityCode: 'Code de sécurité',
+            securityCodePlaceholder: 'Insérez le code de sécurité de la carte',
+            predefinedMethod: 'Méthode de paiement prédéfinie',
+            successMessage: 'Carte ajoutée avec succès',
+            cardNameError: 'Le nom sur la carte est requis',
+            cardNumberError: 'Le numéro de la carte est requis',
+            securityCodeError: 'Le code de sécurité est requis',
+          },
+        },
       },
     },
     About: {
