@@ -906,6 +906,23 @@ export default {
           date: 'समाप्ति तिथि',
           cvv: 'CVV',
         },
+        AddCreditCard: {
+          title: 'कृपया अपने कार्ड की जानकारी दर्ज करें',
+          form: {
+            cardName: 'कार्ड का नाम',
+            cardNamePlaceholder: 'कार्ड का नाम दर्ज करें',
+            cardNumber: 'कार्ड नंबर',
+            cardNumberPlaceholder: 'कार्ड नंबर दर्ज करें',
+            expiryDate: 'समाप्ति तिथि',
+            securityCode: 'सुरक्षा कोड',
+            securityCodePlaceholder: 'कार्ड का सुरक्षा कोड दर्ज करें',
+            predefinedMethod: 'पूर्वनिर्धारित भुगतान विधि',
+            successMessage: 'कार्ड सफलतापूर्वक जोड़ा गया',
+            cardNameError: 'कार्ड का नाम आवश्यक है',
+            cardNumberError: 'कार्ड नंबर आवश्यक है',
+            securityCodeError: 'सुरक्षा कोड आवश्यक है',
+          },
+        },
       },
     },
     About: {

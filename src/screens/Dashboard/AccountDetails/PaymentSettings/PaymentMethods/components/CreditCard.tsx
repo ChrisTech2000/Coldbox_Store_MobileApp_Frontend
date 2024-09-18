@@ -6,7 +6,15 @@ import { cn } from '#ui/lib/cn';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
+import Visa from '#assets/images/visa.svg';
+import Mastercard from '#assets/images/mastercard.svg';
+
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
+
+enum ECreditCardBrands {
+  VISA = 'visa',
+  MASTERCARD = 'mastercard',
+}
 
 export type Card = {
   brand: string;
@@ -68,6 +76,17 @@ function CreditCard({ number, predefined, brand, color, details }: CreditCardPro
     return rgbToHex(newR, newG, newB);
   }, [color, predefined]);
 
+  const brandLogo = useMemo(() => {
+    switch (brand.toLowerCase()) {
+      case ECreditCardBrands.VISA:
+        return <Visa width={50} height={50} />;
+      case ECreditCardBrands.MASTERCARD:
+        return <Mastercard width={50} height={50} />;
+      default:
+        return null;
+    }
+  }, [brand]);
+
   return (
     <SkiaShadow blur={4} dx={1} dy={6} color={colors.zinc[200]} borderRadius={20}>
       <LinearGradient
@@ -87,22 +106,24 @@ function CreditCard({ number, predefined, brand, color, details }: CreditCardPro
           </View>
         ) : null}
 
-        <View tw={cn('flex-row justify-between p-4', !predefined && 'mt-6')}>
+        <View
+          tw={cn('flex-row justify-between px-4 pt-2 pb-1 items-center', !predefined && 'mt-6')}
+        >
           <Text tw="text-white text-xl font-bold">
             {first4Digits} **** **** {last4Digits}
           </Text>
-          <Text tw="text-white text-lg font-bold">{brand}</Text>
+          {brandLogo}
         </View>
 
         <View tw="flex-row justify-between p-4">
-          <View>
+          <View tw="max-w-[40%]">
             <Text tw="text-white text-xs">
               {t('Dashboard.AccountDetails.PaymentSettings.creditCard.owner')}
             </Text>
             <Text tw="text-white text-sm font-bold uppercase">{details?.owner}</Text>
           </View>
           {details?.expirationDate ? (
-            <View>
+            <View tw="max-w-[30%]">
               <Text tw="text-white text-xs">
                 {t('Dashboard.AccountDetails.PaymentSettings.creditCard.date')}
               </Text>
@@ -111,7 +132,7 @@ function CreditCard({ number, predefined, brand, color, details }: CreditCardPro
               </Text>
             </View>
           ) : null}
-          <View>
+          <View tw="max-w-[30%]">
             <Text tw="text-white text-xs">
               {t('Dashboard.AccountDetails.PaymentSettings.creditCard.cvv')}
             </Text>

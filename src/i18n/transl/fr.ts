@@ -915,6 +915,23 @@ export default {
           date: "Date d'Expiration",
           cvv: 'CVV',
         },
+        AddCreditCard: {
+          title: 'Veuillez insérer les informations de votre carte',
+          form: {
+            cardName: 'Nom de la carte',
+            cardNamePlaceholder: 'Insérez le nom de la carte',
+            cardNumber: 'Numéro de carte',
+            cardNumberPlaceholder: 'Insérez le numéro de la carte',
+            expiryDate: "Date d'expiration",
+            securityCode: 'Code de sécurité',
+            securityCodePlaceholder: 'Insérez le code de sécurité de la carte',
+            predefinedMethod: 'Méthode de paiement prédéfinie',
+            successMessage: 'Carte ajoutée avec succès',
+            cardNameError: 'Le nom sur la carte est requis',
+            cardNumberError: 'Le numéro de la carte est requis',
+            securityCodeError: 'Le code de sécurité est requis',
+          },
+        },
       },
     },
     About: {

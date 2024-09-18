@@ -900,6 +900,23 @@ export default {
           date: 'સમાપ્ત તારીખ',
           cvv: 'સિવીવિવી',
         },
+        AddCreditCard: {
+          title: 'કૃપા કરીને તમારા કાર્ડની માહિતી દાખલ કરો',
+          form: {
+            cardName: 'કાર્ડનું નામ',
+            cardNamePlaceholder: 'કાર્ડનું નામ દાખલ કરો',
+            cardNumber: 'કાર્ડ નંબર',
+            cardNumberPlaceholder: 'કાર્ડ નંબર દાખલ કરો',
+            expiryDate: 'સમાપ્તિ તારીખ',
+            securityCode: 'સુરક્ષા કોડ',
+            securityCodePlaceholder: 'કાર્ડનો સુરક્ષા કોડ દાખલ કરો',
+            predefinedMethod: 'પૂર્વનિર્ધારિત ચુકવણી પદ્ધતિ',
+            successMessage: 'કાર્ડ સફળતાપૂર્વક ઉમેરાયું',
+            cardNameError: 'કાર્ડનું નામ જરૂરી છે',
+            cardNumberError: 'કાર્ડ નંબર જરૂરી છે',
+            securityCodeError: 'સિક્યુરિટી કોડ જરૂરી છે',
+          },
+        },
       },
     },
     About: {

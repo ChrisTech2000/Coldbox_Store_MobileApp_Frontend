@@ -24,7 +24,7 @@ const FAKE_CARDS = [
   },
   {
     number: '8234 0978 1782 2903',
-    brand: 'VISA',
+    brand: 'Mastercard',
     details: {
       owner: 'Pedrito Mojito',
       expirationDate: new Date('2026-11-20'),

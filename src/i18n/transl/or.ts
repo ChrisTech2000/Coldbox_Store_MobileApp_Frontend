@@ -905,6 +905,23 @@ export default {
           date: 'ମାତ୍ରା ସମାପ୍ତି',
           cvv: 'CVV',
         },
+        AddCreditCard: {
+          title: 'ଦୟାକରି ଆପଣଙ୍କର କାର୍ଡ ସୂଚନା ଭରଣ କରନ୍ତୁ',
+          form: {
+            cardName: 'କାର୍ଡ ନାମ',
+            cardNamePlaceholder: 'କାର୍ଡ ନାମ ଭରଣ କରନ୍ତୁ',
+            cardNumber: 'କାର୍ଡ ନମ୍ବର',
+            cardNumberPlaceholder: 'କାର୍ଡ ନମ୍ବର ଭରଣ କରନ୍ତୁ',
+            expiryDate: 'ମାୂଦତା ତାରିଖ',
+            securityCode: 'ସୁରକ୍ଷା କୋଡ୍',
+            securityCodePlaceholder: 'କାର୍ଡ ସୁରକ୍ଷା କୋଡ୍ ଭରଣ କରନ୍ତୁ',
+            predefinedMethod: 'ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ପେମେଣ୍ଟ ପଦ୍ଧତି',
+            successMessage: 'କାର୍ଡ ସଫଳତାପୂର୍ବକ ଯୋଡାଯାଇଛି',
+            cardNameError: 'କାର୍ଡ ନାମ ଆବଶ୍ୟକ',
+            cardNumberError: 'କାର୍ଡ ସଂଖ୍ୟା ଆବଶ୍ୟକ',
+            securityCodeError: 'ସୁରକ୍ଷା କୋଡ ଆବଶ୍ୟକ',
+          },
+        },
       },
     },
     About: {
