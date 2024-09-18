@@ -174,7 +174,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
           </RBAC.ProtectedResource>
         </View>
         <View>
-          <RBAC.ProtectedResource action="SET" subject="ManageCouponsSettings">
+          <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
             <View>
               <List.Item
                 tw="p-0 pb-2"

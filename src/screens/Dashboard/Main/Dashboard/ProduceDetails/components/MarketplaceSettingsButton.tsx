@@ -17,7 +17,7 @@ export default function MarketplaceSettingsButton(props: {
   const navigation = useNavigation<NavigationProp<ProduceDetailsStackRoutes>>();
 
   return (
-    <RBAC.ProtectedResource action="VIEW" subject="EditSellingSettings">
+    <RBAC.ProtectedResource action="NAVIGATE" subject="EditSellingSettings">
       <Button
         mode="outlined"
         uppercase

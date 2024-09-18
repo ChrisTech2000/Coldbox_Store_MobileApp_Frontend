@@ -40,6 +40,8 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.NAVIGATE, 'RevenueAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'UsageAnalysis');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CoolingUsers');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'EditSellingSettings');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'ManageCouponsSettings');
         //
         // actions
         // scope: account details
@@ -57,8 +59,8 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
-        cannot(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
-        cannot(PERMISSION_KINDS.SET, 'ManageCouponsSettings');
+        // scope: marketplace
+        cannot(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
         break;
       }
 
@@ -67,7 +69,8 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // navigation
         can(PERMISSION_KINDS.NAVIGATE, 'ManagementStack');
         can(PERMISSION_KINDS.NAVIGATE, 'CheckoutStack');
-
+        can(PERMISSION_KINDS.NAVIGATE, 'EditSellingSettings');
+        can(PERMISSION_KINDS.NAVIGATE, 'ManageCouponsSettings');
         // scope: management stack
         cannot(PERMISSION_KINDS.NAVIGATE, 'CompanyDetails');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Locations');
@@ -93,8 +96,8 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         can(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         can(PERMISSION_KINDS.VIEW, 'OperatorActions');
-        can(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
-        can(PERMISSION_KINDS.SET, 'ManageCouponsSettings');
+        // scope: marketplace
+        can(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
         break;
       }
 
@@ -103,6 +106,8 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // navigation
         cannot(PERMISSION_KINDS.NAVIGATE, 'ManagementStack');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CheckoutStack');
+        can(PERMISSION_KINDS.NAVIGATE, 'EditSellingSettings');
+        can(PERMISSION_KINDS.NAVIGATE, 'ManageCouponsSettings');
         //
         // actions
         // scope: account details
@@ -119,8 +124,8 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
-        can(PERMISSION_KINDS.VIEW, 'EditSellingSettings');
-        can(PERMISSION_KINDS.SET, 'ManageCouponsSettings');
+        // scope: marketplace
+        can(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
         break;
       }
 
