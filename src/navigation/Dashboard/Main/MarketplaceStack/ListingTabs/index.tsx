@@ -66,6 +66,7 @@ export default function MarketplaceListingTabs() {
         backgroundColor: paperTheme.colors.secondary,
       },
       tabBarStyle: {
+        paddingVertical: 5,
         backgroundColor: colors.white,
         elevation: 0,
         shadowOpacity: 0,
@@ -75,7 +76,7 @@ export default function MarketplaceListingTabs() {
       },
       tabBarLabelStyle: {
         ...paperTheme.fonts.labelMedium,
-        fontSize: 14,
+        fontSize: 16,
       },
       tabBarItemStyle: {
         display: 'flex',
@@ -84,7 +85,9 @@ export default function MarketplaceListingTabs() {
         alignItems: 'center',
       },
       tabBarIcon: hasIcon
-        ? (iconProps) => <Icon {...iconProps} name={routeMeta.iconName!} size={22} />
+        ? (iconProps) => (
+            <Icon {...iconProps} name={routeMeta.iconName!} size={26} style={{ marginRight: 4 }} />
+          )
         : undefined,
     };
   }, []);
