@@ -76,7 +76,7 @@ export default function CommodityField(props: Props) {
                 ),
                 options: (
                   <FlashList
-                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
                     data={[...datums]}
                     renderItem={({ item, index }) => (
                       <React.Fragment>

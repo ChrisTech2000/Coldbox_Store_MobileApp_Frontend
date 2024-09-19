@@ -120,7 +120,7 @@ export default function MultipleSelectWithStore<T>({
             header: rest.modalHeader ?? '',
             options: (
               <FlatList
-                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 data={rest.datums}
                 keyExtractor={(item, index) => `${item}-${index}`}
                 renderItem={({ item }) => {

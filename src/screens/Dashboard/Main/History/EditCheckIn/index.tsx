@@ -185,7 +185,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
               <View tw="w-full px-3">
                 <FlatList
-                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   data={generateData(produce, t)}
                   keyExtractor={(item, idx) => `${item.label}-#${index}-${idx}`}
                   renderItem={({ item }) => {

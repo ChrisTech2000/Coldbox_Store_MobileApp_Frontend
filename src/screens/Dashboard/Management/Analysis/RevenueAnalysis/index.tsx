@@ -207,7 +207,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           </View>
         ) : filteredMovements.length > 0 ? (
           <FlashList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
               <Movement

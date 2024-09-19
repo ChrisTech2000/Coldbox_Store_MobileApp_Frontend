@@ -38,26 +38,27 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
   }, []);
 
   return (
-    <FlatList
-      tw="mt-2"
-      data={options}
-      keyExtractor={(item) => `select-crop-type-#${item.id}`}
-      showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => (
-        <View tw="px-3">
-          <List.Item
-            title={item.name}
-            onPress={() => {
-              navigation.navigate('CropList', {
-                type: item.id,
-              });
-            }}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
-          />
-          <Divider tw="bg-gray-400" />
-        </View>
-      )}
-    />
+    <View tw="mt-2">
+      <FlatList
+        tw="mt-2"
+        data={options}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <View tw="px-3">
+            <List.Item
+              title={item.name}
+              onPress={() => {
+                navigation.navigate('CropList', {
+                  type: item.id,
+                });
+              }}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            />
+            <Divider tw="bg-gray-400" />
+          </View>
+        )}
+      />
+    </View>
   );
 }
 

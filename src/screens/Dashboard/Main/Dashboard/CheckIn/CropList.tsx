@@ -59,12 +59,11 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
   return (
     <React.Fragment>
       <_SearchInput onChange={setSearchTerm} />
-
       <FlashList
         contentContainerStyle={styles.list}
         data={filteredData}
         keyExtractor={(item) => `crop-list-item-#${item.id}`}
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <React.Fragment>
             <List.Item

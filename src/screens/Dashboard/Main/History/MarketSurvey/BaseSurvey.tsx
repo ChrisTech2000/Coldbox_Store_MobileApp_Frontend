@@ -243,7 +243,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
 
           <FlatList
             data={farmerSurveys}
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => `${item.id}-${index}`}
             renderItem={({ item: survey, index }) => (
               <TouchableOpacity onPress={() => setOpenFarmersSurveyModal(index)}>

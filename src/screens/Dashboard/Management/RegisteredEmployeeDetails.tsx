@@ -69,7 +69,7 @@ function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmploy
     <View tw="flex-1 space-y-12">
       <View tw="h-1/2">
         <FlatList
-          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           data={datums}
           keyExtractor={(_, itemIdx) => `row-item-#${itemIdx}`}
           renderItem={({ item }) => (

@@ -65,7 +65,7 @@ export default function CountryField() {
                       left={<TextInput.Icon icon="magnify" />}
                     />
                     <FlashList
-                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
                       data={datums}
                       renderItem={({ item, index }) => (
                         <TouchableOpacity

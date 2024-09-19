@@ -124,7 +124,7 @@ export default function CropSpecificPricing() {
             </View>
 
             <FlatList
-              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               data={datums}
               nestedScrollEnabled
               keyExtractor={(item, itemIdx) => `crop-specific-${item.path}-field-#${itemIdx}`}

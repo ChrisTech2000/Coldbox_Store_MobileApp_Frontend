@@ -199,7 +199,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
           </View>
         ) : filteredMovements.length > 0 ? (
           <FlashList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
               <Movement
