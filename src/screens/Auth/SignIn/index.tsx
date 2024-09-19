@@ -21,8 +21,8 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useManagementStore } from '#stores/management';
 import { AccountCard } from './components/AccountCard';
 
-const IMG_SIZE = Dimensions.get('screen').width / 2.5;
-const ACCOUNT_TYPE_SIZE = Dimensions.get('screen').width / 5;
+const IMG_SIZE = Dimensions.get('window').width / 2.5;
+const ACCOUNT_TYPE_SIZE = Dimensions.get('window').width / 5;
 
 export enum EAccountProfile {
   FARMER = ERoles.COOLING_USER,

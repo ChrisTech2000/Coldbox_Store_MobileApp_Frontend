@@ -28,7 +28,7 @@ import StepFactory from './AddLocation/modules/StepFactory';
 import { geocoder, getCountryFullName } from './AddLocation/utils';
 import InAppNotifications from '#common/InAppNotifications';
 
-const width = (Dimensions.get('screen').width - 42) / 2;
+const width = (Dimensions.get('window').width - 42) / 2;
 
 const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
 

@@ -25,8 +25,8 @@ const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
 const useSortingStore = createSortingStore();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const { t } = useTranslationUtils();

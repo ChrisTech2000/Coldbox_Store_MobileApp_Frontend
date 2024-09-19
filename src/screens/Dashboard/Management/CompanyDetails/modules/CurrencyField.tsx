@@ -17,8 +17,8 @@ import { currenciesDict } from '../utils';
 
 const currenciesMeta = currenciesDict();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 export default function CurrencyField() {
   const { control, watch, formState } = FormManager.useFormManager();

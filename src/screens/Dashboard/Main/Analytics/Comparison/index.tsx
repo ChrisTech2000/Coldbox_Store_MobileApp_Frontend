@@ -30,7 +30,7 @@ import { useComparisonData } from './store';
 
 export const useSortingStore = createSortingStore();
 
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 export function ComparisonSection() {
   const { t } = useTranslationUtils();

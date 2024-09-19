@@ -17,8 +17,8 @@ import FormManager, { type FormValues } from '../components/FormManager';
 
 const countriesMeta = countriesDict();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 export default function CountryField() {
   const { control, watch } = FormManager.useFormManager();

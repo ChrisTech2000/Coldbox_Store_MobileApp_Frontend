@@ -41,7 +41,7 @@ type SelectItemProps<T> = {
   itemName: (item: T) => string;
 };
 
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 export default function MultipleSelectWithStore<T>({
   useSelectStore,

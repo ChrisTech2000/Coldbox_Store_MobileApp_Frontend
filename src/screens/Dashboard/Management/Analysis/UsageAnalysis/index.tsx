@@ -38,8 +38,8 @@ const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
 const useSortingStore = createSortingStore();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { t } = useTranslationUtils();

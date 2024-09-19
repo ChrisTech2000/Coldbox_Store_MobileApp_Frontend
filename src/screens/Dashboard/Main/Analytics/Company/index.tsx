@@ -36,7 +36,7 @@ const TABS = {
   impact: <ImpactContent useStore={useCompanyData} key="impact-content-section" />,
 };
 
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 export function CompanySection() {
   const { t } = useTranslationUtils();
