@@ -2,13 +2,18 @@ import { create } from 'zustand';
 
 import type { FormValues } from './modules/MarketplaceFormManager';
 
-type FilterItemKeys = keyof Omit<FormValues, 'min' | 'max'> | 'priceRange';
-
 export type FilterItem = {
   label: string;
-  value: number | Array<number>;
-  key: FilterItemKeys;
-};
+} & (
+  | {
+      key: keyof Omit<FormValues, 'min' | 'max'>;
+      value: number;
+    }
+  | {
+      key: 'priceRange';
+      value: [number, number];
+    }
+);
 
 type MarketplaceFilterState = {
   filters: Array<FilterItem>;

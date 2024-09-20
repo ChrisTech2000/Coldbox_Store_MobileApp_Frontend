@@ -24,23 +24,23 @@ function MarketplaceFilters() {
       <ScrollView tw="px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
         <View tw="flex-1 pb-8">
           <MarketplaceFormManager
-            initialValues={{ companies: [], coolingUnits: [], crops: [], min: 0, max: 0 }}
+            initialValues={_buildInitialValues()}
             onSubmit={(values) => {
               const { min, max, ...rest } = values;
               const filters: Array<FilterItem> = Object.entries(rest).flatMap(([key, items]) =>
                 items.length > 0
                   ? items.map((item) => ({
+                      key: key as keyof Omit<FormValues, 'min' | 'max'>,
                       label: item.label,
                       value: item.value,
-                      key: key as keyof Omit<FormValues, 'min' | 'max'>,
                     }))
                   : []
               );
               if (min > 0 && max > 0) {
                 filters.push({
+                  key: 'priceRange',
                   label: `$${min}KG - $${max}KG`,
                   value: [min, max],
-                  key: 'priceRange',
                 });
               }
               useMarketplaceFilters.getState().addFilters(filters);
@@ -63,10 +63,7 @@ function MarketplaceFilters() {
           uppercase
           onPress={(evt) => {
             evt.stopPropagation();
-            emitter.emit(
-              APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_RESET,
-              DEFAULT_MARKETPLACE_FILTER_VALUES // TODO
-            );
+            emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_RESET, _buildInitialValues());
           }}
         >
           Cancel
@@ -85,6 +82,21 @@ function MarketplaceFilters() {
       </View>
     </React.Fragment>
   );
+}
+
+function _buildInitialValues(): FormValues<number> {
+  const currentState = useMarketplaceFilters.getState().filters;
+  if (currentState.length === 0) return DEFAULT_MARKETPLACE_FILTER_VALUES;
+  const datum = {} as FormValues<number>;
+  for (const filter of currentState) {
+    if (filter.key === 'priceRange') {
+      datum.min = filter.value[0];
+      datum.max = filter.value[1];
+      continue;
+    }
+    datum[filter.key].push({ label: filter.label, value: filter.value });
+  }
+  return datum;
 }
 
 export default withSafeArea(MarketplaceFilters);
