@@ -27,7 +27,7 @@ import { InnerTabs, Tab } from './components/InnerTabs';
 import { UsersContent } from './components/UserContent';
 import { useAggregatedData } from './store';
 
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 export function AggregatedSection() {
   const { t } = useTranslationUtils();

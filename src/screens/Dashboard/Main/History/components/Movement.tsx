@@ -199,7 +199,7 @@ export function Movement({
         <Modal visible={isOptionsModalOpen} onDismiss={() => setIsOptionsModalOpen(false)}>
           <View tw="bg-white rounded-3xl h-auto space-y-2 mx-16 px-3 py-2">
             <FlatList
-              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               data={optionsMenu}
               keyExtractor={(item, index) => `opt-${item.label}-#${index}`}
               renderItem={({ item }) => (

@@ -112,7 +112,7 @@ export default function SelectWithStore<T>({
                 }}
               >
                 <FlatList
-                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   data={rest.datums}
                   keyExtractor={(item, index) => `${item}-${index}`}
                   renderItem={({ item }) => (

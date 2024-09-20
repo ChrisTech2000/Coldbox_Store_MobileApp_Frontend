@@ -177,7 +177,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
         <View>
           <FlatList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={crates}
             renderItem={({ item: crate, index }) => (
               <View key={`${crate.id}-${index}`} tw="flex flex-row items-center justify-between">

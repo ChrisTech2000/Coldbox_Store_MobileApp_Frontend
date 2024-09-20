@@ -137,8 +137,8 @@ export function OperatorActions({
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
         <TouchableOpacity
           tw={cn(
-            'w-12 h-12 items-center justify-center rounded-3xl',
-            isCrateManagementOpen ? 'bg-red-500' : 'bg-green-primary'
+            'w-12 h-12 items-center justify-center rounded-xl',
+            isCrateManagementOpen ? 'bg-red-600' : 'bg-green-primary'
           )}
           onPress={() => setIsCrateManagementOpen(!isCrateManagementOpen)}
         >
@@ -153,8 +153,7 @@ export function OperatorActions({
         <View tw="flex flex-row">
           <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
             <TouchableOpacity
-              tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl"
-              style={{ backgroundColor: paperTheme.colors.secondaryContainer }}
+              tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-green-primary"
               onPress={onCheckIn}
             >
               <CheckIn width={20} height={20} />
@@ -162,7 +161,7 @@ export function OperatorActions({
           </SkiaShadow>
           <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
             <TouchableOpacity
-              tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-red-200"
+              tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-red-400"
               onPress={onCheckOut}
             >
               <CheckOut width={20} height={20} />
@@ -192,7 +191,7 @@ export function OperatorActions({
                 </View>
               ) : (
                 <FlashList
-                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   data={combinedUsers}
                   extraData={selectedUser}
                   keyExtractor={(item) => item?.id?.toString() ?? ''}

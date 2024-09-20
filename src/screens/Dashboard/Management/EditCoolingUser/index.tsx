@@ -34,7 +34,7 @@ import { DataLoader } from './utils';
 export const STATIC_START_DATE = '2022-10-01';
 export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
 
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const { params } = props.route;

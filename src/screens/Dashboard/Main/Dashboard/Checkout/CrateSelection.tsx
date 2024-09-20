@@ -145,7 +145,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           </TouchableOpacity>
 
           <FlatList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={crates ?? []}
             extraData={selectedCrates.length}
             renderItem={({ item: crate, index }) => (

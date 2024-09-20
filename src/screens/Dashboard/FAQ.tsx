@@ -40,7 +40,7 @@ function FAQ() {
 
       <List.AccordionGroup>
         <FlatList
-          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           data={faq}
           keyExtractor={(item, itemIdx) => `faq-${item.id}-#${itemIdx}`}
           renderItem={({ item }) => (

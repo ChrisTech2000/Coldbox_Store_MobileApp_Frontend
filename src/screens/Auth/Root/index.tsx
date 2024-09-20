@@ -13,8 +13,8 @@ import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 import { SelectLanguage } from './components/SelectLanguage';
 
-const screenHeight = Dimensions.get('screen').height;
-const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const HERO_IMG_SIZE = screenHeight > SMALL_SCREEN_THRESHOLD ? screenWidth / 1.1 : screenWidth / 1.4;
 

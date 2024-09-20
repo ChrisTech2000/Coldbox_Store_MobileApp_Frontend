@@ -24,7 +24,7 @@ import { PIN_COLORS } from './constants';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 function CoolingUnitsMaps() {
   const [isLoadingCoords, setLoadingCoords] = useState<boolean>(true);

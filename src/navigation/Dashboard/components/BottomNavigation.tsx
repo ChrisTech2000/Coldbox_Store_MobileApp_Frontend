@@ -29,7 +29,7 @@ function useNavigationState(state: TabNavigationState<DashboardMainRoutes>) {
 
 const MAX_CHARACTERS_FIRST_LINE = 9;
 
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 export default function BottomNavigation(props: BottomTabBarProps) {
   const { navigation, state, descriptors, insets } = props;
