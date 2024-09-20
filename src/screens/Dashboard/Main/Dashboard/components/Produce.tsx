@@ -62,7 +62,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
               {produce.movementCode}
             </Text>
             <View tw="items-end">
-              {produce.minimumRemainingShelfLife && (
+              {produce.minimumRemainingShelfLife ? (
                 <Text
                   variant="TextBold"
                   tw={cn(
@@ -75,7 +75,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
                 >
                   {generateDaysString(produce.minimumRemainingShelfLife)}
                 </Text>
-              )}
+              ) : null}
               <Text variant="TextMedium" tw="underline text-green-primary" onPress={onNavigate}>
                 {t('Dashboard.ProduceDetails.seeDetails')}
               </Text>
