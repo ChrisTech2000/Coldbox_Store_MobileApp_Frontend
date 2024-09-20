@@ -16,7 +16,10 @@ import { useToggle } from '#ui/hooks/useToggle';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
 
-import MarketplaceFormManager, { type FormValues } from '../modules/MarketplaceFormManager';
+import MarketplaceFormManager, {
+  type FilterValue,
+  type FormValues,
+} from '../modules/MarketplaceFormManager';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -39,7 +42,9 @@ export default function CompanyFilters() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
-  const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedCompanies);
+  const [internalSelection, setInternalSelection] = useState<Array<number>>(
+    selectedCompanies.map(({ value }) => value)
+  );
 
   const currentValue = useMemo(() => {
     const names: Array<string> = [];
@@ -50,7 +55,7 @@ export default function CompanyFilters() {
       names.push(company.name);
     }
     return names.length > 0 ? truncate(names.join(', '), { length: 24 }) : 'All';
-  }, [data, selectedCompanies]);
+  }, [internalSelection, data]);
 
   const fieldError = !!formState.errors.companies;
 
@@ -157,7 +162,7 @@ export default function CompanyFilters() {
                           uppercase
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            setInternalSelection(selectedCompanies);
+                            setInternalSelection(selectedCompanies.map(({ value }) => value));
                             toggleVisibility();
                           }}
                         >
@@ -168,7 +173,13 @@ export default function CompanyFilters() {
                           uppercase
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            onChange(internalSelection);
+                            const datums: Array<FilterValue> = [];
+                            for (const value of internalSelection) {
+                              const company = data.get(value);
+                              if (typeof company === 'undefined') continue;
+                              datums.push({ label: company.name, value });
+                            }
+                            onChange(datums);
                             toggleVisibility();
                           }}
                         >

@@ -16,7 +16,10 @@ import { useToggle } from '#ui/hooks/useToggle';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
 
-import MarketplaceFormManager, { type FormValues } from '../modules/MarketplaceFormManager';
+import MarketplaceFormManager, {
+  type FilterValue,
+  type FormValues,
+} from '../modules/MarketplaceFormManager';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -39,7 +42,9 @@ export default function CoolingUnitFilters() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
-  const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedCoolingUnits);
+  const [internalSelection, setInternalSelection] = useState<Array<number>>(
+    selectedCoolingUnits.map(({ value }) => value)
+  );
 
   const currentValue = useMemo(() => {
     const names: Array<string> = [];
@@ -50,7 +55,7 @@ export default function CoolingUnitFilters() {
       names.push(unit.name);
     }
     return names.length > 0 ? truncate(names.join(', '), { length: 24 }) : 'All';
-  }, [data, selectedCoolingUnits]);
+  }, [internalSelection, data]);
 
   const fieldError = !!formState.errors.coolingUnits;
 
@@ -159,7 +164,7 @@ export default function CoolingUnitFilters() {
                           uppercase
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            setInternalSelection(selectedCoolingUnits);
+                            setInternalSelection(selectedCoolingUnits.map(({ value }) => value));
                             toggleVisibility();
                           }}
                         >
@@ -170,7 +175,13 @@ export default function CoolingUnitFilters() {
                           uppercase
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            onChange(internalSelection);
+                            const datums: Array<FilterValue> = [];
+                            for (const value of internalSelection) {
+                              const unit = data.get(value);
+                              if (typeof unit === 'undefined') continue;
+                              datums.push({ label: unit.name, value });
+                            }
+                            onChange(datums);
                             toggleVisibility();
                           }}
                         >

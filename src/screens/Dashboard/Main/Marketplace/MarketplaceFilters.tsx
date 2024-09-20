@@ -10,10 +10,13 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import CompanyFilters from './components/CompanyFilter';
 import MarketplaceFormManager, {
   DEFAULT_MARKETPLACE_FILTER_VALUES,
+  type FormValues,
 } from './modules/MarketplaceFormManager';
 import CoolingUnitFilters from './components/CoolingUnitFilter';
 import CropTypeFilters from './components/CropTypeFilter';
 import RangePrice from './components/RangePrice';
+
+import { type FilterItem, useMarketplaceFilters } from './store';
 
 function MarketplaceFilters() {
   return (
@@ -21,17 +24,34 @@ function MarketplaceFilters() {
       <ScrollView tw="px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
         <View tw="flex-1 pb-8">
           <MarketplaceFormManager
-            onSubmit={async () => undefined}
             initialValues={{ companies: [], coolingUnits: [], crops: [], min: 0, max: 0 }}
+            onSubmit={(values) => {
+              const { min, max, ...rest } = values;
+              const filters: Array<FilterItem> = Object.entries(rest).flatMap(([key, items]) =>
+                items.length > 0
+                  ? items.map((item) => ({
+                      label: item.label,
+                      value: item.value,
+                      key: key as keyof Omit<FormValues, 'min' | 'max'>,
+                    }))
+                  : []
+              );
+              if (min > 0 && max > 0) {
+                filters.push({
+                  label: `$${min}KG - $${max}KG`,
+                  value: [min, max],
+                  key: 'priceRange',
+                });
+              }
+              useMarketplaceFilters.getState().addFilters(filters);
+            }}
           >
-            {() => (
-              <View tw="w-full">
-                <CompanyFilters />
-                <CoolingUnitFilters />
-                <CropTypeFilters />
-                <RangePrice />
-              </View>
-            )}
+            <View tw="w-full">
+              <CompanyFilters />
+              <CoolingUnitFilters />
+              <CropTypeFilters />
+              <RangePrice />
+            </View>
           </MarketplaceFormManager>
         </View>
       </ScrollView>

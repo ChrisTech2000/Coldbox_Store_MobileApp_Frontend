@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useAppEventListener } from '#ui/lib/emitter';
 
+export type FilterValue = { label: string; value: number };
+
 export type FormValues<T = string> = {
-  companies: Array<number>;
-  coolingUnits: Array<number>;
-  crops: Array<number>;
+  companies: Array<FilterValue>;
+  coolingUnits: Array<FilterValue>;
+  crops: Array<FilterValue>;
   min: T;
   max: T;
 };
@@ -20,17 +22,12 @@ export const DEFAULT_MARKETPLACE_FILTER_VALUES: FormValues<number> = {
   max: 0,
 };
 
-type CallbackProps = {
-  isSubmitting: boolean;
-};
-
 type FormManagerProps = {
   initialValues?: FormValues<number>;
-  onSubmit: (values: FormValues) => void;
-  children: (props: CallbackProps) => React.ReactNode;
+  onSubmit: (values: FormValues<number>) => void;
 };
 
-export default function MarketplaceFormManager(props: FormManagerProps) {
+export default function MarketplaceFormManager(props: PropsWithChildren<FormManagerProps>) {
   const { initialValues } = props;
 
   const { zodResolver } = useTranslationUtils();
@@ -43,10 +40,11 @@ export default function MarketplaceFormManager(props: FormManagerProps) {
     },
     resolver: zodResolver((z) => {
       const greaterThanEqual = z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0));
+      const baseStruct = z.object({ label: z.string(), value: z.number() });
       return z.object({
-        companies: z.array(z.number()),
-        coolingUnits: z.array(z.number()),
-        crops: z.array(z.number()),
+        companies: z.array(baseStruct),
+        coolingUnits: z.array(baseStruct),
+        crops: z.array(baseStruct),
         min: greaterThanEqual,
         max: greaterThanEqual,
       });
@@ -55,7 +53,8 @@ export default function MarketplaceFormManager(props: FormManagerProps) {
   });
 
   useAppEventListener('DISPATCH_MARKETPLACE_FILTERS_FORM_SUBMISSION', async () => {
-    const handler = form.handleSubmit(props.onSubmit);
+    // eslint-disable-next-line
+    const handler = form.handleSubmit(props.onSubmit as any);
     await handler();
   });
 
@@ -67,11 +66,7 @@ export default function MarketplaceFormManager(props: FormManagerProps) {
     });
   });
 
-  return (
-    <FormProvider {...form}>
-      {props.children({ isSubmitting: form.formState.isSubmitting })}
-    </FormProvider>
-  );
+  return <FormProvider {...form}>{props.children}</FormProvider>;
 }
 
 MarketplaceFormManager.useForm = function _useForm() {

@@ -16,7 +16,10 @@ import { useToggle } from '#ui/hooks/useToggle';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
 
-import MarketplaceFormManager, { type FormValues } from '../modules/MarketplaceFormManager';
+import MarketplaceFormManager, {
+  FilterValue,
+  type FormValues,
+} from '../modules/MarketplaceFormManager';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -39,7 +42,9 @@ export default function CropTypeFilters() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
-  const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedCrops);
+  const [internalSelection, setInternalSelection] = useState<Array<number>>(
+    selectedCrops.map(({ value }) => value)
+  );
 
   const currentValue = useMemo(() => {
     const names: Array<string> = [];
@@ -50,7 +55,7 @@ export default function CropTypeFilters() {
       names.push(crop.name);
     }
     return names.length > 0 ? truncate(names.join(', '), { length: 20 }) : 'All';
-  }, [data, selectedCrops]);
+  }, [internalSelection, data]);
 
   const fieldError = !!formState.errors.crops;
 
@@ -157,7 +162,7 @@ export default function CropTypeFilters() {
                           uppercase
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            setInternalSelection(selectedCrops);
+                            setInternalSelection(selectedCrops.map(({ value }) => value));
                             toggleVisibility();
                           }}
                         >
@@ -168,7 +173,13 @@ export default function CropTypeFilters() {
                           uppercase
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            onChange(internalSelection);
+                            const datums: Array<FilterValue> = [];
+                            for (const value of internalSelection) {
+                              const crop = data.get(value);
+                              if (typeof crop === 'undefined') continue;
+                              datums.push({ label: crop.name, value });
+                            }
+                            onChange(datums);
                             toggleVisibility();
                           }}
                         >
