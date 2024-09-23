@@ -75,6 +75,10 @@ export default {
       Coupons: 'Coupons', // TODO
       CouponsActiveTab: 'Active', // TODO
       CouponsRevokedTab: 'Revoked', // TODO
+      Marketplace: 'Marketplace', // TODO
+      MarketplaceFilters: 'Filters', // TODO
+      MarketplaceAllTab: 'All', // TODO
+      MarketplaceFavoritesTab: 'Favorites', // TODO
       KnowledgeHub: 'नॉलेज हब',
       QuitTutorial: 'ट्यूटोरियल छोड़ें',
       FAQ: 'अधिकतर पूछे जाने वाले सवाल',

@@ -4,21 +4,25 @@ import {
   TouchableNativeFeedback,
   View,
   Platform,
-  type ViewStyle,
+  type TouchableOpacityProps,
 } from 'react-native';
 import colors from 'tailwindcss/colors';
 import { styled } from 'nativewind';
 
-interface TouchableProps {
-  style?: ViewStyle;
-}
-
-function _Touchable({ children, style, ...props }: PropsWithChildren<TouchableProps>) {
+function _Touchable({
+  children,
+  style,
+  ...props
+}: PropsWithChildren<
+  {
+    rippleColor?: string;
+  } & TouchableOpacityProps
+>) {
   switch (Platform.OS) {
     case 'android':
       return (
         <TouchableNativeFeedback
-          background={TouchableNativeFeedback.Ripple(colors.zinc[100], false)}
+          background={TouchableNativeFeedback.Ripple(props.rippleColor ?? colors.zinc[100], false)}
           {...props}
         >
           <View style={style}>{children}</View>
