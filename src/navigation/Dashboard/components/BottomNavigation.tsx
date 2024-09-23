@@ -1,121 +1,199 @@
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import type { BottomTabDescriptorMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {
-  CommonActions,
-  type ParamListBase,
-  type TabNavigationState,
-} from '@react-navigation/native';
 import React from 'react';
-import { Dimensions, View, type StyleProp, type ViewStyle } from 'react-native';
-import { BottomNavigation as MDBottomNavigation } from 'react-native-paper';
+import {
+  FlatList,
+  type GestureResponderEvent,
+  type StyleProp,
+  View,
+  type ViewStyle,
+} from 'react-native';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from 'tailwindcss/colors';
+import { Modalize } from 'react-native-modalize';
+import { Divider, List } from 'react-native-paper';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
+
+import { paperTheme } from '#ui/lib/theme';
+import { cn } from '#ui/lib/cn';
 
 import type { DashboardMainRoutes } from '../Main';
 
-function useStyles(descriptors: BottomTabDescriptorMap, routeKey: string) {
-  return descriptors[routeKey].options.tabBarStyle as StyleProp<ViewStyle>;
-}
+const BOTTOM_NAV_ITEMS: Array<keyof DashboardMainRoutes> = [
+  'Dashboard',
+  'Marketplace',
+  'Analytics',
+];
 
-function useNavigationState(state: TabNavigationState<DashboardMainRoutes>) {
-  const filteredRoutes = state.routes.filter((route) => route.name !== 'ShoppingCart');
-  return {
-    ...state,
-    routes: filteredRoutes,
-    index: state.index >= filteredRoutes.length ? filteredRoutes.length - 1 : state.index,
-  } satisfies TabNavigationState<ParamListBase>;
-}
+const BOTTOM_SHEET_ITEMS: Array<keyof DashboardMainRoutes> = [
+  'MarketPrice',
+  'History',
+  'CoolingUnits',
+];
 
-const MAX_CHARACTERS_FIRST_LINE = 9;
+const ICON_SIZE = 24;
+const ICON_DEFAULT_COLOR = colors.zinc[500];
 
-const screenHeight = Dimensions.get('screen').height;
+const filterBottomNavItems = (state: TabNavigationState<ParamListBase>) =>
+  state.routes.filter(({ name }) => BOTTOM_NAV_ITEMS.includes(name as keyof DashboardMainRoutes));
 
-export default function BottomNavigation(props: BottomTabBarProps) {
-  const { navigation, state, descriptors, insets } = props;
+const filterBottomSheetItems = (state: TabNavigationState<ParamListBase>) =>
+  state.routes.filter(({ name }) => BOTTOM_SHEET_ITEMS.includes(name as keyof DashboardMainRoutes));
 
-  const styles = useStyles(descriptors, state.routes[state.index].key);
-  // eslint-disable-next-line
-  const navigationState = useNavigationState(state as any);
-
+function BottomNavigation({ state, navigation, descriptors }: BottomTabBarProps) {
+  const modalRef = React.useRef<Modalize>(null);
+  const routeOptions = descriptors[state.routes[state.index].key].options;
   return (
-    <MDBottomNavigation.Bar
-      style={styles}
-      navigationState={navigationState}
-      safeAreaInsets={{
-        ...insets,
-        ...(screenHeight <= SMALL_SCREEN_THRESHOLD ? { bottom: 10 } : {}),
-      }}
-      onTabPress={({ route, preventDefault }) => {
-        const event = navigation.emit({
-          type: 'tabPress',
-          target: route.key,
-          canPreventDefault: true,
-        });
-        if (event.defaultPrevented) return preventDefault();
-        switch (route.name as keyof DashboardMainRoutes) {
-          case 'History': {
-            return navigation.dispatch({
-              ...CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'History', state: { routes: [{ name: 'RootHistoryTabStack' }] } }],
-              }),
-              target: state.key,
-            });
-          }
-          default: {
-            return navigation.dispatch({
-              ...CommonActions.navigate(route.name, route.params),
-              target: state.key,
-            });
-          }
-        }
-      }}
-      renderIcon={({ route, focused, color }) => {
-        const { options } = descriptors[route.key];
-        if (typeof options.tabBarIcon !== 'function') return null;
-        return options.tabBarIcon({ focused, color, size: 24 });
-      }}
-      getLabelText={({ route }) => {
-        const { options } = descriptors[route.key];
-        if (typeof options.tabBarLabel === 'string') return options.tabBarLabel;
-        return options.title;
-      }}
-      renderLabel={({ route }) => {
-        const label =
-          descriptors[route.key].options.tabBarLabel || descriptors[route.key].options.title;
-
-        if (typeof label !== 'string') return null;
-
-        const words = label.trim().split(' ');
-
-        let firstLine = '';
-        let secondLine = '';
-
-        for (let i = 0; i < words.length; i++) {
-          if (
-            firstLine.length + words[i].length + 1 <= MAX_CHARACTERS_FIRST_LINE ||
-            words.length === 1
-          ) {
-            firstLine += (firstLine.length ? ' ' : '') + words[i];
-          } else {
-            secondLine += (secondLine.length ? ' ' : '') + words[i];
-          }
-        }
-
-        return (
-          <View>
-            <Text numberOfLines={1} tw="text-center">
-              {firstLine}
-            </Text>
-            {secondLine ? (
-              <Text numberOfLines={1} tw="text-center">
-                {secondLine}
-              </Text>
-            ) : null}
-          </View>
-        );
-      }}
-    />
+    <React.Fragment>
+      <BottomNavBar
+        state={state}
+        descriptors={descriptors}
+        navigation={navigation}
+        modalRef={modalRef}
+        tabBarStyle={routeOptions.tabBarStyle as StyleProp<ViewStyle>}
+      />
+      <BottomSheet
+        state={state}
+        descriptors={descriptors}
+        navigation={navigation}
+        modalRef={modalRef}
+      />
+    </React.Fragment>
   );
+}
+
+const BottomNavBar = ({
+  state,
+  descriptors,
+  navigation,
+  modalRef,
+  tabBarStyle,
+}: Pick<BottomTabBarProps, 'state' | 'descriptors' | 'navigation'> & {
+  modalRef: React.RefObject<Modalize>;
+  tabBarStyle: StyleProp<ViewStyle>;
+}) => (
+  <View tw="absolute bottom-0 left-0 z-[9999] w-full" style={tabBarStyle}>
+    <SkiaShadow blur={3} dx={0} dy={2} color={colors.zinc[300]} borderRadius={16}>
+      <View tw="flex-row items-center justify-evenly h-24 px-2 bg-white">
+        {filterBottomNavItems(state).map((route, idx) => (
+          <TabItem
+            key={route.key}
+            title={route.name}
+            onPress={(evt: GestureResponderEvent) => {
+              evt.stopPropagation();
+              navigation.navigate(route.name);
+              modalRef.current?.close();
+            }}
+            renderIcon={descriptors?.[route.key]?.options?.tabBarIcon}
+            isFocused={state.index === idx}
+          />
+        ))}
+        <TabItem
+          title="More"
+          onPress={(evt: GestureResponderEvent) => {
+            evt.stopPropagation();
+            modalRef.current?.open();
+          }}
+          renderIcon={() => (
+            <MaterialCommunityIcon
+              name="dots-vertical"
+              color={state.index >= 3 ? colors.white : ICON_DEFAULT_COLOR}
+              size={ICON_SIZE}
+            />
+          )}
+          isFocused={state.index >= 3}
+        />
+      </View>
+    </SkiaShadow>
+  </View>
+);
+
+const BottomSheet = ({
+  state,
+  descriptors,
+  navigation,
+  modalRef,
+}: Pick<BottomTabBarProps, 'state' | 'descriptors' | 'navigation'> & {
+  modalRef: React.RefObject<Modalize>;
+}) => (
+  <Modalize
+    ref={modalRef}
+    modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32, marginBottom: 96 }}
+    adjustToContentHeight
+    withHandle={false}
+  >
+    <View tw="w-full items-center justify-center h-10">
+      <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
+    </View>
+
+    <View tw="px-4 pb-4">
+      <FlatList
+        data={filterBottomSheetItems(state)}
+        keyExtractor={(item) => item.key}
+        scrollEnabled={false}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={Divider}
+        renderItem={({ item }) => (
+          <List.Item
+            tw="px-0 m-0 py-2"
+            title={item.name}
+            left={() =>
+              descriptors?.[item.key]?.options?.tabBarIcon?.({
+                focused: false,
+                color: ICON_DEFAULT_COLOR,
+                size: ICON_SIZE,
+              }) ?? null
+            }
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            onPress={(evt) => {
+              evt.stopPropagation();
+              navigation.navigate(item.name);
+              modalRef.current?.close();
+            }}
+          />
+        )}
+      />
+    </View>
+  </Modalize>
+);
+
+const TabItem = ({
+  title,
+  isFocused,
+  onPress,
+  renderIcon,
+}: {
+  title: string;
+  isFocused?: boolean;
+  onPress?: (event: GestureResponderEvent) => void;
+  renderIcon?: (iconProps: { focused: boolean; color: string; size: number }) => React.ReactNode;
+}) => (
+  <View tw="flex-col items-center justify-start space-y-1">
+    <View tw="rounded-full overflow-hidden">
+      <Touchable
+        tw={cn(
+          'items-center justify-center w-20 h-10',
+          isFocused ? 'bg-green-primary' : 'bg-transparent'
+        )}
+        onPress={onPress}
+        rippleColor={paperTheme.colors.backdrop}
+      >
+        {renderIcon?.({
+          focused: false,
+          color: isFocused ? colors.white : ICON_DEFAULT_COLOR,
+          size: ICON_SIZE,
+        })}
+      </Touchable>
+    </View>
+    <Text tw={cn('leading-none tracking-widest text-zinc-500', isFocused && 'text-black')}>
+      {title}
+    </Text>
+  </View>
+);
+
+export default function BottomNavigationWrapper(props: BottomTabBarProps) {
+  return <BottomNavigation {...props} />;
 }

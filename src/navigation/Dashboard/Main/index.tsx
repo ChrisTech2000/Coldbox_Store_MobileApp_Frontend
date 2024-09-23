@@ -130,11 +130,11 @@ export default function DashboardMainBottomTabs() {
       tabBar={BottomNavigation}
     >
       <Tab.Screen name="Dashboard" component={MainTabStack} />
-      <Tab.Screen name="History" component={HistoryTabStack} />
-      <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
-      <Tab.Screen name="Marketplace" component={MarketplaceStack} />
-      <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       <Tab.Screen name="Analytics" component={AnalyticsStack} />
+      <Tab.Screen name="Marketplace" component={MarketplaceStack} />
+      <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
+      <Tab.Screen name="History" component={HistoryTabStack} />
+      <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       <Tab.Screen name="ShoppingCart" component={ShoppingCartStack} />
     </Tab.Navigator>
   );
