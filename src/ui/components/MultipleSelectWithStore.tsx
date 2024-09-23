@@ -41,7 +41,7 @@ type SelectItemProps<T> = {
   itemName: (item: T) => string;
 };
 
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 export default function MultipleSelectWithStore<T>({
   useSelectStore,
@@ -120,7 +120,7 @@ export default function MultipleSelectWithStore<T>({
             header: rest.modalHeader ?? '',
             options: (
               <FlatList
-                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 data={rest.datums}
                 keyExtractor={(item, index) => `${item}-${index}`}
                 renderItem={({ item }) => {

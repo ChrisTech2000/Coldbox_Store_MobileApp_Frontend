@@ -18,7 +18,7 @@ import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart'
 import { weekSubsetArtisan } from './utils';
 
 const MAX_CAPACITY = 100;
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 export default function CoolingUnitsPlanner() {
   const [selectedColumn, setSelectedColumn] = useState<number>(0);

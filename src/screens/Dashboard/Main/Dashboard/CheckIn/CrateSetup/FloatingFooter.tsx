@@ -38,8 +38,6 @@ export default function FloatingFooter(props: {
       <View tw="py-3 bg-white flex flex-row items-center justify-evenly border-t-0.5 border-gray-600 border-solid">
         <Button
           mode="outlined"
-          tw="border border-red-400"
-          labelStyle="text-red-400 text-lg"
           contentStyle="flex flex-row-reverse"
           icon="close-circle-outline"
           onPress={props.cancelFunc}
@@ -48,7 +46,6 @@ export default function FloatingFooter(props: {
         </Button>
         <Button
           mode="contained"
-          labelStyle="text-lg"
           contentStyle="flex flex-row-reverse"
           icon="check-circle-outline"
           onPress={props.saveFunc}

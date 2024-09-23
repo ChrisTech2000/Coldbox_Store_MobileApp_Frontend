@@ -86,6 +86,12 @@ export default {
       Management: 'Gestão',
       Tutorial: 'Tutorial',
       PayoutOptions: 'Opções de pagamento',
+      PaymentMethods: 'Métodos de pagamento',
+      Wallet: 'Carteira',
+      Transactions: 'Transações',
+      AddCard: 'Adicionar Cartão de Crédito',
+      EditCard: 'Editar Cartão de Crédito',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'Selecione Tipo de Cultura',
@@ -873,6 +879,11 @@ export default {
         location: 'Localização',
         userCode: 'Código de Importação do Utilizador de Refrigeração',
       },
+      sections: {
+        sellerSettings: 'Configurações do vendedor',
+        buyerSettings: 'Configurações do comprador',
+        details: 'Detalhes',
+      },
       toasts: {
         success: 'Utilizador atualizado com sucesso',
       },
@@ -894,6 +905,32 @@ export default {
         },
         successMessage: 'Conta bancária adicionada com sucesso.',
         errorMessage: 'Algo correu mal. Por favor, tente novamente mais tarde.',
+      },
+      PaymentSettings: {
+        cards: 'Cartões',
+        creditCard: {
+          predefined: 'Pré-definido',
+          owner: 'Nome do Titular',
+          date: 'Data de Expiração',
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'Por favor, insira as informações do seu cartão',
+          form: {
+            cardName: 'Nome do cartão',
+            cardNamePlaceholder: 'Insira o nome do cartão',
+            cardNumber: 'Número do cartão',
+            cardNumberPlaceholder: 'Insira o número do cartão',
+            expiryDate: 'Data de validade',
+            securityCode: 'Código de segurança',
+            securityCodePlaceholder: 'Insira o código de segurança do cartão',
+            predefinedMethod: 'Método de pagamento pré-definido',
+            successMessage: 'Cartão adicionado com sucesso',
+            cardNameError: 'O nome do cartão é obrigatório',
+            cardNumberError: 'O número do cartão é obrigatório',
+            securityCodeError: 'O código de segurança é obrigatório',
+          },
+        },
       },
     },
     About: {

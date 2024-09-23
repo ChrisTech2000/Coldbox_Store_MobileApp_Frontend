@@ -86,6 +86,12 @@ export default {
       Management: 'ପରିଚାଳନା',
       Tutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍',
       PayoutOptions: 'ପ୍ରଦାନ ବିକଳ୍ପ',
+      PaymentMethods: 'ପେମେଣ୍ଟ ପଧତିଗୁଡିକ',
+      Wallet: 'ୱାଲେଟ',
+      Transactions: 'ଲେନଦେନ',
+      AddCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ ଯୋଗ କରନ୍ତୁ',
+      EditCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ ସମ୍ପାଦନ କରନ୍ତୁ',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'ବର୍ଗ ପ୍ରକାର ଚୟନ କରନ୍ତୁ',
@@ -871,6 +877,11 @@ export default {
       toasts: {
         success: 'ସଫଳତାର ସହିତ ଅଦ୍ୟତନ କରାଗଲା',
       },
+      sections: {
+        sellerSettings: 'ବିକ୍ରେତା ସେଟିଂସ୍',
+        buyerSettings: 'କ୍ରେତା ସେଟିଂସ୍',
+        details: 'ବିବରଣୀ',
+      },
       PayoutSettings: {
         addTitle: 'ଦୟାକରି ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା ପ୍ରବେଶ କରାନ୍ତୁ',
         editTitle: 'ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା',
@@ -889,6 +900,32 @@ export default {
         },
         successMessage: 'ବ୍ୟାଙ୍କ ଖାତା ସଫଳତାର ସହିତ ଯୋଡା ହୋଇଛି।',
         errorMessage: 'କିଛି ଭୁଲ ହେଲା। ଦୟାକରି ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।',
+      },
+      PaymentSettings: {
+        cards: 'କାର୍ଡସ୍',
+        creditCard: {
+          predefined: 'ପୂର୍ବନିର୍ଦ୍ଧାରିତ',
+          owner: 'କାର୍ଡ ଧାରକର ନାମ',
+          date: 'ମାତ୍ରା ସମାପ୍ତି',
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'ଦୟାକରି ଆପଣଙ୍କର କାର୍ଡ ସୂଚନା ଭରଣ କରନ୍ତୁ',
+          form: {
+            cardName: 'କାର୍ଡ ନାମ',
+            cardNamePlaceholder: 'କାର୍ଡ ନାମ ଭରଣ କରନ୍ତୁ',
+            cardNumber: 'କାର୍ଡ ନମ୍ବର',
+            cardNumberPlaceholder: 'କାର୍ଡ ନମ୍ବର ଭରଣ କରନ୍ତୁ',
+            expiryDate: 'ମାୂଦତା ତାରିଖ',
+            securityCode: 'ସୁରକ୍ଷା କୋଡ୍',
+            securityCodePlaceholder: 'କାର୍ଡ ସୁରକ୍ଷା କୋଡ୍ ଭରଣ କରନ୍ତୁ',
+            predefinedMethod: 'ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ପେମେଣ୍ଟ ପଦ୍ଧତି',
+            successMessage: 'କାର୍ଡ ସଫଳତାପୂର୍ବକ ଯୋଡାଯାଇଛି',
+            cardNameError: 'କାର୍ଡ ନାମ ଆବଶ୍ୟକ',
+            cardNumberError: 'କାର୍ଡ ସଂଖ୍ୟା ଆବଶ୍ୟକ',
+            securityCodeError: 'ସୁରକ୍ଷା କୋଡ ଆବଶ୍ୟକ',
+          },
+        },
       },
     },
     About: {

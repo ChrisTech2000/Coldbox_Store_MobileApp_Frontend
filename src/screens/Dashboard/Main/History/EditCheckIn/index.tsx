@@ -27,8 +27,8 @@ import { EditCheckInSchema, Schema } from './schema';
 import { generateData } from './utils';
 import InAppNotifications from '#common/InAppNotifications';
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   const { movement, coolingUnitId } = props.route.params;
@@ -185,7 +185,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
               <View tw="w-full px-3">
                 <FlatList
-                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   data={generateData(produce, t)}
                   keyExtractor={(item, idx) => `${item.label}-#${index}-${idx}`}
                   renderItem={({ item }) => {

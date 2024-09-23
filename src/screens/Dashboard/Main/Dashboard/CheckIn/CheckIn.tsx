@@ -267,7 +267,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         ) : null}
 
         <FlatList
-          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           data={produces}
           extraData={surveys}
           keyExtractor={(item, itemIdx) => `crate-${item.crop.id}-#${itemIdx}`}

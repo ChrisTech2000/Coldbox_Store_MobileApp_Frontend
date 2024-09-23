@@ -24,7 +24,7 @@ import CurrencyField from './modules/CurrencyField';
 import { derivedSubjects } from './utils';
 import InAppNotifications from '#common/InAppNotifications';
 
-const width = (Dimensions.get('screen').width - 42) / 2;
+const width = (Dimensions.get('window').width - 42) / 2;
 
 function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
   const { navigation } = props;

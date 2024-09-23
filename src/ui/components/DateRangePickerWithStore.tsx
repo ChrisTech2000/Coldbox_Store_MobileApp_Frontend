@@ -97,7 +97,7 @@ export const DateRangePickerWithStore = ({
         <TouchableOpacity
           tw={cn(
             'flex flex-row items-center',
-            variant === 'contained' && 'bg-gray-200 rounded-md p-1 w-28'
+            variant === 'contained' && 'bg-gray-200 rounded-md p-1 w-32'
           )}
           onPress={() => setIsStartDateCalendarOpen(true)}
         >
@@ -132,7 +132,7 @@ export const DateRangePickerWithStore = ({
         <TouchableOpacity
           tw={cn(
             'flex flex-row items-center',
-            variant === 'contained' && 'bg-gray-200 rounded-md p-1 w-28'
+            variant === 'contained' && 'bg-gray-200 rounded-md p-1 w-32'
           )}
           onPress={() => setIsEndDateCalendarOpen(true)}
         >

@@ -84,6 +84,12 @@ const en = {
       Management: 'Management',
       Tutorial: 'Tutorial',
       PayoutOptions: 'Payout options',
+      PaymentMethods: 'Payment methods',
+      Wallet: 'Wallet',
+      Transactions: 'Transactions',
+      AddCard: 'Add a Credit Card',
+      EditCard: 'Edit a Credit Card',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'Select Crop Type',
@@ -867,6 +873,11 @@ const en = {
       toasts: {
         success: 'Successfully updated user',
       },
+      sections: {
+        sellerSettings: 'Seller Settings',
+        buyerSettings: 'Buyer Settings',
+        details: 'Details',
+      },
       PayoutSettings: {
         addTitle: 'Please insert your bank account information',
         editTitle: 'Your bank account information',
@@ -885,6 +896,32 @@ const en = {
         },
         successMessage: 'Bank account added successfully.',
         errorMessage: 'Something went wrong. Please try again later.',
+      },
+      PaymentSettings: {
+        cards: 'Cards',
+        creditCard: {
+          predefined: 'Predefined',
+          owner: 'Card Holder Name',
+          date: 'Expiry Date',
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'Please insert your card information',
+          form: {
+            cardName: 'Card name',
+            cardNamePlaceholder: 'Insert card name',
+            cardNumber: 'Card number',
+            cardNumberPlaceholder: 'Insert card number',
+            expiryDate: 'Expiry date',
+            securityCode: 'Security code',
+            securityCodePlaceholder: 'Insert the card security code',
+            predefinedMethod: 'Predefined payment method',
+            successMessage: 'Card added successfully',
+            cardNameError: 'Card name is required',
+            cardNumberError: 'Card number is required',
+            securityCodeError: 'Security code is required',
+          },
+        },
       },
     },
     About: {

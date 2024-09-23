@@ -86,6 +86,12 @@ export default {
       Management: 'प्रबंधन',
       Tutorial: 'ट्यूटोरियल',
       PayoutOptions: 'भुगतान विकल्प',
+      PaymentMethods: 'भुगतान विधियाँ',
+      Wallet: 'वॉलेट',
+      Transactions: 'लेनदेन',
+      AddCard: 'क्रेडिट कार्ड जोड़ें',
+      EditCard: 'क्रेडिट कार्ड संपादित करें',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'फसल प्रकार चुनें',
@@ -872,6 +878,11 @@ export default {
       toasts: {
         success: 'उपयोगकर्ता को सफलतापूर्वक अद्यतन किया गया',
       },
+      sections: {
+        sellerSettings: 'विक्रेता सेटिंग्स',
+        buyerSettings: 'खरीदार सेटिंग्स',
+        details: 'विवरण',
+      },
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',
         editTitle: 'Les informations de votre compte bancaire',
@@ -890,6 +901,32 @@ export default {
         },
         successMessage: 'Compte bancaire ajouté avec succès.',
         errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+      },
+      PaymentSettings: {
+        cards: 'कार्ड्स',
+        creditCard: {
+          predefined: 'पूर्व निर्धारित',
+          owner: 'कार्ड धारक का नाम',
+          date: 'समाप्ति तिथि',
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'कृपया अपने कार्ड की जानकारी दर्ज करें',
+          form: {
+            cardName: 'कार्ड का नाम',
+            cardNamePlaceholder: 'कार्ड का नाम दर्ज करें',
+            cardNumber: 'कार्ड नंबर',
+            cardNumberPlaceholder: 'कार्ड नंबर दर्ज करें',
+            expiryDate: 'समाप्ति तिथि',
+            securityCode: 'सुरक्षा कोड',
+            securityCodePlaceholder: 'कार्ड का सुरक्षा कोड दर्ज करें',
+            predefinedMethod: 'पूर्वनिर्धारित भुगतान विधि',
+            successMessage: 'कार्ड सफलतापूर्वक जोड़ा गया',
+            cardNameError: 'कार्ड का नाम आवश्यक है',
+            cardNumberError: 'कार्ड नंबर आवश्यक है',
+            securityCodeError: 'सुरक्षा कोड आवश्यक है',
+          },
+        },
       },
     },
     About: {

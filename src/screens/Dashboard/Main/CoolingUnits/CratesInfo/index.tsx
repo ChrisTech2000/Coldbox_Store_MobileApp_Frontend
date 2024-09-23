@@ -84,7 +84,7 @@ function CoolingUnitsCratesInfo() {
       ) : (
         <DataTable style={styles.dataTable}>
           <FlatList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             nestedScrollEnabled
             ListHeaderComponent={
               <DataTable.Header tw="space-x-1">
@@ -123,7 +123,7 @@ function CoolingUnitsCratesInfo() {
 const styles = StyleSheet.create({
   dataTable: {
     marginTop: 20, // equivalent to "mt-5"
-    width: Dimensions.get('screen').width,
+    width: Dimensions.get('window').width,
     paddingBottom: 40, // equivalent to "pb-10"
   },
 });
