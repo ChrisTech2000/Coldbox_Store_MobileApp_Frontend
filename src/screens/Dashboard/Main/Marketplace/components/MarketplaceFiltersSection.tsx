@@ -12,13 +12,14 @@ import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/MarketplaceSt
 import { paperTheme } from '#ui/lib/theme';
 
 import MarketplaceLocationFilter from './LocationFilter';
+import FilterChip from './FilterChip';
 
 export default function MarketplaceFiltersSection() {
   const navigation = useNavigation<NavigationProp<MarketplaceRoutes>>();
 
   return (
-    <View tw="bg-zinc-100 p-4 space-y-3">
-      <View tw="flex-row items-center justify-between">
+    <View tw="bg-zinc-100 py-4 space-y-3">
+      <View tw="flex-row items-center justify-between px-4">
         <MarketplaceLocationFilter />
 
         <Touchable
@@ -34,7 +35,9 @@ export default function MarketplaceFiltersSection() {
         </Touchable>
       </View>
 
-      <View tw="flex-row items-center justify-between">
+      <FilterChip />
+
+      <View tw="flex-row items-center justify-between px-4">
         <Text variant="TextMedium" tw="text-xl">
           Produces
         </Text>

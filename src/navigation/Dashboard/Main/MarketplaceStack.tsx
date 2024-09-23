@@ -21,7 +21,7 @@ import NavigatorHeader, {
 } from '#navigation/components/NavigatorHeader';
 import { useDashboardHeader } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import { DEFAULT_MARKETPLACE_FILTER_VALUES } from '#screens/Dashboard/Main/Marketplace/modules/MarketplaceFormManager';
+import type { FormValues } from '#screens/Dashboard/Main/Marketplace/modules/MarketplaceFormManager';
 
 export type MarketplaceRoutes = {
   MarketplaceRoot: undefined;
@@ -71,10 +71,13 @@ export default function MarketplaceStack() {
               tw="flex-row items-center justify-center space-x-2 px-4 py-1.5 mr-2"
               onPress={(evt) => {
                 evt.stopPropagation();
-                emitter.emit(
-                  APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_RESET,
-                  DEFAULT_MARKETPLACE_FILTER_VALUES
-                );
+                emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_RESET, {
+                  companies: [],
+                  coolingUnits: [],
+                  crops: [],
+                  min: 0,
+                  max: 0,
+                } satisfies FormValues<number>);
               }}
             >
               <Text variant="TextMedium" tw="text-lg text-green-primary">

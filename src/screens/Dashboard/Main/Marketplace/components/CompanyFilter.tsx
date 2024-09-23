@@ -42,9 +42,8 @@ export default function CompanyFilters() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
-  const [internalSelection, setInternalSelection] = useState<Array<number>>(
-    selectedCompanies.map(({ value }) => value)
-  );
+  const [internalSelection, setInternalSelection] =
+    MarketplaceFormManager.useFieldState('companies');
 
   const currentValue = useMemo(() => {
     const names: Array<string> = [];

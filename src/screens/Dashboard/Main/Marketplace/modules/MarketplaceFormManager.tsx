@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { type PropsWithChildren } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -12,14 +12,6 @@ export type FormValues<T = string> = {
   crops: Array<FilterValue>;
   min: T;
   max: T;
-};
-
-export const DEFAULT_MARKETPLACE_FILTER_VALUES: FormValues<number> = {
-  companies: [],
-  coolingUnits: [],
-  crops: [],
-  min: 0,
-  max: 0,
 };
 
 type FormManagerProps = {
@@ -59,11 +51,7 @@ export default function MarketplaceFormManager(props: PropsWithChildren<FormMana
   });
 
   useAppEventListener('DISPATCH_MARKETPLACE_FILTERS_FORM_RESET', (values: FormValues<number>) => {
-    form.reset({
-      ...values,
-      min: values?.min.toString() ?? '0',
-      max: values?.max.toString() ?? '0',
-    });
+    form.reset({ ...values, min: values.min.toString(), max: values.max.toString() });
   });
 
   return <FormProvider {...form}>{props.children}</FormProvider>;
@@ -71,4 +59,24 @@ export default function MarketplaceFormManager(props: PropsWithChildren<FormMana
 
 MarketplaceFormManager.useForm = function _useForm() {
   return useFormContext<FormValues>();
+};
+
+MarketplaceFormManager.useFieldState = function _useFieldState(
+  fieldName: Exclude<keyof FormValues, 'min' | 'max'>
+) {
+  const { watch } = MarketplaceFormManager.useForm();
+
+  const fieldValue = watch(fieldName) ?? [];
+
+  const [internalSelection, setInternalSelection] = React.useState(
+    fieldValue.map(({ value }) => value)
+  );
+
+  React.useEffect(() => {
+    if (Array.isArray(fieldValue)) {
+      setInternalSelection(fieldValue.map(({ value }) => value));
+    }
+  }, [fieldValue]);
+
+  return [internalSelection, setInternalSelection] as const;
 };

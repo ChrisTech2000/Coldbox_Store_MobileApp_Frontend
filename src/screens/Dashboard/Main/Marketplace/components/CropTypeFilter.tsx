@@ -42,9 +42,7 @@ export default function CropTypeFilters() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
-  const [internalSelection, setInternalSelection] = useState<Array<number>>(
-    selectedCrops.map(({ value }) => value)
-  );
+  const [internalSelection, setInternalSelection] = MarketplaceFormManager.useFieldState('crops');
 
   const currentValue = useMemo(() => {
     const names: Array<string> = [];

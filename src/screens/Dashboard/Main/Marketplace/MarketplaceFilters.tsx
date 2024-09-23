@@ -1,24 +1,23 @@
 import React from 'react';
 import { View } from 'react-native';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import type { MarketplaceRouteProps } from '#navigation/Dashboard/Main/MarketplaceStack';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import CompanyFilters from './components/CompanyFilter';
-import MarketplaceFormManager, {
-  DEFAULT_MARKETPLACE_FILTER_VALUES,
-  type FormValues,
-} from './modules/MarketplaceFormManager';
+import MarketplaceFormManager, { type FormValues } from './modules/MarketplaceFormManager';
 import CoolingUnitFilters from './components/CoolingUnitFilter';
 import CropTypeFilters from './components/CropTypeFilter';
 import RangePrice from './components/RangePrice';
 
 import { type FilterItem, useMarketplaceFilters } from './store';
 
-function MarketplaceFilters() {
+function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) {
   return (
     <React.Fragment>
       <ScrollView tw="px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
@@ -43,7 +42,7 @@ function MarketplaceFilters() {
                   value: [min, max],
                 });
               }
-              useMarketplaceFilters.getState().addFilters(filters);
+              useMarketplaceFilters.getState().addFilters(filters, true);
             }}
           >
             <View tw="w-full">
@@ -64,6 +63,7 @@ function MarketplaceFilters() {
           onPress={(evt) => {
             evt.stopPropagation();
             emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_RESET, _buildInitialValues());
+            props.navigation.goBack();
           }}
         >
           Cancel
@@ -75,6 +75,7 @@ function MarketplaceFilters() {
           onPress={(evt) => {
             evt.stopPropagation();
             emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_SUBMISSION);
+            props.navigation.goBack();
           }}
         >
           Apply
@@ -85,18 +86,24 @@ function MarketplaceFilters() {
 }
 
 function _buildInitialValues(): FormValues<number> {
-  const currentState = useMarketplaceFilters.getState().filters;
-  if (currentState.length === 0) return DEFAULT_MARKETPLACE_FILTER_VALUES;
-  const datum = {} as FormValues<number>;
-  for (const filter of currentState) {
+  const deepCopy = cloneDeep(useMarketplaceFilters.getState().filters);
+  const defaultValues: FormValues<number> = {
+    companies: [],
+    coolingUnits: [],
+    crops: [],
+    min: 0,
+    max: 0,
+  };
+  if (deepCopy.length === 0) return defaultValues;
+  for (const filter of deepCopy) {
     if (filter.key === 'priceRange') {
-      datum.min = filter.value[0];
-      datum.max = filter.value[1];
+      defaultValues.min = filter.value[0];
+      defaultValues.max = filter.value[1];
       continue;
     }
-    datum[filter.key].push({ label: filter.label, value: filter.value });
+    defaultValues[filter.key].push({ label: filter.label, value: filter.value });
   }
-  return datum;
+  return defaultValues;
 }
 
 export default withSafeArea(MarketplaceFilters);

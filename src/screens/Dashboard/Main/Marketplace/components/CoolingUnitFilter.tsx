@@ -42,9 +42,8 @@ export default function CoolingUnitFilters() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
-  const [internalSelection, setInternalSelection] = useState<Array<number>>(
-    selectedCoolingUnits.map(({ value }) => value)
-  );
+  const [internalSelection, setInternalSelection] =
+    MarketplaceFormManager.useFieldState('coolingUnits');
 
   const currentValue = useMemo(() => {
     const names: Array<string> = [];
