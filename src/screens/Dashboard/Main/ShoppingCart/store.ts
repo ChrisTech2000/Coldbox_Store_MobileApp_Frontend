@@ -45,6 +45,7 @@ function createCartStore<T>() {
 export const useMarketplaceCartStore = createCartStore<{
   cropName: string;
   movementCode: string;
+  shelfLife: number;
   sellerName: string;
   cropImage: string;
   crateTag: string;

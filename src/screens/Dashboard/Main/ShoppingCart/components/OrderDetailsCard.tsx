@@ -10,24 +10,24 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
 // TODO → add text content to translations
-export default function OrderDetailsCard() {
+export default function OrderDetailsCard(props: { heading: string; totalLabel: string }) {
   const modalRef = useRef<Modalize>(null);
 
   return (
     <React.Fragment>
       <View tw="flex-col space-y-5">
-        <Text tw="text-base text-green-primary font-bold">Order</Text>
+        <Text tw="text-base text-green-primary font-bold">{props.heading}</Text>
         <View tw="flex-col border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
-          <View tw="flex-row items-center h-8">
-            <Text tw="text-base text-zinc-500 w-[45%]">Produce</Text>
+          <View tw="flex-row items-center justify-between h-8">
+            <Text tw="text-base text-zinc-500">Produce</Text>
             <Text tw="text-base">2 KG</Text>
           </View>
-          <View tw="flex-row items-center h-8">
-            <Text tw="text-base text-zinc-500 w-[45%]">Subtotal</Text>
+          <View tw="flex-row items-center justify-between h-8">
+            <Text tw="text-base text-zinc-500">Subtotal</Text>
             <Text tw="text-base">$ 0.00</Text>
           </View>
-          <View tw="flex-row items-center h-8">
-            <Text tw="text-base text-zinc-500 w-[45%]">Discount</Text>
+          <View tw="flex-row items-center justify-between h-8">
+            <Text tw="text-base text-zinc-500">Discount</Text>
             <View tw="flex-row items-center space-x-1">
               <Icon name="minus" size={14} color={paperTheme.colors.error} />
               <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
@@ -35,8 +35,8 @@ export default function OrderDetailsCard() {
               </Text>
             </View>
           </View>
-          <View tw="flex-row items-center h-8">
-            <View tw="flex-row items-center space-x-1 w-[45%]">
+          <View tw="flex-row items-center justify-between h-8">
+            <View tw="flex-row items-center space-x-1">
               <Text tw="text-base text-zinc-500">Service fees</Text>
               <IconButton
                 tw="p-0 m-0"
@@ -55,11 +55,14 @@ export default function OrderDetailsCard() {
               <Text tw="text-base">$ 0.00</Text>
             </View>
           </View>
-          <View tw="flex-row items-center h-8">
-            <Text variant="TextMedium" tw="text-base text-zinc-500 w-[45%]">
-              Total
+
+          <Divider tw="bg-gray-400 my-0.5" />
+
+          <View tw="flex-row items-center justify-between h-8">
+            <Text variant="TextMedium" tw="text-lg text-zinc-500">
+              {props.totalLabel}
             </Text>
-            <Text variant="TextMedium" tw="text-base">
+            <Text variant="TextMedium" tw="text-lg">
               $ 0.00
             </Text>
           </View>
