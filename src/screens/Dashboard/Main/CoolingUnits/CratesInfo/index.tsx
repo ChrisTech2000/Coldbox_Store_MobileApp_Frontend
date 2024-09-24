@@ -3,8 +3,11 @@ import { Dimensions, FlatList, RefreshControl, StyleSheet, View } from 'react-na
 import { ActivityIndicator, DataTable } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
+import { GenericError } from '#ui/components/GenericError';
 import SelectWithStore from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -13,7 +16,6 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, ERoles } from '#types/global';
-import { paperTheme } from '#ui/lib/theme';
 
 import { useCoolingUnitStore } from '../components/GenericFilter';
 
@@ -128,4 +130,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withSafeArea(CoolingUnitsCratesInfo);
+export default withSafeArea(
+  withErrorBoundary(CoolingUnitsCratesInfo, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

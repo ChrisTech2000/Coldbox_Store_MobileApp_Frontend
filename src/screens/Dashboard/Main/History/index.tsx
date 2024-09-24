@@ -4,18 +4,20 @@ import { Dimensions, ScrollView, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { Company, CoolingUnit, ERoles } from '#types/global';
 
+import { GenericError } from '#ui/components/GenericError';
+import { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { createSelectStore } from '#ui/components/SelectWithStore';
 
-import { HistoryTabStackRouteProps } from 'navigation/Dashboard/Main/HistoryTabStack';
 import { Filters } from '../components/Filters';
 import { Movement } from './components/Movement';
 import { createSortingStore, ESortingOptions, SortingMenu } from './components/SortMenu';
@@ -162,4 +164,9 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   );
 }
 
-export default withSafeArea(History);
+export default withSafeArea(
+  withErrorBoundary(History, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

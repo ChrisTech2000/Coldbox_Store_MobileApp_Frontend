@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 
+import { GenericError } from '#ui/components/GenericError';
+import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { PredictionCrop, PredictionState } from '#types/global';
-import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
-import { ScrollView } from 'react-native-gesture-handler';
+
 import { TrendChart } from './components/TrendChart';
 import { AllowedCountry, usePriceTrendsStore } from './store';
 
@@ -105,4 +108,9 @@ function MarketPriceTrend() {
   );
 }
 
-export default withSafeArea(MarketPriceTrend);
+export default withSafeArea(
+  withErrorBoundary(MarketPriceTrend, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

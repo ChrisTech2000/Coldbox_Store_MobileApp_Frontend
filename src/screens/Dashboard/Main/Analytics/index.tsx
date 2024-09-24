@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { GenericError } from '#ui/components/GenericError';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useAuthStore } from '#stores/auth';
@@ -13,4 +15,9 @@ function AnalyticsBase() {
   return user?.role === ERoles.COOLING_USER ? <FarmerAnalytics /> : <Analytics />;
 }
 
-export default withSafeArea(AnalyticsBase);
+export default withSafeArea(
+  withErrorBoundary(AnalyticsBase, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

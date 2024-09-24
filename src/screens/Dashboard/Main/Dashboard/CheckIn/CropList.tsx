@@ -12,8 +12,10 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useCheckInStore } from '#stores/checkIn';
 
+import { GenericError } from '#ui/components/GenericError';
 import { Input } from '#ui/components/Input';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -148,4 +150,9 @@ function _SearchInput(props: { onChange: (v: string) => void }) {
   );
 }
 
-export default withSafeArea(CropList);
+export default withSafeArea(
+  withErrorBoundary(CropList, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

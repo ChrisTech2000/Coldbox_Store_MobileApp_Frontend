@@ -19,6 +19,10 @@ export default {
     other: 'Autre',
   },
   navigation: {
+    error: {
+      errorMessage: "Oups... il semble que quelque chose s'est mal passé.",
+      tryAgainMessage: 'Veuillez réessayer plus tard.',
+    },
     auth: {
       SignIn: 'Connexion',
       SignUp: 'Inscription',

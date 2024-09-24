@@ -3,6 +3,7 @@ import { RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
 
+import RBAC from '#common/RBAC';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -13,7 +14,9 @@ import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { GenericError } from '#ui/components/GenericError';
 
 import { Filters, type Search } from '../components/Filters';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
@@ -21,7 +24,6 @@ import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { sortProduces } from './utils/sortProduces';
-import RBAC from '#common/RBAC';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
@@ -177,4 +179,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   );
 }
 
-export default withSafeArea(DashboardMain);
+export default withSafeArea(
+  withErrorBoundary(DashboardMain, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

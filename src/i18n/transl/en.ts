@@ -17,6 +17,10 @@ const en = {
     other: 'Other',
   },
   navigation: {
+    error: {
+      errorMessage: 'Oops... looks like something went wrong.',
+      tryAgainMessage: 'Please try again later.',
+    },
     auth: {
       SignIn: 'Log in',
       SignUp: 'Sign up',

@@ -19,6 +19,10 @@ export default {
     other: 'Outro',
   },
   navigation: {
+    error: {
+      errorMessage: 'Ops... parece que algo correu mal.',
+      tryAgainMessage: 'Por favor, tente novamente mais tarde.',
+    },
     auth: {
       SignIn: 'Entrar',
       SignUp: 'Registar',

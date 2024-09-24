@@ -8,6 +8,7 @@ import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Icon, RadioButton, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
@@ -18,6 +19,7 @@ import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import MineCart from '#assets/icons/mine-cart.svg';
@@ -28,17 +30,16 @@ import { HistoryTabStackRoutes } from '#navigation/Dashboard/Main/HistoryTabStac
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { useMarketSurveyStore } from '#stores/marketSurvey';
 import { useDashboardStore } from '#stores/dashboard';
-
+import { useMarketSurveyStore } from '#stores/marketSurvey';
 import {
   ESellingLocation,
   EUnitOfMeasurement,
   MAP_APP_UNIT_OF_MEASUREMENT_TO_API,
 } from '#types/global';
 
-import { MarketSurveySchema, MarketSurveySchemaType } from './schema';
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
+import { MarketSurveySchema, MarketSurveySchemaType } from './schema';
 
 const useMeasurementStore = createSelectStore<EUnitOfMeasurement>();
 const useSpoilageReasonsStore = createMultipleSelectStore<string>();
@@ -333,7 +334,12 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
   );
 }
 
-export default withSafeArea(MarketSurvey);
+export default withSafeArea(
+  withErrorBoundary(MarketSurvey, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);
 
 function Question({ question }: { question: string }) {
   return (

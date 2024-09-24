@@ -19,6 +19,10 @@ export default {
     other: 'અન્ય',
   },
   navigation: {
+    error: {
+      errorMessage: 'અરે... કંઈક ખોટું થયું હોય તેવું લાગે છે.',
+      tryAgainMessage: 'કૃપા કરીને થોડી વાર પછી ફરી પ્રયાસ કરો.',
+    },
     auth: {
       SignIn: 'લૉગ ઇન કરો',
       SignUp: 'સાઇન અપ કરો',

@@ -4,7 +4,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import { Divider, Icon, Switch } from 'react-native-paper';
 
+import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
+import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -14,14 +17,13 @@ import { useManagementStore } from '#stores/management';
 import { EPaymentType, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { Input } from '#ui/components/Input';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import InAppNotifications from '#common/InAppNotifications';
-import RBAC from '#common/RBAC';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 const usePaymentTypeStore = createSelectStore<EPaymentType>();
 
@@ -306,4 +308,9 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   );
 }
 
-export default withSafeArea(BillingInfo);
+export default withSafeArea(
+  withErrorBoundary(BillingInfo, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

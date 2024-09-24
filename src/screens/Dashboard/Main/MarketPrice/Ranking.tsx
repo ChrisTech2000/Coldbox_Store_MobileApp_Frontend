@@ -1,20 +1,22 @@
+import { addMonths, startOfMonth } from 'date-fns';
 import React, { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Divider, Switch } from 'react-native-paper';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Text } from '#ui/components/Text';
-import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
+import { GenericError } from '#ui/components/GenericError';
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
 } from '#ui/components/MultipleSelectWithStore';
+import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
+import { Text } from '#ui/components/Text';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { PredictionCrop, PredictionState } from '#types/global';
 
-import { usePriceTrendsStore } from './store';
-import { addMonths, startOfMonth } from 'date-fns';
 import { PredictionTable } from './components/PredictionTable';
+import { usePriceTrendsStore } from './store';
 
 export type Month = {
   id: number;
@@ -131,4 +133,9 @@ function MarketPriceRanking() {
   );
 }
 
-export default withSafeArea(MarketPriceRanking);
+export default withSafeArea(
+  withErrorBoundary(MarketPriceRanking, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);
