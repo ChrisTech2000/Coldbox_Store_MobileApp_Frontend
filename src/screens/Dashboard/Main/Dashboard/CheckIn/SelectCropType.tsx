@@ -2,10 +2,12 @@ import React, { useMemo } from 'react';
 import { FlatList, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
+import { GenericError } from '#ui/components/GenericError';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useTranslationUtils } from '#i18n/utils';
+import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { ECropType } from '#types/global';
 
 type Option = {
@@ -62,4 +64,9 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
   );
 }
 
-export default withSafeArea(SelectCropType);
+export default withSafeArea(
+  withErrorBoundary(SelectCropType, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

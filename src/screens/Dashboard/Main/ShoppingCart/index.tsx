@@ -1,23 +1,26 @@
+import truncate from 'lodash/truncate';
 import React from 'react';
-import { View, FlatList } from 'react-native';
-import { Button, Divider, IconButton } from 'react-native-paper';
+import { FlatList, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { Button, Divider, IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
-import truncate from 'lodash/truncate';
 
-import { ScrollView } from '#ui/components/ScrollView';
-import { Text } from '#ui/components/Text';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-
-import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
-import { useTranslationUtils } from '#i18n/utils';
-import { useCartItems, useMarketplaceCartStore } from './store';
-import { API_BASE_URL } from '#constants/environment';
-import { paperTheme } from '#ui/lib/theme';
 import ColdRoom from '#assets/icons/coldroom.svg';
 
+import { GenericError } from '#ui/components/GenericError';
+import { ScrollView } from '#ui/components/ScrollView';
+import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+import { API_BASE_URL } from '#constants/environment';
+import { useTranslationUtils } from '#i18n/utils';
+import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
+
 import CartItemInput from './components/CartItemInput';
+import { useCartItems, useMarketplaceCartStore } from './store';
 
 // TODO → add text content to translations
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
@@ -153,4 +156,9 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   );
 }
 
-export default withSafeArea(ShoppingCartRoot);
+export default withSafeArea(
+  withErrorBoundary(ShoppingCartRoot, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

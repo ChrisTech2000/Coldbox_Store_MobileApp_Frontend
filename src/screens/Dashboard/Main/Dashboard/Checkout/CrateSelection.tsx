@@ -10,9 +10,11 @@ import { useDashboardStore } from '#stores/dashboard';
 import { CoolingUnit, Crate } from '#types/global';
 
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { CheckoutCrate } from '../components/CheckOutCrate';
@@ -198,4 +200,9 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   );
 }
 
-export default withSafeArea(CrateSelection);
+export default withSafeArea(
+  withErrorBoundary(CrateSelection, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

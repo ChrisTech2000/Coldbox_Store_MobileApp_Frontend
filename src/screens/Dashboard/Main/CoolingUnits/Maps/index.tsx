@@ -1,27 +1,28 @@
+import ms from 'ms';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import GetLocation from 'react-native-get-location';
 import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import GetLocation from 'react-native-get-location';
 import { useShallow } from 'zustand/react/shallow';
-import ms from 'ms';
 
+import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useDashboardStore } from '#stores/dashboard';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { paperTheme } from '#ui/lib/theme';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { useDashboardStore } from '#stores/dashboard';
 
 import * as Map from './components/Map';
 import PointAnnotationModal from './components/PointAnnotationModal';
-
-import { processLocationMarkers } from './utils';
 import { PIN_COLORS } from './constants';
-import { ScrollView } from 'react-native-gesture-handler';
+import { processLocationMarkers } from './utils';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 const screenHeight = Dimensions.get('window').height;
@@ -122,4 +123,9 @@ function CoolingUnitsMaps() {
   );
 }
 
-export default withSafeArea(CoolingUnitsMaps);
+export default withSafeArea(
+  withErrorBoundary(CoolingUnitsMaps, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

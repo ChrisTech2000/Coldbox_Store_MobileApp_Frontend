@@ -1,21 +1,23 @@
+import { useIsFocused } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, View } from 'react-native';
-import { Divider, List } from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import { Divider, List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useIsFocused } from '@react-navigation/native';
-import { useShallow } from 'zustand/react/shallow';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { API_BASE_URL } from '#constants/environment';
-import { paperTheme } from '#ui/lib/theme';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 
 import { useMarketplaceSettingsStore } from './store';
 
@@ -120,4 +122,9 @@ function MarketplaceSettings(props: ProduceDetailsStackRouteProps<'MarketplaceSe
   );
 }
 
-export default withSafeArea(MarketplaceSettings);
+export default withSafeArea(
+  withErrorBoundary(MarketplaceSettings, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

@@ -5,9 +5,11 @@ import colors from 'tailwindcss/colors';
 
 import Danger from '#assets/icons/danger.svg';
 
+import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -147,4 +149,9 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
   );
 }
 
-export default withSafeArea(MarketSurveyBase);
+export default withSafeArea(
+  withErrorBoundary(MarketSurveyBase, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

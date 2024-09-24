@@ -9,10 +9,13 @@ import Carousel from 'react-native-reanimated-carousel';
 import MineCart from '#assets/icons/mine-cart.svg';
 
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -25,7 +28,6 @@ import { Pagination } from './components/Pagination';
 import { ProduceDetailsOption } from './components/ProduceDetailsOption';
 import { EditCheckInSchema, Schema } from './schema';
 import { generateData } from './utils';
-import InAppNotifications from '#common/InAppNotifications';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -218,4 +220,9 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   );
 }
 
-export default withSafeArea(EditCheckIn);
+export default withSafeArea(
+  withErrorBoundary(EditCheckIn, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

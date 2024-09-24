@@ -1,20 +1,21 @@
+import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 import { View } from 'react-native';
-import cloneDeep from 'lodash/cloneDeep';
 
-import { ScrollView } from '#ui/components/ScrollView';
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
+import { ScrollView } from '#ui/components/ScrollView';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { MarketplaceRouteProps } from '#navigation/Dashboard/Main/MarketplaceStack';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import CompanyFilters from './components/CompanyFilter';
-import MarketplaceFormManager, { type FormValues } from './modules/MarketplaceFormManager';
 import CoolingUnitFilters from './components/CoolingUnitFilter';
 import CropTypeFilters from './components/CropTypeFilter';
 import RangePrice from './components/RangePrice';
-
+import MarketplaceFormManager, { type FormValues } from './modules/MarketplaceFormManager';
 import { type FilterItem, useMarketplaceFilters } from './store';
 
 function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) {
@@ -106,4 +107,9 @@ function _buildInitialValues(): FormValues<number> {
   return defaultValues;
 }
 
-export default withSafeArea(MarketplaceFilters);
+export default withSafeArea(
+  withErrorBoundary(MarketplaceFilters, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);
