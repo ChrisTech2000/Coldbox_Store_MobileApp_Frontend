@@ -23,6 +23,7 @@ import MarketPriceTabs from './MarketPriceTabs';
 import AnalyticsStack from './AnalyticsStack';
 import ShoppingCartStack, { type ShoppingCartStackRoutes } from './ShoppingCartStack';
 import MarketplaceStack from './MarketplaceStack';
+import OrdersStack from './OrdersStack';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
@@ -38,6 +39,7 @@ export type DashboardMainRoutes = {
     params?: ShoppingCartStackRoutes | ShoppingCartStackRoutes;
   };
   Marketplace: undefined;
+  Orders: undefined;
 };
 
 export type DashboardMainRoutePaths = keyof DashboardMainRoutes;
@@ -68,6 +70,7 @@ const TAB_METADATA: Record<
   Analytics: { tabBarIcon: 'chart-line', translationPath: 'navigation.bottomTabs.Analytics' },
   ShoppingCart: undefined,
   Marketplace: { tabBarIcon: 'store-outline', translationPath: 'navigation.dashboard.Marketplace' },
+  Orders: { tabBarIcon: 'receipt', translationPath: 'navigation.dashboard.Orders' },
 };
 
 const Tab = createBottomTabNavigator<DashboardMainRoutes>();
@@ -92,7 +95,8 @@ export default function DashboardMainBottomTabs() {
         focusedRoute !== 'Analytics' &&
         routeName !== 'Analytics' &&
         routeName !== 'ShoppingCart' &&
-        routeName !== 'Marketplace';
+        routeName !== 'Marketplace' &&
+        routeName !== 'Orders';
 
       // eslint-disable-next-line
       // @ts-ignore
@@ -136,6 +140,7 @@ export default function DashboardMainBottomTabs() {
       <Tab.Screen name="History" component={HistoryTabStack} />
       <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       <Tab.Screen name="ShoppingCart" component={ShoppingCartStack} />
+      <Tab.Screen name="Orders" component={OrdersStack} />
     </Tab.Navigator>
   );
 }

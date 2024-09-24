@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
-import { Button, Divider, IconButton } from 'react-native-paper';
+import { Divider, IconButton } from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import { useIsFocused } from '@react-navigation/native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,6 +9,7 @@ import colors from 'tailwindcss/colors';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
@@ -49,31 +50,6 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
     <React.Fragment>
       <ScrollView tw="px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
         <View tw="flex-1 pb-8">
-          {/* <Button
-            onPress={() => {
-              useMarketplaceCartStore.getState().addItem({
-                id: Math.random(),
-                cropName: 'Wheat',
-                movementCode: 'WHT2024',
-                sellerName: 'John Doe Farms',
-                shelfLife: 2,
-                cropImage: 'crop_images/apple.png',
-                crateTag: 'CRT123456',
-                weight: 2,
-                price: 1.75,
-                coolingUnitId: 5,
-                coolingUnitName: 'Unit A',
-                pickupDistance: 7.5,
-                quantity: 1,
-                coolingUserCode: 'FM12',
-                companyName: 'Mosano',
-                currencySymbol: '$',
-              });
-            }}
-          >
-            Add
-          </Button> */}
-
           <FlatList
             data={datums}
             keyExtractor={(item) => `marketplace-shopping-cart-list-item-#${item.id}`}

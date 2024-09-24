@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
+import { type NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import { Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,6 +22,9 @@ import DeliveryInformationBottomSheet, {
 
 // TODO → add text content to translations
 function OrderOverview() {
+  // eslint-disable-next-line
+  const navigation = useNavigation<NavigationProp<any>>();
+
   return (
     <React.Fragment>
       <ScrollView tw="px-4 bg-white" showsVerticalScrollIndicator={false}>
@@ -111,7 +114,12 @@ function OrderOverview() {
           tw="w-10/12"
           onPress={(evt) => {
             evt.stopPropagation();
-            // TODO
+            navigation.navigate('Main', {
+              screen: 'Orders',
+              params: {
+                screen: 'OrdersRoot',
+              },
+            });
           }}
         >
           Consult My Orders

@@ -79,6 +79,9 @@ export default {
       MarketplaceFilters: 'Filters', // TODO
       MarketplaceAllTab: 'All', // TODO
       MarketplaceFavoritesTab: 'Favorites', // TODO
+      Orders: 'Orders', // TODO
+      MyOrders: 'My Orders', // TODO
+      OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'नॉलेज हब',
       QuitTutorial: 'ट्यूटोरियल छोड़ें',
       FAQ: 'अधिकतर पूछे जाने वाले सवाल',

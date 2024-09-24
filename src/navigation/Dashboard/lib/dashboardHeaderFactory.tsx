@@ -14,6 +14,7 @@ import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
 import type { AnalyticsStackRoutePaths } from '../Main/AnalyticsStack';
 import type { MarketplaceRoutePaths } from '../Main/MarketplaceStack';
+import type { OrdersRoutePaths } from '../Main/OrdersStack';
 
 import { useNotifications } from './notifications';
 import { useCartItems } from '#screens/Dashboard/Main/ShoppingCart/store';
@@ -94,7 +95,8 @@ type BottomNavRoutePaths =
   | MarketPriceTabsRoutePaths
   | CoolingUnitsTabsRoutePaths
   | AnalyticsStackRoutePaths
-  | MarketplaceRoutePaths;
+  | MarketplaceRoutePaths
+  | OrdersRoutePaths;
 
 export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'RootMainTabStack',
@@ -108,4 +110,7 @@ export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'Analytics',
   'Marketplace',
   'MarketplaceRoot',
+  'Orders',
+  'OrdersRoot',
+  'OrdersDetails',
 ];

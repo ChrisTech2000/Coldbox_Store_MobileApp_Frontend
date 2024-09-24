@@ -32,6 +32,7 @@ const BOTTOM_SHEET_ITEMS: Array<keyof DashboardMainRoutes> = [
   'MarketPrice',
   'History',
   'CoolingUnits',
+  'Orders',
 ];
 
 const ICON_SIZE = 24;
@@ -150,8 +151,15 @@ const BottomSheet = ({
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
             onPress={(evt) => {
               evt.stopPropagation();
-              navigation.navigate(item.name);
               modalRef.current?.close();
+              switch (item.name) {
+                case 'History':
+                  return navigation.navigate('History', { screen: 'RootHistoryTabStack' });
+                case 'Orders':
+                  return navigation.navigate('Orders', { screen: 'OrdersRoot' });
+                default:
+                  return navigation.navigate(item.name);
+              }
             }}
           />
         )}
