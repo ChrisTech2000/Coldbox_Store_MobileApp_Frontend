@@ -9,6 +9,8 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { Button } from '#ui/components/Button';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { GenericError } from '#ui/components/GenericError';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { paperTheme } from '#ui/lib/theme';
@@ -139,4 +141,9 @@ function _PortalsWrapper() {
   );
 }
 
-export default withSafeArea(OrderOverview);
+export default withSafeArea(
+  withErrorBoundary(OrderOverview, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

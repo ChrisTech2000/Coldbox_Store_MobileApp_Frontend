@@ -7,6 +7,8 @@ import { Divider } from 'react-native-paper';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { GenericError } from '#ui/components/GenericError';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
@@ -103,4 +105,9 @@ function _PortalsWrapper() {
   );
 }
 
-export default withSafeArea(OrdersDetails);
+export default withSafeArea(
+  withErrorBoundary(OrdersDetails, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

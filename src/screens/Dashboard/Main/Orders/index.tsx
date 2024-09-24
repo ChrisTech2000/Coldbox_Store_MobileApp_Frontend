@@ -7,6 +7,8 @@ import colors from 'tailwindcss/colors';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { GenericError } from '#ui/components/GenericError';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
@@ -77,8 +79,6 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   );
 }
 
-export default withSafeArea(OrdersRoot);
-
 const MOCKS = [
   {
     date: '2024-09-24T15:39:07+00:00',
@@ -91,3 +91,10 @@ const MOCKS = [
     orderTotal: 11,
   },
 ];
+
+export default withSafeArea(
+  withErrorBoundary(OrdersRoot, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);
