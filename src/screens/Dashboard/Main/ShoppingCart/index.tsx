@@ -10,11 +10,12 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import { useTranslationUtils } from '#i18n/utils';
-import { useCartItems, useMarketplaceCartStore } from './store';
 import { API_BASE_URL } from '#constants/environment';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
@@ -23,6 +24,8 @@ import CartItemInput from './components/CartItemInput';
 import CompanyBottomSheet, {
   type CompanyBottomSheetDatum,
 } from '../Marketplace/components/CompanyBottomSheet';
+
+import { useCartItems, useMarketplaceCartStore } from './store';
 
 // TODO → add text content to translations
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
@@ -181,4 +184,9 @@ function _PortalsWrapper() {
   );
 }
 
-export default withSafeArea(ShoppingCartRoot);
+export default withSafeArea(
+  withErrorBoundary(ShoppingCartRoot, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

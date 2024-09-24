@@ -14,9 +14,11 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { ECoolingUnitMetric, EPricingType } from '#types/global';
 
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
@@ -266,4 +268,9 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   );
 }
 
-export default withSafeArea(ProduceDetails);
+export default withSafeArea(
+  withErrorBoundary(ProduceDetails, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

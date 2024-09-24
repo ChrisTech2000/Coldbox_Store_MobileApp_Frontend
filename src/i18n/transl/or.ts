@@ -19,6 +19,10 @@ export default {
     other: 'ଅନ୍ୟ',
   },
   navigation: {
+    error: {
+      errorMessage: 'ଓହ୍... ଲାଗୁଛି କିଛି ଭୁଲ୍ ହେଇଯାଇଛି।',
+      tryAgainMessage: 'ଦୟାକରି ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।',
+    },
     auth: {
       SignIn: 'ଲଗଇନ୍ କରନ୍ତୁ',
       SignUp: 'ସାଇନ୍ ଅପ୍ କରନ୍ତୁ',

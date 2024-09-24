@@ -1,23 +1,25 @@
 import React, { type PropsWithChildren, useMemo, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { Divider, IconButton, List, Switch, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Controller, useForm } from 'react-hook-form';
 import colors from 'tailwindcss/colors';
 
-import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
-import { Text } from '#ui/components/Text';
-import { Sup } from '#ui/components/SuperscriptText';
-import { Input } from '#ui/components/Input';
-import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
+import { Input } from '#ui/components/Input';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { Sup } from '#ui/components/SuperscriptText';
+import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import { useTranslationUtils } from '#i18n/utils';
+import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import { currenciesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
-import { paperTheme } from '#ui/lib/theme';
-import { cn } from '#ui/lib/cn';
 
 import SellInMarketplaceModal from '../CheckIn/components/SellInMarketplaceModal';
 import { useMarketplaceSettingsStore } from './store';
@@ -229,4 +231,9 @@ _InputWrapper.defaultProps = {
   renderChildren: true,
 };
 
-export default withSafeArea(EditCrateWeightAndPricing);
+export default withSafeArea(
+  withErrorBoundary(EditCrateWeightAndPricing, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

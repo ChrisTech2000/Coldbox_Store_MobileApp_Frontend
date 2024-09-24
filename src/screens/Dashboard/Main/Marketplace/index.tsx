@@ -4,17 +4,19 @@ import { useIsFocused } from '@react-navigation/native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { API_BASE_URL } from '#constants/environment';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
+import AddToCartModal from './components/AddToCartModal';
+import CompanyBottomSheet from './components/CompanyBottomSheet';
 import MarketplaceFiltersSection from './components/MarketplaceFiltersSection';
 import MarketplaceItemWrapper from './components/MarketplaceItem';
-import CompanyBottomSheet from './components/CompanyBottomSheet';
-import AddToCartModal from './components/AddToCartModal';
 
 function MarketplaceRoot() {
   return (
@@ -82,7 +84,12 @@ function _PortalsWrapper() {
   );
 }
 
-export default withSafeArea(MarketplaceRoot);
+export default withSafeArea(
+  withErrorBoundary(MarketplaceRoot, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);
 
 const MOCKS = [
   {

@@ -4,10 +4,12 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
-import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
-import { Text } from '#ui/components/Text';
-import { Sup } from '#ui/components/SuperscriptText';
+import { GenericError } from '#ui/components/GenericError';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { Sup } from '#ui/components/SuperscriptText';
+import { Text } from '#ui/components/Text';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -23,14 +25,13 @@ import {
 } from '#types/global';
 
 import { CrateSetupModal } from '../components/CrateSetupModal';
-import CropDetails from './CropDetails';
+import { useCrateWeightPricingBridge } from '../CrateWeightAndPricing';
 import CratesAmount from './CratesAmount';
-import PlannedDays from './PlannedDays';
+import CropDetails from './CropDetails';
 import CropHarvest from './CropHarvest';
 import FloatingFooter from './FloatingFooter';
+import PlannedDays from './PlannedDays';
 import Sellable from './Sellable';
-
-import { useCrateWeightPricingBridge } from '../CrateWeightAndPricing';
 
 export type SetupSchema = {
   numberOfCrates: number;
@@ -354,4 +355,9 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   );
 }
 
-export default withSafeArea(CrateSetup);
+export default withSafeArea(
+  withErrorBoundary(CrateSetup, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

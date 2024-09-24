@@ -2,9 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 import { Divider } from 'react-native-paper';
 
+import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { Button } from '#ui/components/Button';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
@@ -50,4 +52,9 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   );
 }
 
-export default withSafeArea(OrderDetails);
+export default withSafeArea(
+  withErrorBoundary(OrderDetails, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

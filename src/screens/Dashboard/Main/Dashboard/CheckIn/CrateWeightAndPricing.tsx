@@ -1,24 +1,26 @@
 import React, { useEffect, useRef, useState, type PropsWithChildren } from 'react';
-import { FlatList, View } from 'react-native';
-import { Checkbox, Divider, IconButton, List, Switch, TextInput } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { FlatList, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Checkbox, Divider, IconButton, List, Switch, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
-import { Text } from '#ui/components/Text';
-import { Sup } from '#ui/components/SuperscriptText';
-import { Input } from '#ui/components/Input';
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
+import { Input } from '#ui/components/Input';
+import { Sup } from '#ui/components/SuperscriptText';
+import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useTranslationUtils } from '#i18n/utils';
-import { paperTheme } from '#ui/lib/theme';
-import { cn } from '#ui/lib/cn';
+import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 
 import SellInMarketplaceModal from './components/SellInMarketplaceModal';
 
@@ -361,7 +363,12 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   );
 }
 
-export default withSafeArea(CrateWeightAndPricing);
+export default withSafeArea(
+  withErrorBoundary(CrateWeightAndPricing, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);
 
 function _InputWrapper(props: PropsWithChildren<{ renderChildren: boolean; adjust: boolean }>) {
   const { renderChildren, adjust, children } = props;

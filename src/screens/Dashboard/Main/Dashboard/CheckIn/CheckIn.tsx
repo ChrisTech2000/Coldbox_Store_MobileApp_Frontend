@@ -8,10 +8,13 @@ import FastImage from 'react-native-fast-image';
 import { Divider, Icon, IconButton, List } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
+import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
+import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { ProduceCrate, useCheckInStore } from '#stores/checkIn';
@@ -20,17 +23,16 @@ import { useManagementStore } from '#stores/management';
 import { ECoolingUnitMetric, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CrateSetupModal } from './components/CrateSetupModal';
-import InAppNotifications from '#common/InAppNotifications';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
-import RBAC from '#common/RBAC';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -431,4 +433,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   );
 }
 
-export default withSafeArea(CheckIn);
+export default withSafeArea(
+  withErrorBoundary(CheckIn, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);
