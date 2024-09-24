@@ -83,6 +83,9 @@ export default {
       MarketplaceFilters: 'Filters', // TODO
       MarketplaceAllTab: 'All', // TODO
       MarketplaceFavoritesTab: 'Favorites', // TODO
+      Orders: 'Orders', // TODO
+      MyOrders: 'My Orders', // TODO
+      OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Centre de connaissances',
       QuitTutorial: 'Quitter le tutoriel',
       FAQ: 'FAQ',

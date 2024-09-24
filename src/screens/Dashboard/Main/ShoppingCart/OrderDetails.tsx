@@ -9,17 +9,19 @@ import { Text } from '#ui/components/Text';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
+
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
 import PaymentMethod from './components/PaymentMethod';
 
 // TODO → add text content to translations
-function OrderDetails() {
+function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   return (
     <ScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
       <View tw="flex-1 pb-8 space-y-6">
         <View>
-          <OrderDetailsCard />
+          <OrderDetailsCard heading="Order" totalLabel="Total" />
         </View>
         <View>
           <OrderPickupMethod />
@@ -39,7 +41,7 @@ function OrderDetails() {
             uppercase
             onPress={(evt) => {
               evt.stopPropagation();
-              // TODO
+              props.navigation.navigate('OrderOverview');
             }}
           >
             Pay

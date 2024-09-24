@@ -1,5 +1,6 @@
 import React from 'react';
 import { SectionList, View } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
@@ -67,6 +68,16 @@ function MarketplaceRoot() {
         </View>
       </ScrollView>
 
+      <_PortalsWrapper />
+    </React.Fragment>
+  );
+}
+
+function _PortalsWrapper() {
+  const isFocused = useIsFocused();
+  if (!isFocused) return null;
+  return (
+    <React.Fragment>
       <AddToCartModal />
       <CompanyBottomSheet />
     </React.Fragment>

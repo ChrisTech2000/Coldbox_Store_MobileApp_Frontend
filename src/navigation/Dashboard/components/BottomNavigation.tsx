@@ -9,9 +9,10 @@ import {
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from 'tailwindcss/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Modalize } from 'react-native-modalize';
 import { Divider, List } from 'react-native-paper';
+import colors from 'tailwindcss/colors';
 
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { Text } from '#ui/components/Text';
@@ -32,6 +33,7 @@ const BOTTOM_SHEET_ITEMS: Array<keyof DashboardMainRoutes> = [
   'MarketPrice',
   'History',
   'CoolingUnits',
+  'Orders',
 ];
 
 const ICON_SIZE = 24;
@@ -65,51 +67,56 @@ function BottomNavigation({ state, navigation, descriptors }: BottomTabBarProps)
   );
 }
 
-const BottomNavBar = ({
-  state,
-  descriptors,
-  navigation,
-  modalRef,
-  tabBarStyle,
-}: Pick<BottomTabBarProps, 'state' | 'descriptors' | 'navigation'> & {
-  modalRef: React.RefObject<Modalize>;
-  tabBarStyle: StyleProp<ViewStyle>;
-}) => (
-  <View tw="absolute bottom-0 left-0 z-[9999] w-full" style={tabBarStyle}>
-    <SkiaShadow blur={3} dx={0} dy={2} color={colors.zinc[300]} borderRadius={16}>
-      <View tw="flex-row items-center justify-evenly h-24 px-2 bg-white">
-        {filterBottomNavItems(state).map((route, idx) => (
+function BottomNavBar(
+  props: Pick<BottomTabBarProps, 'state' | 'descriptors' | 'navigation'> & {
+    modalRef: React.RefObject<Modalize>;
+    tabBarStyle: StyleProp<ViewStyle>;
+  }
+) {
+  const { state, descriptors, navigation, modalRef, tabBarStyle } = props;
+
+  const { bottom } = useSafeAreaInsets();
+
+  return (
+    <View
+      tw="absolute bottom-0 left-0 z-[9999] w-full"
+      style={[tabBarStyle, { paddingBottom: bottom }]}
+    >
+      <SkiaShadow blur={3} dx={0} dy={2} color={colors.zinc[300]} borderRadius={16}>
+        <View tw="flex-row items-center justify-evenly h-24 px-2 bg-white">
+          {filterBottomNavItems(state).map((route, idx) => (
+            <TabItem
+              key={route.key}
+              title={route.name}
+              onPress={(evt: GestureResponderEvent) => {
+                evt.stopPropagation();
+                navigation.navigate(route.name);
+                modalRef.current?.close();
+              }}
+              renderIcon={descriptors?.[route.key]?.options?.tabBarIcon}
+              isFocused={state.index === idx}
+            />
+          ))}
           <TabItem
-            key={route.key}
-            title={route.name}
+            title="More"
             onPress={(evt: GestureResponderEvent) => {
               evt.stopPropagation();
-              navigation.navigate(route.name);
-              modalRef.current?.close();
+              modalRef.current?.open();
             }}
-            renderIcon={descriptors?.[route.key]?.options?.tabBarIcon}
-            isFocused={state.index === idx}
+            renderIcon={() => (
+              <MaterialCommunityIcon
+                name="dots-vertical"
+                color={state.index >= 3 ? colors.white : ICON_DEFAULT_COLOR}
+                size={ICON_SIZE}
+              />
+            )}
+            isFocused={state.index >= 3}
           />
-        ))}
-        <TabItem
-          title="More"
-          onPress={(evt: GestureResponderEvent) => {
-            evt.stopPropagation();
-            modalRef.current?.open();
-          }}
-          renderIcon={() => (
-            <MaterialCommunityIcon
-              name="dots-vertical"
-              color={state.index >= 3 ? colors.white : ICON_DEFAULT_COLOR}
-              size={ICON_SIZE}
-            />
-          )}
-          isFocused={state.index >= 3}
-        />
-      </View>
-    </SkiaShadow>
-  </View>
-);
+        </View>
+      </SkiaShadow>
+    </View>
+  );
+}
 
 const BottomSheet = ({
   state,
@@ -150,8 +157,15 @@ const BottomSheet = ({
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
             onPress={(evt) => {
               evt.stopPropagation();
-              navigation.navigate(item.name);
               modalRef.current?.close();
+              switch (item.name) {
+                case 'History':
+                  return navigation.navigate('History', { screen: 'RootHistoryTabStack' });
+                case 'Orders':
+                  return navigation.navigate('Orders', { screen: 'OrdersRoot' });
+                default:
+                  return navigation.navigate(item.name);
+              }
             }}
           />
         )}

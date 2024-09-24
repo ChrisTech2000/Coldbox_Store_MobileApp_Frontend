@@ -9,6 +9,7 @@ import {
 
 import ShoppingCart from '#screens/Dashboard/Main/ShoppingCart';
 import OrderDetails from '#screens/Dashboard/Main/ShoppingCart/OrderDetails';
+import OrderOverview from '#screens/Dashboard/Main/ShoppingCart/OrderOverview';
 
 import { useDashboardHeader } from '../lib/dashboardHeaderFactory';
 
@@ -17,6 +18,7 @@ import NavigatorHeader from '#navigation/components/NavigatorHeader';
 export type ShoppingCartStackRoutes = {
   Root: undefined;
   OrderDetails: undefined;
+  OrderOverview: undefined;
 };
 
 export type ShoppingCartStackRoutePaths = keyof ShoppingCartStackRoutes;
@@ -35,18 +37,22 @@ export default function ShoppingCartStack() {
   const dashboardHeaderFactory = useDashboardHeader();
 
   const screenOptions: ScreenOptions = useCallback(
-    (props) => ({
-      ...props,
-      headerShown: true,
-      header: (headerProps) => (
-        <NavigatorHeader
-          {...headerProps}
-          routeTitle="Shopping cart"
-          // eslint-disable-next-line react/prop-types
-          {...dashboardHeaderFactory(props.navigation.goBack)}
-        />
-      ),
-    }),
+    (props) => {
+      // eslint-disable-next-line react/prop-types
+      const routeName = props.route.name;
+      return {
+        ...props,
+        headerShown: routeName !== 'OrderOverview',
+        header: (headerProps) => (
+          <NavigatorHeader
+            {...headerProps}
+            routeTitle="Shopping cart"
+            // eslint-disable-next-line react/prop-types
+            {...dashboardHeaderFactory(props.navigation.goBack)}
+          />
+        ),
+      };
+    },
     [dashboardHeaderFactory]
   );
 
@@ -54,6 +60,7 @@ export default function ShoppingCartStack() {
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={ShoppingCart} />
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
+      <Stack.Screen name="OrderOverview" component={OrderOverview} />
     </Stack.Navigator>
   );
 }

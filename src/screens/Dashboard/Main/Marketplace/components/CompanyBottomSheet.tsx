@@ -14,7 +14,7 @@ import { Button } from '#ui/components/Button';
 import { useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
-type Datum = {
+export type CompanyBottomSheetDatum = {
   name: string;
   country: string;
   address: string;
@@ -23,13 +23,16 @@ type Datum = {
 };
 
 export default function CompanyBottomSheet() {
-  const [datum, setDatum] = useState<Datum | null>(null);
+  const [datum, setDatum] = useState<CompanyBottomSheetDatum | null>(null);
   const modalRef = useRef<Modalize>(null);
 
-  useAppEventListener<[Datum]>('DISPATCH_MARKETPLACE_COMPANY_MODAL', (company) => {
-    setDatum(company);
-    modalRef.current?.open();
-  });
+  useAppEventListener<[CompanyBottomSheetDatum]>(
+    'DISPATCH_MARKETPLACE_COMPANY_MODAL',
+    (company) => {
+      setDatum(company);
+      modalRef.current?.open();
+    }
+  );
 
   return (
     <Portal>
