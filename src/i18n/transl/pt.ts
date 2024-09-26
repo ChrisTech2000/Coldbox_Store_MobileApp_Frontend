@@ -160,11 +160,13 @@ export default {
     },
   },
   Auth: {
+    welcomePopup:
+      'Bem-vindo ao Coldtivate! Se for agricultor, comerciante ou estiver interessado em adquirir produtos armazenados nas câmaras frias, inscreva-se clicando em "Inscrever-se como utilizador de refrigeração ou consumidor". Se trabalha para uma empresa de refrigeração, entre em contacto com o seu responsável para verificar se a sua empresa está registada. Se estiver, o seu responsável deverá enviar-lhe um convite por SMS para se inscrever como empregado registado ou como operador. Caso contrário, pode registar a empresa e inscrever-se como empregado registado. Consulte a secção "Informações da App" para ver as FAQs.',
     Root: {
       welcome: 'Bem-vindo ao Coldtivate',
       signIn: 'Iniciar Sessão',
       signUpCompany: 'Registar como Empresa',
-      signUpCoolingUser: 'Registar como Utilizador de Refrigeração',
+      signUpCoolingUser: 'Registar como Utilizador de Refrigeração ou Consumidor',
       appInfo: 'Informações da App',
     },
     SignIn: {
@@ -183,7 +185,7 @@ export default {
         coolingUser: {
           label: 'Utilizador de Refrigeração',
           description:
-            'O utilizador da unidade de refrigeração. Agricultores, comerciantes, retalhistas que tenham acesso a um smartphone podem iniciar sessão aqui. Os utilizadores da unidade de refrigeração sem smartphone podem aceder às informações da app visitando uma unidade de refrigeração e interagindo com o operador.',
+            'O utilizador de refrigeração e o consumidor. Agricultores, comerciantes e retalhistas que têm acesso a um smartphone podem iniciar sessão aqui. Utilizadores de refrigeração sem smartphone podem aceder às informações da aplicação visitando uma unidade de refirgeração e interagindo com o operador. Os consumidores podem iniciar sessão aqui para concluir as suas compras.',
         },
         toasts: {
           login:
@@ -272,7 +274,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: 'Registar Utilizador de Refrigeração',
+        header: 'Registar como Utilizador de Refrigeração ou Consumidor',
         languageFieldName: 'idioma',
       },
     },

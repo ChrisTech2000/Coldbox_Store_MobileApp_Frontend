@@ -158,11 +158,13 @@ const en = {
     },
   },
   Auth: {
+    welcomePopup:
+      "Welcome to Coldtivate! If you are a farmer, a trader, or are interested in purchasing produce stored in the cold rooms, please sign up by clicking on 'Sign up as cooling user or consumer'. If you work for a cooling company, please contact your responsible to check whether your company is registered. If it is, your responsible should send you an SMS invite for you to sign up as a registered employee or as an operator. If not, you can sign up the company, and register as a registered employee. Please check the 'App info' section for FAQs.",
     Root: {
       welcome: 'Welcome to Coldtivate',
       signIn: 'Sign In',
       signUpCompany: 'Sign up as Company',
-      signUpCoolingUser: 'Sign up as Cooling User',
+      signUpCoolingUser: 'Sign Up as a Cooling User or Consumer',
       appInfo: 'App Info',
     },
     SignIn: {
@@ -181,7 +183,7 @@ const en = {
         coolingUser: {
           label: 'Cooling User',
           description:
-            'The cold room user. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator.',
+            'The cold room user and consumer. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator. Consumers can log in here to complete purchases.',
         },
         toasts: {
           login:
@@ -269,7 +271,7 @@ const en = {
         },
       },
       SignUpCoolingUser: {
-        header: 'Sign Up Cooling User',
+        header: 'Sign Up as a Cooling User or Consumer',
         languageFieldName: 'language',
       },
     },
