@@ -25,6 +25,7 @@ import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
 type ManagementMode = 'check-in' | 'check-out';
 
@@ -133,7 +134,10 @@ export function OperatorActions({
   ];
 
   return (
-    <View tw="absolute right-4 bottom-2 flex flex-row-reverse items-center">
+    <View
+      style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}
+      tw="absolute right-4 bottom-2 flex flex-row-reverse items-center"
+    >
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
         <TouchableOpacity
           tw={cn(
@@ -149,7 +153,7 @@ export function OperatorActions({
           )}
         </TouchableOpacity>
       </SkiaShadow>
-      {isCrateManagementOpen && (
+      {isCrateManagementOpen ? (
         <View tw="flex flex-row">
           <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
             <TouchableOpacity
@@ -168,7 +172,7 @@ export function OperatorActions({
             </TouchableOpacity>
           </SkiaShadow>
         </View>
-      )}
+      ) : null}
 
       <Portal>
         <Modal visible={isModalOpen} onDismiss={onModalClose}>

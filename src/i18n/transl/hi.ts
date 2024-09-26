@@ -422,6 +422,7 @@ export default {
         checkIn: 'चेक-इन',
         days: 'दिन',
         day: 'दिन',
+        daysLeft: '{{amount}} दिन बचे',
         ttp: 'टीटीपी',
         numberOfCrates: 'क्रेट्स की संख्या',
         totalWeight: 'कुल वजन',
@@ -865,6 +866,15 @@ export default {
           creditCard: 'क्रेडिट कार्ड',
         },
       },
+      Coupons: {
+        emptyMessage: 'कोई कूपन अभी तक जोड़ा नहीं गया है',
+        addCoupon: 'कूपन जोड़ें',
+        code: 'कूपन कोड',
+        percentage: 'कूपन प्रतिशत',
+        revokeTitle: 'कूपन रद्द करना',
+        revokeMessage:
+          'क्या आप सुनिश्चित हैं कि आप इस कूपन को रद्द करना चाहते हैं? एक बार रद्द होने पर, इसका पुनः उपयोग नहीं किया जा सकेगा और छूट उपलब्ध नहीं होगी। यह कार्रवाई स्थायी है और इसे पूर्ववत नहीं किया जा सकता।',
+      },
     },
     AccountDetails: {
       popups: {
@@ -889,6 +899,10 @@ export default {
         sellerSettings: 'विक्रेता सेटिंग्स',
         buyerSettings: 'खरीदार सेटिंग्स',
         details: 'विवरण',
+      },
+      ContactsSharing: {
+        publicPhone: 'फोन नंबर सार्वजनिक करें',
+        publicEmail: 'ई-मेल सार्वजनिक करें',
       },
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',

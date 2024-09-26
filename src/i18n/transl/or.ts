@@ -422,6 +422,7 @@ export default {
         checkIn: 'ଚେକ୍-ଇନ୍',
         days: 'ଦିନ',
         day: 'ଦିନ',
+        daysLeft: '{{amount}} ଦିନ ବାକୀ',
         ttp: 'ଟିଟିପି',
         numberOfCrates: 'କ୍ରେଟ୍‌ଗୁଡିକର ସଂଖ୍ୟା',
         totalWeight: 'ମୋଟ ଓଜନ',
@@ -864,6 +865,15 @@ export default {
           creditCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ',
         },
       },
+      Coupons: {
+        emptyMessage: 'କୌଣସି କୁପନ ଏପର୍ଯ୍ୟନ୍ତ ଯୋଡାଯାଇନି',
+        addCoupon: 'କୁପନ ଯୋଡନ୍ତୁ',
+        code: 'କୁପନ କୋଡ୍',
+        percentage: 'କୁପନ ପ୍ରତିଶତ',
+        revokeTitle: 'କୁପନ ରଦ୍ଦ କରିବା',
+        revokeMessage:
+          'ଆପଣ ଏହି କୁପନ ରଦ୍ଦ କରିବାକୁ ନିଶ୍ଚିତ ତ? ଏକଥାରେ ରଦ୍ଦ କରାଯିବା ପରେ, ଏହା ପुनଃ ବ୍ୟବହାର କରାଯିବ ନାହିଁ ଏବଂ ଡିସକାଉଣ୍ଟ ପୁନଃ ଉପଲବ୍ଧ ହେବ ନାହିଁ। ଏହି କ୍ରିୟା ସ୍ଥାୟୀ ଏବଂ ତାକୁ ପୁନର୍ନିଧାରଣ କରାଯିବା ନାହିଁ।',
+      },
     },
     AccountDetails: {
       popups: {
@@ -888,6 +898,10 @@ export default {
         sellerSettings: 'ବିକ୍ରେତା ସେଟିଂସ୍',
         buyerSettings: 'କ୍ରେତା ସେଟିଂସ୍',
         details: 'ବିବରଣୀ',
+      },
+      ContactsSharing: {
+        publicPhone: 'ଫୋନ୍ ନମ୍ବର ସାଧାରଣ କରନ୍ତୁ',
+        publicEmail: 'ଇ-ମେଲ୍ ସାଧାରଣ କରନ୍ତୁ',
       },
       PayoutSettings: {
         addTitle: 'ଦୟାକରି ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା ପ୍ରବେଶ କରାନ୍ତୁ',

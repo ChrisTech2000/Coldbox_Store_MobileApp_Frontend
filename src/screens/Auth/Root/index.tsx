@@ -80,4 +80,4 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
   );
 }
 
-export default withSafeArea(AuthRoot, ['top', 'bottom']);
+export default withSafeArea(AuthRoot, ['top', 'bottom'], true);

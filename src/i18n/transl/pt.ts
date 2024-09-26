@@ -427,6 +427,7 @@ export default {
         days: 'dias',
         day: 'dia',
         ttp: 'TTP',
+        daysLeft: '{{amount}} dias restantes',
         numberOfCrates: 'Número de paletes',
         totalWeight: 'Peso Total',
         priceType: 'Tipo de preço',
@@ -869,6 +870,15 @@ export default {
           creditCard: 'Cartão de Crédito',
         },
       },
+      Coupons: {
+        emptyMessage: 'Nenhum cupom foi adicionado ainda',
+        addCoupon: 'Adicionar cupom',
+        code: 'Código do cupom',
+        percentage: 'Porcentagem do cupom',
+        revokeTitle: 'Revogando cupom',
+        revokeMessage:
+          'Tem certeza de que deseja revogar este cupom? Uma vez revogado, ele não poderá ser usado novamente e o desconto não estará mais disponível. Esta ação é permanente e não pode ser desfeita.',
+      },
     },
     AccountDetails: {
       popups: {
@@ -893,6 +903,10 @@ export default {
       },
       toasts: {
         success: 'Utilizador atualizado com sucesso',
+      },
+      ContactsSharing: {
+        publicPhone: 'Tornar o número de telefone público',
+        publicEmail: 'Tornar o e-mail público',
       },
       PayoutSettings: {
         addTitle: 'Por favor, insira as informações da sua conta bancária',

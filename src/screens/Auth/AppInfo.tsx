@@ -42,4 +42,4 @@ function AppInfo() {
   );
 }
 
-export default withSafeArea(AppInfo);
+export default withSafeArea(AppInfo, ['bottom'], true);

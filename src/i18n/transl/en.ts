@@ -420,6 +420,7 @@ const en = {
         checkIn: 'Check-in',
         days: 'days',
         day: 'day',
+        daysLeft: '{{amount}} days left',
         ttp: 'TTP',
         numberOfCrates: 'Number of crates',
         totalWeight: 'Total Weight',
@@ -860,6 +861,15 @@ const en = {
           creditCard: 'Credit Card',
         },
       },
+      Coupons: {
+        emptyMessage: 'No coupons has been added yet',
+        addCoupon: 'Add Coupon',
+        code: 'Coupon code',
+        percentage: 'Coupon percentage',
+        revokeTitle: 'Revoking Coupon',
+        revokeMessage:
+          'Are you sure you want to revoke this coupon? Once revoked, it cannot be used again and the discount will no longer be available. This action is permanent and cannot be undone.',
+      },
     },
     AccountDetails: {
       popups: {
@@ -884,6 +894,10 @@ const en = {
         sellerSettings: 'Seller Settings',
         buyerSettings: 'Buyer Settings',
         details: 'Details',
+      },
+      ContactsSharing: {
+        publicPhone: 'Make phone number public',
+        publicEmail: 'Make e-mail public',
       },
       PayoutSettings: {
         addTitle: 'Please insert your bank account information',

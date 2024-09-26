@@ -428,6 +428,7 @@ export default {
         checkIn: 'Enregistrement',
         days: 'jours',
         day: 'jour',
+        daysLeft: '{{amount}} jours restants',
         ttp: 'TTP',
         numberOfCrates: 'Nombre de caisses',
         totalWeight: 'Poids total',
@@ -874,6 +875,15 @@ export default {
           creditCard: 'Carte de Crédit',
         },
       },
+      Coupons: {
+        emptyMessage: "Aucun coupon n'a encore été ajouté",
+        addCoupon: 'Ajouter un coupon',
+        code: 'Code du coupon',
+        percentage: 'Pourcentage du coupon',
+        revokeTitle: 'Révoquer le coupon',
+        revokeMessage:
+          'Êtes-vous sûr de vouloir révoquer ce coupon ? Une fois révoqué, il ne pourra plus être utilisé et la réduction ne sera plus disponible. Cette action est permanente et ne peut pas être annulée.',
+      },
     },
     AccountDetails: {
       popups: {
@@ -898,6 +908,10 @@ export default {
         sellerSettings: 'Paramètres du vendeur',
         buyerSettings: "Paramètres de l'acheteur",
         details: 'Détails',
+      },
+      ContactsSharing: {
+        publicPhone: 'Rendre le numéro de téléphone public',
+        publicEmail: "Rendre l'e-mail public",
       },
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',

@@ -23,6 +23,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
 import MarketplaceSettingsButton from './components/MarketplaceSettingsButton';
+import isNil from 'lodash/isNil';
 
 function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   const { produce, coolingUnit, currency } = props.route.params;
@@ -184,12 +185,14 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                   produce.minimumRemainingShelfLife > 2 &&
                   'bg-yellow-400',
                 produce.minimumRemainingShelfLife <= 2 && 'bg-red-300',
-                (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
+                (isNil(produce.minimumRemainingShelfLife) ||
+                  produce.minimumRemainingShelfLife === -1) &&
                   'bg-gray-300'
               )}
               style={{
                 width: `${100 - percentage + (percentage > 1 ? 10 : 0)}%`,
                 opacity: 0.4,
+                maxWidth: '100%',
               }}
             />
             {percentage > 0 && (
@@ -199,8 +202,8 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                   produce.minimumRemainingShelfLife <= 7 &&
                     produce.minimumRemainingShelfLife > 2 &&
                     'bg-yellow-400',
-                  produce.minimumRemainingShelfLife <= 2 && 'bg-red-500',
-                  (!produce.minimumRemainingShelfLife ||
+                  produce.minimumRemainingShelfLife <= 2 && 'bg-red-700',
+                  (isNil(produce.minimumRemainingShelfLife) ||
                     produce.minimumRemainingShelfLife === -1) &&
                     'bg-gray-300'
                 )}
@@ -272,5 +275,7 @@ export default withSafeArea(
   withErrorBoundary(ProduceDetails, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );

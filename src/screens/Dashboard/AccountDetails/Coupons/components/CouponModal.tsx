@@ -60,7 +60,7 @@ export default function CouponModal(props: {
         <KeyboardAwareScrollView tw="pb-7 pt-4" showsVerticalScrollIndicator={false}>
           <View tw="px-4 space-y-5">
             <View>
-              <Text tw="text-base mb-1.5">Coupon code</Text>
+              <Text tw="text-base mb-1.5">{t('Dashboard.Management.Coupons.code')}</Text>
               <Controller
                 control={form.control}
                 name="code"
@@ -77,7 +77,7 @@ export default function CouponModal(props: {
 
             <View>
               <View tw="flex-row space-x-1 mb-1.5">
-                <Text tw="text-base">Coupon percentage</Text>
+                <Text tw="text-base">{t('Dashboard.Management.Coupons.percentage')}</Text>
                 <Sup>(%)</Sup>
               </View>
               <Controller

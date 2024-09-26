@@ -420,6 +420,7 @@ export default {
         selectAll: 'બધા પસંદ કરો',
         checkIn: 'ચેક-ઇન',
         days: 'દિવસ',
+        daysLeft: '{{amount}} દિવસો બાકી',
         day: 'દિવસ',
         ttp: 'ટીટીપી',
         numberOfCrates: 'કરેટ્સની સંખ્યા',
@@ -859,6 +860,15 @@ export default {
           creditCard: 'ક્રેડિટ કાર્ડ',
         },
       },
+      Coupons: {
+        emptyMessage: 'કોઈ કૂપન હજુ સુધી ઉમેરવામાં આવ્યું નથી',
+        addCoupon: 'કૂપન ઉમેરો',
+        code: 'કૂપન કોડ',
+        percentage: 'કૂપન ટકા',
+        revokeTitle: 'કૂપન રદ કરવો',
+        revokeMessage:
+          'શું તમે ખાતરી છો કે તમે આ કૂપન રદ કરવા માંગો છો? એકવાર રદ કરવામાં આવે, તે ફરીથી ઉપયોગમાં લેવાઈ શકતું નથી અને છૂટ પણ ઉપલબ્ધ રહેશે નહીં. આ ક્રિયા શાશ્વત છે અને તેને રદ કરી શકાયતું નથી.',
+      },
     },
     AccountDetails: {
       popups: {
@@ -883,6 +893,10 @@ export default {
         sellerSettings: 'વિક્રેતા સેટિંગ્સ',
         buyerSettings: 'ખરીદદાર સેટિંગ્સ',
         details: 'વિગતવાર',
+      },
+      ContactsSharing: {
+        publicPhone: 'ફોન નંબર જાહેર કરો',
+        publicEmail: 'ઈ-મેઇલ જાહેર કરો',
       },
       PayoutSettings: {
         addTitle: 'કૃપા કરીને તમારી બેંક એકાઉન્ટની માહિતી દાખલ કરો',

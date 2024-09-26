@@ -92,4 +92,4 @@ function PasswordRecoveryRequest() {
   );
 }
 
-export default withSafeArea(PasswordRecoveryRequest);
+export default withSafeArea(PasswordRecoveryRequest, ['bottom'], true);

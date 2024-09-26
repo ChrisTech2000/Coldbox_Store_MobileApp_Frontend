@@ -437,5 +437,7 @@ export default withSafeArea(
   withErrorBoundary(CheckIn, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );
