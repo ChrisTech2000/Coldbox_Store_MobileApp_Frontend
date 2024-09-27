@@ -305,7 +305,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
         <Divider tw="bg-gray-400" />
 
         {crates.some((crate) => crate.isSellable) ? (
-          <View tw="pb-14">
+          <View tw="pb-20">
             <View tw="flex flex-row space-x-1 mt-6 mb-2">
               <Text tw="text-base">
                 {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice')}

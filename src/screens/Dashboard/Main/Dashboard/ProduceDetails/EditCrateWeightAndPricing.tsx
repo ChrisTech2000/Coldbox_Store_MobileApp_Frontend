@@ -21,6 +21,8 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
+import { useAuthStore } from '#stores/auth';
+import { ERoles } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from '../CheckIn/components/SellInMarketplaceModal';
@@ -36,11 +38,11 @@ type FormValues<T = string> = {
   price: T | undefined;
 };
 
-// TODO: is weight actually editable in this screen? By everyone? Just operators?
 function EditCrateWeightAndPricing(
   props: ProduceDetailsStackRouteProps<'EditCrateWeightAndPricing'>
 ) {
   const { params } = props.route;
+  const { user } = useAuthStore();
 
   const { t, zodResolver } = useTranslationUtils();
 
@@ -190,12 +192,12 @@ function EditCrateWeightAndPricing(
                               form.setValue(`crates.${i}.weight`, text);
                             }
                           }}
-                          disabled={isDisabled}
+                          disabled={isDisabled || user?.role !== ERoles.OPERATOR}
                           left={
                             <TextInput.Icon
                               icon="minus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled}
+                              disabled={isDisabled || user?.role !== ERoles.OPERATOR}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
@@ -212,7 +214,7 @@ function EditCrateWeightAndPricing(
                             <TextInput.Icon
                               icon="plus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled}
+                              disabled={isDisabled || user?.role !== ERoles.OPERATOR}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
@@ -260,7 +262,7 @@ function EditCrateWeightAndPricing(
         <Divider tw="bg-gray-400" />
 
         {crates.some((crate) => crate.isSellable) ? (
-          <View tw="pb-14">
+          <View tw="pb-20">
             <View tw="flex flex-row space-x-1 mt-6 mb-2">
               <Text tw="text-base">
                 {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice')}
