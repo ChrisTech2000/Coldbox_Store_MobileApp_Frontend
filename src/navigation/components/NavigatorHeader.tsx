@@ -21,7 +21,7 @@ export default function NavigatorHeader(props: NavigationHeaderProps) {
     enableHardwareBack: true,
     OverlayComponent: DrawerOverlay,
     maskAllowInteraction: true,
-    onPressMask: () =>  navigation.dispatch(DrawerActions.openDrawer()),
+    onPressMask: () => navigation.dispatch(DrawerActions.openDrawer()),
   });
 
   return (

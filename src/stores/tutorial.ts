@@ -7,5 +7,6 @@ interface TutorialStore {
 
 export const useTutorialStore = create<TutorialStore>((set) => ({
   isTutorialActive: false,
-  toggleTutorial: (value) => set((state) => ({ isTutorialActive: value ?? !state.isTutorialActive })),
+  toggleTutorial: (value) =>
+    set((state) => ({ isTutorialActive: value ?? !state.isTutorialActive })),
 }));

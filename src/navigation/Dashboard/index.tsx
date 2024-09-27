@@ -68,7 +68,7 @@ function DashboardNavigationRouter() {
   );
 
   useNotificationOpenSurveyListener();
-  
+
   return (
     <NavigationDrawer.Navigator
       initialRouteName="Main"

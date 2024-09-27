@@ -123,13 +123,10 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   useEffect(() => {
     if (isTutorialOn) start();
-  }, [isTutorialOn])
+  }, [isTutorialOn]);
 
   return (
-    <View
-      tw="absolute bottom-0 top-0 right-0 left-0"
-      style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}
-    >
+    <View tw="absolute bottom-0 top-0 right-0 left-0" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}>
       <Filters
         sortingMenu={
           <SortingMenu
@@ -147,9 +144,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-        loadingFarmerDashboardProduces ||
-        loadingOperatorDashboardProduces ||
-        areCoolingUnitsLoading ? (
+      loadingFarmerDashboardProduces ||
+      loadingOperatorDashboardProduces ||
+      areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>

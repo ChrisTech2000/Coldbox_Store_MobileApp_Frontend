@@ -4,7 +4,10 @@ import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { PaperProvider, Portal } from 'react-native-paper';
-import { enableExperimentalLayoutAnimation, WalkthroughProvider } from "react-native-interactive-walkthrough"
+import {
+  enableExperimentalLayoutAnimation,
+  WalkthroughProvider,
+} from 'react-native-interactive-walkthrough';
 
 enableExperimentalLayoutAnimation();
 import InAppNotifications from './common/InAppNotifications';

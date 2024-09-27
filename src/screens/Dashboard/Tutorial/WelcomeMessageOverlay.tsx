@@ -1,13 +1,13 @@
-import React from "react";
-import { Modal, View } from "react-native";
-import { IOverlayComponentProps } from "react-native-interactive-walkthrough";
+import React from 'react';
+import { Modal, View } from 'react-native';
+import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import Logo from '#assets/images/coldtivate_logo.svg';
 
-import { useTranslationUtils } from "#i18n/utils";
+import { useTranslationUtils } from '#i18n/utils';
 
-import { Button } from "#ui/components/Button";
-import { Text } from "#ui/components/Text";
+import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
 
 export const WelcomeMessageOverlay = ({ next, isWalkthroughOn, stop }: IOverlayComponentProps) => {
   const { t } = useTranslationUtils();
@@ -18,14 +18,13 @@ export const WelcomeMessageOverlay = ({ next, isWalkthroughOn, stop }: IOverlayC
         <View tw="bg-white rounded-lg w-[85%] h-auto p-4 items-center">
           <Logo width={50} height={50} tw="mb-4" />
 
-          {t('tutorial.welcome').split('. ').map((text) => (
-            <Text
-              key={`title-${text}`}
-              tw="text-base font-bold text-center"
-            >
-              {text}
-            </Text>
-          ))}
+          {t('tutorial.welcome')
+            .split('. ')
+            .map((text) => (
+              <Text key={`title-${text}`} tw="text-base font-bold text-center">
+                {text}
+              </Text>
+            ))}
 
           <View tw="flex flex-row space-x-2 mt-4">
             <Button

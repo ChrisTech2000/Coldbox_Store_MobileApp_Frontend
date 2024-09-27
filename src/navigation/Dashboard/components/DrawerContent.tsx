@@ -96,7 +96,7 @@ export default function DrawerContent(props: Props) {
                 evt.stopPropagation();
                 if (routeName === 'Tutorial') {
                   toggleTutorial(true);
-                  props.navigation.navigate('Dashboard')
+                  props.navigation.navigate('Dashboard');
                   return;
                 }
                 props.navigation.navigate(routeName);
