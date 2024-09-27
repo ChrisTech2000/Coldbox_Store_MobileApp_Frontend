@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
@@ -10,13 +11,16 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import { useTutorialStore } from '#stores/tutorial';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
+import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
+
+import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
-import { GenericError } from '#ui/components/GenericError';
 
 import { Filters, type Search } from '../components/Filters';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
@@ -32,6 +36,16 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
   const { user } = useAuthStore();
   const { company } = useManagementStore();
+  const { isTutorialOn } = useTutorialStore((store) => ({
+    isTutorialOn: store.isTutorialActive,
+    toggleTutorial: store.toggleTutorial,
+  }));
+
+  const { start } = useWalkthroughStep({
+    number: 1,
+    OverlayComponent: WelcomeMessageOverlay,
+    fullScreen: true,
+  });
 
   const { sorting } = useSortingStore();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
@@ -107,8 +121,15 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     else addRefreshDataFn(refreshOperatorDashboardProduces);
   }, [user?.role]);
 
+  useEffect(() => {
+    if (isTutorialOn) start();
+  }, [isTutorialOn])
+
   return (
-    <View tw="absolute bottom-0 top-0 right-0 left-0" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}>
+    <View
+      tw="absolute bottom-0 top-0 right-0 left-0"
+      style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}
+    >
       <Filters
         sortingMenu={
           <SortingMenu
@@ -126,9 +147,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-      loadingFarmerDashboardProduces ||
-      loadingOperatorDashboardProduces ||
-      areCoolingUnitsLoading ? (
+        loadingFarmerDashboardProduces ||
+        loadingOperatorDashboardProduces ||
+        areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>

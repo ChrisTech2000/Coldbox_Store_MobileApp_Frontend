@@ -16,6 +16,7 @@ import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
+import { useTutorialStore } from '#stores/tutorial';
 
 import type { DashboardRoutes } from '../index';
 
@@ -55,6 +56,7 @@ export default function DrawerContent(props: Props) {
   const { t } = useTranslationUtils();
   const focusedRoute = routeNames[index];
   const resetManagementStore = useManagementStore((store) => store.reset);
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   const onLogout = useCallback(() => {
     resetManagementStore();
@@ -92,6 +94,11 @@ export default function DrawerContent(props: Props) {
               active={focusedRoute === routeName}
               onPress={(evt) => {
                 evt.stopPropagation();
+                if (routeName === 'Tutorial') {
+                  toggleTutorial(true);
+                  props.navigation.navigate('Dashboard')
+                  return;
+                }
                 props.navigation.navigate(routeName);
               }}
               icon={datums.iconName}

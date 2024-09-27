@@ -6,7 +6,6 @@ import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
 import FAQ from '#screens/Dashboard/FAQ';
-import Tutorial from '#screens/Dashboard/Tutorial';
 
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
@@ -69,7 +68,7 @@ function DashboardNavigationRouter() {
   );
 
   useNotificationOpenSurveyListener();
-
+  
   return (
     <NavigationDrawer.Navigator
       initialRouteName="Main"
@@ -80,7 +79,6 @@ function DashboardNavigationRouter() {
       <NavigationDrawer.Screen name="AccountDetails" component={AccountDetailsStack} />
       <NavigationDrawer.Screen name="Management" component={ManagementStack} />
       <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHubStack} />
-      <NavigationDrawer.Screen name="Tutorial" component={Tutorial} />
       <NavigationDrawer.Screen name="FAQ" component={FAQ} />
       <NavigationDrawer.Screen name="About" component={AboutStack} />
     </NavigationDrawer.Navigator>
