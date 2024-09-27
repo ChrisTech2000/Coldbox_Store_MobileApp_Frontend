@@ -1,7 +1,9 @@
+import { currencies } from 'currencies.json';
 import isNil from 'lodash/isNil';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Checkbox, Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -23,10 +25,8 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from './components/SellInMarketplaceModal';
-import { currencies } from 'currencies.json';
 import { InfoModal } from './CrateSetup/InfoModal';
 
 type FormValues<T = string> = {
@@ -63,7 +63,6 @@ export function resetCrateWeightPricingBridge() {
   useCrateWeightPricingStore.getState().mutate({ crates: [], price: undefined });
 }
 
-// TODO → add text content to translations
 function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPricing'>) {
   const { params } = props.route;
 
@@ -102,7 +101,6 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     reValidateMode: 'onSubmit',
   });
 
-  console.log(form.formState.errors);
   const crateFields = useFieldArray({ control: form.control, name: 'crates' });
 
   const applyToAll = form.watch('applyToAll');

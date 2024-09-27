@@ -8,19 +8,14 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
-import type { CoolingUnit, Crate, DashboardProduce } from '#types/global';
 import type { TranslationPaths } from '#i18n/index';
+import type { CoolingUnit, Crate, DashboardProduce } from '#types/global';
 
 import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
-import MarketplaceSettings from '#screens/Dashboard/Main/Dashboard/ProduceDetails/MarketplaceSettings';
 import EditCrateWeightAndPricing from '#screens/Dashboard/Main/Dashboard/ProduceDetails/EditCrateWeightAndPricing';
 
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
-import {
-  type MarketplaceCrateDatum,
-  useMarketplaceSettingsStore,
-} from '#screens/Dashboard/Main/Dashboard/ProduceDetails/store';
 import { useTranslationUtils } from '#i18n/utils';
 
 export type ProduceDetailsStackRoutes = {
@@ -29,14 +24,11 @@ export type ProduceDetailsStackRoutes = {
     coolingUnit: CoolingUnit | null;
     currency: string;
   };
-  MarketplaceSettings: {
-    crates: Array<Crate>;
-    produceShelfLife: number;
-    companyCurrency: string;
-  };
   EditCrateWeightAndPricing: {
     companyCurrency: string;
-  } & MarketplaceCrateDatum;
+    currencySymbol: string;
+    crates: Array<Crate>;
+  };
 };
 
 export type ProduceDetailsStackRoutePaths = keyof ProduceDetailsStackRoutes;
@@ -51,7 +43,6 @@ type ScreenOptions = (props: {
 
 const NAVIGATOR_HEADERS: Record<ProduceDetailsStackRoutePaths, TranslationPaths | undefined> = {
   Root: 'navigation.bottomTabs.ProduceDetails',
-  MarketplaceSettings: 'navigation.bottomTabs.MarketplaceSettings',
   EditCrateWeightAndPricing: 'navigation.checkIn.CrateWeightAndPricing',
 };
 
@@ -82,12 +73,6 @@ export default function ProduceDetailsStack() {
               onPress={() => {
                 // eslint-disable-next-line react/prop-types
                 props.navigation.goBack();
-                switch (routeName) {
-                  case 'MarketplaceSettings':
-                    return useMarketplaceSettingsStore.getState().reset();
-                  default:
-                    return;
-                }
               }}
               size={22}
             />
@@ -100,7 +85,6 @@ export default function ProduceDetailsStack() {
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={ProduceDetails} />
-      <Stack.Screen name="MarketplaceSettings" component={MarketplaceSettings} />
       <Stack.Screen name="EditCrateWeightAndPricing" component={EditCrateWeightAndPricing} />
     </Stack.Navigator>
   );
