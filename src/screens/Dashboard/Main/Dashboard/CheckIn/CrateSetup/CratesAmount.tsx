@@ -29,7 +29,9 @@ export default function CratesAmount(props: {
 
   return (
     <View tw="flex-col mt-3">
-      <Text tw="text-base">{t('Dashboard.CrateManagement.CheckIn.Setup.numberOfCratesLabel')}</Text>
+      <Text tw="text-base">
+        {t('Dashboard.CrateManagement.CheckIn.Setup.numberOfCratesLabel')}*
+      </Text>
       <Controller
         name="numberOfCrates"
         control={formControl}
@@ -49,7 +51,7 @@ export default function CratesAmount(props: {
               mode="contained-tonal"
               icon="minus"
               size={30}
-              tw="rounded-md"
+              tw="rounded-md border border-green-primary"
               iconColor={paperTheme.colors.primary}
               containerColor={paperTheme.colors.secondaryContainer}
               onPress={(evt) => {
@@ -61,7 +63,7 @@ export default function CratesAmount(props: {
               mode="contained-tonal"
               icon="plus"
               size={30}
-              tw="rounded-md"
+              tw="rounded-md border border-green-primary"
               iconColor={paperTheme.colors.primary}
               containerColor={paperTheme.colors.secondaryContainer}
               onPress={(evt) => {

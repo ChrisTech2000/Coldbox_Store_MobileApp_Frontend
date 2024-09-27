@@ -96,6 +96,7 @@ export interface CheckInParams extends JsonObject {
       tag: string; // the id defined during checkout
       coolingUnitId: number;
       plannedDays: number | undefined;
+      isSellable?: boolean;
     }>;
     harvestDate: number;
     initialGrade: unknown; // TODO: figure out type

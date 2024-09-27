@@ -442,6 +442,7 @@ const en = {
       CheckIn: {
         emptyState: 'No boxes added yet',
         addCrates: 'Add Crates',
+        cratesAddedLabel: 'Crates Added',
         checkInWithCode: 'Check in with code',
         estimatedCost: 'Estimated Cost',
         pricing: 'Pricing',
@@ -450,6 +451,9 @@ const en = {
         emptyMessage: 'Please add at least one crate to your check in',
         noPlannedDaysMessage:
           'Missing planned days on some items. Cannot calculate estimated cost.',
+        seeMore: 'See more',
+        seeLess: 'See less',
+        listed: 'Listed',
         WithCode: {
           modalTitle: 'Create Check In from existing Check Out',
           modalDescription:
@@ -472,7 +476,7 @@ const en = {
           individualCrateWeightButton: 'Click here to edit individual crate weight',
           individualCrateIdButton: 'Click here to edit individual crate IDs',
           numberOfCratesLabel: 'Number of crates',
-          crateWeightLabel: 'General weight of crate',
+          crateWeightLabel: 'Crate weight and marketplace listing',
           pricePerDayAndCrateLabel: 'Price per day / crate',
           pricePerDayAndKilogramLabel: 'Price per day / kg',
           fixedPriceLabel: 'Fixed price',
@@ -484,6 +488,14 @@ const en = {
             yesterday: 'Yesterday',
             dayBefore: 'Two days back',
             evenBefore: 'Even Before',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'Apply to all',
+            list: 'List for sale',
+            addMore: 'Add more',
+            sellingPrice: 'Listing selling price',
+            potentialSellingPrice: 'Potential selling value',
+            info: 'The price configuration refers to product sale, not cooling storage fee.',
           },
           cratesError: 'Please insert a positive crate number',
           crateWeightError: 'Please insert a positive crate weight',

@@ -458,6 +458,10 @@ export default {
         emptyMessage: 'Veuillez ajouter au moins une caisse à votre enregistrement',
         noPlannedDaysMessage:
           'Des jours planifiés manquent pour certains articles. Impossible de calculer le coût estimé.',
+        seeMore: 'Voir plus',
+        seeLess: 'Voir moins',
+        listed: 'Listé',
+        cratesAddedLabel: 'Cagettes ajoutées',
         WithCode: {
           modalTitle: "Créer un enregistrement à partir d'un retrait existant",
           modalDescription:
@@ -480,7 +484,7 @@ export default {
           individualCrateWeightButton: 'Cliquez ici pour modifier le poids des caisses',
           individualCrateIdButton: 'Cliquez ici pour modifier les ID des caisses',
           numberOfCratesLabel: 'Nombre de caisses',
-          crateWeightLabel: 'Poids général de la caisse',
+          crateWeightLabel: 'Poids de la caisse et liste des marchés',
           pricePerDayAndCrateLabel: 'Prix par jour / caisse',
           pricePerDayAndKilogramLabel: 'Prix par jour / kg',
           fixedPriceLabel: 'Prix fixe',
@@ -492,6 +496,14 @@ export default {
             yesterday: 'Hier',
             dayBefore: 'Il y a deux jours',
             evenBefore: 'Même avant',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'Appliquer à tous',
+            list: 'Lister pour la vente',
+            addMore: 'Ajouter plus',
+            sellingPrice: 'Prix de vente à la liste',
+            potentialSellingPrice: 'Valeur potentielle de vente',
+            info: 'La configuration du prix se réfère à la vente du produit, pas aux frais de stockage au frais.',
           },
           cratesError: 'Veuillez saisir un nombre de caisses positif',
           crateWeightError: 'Veuillez saisir un poids de caisse positif',

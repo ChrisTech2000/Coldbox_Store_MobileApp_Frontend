@@ -456,6 +456,10 @@ export default {
         emptyMessage: 'Por favor, adicione pelo menos uma palete ao seu check-in',
         noPlannedDaysMessage:
           'Faltam dias planeados em alguns itens. Não é possível calcular o custo estimado.',
+        seeMore: 'Ver mais',
+        seeLess: 'Ver menos',
+        listed: 'Listado',
+        cratesAddedLabel: 'Paletes adicionadas',
         WithCode: {
           modalTitle: 'Criar Check-in a partir de Check-out existente',
           modalDescription:
@@ -478,7 +482,7 @@ export default {
           individualCrateWeightButton: 'Clique aqui para editar o peso das paletes',
           individualCrateIdButton: 'Clique aqui para editar os IDs das paletes',
           numberOfCratesLabel: 'Número de paletes',
-          crateWeightLabel: 'Peso geral da palete',
+          crateWeightLabel: 'Peso da palete e listagem no marketplace',
           pricePerDayAndCrateLabel: 'Preço por dia / palete',
           pricePerDayAndKilogramLabel: 'Preço por dia / kg',
           fixedPriceLabel: 'Preço fixo',
@@ -490,6 +494,14 @@ export default {
             yesterday: 'Ontem',
             dayBefore: 'Há dois dias',
             evenBefore: 'Ainda antes',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'Aplicar a todos',
+            list: 'Listar para venda',
+            addMore: 'Adicionar mais',
+            sellingPrice: 'Preço de venda',
+            potentialSellingPrice: 'Valor potencial de venda',
+            info: 'A configuração de preço refere-se à venda do produto, não à taxa de armazenamento a frio.',
           },
           cratesError: 'Por favor, insira um número positivo de paletes',
           crateWeightError: 'Por favor, insira um peso positivo para a palete',

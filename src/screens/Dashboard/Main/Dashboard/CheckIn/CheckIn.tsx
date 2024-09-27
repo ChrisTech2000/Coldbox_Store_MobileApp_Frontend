@@ -3,14 +3,12 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, ScrollView, TouchableHighlight, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
-import { Divider, Icon, IconButton, List } from 'react-native-paper';
+import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
-import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
@@ -24,7 +22,9 @@ import { ECoolingUnitMetric, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
+import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -32,7 +32,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
-import { CrateSetupModal } from './components/CrateSetupModal';
+import { CheckedInCard } from './components/CheckedInCard';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -49,7 +49,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     setCoolingUnit,
     setUser,
     resetCheckInStore,
-    setCheckOutCode,
   } = useCheckInStore();
 
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
@@ -69,7 +68,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   );
 
   const [isCodeModalOpen, setIsCodeModalOpen] = useState<boolean>(false);
-  const [isIdsModalOpen, setIsIdsModalOpen] = useState<number | undefined>(undefined);
+  const [indexForActiveOptions, setIndexForActiveOptions] = useState<number>(-1);
 
   const allCrates = useMemo(
     () => produces.flatMap((produce) => produce.crates),
@@ -125,19 +124,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       }
     },
     [produces, produces.length]
-  );
-
-  const getCratePrice = useCallback(
-    (crates: ProduceCrate['crates']) => {
-      const price = coolingUnit.commonPricingType.value;
-
-      if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.CRATES) {
-        return (price * crates.length).toFixed(2);
-      }
-
-      return crates.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
-    },
-    [coolingUnit]
   );
 
   const onSubmit = useCallback(async () => {
@@ -229,206 +215,201 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [coolingUnit, user, checkOutCode]);
 
   return (
-    <View tw="flex-1 p-4">
-      <List.Item
-        tw="p-0 m-0"
-        title={undefined}
-        left={() => (
-          <Text variant="TextMedium" tw="text-base max-w-[70%]" numberOfLines={1}>
-            {t('Dashboard.CrateManagement.coolingUserLabel')}
-          </Text>
-        )}
-        right={() => (
-          <Text variant="TextMedium" tw="text-base max-w-[30%]" numberOfLines={1}>
-            {user?.user.firstName}
-          </Text>
-        )}
-      />
-      <Divider tw="bg-gray-400 mt-2" />
-      <List.Item
-        tw="p-0 m-0 mt-3"
-        title={undefined}
-        left={() => (
-          <Text variant="TextMedium" tw="text-base">
-            {t('Dashboard.CrateManagement.coolingUnitLabel')}
-          </Text>
-        )}
-        right={() => (
-          <Text variant="TextMedium" tw="text-base">
-            {coolingUnit?.name}
-          </Text>
-        )}
-      />
-      <Divider tw="bg-gray-400 mt-2" />
-
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {produces.length === 0 ? (
-          <Text tw="text-base mt-6 self-center text-gray-600">
-            {t('Dashboard.CrateManagement.CheckIn.emptyState')}
-          </Text>
-        ) : null}
-
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={produces}
-          extraData={surveys}
-          keyExtractor={(item, itemIdx) => `crate-${item.crop.id}-#${itemIdx}`}
-          renderItem={({ item, index }) => (
-            <View>
-              <View tw="flex flex-row items-center justify-between">
-                <View tw="flex flex-row items-center space-x-2">
-                  <FastImage
-                    tw="w-20 h-20 my-1"
-                    source={{
-                      uri: `${API_BASE_URL}media/${item.crop.image}`,
-                      priority: index < 8 ? FastImage.priority.high : FastImage.priority.normal,
-                    }}
-                    resizeMode={FastImage.resizeMode.contain}
-                  />
-                  <Text variant="TextMedium" tw="text-lg w-32">
-                    {item.crop.name} — {item.crates.length}
-                  </Text>
-                </View>
-                <View tw="flex flex-row items-center space-x-2">
-                  {coolingUnit && (
-                    <Text variant="TextMedium">
-                      {currencySymbol}
-                      {getCratePrice(item.crates)}
-                      {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY
-                        ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
-                        : ''}
-                    </Text>
-                  )}
-                  <TouchableHighlight
-                    onPress={() => {
-                      if (produces.length === 1) setCheckOutCode(null);
-                      removeProduce(item);
-                    }}
-                  >
-                    <Icon source="trash-can-outline" size={30} color={colors.red[500]} />
-                  </TouchableHighlight>
-                </View>
-              </View>
-              {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) ? (
-                <FarmerSurvey
-                  cropId={item.crop.id}
-                  cropName={item.crop.name}
-                  farmerId={user.id}
-                  surveys={surveys}
-                />
-              ) : null}
-              {checkOutCode ? (
-                <React.Fragment>
-                  <IconButton
-                    tw="bg-gray-300 w-full px-1 self-center"
-                    icon={() => (
-                      <Text tw="w-full text-center font-bold text-wrap">
-                        {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateIdButton')}
-                      </Text>
-                    )}
-                    onPress={() => setIsIdsModalOpen(index)}
-                  />
-                  <CrateSetupModal
-                    setValue={(modalCrates) => setCrateIDs(modalCrates, item)}
-                    crates={item.crates.map((crate) => ({
-                      crateId: Number(crate.tag),
-                      crateWeight: crate.weight,
-                    }))}
-                    isOpen={isIdsModalOpen === index}
-                    numberOfCrates={allCrates.length}
-                    closeModal={() => setIsIdsModalOpen(undefined)}
-                    title={t('Dashboard.CrateManagement.CheckIn.Setup.modals.id')}
-                  />
-                </React.Fragment>
-              ) : null}
-              <Divider tw="w-full bg-gray-400" />
-            </View>
+    <View tw="flex-1">
+      <View tw="flex-1 p-4">
+        <List.Item
+          tw="p-0 m-0"
+          title={undefined}
+          left={() => (
+            <Text variant="TextMedium" tw="text-base max-w-[70%]" numberOfLines={1}>
+              {t('Dashboard.CrateManagement.coolingUserLabel')}
+            </Text>
           )}
-          nestedScrollEnabled
+          right={() => (
+            <Text variant="TextMedium" tw="text-base max-w-[30%]" numberOfLines={1}>
+              {user?.user.firstName}
+            </Text>
+          )}
         />
-      </ScrollView>
+        <Divider tw="bg-gray-400 mt-2" />
+        <List.Item
+          tw="p-0 m-0 mt-3"
+          title={undefined}
+          left={() => (
+            <Text variant="TextMedium" tw="text-base">
+              {t('Dashboard.CrateManagement.coolingUnitLabel')}
+            </Text>
+          )}
+          right={() => (
+            <Text variant="TextMedium" tw="text-base">
+              {coolingUnit?.name}
+            </Text>
+          )}
+        />
+        <Divider tw="bg-gray-400 mt-2" />
 
-      <View tw="space-y-2">
-        {!checkOutCode ? (
-          <Button
-            tw="w-full border-2 border-green-primary"
-            mode="outlined"
-            onPress={navigateToCropSelection}
-            icon="basket"
-            contentStyle="flex flex-row-reverse items-center"
-          >
-            {t('Dashboard.CrateManagement.CheckIn.addCrates')}
-          </Button>
-        ) : null}
-        {!produces || produces.length === 0 ? (
-          <Button
-            tw="w-full border-2 border-green-primary"
-            mode="outlined"
-            onPress={() => setIsCodeModalOpen(true)}
-            icon="ticket-confirmation-outline"
-            contentStyle="flex flex-row-reverse items-center"
-          >
-            {t('Dashboard.CrateManagement.CheckIn.checkInWithCode')}
-          </Button>
-        ) : null}
-
-        {!allHavePlannedDays && coolingUnit.commonPricingType.type !== EPricingType.FIXED ? (
-          <Text variant="TextMedium" tw="text-lg">
-            {t('Dashboard.CrateManagement.CheckIn.noPlannedDaysMessage')}
+        {produces.length > 0 ? (
+          <Text tw="text-base mt-4 mb-2 self-center">
+            {t('Dashboard.CrateManagement.CheckIn.cratesAddedLabel')}
           </Text>
         ) : null}
 
-        <View tw="flex-col mb-2">
-          <View tw="w-full flex flex-row items-center justify-between mb-2">
-            <Text variant="TextMedium" tw="text-lg font-bold">
-              {allHavePlannedDays
-                ? t('Dashboard.CrateManagement.CheckIn.estimatedCost')
-                : t('Dashboard.CrateManagement.CheckIn.pricing')}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {produces.length === 0 ? (
+            <Text tw="text-base mt-6 self-center text-gray-600">
+              {t('Dashboard.CrateManagement.CheckIn.emptyState')}
             </Text>
-            <Text variant="TextMedium" tw="text-lg font-bold">
-              {`${currencySymbol}${total}`}
-              {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY &&
-              !allHavePlannedDays
-                ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
-                : ''}
+          ) : null}
+
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={produces}
+            extraData={surveys}
+            keyExtractor={(item, itemIdx) => `crate-${item.crop.id}-#${itemIdx}`}
+            renderItem={({ item, index }) => (
+              <View>
+                <CheckedInCard
+                  item={item}
+                  index={index}
+                  coolingUnit={coolingUnit}
+                  currencySymbol={currencySymbol}
+                  checkOutCode={checkOutCode}
+                  totalCrates={allCrates.length}
+                  openOptionsModal={() => setIndexForActiveOptions(index)}
+                  setCrateIDs={setCrateIDs}
+                />
+                {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) ? (
+                  <FarmerSurvey
+                    cropId={item.crop.id}
+                    cropName={item.crop.name}
+                    farmerId={user.id}
+                    surveys={surveys}
+                  />
+                ) : null}
+              </View>
+            )}
+            nestedScrollEnabled
+          />
+        </ScrollView>
+
+        <View tw="space-y-2 mb-20">
+          {!checkOutCode ? (
+            <Button
+              tw="w-full border-2 border-green-primary"
+              mode="outlined"
+              onPress={navigateToCropSelection}
+              icon="basket"
+              contentStyle="flex flex-row-reverse items-center"
+            >
+              {t('Dashboard.CrateManagement.CheckIn.addCrates')}
+            </Button>
+          ) : null}
+          {!produces || produces.length === 0 ? (
+            <Button
+              tw="w-full border-2 border-green-primary"
+              mode="outlined"
+              onPress={() => setIsCodeModalOpen(true)}
+              icon="ticket-confirmation-outline"
+              contentStyle="flex flex-row-reverse items-center"
+            >
+              {t('Dashboard.CrateManagement.CheckIn.checkInWithCode')}
+            </Button>
+          ) : null}
+
+          {!allHavePlannedDays && coolingUnit.commonPricingType.type !== EPricingType.FIXED ? (
+            <Text variant="TextMedium" tw="text-lg">
+              {t('Dashboard.CrateManagement.CheckIn.noPlannedDaysMessage')}
             </Text>
-          </View>
-          <Divider tw="w-full bg-gray-400 mt-2" />
+          ) : null}
         </View>
 
-        <View tw="w-full flex flex-row items-center justify-center space-x-1 py-1.5">
-          <Button
-            tw="w-1/2 border-2 border-red-400"
-            mode="outlined"
-            onPress={() => {
-              resetCheckInStore();
-              rootNavigation.navigate('RootMainTabStack');
-            }}
-            icon="close-circle-outline"
-            contentStyle="flex flex-row-reverse items-center"
-            labelStyle="text-red-400"
-          >
-            {t('actions.cancel')}
-          </Button>
-          <Button
-            tw="w-1/2 border-2 border-green-primary"
-            mode="contained"
-            onPress={onSubmit}
-            icon="check-circle-outline"
-            contentStyle="flex flex-row-reverse items-center"
-            disabled={!produces || produces.length === 0}
-          >
-            {t('actions.confirm')}
-          </Button>
-        </View>
+        {!produces || produces.length === 0 ? (
+          <CheckInWithCodeModal
+            closeModal={() => setIsCodeModalOpen(false)}
+            isModalOpen={isCodeModalOpen}
+          />
+        ) : null}
       </View>
 
-      {!produces || produces.length === 0 ? (
-        <CheckInWithCodeModal
-          closeModal={() => setIsCodeModalOpen(false)}
-          isModalOpen={isCodeModalOpen}
-        />
-      ) : null}
+      <View tw="w-full flex flex-row items-center justify-center space-x-1 py-1.5 px-4">
+        <Button
+          tw="w-1/2 border-2 border-green-primary"
+          mode="outlined"
+          onPress={() => {
+            resetCheckInStore();
+            rootNavigation.navigate('RootMainTabStack');
+          }}
+          icon="close-circle-outline"
+          contentStyle="flex flex-row-reverse items-center"
+          labelStyle="text-green-primary"
+        >
+          {t('actions.cancel')}
+        </Button>
+        <Button
+          tw={cn(
+            'w-1/2 border-2 border-green-primary',
+            !produces || (produces.length === 0 && 'border-2 border-gray-100')
+          )}
+          mode="contained"
+          onPress={onSubmit}
+          icon="check-circle-outline"
+          contentStyle="flex flex-row-reverse items-center"
+          disabled={!produces || produces.length === 0}
+        >
+          {t('actions.confirm')}
+        </Button>
+      </View>
+
+      <View tw="absolute bottom-20 right-0 left-0 w-full">
+        <View tw="w-full h-14 flex flex-row items-center justify-between bg-teal-50 px-4">
+          <Text variant="TextMedium" tw="text-lg font-bold">
+            {allHavePlannedDays
+              ? t('Dashboard.CrateManagement.CheckIn.estimatedCost')
+              : t('Dashboard.CrateManagement.CheckIn.pricing')}
+          </Text>
+          <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
+            {`${currencySymbol}${total}`}
+            {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY && !allHavePlannedDays
+              ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
+              : ''}
+          </Text>
+        </View>
+        <Divider tw="w-full bg-gray-600" />
+      </View>
+
+      <Portal>
+        <Modal
+          visible={indexForActiveOptions !== -1}
+          onDismiss={() => setIndexForActiveOptions(-1)}
+        >
+          <View tw="bg-white rounded-3xl h-auto space-y-2 mx-20 px-3 py-4">
+            <TouchableOpacity
+              tw="space-x-1 w-full mb-2 flex flex-row items-center"
+              onPress={() => null}
+            >
+              <Icon source="pencil" size={18} />
+              <Text variant="TextMedium" tw="text-base">
+                {t('actions.edit')}
+              </Text>
+            </TouchableOpacity>
+
+            <Divider tw="w-full bg-gray-400" />
+
+            <TouchableOpacity
+              tw="space-x-1 w-full pt-2 flex flex-row items-center"
+              onPress={() => {
+                removeProduce(produces[indexForActiveOptions]);
+                setIndexForActiveOptions(-1);
+              }}
+            >
+              <Icon source="trash-can-outline" size={18} color={colors.red[700]} />
+              <Text variant="TextMedium" tw="text-base text-red-700">
+                {t('actions.delete')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      </Portal>
     </View>
   );
 }

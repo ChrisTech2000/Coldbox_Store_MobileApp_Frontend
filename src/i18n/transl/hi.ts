@@ -452,6 +452,10 @@ export default {
         emptyMessage: 'कृपया अपने चेक इन में कम से कम एक क्रेट जोड़ें',
         noPlannedDaysMessage:
           'कुछ वस्तुओं पर नियोजित दिनों की कमी है। अनुमानित लागत की गणना नहीं कर सकते।',
+        seeMore: 'और देखें',
+        seeLess: 'कम देखें',
+        listed: 'सूचीबद्ध',
+        cratesAddedLabel: 'टोकरियाँ जोड़ी गईं',
         WithCode: {
           modalTitle: 'मौजूदा चेक आउट से नया चेक इन बनाएं',
           modalDescription:
@@ -474,7 +478,7 @@ export default {
           individualCrateWeightButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट वजन संपादित करने के लिए',
           individualCrateIdButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट आईडी संपादित करने के लिए',
           numberOfCratesLabel: 'क्रेटों की संख्या',
-          crateWeightLabel: 'क्रेट का सामान्य वजन',
+          crateWeightLabel: 'टोकरे का वजन और बाज़ार सूची',
           pricePerDayAndCrateLabel: 'प्रति दिन / क्रेट की कीमत',
           pricePerDayAndKilogramLabel: 'प्रति दिन / किलोग्राम की कीमत',
           fixedPriceLabel: 'नियत मूल्य',
@@ -486,6 +490,14 @@ export default {
             yesterday: 'कल',
             dayBefore: 'दो दिन पहले',
             evenBefore: 'और पहले',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'सभी पर लागू करें',
+            list: 'विक्रय के लिए सूचीबद्ध करें',
+            addMore: 'और जोड़ें',
+            sellingPrice: 'विक्रय मूल्य सूचीबद्ध करें',
+            potentialSellingPrice: 'संभावित विक्रय मूल्य',
+            info: 'मूल्य कॉन्फ़िगरेशन उत्पाद की बिक्री को संदर्भित करता है, ठंडे भंडारण शुल्क को नहीं।',
           },
           cratesError: 'कृपया एक सकारात्मक क्रेट संख्या डालें',
           crateWeightError: 'कृपया एक सकारात्मक क्रेट वजन डालें',

@@ -451,6 +451,10 @@ export default {
         emptyMessage: 'કૃપા કરીને તમારું ચેક-ઇન કરાવવા માટે ઓછામાં ઓછી એક કરેટ ઉમેરો',
         noPlannedDaysMessage:
           'કોઈ વસ્તુઓમાં યોજિત દિવસો ગમાવવા માટે છે. આથી, અંદાજિત ખર્ચ ગણતરી કરી શકાતી નથી.',
+        seeMore: 'વધુ જુઓ',
+        seeLess: 'ઓછું જુઓ',
+        listed: 'યાદીબદ્ધ',
+        cratesAddedLabel: 'ટોપલીઓ ઉમેરવામાં આવી',
         WithCode: {
           modalTitle: 'મૌજુદા ચેક-આઉટથી નવો ચેક-ઇન બનાવવો',
           modalDescription:
@@ -473,7 +477,7 @@ export default {
           individualCrateWeightButton: 'વ્યક્તિગત કરેટ વજન સુધારવા માટે અહીં ક્લિક કરો',
           individualCrateIdButton: 'વ્યક્તિગત કરેટ આઈડી સુધારવા માટે અહીં ક્લિક કરો',
           numberOfCratesLabel: 'કરેટ્સની સંખ્યા',
-          crateWeightLabel: 'કરેટનું સામાન્ય વજન',
+          crateWeightLabel: 'ક્રેટ વજન અને માર્કેટપ્લેસ સૂચિ',
           pricePerDayAndCrateLabel: 'દરેક દિવસ / કરેટની કિંમત',
           pricePerDayAndKilogramLabel: 'દરેક દિવસ / કિ.ગ્રા. ની કિંમત',
           fixedPriceLabel: 'ફિક્સ્ડ કિંમત',
@@ -485,6 +489,14 @@ export default {
             yesterday: 'ગયા રોજ',
             dayBefore: 'બે દિવસ પહેલા',
             evenBefore: 'ત્યાં પહેલાં',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'બધાને લાગુ કરો',
+            list: 'વેચાણ માટે યાદી',
+            addMore: 'વધુ ઉમેરો',
+            sellingPrice: 'વેચાણ માટેની કિંમતની યાદી',
+            potentialSellingPrice: 'સમ্ভવિત વેચાણ મૂલ્ય',
+            info: 'કિંમતની રચના ઉત્પાદનના વેચાણનો ઉદ્દેશ છે, ઠંડક સંગ્રહ શુલ્કનો નહીં.',
           },
           cratesError: 'કૃપા કરીને સકારાત્મક કરેટ સંખ્યા દાખલ કરો',
           crateWeightError: 'કૃપા કરીને સકારાત્મક કરેટ વજન દાખલ કરો',

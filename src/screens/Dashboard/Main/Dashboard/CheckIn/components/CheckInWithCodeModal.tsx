@@ -107,6 +107,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
               coolingUnitId: coolingUnit.id,
               plannedDays: plannedDays ?? crate.plannedDays ?? undefined,
             })),
+            price: undefined,
             initialGrade: null,
             harvestDate: undefined,
             hasPicture: false,

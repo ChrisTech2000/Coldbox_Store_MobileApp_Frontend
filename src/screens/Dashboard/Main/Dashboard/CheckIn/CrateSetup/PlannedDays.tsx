@@ -42,7 +42,7 @@ export default function PlannedDays(props: {
               mode="contained-tonal"
               icon="minus"
               size={30}
-              tw="rounded-md"
+              tw="rounded-md border border-green-primary"
               iconColor={paperTheme.colors.primary}
               containerColor={paperTheme.colors.secondaryContainer}
               onPress={(evt) => {
@@ -54,7 +54,7 @@ export default function PlannedDays(props: {
               mode="contained-tonal"
               icon="plus"
               size={30}
-              tw="rounded-md"
+              tw="rounded-md border border-green-primary"
               iconColor={paperTheme.colors.primary}
               containerColor={paperTheme.colors.secondaryContainer}
               onPress={(evt) => {

@@ -452,6 +452,10 @@ export default {
         emptyMessage: 'ଦୟାକରି ଆପଣଙ୍କର ଚେକ୍-ଇନ୍‌ରେ କମସେକମ ଏକ କ୍ରେଟ୍ ଯୋଡନ୍ତୁ',
         noPlannedDaysMessage:
           'କିଛି ଆଇଟମ୍‌ରେ ଯୋଜିତ ଦିନ ହାରାଯାଇଛି। ଆନୁମାନିକ ଖର୍ଚ୍ଚ ଗଣନା କରିବା ସମ୍ଭବ ନୁହେଁ।',
+        seeMore: 'ଅଧିକ ଦେଖନ୍ତୁ',
+        seeLess: 'କମ୍ ଦେଖନ୍ତୁ',
+        listed: 'ତାଲିକାଭୁକ୍ତ',
+        cratesAddedLabel: 'ଗଞ୍ଜିଗୁଡ଼ିକ ଯୋଡାଯାଇଛି',
         WithCode: {
           modalTitle: 'ଏକ ବର୍ତ୍ତମାନ ଚେକ୍-ଆଉଟ୍ରୁ ନୂତନ ଚେକ୍-ଇନ୍ ତିଆରି କରନ୍ତୁ',
           modalDescription:
@@ -474,7 +478,7 @@ export default {
           individualCrateWeightButton: 'ବ୍ୟକ୍ତିଗତ କ୍ରେଟ୍ ଓଜନ ସଂପାଦନ କରିବାକୁ ଏଠାକୁ କ୍ଲିକ୍ କରନ୍ତୁ',
           individualCrateIdButton: 'ବ୍ୟକ୍ତିଗତ କ୍ରେଟ୍ ଆଇଡି ସଂପାଦନ କରିବାକୁ ଏଠାକୁ କ୍ଲିକ୍ କରନ୍ତୁ',
           numberOfCratesLabel: 'କ୍ରେଟ୍‌ଗୁଡିକର ସଂଖ୍ୟା',
-          crateWeightLabel: 'ସାଧାରଣ କ୍ରେଟ୍ ଓଜନ',
+          crateWeightLabel: 'କ୍ରେଟ୍ ଓଜନ ଏବଂ ମାର୍କେଟପ୍ଲେସ୍ ତାଲିକା |',
           pricePerDayAndCrateLabel: 'ପ୍ରତି ଦିନ / କ୍ରେଟ୍ ମୂଲ୍ୟ',
           pricePerDayAndKilogramLabel: 'ପ୍ରତି ଦିନ / କିଲୋଗ୍ରାମ୍ ମୂଲ୍ୟ',
           fixedPriceLabel: 'ନିର୍ଦ୍ଧାରିତ ମୂଲ୍ୟ',
@@ -486,6 +490,14 @@ export default {
             yesterday: 'କଲି',
             dayBefore: 'ଦୁଇ ଦିନ ପୂର୍ବରୁ',
             evenBefore: 'ଏଯାଁ ପୂର୍ବରୁ',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'ସବୁରେ ପ୍ରୟୋଗ କରନ୍ତୁ',
+            list: 'ବିକ୍ରୟ ପାଇଁ ତାଲିକାକରଣ',
+            addMore: 'ଅଧିକ ଯୋଡନ୍ତୁ',
+            sellingPrice: 'ବିକ୍ରୟ ମୂଲ୍ୟ ତାଲିକାକରଣ',
+            potentialSellingPrice: 'ସମ୍ଭାବ୍ୟ ବିକ୍ରୟ ମୂଲ୍ୟ',
+            info: 'ମୂଲ୍ୟ ବ୍ୟବସ୍ଥାପନ ପ୍ରସ୍ତୁତି ବିକ୍ରୟ ସହ ଜଡିତ, ଠଣ୍ଡା ଗୋଦାମ ଫିସ୍‌ ସହ ନୁହେଁ।',
           },
           cratesError: 'ଦୟାକରି ସକାରାତ୍ମକ କ୍ରେଟ୍ ସଂଖ୍ୟା ଦିଅନ୍ତୁ',
           crateWeightError: 'ଦୟାକରି ସକାରାତ୍ମକ କ୍ରେଟ୍ ଓଜନ ଦିଅନ୍ତୁ',
