@@ -248,13 +248,13 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         />
         <Divider tw="bg-gray-400 mt-2" />
 
-        {produces.length > 0 ? (
-          <Text tw="text-base mt-4 mb-2 self-center">
-            {t('Dashboard.CrateManagement.CheckIn.cratesAddedLabel')}
-          </Text>
-        ) : null}
-
         <ScrollView showsVerticalScrollIndicator={false}>
+          {produces.length > 0 ? (
+            <Text tw="text-base mt-4 mb-2 self-center">
+              {t('Dashboard.CrateManagement.CheckIn.cratesAddedLabel')}
+            </Text>
+          ) : null}
+
           {produces.length === 0 ? (
             <Text tw="text-base mt-6 self-center text-gray-600">
               {t('Dashboard.CrateManagement.CheckIn.emptyState')}
@@ -317,7 +317,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           ) : null}
 
           {!allHavePlannedDays && coolingUnit.commonPricingType.type !== EPricingType.FIXED ? (
-            <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextMedium" tw="text-base">
               {t('Dashboard.CrateManagement.CheckIn.noPlannedDaysMessage')}
             </Text>
           ) : null}
