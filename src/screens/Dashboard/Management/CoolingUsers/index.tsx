@@ -8,7 +8,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import { CoolingUsersOverlay } from '#screens/Dashboard/Tutorial/CoolingUsersOverlay';
 
 import type {
@@ -38,7 +38,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   const { t } = useTranslationUtils();
 
   const { onLayout } = useWalkthroughStep({
-    number: ETutorialSteps.LIST_COOLING_USERS_STEP,
+    number: EOperatorTutorialSteps.LIST_COOLING_USERS_STEP,
     enableHardwareBack: true,
     OverlayComponent: CoolingUsersOverlay,
   });

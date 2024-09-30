@@ -4,12 +4,14 @@ import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardRoutes } from '#navigation/Dashboard';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
@@ -29,6 +31,13 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import {
+  CheckIn1ScreenOverlay,
+  CheckIn2ScreenOverlay,
+  CheckIn3ScreenOverlay,
+} from '#screens/Dashboard/Tutorial/CheckInOverlays';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+
 import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
@@ -38,8 +47,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
 
   const { t } = useTranslationUtils();
-  const company = useManagementStore((store) => store.company);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
+  const company = useManagementStore((store) => store.company);
   const refreshData = useDashboardStore((store) => store.refreshData);
   const {
     checkOutCode,
@@ -51,7 +62,26 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     resetCheckInStore,
   } = useCheckInStore();
 
-  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const { onLayout: onCheckIn1Layout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.CHECK_IN_STEP_1,
+    enableHardwareBack: true,
+    OverlayComponent: CheckIn1ScreenOverlay,
+  });
+
+  const { onLayout: onCheckIn2Layout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.CHECK_IN_STEP_2,
+    enableHardwareBack: true,
+    OverlayComponent: CheckIn2ScreenOverlay,
+  });
+
+  const { onLayout: onCheckIn3Layout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.CHECK_IN_STEP_3,
+    enableHardwareBack: true,
+    OverlayComponent: CheckIn3ScreenOverlay,
+    maskAllowInteraction: true,
+    onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'History' }),
+  });
+
   const toast = InAppNotifications.useToast();
   const { guard } = RBAC.useRBAC();
 
@@ -215,7 +245,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [coolingUnit, user, checkOutCode]);
 
   return (
-    <View tw="flex-1">
+    <View tw="flex-1" onLayout={onCheckIn1Layout}>
       <View tw="flex-1 p-4">
         <List.Item
           tw="p-0 m-0"
@@ -262,6 +292,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           ) : null}
 
           <FlatList
+            onLayout={onCheckIn2Layout}
             showsVerticalScrollIndicator={false}
             data={produces}
             extraData={surveys}
@@ -346,6 +377,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           {t('actions.cancel')}
         </Button>
         <Button
+          onLayout={onCheckIn3Layout}
           tw={cn(
             'w-1/2 border-2 border-green-primary',
             !produces || (produces.length === 0 && 'border-2 border-gray-100')

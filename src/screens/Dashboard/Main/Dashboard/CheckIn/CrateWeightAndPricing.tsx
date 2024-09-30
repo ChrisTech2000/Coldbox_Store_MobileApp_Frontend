@@ -281,7 +281,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             }}
             ListFooterComponent={
               <Button
-                tw="w-1/4 my-3"
+                tw="my-3"
                 mode="text"
                 disabled={applyToAll}
                 uppercase
@@ -363,8 +363,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             onPress={form.handleSubmit(onSubmit as any)}
             disabled={
               typeof form.formState.errors.crates !== 'undefined' ||
-              !crates.some((c) => c.isSellable) ||
-              !price ||
+              (crates.some((c) => c.isSellable) && !price) ||
               form.formState.isSubmitting
             }
           >

@@ -2,6 +2,7 @@ import React, { SetStateAction, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { StoreApi, UseBoundStore } from 'zustand';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -10,6 +11,9 @@ import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { Company, CoolingUnit, ERoles } from '#types/global';
+
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { CoolingUnitOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitOverlay';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
@@ -48,6 +52,12 @@ export function Filters({
 
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { selectedItem: company } = useCompanyStore();
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.COOLING_UNIT_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: CoolingUnitOverlay,
+  });
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
@@ -105,21 +115,23 @@ export function Filters({
           occupyFullWidth
         />
       )}
-      <SelectWithStore<CoolingUnit>
-        emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
-        datums={units}
-        isModalVisible={isUnitsModalOpen}
-        setIsModalVisible={setIsUnitsModalOpen}
-        itemName={(item) => item?.name}
-        useSelectStore={useCoolingUnitStore}
-        label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-          name: coolingUnit ? coolingUnit.name : '',
-        })}
-        modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-        divider
-        autoSelect
-        occupyFullWidth
-      />
+      <View onLayout={onLayout}>
+        <SelectWithStore<CoolingUnit>
+          emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
+          datums={units}
+          isModalVisible={isUnitsModalOpen}
+          setIsModalVisible={setIsUnitsModalOpen}
+          itemName={(item) => item?.name}
+          useSelectStore={useCoolingUnitStore}
+          label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
+            name: coolingUnit ? coolingUnit.name : '',
+          })}
+          modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+          divider
+          autoSelect
+          occupyFullWidth
+        />
+      </View>
 
       {searchType && (
         <View tw="flex flex-row items-center justify-center space-x-2 mt-4">

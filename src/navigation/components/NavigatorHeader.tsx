@@ -5,9 +5,9 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Appbar } from 'react-native-paper';
 
 import { DrawerOverlay } from '#screens/Dashboard/Tutorial/DrawerOverlay';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
-import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 export type NavigationHeaderProps = {
   routeTitle?: string;
@@ -19,7 +19,7 @@ export default function NavigatorHeader(props: NavigationHeaderProps) {
   const navigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const { onLayout } = useWalkthroughStep({
-    number: ETutorialSteps.OPEN_DRAWER_STEP,
+    number: EOperatorTutorialSteps.OPEN_DRAWER_STEP,
     enableHardwareBack: true,
     OverlayComponent: DrawerOverlay,
     maskAllowInteraction: true,

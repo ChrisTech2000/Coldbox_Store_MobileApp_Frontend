@@ -5,12 +5,14 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import Logo from '#assets/images/coldtivate_logo.svg';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { useTutorialStore } from '#stores/tutorial';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
 export const WelcomeMessageOverlay = ({ next, isWalkthroughOn, stop }: IOverlayComponentProps) => {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <Modal transparent visible={isWalkthroughOn} animationType="fade">
@@ -29,7 +31,10 @@ export const WelcomeMessageOverlay = ({ next, isWalkthroughOn, stop }: IOverlayC
           <View tw="flex flex-row space-x-2 mt-4">
             <Button
               mode="outlined"
-              onPress={stop}
+              onPress={() => {
+                stop();
+                toggleTutorial();
+              }}
               labelStyle="text-green-primary"
               tw="border border-green-primary"
             >

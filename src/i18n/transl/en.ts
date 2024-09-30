@@ -1559,6 +1559,9 @@ const en = {
     prev: 'Prev',
     next: 'Next',
     start: 'Start Tutorial',
+    final:
+      'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.',
+    backToDashboard: 'Back to Dashboard',
     steps: {
       openDrawer:
         'On the top left, you find a menu with the main functionalities. Go ahead and click it.',
@@ -1571,6 +1574,28 @@ const en = {
       listCoolingUsers:
         'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.',
       navigateToAddCoolingUser: "Let's try to add a new Cooling User by clicking the '+' sign.",
+      coolingUnitStep:
+        'You can navigate across cooling units by clicking on the dropdown menu at the top.',
+      initiate_check_in_1:
+        'Once you add a cooling user, you can make a check-in for that cooling user. Go ahead and click the activity button.',
+      initiate_check_in_2: 'Now click on the check-in button (the one in green).',
+      check_in_1:
+        'To complete the check-in, you need to click on "Add Crates" and follow the instructions step by step. Click \'Continue\' to see what the result would look like.',
+      check_in_2:
+        'After having completed all the steps, you will see an overview of the crates you are about to check into the room.',
+      check_in_3:
+        'If you are satisfied, you can click "Confirm" and the new crates will be added to the Dashboard.',
+      history: 'Clicking on "History", you can see all the movements in the room.',
+      // 'Clicking on "History", you can see all the movements in the room. The check-outs for which the market survey has not been completed are marked by a red dot.',
+      coolingUnits:
+        'Click on "Cooling Units" to see the capacity of a cooling unit in the next 7 days (Planner tab) and the temperature of the room (Room conditions tab).',
+      roomConditions:
+        ' You can manually update the temperature of the cooling room in "Room conditions" in case you do not have a sensor connected with the app.',
+      check_out_1:
+        'To start a check-out, click on the Activity button and then on the red button. Then follow the instructions to complete the check-out.',
+      check_out_2: 'You can choose the cooling unit and crops you want to check out.',
+      check_out_3:
+        'Once the items are paid for, click on the respective button and finalize the check out.',
     },
   },
 };

@@ -28,7 +28,7 @@ import Operators from '#screens/Dashboard/Management/Operators';
 import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee';
 import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredEmployeeDetails';
 import { AddCoolingUserNavigationOverLay } from '#screens/Dashboard/Tutorial/AddCoolingUserNavigationOverlay';
-import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -196,7 +196,7 @@ function _rightContentFactory(
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ): NavigationHeaderProps {
   const { onLayout } = useWalkthroughStep({
-    number: ETutorialSteps.ADD_COOLING_USER_NAVIGATION_STEP,
+    number: EOperatorTutorialSteps.ADD_COOLING_USER_NAVIGATION_STEP,
     enableHardwareBack: true,
     OverlayComponent: AddCoolingUserNavigationOverLay,
     onPressMask: () => emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true),

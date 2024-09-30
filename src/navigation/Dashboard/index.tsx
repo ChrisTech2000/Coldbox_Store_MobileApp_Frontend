@@ -24,11 +24,15 @@ import DashboardScreenOptions from './components/ScreenOptions';
 import TemperatureAlert from './components/TemperatureAlert';
 import KnowledgeHubStack from './KnowledgeHub';
 import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
-import DashboardMainBottomTabs from './Main';
+import DashboardMainBottomTabs, { DashboardMainRoutes } from './Main';
 import ManagementStack, { type ManagementRoutes } from './Management';
 
 export type DashboardRoutes = {
-  Main: undefined;
+  Main:
+    | {
+        screen: keyof DashboardMainRoutes;
+      }
+    | undefined;
   AccountDetails: {
     screen: keyof AccountDetailsRoutes;
     params: AccountDetailsRoutes[keyof AccountDetailsRoutes];

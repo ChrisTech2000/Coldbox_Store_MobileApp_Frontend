@@ -6,7 +6,7 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List, Modal, Portal } from 'react-native-paper';
 
 import { CoolingUsersModalOverlay } from '#screens/Dashboard/Tutorial/CoolingUserModalOverlay';
-import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -31,7 +31,7 @@ export default function Prompt(props: Props) {
   const { t } = useTranslationUtils();
 
   const { onLayout } = useWalkthroughStep({
-    number: ETutorialSteps.COOLING_USER_MODAL,
+    number: EOperatorTutorialSteps.COOLING_USER_MODAL,
     enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: CoolingUsersModalOverlay,

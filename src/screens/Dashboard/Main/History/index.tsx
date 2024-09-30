@@ -1,9 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardRoutes } from '#navigation/Dashboard';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -17,6 +21,9 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
+import { HistoryOverlay } from '#screens/Dashboard/Tutorial/HistoryOverlay';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Filters } from '../components/Filters';
 import { Movement } from './components/Movement';
@@ -32,6 +39,8 @@ const deviceHeight = Dimensions.get('window').height;
 
 function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const { t } = useTranslationUtils();
+  const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
+
   const user = useAuthStore((store) => store.user);
   const sorting = useSortingStore((store) => store.sorting);
   const { farmerId, addRefreshDataFn } = useDashboardStore((store) => ({
@@ -45,6 +54,13 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const [search, setSearch] = useState<string>('');
   const [areCoolingUnitsLoading, setAreCoolingUnitsLoading] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.HISTORY_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: HistoryOverlay,
+    onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'CoolingUnits' }),
+  });
 
   const {
     data: movements,
@@ -92,7 +108,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   }, []);
 
   return (
-    <View tw="absolute bottom-0 top-0 right-0 left-0">
+    <View tw="absolute bottom-0 top-0 right-0 left-0" onLayout={onLayout}>
       <Filters
         sortingMenu={
           <SortingMenu

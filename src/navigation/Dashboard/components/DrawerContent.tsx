@@ -10,7 +10,7 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 
-import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import { RepeatTutorialOverlay } from '#screens/Dashboard/Tutorial/RepeatTutorialOverlay';
 import { DrawerManagementOverlay } from '#screens/Dashboard/Tutorial/DrawerManagementOverlay';
 
@@ -64,13 +64,13 @@ export default function DrawerContent(props: Props) {
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   const { onLayout: onTutorialTabLayout } = useWalkthroughStep({
-    number: ETutorialSteps.REPEAT_TUTORIAL_STEP,
+    number: EOperatorTutorialSteps.REPEAT_TUTORIAL_STEP,
     enableHardwareBack: true,
     OverlayComponent: RepeatTutorialOverlay,
   });
 
   const { onLayout: onManagementTabLayout } = useWalkthroughStep({
-    number: ETutorialSteps.GO_TO_MANAGEMENT_STEP,
+    number: EOperatorTutorialSteps.GO_TO_MANAGEMENT_STEP,
     enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: DrawerManagementOverlay,

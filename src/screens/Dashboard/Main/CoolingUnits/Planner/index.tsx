@@ -1,5 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useMemo, useState } from 'react';
 import { Dimensions, RefreshControl, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Text } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -7,10 +10,15 @@ import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { cn } from '#ui/lib/cn';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
+
+import { CoolingUnitsOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsOverlay';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 
@@ -24,9 +32,17 @@ const screenHeight = Dimensions.get('window').height;
 
 function CoolingUnitsPlanner() {
   const [selectedColumn, setSelectedColumn] = useState<number>(0);
+  const navigation = useNavigation<NativeStackNavigationProp<CoolingUnitsTabsRoutes>>();
 
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
   const { t } = useTranslationUtils();
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.COOLING_UNITS_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: CoolingUnitsOverlay,
+    onPressMask: () => navigation.navigate('RoomConditions'),
+  });
 
   const {
     data: coolingUnitCapacity,
@@ -53,7 +69,7 @@ function CoolingUnitsPlanner() {
   }, [coolingUnitCapacity]);
 
   return (
-    <View tw="pt-5 space-y-3">
+    <View tw="pt-5 space-y-3" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }} onLayout={onLayout}>
       <GenericFilter>
         <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
           <GenericFilter.Companies />

@@ -15,7 +15,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 
 import { ManagementOverlay } from '../Tutorial/ManagementOverlay';
-import { ETutorialSteps } from '../Tutorial/utils/constants';
+import { EOperatorTutorialSteps } from '../Tutorial/utils/constants';
 
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
@@ -35,7 +35,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   );
 
   const { onLayout } = useWalkthroughStep({
-    number: ETutorialSteps.GO_TO_COOLING_USERS_STEP,
+    number: EOperatorTutorialSteps.GO_TO_COOLING_USERS_STEP,
     enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: ManagementOverlay,

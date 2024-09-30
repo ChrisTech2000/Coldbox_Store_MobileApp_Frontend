@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react';
 import { RefreshControl, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
 
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -13,7 +15,9 @@ import RBAC from '#common/RBAC';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { paperTheme } from '#ui/lib/theme';
+
+import { RoomConditionsOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsOverlay';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 import LineChart from './components/LineChart';
@@ -23,6 +27,12 @@ import { processTemperatures } from './utils';
 function CoolingUnitsRoomConditions() {
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
   const { t } = useTranslationUtils();
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.ROOM_CONDITIONS_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: RoomConditionsOverlay,
+  });
 
   const {
     data: temperatures,
@@ -41,7 +51,7 @@ function CoolingUnitsRoomConditions() {
   const chartDatums = useMemo(() => processTemperatures(temperatures), [temperatures]);
 
   return (
-    <View tw="pt-5 space-x-3">
+    <View tw="pt-5">
       <GenericFilter>
         <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
           <GenericFilter.Companies />
@@ -83,7 +93,7 @@ function CoolingUnitsRoomConditions() {
           </View>
         )}
         {selectedCoolingUnit ? (
-          <View tw="bg-zinc-200 py-4 mt-8 items-center space-y-3 mb-10">
+          <View onLayout={onLayout} tw="bg-zinc-200 py-4 mt-8 items-center space-y-3 mb-10">
             <View tw="flex-row items-center space-x-4">
               <Icon name="thermometer" size={30} color={paperTheme.colors.scrim} />
               <Text variant="TitleRegular">
