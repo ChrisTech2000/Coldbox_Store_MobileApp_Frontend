@@ -26,7 +26,6 @@ export default function Prompt(props: Props) {
   const { navigation } = props;
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
-
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const [isVisible, toggleVisibility, setModalVisibility] = useToggle(false);
   const { t } = useTranslationUtils();
@@ -40,12 +39,12 @@ export default function Prompt(props: Props) {
       addWidth: 20,
       addHeight: 20,
       addX: -10,
-      addY: -10
+      addY: -10,
     },
     onPressMask: () => {
       toggleVisibility();
       rootNavigation.navigate('RootMainTabStack');
-    }
+    },
   });
 
   useAppEventListener<[boolean]>('DISPATCH_CU_PROMPT', setModalVisibility);

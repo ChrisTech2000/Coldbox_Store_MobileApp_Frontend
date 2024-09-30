@@ -4,7 +4,10 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
 
-export function AddCoolingUserNavigationOverLay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+export function AddCoolingUserNavigationOverLay({
+  next,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
 
   return (
@@ -28,9 +31,7 @@ export function AddCoolingUserNavigationOverLay({ next, step: { onPressMask } }:
           },
         ]}
       >
-        <Text tw="text-base text-center">
-          {t('tutorial.steps.navigateToAddCoolingUser')}
-        </Text>
+        <Text tw="text-base text-center">{t('tutorial.steps.navigateToAddCoolingUser')}</Text>
       </View>
     </View>
   );

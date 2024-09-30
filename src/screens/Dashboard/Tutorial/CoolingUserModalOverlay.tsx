@@ -5,7 +5,6 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
 
-
 export function CoolingUsersModalOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
 
@@ -22,9 +21,7 @@ export function CoolingUsersModalOverlay({ next, step: { onPressMask } }: IOverl
           },
         ]}
       >
-        <Text tw="text-center">
-          {t('tutorial.steps.addCoolingUser')}
-        </Text>
+        <Text tw="text-center">{t('tutorial.steps.addCoolingUser')}</Text>
         <Button
           mode="text"
           onPress={() => {

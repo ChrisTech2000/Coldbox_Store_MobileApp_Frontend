@@ -29,9 +29,7 @@ export function DrawerOverlay({ next, step: { mask, onPressMask } }: IOverlayCom
           },
         ]}
       >
-        <Text tw="text-base">
-          {t('tutorial.steps.openDrawer')}
-        </Text>
+        <Text tw="text-base">{t('tutorial.steps.openDrawer')}</Text>
       </View>
     </View>
   );

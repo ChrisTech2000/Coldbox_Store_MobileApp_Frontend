@@ -42,7 +42,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
     enableHardwareBack: true,
     OverlayComponent: CoolingUsersOverlay,
   });
-  
+
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getOperatorFarmers',
     ColdtivateService.getOperatorFarmers,

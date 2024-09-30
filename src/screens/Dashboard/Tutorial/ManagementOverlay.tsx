@@ -31,11 +31,9 @@ export function ManagementOverlay({ next, step: { onPressMask } }: IOverlayCompo
           ]}
         >
           <Icon source="arrow-top-left-bold-outline" size={20} />
-          <Text tw="text-base">
-            {t('tutorial.steps.navigateToCoolingUser')}
-          </Text>
+          <Text tw="text-base">{t('tutorial.steps.navigateToCoolingUser')}</Text>
         </View>
       </View>
-    </View >
+    </View>
   );
 }

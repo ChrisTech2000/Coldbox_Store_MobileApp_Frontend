@@ -39,9 +39,8 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
     enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: ManagementOverlay,
-    onPressMask: () => props.navigation.navigate('CoolingUsers')
+    onPressMask: () => props.navigation.navigate('CoolingUsers'),
   });
-
 
   const disabledCoolingUnits = isLoading || !data.length;
   const coolingUnitsColor = disabledCoolingUnits ? colors.gray[400] : colors.gray[800];

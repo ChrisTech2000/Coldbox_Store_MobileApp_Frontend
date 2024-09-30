@@ -1568,8 +1568,9 @@ const en = {
       addCoolingUser:
         'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',
-      listCoolingUsers: 'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.',
-      navigateToAddCoolingUser: 'Let\'s try to add a new Cooling User by clicking the \'+\' sign.'
+      listCoolingUsers:
+        'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.',
+      navigateToAddCoolingUser: "Let's try to add a new Cooling User by clicking the '+' sign.",
     },
   },
 };

@@ -21,14 +21,8 @@ export function CoolingUsersOverlay({ next }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-base text-center">
-          {t('tutorial.steps.listCoolingUsers')}
-        </Text>
-        <Button
-          mode="text"
-          onPress={next}
-          labelStyle="text-green-primary"
-        >
+        <Text tw="text-base text-center">{t('tutorial.steps.listCoolingUsers')}</Text>
+        <Button mode="text" onPress={next} labelStyle="text-green-primary">
           {t('actions.continue')}
         </Button>
       </View>

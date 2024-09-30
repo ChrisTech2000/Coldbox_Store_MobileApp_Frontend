@@ -18,9 +18,7 @@ export function DrawerManagementOverlay({ next, step: { onPressMask } }: IOverla
         }}
       >
         <Icon source="account-supervisor-outline" size={25} />
-        <Text tw="text-base">
-          {t('navigation.dashboard.Management')}
-        </Text>
+        <Text tw="text-base">{t('navigation.dashboard.Management')}</Text>
       </TouchableOpacity>
       <View
         tw="absolute left-3 top-1/3 w-[90%] h-auto bg-white p-3 rounded-md z-30"
@@ -33,9 +31,7 @@ export function DrawerManagementOverlay({ next, step: { onPressMask } }: IOverla
           },
         ]}
       >
-        <Text tw="text-base text-center">
-          {t('tutorial.steps.managementNavigation')}
-        </Text>
+        <Text tw="text-base text-center">{t('tutorial.steps.managementNavigation')}</Text>
       </View>
     </View>
   );

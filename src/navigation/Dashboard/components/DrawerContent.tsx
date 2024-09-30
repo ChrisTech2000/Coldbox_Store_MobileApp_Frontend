@@ -74,7 +74,7 @@ export default function DrawerContent(props: Props) {
     enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: DrawerManagementOverlay,
-    onPressMask: () => props.navigation.navigate('Management')
+    onPressMask: () => props.navigation.navigate('Management'),
   });
 
   const onLogout = useCallback(() => {
