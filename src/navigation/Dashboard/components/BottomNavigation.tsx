@@ -78,7 +78,7 @@ function BottomNavBar(
   const { bottom } = useSafeAreaInsets();
 
   return (
-    <View tw="absolute bottom-0 left-0 z-[9999] w-full" style={[tabBarStyle]}>
+    <View tw="absolute bottom-0 left-0 z-[9999] w-full" style={tabBarStyle}>
       <SkiaShadow blur={3} dx={0} dy={2} color={colors.zinc[300]} borderRadius={16}>
         <View
           tw="flex-row items-center justify-evenly h-28 px-2 bg-white pt-2"

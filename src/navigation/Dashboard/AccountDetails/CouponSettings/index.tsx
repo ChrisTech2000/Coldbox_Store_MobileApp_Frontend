@@ -7,16 +7,16 @@ import {
 } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 
 import Coupons from '#screens/Dashboard/AccountDetails/Coupons';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import CouponService from '#services/CouponService';
 
 import CouponStatusTabs from './CouponStatusTabs';
-import { useCouponStore } from '#screens/Dashboard/AccountDetails/Coupons/store';
 
 export type CouponsSettingsRoutes = {
   Root: undefined;
@@ -57,12 +57,18 @@ export default function CouponsSettingsStack() {
     []
   );
 
-  // TODO → replace this with SWR hook
-  const couponsLength = useCouponStore(useShallow((store) => store.coupons)).length;
+  const { data } = useApiCall(
+    'getCouponList',
+    CouponService.getCouponList,
+    { revoked: 'included' },
+    {
+      defaultData: { nodes: [] },
+    }
+  );
 
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
-      {couponsLength === 0 ? (
+      {data.nodes.length === 0 ? (
         <Stack.Screen name="Root" component={Coupons} />
       ) : (
         <Stack.Screen name="Root" component={CouponStatusTabs} />

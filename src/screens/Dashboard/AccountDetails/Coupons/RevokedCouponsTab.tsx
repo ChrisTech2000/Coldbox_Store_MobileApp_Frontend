@@ -5,17 +5,25 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useCouponStore } from './store';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import CouponService from '#services/CouponService';
 
 // TODO → add text content to translations
 function RevokedCouponsTab() {
-  const coupons = useCouponStore((store) => store.coupons);
+  const { data } = useApiCall(
+    'getCouponList',
+    CouponService.getCouponList,
+    { revoked: 'only' },
+    {
+      defaultData: { nodes: [] },
+    }
+  );
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View tw="px-3 pt-3 pb-8">
         <FlatList
-          data={coupons.filter((coupon) => !coupon.isActive)}
+          data={data.nodes}
           keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
@@ -27,7 +35,7 @@ function RevokedCouponsTab() {
                     {item.code}
                   </Text>
                 </View>
-                <Text tw="text-lg text-zinc-500">-&nbsp;{item.percentage}&#37;</Text>
+                <Text tw="text-lg text-zinc-500">-&nbsp;{item.discountPercentage * 100}&#37;</Text>
               </View>
             </View>
           )}
@@ -37,4 +45,4 @@ function RevokedCouponsTab() {
   );
 }
 
-export default withSafeArea(RevokedCouponsTab);
+export default withSafeArea(RevokedCouponsTab, ['bottom'], true);

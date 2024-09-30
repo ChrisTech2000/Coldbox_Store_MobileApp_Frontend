@@ -105,4 +105,4 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
   );
 }
 
-export default withSafeArea(LocalizationPreferences);
+export default withSafeArea(LocalizationPreferences, ['bottom'], true);

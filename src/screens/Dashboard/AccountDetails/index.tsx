@@ -210,4 +210,4 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   );
 }
 
-export default withSafeArea(AccountDetails);
+export default withSafeArea(AccountDetails, ['bottom'], true);
