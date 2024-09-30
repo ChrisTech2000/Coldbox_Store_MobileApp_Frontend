@@ -11,6 +11,7 @@ export interface ProduceCrate extends Omit<Produce, 'crop' | 'harvestDate'> {
     image: string;
   };
   harvestDate: number | undefined;
+  price: number | undefined;
 }
 
 type State = {

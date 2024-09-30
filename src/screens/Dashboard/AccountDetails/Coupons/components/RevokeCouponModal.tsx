@@ -24,12 +24,8 @@ export default function RevokeCouponModal(props: {
       <Modal visible={visible} onDismiss={() => onChangeVisible(false)}>
         <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
           <View tw="items-start space-y-4 my-2.5">
-            <Text variant="TitleMedium">Revoking Coupon</Text>
-            <Text>
-              Are you sure you want to revoke this coupon? Once revoked, it cannot be used again and
-              the discount will no longer be available. This action is permanent and cannot be
-              undone.
-            </Text>
+            <Text variant="TitleMedium">{t('Dashboard.Management.Coupons.revokeTitle')}</Text>
+            <Text>{t('Dashboard.Management.Coupons.revokeMessage')}</Text>
           </View>
           <View tw="flex-row self-end space-x-2">
             <Button

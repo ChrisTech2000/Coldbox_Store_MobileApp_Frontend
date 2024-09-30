@@ -15,7 +15,7 @@ import { ERoles, type Company, type CoolingUnit } from '#types/global';
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
 import { GenericError } from '#ui/components/GenericError';
 
 import { Filters, type Search } from '../components/Filters';
@@ -90,7 +90,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
     return sortedProduces.filter((produce) => {
       if (searchType === 'id') {
-        return produce.crates.some((crate) => crate.id.toString() === lowerCaseSearch);
+        return produce.crates.some((crate) => crate.tag.toString() === lowerCaseSearch);
       }
 
       return (
@@ -108,7 +108,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, [user?.role]);
 
   return (
-    <View tw="absolute bottom-0 top-0 right-0 left-0">
+    <View tw="absolute bottom-0 top-0 right-0 left-0" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}>
       <Filters
         sortingMenu={
           <SortingMenu

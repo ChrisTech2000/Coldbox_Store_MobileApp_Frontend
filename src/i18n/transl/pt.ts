@@ -160,11 +160,13 @@ export default {
     },
   },
   Auth: {
+    welcomePopup:
+      'Bem-vindo ao Coldtivate! Se for agricultor, comerciante ou estiver interessado em adquirir produtos armazenados nas câmaras frias, inscreva-se clicando em "Inscrever-se como utilizador de refrigeração ou consumidor". Se trabalha para uma empresa de refrigeração, entre em contacto com o seu responsável para verificar se a sua empresa está registada. Se estiver, o seu responsável deverá enviar-lhe um convite por SMS para se inscrever como empregado registado ou como operador. Caso contrário, pode registar a empresa e inscrever-se como empregado registado. Consulte a secção "Informações da App" para ver as FAQs.',
     Root: {
       welcome: 'Bem-vindo ao Coldtivate',
       signIn: 'Iniciar Sessão',
       signUpCompany: 'Registar como Empresa',
-      signUpCoolingUser: 'Registar como Utilizador de Refrigeração',
+      signUpCoolingUser: 'Registar como Utilizador de Refrigeração ou Consumidor',
       appInfo: 'Informações da App',
     },
     SignIn: {
@@ -183,7 +185,7 @@ export default {
         coolingUser: {
           label: 'Utilizador de Refrigeração',
           description:
-            'O utilizador da unidade de refrigeração. Agricultores, comerciantes, retalhistas que tenham acesso a um smartphone podem iniciar sessão aqui. Os utilizadores da unidade de refrigeração sem smartphone podem aceder às informações da app visitando uma unidade de refrigeração e interagindo com o operador.',
+            'O utilizador de refrigeração e o consumidor. Agricultores, comerciantes e retalhistas que têm acesso a um smartphone podem iniciar sessão aqui. Utilizadores de refrigeração sem smartphone podem aceder às informações da aplicação visitando uma unidade de refirgeração e interagindo com o operador. Os consumidores podem iniciar sessão aqui para concluir as suas compras.',
         },
         toasts: {
           login:
@@ -272,7 +274,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: 'Registar Utilizador de Refrigeração',
+        header: 'Registar como Utilizador de Refrigeração ou Consumidor',
         languageFieldName: 'idioma',
       },
     },
@@ -427,6 +429,7 @@ export default {
         days: 'dias',
         day: 'dia',
         ttp: 'TTP',
+        daysLeft: '{{amount}} dias restantes',
         numberOfCrates: 'Número de paletes',
         totalWeight: 'Peso Total',
         priceType: 'Tipo de preço',
@@ -453,6 +456,10 @@ export default {
         emptyMessage: 'Por favor, adicione pelo menos uma palete ao seu check-in',
         noPlannedDaysMessage:
           'Faltam dias planeados em alguns itens. Não é possível calcular o custo estimado.',
+        seeMore: 'Ver mais',
+        seeLess: 'Ver menos',
+        listed: 'Listado',
+        cratesAddedLabel: 'Paletes adicionadas',
         WithCode: {
           modalTitle: 'Criar Check-in a partir de Check-out existente',
           modalDescription:
@@ -475,7 +482,7 @@ export default {
           individualCrateWeightButton: 'Clique aqui para editar o peso das paletes',
           individualCrateIdButton: 'Clique aqui para editar os IDs das paletes',
           numberOfCratesLabel: 'Número de paletes',
-          crateWeightLabel: 'Peso geral da palete',
+          crateWeightLabel: 'Peso da palete e listagem no marketplace',
           pricePerDayAndCrateLabel: 'Preço por dia / palete',
           pricePerDayAndKilogramLabel: 'Preço por dia / kg',
           fixedPriceLabel: 'Preço fixo',
@@ -487,6 +494,14 @@ export default {
             yesterday: 'Ontem',
             dayBefore: 'Há dois dias',
             evenBefore: 'Ainda antes',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'Aplicar a todos',
+            list: 'Listar para venda',
+            addMore: 'Adicionar mais',
+            sellingPrice: 'Preço de venda',
+            potentialSellingPrice: 'Valor potencial de venda',
+            info: 'A configuração de preço refere-se à venda do produto, não à taxa de armazenamento a frio.',
           },
           cratesError: 'Por favor, insira um número positivo de paletes',
           crateWeightError: 'Por favor, insira um peso positivo para a palete',
@@ -869,6 +884,15 @@ export default {
           creditCard: 'Cartão de Crédito',
         },
       },
+      Coupons: {
+        emptyMessage: 'Nenhum cupom foi adicionado ainda',
+        addCoupon: 'Adicionar cupom',
+        code: 'Código do cupom',
+        percentage: 'Porcentagem do cupom',
+        revokeTitle: 'Revogando cupom',
+        revokeMessage:
+          'Tem certeza de que deseja revogar este cupom? Uma vez revogado, ele não poderá ser usado novamente e o desconto não estará mais disponível. Esta ação é permanente e não pode ser desfeita.',
+      },
     },
     AccountDetails: {
       popups: {
@@ -893,6 +917,10 @@ export default {
       },
       toasts: {
         success: 'Utilizador atualizado com sucesso',
+      },
+      ContactsSharing: {
+        publicPhone: 'Tornar o número de telefone público',
+        publicEmail: 'Tornar o e-mail público',
       },
       PayoutSettings: {
         addTitle: 'Por favor, insira as informações da sua conta bancária',

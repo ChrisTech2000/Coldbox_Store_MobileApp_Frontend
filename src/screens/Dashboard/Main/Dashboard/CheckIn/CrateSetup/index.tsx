@@ -7,7 +7,6 @@ import { Divider, List } from 'react-native-paper';
 import { GenericError } from '#ui/components/GenericError';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
-import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -31,7 +30,6 @@ import CropDetails from './CropDetails';
 import CropHarvest from './CropHarvest';
 import FloatingFooter from './FloatingFooter';
 import PlannedDays from './PlannedDays';
-import Sellable from './Sellable';
 
 export type SetupSchema = {
   numberOfCrates: number;
@@ -39,10 +37,11 @@ export type SetupSchema = {
   crates: Array<{
     crateWeight: number;
     crateId: number | undefined;
+    isSellable: boolean | undefined;
   }>;
   plannedDays: number | undefined;
   dateHarvested: EDateCropped;
-  isSellableInMarketplace: boolean;
+  price: number | undefined;
 };
 
 // TODO → add text content to translations
@@ -61,7 +60,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     setError,
     clearErrors,
     reset,
-    getValues,
     formState: { errors },
   } = useForm<SetupSchema>({
     resolver: zodResolver((z, t) =>
@@ -82,9 +80,11 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           .object({
             crateWeight: z.number(),
             crateId: z.number().optional(),
+            isSellable: z.boolean(),
           })
           .array(),
         plannedDays: z.number().optional(),
+        price: z.number().optional(),
         dateHarvested: z
           .enum([
             EDateCropped.TODAY,
@@ -96,7 +96,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           .refine((date) => !!date, {
             message: t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateError'),
           }),
-        isSellableInMarketplace: z.boolean(),
       })
     ),
   });
@@ -104,12 +103,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   useCrateWeightPricingBridge((values) => {
-    // TODO → include the crate pricing in the future
     reset((state) => ({
       ...state,
-      crates: values.crates.map((crate) => ({ crateId: crate.id, crateWeight: crate.weight })),
+      crates: values.crates.map((crate) => ({
+        crateId: crate.id,
+        crateWeight: crate.weight,
+        isSellable: crate.isSellable,
+      })),
       numberOfCrates: values.crates.length,
-      isSellableInMarketplace: values.isSellable,
+      price: values.price,
     }));
   });
 
@@ -180,6 +182,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             ? Array.from({ length: numberOfCrates }, () => ({
                 crateWeight: weight,
                 crateId: undefined,
+                isSellable: false,
               }))
             : [...crates];
 
@@ -190,6 +193,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
               () => ({
                 crateWeight: weight,
                 crateId: undefined,
+                isSellable: false,
               })
             );
             newCrates = [...newCrates, ...additionalCrates];
@@ -230,7 +234,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         harvestDate = crop.harvestedBefore;
       }
 
-      // TODO → include crate weight, pricing and sellable state in the future
       addProduce({
         crop: {
           id: crop.id,
@@ -244,10 +247,12 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           tag: crate.crateId?.toString() ?? '',
           coolingUnitId: coolingUnit.id,
           plannedDays: values.plannedDays,
+          isSellable: crate.isSellable,
         })),
         initialGrade: null,
         harvestDate: (harvestDate ?? dateHarvested) as number,
         hasPicture: false, // TODO: confirm this in the future, but sending true returns a 500 error
+        price: values.price,
       });
 
       navigation.navigate('CheckIn', {
@@ -271,7 +276,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
               formControl={control}
               errorMessage={errors.numberOfCrates?.message}
             />
-            <Sellable formControl={control} />
 
             <View tw="flex-col">
               <List.Item
@@ -280,19 +284,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 onPress={(evt) => {
                   evt?.stopPropagation();
                   navigation.navigate('CrateWeightAndPricing', {
-                    isSellableInMarketplace: getValues('isSellableInMarketplace'),
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
                     currencySymbol,
                     crates,
                   });
                 }}
                 left={() => (
-                  <View tw="flex-row">
-                    <Text tw="text-base">Crate weight</Text>
-                    <Sup>({t('Dashboard.ProduceDetails.kilogram').toUpperCase()})</Sup>
-                    <Text tw="text-base">and pricing</Text>
-                    <Sup>({company?.currency?.toUpperCase() ?? 'NGN'})</Sup>
-                  </View>
+                  <Text tw="text-base">
+                    {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel')}
+                  </Text>
                 )}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
               />
@@ -359,5 +359,7 @@ export default withSafeArea(
   withErrorBoundary(CrateSetup, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );

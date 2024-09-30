@@ -6,14 +6,16 @@ import { Modalize } from 'react-native-modalize';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-
 import { paperTheme } from '#ui/lib/theme';
+
+import { useTranslationUtils } from '#i18n/utils';
 
 import CouponModal from './components/CouponModal';
 import { useCouponStore } from './store';
 
 // TODO → add text content to translations
 function CouponsRoot() {
+  const { t } = useTranslationUtils();
   const modalRef = useRef<Modalize>(null);
 
   return (
@@ -24,7 +26,7 @@ function CouponsRoot() {
         <View tw="h-36 w-36 items-center justify-center rounded-full bg-zinc-100">
           <Icon name="ticket-percent-outline" size={60} color={paperTheme.colors.primary} />
         </View>
-        <Text tw="text-base">No coupons has been added yet</Text>
+        <Text tw="text-base">{t('Dashboard.Management.Coupons.emptyMessage')}</Text>
       </View>
 
       <CouponModal
@@ -48,7 +50,7 @@ function CouponsRoot() {
           modalRef.current?.open();
         }}
       >
-        Add Coupon
+        {t('Dashboard.Management.Coupons.addCoupon')}
       </Button>
     </View>
   );

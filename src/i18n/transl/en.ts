@@ -158,11 +158,13 @@ const en = {
     },
   },
   Auth: {
+    welcomePopup:
+      "Welcome to Coldtivate! If you are a farmer, a trader, or are interested in purchasing produce stored in the cold rooms, please sign up by clicking on 'Sign up as cooling user or consumer'. If you work for a cooling company, please contact your responsible to check whether your company is registered. If it is, your responsible should send you an SMS invite for you to sign up as a registered employee or as an operator. If not, you can sign up the company, and register as a registered employee. Please check the 'App info' section for FAQs.",
     Root: {
       welcome: 'Welcome to Coldtivate',
       signIn: 'Sign In',
       signUpCompany: 'Sign up as Company',
-      signUpCoolingUser: 'Sign up as Cooling User',
+      signUpCoolingUser: 'Sign Up as a Cooling User or Consumer',
       appInfo: 'App Info',
     },
     SignIn: {
@@ -181,7 +183,7 @@ const en = {
         coolingUser: {
           label: 'Cooling User',
           description:
-            'The cold room user. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator.',
+            'The cold room user and consumer. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator. Consumers can log in here to complete purchases.',
         },
         toasts: {
           login:
@@ -269,7 +271,7 @@ const en = {
         },
       },
       SignUpCoolingUser: {
-        header: 'Sign Up Cooling User',
+        header: 'Sign Up as a Cooling User or Consumer',
         languageFieldName: 'language',
       },
     },
@@ -420,6 +422,7 @@ const en = {
         checkIn: 'Check-in',
         days: 'days',
         day: 'day',
+        daysLeft: '{{amount}} days left',
         ttp: 'TTP',
         numberOfCrates: 'Number of crates',
         totalWeight: 'Total Weight',
@@ -439,6 +442,7 @@ const en = {
       CheckIn: {
         emptyState: 'No boxes added yet',
         addCrates: 'Add Crates',
+        cratesAddedLabel: 'Crates Added',
         checkInWithCode: 'Check in with code',
         estimatedCost: 'Estimated Cost',
         pricing: 'Pricing',
@@ -447,6 +451,9 @@ const en = {
         emptyMessage: 'Please add at least one crate to your check in',
         noPlannedDaysMessage:
           'Missing planned days on some items. Cannot calculate estimated cost.',
+        seeMore: 'See more',
+        seeLess: 'See less',
+        listed: 'Listed',
         WithCode: {
           modalTitle: 'Create Check In from existing Check Out',
           modalDescription:
@@ -469,7 +476,7 @@ const en = {
           individualCrateWeightButton: 'Click here to edit individual crate weight',
           individualCrateIdButton: 'Click here to edit individual crate IDs',
           numberOfCratesLabel: 'Number of crates',
-          crateWeightLabel: 'General weight of crate',
+          crateWeightLabel: 'Crate weight and marketplace listing',
           pricePerDayAndCrateLabel: 'Price per day / crate',
           pricePerDayAndKilogramLabel: 'Price per day / kg',
           fixedPriceLabel: 'Fixed price',
@@ -481,6 +488,14 @@ const en = {
             yesterday: 'Yesterday',
             dayBefore: 'Two days back',
             evenBefore: 'Even Before',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'Apply to all',
+            list: 'List for sale',
+            addMore: 'Add more',
+            sellingPrice: 'Listing selling price',
+            potentialSellingPrice: 'Potential selling value',
+            info: 'The price configuration refers to product sale, not cooling storage fee.',
           },
           cratesError: 'Please insert a positive crate number',
           crateWeightError: 'Please insert a positive crate weight',
@@ -860,6 +875,15 @@ const en = {
           creditCard: 'Credit Card',
         },
       },
+      Coupons: {
+        emptyMessage: 'No coupons has been added yet',
+        addCoupon: 'Add Coupon',
+        code: 'Coupon code',
+        percentage: 'Coupon percentage',
+        revokeTitle: 'Revoking Coupon',
+        revokeMessage:
+          'Are you sure you want to revoke this coupon? Once revoked, it cannot be used again and the discount will no longer be available. This action is permanent and cannot be undone.',
+      },
     },
     AccountDetails: {
       popups: {
@@ -884,6 +908,10 @@ const en = {
         sellerSettings: 'Seller Settings',
         buyerSettings: 'Buyer Settings',
         details: 'Details',
+      },
+      ContactsSharing: {
+        publicPhone: 'Make phone number public',
+        publicEmail: 'Make e-mail public',
       },
       PayoutSettings: {
         addTitle: 'Please insert your bank account information',

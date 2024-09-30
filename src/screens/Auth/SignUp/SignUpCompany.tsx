@@ -452,4 +452,4 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
   );
 }
 
-export default withSafeArea(SignUpCompany);
+export default withSafeArea(SignUpCompany, ['bottom'], true);

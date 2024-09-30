@@ -21,8 +21,9 @@ import { cn } from '#ui/lib/cn';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import isNil from 'lodash/isNil';
 import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
-import MarketplaceSettingsButton from './components/MarketplaceSettingsButton';
+import { currencies } from 'currencies.json';
 
 function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   const { produce, coolingUnit, currency } = props.route.params;
@@ -87,6 +88,24 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       {
         label: t('Dashboard.ProduceDetails.cropType'),
         value: produce.cropName,
+      },
+      {
+        label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
+        value: (
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('EditCrateWeightAndPricing', {
+                companyCurrency: currency,
+                currencySymbol: currencies.find((c) => c.name === currency)?.symbol ?? '',
+                crates: produce.crates,
+              })
+            }
+            tw="pl-4"
+          >
+            <Icon source="chevron-right" size={25} />
+          </TouchableOpacity>
+        ),
+        custom: true,
       },
       {
         label: t('Dashboard.ProduceDetails.numberOfCrates'),
@@ -184,12 +203,14 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                   produce.minimumRemainingShelfLife > 2 &&
                   'bg-yellow-400',
                 produce.minimumRemainingShelfLife <= 2 && 'bg-red-300',
-                (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
+                (isNil(produce.minimumRemainingShelfLife) ||
+                  produce.minimumRemainingShelfLife === -1) &&
                   'bg-gray-300'
               )}
               style={{
                 width: `${100 - percentage + (percentage > 1 ? 10 : 0)}%`,
                 opacity: 0.4,
+                maxWidth: '100%',
               }}
             />
             {percentage > 0 && (
@@ -199,8 +220,8 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                   produce.minimumRemainingShelfLife <= 7 &&
                     produce.minimumRemainingShelfLife > 2 &&
                     'bg-yellow-400',
-                  produce.minimumRemainingShelfLife <= 2 && 'bg-red-500',
-                  (!produce.minimumRemainingShelfLife ||
+                  produce.minimumRemainingShelfLife <= 2 && 'bg-red-700',
+                  (isNil(produce.minimumRemainingShelfLife) ||
                     produce.minimumRemainingShelfLife === -1) &&
                     'bg-gray-300'
                 )}
@@ -248,21 +269,19 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                 <Text variant="TextMedium" tw="text-base">
                   {item.label}
                 </Text>
-                <Text variant="TextMedium" tw="text-base text-gray-400">
-                  {item.value ?? '-'}
-                </Text>
+                {item.custom ? (
+                  item.value
+                ) : (
+                  <Text variant="TextMedium" tw="text-base text-gray-400">
+                    {item.value ?? '-'}
+                  </Text>
+                )}
               </View>
               <Divider />
             </View>
           )}
         />
       </View>
-
-      <MarketplaceSettingsButton
-        crates={produce.crates}
-        produceShelfLife={produce.minimumRemainingShelfLife ?? 0}
-        companyCurrency={currency}
-      />
       <CheckoutButtonRedirect coolingUnit={coolingUnit} farmer={farmer} crates={produce.crates} />
     </ScrollView>
   );
@@ -272,5 +291,7 @@ export default withSafeArea(
   withErrorBoundary(ProduceDetails, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );
