@@ -15,6 +15,7 @@ import { useTutorialStore } from '#stores/tutorial';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
 import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
+import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
@@ -42,7 +43,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }));
 
   const { start } = useWalkthroughStep({
-    number: 1,
+    number: ETutorialSteps.INITIAL_STEP,
     OverlayComponent: WelcomeMessageOverlay,
     fullScreen: true,
   });
@@ -144,9 +145,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-      loadingFarmerDashboardProduces ||
-      loadingOperatorDashboardProduces ||
-      areCoolingUnitsLoading ? (
+        loadingFarmerDashboardProduces ||
+        loadingOperatorDashboardProduces ||
+        areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>

@@ -27,12 +27,15 @@ import Locations from '#screens/Dashboard/Management/Locations';
 import Operators from '#screens/Dashboard/Management/Operators';
 import RegisteredEmployee from '#screens/Dashboard/Management/RegisteredEmployee';
 import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredEmployeeDetails';
+import { AddCoolingUserNavigationOverLay } from '#screens/Dashboard/Tutorial/AddCoolingUserNavigationOverlay';
+import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';
 import MarketSurveyStack, {
   MarketSurveyStackRoutes,
@@ -192,6 +195,13 @@ function _rightContentFactory(
   routeName: ManagementRoutePaths,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ): NavigationHeaderProps {
+  const { onLayout } = useWalkthroughStep({
+    number: ETutorialSteps.ADD_COOLING_USER_NAVIGATION_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: AddCoolingUserNavigationOverLay,
+    onPressMask: () => emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true),
+  });
+
   switch (routeName) {
     case 'Locations':
       return {
@@ -217,6 +227,7 @@ function _rightContentFactory(
       return {
         rightContent: (
           <Appbar.Action
+            onLayout={onLayout}
             icon="plus-circle-outline"
             size={32}
             onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true)}

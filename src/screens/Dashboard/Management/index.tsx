@@ -1,10 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
@@ -12,6 +13,9 @@ import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
+
+import { ManagementOverlay } from '../Tutorial/ManagementOverlay';
+import { ETutorialSteps } from '../Tutorial/utils/constants';
 
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
@@ -30,11 +34,20 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
     }
   );
 
+  const { onLayout } = useWalkthroughStep({
+    number: ETutorialSteps.GO_TO_COOLING_USERS_STEP,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    OverlayComponent: ManagementOverlay,
+    onPressMask: () => props.navigation.navigate('CoolingUsers')
+  });
+
+
   const disabledCoolingUnits = isLoading || !data.length;
   const coolingUnitsColor = disabledCoolingUnits ? colors.gray[400] : colors.gray[800];
 
   return (
-    <View tw="flex-1 justify-start">
+    <View tw="flex-1 justify-start" onLayout={onLayout}>
       <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUsers">
         <List.Item
           title={t('navigation.management.CoolingUsers')}

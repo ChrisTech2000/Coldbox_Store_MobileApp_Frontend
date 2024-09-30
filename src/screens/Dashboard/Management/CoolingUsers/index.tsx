@@ -8,6 +8,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { CoolingUsersOverlay } from '#screens/Dashboard/Tutorial/CoolingUsersOverlay';
+
 import type {
   ManagementRoutePaths,
   ManagementRouteProps,
@@ -25,6 +28,7 @@ import { AIR_PROD_BASE_URL } from '#constants/environment';
 
 import Prompt from './components/Prompt';
 import FormModal from './components/FormModal';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   const user = useAuthStore(useShallow((store) => store.user));
@@ -33,6 +37,12 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   const [isDownloading, toggleDownloading] = useToggle(false);
   const { t } = useTranslationUtils();
 
+  const { onLayout } = useWalkthroughStep({
+    number: ETutorialSteps.LIST_COOLING_USERS_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: CoolingUsersOverlay,
+  });
+  
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getOperatorFarmers',
     ColdtivateService.getOperatorFarmers,
@@ -62,14 +72,14 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
 
   if (isLoading) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center" onLayout={onLayout}>
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
   }
 
   return (
-    <View tw="flex-1 justify-start">
+    <View tw="flex-1 justify-start" onLayout={onLayout}>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={datums}

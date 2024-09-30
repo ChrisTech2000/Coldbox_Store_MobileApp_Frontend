@@ -6,8 +6,13 @@ import { styled } from 'nativewind';
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Drawer } from 'react-native-paper';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
+
+import { ETutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { RepeatTutorialOverlay } from '#screens/Dashboard/Tutorial/RepeatTutorialOverlay';
+import { DrawerManagementOverlay } from '#screens/Dashboard/Tutorial/DrawerManagementOverlay';
 
 import { Image } from '#ui/components/Image';
 
@@ -58,6 +63,20 @@ export default function DrawerContent(props: Props) {
   const resetManagementStore = useManagementStore((store) => store.reset);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
+  const { onLayout: onTutorialTabLayout } = useWalkthroughStep({
+    number: ETutorialSteps.REPEAT_TUTORIAL_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: RepeatTutorialOverlay,
+  });
+
+  const { onLayout: onManagementTabLayout } = useWalkthroughStep({
+    number: ETutorialSteps.GO_TO_MANAGEMENT_STEP,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    OverlayComponent: DrawerManagementOverlay,
+    onPressMask: () => props.navigation.navigate('Management')
+  });
+
   const onLogout = useCallback(() => {
     resetManagementStore();
     useAuthStore.getState().revokeSession();
@@ -92,6 +111,13 @@ export default function DrawerContent(props: Props) {
             <Drawer.Item
               label={props.t(datums.translationPath)}
               active={focusedRoute === routeName}
+              onLayout={
+                routeName === 'Tutorial'
+                  ? onTutorialTabLayout
+                  : routeName === 'Management'
+                    ? onManagementTabLayout
+                    : undefined
+              }
               onPress={(evt) => {
                 evt.stopPropagation();
                 if (routeName === 'Tutorial') {
