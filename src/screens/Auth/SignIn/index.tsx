@@ -8,17 +8,19 @@ import Employee from '#assets/icons/employee.svg';
 import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
 import Logo from '#assets/images/coldtivate_logo.svg';
+import InAppNotifications from '#common/InAppNotifications';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import type { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
 import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
+import { useTutorialStore } from '#stores/tutorial';
 import { ERoles, MAP_ROLES } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import InAppNotifications from '#common/InAppNotifications';
-import { useManagementStore } from '#stores/management';
 import { AccountCard } from './components/AccountCard';
 
 const IMG_SIZE = Dimensions.get('window').width / 2.5;
@@ -46,6 +48,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   }));
 
   const { t, zodResolver } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const toast = InAppNotifications.useToast();
 
   const descriptions = useMemo(
@@ -128,6 +131,8 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           refreshToken: result.refresh,
         });
         setUser({ ...result.user, role: result.role });
+
+        if (!result.user.lastLogin) toggleTutorial();
 
         toast.show(t('Auth.SignIn.accounts.toasts.success'), {
           type: 'md_success',

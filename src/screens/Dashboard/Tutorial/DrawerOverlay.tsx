@@ -1,8 +1,12 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { cn } from '#ui/lib/cn';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+
+const screenHeight = Dimensions.get('window').height;
 
 export function DrawerOverlay({ next, step: { mask, onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
@@ -10,7 +14,10 @@ export function DrawerOverlay({ next, step: { mask, onPressMask } }: IOverlayCom
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw="absolute top-8 left-3 w-[10%] h-[5%]"
+        tw={cn(
+          'absolute left-3 w-[10%] h-[5%]',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-8' : 'top-14'
+        )}
         onPress={() => {
           onPressMask?.();
           next();

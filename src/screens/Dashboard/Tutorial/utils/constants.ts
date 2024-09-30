@@ -16,4 +16,8 @@ export enum EOperatorTutorialSteps {
   HISTORY_STEP = 15,
   COOLING_UNITS_STEP = 16,
   ROOM_CONDITIONS_STEP = 17,
+  CHECK_OUT_STEP_1 = 18,
+  CHECK_OUT_STEP_2 = 19,
+  CHECK_OUT_STEP_3 = 20,
+  FINAL_STEP = 21,
 }

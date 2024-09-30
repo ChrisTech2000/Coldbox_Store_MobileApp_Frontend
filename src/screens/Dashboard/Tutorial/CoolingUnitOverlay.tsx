@@ -22,7 +22,7 @@ export function CoolingUnitOverlay({ next }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-center">{t('tutorial.steps.coolingUnitStep')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.coolingUnitStep')}</Text>
         <Button mode="text" onPress={next} labelStyle="text-green-primary">
           {t('actions.continue')}
         </Button>

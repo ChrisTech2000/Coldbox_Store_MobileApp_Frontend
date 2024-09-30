@@ -23,6 +23,7 @@ import {
   CheckInButtonOverlay,
   OperatorActionsOverlay,
 } from '#screens/Dashboard/Tutorial/CheckInOverlays';
+import { OperatorActionsOverlay as CheckoutOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
@@ -33,7 +34,11 @@ import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
-import { MOCKED_COOLING_UNIT, MOCKED_USER } from '../utils/mockedData';
+import {
+  MOCKED_CHECK_OUT_DATA,
+  MOCKED_COOLING_UNIT,
+  MOCKED_USER,
+} from '../../../Tutorial/utils/mockedData';
 
 type ManagementMode = 'check-in' | 'check-out';
 
@@ -61,6 +66,25 @@ export function OperatorActions({
     OverlayComponent: OperatorActionsOverlay,
     maskAllowInteraction: true,
     onPressMask: () => setIsCrateManagementOpen(true),
+  });
+
+  const { onLayout: onInitiateCheckoutLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.CHECK_OUT_STEP_1,
+    enableHardwareBack: true,
+    OverlayComponent: CheckoutOverlay,
+    maskAllowInteraction: true,
+    onStart: () => setIsCrateManagementOpen(true),
+    onPressMask: () =>
+      navigation.navigate('CheckOutStack', {
+        screen: 'CrateSelection',
+        // eslint-disable-next-line
+        // @ts-ignore
+        params: {
+          user: MOCKED_USER,
+          coolingUnit: MOCKED_COOLING_UNIT,
+          crates: MOCKED_CHECK_OUT_DATA,
+        },
+      }),
   });
 
   const { onLayout: onCheckInLayout } = useWalkthroughStep({
@@ -199,6 +223,7 @@ export function OperatorActions({
             <TouchableOpacity
               tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-red-400"
               onPress={onCheckOut}
+              onLayout={onInitiateCheckoutLayout}
             >
               <CheckOut width={20} height={20} />
             </TouchableOpacity>

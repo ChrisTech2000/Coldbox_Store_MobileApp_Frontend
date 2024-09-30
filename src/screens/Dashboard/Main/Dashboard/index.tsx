@@ -16,6 +16,7 @@ import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
 import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
 
 import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
@@ -45,6 +46,12 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { start } = useWalkthroughStep({
     number: EOperatorTutorialSteps.INITIAL_STEP,
     OverlayComponent: WelcomeMessageOverlay,
+    fullScreen: true,
+  });
+
+  useWalkthroughStep({
+    number: EOperatorTutorialSteps.FINAL_STEP,
+    OverlayComponent: TutorialFinishedMessageOverlay,
     fullScreen: true,
   });
 

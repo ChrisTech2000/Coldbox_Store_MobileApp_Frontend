@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import { Divider, Icon, Switch } from 'react-native-paper';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -15,6 +16,9 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { EPaymentType, EPricingType } from '#types/global';
+
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { CheckOut2ScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -42,6 +46,13 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const [discount, setDiscount] = useState<number>(0);
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isPaymentTypeModalOpen, setIsPaymentTypeModalOpen] = useState<boolean>(false);
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
+    enableHardwareBack: true,
+    OverlayComponent: CheckOut2ScreenOverlay,
+    onPressMask: () => rootNavigation.navigate('RootMainTabStack'),
+  });
 
   const { data: locations } = useApiCall(
     'getLocations',
@@ -272,7 +283,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           />
         </View>
         <Divider tw="bg-gray-400 my-2" />
-        <View tw="flex flex-row w-full justify-between items-center">
+        <View onLayout={onLayout} tw="flex flex-row w-full justify-between items-center">
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.CheckOut.paid')}
           </Text>

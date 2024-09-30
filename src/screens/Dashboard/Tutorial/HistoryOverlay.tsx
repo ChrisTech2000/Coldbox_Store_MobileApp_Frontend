@@ -21,7 +21,7 @@ export function HistoryOverlay({ next, step: { onPressMask } }: IOverlayComponen
           },
         ]}
       >
-        <Text tw="text-center">{t('tutorial.steps.history')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.history')}</Text>
         <Button
           mode="text"
           onPress={() => {
