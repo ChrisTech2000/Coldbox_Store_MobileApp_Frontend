@@ -46,4 +46,4 @@ function ContactsSharing() {
   );
 }
 
-export default withSafeArea(ContactsSharing);
+export default withSafeArea(ContactsSharing, ['bottom'], true);

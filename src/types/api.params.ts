@@ -411,3 +411,12 @@ export type GetPredictionTableParams = {
   days: Date[];
   statesIds: number[];
 };
+
+export interface CreateCouponParams extends JsonObject {
+  code: string;
+  discountPercentage: number;
+}
+
+export interface GetCouponListParams extends JsonObject {
+  revoked: 'only' | 'included';
+}

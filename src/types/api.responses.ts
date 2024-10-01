@@ -419,3 +419,15 @@ export type VerifyUbibotSensorConnectivityResponse = {
   success: string;
   data: Array<string>;
 };
+
+export interface CreateCouponResponse {
+  id: number;
+  code: string;
+  createdAt: string;
+  discountPercentage: number;
+  revokedAt: null | string;
+}
+
+export interface GetCouponListResponse {
+  nodes: Array<CreateCouponResponse>;
+}

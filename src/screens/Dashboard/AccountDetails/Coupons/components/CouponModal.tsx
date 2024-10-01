@@ -43,6 +43,10 @@ export default function CouponModal(props: {
 
   function onSubmit(values: FormValues<number>) {
     props.onSubmit?.(values);
+    form.reset({
+      code: datum?.code ?? '',
+      percentage: datum?.percentage.toString() ?? '',
+    });
   }
 
   return (

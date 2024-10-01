@@ -171,4 +171,4 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
   );
 }
 
-export default withSafeArea(PayoutSettings);
+export default withSafeArea(PayoutSettings, ['bottom'], true);
