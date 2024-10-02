@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import type { GetAvailableListingParams } from '#types/api.params';
+
 import type { FormValues } from './modules/MarketplaceFormManager';
 
 export type FilterItem = {
@@ -46,4 +48,18 @@ export const useMarketplaceFilters = create<MarketplaceFilterState>((set) => ({
     set(() => ({
       filters: [],
     })),
+}));
+
+export const useMarketplaceQueryParams = create<
+  GetAvailableListingParams & {
+    setParams: (params: Partial<GetAvailableListingParams>) => void;
+  }
+>((set) => ({
+  location: [],
+  sortBy: 'nearby-me',
+  coolingUnitIds: [],
+  page: 1,
+  itemsPerPage: 50,
+  setParams: (params: Partial<GetAvailableListingParams>) =>
+    set((state) => ({ ...state, ...params })),
 }));

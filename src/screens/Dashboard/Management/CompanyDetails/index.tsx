@@ -150,4 +150,4 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
   );
 }
 
-export default withSafeArea(CompanyDetails);
+export default withSafeArea(CompanyDetails, ['bottom'], true);

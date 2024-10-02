@@ -23,7 +23,7 @@ import LocationNameModule from './modules/LocationNameModule';
 import StepModule from './modules/StepModule';
 import StepFactory from './modules/StepFactory';
 
-import { geocoder, getCountryFullName } from './utils';
+import { Geocoder, getCountryFullName } from './utils';
 import InAppNotifications from '#common/InAppNotifications';
 
 function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
@@ -41,6 +41,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
       const { _step, ...rest } = values;
 
       let datums: Partial<PreprocessedFormValues> = {};
+      const geocoder = new Geocoder();
 
       switch (_step) {
         case 'geolocation':
@@ -106,4 +107,4 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   );
 }
 
-export default withSafeArea(AddLocation);
+export default withSafeArea(AddLocation, ['bottom'], true);

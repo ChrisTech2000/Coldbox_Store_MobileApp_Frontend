@@ -62,6 +62,8 @@ export type CheckInResponse = {
   movement: number;
   farmer: number;
   hasDt: string;
+  cratesIds: Array<number>;
+  produces: Array<{ id: number; cropId: number; crates: Array<number> }>;
 };
 
 export type CheckOut = Array<{
@@ -430,4 +432,31 @@ export interface CreateCouponResponse {
 
 export interface GetCouponListResponse {
   nodes: Array<CreateCouponResponse>;
+}
+
+export interface GetAvailableListingResponse {
+  nodes: Array<{
+    availableWeightInKg: number;
+    crateId: number;
+    createdAt: string;
+    currency: string;
+    id: number;
+    lastUpdatedAt: string;
+    pendingInCoolingFees: number;
+    pendingInCoolingFeesPricePerKg: number;
+    producePricePerKg: number;
+    relCompanyId: number;
+    relCoolingUnitId: number;
+    relCrateRemainingShelfLife: null | number;
+    relCropId: number;
+    relCheckInMovementCode: string;
+    totalPricePerKg: number;
+    weightLockedInPaymentPendingOrdersInKg: number;
+  }>;
+  pagination: {
+    itemsPerPage: number;
+    page: number;
+    totalItems: number;
+    totalPages: number;
+  };
 }

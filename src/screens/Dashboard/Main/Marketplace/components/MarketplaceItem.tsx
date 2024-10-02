@@ -9,8 +9,12 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import ColdtivateService from '#services/ColdtivateService';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+
+import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
 
 export default function MarketplaceItemWrapper(props: PropsWithChildren) {
   return (
@@ -22,7 +26,7 @@ export default function MarketplaceItemWrapper(props: PropsWithChildren) {
 }
 
 MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
-  shelfLife: number;
+  shelfLife: number | null;
   cropName: string;
   movementCode: string;
   cropImageUri: string;
@@ -32,9 +36,11 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
       <View tw="flex-col">
         <View tw="flex-row items-center space-x-2">
           <MaterialCommunityIcon name="timer-outline" size={23} color={colors.red[700]} />
-          <Text variant="TextMedium" tw="text-base text-red-700">
-            {props.shelfLife} days left
-          </Text>
+          {props.shelfLife !== null ? (
+            <Text variant="TextMedium" tw="text-base text-red-700">
+              {props.shelfLife} days left
+            </Text>
+          ) : null}
         </View>
 
         <View tw="my-1.5">
@@ -50,8 +56,8 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
   );
 };
 
-MarketplaceItemWrapper.CompanyAction = function _MarketplaceItemBody(props: {
-  company: { name: string; country: string; address: string; latitude: number; longitude: number };
+MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
+  company: { name: string; id: number; locationId: number | null };
   coolingUnitName: string;
   readOnly?: boolean;
 }) {
@@ -67,9 +73,32 @@ MarketplaceItemWrapper.CompanyAction = function _MarketplaceItemBody(props: {
     <Touchable
       tw="flex-row items-center justify-center space-x-2.5 px-1.5 py-2 self-start mb-0.5"
       rippleColor={colors.zinc[200]}
-      onPress={(evt) => {
+      onPress={async (evt) => {
         evt.stopPropagation();
-        emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, props.company);
+        if (!props.company.locationId) return;
+        const result = await ColdtivateService.getLocation({
+          companyId: props.company.id,
+          locationId: props.company.locationId,
+        });
+
+        const datum = {
+          name: result.company.name,
+          locationName: result.name,
+          address: [
+            result.streetNumber,
+            result.street,
+            result.city,
+            result.state,
+            result.zipCode,
+            countriesDict().getNameByISO(result.company.country ?? 'NG'),
+          ]
+            .filter(Boolean)
+            .join(', '),
+          latitude: result.latitude,
+          longitude: result.longitude,
+        } satisfies CompanyBottomSheetDatum;
+
+        emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, datum);
       }}
     >
       <MaterialCommunityIcon
@@ -84,7 +113,7 @@ MarketplaceItemWrapper.CompanyAction = function _MarketplaceItemBody(props: {
   );
 };
 
-MarketplaceItemWrapper.BuyAction = function _MarketplaceItemBody(props: {
+MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
   crateWeight: number;
   price: number;
   onAddFunc?: () => void;

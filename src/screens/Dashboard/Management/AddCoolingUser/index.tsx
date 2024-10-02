@@ -161,4 +161,4 @@ function _buildInitialValues(contextualFarmer?: Farmer) {
   return values;
 }
 
-export default withSafeArea(AddCoolingUser);
+export default withSafeArea(AddCoolingUser, ['bottom'], true);

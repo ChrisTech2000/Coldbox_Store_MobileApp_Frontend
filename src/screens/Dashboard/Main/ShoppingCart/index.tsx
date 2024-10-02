@@ -95,7 +95,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                       evt.stopPropagation();
                       emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, {
                         name: 'Mosano',
-                        country: 'Portugal',
+                        locationName: 'Portugal',
                         address: 'Rua D. João I, nº 256 4450-162 Matosinhos',
                         latitude: 41.178465,
                         longitude: -8.687502,

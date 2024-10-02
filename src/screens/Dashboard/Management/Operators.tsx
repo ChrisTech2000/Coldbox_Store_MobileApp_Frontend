@@ -126,4 +126,4 @@ function _propsFactory(
   return props;
 }
 
-export default withSafeArea(Operators);
+export default withSafeArea(Operators, ['bottom'], true);
