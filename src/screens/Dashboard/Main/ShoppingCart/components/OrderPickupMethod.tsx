@@ -62,10 +62,6 @@ export default function OrderPickupMethod(props: { onConfirm?: (selected: Datum)
                     {
                       companyName: 'Lorem Ipsum',
                       phoneNumber: '+0123456789',
-                      produces: [
-                        { cropName: 'Banana', weight: 2, code: 'CU05-03' },
-                        { cropName: 'Banana', weight: 2, code: 'CU05-03' },
-                      ],
                     },
                   ] satisfies Array<DeliveryInformationDatum>);
                 }}

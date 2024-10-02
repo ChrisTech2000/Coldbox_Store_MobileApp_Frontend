@@ -1137,6 +1137,8 @@ const en = {
       products: 'Products',
       consultOrders: 'Consult My Orders',
       total: 'Total',
+      couponQuestion: 'Have a discount coupon?',
+      redeem: 'Redeem code.',
       errors: {
         invalid: 'Invalid value',
       },

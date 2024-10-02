@@ -3,7 +3,7 @@ import truncate from 'lodash/truncate';
 import React, { useRef, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { Divider, List, Portal } from 'react-native-paper';
+import { List, Portal } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
@@ -19,7 +19,6 @@ import { useTranslationUtils } from '#i18n/utils';
 export type DeliveryInformationDatum = {
   companyName: string;
   phoneNumber: string;
-  produces: Array<{ cropName: string; weight: number; code: string }>;
 };
 
 // TODO → maybe replace Flatlist + .map() with Flashlist for better performance (would need to test it first)
@@ -56,7 +55,7 @@ export default function DeliveryInformationBottomSheet() {
             keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
                 <_Field
                   label={t('Dashboard.ShoppingCart.companyName')}
@@ -68,16 +67,6 @@ export default function DeliveryInformationBottomSheet() {
                   value={item.phoneNumber}
                   mode="clipboard"
                 />
-                <Divider tw="bg-zinc-400 mt-1.5" />
-                {item.produces.map((produce, produceIdx) => (
-                  <_Field
-                    key={`delivery-information-${index}-produce-#${produceIdx}`}
-                    label={produce.cropName}
-                    value={`${produce.weight}KG`}
-                    smallText={produce.code}
-                    mode="highlight"
-                  />
-                ))}
               </View>
             )}
           />

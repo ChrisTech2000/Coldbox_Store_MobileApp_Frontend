@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { GestureResponderEvent, View } from 'react-native';
+import { GestureResponderEvent, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -72,6 +72,14 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           {/** TODO: integrate pickup methods */}
           <OrderPickupMethod />
         </View>
+
+        <View tw="flex-row items-center space-x-1">
+          <Text tw="text-lg">{t('Dashboard.ShoppingCart.couponQuestion')}</Text>
+          <TouchableOpacity onPress={() => null}>
+            <Text tw="text-lg text-green-primary">{t('Dashboard.ShoppingCart.redeem')}</Text>
+          </TouchableOpacity>
+        </View>
+
         <View tw="flex-col w-full mt-6">
           <View tw="flex-row items-center justify-between">
             <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>

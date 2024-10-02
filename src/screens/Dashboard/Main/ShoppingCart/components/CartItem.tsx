@@ -73,6 +73,7 @@ export function CartItem({ item }: CartItemProps) {
     );
   }
 
+  console.log(crop);
   return (
     <View tw="flex-row w-full my-3 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
       <View tw="w-2 bg-red-700 h-full" />
@@ -96,9 +97,9 @@ export function CartItem({ item }: CartItemProps) {
             </View>
           </View>
           <FastImage
-            tw="w-20 h-16"
+            tw="w-20 h-16 mr-1"
             resizeMode="contain"
-            source={{ uri: `${API_BASE_URL}media/${crop?.name}` }}
+            source={{ uri: `${API_BASE_URL}media/${crop?.image}` }}
           />
         </View>
         <Touchable

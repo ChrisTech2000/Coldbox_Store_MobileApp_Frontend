@@ -69,7 +69,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
               <View tw="flex-col w-full mt-6">
                 <View tw="flex-row items-center justify-between">
                   <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
-                  <Text tw="text-lg">${data.totalAmount}</Text>
+                  <Text tw="text-lg">${data.totalAmount.toFixed(2)}</Text>
                 </View>
                 <Divider tw="bg-zinc-400 my-3" />
                 <Button
