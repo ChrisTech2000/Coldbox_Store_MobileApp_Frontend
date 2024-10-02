@@ -1,38 +1,71 @@
-import { useMarketplaceQueryParams } from './store';
+import { useMemo } from 'react';
+import { CurrencyStandardization } from 'currency-format-utils';
 
 import type { Company } from '#types/global';
 import type { GetAllCropsResponse, GetCoolingUnitResponse } from '#types/api.responses';
+import type { GetAvailableListingParams } from '#types/api.params';
 import { useMap } from '#ui/hooks/useMap';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/Marketplace';
 import ColdtivateService from '#services/ColdtivateService';
 
+import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
+
 export type AvailableListingDatum = {
   id: number;
-  cropName: string;
   movementCode: string;
-  cropImage: string;
   crateWeight: number;
   price: number;
   shelfLife: number | null;
+  crop: {
+    id: number;
+    name: string;
+    image: string;
+  };
   company: {
     id: number;
     name: string;
     locationId: number | null;
   };
-  coolingUnitName: string;
+  coolingUnit: {
+    id: number;
+    name: string;
+  };
+  distance: number;
+  currencyValue: string;
 };
 
 export function useMarketplaceListing() {
   const queryParams = useMarketplaceQueryParams();
+  const filters = useMarketplaceFilters((store) => store.filters);
 
   const [companyMap, companyActions] = useMap<number, Company>();
   const [coolingUnitMap, coolingUnitActions] = useMap<number, GetCoolingUnitResponse>();
   const [cropsMap, cropsActions] = useMap<number, GetAllCropsResponse>();
 
-  return useApiCall(
+  const filtering = useMemo(
+    () => ({
+      unitsToFilterIn: new Set<number>(
+        filters
+          .filter(({ key }) => key === 'coolingUnits')
+          .map(({ value }) => value) as Array<number>
+      ),
+      companiesToFilterIn: new Set<number>(
+        filters.filter(({ key }) => key === 'companies').map(({ value }) => value) as Array<number>
+      ),
+      cropsToFilterIn: new Set<number>(
+        filters.filter(({ key }) => key === 'crops').map(({ value }) => value) as Array<number>
+      ),
+      priceRangeFilter: filters.find(({ key }) => key === 'priceRange')?.value as
+        | [number, number]
+        | undefined,
+    }),
+    [filters]
+  );
+
+  const { data: datums, ...rest } = useApiCall(
     'getAvailableListing',
-    async (params) => {
+    async (params: GetAvailableListingParams) => {
       const listing = await MarketplaceService.getAvailableListing(params);
 
       // companies aggregation
@@ -83,35 +116,68 @@ export function useMarketplaceListing() {
       }
       cropsActions.setAll(cropsMapCopy);
 
-      // TODO: filter by marketplace filters
-      // marketplace listing remap
+      // marketplace listing datums
       return listing.nodes.map((node) => {
         const contextualCrop = cropsMapCopy.get(node.relCropId);
         const contextualUnit = unitsMapCopy.get(node.relCoolingUnitId);
+        const company = companiesMapCopy.get(node.relCompanyId);
+        const currencyFormat = CurrencyStandardization.currencyCode({
+          code: node.currency,
+          value: node.producePricePerKg,
+        });
         return {
           id: node.id,
+          distance: node.distance,
           crateWeight: node.availableWeightInKg,
           shelfLife: node.relCrateRemainingShelfLife,
           price: node.producePricePerKg,
           company: {
             id: node.relCompanyId,
-            name: companiesMapCopy.get(node.relCompanyId)?.name ?? '',
+            name: company?.name ?? '',
             locationId: contextualUnit?.location ?? null,
           },
-          coolingUnitName: contextualUnit?.name ?? '',
-          cropImage: contextualCrop?.image ?? '',
-          cropName: contextualCrop?.name ?? '',
+          coolingUnit: {
+            id: contextualUnit?.id ?? 0,
+            name: contextualUnit?.name ?? '',
+          },
+          crop: {
+            id: contextualCrop?.id ?? 0,
+            name: contextualCrop?.name ?? '',
+            image: contextualCrop?.image ?? '',
+          },
           movementCode: node.relCheckInMovementCode,
+          currencyValue: currencyFormat.getValueFormated(),
         } satisfies AvailableListingDatum;
       });
     },
     {
-      location: queryParams.location,
+      page: 1,
+      itemsPerPage: 300,
       sortBy: queryParams.sortBy,
-      coolingUnitIds: queryParams.coolingUnitIds,
-      page: queryParams.page,
-      itemsPerPage: queryParams.itemsPerPage,
+      location: queryParams.location,
+      filterByMaxDistanceInKm: queryParams.filterByMaxDistanceInKm,
+      filterByCoolingUnitsIds: Array.from(filtering.unitsToFilterIn),
     },
-    { skip: (queryParams?.location ?? []).length === 0, defaultData: undefined }
+    { skip: (queryParams?.location ?? []).length === 0, defaultData: [], errorRetryCount: 1 }
   );
+
+  return {
+    ...rest,
+    data: useMemo(() => {
+      const { companiesToFilterIn, cropsToFilterIn, priceRangeFilter } = filtering;
+
+      // apply filters to the remapped listings
+      return datums.filter((datum) => {
+        const isInCompanyFilter =
+          !companiesToFilterIn.size || companiesToFilterIn.has(datum.company.id);
+        const isInCropFilter = !cropsToFilterIn.size || cropsToFilterIn.has(datum.crop.id);
+
+        const isInPriceRange =
+          !priceRangeFilter ||
+          (datum.price >= priceRangeFilter[0] && datum.price <= priceRangeFilter[1]);
+
+        return isInCompanyFilter && isInCropFilter && isInPriceRange;
+      });
+    }, [datums, filtering]),
+  };
 }

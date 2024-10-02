@@ -50,16 +50,18 @@ export const useMarketplaceFilters = create<MarketplaceFilterState>((set) => ({
     })),
 }));
 
+type MarketplaceQueryParams = Pick<
+  GetAvailableListingParams,
+  'location' | 'sortBy' | 'filterByMaxDistanceInKm'
+>;
+
 export const useMarketplaceQueryParams = create<
-  GetAvailableListingParams & {
-    setParams: (params: Partial<GetAvailableListingParams>) => void;
+  MarketplaceQueryParams & {
+    setParams: (params: Partial<MarketplaceQueryParams>) => void;
   }
 >((set) => ({
   location: [],
-  sortBy: 'nearby-me',
-  coolingUnitIds: [],
-  page: 1,
-  itemsPerPage: 50,
-  setParams: (params: Partial<GetAvailableListingParams>) =>
-    set((state) => ({ ...state, ...params })),
+  sortBy: 'price-asc',
+  filterByMaxDistanceInKm: 0,
+  setParams: (params: Partial<MarketplaceQueryParams>) => set((state) => ({ ...state, ...params })),
 }));

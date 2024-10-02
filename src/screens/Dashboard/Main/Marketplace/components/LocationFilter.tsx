@@ -51,9 +51,10 @@ export default function MarketplaceLocationFilter() {
         cityName: values.cityName,
         countryCode: company.country,
       });
-      useMarketplaceQueryParams
-        .getState()
-        .setParams({ location: [result.latitude, result.longitude] });
+      useMarketplaceQueryParams.getState().setParams({
+        location: [result.latitude, result.longitude],
+        filterByMaxDistanceInKm: values.distance,
+      });
       modalRef.current?.close();
     } catch (exception) {
       console.error(exception);
@@ -158,6 +159,7 @@ export default function MarketplaceLocationFilter() {
                 evt.stopPropagation();
                 modalRef.current?.close();
               }}
+              disabled={form.formState.isSubmitting}
             >
               {t('actions.cancel')}
             </Button>
@@ -167,6 +169,7 @@ export default function MarketplaceLocationFilter() {
               uppercase
               // eslint-disable-next-line
               onPress={form.handleSubmit(onSubmit as any)}
+              disabled={form.formState.isSubmitting}
             >
               Apply
             </Button>

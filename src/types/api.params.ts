@@ -429,7 +429,8 @@ export interface UpdateListedCrateParams extends JsonObject {
 export interface GetAvailableListingParams extends JsonObject {
   location: [number, number] | [];
   sortBy?: 'price-asc' | 'price-desc' | 'nearby-me';
-  coolingUnitIds?: Array<number>;
+  filterByCoolingUnitsIds?: Array<number>;
   page?: number;
   itemsPerPage?: number;
+  filterByMaxDistanceInKm?: number;
 }

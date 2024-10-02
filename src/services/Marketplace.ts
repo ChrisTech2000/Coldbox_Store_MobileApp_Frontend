@@ -23,9 +23,18 @@ class MarketplaceService extends HttpClient {
     params: GetAvailableListingParams
   ): Promise<GetAvailableListingResponse> => {
     try {
-      const locationUrl = params.location.join(',');
       const { data } = await this.get<GetAvailableListingResponse>(
-        [MarketplaceEndpoints.AVAILABLE_LISTING, '?location=', locationUrl].join('')
+        MarketplaceEndpoints.AVAILABLE_LISTING,
+        {
+          params: {
+            ...params,
+            location: params.location.join(','),
+            filterByCoolingUnitsIds:
+              !params?.filterByCoolingUnitsIds || params.filterByCoolingUnitsIds.length < 1
+                ? undefined
+                : params.filterByCoolingUnitsIds.join(','),
+          },
+        }
       );
       return data;
     } catch (error) {

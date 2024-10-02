@@ -18,7 +18,7 @@ import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
 
 export default function MarketplaceItemWrapper(props: PropsWithChildren) {
   return (
-    <View tw="flex-row w-full my-3 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
+    <View tw="flex-row w-full my-2 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
       <View tw="w-2 bg-red-700 h-full" />
       <View tw="p-3">{props.children}</View>
     </View>
@@ -115,7 +115,7 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
 
 MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
   crateWeight: number;
-  price: number;
+  currencyValue: string;
   onAddFunc?: () => void;
 }) {
   const hasAction = typeof props.onAddFunc === 'function';
@@ -130,7 +130,7 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
             {props.crateWeight}KG available
           </Text>
           <Text variant="TextMedium" tw="text-base">
-            ${props.price} / KG
+            {props.currencyValue} / KG
           </Text>
         </View>
 
