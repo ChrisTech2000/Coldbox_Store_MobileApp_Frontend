@@ -28,7 +28,7 @@ export default class HttpClient {
   constructor(options?: HttpClientOptions) {
     this.updateOptions({
       baseURL: API_BASE_URL,
-      // baseURL: 'https://cd97-188-250-221-28.ngrok-free.app',
+      //baseURL: 'https://cd97-188-250-221-28.ngrok-free.app',
       getTokens: () => {
         const storedTokens = useAuthStore.getState().tokens;
         return {

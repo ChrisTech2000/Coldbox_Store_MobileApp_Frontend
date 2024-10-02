@@ -1,8 +1,8 @@
-import { type NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { Divider } from 'react-native-paper';
+import { ActivityIndicator, Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Button } from '#ui/components/Button';
@@ -10,23 +10,44 @@ import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import { paperTheme } from '#ui/lib/theme';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import MarketplaceService from '#services/MarketplaceService';
 
 import DeliveryInformationBottomSheet, {
   type DeliveryInformationDatum,
 } from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-function OrderOverview() {
+function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
-  // eslint-disable-next-line
-  const navigation = useNavigation<NavigationProp<any>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+
+  const { data, isLoading } = useApiCall(
+    'getOrder',
+    MarketplaceService.getOrder,
+    props.route.params.orderId,
+    {
+      defaultData: undefined,
+    }
+  );
+
+  if (isLoading || !data.items?.length) {
+    return (
+      <View tw="flex-1 items-center justify-center mt-4">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -46,6 +67,15 @@ function OrderOverview() {
               <OrderDetailsCard
                 heading={t('Dashboard.ShoppingCart.orderOverview')}
                 totalLabel="Order total"
+                produceWeight={data.items?.reduce(
+                  (acc, curr) => (acc += curr.orderedProduceWeight),
+                  0
+                )}
+                subtotal={data.totalProduceAmount}
+                discount={0} // TODO: implement discount coupons
+                coolingFees={data.totalCoolingFeesAmount}
+                paymentFees={data.totalPaymentFeesAmount}
+                total={data.totalAmount}
               />
             </View>
 
@@ -64,12 +94,10 @@ function OrderOverview() {
                         {
                           companyName: 'Mosano',
                           phoneNumber: '+0123456789',
-                          produces: [{ cropName: 'Banana', weight: 2, code: 'CU05-03' }],
                         },
                         {
                           companyName: 'Lorem Ipsum',
                           phoneNumber: '+0123456789',
-                          produces: [{ cropName: 'Banana', weight: 2, code: 'CU05-03' }],
                         },
                       ] satisfies Array<DeliveryInformationDatum>);
                     }}
@@ -81,15 +109,6 @@ function OrderOverview() {
                 </View>
               </View>
             </View>
-
-            {/* <View tw="space-y-5">
-              <View tw="flex-row items-center justify-between">
-                <Text tw="text-base text-green-primary font-bold">Payment method</Text>
-              </View>
-              <View tw="justify-center border border-solid border-zinc-300 rounded-xl px-4 h-14">
-                <Text tw="text-lg font-bold">VISA ****0329</Text>
-              </View>
-            </View> */}
 
             <View tw="space-y-5">
               <Text tw="text-base text-green-primary font-bold">
@@ -126,12 +145,8 @@ function OrderOverview() {
           tw="w-10/12"
           onPress={(evt) => {
             evt.stopPropagation();
-            navigation.navigate('Main', {
-              screen: 'Orders',
-              params: {
-                screen: 'OrdersRoot',
-              },
-            });
+            emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
+            rootNavigation.navigate('Dashboard');
           }}
         >
           {t('Dashboard.ShoppingCart.consultOrders')}

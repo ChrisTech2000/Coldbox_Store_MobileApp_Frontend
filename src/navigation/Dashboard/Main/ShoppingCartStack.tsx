@@ -19,8 +19,8 @@ import NavigatorHeader from '#navigation/components/NavigatorHeader';
 export type ShoppingCartStackRoutes = {
   Root: undefined;
   OrderDetails: undefined;
-  OrderOverview: undefined;
-  PaystackPayment: { url: string };
+  OrderOverview: { orderId: number };
+  PaystackPayment: { url: string; orderId: number };
 };
 
 export type ShoppingCartStackRoutePaths = keyof ShoppingCartStackRoutes;
@@ -44,7 +44,7 @@ export default function ShoppingCartStack() {
       const routeName = props.route.name;
       return {
         ...props,
-        headerShown: routeName !== 'OrderOverview',
+        headerShown: routeName !== 'OrderOverview' && routeName !== 'PaystackPayment',
         header: (headerProps) => (
           <NavigatorHeader
             {...headerProps}

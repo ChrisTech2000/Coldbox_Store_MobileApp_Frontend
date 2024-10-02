@@ -6,10 +6,9 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { paperTheme } from '#ui/lib/theme';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
@@ -40,8 +39,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
     if (result.authorizationUrl) {
       setIsSubmitting(false);
-      emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
-      props.navigation.navigate('PaystackPayment', { url: result.authorizationUrl });
+      props.navigation.navigate('PaystackPayment', {
+        url: result.authorizationUrl,
+        orderId: result.orderId,
+      });
     }
   }, []);
 
@@ -60,7 +61,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           <OrderDetailsCard
             heading={t('Dashboard.ShoppingCart.orderHeader')}
             totalLabel={t('Dashboard.ShoppingCart.total')}
-            produceWeight={data.items.reduce((acc, curr) => (acc += curr.orderedProduceWeight), 0)}
+            produceWeight={data.items?.reduce((acc, curr) => (acc += curr.orderedProduceWeight), 0)}
             subtotal={data.totalProduceAmount}
             discount={0} // TODO: implement discount coupons
             coolingFees={data.totalCoolingFeesAmount}
@@ -83,7 +84,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
         <View tw="flex-col w-full mt-6">
           <View tw="flex-row items-center justify-between">
             <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
-            <Text tw="text-lg">${data.totalAmount.toFixed(2)}</Text>
+            <Text tw="text-lg">${data.totalAmount?.toFixed(2)}</Text>
           </View>
           <Divider tw="bg-zinc-400 my-3" />
           <Button
@@ -93,7 +94,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             onPress={onPay}
             disabled={isSubmitting}
           >
-            {t('Dashboard.ShoppingCart.pay')}
+            {isSubmitting ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              t('Dashboard.ShoppingCart.pay')
+            )}
           </Button>
         </View>
       </View>

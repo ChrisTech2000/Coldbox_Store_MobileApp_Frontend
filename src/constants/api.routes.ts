@@ -98,6 +98,7 @@ export enum CouponsEndpoints {
 export enum EMarketplaceEndpoints {
   ADD_ITEM = 'marketplace/buyer/cart/items/',
   GET_CART = 'marketplace/buyer/cart/',
+  GET_ORDER = 'marketplace/buyer/orders/:orderId/',
   REMOVE_ITEM_FROM_CART = 'marketplace/buyer/cart/items/:crateId/',
   CHECKOUT_WITH_PAYSTACK = 'marketplace/buyer/cart/checkout-with-paystack/',
 }

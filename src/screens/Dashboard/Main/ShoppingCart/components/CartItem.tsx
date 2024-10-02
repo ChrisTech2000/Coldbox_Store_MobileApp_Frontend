@@ -73,7 +73,6 @@ export function CartItem({ item }: CartItemProps) {
     );
   }
 
-  console.log(crop);
   return (
     <View tw="flex-row w-full my-3 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
       <View tw="w-2 bg-red-700 h-full" />
@@ -94,6 +93,7 @@ export function CartItem({ item }: CartItemProps) {
               <Text variant="TextMedium" tw="text-xl">
                 {crop?.name}
               </Text>
+              <Text tw="text-base text-gray-500">{item.relCheckInMovementCode}</Text>
             </View>
           </View>
           <FastImage
@@ -158,6 +158,7 @@ export function CartItem({ item }: CartItemProps) {
             onPress={async (evt) => {
               evt.stopPropagation();
               await MarketplaceService.removeItemFromCart(item.relCrateId);
+              emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
             }}
           />
         </View>

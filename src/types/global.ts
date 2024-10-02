@@ -526,6 +526,7 @@ export type CartItem = {
   relCompanyId: number;
   relCrateId: number;
   relCrateRemainingShelfLife: number | null;
+  relCheckInMovementCode: string;
 };
 
 //////////////////////// ENUMS
