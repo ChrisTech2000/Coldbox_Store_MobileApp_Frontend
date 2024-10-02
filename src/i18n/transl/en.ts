@@ -1108,6 +1108,17 @@ const en = {
         },
       },
     },
+    MyOrders: {
+      sort: {
+        mostRecent: 'Most recent',
+        date: 'Date',
+        oldest: 'Oldest',
+        orderId: 'Order ID',
+        cropType: 'Crop Type',
+        coolingUnit: 'Cooling Unit',
+        orderTotal: 'Order Total',
+      },
+    },
     ShoppingCart: {
       empty: 'Your cart is empty',
       daysLeft: 'days left',

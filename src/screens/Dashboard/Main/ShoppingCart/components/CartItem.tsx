@@ -9,6 +9,7 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import { cn } from '#ui/lib/cn';
 
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
@@ -75,15 +76,47 @@ export function CartItem({ item }: CartItemProps) {
 
   return (
     <View tw="flex-row w-full my-3 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
-      <View tw="w-2 bg-red-700 h-full" />
-
+      <View
+        tw={cn(
+          'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
+          item.relCrateRemainingShelfLife &&
+            item.relCrateRemainingShelfLife <= 7 &&
+            item.relCrateRemainingShelfLife > 2 &&
+            'bg-yellow-400 border-yellow-400',
+          item.relCrateRemainingShelfLife &&
+            item.relCrateRemainingShelfLife < 2 &&
+            'bg-red-500 border-red-500',
+          (!item.relCrateRemainingShelfLife || item.relCrateRemainingShelfLife === -1) &&
+            'bg-gray-300 border-gray-300'
+        )}
+      />
       <View tw="flex-col p-3">
         <View tw="w-full flex-row items-start justify-between">
           <View tw="flex-col">
             {item.relCrateRemainingShelfLife ? (
               <View tw="flex-row items-center space-x-2">
-                <MaterialCommunityIcon name="timer-outline" size={23} color={colors.red[700]} />
-                <Text variant="TextMedium" tw="text-base text-red-700">
+                <MaterialCommunityIcon
+                  name="timer-outline"
+                  size={23}
+                  color={
+                    item.relCrateRemainingShelfLife > 7
+                      ? colors.green[400]
+                      : item.relCrateRemainingShelfLife <= 7 && item.relCrateRemainingShelfLife > 2
+                        ? colors.yellow[400]
+                        : colors.red[400]
+                  }
+                />
+                <Text
+                  variant="TextMedium"
+                  tw={cn(
+                    'text-base',
+                    'text-green-400',
+                    item.relCrateRemainingShelfLife <= 7 &&
+                      item.relCrateRemainingShelfLife > 2 &&
+                      'text-yellow-400',
+                    item.relCrateRemainingShelfLife < 2 && 'text-red-500'
+                  )}
+                >
                   {item.relCrateRemainingShelfLife} {t('Dashboard.ShoppingCart.daysLeft')}
                 </Text>
               </View>
