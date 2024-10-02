@@ -12,18 +12,22 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import DeliveryInformationBottomSheet, {
   type DeliveryInformationDatum,
 } from './DeliveryInformationBottomSheet';
+import { useTranslationUtils } from '#i18n/utils';
 
 // TODO → improve this in the future
 type Datum = string;
 
-// TODO → add text content to translations
 export default function OrderPickupMethod(props: { onConfirm?: (selected: Datum) => void }) {
+  const { t } = useTranslationUtils();
+
   const [selectedItem, setSelectedItem] = React.useState<Datum>('now');
 
   return (
     <React.Fragment>
       <View tw="flex-col space-y-5">
-        <Text tw="text-base text-green-primary font-bold">Pickup method</Text>
+        <Text tw="text-base text-green-primary font-bold">
+          {t('Dashboard.ShoppingCart.pickupMethods')}
+        </Text>
         <View tw="flex-col border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
           <RadioButton.Group
             value={selectedItem}
@@ -32,17 +36,21 @@ export default function OrderPickupMethod(props: { onConfirm?: (selected: Datum)
               props.onConfirm?.(value);
             }}
           >
-            <RadioButtonItem label="Pickup today" value="now" tw="flex flex-row-reverse ml-[-10]" />
+            <RadioButtonItem
+              label={t('Dashboard.ShoppingCart.pickUpToday')}
+              value="now"
+              tw="flex flex-row-reverse ml-[-10]"
+            />
             <Divider tw="bg-zinc-400" />
             <RadioButtonItem
-              label="Keep in storage (€ 0.00 / day)"
+              label={t('Dashboard.ShoppingCart.keepInStorageDailyRate', { price: '$3.00' })} // TODO: see if rate is fixed or daily
               value="later"
               tw="flex flex-row-reverse ml-[-10]"
             />
             <Divider tw="bg-zinc-400" />
             <View tw="flex-row items-center justify-between">
               <RadioButtonItem
-                label="Delivery"
+                label={t('Dashboard.ShoppingCart.delivery')}
                 value="delivery"
                 tw="flex flex-row-reverse ml-[-10] w-[65%]"
               />
@@ -62,7 +70,9 @@ export default function OrderPickupMethod(props: { onConfirm?: (selected: Datum)
                   ] satisfies Array<DeliveryInformationDatum>);
                 }}
               >
-                <Text tw="text-base text-green-primary">View contact(s)</Text>
+                <Text tw="text-base text-green-primary">
+                  {t('Dashboard.ShoppingCart.viewContacts')}
+                </Text>
               </Touchable>
             </View>
           </RadioButton.Group>

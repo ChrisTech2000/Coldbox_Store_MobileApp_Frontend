@@ -1,19 +1,20 @@
+import Clipboard from '@react-native-clipboard/clipboard';
+import truncate from 'lodash/truncate';
 import React, { useRef, useState } from 'react';
 import { FlatList, View } from 'react-native';
-import { Divider, List, Portal } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
+import { Divider, List, Portal } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Clipboard from '@react-native-clipboard/clipboard';
 import colors from 'tailwindcss/colors';
-import truncate from 'lodash/truncate';
 
+import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
-import { Button } from '#ui/components/Button';
-
+import { cn } from '#ui/lib/cn';
 import { useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
-import { cn } from '#ui/lib/cn';
+
+import { useTranslationUtils } from '#i18n/utils';
 
 export type DeliveryInformationDatum = {
   companyName: string;
@@ -21,9 +22,10 @@ export type DeliveryInformationDatum = {
   produces: Array<{ cropName: string; weight: number; code: string }>;
 };
 
-// TODO → add text content to translations
 // TODO → maybe replace Flatlist + .map() with Flashlist for better performance (would need to test it first)
 export default function DeliveryInformationBottomSheet() {
+  const { t } = useTranslationUtils();
+
   const [datum, setDatum] = useState<Array<DeliveryInformationDatum> | null>(null);
   const modalRef = useRef<Modalize>(null);
 
@@ -48,7 +50,7 @@ export default function DeliveryInformationBottomSheet() {
         </View>
 
         <View tw="px-4 pb-4 pt-2.5 space-y-3.5">
-          <Text tw="text-2xl mb-1.5">Contact(s) for delivery information</Text>
+          <Text tw="text-2xl mb-1.5">{t('Dashboard.ShoppingCart.contactsForDelivery')}</Text>
           <FlatList
             data={datum ?? []}
             keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
@@ -56,8 +58,16 @@ export default function DeliveryInformationBottomSheet() {
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
-                <_Field label="Company name" value={item.companyName} mode="text" />
-                <_Field label="Phone number" value={item.phoneNumber} mode="clipboard" />
+                <_Field
+                  label={t('Dashboard.ShoppingCart.companyName')}
+                  value={item.companyName}
+                  mode="text"
+                />
+                <_Field
+                  label={t('Dashboard.ShoppingCart.phoneNumber')}
+                  value={item.phoneNumber}
+                  mode="clipboard"
+                />
                 <Divider tw="bg-zinc-400 mt-1.5" />
                 {item.produces.map((produce, produceIdx) => (
                   <_Field
@@ -75,7 +85,7 @@ export default function DeliveryInformationBottomSheet() {
 
         <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
           <Button mode="outlined" tw="w-5/6" uppercase onPress={() => modalRef.current?.close()}>
-            Got it!
+            {t('Dashboard.ShoppingCart.gotItButton')}
           </Button>
         </View>
       </Modalize>

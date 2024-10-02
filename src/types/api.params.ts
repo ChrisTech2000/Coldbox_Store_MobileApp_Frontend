@@ -420,3 +420,9 @@ export interface CreateCouponParams extends JsonObject {
 export interface GetCouponListParams extends JsonObject {
   revoked: 'only' | 'included';
 }
+
+export interface AddItemToCartParams extends JsonObject {
+  crateId: number;
+  orderedProduceWeight: number;
+  updateStrategy: 'increase' | 'decrease' | 'replace';
+}

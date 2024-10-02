@@ -9,7 +9,6 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { paperTheme } from '#ui/lib/theme';
 
-// TODO → add text content to translations
 export default function RevokeCouponModal(props: {
   visible: boolean;
   onChangeVisible: (v: SetStateAction<boolean>) => void;

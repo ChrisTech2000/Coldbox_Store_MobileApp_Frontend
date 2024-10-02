@@ -509,6 +509,25 @@ export type PredictionTableData = Array<{
   price: number | null;
 }>;
 
+export type CartItem = {
+  coolingFeesAmount: number;
+  couponId: number | null;
+  crateAvailableWeight: number;
+  discountAmount: number;
+  marketListedCrateId: number;
+  orderedEntireCrate: boolean;
+  orderedProduceWeight: number;
+  postOrderCrateId: number | null;
+  produceAmount: number;
+  producePricePerKg: number;
+  totalAmount: number;
+  relCropId: number;
+  relCoolingUnitId: number;
+  relCompanyId: number;
+  relCrateId: number;
+  relCrateRemainingShelfLife: number | null;
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',

@@ -1,29 +1,30 @@
+import { type NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
-import { type NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import { Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
-import { Button } from '#ui/components/Button';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
-import { GenericError } from '#ui/components/GenericError';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { paperTheme } from '#ui/lib/theme';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { API_BASE_URL } from '#constants/environment';
+import { useTranslationUtils } from '#i18n/utils';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
 
-import OrderDetailsCard from './components/OrderDetailsCard';
 import DeliveryInformationBottomSheet, {
   type DeliveryInformationDatum,
 } from './components/DeliveryInformationBottomSheet';
+import OrderDetailsCard from './components/OrderDetailsCard';
 
-// TODO → add text content to translations
 function OrderOverview() {
+  const { t } = useTranslationUtils();
   // eslint-disable-next-line
   const navigation = useNavigation<NavigationProp<any>>();
 
@@ -38,18 +39,23 @@ function OrderOverview() {
                 color={paperTheme.colors.primary}
                 size={65}
               />
-              <Text tw="text-2xl">Thank You for Ordering</Text>
+              <Text tw="text-2xl">{t('Dashboard.ShoppingCart.thankYouMessage')}</Text>
             </View>
 
             <View>
-              <OrderDetailsCard heading="Order overview" totalLabel="Order total" />
+              <OrderDetailsCard
+                heading={t('Dashboard.ShoppingCart.orderOverview')}
+                totalLabel="Order total"
+              />
             </View>
 
             <View tw="flex-col space-y-5">
-              <Text tw="text-base text-green-primary font-bold">Pickup method</Text>
+              <Text tw="text-base text-green-primary font-bold">
+                {t('Dashboard.ShoppingCart.pickupMethods')}
+              </Text>
               <View tw="border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
                 <View tw="flex-row items-center justify-between">
-                  <Text tw="text-base font-bold">Delivery</Text>
+                  <Text tw="text-base font-bold">{t('Dashboard.ShoppingCart.delivery')}</Text>
                   <Touchable
                     tw="p-2"
                     onPress={(evt) => {
@@ -68,23 +74,27 @@ function OrderOverview() {
                       ] satisfies Array<DeliveryInformationDatum>);
                     }}
                   >
-                    <Text tw="text-base text-green-primary">View contact(s)</Text>
+                    <Text tw="text-base text-green-primary">
+                      {t('Dashboard.ShoppingCart.viewContacts')}
+                    </Text>
                   </Touchable>
                 </View>
               </View>
             </View>
 
-            <View tw="space-y-5">
+            {/* <View tw="space-y-5">
               <View tw="flex-row items-center justify-between">
                 <Text tw="text-base text-green-primary font-bold">Payment method</Text>
               </View>
               <View tw="justify-center border border-solid border-zinc-300 rounded-xl px-4 h-14">
                 <Text tw="text-lg font-bold">VISA ****0329</Text>
               </View>
-            </View>
+            </View> */}
 
             <View tw="space-y-5">
-              <Text tw="text-base text-green-primary font-bold">Products</Text>
+              <Text tw="text-base text-green-primary font-bold">
+                {t('Dashboard.ShoppingCart.produce')}
+              </Text>
               <View tw="border border-solid border-zinc-300 rounded-md p-3">
                 <View tw="flex-row items-start justify-between">
                   <View tw="flex-col items-start">
@@ -99,8 +109,8 @@ function OrderOverview() {
                 </View>
                 <Divider tw="bg-gray-400 my-2" />
                 <View tw="flex-row items-center justify-between py-1.5">
-                  <Text tw="font-bold">2KG</Text>
-                  <Text tw="font-bold">$0.00 / KG</Text>
+                  <Text tw="font-bold">2{t('Dashboard.ProduceDetails.kilogram')}</Text>
+                  <Text tw="font-bold">$0.00 {t('Dashboard.ShoppingCart.perKg')}</Text>
                 </View>
               </View>
             </View>
@@ -124,7 +134,7 @@ function OrderOverview() {
             });
           }}
         >
-          Consult My Orders
+          {t('Dashboard.ShoppingCart.consultOrders')}
         </Button>
       </View>
     </React.Fragment>
@@ -145,5 +155,7 @@ export default withSafeArea(
   withErrorBoundary(OrderOverview, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );

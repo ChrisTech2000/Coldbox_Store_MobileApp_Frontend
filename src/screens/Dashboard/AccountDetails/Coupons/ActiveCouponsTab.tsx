@@ -7,16 +7,17 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { paperTheme } from '#ui/lib/theme';
 
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import CouponService from '#services/CouponService';
-import { paperTheme } from '#ui/lib/theme';
+import { useTranslationUtils } from '#i18n/utils';
 
 import CouponModal from './components/CouponModal';
 import RevokeCouponModal from './components/RevokeCouponModal';
 
-// TODO → add text content to translations
 function ActiveCouponsTab() {
+  const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
   const modalRef = useRef<Modalize>(null);
@@ -60,7 +61,7 @@ function ActiveCouponsTab() {
                     setIsModalVisible(true);
                   }}
                 >
-                  Revoke
+                  {t('Dashboard.Management.Coupons.revoke')}
                 </Button>
               </View>
             )}
@@ -110,7 +111,7 @@ function ActiveCouponsTab() {
             modalRef.current?.open();
           }}
         >
-          Add Coupon
+          {t('Dashboard.Management.Coupons.addCoupon')}
         </Button>
       </View>
     </React.Fragment>

@@ -10,6 +10,7 @@ import {
 import ShoppingCart from '#screens/Dashboard/Main/ShoppingCart';
 import OrderDetails from '#screens/Dashboard/Main/ShoppingCart/OrderDetails';
 import OrderOverview from '#screens/Dashboard/Main/ShoppingCart/OrderOverview';
+import PaystackPayment from '#screens/Dashboard/Main/ShoppingCart/PaystackPayment';
 
 import { useDashboardHeader } from '../lib/dashboardHeaderFactory';
 
@@ -19,6 +20,7 @@ export type ShoppingCartStackRoutes = {
   Root: undefined;
   OrderDetails: undefined;
   OrderOverview: undefined;
+  PaystackPayment: { url: string };
 };
 
 export type ShoppingCartStackRoutePaths = keyof ShoppingCartStackRoutes;
@@ -61,6 +63,7 @@ export default function ShoppingCartStack() {
       <Stack.Screen name="Root" component={ShoppingCart} />
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
       <Stack.Screen name="OrderOverview" component={OrderOverview} />
+      <Stack.Screen name="PaystackPayment" component={PaystackPayment} />
     </Stack.Navigator>
   );
 }

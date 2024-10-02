@@ -1,4 +1,5 @@
 import {
+  CartItem,
   ECoolingUnitMetric,
   EMovementType,
   EPaymentType,
@@ -430,4 +431,20 @@ export interface CreateCouponResponse {
 
 export interface GetCouponListResponse {
   nodes: Array<CreateCouponResponse>;
+}
+
+export interface GetCartResponse {
+  id: number;
+  items: Array<CartItem>;
+  totalAmount: number;
+  totalColdtivateAmount: number;
+  totalCoolingFeesAmount: number;
+  totalDiscountAmount: number;
+  totalPaymentFeesAmount: number;
+  totalProduceAmount: number;
+}
+
+export interface CheckoutWithPaystackResponse {
+  orderId: number;
+  authorizationUrl: string;
 }
