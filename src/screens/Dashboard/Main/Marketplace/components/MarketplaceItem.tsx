@@ -1,5 +1,6 @@
 import React, { type PropsWithChildren } from 'react';
-import { View } from 'react-native';
+import { type GestureResponderEvent, View } from 'react-native';
+import { useDebouncedCallback } from 'use-debounce';
 import { Divider } from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,10 +17,20 @@ import { cn } from '#ui/lib/cn';
 
 import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
 
-export default function MarketplaceItemWrapper(props: PropsWithChildren) {
+export default function MarketplaceItemWrapper(
+  props: PropsWithChildren<{ shelfLife: number | null }>
+) {
+  const bgColor = !props.shelfLife
+    ? undefined
+    : props.shelfLife <= 2
+      ? 'bg-red-700'
+      : props.shelfLife <= 7
+        ? 'bg-yellow-400'
+        : 'bg-gray-300';
+
   return (
     <View tw="flex-row w-full my-2 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
-      <View tw="w-2 bg-red-700 h-full" />
+      {!bgColor ? null : <View tw={cn('w-2 h-full', bgColor)} />}
       <View tw="p-3">{props.children}</View>
     </View>
   );
@@ -31,17 +42,33 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
   movementCode: string;
   cropImageUri: string;
 }) {
+  const iconColor = !props.shelfLife
+    ? undefined
+    : props.shelfLife <= 2
+      ? colors.red[700]
+      : props.shelfLife <= 7
+        ? colors.yellow[400]
+        : colors.gray[500];
+
+  const textColor = !props.shelfLife
+    ? undefined
+    : props.shelfLife <= 2
+      ? 'text-red-700'
+      : props.shelfLife <= 7
+        ? 'text-yellow-500'
+        : 'text-gray-500';
+
   return (
     <View tw="w-full flex-row items-start justify-between">
       <View tw="flex-col">
-        <View tw="flex-row items-center space-x-2">
-          <MaterialCommunityIcon name="timer-outline" size={23} color={colors.red[700]} />
-          {props.shelfLife !== null ? (
-            <Text variant="TextMedium" tw="text-base text-red-700">
+        {props.shelfLife !== null ? (
+          <View tw="flex-row items-center space-x-2">
+            <MaterialCommunityIcon name="timer-outline" size={23} color={iconColor} />
+            <Text variant="TextMedium" tw={cn('text-base', textColor)}>
               {props.shelfLife} days left
             </Text>
-          ) : null}
-        </View>
+          </View>
+        ) : null}
 
         <View tw="my-1.5">
           <Text variant="TextMedium" tw="text-xl">
@@ -69,37 +96,39 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
     );
   }
 
+  const onPressHandler = useDebouncedCallback(async (evt: GestureResponderEvent) => {
+    evt.stopPropagation();
+    if (!props.company.locationId) return;
+    const result = await ColdtivateService.getLocation({
+      companyId: props.company.id,
+      locationId: props.company.locationId,
+    });
+
+    const datum = {
+      name: result.company.name,
+      locationName: result.name,
+      address: [
+        result.streetNumber,
+        result.street,
+        result.city,
+        result.state,
+        result.zipCode,
+        countriesDict().getNameByISO(result.company.country ?? 'NG'),
+      ]
+        .filter(Boolean)
+        .join(', '),
+      latitude: result.latitude,
+      longitude: result.longitude,
+    } satisfies CompanyBottomSheetDatum;
+
+    emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, datum);
+  }, 600);
+
   return (
     <Touchable
       tw="flex-row items-center justify-center space-x-2.5 px-1.5 py-2 self-start mb-0.5"
       rippleColor={colors.zinc[200]}
-      onPress={async (evt) => {
-        evt.stopPropagation();
-        if (!props.company.locationId) return;
-        const result = await ColdtivateService.getLocation({
-          companyId: props.company.id,
-          locationId: props.company.locationId,
-        });
-
-        const datum = {
-          name: result.company.name,
-          locationName: result.name,
-          address: [
-            result.streetNumber,
-            result.street,
-            result.city,
-            result.state,
-            result.zipCode,
-            countriesDict().getNameByISO(result.company.country ?? 'NG'),
-          ]
-            .filter(Boolean)
-            .join(', '),
-          latitude: result.latitude,
-          longitude: result.longitude,
-        } satisfies CompanyBottomSheetDatum;
-
-        emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, datum);
-      }}
+      onPress={onPressHandler}
     >
       <MaterialCommunityIcon
         name="information-outline"

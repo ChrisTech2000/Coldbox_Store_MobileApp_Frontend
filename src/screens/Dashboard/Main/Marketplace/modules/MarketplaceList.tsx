@@ -42,7 +42,7 @@ export default function MarketplaceList() {
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
           renderItem={({ item }) => (
-            <MarketplaceItemWrapper>
+            <MarketplaceItemWrapper shelfLife={item.shelfLife}>
               <MarketplaceItemWrapper.Body
                 shelfLife={item.shelfLife}
                 cropName={item.crop.name}
@@ -116,7 +116,7 @@ function _NearbyMeSection(props: {
         </View>
       )}
       renderItem={({ item }) => (
-        <MarketplaceItemWrapper>
+        <MarketplaceItemWrapper shelfLife={item.shelfLife}>
           <MarketplaceItemWrapper.Body
             shelfLife={item.shelfLife}
             cropName={item.crop.name}

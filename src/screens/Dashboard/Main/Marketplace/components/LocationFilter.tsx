@@ -1,11 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import { Button, Portal, TextInput } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { Controller, useForm } from 'react-hook-form';
+import GetLocation from 'react-native-get-location';
 import colors from 'tailwindcss/colors';
+import ms from 'ms';
 
 import { Touchable } from '#ui/components/Touchable';
 import { Text } from '#ui/components/Text';
@@ -60,6 +62,26 @@ export default function MarketplaceLocationFilter() {
       console.error(exception);
     }
   }
+
+  useEffect(() => {
+    async function _getInitialLocation(): Promise<void> {
+      const currentLocation = useMarketplaceQueryParams.getState().location;
+      if (currentLocation.length >= 1) return; // safe guard
+      const result = await GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: ms('6 seconds'),
+      });
+      useMarketplaceQueryParams.getState().setParams({
+        location: [result.latitude, result.longitude],
+      });
+      const location = await new Geocoder().getAddressFromCoords({
+        latitude: result.latitude,
+        longitude: result.longitude,
+      });
+      form.setValue('cityName', location.city);
+    }
+    void _getInitialLocation();
+  }, []);
 
   return (
     <React.Fragment>

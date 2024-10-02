@@ -52,7 +52,7 @@ export default function AddToCartModal() {
           <View tw="items-start space-y-1 my-2.5 w-full">
             <Text variant="TitleMedium">Select quantity</Text>
             {isVisible ? (
-              <MarketplaceItemWrapper>
+              <MarketplaceItemWrapper shelfLife={datum.shelfLife}>
                 <MarketplaceItemWrapper.Body
                   shelfLife={datum.shelfLife}
                   cropName={datum.crop.name}
@@ -66,7 +66,7 @@ export default function AddToCartModal() {
                 />
                 <MarketplaceItemWrapper.BuyAction
                   crateWeight={datum.crateWeight}
-                  price={datum.price}
+                  currencyValue={datum.currencyValue}
                 />
               </MarketplaceItemWrapper>
             ) : null}
@@ -118,6 +118,7 @@ export default function AddToCartModal() {
                 evt.stopPropagation();
                 resetState();
               }}
+              disabled={form.formState.isSubmitting}
             >
               Add to cart and continue shopping
             </Button>
@@ -126,6 +127,7 @@ export default function AddToCartModal() {
               mode="contained"
               // eslint-disable-next-line
               onPress={form.handleSubmit(onSubmit as any)}
+              disabled={form.formState.isSubmitting}
             >
               Buy now
             </Button>
