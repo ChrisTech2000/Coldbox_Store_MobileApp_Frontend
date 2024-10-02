@@ -86,7 +86,7 @@ function _NearbyMeSection(props: {
         } else if (datum.distance <= 25) {
           bucket = '10 to 25 KM away';
         } else {
-          bucket = 'more than 25 KM away';
+          bucket = 'More than 25 KM away';
         }
         if (!acc[bucket]) acc[bucket] = [];
         acc[bucket].push(datum);
