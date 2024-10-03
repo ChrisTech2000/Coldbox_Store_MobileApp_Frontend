@@ -44,12 +44,11 @@ function EditCrateWeightAndPricing(
   props: ProduceDetailsStackRouteProps<'EditCrateWeightAndPricing'>
 ) {
   const { params } = props.route;
-  const { user } = useAuthStore();
 
+  const { user } = useAuthStore();
   const { t, zodResolver } = useTranslationUtils();
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const form = useForm<FormValues>({
@@ -100,34 +99,43 @@ function EditCrateWeightAndPricing(
     props.navigation.goBack();
   }
 
-  const debouncedInitialSetup = useDebouncedCallback(async (ids: Array<number>): Promise<void> => {
+  const debouncedInitialSetup = useDebouncedCallback(async (): Promise<void> => {
     try {
-      const results = await Promise.all(
-        Array.from(ids).map(
-          async (crateId) => await MarketplaceService.getSellerListedCratesByCrateId(crateId)
-        )
-      );
-      console.log(results);
+      // const ids = new Set<number>(params.crates.map((crate) => crate.id));
+      const crates: FormValues['crates'] = [];
 
-      form.reset({
-        applyToAll: false,
-        crates: params.crates.map((crate, crateIdx) => ({
-          id: crate.id,
-          crateIdx: crateIdx + 1,
-          weight: crate.weight.toString(),
-          isSellable: false,
-        })),
-        price: '0',
-      });
+      // params.crates.map((crate, crateIdx) => ({
+      //   id: crate.id,
+      //   crateIdx: crateIdx + 1,
+      //   weight: crate.weight.toString(),
+      //   isSellable: false,
+      // }))
+
+      switch (user?.role) {
+        case ERoles.COOLING_USER: {
+          // TODO
+          const result = await MarketplaceService.getSellerListedCrates();
+          console.log(result);
+          break;
+        }
+        case ERoles.OPERATOR: {
+          // TODO
+          break;
+        }
+        default:
+          return props.navigation.goBack();
+      }
+      form.reset({ applyToAll: false, crates, price: '0' });
     } catch (exception) {
       console.error(exception);
     }
   }, 700);
 
   useEffect(() => {
-    const ids = new Set<number>(params.crates.map((crate) => crate.id));
-    debouncedInitialSetup(Array.from(ids));
+    debouncedInitialSetup();
   }, [params.crates]);
+
+  const isFarmer = user?.role !== ERoles.OPERATOR; // only operators and cooling users can visit this screen
 
   return (
     <React.Fragment>
@@ -215,12 +223,12 @@ function EditCrateWeightAndPricing(
                               form.setValue(`crates.${i}.weight`, text);
                             }
                           }}
-                          disabled={isDisabled || user?.role !== ERoles.OPERATOR}
+                          disabled={isDisabled || isFarmer}
                           left={
                             <TextInput.Icon
                               icon="minus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled || user?.role !== ERoles.OPERATOR}
+                              disabled={isDisabled || isFarmer}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
@@ -237,7 +245,7 @@ function EditCrateWeightAndPricing(
                             <TextInput.Icon
                               icon="plus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled || user?.role !== ERoles.OPERATOR}
+                              disabled={isDisabled || isFarmer}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);

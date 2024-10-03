@@ -24,7 +24,10 @@ import {
 } from '#types/global';
 
 import { CrateSetupModal } from '../components/CrateSetupModal';
-import { useCrateWeightPricingBridge } from '../CrateWeightAndPricing';
+import {
+  resetCrateWeightPricingBridge,
+  useCrateWeightPricingBridge,
+} from '../CrateWeightAndPricing';
 import CratesAmount from './CratesAmount';
 import CropDetails from './CropDetails';
 import CropHarvest from './CropHarvest';
@@ -45,7 +48,11 @@ export type SetupSchema = {
 };
 
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
-  const { additionalInfo, crop } = route.params;
+  const contextualCrop =
+    'crop' in route.params ? route.params.crop : route.params.contextualProduce.crop;
+  const contextualAdditionalInfo =
+    'additionalInfo' in route.params ? route.params.additionalInfo : '';
+
   const { company } = useManagementStore();
   const { addProduce, coolingUnit, user } = useCheckInStore();
 
@@ -59,8 +66,21 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     setError,
     clearErrors,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<SetupSchema>({
+    ...('contextualProduce' in route.params
+      ? {
+          defaultValues: {
+            numberOfCrates: route.params.contextualProduce.crates.length,
+            generalCrateWeight: coolingUnit?.crateWeight ?? 25,
+            crates: route.params.contextualProduce.crates ?? [],
+            plannedDays: route.params.contextualProduce.crates[0].plannedDays,
+            price: route.params.contextualProduce.price,
+            dateHarvested: route.params.contextualProduce.harvestDate,
+          },
+        }
+      : {}),
     resolver: zodResolver((z, t) =>
       z.object({
         numberOfCrates: z
@@ -104,8 +124,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   useCrateWeightPricingBridge((values) => {
     reset((state) => ({
       ...state,
-      crates: values.crates.map((crate) => ({
-        crateId: crate.id,
+      crates: values.crates.map((crate, crateIdx) => ({
+        crateId: state?.crates?.[crateIdx]?.crateId,
         crateWeight: crate.weight,
         isSellable: crate.isSellable,
       })),
@@ -220,26 +240,9 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     (values) => {
       if (!coolingUnit || !user) return;
 
-      const dateHarvested = values.dateHarvested;
-      let harvestDate = null;
-
-      if (dateHarvested === EDateCropped.TODAY) {
-        harvestDate = crop.harvestedToday;
-      } else if (dateHarvested === EDateCropped.YESTERDAY) {
-        harvestDate = crop.harvestedYesterday;
-      } else if (dateHarvested === EDateCropped.DAY_BEFORE) {
-        harvestDate = crop.harvestedDayBeforeYesterday;
-      } else if (dateHarvested === EDateCropped.EVEN_BEFORE) {
-        harvestDate = crop.harvestedBefore;
-      }
-
       addProduce({
-        crop: {
-          id: crop.id,
-          name: crop.name,
-          image: crop.image,
-        },
-        additionalInfo,
+        crop: contextualCrop,
+        additionalInfo: contextualAdditionalInfo,
         crates: values.crates.map((crate) => ({
           checkOut: null,
           weight: crate.crateWeight,
@@ -249,24 +252,26 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           isSellable: crate.isSellable,
         })),
         initialGrade: null,
-        harvestDate: (harvestDate ?? dateHarvested) as number,
+        harvestDate: values.dateHarvested,
         hasPicture: false, // TODO: confirm this in the future, but sending true returns a 500 error
         price: values.price,
       });
 
+      resetCrateWeightPricingBridge();
+      reset();
       navigation.navigate('CheckIn', {
         user: user ?? undefined,
         coolingUnit: coolingUnit ?? undefined,
       });
     },
-    [coolingUnit, additionalInfo, crop, user]
+    [coolingUnit, contextualAdditionalInfo, contextualCrop, user, reset]
   );
 
   return (
     <React.Fragment>
       <KeyboardAwareScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
         <View tw="flex-1 pb-48">
-          <CropDetails cropName={crop.name} additionalInfo={additionalInfo} />
+          <CropDetails cropName={contextualCrop.name} additionalInfo={contextualAdditionalInfo} />
 
           <View tw="mt-8">
             <Text tw="text-base text-green-primary font-bold">Details</Text>
@@ -281,11 +286,20 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 tw="px-0 m-0"
                 title={undefined}
                 onPress={(evt) => {
-                  evt?.stopPropagation();
+                  evt.stopPropagation();
+                  const totalWeight = crates.reduce(
+                    (acc, curr) => (curr.isSellable ? (acc += curr.crateWeight) : acc),
+                    0
+                  );
+                  const sellingPrice = (getValues('price') ?? 0) / totalWeight;
                   navigation.navigate('CrateWeightAndPricing', {
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
                     currencySymbol,
-                    crates,
+                    crates: crates.map((crate) => ({
+                      crateWeight: crate.crateWeight,
+                      isSellable: crate.isSellable ?? false,
+                    })),
+                    sellingPrice: isNaN(sellingPrice) ? 0 : sellingPrice,
                   });
                 }}
                 left={() => (
@@ -342,6 +356,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           totalPrice={totalPrice}
           cancelFunc={(evt) => {
             evt.stopPropagation();
+            resetCrateWeightPricingBridge();
+            reset();
             navigation.navigate('CheckIn', {
               user: user as Farmer,
               coolingUnit: coolingUnit as CoolingUnit,

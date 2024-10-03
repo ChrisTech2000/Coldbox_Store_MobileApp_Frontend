@@ -19,24 +19,29 @@ import CrateWeightAndPricing, {
 import { TranslationPaths } from '#i18n/index';
 import { Translator, useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
-import { useCheckInStore } from '#stores/checkIn';
+import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { ECropType, type CoolingUnit, type Crop, type Farmer } from '#types/global';
 
 export type CheckInStackRoutes = {
   CheckIn: { coolingUnit: CoolingUnit; user: Farmer };
   SelectCropType: undefined;
   CropList: { type: ECropType };
-  CrateSetup: {
-    crop: Crop;
-    additionalInfo: string;
-  };
+  CrateSetup:
+    | {
+        crop: Crop;
+        additionalInfo: string;
+      }
+    | {
+        contextualProduce: ProduceCrate;
+      };
   CrateWeightAndPricing: {
     companyCurrency: string;
     currencySymbol: string;
     crates: Array<{
       crateWeight: number;
-      crateId: number | undefined;
+      isSellable: boolean;
     }>;
+    sellingPrice: number;
   };
 };
 

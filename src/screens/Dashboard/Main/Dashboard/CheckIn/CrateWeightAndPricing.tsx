@@ -1,5 +1,4 @@
 import { currencies } from 'currencies.json';
-import isNil from 'lodash/isNil';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
@@ -32,9 +31,7 @@ import { InfoModal } from './CrateSetup/InfoModal';
 type FormValues<T = string> = {
   applyToAll: boolean;
   crates: Array<{
-    id: number | undefined;
     weight: T;
-    crateId: number | undefined;
     isSellable: boolean;
   }>;
   price: T | undefined;
@@ -77,10 +74,10 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     defaultValues: {
       applyToAll: false,
       crates: params.crates.map((crate) => ({
-        ...crate,
         weight: crate.crateWeight.toString(),
-        isSellable: false,
+        isSellable: crate.isSellable,
       })),
+      price: params.sellingPrice.toString(),
     },
     resolver: zodResolver((z) => {
       const greaterThanEqual = z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0));
@@ -168,23 +165,19 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             data={crateFields.fields}
             keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
             scrollEnabled={false}
-            renderItem={({ item, index }) => {
+            renderItem={({ index }) => {
               const isDisabled = applyToAll && index > 0;
               return (
                 <View tw="flex-row items-center justify-between my-3">
-                  <View
-                    tw={cn('flex-col self-end px-3', isNil(item.crateId) && 'self-center mt-5')}
-                  >
+                  <View tw="flex-col self-end px-3 self-center mt-5">
                     <Icon
                       name="basket-outline"
                       size={30}
                       color={isDisabled ? colors.gray[400] : paperTheme.colors.onSurface}
                     />
-                    {item.crateId ? (
-                      <Text tw={cn('text-base self-center', isDisabled && 'text-gray-400')}>
-                        {item.crateId}
-                      </Text>
-                    ) : null}
+                    <Text tw={cn('text-base self-center', isDisabled && 'text-gray-400')}>
+                      #{index + 1}
+                    </Text>
                   </View>
 
                   <View tw="flex-col">
@@ -269,7 +262,10 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                         }}
                         disabled={isDisabled}
                       >
-                        <Checkbox status={value ? 'checked' : 'unchecked'} disabled={isDisabled} />
+                        <Checkbox
+                          status={applyToAll || value ? 'checked' : 'unchecked'}
+                          disabled={isDisabled}
+                        />
                         <Text tw={cn('text-base', isDisabled && 'text-gray-300')}>
                           {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list')}
                         </Text>
@@ -288,9 +284,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                 onPress={(evt) => {
                   evt.stopPropagation();
                   crateFields.append({
-                    id: undefined,
                     weight: '25',
-                    crateId: undefined,
                     isSellable: false,
                   });
                   scrollViewRef.current?.scrollToEnd(true);

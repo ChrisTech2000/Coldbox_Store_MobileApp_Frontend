@@ -1,16 +1,12 @@
 import { create } from 'zustand';
 
 import type { CheckInParams } from '#types/api.params';
-import type { CoolingUnit, Farmer } from '#types/global';
+import type { CoolingUnit, Crop, EDateCropped, Farmer } from '#types/global';
 
 type Produce = CheckInParams['produces'][number];
 export interface ProduceCrate extends Omit<Produce, 'crop' | 'harvestDate'> {
-  crop: {
-    id: number | undefined;
-    name: string;
-    image: string;
-  };
-  harvestDate: number | undefined;
+  crop: Crop;
+  harvestDate: EDateCropped | undefined;
   price: number | undefined;
 }
 
