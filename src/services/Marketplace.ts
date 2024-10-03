@@ -1,6 +1,6 @@
 import type { AxiosError } from 'axios';
 
-import { MarketplaceEndpoints } from '#constants/api.routes';
+import { EMarketplaceEndpoints } from '#constants/api.routes';
 import type { GetAvailableListingParams, UpdateListedCrateParams } from '#types/api.params';
 import type { GetAvailableListingResponse } from '#types/api.responses';
 
@@ -10,7 +10,7 @@ import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 class MarketplaceService extends HttpClient {
   public upsertListedCrate = async (params: UpdateListedCrateParams) => {
     try {
-      const { data } = await this.post(MarketplaceEndpoints.UPSERT_LISTED_CRATE, params);
+      const { data } = await this.post(EMarketplaceEndpoints.UPSERT_LISTED_CRATE, params);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -24,7 +24,7 @@ class MarketplaceService extends HttpClient {
   ): Promise<GetAvailableListingResponse> => {
     try {
       const { data } = await this.get<GetAvailableListingResponse>(
-        MarketplaceEndpoints.AVAILABLE_LISTING,
+        EMarketplaceEndpoints.AVAILABLE_LISTING,
         {
           params: {
             ...params,

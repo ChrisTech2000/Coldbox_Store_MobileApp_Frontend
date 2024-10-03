@@ -1112,12 +1112,13 @@ const en = {
       sort: {
         mostRecent: 'Most recent',
         date: 'Date',
-        oldest: 'Oldest',
-        orderId: 'Order ID',
-        cropType: 'Crop Type',
-        coolingUnit: 'Cooling Unit',
-        orderTotal: 'Order Total',
       },
+      oldest: 'Oldest',
+      orderId: 'Order ID',
+      cropType: 'Crop Type',
+      coolingUnit: 'Cooling Unit',
+      orderTotal: 'Order Total',
+      backToTopButton: 'Back to the top',
     },
     ShoppingCart: {
       empty: 'Your cart is empty',

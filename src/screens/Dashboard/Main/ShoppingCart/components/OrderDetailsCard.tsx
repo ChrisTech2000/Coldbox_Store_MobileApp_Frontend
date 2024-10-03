@@ -22,7 +22,6 @@ type OrderDetailsCardProps = {
   totalLabel: string;
 };
 
-// TODO: implement currency
 export default function OrderDetailsCard(props: OrderDetailsCardProps) {
   const { t } = useTranslationUtils();
   const modalRef = useRef<Modalize>(null);

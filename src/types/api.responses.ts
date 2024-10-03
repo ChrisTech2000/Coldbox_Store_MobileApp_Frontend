@@ -446,6 +446,9 @@ export interface GetCartResponse {
   totalProduceAmount: number;
 }
 
+export interface GetAllOrdersResponse extends GetCartResponse {
+  createdAt: string;
+}
 export interface CheckoutWithPaystackResponse {
   orderId: number;
   authorizationUrl: string;

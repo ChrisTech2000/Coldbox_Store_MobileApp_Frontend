@@ -1,8 +1,12 @@
 import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
-import type { CheckoutWithPaystackResponse, GetCartResponse } from '#types/api.responses';
-import { AddItemToCartParams } from '#types/api.params';
+import type {
+  CheckoutWithPaystackResponse,
+  GetAllOrdersResponse,
+  GetCartResponse,
+} from '#types/api.responses';
+import type { AddItemToCartParams } from '#types/api.params';
 
 import HttpClient from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
@@ -69,9 +73,11 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getOrders = async (): Promise<Array<GetCartResponse>> => {
+  public getOrders = async (): Promise<Array<GetAllOrdersResponse>> => {
     try {
-      const { data } = await this.get<Array<GetCartResponse>>(EMarketplaceEndpoints.GET_ORDERS);
+      const { data } = await this.get<Array<GetAllOrdersResponse>>(
+        EMarketplaceEndpoints.GET_ORDERS
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
