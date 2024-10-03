@@ -66,6 +66,7 @@ platform :android do
 
         # TODO: build towards production or staging depending on the pipeline
 
+        ENV['APP_ENV'] = options[:pipeline]
         gradle(
             project_dir: "android",
             tasks: ["bundleRelease"],
@@ -74,7 +75,6 @@ platform :android do
                 "versionCode" => build_id,
                 "versionName" => version_id,
                 "MAPBOX_DOWNLOADS_TOKEN" => ENV["MAPBOX_DOWNLOADS_TOKEN"],
-
             },
         )
     end
@@ -96,24 +96,21 @@ platform :android do
     # Environment specific lanes
     ##
 
-    # desc "Submit a new Staging Build to the Play Store"
-    # desc "This will also deploy just for the staging group."
-    # lane :staging do |options|
-    #     options = options.merge(
-    #         pipeline: "staging",
-    #         # env_file: ".env.staging", # set by the ng build command configuration
-    #     )
+    desc "Submit a new Staging Build to the Play Store"
+    desc "This will also deploy just for the staging group."
+    lane :production do |options|
+        options = options.merge(
+            pipeline: "staging",
+        )
 
-    #     build(options)
-    #     deploy_to_play_store(options)
-    # end
-
+        build(options)
+        publish_to_play_store(options)
+    end
     desc "Submit a new Production Build to the Play Store"
     desc "This will also deploy just for the production group."
     lane :production do |options|
         options = options.merge(
             pipeline: "production",
-            # env_file: ".env.production", # set by the ng build command configuration
         )
 
         build(options)
@@ -220,6 +217,7 @@ platform :ios do
             # target_filter: "App"
         )
 
+        ENV['APP_ENV'] = options[:pipeline]
         gym(
             scheme: options[:scheme],
             workspace: "ios/coldtivate.xcworkspace",
@@ -256,18 +254,18 @@ platform :ios do
 
   ################################################################################
 
-  # desc "Submit a new Staging Build"
-  # desc "This build is intended to be submitted to the app store."
-  # lane :staging do |options|
-  #   options = options.merge(
-  #     pipeline: "staging",
-  #     scheme: "App",
-  #     type: "appstore",
-  #   )
+  desc "Submit a new Staging Build"
+  desc "This build is intended to be submitted to TestFlight."
+  lane :production do |options|
+    options = options.merge(
+      pipeline: "staging",
+      scheme: "App",
+      type: "appstore",
+    )
 
-  #   build(options)
-  #   deploy_testflight(options)
-  # end
+    build(options)
+    publish_to_testflight(options)
+  end
 
   desc "Submit a new Production Build"
   desc "This build is intended to be submitted to the app store."
