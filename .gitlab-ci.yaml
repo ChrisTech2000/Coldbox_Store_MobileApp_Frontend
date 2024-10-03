@@ -180,7 +180,6 @@ build android app staging:
     - /^hotfix\/-.*/
     - development
     - main
-    - feat/fastlane-and-secrets
 
 build ios app staging:
   extends: .build-ios-app
@@ -192,7 +191,6 @@ build ios app staging:
     - /^hotfix\/-.*/
     - development
     - main
-    - feat/fastlane-and-secrets
 
 ### Production
 
