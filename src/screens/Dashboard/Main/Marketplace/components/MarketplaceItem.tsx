@@ -1,5 +1,5 @@
 import React, { type PropsWithChildren } from 'react';
-import { type GestureResponderEvent, View } from 'react-native';
+import { View } from 'react-native';
 import { useDebouncedCallback } from 'use-debounce';
 import { Divider } from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
@@ -96,8 +96,7 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
     );
   }
 
-  const onPressHandler = useDebouncedCallback(async (evt: GestureResponderEvent) => {
-    evt.stopPropagation();
+  const onPressHandler = useDebouncedCallback(async () => {
     if (!props.company.locationId) return;
     const result = await ColdtivateService.getLocation({
       companyId: props.company.id,
@@ -128,7 +127,10 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
     <Touchable
       tw="flex-row items-center justify-center space-x-2.5 px-1.5 py-2 self-start mb-0.5"
       rippleColor={colors.zinc[200]}
-      onPress={onPressHandler}
+      onPress={async (evt) => {
+        evt.stopPropagation();
+        onPressHandler();
+      }}
     >
       <MaterialCommunityIcon
         name="information-outline"
