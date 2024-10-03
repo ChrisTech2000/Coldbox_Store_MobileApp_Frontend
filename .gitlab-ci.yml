@@ -152,7 +152,7 @@ build ci image:
   script:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
     - export VERSION_ID=${CI_COMMIT_REF_NAME:-0.0.0}
-    - bundler exec fastlane ios "$LANE"  --verbose "version_id:$VERSION_ID"
+    - bundler exec fastlane ios "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:
       - ios/build
