@@ -8,8 +8,9 @@ import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
-
 import { useControlledState } from '#ui/hooks/useControlledState';
+import { cn } from '#ui/lib/cn';
+
 import { useTranslationUtils } from '#i18n/utils';
 
 export type SelectStore<T> = {
@@ -25,6 +26,7 @@ export const createSelectStore = <T,>(initialState?: T) =>
 
 type SelectItemProps<T> = {
   autoSelect?: boolean;
+  border?: boolean;
   datums: Array<T>;
   divider?: boolean;
   disabled?: boolean;
@@ -91,7 +93,12 @@ export default function SelectWithStore<T>({
   }
 
   return (
-    <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
+    <View
+      tw={cn(
+        rest.occupyFullWidth ? 'w-full' : '',
+        rest.border ? 'border border-gray-900 py-4' : ''
+      )}
+    >
       <View tw="px-2">
         <Select
           variant="md"

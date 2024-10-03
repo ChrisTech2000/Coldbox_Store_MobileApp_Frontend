@@ -104,4 +104,6 @@ export enum EMarketplaceEndpoints {
   CHECKOUT_WITH_PAYSTACK = 'marketplace/buyer/cart/checkout-with-paystack/',
   UPSERT_LISTED_CRATE = 'marketplace/seller/listed-crates/',
   AVAILABLE_LISTING = 'marketplace/buyer/available-listings/',
+  SELLER_BANK_ACCOUNTS = 'marketplace/seller/paystack-accounts/',
+  GET_BANKS = 'marketplace/data/banks/',
 }

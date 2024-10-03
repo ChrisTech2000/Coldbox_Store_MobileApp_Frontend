@@ -1,4 +1,5 @@
 import {
+  Bank,
   CartItem,
   ECoolingUnitMetric,
   EMovementType,
@@ -479,4 +480,8 @@ export interface GetAvailableListingResponse {
     totalItems: number;
     totalPages: number;
   };
+}
+
+export interface GetAvailableBanksResponse {
+  banks: Array<Bank>;
 }

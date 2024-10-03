@@ -1,16 +1,18 @@
 import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
+import type { AddItemToCartParams, AddUserBankAccountParams } from '#types/api.params';
 import type {
   CheckoutWithPaystackResponse,
   GetAllOrdersResponse,
+  GetAvailableBanksResponse,
   GetCartResponse,
 } from '#types/api.responses';
-import type { AddItemToCartParams } from '#types/api.params';
+import type { BankAccount } from '#types/global';
 
 import HttpClient from './HttpClient';
-import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 import { subs } from './utils';
+import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 
 class MarketplaceService extends HttpClient {
   public getCart = async (): Promise<GetCartResponse> => {
@@ -77,6 +79,44 @@ class MarketplaceService extends HttpClient {
     try {
       const { data } = await this.get<Array<GetAllOrdersResponse>>(
         EMarketplaceEndpoints.GET_ORDERS
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getUserBankAccounts = async (): Promise<Array<BankAccount>> => {
+    try {
+      const { data } = await this.get<Array<BankAccount>>(
+        EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getAvailableBanks = async (): Promise<GetAvailableBanksResponse> => {
+    try {
+      const { data } = await this.get<GetAvailableBanksResponse>(EMarketplaceEndpoints.GET_BANKS);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public addUserAccount = async (params: AddUserBankAccountParams): Promise<BankAccount> => {
+    try {
+      const { data } = await this.post<BankAccount>(
+        EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS,
+        params
       );
       return data;
     } catch (error) {
