@@ -147,8 +147,9 @@ build ci image:
     - *bundler-install
     - *trust-git-providers
     - eval $(ssh-agent -s)
-    - chmod 0600 "$MATCH_GIT_PRIVATE_KEY_PATH"
-    - ssh-add "$MATCH_GIT_PRIVATE_KEY_PATH"
+    - awk '{printf "%s", $0}' "$MATCH_GIT_PRIVATE_KEY_PATH" > .ssh_key
+    - chmod 0600 .ssh_key
+    - ssh-add .ssh_key
   script:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
     - export VERSION_ID=${CI_COMMIT_REF_NAME:-0.0.0}
