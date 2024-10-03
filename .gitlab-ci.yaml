@@ -1,0 +1,239 @@
+stages:
+  - dependencies
+  # - validation
+  - build
+  - deploy
+
+image: ${CI_REGISTRY_IMAGE}:ci
+
+###
+## Template Scripts
+###
+
+.npm-install: &npm-install
+  - npm config set cache ~/.npm
+  - npm ci --force
+
+.bundler-install: &bundler-install
+  - bundler config set path ~/.bundler
+  - bundler install --frozen
+
+.trust-git-providers: &trust-git-providers
+  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+  - ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+.git-secret-reveal: &git-secret-reveal
+  - if [ "$GIT_SECRET_GPG_PATH" == "" ]; then echo "GIT SECRET GPG PATH NOT DEFINED"; exit 1; fi;
+  - if [ "$GIT_SECRET_GPG_PASSWORD" == "" ]; then echo "GIT SECRET GPG PASSWORD NOT DEFINED"; exit 1; fi;
+  - gpg --batch --passphrase "${GIT_SECRET_GPG_PASSWORD}" --import "$GIT_SECRET_GPG_PATH";
+  - git secret reveal -p "$GIT_SECRET_GPG_PASSWORD";
+
+###
+## Caches
+###
+
+.npm-cache: &npm-cache
+  key: npm-cache
+  policy: pull
+  paths:
+    - node_modules/
+    - ~/.npm
+.android-cache: &android-cache
+  key: android-cache
+  policy: pull
+  paths:
+    - android/.gradle
+    - android/build
+    - android/*/build
+.cocoapods-cache: &cocoapods-cache
+  key:
+    files:
+      - ios/App/Podfile.lock
+  policy: pull
+  paths:
+    - ios/App/Pods
+.bundler-cache: &bundler-cache
+  key: bundler-cache
+  policy: pull
+  paths:
+    - ~/.bundler
+
+# TODO: add Xcode project cache
+
+###
+## CI Dependencies
+###
+
+build ci image:
+  stage: dependencies
+  image: docker:25.0.3
+  services:
+    - docker:25.0.3-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: '/certs'
+  before_script:
+    - command -v docker && docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.gitlab.com
+  script:
+    - docker pull ${CI_REGISTRY_IMAGE}:ci || true
+    - docker build --cache-from "${CI_REGISTRY_IMAGE}:ci" --tag "${CI_REGISTRY_IMAGE}:ci" --file ./docker/ci/Dockerfile.debian-based ./docker/ci
+    - docker push "${CI_REGISTRY_IMAGE}:ci"
+  only:
+    refs:
+      - main
+      - development
+      - feat/*
+    changes:
+      - docker/ci/*
+
+###
+## Validation
+###
+
+# lint:
+#   stage: validation
+#   before_script:
+#     - npm ci --force
+#   script:
+#     - npm run lint
+
+###
+## Build
+###
+
+## Templates
+.build-android-app:
+  stage: build
+  variables:
+    LC_ALL: en_US.UTF-8
+    LANG: en_US.UTF-8
+    NG_CONFIGURATION: production
+    LANE: build
+  before_script:
+    - *git-secret-reveal
+    - *npm-install
+    - *bundler-install
+    # - *trust-git-providers # mosano's runner already trust these
+  script:
+    # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
+    - export VERSION_ID=${CI_COMMIT_REF_NAME:-0.0.0}
+    - bundle exec fastlane android "$LANE" "version_id:$VERSION_ID"
+  artifacts:
+    paths:
+      - android/app/build/outputs/
+  cache:
+    - <<: *npm-cache
+    - <<: *bundler-cache
+      policy: pull-push
+      key: bundler-cache-android
+    - <<: *android-cache
+      policy: pull-push
+
+.build-ios-app:
+  tags:
+    # - saas-macos-medium-m1
+    - macos
+  image: macos-14-xcode-15
+  stage: build
+  variables:
+    LC_ALL: en_US.UTF-8
+    LANG: en_US.UTF-8
+    NG_CONFIGURATION: production
+    LANE: build
+  before_script:
+    - *npm-install
+    - *bundler-install
+    - *trust-git-providers
+    - eval $(ssh-agent -s)
+    - chmod 0600 "$MATCH_GIT_PRIVATE_KEY_PATH"
+    - ssh-add "$MATCH_GIT_PRIVATE_KEY_PATH"
+  script:
+    # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
+    - export VERSION_ID=${CI_COMMIT_REF_NAME:-0.0.0}
+    - bundler exec fastlane ios "$LANE"  --verbose "version_id:$VERSION_ID"
+  artifacts:
+    paths:
+      - ios/build
+  cache:
+    - <<: *npm-cache
+    - <<: *bundler-cache
+      policy: pull-push
+      key: bundler-cache-ios
+    - <<: *cocoapods-cache
+      policy: pull-push
+    - <<: *capacitor-cache
+      policy: pull-push
+
+## Jobs
+
+### Staging
+
+build android app staging:
+  extends: .build-android-app
+  variables:
+    NG_CONFIGURATION: staging
+  when: manual
+  only:
+    - /^feat\/.*/
+    - /^hotfix\/-.*/
+    - development
+    - main
+    - feat/fastlane-and-secrets
+
+build ios app staging:
+  extends: .build-ios-app
+  variables:
+    NG_CONFIGURATION: staging
+  when: manual
+  only:
+    - /^feat\/.*/
+    - /^hotfix\/-.*/
+    - development
+    - main
+    - feat/fastlane-and-secrets
+
+### Production
+
+build android app production:
+  extends: .build-android-app
+  variables:
+    NG_CONFIGURATION: production
+  when: manual
+  only:
+    - tags
+
+build ios app production:
+  extends: .build-ios-app
+  variables:
+    NG_CONFIGURATION: production
+  when: manual
+  only:
+    - tags
+
+###
+## Deployment
+###
+
+## Templates
+
+## Jobs
+
+build and publish android app production:
+  extends: .build-android-app
+  variables:
+    NG_CONFIGURATION: production
+    LANE: production
+  when: manual
+  only:
+    - tags
+
+build and publish ios app production:
+  extends: .build-ios-app
+  variables:
+    NG_CONFIGURATION: production
+    LANE: production
+  when: manual
+  only:
+    - tags

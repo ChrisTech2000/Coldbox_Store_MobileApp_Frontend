@@ -21,6 +21,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### parse_version_id
+
+```sh
+[bundle exec] fastlane parse_version_id
+```
+
+
+
 ----
 
 

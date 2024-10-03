@@ -18,6 +18,36 @@ lane :generate_build_id do |options|
   build_id
 end
 
+lane :parse_version_id do |options|
+  # Extract the version_id from the options or default to "0.0.0"
+  version_id = options[:version_id] || "0.0.0"
+
+  # Use a regular expression to remove any non-numeric leading characters like 'v'
+  sanitized_version_id = version_id.gsub(/^[^0-9]*/, '')
+
+  # Split the sanitized version_id into major, minor, and patch components
+  version_components = sanitized_version_id.split('.')
+
+  # Convert each component to an integer, defaulting to 0 if missing
+  major = version_components[0].to_i
+  minor = version_components[1].to_i
+  patch = version_components[2].to_i
+
+  # Construct the whole version string
+  id = "#{major}.#{minor}.#{patch}"
+
+  # Print the casted version
+  UI.message("Parsed version: #{id}")
+
+  # Return the casted version as a hash including the whole version string
+  {
+    major: major,
+    minor: minor,
+    patch: patch,
+    id: id
+  }
+end
+
 ##
 # ANDROID
 ##
@@ -31,8 +61,8 @@ platform :android do
 
     desc "Build the app"
     lane :build do |options|
-        version_id = options[:version_id] || "0.0.1"
-        build_id = options[:build_id] || generate_build_id(version_id: version_id)
+        version = parse_version_id(version_id: options[:version_id] || "0.0.1")
+        build_id = options[:build_id] || generate_build_id(version_id: version[:id])
 
         # TODO: build towards production or staging depending on the pipeline
 
@@ -116,8 +146,8 @@ platform :ios do
         team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
         type = options[:type] || "appstore" # "development", "appstore", "ad-hoc"
 
-        version_id = options[:version_id] || "0.0.1"
-        build_id = options[:build_id] || generate_build_id(version_id: version_id)
+        version = parse_version_id(version_id: options[:version_id] || "0.0.1")
+        build_id = options[:build_id] || generate_build_id(version_id: version[:id])
 
         if type == 'ad-hoc'
             register_devices(
@@ -138,27 +168,29 @@ platform :ios do
 
         netrc_file = Tempfile.new('netrc')
         ENV['NETRC'] = netrc_file.path
-        #begin
+
+        # The environment variable is now accessible in the lane
+        begin
+            sh('if [ -f "~/.netrc" ]; then mv ~/.netrc ~/.netrc.original; fi; ln -s "$NETRC" ~/.netrc; exit 0')
+
             netrc_file.write <<~CONTENT
-                machine api.mapbox.com
-                login mapbox
-                password #{ENV['MAPBOX_DOWNLOADS_TOKEN']}
+                machine api.mapbox.com login mapbox password #{ENV['MAPBOX_DOWNLOADS_TOKEN']}
             CONTENT
 
             # Ensure the content is flushed to the file
             netrc_file.flush
 
             puts "Using temporary .netrc file at: #{netrc_file.path}"
-
             cocoapods(
                 podfile: 'ios/Podfile',
                 use_bundle_exec: false,
             )
-        #ensure
-            #ENV.delete('NETRC')
-            #netrc_file.close
-            #netrc_file.unlink
-        #end
+        ensure
+            sh('rm ~/.netrc; if [ -f "~/.netrc.original" ]; then cp ~/.netrc.original ~/.netrc; fi;  exit 0')
+            ENV.delete('NETRC')
+            netrc_file.close
+            netrc_file.unlink
+        end
 
         increment_version_number(
             xcodeproj: "ios/coldtivate.xcodeproj",

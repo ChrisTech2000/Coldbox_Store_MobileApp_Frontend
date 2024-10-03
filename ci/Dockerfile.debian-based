@@ -1,0 +1,62 @@
+FROM debian:sid-slim
+
+# Runtime necessary env
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update -y && \
+    apt-get install -y \
+    git git-secret \
+    busybox openssh-client make build-essential \
+    openjdk-8-jdk openjdk-17-jdk \
+    ruby-full ruby-dev \
+    curl wget tar locales \
+    make cmake gcc g++ \
+    && \
+    apt-get clean autoclean && \
+    apt-get autoremove --yes
+RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+# Set Java 8 version as the default jdk
+RUN update-java-alternatives --set "$(update-java-alternatives --list | grep java-1.8 |  cut -d " " -f1)"
+# # Set the default JVM to OpenJDK 8
+# ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk/
+# ENV JAVA_INCLUDE_DIR=$JAVA_HOME/include
+
+# NodeJS / NPM / Yarn
+ENV NODE_VERSION=20.13.1 \
+    NODE_HOME=/usr/local/nodejs \
+    YARN_VERSION=1.22.19 \
+    YARN_HOME=/usr/local/yarn \
+    PATH=$PATH:/usr/local/nodejs/bin:/usr/local/yarn/bin
+RUN mkdir -p $NODE_HOME $YARN_HOME \
+    && curl --silent --compressed -L "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | tar -C "$NODE_HOME" --strip-components 1 -xJf - \
+    && curl --silent --compressed -L "https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz" | tar -C "$YARN_HOME" --strip-components 1 -xzf -
+
+# Android
+ENV ANDROID_HOME=/usr/local/android-sdk \
+    ANDROID_VERSION=34 \
+    ANDROID_BUILD_TOOLS_VERSION=34.0.0 \
+    ANDROID_NDK_VERSION=26.2.11394342 \
+    PATH=$PATH:/usr/local/android-sdk/tools/bin:/usr/local/android-sdk/platform-tools
+
+# Download Android SDK and Install Android Build Tool and Libraries
+RUN mkdir "$ANDROID_HOME" ~/.android && touch ~/.android/repositories.cfg \
+    && cd "$ANDROID_HOME" \
+    && curl --silent "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip" | busybox unzip -q - \
+    && chmod +x -R $ANDROID_HOME/tools/bin
+
+# Accept licenses and Update the SDK Manager repositories
+RUN yes | sdkmanager --licenses > /dev/null \
+    && sdkmanager --update > /dev/null
+
+# Install build, platform, and platform tools
+RUN sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_VERSION}" "platform-tools" > /dev/null
+
+# Set the default JVM to OpenJDK 17
+RUN update-java-alternatives --set "$(update-java-alternatives --list | grep java-1.17 |  cut -d " " -f1)"
+
+# Install bundler
+RUN gem install bundler
