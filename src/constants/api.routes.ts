@@ -98,4 +98,5 @@ export enum CouponsEndpoints {
 export enum MarketplaceEndpoints {
   UPSERT_LISTED_CRATE = 'marketplace/seller/listed-crates/',
   AVAILABLE_LISTING = 'marketplace/buyer/available-listings/',
+  GET_SELLER_LISTED_CRATES_BY_CRATE_ID = 'marketplace/seller/listed-crates/:crateId/',
 }

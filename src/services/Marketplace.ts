@@ -6,6 +6,7 @@ import type { GetAvailableListingResponse } from '#types/api.responses';
 
 import HttpClient from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
+import { subs } from './utils';
 
 class MarketplaceService extends HttpClient {
   public upsertListedCrate = async (params: UpdateListedCrateParams) => {
@@ -35,6 +36,19 @@ class MarketplaceService extends HttpClient {
                 : params.filterByCoolingUnitsIds.join(','),
           },
         }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getSellerListedCratesByCrateId = async (crateId: number) => {
+    try {
+      const { data } = await this.get(
+        subs(MarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId })
       );
       return data;
     } catch (error) {

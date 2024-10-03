@@ -2,7 +2,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { Divider, Icon } from 'react-native-paper';
+import { Divider, Icon, List } from 'react-native-paper';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
@@ -86,32 +86,23 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   const data = useMemo(
     () => [
       {
+        key: 'cropType',
         label: t('Dashboard.ProduceDetails.cropType'),
         value: produce.cropName,
       },
       {
+        key: 'crateWeightLabel',
         label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
-        value: (
-          <TouchableOpacity
-            onPress={() =>
-              props.navigation.navigate('EditCrateWeightAndPricing', {
-                companyCurrency: currency,
-                currencySymbol: currencies.find((c) => c.name === currency)?.symbol ?? '',
-                crates: produce.crates,
-              })
-            }
-            tw="pl-4"
-          >
-            <Icon source="chevron-right" size={25} />
-          </TouchableOpacity>
-        ),
+        value: <Icon source="chevron-right" size={25} />,
         custom: true,
       },
       {
+        key: 'numberOfCrates',
         label: t('Dashboard.ProduceDetails.numberOfCrates'),
         value: produce.crates.length,
       },
       {
+        key: 'crateIds',
         label: t('Dashboard.ProduceDetails.crateIds'),
         value: produce.crates
           .map((crate) => crate.tag)
@@ -119,23 +110,28 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
           .join(', '),
       },
       {
+        key: 'combinedWeight',
         label: t('Dashboard.ProduceDetails.combinedWeight'),
         value: `${produce.cratesCombinedWeight}${t('Dashboard.ProduceDetails.kilogram')}`,
       },
       {
+        key: 'remainingTime',
         label: t('Dashboard.ProduceDetails.remainingTime'),
         value: produce.minimumRemainingShelfLife,
       },
       {
+        key: 'currentStorageDays',
         label: t('Dashboard.ProduceDetails.currentStorageDays'),
         value: produce.currentStorageDays,
       },
       {
+        key: 'plannedDays',
         label: t('Dashboard.ProduceDetails.plannedDays'),
         value: produce.plannedDays,
       },
       produce.crates[0].pricing[0].pricingType === EPricingType.PERIODICITY
         ? {
+            key: 'pricePerDay',
             label: t('Dashboard.ProduceDetails.pricePerDay'),
             value: dailyPrice?.toLocaleString('en-US', {
               style: 'currency',
@@ -144,6 +140,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
           }
         : {},
       {
+        key: 'plannedStorageCost',
         label: t('Dashboard.ProduceDetails.plannedStorageCost'),
         value: pricing.toLocaleString('en-US', {
           style: 'currency',
@@ -154,136 +151,160 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
     [produce, pricing, currency, dailyPrice]
   );
 
-  const farmer = useMemo(() => {
-    return farmers?.find(
-      (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === produce.farmer
-    );
-  }, [produce, farmers]);
+  const farmer = useMemo(
+    () =>
+      farmers?.find(
+        (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === produce.farmer
+      ),
+    [produce, farmers]
+  );
 
   return (
-    <ScrollView
-      contentContainerStyle="flex-col items-center justify-center py-2"
-      tw="space-y-4"
-      showsVerticalScrollIndicator={false}
-    >
-      <View tw="flex flex-row items-center space-x-3">
-        <FastImage
-          resizeMode="contain"
-          tw="w-32 h-32"
-          source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}
-        />
-        <View tw="space-y-3">
-          <View>
-            <Text variant="TextMedium" tw="text-gray-400">
-              {t('Dashboard.ProduceDetails.coolingUser')}
-            </Text>
-            <Text variant="TextMedium">{produce.farmer}</Text>
-          </View>
-          <View>
-            <Text variant="TextMedium" tw="text-gray-400">
-              {t('Dashboard.ProduceDetails.contact')}
-            </Text>
-            <View tw="flex flex-row items-center space-x-2">
-              <Text variant="TextMedium">{produce.farmerContact}</Text>
-              <TouchableOpacity onPress={() => copyToClipboard(produce.farmerContact)}>
-                <Icon source="content-copy" size={20} />
-              </TouchableOpacity>
+    <React.Fragment>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View tw="flex-col items-center justify-center space-y-4 pb-16">
+          <View tw="flex flex-row items-center space-x-3">
+            <FastImage
+              resizeMode="contain"
+              tw="w-32 h-32"
+              source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}
+            />
+            <View tw="space-y-3">
+              <View>
+                <Text variant="TextMedium" tw="text-gray-400">
+                  {t('Dashboard.ProduceDetails.coolingUser')}
+                </Text>
+                <Text variant="TextMedium">{produce.farmer}</Text>
+              </View>
+              <View>
+                <Text variant="TextMedium" tw="text-gray-400">
+                  {t('Dashboard.ProduceDetails.contact')}
+                </Text>
+                <View tw="flex flex-row items-center space-x-2">
+                  <Text variant="TextMedium">{produce.farmerContact}</Text>
+                  <TouchableOpacity onPress={() => copyToClipboard(produce.farmerContact)}>
+                    <Icon source="content-copy" size={20} />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
-        </View>
-      </View>
 
-      {produce.runDt && produce.qualityDt !== -1 ? (
-        <View tw="w-full px-2">
-          <View tw="relative w-full h-3 bg-gray-300 rounded-lg">
-            <View
-              tw={cn(
-                'absolute top-0 left-0 w-full bg-green-100 rounded-lg h-3',
-                produce.minimumRemainingShelfLife <= 7 &&
-                  produce.minimumRemainingShelfLife > 2 &&
-                  'bg-yellow-400',
-                produce.minimumRemainingShelfLife <= 2 && 'bg-red-300',
-                (isNil(produce.minimumRemainingShelfLife) ||
-                  produce.minimumRemainingShelfLife === -1) &&
-                  'bg-gray-300'
-              )}
-              style={{
-                width: `${100 - percentage + (percentage > 1 ? 10 : 0)}%`,
-                opacity: 0.4,
-                maxWidth: '100%',
-              }}
-            />
-            {percentage > 0 && (
-              <View
-                tw={cn(
-                  'absolute top-0 right-0 w-full bg-green-300 rounded-lg h-3',
-                  produce.minimumRemainingShelfLife <= 7 &&
-                    produce.minimumRemainingShelfLife > 2 &&
-                    'bg-yellow-400',
-                  produce.minimumRemainingShelfLife <= 2 && 'bg-red-700',
-                  (isNil(produce.minimumRemainingShelfLife) ||
-                    produce.minimumRemainingShelfLife === -1) &&
-                    'bg-gray-300'
-                )}
-                style={{
-                  width: `${percentage}%`,
-                }}
-              />
-            )}
-          </View>
-
-          <View tw="flex flex-row items-center justify-between">
-            <Text variant="TextMedium" tw="px-2">
-              {percentage}%
-            </Text>
-            <Text variant="TextMedium" tw="px-2">
-              {t('Dashboard.ProduceDetails.pickUp')}
-            </Text>
-            <Text
-              variant="TextMedium"
-              tw="px-2"
-            >{`${produce.minimumRemainingShelfLife ?? 0} ${t('Dashboard.ProduceDetails.days')}`}</Text>
-          </View>
-        </View>
-      ) : (
-        <Text variant="TextMedium" tw="text-lg px-2">
-          {t('Dashboard.ProduceDetails.noDTMessage')}
-        </Text>
-      )}
-
-      <View tw="flex flex-row items-center space-x-2">
-        <MineCart width={16} height={16} />
-        <Text variant="TitleBold">
-          {`${crates} ${crates === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
-        </Text>
-      </View>
-
-      <View tw="w-full px-3">
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={data}
-          scrollEnabled={false}
-          renderItem={({ item, index }) => (
-            <View tw="space-y-1 my-2" key={`${item.label}-${index}`}>
-              <View tw="flex flex-row justify-between items-center">
-                <Text variant="TextMedium" tw="text-base">
-                  {item.label}
-                </Text>
-                {item.custom ? (
-                  item.value
-                ) : (
-                  <Text variant="TextMedium" tw="text-base text-gray-400">
-                    {item.value ?? '-'}
-                  </Text>
+          {produce.runDt && produce.qualityDt !== -1 ? (
+            <View tw="w-full px-2">
+              <View tw="relative w-full h-3 bg-gray-300 rounded-lg">
+                <View
+                  tw={cn(
+                    'absolute top-0 left-0 w-full bg-green-100 rounded-lg h-3',
+                    produce.minimumRemainingShelfLife <= 7 &&
+                      produce.minimumRemainingShelfLife > 2 &&
+                      'bg-yellow-400',
+                    produce.minimumRemainingShelfLife <= 2 && 'bg-red-300',
+                    (isNil(produce.minimumRemainingShelfLife) ||
+                      produce.minimumRemainingShelfLife === -1) &&
+                      'bg-gray-300'
+                  )}
+                  style={{
+                    width: `${100 - percentage + (percentage > 1 ? 10 : 0)}%`,
+                    opacity: 0.4,
+                    maxWidth: '100%',
+                  }}
+                />
+                {percentage > 0 && (
+                  <View
+                    tw={cn(
+                      'absolute top-0 right-0 w-full bg-green-300 rounded-lg h-3',
+                      produce.minimumRemainingShelfLife <= 7 &&
+                        produce.minimumRemainingShelfLife > 2 &&
+                        'bg-yellow-400',
+                      produce.minimumRemainingShelfLife <= 2 && 'bg-red-700',
+                      (isNil(produce.minimumRemainingShelfLife) ||
+                        produce.minimumRemainingShelfLife === -1) &&
+                        'bg-gray-300'
+                    )}
+                    style={{
+                      width: `${percentage}%`,
+                    }}
+                  />
                 )}
               </View>
-              <Divider />
+
+              <View tw="flex flex-row items-center justify-between">
+                <Text variant="TextMedium" tw="px-2">
+                  {percentage}%
+                </Text>
+                <Text variant="TextMedium" tw="px-2">
+                  {t('Dashboard.ProduceDetails.pickUp')}
+                </Text>
+                <Text
+                  variant="TextMedium"
+                  tw="px-2"
+                >{`${produce.minimumRemainingShelfLife ?? 0} ${t('Dashboard.ProduceDetails.days')}`}</Text>
+              </View>
             </View>
+          ) : (
+            <Text variant="TextMedium" tw="text-lg px-2">
+              {t('Dashboard.ProduceDetails.noDTMessage')}
+            </Text>
           )}
-        />
+
+          <View tw="flex flex-row items-center space-x-2">
+            <MineCart width={16} height={16} />
+            <Text variant="TitleBold">
+              {`${crates} ${crates === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
+            </Text>
+          </View>
+
+          <View tw="w-full px-3">
+            <FlatList
+              data={data}
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, itemIdx) => `produce-details-list-item-${item.key}-#${itemIdx}`}
+              renderItem={({ item }) => (
+                <React.Fragment>
+                  <List.Item
+                    tw="p-0 m-0 py-1"
+                    title={undefined}
+                    left={() => (
+                      <Text variant="TextMedium" tw="text-base">
+                        {item.label}
+                      </Text>
+                    )}
+                    right={() => {
+                      if (item.custom) return item.value;
+                      return (
+                        <Text variant="TextMedium" tw="text-base text-gray-400">
+                          {item.value ?? '-'}
+                        </Text>
+                      );
+                    }}
+                    {...(item.key === 'crateWeightLabel'
+                      ? {
+                          onPress: (evt) => {
+                            evt.stopPropagation();
+                            props.navigation.navigate('EditCrateWeightAndPricing', {
+                              companyCurrency: currency,
+                              currencySymbol:
+                                currencies.find((c) => c.name === currency)?.symbol ?? '',
+                              crates: produce.crates,
+                            });
+                          },
+                        }
+                      : {})}
+                  />
+                  <Divider />
+                </React.Fragment>
+              )}
+            />
+          </View>
+        </View>
+      </ScrollView>
+
+      <View tw="absolute left-0 bottom-0 bg-white border-t border-zinc-300 w-full h-20 items-center justify-center">
+        <CheckoutButtonRedirect coolingUnit={coolingUnit} farmer={farmer} crates={produce.crates} />
       </View>
-      <CheckoutButtonRedirect coolingUnit={coolingUnit} farmer={farmer} crates={produce.crates} />
-    </ScrollView>
+    </React.Fragment>
   );
 }
 

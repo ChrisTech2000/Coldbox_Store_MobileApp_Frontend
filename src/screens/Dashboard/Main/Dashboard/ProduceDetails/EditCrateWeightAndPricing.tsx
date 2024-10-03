@@ -1,11 +1,12 @@
-import isNil from 'lodash/isNil';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDebouncedCallback } from 'use-debounce';
 import colors from 'tailwindcss/colors';
+import isNil from 'lodash/isNil';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -23,6 +24,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
+import MarketplaceService from '#services/Marketplace';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from '../CheckIn/components/SellInMarketplaceModal';
@@ -32,7 +34,7 @@ type FormValues<T = string> = {
   crates: Array<{
     id: number | undefined;
     weight: T;
-    crateId: number | undefined;
+    crateIdx: number;
     isSellable: boolean;
   }>;
   price: T | undefined;
@@ -51,14 +53,7 @@ function EditCrateWeightAndPricing(
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const form = useForm<FormValues>({
-    defaultValues: {
-      applyToAll: false,
-      crates: params.crates.map((crate) => ({
-        ...crate,
-        weight: crate.weight.toString(),
-        isSellable: false,
-      })),
-    },
+    defaultValues: { applyToAll: false, crates: [], price: '0' },
     resolver: zodResolver((z) => {
       const greaterThanEqual = z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0));
       return z.object({
@@ -68,6 +63,7 @@ function EditCrateWeightAndPricing(
           .array(
             z.object({
               id: z.number().optional(),
+              crateIdx: z.number(),
               weight: greaterThanEqual,
               isSellable: z.boolean(),
             })
@@ -103,6 +99,35 @@ function EditCrateWeightAndPricing(
     // TODO: API call
     props.navigation.goBack();
   }
+
+  const debouncedInitialSetup = useDebouncedCallback(async (ids: Array<number>): Promise<void> => {
+    try {
+      const results = await Promise.all(
+        Array.from(ids).map(
+          async (crateId) => await MarketplaceService.getSellerListedCratesByCrateId(crateId)
+        )
+      );
+      console.log(results);
+
+      form.reset({
+        applyToAll: false,
+        crates: params.crates.map((crate, crateIdx) => ({
+          id: crate.id,
+          crateIdx: crateIdx + 1,
+          weight: crate.weight.toString(),
+          isSellable: false,
+        })),
+        price: '0',
+      });
+    } catch (exception) {
+      console.error(exception);
+    }
+  }, 700);
+
+  useEffect(() => {
+    const ids = new Set<number>(params.crates.map((crate) => crate.id));
+    debouncedInitialSetup(Array.from(ids));
+  }, [params.crates]);
 
   return (
     <React.Fragment>
@@ -150,18 +175,16 @@ function EditCrateWeightAndPricing(
               return (
                 <View tw="flex-row items-center justify-between my-3">
                   <View
-                    tw={cn('flex-col self-end px-3', isNil(item.crateId) && 'self-center mt-5')}
+                    tw={cn('flex-col self-end px-3', isNil(item.crateIdx) && 'self-center mt-5')}
                   >
                     <Icon
                       name="basket-outline"
                       size={30}
                       color={isDisabled ? colors.gray[400] : paperTheme.colors.onSurface}
                     />
-                    {item.crateId ? (
-                      <Text tw={cn('text-base self-center', isDisabled && 'text-gray-400')}>
-                        {item.crateId}
-                      </Text>
-                    ) : null}
+                    <Text tw={cn('text-base self-center', isDisabled && 'text-gray-400')}>
+                      #{item.crateIdx}
+                    </Text>
                   </View>
 
                   <View tw="flex-col">
