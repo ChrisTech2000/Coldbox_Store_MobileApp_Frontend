@@ -25,7 +25,7 @@ import FormManager, {
 import LocationNameModule from './AddLocation/modules/LocationNameModule';
 import StepModule from './AddLocation/modules/StepModule';
 import StepFactory from './AddLocation/modules/StepFactory';
-import { geocoder, getCountryFullName } from './AddLocation/utils';
+import { Geocoder, getCountryFullName } from './AddLocation/utils';
 import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('window').width - 42) / 2;
@@ -67,6 +67,8 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       const { _step, ...rest } = values;
 
       let datums: Partial<PreprocessedFormValues> = {};
+
+      const geocoder = new Geocoder();
 
       switch (_step) {
         case 'geolocation':

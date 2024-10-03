@@ -420,3 +420,17 @@ export interface CreateCouponParams extends JsonObject {
 export interface GetCouponListParams extends JsonObject {
   revoked: 'only' | 'included';
 }
+
+export interface UpdateListedCrateParams extends JsonObject {
+  crateIds: Array<number>;
+  producePricePerKg: number;
+}
+
+export interface GetAvailableListingParams extends JsonObject {
+  location: [number, number] | [];
+  sortBy?: 'price-asc' | 'price-desc' | 'nearby-me';
+  filterByCoolingUnitsIds?: Array<number>;
+  page?: number;
+  itemsPerPage?: number;
+  filterByMaxDistanceInKm?: number;
+}

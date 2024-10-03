@@ -139,4 +139,4 @@ function _propsFactory(
   return props;
 }
 
-export default withSafeArea(CoolingUsers);
+export default withSafeArea(CoolingUsers, ['bottom'], true);

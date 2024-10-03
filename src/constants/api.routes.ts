@@ -59,7 +59,7 @@ export enum ESMSEndpoints {
 }
 
 export enum ENotificationsEndpoints {
-  GET_NOTIFICATIONS = '/user/v1/notification',
+  GET_NOTIFICATIONS = '/user/v1/notification/',
   UPDATE_NOTIFICATION = 'user/v1/notification/:notificationId/',
 }
 
@@ -93,4 +93,9 @@ export enum EPredictionEndpoints {
 export enum CouponsEndpoints {
   LIST_OWN_COUPONS = 'marketplace/seller/coupons/',
   REVOKE_COUPON = 'marketplace/seller/coupons/:couponId/',
+}
+
+export enum MarketplaceEndpoints {
+  UPSERT_LISTED_CRATE = 'marketplace/seller/listed-crates/',
+  AVAILABLE_LISTING = 'marketplace/buyer/available-listings/',
 }

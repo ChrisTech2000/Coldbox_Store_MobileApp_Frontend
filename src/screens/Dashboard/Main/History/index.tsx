@@ -134,7 +134,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.farmer,
+                      farmer: movement.farmer, // TODO: this has been removed by the backend, we will need to review this later
                       crops: movement.movementCrops.filter(
                         (crop) => !movement.hasMarketSurvey.includes(crop.id)
                       ),

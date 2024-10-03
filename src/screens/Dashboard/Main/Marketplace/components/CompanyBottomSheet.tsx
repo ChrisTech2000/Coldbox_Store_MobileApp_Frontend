@@ -16,7 +16,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 export type CompanyBottomSheetDatum = {
   name: string;
-  country: string;
+  locationName: string;
   address: string;
   latitude: number;
   longitude: number;
@@ -52,7 +52,7 @@ export default function CompanyBottomSheet() {
             {datum?.name}
           </Text>
           <View tw="mt-3">
-            <_CompanyField label="Location name" value={datum?.country ?? ''} />
+            <_CompanyField label="Location name" value={datum?.locationName ?? ''} />
             <Divider tw="bg-zinc-400" />
 
             <_CompanyField label="Address" value={datum?.address ?? ''} />
@@ -60,7 +60,7 @@ export default function CompanyBottomSheet() {
 
             <_CompanyField
               label="Coordinates"
-              value={`${datum?.latitude}° N, ${datum?.longitude}° E`}
+              value={datum !== null ? _formatCoords(datum.latitude, datum.longitude) : ''}
             />
           </View>
         </View>
@@ -104,4 +104,10 @@ function _CompanyField(props: { label: string; value: string }) {
       )}
     />
   );
+}
+
+function _formatCoords(lat: number, lon: number): string {
+  const latDirection = lat >= 0 ? 'N' : 'S';
+  const lonDirection = lon >= 0 ? 'E' : 'W';
+  return `${lat}° ${latDirection}, ${lon}° ${lonDirection}`;
 }

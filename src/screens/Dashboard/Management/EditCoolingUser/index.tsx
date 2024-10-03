@@ -173,4 +173,4 @@ function _buildInitialValues(datum?: Farmer) {
   return values;
 }
 
-export default withSafeArea(EditCoolingUser);
+export default withSafeArea(EditCoolingUser, ['bottom'], true);
