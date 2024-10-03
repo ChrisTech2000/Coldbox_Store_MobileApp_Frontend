@@ -216,6 +216,26 @@ build ios app production:
 
 ## Jobs
 
+build and publish android app staging:
+  extends: .build-android-app
+  variables:
+    NG_CONFIGURATION: staging
+    LANE: staging
+  when: manual
+  only:
+    - tags
+
+build and publish ios app staging:
+  extends: .build-ios-app
+  variables:
+    NG_CONFIGURATION: staging
+    LANE: staging
+  when: manual
+  only:
+    - tags
+
+## Jobs
+
 build and publish android app production:
   extends: .build-android-app
   variables:
