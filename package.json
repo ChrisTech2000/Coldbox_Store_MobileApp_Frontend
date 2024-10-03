@@ -18,7 +18,7 @@
     "@casl/ability": "^6.7.1",
     "@hookform/resolvers": "^3.6.0",
     "@mapbox/mapbox-sdk": "^0.16.0",
-    "@react-native-clipboard/clipboard": "^1.13.2",
+    "@react-native-clipboard/clipboard": "1.13.2",
     "@react-native-community/geolocation": "^3.2.1",
     "@react-native-community/netinfo": "^11.3.2",
     "@react-navigation/bottom-tabs": "^6.5.20",
