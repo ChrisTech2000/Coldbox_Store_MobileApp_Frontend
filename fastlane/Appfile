@@ -9,5 +9,5 @@ package_name "com.base.coldtivate"
 # iOS
 ##
 app_identifier "com.base.coldtivate"
-apple_id "jmoreira@mosano.eu"
+apple_id "dev@mosano.eu"
 team_id "JS75VC2AMT"
