@@ -200,7 +200,7 @@ platform :ios do
 
         update_info_plist(
             xcodeproj: "ios/coldtivate.xcodeproj",
-            plist_path: "App/Info.plist",
+            plist_path: "coldtivate/Info.plist",
             display_name: app_name,
         )
 
@@ -214,7 +214,6 @@ platform :ios do
             xcodeproj: "ios/coldtivate.xcodeproj",
             profile: ENV["sigh_"+ app_identifier +"_" + type + "_profile-path"],
             code_signing_identity: ENV["sigh_"+ app_identifier +"_" + type + "_certificate-name"],
-            # target_filter: "App"
         )
 
         ENV['APP_ENV'] = options[:pipeline]
@@ -235,7 +234,7 @@ platform :ios do
         commit = last_git_commit
 
         upload_to_testflight(
-            username: "dev@mosano.eu", # TODO: use the Appfile.apple_id
+            username: "dev@mosano.eu",
             app_platform: 'ios',
             ipa: "#{lane_context[SharedValues::IPA_OUTPUT_PATH]}",
             # dsym: "#{lane_context[SharedValues::DSYM_OUTPUT_PATH]}",
