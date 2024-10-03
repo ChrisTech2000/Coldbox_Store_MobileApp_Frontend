@@ -142,7 +142,7 @@ export function CartItem({ item }: CartItemProps) {
             evt.stopPropagation();
             emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, {
               name: company?.name,
-              country: countriesMeta.getNameByISO(company?.country ?? '') ?? '',
+              locationName: countriesMeta.getNameByISO(company?.country ?? '') ?? '',
               address: '', // TODO: add
               latitude: 0,
               longitude: 0,

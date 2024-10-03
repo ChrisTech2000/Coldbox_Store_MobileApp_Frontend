@@ -140,4 +140,4 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   );
 }
 
-export default withSafeArea(ManagementMain);
+export default withSafeArea(ManagementMain, ['bottom'], true);

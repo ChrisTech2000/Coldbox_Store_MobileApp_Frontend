@@ -238,4 +238,4 @@ async function _dataFetcher(farmerId: number) {
 
 export type CoolingUserSurveyAggregatedData = Awaited<ReturnType<typeof _dataFetcher>>;
 
-export default withSafeArea(CoolingUsersSurvey);
+export default withSafeArea(CoolingUsersSurvey, ['bottom'], true);

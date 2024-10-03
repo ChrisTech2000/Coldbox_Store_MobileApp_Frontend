@@ -426,3 +426,16 @@ export interface AddItemToCartParams extends JsonObject {
   orderedProduceWeight: number;
   updateStrategy: 'increase' | 'decrease' | 'replace';
 }
+export interface UpdateListedCrateParams extends JsonObject {
+  crateIds: Array<number>;
+  producePricePerKg: number;
+}
+
+export interface GetAvailableListingParams extends JsonObject {
+  location: [number, number] | [];
+  sortBy?: 'price-asc' | 'price-desc' | 'nearby-me';
+  filterByCoolingUnitsIds?: Array<number>;
+  page?: number;
+  itemsPerPage?: number;
+  filterByMaxDistanceInKm?: number;
+}

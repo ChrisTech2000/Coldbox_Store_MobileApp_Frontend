@@ -59,7 +59,7 @@ export enum ESMSEndpoints {
 }
 
 export enum ENotificationsEndpoints {
-  GET_NOTIFICATIONS = '/user/v1/notification',
+  GET_NOTIFICATIONS = '/user/v1/notification/',
   UPDATE_NOTIFICATION = 'user/v1/notification/:notificationId/',
 }
 
@@ -102,4 +102,6 @@ export enum EMarketplaceEndpoints {
   GET_ORDERS = 'marketplace/buyer/orders/',
   REMOVE_ITEM_FROM_CART = 'marketplace/buyer/cart/items/:crateId/',
   CHECKOUT_WITH_PAYSTACK = 'marketplace/buyer/cart/checkout-with-paystack/',
+  UPSERT_LISTED_CRATE = 'marketplace/seller/listed-crates/',
+  AVAILABLE_LISTING = 'marketplace/buyer/available-listings/',
 }
