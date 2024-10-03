@@ -9,6 +9,7 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { CurrencyStandardization } from 'currency-format-utils';
 
 type OrderDetailsCardProps = {
   produceWeight: number;
@@ -40,14 +41,22 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
           </View>
           <View tw="flex-row items-center justify-between h-8">
             <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.subtotal')}</Text>
-            <Text tw="text-base">${props.subtotal.toFixed(2)}</Text>
+            <Text tw="text-base">
+              {CurrencyStandardization.currencyCode({
+                code: 'NGN', // TODO: get value from somewhere
+                value: props.subtotal,
+              }).getValueFormated()}
+            </Text>
           </View>
           <View tw="flex-row items-center justify-between h-8">
             <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
             <View tw="flex-row items-center space-x-1">
               <Icon name="minus" size={14} color={paperTheme.colors.error} />
               <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
-                ${props.discount.toFixed(2)}
+                {CurrencyStandardization.currencyCode({
+                  code: 'NGN', // TODO: get value from somewhere
+                  value: props.discount.toFixed(2),
+                }).getValueFormated()}
               </Text>
             </View>
           </View>
@@ -68,7 +77,12 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
             </View>
             <View tw="flex-row items-center space-x-1">
               <Icon name="plus" size={16} color={paperTheme.colors.scrim} />
-              <Text tw="text-base">${(props.paymentFees + props.coolingFees).toFixed(2)}</Text>
+              <Text tw="text-base">
+                {CurrencyStandardization.currencyCode({
+                  code: 'NGN', // TODO: get value from somewhere
+                  value: props.paymentFees + props.coolingFees,
+                }).getValueFormated()}
+              </Text>
             </View>
           </View>
 
@@ -79,7 +93,10 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               {props.totalLabel}
             </Text>
             <Text variant="TextMedium" tw="text-lg">
-              ${props.total.toFixed(2)}
+              {CurrencyStandardization.currencyCode({
+                code: 'NGN', // TODO: get value from somewhere
+                value: props.total,
+              }).getValueFormated()}
             </Text>
           </View>
         </View>
@@ -102,12 +119,22 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
             <View>
               <View tw="flex-row items-center justify-between py-3.5">
                 <Text tw="text-base">{t('Dashboard.ShoppingCart.marketFees')}</Text>
-                <Text tw="text-base text-zinc-500">${props.coolingFees.toFixed(2)}</Text>
+                <Text tw="text-base text-zinc-500">
+                  {CurrencyStandardization.currencyCode({
+                    code: 'NGN', // TODO: get value from somewhere
+                    value: props.coolingFees,
+                  }).getValueFormated()}
+                </Text>
               </View>
               <Divider tw="bg-zinc-400" />
               <View tw="flex-row items-center justify-between py-3.5">
                 <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
-                <Text tw="text-base text-zinc-500">${props.paymentFees.toFixed(2)}</Text>
+                <Text tw="text-base text-zinc-500">
+                  {CurrencyStandardization.currencyCode({
+                    code: 'NGN', // TODO: get value from somewhere
+                    value: props.paymentFees,
+                  }).getValueFormated()}
+                </Text>
               </View>
             </View>
           </View>

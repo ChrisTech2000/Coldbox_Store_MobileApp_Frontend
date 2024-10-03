@@ -17,6 +17,7 @@ import MarketplaceService from '#services/MarketplaceService';
 
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
+import { CurrencyStandardization } from 'currency-format-utils';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -84,7 +85,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
         <View tw="flex-col w-full mt-6">
           <View tw="flex-row items-center justify-between">
             <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
-            <Text tw="text-lg">${data.totalAmount?.toFixed(2)}</Text>
+            <Text tw="text-lg">
+              {CurrencyStandardization.currencyCode({
+                code: 'NGN', // TODO: get value from somewhere
+                value: data.totalAmount,
+              }).getValueFormated()}
+            </Text>
           </View>
           <Divider tw="bg-zinc-400 my-3" />
           <Button

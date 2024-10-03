@@ -20,6 +20,7 @@ import MarketplaceService from '#services/MarketplaceService';
 
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
+import { CurrencyStandardization } from 'currency-format-utils';
 
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
@@ -56,7 +57,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
 
   return (
     <React.Fragment>
-      <ScrollView tw="px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
+      <ScrollView tw="h-full px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
         <View tw="flex-1 pb-8">
           <FlatList
             data={data.items}
@@ -69,7 +70,12 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
               <View tw="flex-col w-full mt-6">
                 <View tw="flex-row items-center justify-between">
                   <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
-                  <Text tw="text-lg">${data.totalAmount.toFixed(2)}</Text>
+                  <Text tw="text-lg">
+                    {CurrencyStandardization.currencyCode({
+                      code: 'NGN', // TODO: get from somewhere
+                      value: data.totalAmount,
+                    }).getValueFormated()}
+                  </Text>
                 </View>
                 <Divider tw="bg-zinc-400 my-3" />
                 <Button

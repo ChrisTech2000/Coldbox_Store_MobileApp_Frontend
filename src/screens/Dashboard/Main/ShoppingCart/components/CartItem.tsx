@@ -21,6 +21,7 @@ import { type CartItem as CartItemType } from '#types/global';
 
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
 import CartItemInput from './CartItemInput';
+import { CurrencyStandardization } from 'currency-format-utils';
 
 const countriesMeta = countriesDict();
 
@@ -167,7 +168,11 @@ export function CartItem({ item }: CartItemProps) {
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
             <Text variant="TextMedium" tw="text-base">
-              ${item.producePricePerKg} {t('Dashboard.ShoppingCart.perKg')}
+              {CurrencyStandardization.currencyCode({
+                code: company.currency,
+                value: item.producePricePerKg,
+              }).getValueFormated()}
+              {t('Dashboard.ShoppingCart.perKg')}
             </Text>
           </View>
         </View>
