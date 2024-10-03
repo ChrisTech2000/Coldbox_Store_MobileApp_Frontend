@@ -95,7 +95,13 @@ export enum CouponsEndpoints {
   REVOKE_COUPON = 'marketplace/seller/coupons/:couponId/',
 }
 
-export enum MarketplaceEndpoints {
+export enum EMarketplaceEndpoints {
+  ADD_ITEM = 'marketplace/buyer/cart/items/',
+  GET_CART = 'marketplace/buyer/cart/',
+  GET_ORDER = 'marketplace/buyer/orders/:orderId/',
+  GET_ORDERS = 'marketplace/buyer/orders/',
+  REMOVE_ITEM_FROM_CART = 'marketplace/buyer/cart/items/:crateId/',
+  CHECKOUT_WITH_PAYSTACK = 'marketplace/buyer/cart/checkout-with-paystack/',
   UPSERT_LISTED_CRATE = 'marketplace/seller/listed-crates/',
   AVAILABLE_LISTING = 'marketplace/buyer/available-listings/',
   GET_SELLER_LISTED_CRATES_BY_CRATE_ID = 'marketplace/seller/listed-crates/:crateId/',

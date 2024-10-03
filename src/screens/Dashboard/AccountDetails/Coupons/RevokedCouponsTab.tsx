@@ -8,7 +8,6 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import CouponService from '#services/CouponService';
 
-// TODO → add text content to translations
 function RevokedCouponsTab() {
   const { data } = useApiCall(
     'getCouponList',
