@@ -10,9 +10,9 @@ image: ${CI_REGISTRY_IMAGE}:ci
 ## Template Scripts
 ###
 
-.npm-install: &npm-install
-  - npm config set cache ~/.npm
-  - npm ci --force
+.yarn-install: &yarn-install
+  - yarn config set cache-folder ~/.yarn
+  - yarn install --frozen-lockfile
 
 .bundler-install: &bundler-install
   - bundler config set path ~/.bundler
@@ -33,12 +33,12 @@ image: ${CI_REGISTRY_IMAGE}:ci
 ## Caches
 ###
 
-.npm-cache: &npm-cache
-  key: npm-cache
+.yarn-cache: &yarn-cache
+  key: yarn-cache
   policy: pull
   paths:
     - node_modules/
-    - ~/.npm
+    - ~/.yarn
 .android-cache: &android-cache
   key: android-cache
   policy: pull
@@ -95,9 +95,9 @@ build ci image:
 # lint:
 #   stage: validation
 #   before_script:
-#     - npm ci --force
+#     - *yarn-install
 #   script:
-#     - npm run lint
+#     - yarn run lint
 
 ###
 ## Build
@@ -113,7 +113,7 @@ build ci image:
     LANE: build
   before_script:
     - *git-secret-reveal
-    - *npm-install
+    - *yarn-install
     - *bundler-install
     # - *trust-git-providers # mosano's runner already trust these
   script:
@@ -124,7 +124,7 @@ build ci image:
     paths:
       - android/app/build/outputs/
   cache:
-    - <<: *npm-cache
+    - <<: *yarn-cache
     - <<: *bundler-cache
       policy: pull-push
       key: bundler-cache-android
@@ -143,7 +143,7 @@ build ci image:
     NG_CONFIGURATION: production
     LANE: build
   before_script:
-    - *npm-install
+    - *yarn-install
     - *bundler-install
     - *trust-git-providers
     - eval $(ssh-agent -s)
@@ -157,7 +157,7 @@ build ci image:
     paths:
       - ios/build
   cache:
-    - <<: *npm-cache
+    - <<: *yarn-cache
     - <<: *bundler-cache
       policy: pull-push
       key: bundler-cache-ios
