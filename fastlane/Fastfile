@@ -98,7 +98,7 @@ platform :android do
 
     desc "Submit a new Staging Build to the Play Store"
     desc "This will also deploy just for the staging group."
-    lane :production do |options|
+    lane :staging do |options|
         options = options.merge(
             pipeline: "staging",
         )
@@ -256,7 +256,7 @@ platform :ios do
 
   desc "Submit a new Staging Build"
   desc "This build is intended to be submitted to TestFlight."
-  lane :production do |options|
+  lane :staging do |options|
     options = options.merge(
       pipeline: "staging",
       scheme: "App",
