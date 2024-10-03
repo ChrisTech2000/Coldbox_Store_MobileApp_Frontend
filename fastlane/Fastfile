@@ -258,7 +258,6 @@ platform :ios do
   lane :staging do |options|
     options = options.merge(
       pipeline: "staging",
-      scheme: "App",
       type: "appstore",
     )
 
@@ -271,7 +270,6 @@ platform :ios do
   lane :production do |options|
     options = options.merge(
       pipeline: "production",
-      scheme: "App",
       type: "appstore",
     )
 
