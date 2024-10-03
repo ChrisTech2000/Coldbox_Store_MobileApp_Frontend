@@ -44,7 +44,6 @@ export type SetupSchema = {
   price: number | undefined;
 };
 
-// TODO → add text content to translations
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
   const { additionalInfo, crop } = route.params;
   const { company } = useManagementStore();

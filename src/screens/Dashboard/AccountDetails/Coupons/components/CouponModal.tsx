@@ -17,7 +17,6 @@ type FormValues<T = string> = {
   percentage: T;
 };
 
-// TODO → add text content to translations
 export default function CouponModal(props: {
   modalRef: RefObject<Modalize>;
   datum?: FormValues<number>;

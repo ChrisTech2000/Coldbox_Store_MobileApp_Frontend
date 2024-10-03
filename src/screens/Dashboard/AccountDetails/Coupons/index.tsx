@@ -15,7 +15,6 @@ import { getQueryKey } from '#services/hooks/useAPiCall';
 
 import CouponModal from './components/CouponModal';
 
-// TODO → add text content to translations
 function CouponsRoot() {
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();

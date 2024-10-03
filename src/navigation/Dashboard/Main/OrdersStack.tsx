@@ -21,7 +21,7 @@ import { useDashboardHeader } from '#navigation/Dashboard/lib/dashboardHeaderFac
 export type OrdersRoutes = {
   OrdersRoot: undefined;
   OrdersDetails: {
-    orderId: string;
+    orderId: number;
   };
 };
 

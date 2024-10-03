@@ -8,13 +8,11 @@ import { Button } from '#ui/components/Button';
 import { useTranslationUtils } from '#i18n/utils';
 import { useControlledState } from '#ui/hooks/useControlledState';
 
-// TODO → add text content to translations
 export default function SellInMarketplaceModal(props: {
   visible: boolean;
   onChangeVisible: (v: SetStateAction<boolean>) => void;
 }) {
   const { t } = useTranslationUtils();
-
   const [visible, onChangeVisible] = useControlledState(props.visible, props.onChangeVisible);
 
   return (
@@ -23,7 +21,7 @@ export default function SellInMarketplaceModal(props: {
         <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
           <View tw="items-start space-y-4 my-2.5">
             <Text variant="TitleMedium">Sell in marketplace</Text>
-            <Text>The price configuration refers to product sale, not cooling storage fee.</Text>
+            <Text>{t('Dashboard.Marketplace.priceConfig')}</Text>
           </View>
           <View tw="flex-row self-end">
             <Button

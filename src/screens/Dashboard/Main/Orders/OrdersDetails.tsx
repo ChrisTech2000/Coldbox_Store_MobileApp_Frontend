@@ -1,20 +1,19 @@
+import { useIsFocused } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import { Divider } from 'react-native-paper';
 
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
-import { GenericError } from '#ui/components/GenericError';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { API_BASE_URL } from '#constants/environment';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
-import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
 import DeliveryInformationBottomSheet, {
   type DeliveryInformationDatum,
 } from '../ShoppingCart/components/DeliveryInformationBottomSheet';
@@ -25,7 +24,7 @@ function OrdersDetails() {
       <ScrollView tw="px-4 pt-4 bg-white" showsVerticalScrollIndicator={false}>
         <View tw="pb-32 space-y-6">
           <View>
-            <OrderDetailsCard heading="Order overview" totalLabel="Order total" />
+            {/* <OrderDetailsCard heading="Order overview" totalLabel="Order total" /> */}
           </View>
 
           <View tw="flex-col space-y-5">
@@ -41,12 +40,10 @@ function OrdersDetails() {
                       {
                         companyName: 'Mosano',
                         phoneNumber: '+0123456789',
-                        produces: [{ cropName: 'Banana', weight: 2, code: 'CU05-03' }],
                       },
                       {
                         companyName: 'Lorem Ipsum',
                         phoneNumber: '+0123456789',
-                        produces: [{ cropName: 'Banana', weight: 2, code: 'CU05-03' }],
                       },
                     ] satisfies Array<DeliveryInformationDatum>);
                   }}

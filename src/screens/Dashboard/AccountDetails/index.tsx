@@ -127,7 +127,8 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
         </View>
       </View>
 
-      <View>
+      {/** TODO: not sure if this will ever be a part of the app; leaving it just in case */}
+      {/* <View>
         <RBAC.ProtectedResource action="SET" subject="BuyerSettings">
           <View tw="space-y-3">
             <Text tw="text-base text-green-primary font-bold">
@@ -150,7 +151,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             </View>
           </View>
         </RBAC.ProtectedResource>
-      </View>
+      </View> */}
 
       <View tw="space-y-3">
         <Text tw="text-base text-green-primary font-bold">
