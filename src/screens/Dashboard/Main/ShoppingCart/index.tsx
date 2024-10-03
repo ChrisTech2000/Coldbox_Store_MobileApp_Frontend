@@ -1,4 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
+import { CurrencyStandardization } from 'currency-format-utils';
 import React from 'react';
 import { FlatList, View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
@@ -20,7 +21,6 @@ import MarketplaceService from '#services/MarketplaceService';
 
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
-import { CurrencyStandardization } from 'currency-format-utils';
 
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();

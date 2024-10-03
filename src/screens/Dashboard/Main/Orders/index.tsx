@@ -1,9 +1,8 @@
-import React from 'react';
+import { CurrencyStandardization } from 'currency-format-utils';
+import React, { useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import colors from 'tailwindcss/colors';
 
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -18,9 +17,13 @@ import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import { SortingMenu } from './Sorting';
 
 function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   const { t } = useTranslationUtils();
+  // const { sorting } = useSortingStore();  // TODO: implement sorting, but date is needed
+
+  const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
 
   const { data, isLoading } = useApiCall(
     'getOrders',
@@ -64,18 +67,11 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
           <Text variant="TextMedium" tw="text-lg">
             {t('navigation.bottomTabs.History')}
           </Text>
-          <Touchable
-            tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
-            rippleColor={colors.zinc[200]}
-            onPress={(evt) => {
-              evt.stopPropagation();
-              // TODO
-            }}
-          >
-            {/** TODO: add selector and sorting functionality */}
-            <Text tw="text-base text-green-primary">Most recent</Text>
-            <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
-          </Touchable>
+
+          <SortingMenu
+            isModalVisible={isSortingModalOpen}
+            setIsModalVisible={setIsSortingModalOpen}
+          />
         </View>
         <FlatList
           data={data}
@@ -116,19 +112,28 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                     <Text variant="TextMedium" tw="text-base w-[50%]">
                       {t('Dashboard.MyOrders.sort.cropType')}
                     </Text>
-                    <Text tw="text-base text-zinc-500">{_crops.join(', ')}</Text>
+                    <Text tw="text-base text-zinc-500" numberOfLines={1}>
+                      {_crops.join(', ')}
+                    </Text>
                   </View>
                   <View tw="flex-row items-center">
                     <Text variant="TextMedium" tw="text-base w-[50%]">
                       {t('Dashboard.MyOrders.sort.coolingUnit')}
                     </Text>
-                    <Text tw="text-base text-zinc-500">{_coolingUnits.join(', ')}</Text>
+                    <Text tw="text-base text-zinc-500" numberOfLines={1}>
+                      {_coolingUnits.join(', ')}
+                    </Text>
                   </View>
                   <View tw="flex-row items-center">
                     <Text variant="TextMedium" tw="text-base w-[50%]">
                       {t('Dashboard.MyOrders.sort.orderTotal')}
                     </Text>
-                    <Text tw="text-base text-zinc-500">${item.totalAmount}</Text>
+                    <Text tw="text-base text-zinc-500">
+                      {CurrencyStandardization.currencyCode({
+                        code: 'NGN', // TODO: get value from somewhere
+                        value: item.totalAmount,
+                      }).getValueFormated()}
+                    </Text>
                   </View>
                 </View>
                 <MaterialCommunityIcon name="chevron-right" size={28} />

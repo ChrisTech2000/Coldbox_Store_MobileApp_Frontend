@@ -1,3 +1,4 @@
+import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useState } from 'react';
 import { GestureResponderEvent, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
@@ -17,7 +18,6 @@ import MarketplaceService from '#services/MarketplaceService';
 
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
-import { CurrencyStandardization } from 'currency-format-utils';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();

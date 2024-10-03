@@ -1,7 +1,8 @@
+import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import { Divider, IconButton, Portal } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
+import { Divider, IconButton, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
@@ -9,7 +10,6 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { CurrencyStandardization } from 'currency-format-utils';
 
 type OrderDetailsCardProps = {
   produceWeight: number;
