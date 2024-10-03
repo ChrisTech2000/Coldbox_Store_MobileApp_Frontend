@@ -163,8 +163,6 @@ build ci image:
       key: bundler-cache-ios
     - <<: *cocoapods-cache
       policy: pull-push
-    - <<: *capacitor-cache
-      policy: pull-push
 
 ## Jobs
 
