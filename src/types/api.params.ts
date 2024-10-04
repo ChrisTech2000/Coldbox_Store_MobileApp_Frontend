@@ -1,6 +1,7 @@
 import { JsonObject } from '#services/utils';
 import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import {
+  EBankAccountType,
   EImpactMode,
   EPaymentType,
   ERoles,
@@ -438,4 +439,12 @@ export interface GetAvailableListingParams extends JsonObject {
   page?: number;
   itemsPerPage?: number;
   filterByMaxDistanceInKm?: number;
+}
+
+export interface AddUserBankAccountParams extends JsonObject {
+  accountType: EBankAccountType;
+  bankCode: string;
+  accountNumber: string;
+  countryCode: string;
+  accountName: string;
 }
