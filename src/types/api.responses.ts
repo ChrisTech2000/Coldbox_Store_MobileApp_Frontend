@@ -1,4 +1,5 @@
 import {
+  Bank,
   CartItem,
   ECoolingUnitMetric,
   EMovementType,
@@ -446,6 +447,9 @@ export interface GetCartResponse {
   totalProduceAmount: number;
 }
 
+export interface GetAllOrdersResponse extends GetCartResponse {
+  createdAt: string;
+}
 export interface CheckoutWithPaystackResponse {
   orderId: number;
   authorizationUrl: string;
@@ -476,4 +480,8 @@ export interface GetAvailableListingResponse {
     totalItems: number;
     totalPages: number;
   };
+}
+
+export interface GetAvailableBanksResponse {
+  banks: Array<Bank>;
 }
