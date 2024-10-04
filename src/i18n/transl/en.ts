@@ -892,7 +892,7 @@ const en = {
         addToCartButton: 'Add to cart and continue shopping',
         selectQuantity: 'Select quantity',
         buyNowButton: 'Buy now',
-      }
+      },
     },
     AccountDetails: {
       popups: {

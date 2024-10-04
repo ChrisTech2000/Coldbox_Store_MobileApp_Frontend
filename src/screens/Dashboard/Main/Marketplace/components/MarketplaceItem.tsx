@@ -16,7 +16,6 @@ import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import ColdtivateService from '#services/ColdtivateService';
 
-
 import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
 
 export default function MarketplaceItemWrapper(
@@ -163,7 +162,8 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
       <View tw="flex-row items-center py-1 justify-between">
         <View tw={cn('flex-row items-center justify-between pr-2', hasAction ? 'w-3/4' : 'w-full')}>
           <Text variant="TextMedium" tw="text-base">
-            {props.crateWeight}{t('Dashboard.ShoppingCart.weight')}
+            {props.crateWeight}
+            {t('Dashboard.ShoppingCart.weight')}
           </Text>
           <Text variant="TextMedium" tw="text-base">
             {props.currencyValue} {t('Dashboard.ShoppingCart.perKg')}

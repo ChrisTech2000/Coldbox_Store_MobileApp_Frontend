@@ -31,13 +31,16 @@ export default function AddToCartModal() {
   const { t, zodResolver } = useTranslationUtils();
   const modalRef = useRef<Modalize>(null);
   const toast = InAppNotifications.useToast();
-  const navigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>()
+  const navigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const [datum, setDatum] = useState<AvailableListingDatum | undefined>(undefined);
-  useAppEventListener<[AvailableListingDatum]>('DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL', (datum) => {
-    setDatum(datum);
-    modalRef.current?.open();
-  });
+  useAppEventListener<[AvailableListingDatum]>(
+    'DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL',
+    (datum) => {
+      setDatum(datum);
+      modalRef.current?.open();
+    }
+  );
 
   const isVisible = typeof datum !== 'undefined';
 
@@ -95,9 +98,7 @@ export default function AddToCartModal() {
 
         <View tw="w-full items-center h-auto py-4 px-5 self-center space-y-2">
           <View tw="items-start space-y-1 my-2.5 w-full">
-            <Text variant="TitleMedium">
-              {t('Dashboard.Marketplace.addToCart.selectQuantity')}
-            </Text>
+            <Text variant="TitleMedium">{t('Dashboard.Marketplace.addToCart.selectQuantity')}</Text>
             {isVisible ? (
               <MarketplaceItemWrapper shelfLife={datum.shelfLife}>
                 <MarketplaceItemWrapper.Body
@@ -151,7 +152,8 @@ export default function AddToCartModal() {
                         evt.stopPropagation();
                         const int = Number(value);
                         if (isNaN(int)) return; // safe guard
-                        if (datum?.crateWeight && int + 1 <= datum.crateWeight) onChange((int + 1).toString());
+                        if (datum?.crateWeight && int + 1 <= datum.crateWeight)
+                          onChange((int + 1).toString());
                         else
                           toast.show(t('Dashboard.ShoppingCart.errors.invalid'), {
                             type: 'md_danger',

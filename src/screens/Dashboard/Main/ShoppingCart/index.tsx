@@ -61,10 +61,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
         tw="h-full px-4 pt-3 bg-white"
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl
-            refreshing={isValidating}
-            onRefresh={async () => await refetch()}
-          />
+          <RefreshControl refreshing={isValidating} onRefresh={async () => await refetch()} />
         }
       >
         <View tw="flex-1 pb-8">

@@ -55,7 +55,7 @@ export default function CartItemInput(props: {
   }, []);
 
   useEffect(() => {
-    form.setValue('quantity', props.initialValue.toString())
+    form.setValue('quantity', props.initialValue.toString());
   }, [props.initialValue]);
 
   return (

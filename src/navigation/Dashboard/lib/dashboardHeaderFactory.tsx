@@ -81,7 +81,7 @@ export function useDashboardHeader() {
   const cartItemsCount = data?.items?.length ?? 0;
 
   useAppEventListener('DISPATCH_CART_REVALIDATION', () => {
-    refetch()
+    refetch();
   });
 
   return useCallback(
