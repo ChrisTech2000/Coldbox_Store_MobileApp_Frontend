@@ -17,7 +17,7 @@ function MarketplaceRoot() {
     <React.Fragment>
       <MarketplaceFiltersSection />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View tw="flex-1 pb-8">
+        <View tw="flex-1">
           <MarketplaceList />
         </View>
       </ScrollView>

@@ -1,31 +1,52 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
-import { Modal, Portal, TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { Portal, TextInput } from 'react-native-paper';
 
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
-
-import { useTranslationUtils } from '#i18n/utils';
-import { useAppEventListener } from '#ui/lib/emitter';
-import { API_BASE_URL } from '#constants/environment';
+import { Text } from '#ui/components/Text';
+import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
-import MarketplaceItemWrapper from './MarketplaceItem';
+import { API_BASE_URL } from '#constants/environment';
+import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import MarketplaceService from '#services/MarketplaceService';
+import { useApiCall } from '#services/hooks/useAPiCall';
+
+import InAppNotifications from '#common/InAppNotifications';
+
 import type { AvailableListingDatum } from '../utils';
+import MarketplaceItemWrapper from './MarketplaceItem';
 
 type FormValues<T = string> = {
   quantity: T;
 };
 
 export default function AddToCartModal() {
-  const { zodResolver } = useTranslationUtils();
+  const { t, zodResolver } = useTranslationUtils();
+  const modalRef = useRef<Modalize>(null);
+  const toast = InAppNotifications.useToast();
+  const navigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>()
 
   const [datum, setDatum] = useState<AvailableListingDatum | undefined>(undefined);
-  useAppEventListener<[AvailableListingDatum]>('DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL', setDatum);
+  useAppEventListener<[AvailableListingDatum]>('DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL', (datum) => {
+    setDatum(datum);
+    modalRef.current?.open();
+  });
 
   const isVisible = typeof datum !== 'undefined';
+
+  const { data, refetch } = useApiCall(
+    'getCart',
+    MarketplaceService.getCart,
+    {},
+    { defaultData: undefined }
+  );
 
   const form = useForm<FormValues>({
     defaultValues: { quantity: '1' },
@@ -40,17 +61,43 @@ export default function AddToCartModal() {
     form.reset({ quantity: '1' });
   }
 
-  async function onSubmit(values: FormValues<number>): Promise<void> {
-    // TODO
-    console.log(values);
+  async function onSubmit(values: FormValues<number>, buyNow?: boolean): Promise<void> {
+    if (!datum) return;
+
+    const crateAlreadyInCart = data.items.find((i) => i.relCrateId === datum.crateId);
+
+    await MarketplaceService.addItemToCart({
+      crateId: datum.crateId,
+      orderedProduceWeight: values.quantity,
+      updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
+    });
+
+    emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
+    refetch();
+    resetState();
+    modalRef.current?.close();
+
+    if (buyNow) navigation.navigate('ShoppingCart', { screen: 'Root' }); // TODO: confirm this behaviour
   }
 
   return (
     <Portal>
-      <Modal visible={isVisible} onDismiss={resetState}>
-        <View tw="w-full items-center bg-zinc-50 rounded-3xl w-11/12 max-w-11/12 h-auto py-4 px-5 self-center space-y-2">
+      <Modalize
+        ref={modalRef}
+        onClose={resetState}
+        withHandle={false}
+        adjustToContentHeight
+        modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
+      >
+        <View tw="w-full items-center justify-center h-10">
+          <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
+        </View>
+
+        <View tw="w-full items-center h-auto py-4 px-5 self-center space-y-2">
           <View tw="items-start space-y-1 my-2.5 w-full">
-            <Text variant="TitleMedium">Select quantity</Text>
+            <Text variant="TitleMedium">
+              {t('Dashboard.Marketplace.addToCart.selectQuantity')}
+            </Text>
             {isVisible ? (
               <MarketplaceItemWrapper shelfLife={datum.shelfLife}>
                 <MarketplaceItemWrapper.Body
@@ -87,9 +134,12 @@ export default function AddToCartModal() {
                       onPress={(evt) => {
                         evt.stopPropagation();
                         const int = Number(value);
-                        if (isNaN(int)) return;
-                        const finalValue = (int - 1).toString();
-                        onChange(finalValue);
+                        if (isNaN(int)) return; // safe guard
+                        if (int - 1 > 0) onChange((int - 1).toString());
+                        else
+                          toast.show(t('Dashboard.ShoppingCart.errors.invalid'), {
+                            type: 'md_danger',
+                          });
                       }}
                     />
                   }
@@ -100,9 +150,12 @@ export default function AddToCartModal() {
                       onPress={(evt) => {
                         evt.stopPropagation();
                         const int = Number(value);
-                        if (isNaN(int)) return;
-                        const finalValue = (int + 1).toString();
-                        onChange(finalValue);
+                        if (isNaN(int)) return; // safe guard
+                        if (datum?.crateWeight && int + 1 <= datum.crateWeight) onChange((int + 1).toString());
+                        else
+                          toast.show(t('Dashboard.ShoppingCart.errors.invalid'), {
+                            type: 'md_danger',
+                          });
                       }}
                     />
                   }
@@ -114,26 +167,24 @@ export default function AddToCartModal() {
             <Button
               tw="w-11/12"
               mode="outlined"
-              onPress={(evt) => {
-                evt.stopPropagation();
-                resetState();
-              }}
+              // eslint-disable-next-line
+              onPress={form.handleSubmit(onSubmit as any)}
               disabled={form.formState.isSubmitting}
             >
-              Add to cart and continue shopping
+              {t('Dashboard.Marketplace.addToCart.addToCartButton')}
             </Button>
             <Button
-              tw="w-11/12"
+              tw="w-11/12 mb-4"
               mode="contained"
               // eslint-disable-next-line
               onPress={form.handleSubmit(onSubmit as any)}
               disabled={form.formState.isSubmitting}
             >
-              Buy now
+              {t('Dashboard.Marketplace.addToCart.buyNowButton')}
             </Button>
           </View>
         </View>
-      </Modal>
+      </Modalize>
     </Portal>
   );
 }

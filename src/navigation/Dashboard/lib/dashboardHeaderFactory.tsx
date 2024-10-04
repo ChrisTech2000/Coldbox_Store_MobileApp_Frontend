@@ -7,6 +7,7 @@ import RBAC from '#common/RBAC';
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import { useAppEventListener } from '#ui/lib/emitter';
 
 import { useRightDrawerStore } from '../index';
 import type { DashboardMainRoutePaths, DashboardMainRoutes } from '../Main';
@@ -67,7 +68,7 @@ export function useDashboardHeader() {
   const { guard } = RBAC.useRBAC();
   const { dispatch, navigate } = useNavigation<NavigationProp<DashboardMainRoutes>>();
 
-  const { data } = useApiCall(
+  const { data, refetch } = useApiCall(
     'getCart',
     MarketplaceService.getCart,
     {},
@@ -78,6 +79,10 @@ export function useDashboardHeader() {
 
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
   const cartItemsCount = data?.items?.length ?? 0;
+
+  useAppEventListener('DISPATCH_CART_REVALIDATION', () => {
+    refetch()
+  });
 
   return useCallback(
     (goBackFunc?: () => void): NavigationHeaderProps => {

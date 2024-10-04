@@ -85,7 +85,7 @@ export function CartItem({ item }: CartItemProps) {
             item.relCrateRemainingShelfLife > 2 &&
             'bg-yellow-400 border-yellow-400',
           item.relCrateRemainingShelfLife &&
-            item.relCrateRemainingShelfLife < 2 &&
+            item.relCrateRemainingShelfLife <= 2 &&
             'bg-red-500 border-red-500',
           (!item.relCrateRemainingShelfLife || item.relCrateRemainingShelfLife === -1) &&
             'bg-gray-300 border-gray-300'
@@ -115,7 +115,7 @@ export function CartItem({ item }: CartItemProps) {
                     item.relCrateRemainingShelfLife <= 7 &&
                       item.relCrateRemainingShelfLife > 2 &&
                       'text-yellow-400',
-                    item.relCrateRemainingShelfLife < 2 && 'text-red-500'
+                    item.relCrateRemainingShelfLife <= 2 && 'text-red-500'
                   )}
                 >
                   {item.relCrateRemainingShelfLife} {t('Dashboard.ShoppingCart.daysLeft')}

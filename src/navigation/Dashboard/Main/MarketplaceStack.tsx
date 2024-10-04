@@ -89,7 +89,7 @@ export default function MarketplaceStack() {
         return <NavigatorHeader {...baseProps} />;
       },
     };
-  }, []);
+  }, [dashboardHeaderFactory]);
 
   return (
     <Stack.Navigator initialRouteName="MarketplaceRoot" screenOptions={screenOptions}>

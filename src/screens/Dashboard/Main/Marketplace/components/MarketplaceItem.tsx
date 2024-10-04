@@ -1,19 +1,21 @@
 import React, { type PropsWithChildren } from 'react';
 import { View } from 'react-native';
-import { useDebouncedCallback } from 'use-debounce';
-import { Divider } from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import { Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
-
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import ColdtivateService from '#services/ColdtivateService';
-import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
-import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
+
+import { useTranslationUtils } from '#i18n/utils';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
+import ColdtivateService from '#services/ColdtivateService';
+
 
 import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
 
@@ -21,12 +23,12 @@ export default function MarketplaceItemWrapper(
   props: PropsWithChildren<{ shelfLife: number | null }>
 ) {
   const bgColor = !props.shelfLife
-    ? undefined
+    ? 'bg-gray-300'
     : props.shelfLife <= 2
       ? 'bg-red-700'
       : props.shelfLife <= 7
         ? 'bg-yellow-400'
-        : 'bg-gray-300';
+        : 'bg-green-400';
 
   return (
     <View tw="flex-row w-full my-2 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
@@ -42,21 +44,23 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
   movementCode: string;
   cropImageUri: string;
 }) {
+  const { t } = useTranslationUtils();
+
   const iconColor = !props.shelfLife
     ? undefined
     : props.shelfLife <= 2
       ? colors.red[700]
       : props.shelfLife <= 7
         ? colors.yellow[400]
-        : colors.gray[500];
+        : colors.green[400];
 
   const textColor = !props.shelfLife
     ? undefined
     : props.shelfLife <= 2
       ? 'text-red-700'
       : props.shelfLife <= 7
-        ? 'text-yellow-500'
-        : 'text-gray-500';
+        ? 'text-yellow-400'
+        : 'text-green-400';
 
   return (
     <View tw="w-full flex-row items-start justify-between">
@@ -65,7 +69,7 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
           <View tw="flex-row items-center space-x-2">
             <MaterialCommunityIcon name="timer-outline" size={23} color={iconColor} />
             <Text variant="TextMedium" tw={cn('text-base', textColor)}>
-              {props.shelfLife} days left
+              {props.shelfLife} {t('Dashboard.ShoppingCart.daysLeft')}
             </Text>
           </View>
         ) : null}
@@ -149,6 +153,7 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
   currencyValue: string;
   onAddFunc?: () => void;
 }) {
+  const { t } = useTranslationUtils();
   const hasAction = typeof props.onAddFunc === 'function';
 
   return (
@@ -158,10 +163,10 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
       <View tw="flex-row items-center py-1 justify-between">
         <View tw={cn('flex-row items-center justify-between pr-2', hasAction ? 'w-3/4' : 'w-full')}>
           <Text variant="TextMedium" tw="text-base">
-            {props.crateWeight}KG available
+            {props.crateWeight}{t('Dashboard.ShoppingCart.weight')}
           </Text>
           <Text variant="TextMedium" tw="text-base">
-            {props.currencyValue} / KG
+            {props.currencyValue} {t('Dashboard.ShoppingCart.perKg')}
           </Text>
         </View>
 
@@ -178,8 +183,8 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
               }}
             >
               <MaterialCommunityIcon name="cart-plus" size={19} color={paperTheme.colors.primary} />
-              <Text variant="TextMedium" tw="text-base text-green-primary">
-                ADD
+              <Text variant="TextMedium" tw="text-base text-green-primary uppercase">
+                {t('actions.add')}
               </Text>
             </Touchable>
           </React.Fragment>

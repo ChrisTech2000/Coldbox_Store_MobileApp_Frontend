@@ -888,6 +888,11 @@ const en = {
     },
     Marketplace: {
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
+      addToCart: {
+        addToCartButton: 'Add to cart and continue shopping',
+        selectQuantity: 'Select quantity',
+        buyNowButton: 'Buy now',
+      }
     },
     AccountDetails: {
       popups: {
