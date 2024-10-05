@@ -58,6 +58,16 @@ Build the app
 
 Publish the app
 
+### android staging
+
+```sh
+[bundle exec] fastlane android staging
+```
+
+Submit a new Staging Build to the Play Store
+
+This will also deploy just for the staging group.
+
 ### android production
 
 ```sh
@@ -96,6 +106,16 @@ Build the app
 ```
 
 Publish to Testflight
+
+### ios staging
+
+```sh
+[bundle exec] fastlane ios staging
+```
+
+Submit a new Staging Build
+
+This build is intended to be submitted to TestFlight.
 
 ### ios production
 

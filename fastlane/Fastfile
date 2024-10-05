@@ -201,6 +201,7 @@ platform :ios do
         update_info_plist(
             xcodeproj: "ios/coldtivate.xcodeproj",
             plist_path: "coldtivate/Info.plist",
+            app_identifier: app_identifier,
             display_name: app_name,
         )
 
