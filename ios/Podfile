@@ -5,7 +5,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, 13.4 # Mapbox Maps 11 requires ios 12.4 or later
+platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
@@ -40,7 +40,20 @@ target 'coldtivate' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
-    $RNMapboxMapsVersion = '= 11.0.0'
     $RNMapboxMaps.post_install(installer)
+    
+    installer.pods_project.targets.each do |target|
+      if target.name == 'MapboxMobileEvents'
+        `xcrun -sdk iphoneos bitcode_strip -r Pods/MapboxMobileEvents/MapboxMobileEvents.xcframework/ios-arm64_armv7/MapboxMobileEvents.framework/MapboxMobileEvents -o Pods/MapboxMobileEvents/MapboxMobileEvents.xcframework/ios-arm64_armv7/MapboxMobileEvents.framework/MapboxMobileEvents`
+      end
+
+      if target.name == 'MapboxCommon'
+        `xcrun -sdk iphoneos bitcode_strip -r Pods/MapboxCommon/MapboxCommon.xcframework/ios-arm64/MapboxCommon.framework/MapboxCommon -o Pods/MapboxCommon/MapboxCommon.xcframework/ios-arm64/MapboxCommon.framework/MapboxCommon`
+      end
+
+      if target.name == 'MapboxCoreMaps'
+        `xcrun -sdk iphoneos bitcode_strip -r Pods/MapboxCoreMaps/MapboxCoreMaps.xcframework/ios-arm64/MapboxCoreMaps.framework/MapboxCoreMaps -o Pods/MapboxCoreMaps/MapboxCoreMaps.xcframework/ios-arm64/MapboxCoreMaps.framework/MapboxCoreMaps`
+      end
+    end
   end
 end
