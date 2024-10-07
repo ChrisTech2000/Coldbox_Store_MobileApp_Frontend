@@ -651,6 +651,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.base.coldtivate";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -680,6 +681,7 @@
 				PROVISIONING_PROFILE = "b80883a4-0eb5-49c1-9574-6d391cf7a24e";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.base.coldtivate";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
