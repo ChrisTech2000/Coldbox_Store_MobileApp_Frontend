@@ -34,7 +34,7 @@ export default function CartItemInput(props: {
   const debouncedSubmit = useMemo(
     () =>
       debounce(async (values: FormValues<number>) => {
-        if (values.quantity) {
+        if (values.quantity && values.quantity !== props.initialValue) {
           await MarketplaceService.addItemToCart({
             crateId: props.crateId,
             orderedProduceWeight: values.quantity,

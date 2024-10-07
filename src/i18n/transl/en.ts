@@ -9,6 +9,9 @@ const en = {
       gu: 'Gujarati',
       fr: 'French',
       pt: 'Portuguese',
+      igbo: 'Igbo',
+      yoruba: 'Yoruba',
+      hausa: 'Hausa',
     },
   },
   gender: {
@@ -94,8 +97,6 @@ const en = {
       PaymentMethods: 'Payment methods',
       Wallet: 'Wallet',
       Transactions: 'Transactions',
-      AddCard: 'Add a Credit Card',
-      EditCard: 'Edit a Credit Card',
       Transaction: '{{id}}',
     },
     checkIn: {
