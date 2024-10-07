@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -25,7 +25,7 @@ import { CartItem } from './components/CartItem';
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
 
-  const { data, isLoading, refetch } = useApiCall(
+  const { data, isLoading, isValidating, refetch } = useApiCall(
     'getCart',
     MarketplaceService.getCart,
     {},
@@ -57,7 +57,13 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
 
   return (
     <React.Fragment>
-      <ScrollView tw="h-full px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        tw="h-full px-4 pt-3 bg-white"
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={isValidating} onRefresh={async () => await refetch()} />
+        }
+      >
         <View tw="flex-1 pb-8">
           <FlatList
             data={data.items}
