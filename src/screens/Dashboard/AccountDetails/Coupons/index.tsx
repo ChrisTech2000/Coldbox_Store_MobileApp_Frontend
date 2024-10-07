@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Modalize } from 'react-native-modalize';
+import { useSWRConfig } from 'swr';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
@@ -9,13 +10,15 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
+import CouponService from '#services/CouponService';
+import { getQueryKey } from '#services/hooks/useAPiCall';
 
 import CouponModal from './components/CouponModal';
-import { useCouponStore } from './store';
 
-// TODO → add text content to translations
 function CouponsRoot() {
   const { t } = useTranslationUtils();
+  const { mutate } = useSWRConfig();
+
   const modalRef = useRef<Modalize>(null);
 
   return (
@@ -31,13 +34,17 @@ function CouponsRoot() {
 
       <CouponModal
         modalRef={modalRef}
-        onSubmit={(values) => {
-          modalRef.current?.close();
-          // TODO → replace this with api call
-          useCouponStore.getState().append({
-            ...values,
-            isActive: true,
-          });
+        onSubmit={async (values) => {
+          try {
+            await CouponService.createCoupon({
+              code: values.code,
+              discountPercentage: values.percentage,
+            });
+            await mutate(getQueryKey('getCouponList'));
+            modalRef.current?.close();
+          } catch (exception) {
+            console.error(exception);
+          }
         }}
       />
 
@@ -56,4 +63,4 @@ function CouponsRoot() {
   );
 }
 
-export default withSafeArea(CouponsRoot);
+export default withSafeArea(CouponsRoot, ['bottom'], true);

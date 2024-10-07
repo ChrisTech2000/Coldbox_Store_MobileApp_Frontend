@@ -1,19 +1,27 @@
-import React, { useEffect } from 'react';
+import debounce from 'lodash/debounce';
+import React, { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { TextInput } from 'react-native-paper';
 
 import { Input } from '#ui/components/Input';
-
-import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
-import { useMarketplaceCartStore } from '../store';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+
+import InAppNotifications from '#common/InAppNotifications';
+import { useTranslationUtils } from '#i18n/utils';
+import MarketplaceService from '#services/MarketplaceService';
 
 type FormValues<T = string> = {
   quantity: T;
 };
 
-export default function CartItemInput(props: { itemId: number; initialValue: number }) {
-  const { zodResolver } = useTranslationUtils();
+export default function CartItemInput(props: {
+  crateId: number;
+  initialValue: number;
+  availableWeight: number;
+}) {
+  const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const form = useForm<FormValues>({
     defaultValues: { quantity: props.initialValue.toString() },
@@ -23,16 +31,32 @@ export default function CartItemInput(props: { itemId: number; initialValue: num
     reValidateMode: 'onSubmit',
   });
 
-  function onSubmit(values: FormValues<number>) {
-    useMarketplaceCartStore.getState().updateQuantity(props.itemId, values.quantity);
-  }
+  const debouncedSubmit = useMemo(
+    () =>
+      debounce(async (values: FormValues<number>) => {
+        if (values.quantity) {
+          await MarketplaceService.addItemToCart({
+            crateId: props.crateId,
+            orderedProduceWeight: values.quantity,
+            updateStrategy: 'replace',
+          });
+
+          emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
+        }
+      }, 500),
+    [props.crateId]
+  );
 
   useEffect(() => {
     // eslint-disable-next-line
-    const handler = form.handleSubmit(onSubmit as any);
+    const handler = form.handleSubmit(debouncedSubmit as any);
     const subscription = form.watch(() => handler());
     return () => subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    form.setValue('quantity', props.initialValue.toString());
+  }, [props.initialValue]);
 
   return (
     <Controller
@@ -44,7 +68,25 @@ export default function CartItemInput(props: { itemId: number; initialValue: num
           keyboardType="numeric"
           placeholder="0"
           value={value}
-          onChangeText={onChange}
+          onChangeText={(val) => {
+            if (!val) {
+              onChange(val);
+              toast.show(t('Dashboard.ShoppingCart.errors.invalid'), { type: 'md_danger' });
+              return;
+            }
+
+            const normalizedValue = val.replace(',', '.');
+            const floatValue = parseFloat(normalizedValue);
+
+            if (isNaN(floatValue)) return;
+
+            if (floatValue > props.availableWeight) {
+              toast.show(t('Dashboard.ShoppingCart.errors.invalid'), { type: 'md_danger' });
+              onChange(props.availableWeight);
+            } else {
+              onChange(normalizedValue);
+            }
+          }}
           left={
             <TextInput.Icon
               icon="minus"
@@ -53,7 +95,11 @@ export default function CartItemInput(props: { itemId: number; initialValue: num
                 evt.stopPropagation();
                 const int = Number(value);
                 if (isNaN(int)) return; // safe guard
-                onChange((int - 1).toString());
+                if (int - 1 > 0) onChange((int - 1).toString());
+                else
+                  toast.show(t('Dashboard.ShoppingCart.errors.invalid'), {
+                    type: 'md_danger',
+                  });
               }}
             />
           }
@@ -65,7 +111,11 @@ export default function CartItemInput(props: { itemId: number; initialValue: num
                 evt.stopPropagation();
                 const int = Number(value);
                 if (isNaN(int)) return; // safe guard
-                onChange((int + 1).toString());
+                if (int + 1 <= props.availableWeight) onChange((int + 1).toString());
+                else
+                  toast.show(t('Dashboard.ShoppingCart.errors.invalid'), {
+                    type: 'md_danger',
+                  });
               }}
             />
           }

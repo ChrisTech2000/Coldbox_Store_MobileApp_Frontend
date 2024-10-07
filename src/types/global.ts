@@ -509,6 +509,56 @@ export type PredictionTableData = Array<{
   price: number | null;
 }>;
 
+export type CartItem = {
+  coolingFeesAmount: number;
+  couponId: number | null;
+  crateAvailableWeight: number;
+  discountAmount: number;
+  marketListedCrateId: number;
+  orderedEntireCrate: boolean;
+  orderedProduceWeight: number;
+  postOrderCrateId: number | null;
+  produceAmount: number;
+  producePricePerKg: number;
+  totalAmount: number;
+  relCropId: number;
+  relCoolingUnitId: number;
+  relCompanyId: number;
+  relCrateId: number;
+  relCrateRemainingShelfLife: number | null;
+  relCheckInMovementCode: string;
+};
+
+export type BankAccount = {
+  id: number;
+  createdAt: string; // ISO date string
+  createdByUser: number;
+  accountType: EBankAccountType;
+  bankCode: string;
+  countryCode: string;
+  accountNumber: string;
+  accountName: string;
+  paystackSubaccountCode: string;
+};
+
+export type Bank = {
+  id: number;
+  name: string;
+  slug: string;
+  code: string;
+  longcode: string;
+  gateway: string | null;
+  payWithBank: boolean;
+  supportsTransfer: boolean;
+  active: boolean;
+  country: string;
+  currency: string;
+  type: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',
@@ -518,6 +568,11 @@ export enum ECoolingUnitMetric {
 export enum EPricingType {
   FIXED = 'FIXED',
   PERIODICITY = 'PERIODICITY',
+}
+
+export enum EBankAccountType {
+  PERSONAL = 1,
+  BUSINESS = 2,
 }
 
 export enum ERoles {

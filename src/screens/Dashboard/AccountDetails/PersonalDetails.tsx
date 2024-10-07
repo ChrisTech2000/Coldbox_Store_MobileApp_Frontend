@@ -114,4 +114,4 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
   );
 }
 
-export default withSafeArea(PersonalDetails);
+export default withSafeArea(PersonalDetails, ['bottom'], true);

@@ -19,4 +19,4 @@ function EditCoolingUnit(props: ManagementRouteProps<'EditCoolingUnit'>) {
   );
 }
 
-export default withSafeArea(EditCoolingUnit);
+export default withSafeArea(EditCoolingUnit, ['bottom'], true);

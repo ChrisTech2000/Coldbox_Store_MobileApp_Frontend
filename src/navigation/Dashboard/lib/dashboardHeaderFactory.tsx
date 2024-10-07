@@ -1,23 +1,24 @@
+import { type NavigationProp, DrawerActions, useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
-import { type NavigationProp, DrawerActions, useNavigation } from '@react-navigation/native';
 import { Appbar, Badge } from 'react-native-paper';
 
-import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import RBAC from '#common/RBAC';
+import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import MarketplaceService from '#services/MarketplaceService';
+import { useAppEventListener } from '#ui/lib/emitter';
 
 import { useRightDrawerStore } from '../index';
-import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
 import type { DashboardMainRoutePaths, DashboardMainRoutes } from '../Main';
-import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
-import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
-import type { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
 import type { AnalyticsStackRoutePaths } from '../Main/AnalyticsStack';
+import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
+import type { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
+import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
 import type { MarketplaceRoutePaths } from '../Main/MarketplaceStack';
+import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { OrdersRoutePaths } from '../Main/OrdersStack';
-
 import { useNotifications } from './notifications';
-import { useCartItems } from '#screens/Dashboard/Main/ShoppingCart/store';
 
 function _buildLeftContent<Params extends Record<string, unknown>, Path extends string>(
   dispatch: NavigationProp<Params, Path>['dispatch'],
@@ -67,8 +68,21 @@ export function useDashboardHeader() {
   const { guard } = RBAC.useRBAC();
   const { dispatch, navigate } = useNavigation<NavigationProp<DashboardMainRoutes>>();
 
+  const { data, refetch } = useApiCall(
+    'getCart',
+    MarketplaceService.getCart,
+    {},
+    {
+      defaultData: undefined,
+    }
+  );
+
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
-  const cartItemsCount = useCartItems().length;
+  const cartItemsCount = data?.items?.length ?? 0;
+
+  useAppEventListener('DISPATCH_CART_REVALIDATION', () => {
+    refetch();
+  });
 
   return useCallback(
     (goBackFunc?: () => void): NavigationHeaderProps => {

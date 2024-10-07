@@ -1,4 +1,6 @@
 import {
+  Bank,
+  CartItem,
   ECoolingUnitMetric,
   EMovementType,
   EPaymentType,
@@ -62,6 +64,8 @@ export type CheckInResponse = {
   movement: number;
   farmer: number;
   hasDt: string;
+  cratesIds: Array<number>;
+  produces: Array<{ id: number; cropId: number; crates: Array<number> }>;
 };
 
 export type CheckOut = Array<{
@@ -419,3 +423,65 @@ export type VerifyUbibotSensorConnectivityResponse = {
   success: string;
   data: Array<string>;
 };
+
+export interface CreateCouponResponse {
+  id: number;
+  code: string;
+  createdAt: string;
+  discountPercentage: number;
+  revokedAt: null | string;
+}
+
+export interface GetCouponListResponse {
+  nodes: Array<CreateCouponResponse>;
+}
+
+export interface GetCartResponse {
+  id: number;
+  items: Array<CartItem>;
+  totalAmount: number;
+  totalColdtivateAmount: number;
+  totalCoolingFeesAmount: number;
+  totalDiscountAmount: number;
+  totalPaymentFeesAmount: number;
+  totalProduceAmount: number;
+}
+
+export interface GetAllOrdersResponse extends GetCartResponse {
+  createdAt: string;
+}
+export interface CheckoutWithPaystackResponse {
+  orderId: number;
+  authorizationUrl: string;
+}
+export interface GetAvailableListingResponse {
+  nodes: Array<{
+    availableWeightInKg: number;
+    crateId: number;
+    createdAt: string;
+    currency: string;
+    distance: number;
+    id: number;
+    lastUpdatedAt: string;
+    pendingInCoolingFees: number;
+    pendingInCoolingFeesPricePerKg: number;
+    producePricePerKg: number;
+    relCheckInMovementCode: string;
+    relCompanyId: number;
+    relCoolingUnitId: number;
+    relCrateRemainingShelfLife: number;
+    relCropId: number;
+    totalPricePerKg: number;
+    weightLockedInPaymentPendingOrdersInKg: number;
+  }>;
+  pagination: {
+    itemsPerPage: number;
+    page: number;
+    totalItems: number;
+    totalPages: number;
+  };
+}
+
+export interface GetAvailableBanksResponse {
+  banks: Array<Bank>;
+}

@@ -250,4 +250,4 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
   );
 }
 
-export default withSafeArea(AddOperator);
+export default withSafeArea(AddOperator, ['bottom'], true);

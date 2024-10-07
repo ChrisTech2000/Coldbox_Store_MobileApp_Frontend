@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { FlatList, GestureResponderEvent, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -17,10 +17,11 @@ import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { ProduceCrate, useCheckInStore } from '#stores/checkIn';
+import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { ECoolingUnitMetric, EPricingType } from '#types/global';
+import type { CheckInResponse, CheckInWitCodeResponse } from '#types/api.responses';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -30,6 +31,7 @@ import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import Marketplace from '#services/Marketplace';
 
 import {
   CheckIn1ScreenOverlay,
@@ -42,6 +44,8 @@ import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CheckedInCard } from './components/CheckedInCard';
+
+import { processMarketplaceCrateListing } from './utils';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -156,7 +160,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     [produces, produces.length]
   );
 
-  const onSubmit = useCallback(async () => {
+  async function onSubmit(evt: GestureResponderEvent): Promise<void> {
+    evt.stopPropagation();
+
     if (!produces || !produces.length) {
       toast.show(t('Dashboard.CrateManagement.CheckIn.emptyMessage'), {
         type: 'md_danger',
@@ -164,54 +170,74 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       return;
     }
 
-    const result = checkOutCode
-      ? await ColdtivateService.checkInWithCode({
-          params: {
-            code: checkOutCode,
-            farmer: user.id,
-            coolingUnitId: coolingUnit?.id as number,
-            days: produces[0].crates[0].plannedDays,
-            tags: produces
-              .flatMap((produce) => produce.crates)
-              .map((crate) => {
-                return crate.tag;
-              })
-              .filter((tag) => typeof tag === 'string'),
-          },
-        })
-      : await ColdtivateService.checkIn({
-          farmerId: user.id,
-          id: undefined,
-          produces: produces.map((produce) => ({
+    let result: CheckInWitCodeResponse | CheckInResponse | undefined = undefined;
+
+    if (typeof checkOutCode === 'string') {
+      result = await ColdtivateService.checkInWithCode({
+        params: {
+          code: checkOutCode,
+          farmer: user.id,
+          coolingUnitId: coolingUnit?.id as number,
+          days: produces[0].crates[0].plannedDays,
+          tags: produces
+            .flatMap((produce) => produce.crates)
+            .map((crate) => {
+              return crate.tag;
+            })
+            .filter((tag) => typeof tag === 'string'),
+        },
+      });
+    } else {
+      result = await ColdtivateService.checkIn({
+        farmerId: user.id,
+        id: undefined,
+        produces: cloneDeep(produces).map((produce) => {
+          delete produce.price;
+          return {
             ...produce,
             crop: {
               id: produce.crop.id as number,
             },
             harvestDate: produce.harvestDate as number,
-          })),
-        });
-
-    if (result) {
-      resetCheckInStore();
-      toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), {
-        type: 'md_success',
+            crates: produce.crates.map((crate) => {
+              const crateShallow = { ...crate };
+              delete crateShallow.isSellable;
+              return crateShallow;
+            }),
+          };
+        }),
       });
-
-      setTimeout(() => refreshData.forEach((fn) => fn()), 1000);
-
-      if (guard('VIEW', 'TemperatureAlertModal')) {
-        const temperatureAlertDatum = {
-          coolingUnitId: coolingUnit.id,
-          companyId: company!.id,
-          showCompleteInfo: true,
-        } satisfies TemperatureAlertEvtDatum;
-
-        emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
-      }
-
-      rootNavigation.navigate('RootMainTabStack');
     }
-  }, [user, produces, checkOutCode, coolingUnit?.id, guard]);
+
+    if (typeof result !== 'object') return;
+
+    if ('movement' in result) {
+      await Promise.allSettled(
+        processMarketplaceCrateListing(produces, result.produces).map(({ crateIds, pricePerKg }) =>
+          Marketplace.upsertListedCrate({ crateIds, producePricePerKg: pricePerKg })
+        )
+      );
+    }
+
+    resetCheckInStore();
+    toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), {
+      type: 'md_success',
+    });
+
+    setTimeout(() => refreshData.forEach((fn) => fn()), 1000);
+
+    if (guard('VIEW', 'TemperatureAlertModal')) {
+      const temperatureAlertDatum = {
+        coolingUnitId: coolingUnit.id,
+        companyId: company!.id,
+        showCompleteInfo: true,
+      } satisfies TemperatureAlertEvtDatum;
+
+      emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
+    }
+
+    rootNavigation.navigate('RootMainTabStack');
+  }
 
   const navigateToCropSelection = useCallback(() => {
     const now = new Date();

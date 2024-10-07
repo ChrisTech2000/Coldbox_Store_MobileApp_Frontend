@@ -1,6 +1,7 @@
 import { JsonObject } from '#services/utils';
 import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import {
+  EBankAccountType,
   EImpactMode,
   EPaymentType,
   ERoles,
@@ -411,3 +412,39 @@ export type GetPredictionTableParams = {
   days: Date[];
   statesIds: number[];
 };
+
+export interface CreateCouponParams extends JsonObject {
+  code: string;
+  discountPercentage: number;
+}
+
+export interface GetCouponListParams extends JsonObject {
+  revoked: 'only' | 'included';
+}
+
+export interface AddItemToCartParams extends JsonObject {
+  crateId: number;
+  orderedProduceWeight: number;
+  updateStrategy: 'increase' | 'decrease' | 'replace';
+}
+export interface UpdateListedCrateParams extends JsonObject {
+  crateIds: Array<number>;
+  producePricePerKg: number;
+}
+
+export interface GetAvailableListingParams extends JsonObject {
+  location: [number, number] | [];
+  sortBy?: 'price-asc' | 'price-desc' | 'nearby-me';
+  filterByCoolingUnitsIds?: Array<number>;
+  page?: number;
+  itemsPerPage?: number;
+  filterByMaxDistanceInKm?: number;
+}
+
+export interface AddUserBankAccountParams extends JsonObject {
+  accountType: EBankAccountType;
+  bankCode: string;
+  accountNumber: string;
+  countryCode: string;
+  accountName: string;
+}

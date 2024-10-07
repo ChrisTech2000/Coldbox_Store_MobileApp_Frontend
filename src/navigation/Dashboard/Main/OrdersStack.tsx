@@ -21,7 +21,7 @@ import { useDashboardHeader } from '#navigation/Dashboard/lib/dashboardHeaderFac
 export type OrdersRoutes = {
   OrdersRoot: undefined;
   OrdersDetails: {
-    orderId: string;
+    orderId: number;
   };
 };
 
@@ -58,7 +58,7 @@ export default function OrdersStack() {
           const baseProps: NavigationHeaderProps = {
             routeTitle: t(NAVIGATOR_HEADERS[routeName], {
               // eslint-disable-next-line react/prop-types
-              orderCode: props.route.params?.orderId,
+              orderCode: `#${props.route.params?.orderId}`,
             }),
           };
           if (routeName === 'OrdersRoot') {

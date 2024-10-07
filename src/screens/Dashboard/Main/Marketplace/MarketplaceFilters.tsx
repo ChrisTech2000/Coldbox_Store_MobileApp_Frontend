@@ -111,5 +111,7 @@ export default withSafeArea(
   withErrorBoundary(MarketplaceFilters, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );

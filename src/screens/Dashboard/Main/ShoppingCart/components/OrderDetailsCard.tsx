@@ -1,16 +1,29 @@
+import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import { Divider, IconButton, Portal } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
+import { Divider, IconButton, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
-
 import { paperTheme } from '#ui/lib/theme';
 
-// TODO → add text content to translations
-export default function OrderDetailsCard(props: { heading: string; totalLabel: string }) {
+import { useTranslationUtils } from '#i18n/utils';
+
+type OrderDetailsCardProps = {
+  produceWeight: number;
+  subtotal: number;
+  discount: number;
+  coolingFees: number;
+  paymentFees: number;
+  total: number;
+  heading: string;
+  totalLabel: string;
+};
+
+export default function OrderDetailsCard(props: OrderDetailsCardProps) {
+  const { t } = useTranslationUtils();
   const modalRef = useRef<Modalize>(null);
 
   return (
@@ -19,25 +32,36 @@ export default function OrderDetailsCard(props: { heading: string; totalLabel: s
         <Text tw="text-base text-green-primary font-bold">{props.heading}</Text>
         <View tw="flex-col border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
           <View tw="flex-row items-center justify-between h-8">
-            <Text tw="text-base text-zinc-500">Produce</Text>
-            <Text tw="text-base">2 KG</Text>
+            <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.produce')}</Text>
+            <Text tw="text-base">
+              {props.produceWeight}
+              {t('Dashboard.ProduceDetails.kilogram').toUpperCase()}
+            </Text>
           </View>
           <View tw="flex-row items-center justify-between h-8">
-            <Text tw="text-base text-zinc-500">Subtotal</Text>
-            <Text tw="text-base">$ 0.00</Text>
+            <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.subtotal')}</Text>
+            <Text tw="text-base">
+              {CurrencyStandardization.currencyCode({
+                code: 'NGN', // TODO: get value from somewhere
+                value: props.subtotal,
+              }).getValueFormated()}
+            </Text>
           </View>
           <View tw="flex-row items-center justify-between h-8">
-            <Text tw="text-base text-zinc-500">Discount</Text>
+            <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
             <View tw="flex-row items-center space-x-1">
               <Icon name="minus" size={14} color={paperTheme.colors.error} />
               <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
-                $0.00
+                {CurrencyStandardization.currencyCode({
+                  code: 'NGN', // TODO: get value from somewhere
+                  value: props.discount.toFixed(2),
+                }).getValueFormated()}
               </Text>
             </View>
           </View>
           <View tw="flex-row items-center justify-between h-8">
             <View tw="flex-row items-center space-x-1">
-              <Text tw="text-base text-zinc-500">Service fees</Text>
+              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.fees')}</Text>
               <IconButton
                 tw="p-0 m-0"
                 icon="information-outline"
@@ -52,7 +76,12 @@ export default function OrderDetailsCard(props: { heading: string; totalLabel: s
             </View>
             <View tw="flex-row items-center space-x-1">
               <Icon name="plus" size={16} color={paperTheme.colors.scrim} />
-              <Text tw="text-base">$ 0.00</Text>
+              <Text tw="text-base">
+                {CurrencyStandardization.currencyCode({
+                  code: 'NGN', // TODO: get value from somewhere
+                  value: props.paymentFees + props.coolingFees,
+                }).getValueFormated()}
+              </Text>
             </View>
           </View>
 
@@ -63,7 +92,10 @@ export default function OrderDetailsCard(props: { heading: string; totalLabel: s
               {props.totalLabel}
             </Text>
             <Text variant="TextMedium" tw="text-lg">
-              $ 0.00
+              {CurrencyStandardization.currencyCode({
+                code: 'NGN', // TODO: get value from somewhere
+                value: props.total,
+              }).getValueFormated()}
             </Text>
           </View>
         </View>
@@ -81,17 +113,27 @@ export default function OrderDetailsCard(props: { heading: string; totalLabel: s
           </View>
 
           <View tw="px-4 pb-4 pt-2.5 space-y-3.5">
-            <Text tw="text-2xl">Service fees</Text>
+            <Text tw="text-2xl">{t('Dashboard.ShoppingCart.fees')}</Text>
 
             <View>
               <View tw="flex-row items-center justify-between py-3.5">
-                <Text tw="text-base">Marketplace fee</Text>
-                <Text tw="text-base text-zinc-500">$0.00</Text>
+                <Text tw="text-base">{t('Dashboard.ShoppingCart.marketFees')}</Text>
+                <Text tw="text-base text-zinc-500">
+                  {CurrencyStandardization.currencyCode({
+                    code: 'NGN', // TODO: get value from somewhere
+                    value: props.coolingFees,
+                  }).getValueFormated()}
+                </Text>
               </View>
               <Divider tw="bg-zinc-400" />
               <View tw="flex-row items-center justify-between py-3.5">
-                <Text tw="text-base">Payment fee</Text>
-                <Text tw="text-base text-zinc-500">$0.00</Text>
+                <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
+                <Text tw="text-base text-zinc-500">
+                  {CurrencyStandardization.currencyCode({
+                    code: 'NGN', // TODO: get value from somewhere
+                    value: props.paymentFees,
+                  }).getValueFormated()}
+                </Text>
               </View>
             </View>
           </View>

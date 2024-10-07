@@ -93,4 +93,4 @@ function Invite(props: AuthRouteProps<'Invite'>) {
   );
 }
 
-export default withSafeArea(Invite);
+export default withSafeArea(Invite, ['bottom'], true);

@@ -1,34 +1,40 @@
 import React, { useRef, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { useShallow } from 'zustand/react/shallow';
+import { useSWRConfig } from 'swr';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-
 import { paperTheme } from '#ui/lib/theme';
 
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import CouponService from '#services/CouponService';
+import { useTranslationUtils } from '#i18n/utils';
+
 import CouponModal from './components/CouponModal';
-import { useCouponStore } from './store';
 import RevokeCouponModal from './components/RevokeCouponModal';
 
-// TODO → add text content to translations
 function ActiveCouponsTab() {
+  const { t } = useTranslationUtils();
+  const { mutate } = useSWRConfig();
+
   const modalRef = useRef<Modalize>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  const selectedCoupon = useRef<string | null>(null);
+  const { data } = useApiCall('getCouponList', CouponService.getCouponList, undefined, {
+    defaultData: { nodes: [] },
+  });
 
-  const coupons = useCouponStore(useShallow((store) => store.coupons));
+  const selectedCoupon = useRef<number | null>(null);
 
   return (
     <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View tw="px-3 pt-3 pb-8">
           <FlatList
-            data={coupons.filter((coupon) => coupon.isActive)}
+            data={data.nodes}
             keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
@@ -40,7 +46,9 @@ function ActiveCouponsTab() {
                       {item.code}
                     </Text>
                   </View>
-                  <Text tw="text-lg text-zinc-500">-&nbsp;{item.percentage}&#37;</Text>
+                  <Text tw="text-lg text-zinc-500">
+                    -&nbsp;{item.discountPercentage * 100}&#37;
+                  </Text>
                 </View>
                 <Button
                   tw="w-1/4"
@@ -49,12 +57,11 @@ function ActiveCouponsTab() {
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    // TODO → replace this in the future
-                    selectedCoupon.current = item.code;
+                    selectedCoupon.current = item.id;
                     setIsModalVisible(true);
                   }}
                 >
-                  Revoke
+                  {t('Dashboard.Management.Coupons.revoke')}
                 </Button>
               </View>
             )}
@@ -65,24 +72,32 @@ function ActiveCouponsTab() {
       <RevokeCouponModal
         visible={isModalVisible}
         onChangeVisible={setIsModalVisible}
-        onConfirm={() => {
+        onConfirm={async () => {
           setIsModalVisible(false);
-          // TODO → replace this in the future
-          if (typeof selectedCoupon.current === 'string') {
-            useCouponStore.getState().toggle(selectedCoupon.current);
+          if (typeof selectedCoupon.current === 'number') {
+            try {
+              await CouponService.revokeCoupon(selectedCoupon.current);
+              await mutate(getQueryKey('getCouponList'));
+            } catch (exception) {
+              console.error(exception);
+            }
           }
         }}
       />
 
       <CouponModal
         modalRef={modalRef}
-        onSubmit={(values) => {
-          modalRef.current?.close();
-          // TODO → replace this with api call
-          useCouponStore.getState().append({
-            ...values,
-            isActive: true,
-          });
+        onSubmit={async (values) => {
+          try {
+            await CouponService.createCoupon({
+              code: values.code,
+              discountPercentage: Math.min(values.percentage / 100, 1.0),
+            });
+            await mutate(getQueryKey('getCouponList'));
+            modalRef.current?.close();
+          } catch (exception) {
+            console.error(exception);
+          }
         }}
       />
 
@@ -96,11 +111,11 @@ function ActiveCouponsTab() {
             modalRef.current?.open();
           }}
         >
-          Add Coupon
+          {t('Dashboard.Management.Coupons.addCoupon')}
         </Button>
       </View>
     </React.Fragment>
   );
 }
 
-export default withSafeArea(ActiveCouponsTab);
+export default withSafeArea(ActiveCouponsTab, ['bottom'], true);
