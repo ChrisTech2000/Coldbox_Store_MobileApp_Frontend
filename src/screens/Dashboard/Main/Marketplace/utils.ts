@@ -15,6 +15,7 @@ export type AvailableListingDatum = {
   id: number;
   movementCode: string;
   crateWeight: number;
+  crateId: number;
   price: number;
   shelfLife: number | null;
   crop: {
@@ -128,6 +129,7 @@ export function useMarketplaceListing() {
         return {
           id: node.id,
           distance: node.distance,
+          crateId: node.crateId,
           crateWeight: node.availableWeightInKg,
           shelfLife: node.relCrateRemainingShelfLife,
           price: node.producePricePerKg,

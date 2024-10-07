@@ -54,6 +54,10 @@ export default function CartItemInput(props: {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    form.setValue('quantity', props.initialValue.toString());
+  }, [props.initialValue]);
+
   return (
     <Controller
       control={form.control}
