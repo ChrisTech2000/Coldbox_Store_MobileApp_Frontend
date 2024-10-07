@@ -1,40 +1,30 @@
-import Clipboard from '@react-native-clipboard/clipboard';
-import truncate from 'lodash/truncate';
-import React, { useRef, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { List, Portal } from 'react-native-paper';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from 'tailwindcss/colors';
+import { Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
+import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
-import { Touchable } from '#ui/components/Touchable';
-import { cn } from '#ui/lib/cn';
 import { useAppEventListener } from '#ui/lib/emitter';
-import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
+import MarketplaceService from '#services/MarketplaceService';
 
-export type DeliveryInformationDatum = {
-  companyName: string;
-  phoneNumber: string;
-};
-
-// TODO → maybe replace Flatlist + .map() with Flashlist for better performance (would need to test it first)
-export default function DeliveryInformationBottomSheet() {
+export default function AddCouponBottomSheet() {
   const { t } = useTranslationUtils();
 
-  const [datum, setDatum] = useState<Array<DeliveryInformationDatum> | null>(null);
+  const [value, setValue] = useState<string>('');
   const modalRef = useRef<Modalize>(null);
 
-  useAppEventListener<[Array<DeliveryInformationDatum>]>(
-    'DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION',
-    (info) => {
-      setDatum(info);
-      modalRef.current?.open();
-    }
-  );
+  useAppEventListener('DISPATCH_ADD_COUPON_IN_CART_MODAL', () => {
+    modalRef.current?.open();
+  });
+
+  const submit = useCallback(async () => {
+    await MarketplaceService.applyCoupon(value);
+    modalRef.current?.close();
+  }, [value]);
 
   return (
     <Portal>
@@ -49,79 +39,21 @@ export default function DeliveryInformationBottomSheet() {
         </View>
 
         <View tw="px-4 pb-4 pt-2.5 space-y-3.5">
-          <Text tw="text-2xl mb-1.5">{t('Dashboard.ShoppingCart.contactsForDelivery')}</Text>
-          <FlatList
-            data={datum ?? []}
-            keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
-                <_Field
-                  label={t('Dashboard.ShoppingCart.companyName')}
-                  value={item.companyName}
-                  mode="text"
-                />
-                <_Field
-                  label={t('Dashboard.ShoppingCart.phoneNumber')}
-                  value={item.phoneNumber}
-                  mode="clipboard"
-                />
-              </View>
-            )}
+          <Text tw="text-base">{t('Dashboard.Management.Coupons.code')}</Text>
+          <Input
+            tw="bg-white border rounded-sm"
+            placeholder={t('Dashboard.ShoppingCart.couponPlaceholder')}
+            value={value}
+            onChangeText={(val) => setValue(val)}
           />
         </View>
 
-        <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
-          <Button mode="outlined" tw="w-5/6" uppercase onPress={() => modalRef.current?.close()}>
-            {t('Dashboard.ShoppingCart.gotItButton')}
+        <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300 mb-4">
+          <Button mode="contained" tw="w-5/6" uppercase onPress={submit} disabled={!value}>
+            {t('Dashboard.ShoppingCart.redeemCoupon')}
           </Button>
         </View>
       </Modalize>
     </Portal>
-  );
-}
-
-function _Field(props: {
-  mode: 'text' | 'clipboard' | 'highlight';
-  label: string;
-  value: string;
-  smallText?: string;
-}) {
-  const { mode, label, value, smallText } = props;
-  return (
-    <List.Item
-      title={undefined}
-      tw="p-0 m-0"
-      left={() => (
-        <View>
-          <Text tw={cn('text-lg', mode === 'clipboard' || (mode === 'highlight' && 'font-bold'))}>
-            {label}
-          </Text>
-          {mode === 'highlight' && <Text tw="text-zinc-500">{smallText}</Text>}
-        </View>
-      )}
-      right={() => (
-        <Touchable
-          tw="flex-row items-center justify-center space-x-1.5 pl-1 pr-0.5"
-          rippleColor={colors.zinc[200]}
-          onPress={(evt) => {
-            evt.stopPropagation();
-            if (mode === 'clipboard') Clipboard.setString(value);
-          }}
-        >
-          <Text tw={cn('text-lg', mode === 'highlight' ? 'font-bold' : 'text-zinc-500')}>
-            {truncate(value, { length: 28 })}
-          </Text>
-          {mode === 'clipboard' && (
-            <MaterialCommunityIcon
-              name="content-copy"
-              size={16}
-              color={paperTheme.colors.primary}
-            />
-          )}
-        </Touchable>
-      )}
-    />
   );
 }

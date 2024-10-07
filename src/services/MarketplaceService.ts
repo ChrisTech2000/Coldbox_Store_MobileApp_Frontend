@@ -125,6 +125,19 @@ class MarketplaceService extends HttpClient {
       throw customError;
     }
   };
+
+  public applyCoupon = async (couponCode: string): Promise<BankAccount> => {
+    try {
+      const { data } = await this.post<BankAccount>(EMarketplaceEndpoints.APPLY_COUPON, {
+        couponCode,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new MarketplaceService();

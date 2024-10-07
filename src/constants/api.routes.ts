@@ -106,4 +106,5 @@ export enum EMarketplaceEndpoints {
   AVAILABLE_LISTING = 'marketplace/buyer/available-listings/',
   SELLER_BANK_ACCOUNTS = 'marketplace/seller/paystack-accounts/',
   GET_BANKS = 'marketplace/data/banks/',
+  APPLY_COUPON = 'marketplace/buyer/cart/apply-coupon/',
 }

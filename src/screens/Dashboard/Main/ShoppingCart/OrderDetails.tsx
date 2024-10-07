@@ -10,6 +10,7 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
@@ -18,6 +19,8 @@ import MarketplaceService from '#services/MarketplaceService';
 
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
+import AddCouponBottomSheet from './components/AddCouponBottomSheet';
+import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -77,7 +80,9 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
         <View tw="flex-row items-center space-x-1">
           <Text tw="text-lg">{t('Dashboard.ShoppingCart.couponQuestion')}</Text>
-          <TouchableOpacity onPress={() => null}>
+          <TouchableOpacity
+            onPress={() => emitter.emit(APP_EVENTS.DISPATCH_ADD_COUPON_IN_CART_MODAL)}
+          >
             <Text tw="text-lg text-green-primary">{t('Dashboard.ShoppingCart.redeem')}</Text>
           </TouchableOpacity>
         </View>
@@ -108,6 +113,9 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           </Button>
         </View>
       </View>
+
+      <AddCouponBottomSheet />
+      <ListCouponsBottomSheet />
     </ScrollView>
   );
 }

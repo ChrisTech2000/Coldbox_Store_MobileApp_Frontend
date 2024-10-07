@@ -1166,6 +1166,9 @@ const en = {
       total: 'Total',
       couponQuestion: 'Have a discount coupon?',
       redeem: 'Redeem code.',
+      redeemCoupon: 'Redeem coupon',
+      couponPlaceholder: 'E.g. 20OFF',
+      discountsApplied: 'Discounts Applied',
       errors: {
         invalid: 'Invalid value',
       },

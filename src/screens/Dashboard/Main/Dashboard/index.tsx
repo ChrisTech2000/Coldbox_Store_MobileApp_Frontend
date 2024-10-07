@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Button } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
@@ -12,13 +12,15 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
+import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
-import { GenericError } from '#ui/components/GenericError';
 
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { Filters, type Search } from '../components/Filters';
+import ListCouponsBottomSheet from '../ShoppingCart/components/ListCouponsBottomSheet';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
 import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
@@ -176,6 +178,11 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
         <OperatorActions {...props} coolingUnit={coolingUnit} />
       </RBAC.ProtectedResource>
+
+      <ListCouponsBottomSheet />
+      <Button onPress={() => emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL)}>
+        HAHAHAHA
+      </Button>
     </View>
   );
 }
