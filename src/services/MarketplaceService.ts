@@ -127,7 +127,9 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public addPaystackAccount = async (params: AddPaystackBankAccountParams): Promise<BankAccount> => {
+  public addPaystackAccount = async (
+    params: AddPaystackBankAccountParams
+  ): Promise<BankAccount> => {
     try {
       const { data } = await this.post<BankAccount>(
         EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS,

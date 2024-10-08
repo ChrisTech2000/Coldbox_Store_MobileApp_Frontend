@@ -174,7 +174,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             <Divider tw="bg-gray-400" />
           </RBAC.ProtectedResource>
         </View>
-        
+
         <View>
           <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
             <View>

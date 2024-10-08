@@ -88,11 +88,9 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
   } = useForm<FormValues>({
     resolver: zodResolver((z) =>
       z.object({
-        accountName: z
-          .string()
-          .min(1, {
-            message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.accountName'),
-          }),
+        accountName: z.string().min(1, {
+          message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.accountName'),
+        }),
         accountNumber: z
           .string()
           .min(1, { message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.account') }),
@@ -100,11 +98,9 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
         bank: z
           .string()
           .min(1, { message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.bank') }),
-        accountType: z
-          .string()
-          .min(1, {
-            message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.accountType'),
-          }),
+        accountType: z.string().min(1, {
+          message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.accountType'),
+        }),
       })
     ),
   });
@@ -119,30 +115,33 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
     store.onSelect,
   ]);
 
-  const onSubmit = useCallback(async (data: FormValues) => {
-    try {
-      await MarketplaceService.addPaystackAccount({
-        ...(user?.role === ERoles.EMPLOYEE ? { companyId: company?.id } : {}),
-        accountType: mapEnum(t)[data.accountType],
-        bankCode: data.bank,
-        accountNumber: data.accountNumber,
-        countryCode: countriesMeta.getISOByName(data.country) ?? 'NG',
-        accountName: data.accountName,
-      });
+  const onSubmit = useCallback(
+    async (data: FormValues) => {
+      try {
+        await MarketplaceService.addPaystackAccount({
+          ...(user?.role === ERoles.EMPLOYEE ? { companyId: company?.id } : {}),
+          accountType: mapEnum(t)[data.accountType],
+          bankCode: data.bank,
+          accountNumber: data.accountNumber,
+          countryCode: countriesMeta.getISOByName(data.country) ?? 'NG',
+          accountName: data.accountName,
+        });
 
-      toast.show(t('Dashboard.AccountDetails.PayoutSettings.successMessage'), {
-        type: 'md_success',
-        style: { marginBottom: 50 },
-      });
+        toast.show(t('Dashboard.AccountDetails.PayoutSettings.successMessage'), {
+          type: 'md_success',
+          style: { marginBottom: 50 },
+        });
 
-      props.navigation.goBack();
-    } catch (error) {
-      toast.show(t('navigation.error.errorMessage'), {
-        type: 'md_danger',
-        style: { marginBottom: 50 },
-      });
-    }
-  }, [user, company]);
+        props.navigation.goBack();
+      } catch (error) {
+        toast.show(t('navigation.error.errorMessage'), {
+          type: 'md_danger',
+          style: { marginBottom: 50 },
+        });
+      }
+    },
+    [user, company]
+  );
 
   useEffect(() => {
     if (bank) setValue('bank', `${bank.id}`);
@@ -204,7 +203,11 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
               control={control}
               name="country"
               render={({ field: { value } }) => (
-                <Input tw="bg-white border rounded-sm" value={value ?? t('Dashboard.AccountDetails.PayoutSettings.form.nigeria')} disabled />
+                <Input
+                  tw="bg-white border rounded-sm"
+                  value={value ?? t('Dashboard.AccountDetails.PayoutSettings.form.nigeria')}
+                  disabled
+                />
               )}
             />
           </View>
