@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
+import { useIsFocused } from '@react-navigation/native';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -47,13 +48,16 @@ const useCrateWeightPricingStore = create<StoreState & StoreActions>((set) => ({
 }));
 
 export function useCrateWeightPricingBridge(cb: (values: StoreState) => void) {
+  const isFocused = useIsFocused();
+
   const [crates, price] = useCrateWeightPricingStore(
     useShallow((store) => [store.crates, store.price])
   );
 
   useEffect(() => {
+    if (isFocused || !(crates.length >= 1)) return;
     cb({ crates, price });
-  }, [crates]);
+  }, [isFocused, crates]);
 }
 
 export function resetCrateWeightPricingBridge() {
@@ -74,7 +78,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     defaultValues: {
       applyToAll: false,
       crates: params.crates.map((crate) => ({
-        weight: crate.crateWeight.toString(),
+        weight: crate.weight.toString(),
         isSellable: crate.isSellable,
       })),
       price: params.sellingPrice.toString(),

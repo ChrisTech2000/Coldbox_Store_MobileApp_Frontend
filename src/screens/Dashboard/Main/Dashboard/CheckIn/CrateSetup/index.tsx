@@ -38,7 +38,7 @@ export type SetupSchema = {
   numberOfCrates: number;
   generalCrateWeight: number;
   crates: Array<{
-    crateWeight: number;
+    weight: number;
     crateId: number | undefined;
     isSellable: boolean | undefined;
   }>;
@@ -54,7 +54,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     'additionalInfo' in route.params ? route.params.additionalInfo : '';
 
   const { company } = useManagementStore();
-  const { addProduce, coolingUnit, user } = useCheckInStore();
+  const { addProduce, coolingUnit, user, removeProduce } = useCheckInStore();
 
   const { t, zodResolver } = useTranslationUtils();
 
@@ -97,7 +97,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           .default(coolingUnit?.crateWeight ?? 0),
         crates: z
           .object({
-            crateWeight: z.number(),
+            weight: z.number(),
             crateId: z.number().optional(),
             isSellable: z.boolean(),
           })
@@ -126,7 +126,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       ...state,
       crates: values.crates.map((crate, crateIdx) => ({
         crateId: state?.crates?.[crateIdx]?.crateId,
-        crateWeight: crate.weight,
+        weight: crate.weight,
         isSellable: crate.isSellable,
       })),
       numberOfCrates: values.crates.length,
@@ -150,8 +150,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
 
     if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
       if (!crates) return '0.00';
-      const dailyPrice =
-        crates?.reduce((acc, current) => (acc += current.crateWeight * price), 0) ?? 0;
+      const dailyPrice = crates?.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
       return (dailyPrice * multiplier).toFixed(2);
     }
 
@@ -199,7 +198,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         let newCrates =
           !crates || crates.length === 0
             ? Array.from({ length: numberOfCrates }, () => ({
-                crateWeight: weight,
+                weight,
                 crateId: undefined,
                 isSellable: false,
               }))
@@ -210,7 +209,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             const additionalCrates = Array.from(
               { length: numberOfCrates - newCrates.length },
               () => ({
-                crateWeight: weight,
+                weight,
                 crateId: undefined,
                 isSellable: false,
               })
@@ -240,12 +239,16 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     (values) => {
       if (!coolingUnit || !user) return;
 
+      if ('contextualProduce' in route.params) {
+        removeProduce(route.params.contextualProduce);
+      }
+
       addProduce({
         crop: contextualCrop,
         additionalInfo: contextualAdditionalInfo,
         crates: values.crates.map((crate) => ({
           checkOut: null,
-          weight: crate.crateWeight,
+          weight: crate.weight,
           tag: crate.crateId?.toString() ?? '',
           coolingUnitId: coolingUnit.id,
           plannedDays: values.plannedDays,
@@ -264,7 +267,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         coolingUnit: coolingUnit ?? undefined,
       });
     },
-    [coolingUnit, contextualAdditionalInfo, contextualCrop, user, reset]
+    [coolingUnit, contextualAdditionalInfo, contextualCrop, user, reset, route.params]
   );
 
   return (
@@ -288,7 +291,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 onPress={(evt) => {
                   evt.stopPropagation();
                   const totalWeight = crates.reduce(
-                    (acc, curr) => (curr.isSellable ? (acc += curr.crateWeight) : acc),
+                    (acc, curr) => (curr.isSellable ? (acc += curr.weight) : acc),
                     0
                   );
                   const sellingPrice = (getValues('price') ?? 0) / totalWeight;
@@ -296,7 +299,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
                     currencySymbol,
                     crates: crates.map((crate) => ({
-                      crateWeight: crate.crateWeight,
+                      weight: crate.weight,
                       isSellable: crate.isSellable ?? false,
                     })),
                     sellingPrice: isNaN(sellingPrice) ? 0 : sellingPrice,

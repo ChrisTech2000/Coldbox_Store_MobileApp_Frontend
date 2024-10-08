@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
+import ms from 'ms';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -36,6 +37,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import Marketplace from '#services/Marketplace';
+import { waitFor } from '#ui/lib/waitFor';
 
 import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
@@ -191,6 +193,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             crates: produce.crates.map((crate) => {
               const crateShallow = { ...crate };
               delete crateShallow.isSellable;
+              if (crateShallow.checkOut === null) delete crateShallow.checkOut;
               return crateShallow;
             }),
           };
@@ -215,7 +218,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       type: 'md_success',
     });
 
-    setTimeout(() => refreshData.forEach((fn) => fn()), 1000);
+    await waitFor(ms('1 second'));
+    refreshData.forEach((fn) => fn());
 
     if (guard('VIEW', 'TemperatureAlertModal')) {
       const temperatureAlertDatum = {

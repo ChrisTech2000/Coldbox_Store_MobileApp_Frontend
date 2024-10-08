@@ -177,7 +177,7 @@ export function CheckedInCard({
             setValue={(modalCrates) => setCrateIDs(modalCrates, item)}
             crates={item.crates.map((crate) => ({
               crateId: Number(crate.tag),
-              crateWeight: crate.weight,
+              weight: crate.weight,
               isSellable: crate.isSellable,
             }))}
             isOpen={isIdsModalOpen === index}

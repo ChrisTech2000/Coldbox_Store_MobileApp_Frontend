@@ -92,7 +92,7 @@ export interface CheckInParams extends JsonObject {
     crop: { id: number };
     additionalInfo: string;
     crates: Array<{
-      checkOut: Date | null;
+      checkOut?: Date | null;
       weight: number;
       tag: string; // the id defined during checkout
       coolingUnitId: number;

@@ -38,7 +38,7 @@ export type CheckInStackRoutes = {
     companyCurrency: string;
     currencySymbol: string;
     crates: Array<{
-      crateWeight: number;
+      weight: number;
       isSellable: boolean;
     }>;
     sellingPrice: number;
