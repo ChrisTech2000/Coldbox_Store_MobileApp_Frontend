@@ -16,9 +16,7 @@ export default function ListCouponsBottomSheet() {
 
   const modalRef = useRef<Modalize>(null);
 
-  const onDeleteCoupon = useCallback(() => {
-    
-  }, []);
+  const onDeleteCoupon = useCallback(() => {}, []);
 
   useAppEventListener('DISPATCH_LIST_COUPONS_IN_CART_MODAL', () => {
     modalRef.current?.open();

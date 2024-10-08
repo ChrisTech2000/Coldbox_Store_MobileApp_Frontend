@@ -33,7 +33,10 @@ type CartItemProps = {
 
 export function CartItem({ item }: CartItemProps) {
   const { t } = useTranslationUtils();
-  const [fetchCart, coolingUnits] = useCartStore((store) => [store.fetchCart, store.allCoolingUnits]);
+  const [fetchCart, coolingUnits] = useCartStore((store) => [
+    store.fetchCart,
+    store.allCoolingUnits,
+  ]);
   const crops = useDashboardStore((store) => store.allCrops);
 
   const { data: company, isLoading: isLoadingCompany } = useApiCall(
@@ -66,14 +69,14 @@ export function CartItem({ item }: CartItemProps) {
         tw={cn(
           'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
           item.relCrateRemainingShelfLife &&
-          item.relCrateRemainingShelfLife <= 7 &&
-          item.relCrateRemainingShelfLife > 2 &&
-          'bg-yellow-400 border-yellow-400',
+            item.relCrateRemainingShelfLife <= 7 &&
+            item.relCrateRemainingShelfLife > 2 &&
+            'bg-yellow-400 border-yellow-400',
           item.relCrateRemainingShelfLife &&
-          item.relCrateRemainingShelfLife <= 2 &&
-          'bg-red-500 border-red-500',
+            item.relCrateRemainingShelfLife <= 2 &&
+            'bg-red-500 border-red-500',
           (!item.relCrateRemainingShelfLife || item.relCrateRemainingShelfLife === -1) &&
-          'bg-gray-300 border-gray-300'
+            'bg-gray-300 border-gray-300'
         )}
       />
       <View tw="flex-col p-3">
@@ -98,8 +101,8 @@ export function CartItem({ item }: CartItemProps) {
                     'text-base',
                     'text-green-400',
                     item.relCrateRemainingShelfLife <= 7 &&
-                    item.relCrateRemainingShelfLife > 2 &&
-                    'text-yellow-400',
+                      item.relCrateRemainingShelfLife > 2 &&
+                      'text-yellow-400',
                     item.relCrateRemainingShelfLife <= 2 && 'text-red-500'
                   )}
                 >

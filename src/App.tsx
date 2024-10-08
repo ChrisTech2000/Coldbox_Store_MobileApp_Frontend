@@ -23,7 +23,7 @@ export default function App() {
 
   useGlobalInformation(isAuthenticated);
   useCartInformation(isAuthenticated);
-  
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <PaperProvider theme={paperTheme}>

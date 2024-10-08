@@ -73,19 +73,22 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
     [scrollRef.current]
   );
 
-  const onPay = useCallback(async (evt: GestureResponderEvent) => {
-    evt.stopPropagation();
-    setIsSubmitting(true);
-    const result = await MarketplaceService.payWithPaystack();
+  const onPay = useCallback(
+    async (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+      setIsSubmitting(true);
+      const result = await MarketplaceService.payWithPaystack();
 
-    if (result.authorizationUrl) {
-      setIsSubmitting(false);
-      props.navigation.navigate('PaystackPayment', {
-        url: result.authorizationUrl,
-        orderId: props.route.params.orderId,
-      });
-    }
-  }, [props.route.params.orderId]);
+      if (result.authorizationUrl) {
+        setIsSubmitting(false);
+        props.navigation.navigate('PaystackPayment', {
+          url: result.authorizationUrl,
+          orderId: props.route.params.orderId,
+        });
+      }
+    },
+    [props.route.params.orderId]
+  );
 
   if (isLoading || isLoadingCrops) {
     return (

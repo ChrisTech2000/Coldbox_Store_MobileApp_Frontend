@@ -59,10 +59,12 @@ export default function OrdersStack() {
         ...props,
         header: () => {
           const baseProps: NavigationHeaderProps = {
-            routeTitle: routeName ? t(NAVIGATOR_HEADERS[routeName] as TranslationPaths, {
-              // eslint-disable-next-line react/prop-types
-              orderCode: `#${props.route.params?.orderId}`,
-            }) : undefined,
+            routeTitle: routeName
+              ? t(NAVIGATOR_HEADERS[routeName] as TranslationPaths, {
+                  // eslint-disable-next-line react/prop-types
+                  orderCode: `#${props.route.params?.orderId}`,
+                })
+              : undefined,
           };
           if (routeName === 'OrdersRoot') {
             const { leftContent, rightContent } = dashboardHeaderFactory();

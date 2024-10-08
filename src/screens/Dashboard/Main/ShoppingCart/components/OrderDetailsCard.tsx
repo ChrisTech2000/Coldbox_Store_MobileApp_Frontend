@@ -59,7 +59,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
                 containerColor={colors.transparent}
                 onPress={(evt) => {
                   evt.stopPropagation();
-                  emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL)
+                  emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL);
                 }}
               />
             </View>

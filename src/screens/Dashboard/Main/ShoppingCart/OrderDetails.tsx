@@ -24,7 +24,7 @@ import OrderPickupMethod from './components/OrderPickupMethod';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
-  const [cartData] = useCartStore((store) => [store.cartData, store.isLoading])
+  const [cartData] = useCartStore((store) => [store.cartData, store.isLoading]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const onPay = useCallback(async (evt: GestureResponderEvent) => {
@@ -56,7 +56,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           <OrderDetailsCard
             heading={t('Dashboard.ShoppingCart.orderHeader')}
             totalLabel={t('Dashboard.ShoppingCart.total')}
-            produceWeight={cartData?.items?.reduce((acc, curr) => (acc += curr.orderedProduceWeight), 0)}
+            produceWeight={cartData?.items?.reduce(
+              (acc, curr) => (acc += curr.orderedProduceWeight),
+              0
+            )}
             subtotal={cartData.totalProduceAmount}
             discount={cartData.totalDiscountAmount}
             coolingFees={cartData.totalCoolingFeesAmount}

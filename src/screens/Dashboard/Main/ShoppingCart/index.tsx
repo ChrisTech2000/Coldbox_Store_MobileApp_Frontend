@@ -26,7 +26,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
     fetchCart: store.fetchCart,
     cartData: store.cartData,
     isLoading: store.isLoading,
-  }))
+  }));
 
   if (isLoading) {
     return (

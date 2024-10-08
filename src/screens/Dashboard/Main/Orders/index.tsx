@@ -50,7 +50,6 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
     }
   );
 
-
   const sortedData = useMemo(() => {
     if (!data || !isArray(data)) return [];
     return [...data].sort((a, b) => {

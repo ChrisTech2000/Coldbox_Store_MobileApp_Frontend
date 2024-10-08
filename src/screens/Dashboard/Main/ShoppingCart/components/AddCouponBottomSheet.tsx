@@ -43,7 +43,6 @@ export default function AddCouponBottomSheet() {
         type: 'md_danger',
       });
     }
-
   }, [value]);
 
   return (
