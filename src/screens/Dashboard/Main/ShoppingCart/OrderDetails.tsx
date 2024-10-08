@@ -42,9 +42,9 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   }, []);
 
   // const cartDataByCoolingUnit = useMemo(() => {
-        // TODO: group data by cooling unit
+  // TODO: group data by cooling unit
   // }, []);
-  
+
   if (!cartData) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">

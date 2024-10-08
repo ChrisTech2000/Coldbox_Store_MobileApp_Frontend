@@ -44,10 +44,7 @@ class MarketplaceService extends HttpClient {
   public payWithPaystack = async (orderId: number): Promise<CheckoutWithPaystackResponse> => {
     try {
       const url = subs(EMarketplaceEndpoints.PAY_WITH_PAYSTACK, { order: orderId });
-      const { data } = await this.post<CheckoutWithPaystackResponse>(
-        url,
-        {}
-      );
+      const { data } = await this.post<CheckoutWithPaystackResponse>(url, {});
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

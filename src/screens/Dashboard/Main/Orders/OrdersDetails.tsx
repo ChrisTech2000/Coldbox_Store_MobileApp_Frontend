@@ -197,7 +197,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                         {CurrencyStandardization.currencyCode({
                           code: 'NGN', // TODO: get value from somewhere
                           value: item.producePricePerKg.toFixed(2),
-                        }).getValueFormated()} {t('Dashboard.ShoppingCart.perKg')}
+                        }).getValueFormated()}{' '}
+                        {t('Dashboard.ShoppingCart.perKg')}
                       </Text>
                     </View>
                   </View>
