@@ -4,6 +4,7 @@ import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { PaperProvider, Portal } from 'react-native-paper';
+import BootSplash from 'react-native-bootsplash';
 
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
@@ -28,7 +29,11 @@ export default function App() {
       <InAppNotifications>
         <StaleWhileRevalidate>
           <SafeAreaProvider>
-            <NavigationContainer theme={navigatorTheme} linking={linking}>
+            <NavigationContainer
+              theme={navigatorTheme}
+              linking={linking}
+              onReady={() => BootSplash.hide({ fade: true })}
+            >
               <Portal.Host>
                 {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
               </Portal.Host>
