@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { ActivityIndicator, Button } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
@@ -18,9 +18,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { Filters, type Search } from '../components/Filters';
-import ListCouponsBottomSheet from '../ShoppingCart/components/ListCouponsBottomSheet';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
 import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
@@ -129,9 +127,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-      loadingFarmerDashboardProduces ||
-      loadingOperatorDashboardProduces ||
-      areCoolingUnitsLoading ? (
+        loadingFarmerDashboardProduces ||
+        loadingOperatorDashboardProduces ||
+        areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>
@@ -178,11 +176,6 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
         <OperatorActions {...props} coolingUnit={coolingUnit} />
       </RBAC.ProtectedResource>
-
-      <ListCouponsBottomSheet />
-      <Button onPress={() => emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL)}>
-        HAHAHAHA
-      </Button>
     </View>
   );
 }

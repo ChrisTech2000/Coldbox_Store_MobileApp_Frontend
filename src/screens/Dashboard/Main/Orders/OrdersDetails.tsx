@@ -12,6 +12,7 @@ import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
+import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
@@ -27,6 +28,7 @@ import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import { EOrderStatus } from '#types/global';
 
 import DeliveryInformationBottomSheet, {
   type DeliveryInformationDatum,
@@ -38,6 +40,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const scrollRef = useRef<ScrollView>(null);
 
   const [showButton, setShowButton] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const { data, isLoading } = useApiCall(
     'getOrder',
@@ -69,6 +72,20 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
     },
     [scrollRef.current]
   );
+
+  const onPay = useCallback(async (evt: GestureResponderEvent) => {
+    evt.stopPropagation();
+    setIsSubmitting(true);
+    const result = await MarketplaceService.payWithPaystack();
+
+    if (result.authorizationUrl) {
+      setIsSubmitting(false);
+      props.navigation.navigate('PaystackPayment', {
+        url: result.authorizationUrl,
+        orderId: props.route.params.orderId,
+      });
+    }
+  }, [props.route.params.orderId]);
 
   if (isLoading || isLoadingCrops) {
     return (
@@ -171,6 +188,21 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               }}
             />
           </View>
+          {data.status === EOrderStatus.PAYMENT_PENDING ? (
+            <Button
+              tw="w-5/6 self-center my-4"
+              mode="contained"
+              uppercase
+              onPress={onPay}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                t('Dashboard.ShoppingCart.pay')
+              )}
+            </Button>
+          ) : null}
         </View>
       </ScrollView>
 

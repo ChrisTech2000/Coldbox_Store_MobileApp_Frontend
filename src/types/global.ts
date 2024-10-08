@@ -685,6 +685,15 @@ export enum EView {
   AGGREGATED = 'aggregated',
 }
 
+export enum EOrderStatus {
+  CART = 'cart',
+  ABANDONED_CART = 'abandoned-cart',
+  PAYMENT_PENDING = 'payment-pending',
+  PAYMENT_EXPIRED = 'payment-expired',
+  PAID = 'paid',
+  CANCELLED = 'cancelled',
+}
+
 //////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',

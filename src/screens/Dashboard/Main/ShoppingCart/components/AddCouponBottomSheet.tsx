@@ -1,20 +1,26 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { Portal } from 'react-native-paper';
+import { ActivityIndicator, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
 import { useAppEventListener } from '#ui/lib/emitter';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import MarketplaceService from '#services/MarketplaceService';
+import useCartStore from '#stores/shoppingCart';
 
 export default function AddCouponBottomSheet() {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
+  const fetchCart = useCartStore((store) => store.fetchCart);
 
   const [value, setValue] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const modalRef = useRef<Modalize>(null);
 
   useAppEventListener('DISPATCH_ADD_COUPON_IN_CART_MODAL', () => {
@@ -22,8 +28,22 @@ export default function AddCouponBottomSheet() {
   });
 
   const submit = useCallback(async () => {
-    await MarketplaceService.applyCoupon(value);
-    modalRef.current?.close();
+    try {
+      setIsSubmitting(true);
+      await MarketplaceService.applyCoupon(value);
+      await fetchCart();
+      setIsSubmitting(false);
+      modalRef.current?.close();
+      toast.show(t('actions.done'), {
+        type: 'md_success',
+      });
+    } catch (error) {
+      console.log(error);
+      toast.show(t('navigation.error.errorMessage'), {
+        type: 'md_danger',
+      });
+    }
+
   }, [value]);
 
   return (
@@ -50,7 +70,11 @@ export default function AddCouponBottomSheet() {
 
         <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300 mb-4">
           <Button mode="contained" tw="w-5/6" uppercase onPress={submit} disabled={!value}>
-            {t('Dashboard.ShoppingCart.redeemCoupon')}
+            {isSubmitting ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              t('Dashboard.ShoppingCart.redeemCoupon')
+            )}
           </Button>
         </View>
       </Modalize>

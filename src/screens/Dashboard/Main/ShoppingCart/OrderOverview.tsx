@@ -10,7 +10,6 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -21,6 +20,7 @@ import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/Shopping
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import useCartStore from '#stores/shoppingCart';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
@@ -29,6 +29,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
   // eslint-disable-next-line
   const navigation = useNavigation<NavigationProp<any>>();
+  const fetchCart = useCartStore((store) => store.fetchCart);
 
   const { data, isLoading } = useApiCall(
     'getOrder',
@@ -168,7 +169,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
           tw="w-10/12"
           onPress={(evt) => {
             evt.stopPropagation();
-            emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
+            fetchCart();
             navigation.navigate('Main', {
               screen: 'Orders',
               params: {

@@ -1,3 +1,4 @@
+import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -7,9 +8,9 @@ import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
-import { cn } from '#ui/lib/cn';
 
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
@@ -17,11 +18,12 @@ import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/util
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import { useDashboardStore } from '#stores/dashboard';
+import useCartStore from '#stores/shoppingCart';
 import { type CartItem as CartItemType } from '#types/global';
 
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
 import CartItemInput from './CartItemInput';
-import { CurrencyStandardization } from 'currency-format-utils';
 
 const countriesMeta = countriesDict();
 
@@ -31,16 +33,8 @@ type CartItemProps = {
 
 export function CartItem({ item }: CartItemProps) {
   const { t } = useTranslationUtils();
-
-  const { data: coolingUnits, isLoading: isLoadingUnits } = useApiCall(
-    'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
-    {},
-    {
-      skip: !item,
-      defaultData: [],
-    }
-  );
+  const [fetchCart, coolingUnits] = useCartStore((store) => [store.fetchCart, store.allCoolingUnits]);
+  const crops = useDashboardStore((store) => store.allCrops);
 
   const { data: company, isLoading: isLoadingCompany } = useApiCall(
     'getCompanyById',
@@ -51,15 +45,6 @@ export function CartItem({ item }: CartItemProps) {
     }
   );
 
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
-    'getAllCrops',
-    ColdtivateService.getAllCrops,
-    undefined,
-    {
-      defaultData: [],
-    }
-  );
-
   const coolingUnit = useMemo(
     () => coolingUnits?.find((c) => c.id === item.relCoolingUnitId),
     [coolingUnits]
@@ -67,7 +52,7 @@ export function CartItem({ item }: CartItemProps) {
 
   const crop = useMemo(() => crops?.find((c) => c.id === item.relCropId), [crops]);
 
-  if (isLoadingCompany || isLoadingCrops || isLoadingUnits) {
+  if (isLoadingCompany) {
     return (
       <View tw="flex-1 w-full my-3 py-2 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -81,14 +66,14 @@ export function CartItem({ item }: CartItemProps) {
         tw={cn(
           'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
           item.relCrateRemainingShelfLife &&
-            item.relCrateRemainingShelfLife <= 7 &&
-            item.relCrateRemainingShelfLife > 2 &&
-            'bg-yellow-400 border-yellow-400',
+          item.relCrateRemainingShelfLife <= 7 &&
+          item.relCrateRemainingShelfLife > 2 &&
+          'bg-yellow-400 border-yellow-400',
           item.relCrateRemainingShelfLife &&
-            item.relCrateRemainingShelfLife <= 2 &&
-            'bg-red-500 border-red-500',
+          item.relCrateRemainingShelfLife <= 2 &&
+          'bg-red-500 border-red-500',
           (!item.relCrateRemainingShelfLife || item.relCrateRemainingShelfLife === -1) &&
-            'bg-gray-300 border-gray-300'
+          'bg-gray-300 border-gray-300'
         )}
       />
       <View tw="flex-col p-3">
@@ -113,8 +98,8 @@ export function CartItem({ item }: CartItemProps) {
                     'text-base',
                     'text-green-400',
                     item.relCrateRemainingShelfLife <= 7 &&
-                      item.relCrateRemainingShelfLife > 2 &&
-                      'text-yellow-400',
+                    item.relCrateRemainingShelfLife > 2 &&
+                    'text-yellow-400',
                     item.relCrateRemainingShelfLife <= 2 && 'text-red-500'
                   )}
                 >
@@ -196,7 +181,7 @@ export function CartItem({ item }: CartItemProps) {
             onPress={async (evt) => {
               evt.stopPropagation();
               await MarketplaceService.removeItemFromCart(item.relCrateId);
-              emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
+              fetchCart();
             }}
           />
         </View>

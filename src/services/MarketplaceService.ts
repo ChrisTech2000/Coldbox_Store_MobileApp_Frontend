@@ -3,6 +3,7 @@ import type { AxiosError } from 'axios';
 import { EMarketplaceEndpoints } from '#constants/api.routes';
 import type { AddItemToCartParams, AddUserBankAccountParams } from '#types/api.params';
 import type {
+  ApplyCouponResponse,
   CheckoutWithPaystackResponse,
   GetAllOrdersResponse,
   GetAvailableBanksResponse,
@@ -40,6 +41,20 @@ class MarketplaceService extends HttpClient {
     }
   };
 
+  public payWithPaystack = async (): Promise<CheckoutWithPaystackResponse> => {
+    try {
+      const { data } = await this.post<CheckoutWithPaystackResponse>(
+        EMarketplaceEndpoints.PAY_WITH_PAYSTACK,
+        {}
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public removeItemFromCart = async (crateId: number): Promise<GetCartResponse> => {
     try {
       const url = subs(EMarketplaceEndpoints.REMOVE_ITEM_FROM_CART, { crateId });
@@ -63,10 +78,10 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getOrder = async (orderId: number): Promise<GetCartResponse> => {
+  public getOrder = async (orderId: number): Promise<GetAllOrdersResponse> => {
     try {
       const url = subs(EMarketplaceEndpoints.GET_ORDER, { orderId });
-      const { data } = await this.get<GetCartResponse>(url);
+      const { data } = await this.get<GetAllOrdersResponse>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -126,9 +141,9 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public applyCoupon = async (couponCode: string): Promise<BankAccount> => {
+  public applyCoupon = async (couponCode: string): Promise<ApplyCouponResponse> => {
     try {
-      const { data } = await this.post<BankAccount>(EMarketplaceEndpoints.APPLY_COUPON, {
+      const { data } = await this.post<ApplyCouponResponse>(EMarketplaceEndpoints.APPLY_COUPON, {
         couponCode,
       });
       return data;

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Divider, Icon, Portal } from 'react-native-paper';
@@ -9,11 +9,16 @@ import { useAppEventListener } from '#ui/lib/emitter';
 
 import { useTranslationUtils } from '#i18n/utils';
 import colors from 'tailwindcss/colors';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function ListCouponsBottomSheet() {
   const { t } = useTranslationUtils();
 
   const modalRef = useRef<Modalize>(null);
+
+  const onDeleteCoupon = useCallback(() => {
+    
+  }, []);
 
   useAppEventListener('DISPATCH_LIST_COUPONS_IN_CART_MODAL', () => {
     modalRef.current?.open();
@@ -45,7 +50,9 @@ export default function ListCouponsBottomSheet() {
                   <Text tw="text-base font-bold uppercase">{item.code}</Text>
                   <Text tw="text-base text-gray-400 uppercase">{item.percentage}</Text>
                 </View>
-                <Icon source="trash-can-outline" size={24} color={colors.red[700]} />
+                <TouchableOpacity onPress={onDeleteCoupon}>
+                  <Icon source="trash-can-outline" size={24} color={colors.red[700]} />
+                </TouchableOpacity>
               </View>
             )}
           />

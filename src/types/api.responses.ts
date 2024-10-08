@@ -3,6 +3,7 @@ import {
   CartItem,
   ECoolingUnitMetric,
   EMovementType,
+  EOrderStatus,
   EPaymentType,
   ERoles,
   ESellingLocation,
@@ -449,6 +450,7 @@ export interface GetCartResponse {
 
 export interface GetAllOrdersResponse extends GetCartResponse {
   createdAt: string;
+  status: EOrderStatus;
 }
 export interface CheckoutWithPaystackResponse {
   orderId: number;
@@ -484,4 +486,8 @@ export interface GetAvailableListingResponse {
 
 export interface GetAvailableBanksResponse {
   banks: Array<Bank>;
+}
+
+export interface ApplyCouponResponse {
+  message: string;
 }

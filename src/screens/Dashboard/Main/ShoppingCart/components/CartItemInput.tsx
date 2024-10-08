@@ -5,11 +5,11 @@ import { TextInput } from 'react-native-paper';
 
 import { Input } from '#ui/components/Input';
 import { paperTheme } from '#ui/lib/theme';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import MarketplaceService from '#services/MarketplaceService';
+import useCartStore from '#stores/shoppingCart';
 
 type FormValues<T = string> = {
   quantity: T;
@@ -22,6 +22,7 @@ export default function CartItemInput(props: {
 }) {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
+  const fetchCart = useCartStore((store) => store.fetchCart);
 
   const form = useForm<FormValues>({
     defaultValues: { quantity: props.initialValue.toString() },
@@ -41,7 +42,7 @@ export default function CartItemInput(props: {
             updateStrategy: 'replace',
           });
 
-          emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
+          fetchCart();
         }
       }, 500),
     [props.crateId]

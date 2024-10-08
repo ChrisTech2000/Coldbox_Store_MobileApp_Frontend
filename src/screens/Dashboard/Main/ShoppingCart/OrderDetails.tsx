@@ -7,34 +7,25 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
-import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import useCartStore from '#stores/shoppingCart';
 
-import OrderDetailsCard from './components/OrderDetailsCard';
-import OrderPickupMethod from './components/OrderPickupMethod';
 import AddCouponBottomSheet from './components/AddCouponBottomSheet';
 import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
+import OrderDetailsCard from './components/OrderDetailsCard';
+import OrderPickupMethod from './components/OrderPickupMethod';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
-
+  const [cartData] = useCartStore((store) => [store.cartData, store.isLoading])
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-  const { data, isLoading } = useApiCall(
-    'getCart',
-    MarketplaceService.getCart,
-    {},
-    {
-      defaultData: undefined,
-    }
-  );
 
   const onPay = useCallback(async (evt: GestureResponderEvent) => {
     evt.stopPropagation();
@@ -50,7 +41,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     }
   }, []);
 
-  if (isLoading) {
+  if (!cartData) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -65,12 +56,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           <OrderDetailsCard
             heading={t('Dashboard.ShoppingCart.orderHeader')}
             totalLabel={t('Dashboard.ShoppingCart.total')}
-            produceWeight={data.items?.reduce((acc, curr) => (acc += curr.orderedProduceWeight), 0)}
-            subtotal={data.totalProduceAmount}
-            discount={0} // TODO: implement discount coupons
-            coolingFees={data.totalCoolingFeesAmount}
-            paymentFees={data.totalPaymentFeesAmount}
-            total={data.totalAmount}
+            produceWeight={cartData?.items?.reduce((acc, curr) => (acc += curr.orderedProduceWeight), 0)}
+            subtotal={cartData.totalProduceAmount}
+            discount={cartData.totalDiscountAmount}
+            coolingFees={cartData.totalCoolingFeesAmount}
+            paymentFees={cartData.totalPaymentFeesAmount}
+            total={cartData.totalAmount}
           />
         </View>
         <View>
@@ -93,7 +84,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             <Text tw="text-lg">
               {CurrencyStandardization.currencyCode({
                 code: 'NGN', // TODO: get value from somewhere
-                value: data.totalAmount,
+                value: cartData.totalAmount,
               }).getValueFormated()}
             </Text>
           </View>

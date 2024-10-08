@@ -1126,9 +1126,9 @@ const en = {
     MyOrders: {
       sort: {
         mostRecent: 'Most recent',
+        oldest: 'Oldest',
         date: 'Date',
       },
-      oldest: 'Oldest',
       orderId: 'Order ID',
       cropType: 'Crop Type',
       coolingUnit: 'Cooling Unit',
