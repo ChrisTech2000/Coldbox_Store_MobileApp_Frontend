@@ -5,8 +5,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
-import { useApiCall } from '#services/hooks/useAPiCall';
+import { useDashboardStore } from '#stores/dashboard';
 
 import { sortAndMapData } from '../../utils';
 import { generateSecondColumnContent } from '../../utils/generateSecondColumnContent';
@@ -22,10 +21,7 @@ type SectionProps = {
 export function CratesContent() {
   const { t } = useTranslationUtils();
   const { coolingUnitData } = useAggregatedData();
-
-  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
-    defaultData: [],
-  });
+  const crops = useDashboardStore((store) => store.allCrops ?? []);
 
   const crates = useMemo(() => {
     return {

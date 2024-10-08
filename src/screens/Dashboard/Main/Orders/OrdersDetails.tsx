@@ -12,6 +12,7 @@ import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
+import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
@@ -21,23 +22,28 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import { EOrderStatus } from '#types/global';
 
 import DeliveryInformationBottomSheet, {
   type DeliveryInformationDatum,
 } from '../ShoppingCart/components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
+import { CurrencyStandardization } from 'currency-format-utils';
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
   const scrollRef = useRef<ScrollView>(null);
 
   const [showButton, setShowButton] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const { data, isLoading } = useApiCall(
     'getOrder',
@@ -70,6 +76,31 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
     [scrollRef.current]
   );
 
+  const onPay = useCallback(
+    async (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+
+      try {
+        setIsSubmitting(true);
+        const result = await MarketplaceService.payWithPaystack(props.route.params.orderId);
+        setIsSubmitting(false);
+
+        if (result.authorizationUrl) {
+          props.navigation.navigate('PaystackPayment', {
+            url: result.authorizationUrl,
+            orderId: props.route.params.orderId,
+          });
+        }
+      } catch (error) {
+        setIsSubmitting(false);
+        toast.show(t('navigation.error.errorMessage'), {
+          type: 'md_danger',
+        });
+      }
+    },
+    [props.route.params.orderId]
+  );
+
   if (isLoading || isLoadingCrops) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
@@ -96,7 +127,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 0
               )}
               subtotal={data.totalProduceAmount}
-              discount={0} // TODO: implement discount coupons
+              discount={data.totalDiscountAmount}
               coolingFees={data.totalCoolingFeesAmount}
               paymentFees={data.totalPaymentFeesAmount}
               total={data.totalAmount}
@@ -144,7 +175,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               renderItem={({ item }) => {
                 const crop = crops?.find((c) => c.id === item.relCropId);
                 return (
-                  <View tw="border border-solid border-zinc-300 rounded-md p-3">
+                  <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
                     <View tw="flex-row items-start justify-between">
                       <View tw="flex-col items-start">
                         <Text tw="text-lg font-bold">{crop?.name}</Text>
@@ -163,7 +194,11 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                         {t('Dashboard.ProduceDetails.kilogram')}
                       </Text>
                       <Text tw="font-bold">
-                        ${item.producePricePerKg.toFixed(2)} {t('Dashboard.ShoppingCart.perKg')}
+                        {CurrencyStandardization.currencyCode({
+                          code: 'NGN', // TODO: get value from somewhere
+                          value: item.producePricePerKg.toFixed(2),
+                        }).getValueFormated()}{' '}
+                        {t('Dashboard.ShoppingCart.perKg')}
                       </Text>
                     </View>
                   </View>
@@ -171,6 +206,21 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               }}
             />
           </View>
+          {data.status === EOrderStatus.PAYMENT_PENDING ? (
+            <Button
+              tw="w-5/6 self-center my-4"
+              mode="contained"
+              uppercase
+              onPress={onPay}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                t('Dashboard.ShoppingCart.pay')
+              )}
+            </Button>
+          ) : null}
         </View>
       </ScrollView>
 

@@ -10,6 +10,7 @@ import { Appbar } from 'react-native-paper';
 
 import OrdersRoot from '#screens/Dashboard/Main/Orders';
 import OrdersDetails from '#screens/Dashboard/Main/Orders/OrdersDetails';
+import PaystackPayment from '#screens/Dashboard/Main/ShoppingCart/PaystackPayment';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -23,6 +24,7 @@ export type OrdersRoutes = {
   OrdersDetails: {
     orderId: number;
   };
+  PaystackPayment: { url: string; orderId: number };
 };
 
 export type OrdersRoutePaths = keyof OrdersRoutes;
@@ -32,9 +34,10 @@ export type OrdersRouteProps<Path extends OrdersRoutePaths> = NativeStackScreenP
   Path
 >;
 
-export const NAVIGATOR_HEADERS: Record<OrdersRoutePaths, TranslationPaths> = {
+export const NAVIGATOR_HEADERS: Record<OrdersRoutePaths, TranslationPaths | undefined> = {
   OrdersRoot: 'navigation.dashboard.MyOrders',
   OrdersDetails: 'navigation.dashboard.OrderDetails',
+  PaystackPayment: undefined,
 };
 
 type ScreenOptions = (props: {
@@ -56,10 +59,12 @@ export default function OrdersStack() {
         ...props,
         header: () => {
           const baseProps: NavigationHeaderProps = {
-            routeTitle: t(NAVIGATOR_HEADERS[routeName], {
-              // eslint-disable-next-line react/prop-types
-              orderCode: `#${props.route.params?.orderId}`,
-            }),
+            routeTitle: routeName
+              ? t(NAVIGATOR_HEADERS[routeName] as TranslationPaths, {
+                  // eslint-disable-next-line react/prop-types
+                  orderCode: `#${props.route.params?.orderId}`,
+                })
+              : undefined,
           };
           if (routeName === 'OrdersRoot') {
             const { leftContent, rightContent } = dashboardHeaderFactory();
@@ -83,6 +88,7 @@ export default function OrdersStack() {
     <Stack.Navigator initialRouteName="OrdersRoot" screenOptions={screenOptions}>
       <Stack.Screen name="OrdersRoot" component={OrdersRoot} />
       <Stack.Screen name="OrdersDetails" component={OrdersDetails} />
+      <Stack.Screen name="PaystackPayment" component={PaystackPayment} />
     </Stack.Navigator>
   );
 }

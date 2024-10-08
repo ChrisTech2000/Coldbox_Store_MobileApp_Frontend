@@ -46,9 +46,9 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // actions
         // scope: account details
         can(PERMISSION_KINDS.SET, 'FormEmailField');
+        can(PERMISSION_KINDS.SET, 'PayoutSettings');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
-        cannot(PERMISSION_KINDS.SET, 'PayoutSettings');
         cannot(PERMISSION_KINDS.SET, 'BuyerSettings');
 
         // scope: cooling units

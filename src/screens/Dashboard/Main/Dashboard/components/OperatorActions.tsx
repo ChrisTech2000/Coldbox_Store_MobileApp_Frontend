@@ -1,9 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon, Portal, TextInput } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
@@ -42,9 +41,6 @@ import {
 
 type ManagementMode = 'check-in' | 'check-out';
 
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
-
 export function OperatorActions({
   navigation,
   coolingUnit,
@@ -77,9 +73,9 @@ export function OperatorActions({
     onPressMask: () =>
       navigation.navigate('CheckOutStack', {
         screen: 'CrateSelection',
-        // eslint-disable-next-line
-        // @ts-ignore
         params: {
+          // eslint-disable-next-line
+          // @ts-ignore
           user: MOCKED_USER,
           coolingUnit: MOCKED_COOLING_UNIT,
           crates: MOCKED_CHECK_OUT_DATA,
@@ -251,8 +247,9 @@ export function OperatorActions({
                   <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
                 </View>
               ) : (
-                <FlashList
+                <FlatList
                   showsVerticalScrollIndicator={false}
+                  scrollEnabled={false}
                   data={combinedUsers}
                   extraData={selectedUser}
                   keyExtractor={(item) => item?.id?.toString() ?? ''}
@@ -271,11 +268,6 @@ export function OperatorActions({
                       </Text>
                     </TouchableOpacity>
                   )}
-                  estimatedItemSize={20}
-                  estimatedListSize={{
-                    height: deviceHeight,
-                    width: deviceWidth / 2,
-                  }}
                 />
               )}
             </ScrollView>

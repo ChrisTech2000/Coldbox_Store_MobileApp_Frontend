@@ -14,9 +14,9 @@ import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
+import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
 import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
 
 import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';

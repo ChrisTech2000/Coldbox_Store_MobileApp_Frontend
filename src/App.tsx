@@ -1,4 +1,3 @@
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -8,17 +7,18 @@ import {
   enableExperimentalLayoutAnimation,
   WalkthroughProvider,
 } from 'react-native-interactive-walkthrough';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-enableExperimentalLayoutAnimation();
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import AuthNavigator from './navigation/Auth';
 import DashboardNavigator from './navigation/Dashboard';
 
-import { paperTheme, navigatorTheme } from './ui/lib/theme';
+import linking from './navigation/deepLinking';
 import { useAuthManager } from './stores/auth';
 import { useGlobalInformation } from './stores/dashboard';
-import linking from './navigation/deepLinking';
+import { useCartInformation } from './stores/shoppingCart';
+import { navigatorTheme, paperTheme } from './ui/lib/theme';
 
 import './i18n';
 
@@ -27,6 +27,7 @@ enableExperimentalLayoutAnimation();
 export default function App() {
   const isAuthenticated = useAuthManager();
   useGlobalInformation(isAuthenticated);
+  useCartInformation(isAuthenticated);
 
   return (
     <WalkthroughProvider useIsFocused={useIsFocused}>

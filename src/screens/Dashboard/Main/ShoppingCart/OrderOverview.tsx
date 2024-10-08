@@ -1,4 +1,5 @@
 import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
+import { CurrencyStandardization } from 'currency-format-utils';
 import React from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -10,7 +11,6 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -21,6 +21,7 @@ import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/Shopping
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import useCartStore from '#stores/shoppingCart';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
@@ -29,6 +30,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
   // eslint-disable-next-line
   const navigation = useNavigation<NavigationProp<any>>();
+  const fetchCart = useCartStore((store) => store.fetchCart);
 
   const { data, isLoading } = useApiCall(
     'getOrder',
@@ -129,7 +131,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 renderItem={({ item }) => {
                   const crop = crops?.find((c) => c.id === item.relCropId);
                   return (
-                    <View tw="border border-solid border-zinc-300 rounded-md p-3">
+                    <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
                       <View tw="flex-row items-start justify-between">
                         <View tw="flex-col items-start">
                           <Text tw="text-lg font-bold">{crop?.name}</Text>
@@ -148,7 +150,11 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                           {t('Dashboard.ProduceDetails.kilogram')}
                         </Text>
                         <Text tw="font-bold">
-                          ${item.producePricePerKg.toFixed(2)} {t('Dashboard.ShoppingCart.perKg')}
+                          {CurrencyStandardization.currencyCode({
+                            code: 'NGN', // TODO: get value from somewhere
+                            value: item.producePricePerKg.toFixed(2),
+                          }).getValueFormated()}
+                          {t('Dashboard.ShoppingCart.perKg')}
                         </Text>
                       </View>
                     </View>
@@ -168,7 +174,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
           tw="w-10/12"
           onPress={(evt) => {
             evt.stopPropagation();
-            emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
+            fetchCart();
             navigation.navigate('Main', {
               screen: 'Orders',
               params: {

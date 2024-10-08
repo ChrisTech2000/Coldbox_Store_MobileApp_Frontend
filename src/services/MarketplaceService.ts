@@ -1,8 +1,9 @@
 import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
-import type { AddItemToCartParams, AddUserBankAccountParams } from '#types/api.params';
+import type { AddItemToCartParams, AddPaystackBankAccountParams } from '#types/api.params';
 import type {
+  ApplyCouponResponse,
   CheckoutWithPaystackResponse,
   GetAllOrdersResponse,
   GetAvailableBanksResponse,
@@ -40,6 +41,18 @@ class MarketplaceService extends HttpClient {
     }
   };
 
+  public payWithPaystack = async (orderId: number): Promise<CheckoutWithPaystackResponse> => {
+    try {
+      const url = subs(EMarketplaceEndpoints.PAY_WITH_PAYSTACK, { order: orderId });
+      const { data } = await this.post<CheckoutWithPaystackResponse>(url, {});
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public removeItemFromCart = async (crateId: number): Promise<GetCartResponse> => {
     try {
       const url = subs(EMarketplaceEndpoints.REMOVE_ITEM_FROM_CART, { crateId });
@@ -63,10 +76,10 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getOrder = async (orderId: number): Promise<GetCartResponse> => {
+  public getOrder = async (orderId: number): Promise<GetAllOrdersResponse> => {
     try {
       const url = subs(EMarketplaceEndpoints.GET_ORDER, { orderId });
-      const { data } = await this.get<GetCartResponse>(url);
+      const { data } = await this.get<GetAllOrdersResponse>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -112,12 +125,40 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public addUserAccount = async (params: AddUserBankAccountParams): Promise<BankAccount> => {
+  public addPaystackAccount = async (
+    params: AddPaystackBankAccountParams
+  ): Promise<BankAccount> => {
     try {
       const { data } = await this.post<BankAccount>(
         EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS,
         params
       );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public applyCoupon = async (couponCode: string): Promise<ApplyCouponResponse> => {
+    try {
+      const { data } = await this.post<ApplyCouponResponse>(EMarketplaceEndpoints.APPLY_COUPON, {
+        couponCode,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public clearCoupon = async (couponCode: string): Promise<ApplyCouponResponse> => {
+    try {
+      const { data } = await this.post<ApplyCouponResponse>(EMarketplaceEndpoints.CLEAR_COUPON, {
+        couponCode,
+      });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
