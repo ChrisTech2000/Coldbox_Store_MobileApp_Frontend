@@ -12,11 +12,11 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
+import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
-import { GenericError } from '#ui/components/GenericError';
 
 import { Filters, type Search } from '../components/Filters';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
