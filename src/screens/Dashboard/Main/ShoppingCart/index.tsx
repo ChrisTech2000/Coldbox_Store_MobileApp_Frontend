@@ -28,7 +28,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
     isLoading: store.isLoading,
   }));
 
-  if (isLoading) {
+  if (isLoading && !cartData) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />

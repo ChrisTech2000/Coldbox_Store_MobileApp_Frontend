@@ -22,6 +22,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
@@ -34,9 +35,11 @@ import DeliveryInformationBottomSheet, {
   type DeliveryInformationDatum,
 } from '../ShoppingCart/components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
+import { CurrencyStandardization } from 'currency-format-utils';
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
   const scrollRef = useRef<ScrollView>(null);
 
   const [showButton, setShowButton] = useState<boolean>(false);
@@ -76,14 +79,22 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const onPay = useCallback(
     async (evt: GestureResponderEvent) => {
       evt.stopPropagation();
-      setIsSubmitting(true);
-      const result = await MarketplaceService.payWithPaystack();
 
-      if (result.authorizationUrl) {
+      try {
+        setIsSubmitting(true);
+        const result = await MarketplaceService.payWithPaystack(props.route.params.orderId);
         setIsSubmitting(false);
-        props.navigation.navigate('PaystackPayment', {
-          url: result.authorizationUrl,
-          orderId: props.route.params.orderId,
+
+        if (result.authorizationUrl) {
+          props.navigation.navigate('PaystackPayment', {
+            url: result.authorizationUrl,
+            orderId: props.route.params.orderId,
+          });
+        }
+      } catch (error) {
+        setIsSubmitting(false);
+        toast.show(t('navigation.error.errorMessage'), {
+          type: 'md_danger',
         });
       }
     },
@@ -183,7 +194,10 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                         {t('Dashboard.ProduceDetails.kilogram')}
                       </Text>
                       <Text tw="font-bold">
-                        ${item.producePricePerKg.toFixed(2)} {t('Dashboard.ShoppingCart.perKg')}
+                        {CurrencyStandardization.currencyCode({
+                          code: 'NGN', // TODO: get value from somewhere
+                          value: item.producePricePerKg.toFixed(2),
+                        }).getValueFormated()} {t('Dashboard.ShoppingCart.perKg')}
                       </Text>
                     </View>
                   </View>

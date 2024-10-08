@@ -24,7 +24,7 @@ import OrderPickupMethod from './components/OrderPickupMethod';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
-  const [cartData] = useCartStore((store) => [store.cartData, store.isLoading]);
+  const cartData = useCartStore((store) => store.cartData);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const onPay = useCallback(async (evt: GestureResponderEvent) => {
@@ -41,6 +41,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     }
   }, []);
 
+  // const cartDataByCoolingUnit = useMemo(() => {
+        // TODO: group data by cooling unit
+  // }, []);
+  
   if (!cartData) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">

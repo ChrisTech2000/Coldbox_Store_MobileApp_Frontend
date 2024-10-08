@@ -490,4 +490,5 @@ export interface GetAvailableBanksResponse {
 
 export interface ApplyCouponResponse {
   message: string;
+  cart: GetCartResponse;
 }

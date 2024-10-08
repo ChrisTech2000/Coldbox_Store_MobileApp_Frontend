@@ -11,8 +11,10 @@ interface CartStoreState {
   allCoolingUnits: CoolingUnit[] | undefined;
   isLoading: boolean;
   error: Error | null;
+
   fetchCart: () => Promise<void>;
   fetchCoolingUnits: () => Promise<void>;
+  setCart: (cart: GetCartResponse | undefined) => void;
 }
 
 const useCartStore = create<CartStoreState>((set) => ({
@@ -40,6 +42,8 @@ const useCartStore = create<CartStoreState>((set) => ({
       set({ error: err as Error, isLoading: false });
     }
   },
+
+  setCart: (cartData: GetCartResponse | undefined) => set({ cartData }),
 }));
 
 export const useCartInformation = (isAuthenticated: boolean) => {

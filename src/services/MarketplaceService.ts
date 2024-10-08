@@ -41,10 +41,11 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public payWithPaystack = async (): Promise<CheckoutWithPaystackResponse> => {
+  public payWithPaystack = async (orderId: number): Promise<CheckoutWithPaystackResponse> => {
     try {
+      const url = subs(EMarketplaceEndpoints.PAY_WITH_PAYSTACK, { order: orderId });
       const { data } = await this.post<CheckoutWithPaystackResponse>(
-        EMarketplaceEndpoints.PAY_WITH_PAYSTACK,
+        url,
         {}
       );
       return data;

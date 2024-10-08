@@ -16,7 +16,7 @@ import useCartStore from '#stores/shoppingCart';
 export default function AddCouponBottomSheet() {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
-  const fetchCart = useCartStore((store) => store.fetchCart);
+  const setCart = useCartStore((store) => store.setCart);
 
   const [value, setValue] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -30,15 +30,17 @@ export default function AddCouponBottomSheet() {
   const submit = useCallback(async () => {
     try {
       setIsSubmitting(true);
-      await MarketplaceService.applyCoupon(value);
-      await fetchCart();
-      setIsSubmitting(false);
-      modalRef.current?.close();
-      toast.show(t('actions.done'), {
-        type: 'md_success',
-      });
+      const result = await MarketplaceService.applyCoupon(value);
+
+      if (result) {
+        setCart(result.cart);
+        setIsSubmitting(false);
+        modalRef.current?.close();
+        toast.show(t('actions.done'), {
+          type: 'md_success',
+        });
+      }
     } catch (error) {
-      console.log(error);
       toast.show(t('navigation.error.errorMessage'), {
         type: 'md_danger',
       });
