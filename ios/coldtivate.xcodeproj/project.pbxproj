@@ -35,7 +35,7 @@
 		261B7CCA0EA14619A1439FB0 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C94D89D7CB2842F0B86F5212 /* Roboto-Bold.ttf */; };
 		30B1644DDCBB4BA7A333EAE2 /* danger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 9FAB9E1065924CA7A333D97C /* danger.svg */; };
 		3B840A1F873040EEB2D6DBCB /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8FE04C60CBE446FE8F1BDD15 /* Roboto-Regular.ttf */; };
-		66726D000AEB4A4987306433 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		66726D000AEB4A4987306433 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		7522F1BBA8235EDC84A1BA30 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EBF3B6864E19E58B0A22F9E5 /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-coldtivate-coldtivateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-coldtivate-coldtivateTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -96,7 +96,6 @@
 		3D1DF6D3D9024F8BA2F0BA92 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../src/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		4C9DFE8E3FA54BB891B92744 /* coldroom.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = coldroom.svg; path = ../src/assets/icons/coldroom.svg; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-coldtivate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coldtivate.release.xcconfig"; path = "Target Support Files/Pods-coldtivate/Pods-coldtivate.release.xcconfig"; sourceTree = "<group>"; };
-		5A5AF40A6F3A4178812CF310 /* Icon-1@2x.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Icon-1@2x.png"; path = "../src/assets/images/Icon-1@2x.png"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-coldtivate-coldtivateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coldtivate-coldtivateTests.debug.xcconfig"; path = "Target Support Files/Pods-coldtivate-coldtivateTests/Pods-coldtivate-coldtivateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5C6118B8FF36417CA6917732 /* check-in.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "check-in.svg"; path = "../src/assets/icons/check-in.svg"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-coldtivate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-coldtivate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,7 +105,6 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-coldtivate-coldtivateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coldtivate-coldtivateTests.release.xcconfig"; path = "Target Support Files/Pods-coldtivate-coldtivateTests/Pods-coldtivate-coldtivateTests.release.xcconfig"; sourceTree = "<group>"; };
 		8CDC63FEC67E4BF7BC3C78C6 /* farmer.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = farmer.svg; path = ../src/assets/icons/farmer.svg; sourceTree = "<group>"; };
 		8FE04C60CBE446FE8F1BDD15 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../src/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		9D9E43BE57874B1886C90CCB /* Icon-1@3x.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Icon-1@3x.png"; path = "../src/assets/images/Icon-1@3x.png"; sourceTree = "<group>"; };
 		9FAB9E1065924CA7A333D97C /* danger.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = danger.svg; path = ../src/assets/icons/danger.svg; sourceTree = "<group>"; };
 		B096564513214963853ACF67 /* mine-cart.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "mine-cart.svg"; path = "../src/assets/icons/mine-cart.svg"; sourceTree = "<group>"; };
 		BA5E6F59DCC948798269F922 /* employee.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = employee.svg; path = ../src/assets/icons/employee.svg; sourceTree = "<group>"; };
@@ -304,6 +302,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				B2C718BD06914F599005E457 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -402,8 +401,6 @@
 				F379F59D95304B5187AD43D6 /* crates-management.svg in Resources */,
 				9BAEE555919A4B0FAD80278B /* check-in.svg in Resources */,
 				66726D000AEB4A4987306433 /* BuildFile in Resources */,
-				75382C33B58047BEAB4F7136 /* Icon-1@2x.png in Resources */,
-				A1E69CEADE5444F88CE27EDA /* Icon-1@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,7 +421,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode.sh $REACT_NATIVE_XCODE\\\"\"\n";
 		};
 		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -464,6 +461,20 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		B2C718BD06914F599005E457 /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode-debug-files.sh";
 		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -763,7 +774,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -835,7 +849,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

@@ -4,6 +4,9 @@ import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { PaperProvider, Portal } from 'react-native-paper';
+import * as Sentry from '@sentry/react-native';
+
+import { ENVIRONMENT, SENTRY_DSN } from '#constants/environment';
 
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
@@ -17,7 +20,9 @@ import linking from './navigation/deepLinking';
 
 import './i18n';
 
-export default function App() {
+Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
+
+function App() {
   const isAuthenticated = useAuthManager();
 
   useGlobalInformation(isAuthenticated);
@@ -39,3 +44,5 @@ export default function App() {
     </PaperProvider>
   );
 }
+
+export default Sentry.wrap(App);
