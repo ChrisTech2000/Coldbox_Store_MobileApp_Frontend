@@ -153,6 +153,19 @@ class MarketplaceService extends HttpClient {
       throw customError;
     }
   };
+
+  public clearCoupon = async (couponCode: string): Promise<ApplyCouponResponse> => {
+    try {
+      const { data } = await this.post<ApplyCouponResponse>(EMarketplaceEndpoints.CLEAR_COUPON, {
+        couponCode,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new MarketplaceService();

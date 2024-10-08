@@ -123,7 +123,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                     props.navigation.navigate('OrdersDetails', { orderId: item.id });
                   }}
                 >
-                  <View tw="w-[90%]">
+                  <View tw="w-[90%] space-y-2">
                     <View tw="flex-row items-center">
                       <Text variant="TextMedium" tw="text-base w-[50%]">
                         {t('Dashboard.MyOrders.sort.date')}
@@ -142,7 +142,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                       <Text variant="TextMedium" tw="text-base w-[50%]">
                         {t('Dashboard.MyOrders.cropType')}
                       </Text>
-                      <Text tw="text-base text-zinc-500" numberOfLines={1}>
+                      <Text tw="text-base text-zinc-500 w-40" numberOfLines={2}>
                         {[...new Set(_crops)].join(', ')}
                       </Text>
                     </View>
@@ -150,7 +150,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                       <Text variant="TextMedium" tw="text-base w-[50%]">
                         {t('Dashboard.MyOrders.coolingUnit')}
                       </Text>
-                      <Text tw="text-base text-zinc-500" numberOfLines={1}>
+                      <Text tw="text-base text-zinc-500 w-40" numberOfLines={2}>
                         {[...new Set(_coolingUnits)].join(', ')}
                       </Text>
                     </View>

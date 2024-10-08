@@ -1,4 +1,5 @@
 import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
+import { CurrencyStandardization } from 'currency-format-utils';
 import React from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -130,7 +131,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 renderItem={({ item }) => {
                   const crop = crops?.find((c) => c.id === item.relCropId);
                   return (
-                    <View tw="border border-solid border-zinc-300 rounded-md p-3">
+                    <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
                       <View tw="flex-row items-start justify-between">
                         <View tw="flex-col items-start">
                           <Text tw="text-lg font-bold">{crop?.name}</Text>
@@ -149,7 +150,11 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                           {t('Dashboard.ProduceDetails.kilogram')}
                         </Text>
                         <Text tw="font-bold">
-                          ${item.producePricePerKg.toFixed(2)} {t('Dashboard.ShoppingCart.perKg')}
+                          {CurrencyStandardization.currencyCode({
+                            code: 'NGN', // TODO: get value from somewhere
+                            value: item.producePricePerKg.toFixed(2),
+                          }).getValueFormated()}
+                          {t('Dashboard.ShoppingCart.perKg')}
                         </Text>
                       </View>
                     </View>

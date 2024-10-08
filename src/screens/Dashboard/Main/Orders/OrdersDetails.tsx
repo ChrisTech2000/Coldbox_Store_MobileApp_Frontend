@@ -127,7 +127,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 0
               )}
               subtotal={data.totalProduceAmount}
-              discount={0} // TODO: implement discount coupons
+              discount={data.totalDiscountAmount}
               coolingFees={data.totalCoolingFeesAmount}
               paymentFees={data.totalPaymentFeesAmount}
               total={data.totalAmount}
@@ -175,7 +175,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               renderItem={({ item }) => {
                 const crop = crops?.find((c) => c.id === item.relCropId);
                 return (
-                  <View tw="border border-solid border-zinc-300 rounded-md p-3">
+                  <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
                     <View tw="flex-row items-start justify-between">
                       <View tw="flex-col items-start">
                         <Text tw="text-lg font-bold">{crop?.name}</Text>

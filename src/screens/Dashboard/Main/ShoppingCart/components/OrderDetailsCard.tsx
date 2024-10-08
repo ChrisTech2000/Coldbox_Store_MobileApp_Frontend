@@ -51,17 +51,19 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
           <View tw="flex-row items-center justify-between h-8">
             <View tw="flex-row items-center space-x-1">
               <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
-              <IconButton
-                tw="p-0 m-0"
-                icon="information-outline"
-                size={17}
-                iconColor={colors.gray[600]}
-                containerColor={colors.transparent}
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL);
-                }}
-              />
+              {props.discount ? (
+                <IconButton
+                  tw="p-0 m-0"
+                  icon="information-outline"
+                  size={17}
+                  iconColor={colors.gray[600]}
+                  containerColor={colors.transparent}
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL);
+                  }}
+                />
+              ) : null}
             </View>
 
             <View tw="flex-row items-center space-x-1">
@@ -74,6 +76,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               </Text>
             </View>
           </View>
+
           <View tw="flex-row items-center justify-between h-8">
             <View tw="flex-row items-center space-x-1">
               <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.fees')}</Text>
@@ -89,6 +92,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
                 }}
               />
             </View>
+
             <View tw="flex-row items-center space-x-1">
               <Icon name="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">

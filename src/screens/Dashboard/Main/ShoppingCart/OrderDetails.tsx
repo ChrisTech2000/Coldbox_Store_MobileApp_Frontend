@@ -1,6 +1,6 @@
 import { CurrencyStandardization } from 'currency-format-utils';
-import React, { useCallback, useState } from 'react';
-import { GestureResponderEvent, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -24,7 +24,7 @@ import OrderPickupMethod from './components/OrderPickupMethod';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
-  const cartData = useCartStore((store) => store.cartData);
+  const [cartData, coolingUnits] = useCartStore((store) => [store.cartData, store.allCoolingUnits]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const onPay = useCallback(async (evt: GestureResponderEvent) => {
@@ -41,9 +41,29 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     }
   }, []);
 
-  // const cartDataByCoolingUnit = useMemo(() => {
-  // TODO: group data by cooling unit
-  // }, []);
+  const cartDataByCoolingUnit = useMemo(() => {
+    if (!cartData?.items) return [];
+
+    const groupedData = cartData.items.reduce(
+      (acc, item) => {
+        const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
+
+        if (!coolingUnit) return acc;
+
+        if (!acc[coolingUnit.name]) {
+          acc[coolingUnit.name] = [];
+        }
+        acc[coolingUnit.name].push(item);
+        return acc;
+      },
+      {} as Record<string, typeof cartData.items>
+    );
+
+    return Object.entries(groupedData).map(([coolingUnit, items]) => ({
+      coolingUnit,
+      items,
+    }));
+  }, [cartData, coolingUnits]);
 
   if (!cartData) {
     return (
@@ -56,21 +76,35 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   return (
     <ScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
       <View tw="flex-1 pb-8 space-y-6">
-        <View>
-          <OrderDetailsCard
-            heading={t('Dashboard.ShoppingCart.orderHeader')}
-            totalLabel={t('Dashboard.ShoppingCart.total')}
-            produceWeight={cartData?.items?.reduce(
-              (acc, curr) => (acc += curr.orderedProduceWeight),
-              0
-            )}
-            subtotal={cartData.totalProduceAmount}
-            discount={cartData.totalDiscountAmount}
-            coolingFees={cartData.totalCoolingFeesAmount}
-            paymentFees={cartData.totalPaymentFeesAmount}
-            total={cartData.totalAmount}
-          />
-        </View>
+        <FlatList
+          data={cartDataByCoolingUnit}
+          keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => {
+            return (
+              <View tw="mb-4">
+                <OrderDetailsCard
+                  heading={item.coolingUnit}
+                  totalLabel={t('Dashboard.ShoppingCart.total')}
+                  produceWeight={item?.items?.reduce(
+                    (acc, curr) => (acc += curr.orderedProduceWeight),
+                    0
+                  )}
+                  subtotal={item?.items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
+                  discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
+                  coolingFees={item?.items?.reduce(
+                    (acc, curr) => (acc += curr.coolingFeesAmount),
+                    0
+                  )}
+                  paymentFees={0} // TODO: figure out
+                  total={item?.items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
+                />
+              </View>
+            );
+          }}
+        />
+
         <View>
           {/** TODO: integrate pickup methods */}
           <OrderPickupMethod />

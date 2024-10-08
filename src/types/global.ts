@@ -527,6 +527,7 @@ export type CartItem = {
   relCrateId: number;
   relCrateRemainingShelfLife: number | null;
   relCheckInMovementCode: string;
+  relCouponCode: string | undefined;
 };
 
 export type BankAccount = {
