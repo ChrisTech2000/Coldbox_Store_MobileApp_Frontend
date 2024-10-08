@@ -160,7 +160,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
         <View>
           <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
             <List.Item
-              tw="p-0 py-2"
+              tw="px-0 py-2"
               title={undefined}
               left={() => (
                 <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
@@ -174,6 +174,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             <Divider tw="bg-gray-400" />
           </RBAC.ProtectedResource>
         </View>
+        
         <View>
           <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
             <View>
@@ -187,12 +188,12 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                   props.navigation.navigate('CouponStack');
                 }}
               />
-              <Divider tw="bg-gray-400" />
+              <Divider tw="bg-gray-400 mb-2" />
             </View>
           </RBAC.ProtectedResource>
           <View>
             <List.Item
-              tw="p-0 py-2"
+              tw="p-0 pb-2"
               title={undefined}
               left={() => (
                 <Text tw="text-base w-[80%]">{t('navigation.dashboard.ContactsSharing')}</Text>

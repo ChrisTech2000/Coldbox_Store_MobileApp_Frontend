@@ -16,7 +16,9 @@ import { Translator, useTranslationUtils } from '#i18n/utils';
 import { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
-import { Bank, EBankAccountType } from '#types/global';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
+import { type Bank, EBankAccountType, ERoles } from '#types/global';
 
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
@@ -55,6 +57,8 @@ function mapEnum(t: Translator) {
 
 function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
   const { t, zodResolver } = useTranslationUtils();
+  const user = useAuthStore((store) => store.user);
+  const company = useManagementStore((store) => store.company);
   const toast = InAppNotifications.useToast();
 
   const { data, isLoading: isLoadingBankAccounts } = useApiCall(
@@ -117,7 +121,8 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
 
   const onSubmit = useCallback(async (data: FormValues) => {
     try {
-      await MarketplaceService.addUserAccount({
+      await MarketplaceService.addPaystackAccount({
+        ...(user?.role === ERoles.EMPLOYEE ? { companyId: company?.id } : {}),
         accountType: mapEnum(t)[data.accountType],
         bankCode: data.bank,
         accountNumber: data.accountNumber,
@@ -137,7 +142,7 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
         style: { marginBottom: 50 },
       });
     }
-  }, []);
+  }, [user, company]);
 
   useEffect(() => {
     if (bank) setValue('bank', `${bank.id}`);
@@ -199,7 +204,7 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
               control={control}
               name="country"
               render={({ field: { value } }) => (
-                <Input tw="bg-white border rounded-sm" value={value} disabled />
+                <Input tw="bg-white border rounded-sm" value={value ?? t('Dashboard.AccountDetails.PayoutSettings.form.nigeria')} disabled />
               )}
             />
           </View>

@@ -1,7 +1,7 @@
 import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
-import type { AddItemToCartParams, AddUserBankAccountParams } from '#types/api.params';
+import type { AddItemToCartParams, AddPaystackBankAccountParams } from '#types/api.params';
 import type {
   ApplyCouponResponse,
   CheckoutWithPaystackResponse,
@@ -127,7 +127,7 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public addUserAccount = async (params: AddUserBankAccountParams): Promise<BankAccount> => {
+  public addPaystackAccount = async (params: AddPaystackBankAccountParams): Promise<BankAccount> => {
     try {
       const { data } = await this.post<BankAccount>(
         EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS,
