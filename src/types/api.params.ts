@@ -4,6 +4,7 @@ import {
   EBankAccountType,
   EImpactMode,
   EPaymentType,
+  EPickUpMethod,
   ERoles,
   ESellingLocation,
   type Company,
@@ -448,4 +449,11 @@ export interface AddPaystackBankAccountParams extends JsonObject {
   countryCode: string;
   accountName: string;
   companyId?: number;
+}
+
+export interface SetPickUpDetailsParams extends JsonObject {
+  pickUpDetails: Array<{
+    coolingUnitId: number;
+    pickupMethod: EPickUpMethod;
+  }>;
 }
