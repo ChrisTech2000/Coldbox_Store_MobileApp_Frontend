@@ -527,6 +527,7 @@ export type CartItem = {
   relCrateId: number;
   relCrateRemainingShelfLife: number | null;
   relCheckInMovementCode: string;
+  relCouponCode: string | undefined;
 };
 
 export type BankAccount = {
@@ -683,6 +684,15 @@ export enum EImpactMode {
 export enum EView {
   COMPARISON = 'comparison',
   AGGREGATED = 'aggregated',
+}
+
+export enum EOrderStatus {
+  CART = 'cart',
+  ABANDONED_CART = 'abandoned-cart',
+  PAYMENT_PENDING = 'payment-pending',
+  PAYMENT_EXPIRED = 'payment-expired',
+  PAID = 'paid',
+  CANCELLED = 'cancelled',
 }
 
 //////////////////////// MAPPERS

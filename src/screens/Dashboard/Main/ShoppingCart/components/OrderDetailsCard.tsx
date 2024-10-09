@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -48,17 +49,34 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
             </Text>
           </View>
           <View tw="flex-row items-center justify-between h-8">
-            <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
+            <View tw="flex-row items-center space-x-1">
+              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
+              {props.discount ? (
+                <IconButton
+                  tw="p-0 m-0"
+                  icon="information-outline"
+                  size={17}
+                  iconColor={colors.gray[600]}
+                  containerColor={colors.transparent}
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL);
+                  }}
+                />
+              ) : null}
+            </View>
+
             <View tw="flex-row items-center space-x-1">
               <Icon name="minus" size={14} color={paperTheme.colors.error} />
               <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
                 {CurrencyStandardization.currencyCode({
                   code: 'NGN', // TODO: get value from somewhere
-                  value: props.discount.toFixed(2),
+                  value: props.discount ? props.discount.toFixed(2) : 0,
                 }).getValueFormated()}
               </Text>
             </View>
           </View>
+
           <View tw="flex-row items-center justify-between h-8">
             <View tw="flex-row items-center space-x-1">
               <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.fees')}</Text>
@@ -74,6 +92,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
                 }}
               />
             </View>
+
             <View tw="flex-row items-center space-x-1">
               <Icon name="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">

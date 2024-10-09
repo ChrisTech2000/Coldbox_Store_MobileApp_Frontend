@@ -7,15 +7,15 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { useDashboardStore } from '#stores/dashboard';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
-import { useFarmerAnalyticsData } from '../store';
-import { ExtendedTable, Table, TableData } from './Table';
 import { sortAndMapData } from '../../utils';
 import { generateSecondColumnContent } from '../../utils/generateSecondColumnContent';
+import { useFarmerAnalyticsData } from '../store';
+import { ExtendedTable, Table, TableData } from './Table';
 
 type Section =
   | 'crates'
@@ -28,6 +28,8 @@ type Section =
 
 export function CratesTab() {
   const { t } = useTranslationUtils();
+  const crops = useDashboardStore((store) => store.allCrops ?? []);
+
   const { configData, farmer } = useFarmerAnalyticsData((store) => ({
     configData: store.configData,
     farmer: store.farmer,
@@ -58,15 +60,6 @@ export function CratesTab() {
     },
     {
       skip: !configData || !farmer,
-    }
-  );
-
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
-    'getAllCrops',
-    ColdtivateService.getAllCrops,
-    undefined,
-    {
-      defaultData: [],
     }
   );
 
@@ -152,7 +145,7 @@ export function CratesTab() {
     [farmerImpact, crops]
   );
 
-  if (loadingFarmerImpact || isLoadingCrops) {
+  if (loadingFarmerImpact) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />

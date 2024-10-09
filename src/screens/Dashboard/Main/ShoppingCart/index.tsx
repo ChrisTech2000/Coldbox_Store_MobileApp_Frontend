@@ -9,34 +9,26 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
-import { useApiCall } from '#services/hooks/useAPiCall';
-import MarketplaceService from '#services/MarketplaceService';
+import useCartStore from '#stores/shoppingCart';
 
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
+  const { fetchCart, cartData, isLoading } = useCartStore((store) => ({
+    fetchCart: store.fetchCart,
+    cartData: store.cartData,
+    isLoading: store.isLoading,
+  }));
 
-  const { data, isLoading, isValidating, refetch } = useApiCall(
-    'getCart',
-    MarketplaceService.getCart,
-    {},
-    {
-      defaultData: undefined,
-    }
-  );
-
-  useAppEventListener('DISPATCH_CART_REVALIDATION', () => refetch());
-
-  if (isLoading) {
+  if (isLoading && !cartData) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -44,7 +36,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
     );
   }
 
-  if (!data || !data.items?.length) {
+  if (!cartData || !cartData.items?.length) {
     return (
       <View tw="flex-1 items-center justify-center space-y-3.5">
         <View tw="h-36 w-36 items-center justify-center rounded-full bg-zinc-100">
@@ -61,12 +53,12 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
         tw="h-full px-4 pt-3 bg-white"
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={isValidating} onRefresh={async () => await refetch()} />
+          <RefreshControl refreshing={isLoading} onRefresh={async () => await fetchCart()} />
         }
       >
         <View tw="flex-1 pb-8">
           <FlatList
-            data={data.items}
+            data={cartData.items}
             keyExtractor={(item) =>
               `marketplace-shopping-cart-list-item-#${item.marketListedCrateId}`
             }
@@ -79,7 +71,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                   <Text tw="text-lg">
                     {CurrencyStandardization.currencyCode({
                       code: 'NGN', // TODO: get from somewhere
-                      value: data.totalAmount,
+                      value: cartData.totalAmount,
                     }).getValueFormated()}
                   </Text>
                 </View>

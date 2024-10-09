@@ -1,5 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
@@ -9,16 +7,14 @@ import { Portal, TextInput } from 'react-native-paper';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
-import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
+import { useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import MarketplaceService from '#services/MarketplaceService';
-import { useApiCall } from '#services/hooks/useAPiCall';
-
-import InAppNotifications from '#common/InAppNotifications';
+import useCartStore from '#stores/shoppingCart';
 
 import type { AvailableListingDatum } from '../utils';
 import MarketplaceItemWrapper from './MarketplaceItem';
@@ -31,7 +27,7 @@ export default function AddToCartModal() {
   const { t, zodResolver } = useTranslationUtils();
   const modalRef = useRef<Modalize>(null);
   const toast = InAppNotifications.useToast();
-  const navigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const [cartData, fetchCart] = useCartStore((store) => [store.cartData, store.fetchCart]);
 
   const [datum, setDatum] = useState<AvailableListingDatum | undefined>(undefined);
   useAppEventListener<[AvailableListingDatum]>(
@@ -43,13 +39,6 @@ export default function AddToCartModal() {
   );
 
   const isVisible = typeof datum !== 'undefined';
-
-  const { data, refetch } = useApiCall(
-    'getCart',
-    MarketplaceService.getCart,
-    {},
-    { defaultData: undefined }
-  );
 
   const form = useForm<FormValues>({
     defaultValues: { quantity: '1' },
@@ -64,10 +53,10 @@ export default function AddToCartModal() {
     form.reset({ quantity: '1' });
   }
 
-  async function onSubmit(values: FormValues<number>, buyNow?: boolean): Promise<void> {
+  async function onSubmit(values: FormValues<number>): Promise<void> {
     if (!datum) return;
 
-    const crateAlreadyInCart = data.items.find((i) => i.relCrateId === datum.crateId);
+    const crateAlreadyInCart = cartData?.items?.find((i) => i.relCrateId === datum.crateId);
 
     await MarketplaceService.addItemToCart({
       crateId: datum.crateId,
@@ -75,12 +64,9 @@ export default function AddToCartModal() {
       updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
     });
 
-    emitter.emit(APP_EVENTS.DISPATCH_CART_REVALIDATION);
-    refetch();
+    fetchCart();
     resetState();
     modalRef.current?.close();
-
-    if (buyNow) navigation.navigate('ShoppingCart', { screen: 'Root' }); // TODO: confirm this behaviour
   }
 
   return (
@@ -167,22 +153,13 @@ export default function AddToCartModal() {
           </View>
           <View tw="w-full flex-col items-center space-y-2">
             <Button
-              tw="w-11/12"
+              tw="w-11/12 mb-4"
               mode="outlined"
               // eslint-disable-next-line
               onPress={form.handleSubmit(onSubmit as any)}
               disabled={form.formState.isSubmitting}
             >
               {t('Dashboard.Marketplace.addToCart.addToCartButton')}
-            </Button>
-            <Button
-              tw="w-11/12 mb-4"
-              mode="contained"
-              // eslint-disable-next-line
-              onPress={form.handleSubmit(onSubmit as any)}
-              disabled={form.formState.isSubmitting}
-            >
-              {t('Dashboard.Marketplace.addToCart.buyNowButton')}
             </Button>
           </View>
         </View>

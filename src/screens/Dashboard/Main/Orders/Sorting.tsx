@@ -85,7 +85,7 @@ export function SortingMenu(props: SortingMenuProps) {
       </TouchableOpacity>
       <Portal>
         <Modal visible={isModalVisible} onDismiss={() => setIsModalVisible(false)}>
-          <View tw="bg-white rounded-3xl h-auto space-y-2 items-center mx-16 py-1">
+          <View tw="bg-white rounded-3xl h-auto space-y-2 p-4 mx-16">
             <Text variant="TitleBold">{t('Dashboard.SortMenu.title')}</Text>
             <Divider tw="w-full bg-grey-700 my-1" />
             <RadioButton.Group

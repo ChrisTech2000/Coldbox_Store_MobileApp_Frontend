@@ -7,8 +7,7 @@ import { Text } from '#ui/components/Text';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
-import { useApiCall } from '#services/hooks/useAPiCall';
+import { useDashboardStore } from '#stores/dashboard';
 import { GetAllCropsResponse } from '#types/api.responses';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
@@ -57,16 +56,14 @@ type ExtendedTableProps = {
 
 export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
   const { t } = useTranslationUtils();
+  const crops = useDashboardStore((store) => store.allCrops ?? []);
+
   const { coolingUnitData, configData } = useComparisonData((store) => ({
     coolingUnitData: store.coolingUnitData,
     configData: store.configData,
   }));
 
   const [expanded, setExpanded] = useState<Section | undefined>();
-
-  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
-    defaultData: [],
-  });
 
   const expandTab = useCallback(
     (tab: Section) => {

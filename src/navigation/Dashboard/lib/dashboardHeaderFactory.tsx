@@ -5,9 +5,7 @@ import { Appbar, Badge } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
-import { useApiCall } from '#services/hooks/useAPiCall';
-import MarketplaceService from '#services/MarketplaceService';
-import { useAppEventListener } from '#ui/lib/emitter';
+import useCartStore from '#stores/shoppingCart';
 
 import { useRightDrawerStore } from '../index';
 import type { DashboardMainRoutePaths, DashboardMainRoutes } from '../Main';
@@ -67,22 +65,10 @@ function _buildRightContent(
 export function useDashboardHeader() {
   const { guard } = RBAC.useRBAC();
   const { dispatch, navigate } = useNavigation<NavigationProp<DashboardMainRoutes>>();
-
-  const { data, refetch } = useApiCall(
-    'getCart',
-    MarketplaceService.getCart,
-    {},
-    {
-      defaultData: undefined,
-    }
-  );
+  const cartData = useCartStore((store) => store.cartData);
 
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
-  const cartItemsCount = data?.items?.length ?? 0;
-
-  useAppEventListener('DISPATCH_CART_REVALIDATION', () => {
-    refetch();
-  });
+  const cartItemsCount = cartData?.items?.length ?? 0;
 
   return useCallback(
     (goBackFunc?: () => void): NavigationHeaderProps => {

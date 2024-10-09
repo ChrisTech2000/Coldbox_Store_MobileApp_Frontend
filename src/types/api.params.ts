@@ -441,10 +441,11 @@ export interface GetAvailableListingParams extends JsonObject {
   filterByMaxDistanceInKm?: number;
 }
 
-export interface AddUserBankAccountParams extends JsonObject {
+export interface AddPaystackBankAccountParams extends JsonObject {
   accountType: EBankAccountType;
   bankCode: string;
   accountNumber: string;
   countryCode: string;
   accountName: string;
+  companyId?: number;
 }

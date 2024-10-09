@@ -9,6 +9,9 @@ const en = {
       gu: 'Gujarati',
       fr: 'French',
       pt: 'Portuguese',
+      igbo: 'Igbo',
+      yoruba: 'Yoruba',
+      hausa: 'Hausa',
     },
   },
   gender: {
@@ -94,8 +97,6 @@ const en = {
       PaymentMethods: 'Payment methods',
       Wallet: 'Wallet',
       Transactions: 'Transactions',
-      AddCard: 'Add a Credit Card',
-      EditCard: 'Edit a Credit Card',
       Transaction: '{{id}}',
     },
     checkIn: {
@@ -1125,9 +1126,9 @@ const en = {
     MyOrders: {
       sort: {
         mostRecent: 'Most recent',
+        oldest: 'Oldest',
         date: 'Date',
       },
-      oldest: 'Oldest',
       orderId: 'Order ID',
       cropType: 'Crop Type',
       coolingUnit: 'Cooling Unit',
@@ -1165,6 +1166,9 @@ const en = {
       total: 'Total',
       couponQuestion: 'Have a discount coupon?',
       redeem: 'Redeem code.',
+      redeemCoupon: 'Redeem coupon',
+      couponPlaceholder: 'E.g. 20OFF',
+      discountsApplied: 'Discounts Applied',
       errors: {
         invalid: 'Invalid value',
       },
