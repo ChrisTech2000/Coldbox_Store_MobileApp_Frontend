@@ -1129,6 +1129,7 @@ const en = {
         oldest: 'Oldest',
         date: 'Date',
       },
+      title: 'Order Overview',
       orderId: 'Order ID',
       cropType: 'Crop Type',
       coolingUnit: 'Cooling Unit',

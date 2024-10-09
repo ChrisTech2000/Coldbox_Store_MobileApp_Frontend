@@ -37,7 +37,7 @@ export default function OrderPickupMethod({ coolingUnitsIds }: OrderPickupMethod
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const coolingUnits = useMemo(() => {
-    return allCoolingUnits?.filter((cu) => coolingUnitsIds.includes(cu.id));
+    return allCoolingUnits?.filter((cu) => coolingUnitsIds?.includes(cu.id));
   }, [coolingUnitsIds, allCoolingUnits]);
 
   const handleValueChange = useCallback((coolingUnitId: number, value: EPickUpMethod) => {

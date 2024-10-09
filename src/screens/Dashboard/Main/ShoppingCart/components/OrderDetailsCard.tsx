@@ -26,8 +26,8 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
 
   return (
     <React.Fragment>
-      <View tw="flex-col space-y-5">
-        <Text tw="text-base text-green-primary font-bold">{props.heading}</Text>
+      <View tw="flex-col space-y-1">
+        <Text tw="text-base">{props.heading}</Text>
         <View tw="flex-col border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
           <View tw="flex-row items-center justify-between h-8">
             <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.produce')}</Text>
