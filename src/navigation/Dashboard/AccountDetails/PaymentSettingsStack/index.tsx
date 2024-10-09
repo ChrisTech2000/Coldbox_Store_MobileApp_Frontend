@@ -12,13 +12,10 @@ import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
-import AddCard from '#screens/Dashboard/AccountDetails/PaymentSettings/AddCard';
 import PaymentMethods from '#screens/Dashboard/AccountDetails/PaymentSettings/PaymentMethods';
 
 export type PaymentSettingsRoutes = {
   Root: undefined;
-  AddCard: undefined;
-  EditCard: undefined;
   TransactionDetails: undefined;
 };
 
@@ -29,8 +26,6 @@ export type PaymentSettingsRouteProps<Path extends PaymentSettingsRoutePaths> =
 
 export const NAVIGATOR_HEADERS: Record<PaymentSettingsRoutePaths, TranslationPaths> = {
   Root: 'navigation.dashboard.PaymentMethods',
-  AddCard: 'navigation.dashboard.AddCard',
-  EditCard: 'navigation.dashboard.EditCard',
   TransactionDetails: 'navigation.dashboard.Transaction',
 };
 
@@ -63,7 +58,6 @@ export default function PaymentSettings() {
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={PaymentMethods} />
-      <Stack.Screen name="AddCard" component={AddCard} />
     </Stack.Navigator>
   );
 }

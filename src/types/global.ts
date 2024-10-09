@@ -695,6 +695,12 @@ export enum EOrderStatus {
   CANCELLED = 'cancelled',
 }
 
+export enum EPickUpMethod {
+  PICK_UP_SAME_DAY = 'pick-up-same-day',
+  KEEP_IN_STORAGE = 'keep-in-storage',
+  DELIVERY = 'delivery',
+}
+
 //////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',

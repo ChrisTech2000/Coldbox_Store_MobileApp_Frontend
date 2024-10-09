@@ -53,6 +53,7 @@ const en = {
       RegisteredEmployee: 'Registered Employee',
       AddRegisteredEmployee: 'Add Registered Employee',
       RegisteredEmployeeDetails: 'Registered Employee Details',
+      DeliveryContacts: 'Delivery Contacts',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -593,6 +594,14 @@ const en = {
       },
     },
     Management: {
+      Delivery: {
+        companyName: 'Company name',
+        companyNamePlaceholder: 'Insert company name',
+        contactName: 'Contact name',
+        contactNamePlaceholder: 'Insert contact name',
+        phoneNumber: 'Phone number',
+        phoneNumberPlaceholder: 'Insert phone number',
+      },
       Location: {
         emptyState: 'No locations added yet. Click on the + sign to add one.',
         text: {
@@ -1129,6 +1138,7 @@ const en = {
         oldest: 'Oldest',
         date: 'Date',
       },
+      title: 'Order Overview',
       orderId: 'Order ID',
       cropType: 'Crop Type',
       coolingUnit: 'Cooling Unit',

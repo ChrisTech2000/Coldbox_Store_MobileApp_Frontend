@@ -1,8 +1,7 @@
 import { CurrencyStandardization } from 'currency-format-utils';
-import React, { useRef } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
-import { Divider, IconButton, Portal } from 'react-native-paper';
+import { Divider, IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
@@ -17,7 +16,6 @@ type OrderDetailsCardProps = {
   subtotal: number;
   discount: number;
   coolingFees: number;
-  paymentFees: number;
   total: number;
   heading: string;
   totalLabel: string;
@@ -25,12 +23,11 @@ type OrderDetailsCardProps = {
 
 export default function OrderDetailsCard(props: OrderDetailsCardProps) {
   const { t } = useTranslationUtils();
-  const modalRef = useRef<Modalize>(null);
 
   return (
     <React.Fragment>
-      <View tw="flex-col space-y-5">
-        <Text tw="text-base text-green-primary font-bold">{props.heading}</Text>
+      <View tw="flex-col space-y-1">
+        <Text tw="text-base">{props.heading}</Text>
         <View tw="flex-col border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
           <View tw="flex-row items-center justify-between h-8">
             <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.produce')}</Text>
@@ -79,18 +76,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
 
           <View tw="flex-row items-center justify-between h-8">
             <View tw="flex-row items-center space-x-1">
-              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.fees')}</Text>
-              <IconButton
-                tw="p-0 m-0"
-                icon="information-outline"
-                size={17}
-                iconColor={colors.gray[600]}
-                containerColor={colors.transparent}
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  modalRef.current?.open();
-                }}
-              />
+              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.marketFees')}</Text>
             </View>
 
             <View tw="flex-row items-center space-x-1">
@@ -98,7 +84,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               <Text tw="text-base">
                 {CurrencyStandardization.currencyCode({
                   code: 'NGN', // TODO: get value from somewhere
-                  value: props.paymentFees + props.coolingFees,
+                  value: props.coolingFees,
                 }).getValueFormated()}
               </Text>
             </View>
@@ -120,7 +106,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
         </View>
       </View>
 
-      <Portal>
+      {/* <Portal> // TODO: delete if current impl is accepted
         <Modalize
           ref={modalRef}
           modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
@@ -157,7 +143,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
             </View>
           </View>
         </Modalize>
-      </Portal>
+      </Portal> */}
     </React.Fragment>
   );
 }
