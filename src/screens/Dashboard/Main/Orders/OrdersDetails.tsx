@@ -1,5 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   GestureResponderEvent,
@@ -9,8 +9,9 @@ import {
   View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { ActivityIndicator, Divider } from 'react-native-paper';
+import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
+import { CurrencyStandardization } from 'currency-format-utils';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -29,18 +30,19 @@ import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
-import { EOrderStatus } from '#types/global';
+import { EOrderStatus, EPickUpMethod, EPricingType } from '#types/global';
 
 import DeliveryInformationBottomSheet, {
   type DeliveryInformationDatum,
 } from '../ShoppingCart/components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
-import { CurrencyStandardization } from 'currency-format-utils';
+import useCartStore from '#stores/shoppingCart';
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const scrollRef = useRef<ScrollView>(null);
+  const coolingUnits = useCartStore((store) => store.allCoolingUnits);
 
   const [showButton, setShowButton] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -62,6 +64,30 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
       defaultData: [],
     }
   );
+
+  const orderDataByCoolingUnit = useMemo(() => {
+    if (!data?.items) return [];
+
+    const groupedData = data.items.reduce(
+      (acc, item) => {
+        const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
+
+        if (!coolingUnit) return acc;
+
+        if (!acc[coolingUnit.name]) {
+          acc[coolingUnit.name] = [];
+        }
+        acc[coolingUnit.name].push(item);
+        return acc;
+      },
+      {} as Record<string, typeof data.items>
+    );
+
+    return Object.entries(groupedData).map(([coolingUnit, items]) => ({
+      coolingUnit,
+      items,
+    }));
+  }, [data, coolingUnits]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;
@@ -117,50 +143,98 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         onScroll={handleScroll}
         ref={scrollRef}
       >
-        <View tw="pb-32 space-y-6">
-          <View>
-            <OrderDetailsCard
-              heading={t('Dashboard.ShoppingCart.orderHeader')}
-              totalLabel={t('Dashboard.ShoppingCart.total')}
-              produceWeight={data.items?.reduce(
-                (acc, curr) => (acc += curr.orderedProduceWeight),
-                0
-              )}
-              subtotal={data.totalProduceAmount}
-              discount={data.totalDiscountAmount}
-              coolingFees={data.totalCoolingFeesAmount}
-              paymentFees={data.totalPaymentFeesAmount}
-              total={data.totalAmount}
-            />
-          </View>
+        <View tw="pb-32 space-y-4">
+          <Text tw="text-base text-green-primary font-bold">{t('Dashboard.MyOrders.title')}</Text>
+          <FlatList
+            data={orderDataByCoolingUnit}
+            keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => {
+              return (
+                <View tw="mb-4">
+                  <OrderDetailsCard
+                    heading={item.coolingUnit}
+                    totalLabel={t('Dashboard.ShoppingCart.total')}
+                    produceWeight={item?.items?.reduce(
+                      (acc, curr) => (acc += curr.orderedProduceWeight),
+                      0
+                    )}
+                    subtotal={item?.items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
+                    discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
+                    coolingFees={item?.items?.reduce(
+                      (acc, curr) => (acc += curr.coolingFeesAmount),
+                      0
+                    )}
+                    total={item?.items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
+                  />
+                </View>
+              );
+            }}
+          />
 
           <View tw="flex-col space-y-5">
             <Text tw="text-base text-green-primary font-bold">
               {t('Dashboard.ShoppingCart.pickupMethods')}
             </Text>
-            <View tw="border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
-              <View tw="flex-row items-center justify-between">
-                <Text tw="text-base font-bold">Delivery</Text>
-                <Touchable
-                  tw="p-2"
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, [
-                      {
-                        companyName: 'Mosano',
-                        phoneNumber: '+0123456789',
-                      },
-                      {
-                        companyName: 'Lorem Ipsum',
-                        phoneNumber: '+0123456789',
-                      },
-                    ] satisfies Array<DeliveryInformationDatum>);
-                  }}
-                >
-                  <Text tw="text-base text-green-primary">View contact(s)</Text>
-                </Touchable>
-              </View>
-            </View>
+
+            {data.pickupDetails?.length ? (
+              <FlatList
+                data={data.pickupDetails}
+                keyExtractor={(item, index) => `cooling-unit-${item.coolingUnitId}-dm-${index}`}
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => {
+                  const coolingUnit = coolingUnits?.find((cu) => cu.id === item.coolingUnitId);
+
+                  return (
+                    <View tw="mb-4">
+                      <Text tw="text-base">{coolingUnit?.name ?? ''}</Text>
+                      <View tw="flex flex-row items-center justify-between mt-1 p-4 border border-gray-300 rounded-xl">
+                        <Text tw="text-base">
+                          {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
+                            ? t('Dashboard.ShoppingCart.pickUpToday')
+                            : ''}
+                          {item.pickupMethod === EPickUpMethod.DELIVERY
+                            ? t('Dashboard.ShoppingCart.delivery')
+                            : ''}
+                          {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
+                            ? t(
+                                coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+                                  ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
+                                  : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
+                                {
+                                  price: CurrencyStandardization.currencyCode({
+                                    code: 'NGN', // TODO: get value from somewhere
+                                    value: coolingUnit?.commonPricingType.value ?? 0,
+                                  }).getValueFormated(),
+                                }
+                              )
+                            : ''}
+                        </Text>
+                        {item.pickupMethod === EPickUpMethod.DELIVERY ? (
+                          <Touchable
+                            onPress={(evt) => {
+                              evt.stopPropagation();
+                              emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, [
+                                {
+                                  companyName: 'Lorem Ipsum', // TODO: send actual data
+                                  phoneNumber: '+0123456789',
+                                },
+                              ] satisfies Array<DeliveryInformationDatum>);
+                            }}
+                          >
+                            <Text tw="text-base text-green-primary">
+                              {t('Dashboard.ShoppingCart.viewContacts')}
+                            </Text>
+                          </Touchable>
+                        ) : null}
+                      </View>
+                    </View>
+                  );
+                }}
+              />
+            ) : null}
           </View>
 
           <View tw="space-y-5">
@@ -206,6 +280,34 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               }}
             />
           </View>
+
+          <View>
+            <Divider tw="bg-zinc-400 my-3" />
+
+            <View tw="flex-row items-center justify-between h-8">
+              <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
+              <View tw="flex-row items-center space-x-1">
+                <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
+                <Text tw="text-base">
+                  {CurrencyStandardization.currencyCode({
+                    code: 'NGN', // TODO: get value from somewhere
+                    value: data.totalPaymentFeesAmount,
+                  }).getValueFormated()}
+                </Text>
+              </View>
+            </View>
+
+            <View tw="flex-row items-center justify-between">
+              <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
+              <Text tw="text-lg">
+                {CurrencyStandardization.currencyCode({
+                  code: 'NGN', // TODO: get value from somewhere
+                  value: data.totalAmount,
+                }).getValueFormated()}
+              </Text>
+            </View>
+          </View>
+
           {data.status === EOrderStatus.PAYMENT_PENDING ? (
             <Button
               tw="w-5/6 self-center my-4"

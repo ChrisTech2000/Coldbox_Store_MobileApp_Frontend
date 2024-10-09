@@ -110,4 +110,5 @@ export enum EMarketplaceEndpoints {
   APPLY_COUPON = 'marketplace/buyer/cart/apply-coupon/',
   CLEAR_COUPON = 'marketplace/buyer/cart/clear-coupon/',
   PAY_WITH_PAYSTACK = 'marketplace/buyer/orders/:order/pay-with-paystack/',
+  SET_PICKUP_DETAILS = 'marketplace/buyer/cart/set-pickup-details/',
 }
