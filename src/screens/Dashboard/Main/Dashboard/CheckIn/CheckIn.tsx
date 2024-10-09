@@ -204,13 +204,13 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     if (typeof result !== 'object') return;
 
     if ('movement' in result) {
-      const results = await Promise.all(
-        processMarketplaceCrateListing(produces, result.produces).map(
+      const processedCrateListing = processMarketplaceCrateListing(produces, result.produces);
+      await Promise.all(
+        processedCrateListing.map(
           async ({ crateIds, pricePerKg }) =>
             await Marketplace.upsertListedCrate({ crateIds, producePricePerKg: pricePerKg })
         )
       );
-      console.log(results); // TODO -> get data so that I can add data types to it
     }
 
     resetCheckInStore();

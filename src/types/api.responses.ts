@@ -484,6 +484,19 @@ export interface GetAvailableListingResponse {
   };
 }
 
+export interface UpdateListedCrateResponse {
+  id: number;
+  movement: number;
+  ownerUser: number;
+  ownerOnBehalfOfCompany: number | null; // if it's null the owner is the user, otherwise the owner is the company
+  has_dt: string;
+  produces: Array<{
+    id: number;
+    cropId: number;
+    cratesIds: Array<number>;
+  }>;
+}
+
 export interface GetAvailableBanksResponse {
   banks: Array<Bank>;
 }

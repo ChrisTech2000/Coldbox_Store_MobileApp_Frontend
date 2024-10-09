@@ -43,7 +43,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
     }
   );
 
-  const crates = produce.crates.length;
+  const crates = produce.checkedInCrates.length;
 
   const copyToClipboard = useCallback(
     (text: string) => {
@@ -54,9 +54,9 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   );
 
   const pricing = useMemo(() => {
-    const pricing = produce.crates[0].pricing[0];
+    const pricing = produce.checkedInCrates[0].pricing[0];
     const metric =
-      produce.crates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
+      produce.checkedInCrates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
         ? produce.cratesCombinedWeight
         : produce.cratesAmount;
 
@@ -76,8 +76,8 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
 
   const dailyPrice = useMemo(() => {
     return (
-      produce.crates[0].pricing[0].dailyRate *
-      (produce.crates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
+      produce.checkedInCrates[0].pricing[0].dailyRate *
+      (produce.checkedInCrates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
         ? produce.cratesCombinedWeight
         : produce.cratesAmount)
     );
@@ -99,12 +99,12 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       {
         key: 'numberOfCrates',
         label: t('Dashboard.ProduceDetails.numberOfCrates'),
-        value: produce.crates.length,
+        value: produce.checkedInCrates.length,
       },
       {
         key: 'crateIds',
         label: t('Dashboard.ProduceDetails.crateIds'),
-        value: produce.crates
+        value: produce.checkedInCrates
           .map((crate) => crate.tag)
           .filter(Boolean)
           .join(', '),
@@ -129,7 +129,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         label: t('Dashboard.ProduceDetails.plannedDays'),
         value: produce.plannedDays,
       },
-      produce.crates[0].pricing[0].pricingType === EPricingType.PERIODICITY
+      produce.checkedInCrates[0].pricing[0].pricingType === EPricingType.PERIODICITY
         ? {
             key: 'pricePerDay',
             label: t('Dashboard.ProduceDetails.pricePerDay'),
@@ -287,7 +287,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                               companyCurrency: currency,
                               currencySymbol:
                                 currencies.find((c) => c.name === currency)?.symbol ?? '',
-                              crates: produce.crates,
+                              crates: produce.checkedInCrates,
                             });
                           },
                         }
@@ -302,7 +302,11 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       </ScrollView>
 
       <View tw="absolute left-0 bottom-0 bg-white border-t border-zinc-300 w-full h-20 items-center justify-center">
-        <CheckoutButtonRedirect coolingUnit={coolingUnit} farmer={farmer} crates={produce.crates} />
+        <CheckoutButtonRedirect
+          coolingUnit={coolingUnit}
+          farmer={farmer}
+          crates={produce.checkedInCrates}
+        />
       </View>
     </React.Fragment>
   );

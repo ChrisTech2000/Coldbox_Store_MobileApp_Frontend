@@ -2,9 +2,9 @@ import { type DashboardProduce, ECoolingUnitMetric, EPricingType } from '#types/
 import { Translator } from '#i18n/utils';
 
 export function generateData(produce: DashboardProduce, t: Translator) {
-  const pricing = produce.crates[0].pricing[0];
+  const pricing = produce.checkedInCrates[0].pricing[0];
   const metric =
-    produce.crates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
+    produce.checkedInCrates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
       ? produce.cratesCombinedWeight
       : produce.cratesAmount;
 
@@ -25,12 +25,12 @@ export function generateData(produce: DashboardProduce, t: Translator) {
     {
       id: 'crates',
       label: t('Dashboard.ProduceDetails.numberOfCrates'),
-      value: produce.crates.length,
+      value: produce.checkedInCrates.length,
     },
     {
       id: 'crateIds',
       label: t('Dashboard.ProduceDetails.crateIds'),
-      value: produce.crates.map((crate) => crate.id).join(', '),
+      value: produce.checkedInCrates.map((crate) => crate.id).join(', '),
     },
     {
       id: 'weight',
@@ -52,11 +52,11 @@ export function generateData(produce: DashboardProduce, t: Translator) {
       label: t('Dashboard.ProduceDetails.plannedDays'),
       value: produce.plannedDays,
     },
-    produce.crates[0].pricing[0].pricingType === EPricingType.PERIODICITY
+    produce.checkedInCrates[0].pricing[0].pricingType === EPricingType.PERIODICITY
       ? {
           id: 'pricePerDay',
           label: t('Dashboard.ProduceDetails.pricePerDay'),
-          value: produce.crates[0].pricing[0].dailyRate,
+          value: produce.checkedInCrates[0].pricing[0].dailyRate,
         }
       : {},
     {
