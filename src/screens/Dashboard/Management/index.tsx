@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -34,109 +34,211 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const coolingUnitsColor = disabledCoolingUnits ? colors.gray[400] : colors.gray[800];
 
   return (
-    <View tw="flex-1 justify-start">
-      <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUsers">
-        <List.Item
-          title={t('navigation.management.CoolingUsers')}
-          onPress={() => {
-            navigation.navigate('CoolingUsers');
-          }}
-          left={(props) => <List.Icon {...props} icon="account-multiple-outline" />}
-          right={(props) => <List.Icon {...props} icon="chevron-right" />}
-        />
-        <Divider />
-      </RBAC.ProtectedResource>
+    <ScrollView tw="flex-1 p-4" showsVerticalScrollIndicator={false}>
+      <View tw="space-y-3">
+        <Text tw="text-base text-green-primary font-bold">
+          {t('Dashboard.AccountDetails.sections.details')}
+        </Text>
 
-      <RBAC.ProtectedResource action="NAVIGATE" subject="CompanyDetails">
-        <List.Item
-          title={t('navigation.management.CompanyDetails')}
-          onPress={() => navigation.navigate('CompanyDetails')}
-          left={(props) => <List.Icon {...props} icon="information-outline" />}
-          right={(props) => <List.Icon {...props} icon="chevron-right" />}
-        />
-        <Divider />
-      </RBAC.ProtectedResource>
+        <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUsers">
+          <List.Item
+            tw="px-0 py-2"
+            title={undefined}
+            left={() => (
+              <Text tw="text-base w-[80%]">{t('navigation.management.CoolingUsers')}</Text>
+            )}
+            onPress={() => {
+              navigation.navigate('CoolingUsers');
+            }}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+          <Divider />
+        </RBAC.ProtectedResource>
 
-      <RBAC.ProtectedResource action="NAVIGATE" subject="Locations">
-        <List.Item
-          title={t('navigation.management.Locations')}
-          onPress={() => {
-            navigation.navigate('Locations');
-          }}
-          left={(props) => <List.Icon {...props} icon="map-marker" />}
-          right={(props) => <List.Icon {...props} icon="chevron-right" />}
-        />
-        <Divider />
-      </RBAC.ProtectedResource>
+        <RBAC.ProtectedResource action="NAVIGATE" subject="CompanyDetails">
+          <List.Item
+            tw="px-0 py-2"
+            title={undefined}
+            left={() => (
+              <Text tw="text-base w-[80%]">{t('navigation.management.CompanyDetails')}</Text>
+            )}
+            onPress={() => navigation.navigate('CompanyDetails')}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+          <Divider />
+        </RBAC.ProtectedResource>
 
-      <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUnits">
-        <List.Item
-          title={t('navigation.management.CoolingUnits')}
-          description={
-            disabledCoolingUnits ? t('navigation.management.DisabledCoolingUnitsDescription') : ''
-          }
-          disabled={disabledCoolingUnits}
-          onPress={() => {
-            navigation.navigate('CoolingUnits');
-          }}
-          left={(props) => (
-            <List.Icon {...props} icon="coolant-temperature" color={coolingUnitsColor} />
-          )}
-          right={(props) => <List.Icon {...props} icon="chevron-right" color={coolingUnitsColor} />}
-          titleStyle={{ color: coolingUnitsColor }}
-          descriptionStyle={{ color: coolingUnitsColor }}
-        />
-        <Divider />
-      </RBAC.ProtectedResource>
+        <RBAC.ProtectedResource action="NAVIGATE" subject="Locations">
+          <List.Item
+            tw="px-0 py-2"
+            title={undefined}
+            left={() => <Text tw="text-base w-[80%]">{t('navigation.management.Locations')}</Text>}
+            onPress={() => {
+              navigation.navigate('Locations');
+            }}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+          <Divider />
+        </RBAC.ProtectedResource>
 
-      <RBAC.ProtectedResource action="NAVIGATE" subject="Operators">
-        <List.Item
-          title={t('navigation.management.Operators')}
-          onPress={() => {
-            navigation.navigate('Operators');
-          }}
-          left={(props) => <List.Icon {...props} icon="account-outline" />}
-          right={(props) => <List.Icon {...props} icon="chevron-right" />}
-        />
-        <Divider />
-      </RBAC.ProtectedResource>
+        <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUnits">
+          <List.Item
+            tw="px-0 py-2"
+            title={disabledCoolingUnits ? t('navigation.management.CoolingUnits') : undefined}
+            description={
+              disabledCoolingUnits ? t('navigation.management.DisabledCoolingUnitsDescription') : ''
+            }
+            disabled={disabledCoolingUnits}
+            onPress={() => {
+              navigation.navigate('CoolingUnits');
+            }}
+            left={() =>
+              disabledCoolingUnits ? null : (
+                <Text tw="text-base w-[80%]">{t('navigation.management.CoolingUnits')}</Text>
+              )
+            }
+            right={(props) => (
+              <List.Icon {...props} icon="chevron-right" color={coolingUnitsColor} />
+            )}
+            titleStyle={{ color: coolingUnitsColor }}
+            descriptionStyle={{ color: coolingUnitsColor }}
+          />
+          <Divider />
+        </RBAC.ProtectedResource>
 
-      <RBAC.ProtectedResource action="NAVIGATE" subject="RegisteredEmployees">
-        <List.Item
-          title={t('navigation.management.RegisteredEmployee')}
-          onPress={() => {
-            navigation.navigate('RegisteredEmployee');
-          }}
-          left={(props) => <List.Icon {...props} icon="account-outline" />}
-          right={(props) => <List.Icon {...props} icon="chevron-right" />}
-        />
-        <Divider />
-      </RBAC.ProtectedResource>
+        <RBAC.ProtectedResource action="NAVIGATE" subject="Operators">
+          <List.Item
+            tw="px-0 py-2"
+            title={undefined}
+            left={() => <Text tw="text-base w-[80%]">{t('navigation.management.Operators')}</Text>}
+            onPress={() => {
+              navigation.navigate('Operators');
+            }}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+          <Divider />
+        </RBAC.ProtectedResource>
 
-      <RBAC.ProtectedResource action="NAVIGATE" subject="RevenueAnalysis">
-        <List.Item
-          title={t('navigation.management.RevenueAnalysis')}
-          onPress={() => {
-            navigation.navigate('RevenueAnalysis');
-          }}
-          left={(props) => <List.Icon {...props} icon="cash-multiple" />}
-          right={(props) => <List.Icon {...props} icon="chevron-right" />}
-        />
-        <Divider />
-      </RBAC.ProtectedResource>
+        <RBAC.ProtectedResource action="NAVIGATE" subject="RegisteredEmployees">
+          <List.Item
+            tw="px-0 py-2"
+            title={undefined}
+            left={() => (
+              <Text tw="text-base w-[80%]">{t('navigation.management.RegisteredEmployee')}</Text>
+            )}
+            onPress={() => {
+              navigation.navigate('RegisteredEmployee');
+            }}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+          <Divider />
+        </RBAC.ProtectedResource>
 
-      <RBAC.ProtectedResource action="NAVIGATE" subject="UsageAnalysis">
-        <List.Item
-          title={t('navigation.management.UsageAnalysis')}
-          onPress={() => {
-            navigation.navigate('UsageAnalysis');
-          }}
-          left={(props) => <List.Icon {...props} icon="archive-arrow-up-outline" />}
-          right={(props) => <List.Icon {...props} icon="chevron-right" />}
-        />
-        <Divider />
+        <RBAC.ProtectedResource action="NAVIGATE" subject="RevenueAnalysis">
+          <List.Item
+            tw="px-0 py-2"
+            title={undefined}
+            left={() => (
+              <Text tw="text-base w-[80%]">{t('navigation.management.RevenueAnalysis')}</Text>
+            )}
+            onPress={() => {
+              navigation.navigate('RevenueAnalysis');
+            }}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+          <Divider />
+        </RBAC.ProtectedResource>
+
+        <RBAC.ProtectedResource action="NAVIGATE" subject="UsageAnalysis">
+          <List.Item
+            tw="px-0 py-2"
+            title={undefined}
+            left={() => (
+              <Text tw="text-base w-[80%]">{t('navigation.management.UsageAnalysis')}</Text>
+            )}
+            onPress={() => {
+              navigation.navigate('UsageAnalysis');
+            }}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+          <Divider />
+        </RBAC.ProtectedResource>
+      </View>
+
+      <RBAC.ProtectedResource action="SET" subject="CompanySellerSettings">
+        <View tw="space-y-3 mt-6">
+          <Text tw="text-base text-green-primary font-bold">
+            {t('Dashboard.AccountDetails.sections.sellerSettings')}
+          </Text>
+          <View>
+            <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
+              <List.Item
+                tw="px-0 py-2"
+                title={undefined}
+                left={() => (
+                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
+                )}
+                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  props.navigation.navigate('PayoutSettings');
+                }}
+              />
+              <Divider tw="bg-gray-400" />
+            </RBAC.ProtectedResource>
+          </View>
+
+          <View>
+            <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
+              <View>
+                <List.Item
+                  tw="p-0 pb-2"
+                  title={undefined}
+                  left={() => <Text tw="text-base w-[80%]">Discount coupons</Text>}
+                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    props.navigation.navigate('CouponStack');
+                  }}
+                />
+                <Divider tw="bg-gray-400 mb-2" />
+              </View>
+            </RBAC.ProtectedResource>
+            <View>
+              <List.Item
+                tw="p-0 pb-2"
+                title={undefined}
+                left={() => (
+                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.ContactsSharing')}</Text>
+                )}
+                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  props.navigation.navigate('ContactsSharing');
+                }}
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
+          </View>
+
+          <RBAC.ProtectedResource action="NAVIGATE" subject="DeliveryContacts">
+            <List.Item
+              tw="px-0 py-2"
+              title={undefined}
+              left={() => (
+                <Text tw="text-base w-[80%]">{t('navigation.management.DeliveryContacts')}</Text>
+              )}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                props.navigation.navigate('DeliveryContacts');
+              }}
+            />
+            <Divider tw="bg-gray-400" />
+          </RBAC.ProtectedResource>
+        </View>
       </RBAC.ProtectedResource>
-    </View>
+    </ScrollView>
   );
 }
 

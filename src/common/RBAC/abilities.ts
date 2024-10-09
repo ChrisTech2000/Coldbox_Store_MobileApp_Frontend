@@ -39,18 +39,19 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.NAVIGATE, 'RegisteredEmployees');
         can(PERMISSION_KINDS.NAVIGATE, 'RevenueAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'UsageAnalysis');
+        can(PERMISSION_KINDS.NAVIGATE, 'DeliveryContacts');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CoolingUsers');
         cannot(PERMISSION_KINDS.NAVIGATE, 'EditSellingSettings');
-        cannot(PERMISSION_KINDS.NAVIGATE, 'ManageCouponsSettings');
+        can(PERMISSION_KINDS.NAVIGATE, 'ManageCouponsSettings');
         //
         // actions
         // scope: account details
         can(PERMISSION_KINDS.SET, 'FormEmailField');
         can(PERMISSION_KINDS.SET, 'PayoutSettings');
+        can(PERMISSION_KINDS.SET, 'CompanySellerSettings');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
-        cannot(PERMISSION_KINDS.SET, 'BuyerSettings');
-
+        cannot(PERMISSION_KINDS.SET, 'UserSellerSettings');
         // scope: cooling units
         can(PERMISSION_KINDS.SET, 'Temperatures');
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
@@ -77,17 +78,20 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         cannot(PERMISSION_KINDS.NAVIGATE, 'CoolingUnits');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Operators');
         cannot(PERMISSION_KINDS.NAVIGATE, 'RegisteredEmployees');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'DeliveryContacts');
         can(PERMISSION_KINDS.NAVIGATE, 'RevenueAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'UsageAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'CoolingUsers');
+        can(PERMISSION_KINDS.NAVIGATE, 'DeliveryContacts');
         //
         // actions
         // scope: account details
         cannot(PERMISSION_KINDS.SET, 'FormEmailField');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
+        cannot(PERMISSION_KINDS.SET, 'CompanySellerSettings');
         can(PERMISSION_KINDS.SET, 'PayoutSettings');
-        can(PERMISSION_KINDS.SET, 'BuyerSettings');
+        can(PERMISSION_KINDS.SET, 'UserSellerSettings');
         // scope: cooling units
         can(PERMISSION_KINDS.SET, 'Temperatures');
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
@@ -115,7 +119,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.VIEW, 'FarmerFields');
         can(PERMISSION_KINDS.STORE, 'FarmerDetails');
         can(PERMISSION_KINDS.SET, 'PayoutSettings');
-        can(PERMISSION_KINDS.SET, 'BuyerSettings');
+        can(PERMISSION_KINDS.SET, 'UserSellerSettings');
         // scope: cooling units
         cannot(PERMISSION_KINDS.SET, 'Temperatures');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
