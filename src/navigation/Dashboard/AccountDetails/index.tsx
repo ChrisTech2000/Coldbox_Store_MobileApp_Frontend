@@ -63,7 +63,6 @@ export const NAVIGATOR_HEADERS: Record<AccountDetailsRoutePaths, TranslationPath
   ContactsSharing: 'navigation.dashboard.ContactsSharing',
   CouponStack: undefined,
   PayoutSettings: 'navigation.dashboard.PayoutOptions',
-  //PaymentSettings: undefined,
 };
 
 type ScreenOptions = (props: {
