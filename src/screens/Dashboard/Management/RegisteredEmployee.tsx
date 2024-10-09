@@ -136,4 +136,4 @@ function _propsFactory(
   return props;
 }
 
-export default withSafeArea(RegisteredEmployee);
+export default withSafeArea(RegisteredEmployee, ['bottom'], true);

@@ -154,4 +154,4 @@ function NotificationsDrawerContent(props: Props) {
   );
 }
 
-export default withSafeArea(NotificationsDrawerContent, ['top', 'bottom']);
+export default withSafeArea(NotificationsDrawerContent, ['top', 'bottom'], true);
