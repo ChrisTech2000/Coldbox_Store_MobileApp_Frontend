@@ -49,9 +49,11 @@ export type SetupSchema = {
 
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
   const contextualCrop =
-    'crop' in route.params ? route.params.crop : route.params.contextualProduce.crop;
+    'contextualProduce' in route.params ? route.params.contextualProduce.crop : route.params.crop;
   const contextualAdditionalInfo =
-    'additionalInfo' in route.params ? route.params.additionalInfo : '';
+    'contextualProduce' in route.params
+      ? route.params.contextualProduce?.additionalInfo ?? ''
+      : route.params?.additionalInfo ?? '';
 
   const { company } = useManagementStore();
   const { addProduce, coolingUnit, user, removeProduce } = useCheckInStore();
