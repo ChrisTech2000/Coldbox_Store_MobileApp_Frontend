@@ -1,12 +1,14 @@
+import { useIsFocused } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator, Divider } from 'react-native-paper';
+import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
@@ -16,8 +18,12 @@ import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
+import { EPickUpMethod, EPricingType } from '#types/global';
 
 import AddCouponBottomSheet from './components/AddCouponBottomSheet';
+import DeliveryInformationBottomSheet, {
+  DeliveryInformationDatum,
+} from './components/DeliveryInformationBottomSheet';
 import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
@@ -97,7 +103,6 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                     (acc, curr) => (acc += curr.coolingFeesAmount),
                     0
                   )}
-                  paymentFees={0} // TODO: figure out
                   total={item?.items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
                 />
               </View>
@@ -106,8 +111,67 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
         />
 
         <View>
-          {/** TODO: integrate pickup methods */}
-          <OrderPickupMethod />
+          <OrderPickupMethod
+            coolingUnitsIds={cartData?.items?.flatMap((item) => item.relCoolingUnitId)}
+          />
+
+          {cartData.pickupDetails?.length ? (
+            <FlatList
+              data={cartData.pickupDetails}
+              keyExtractor={(item, index) => `cooling-unit-${item.coolingUnitId}-dm-${index}`}
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => {
+                const coolingUnit = coolingUnits?.find((cu) => cu.id === item.coolingUnitId);
+
+                return (
+                  <View tw="mb-4">
+                    <Text tw="text-base">{coolingUnit?.name ?? ''}</Text>
+                    <View tw="flex flex-row items-center justify-between mt-1 p-4 border border-gray-300 rounded-xl">
+                      <Text tw="text-base">
+                        {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
+                          ? t('Dashboard.ShoppingCart.pickUpToday')
+                          : ''}
+                        {item.pickupMethod === EPickUpMethod.DELIVERY
+                          ? t('Dashboard.ShoppingCart.delivery')
+                          : ''}
+                        {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
+                          ? t(
+                              coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+                                ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
+                                : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
+                              {
+                                price: CurrencyStandardization.currencyCode({
+                                  code: 'NGN', // TODO: get value from somewhere
+                                  value: coolingUnit?.commonPricingType.value ?? 0,
+                                }).getValueFormated(),
+                              }
+                            )
+                          : ''}
+                      </Text>
+                      {item.pickupMethod === EPickUpMethod.DELIVERY ? (
+                        <Touchable
+                          onPress={(evt) => {
+                            evt.stopPropagation();
+                            emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, [
+                              {
+                                companyName: 'Lorem Ipsum', // TODO: send actual data
+                                phoneNumber: '+0123456789',
+                              },
+                            ] satisfies Array<DeliveryInformationDatum>);
+                          }}
+                        >
+                          <Text tw="text-base text-green-primary">
+                            {t('Dashboard.ShoppingCart.viewContacts')}
+                          </Text>
+                        </Touchable>
+                      ) : null}
+                    </View>
+                  </View>
+                );
+              }}
+            />
+          ) : null}
         </View>
 
         <View tw="flex-row items-center space-x-1">
@@ -120,6 +184,19 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
         </View>
 
         <View tw="flex-col w-full mt-6">
+          <View tw="flex-row items-center justify-between h-8">
+            <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
+            <View tw="flex-row items-center space-x-1">
+              <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
+              <Text tw="text-base">
+                {CurrencyStandardization.currencyCode({
+                  code: 'NGN', // TODO: get value from somewhere
+                  value: cartData.totalPaymentFeesAmount,
+                }).getValueFormated()}
+              </Text>
+            </View>
+          </View>
+
           <View tw="flex-row items-center justify-between">
             <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
             <Text tw="text-lg">
@@ -148,6 +225,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
       <AddCouponBottomSheet />
       <ListCouponsBottomSheet />
+      <_PortalsWrapper />
     </ScrollView>
   );
 }
@@ -160,3 +238,13 @@ export default withSafeArea(
   ['bottom'],
   true
 );
+
+function _PortalsWrapper() {
+  const isFocused = useIsFocused();
+  if (!isFocused) return null;
+  return (
+    <React.Fragment>
+      <DeliveryInformationBottomSheet />
+    </React.Fragment>
+  );
+}

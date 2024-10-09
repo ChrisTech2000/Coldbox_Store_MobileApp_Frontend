@@ -1,13 +1,18 @@
 import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
-import type { AddItemToCartParams, AddPaystackBankAccountParams } from '#types/api.params';
+import type {
+  AddItemToCartParams,
+  AddPaystackBankAccountParams,
+  SetPickUpDetailsParams,
+} from '#types/api.params';
 import type {
   ApplyCouponResponse,
   CheckoutWithPaystackResponse,
   GetAllOrdersResponse,
   GetAvailableBanksResponse,
   GetCartResponse,
+  SetPickUpDetailsResponse,
 } from '#types/api.responses';
 import type { BankAccount } from '#types/global';
 
@@ -159,6 +164,24 @@ class MarketplaceService extends HttpClient {
       const { data } = await this.post<ApplyCouponResponse>(EMarketplaceEndpoints.CLEAR_COUPON, {
         couponCode,
       });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public setPickUpMethods = async (
+    params: SetPickUpDetailsParams
+  ): Promise<SetPickUpDetailsResponse> => {
+    try {
+      const { data } = await this.post<SetPickUpDetailsResponse>(
+        EMarketplaceEndpoints.SET_PICKUP_DETAILS,
+        {
+          ...params,
+        }
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

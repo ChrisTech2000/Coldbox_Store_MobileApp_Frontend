@@ -83,7 +83,6 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 subtotal={data.totalProduceAmount}
                 discount={0} // TODO: implement discount coupons
                 coolingFees={data.totalCoolingFeesAmount}
-                paymentFees={data.totalPaymentFeesAmount}
                 total={data.totalAmount}
               />
             </View>

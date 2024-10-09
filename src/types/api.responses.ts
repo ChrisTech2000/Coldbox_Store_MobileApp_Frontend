@@ -5,6 +5,7 @@ import {
   EMovementType,
   EOrderStatus,
   EPaymentType,
+  EPickUpMethod,
   ERoles,
   ESellingLocation,
   type CommodityInfo,
@@ -446,6 +447,10 @@ export interface GetCartResponse {
   totalDiscountAmount: number;
   totalPaymentFeesAmount: number;
   totalProduceAmount: number;
+  pickupDetails: Array<{
+    coolingUnitId: number;
+    pickupMethod: EPickUpMethod;
+  }>;
 }
 
 export interface GetAllOrdersResponse extends GetCartResponse {
@@ -492,3 +497,5 @@ export interface ApplyCouponResponse {
   message: string;
   cart: GetCartResponse;
 }
+
+export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}

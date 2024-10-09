@@ -129,7 +129,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               subtotal={data.totalProduceAmount}
               discount={data.totalDiscountAmount}
               coolingFees={data.totalCoolingFeesAmount}
-              paymentFees={data.totalPaymentFeesAmount}
               total={data.totalAmount}
             />
           </View>
