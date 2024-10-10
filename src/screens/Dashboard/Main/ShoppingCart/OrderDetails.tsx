@@ -21,9 +21,7 @@ import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
 
 import AddCouponBottomSheet from './components/AddCouponBottomSheet';
-import DeliveryInformationBottomSheet, {
-  DeliveryInformationDatum,
-} from './components/DeliveryInformationBottomSheet';
+import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
@@ -153,12 +151,9 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                         <Touchable
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, [
-                              {
-                                companyName: 'Lorem Ipsum', // TODO: send actual data
-                                phoneNumber: '+0123456789',
-                              },
-                            ] satisfies Array<DeliveryInformationDatum>);
+                            emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, {
+                              coolingUnitId: item.coolingUnitId,
+                            });
                           }}
                         >
                           <Text tw="text-base text-green-primary">

@@ -26,9 +26,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
 
-import DeliveryInformationBottomSheet, {
-  DeliveryInformationDatum,
-} from './components/DeliveryInformationBottomSheet';
+import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 
 function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
@@ -178,12 +176,10 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                                 evt.stopPropagation();
                                 emitter.emit(
                                   APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION,
-                                  [
-                                    {
-                                      companyName: 'Lorem Ipsum', // TODO: send actual data
-                                      phoneNumber: '+0123456789',
-                                    },
-                                  ] satisfies Array<DeliveryInformationDatum>
+                                  {
+                                    orderId: props.route.params.orderId,
+                                    coolingUnitId: item.coolingUnitId,
+                                  }
                                 );
                               }}
                             >

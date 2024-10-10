@@ -12,6 +12,7 @@ import type {
   GetAllOrdersResponse,
   GetAvailableBanksResponse,
   GetCartResponse,
+  GetDeliveryContactsResponse,
   SetPickUpDetailsResponse,
 } from '#types/api.responses';
 import type { BankAccount } from '#types/global';
@@ -122,6 +123,33 @@ class MarketplaceService extends HttpClient {
   public getAvailableBanks = async (): Promise<GetAvailableBanksResponse> => {
     try {
       const { data } = await this.get<GetAvailableBanksResponse>(EMarketplaceEndpoints.GET_BANKS);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCartDeliveryContacts = async (): Promise<GetDeliveryContactsResponse> => {
+    try {
+      const { data } = await this.get<GetDeliveryContactsResponse>(
+        EMarketplaceEndpoints.GET_CART_DELIVERY_CONTACTS
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getOrderDeliveryContacts = async (
+    orderId: number
+  ): Promise<GetDeliveryContactsResponse> => {
+    try {
+      const url = subs(EMarketplaceEndpoints.GET_ORDER_DELIVERY_CONTACTS, { orderId });
+      const { data } = await this.get<GetDeliveryContactsResponse>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
