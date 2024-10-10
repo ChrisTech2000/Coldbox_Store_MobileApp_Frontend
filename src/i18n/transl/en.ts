@@ -597,10 +597,14 @@ const en = {
       Delivery: {
         companyName: 'Company name',
         companyNamePlaceholder: 'Insert company name',
+        companyNameError: 'Please insert the company name',
         contactName: 'Contact name',
         contactNamePlaceholder: 'Insert contact name',
+        contactNameError: 'Please insert the contact name',
         phoneNumber: 'Phone number',
         phoneNumberPlaceholder: 'Insert phone number',
+        emptyMessage: 'No contacts have been added yet',
+        deleteContactMessage: 'Are you sure you want to delete this contact?',
       },
       Location: {
         emptyState: 'No locations added yet. Click on the + sign to add one.',

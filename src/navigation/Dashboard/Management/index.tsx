@@ -8,7 +8,6 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
-import ContactsSharing from '#screens/Dashboard/AccountDetails/ContactsSharing';
 import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 import EditCheckIn from '#screens/Dashboard/Main/History/EditCheckIn';
 import ManagementRoot from '#screens/Dashboard/Management';
@@ -91,7 +90,6 @@ export type ManagementRoutes = {
     screen: keyof EditCoolingUserStackRoutes;
     params: EditCoolingUserStackRoutes[keyof EditCoolingUserStackRoutes];
   };
-  ContactsSharing: undefined;
   CouponStack: undefined;
   PayoutSettings: undefined;
   DeliveryContacts: undefined;
@@ -130,7 +128,6 @@ const NAVIGATOR_HEADERS: Record<ManagementRoutePaths, TranslationPaths | undefin
   RegisteredEmployee: 'navigation.management.RegisteredEmployee',
   AddRegisteredEmployee: 'navigation.management.AddRegisteredEmployee',
   RegisteredEmployeeDetails: 'navigation.management.RegisteredEmployeeDetails',
-  ContactsSharing: 'navigation.dashboard.ContactsSharing',
   CouponStack: undefined,
   PayoutSettings: 'navigation.dashboard.PayoutOptions',
   DeliveryContacts: 'navigation.management.DeliveryContacts',
@@ -196,7 +193,6 @@ export default function ManagementStack() {
       <Stack.Screen name="AddRegisteredEmployee" component={AddRegisteredEmployee} />
       <Stack.Screen name="RegisteredEmployeeDetails" component={RegisteredEmployeeDetails} />
       <Stack.Screen name="MarketSurveyStack" component={MarketSurveyStack} />
-      <Stack.Screen name="ContactsSharing" component={ContactsSharing} />
       <Stack.Screen name="CouponStack" component={CouponsSettingsStack} />
       <Stack.Screen name="PayoutSettings" component={PayoutSettings} />
       <Stack.Screen name="DeliveryContacts" component={DeliveryContacts} />

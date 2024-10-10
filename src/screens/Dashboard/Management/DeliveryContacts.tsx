@@ -1,11 +1,17 @@
-import React, { useCallback } from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import React, { useCallback, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View } from 'react-native';
-import { ActivityIndicator, TextInput } from 'react-native-paper';
+import { FlatList, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { ActivityIndicator, Divider, Modal, Portal, TextInput } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { Text } from '#ui/components/Text';
+import { emitter, useAppEventListener } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -14,37 +20,216 @@ import { useTranslationUtils } from '#i18n/utils';
 import { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
+import validator from 'validator';
 
 interface FormValues {
+  id: number;
   companyName: string;
   contactName: string;
   phoneNumber: string;
 }
 
 function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
+  const { t } = useTranslationUtils();
+
+  const [contactToDelete, setContactToDelete] = useState<number | null>(null);
+
+  const data = [
+    {
+      id: 1,
+      contactName: 'Cooling unit 2',
+      companyName: 'Company da Soraia',
+      phoneNumber: '+351911111111',
+    },
+  ]; // TODO: fetch
+
+  // if (isLoading) {
+  //   return (
+  //     <View tw="flex-1 items-center justify-center mt-4">
+  //       <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+  //     </View>
+  //   );
+  // }
+
+  return (
+    <KeyboardAwareScrollView
+      contentContainerStyle="h-full justify-between p-3"
+      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+      showsVerticalScrollIndicator={false}
+    >
+      {!data?.length ? (
+        <View tw="items-center space-y-3.5 mt-[50%]">
+          <View tw="h-36 w-36 items-center justify-center rounded-full bg-zinc-100">
+            <Icon name="phone-outline" size={60} color={paperTheme.colors.primary} />
+          </View>
+          <Text tw="text-base">{t('Dashboard.Management.Delivery.emptyMessage')}</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={data}
+          keyExtractor={(item, index) => `contact-${item.contactName}-${index}`}
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <View tw="w-full p-5 space-y-3 border border-solid border-zinc-300 rounded-2xl my-2">
+              <View>
+                <View tw="flex flex-row items-center justify-between mb-2">
+                  <Text tw="text-base">{t('Dashboard.Management.Delivery.contactName')}</Text>
+                  <Text tw="text-base text-gray-500">{item.contactName}</Text>
+                </View>
+                <Divider tw="bg-gray-400" />
+              </View>
+
+              <View>
+                <View tw="flex flex-row items-center justify-between mb-2">
+                  <Text tw="text-base">{t('Dashboard.Management.Delivery.companyName')}</Text>
+                  <Text tw="text-base text-gray-500">{item.companyName}</Text>
+                </View>
+                <Divider tw="bg-gray-400" />
+              </View>
+
+              <View>
+                <View tw="flex flex-row items-center justify-between mb-2">
+                  <Text tw="text-base">{t('Dashboard.Management.Delivery.phoneNumber')}</Text>
+                  <Text tw="text-base text-gray-500">{item.phoneNumber}</Text>
+                </View>
+                <Divider tw="bg-gray-400" />
+              </View>
+
+              <View tw="flex flex-row justify-end">
+                <Button
+                  mode="text"
+                  onPress={() => emitter.emit('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', item)}
+                  uppercase
+                >
+                  {t('actions.edit')}
+                </Button>
+                <Button
+                  labelStyle="text-red-700"
+                  mode="text"
+                  onPress={() => setContactToDelete(item.id)}
+                  uppercase
+                >
+                  {t('actions.delete')}
+                </Button>
+              </View>
+            </View>
+          )}
+        />
+      )}
+
+      <View tw="flex flex-row items-end justify-evenly">
+        <Button
+          tw="w-[48%]"
+          mode="contained"
+          onPress={() => emitter.emit('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', null)}
+          icon="plus-circle-outline"
+          uppercase
+        >
+          {t('actions.add')}
+        </Button>
+      </View>
+
+      <BottomSheet {...props} />
+
+      <Portal>
+        <Modal visible={!!contactToDelete} onDismiss={() => setContactToDelete(null)}>
+          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
+            <View tw="items-start space-y-4 my-2.5">
+              <Text variant="TitleMedium">
+                {t('Dashboard.Management.Delivery.deleteContactMessage')}
+              </Text>
+            </View>
+            <View tw="flex-row self-end space-x-2">
+              <Button
+                mode="text"
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  setContactToDelete(null);
+                }}
+              >
+                {t('actions.cancel')}
+              </Button>
+              <Button
+                mode="text"
+                textColor={paperTheme.colors.error}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  // TODO: confirm
+                  setContactToDelete(null);
+                }}
+              >
+                {t('actions.confirm')}
+              </Button>
+            </View>
+          </View>
+        </Modal>
+      </Portal>
+    </KeyboardAwareScrollView>
+  );
+}
+
+export default withSafeArea(
+  withErrorBoundary(DeliveryContacts, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  }),
+  ['bottom'],
+  true
+);
+
+function BottomSheet(props: ManagementRouteProps<'DeliveryContacts'>) {
   const { t, zodResolver } = useTranslationUtils();
+  const isFocused = useIsFocused();
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
   const toast = InAppNotifications.useToast();
 
+  const [, setMode] = useState<'edit' | 'add'>();
+  const modalRef = useRef<Modalize>(null);
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<FormValues>({
     resolver: zodResolver((z) =>
       z.object({
-        companyName: z.string().min(1, {
-          message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.accountName'),
-        }),
+        companyName: z
+          .string()
+          .min(1, {
+            message: t('Dashboard.Management.Delivery.companyNameError'),
+          })
+          .default(''),
         contactName: z
           .string()
-          .min(1, { message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.account') }),
-        phoneNumber: z.string().min(1, {
-          message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.accountType'),
-        }),
+          .min(1, {
+            message: t('Dashboard.Management.Delivery.contactNameError'),
+          })
+          .default(''),
+        phoneNumber: z
+          .string()
+          .min(1, { message: t('Auth.SignUp.schema.phoneError') })
+          .default('')
+          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+            message: t('Auth.SignUp.schema.invalidPhoneError'),
+          }),
       })
     ),
+  });
+
+  useAppEventListener<[FormValues]>('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', (info) => {
+    if (info) setMode('edit');
+    else setMode('add');
+
+    reset({
+      companyName: info?.companyName ?? '',
+      contactName: info?.contactName ?? '',
+      phoneNumber: info?.phoneNumber ?? '',
+    });
+
+    modalRef.current?.open();
   });
 
   const onSubmit = useCallback(
@@ -67,23 +252,21 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
     [user, company]
   );
 
-  // if (isLoading) {
-  //   return (
-  //     <View tw="flex-1 items-center justify-center mt-4">
-  //       <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-  //     </View>
-  //   );
-  // }
+  if (!isFocused) return null;
 
   return (
-    <KeyboardAwareScrollView
-      tw="h-full p-3"
-      contentContainerStyle="flex-1 justify-between"
-      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-      showsVerticalScrollIndicator={false}
-    >
-      <View>
-        <View tw="mt-4 space-y-3">
+    <Portal>
+      <Modalize
+        ref={modalRef}
+        modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
+        adjustToContentHeight
+        withHandle={false}
+      >
+        <View tw="w-full items-center justify-center h-10">
+          <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
+        </View>
+
+        <View tw="mt-4 space-y-3 mb-5">
           <Controller
             control={control}
             name="companyName"
@@ -101,6 +284,11 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
               />
             )}
           />
+          {errors.companyName && (
+            <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+              {errors.companyName.message?.toString()}
+            </Text>
+          )}
 
           <Controller
             control={control}
@@ -119,6 +307,11 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
               />
             )}
           />
+          {errors.contactName && (
+            <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+              {errors.contactName.message?.toString()}
+            </Text>
+          )}
 
           <Controller
             control={control}
@@ -133,38 +326,29 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
-                error={!!errors.contactName}
+                error={!!errors.phoneNumber}
               />
             )}
           />
-        </View>
-      </View>
-
-      <View tw="flex flex-row items-end justify-evenly">
-        <Button
-          tw="w-[48%]"
-          mode="contained"
-          onPress={handleSubmit(onSubmit)}
-          icon={isSubmitting ? undefined : 'check-circle-outline'}
-          disabled={!isDirty}
-          uppercase
-        >
-          {isSubmitting ? (
-            <ActivityIndicator size="small" color="white" />
-          ) : (
-            t('actions.save-changes')
+          {errors.phoneNumber && (
+            <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+              {errors.phoneNumber.message?.toString()}
+            </Text>
           )}
-        </Button>
-      </View>
-    </KeyboardAwareScrollView>
+        </View>
+
+        <View tw="pb-10 items-center">
+          <Button
+            tw="w-[48%]"
+            mode="contained"
+            onPress={handleSubmit(onSubmit)}
+            disabled={!isDirty}
+            uppercase
+          >
+            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
+          </Button>
+        </View>
+      </Modalize>
+    </Portal>
   );
 }
-
-export default withSafeArea(
-  withErrorBoundary(DeliveryContacts, {
-    fallback: <GenericError />,
-    onError: (error) => console.error('Error caught:', error),
-  }),
-  ['bottom'],
-  true
-);
