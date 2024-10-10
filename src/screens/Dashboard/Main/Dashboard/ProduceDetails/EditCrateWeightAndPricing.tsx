@@ -25,6 +25,7 @@ import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
 import MarketplaceService from '#services/Marketplace';
 import { useToggle } from '#ui/hooks/useToggle';
+import type { ListedCratesBaseParams } from '#types/api.params';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from '../CheckIn/components/SellInMarketplaceModal';
@@ -116,11 +117,17 @@ function EditCrateWeightAndPricing(
 
       const promises: Array<Promise<unknown>> = [];
 
+      const operatorParams =
+        user?.role === ERoles.OPERATOR
+          ? ({ operatorOnBehalfOfSellerFarmerId: params.farmerId } satisfies ListedCratesBaseParams)
+          : {};
+
       if (cratesToList.length > 0) {
         promises.push(
           MarketplaceService.upsertListedCrate({
             crateIds: cratesToList,
             producePricePerKg: currentPrice,
+            ...operatorParams,
           })
         );
       }
@@ -134,12 +141,18 @@ function EditCrateWeightAndPricing(
           MarketplaceService.upsertListedCrate({
             crateIds: previous.sellableCrates,
             producePricePerKg: currentPrice,
+            ...operatorParams,
           })
         );
       }
 
       promises.push(
-        ...cratesToDelist.map((crateId) => MarketplaceService.delistCratesByCrateId(crateId))
+        ...cratesToDelist.map((crateId) =>
+          MarketplaceService.delistCratesByCrateId({
+            crateId,
+            ...operatorParams,
+          })
+        )
       );
 
       await Promise.allSettled(promises);
@@ -152,7 +165,11 @@ function EditCrateWeightAndPricing(
 
   const debouncedInitialSetup = useDebouncedCallback(async (): Promise<void> => {
     try {
-      const ids: Array<number> = params.crates.map((crate) => crate.id);
+      const result = await MarketplaceService.getSellerListedCrates(
+        user?.role === ERoles.OPERATOR
+          ? { operatorOnBehalfOfSellerFarmerId: params.farmerId }
+          : undefined
+      );
 
       const initialCrates: FormValues['crates'] = params.crates.map((crate) => ({
         id: crate.id,
@@ -160,28 +177,19 @@ function EditCrateWeightAndPricing(
         isSellable: false,
       }));
 
+      // TODO: review this to reduce amount of request
+      // TODO: make sure it works for both operator and cooling user
+
+      console.log(result);
+      return;
+
       let price: undefined | string;
 
-      switch (user?.role) {
-        case ERoles.COOLING_USER: {
-          for await (const [idx, id] of ids.entries()) {
-            try {
-              const result = await MarketplaceService.getSellerListedCratesByCrateId(id);
-              if (typeof result !== 'object') continue;
-              initialCrates[idx].isSellable = true;
-              if (typeof price === 'undefined') price = result?.producePricePerKg?.toString();
-            } catch {
-              // exception
-            }
-          }
-          break;
-        }
-        case ERoles.OPERATOR: {
-          // TODO
-          break;
-        }
-        default:
-          return props.navigation.goBack();
+      for (const item of result) {
+        const crateIdx = initialCrates.findIndex((crate) => crate.id === item.crateId);
+        if (crateIdx === -1) continue;
+        initialCrates[crateIdx].isSellable = true;
+        if (typeof price === 'undefined') price = item?.producePricePerKg?.toString();
       }
 
       const applyToAll = initialCrates.every(

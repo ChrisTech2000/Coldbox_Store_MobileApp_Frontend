@@ -1,7 +1,11 @@
 import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
-import type { GetAvailableListingParams, UpdateListedCrateParams } from '#types/api.params';
+import type {
+  GetAvailableListingParams,
+  ListedCratesBaseParams,
+  UpdateListedCrateParams,
+} from '#types/api.params';
 import type {
   GetAvailableListingResponse,
   SellerListedCratesResponse,
@@ -14,12 +18,14 @@ import { subs } from './utils';
 
 class MarketplaceService extends HttpClient {
   public upsertListedCrate = async (
-    params: UpdateListedCrateParams
+    params: ListedCratesBaseParams & UpdateListedCrateParams
   ): Promise<UpdateListedCrateResponse> => {
     try {
+      const { operatorOnBehalfOfSellerFarmerId, operatorOnBehalfOfSellerUserId, ...body } = params;
       const { data } = await this.post<UpdateListedCrateResponse>(
         EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
-        params
+        body,
+        { params: { operatorOnBehalfOfSellerFarmerId, operatorOnBehalfOfSellerUserId } }
       );
       return data;
     } catch (error) {
@@ -55,11 +61,13 @@ class MarketplaceService extends HttpClient {
   };
 
   public getSellerListedCratesByCrateId = async (
-    crateId: number
+    params: ListedCratesBaseParams & { crateId: number }
   ): Promise<SellerListedCratesResponse> => {
     try {
+      const { crateId, ...rest } = params;
       const { data } = await this.get<SellerListedCratesResponse>(
-        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId })
+        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }),
+        { params: rest }
       );
       return data;
     } catch (error) {
@@ -69,10 +77,13 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getSellerListedCrates = async (): Promise<Array<SellerListedCratesResponse>> => {
+  public getSellerListedCrates = async (
+    params?: ListedCratesBaseParams
+  ): Promise<Array<SellerListedCratesResponse>> => {
     try {
       const { data } = await this.get<Array<SellerListedCratesResponse>>(
-        EMarketplaceEndpoints.UPSERT_LISTED_CRATE
+        EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
+        { params }
       );
       return data;
     } catch (error) {
@@ -82,10 +93,12 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public delistCratesByCrateId = async (crateId: number) => {
+  public delistCratesByCrateId = async (params: ListedCratesBaseParams & { crateId: number }) => {
     try {
+      const { crateId, ...rest } = params;
       const { data } = await this.delete(
-        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId })
+        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }),
+        { params: rest }
       );
       return data;
     } catch (error) {

@@ -433,6 +433,11 @@ export interface UpdateListedCrateParams extends JsonObject {
   producePricePerKg: number;
 }
 
+export interface ListedCratesBaseParams {
+  operatorOnBehalfOfSellerFarmerId?: number;
+  operatorOnBehalfOfSellerUserId?: number;
+}
+
 export interface GetAvailableListingParams extends JsonObject {
   location: [number, number] | [];
   sortBy?: 'price-asc' | 'price-desc' | 'nearby-me';

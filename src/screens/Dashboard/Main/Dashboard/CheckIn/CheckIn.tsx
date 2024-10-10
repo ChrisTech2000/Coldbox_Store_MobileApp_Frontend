@@ -208,7 +208,11 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       await Promise.all(
         processedCrateListing.map(
           async ({ crateIds, pricePerKg }) =>
-            await Marketplace.upsertListedCrate({ crateIds, producePricePerKg: pricePerKg })
+            await Marketplace.upsertListedCrate({
+              crateIds,
+              producePricePerKg: pricePerKg,
+              operatorOnBehalfOfSellerFarmerId: user.id,
+            })
         )
       );
     }

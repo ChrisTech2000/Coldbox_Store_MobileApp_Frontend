@@ -283,11 +283,13 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                       ? {
                           onPress: (evt) => {
                             evt.stopPropagation();
+                            if (typeof farmer === 'undefined') return;
                             props.navigation.navigate('EditCrateWeightAndPricing', {
                               companyCurrency: currency,
                               currencySymbol:
                                 currencies.find((c) => c.name === currency)?.symbol ?? '',
                               crates: produce.checkedInCrates,
+                              farmerId: farmer.id,
                             });
                           },
                         }
