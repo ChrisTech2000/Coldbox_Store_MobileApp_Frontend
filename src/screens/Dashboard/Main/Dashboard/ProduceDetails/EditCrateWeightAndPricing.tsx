@@ -86,6 +86,7 @@ function EditCrateWeightAndPricing(
   const applyToAll = form.watch('applyToAll');
   const price = form.watch('price');
   const crates = form.watch('crates');
+  const previousSellableCrates = form.watch('previous.sellableCrates');
 
   const potentialPrice = useMemo(() => {
     if (!price) return 0;
@@ -177,15 +178,9 @@ function EditCrateWeightAndPricing(
         isSellable: false,
       }));
 
-      // TODO: review this to reduce amount of request
-      // TODO: make sure it works for both operator and cooling user
-
-      console.log(result);
-      return;
-
       let price: undefined | string;
 
-      for (const item of result) {
+      for (const item of result.nodes) {
         const crateIdx = initialCrates.findIndex((crate) => crate.id === item.crateId);
         if (crateIdx === -1) continue;
         initialCrates[crateIdx].isSellable = true;
@@ -218,7 +213,16 @@ function EditCrateWeightAndPricing(
     void debouncedInitialSetup();
   }, [params.crates]);
 
-  const isFarmer = user?.role !== ERoles.OPERATOR; // only operators and cooling users can visit this screen
+  const hasCrateChanges = useMemo(() => {
+    const currentSellableCrates: Array<number> = crates
+      .filter((crate) => crate.isSellable)
+      .map((crate) => crate.id);
+    const isPriceChanged = Number(price) !== form.getValues('previous.price');
+    const isSellableChanged =
+      JSON.stringify(currentSellableCrates.sort()) !==
+      JSON.stringify(previousSellableCrates.sort());
+    return isPriceChanged || isSellableChanged;
+  }, [crates, price, previousSellableCrates, form]);
 
   if (isSettingUp) {
     return (
@@ -312,12 +316,12 @@ function EditCrateWeightAndPricing(
                               form.setValue(`crates.${i}.weight`, text);
                             }
                           }}
-                          disabled={isDisabled || isFarmer}
+                          disabled
                           left={
                             <TextInput.Icon
+                              disabled
                               icon="minus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled || isFarmer}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
@@ -332,9 +336,9 @@ function EditCrateWeightAndPricing(
                           }
                           right={
                             <TextInput.Icon
+                              disabled
                               icon="plus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled || isFarmer}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
@@ -436,8 +440,7 @@ function EditCrateWeightAndPricing(
             onPress={form.handleSubmit(onSubmit as any)}
             disabled={
               typeof form.formState.errors.crates !== 'undefined' ||
-              !crates.some((c) => c.isSellable) ||
-              !price ||
+              !hasCrateChanges ||
               form.formState.isSubmitting ||
               !form.formState.isDirty
             }

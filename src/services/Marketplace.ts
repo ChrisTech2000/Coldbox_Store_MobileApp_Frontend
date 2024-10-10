@@ -8,6 +8,7 @@ import type {
 } from '#types/api.params';
 import type {
   GetAvailableListingResponse,
+  GetSellerListedCrates,
   SellerListedCratesResponse,
   UpdateListedCrateResponse,
 } from '#types/api.responses';
@@ -79,9 +80,9 @@ class MarketplaceService extends HttpClient {
 
   public getSellerListedCrates = async (
     params?: ListedCratesBaseParams
-  ): Promise<Array<SellerListedCratesResponse>> => {
+  ): Promise<GetSellerListedCrates> => {
     try {
-      const { data } = await this.get<Array<SellerListedCratesResponse>>(
+      const { data } = await this.get<GetSellerListedCrates>(
         EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
         { params }
       );

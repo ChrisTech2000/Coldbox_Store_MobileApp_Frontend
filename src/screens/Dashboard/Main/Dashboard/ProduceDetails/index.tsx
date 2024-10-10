@@ -162,7 +162,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   return (
     <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View tw="flex-col items-center justify-center space-y-4 pb-16">
+        <View tw="flex-col items-center justify-center space-y-4 pb-24">
           <View tw="flex flex-row items-center space-x-3">
             <FastImage
               resizeMode="contain"
@@ -283,13 +283,13 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                       ? {
                           onPress: (evt) => {
                             evt.stopPropagation();
-                            if (typeof farmer === 'undefined') return;
+                            const farmerId = farmer?.id ?? produce.farmerId;
                             props.navigation.navigate('EditCrateWeightAndPricing', {
                               companyCurrency: currency,
                               currencySymbol:
                                 currencies.find((c) => c.name === currency)?.symbol ?? '',
                               crates: produce.checkedInCrates,
-                              farmerId: farmer.id,
+                              farmerId,
                             });
                           },
                         }

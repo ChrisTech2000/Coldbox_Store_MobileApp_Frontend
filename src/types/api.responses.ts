@@ -532,3 +532,7 @@ export interface SellerListedCratesResponse {
   totalPricePerKg: number;
   weightLockedInPaymentPendingOrdersInKg: number;
 }
+
+export interface GetSellerListedCrates {
+  nodes: Array<SellerListedCratesResponse>;
+}
