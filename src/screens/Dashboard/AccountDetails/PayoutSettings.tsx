@@ -86,6 +86,9 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
     reset,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<FormValues>({
+    defaultValues: {
+      country: t('Dashboard.AccountDetails.PayoutSettings.form.nigeria'),
+    },
     resolver: zodResolver((z) =>
       z.object({
         accountName: z.string().min(1, {
@@ -94,7 +97,7 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
         accountNumber: z
           .string()
           .min(1, { message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.account') }),
-        country: z.string().min(1),
+        country: z.string(),
         bank: z
           .string()
           .min(1, { message: t('Dashboard.AccountDetails.PayoutSettings.form.errors.bank') }),
