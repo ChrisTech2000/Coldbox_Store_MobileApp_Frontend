@@ -112,4 +112,7 @@ export enum EMarketplaceEndpoints {
   SET_PICKUP_DETAILS = 'marketplace/buyer/cart/set-pickup-details/',
   GET_CART_DELIVERY_CONTACTS = 'marketplace/buyer/cart/delivery-contacts/',
   GET_ORDER_DELIVERY_CONTACTS = 'marketplace/buyer/orders/:orderId/delivery-contacts/',
+  COMPANY_DELIVERY_CONTACTS = 'marketplace/company/delivery-contacts/',
+  LIST_COMPANY_DELIVERY_CONTACTS = 'marketplace/company/delivery-contacts/?company_id=:companyId',
+  DELETE_DELIVERY_CONTACT = 'marketplace/company/delivery-contacts/:contactId/?company_id=companyId',
 }

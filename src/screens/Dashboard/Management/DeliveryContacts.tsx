@@ -5,6 +5,7 @@ import { FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Divider, Modal, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import validator from 'validator';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -18,38 +19,39 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import validator from 'validator';
 
 interface FormValues {
-  id: number;
-  companyName: string;
   contactName: string;
   phoneNumber: string;
 }
 
 function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
   const { t } = useTranslationUtils();
+  const company = useManagementStore((store) => store.company);
 
   const [contactToDelete, setContactToDelete] = useState<number | null>(null);
 
-  const data = [
+  const { data, isLoading } = useApiCall(
+    'listDeliveryContacts',
+    MarketplaceService.listDeliveryContacts,
+    company!.id,
     {
-      id: 1,
-      contactName: 'Cooling unit 2',
-      companyName: 'Company da Soraia',
-      phoneNumber: '+351911111111',
-    },
-  ]; // TODO: fetch
+      skip: !company?.id,
+      defaultData: [],
+    }
+  );
 
-  // if (isLoading) {
-  //   return (
-  //     <View tw="flex-1 items-center justify-center mt-4">
-  //       <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-  //     </View>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center mt-4">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAwareScrollView
@@ -67,7 +69,7 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
       ) : (
         <FlatList
           data={data}
-          keyExtractor={(item, index) => `contact-${item.contactName}-${index}`}
+          keyExtractor={(item, index) => `contact-${item.name}-${index}`}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
@@ -75,7 +77,7 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
               <View>
                 <View tw="flex flex-row items-center justify-between mb-2">
                   <Text tw="text-base">{t('Dashboard.Management.Delivery.contactName')}</Text>
-                  <Text tw="text-base text-gray-500">{item.contactName}</Text>
+                  <Text tw="text-base text-gray-500">{item.name}</Text>
                 </View>
                 <Divider tw="bg-gray-400" />
               </View>
@@ -91,19 +93,12 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
               <View>
                 <View tw="flex flex-row items-center justify-between mb-2">
                   <Text tw="text-base">{t('Dashboard.Management.Delivery.phoneNumber')}</Text>
-                  <Text tw="text-base text-gray-500">{item.phoneNumber}</Text>
+                  <Text tw="text-base text-gray-500">{item.phone}</Text>
                 </View>
                 <Divider tw="bg-gray-400" />
               </View>
 
               <View tw="flex flex-row justify-end">
-                <Button
-                  mode="text"
-                  onPress={() => emitter.emit('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', item)}
-                  uppercase
-                >
-                  {t('actions.edit')}
-                </Button>
                 <Button
                   labelStyle="text-red-700"
                   mode="text"
@@ -153,9 +148,12 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
               <Button
                 mode="text"
                 textColor={paperTheme.colors.error}
-                onPress={(evt) => {
+                onPress={async (evt) => {
                   evt.stopPropagation();
-                  // TODO: confirm
+                  await MarketplaceService.deleteDeliveryContactId({
+                    contactId: contactToDelete as number,
+                    companyId: company!.id,
+                  });
                   setContactToDelete(null);
                 }}
               >
@@ -185,23 +183,15 @@ function BottomSheet(props: ManagementRouteProps<'DeliveryContacts'>) {
   const company = useManagementStore((store) => store.company);
   const toast = InAppNotifications.useToast();
 
-  const [, setMode] = useState<'edit' | 'add'>();
   const modalRef = useRef<Modalize>(null);
 
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<FormValues>({
     resolver: zodResolver((z) =>
       z.object({
-        companyName: z
-          .string()
-          .min(1, {
-            message: t('Dashboard.Management.Delivery.companyNameError'),
-          })
-          .default(''),
         contactName: z
           .string()
           .min(1, {
@@ -219,29 +209,27 @@ function BottomSheet(props: ManagementRouteProps<'DeliveryContacts'>) {
     ),
   });
 
-  useAppEventListener<[FormValues]>('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', (info) => {
-    if (info) setMode('edit');
-    else setMode('add');
-
-    reset({
-      companyName: info?.companyName ?? '',
-      contactName: info?.contactName ?? '',
-      phoneNumber: info?.phoneNumber ?? '',
-    });
-
+  useAppEventListener('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', () => {
     modalRef.current?.open();
   });
 
   const onSubmit = useCallback(
     async (data: FormValues) => {
       try {
-        console.log(data);
-        toast.show(t('Dashboard.AccountDetails.PayoutSettings.successMessage'), {
-          type: 'md_success',
-          style: { marginBottom: 50 },
+        const result = await MarketplaceService.createDeliveryContact({
+          name: data.contactName,
+          phone: data.phoneNumber,
+          companyId: company!.id,
         });
 
-        props.navigation.goBack();
+        if (result) {
+          toast.show(t('Dashboard.AccountDetails.PayoutSettings.successMessage'), {
+            type: 'md_success',
+            style: { marginBottom: 50 },
+          });
+
+          props.navigation.goBack();
+        }
       } catch (error) {
         toast.show(t('navigation.error.errorMessage'), {
           type: 'md_danger',
@@ -267,29 +255,6 @@ function BottomSheet(props: ManagementRouteProps<'DeliveryContacts'>) {
         </View>
 
         <View tw="mt-4 space-y-3 mb-5">
-          <Controller
-            control={control}
-            name="companyName"
-            render={({ field: { value, onChange, onBlur } }) => (
-              <TextInput
-                tw="w-full bg-transparent mt-1"
-                label={t('Dashboard.Management.Delivery.companyName')}
-                mode="flat"
-                placeholder={t('Dashboard.Management.Delivery.companyNamePlaceholder')}
-                dense
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={!!errors.companyName}
-              />
-            )}
-          />
-          {errors.companyName && (
-            <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-              {errors.companyName.message?.toString()}
-            </Text>
-          )}
-
           <Controller
             control={control}
             name="contactName"

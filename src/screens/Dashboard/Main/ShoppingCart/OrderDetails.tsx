@@ -152,7 +152,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                           onPress={(evt) => {
                             evt.stopPropagation();
                             emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, {
-                              coolingUnitId: item.coolingUnitId,
+                              coolingUnitId: coolingUnit?.id,
                             });
                           }}
                         >

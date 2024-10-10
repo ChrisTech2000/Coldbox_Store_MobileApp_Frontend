@@ -1186,6 +1186,7 @@ const en = {
       discountsApplied: 'Discounts Applied',
       errors: {
         invalid: 'Invalid value',
+        minimumCartValue: 'Order must be at least ₦100.',
       },
     },
     Analytics: {
