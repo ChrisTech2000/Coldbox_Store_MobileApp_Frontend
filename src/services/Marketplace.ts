@@ -2,7 +2,11 @@ import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
 import type { GetAvailableListingParams, UpdateListedCrateParams } from '#types/api.params';
-import type { GetAvailableListingResponse, UpdateListedCrateResponse } from '#types/api.responses';
+import type {
+  GetAvailableListingResponse,
+  SellerListedCratesResponse,
+  UpdateListedCrateResponse,
+} from '#types/api.responses';
 
 import HttpClient from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
@@ -50,9 +54,11 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getSellerListedCratesByCrateId = async (crateId: number) => {
+  public getSellerListedCratesByCrateId = async (
+    crateId: number
+  ): Promise<SellerListedCratesResponse> => {
     try {
-      const { data } = await this.get(
+      const { data } = await this.get<SellerListedCratesResponse>(
         subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId })
       );
       return data;
@@ -63,9 +69,24 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getSellerListedCrates = async () => {
+  public getSellerListedCrates = async (): Promise<Array<SellerListedCratesResponse>> => {
     try {
-      const { data } = await this.get(EMarketplaceEndpoints.UPSERT_LISTED_CRATE);
+      const { data } = await this.get<Array<SellerListedCratesResponse>>(
+        EMarketplaceEndpoints.UPSERT_LISTED_CRATE
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public delistCratesByCrateId = async (crateId: number) => {
+    try {
+      const { data } = await this.delete(
+        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId })
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

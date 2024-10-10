@@ -2,11 +2,10 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Divider, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDebouncedCallback } from 'use-debounce';
 import colors from 'tailwindcss/colors';
-import isNil from 'lodash/isNil';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -25,6 +24,7 @@ import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/M
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
 import MarketplaceService from '#services/Marketplace';
+import { useToggle } from '#ui/hooks/useToggle';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from '../CheckIn/components/SellInMarketplaceModal';
@@ -32,12 +32,15 @@ import SellInMarketplaceModal from '../CheckIn/components/SellInMarketplaceModal
 type FormValues<T = string> = {
   applyToAll: boolean;
   crates: Array<{
-    id: number | undefined;
+    id: number;
     weight: T;
-    crateIdx: number;
     isSellable: boolean;
   }>;
-  price: T | undefined;
+  price: T;
+  previous: {
+    sellableCrates: Array<number>;
+    price: number;
+  };
 };
 
 function EditCrateWeightAndPricing(
@@ -48,6 +51,7 @@ function EditCrateWeightAndPricing(
   const { user } = useAuthStore();
   const { t, zodResolver } = useTranslationUtils();
 
+  const [isSettingUp, toggleIsSettingUp] = useToggle(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
@@ -57,17 +61,20 @@ function EditCrateWeightAndPricing(
       const greaterThanEqual = z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0));
       return z.object({
         applyToAll: z.boolean(),
-        price: z.string().optional(),
+        price: z.string(),
         crates: z
           .array(
             z.object({
-              id: z.number().optional(),
-              crateIdx: z.number(),
+              id: z.number(),
               weight: greaterThanEqual,
               isSellable: z.boolean(),
             })
           )
           .min(1),
+        previous: z.object({
+          sellableCrates: z.array(z.number()),
+          price: z.number(),
+        }),
       });
     }),
     reValidateMode: 'onSubmit',
@@ -93,29 +100,80 @@ function EditCrateWeightAndPricing(
     }, 0);
   }, [crates, price, applyToAll]);
 
-  function onSubmit(values: FormValues<number>): void {
-    console.log(values);
-    // TODO: API call
-    props.navigation.goBack();
+  async function onSubmit(values: FormValues<number>): Promise<void> {
+    try {
+      const { previous, crates, price } = values;
+
+      const cratesToList: Array<number> = [];
+      const cratesToDelist: Array<number> = [];
+      const currentPrice = Number(price);
+
+      for (const crate of crates) {
+        const wasSellable = previous.sellableCrates.includes(crate.id);
+        if (crate.isSellable && !wasSellable) cratesToList.push(crate.id);
+        if (!crate.isSellable && wasSellable) cratesToDelist.push(crate.id);
+      }
+
+      const promises: Array<Promise<unknown>> = [];
+
+      if (cratesToList.length > 0) {
+        promises.push(
+          MarketplaceService.upsertListedCrate({
+            crateIds: cratesToList,
+            producePricePerKg: currentPrice,
+          })
+        );
+      }
+
+      if (
+        promises.length === 0 &&
+        currentPrice !== previous.price &&
+        previous.sellableCrates.length > 0
+      ) {
+        promises.push(
+          MarketplaceService.upsertListedCrate({
+            crateIds: previous.sellableCrates,
+            producePricePerKg: currentPrice,
+          })
+        );
+      }
+
+      promises.push(
+        ...cratesToDelist.map((crateId) => MarketplaceService.delistCratesByCrateId(crateId))
+      );
+
+      await Promise.allSettled(promises);
+
+      props.navigation.goBack();
+    } catch (exception) {
+      console.error(exception);
+    }
   }
 
   const debouncedInitialSetup = useDebouncedCallback(async (): Promise<void> => {
     try {
-      // const ids = new Set<number>(params.crates.map((crate) => crate.id));
-      const crates: FormValues['crates'] = [];
+      const ids: Array<number> = params.crates.map((crate) => crate.id);
 
-      // params.crates.map((crate, crateIdx) => ({
-      //   id: crate.id,
-      //   crateIdx: crateIdx + 1,
-      //   weight: crate.weight.toString(),
-      //   isSellable: false,
-      // }))
+      const initialCrates: FormValues['crates'] = params.crates.map((crate) => ({
+        id: crate.id,
+        weight: crate.weight.toString(),
+        isSellable: false,
+      }));
+
+      let price: undefined | string;
 
       switch (user?.role) {
         case ERoles.COOLING_USER: {
-          // TODO
-          const result = await MarketplaceService.getSellerListedCrates();
-          console.log(result);
+          for await (const [idx, id] of ids.entries()) {
+            try {
+              const result = await MarketplaceService.getSellerListedCratesByCrateId(id);
+              if (typeof result !== 'object') continue;
+              initialCrates[idx].isSellable = true;
+              if (typeof price === 'undefined') price = result?.producePricePerKg?.toString();
+            } catch {
+              // exception
+            }
+          }
           break;
         }
         case ERoles.OPERATOR: {
@@ -125,17 +183,42 @@ function EditCrateWeightAndPricing(
         default:
           return props.navigation.goBack();
       }
-      form.reset({ applyToAll: false, crates, price: '0' });
+
+      const applyToAll = initialCrates.every(
+        (crate, _, array) => crate.isSellable && crate.weight === array[0].weight
+      );
+
+      form.reset({
+        applyToAll,
+        crates: initialCrates,
+        price: price ?? '0',
+        previous: {
+          sellableCrates: initialCrates
+            .filter((crate) => crate.isSellable)
+            .map((crate) => crate.id),
+          price: Number(price),
+        },
+      });
     } catch (exception) {
       console.error(exception);
+    } finally {
+      toggleIsSettingUp();
     }
   }, 700);
 
   useEffect(() => {
-    debouncedInitialSetup();
+    void debouncedInitialSetup();
   }, [params.crates]);
 
   const isFarmer = user?.role !== ERoles.OPERATOR; // only operators and cooling users can visit this screen
+
+  if (isSettingUp) {
+    return (
+      <View tw="flex-1 items-center justify-center mt-4">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -178,20 +261,18 @@ function EditCrateWeightAndPricing(
             data={crateFields.fields}
             keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
             scrollEnabled={false}
-            renderItem={({ item, index }) => {
+            renderItem={({ index }) => {
               const isDisabled = applyToAll && index > 0;
               return (
                 <View tw="flex-row items-center justify-between my-3">
-                  <View
-                    tw={cn('flex-col self-end px-3', isNil(item.crateIdx) && 'self-center mt-5')}
-                  >
+                  <View tw="flex-col self-end px-3">
                     <Icon
                       name="basket-outline"
                       size={30}
                       color={isDisabled ? colors.gray[400] : paperTheme.colors.onSurface}
                     />
                     <Text tw={cn('text-base self-center', isDisabled && 'text-gray-400')}>
-                      #{item.crateIdx}
+                      #{index + 1}
                     </Text>
                   </View>
 
@@ -349,7 +430,8 @@ function EditCrateWeightAndPricing(
               typeof form.formState.errors.crates !== 'undefined' ||
               !crates.some((c) => c.isSellable) ||
               !price ||
-              form.formState.isSubmitting
+              form.formState.isSubmitting ||
+              !form.formState.isDirty
             }
           >
             {t('actions.save-changes')}

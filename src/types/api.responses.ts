@@ -512,3 +512,23 @@ export interface ApplyCouponResponse {
 }
 
 export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
+
+export interface SellerListedCratesResponse {
+  availableWeightInKg: number;
+  crateId: number;
+  createdAt: string;
+  currency: string;
+  distance: number | null;
+  id: number;
+  lastUpdatedAt: string;
+  pendingInCoolingFees: number;
+  pendingInCoolingFeesPricePerKg: number;
+  producePricePerKg: number;
+  relCheckInMovementCode: string;
+  relCompanyId: number;
+  relCoolingUnitId: number;
+  relCrateRemainingShelfLife: number;
+  relCropId: number;
+  totalPricePerKg: number;
+  weightLockedInPaymentPendingOrdersInKg: number;
+}
