@@ -66,7 +66,7 @@ platform :android do
 
         # TODO: build towards production or staging depending on the pipeline
 
-        ENV['APP_ENV'] = options[:pipeline]
+        ENV['ENVFILE'] = options[:pipeline]
         gradle(
             project_dir: "android",
             tasks: ["bundleRelease", "assembleRelease"],
@@ -89,6 +89,7 @@ platform :android do
             ),
             json_key: './fastlane/google-service-account.json',
             deactivate_on_promote: false,
+            skip_upload_apk: true, # we're now building both the apk and the bundle
         )
     end
 
@@ -217,7 +218,7 @@ platform :ios do
             code_signing_identity: ENV["sigh_"+ app_identifier +"_" + type + "_certificate-name"],
         )
 
-        ENV['APP_ENV'] = options[:pipeline]
+        ENV['ENVFILE'] = options[:pipeline]
         gym(
             scheme: options[:scheme],
             workspace: "ios/coldtivate.xcworkspace",

@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
+import ms from 'ms';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
@@ -12,7 +13,6 @@ import {
 } from 'react-native';
 import { Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
-import ms from 'ms';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -21,12 +21,13 @@ import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
 import ColdtivateService from '#services/ColdtivateService';
+import MarketplaceService from '#services/MarketplaceService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
-import { ECoolingUnitMetric, EDateCropped, EPricingType } from '#types/global';
 import type { CheckInResponse, CheckInWitCodeResponse } from '#types/api.responses';
+import { ECoolingUnitMetric, EDateCropped, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -34,10 +35,9 @@ import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { waitFor } from '#ui/lib/waitFor';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import Marketplace from '#services/Marketplace';
-import { waitFor } from '#ui/lib/waitFor';
 
 import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
@@ -208,7 +208,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       await Promise.allSettled(
         processedCrateListing.map(
           async ({ crateIds, pricePerKg }) =>
-            await Marketplace.upsertListedCrate({
+            await MarketplaceService.upsertListedCrate({
               crateIds,
               producePricePerKg: pricePerKg,
               operatorOnBehalfOfSellerFarmerId: user.id,
