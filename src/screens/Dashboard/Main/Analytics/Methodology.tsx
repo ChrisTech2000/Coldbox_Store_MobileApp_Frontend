@@ -3,12 +3,14 @@ import { FlatList, View } from 'react-native';
 import { Divider, List, TextInput } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useAuthStore } from '#stores/auth';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import { METHODOLOGY_CONTENT } from '#constants/methodology';
+import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
 
 function Methodology() {
   const user = useAuthStore(useShallow((store) => store.user));
@@ -38,7 +40,7 @@ function Methodology() {
 
       <List.AccordionGroup>
         <FlatList
-          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           data={methodologyContent}
           keyExtractor={(item, itemIdx) => `methodology-${item.title}-#${itemIdx}`}
           renderItem={({ item }) => (
@@ -56,4 +58,9 @@ function Methodology() {
   );
 }
 
-export default withSafeArea(Methodology);
+export default withSafeArea(
+  withErrorBoundary(Methodology, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

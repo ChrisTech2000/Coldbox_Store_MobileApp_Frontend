@@ -9,6 +9,9 @@ const en = {
       gu: 'Gujarati',
       fr: 'French',
       pt: 'Portuguese',
+      igbo: 'Igbo',
+      yoruba: 'Yoruba',
+      hausa: 'Hausa',
     },
   },
   gender: {
@@ -17,6 +20,10 @@ const en = {
     other: 'Other',
   },
   navigation: {
+    error: {
+      errorMessage: 'Oops... looks like something went wrong.',
+      tryAgainMessage: 'Please try again later.',
+    },
     auth: {
       SignIn: 'Log in',
       SignUp: 'Sign up',
@@ -46,10 +53,12 @@ const en = {
       RegisteredEmployee: 'Registered Employee',
       AddRegisteredEmployee: 'Add Registered Employee',
       RegisteredEmployeeDetails: 'Registered Employee Details',
+      DeliveryContacts: 'Delivery Contacts',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
       ProduceDetails: '{{produceCode}}',
+      MarketplaceSettings: 'Marketplace settings',
       PriceTrend: 'Price trend',
       PriceRanking: 'Price ranking',
       Planner: 'Planner',
@@ -66,18 +75,37 @@ const en = {
     },
     dashboard: {
       AccountDetails: 'Account details',
+      PersonalDetails: 'Personal details',
+      LocalizationPreferences: 'Localization preferences',
+      ContactsSharing: 'Contacts sharing',
+      Coupons: 'Coupons',
+      CouponsActiveTab: 'Active',
+      CouponsRevokedTab: 'Revoked',
+      Marketplace: 'Marketplace',
+      MarketplaceFilters: 'Filters',
+      MarketplaceAllTab: 'All',
+      MarketplaceFavoritesTab: 'Favorites',
+      Orders: 'Orders',
+      MyOrders: 'My Orders',
+      OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Knowledge Hub',
       QuitTutorial: 'Quit Tutorial',
       FAQ: 'FAQ',
       About: 'About',
       Management: 'Management',
       Tutorial: 'Tutorial',
+      PayoutOptions: 'Payout options',
+      PaymentMethods: 'Payment methods',
+      Wallet: 'Wallet',
+      Transactions: 'Transactions',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'Select Crop Type',
       CheckIn: 'CheckIn',
       CropList: '{{cropType}}',
       CrateSetup: 'CheckIn',
+      CrateWeightAndPricing: 'Crate weight and pricing',
     },
     about: {
       comsolAgreement: 'COMSOL Runtime License Agreement 6.0',
@@ -119,6 +147,7 @@ const en = {
     'complete-later': 'Complete later',
     'update-success': 'Succesfully updated',
     'save-changes': 'Save changes',
+    save: 'Save',
     continue: 'Continue',
   },
   components: {
@@ -131,11 +160,13 @@ const en = {
     },
   },
   Auth: {
+    welcomePopup:
+      "Welcome to Coldtivate! If you are a farmer, a trader, or are interested in purchasing produce stored in the cold rooms, please sign up by clicking on 'Sign up as cooling user or consumer'. If you work for a cooling company, please contact your responsible to check whether your company is registered. If it is, your responsible should send you an SMS invite for you to sign up as a registered employee or as an operator. If not, you can sign up the company, and register as a registered employee. Please check the 'App info' section for FAQs.",
     Root: {
       welcome: 'Welcome to Coldtivate',
       signIn: 'Sign In',
       signUpCompany: 'Sign up as Company',
-      signUpCoolingUser: 'Sign up as Cooling User',
+      signUpCoolingUser: 'Sign Up as a Cooling User or Consumer',
       appInfo: 'App Info',
     },
     SignIn: {
@@ -154,7 +185,7 @@ const en = {
         coolingUser: {
           label: 'Cooling User',
           description:
-            'The cold room user. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator.',
+            'The cold room user and consumer. Farmers, traders, retailers who have access to a smartphone can log in here. Cold room users without a smartphone can access the information of the app by visiting a cold room and interacting with the operator. Consumers can log in here to complete purchases.',
         },
         toasts: {
           login:
@@ -242,7 +273,7 @@ const en = {
         },
       },
       SignUpCoolingUser: {
-        header: 'Sign Up Cooling User',
+        header: 'Sign Up as a Cooling User or Consumer',
         languageFieldName: 'language',
       },
     },
@@ -393,6 +424,7 @@ const en = {
         checkIn: 'Check-in',
         days: 'days',
         day: 'day',
+        daysLeft: '{{amount}} days left',
         ttp: 'TTP',
         numberOfCrates: 'Number of crates',
         totalWeight: 'Total Weight',
@@ -412,6 +444,7 @@ const en = {
       CheckIn: {
         emptyState: 'No boxes added yet',
         addCrates: 'Add Crates',
+        cratesAddedLabel: 'Crates Added',
         checkInWithCode: 'Check in with code',
         estimatedCost: 'Estimated Cost',
         pricing: 'Pricing',
@@ -420,6 +453,9 @@ const en = {
         emptyMessage: 'Please add at least one crate to your check in',
         noPlannedDaysMessage:
           'Missing planned days on some items. Cannot calculate estimated cost.',
+        seeMore: 'See more',
+        seeLess: 'See less',
+        listed: 'Listed',
         WithCode: {
           modalTitle: 'Create Check In from existing Check Out',
           modalDescription:
@@ -442,7 +478,7 @@ const en = {
           individualCrateWeightButton: 'Click here to edit individual crate weight',
           individualCrateIdButton: 'Click here to edit individual crate IDs',
           numberOfCratesLabel: 'Number of crates',
-          crateWeightLabel: 'General weight of crate',
+          crateWeightLabel: 'Crate weight and marketplace listing',
           pricePerDayAndCrateLabel: 'Price per day / crate',
           pricePerDayAndKilogramLabel: 'Price per day / kg',
           fixedPriceLabel: 'Fixed price',
@@ -454,6 +490,14 @@ const en = {
             yesterday: 'Yesterday',
             dayBefore: 'Two days back',
             evenBefore: 'Even Before',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'Apply to all',
+            list: 'List for sale',
+            addMore: 'Add more',
+            sellingPrice: 'Listing selling price',
+            potentialSellingPrice: 'Potential selling value',
+            info: 'The price configuration refers to product sale, not cooling storage fee.',
           },
           cratesError: 'Please insert a positive crate number',
           crateWeightError: 'Please insert a positive crate weight',
@@ -550,6 +594,14 @@ const en = {
       },
     },
     Management: {
+      Delivery: {
+        companyName: 'Company name',
+        companyNamePlaceholder: 'Insert company name',
+        contactName: 'Contact name',
+        contactNamePlaceholder: 'Insert contact name',
+        phoneNumber: 'Phone number',
+        phoneNumberPlaceholder: 'Insert phone number',
+      },
       Location: {
         emptyState: 'No locations added yet. Click on the + sign to add one.',
         text: {
@@ -833,6 +885,24 @@ const en = {
           creditCard: 'Credit Card',
         },
       },
+      Coupons: {
+        emptyMessage: 'No coupons have been added yet',
+        addCoupon: 'Add Coupon',
+        code: 'Coupon code',
+        percentage: 'Coupon percentage',
+        revokeTitle: 'Revoking Coupon',
+        revoke: 'Revoke',
+        revokeMessage:
+          'Are you sure you want to revoke this coupon? Once revoked, it cannot be used again and the discount will no longer be available. This action is permanent and cannot be undone.',
+      },
+    },
+    Marketplace: {
+      priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
+      addToCart: {
+        addToCartButton: 'Add to cart and continue shopping',
+        selectQuantity: 'Select quantity',
+        buyNowButton: 'Buy now',
+      },
     },
     AccountDetails: {
       popups: {
@@ -852,6 +922,69 @@ const en = {
       },
       toasts: {
         success: 'Successfully updated user',
+      },
+      sections: {
+        sellerSettings: 'Seller Settings',
+        buyerSettings: 'Buyer Settings',
+        details: 'Details',
+      },
+      ContactsSharing: {
+        publicPhone: 'Make phone number public',
+        publicEmail: 'Make e-mail public',
+      },
+      PayoutSettings: {
+        addTitle: 'Please insert your bank account information',
+        editTitle: 'Your bank account information',
+        form: {
+          nameLabel: 'Account name',
+          namePlaceholder: 'Insert account name',
+          accountNumberLabel: 'Account number',
+          accountNumberPlaceholder: 'Insert account number',
+          countryLabel: 'Country',
+          nigeria: 'Nigeria',
+          selectBank: 'Select bank from list',
+          bank: 'Bank',
+          accountType: 'Account Type',
+          selectAccountType: 'Select account type',
+          accountTypes: {
+            personal: 'Personal',
+            business: 'Business',
+          },
+          errors: {
+            accountName: 'Account name is required',
+            account: 'Account number is required',
+            accountType: 'Account type is required',
+            bank: 'Bank selection is required',
+          },
+        },
+        successMessage: 'Bank account added successfully.',
+        errorMessage: 'Something went wrong. Please try again later.',
+      },
+      PaymentSettings: {
+        cards: 'Cards',
+        creditCard: {
+          predefined: 'Predefined',
+          owner: 'Card Holder Name',
+          date: 'Expiry Date',
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'Please insert your card information',
+          form: {
+            cardName: 'Card name',
+            cardNamePlaceholder: 'Insert card name',
+            cardNumber: 'Card number',
+            cardNumberPlaceholder: 'Insert card number',
+            expiryDate: 'Expiry date',
+            securityCode: 'Security code',
+            securityCodePlaceholder: 'Insert the card security code',
+            predefinedMethod: 'Predefined payment method',
+            successMessage: 'Card added successfully',
+            cardNameError: 'Card name is required',
+            cardNumberError: 'Card number is required',
+            securityCodeError: 'Security code is required',
+          },
+        },
       },
     },
     About: {
@@ -997,6 +1130,57 @@ const en = {
           checkedOut: 'Checked out',
           checkedIn: 'Checked in',
         },
+      },
+    },
+    MyOrders: {
+      sort: {
+        mostRecent: 'Most recent',
+        oldest: 'Oldest',
+        date: 'Date',
+      },
+      title: 'Order Overview',
+      orderId: 'Order ID',
+      cropType: 'Crop Type',
+      coolingUnit: 'Cooling Unit',
+      orderTotal: 'Order Total',
+      backToTopButton: 'Back to the top',
+    },
+    ShoppingCart: {
+      empty: 'Your cart is empty',
+      daysLeft: 'days left',
+      weight: 'KG available',
+      perKg: '/ KG',
+      totalToPay: 'Total to pay',
+      pay: 'Pay',
+      orderHeader: 'Order',
+      subtotal: 'Subtotal',
+      produce: 'Produce',
+      discount: 'Discount',
+      fees: 'Service fees',
+      marketFees: 'Marketplace fee',
+      paymentFee: 'Payment fee',
+      viewContacts: 'View contact(s)',
+      contactsForDelivery: 'Contact(s) for delivery information',
+      gotItButton: 'Got it!',
+      pickupMethods: 'Pickup method',
+      pickUpToday: 'Pickup today',
+      keepInStorageDailyRate: 'Keep in storage ({{price}} / day)',
+      keepInStorageFixedRate: 'Keep in storage ({{price}})',
+      delivery: 'Delivery',
+      companyName: 'Company name',
+      phoneNumber: 'Phone number',
+      thankYouMessage: 'Thank You for Ordering',
+      orderOverview: 'Order overview',
+      products: 'Products',
+      consultOrders: 'Consult My Orders',
+      total: 'Total',
+      couponQuestion: 'Have a discount coupon?',
+      redeem: 'Redeem code.',
+      redeemCoupon: 'Redeem coupon',
+      couponPlaceholder: 'E.g. 20OFF',
+      discountsApplied: 'Discounts Applied',
+      errors: {
+        invalid: 'Invalid value',
       },
     },
     Analytics: {

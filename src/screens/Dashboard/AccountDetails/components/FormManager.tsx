@@ -2,27 +2,18 @@ import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { useIsFocused } from '@react-navigation/native';
 
+import type { DetailsSectionParams } from '#navigation/Dashboard/AccountDetails';
 import { EApiGender, ERoles } from '#types/global';
-import type { TranslationLocales } from '#i18n/constants';
 import { useTranslationUtils } from '#i18n/utils';
 
 export type FormValues = {
-  kind: ERoles;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  language: TranslationLocales;
-  gender: EApiGender;
-  email: string;
   location: string;
-  parentName: string;
-  country: string;
-  userCode: string;
-};
+} & Omit<DetailsSectionParams, 'userId' | 'farmerId'>;
 
 type CallbackProps = {
   submitHandler: (evt?: React.BaseSyntheticEvent) => Promise<void>;
   isSubmitting: boolean;
+  hasChanges: boolean;
 };
 
 type FormManagerProps = {
@@ -94,6 +85,7 @@ export default function FormManager(props: FormManagerProps) {
   const callbackProps = {
     submitHandler: form.handleSubmit(props.onSubmit),
     isSubmitting: form.formState.isSubmitting,
+    hasChanges: form.formState.isDirty,
   } satisfies CallbackProps;
 
   return <FormProvider {...form}>{props.children(callbackProps)}</FormProvider>;

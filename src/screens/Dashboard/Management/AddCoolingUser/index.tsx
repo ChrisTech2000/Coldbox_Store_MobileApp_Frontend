@@ -26,7 +26,7 @@ import ContactField from './modules/ContactField';
 import LanguageField from './modules/LanguageField';
 import InAppNotifications from '#common/InAppNotifications';
 
-const width = (Dimensions.get('screen').width - 42) / 2;
+const width = (Dimensions.get('window').width - 42) / 2;
 
 function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   const { params } = props.route;
@@ -161,4 +161,4 @@ function _buildInitialValues(contextualFarmer?: Farmer) {
   return values;
 }
 
-export default withSafeArea(AddCoolingUser);
+export default withSafeArea(AddCoolingUser, ['bottom'], true);

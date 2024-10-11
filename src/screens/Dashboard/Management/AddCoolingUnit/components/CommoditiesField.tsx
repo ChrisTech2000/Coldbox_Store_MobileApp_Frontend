@@ -18,8 +18,8 @@ import DataAggregator from '../contexts/DataAggregator';
 import FormManager, { type FormValues } from '../contexts/FormManager';
 import { CropPricingManager } from '../utils';
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 export default function CommoditiesField() {
   const { control, watch, formState } = FormManager.useFormManager();
@@ -82,7 +82,7 @@ export default function CommoditiesField() {
                   ),
                   options: (
                     <FlashList
-                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
                       data={[...datums]}
                       renderItem={({ item: [id, name], index }) => (
                         <React.Fragment>

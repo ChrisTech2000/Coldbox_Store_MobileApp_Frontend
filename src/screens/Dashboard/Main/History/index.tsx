@@ -4,18 +4,20 @@ import { Dimensions, ScrollView, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { Company, CoolingUnit, ERoles } from '#types/global';
 
+import { GenericError } from '#ui/components/GenericError';
+import { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { createSelectStore } from '#ui/components/SelectWithStore';
 
-import { HistoryTabStackRouteProps } from 'navigation/Dashboard/Main/HistoryTabStack';
 import { Filters } from '../components/Filters';
 import { Movement } from './components/Movement';
 import { createSortingStore, ESortingOptions, SortingMenu } from './components/SortMenu';
@@ -25,8 +27,8 @@ const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
 const useSortingStore = createSortingStore();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const { t } = useTranslationUtils();
@@ -114,7 +116,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
           </View>
         ) : movements.length > 0 ? (
           <FlashList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
               <Movement
@@ -132,7 +134,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.farmer,
+                      farmer: movement.farmer, // TODO: this has been removed by the backend, we will need to review this later
                       crops: movement.movementCrops.filter(
                         (crop) => !movement.hasMarketSurvey.includes(crop.id)
                       ),
@@ -162,4 +164,9 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   );
 }
 
-export default withSafeArea(History);
+export default withSafeArea(
+  withErrorBoundary(History, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

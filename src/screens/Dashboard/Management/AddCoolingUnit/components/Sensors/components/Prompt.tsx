@@ -34,7 +34,7 @@ export default function Prompt() {
           </Text>
           <View tw="w-full py-1.5">
             <FlatList
-              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               nestedScrollEnabled
               data={SENSOR_TYPES}
               keyExtractor={(item, itemIdx) => `sensor-type-item-${item}-#${itemIdx}`}

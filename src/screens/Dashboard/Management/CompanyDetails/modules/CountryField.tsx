@@ -18,8 +18,8 @@ import { countriesDict } from '../utils';
 
 const countriesMeta = countriesDict();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 export default function CountryField() {
   const { control, watch, formState } = FormManager.useFormManager();
@@ -65,7 +65,7 @@ export default function CountryField() {
                       left={<TextInput.Icon icon="magnify" />}
                     />
                     <FlashList
-                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
                       data={datums}
                       renderItem={({ item, index }) => (
                         <TouchableOpacity

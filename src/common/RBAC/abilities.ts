@@ -39,20 +39,29 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.NAVIGATE, 'RegisteredEmployees');
         can(PERMISSION_KINDS.NAVIGATE, 'RevenueAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'UsageAnalysis');
+        can(PERMISSION_KINDS.NAVIGATE, 'DeliveryContacts');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CoolingUsers');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'EditSellingSettings');
+        can(PERMISSION_KINDS.NAVIGATE, 'ManageCouponsSettings');
         //
         // actions
         // scope: account details
         can(PERMISSION_KINDS.SET, 'FormEmailField');
+        can(PERMISSION_KINDS.SET, 'PayoutSettings');
+        can(PERMISSION_KINDS.SET, 'CompanySellerSettings');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
+        cannot(PERMISSION_KINDS.SET, 'UserSellerSettings');
         // scope: cooling units
         can(PERMISSION_KINDS.SET, 'Temperatures');
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Maps');
         cannot(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
-        // scope: check-in temperature alert
+        // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
+        cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
+        // scope: marketplace
+        cannot(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
         break;
       }
 
@@ -61,29 +70,38 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // navigation
         can(PERMISSION_KINDS.NAVIGATE, 'ManagementStack');
         can(PERMISSION_KINDS.NAVIGATE, 'CheckoutStack');
-
+        can(PERMISSION_KINDS.NAVIGATE, 'EditSellingSettings');
+        can(PERMISSION_KINDS.NAVIGATE, 'ManageCouponsSettings');
         // scope: management stack
         cannot(PERMISSION_KINDS.NAVIGATE, 'CompanyDetails');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Locations');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CoolingUnits');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Operators');
         cannot(PERMISSION_KINDS.NAVIGATE, 'RegisteredEmployees');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'DeliveryContacts');
         can(PERMISSION_KINDS.NAVIGATE, 'RevenueAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'UsageAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'CoolingUsers');
+        can(PERMISSION_KINDS.NAVIGATE, 'DeliveryContacts');
         //
         // actions
         // scope: account details
         cannot(PERMISSION_KINDS.SET, 'FormEmailField');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
+        cannot(PERMISSION_KINDS.SET, 'CompanySellerSettings');
+        can(PERMISSION_KINDS.SET, 'PayoutSettings');
+        can(PERMISSION_KINDS.SET, 'UserSellerSettings');
         // scope: cooling units
         can(PERMISSION_KINDS.SET, 'Temperatures');
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         cannot(PERMISSION_KINDS.NAVIGATE, 'Maps');
         cannot(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
-        // scope: check-in temperature alert
+        // scope: check-in
         can(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
+        can(PERMISSION_KINDS.VIEW, 'OperatorActions');
+        // scope: marketplace
+        can(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
         break;
       }
 
@@ -92,19 +110,26 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // navigation
         cannot(PERMISSION_KINDS.NAVIGATE, 'ManagementStack');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CheckoutStack');
+        can(PERMISSION_KINDS.NAVIGATE, 'EditSellingSettings');
+        can(PERMISSION_KINDS.NAVIGATE, 'ManageCouponsSettings');
         //
         // actions
         // scope: account details
         cannot(PERMISSION_KINDS.SET, 'FormEmailField');
         can(PERMISSION_KINDS.VIEW, 'FarmerFields');
         can(PERMISSION_KINDS.STORE, 'FarmerDetails');
+        can(PERMISSION_KINDS.SET, 'PayoutSettings');
+        can(PERMISSION_KINDS.SET, 'UserSellerSettings');
         // scope: cooling units
         cannot(PERMISSION_KINDS.SET, 'Temperatures');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
         can(PERMISSION_KINDS.NAVIGATE, 'Maps');
         can(PERMISSION_KINDS.VIEW, 'CompaniesFilter');
-        // scope: check-in temperature alert
+        // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
+        cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
+        // scope: marketplace
+        can(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
         break;
       }
 

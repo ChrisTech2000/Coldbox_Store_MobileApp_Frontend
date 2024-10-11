@@ -40,7 +40,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
         </View>
         <Divider tw="w-full bg-gray-400" />
 
-        <ScrollView tw="px-2" showsHorizontalScrollIndicator={false}>
+        <ScrollView tw="px-2" showsVerticalScrollIndicator={false}>
           <View tw="space-y-1">
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
@@ -132,7 +132,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
           </Text>
 
           <FlatList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={movement.cratesCheckin}
             keyExtractor={(item, index) => `${item.code}-${index}`}
             renderItem={({ item: crate }) => (

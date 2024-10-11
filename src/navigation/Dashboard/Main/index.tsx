@@ -21,6 +21,9 @@ import HistoryTabStack, { HistoryTabStackRoutes } from './HistoryTabStack';
 import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
 import AnalyticsStack from './AnalyticsStack';
+import ShoppingCartStack, { type ShoppingCartStackRoutes } from './ShoppingCartStack';
+import MarketplaceStack from './MarketplaceStack';
+import OrdersStack from './OrdersStack';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
@@ -31,6 +34,12 @@ export type DashboardMainRoutes = {
   MarketPrice: undefined;
   CoolingUnits: undefined;
   Analytics: undefined;
+  ShoppingCart: {
+    screen: keyof ShoppingCartStackRoutes;
+    params?: ShoppingCartStackRoutes | ShoppingCartStackRoutes;
+  };
+  Marketplace: undefined;
+  Orders: undefined;
 };
 
 export type DashboardMainRoutePaths = keyof DashboardMainRoutes;
@@ -46,7 +55,7 @@ type ScreenOptions = (props: {
 
 const TAB_METADATA: Record<
   DashboardMainRoutePaths,
-  { tabBarIcon: string; translationPath: TranslationPaths }
+  { tabBarIcon: string; translationPath: TranslationPaths } | undefined
 > = {
   Dashboard: { tabBarIcon: 'basket-outline', translationPath: 'navigation.bottomTabs.Dashboard' },
   History: { tabBarIcon: 'calendar-outline', translationPath: 'navigation.bottomTabs.History' },
@@ -59,6 +68,9 @@ const TAB_METADATA: Record<
     translationPath: 'navigation.bottomTabs.CoolingUnits',
   },
   Analytics: { tabBarIcon: 'chart-line', translationPath: 'navigation.bottomTabs.Analytics' },
+  ShoppingCart: undefined,
+  Marketplace: { tabBarIcon: 'store-outline', translationPath: 'navigation.dashboard.Marketplace' },
+  Orders: { tabBarIcon: 'receipt', translationPath: 'navigation.dashboard.Orders' },
 };
 
 const Tab = createBottomTabNavigator<DashboardMainRoutes>();
@@ -81,34 +93,38 @@ export default function DashboardMainBottomTabs() {
         focusedRoute !== 'RootHistoryTabStack' &&
         routeName !== 'History' &&
         focusedRoute !== 'Analytics' &&
-        routeName !== 'Analytics';
+        routeName !== 'Analytics' &&
+        routeName !== 'ShoppingCart' &&
+        routeName !== 'Marketplace' &&
+        routeName !== 'Orders';
 
       // eslint-disable-next-line
       // @ts-ignore
       const showBottomNav = !focusedRoute || BOTTOM_NAV_ROUTES_SCOPE.includes(focusedRoute);
-      const translationPath = TAB_METADATA[routeName].translationPath;
+      const translationPath = TAB_METADATA[routeName]?.translationPath;
+      const tabBarIconName = TAB_METADATA[routeName]?.tabBarIcon;
 
       return {
         ...props,
         headerShown: showHeader,
         tabBarStyle: { display: showBottomNav ? 'flex' : 'none' },
-        tabBarLabel: t(translationPath),
-        tabBarIcon: (iconProps) => (
-          <Icon name={TAB_METADATA[routeName].tabBarIcon} {...iconProps} />
-        ),
+        tabBarLabel: typeof translationPath === 'string' ? t(translationPath) : undefined,
+        tabBarIcon:
+          typeof tabBarIconName === 'string'
+            ? (iconProps) => <Icon name={tabBarIconName} {...iconProps} />
+            : undefined,
         header: (headerProps) => (
           <NavigatorHeader
             {...headerProps}
             routeTitle={t('navigation.bottomTabs.RootMainTabStack', {
               firstName: user?.firstName ?? '',
             })}
-            // eslint-disable-next-line react/prop-types
             {...dashboardHeaderFactory()}
           />
         ),
       };
     },
-    [user?.firstName]
+    [user?.firstName, dashboardHeaderFactory]
   );
 
   return (
@@ -118,10 +134,13 @@ export default function DashboardMainBottomTabs() {
       tabBar={BottomNavigation}
     >
       <Tab.Screen name="Dashboard" component={MainTabStack} />
-      <Tab.Screen name="History" component={HistoryTabStack} />
-      <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
-      <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       <Tab.Screen name="Analytics" component={AnalyticsStack} />
+      <Tab.Screen name="Marketplace" component={MarketplaceStack} />
+      <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
+      <Tab.Screen name="History" component={HistoryTabStack} />
+      <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
+      <Tab.Screen name="ShoppingCart" component={ShoppingCartStack} />
+      <Tab.Screen name="Orders" component={OrdersStack} />
     </Tab.Navigator>
   );
 }

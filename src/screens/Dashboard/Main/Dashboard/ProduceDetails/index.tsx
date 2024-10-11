@@ -8,20 +8,25 @@ import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
+import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
+import { ECoolingUnitMetric, EPricingType } from '#types/global';
 
-import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDetails'>) {
-  const { produce, coolingUnit, currency } = route.params;
+import isNil from 'lodash/isNil';
+import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
+import { currencies } from 'currencies.json';
+
+function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
+  const { produce, coolingUnit, currency } = props.route.params;
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
   const toast = InAppNotifications.useToast();
@@ -83,6 +88,24 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
       {
         label: t('Dashboard.ProduceDetails.cropType'),
         value: produce.cropName,
+      },
+      {
+        label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
+        value: (
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('EditCrateWeightAndPricing', {
+                companyCurrency: currency,
+                currencySymbol: currencies.find((c) => c.name === currency)?.symbol ?? '',
+                crates: produce.crates,
+              })
+            }
+            tw="pl-4"
+          >
+            <Icon source="chevron-right" size={25} />
+          </TouchableOpacity>
+        ),
+        custom: true,
       },
       {
         label: t('Dashboard.ProduceDetails.numberOfCrates'),
@@ -180,12 +203,14 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
                   produce.minimumRemainingShelfLife > 2 &&
                   'bg-yellow-400',
                 produce.minimumRemainingShelfLife <= 2 && 'bg-red-300',
-                (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
+                (isNil(produce.minimumRemainingShelfLife) ||
+                  produce.minimumRemainingShelfLife === -1) &&
                   'bg-gray-300'
               )}
               style={{
                 width: `${100 - percentage + (percentage > 1 ? 10 : 0)}%`,
                 opacity: 0.4,
+                maxWidth: '100%',
               }}
             />
             {percentage > 0 && (
@@ -195,8 +220,8 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
                   produce.minimumRemainingShelfLife <= 7 &&
                     produce.minimumRemainingShelfLife > 2 &&
                     'bg-yellow-400',
-                  produce.minimumRemainingShelfLife <= 2 && 'bg-red-500',
-                  (!produce.minimumRemainingShelfLife ||
+                  produce.minimumRemainingShelfLife <= 2 && 'bg-red-700',
+                  (isNil(produce.minimumRemainingShelfLife) ||
                     produce.minimumRemainingShelfLife === -1) &&
                     'bg-gray-300'
                 )}
@@ -235,7 +260,7 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
 
       <View tw="w-full px-3">
         <FlatList
-          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           data={data}
           scrollEnabled={false}
           renderItem={({ item, index }) => (
@@ -244,37 +269,29 @@ function ProduceDetails({ route, navigation }: MainTabStackRouteProps<'ProduceDe
                 <Text variant="TextMedium" tw="text-base">
                   {item.label}
                 </Text>
-                <Text variant="TextMedium" tw="text-base text-gray-400">
-                  {item.value ?? '-'}
-                </Text>
+                {item.custom ? (
+                  item.value
+                ) : (
+                  <Text variant="TextMedium" tw="text-base text-gray-400">
+                    {item.value ?? '-'}
+                  </Text>
+                )}
               </View>
               <Divider />
             </View>
           )}
         />
       </View>
-
-      {user?.role === ERoles.OPERATOR && (
-        <Button
-          mode="contained"
-          uppercase
-          tw="w-[85%]"
-          onPress={() => {
-            navigation.navigate('CheckOutStack', {
-              screen: 'CrateSelection',
-              params: {
-                coolingUnit,
-                user: farmer,
-                crates: produce.crates,
-              },
-            });
-          }}
-        >
-          {t('Dashboard.ProduceDetails.checkOutButton')}
-        </Button>
-      )}
+      <CheckoutButtonRedirect coolingUnit={coolingUnit} farmer={farmer} crates={produce.crates} />
     </ScrollView>
   );
 }
 
-export default withSafeArea(ProduceDetails);
+export default withSafeArea(
+  withErrorBoundary(ProduceDetails, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  }),
+  ['bottom'],
+  true
+);

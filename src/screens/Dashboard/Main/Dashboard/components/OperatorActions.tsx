@@ -1,8 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon, Portal, TextInput } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
@@ -25,11 +24,9 @@ import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
 type ManagementMode = 'check-in' | 'check-out';
-
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
 
 export function OperatorActions({
   navigation,
@@ -133,12 +130,15 @@ export function OperatorActions({
   ];
 
   return (
-    <View tw="absolute right-4 bottom-2 flex flex-row-reverse items-center">
+    <View
+      style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}
+      tw="absolute right-4 bottom-2 flex flex-row-reverse items-center"
+    >
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
         <TouchableOpacity
           tw={cn(
-            'w-12 h-12 items-center justify-center rounded-3xl',
-            isCrateManagementOpen ? 'bg-red-500' : 'bg-green-primary'
+            'w-12 h-12 items-center justify-center rounded-xl',
+            isCrateManagementOpen ? 'bg-red-600' : 'bg-green-primary'
           )}
           onPress={() => setIsCrateManagementOpen(!isCrateManagementOpen)}
         >
@@ -149,12 +149,11 @@ export function OperatorActions({
           )}
         </TouchableOpacity>
       </SkiaShadow>
-      {isCrateManagementOpen && (
+      {isCrateManagementOpen ? (
         <View tw="flex flex-row">
           <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
             <TouchableOpacity
-              tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl"
-              style={{ backgroundColor: paperTheme.colors.secondaryContainer }}
+              tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-green-primary"
               onPress={onCheckIn}
             >
               <CheckIn width={20} height={20} />
@@ -162,14 +161,14 @@ export function OperatorActions({
           </SkiaShadow>
           <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
             <TouchableOpacity
-              tw="w-10 h-10 mx-1 items-center justify-center rounded-3xl bg-red-200"
+              tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-red-400"
               onPress={onCheckOut}
             >
               <CheckOut width={20} height={20} />
             </TouchableOpacity>
           </SkiaShadow>
         </View>
-      )}
+      ) : null}
 
       <Portal>
         <Modal visible={isModalOpen} onDismiss={onModalClose}>
@@ -191,8 +190,9 @@ export function OperatorActions({
                   <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
                 </View>
               ) : (
-                <FlashList
-                  showsHorizontalScrollIndicator={false}
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  scrollEnabled={false}
                   data={combinedUsers}
                   extraData={selectedUser}
                   keyExtractor={(item) => item?.id?.toString() ?? ''}
@@ -211,11 +211,6 @@ export function OperatorActions({
                       </Text>
                     </TouchableOpacity>
                   )}
-                  estimatedItemSize={20}
-                  estimatedListSize={{
-                    height: deviceHeight,
-                    width: deviceWidth / 2,
-                  }}
                 />
               )}
             </ScrollView>

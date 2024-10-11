@@ -137,7 +137,7 @@ export default function TemperatureAlert() {
               <DataTable>
                 <FlatList
                   nestedScrollEnabled
-                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   ListHeaderComponent={
                     <DataTable.Header>
                       <DataTable.Title>

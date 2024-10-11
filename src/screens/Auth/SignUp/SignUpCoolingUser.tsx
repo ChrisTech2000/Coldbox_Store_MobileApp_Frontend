@@ -337,4 +337,4 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
   );
 }
 
-export default withSafeArea(SignUpCoolingUser);
+export default withSafeArea(SignUpCoolingUser, ['bottom'], true);

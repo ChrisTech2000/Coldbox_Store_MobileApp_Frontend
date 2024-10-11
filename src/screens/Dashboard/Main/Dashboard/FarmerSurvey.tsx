@@ -24,7 +24,7 @@ type FarmerSurveyProps = {
   surveys: GetFarmerSurveysResponse | undefined;
 };
 
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
 export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurveyProps) {
   const { t } = useTranslationUtils();

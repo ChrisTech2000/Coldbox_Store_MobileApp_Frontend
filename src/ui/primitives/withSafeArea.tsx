@@ -4,9 +4,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Boundaries = 'top' | 'bottom';
 
+export const BOTTOM_NAV_HEIGHT = 115;
+
 export function withSafeArea<T extends object>(
   WrappedComponent: ComponentType<T>,
-  boundaries: Array<Boundaries> = ['bottom']
+  boundaries: Array<Boundaries> = ['bottom'],
+  excludeExtraPadding?: boolean
 ) {
   const SafeAreaInsets = (props: T) => {
     const insets = useSafeAreaInsets();
@@ -27,11 +30,10 @@ export function withSafeArea<T extends object>(
             continue;
 
           case 'bottom':
-            base.paddingBottom = insets.bottom;
+            base.paddingBottom = insets.bottom + (excludeExtraPadding ? 0 : BOTTOM_NAV_HEIGHT);
             continue;
         }
       }
-
       return base;
     }, [insets]);
 

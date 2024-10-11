@@ -17,8 +17,8 @@ import FormManager, { type FormValues } from '../components/FormManager';
 
 const countriesMeta = countriesDict();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 export default function CountryField() {
   const { control, watch } = FormManager.useFormManager();
@@ -38,7 +38,7 @@ export default function CountryField() {
   );
 
   return (
-    <View tw="mt-4">
+    <React.Fragment>
       <Controller<FormValues>
         name="country"
         control={control}
@@ -62,7 +62,7 @@ export default function CountryField() {
                       left={<TextInput.Icon icon="magnify" />}
                     />
                     <FlashList
-                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
                       data={datums}
                       renderItem={({ item, index }) => (
                         <TouchableOpacity
@@ -90,7 +90,7 @@ export default function CountryField() {
           </View>
         )}
       />
-      <Divider tw="w-full bg-gray-700 my-3" />
-    </View>
+      <Divider tw="w-full bg-gray-700 mt-3" />
+    </React.Fragment>
   );
 }

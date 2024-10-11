@@ -26,7 +26,7 @@ import OccupationField from './components/SurveyFormFields/OccupationField';
 import SurveyFormManager from './components/SurveyFormManager';
 
 const SWR_CACHE_KEY = 'getCoolingUsersSurveyAggregatedData';
-const width = (Dimensions.get('screen').width - 42) / 2;
+const width = (Dimensions.get('window').width - 42) / 2;
 
 export type CommoditiesBaseDatums<T = string> = {
   occupation: EOccupation;
@@ -238,4 +238,4 @@ async function _dataFetcher(farmerId: number) {
 
 export type CoolingUserSurveyAggregatedData = Awaited<ReturnType<typeof _dataFetcher>>;
 
-export default withSafeArea(CoolingUsersSurvey);
+export default withSafeArea(CoolingUsersSurvey, ['bottom'], true);

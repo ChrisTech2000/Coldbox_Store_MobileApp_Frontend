@@ -3,6 +3,7 @@ import { RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
 
+import RBAC from '#common/RBAC';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -11,9 +12,11 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { ERoles, type Company, type CoolingUnit } from '#types/global';
 
+import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { paperTheme } from '#ui/lib/theme';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { Filters, type Search } from '../components/Filters';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
@@ -52,6 +55,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       defaultData: [],
     }
   );
+
   const {
     data: operatorDashboardProduces,
     refetch: refreshOperatorDashboardProduces,
@@ -87,7 +91,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
     return sortedProduces.filter((produce) => {
       if (searchType === 'id') {
-        return produce.crates.some((crate) => crate.id.toString() === lowerCaseSearch);
+        return produce.crates.some((crate) => crate.tag.toString() === lowerCaseSearch);
       }
 
       return (
@@ -105,7 +109,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, [user?.role]);
 
   return (
-    <View tw="absolute bottom-0 top-0 right-0 left-0">
+    <View tw="absolute bottom-0 top-0 right-0 left-0" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}>
       <Filters
         sortingMenu={
           <SortingMenu
@@ -133,7 +137,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         <DashboardEmptyState />
       ) : (
         <FlatList
-          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               refreshing={
@@ -154,10 +158,13 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
               key={`${produce.id}-${index}`}
               produce={produce}
               onNavigate={() =>
-                navigation.navigate('ProduceDetails', {
-                  produce,
-                  coolingUnit: coolingUnit,
-                  currency: selectedCompany?.currency ?? company?.currency ?? '',
+                navigation.navigate('ProduceDetailsStack', {
+                  screen: 'Root',
+                  params: {
+                    produce,
+                    coolingUnit: coolingUnit,
+                    currency: selectedCompany?.currency ?? company?.currency ?? '',
+                  },
                 })
               }
               currency={selectedCompany?.currency ?? company?.currency ?? ''}
@@ -165,9 +172,17 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           )}
         />
       )}
-      {user?.role === ERoles.OPERATOR && <OperatorActions {...props} coolingUnit={coolingUnit} />}
+
+      <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
+        <OperatorActions {...props} coolingUnit={coolingUnit} />
+      </RBAC.ProtectedResource>
     </View>
   );
 }
 
-export default withSafeArea(DashboardMain);
+export default withSafeArea(
+  withErrorBoundary(DashboardMain, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

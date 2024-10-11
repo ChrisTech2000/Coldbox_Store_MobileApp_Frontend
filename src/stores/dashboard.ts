@@ -3,7 +3,8 @@ import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
 import ColdtivateService from '#services/ColdtivateService';
-import { ERoles, type Farmer, type Company, type CoolingUnit } from '#types/global';
+import { GetAllCropsResponse } from '#types/api.responses';
+import { type Company, type CoolingUnit, type Farmer } from '#types/global';
 
 import { useAuthStore } from './auth';
 
@@ -19,6 +20,8 @@ type State = {
   farmerUnitsIds: number[] | null;
 
   coolingUnits: Array<CoolingUnit> | null;
+
+  allCrops: Array<GetAllCropsResponse> | null;
 
   refreshData: Array<() => void>;
 };
@@ -42,18 +45,22 @@ export const useDashboardStore = create<State & Actions>((set) => ({
   farmerCompanies: null,
   farmerUnitsIds: null,
   coolingUnits: null,
+  allCrops: null,
   refreshData: [],
 
   fetchGlobalInformation: async (userId: number) => {
     try {
-      const [farmerResult, companiesResult] = await Promise.allSettled([
+      const [farmerResult, companiesResult, allCropsResult] = await Promise.allSettled([
         ColdtivateService.getFarmerByUserId(userId),
         ColdtivateService.getCompanies(),
+        ColdtivateService.getAllCrops(),
       ]);
 
       const farmer =
         farmerResult.status === 'fulfilled' ? farmerResult.value?.at(0) : ({} as Farmer);
       const companies = companiesResult.status === 'fulfilled' ? companiesResult.value : [];
+
+      const crops = allCropsResult.status === 'fulfilled' ? allCropsResult.value : [];
 
       const farmerCompanies = companies?.filter((company) =>
         farmer?.companies.includes(company.id)
@@ -66,6 +73,7 @@ export const useDashboardStore = create<State & Actions>((set) => ({
         farmerUserCode: farmer?.userCode ?? null,
         farmerCompanies: farmerCompanies ?? null,
         farmerUnitsIds: farmer?.coolingUnits ?? null,
+        allCrops: crops ?? null,
       });
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -92,7 +100,7 @@ export const useGlobalInformation = (isAuthenticated: boolean) => {
   const user = useAuthStore(useShallow((store) => store.user));
 
   useEffect(() => {
-    if (!isAuthenticated || !user?.id || user.role !== ERoles.COOLING_USER) return;
+    if (!isAuthenticated || !user?.id) return;
 
     setIsLoading(true);
     fetchGlobalInformation(user?.id).finally(() => setIsLoading(false));

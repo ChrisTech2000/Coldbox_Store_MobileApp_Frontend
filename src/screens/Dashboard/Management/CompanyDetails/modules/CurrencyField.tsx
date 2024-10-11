@@ -17,8 +17,8 @@ import { currenciesDict } from '../utils';
 
 const currenciesMeta = currenciesDict();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 export default function CurrencyField() {
   const { control, watch, formState } = FormManager.useFormManager();
@@ -61,7 +61,7 @@ export default function CurrencyField() {
                       left={<TextInput.Icon icon="magnify" />}
                     />
                     <FlashList
-                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
                       data={datums}
                       renderItem={({ item, index }) => (
                         <TouchableOpacity

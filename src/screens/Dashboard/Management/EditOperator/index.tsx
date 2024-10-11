@@ -165,4 +165,4 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   );
 }
 
-export default withSafeArea(EditOperator);
+export default withSafeArea(EditOperator, ['bottom'], true);

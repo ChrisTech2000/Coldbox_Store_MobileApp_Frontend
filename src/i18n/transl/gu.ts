@@ -19,6 +19,10 @@ export default {
     other: 'અન્ય',
   },
   navigation: {
+    error: {
+      errorMessage: 'અરે... કંઈક ખોટું થયું હોય તેવું લાગે છે.',
+      tryAgainMessage: 'કૃપા કરીને થોડી વાર પછી ફરી પ્રયાસ કરો.',
+    },
     auth: {
       SignIn: 'લૉગ ઇન કરો',
       SignUp: 'સાઇન અપ કરો',
@@ -52,6 +56,7 @@ export default {
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
       ProduceDetails: '{{produceCode}}',
+      MarketplaceSettings: 'Marketplace settings', // TODO
       PriceTrend: 'કિંમતનો પ્રવાહ',
       PriceRanking: 'કિંમત રેન્કિંગ',
       Planner: 'પ્લાનર',
@@ -68,18 +73,39 @@ export default {
     },
     dashboard: {
       AccountDetails: 'ખાતાનો વિગતવાર',
+      PersonalDetails: 'Personal details', // TODO
+      LocalizationPreferences: 'Localization preferences', // TODO
+      ContactsSharing: 'Contacts sharing', // TODO
+      Coupons: 'Coupons', // TODO
+      CouponsActiveTab: 'Active', // TODO
+      CouponsRevokedTab: 'Revoked', // TODO
+      Marketplace: 'Marketplace', // TODO
+      MarketplaceFilters: 'Filters', // TODO
+      MarketplaceAllTab: 'All', // TODO
+      MarketplaceFavoritesTab: 'Favorites', // TODO
+      Orders: 'Orders', // TODO
+      MyOrders: 'My Orders', // TODO
+      OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'જ્ઞાન કેન્દ્ર',
       QuitTutorial: 'ટ્યુટોરિયલ છોડો',
       FAQ: 'વારંવાર પુછાતા પ્રશ્નો',
       About: 'વિશે',
       Management: 'કુશળતા',
       Tutorial: 'ટ્યુટોરિયલ',
+      PayoutOptions: 'ચુકવણી વિકલ્પો',
+      PaymentMethods: 'પેમેન્ટ પદ્ધતિઓ',
+      Wallet: 'વૉલેટ',
+      Transactions: 'લેનદેન',
+      AddCard: 'ક્રેડિટ કાર્ડ ઉમેરો',
+      EditCard: 'ક્રેડિટ કાર્ડ સંપાદિત કરો',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'કૃષિ પ્રકાર પસંદ કરો',
       CheckIn: 'ચેક-ઇન',
       CropList: '{{cropType}}',
       CrateSetup: 'ચેક-ઇન',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'COMSOL રનટાઇમ લાઇસેન્સ સમજૂતિ 6.0',
@@ -122,6 +148,7 @@ export default {
     'update-success': 'સફળતાપૂર્વક અપડેટ',
     'save-changes': 'પરિવર્તનો સાચવો',
     continue: 'જારી રાખો',
+    save: 'સાચવો',
   },
   components: {
     datePicker: {
@@ -133,11 +160,13 @@ export default {
     },
   },
   Auth: {
+    welcomePopup:
+      'Coldtivate માં આપનું સ્વાગત છે! જો તમે ખેડૂત, વેપારી છો અથવા કોલ્ડ રૂમમાં સંગ્રહિત ઉત્પાદનો ખરીદવામાં રસ ધરાવો છો, તો કૃપા કરીને \'ઠંડક વપરાશકર્તા અથવા ઉપભોક્તા તરીકે સાઇન અપ કરો\' પર ક્લિક કરીને નોંધણી કરો. જો તમે ઠંડક કંપનીમાં કામ કરો છો, તો તમારો જવાબદાર વ્યક્તિ સંપર્ક કરો અને તપાસો કે તમારી કંપની નોંધાયેલી છે કે કેમ. જો છે, તો તમારો જવાબદાર તમને નોંધાયેલા કર્મચારી અથવા ઑપરેટર તરીકે સાઇન અપ કરવા માટે SMS આમંત્રણ મોકલશે. જો નથી, તો તમે કંપની નોંધાવી શકો છો અને નોંધાયેલા કર્મચારી તરીકે નોંધણી કરી શકો છો. કૃપા કરીને "ઍપ માહિતી" વિભાગ તપાસો, જેમાં FAQ છે.',
     Root: {
       welcome: 'કોલ્ડટિવેટમાં આપનું સ્વાગત છે',
       signIn: 'સાઇન ઇન',
       signUpCompany: 'કંપની તરીકે સાઇન અપ કરો',
-      signUpCoolingUser: 'કૂલિંગ યુઝર તરીકે સાઇન અપ કરો',
+      signUpCoolingUser: 'ઠંડક વપરાશકર્તા અથવા ઉપભોક્તા તરીકે નોંધણી કરો',
       appInfo: 'એપ્લિકેશન માહિતી',
     },
     SignIn: {
@@ -156,7 +185,7 @@ export default {
         coolingUser: {
           label: 'કૂલિંગ યુઝર',
           description:
-            'ઠંડા કક્ષાનો ઉપયોગકર્તા. ખેડૂતો, વેપારી, રિટેલર્સ જેમણે સ્માર્ટફોનનો ઍક્સેસ છે તે અહીં લોગિન કરી શકે છે. સ્માર્ટફોન વિના ઠંડા કક્ષાનો ઉપયોગકર્તા ઠંડા કક્ષાને મુલાકાત લઈને અને ઓપરેટર સાથે મલ્ટિઅક્ષસ કરી શકે છે.',
+            'કોલ્ડ રૂમ વપરાશકર્તા અને ઉપભોક્તા. ખેડૂત, વેપારી, અને રિટેલર, જેમણે સ્માર્ટફોનનો ઍક્સેસ છે, તે અહીં લૉગ ઇન કરી શકે છે. જેમણે સ્માર્ટફોન નથી, તેવા કોલ્ડ રૂમ વપરાશકર્તા કોલ્ડ રૂમમાં જઈને અને ઑપરેટર સાથે સંપર્ક કરીને ઍપની માહિતી મેળવી શકે છે. ઉપભોક્તા અહીં લૉગ ઇન કરીને ખરીદી પૂર્ણ કરી શકે છે.',
         },
         toasts: {
           login:
@@ -244,7 +273,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: 'સાઇન અપ ઠંડકનો ઉપયોગકર્તા',
+        header: 'ઠંડક વપરાશકર્તા અથવા ઉપભોક્તા તરીકે નોંધણી કરો',
         languageFieldName: 'ભાષા',
       },
     },
@@ -393,6 +422,7 @@ export default {
         selectAll: 'બધા પસંદ કરો',
         checkIn: 'ચેક-ઇન',
         days: 'દિવસ',
+        daysLeft: '{{amount}} દિવસો બાકી',
         day: 'દિવસ',
         ttp: 'ટીટીપી',
         numberOfCrates: 'કરેટ્સની સંખ્યા',
@@ -421,6 +451,10 @@ export default {
         emptyMessage: 'કૃપા કરીને તમારું ચેક-ઇન કરાવવા માટે ઓછામાં ઓછી એક કરેટ ઉમેરો',
         noPlannedDaysMessage:
           'કોઈ વસ્તુઓમાં યોજિત દિવસો ગમાવવા માટે છે. આથી, અંદાજિત ખર્ચ ગણતરી કરી શકાતી નથી.',
+        seeMore: 'વધુ જુઓ',
+        seeLess: 'ઓછું જુઓ',
+        listed: 'યાદીબદ્ધ',
+        cratesAddedLabel: 'ટોપલીઓ ઉમેરવામાં આવી',
         WithCode: {
           modalTitle: 'મૌજુદા ચેક-આઉટથી નવો ચેક-ઇન બનાવવો',
           modalDescription:
@@ -443,7 +477,7 @@ export default {
           individualCrateWeightButton: 'વ્યક્તિગત કરેટ વજન સુધારવા માટે અહીં ક્લિક કરો',
           individualCrateIdButton: 'વ્યક્તિગત કરેટ આઈડી સુધારવા માટે અહીં ક્લિક કરો',
           numberOfCratesLabel: 'કરેટ્સની સંખ્યા',
-          crateWeightLabel: 'કરેટનું સામાન્ય વજન',
+          crateWeightLabel: 'ક્રેટ વજન અને માર્કેટપ્લેસ સૂચિ',
           pricePerDayAndCrateLabel: 'દરેક દિવસ / કરેટની કિંમત',
           pricePerDayAndKilogramLabel: 'દરેક દિવસ / કિ.ગ્રા. ની કિંમત',
           fixedPriceLabel: 'ફિક્સ્ડ કિંમત',
@@ -455,6 +489,14 @@ export default {
             yesterday: 'ગયા રોજ',
             dayBefore: 'બે દિવસ પહેલા',
             evenBefore: 'ત્યાં પહેલાં',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'બધાને લાગુ કરો',
+            list: 'વેચાણ માટે યાદી',
+            addMore: 'વધુ ઉમેરો',
+            sellingPrice: 'વેચાણ માટેની કિંમતની યાદી',
+            potentialSellingPrice: 'સમ্ভવિત વેચાણ મૂલ્ય',
+            info: 'કિંમતની રચના ઉત્પાદનના વેચાણનો ઉદ્દેશ છે, ઠંડક સંગ્રહ શુલ્કનો નહીં.',
           },
           cratesError: 'કૃપા કરીને સકારાત્મક કરેટ સંખ્યા દાખલ કરો',
           crateWeightError: 'કૃપા કરીને સકારાત્મક કરેટ વજન દાખલ કરો',
@@ -832,6 +874,15 @@ export default {
           creditCard: 'ક્રેડિટ કાર્ડ',
         },
       },
+      Coupons: {
+        emptyMessage: 'કોઈ કૂપન હજુ સુધી ઉમેરવામાં આવ્યું નથી',
+        addCoupon: 'કૂપન ઉમેરો',
+        code: 'કૂપન કોડ',
+        percentage: 'કૂપન ટકા',
+        revokeTitle: 'કૂપન રદ કરવો',
+        revokeMessage:
+          'શું તમે ખાતરી છો કે તમે આ કૂપન રદ કરવા માંગો છો? એકવાર રદ કરવામાં આવે, તે ફરીથી ઉપયોગમાં લેવાઈ શકતું નથી અને છૂટ પણ ઉપલબ્ધ રહેશે નહીં. આ ક્રિયા શાશ્વત છે અને તેને રદ કરી શકાયતું નથી.',
+      },
     },
     AccountDetails: {
       popups: {
@@ -851,6 +902,60 @@ export default {
       },
       toasts: {
         success: 'સફળતાપૂર્વક અપડેટ થયું',
+      },
+      sections: {
+        sellerSettings: 'વિક્રેતા સેટિંગ્સ',
+        buyerSettings: 'ખરીદદાર સેટિંગ્સ',
+        details: 'વિગતવાર',
+      },
+      ContactsSharing: {
+        publicPhone: 'ફોન નંબર જાહેર કરો',
+        publicEmail: 'ઈ-મેઇલ જાહેર કરો',
+      },
+      PayoutSettings: {
+        addTitle: 'કૃપા કરીને તમારી બેંક એકાઉન્ટની માહિતી દાખલ કરો',
+        editTitle: 'તમારી બેંક એકાઉન્ટની માહિતી',
+        form: {
+          nameLabel: 'મૂળ નામ',
+          namePlaceholder: 'જેમ કે: John Doe',
+          accountNumberLabel: 'એકાઉન્ટ નંબર',
+          accountNumberPlaceholder: 'એકાઉન્ટ નંબર દાખલ કરો',
+          bankLabel: 'બેંકનું નામ',
+          bankPlaceholder: 'બેંકનું નામ દાખલ કરો',
+          errors: {
+            name: 'પૂરું નામ જરૂરી છે',
+            account: 'ખાતાનો નંબર જરૂરી છે',
+            bank: 'બેંકનું નામ જરૂરી છે',
+          },
+        },
+        successMessage: 'બેંક એકાઉન્ટ સફળતાપૂર્વક ઉમેરાયું.',
+        errorMessage: 'કંઇક ખોટું થયું. કૃપા કરીને પછી ફરી પ્રયાસ કરો.',
+      },
+      PaymentSettings: {
+        cards: 'કાર્ડ્સ',
+        creditCard: {
+          predefined: 'પૂર્વ નક્કી કરેલ',
+          owner: 'કાર્ડ ધારકનું નામ',
+          date: 'સમાપ્ત તારીખ',
+          cvv: 'સિવીવિવી',
+        },
+        AddCreditCard: {
+          title: 'કૃપા કરીને તમારા કાર્ડની માહિતી દાખલ કરો',
+          form: {
+            cardName: 'કાર્ડનું નામ',
+            cardNamePlaceholder: 'કાર્ડનું નામ દાખલ કરો',
+            cardNumber: 'કાર્ડ નંબર',
+            cardNumberPlaceholder: 'કાર્ડ નંબર દાખલ કરો',
+            expiryDate: 'સમાપ્તિ તારીખ',
+            securityCode: 'સુરક્ષા કોડ',
+            securityCodePlaceholder: 'કાર્ડનો સુરક્ષા કોડ દાખલ કરો',
+            predefinedMethod: 'પૂર્વનિર્ધારિત ચુકવણી પદ્ધતિ',
+            successMessage: 'કાર્ડ સફળતાપૂર્વક ઉમેરાયું',
+            cardNameError: 'કાર્ડનું નામ જરૂરી છે',
+            cardNumberError: 'કાર્ડ નંબર જરૂરી છે',
+            securityCodeError: 'સિક્યુરિટી કોડ જરૂરી છે',
+          },
+        },
       },
     },
     About: {
@@ -996,6 +1101,35 @@ export default {
           checkedIn: 'ચેક-ઇન થઈ ગયું',
         },
       },
+    },
+    ShoppingCart: {
+      empty: 'તમારું કાર્ટ ખાલી છે',
+      daysLeft: 'દિવસ બાકી',
+      weight: 'કિલો ઉપલબ્ધ',
+      perKg: 'કિલોગ્રામ દીઠ',
+      total: 'કુલ ચૂકવણી',
+      pay: 'ચૂકવણી કરો',
+      orderHeader: 'ઓર્ડર',
+      subtotal: 'ઉપકુલ',
+      produce: 'ઉત્પાદન',
+      discount: 'ડિસ્કાઉન્ટ',
+      fees: 'સેવા ફી',
+      marketFees: 'માર્કેટપ્લેસ ફી',
+      paymentFee: 'ચૂકવણી ફી',
+      viewContacts: 'સંપર્ક જુઓ',
+      contactsForDelivery: 'ડિલિવરી માહિતી માટેના સંપર્ક',
+      gotItButton: 'સમજ્યું!',
+      pickupMethods: 'પિકઅપ પદ્ધતિ',
+      pickUpToday: 'આજે પિકઅપ કરો',
+      keepInStorageDailyRate: 'સ્ટોરેજમાં રાખો (દિવસ દીઠ {{price}})',
+      keepInStorageFixedRate: 'ફિક્સ્ડ સ્ટોરેજ દર ({{price}})',
+      delivery: 'ડિલિવરી',
+      companyName: 'કંપનીનું નામ',
+      phoneNumber: 'ફોન નંબર',
+      thankYouMessage: 'ઓર્ડર કરવા બદલ આભાર',
+      orderOverview: 'ઓર્ડર સારાંશ',
+      products: 'ઉત્પાદનો',
+      consultOrders: 'મારા ઓર્ડર જુઓ',
     },
     Analytics: {
       emptyState: 'પ્રદર્શિત કરવા માટે કોઈ ડેટા નથી',

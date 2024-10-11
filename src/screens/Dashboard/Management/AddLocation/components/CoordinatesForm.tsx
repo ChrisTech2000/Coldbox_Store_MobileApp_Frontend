@@ -7,7 +7,7 @@ import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../components/FormManager';
 
-const width = (Dimensions.get('screen').width - 42) / 2;
+const width = (Dimensions.get('window').width - 42) / 2;
 
 export default function CoordinatesForm() {
   const { control, formState } = FormManager.useFormManager();

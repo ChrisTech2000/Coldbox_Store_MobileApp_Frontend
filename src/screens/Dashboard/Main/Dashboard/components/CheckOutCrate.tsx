@@ -55,11 +55,11 @@ export function CheckoutCrate({ crate }: ProduceProps) {
           </Text>
         </View>
         <View tw="pl-2">
-          {crate.remainingShelfLife && (
+          {crate.remainingShelfLife ? (
             <Text variant="TextBold" tw="text-green-400 text-base">
               {`${t('Dashboard.CrateManagement.CheckOut.ttp')}: ${generateDaysString(crate.remainingShelfLife)}`}
             </Text>
-          )}
+          ) : null}
           <Text variant="TextMedium">{`${t('Dashboard.CrateManagement.CheckOut.checkIn')}:`}</Text>
           <Text variant="TextMedium">{dateFmt(crate.checkInDate.toString(), 'MMM dd yyyy')}</Text>
           <Text variant="TextMedium">{`(${generateDaysString(crate.currentStorageDays)})`}</Text>

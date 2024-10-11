@@ -17,7 +17,7 @@ import { paperTheme } from '#ui/lib/theme';
 import FormManager from '../../AddCoolingUnit/contexts/FormManager';
 import InAppNotifications from '#common/InAppNotifications';
 
-const width = (Dimensions.get('screen').width - 42) / 2;
+const width = (Dimensions.get('window').width - 42) / 2;
 
 type Props = {
   coolingUnitId: number;

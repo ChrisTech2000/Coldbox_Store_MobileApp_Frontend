@@ -1,8 +1,10 @@
 import { JsonObject } from '#services/utils';
 import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import {
+  EBankAccountType,
   EImpactMode,
   EPaymentType,
+  EPickUpMethod,
   ERoles,
   ESellingLocation,
   type Company,
@@ -96,6 +98,7 @@ export interface CheckInParams extends JsonObject {
       tag: string; // the id defined during checkout
       coolingUnitId: number;
       plannedDays: number | undefined;
+      isSellable?: boolean;
     }>;
     harvestDate: number;
     initialGrade: unknown; // TODO: figure out type
@@ -410,3 +413,47 @@ export type GetPredictionTableParams = {
   days: Date[];
   statesIds: number[];
 };
+
+export interface CreateCouponParams extends JsonObject {
+  code: string;
+  discountPercentage: number;
+}
+
+export interface GetCouponListParams extends JsonObject {
+  revoked: 'only' | 'included';
+}
+
+export interface AddItemToCartParams extends JsonObject {
+  crateId: number;
+  orderedProduceWeight: number;
+  updateStrategy: 'increase' | 'decrease' | 'replace';
+}
+export interface UpdateListedCrateParams extends JsonObject {
+  crateIds: Array<number>;
+  producePricePerKg: number;
+}
+
+export interface GetAvailableListingParams extends JsonObject {
+  location: [number, number] | [];
+  sortBy?: 'price-asc' | 'price-desc' | 'nearby-me';
+  filterByCoolingUnitsIds?: Array<number>;
+  page?: number;
+  itemsPerPage?: number;
+  filterByMaxDistanceInKm?: number;
+}
+
+export interface AddPaystackBankAccountParams extends JsonObject {
+  accountType: EBankAccountType;
+  bankCode: string;
+  accountNumber: string;
+  countryCode: string;
+  accountName: string;
+  companyId?: number;
+}
+
+export interface SetPickUpDetailsParams extends JsonObject {
+  pickUpDetails: Array<{
+    coolingUnitId: number;
+    pickupMethod: EPickUpMethod;
+  }>;
+}

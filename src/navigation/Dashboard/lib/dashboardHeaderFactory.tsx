@@ -1,49 +1,88 @@
-import React, { useCallback } from 'react';
 import { type NavigationProp, DrawerActions, useNavigation } from '@react-navigation/native';
+import React, { useCallback } from 'react';
+import { View } from 'react-native';
 import { Appbar, Badge } from 'react-native-paper';
 
+import RBAC from '#common/RBAC';
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
+import useCartStore from '#stores/shoppingCart';
 
 import { useRightDrawerStore } from '../index';
-import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
-import type { DashboardMainRoutePaths } from '../Main';
-import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
-import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
-import type { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
+import type { DashboardMainRoutePaths, DashboardMainRoutes } from '../Main';
 import type { AnalyticsStackRoutePaths } from '../Main/AnalyticsStack';
-
+import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
+import type { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
+import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
+import type { MarketplaceRoutePaths } from '../Main/MarketplaceStack';
+import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
+import type { OrdersRoutePaths } from '../Main/OrdersStack';
 import { useNotifications } from './notifications';
 
-function _dashboardHeaderFactory<Params extends Record<string, unknown>, Path extends string>(
+function _buildLeftContent<Params extends Record<string, unknown>, Path extends string>(
   dispatch: NavigationProp<Params, Path>['dispatch'],
-  notificationCount?: number
-): NavigationHeaderProps {
-  return {
-    leftContent: (
-      <Appbar.Action icon="menu" size={26} onPress={() => dispatch(DrawerActions.openDrawer())} />
-    ),
-    rightContent: (
-      <React.Fragment>
+  goBackFunc?: () => void
+) {
+  if (typeof goBackFunc === 'function') {
+    return <Appbar.BackAction size={26} onPress={() => goBackFunc?.()} />;
+  }
+  return (
+    <Appbar.Action icon="menu" size={26} onPress={() => dispatch(DrawerActions.openDrawer())} />
+  );
+}
+
+function _buildRightContent(
+  notificationCount: number,
+  cartItemsCount: number,
+  goToShoppingCart?: () => void
+) {
+  return (
+    <View tw="flex-row items-center space-x-1.5">
+      <View tw="relative">
         <Appbar.Action
           icon="bell-outline"
-          size={25}
+          size={26}
           onPress={() => useRightDrawerStore.getState().toggle()}
         />
-        <Badge visible={!!notificationCount && notificationCount > 0} tw="absolute top-2 right-2">
+        <Badge
+          visible={!!notificationCount && notificationCount > 0}
+          tw="absolute top-1.5 right-1.5"
+        >
           {notificationCount}
         </Badge>
-      </React.Fragment>
-    ),
-  };
+      </View>
+      {typeof goToShoppingCart === 'function' ? (
+        <View tw="relative">
+          <Appbar.Action icon="cart-outline" size={27} onPress={() => goToShoppingCart()} />
+          <Badge visible={cartItemsCount > 0} tw="absolute top-1.5 right-1.5">
+            {cartItemsCount}
+          </Badge>
+        </View>
+      ) : null}
+    </View>
+  );
 }
 
 export function useDashboardHeader() {
-  const dispatch = useNavigation().dispatch;
+  const { guard } = RBAC.useRBAC();
+  const { dispatch, navigate } = useNavigation<NavigationProp<DashboardMainRoutes>>();
+  const cartData = useCartStore((store) => store.cartData);
+
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
+  const cartItemsCount = cartData?.items?.length ?? 0;
 
   return useCallback(
-    () => _dashboardHeaderFactory(dispatch, newNotificationsCount),
-    [newNotificationsCount]
+    (goBackFunc?: () => void): NavigationHeaderProps => {
+      const showShoppingCart = guard('VIEW', 'MarketplaceShoppingCart');
+      return {
+        leftContent: _buildLeftContent(dispatch, goBackFunc),
+        rightContent: _buildRightContent(
+          newNotificationsCount,
+          cartItemsCount,
+          showShoppingCart ? () => navigate('ShoppingCart', { screen: 'Root' }) : undefined
+        ),
+      };
+    },
+    [newNotificationsCount, cartItemsCount]
   );
 }
 
@@ -55,7 +94,9 @@ type BottomNavRoutePaths =
   | HistoryTabStackRoutePaths
   | MarketPriceTabsRoutePaths
   | CoolingUnitsTabsRoutePaths
-  | AnalyticsStackRoutePaths;
+  | AnalyticsStackRoutePaths
+  | MarketplaceRoutePaths
+  | OrdersRoutePaths;
 
 export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'RootMainTabStack',
@@ -67,4 +108,9 @@ export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'CratesInfo',
   'Maps',
   'Analytics',
+  'Marketplace',
+  'MarketplaceRoot',
+  'Orders',
+  'OrdersRoot',
+  'OrdersDetails',
 ];

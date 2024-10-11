@@ -19,6 +19,10 @@ export default {
     other: 'Autre',
   },
   navigation: {
+    error: {
+      errorMessage: "Oups... il semble que quelque chose s'est mal passé.",
+      tryAgainMessage: 'Veuillez réessayer plus tard.',
+    },
     auth: {
       SignIn: 'Connexion',
       SignUp: 'Inscription',
@@ -52,6 +56,7 @@ export default {
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
       ProduceDetails: '{{produceCode}}',
+      MarketplaceSettings: 'Marketplace settings', // TODO
       PriceTrend: 'Tendance des prix',
       PriceRanking: 'Classement des prix',
       Planner: 'Planificateur',
@@ -68,18 +73,39 @@ export default {
     },
     dashboard: {
       AccountDetails: 'Détails du compte',
+      PersonalDetails: 'Personal details', // TODO
+      LocalizationPreferences: 'Localization preferences', // TODO
+      ContactsSharing: 'Contacts sharing', // TODO
+      Coupons: 'Coupons', // TODO
+      CouponsActiveTab: 'Active', // TODO
+      CouponsRevokedTab: 'Revoked', // TODO
+      Marketplace: 'Marketplace', // TODO
+      MarketplaceFilters: 'Filters', // TODO
+      MarketplaceAllTab: 'All', // TODO
+      MarketplaceFavoritesTab: 'Favorites', // TODO
+      Orders: 'Orders', // TODO
+      MyOrders: 'My Orders', // TODO
+      OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Centre de connaissances',
       QuitTutorial: 'Quitter le tutoriel',
       FAQ: 'FAQ',
       About: 'À propos',
       Management: 'Gestion',
       Tutorial: 'Tutoriel',
+      PayoutOptions: 'Options de paiement',
+      PaymentMethods: 'Méthodes de paiement',
+      Wallet: 'Portefeuille',
+      Transactions: 'Transactions',
+      AddCard: 'Ajouter une carte de crédit',
+      EditCard: 'Modifier une carte de crédit',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'Sélectionner le type de culture',
       CheckIn: 'Enregistrement',
       CropList: '{{cropType}}',
       CrateSetup: 'Enregistrement',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'Contrat de Licence Runtime COMSOL 6.0',
@@ -122,6 +148,7 @@ export default {
     'update-success': 'Mis à jour avec succès',
     'save-changes': 'Enregistrer les modifications',
     continue: 'Continuer',
+    save: 'Enregistrer',
   },
   components: {
     datePicker: {
@@ -133,11 +160,13 @@ export default {
     },
   },
   Auth: {
+    welcomePopup:
+      "Bienvenue sur Coldtivate ! Si vous êtes un agriculteur, un commerçant, ou si vous souhaitez acheter des produits stockés dans les chambres froides, veuillez vous inscrire en cliquant sur \"S'inscrire en tant qu'utilisateur de refroidissement ou consommateur\". Si vous travaillez pour une entreprise de refroidissement, veuillez contacter votre responsable pour vérifier si votre entreprise est enregistrée. Si elle l'est, votre responsable devrait vous envoyer une invitation par SMS pour vous inscrire en tant qu'employé enregistré ou opérateur. Sinon, vous pouvez inscrire l'entreprise et vous enregistrer en tant qu'employé enregistré. Veuillez consulter la section \"Infos sur l'app\" pour les FAQ.",
     Root: {
       welcome: 'Bienvenue sur Coldtivate',
       signIn: 'Se connecter',
       signUpCompany: "S'inscrire comme entreprise",
-      signUpCoolingUser: "S'inscrire comme utilisateur de refroidissement",
+      signUpCoolingUser: "S'inscrire comme utilisateur de refroidissement ou consommateur",
       appInfo: "Informations sur l'application",
     },
     SignIn: {
@@ -156,7 +185,7 @@ export default {
         coolingUser: {
           label: 'Utilisateur de refroidissement',
           description:
-            "L'utilisateur de la chambre froide. Les agriculteurs, commerçants, détaillants ayant accès à un smartphone peuvent se connecter ici. Les utilisateurs de chambres froides sans smartphone peuvent accéder aux informations de l'application en visitant une chambre froide et en interagissant avec l'opérateur.",
+            "L'utilisateur de chambre froide et le consommateur. Les agriculteurs, commerçants et détaillants qui ont accès à un smartphone peuvent se connecter ici. Les utilisateurs de chambres froides sans smartphone peuvent accéder aux informations de l'application en visitant une chambre froide et en interagissant avec l'opérateur. Les consommateurs peuvent se connecter ici pour finaliser leurs achats.",
         },
         toasts: {
           login:
@@ -246,7 +275,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: "S'inscrire comme utilisateur de refroidissement",
+        header: "S'inscrire comme utilisateur de refroidissement ou consommateur",
         languageFieldName: 'langue',
       },
     },
@@ -401,6 +430,7 @@ export default {
         checkIn: 'Enregistrement',
         days: 'jours',
         day: 'jour',
+        daysLeft: '{{amount}} jours restants',
         ttp: 'TTP',
         numberOfCrates: 'Nombre de caisses',
         totalWeight: 'Poids total',
@@ -428,6 +458,10 @@ export default {
         emptyMessage: 'Veuillez ajouter au moins une caisse à votre enregistrement',
         noPlannedDaysMessage:
           'Des jours planifiés manquent pour certains articles. Impossible de calculer le coût estimé.',
+        seeMore: 'Voir plus',
+        seeLess: 'Voir moins',
+        listed: 'Listé',
+        cratesAddedLabel: 'Cagettes ajoutées',
         WithCode: {
           modalTitle: "Créer un enregistrement à partir d'un retrait existant",
           modalDescription:
@@ -450,7 +484,7 @@ export default {
           individualCrateWeightButton: 'Cliquez ici pour modifier le poids des caisses',
           individualCrateIdButton: 'Cliquez ici pour modifier les ID des caisses',
           numberOfCratesLabel: 'Nombre de caisses',
-          crateWeightLabel: 'Poids général de la caisse',
+          crateWeightLabel: 'Poids de la caisse et liste des marchés',
           pricePerDayAndCrateLabel: 'Prix par jour / caisse',
           pricePerDayAndKilogramLabel: 'Prix par jour / kg',
           fixedPriceLabel: 'Prix fixe',
@@ -462,6 +496,14 @@ export default {
             yesterday: 'Hier',
             dayBefore: 'Il y a deux jours',
             evenBefore: 'Même avant',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'Appliquer à tous',
+            list: 'Lister pour la vente',
+            addMore: 'Ajouter plus',
+            sellingPrice: 'Prix de vente à la liste',
+            potentialSellingPrice: 'Valeur potentielle de vente',
+            info: 'La configuration du prix se réfère à la vente du produit, pas aux frais de stockage au frais.',
           },
           cratesError: 'Veuillez saisir un nombre de caisses positif',
           crateWeightError: 'Veuillez saisir un poids de caisse positif',
@@ -847,6 +889,15 @@ export default {
           creditCard: 'Carte de Crédit',
         },
       },
+      Coupons: {
+        emptyMessage: "Aucun coupon n'a encore été ajouté",
+        addCoupon: 'Ajouter un coupon',
+        code: 'Code du coupon',
+        percentage: 'Pourcentage du coupon',
+        revokeTitle: 'Révoquer le coupon',
+        revokeMessage:
+          'Êtes-vous sûr de vouloir révoquer ce coupon ? Une fois révoqué, il ne pourra plus être utilisé et la réduction ne sera plus disponible. Cette action est permanente et ne peut pas être annulée.',
+      },
     },
     AccountDetails: {
       popups: {
@@ -866,6 +917,60 @@ export default {
       },
       toasts: {
         success: 'Mise à jour réussie',
+      },
+      sections: {
+        sellerSettings: 'Paramètres du vendeur',
+        buyerSettings: "Paramètres de l'acheteur",
+        details: 'Détails',
+      },
+      ContactsSharing: {
+        publicPhone: 'Rendre le numéro de téléphone public',
+        publicEmail: "Rendre l'e-mail public",
+      },
+      PayoutSettings: {
+        addTitle: 'Veuillez insérer les informations de votre compte bancaire',
+        editTitle: 'Les informations de votre compte bancaire',
+        form: {
+          nameLabel: 'Nom complet',
+          namePlaceholder: 'Ex. : John Doe',
+          accountNumberLabel: 'Numéro de compte',
+          accountNumberPlaceholder: 'Insérez le numéro de compte',
+          bankLabel: 'Nom de la banque',
+          bankPlaceholder: 'Insérez le nom de la banque',
+          errors: {
+            name: 'Le nom complet est requis',
+            account: 'Le numéro de compte est requis',
+            bank: 'Le nom de la banque est requis',
+          },
+        },
+        successMessage: 'Compte bancaire ajouté avec succès.',
+        errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+      },
+      PaymentSettings: {
+        cards: 'Cartes',
+        creditCard: {
+          predefined: 'Prédéfinie',
+          owner: 'Nom du Titulaire',
+          date: "Date d'Expiration",
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'Veuillez insérer les informations de votre carte',
+          form: {
+            cardName: 'Nom de la carte',
+            cardNamePlaceholder: 'Insérez le nom de la carte',
+            cardNumber: 'Numéro de carte',
+            cardNumberPlaceholder: 'Insérez le numéro de la carte',
+            expiryDate: "Date d'expiration",
+            securityCode: 'Code de sécurité',
+            securityCodePlaceholder: 'Insérez le code de sécurité de la carte',
+            predefinedMethod: 'Méthode de paiement prédéfinie',
+            successMessage: 'Carte ajoutée avec succès',
+            cardNameError: 'Le nom sur la carte est requis',
+            cardNumberError: 'Le numéro de la carte est requis',
+            securityCodeError: 'Le code de sécurité est requis',
+          },
+        },
       },
     },
     About: {
@@ -1012,6 +1117,35 @@ export default {
           checkedIn: 'Entré',
         },
       },
+    },
+    ShoppingCart: {
+      empty: 'Votre panier est vide',
+      daysLeft: 'jours restants',
+      weight: 'KG disponibles',
+      perKg: '/ KG',
+      total: 'Total à payer',
+      pay: 'Payer',
+      orderHeader: 'Commande',
+      subtotal: 'Sous-total',
+      produce: 'Produit',
+      discount: 'Remise',
+      fees: 'Frais de service',
+      marketFees: 'Frais du marché',
+      paymentFee: 'Frais de paiement',
+      viewContacts: 'Voir contact(s)',
+      contactsForDelivery: 'Contact(s) pour les informations de livraison',
+      gotItButton: 'Compris !',
+      pickupMethods: 'Méthode de retrait',
+      pickUpToday: "Retrait aujourd'hui",
+      keepInStorageDailyRate: 'Garder en stockage ({{price}} / jour)',
+      keepInStorageFixedRate: 'Garder en stockage ({{price}})',
+      delivery: 'Livraison',
+      companyName: "Nom de l'entreprise",
+      phoneNumber: 'Numéro de téléphone',
+      thankYouMessage: 'Merci pour votre commande',
+      orderOverview: 'Aperçu de la commande',
+      products: 'Produits',
+      consultOrders: 'Consulter mes commandes',
     },
     Analytics: {
       emptyState: 'Aucune donnée à afficher',
