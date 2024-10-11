@@ -8,4 +8,5 @@ declare module '@env' {
   export const REACT_APP_YOUR_VCCA_PDF_LINK: string;
   export const REACT_APP_SENTRY_DSN: string;
   export const REACT_APP_ENVIRONMENT: string;
+  export const REACT_APP_DEEP_LINK_URL: string;
 }

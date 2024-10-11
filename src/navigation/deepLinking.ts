@@ -1,10 +1,11 @@
 import type { LinkingOptions } from '@react-navigation/native';
 
-export const BASE_DEEP_LINK_URL = 'coldtivate://app';
-export const BASE_UNIVERSAL_LINK_URL = 'https://app.coldtivate.org';
+import { DEEP_LINK_URL } from '#constants/environment';
+
+const BASE_DEEP_LINK_URL_SCHEMA = 'coldtivate://app';
 
 export default {
-  prefixes: [BASE_DEEP_LINK_URL, BASE_UNIVERSAL_LINK_URL],
+  prefixes: [BASE_DEEP_LINK_URL_SCHEMA, DEEP_LINK_URL],
   config: {
     screens: {
       PasswordReset: 'password-reset/:resetCode/:phoneNumber',
