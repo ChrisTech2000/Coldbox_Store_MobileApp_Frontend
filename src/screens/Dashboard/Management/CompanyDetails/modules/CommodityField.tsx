@@ -12,6 +12,7 @@ import type { GetAllCropsResponse } from '#types/api.responses';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 import { useTranslationUtils } from '#i18n/utils';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 import FormManager, { type FormValues } from '../components/FormManager';
 
@@ -105,7 +106,33 @@ export default function CommodityField(props: Props) {
                   />
                 ),
                 footer: (
-                  <View tw="flex flex-row items-center justify-end">
+                  <View
+                    tw={
+                      deviceHeight > SMALL_SCREEN_THRESHOLD
+                        ? 'flex flex-row items-center justify-end'
+                        : 'items-center'
+                    }
+                  >
+                    <Button
+                      mode="text"
+                      uppercase
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        setInternalSelection(datums.map(({ id }) => id));
+                      }}
+                    >
+                      {t('actions.all')}
+                    </Button>
+                    <Button
+                      mode="text"
+                      uppercase
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        setInternalSelection([]);
+                      }}
+                    >
+                      {t('actions.none')}
+                    </Button>
                     <Button
                       mode="text"
                       uppercase
