@@ -11,16 +11,19 @@ import ShoppingCart from '#screens/Dashboard/Main/ShoppingCart';
 import OrderDetails from '#screens/Dashboard/Main/ShoppingCart/OrderDetails';
 import OrderOverview from '#screens/Dashboard/Main/ShoppingCart/OrderOverview';
 import PaystackPayment from '#screens/Dashboard/Main/ShoppingCart/PaystackPayment';
+import OrdersDetails from '#screens/Dashboard/Main/Orders/OrdersDetails';
 
 import { useDashboardHeader } from '../lib/dashboardHeaderFactory';
 
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
+import { useTranslationUtils } from '#i18n/utils';
 
 export type ShoppingCartStackRoutes = {
   Root: undefined;
   OrderDetails: undefined;
   OrderOverview: { orderId: number };
   PaystackPayment: { url: string; orderId: number };
+  IncompleteOrderOverview: { orderId: number };
 };
 
 export type ShoppingCartStackRoutePaths = keyof ShoppingCartStackRoutes;
@@ -36,6 +39,7 @@ type ScreenOptions = (props: {
 const Stack = createNativeStackNavigator<ShoppingCartStackRoutes>();
 
 export default function ShoppingCartStack() {
+  const { t } = useTranslationUtils();
   const dashboardHeaderFactory = useDashboardHeader();
 
   const screenOptions: ScreenOptions = useCallback(
@@ -48,9 +52,20 @@ export default function ShoppingCartStack() {
         header: (headerProps) => (
           <NavigatorHeader
             {...headerProps}
-            routeTitle="Shopping cart"
             // eslint-disable-next-line react/prop-types
-            {...dashboardHeaderFactory(props.navigation.goBack)}
+            routeTitle={
+              routeName === 'IncompleteOrderOverview'
+                ? t('navigation.dashboard.OrderDetails', {
+                    orderCode: props.route?.params?.orderId ?? '',
+                  })
+                : t('navigation.dashboard.ShoppingCart')
+            }
+            // eslint-disable-next-line react/prop-types
+            {...dashboardHeaderFactory(
+              routeName === 'IncompleteOrderOverview'
+                ? () => props.navigation.popToTop()
+                : props.navigation.goBack
+            )}
           />
         ),
       };
@@ -64,6 +79,12 @@ export default function ShoppingCartStack() {
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
       <Stack.Screen name="OrderOverview" component={OrderOverview} />
       <Stack.Screen name="PaystackPayment" component={PaystackPayment} />
+      <Stack.Screen
+        name="IncompleteOrderOverview"
+        // eslint-disable-next-line
+        // @ts-ignore
+        component={OrdersDetails}
+      />
     </Stack.Navigator>
   );
 }

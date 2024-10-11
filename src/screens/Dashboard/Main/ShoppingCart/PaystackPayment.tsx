@@ -2,24 +2,35 @@ import React from 'react';
 import { View } from 'react-native';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 import { ActivityIndicator } from 'react-native-paper';
+import ms from 'ms';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { paperTheme } from '#ui/lib/theme';
 import { GenericError } from '#ui/components/GenericError';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { waitFor } from '#ui/lib/waitFor';
 
 import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
+import useCartStore from '#stores/shoppingCart';
 
-const TRANSACTION_COMPLETED_URL = '/marketplace/paystack/transaction-completed';
+const TRANSACTION_COMPLETED_URL = '/payment/callback';
+const TRANSACTION_CANCELLED_URL = '/payment/cancel';
 
 function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) {
-  const handleNavigationStateChange = (navState: WebViewNavigation) => {
+  const fetchCart = useCartStore((store) => store.fetchCart);
+
+  async function handleNavigationStateChange(navState: WebViewNavigation) {
     const { url } = navState;
 
     if (url.includes(TRANSACTION_COMPLETED_URL)) {
       props.navigation.navigate('OrderOverview', { orderId: props.route.params.orderId });
     }
-  };
+
+    if (url.includes(TRANSACTION_CANCELLED_URL)) {
+      waitFor(ms('2 second')).then(fetchCart);
+      props.navigation.navigate('IncompleteOrderOverview', { orderId: props.route.params.orderId });
+    }
+  }
 
   return (
     <WebView
@@ -30,7 +41,7 @@ function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) 
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>
       )}
-      onNavigationStateChange={handleNavigationStateChange} // Listen for URL changes
+      onNavigationStateChange={handleNavigationStateChange}
     />
   );
 }

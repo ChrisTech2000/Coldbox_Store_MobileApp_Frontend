@@ -23,7 +23,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
-import MarketplaceService from '#services/Marketplace';
+import MarketplaceService from '#services/MarketplaceService';
 import { useToggle } from '#ui/hooks/useToggle';
 import type { ListedCratesBaseParams } from '#types/api.params';
 
