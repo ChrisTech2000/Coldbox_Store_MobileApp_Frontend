@@ -1,6 +1,6 @@
 
 lane :generate_build_id do |options|
-  version_id = options[:version_id] || "0.0.0"
+  version_id = options[:version_id] || "0.0.1"
 
   # Split the version_id into major, minor, and patch components
   version_components = version_id.split('.')
@@ -20,7 +20,7 @@ end
 
 lane :parse_version_id do |options|
   # Extract the version_id from the options or default to "0.0.0"
-  version_id = options[:version_id] || "0.0.0"
+  version_id = options[:version_id] || "0.0.1"
 
   # Use a regular expression to remove any non-numeric leading characters like 'v'
   sanitized_version_id = version_id.gsub(/^[^0-9]*/, '')
