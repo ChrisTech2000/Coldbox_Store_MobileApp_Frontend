@@ -910,6 +910,7 @@ const en = {
         selectQuantity: 'Select quantity',
         buyNowButton: 'Buy now',
       },
+      currentLocation: 'Current location',
     },
     AccountDetails: {
       popups: {

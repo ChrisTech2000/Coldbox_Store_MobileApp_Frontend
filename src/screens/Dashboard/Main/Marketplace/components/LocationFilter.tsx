@@ -1,23 +1,24 @@
+import ms from 'ms';
 import React, { useEffect, useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { Button, Portal, TextInput } from 'react-native-paper';
+import GetLocation from 'react-native-get-location';
 import { Modalize } from 'react-native-modalize';
+import { Button, Portal, TextInput } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Controller, useForm } from 'react-hook-form';
-import GetLocation from 'react-native-get-location';
 import colors from 'tailwindcss/colors';
-import ms from 'ms';
 
-import { Touchable } from '#ui/components/Touchable';
-import { Text } from '#ui/components/Text';
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
+import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
+import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useManagementStore } from '#stores/management';
 import { Geocoder } from '#screens/Dashboard/Management/AddLocation/utils';
-import { paperTheme } from '#ui/lib/theme';
+import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 
 import { useMarketplaceQueryParams } from '../store';
 
@@ -29,6 +30,7 @@ type FormValues<T = string> = {
 export default function MarketplaceLocationFilter() {
   const { t, zodResolver } = useTranslationUtils();
   const { company } = useManagementStore();
+  const farmerCountry = useDashboardStore((store) => store.farmerCountry);
 
   const modalRef = useRef<Modalize>(null);
 
@@ -46,12 +48,17 @@ export default function MarketplaceLocationFilter() {
     reValidateMode: 'onSubmit',
   });
 
+  const cityName = form.watch('cityName');
+  const distance = form.watch('distance');
+
   async function onSubmit(values: FormValues<number>): Promise<void> {
-    if (typeof company?.country === 'undefined') return;
+    const countryCode = company?.country ?? farmerCountry;
+    if (!countryCode) return;
+
     try {
       const result = await new Geocoder().getCoordsFromLocation({
         cityName: values.cityName,
-        countryCode: company.country,
+        countryCode: countryCode,
       });
       useMarketplaceQueryParams.getState().setParams({
         location: [result.latitude, result.longitude],
@@ -94,7 +101,11 @@ export default function MarketplaceLocationFilter() {
         }}
       >
         <MaterialCommunityIcon name="map-marker-outline" size={28} color={colors.zinc[600]} />
-        <Text tw="text-base">Current location</Text>
+        <Text tw="text-base">
+          {cityName
+            ? `${cityName} ${distance ? `(+${distance}km)` : ''}`
+            : t('Dashboard.Marketplace.currentLocation')}
+        </Text>
         <MaterialIcon name="arrow-drop-down" size={26} color={colors.zinc[600]} />
       </Touchable>
 
@@ -111,7 +122,7 @@ export default function MarketplaceLocationFilter() {
 
           <View tw="px-4 pb-4 pt-2.5 space-y-4">
             <View tw="space-y-2">
-              <Text tw="text-base">My Location</Text>
+              <Text tw="text-base">{t('Dashboard.Marketplace.currentLocation')}</Text>
               <Controller
                 control={form.control}
                 name="cityName"
@@ -138,6 +149,7 @@ export default function MarketplaceLocationFilter() {
                     tw="bg-white border rounded-sm h-14 text-center rounded-md"
                     keyboardType="numeric"
                     defaultValue="0"
+                    editable={false}
                     value={value}
                     onChangeText={onChange}
                     left={
