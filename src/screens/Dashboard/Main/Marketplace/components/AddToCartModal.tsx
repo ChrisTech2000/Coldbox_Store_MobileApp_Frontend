@@ -113,11 +113,13 @@ export default function AddToCartModal() {
                   keyboardType="numeric"
                   defaultValue="1"
                   value={value}
+                  editable={false}
                   onChangeText={onChange}
                   left={
                     <TextInput.Icon
                       icon="minus"
                       color={paperTheme.colors.primary}
+                      disabled={Number(value) - 1 === 0}
                       onPress={(evt) => {
                         evt.stopPropagation();
                         const int = Number(value);
@@ -133,6 +135,7 @@ export default function AddToCartModal() {
                   right={
                     <TextInput.Icon
                       icon="plus"
+                      disabled={datum && Number(value) + 1 > datum.crateWeight}
                       color={paperTheme.colors.primary}
                       onPress={(evt) => {
                         evt.stopPropagation();

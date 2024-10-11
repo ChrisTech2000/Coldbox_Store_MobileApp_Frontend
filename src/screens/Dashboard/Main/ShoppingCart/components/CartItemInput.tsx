@@ -69,54 +69,42 @@ export default function CartItemInput(props: {
           keyboardType="numeric"
           placeholder="0"
           value={value}
-          onChangeText={(val) => {
-            if (!val) {
-              onChange(val);
-              toast.show(t('Dashboard.ShoppingCart.errors.invalid'), { type: 'md_danger' });
-              return;
-            }
-
-            const normalizedValue = val.replace(',', '.');
-            const floatValue = parseFloat(normalizedValue);
-
-            if (isNaN(floatValue)) return;
-
-            if (floatValue > props.availableWeight) {
-              toast.show(t('Dashboard.ShoppingCart.errors.invalid'), { type: 'md_danger' });
-              onChange(props.availableWeight);
-            } else {
-              onChange(normalizedValue);
-            }
-          }}
+          editable={false}
           left={
             <TextInput.Icon
               icon="minus"
+              disabled={Number(value) - 1 === 0}
               color={paperTheme.colors.primary}
               onPress={(evt) => {
                 evt.stopPropagation();
                 const int = Number(value);
-                if (isNaN(int)) return; // safe guard
-                if (int - 1 > 0) onChange((int - 1).toString());
-                else
+                if (isNaN(int)) return; // safeguard
+                if (int - 1 > 0) {
+                  onChange((int - 1).toString());
+                } else {
                   toast.show(t('Dashboard.ShoppingCart.errors.invalid'), {
                     type: 'md_danger',
                   });
+                }
               }}
             />
           }
           right={
             <TextInput.Icon
               icon="plus"
+              disabled={Number(value) + 1 > props.availableWeight}
               color={paperTheme.colors.primary}
               onPress={(evt) => {
                 evt.stopPropagation();
                 const int = Number(value);
-                if (isNaN(int)) return; // safe guard
-                if (int + 1 <= props.availableWeight) onChange((int + 1).toString());
-                else
+                if (isNaN(int)) return; // safeguard
+                if (int + 1 <= props.availableWeight) {
+                  onChange((int + 1).toString());
+                } else {
                   toast.show(t('Dashboard.ShoppingCart.errors.invalid'), {
                     type: 'md_danger',
                   });
+                }
               }}
             />
           }

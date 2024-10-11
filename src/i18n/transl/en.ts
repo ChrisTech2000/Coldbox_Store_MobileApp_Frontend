@@ -99,6 +99,7 @@ const en = {
       Wallet: 'Wallet',
       Transactions: 'Transactions',
       Transaction: '{{id}}',
+      ShoppingCart: 'Shopping Cart',
     },
     checkIn: {
       SelectCropType: 'Select Crop Type',
@@ -909,6 +910,7 @@ const en = {
         selectQuantity: 'Select quantity',
         buyNowButton: 'Buy now',
       },
+      currentLocation: 'Current location',
     },
     AccountDetails: {
       popups: {
@@ -1173,7 +1175,7 @@ const en = {
       keepInStorageDailyRate: 'Keep in storage ({{price}} / day)',
       keepInStorageFixedRate: 'Keep in storage ({{price}})',
       delivery: 'Delivery',
-      companyName: 'Company name',
+      contactName: 'Contact name',
       phoneNumber: 'Phone number',
       thankYouMessage: 'Thank You for Ordering',
       orderOverview: 'Order overview',
