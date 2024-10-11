@@ -35,7 +35,7 @@
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="https" />
-          <data android:host="mobile.coldtivate.org" />
+          <data android:host="app.coldtivate.org" />
         </intent-filter>
       </activity>
     </application>
