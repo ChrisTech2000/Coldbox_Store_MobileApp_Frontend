@@ -69,7 +69,7 @@ platform :android do
         ENV['APP_ENV'] = options[:pipeline]
         gradle(
             project_dir: "android",
-            tasks: ["bundleRelease"],
+            tasks: ["bundleRelease", "assembleRelease"],
             flags: "--no-daemon --max-workers 1",
             properties: {
                 "versionCode" => build_id,
