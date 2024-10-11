@@ -1,5 +1,25 @@
 
-lane :generate_build_id do |options|
+def setup_dotenv(options)
+  pipeline = options[:pipeline] || "production"
+
+  # Define the source and destination paths
+  source_env_file = ".env.#{pipeline}"
+  default_env_file = ".env"
+
+  # Copy the pipeline-specific .env file to the destination
+  sh("cd ..; cp #{source_env_file} #{default_env_file}")
+  ENV['ENVFILE'] = source_env_file
+
+
+  # clear the react-native-config cache
+  sh("cd ..; touch node_modules/react-native-config/ios/ReactNativeConfig/BuildDotenvConfig.rb")
+
+  # Log the used .env file
+  UI.message("Using environment file: #{ENV['ENVFILE']}")
+end
+
+
+def generate_build_id (options)
   version_id = options[:version_id] || "0.0.1"
 
   # Split the version_id into major, minor, and patch components
@@ -18,7 +38,7 @@ lane :generate_build_id do |options|
   build_id
 end
 
-lane :parse_version_id do |options|
+def parse_version_id (options)
   # Extract the version_id from the options or default to "0.0.0"
   version_id = options[:version_id] || "0.0.1"
 
@@ -64,9 +84,8 @@ platform :android do
         version = parse_version_id(version_id: options[:version_id] || "0.0.1")
         build_id = options[:build_id] || generate_build_id(version_id: version[:id])
 
-        # TODO: build towards production or staging depending on the pipeline
+        setup_dotenv(options)
 
-        ENV['ENVFILE'] = ".env." + options[:pipeline]
         gradle(
             project_dir: "android",
             tasks: ["bundleRelease", "assembleRelease"],
@@ -147,6 +166,8 @@ platform :ios do
         version = parse_version_id(version_id: options[:version_id] || "0.0.1")
         build_id = options[:build_id] || generate_build_id(version_id: version[:id])
 
+        setup_dotenv(options)
+
         if type == 'ad-hoc'
             register_devices(
                 devices_file: './fastlane/devices.txt',
@@ -217,14 +238,6 @@ platform :ios do
             profile: ENV["sigh_"+ app_identifier +"_" + type + "_profile-path"],
             code_signing_identity: ENV["sigh_"+ app_identifier +"_" + type + "_certificate-name"],
         )
-
-        # Handle the environment file for the correct pipeline
-        env_file = ".env.#{options[:pipeline]}"
-        # ENV['ENVFILE'] = ".env." + options[:pipeline]
-        sh("cd ..; cp " + env_file + " .env")
-
-        # clear the react-native-config cache
-        sh("cd ..; touch node_modules/react-native-config/ios/ReactNativeConfig/BuildDotenvConfig.rb")
 
         gym(
             scheme: options[:scheme],

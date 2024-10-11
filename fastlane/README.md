@@ -13,25 +13,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### generate_build_id
-
-```sh
-[bundle exec] fastlane generate_build_id
-```
-
-
-
-### parse_version_id
-
-```sh
-[bundle exec] fastlane parse_version_id
-```
-
-
-
-----
-
-
 ## Android
 
 ### android test
