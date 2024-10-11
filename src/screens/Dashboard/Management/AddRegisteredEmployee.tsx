@@ -17,7 +17,7 @@ import { useManagementStore } from '#stores/management';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { useAuthStore } from '#stores/auth';
-import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
+import { BASE_UNIVERSAL_LINK_URL } from '#navigation/deepLinking';
 import { ERoles, MAP_ROLES } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import InAppNotifications from '#common/InAppNotifications';
@@ -60,7 +60,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
     const userId = useAuthStore.getState().user?.id;
     if (!userId) return; // safe guard
 
-    const head = `${BASE_DEEP_LINK_URL}/invite/`;
+    const head = `${BASE_UNIVERSAL_LINK_URL}/invite/`;
     const tail = `/${MAP_ROLES[ERoles.EMPLOYEE]}/${values.phoneNumber}`;
 
     const coolingUnits = data?.map((coolingUnit) => coolingUnit.id) ?? [];

@@ -46,6 +46,16 @@
 				<string>coldtivate</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.base.coldtivate</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>coldtivate</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

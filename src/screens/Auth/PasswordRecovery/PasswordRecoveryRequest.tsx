@@ -8,7 +8,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
-import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
+import { BASE_UNIVERSAL_LINK_URL } from '#navigation/deepLinking';
 import InAppNotifications from '#common/InAppNotifications';
 
 type PasswordRecoverySchema = { phone: string };
@@ -28,7 +28,7 @@ function PasswordRecoveryRequest() {
   const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(
     async (values) => {
       const partOne = t('Auth.ForgotPassword.link.partOne', {
-        baseLink: `${BASE_DEEP_LINK_URL}/password-reset/`,
+        baseLink: `${BASE_UNIVERSAL_LINK_URL}/password-reset/`,
       });
 
       try {
