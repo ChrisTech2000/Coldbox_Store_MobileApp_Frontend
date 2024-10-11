@@ -245,10 +245,11 @@ function EditCrateWeightAndPricing(
                 <TouchableOpacity
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
                   onPress={() => {
-                    if (!value) {
-                      for (let i = 0; i < crateFields.fields.length; i++) {
-                        form.setValue(`crates.${i}.isSellable`, crates[0].isSellable);
-                      }
+                    for (let i = 0; i < crateFields.fields.length; i++) {
+                      form.setValue(`crates.${i}.isSellable`, !value);
+                    }
+                    if (!form.getValues('crates').some((c) => c.isSellable)) {
+                      form.setValue('price', '0');
                     }
                     onChange(!value);
                   }}
@@ -269,7 +270,7 @@ function EditCrateWeightAndPricing(
             keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
             scrollEnabled={false}
             renderItem={({ index }) => {
-              const isDisabled = applyToAll && index > 0;
+              const isDisabled = applyToAll && index >= 0;
               return (
                 <View tw="flex-row items-center justify-between my-3">
                   <View tw="flex-col self-end px-3">
