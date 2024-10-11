@@ -23,10 +23,16 @@ class MarketplaceService extends HttpClient {
   ): Promise<UpdateListedCrateResponse> => {
     try {
       const { operatorOnBehalfOfSellerFarmerId, operatorOnBehalfOfSellerUserId, ...body } = params;
+
       const { data } = await this.post<UpdateListedCrateResponse>(
         EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
         body,
-        { params: { operatorOnBehalfOfSellerFarmerId, operatorOnBehalfOfSellerUserId } }
+        {
+          params: {
+            operator_on_behalf_of_seller_farmer_id: operatorOnBehalfOfSellerFarmerId,
+            operator_on_behalf_of_seller_user_id: operatorOnBehalfOfSellerUserId,
+          },
+        }
       );
       return data;
     } catch (error) {

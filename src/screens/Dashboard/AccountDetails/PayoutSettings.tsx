@@ -160,6 +160,12 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
         country: t('Dashboard.AccountDetails.PayoutSettings.form.nigeria'),
         accountName: data?.[data?.length - 1]?.accountName ?? '',
         accountNumber: data?.[data?.length - 1]?.accountNumber ?? '',
+        // eslint-disable-next-line
+        // @ts-ignore
+        accountType: data?.[data?.length - 1]?.accountType,
+        bank: availableBanks?.banks?.find(
+          (b) => b.id.toString() === data?.[data?.length - 1]?.bankCode
+        )?.code,
       });
 
       setBank(
