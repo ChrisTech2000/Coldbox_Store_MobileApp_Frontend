@@ -66,7 +66,7 @@ platform :android do
 
         # TODO: build towards production or staging depending on the pipeline
 
-        ENV['ENVFILE'] = options[:pipeline]
+        ENV['ENVFILE'] = ".env." + options[:pipeline]
         gradle(
             project_dir: "android",
             tasks: ["bundleRelease", "assembleRelease"],
@@ -218,7 +218,7 @@ platform :ios do
             code_signing_identity: ENV["sigh_"+ app_identifier +"_" + type + "_certificate-name"],
         )
 
-        ENV['ENVFILE'] = options[:pipeline]
+        ENV['ENVFILE'] = ".env." + options[:pipeline]
         gym(
             scheme: options[:scheme],
             workspace: "ios/coldtivate.xcworkspace",
