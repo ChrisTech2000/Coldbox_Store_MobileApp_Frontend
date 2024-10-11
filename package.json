@@ -1,6 +1,6 @@
 {
   "name": "coldtivate",
-  "version": "7.0.23",
+  "version": "7.0.27",
   "private": true,
   "scripts": {
     "prepare": "husky",
@@ -132,5 +132,6 @@
       "eslint --quiet --fix",
       "prettier --write"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
