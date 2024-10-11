@@ -51,7 +51,7 @@
     "react-hook-form": "^7.52.0",
     "react-i18next": "^14.1.2",
     "react-native": "0.74.2",
-    "react-native-config": "^1.5.3",
+    "react-native-config": "1.5.1",
     "react-native-date-picker": "^5.0.4",
     "react-native-drawer-layout": "^3.3.0",
     "react-native-fast-image": "^8.6.3",
