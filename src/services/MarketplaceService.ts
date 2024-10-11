@@ -252,7 +252,7 @@ class MarketplaceService extends HttpClient {
     params: DeleteDeliveryContactParams
   ): Promise<unknown> => {
     try {
-      const url = subs(EMarketplaceEndpoints.REMOVE_ITEM_FROM_CART, {
+      const url = subs(EMarketplaceEndpoints.DELETE_DELIVERY_CONTACT, {
         contactId: params.contactId,
         companyId: params.companyId,
       });

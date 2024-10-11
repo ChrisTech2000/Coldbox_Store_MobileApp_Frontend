@@ -606,6 +606,7 @@ const en = {
         emptyMessage: 'No contacts have been added yet',
         deleteContactMessage: 'Are you sure you want to delete this contact?',
         noAvailableContacts: 'There are no available contacts for this particular cooling unit.',
+        contactedAddedSuccessfully: 'Contact added successfully.',
       },
       Location: {
         emptyState: 'No locations added yet. Click on the + sign to add one.',

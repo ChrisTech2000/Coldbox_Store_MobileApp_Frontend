@@ -20,7 +20,7 @@ import useCartStore from '#stores/shoppingCart';
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 
-const CART_MINIMUM_VALUE = 100;
+export const CART_MINIMUM_VALUE = 100;
 
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
@@ -48,6 +48,10 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
       </View>
     );
   }
+
+  const orderDisabled =
+    cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
+    CART_MINIMUM_VALUE;
 
   return (
     <React.Fragment>
@@ -82,10 +86,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                   tw="w-5/6 self-center my-4"
                   mode="contained"
                   uppercase
-                  disabled={
-                    cartData.totalCoolingFeesAmount + cartData.totalProduceAmount <
-                    CART_MINIMUM_VALUE
-                  }
+                  disabled={orderDisabled}
                   onPress={(evt) => {
                     evt.stopPropagation();
                     props.navigation.navigate('OrderDetails');
@@ -93,8 +94,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                 >
                   {t('actions.continue')}
                 </Button>
-                {cartData.totalCoolingFeesAmount + cartData.totalProduceAmount <
-                CART_MINIMUM_VALUE ? (
+                {orderDisabled ? (
                   <Text tw="text-red-700 self-center mb-4">
                     {t('Dashboard.ShoppingCart.errors.minimumCartValue')}
                   </Text>

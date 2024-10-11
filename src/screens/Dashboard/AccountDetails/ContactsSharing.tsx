@@ -33,7 +33,7 @@ function ContactsSharing() {
           isPhonePublic: !isNil(publicPhone) ? publicPhone : user?.isPhonePublic,
         });
 
-        setUser({ ...userDatum, role: user?.role }); // TODO: confirm that user comes with correct info
+        setUser({ ...userDatum, role: user?.role });
 
         toast.show(t('Dashboard.AccountDetails.toasts.success'), {
           type: 'md_success',
@@ -61,7 +61,7 @@ function ContactsSharing() {
             right={() => (
               <Switch
                 value={user?.isPhonePublic ?? false}
-                onValueChange={(val) => onPreferencesChange(undefined, val)}
+                onValueChange={(val) => onPreferencesChange(val, undefined)}
               />
             )}
           />
@@ -79,7 +79,7 @@ function ContactsSharing() {
             right={() => (
               <Switch
                 value={user?.isEmailPublic ?? false}
-                onValueChange={(val) => onPreferencesChange(val, undefined)}
+                onValueChange={(val) => onPreferencesChange(undefined, val)}
               />
             )}
           />

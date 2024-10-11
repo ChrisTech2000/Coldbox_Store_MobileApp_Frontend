@@ -11,14 +11,13 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
-import { emitter, useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
@@ -29,13 +28,13 @@ interface FormValues {
   phoneNumber: string;
 }
 
-function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
+function DeliveryContacts() {
   const { t } = useTranslationUtils();
   const company = useManagementStore((store) => store.company);
 
   const [contactToDelete, setContactToDelete] = useState<number | null>(null);
 
-  const { data, isLoading } = useApiCall(
+  const { data, isLoading, refetch } = useApiCall(
     'listDeliveryContacts',
     MarketplaceService.listDeliveryContacts,
     company!.id,
@@ -44,6 +43,8 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
       defaultData: [],
     }
   );
+
+  useAppEventListener('DISPATCH_RELOAD_DELIVERY_CONTACTS', refetch);
 
   if (isLoading) {
     return (
@@ -73,19 +74,11 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <View tw="w-full p-5 space-y-3 border border-solid border-zinc-300 rounded-2xl my-2">
+            <View tw="w-full px-5 py-3 space-y-3 border border-solid border-zinc-300 rounded-2xl my-2">
               <View>
                 <View tw="flex flex-row items-center justify-between mb-2">
                   <Text tw="text-base">{t('Dashboard.Management.Delivery.contactName')}</Text>
                   <Text tw="text-base text-gray-500">{item.name}</Text>
-                </View>
-                <Divider tw="bg-gray-400" />
-              </View>
-
-              <View>
-                <View tw="flex flex-row items-center justify-between mb-2">
-                  <Text tw="text-base">{t('Dashboard.Management.Delivery.companyName')}</Text>
-                  <Text tw="text-base text-gray-500">{item.companyName}</Text>
                 </View>
                 <Divider tw="bg-gray-400" />
               </View>
@@ -104,6 +97,8 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
                   mode="text"
                   onPress={() => setContactToDelete(item.id)}
                   uppercase
+                  icon="trash-can-outline"
+                  contentStyle="flex flex-row-reverse items-center"
                 >
                   {t('actions.delete')}
                 </Button>
@@ -125,7 +120,7 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
         </Button>
       </View>
 
-      <BottomSheet {...props} />
+      <BottomSheet />
 
       <Portal>
         <Modal visible={!!contactToDelete} onDismiss={() => setContactToDelete(null)}>
@@ -154,6 +149,7 @@ function DeliveryContacts(props: ManagementRouteProps<'DeliveryContacts'>) {
                     contactId: contactToDelete as number,
                     companyId: company!.id,
                   });
+                  refetch();
                   setContactToDelete(null);
                 }}
               >
@@ -176,7 +172,7 @@ export default withSafeArea(
   true
 );
 
-function BottomSheet(props: ManagementRouteProps<'DeliveryContacts'>) {
+function BottomSheet() {
   const { t, zodResolver } = useTranslationUtils();
   const isFocused = useIsFocused();
   const user = useAuthStore((store) => store.user);
@@ -223,12 +219,12 @@ function BottomSheet(props: ManagementRouteProps<'DeliveryContacts'>) {
         });
 
         if (result) {
-          toast.show(t('Dashboard.AccountDetails.PayoutSettings.successMessage'), {
+          toast.show(t('Dashboard.Management.Delivery.contactedAddedSuccessfully'), {
             type: 'md_success',
             style: { marginBottom: 50 },
           });
-
-          props.navigation.goBack();
+          modalRef.current?.close();
+          emitter.emit(APP_EVENTS.DISPATCH_RELOAD_DELIVERY_CONTACTS);
         }
       } catch (error) {
         toast.show(t('navigation.error.errorMessage'), {

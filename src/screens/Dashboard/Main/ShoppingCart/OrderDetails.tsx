@@ -25,6 +25,7 @@ import DeliveryInformationBottomSheet from './components/DeliveryInformationBott
 import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
+import { CART_MINIMUM_VALUE } from '.';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -76,6 +77,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
       </View>
     );
   }
+
+  const orderDisabled =
+    cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
+    CART_MINIMUM_VALUE;
 
   return (
     <ScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
@@ -207,7 +212,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             mode="contained"
             uppercase
             onPress={onPay}
-            disabled={isSubmitting}
+            disabled={isSubmitting || orderDisabled}
           >
             {isSubmitting ? (
               <ActivityIndicator size="small" color="white" />
@@ -215,6 +220,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               t('Dashboard.ShoppingCart.pay')
             )}
           </Button>
+          {orderDisabled ? (
+            <Text tw="text-red-700 self-center mb-4">
+              {t('Dashboard.ShoppingCart.errors.minimumCartValue')}
+            </Text>
+          ) : null}
         </View>
       </View>
 
