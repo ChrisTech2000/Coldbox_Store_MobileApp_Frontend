@@ -221,10 +221,10 @@ platform :ios do
         # Handle the environment file for the correct pipeline
         env_file = ".env.#{options[:pipeline]}"
         # ENV['ENVFILE'] = ".env." + options[:pipeline]
-        sh("cp " + env_file + " .env")
+        sh("cd ..; cp " + env_file + " .env")
 
         # clear the react-native-config cache
-        sh("touch node_modules/react-native-config/ios/ReactNativeConfig/BuildDotenvConfig.rb")
+        sh("cd ..; touch node_modules/react-native-config/ios/ReactNativeConfig/BuildDotenvConfig.rb")
 
         gym(
             scheme: options[:scheme],
