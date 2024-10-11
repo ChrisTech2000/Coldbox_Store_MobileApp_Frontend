@@ -911,6 +911,8 @@ const en = {
         buyNowButton: 'Buy now',
       },
       currentLocation: 'Current location',
+      filterError:
+        'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.',
     },
     AccountDetails: {
       popups: {
