@@ -52,10 +52,10 @@ export default function ShoppingCartStack() {
         header: (headerProps) => (
           <NavigatorHeader
             {...headerProps}
-            // eslint-disable-next-line react/prop-types
             routeTitle={
               routeName === 'IncompleteOrderOverview'
                 ? t('navigation.dashboard.OrderDetails', {
+                    // eslint-disable-next-line react/prop-types
                     orderCode: props.route?.params?.orderId ?? '',
                   })
                 : t('navigation.dashboard.ShoppingCart')
@@ -63,8 +63,10 @@ export default function ShoppingCartStack() {
             // eslint-disable-next-line react/prop-types
             {...dashboardHeaderFactory(
               routeName === 'IncompleteOrderOverview'
-                ? () => props.navigation.popToTop()
-                : props.navigation.goBack
+                ? // eslint-disable-next-line react/prop-types
+                  () => props.navigation.popToTop()
+                : // eslint-disable-next-line react/prop-types
+                  props.navigation.goBack
             )}
           />
         ),
