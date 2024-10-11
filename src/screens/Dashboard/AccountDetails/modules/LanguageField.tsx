@@ -22,8 +22,8 @@ export default function LanguageField() {
   const [internalSelection, setInternalSelection] = useState<TranslationLocales>(selectedLanguage);
 
   return (
-    <View tw="mt-6">
-      <View tw="px-3">
+    <View tw="mt-4">
+      <View tw="mx-4">
         <Select
           variant="md"
           label={t('languages.label')}
@@ -77,7 +77,7 @@ export default function LanguageField() {
           }}
         />
       </View>
-      <Divider tw="w-full bg-gray-700 my-3" />
+      <Divider tw="w-full bg-gray-700 mt-3" />
     </View>
   );
 }

@@ -18,7 +18,7 @@ import FormManager, { type FormValues, buildInitialValues } from './components/F
 import FormFields from './components/FormFields';
 import { EAccountProfile } from '../SignIn';
 
-const LOGO_SIZE = Dimensions.get('screen').width / 2.5;
+const LOGO_SIZE = Dimensions.get('window').width / 2.5;
 
 function Invite(props: AuthRouteProps<'Invite'>) {
   const { params } = props.route;
@@ -93,4 +93,4 @@ function Invite(props: AuthRouteProps<'Invite'>) {
   );
 }
 
-export default withSafeArea(Invite);
+export default withSafeArea(Invite, ['bottom'], true);

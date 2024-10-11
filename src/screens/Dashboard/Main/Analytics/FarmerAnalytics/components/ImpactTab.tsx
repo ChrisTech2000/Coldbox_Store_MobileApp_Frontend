@@ -9,6 +9,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { useDashboardStore } from '#stores/dashboard';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 import { Button } from '#ui/components/Button';
@@ -38,6 +39,8 @@ type TableProps = {
 
 export function ImpactTab() {
   const { t } = useTranslationUtils();
+  const crops = useDashboardStore((store) => store.allCrops ?? []);
+
   const { configData, farmer } = useFarmerAnalyticsData((store) => ({
     configData: store.configData,
     farmer: store.farmer,
@@ -63,15 +66,6 @@ export function ImpactTab() {
     },
     {
       skip: !configData || !farmer,
-    }
-  );
-
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
-    'getAllCrops',
-    ColdtivateService.getAllCrops,
-    undefined,
-    {
-      defaultData: [],
     }
   );
 
@@ -173,7 +167,7 @@ export function ImpactTab() {
     }
   }, [surveysData, refetch]);
 
-  if (loadingImpact || isLoadingCrops) {
+  if (loadingImpact) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />

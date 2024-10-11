@@ -3,8 +3,10 @@ import { Dimensions, RefreshControl, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { cn } from '#ui/lib/cn';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -18,9 +20,9 @@ import WeekBarChart, { type WeekBarChartDatum } from './components/WeekBarChart'
 import { weekSubsetArtisan } from './utils';
 
 const MAX_CAPACITY = 100;
-const screenHeight = Dimensions.get('screen').height;
+const screenHeight = Dimensions.get('window').height;
 
-export default function CoolingUnitsPlanner() {
+function CoolingUnitsPlanner() {
   const [selectedColumn, setSelectedColumn] = useState<number>(0);
 
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
@@ -101,3 +103,8 @@ export default function CoolingUnitsPlanner() {
     </View>
   );
 }
+
+export default withErrorBoundary(CoolingUnitsPlanner, {
+  fallback: <GenericError />,
+  onError: (error) => console.error('Error caught:', error),
+});

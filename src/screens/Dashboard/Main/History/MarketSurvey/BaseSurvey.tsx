@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { FlatList, TouchableOpacity, View } from 'react-native';
@@ -5,14 +7,17 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Divider, Icon, RadioButton } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { Input } from '#ui/components/Input';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { HistoryTabStackRoutes } from '#navigation/Dashboard/Main/HistoryTabStack';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -21,9 +26,6 @@ import { useMarketSurveyStore } from '#stores/marketSurvey';
 import { FarmersSurveyModal, FarmerSurveySchemaType } from '../../components/FarmerSurveyModal';
 import { BaseSurveySchema, EExperience, EOccupation, type BaseSurveySchemaType } from './schema';
 import { sanitizeString } from './utils';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { HistoryTabStackRoutes } from 'navigation/Dashboard/Main/HistoryTabStack';
 
 function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
   const { companyCurrency } = props.route.params;
@@ -243,7 +245,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
 
           <FlatList
             data={farmerSurveys}
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => `${item.id}-${index}`}
             renderItem={({ item: survey, index }) => (
               <TouchableOpacity onPress={() => setOpenFarmersSurveyModal(index)}>
@@ -337,4 +339,9 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
   );
 }
 
-export default withSafeArea(BaseSurvey);
+export default withSafeArea(
+  withErrorBoundary(BaseSurvey, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

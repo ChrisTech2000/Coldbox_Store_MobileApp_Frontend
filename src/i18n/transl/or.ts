@@ -19,6 +19,10 @@ export default {
     other: 'ଅନ୍ୟ',
   },
   navigation: {
+    error: {
+      errorMessage: 'ଓହ୍... ଲାଗୁଛି କିଛି ଭୁଲ୍ ହେଇଯାଇଛି।',
+      tryAgainMessage: 'ଦୟାକରି ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।',
+    },
     auth: {
       SignIn: 'ଲଗଇନ୍ କରନ୍ତୁ',
       SignUp: 'ସାଇନ୍ ଅପ୍ କରନ୍ତୁ',
@@ -52,6 +56,7 @@ export default {
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
       ProduceDetails: '{{produceCode}}',
+      MarketplaceSettings: 'Marketplace settings', // TODO
       PriceTrend: 'ମୂଲ୍ୟ ଘଟଣା',
       PriceRanking: 'ମୂଲ୍ୟ ଅଙ୍କନ',
       Planner: 'ପ୍ଲାନର୍',
@@ -68,18 +73,39 @@ export default {
     },
     dashboard: {
       AccountDetails: 'ଖାତା ବିବରଣୀ',
+      PersonalDetails: 'Personal details', // TODO
+      LocalizationPreferences: 'Localization preferences', // TODO
+      ContactsSharing: 'Contacts sharing', // TODO
+      Coupons: 'Coupons', // TODO
+      CouponsActiveTab: 'Active', // TODO
+      CouponsRevokedTab: 'Revoked', // TODO
+      Marketplace: 'Marketplace', // TODO
+      MarketplaceFilters: 'Filters', // TODO
+      MarketplaceAllTab: 'All', // TODO
+      MarketplaceFavoritesTab: 'Favorites', // TODO
+      Orders: 'Orders', // TODO
+      MyOrders: 'My Orders', // TODO
+      OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'ଜ୍ଞାନ କେନ୍ଦ୍ର',
       QuitTutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍ ଛାଡ଼ନ୍ତୁ',
       FAQ: 'ପ୍ରଶ୍ନ ଓ ଉତ୍ତର',
       About: 'ସମ୍ପର୍କରେ',
       Management: 'ପରିଚାଳନା',
       Tutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍',
+      PayoutOptions: 'ପ୍ରଦାନ ବିକଳ୍ପ',
+      PaymentMethods: 'ପେମେଣ୍ଟ ପଧତିଗୁଡିକ',
+      Wallet: 'ୱାଲେଟ',
+      Transactions: 'ଲେନଦେନ',
+      AddCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ ଯୋଗ କରନ୍ତୁ',
+      EditCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ ସମ୍ପାଦନ କରନ୍ତୁ',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'ବର୍ଗ ପ୍ରକାର ଚୟନ କରନ୍ତୁ',
       CheckIn: 'ଚେକ୍-ଇନ୍',
       CropList: '{{cropType}}',
       CrateSetup: 'ଚେକ୍-ଇନ୍',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'COMSOL ରଣଟାଇମ୍ ଲାଇସେନ୍ସ ସମ୍ମତି 6.0',
@@ -122,6 +148,7 @@ export default {
     'update-success': 'ସଫଳତାର ସହ ଅଦ୍ୟତନ',
     'save-changes': 'ପରିବର୍ତ୍ତନ ସଞ୍ଚୟ କରନ୍ତୁ',
     continue: 'ଜାରି ରଖନ୍ତୁ',
+    save: 'ସଞ୍ଚୟ କରନ୍ତୁ',
   },
   components: {
     datePicker: {
@@ -133,11 +160,13 @@ export default {
     },
   },
   Auth: {
+    welcomePopup:
+      "Coldtivateକୁ ସ୍ୱାଗତ! ଯଦି ଆପଣ ଏକ କୃଷକ, ବ୍ୟାପାରୀ ଅଟନ୍ତି କିମ୍ବା ଶୀତଳକକ୍ଷରେ ସଂରକ୍ଷିତ ଉତ୍ପାଦନ ବିକ୍ରୟ କରିବାକୁ ରୁଚି ରଖନ୍ତି, ତେବେ 'ଶୀତଳନ ଉପଭୋକ୍ତା କିମ୍ବା ଗ୍ରାହକ ଭାବେ ସାଇନ୍ ଅପ୍ କରନ୍ତୁ' ଉପରେ କ୍ଲିକ୍ କରି ସାଇନ୍ ଅପ୍ କରନ୍ତୁ। ଯଦି ଆପଣ ଏକ ଶୀତଳନ କମ୍ପାନୀ ପାଇଁ କାମ କରୁଛନ୍ତି, ତେବେ ଆପଣଙ୍କର ଦାୟୀକୁ ଯାଞ୍ଚ କରିବାକୁ ଅନୁରୋଧ କରନ୍ତୁ କମ୍ପାନୀଟି ଅନୁମୋଦିତ କି ନାହିଁ। ଯଦି ଥାଏ, ଆପଣଙ୍କର ଦାୟୀ ଆପଣଙ୍କୁ ଏସଏମଏସ ଆମନ୍ତ୍ରଣ ପଠାଇବ ଏବଂ ଆପଣ ଏକ ଅନୁମୋଦିତ କର୍ମଚାରୀ କିମ୍ବା ଅପରେଟର ଭାବରେ ସାଇନ୍ଅପ୍ କରିପାରିବେ। ଯଦି ନୁହେଁ, ତେବେ ଆପଣ କମ୍ପାନୀକୁ ଅନୁମୋଦନ କରିପାରିବେ ଏବଂ ଏକ ଅନୁମୋଦିତ କର୍ମଚାରୀ ଭାବେ ସାଇନ୍ ଅପ୍ କରିପାରିବେ। କୃପାୟା 'ଆପ୍ପ ସୂଚନା' ବିଭାଗରେ FAQଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ।",
     Root: {
       welcome: 'କୋଲଡ୍ଟିଭେଟ୍ରେ ସ୍ବାଗତ',
       signIn: 'ସାଇନ୍ ଇନ୍',
       signUpCompany: 'କମ୍ପାନୀ ଭାବରେ ସାଇନ୍ ଅପ୍ କରନ୍ତୁ',
-      signUpCoolingUser: 'କୁଲିଂ ୟୁଜର୍ ଭାବରେ ସାଇନ୍ ଅପ୍ କରନ୍ତୁ',
+      signUpCoolingUser: 'ଏକ ଶୀତଳନ ଉପଭୋକ୍ତା କିମ୍ବା ଗ୍ରାହକ ଭାବେ ସାଇନ୍ ଅପ୍ କରନ୍ତୁ',
       appInfo: 'ଆପ୍ ତଥ୍ୟ',
     },
     SignIn: {
@@ -156,7 +185,7 @@ export default {
         coolingUser: {
           label: 'କୁଲିଂ ଉଜର୍',
           description:
-            'ଠଣ୍ଡା କକ୍ଷର ଉପଯୋଗକର୍ତ୍ତା। କୃଷକ, ବ୍ୟାପାରୀ, ଖରିଦାରାଯାଁ ଯେଉଁମାନେ ସ୍ମାର୍ଟଫୋନ୍ ପ୍ରବେଶ ପାଇଁ ଲଗ୍ ଇନ୍ କରିପାରିବେ। ସ୍ମାର୍ଟଫୋନ୍ ବିହୀନ ଠଣ୍ଡା କକ୍ଷର ଉପଯୋଗକର୍ତ୍ତାମାନେ ଏକ ଠଣ୍ଡା କକ୍ଷକୁ ଯାଇ କ୍ରିୟାକଳାପ କରିପାରିବେ।',
+            'ଶୀତଳକକ୍ଷ ଉପଭୋକ୍ତା ଓ ଗ୍ରାହକ। ଯେଉଁ କୃଷକ, ବ୍ୟାପାରୀ ଓ ବ୍ରିକେତାବିକ୍ରେତାଙ୍କ ପାଖରେ ସ୍ମାର୍ଟଫୋନ୍ ରହିଛି ସେମାନେ ଏଠାରେ ଲଗଇନ୍ କରିପାରିବେ। ଯେଉଁମାନଙ୍କର ସ୍ମାର୍ଟଫୋନ୍ ନାହିଁ, ସେମାନେ ଏକ ଶୀତଳକକ୍ଷରେ ଗସ୍ତ କରି ଓ ଅପରେଟରଙ୍କ ସହ ସଂଯୋଗ କରି ଆପ୍ପ ସଂପର୍କିତ ସୂଚନା ପାଇପାରିବେ। ଗ୍ରାହକମାନେ ଏଠାରେ ଲଗଇନ୍ କରି କ୍ରୟ ସମ୍ପୂର୍ଣ୍ଣ କରିପାରିବେ।',
         },
         toasts: {
           login:
@@ -244,7 +273,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: 'ସାଇନ୍ ଅପ୍ କୁଲିଂ ଉଜର୍',
+        header: 'ଏକ ଶୀତଳନ ଉପଭୋକ୍ତା କିମ୍ବା ଗ୍ରାହକ ଭାବେ ସାଇନ୍ ଅପ୍ କରନ୍ତୁ',
         languageFieldName: 'ଭାଷା',
       },
     },
@@ -395,6 +424,7 @@ export default {
         checkIn: 'ଚେକ୍-ଇନ୍',
         days: 'ଦିନ',
         day: 'ଦିନ',
+        daysLeft: '{{amount}} ଦିନ ବାକୀ',
         ttp: 'ଟିଟିପି',
         numberOfCrates: 'କ୍ରେଟ୍‌ଗୁଡିକର ସଂଖ୍ୟା',
         totalWeight: 'ମୋଟ ଓଜନ',
@@ -422,6 +452,10 @@ export default {
         emptyMessage: 'ଦୟାକରି ଆପଣଙ୍କର ଚେକ୍-ଇନ୍‌ରେ କମସେକମ ଏକ କ୍ରେଟ୍ ଯୋଡନ୍ତୁ',
         noPlannedDaysMessage:
           'କିଛି ଆଇଟମ୍‌ରେ ଯୋଜିତ ଦିନ ହାରାଯାଇଛି। ଆନୁମାନିକ ଖର୍ଚ୍ଚ ଗଣନା କରିବା ସମ୍ଭବ ନୁହେଁ।',
+        seeMore: 'ଅଧିକ ଦେଖନ୍ତୁ',
+        seeLess: 'କମ୍ ଦେଖନ୍ତୁ',
+        listed: 'ତାଲିକାଭୁକ୍ତ',
+        cratesAddedLabel: 'ଗଞ୍ଜିଗୁଡ଼ିକ ଯୋଡାଯାଇଛି',
         WithCode: {
           modalTitle: 'ଏକ ବର୍ତ୍ତମାନ ଚେକ୍-ଆଉଟ୍ରୁ ନୂତନ ଚେକ୍-ଇନ୍ ତିଆରି କରନ୍ତୁ',
           modalDescription:
@@ -444,7 +478,7 @@ export default {
           individualCrateWeightButton: 'ବ୍ୟକ୍ତିଗତ କ୍ରେଟ୍ ଓଜନ ସଂପାଦନ କରିବାକୁ ଏଠାକୁ କ୍ଲିକ୍ କରନ୍ତୁ',
           individualCrateIdButton: 'ବ୍ୟକ୍ତିଗତ କ୍ରେଟ୍ ଆଇଡି ସଂପାଦନ କରିବାକୁ ଏଠାକୁ କ୍ଲିକ୍ କରନ୍ତୁ',
           numberOfCratesLabel: 'କ୍ରେଟ୍‌ଗୁଡିକର ସଂଖ୍ୟା',
-          crateWeightLabel: 'ସାଧାରଣ କ୍ରେଟ୍ ଓଜନ',
+          crateWeightLabel: 'କ୍ରେଟ୍ ଓଜନ ଏବଂ ମାର୍କେଟପ୍ଲେସ୍ ତାଲିକା |',
           pricePerDayAndCrateLabel: 'ପ୍ରତି ଦିନ / କ୍ରେଟ୍ ମୂଲ୍ୟ',
           pricePerDayAndKilogramLabel: 'ପ୍ରତି ଦିନ / କିଲୋଗ୍ରାମ୍ ମୂଲ୍ୟ',
           fixedPriceLabel: 'ନିର୍ଦ୍ଧାରିତ ମୂଲ୍ୟ',
@@ -456,6 +490,14 @@ export default {
             yesterday: 'କଲି',
             dayBefore: 'ଦୁଇ ଦିନ ପୂର୍ବରୁ',
             evenBefore: 'ଏଯାଁ ପୂର୍ବରୁ',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'ସବୁରେ ପ୍ରୟୋଗ କରନ୍ତୁ',
+            list: 'ବିକ୍ରୟ ପାଇଁ ତାଲିକାକରଣ',
+            addMore: 'ଅଧିକ ଯୋଡନ୍ତୁ',
+            sellingPrice: 'ବିକ୍ରୟ ମୂଲ୍ୟ ତାଲିକାକରଣ',
+            potentialSellingPrice: 'ସମ୍ଭାବ୍ୟ ବିକ୍ରୟ ମୂଲ୍ୟ',
+            info: 'ମୂଲ୍ୟ ବ୍ୟବସ୍ଥାପନ ପ୍ରସ୍ତୁତି ବିକ୍ରୟ ସହ ଜଡିତ, ଠଣ୍ଡା ଗୋଦାମ ଫିସ୍‌ ସହ ନୁହେଁ।',
           },
           cratesError: 'ଦୟାକରି ସକାରାତ୍ମକ କ୍ରେଟ୍ ସଂଖ୍ୟା ଦିଅନ୍ତୁ',
           crateWeightError: 'ଦୟାକରି ସକାରାତ୍ମକ କ୍ରେଟ୍ ଓଜନ ଦିଅନ୍ତୁ',
@@ -837,6 +879,15 @@ export default {
           creditCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ',
         },
       },
+      Coupons: {
+        emptyMessage: 'କୌଣସି କୁପନ ଏପର୍ଯ୍ୟନ୍ତ ଯୋଡାଯାଇନି',
+        addCoupon: 'କୁପନ ଯୋଡନ୍ତୁ',
+        code: 'କୁପନ କୋଡ୍',
+        percentage: 'କୁପନ ପ୍ରତିଶତ',
+        revokeTitle: 'କୁପନ ରଦ୍ଦ କରିବା',
+        revokeMessage:
+          'ଆପଣ ଏହି କୁପନ ରଦ୍ଦ କରିବାକୁ ନିଶ୍ଚିତ ତ? ଏକଥାରେ ରଦ୍ଦ କରାଯିବା ପରେ, ଏହା ପुनଃ ବ୍ୟବହାର କରାଯିବ ନାହିଁ ଏବଂ ଡିସକାଉଣ୍ଟ ପୁନଃ ଉପଲବ୍ଧ ହେବ ନାହିଁ। ଏହି କ୍ରିୟା ସ୍ଥାୟୀ ଏବଂ ତାକୁ ପୁନର୍ନିଧାରଣ କରାଯିବା ନାହିଁ।',
+      },
     },
     AccountDetails: {
       popups: {
@@ -856,6 +907,60 @@ export default {
       },
       toasts: {
         success: 'ସଫଳତାର ସହିତ ଅଦ୍ୟତନ କରାଗଲା',
+      },
+      sections: {
+        sellerSettings: 'ବିକ୍ରେତା ସେଟିଂସ୍',
+        buyerSettings: 'କ୍ରେତା ସେଟିଂସ୍',
+        details: 'ବିବରଣୀ',
+      },
+      ContactsSharing: {
+        publicPhone: 'ଫୋନ୍ ନମ୍ବର ସାଧାରଣ କରନ୍ତୁ',
+        publicEmail: 'ଇ-ମେଲ୍ ସାଧାରଣ କରନ୍ତୁ',
+      },
+      PayoutSettings: {
+        addTitle: 'ଦୟାକରି ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା ପ୍ରବେଶ କରାନ୍ତୁ',
+        editTitle: 'ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା',
+        form: {
+          nameLabel: 'ପୂରା ନାମ',
+          namePlaceholder: 'ଉଦାହରଣ ସ୍ୱରୂପ: ଜନ୍ ଡୋ',
+          accountNumberLabel: 'ଖାତା ନମ୍ବର',
+          accountNumberPlaceholder: 'ଖାତା ନମ୍ବର ପ୍ରବେଶ କରାନ୍ତୁ',
+          bankLabel: 'ବ୍ୟାଙ୍କର ନାମ',
+          bankPlaceholder: 'ବ୍ୟାଙ୍କର ନାମ ପ୍ରବେଶ କରାନ୍ତୁ',
+          errors: {
+            name: 'ପୂର୍ଣ୍ଣ ନାମ ଆବଶ୍ୟକ',
+            account: 'ଖାତା ସଂଖ୍ୟା ଆବଶ୍ୟକ',
+            bank: 'ବ୍ୟାଙ୍କ ନାମ ଆବଶ୍ୟକ',
+          },
+        },
+        successMessage: 'ବ୍ୟାଙ୍କ ଖାତା ସଫଳତାର ସହିତ ଯୋଡା ହୋଇଛି।',
+        errorMessage: 'କିଛି ଭୁଲ ହେଲା। ଦୟାକରି ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।',
+      },
+      PaymentSettings: {
+        cards: 'କାର୍ଡସ୍',
+        creditCard: {
+          predefined: 'ପୂର୍ବନିର୍ଦ୍ଧାରିତ',
+          owner: 'କାର୍ଡ ଧାରକର ନାମ',
+          date: 'ମାତ୍ରା ସମାପ୍ତି',
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'ଦୟାକରି ଆପଣଙ୍କର କାର୍ଡ ସୂଚନା ଭରଣ କରନ୍ତୁ',
+          form: {
+            cardName: 'କାର୍ଡ ନାମ',
+            cardNamePlaceholder: 'କାର୍ଡ ନାମ ଭରଣ କରନ୍ତୁ',
+            cardNumber: 'କାର୍ଡ ନମ୍ବର',
+            cardNumberPlaceholder: 'କାର୍ଡ ନମ୍ବର ଭରଣ କରନ୍ତୁ',
+            expiryDate: 'ମାୂଦତା ତାରିଖ',
+            securityCode: 'ସୁରକ୍ଷା କୋଡ୍',
+            securityCodePlaceholder: 'କାର୍ଡ ସୁରକ୍ଷା କୋଡ୍ ଭରଣ କରନ୍ତୁ',
+            predefinedMethod: 'ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ପେମେଣ୍ଟ ପଦ୍ଧତି',
+            successMessage: 'କାର୍ଡ ସଫଳତାପୂର୍ବକ ଯୋଡାଯାଇଛି',
+            cardNameError: 'କାର୍ଡ ନାମ ଆବଶ୍ୟକ',
+            cardNumberError: 'କାର୍ଡ ସଂଖ୍ୟା ଆବଶ୍ୟକ',
+            securityCodeError: 'ସୁରକ୍ଷା କୋଡ ଆବଶ୍ୟକ',
+          },
+        },
       },
     },
     About: {
@@ -1001,6 +1106,35 @@ export default {
           checkedIn: 'ଚେକ୍-ଇନ୍ ହୋଇଛି',
         },
       },
+    },
+    ShoppingCart: {
+      empty: 'ଆପଣଙ୍କର ଟୋକା ଖାଲି ଅଛି',
+      daysLeft: 'ଦିନ ବାକି ଅଛି',
+      weight: 'କିଲୋଗ୍ରାମ ଉପଲବ୍ଧ',
+      perKg: '/ କିଲୋଗ୍ରାମ',
+      total: 'ମୋଟ ଦେବାକୁ',
+      pay: 'ପେ କରନ୍ତୁ',
+      orderHeader: 'ଅର୍ଡର',
+      subtotal: 'ସବଟୋଟାଲ',
+      produce: 'ଉତ୍ପାଦ',
+      discount: 'ଡିସକାଉଣ୍ଟ',
+      fees: 'ସେବା ଶୁଳ୍କ',
+      marketFees: 'ମାର୍କେଟପ୍ଲେସ ଶୁଳ୍କ',
+      paymentFee: 'ପେମେଣ୍ଟ ଶୁଳ୍କ',
+      viewContacts: 'ଯୋଗାଯୋଗ ଦେଖନ୍ତୁ',
+      contactsForDelivery: 'ଡେଲିଭେରି ନିମନ୍ତେ ସଂପର୍କ',
+      gotItButton: 'ବୁଝିଲି!',
+      pickupMethods: 'ପିକ୍ଅପ ଶ୍ରେଣୀ',
+      pickUpToday: 'ଆଜି ଉଠାନ୍ତୁ',
+      keepInStorageDailyRate: 'ଭଣ୍ଡାରରେ ରଖ ({{price}} / ଦିନ)',
+      keepInStorageFixedRate: 'ଭଣ୍ଡାର ହାର ({{price}})',
+      delivery: 'ବିତରଣ',
+      companyName: 'କମ୍ପାନୀ ନାମ',
+      phoneNumber: 'ଫୋନ ନମ୍ବର',
+      thankYouMessage: 'ଅର୍ଡର କରିବାକୁ ଧନ୍ୟବାଦ',
+      orderOverview: 'ଅର୍ଡର ଦର୍ଶନ',
+      products: 'ଉତ୍ପାଦ',
+      consultOrders: 'ମୋ ଅର୍ଡରଗୁଡ଼ିକ ଦେଖନ୍ତୁ',
     },
     Analytics: {
       emptyState: 'ଦେଖାଇବାକୁ କୌଣସି ତଥ୍ୟ ନାହିଁ',

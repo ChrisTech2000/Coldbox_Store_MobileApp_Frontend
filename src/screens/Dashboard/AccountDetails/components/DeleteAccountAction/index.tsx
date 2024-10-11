@@ -113,7 +113,7 @@ export default function DeleteAccountAction() {
   return (
     <React.Fragment>
       <Button
-        tw="w-full"
+        tw="w-[48%]"
         mode="contained"
         onPress={onDelete}
         icon={isProcessing ? undefined : 'trash-can-outline'}

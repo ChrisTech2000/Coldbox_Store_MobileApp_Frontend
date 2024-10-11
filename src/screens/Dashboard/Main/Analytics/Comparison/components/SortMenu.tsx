@@ -97,7 +97,7 @@ export function SortingMenu({ useSortingStore, ...props }: SortingMenuProps) {
             >
               <View tw="max-h-40">
                 <FlatList
-                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   data={options}
                   keyExtractor={(item, index) => `${item.label}-${index}`}
                   renderItem={({ item }) => (

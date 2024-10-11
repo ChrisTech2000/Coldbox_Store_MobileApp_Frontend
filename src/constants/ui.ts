@@ -1,1 +1,1 @@
-export const SMALL_SCREEN_THRESHOLD = 667;
+export const SMALL_SCREEN_THRESHOLD = 800;

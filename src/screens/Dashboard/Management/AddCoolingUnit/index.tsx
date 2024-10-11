@@ -18,4 +18,4 @@ function AddCoolingUnit() {
   );
 }
 
-export default withSafeArea(AddCoolingUnit);
+export default withSafeArea(AddCoolingUnit, ['bottom'], true);

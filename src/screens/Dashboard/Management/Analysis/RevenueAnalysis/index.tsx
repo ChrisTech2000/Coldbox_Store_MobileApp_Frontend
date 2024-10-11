@@ -44,8 +44,8 @@ const usePaymentType = createMultipleSelectStore<PaymentOption>();
 const useDateRangeStore = createDataRangeStore();
 const useSortingStore = createSortingStore();
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
   const { t } = useTranslationUtils();
@@ -207,7 +207,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           </View>
         ) : filteredMovements.length > 0 ? (
           <FlashList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
               <Movement

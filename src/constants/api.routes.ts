@@ -59,7 +59,7 @@ export enum ESMSEndpoints {
 }
 
 export enum ENotificationsEndpoints {
-  GET_NOTIFICATIONS = '/user/v1/notification',
+  GET_NOTIFICATIONS = '/user/v1/notification/',
   UPDATE_NOTIFICATION = 'user/v1/notification/:notificationId/',
 }
 
@@ -88,4 +88,32 @@ export enum EPredictionEndpoints {
   GET_PREDICTION_IN = '/prediction/predictions/get_data_graph',
   GET_PREDICTION_TABLE_NG = '/prediction/predictions/get_data_table_ng',
   GET_PREDICTION_TABLE_IN = '/prediction/predictions/get_data_table',
+}
+
+export enum CouponsEndpoints {
+  LIST_OWN_COUPONS = 'marketplace/seller/coupons/',
+  REVOKE_COUPON = 'marketplace/seller/coupons/:couponId/',
+}
+
+export enum EMarketplaceEndpoints {
+  ADD_ITEM = 'marketplace/buyer/cart/items/',
+  GET_CART = 'marketplace/buyer/cart/',
+  GET_ORDER = 'marketplace/buyer/orders/:orderId/',
+  GET_ORDERS = 'marketplace/buyer/orders/',
+  REMOVE_ITEM_FROM_CART = 'marketplace/buyer/cart/items/:crateId/',
+  CHECKOUT_WITH_PAYSTACK = 'marketplace/buyer/cart/checkout-with-paystack/',
+  UPSERT_LISTED_CRATE = 'marketplace/seller/listed-crates/',
+  AVAILABLE_LISTING = 'marketplace/buyer/available-listings/',
+  GET_SELLER_LISTED_CRATES_BY_CRATE_ID = 'marketplace/seller/listed-crates/:crateId/',
+  SELLER_BANK_ACCOUNTS = 'marketplace/seller/paystack-accounts/',
+  GET_BANKS = 'marketplace/data/banks/',
+  APPLY_COUPON = 'marketplace/buyer/cart/apply-coupon/',
+  CLEAR_COUPON = 'marketplace/buyer/cart/clear-coupon/',
+  PAY_WITH_PAYSTACK = 'marketplace/buyer/orders/:order/pay-with-paystack/',
+  SET_PICKUP_DETAILS = 'marketplace/buyer/cart/set-pickup-details/',
+  GET_CART_DELIVERY_CONTACTS = 'marketplace/buyer/cart/delivery-contacts/',
+  GET_ORDER_DELIVERY_CONTACTS = 'marketplace/buyer/orders/:orderId/delivery-contacts/',
+  COMPANY_DELIVERY_CONTACTS = 'marketplace/company/delivery-contacts/',
+  LIST_COMPANY_DELIVERY_CONTACTS = 'marketplace/company/delivery-contacts/?company_id=:companyId',
+  DELETE_DELIVERY_CONTACT = 'marketplace/company/delivery-contacts/:contactId/?company_id=companyId',
 }

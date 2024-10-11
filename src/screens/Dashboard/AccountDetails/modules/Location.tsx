@@ -19,7 +19,7 @@ export default function LocationField() {
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
-            tw="w-full bg-transparent mt-1"
+            tw="w-full bg-transparent"
             label={t('Dashboard.AccountDetails.fields.location')}
             mode="flat"
             dense

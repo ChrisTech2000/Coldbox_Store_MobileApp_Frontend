@@ -76,7 +76,7 @@ export default function GenderField() {
           }}
         />
       </View>
-      <Divider tw="w-full bg-gray-700 mt-2 my-3" />
+      <Divider tw="w-full bg-gray-700 mt-2" />
     </View>
   );
 }

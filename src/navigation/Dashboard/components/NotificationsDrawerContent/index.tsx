@@ -86,7 +86,7 @@ function NotificationsDrawerContent(props: Props) {
       </View>
 
       <FlatList
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         data={notifications}
         keyExtractor={(item) => `notification-#${item.id}`}
         renderItem={({ item }) => (
@@ -154,4 +154,4 @@ function NotificationsDrawerContent(props: Props) {
   );
 }
 
-export default withSafeArea(NotificationsDrawerContent, ['top', 'bottom']);
+export default withSafeArea(NotificationsDrawerContent, ['top', 'bottom'], true);

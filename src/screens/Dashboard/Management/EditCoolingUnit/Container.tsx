@@ -27,7 +27,7 @@ import DeleteAction from './components/DeleteAction';
 import { CropPricingManager } from '../AddCoolingUnit/utils';
 import InAppNotifications from '#common/InAppNotifications';
 
-const width = (Dimensions.get('screen').width - 42) / 2;
+const width = (Dimensions.get('window').width - 42) / 2;
 
 type FormStateBuilder = {
   getFormValues: () => FormValues;

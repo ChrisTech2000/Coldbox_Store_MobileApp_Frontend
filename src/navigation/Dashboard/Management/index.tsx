@@ -8,6 +8,7 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
+import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 import EditCheckIn from '#screens/Dashboard/Main/History/EditCheckIn';
 import ManagementRoot from '#screens/Dashboard/Management';
 import AddCoolingUnit from '#screens/Dashboard/Management/AddCoolingUnit';
@@ -20,6 +21,7 @@ import UsageAnalysis from '#screens/Dashboard/Management/Analysis/UsageAnalysis'
 import CompanyDetails from '#screens/Dashboard/Management/CompanyDetails';
 import CoolingUnits from '#screens/Dashboard/Management/CoolingUnits';
 import CoolingUsers from '#screens/Dashboard/Management/CoolingUsers';
+import DeliveryContacts from '#screens/Dashboard/Management/DeliveryContacts';
 import EditCoolingUnit from '#screens/Dashboard/Management/EditCoolingUnit';
 import EditLocation from '#screens/Dashboard/Management/EditLocation';
 import EditOperator from '#screens/Dashboard/Management/EditOperator';
@@ -34,6 +36,7 @@ import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';
+import CouponsSettingsStack from '../AccountDetails/CouponSettings';
 import MarketSurveyStack, {
   MarketSurveyStackRoutes,
 } from '../Main/HistoryTabStack/MarketSurveyStack';
@@ -87,6 +90,9 @@ export type ManagementRoutes = {
     screen: keyof EditCoolingUserStackRoutes;
     params: EditCoolingUserStackRoutes[keyof EditCoolingUserStackRoutes];
   };
+  CouponStack: undefined;
+  PayoutSettings: undefined;
+  DeliveryContacts: undefined;
 };
 
 export type ManagementRoutePaths = keyof ManagementRoutes;
@@ -122,6 +128,9 @@ const NAVIGATOR_HEADERS: Record<ManagementRoutePaths, TranslationPaths | undefin
   RegisteredEmployee: 'navigation.management.RegisteredEmployee',
   AddRegisteredEmployee: 'navigation.management.AddRegisteredEmployee',
   RegisteredEmployeeDetails: 'navigation.management.RegisteredEmployeeDetails',
+  CouponStack: undefined,
+  PayoutSettings: 'navigation.dashboard.PayoutOptions',
+  DeliveryContacts: 'navigation.management.DeliveryContacts',
 };
 
 const Stack = createNativeStackNavigator<ManagementRoutes>();
@@ -184,6 +193,9 @@ export default function ManagementStack() {
       <Stack.Screen name="AddRegisteredEmployee" component={AddRegisteredEmployee} />
       <Stack.Screen name="RegisteredEmployeeDetails" component={RegisteredEmployeeDetails} />
       <Stack.Screen name="MarketSurveyStack" component={MarketSurveyStack} />
+      <Stack.Screen name="CouponStack" component={CouponsSettingsStack} />
+      <Stack.Screen name="PayoutSettings" component={PayoutSettings} />
+      <Stack.Screen name="DeliveryContacts" component={DeliveryContacts} />
     </Stack.Navigator>
   );
 }

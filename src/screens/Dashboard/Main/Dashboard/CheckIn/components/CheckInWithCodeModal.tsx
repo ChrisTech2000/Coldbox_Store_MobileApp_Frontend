@@ -14,6 +14,7 @@ import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import InAppNotifications from '#common/InAppNotifications';
+import type { Crop } from '#types/global';
 
 type CheckInWithCodeModalProps = {
   isModalOpen: boolean;
@@ -98,7 +99,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
               id: undefined,
               name: group[0].name,
               image: group[0].cropImage,
-            },
+            } as unknown as Crop,
             additionalInfo: '',
             crates: group.map((crate) => ({
               checkOut: null,
@@ -107,6 +108,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
               coolingUnitId: coolingUnit.id,
               plannedDays: plannedDays ?? crate.plannedDays ?? undefined,
             })),
+            price: undefined,
             initialGrade: null,
             harvestDate: undefined,
             hasPicture: false,

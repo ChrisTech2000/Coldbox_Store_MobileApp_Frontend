@@ -12,20 +12,36 @@ import CheckIn from '#screens/Dashboard/Main/Dashboard/CheckIn/CheckIn';
 import CrateSetup from '#screens/Dashboard/Main/Dashboard/CheckIn/CrateSetup';
 import CropList from '#screens/Dashboard/Main/Dashboard/CheckIn/CropList';
 import SelectCropType from '#screens/Dashboard/Main/Dashboard/CheckIn/SelectCropType';
+import CrateWeightAndPricing, {
+  resetCrateWeightPricingBridge,
+} from '#screens/Dashboard/Main/Dashboard/CheckIn/CrateWeightAndPricing';
 
 import { TranslationPaths } from '#i18n/index';
 import { Translator, useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
-import { useCheckInStore } from '#stores/checkIn';
+import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { ECropType, type CoolingUnit, type Crop, type Farmer } from '#types/global';
 
 export type CheckInStackRoutes = {
   CheckIn: { coolingUnit: CoolingUnit; user: Farmer };
   SelectCropType: undefined;
   CropList: { type: ECropType };
-  CrateSetup: {
-    crop: Crop;
-    additionalInfo: string;
+  CrateSetup:
+    | {
+        crop: Crop;
+        additionalInfo: string;
+      }
+    | {
+        contextualProduce: ProduceCrate;
+      };
+  CrateWeightAndPricing: {
+    companyCurrency: string;
+    currencySymbol: string;
+    crates: Array<{
+      weight: number;
+      isSellable: boolean;
+    }>;
+    sellingPrice: number;
   };
 };
 
@@ -41,6 +57,7 @@ export const NAVIGATOR_HEADERS: Record<CheckInStackRoutePaths, TranslationPaths 
   CheckIn: 'navigation.checkIn.CheckIn',
   CropList: 'navigation.checkIn.CropList',
   CrateSetup: 'navigation.checkIn.CrateSetup',
+  CrateWeightAndPricing: 'navigation.checkIn.CrateWeightAndPricing',
 };
 
 type ScreenOptions = (props: {
@@ -74,7 +91,14 @@ export default function CheckInStack() {
               onPress={() => {
                 // eslint-disable-next-line react/prop-types
                 props.navigation.goBack();
-                if (routeName === 'CheckIn') resetCheckInStore();
+                switch (routeName) {
+                  case 'CheckIn':
+                    return resetCheckInStore();
+                  case 'CrateSetup':
+                    return resetCrateWeightPricingBridge();
+                  default:
+                    return;
+                }
               }}
               size={22}
             />
@@ -92,6 +116,7 @@ export default function CheckInStack() {
       <Stack.Screen name="SelectCropType" component={SelectCropType} />
       <Stack.Screen name="CropList" component={CropList} />
       <Stack.Screen name="CrateSetup" component={CrateSetup} />
+      <Stack.Screen name="CrateWeightAndPricing" component={CrateWeightAndPricing} />
     </Stack.Navigator>
   );
 }

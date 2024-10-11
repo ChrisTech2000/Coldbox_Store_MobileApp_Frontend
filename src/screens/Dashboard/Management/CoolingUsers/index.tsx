@@ -71,7 +71,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   return (
     <View tw="flex-1 justify-start">
       <FlatList
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         data={datums}
         keyExtractor={(item) => `cooling-user-item-#${item.id}`}
         ListHeaderComponent={
@@ -139,4 +139,4 @@ function _propsFactory(
   return props;
 }
 
-export default withSafeArea(CoolingUsers);
+export default withSafeArea(CoolingUsers, ['bottom'], true);

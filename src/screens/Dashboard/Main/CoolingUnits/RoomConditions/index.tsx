@@ -3,21 +3,22 @@ import { RefreshControl, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
 
+import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import RBAC from '#common/RBAC';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { paperTheme } from '#ui/lib/theme';
-import RBAC from '#common/RBAC';
 
+import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 import LineChart from './components/LineChart';
 import TemperatureModal from './components/TemperatureModal';
-
 import { processTemperatures } from './utils';
-import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 
 function CoolingUnitsRoomConditions() {
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
@@ -116,4 +117,9 @@ function CoolingUnitsRoomConditions() {
   );
 }
 
-export default withSafeArea(CoolingUnitsRoomConditions);
+export default withSafeArea(
+  withErrorBoundary(CoolingUnitsRoomConditions, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

@@ -1,24 +1,22 @@
 import { FlashList } from '@shopify/flash-list';
 import cloneDeep from 'lodash/cloneDeep';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, View } from 'react-native';
-import { Divider, Icon, Portal, TextInput } from 'react-native-paper';
+import { Divider, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 
 import { useTranslationUtils } from '#i18n/utils';
 
-import { ModalMode, SetupSchema } from '../CrateSetup';
+import type { SetupSchema } from '../CrateSetup';
 
 type CrateModalProps = {
   crates: SetupSchema['crates'];
   isOpen: boolean;
-  mode: ModalMode;
   numberOfCrates: number;
   setValue: (crates: SetupSchema['crates']) => void;
   title: string;
@@ -28,20 +26,11 @@ type CrateModalProps = {
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-export function CrateSetupModal({
-  crates,
-  isOpen,
-  mode,
-  title,
-  closeModal,
-  setValue,
-}: CrateModalProps) {
+export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }: CrateModalProps) {
   const { t } = useTranslationUtils();
 
   const [initialId, setInitialId] = useState<number | undefined>(undefined);
   const [modalCrates, setModalCrates] = useState<SetupSchema['crates']>(crates);
-
-  const weightMode = useMemo(() => mode === 'weight', [mode]);
 
   const onChangeNumericKeyboard = useCallback(
     (newVal: string | number, index: number) => {
@@ -49,11 +38,11 @@ export function CrateSetupModal({
 
       if (!isNaN(value)) {
         const crates = cloneDeep(modalCrates);
-        crates[index][weightMode ? 'crateWeight' : 'crateId'] = value;
+        crates[index].crateId = value;
         setModalCrates(crates);
       }
     },
-    [modalCrates, weightMode]
+    [modalCrates]
   );
 
   const onChangeInitialVal = useCallback((newVal: string) => {
@@ -100,16 +89,15 @@ export function CrateSetupModal({
 
           <ScrollView tw="w-full h-[60%]" showsVerticalScrollIndicator={false}>
             <FlashList
-              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               data={modalCrates}
               extraData={crates}
               renderItem={({ index }) => (
                 <View
-                  key={`crate-${mode}-${index}`}
+                  key={`crate-#${index}`}
                   tw="w-full flex flex-row items-center justify-between px-2 my-1"
                 >
                   <View tw="flex flex-row items-center space-x-1">
-                    {weightMode && <Icon source="basket" size={15} />}
                     <Text tw="mr-4 ml-1 w-14">
                       {t('Dashboard.CrateManagement.CheckIn.Setup.modals.crateLabel')} {index + 1}
                     </Text>
@@ -117,57 +105,11 @@ export function CrateSetupModal({
 
                   <View tw="flex flex-row items-center justify-between">
                     <Input
-                      tw={cn('bg-white border rounded-sm h-10', !weightMode && 'w-[80%]')}
+                      tw="bg-white border rounded-sm h-10 w-[80%]"
                       onChangeText={(newVal) => onChangeNumericKeyboard(newVal, index)}
-                      value={modalCrates[index][weightMode ? 'crateWeight' : 'crateId']?.toString()}
+                      value={modalCrates[index].crateId?.toString()}
                       keyboardType="numeric"
-                      right={
-                        weightMode && (
-                          <TextInput.Icon
-                            icon={() => (
-                              <Text variant="TextMedium" tw="text-green-primary">
-                                {t('Dashboard.ProduceDetails.kilogram')}
-                              </Text>
-                            )}
-                          />
-                        )
-                      }
                     />
-
-                    {weightMode && (
-                      <View tw="flex flex-row items-center">
-                        <Button
-                          labelStyle="text-xl"
-                          tw="w-8 ml-4 mr-6"
-                          onPress={() =>
-                            onChangeNumericKeyboard(
-                              !modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
-                                ? 0
-                                : Number(
-                                    modalCrates[index][weightMode ? 'crateWeight' : 'crateId']
-                                  ) - 1,
-                              index
-                            )
-                          }
-                        >
-                          -
-                        </Button>
-                        <Button
-                          labelStyle="text-xl"
-                          tw="w-8 mr-6"
-                          onPress={() =>
-                            onChangeNumericKeyboard(
-                              Number(
-                                modalCrates[index][weightMode ? 'crateWeight' : 'crateId'] ?? 0
-                              ) + 1,
-                              index
-                            )
-                          }
-                        >
-                          +
-                        </Button>
-                      </View>
-                    )}
                   </View>
                 </View>
               )}
@@ -179,24 +121,22 @@ export function CrateSetupModal({
             />
           </ScrollView>
 
-          {!weightMode && (
-            <View tw="w-full px-3 mt-4 mb-2">
-              <Text variant="TextMedium" tw="text-base my-1">
-                {t('Dashboard.CrateManagement.CheckIn.Setup.modals.selectInitialId')}
-              </Text>
-              <View tw="flex flex-row justify-between">
-                <Input
-                  tw="bg-white border rounded-sm h-10 w-[50%]"
-                  onChangeText={onChangeInitialVal}
-                  value={initialId?.toString() ?? ''}
-                  keyboardType="numeric"
-                />
-                <Button mode="text" uppercase labelStyle="text-base" onPress={onSerialize}>
-                  {t('Dashboard.CrateManagement.CheckIn.Setup.modals.serialize')}
-                </Button>
-              </View>
+          <View tw="w-full px-3 mt-4 mb-2">
+            <Text variant="TextMedium" tw="text-base my-1">
+              {t('Dashboard.CrateManagement.CheckIn.Setup.modals.selectInitialId')}
+            </Text>
+            <View tw="flex flex-row justify-between">
+              <Input
+                tw="bg-white border rounded-sm h-10 w-[50%]"
+                onChangeText={onChangeInitialVal}
+                value={initialId?.toString() ?? ''}
+                keyboardType="numeric"
+              />
+              <Button mode="text" uppercase labelStyle="text-base" onPress={onSerialize}>
+                {t('Dashboard.CrateManagement.CheckIn.Setup.modals.serialize')}
+              </Button>
             </View>
-          )}
+          </View>
 
           <Button
             mode="contained"

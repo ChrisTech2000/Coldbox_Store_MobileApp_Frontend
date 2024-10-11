@@ -10,9 +10,11 @@ import { useDashboardStore } from '#stores/dashboard';
 import { CoolingUnit, Crate } from '#types/global';
 
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { CheckoutCrate } from '../components/CheckOutCrate';
@@ -114,19 +116,19 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
         </View>
       </View>
       <Divider tw="bg-gray-400 my-2" />
-      {!coolingUnit && (
+      {!coolingUnit ? (
         <Text variant="TextBold" tw="text-lg mt-2 ml-4">
           {t('Dashboard.CrateManagement.noUnitWarning')}
         </Text>
-      )}
+      ) : null}
 
-      {coolingUnit && crates?.length === 0 && (
+      {coolingUnit && crates?.length === 0 ? (
         <Text variant="TextBold" tw="text-lg mt-2 ml-4">
           {t('Dashboard.CrateManagement.noCratesWarning')}
         </Text>
-      )}
+      ) : null}
 
-      {coolingUnit && crates && crates.length > 0 && (
+      {coolingUnit && crates && crates.length > 0 ? (
         <>
           <Text variant="TextBold" tw="text-lg mt-2 mb-1 ml-4">
             {t('Dashboard.CrateManagement.CheckOut.selectCrateMessage')}
@@ -145,7 +147,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           </TouchableOpacity>
 
           <FlatList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={crates ?? []}
             extraData={selectedCrates.length}
             renderItem={({ item: crate, index }) => (
@@ -168,7 +170,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
             )}
           />
         </>
-      )}
+      ) : null}
 
       <View tw="flex flex-row space-x-2 w-full mt-4 justify-center">
         <Button
@@ -198,4 +200,11 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   );
 }
 
-export default withSafeArea(CrateSelection);
+export default withSafeArea(
+  withErrorBoundary(CrateSelection, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  }),
+  ['bottom'],
+  true
+);

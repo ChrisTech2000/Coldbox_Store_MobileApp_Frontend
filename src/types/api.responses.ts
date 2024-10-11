@@ -1,7 +1,11 @@
 import {
+  Bank,
+  CartItem,
   ECoolingUnitMetric,
   EMovementType,
+  EOrderStatus,
   EPaymentType,
+  EPickUpMethod,
   ERoles,
   ESellingLocation,
   type CommodityInfo,
@@ -62,6 +66,8 @@ export type CheckInResponse = {
   movement: number;
   farmer: number;
   hasDt: string;
+  cratesIds: Array<number>;
+  produces: Array<{ id: number; cropId: number; cratesIds: Array<number> }>;
 };
 
 export type CheckOut = Array<{
@@ -419,3 +425,122 @@ export type VerifyUbibotSensorConnectivityResponse = {
   success: string;
   data: Array<string>;
 };
+
+export interface CreateCouponResponse {
+  id: number;
+  code: string;
+  createdAt: string;
+  discountPercentage: number;
+  revokedAt: null | string;
+}
+
+export interface GetCouponListResponse {
+  nodes: Array<CreateCouponResponse>;
+}
+
+export interface GetCartResponse {
+  id: number;
+  items: Array<CartItem>;
+  totalAmount: number;
+  totalColdtivateAmount: number;
+  totalCoolingFeesAmount: number;
+  totalDiscountAmount: number;
+  totalPaymentFeesAmount: number;
+  totalProduceAmount: number;
+  pickupDetails: Array<{
+    coolingUnitId: number;
+    pickupMethod: EPickUpMethod;
+  }>;
+}
+
+export interface GetAllOrdersResponse extends GetCartResponse {
+  createdAt: string;
+  status: EOrderStatus;
+}
+export interface CheckoutWithPaystackResponse {
+  orderId: number;
+  authorizationUrl: string;
+}
+export interface GetAvailableListingResponse {
+  nodes: Array<{
+    availableWeightInKg: number;
+    crateId: number;
+    createdAt: string;
+    currency: string;
+    distance: number;
+    id: number;
+    lastUpdatedAt: string;
+    pendingInCoolingFees: number;
+    pendingInCoolingFeesPricePerKg: number;
+    producePricePerKg: number;
+    relCheckInMovementCode: string;
+    relCompanyId: number;
+    relCoolingUnitId: number;
+    relCrateRemainingShelfLife: number;
+    relCropId: number;
+    totalPricePerKg: number;
+    weightLockedInPaymentPendingOrdersInKg: number;
+  }>;
+  pagination: {
+    itemsPerPage: number;
+    page: number;
+    totalItems: number;
+    totalPages: number;
+  };
+}
+
+export interface UpdateListedCrateResponse {
+  id: number;
+  movement: number;
+  ownerUser: number;
+  ownerOnBehalfOfCompany: number | null; // if it's null the owner is the user, otherwise the owner is the company
+  has_dt: string;
+  produces: Array<{
+    id: number;
+    cropId: number;
+    cratesIds: Array<number>;
+  }>;
+}
+
+export interface GetAvailableBanksResponse {
+  banks: Array<Bank>;
+}
+
+export interface ApplyCouponResponse {
+  message: string;
+  cart: GetCartResponse;
+}
+
+export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
+
+export type GetDeliveryContactsResponse = Array<{
+  id: number;
+  companyName?: string;
+  phone: string;
+  name: string;
+  coolingUnitId: number;
+}>;
+
+export interface SellerListedCratesResponse {
+  availableWeightInKg: number;
+  crateId: number;
+  createdAt: string;
+  currency: string;
+  distance: number | null;
+  id: number;
+  lastUpdatedAt: string;
+  pendingInCoolingFees: number;
+  pendingInCoolingFeesPricePerKg: number;
+  producePricePerKg: number;
+  relCheckInMovementCode: string;
+  relCompanyId: number;
+  relCoolingUnitId: number;
+  relCrateRemainingShelfLife: number;
+  relCropId: number;
+  totalPricePerKg: number;
+  weightLockedInPaymentPendingOrdersInKg: number;
+}
+
+export interface GetSellerListedCrates {
+  nodes: Array<SellerListedCratesResponse>;
+}

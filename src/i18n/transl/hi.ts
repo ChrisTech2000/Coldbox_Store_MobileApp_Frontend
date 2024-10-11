@@ -19,6 +19,10 @@ export default {
     other: 'अन्य',
   },
   navigation: {
+    error: {
+      errorMessage: 'अरे... लगता है कुछ गलत हो गया है।',
+      tryAgainMessage: 'कृपया बाद में फिर से प्रयास करें।',
+    },
     auth: {
       SignIn: 'लॉगिन',
       SignUp: 'साईन अप',
@@ -52,6 +56,7 @@ export default {
     bottomTabs: {
       RootMainTabStack: '{{firstName}} का Coldtivate',
       ProduceDetails: '{{produceCode}}',
+      MarketplaceSettings: 'Marketplace settings', // TODO
       PriceTrend: 'मूल्य प्रवृत्ति',
       PriceRanking: 'मूल्य रैंकिंग',
       Planner: 'प्लानर',
@@ -68,18 +73,39 @@ export default {
     },
     dashboard: {
       AccountDetails: 'अकाउंट डिटेल्स',
+      PersonalDetails: 'Personal details', // TODO
+      LocalizationPreferences: 'Localization preferences', // TODO
+      ContactsSharing: 'Contacts sharing', // TODO
+      Coupons: 'Coupons', // TODO
+      CouponsActiveTab: 'Active', // TODO
+      CouponsRevokedTab: 'Revoked', // TODO
+      Marketplace: 'Marketplace', // TODO
+      MarketplaceFilters: 'Filters', // TODO
+      MarketplaceAllTab: 'All', // TODO
+      MarketplaceFavoritesTab: 'Favorites', // TODO
+      Orders: 'Orders', // TODO
+      MyOrders: 'My Orders', // TODO
+      OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'नॉलेज हब',
       QuitTutorial: 'ट्यूटोरियल छोड़ें',
       FAQ: 'अधिकतर पूछे जाने वाले सवाल',
       About: 'विषय',
       Management: 'प्रबंधन',
       Tutorial: 'ट्यूटोरियल',
+      PayoutOptions: 'भुगतान विकल्प',
+      PaymentMethods: 'भुगतान विधियाँ',
+      Wallet: 'वॉलेट',
+      Transactions: 'लेनदेन',
+      AddCard: 'क्रेडिट कार्ड जोड़ें',
+      EditCard: 'क्रेडिट कार्ड संपादित करें',
+      Transaction: '{{id}}',
     },
     checkIn: {
       SelectCropType: 'फसल प्रकार चुनें',
       CheckIn: 'चेक इन',
       CropList: '{{cropType}}',
       CrateSetup: 'चेक इन',
+      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
     },
     about: {
       comsolAgreement: 'COMSOL Runtime License Agreement 6.0',
@@ -122,6 +148,7 @@ export default {
     'update-success': 'सफलतापूर्वक उत्परिवर्तित',
     'save-changes': 'बदलाव सहेजें',
     continue: 'जारी रखना',
+    save: 'सहेजें',
   },
   components: {
     datePicker: {
@@ -133,11 +160,13 @@ export default {
     },
   },
   Auth: {
+    welcomePopup:
+      "Coldtivate में आपका स्वागत है! यदि आप किसान, व्यापारी हैं, या कोल्ड रूम में संग्रहीत उत्पाद खरीदने में रुचि रखते हैं, तो कृपया 'शीतलन उपयोगकर्ता या उपभोक्ता के रूप में साइन अप करें' पर क्लिक करके साइन अप करें। यदि आप किसी शीतलन कंपनी में काम करते हैं, तो कृपया अपने उत्तरदायी व्यक्ति से संपर्क करें और जांचें कि आपकी कंपनी पंजीकृत है या नहीं। यदि हां, तो आपका उत्तरदायी व्यक्ति आपको एक एसएमएस आमंत्रण भेजेगा ताकि आप पंजीकृत कर्मचारी या ऑपरेटर के रूप में साइन अप कर सकें। यदि नहीं, तो आप कंपनी को पंजीकृत कर सकते हैं और पंजीकृत कर्मचारी के रूप में साइन अप कर सकते हैं। कृपया 'ऐप जानकारी' अनुभाग में अक्सर पूछे जाने वाले प्रश्नों की जाँच करें।",
     Root: {
       welcome: 'स्वागतम',
       signIn: 'साइन इन करें',
       signUpCompany: 'अस कंपनी साइन अप करें',
-      signUpCoolingUser: 'કૂલિંગ યુઝર તરીકે સાઇન અપ કરો',
+      signUpCoolingUser: 'शीतलन उपयोगकर्ता या उपभोक्ता के रूप में साइन अप करें',
       appInfo: 'सामान्यतःपूछे जाने वाले प्रश्न',
     },
     SignIn: {
@@ -156,7 +185,7 @@ export default {
         coolingUser: {
           label: 'किसान',
           description:
-            'कोल्ड रूम उपयोगकर्ता। किसान, व्यापारी, खुदरा विक्रेता जिनके पास स्मार्टफोन है, वे यहां लॉग इन कर सकते हैं। स्मार्टफोन के बिना कोल्ड रूम के उपयोगकर्ता कोल्ड रूम में जाकर और ऑपरेटर के साथ बातचीत करके ऐप की जानकारी तक पहुंच सकते हैं',
+            'कोल्ड रूम उपयोगकर्ता और उपभोक्ता। किसान, व्यापारी, और खुदरा विक्रेता, जिनके पास स्मार्टफोन है, वे यहां लॉग इन कर सकते हैं। जिनके पास स्मार्टफोन नहीं है, वे कोल्ड रूम जाकर और ऑपरेटर से संपर्क करके ऐप की जानकारी प्राप्त कर सकते हैं। उपभोक्ता यहां लॉग इन करके खरीदारी पूरी कर सकते हैं।',
         },
         toasts: {
           login: 'उपयोगकर्ता नाम या पासवर्ड सही नहीं हैं',
@@ -244,7 +273,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: 'कूलिंग उपयोगकर्ता साइन अप करें',
+        header: 'शीतलन उपयोगकर्ता या उपभोक्ता के रूप में साइन अप करें',
         languageFieldName: 'भाषा',
       },
     },
@@ -395,6 +424,7 @@ export default {
         checkIn: 'चेक-इन',
         days: 'दिन',
         day: 'दिन',
+        daysLeft: '{{amount}} दिन बचे',
         ttp: 'टीटीपी',
         numberOfCrates: 'क्रेट्स की संख्या',
         totalWeight: 'कुल वजन',
@@ -422,6 +452,10 @@ export default {
         emptyMessage: 'कृपया अपने चेक इन में कम से कम एक क्रेट जोड़ें',
         noPlannedDaysMessage:
           'कुछ वस्तुओं पर नियोजित दिनों की कमी है। अनुमानित लागत की गणना नहीं कर सकते।',
+        seeMore: 'और देखें',
+        seeLess: 'कम देखें',
+        listed: 'सूचीबद्ध',
+        cratesAddedLabel: 'टोकरियाँ जोड़ी गईं',
         WithCode: {
           modalTitle: 'मौजूदा चेक आउट से नया चेक इन बनाएं',
           modalDescription:
@@ -444,7 +478,7 @@ export default {
           individualCrateWeightButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट वजन संपादित करने के लिए',
           individualCrateIdButton: 'यहाँ क्लिक करें व्यक्तिगत क्रेट आईडी संपादित करने के लिए',
           numberOfCratesLabel: 'क्रेटों की संख्या',
-          crateWeightLabel: 'क्रेट का सामान्य वजन',
+          crateWeightLabel: 'टोकरे का वजन और बाज़ार सूची',
           pricePerDayAndCrateLabel: 'प्रति दिन / क्रेट की कीमत',
           pricePerDayAndKilogramLabel: 'प्रति दिन / किलोग्राम की कीमत',
           fixedPriceLabel: 'नियत मूल्य',
@@ -456,6 +490,14 @@ export default {
             yesterday: 'कल',
             dayBefore: 'दो दिन पहले',
             evenBefore: 'और पहले',
+          },
+          crateWeightAndPricing: {
+            applyAll: 'सभी पर लागू करें',
+            list: 'विक्रय के लिए सूचीबद्ध करें',
+            addMore: 'और जोड़ें',
+            sellingPrice: 'विक्रय मूल्य सूचीबद्ध करें',
+            potentialSellingPrice: 'संभावित विक्रय मूल्य',
+            info: 'मूल्य कॉन्फ़िगरेशन उत्पाद की बिक्री को संदर्भित करता है, ठंडे भंडारण शुल्क को नहीं।',
           },
           cratesError: 'कृपया एक सकारात्मक क्रेट संख्या डालें',
           crateWeightError: 'कृपया एक सकारात्मक क्रेट वजन डालें',
@@ -838,6 +880,15 @@ export default {
           creditCard: 'क्रेडिट कार्ड',
         },
       },
+      Coupons: {
+        emptyMessage: 'कोई कूपन अभी तक जोड़ा नहीं गया है',
+        addCoupon: 'कूपन जोड़ें',
+        code: 'कूपन कोड',
+        percentage: 'कूपन प्रतिशत',
+        revokeTitle: 'कूपन रद्द करना',
+        revokeMessage:
+          'क्या आप सुनिश्चित हैं कि आप इस कूपन को रद्द करना चाहते हैं? एक बार रद्द होने पर, इसका पुनः उपयोग नहीं किया जा सकेगा और छूट उपलब्ध नहीं होगी। यह कार्रवाई स्थायी है और इसे पूर्ववत नहीं किया जा सकता।',
+      },
     },
     AccountDetails: {
       popups: {
@@ -857,6 +908,60 @@ export default {
       },
       toasts: {
         success: 'उपयोगकर्ता को सफलतापूर्वक अद्यतन किया गया',
+      },
+      sections: {
+        sellerSettings: 'विक्रेता सेटिंग्स',
+        buyerSettings: 'खरीदार सेटिंग्स',
+        details: 'विवरण',
+      },
+      ContactsSharing: {
+        publicPhone: 'फोन नंबर सार्वजनिक करें',
+        publicEmail: 'ई-मेल सार्वजनिक करें',
+      },
+      PayoutSettings: {
+        addTitle: 'Veuillez insérer les informations de votre compte bancaire',
+        editTitle: 'Les informations de votre compte bancaire',
+        form: {
+          nameLabel: 'Nom complet',
+          namePlaceholder: 'Ex. : John Doe',
+          accountNumberLabel: 'Numéro de compte',
+          accountNumberPlaceholder: 'Insérez le numéro de compte',
+          bankLabel: 'Nom de la banque',
+          bankPlaceholder: 'Insérez le nom de la banque',
+          errors: {
+            name: 'पूरा नाम आवश्यक है',
+            account: 'खाता नंबर आवश्यक है',
+            bank: 'बैंक का नाम आवश्यक है',
+          },
+        },
+        successMessage: 'Compte bancaire ajouté avec succès.',
+        errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+      },
+      PaymentSettings: {
+        cards: 'कार्ड्स',
+        creditCard: {
+          predefined: 'पूर्व निर्धारित',
+          owner: 'कार्ड धारक का नाम',
+          date: 'समाप्ति तिथि',
+          cvv: 'CVV',
+        },
+        AddCreditCard: {
+          title: 'कृपया अपने कार्ड की जानकारी दर्ज करें',
+          form: {
+            cardName: 'कार्ड का नाम',
+            cardNamePlaceholder: 'कार्ड का नाम दर्ज करें',
+            cardNumber: 'कार्ड नंबर',
+            cardNumberPlaceholder: 'कार्ड नंबर दर्ज करें',
+            expiryDate: 'समाप्ति तिथि',
+            securityCode: 'सुरक्षा कोड',
+            securityCodePlaceholder: 'कार्ड का सुरक्षा कोड दर्ज करें',
+            predefinedMethod: 'पूर्वनिर्धारित भुगतान विधि',
+            successMessage: 'कार्ड सफलतापूर्वक जोड़ा गया',
+            cardNameError: 'कार्ड का नाम आवश्यक है',
+            cardNumberError: 'कार्ड नंबर आवश्यक है',
+            securityCodeError: 'सुरक्षा कोड आवश्यक है',
+          },
+        },
       },
     },
     About: {
@@ -1002,6 +1107,35 @@ export default {
           checkedIn: 'चेक इन किया गया',
         },
       },
+    },
+    ShoppingCart: {
+      empty: 'आपकी टोकरी खाली है',
+      daysLeft: 'दिन शेष',
+      weight: 'किलोग्राम उपलब्ध',
+      perKg: '/ किलोग्राम',
+      total: 'कुल भुगतान',
+      pay: 'भुगतान करें',
+      orderHeader: 'आदेश',
+      subtotal: 'उप-योग',
+      produce: 'उत्पाद',
+      discount: 'छूट',
+      fees: 'सेवा शुल्क',
+      marketFees: 'मार्केटप्लेस शुल्क',
+      paymentFee: 'भुगतान शुल्क',
+      viewContacts: 'संपर्क देखें',
+      contactsForDelivery: 'डिलीवरी जानकारी के लिए संपर्क',
+      gotItButton: 'समझ गया!',
+      pickupMethods: 'पिकअप विधि',
+      pickUpToday: 'आज उठाएँ',
+      keepInStorageDailyRate: 'स्टोरेज में रखें ({{price}} / दिन)',
+      keepInStorageFixedRate: 'फिक्स्ड स्टोरेज दर ({{price}})',
+      delivery: 'डिलीवरी',
+      companyName: 'कंपनी का नाम',
+      phoneNumber: 'फोन नंबर',
+      thankYouMessage: 'ऑर्डर करने के लिए धन्यवाद',
+      orderOverview: 'आदेश का अवलोकन',
+      products: 'उत्पाद',
+      consultOrders: 'मेरे ऑर्डर देखें',
     },
     Analytics: {
       emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',

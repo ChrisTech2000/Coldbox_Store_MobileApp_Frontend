@@ -9,10 +9,13 @@ import Carousel from 'react-native-reanimated-carousel';
 import MineCart from '#assets/icons/mine-cart.svg';
 
 import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -25,10 +28,9 @@ import { Pagination } from './components/Pagination';
 import { ProduceDetailsOption } from './components/ProduceDetailsOption';
 import { EditCheckInSchema, Schema } from './schema';
 import { generateData } from './utils';
-import InAppNotifications from '#common/InAppNotifications';
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   const { movement, coolingUnitId } = props.route.params;
@@ -82,7 +84,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
       produces: matchingProduces.map((produce) => ({
         id: produce.id,
         crop: produce.cropName,
-        plannedDays: `${produce.plannedDays ?? ''}`,
+        plannedDays: produce?.plannedDays?.toString() ?? '',
       })),
     },
   });
@@ -179,13 +181,13 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
               <View tw="flex flex-row items-center space-x-2">
                 <MineCart width={16} height={16} />
                 <Text variant="TitleBold">
-                  {`${produce.crates.length} ${produce.crates.length === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
+                  {`${produce.checkedInCrates.length} ${produce.checkedInCrates.length === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
                 </Text>
               </View>
 
               <View tw="w-full px-3">
                 <FlatList
-                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   data={generateData(produce, t)}
                   keyExtractor={(item, idx) => `${item.label}-#${index}-${idx}`}
                   renderItem={({ item }) => {
@@ -218,4 +220,9 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   );
 }
 
-export default withSafeArea(EditCheckIn);
+export default withSafeArea(
+  withErrorBoundary(EditCheckIn, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  })
+);

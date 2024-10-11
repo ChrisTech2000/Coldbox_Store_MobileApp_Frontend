@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, View } from 'react-native';
+import { Divider, List } from 'react-native-paper';
+
+import { GenericError } from '#ui/components/GenericError';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
+import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { ECropType } from '#types/global';
-import { Text } from '#ui/components/Text';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { Divider } from 'react-native-paper';
-import { CheckInStackRouteProps } from 'navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 
 type Option = {
   id: ECropType;
@@ -40,25 +42,33 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
   return (
     <View tw="mt-2">
       <FlatList
-        showsHorizontalScrollIndicator={false}
+        tw="mt-2"
         data={options}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity
-            key={`${item.id}-${index}`}
-            tw="mx-2"
-            onPress={() =>
-              navigation.navigate('CropList', {
-                type: item.id,
-              })
-            }
-          >
-            <Text variant="TitleMedium">{item.name}</Text>
-            <Divider tw="bg-gray-400 my-2" />
-          </TouchableOpacity>
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <View tw="px-3">
+            <List.Item
+              title={item.name}
+              onPress={() => {
+                navigation.navigate('CropList', {
+                  type: item.id,
+                });
+              }}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            />
+            <Divider tw="bg-gray-400" />
+          </View>
         )}
       />
     </View>
   );
 }
 
-export default withSafeArea(SelectCropType);
+export default withSafeArea(
+  withErrorBoundary(SelectCropType, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  }),
+  ['bottom'],
+  true
+);

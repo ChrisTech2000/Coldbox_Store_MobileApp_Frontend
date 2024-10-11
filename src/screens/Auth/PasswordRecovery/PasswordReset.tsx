@@ -141,4 +141,4 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
   );
 }
 
-export default withSafeArea(PasswordReset);
+export default withSafeArea(PasswordReset, ['bottom'], true);
