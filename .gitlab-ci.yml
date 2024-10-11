@@ -118,8 +118,9 @@ build ci image:
     # - *trust-git-providers # mosano's runner already trust these
   script:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
-    - export VERSION_ID=${CI_COMMIT_REF_NAME:-$(git describe --tags --abbrev=0 || echo "0.0.0")}
-    - bundle exec fastlane android "$LANE" "version_id:$VERSION_ID"
+    - export VERSION_ID=${CI_COMMIT_REF_NAME}
+    - if [ "$VERSION_ID" == "" ]; then  git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
+    - bundler exec fastlane android "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:
       - android/app/build/outputs/
@@ -151,7 +152,8 @@ build ci image:
     - ssh-add "$MATCH_GIT_PRIVATE_KEY_PATH"
   script:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
-    - export VERSION_ID=${CI_COMMIT_REF_NAME:-$(git describe --tags --abbrev=0 || echo "0.0.0")}
+    - export VERSION_ID=${CI_COMMIT_REF_NAME}
+    - if [ "$VERSION_ID" == "" ]; then  git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
     - bundler exec fastlane ios "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:
