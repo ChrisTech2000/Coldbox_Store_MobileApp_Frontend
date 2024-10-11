@@ -4,6 +4,8 @@ import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider, Portal } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as Sentry from '@sentry/react-native';
+import { ENVIRONMENT, SENTRY_DSN } from '#constants/environment';
 
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
@@ -18,7 +20,9 @@ import { navigatorTheme, paperTheme } from './ui/lib/theme';
 
 import './i18n';
 
-export default function App() {
+Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
+
+function App() {
   const isAuthenticated = useAuthManager();
 
   useGlobalInformation(isAuthenticated);
@@ -43,3 +47,5 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
+
+export default Sentry.wrap(App);
