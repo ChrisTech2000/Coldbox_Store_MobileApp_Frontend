@@ -499,3 +499,11 @@ export interface ApplyCouponResponse {
 }
 
 export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
+
+export type GetDeliveryContactsResponse = Array<{
+  id: number;
+  companyName?: string;
+  phone: string;
+  name: string;
+  coolingUnitId: number;
+}>;

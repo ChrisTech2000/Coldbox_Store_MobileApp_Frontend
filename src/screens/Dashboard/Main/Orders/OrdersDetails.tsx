@@ -1,4 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
+import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -11,7 +12,6 @@ import {
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
-import { CurrencyStandardization } from 'currency-format-utils';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -32,11 +32,9 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { EOrderStatus, EPickUpMethod, EPricingType } from '#types/global';
 
-import DeliveryInformationBottomSheet, {
-  type DeliveryInformationDatum,
-} from '../ShoppingCart/components/DeliveryInformationBottomSheet';
-import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
 import useCartStore from '#stores/shoppingCart';
+import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryInformationBottomSheet';
+import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
@@ -216,12 +214,10 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                           <Touchable
                             onPress={(evt) => {
                               evt.stopPropagation();
-                              emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, [
-                                {
-                                  companyName: 'Lorem Ipsum', // TODO: send actual data
-                                  phoneNumber: '+0123456789',
-                                },
-                              ] satisfies Array<DeliveryInformationDatum>);
+                              emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, {
+                                orderId: props.route.params.orderId,
+                                coolingUnitId: item.coolingUnitId,
+                              });
                             }}
                           >
                             <Text tw="text-base text-green-primary">

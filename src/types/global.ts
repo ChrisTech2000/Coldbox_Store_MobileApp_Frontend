@@ -9,6 +9,8 @@ export type User = {
   language?: string;
   role?: ERoles;
   username?: string; // we get this prop when we fetch the operators
+  isPhonePublic?: boolean;
+  isEmailPublic?: boolean;
 };
 
 export type Farmer = {

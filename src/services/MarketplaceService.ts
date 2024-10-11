@@ -4,6 +4,8 @@ import { EMarketplaceEndpoints } from '#constants/api.routes';
 import type {
   AddItemToCartParams,
   AddPaystackBankAccountParams,
+  CreateDeliveryContactParams,
+  DeleteDeliveryContactParams,
   SetPickUpDetailsParams,
 } from '#types/api.params';
 import type {
@@ -12,6 +14,7 @@ import type {
   GetAllOrdersResponse,
   GetAvailableBanksResponse,
   GetCartResponse,
+  GetDeliveryContactsResponse,
   SetPickUpDetailsResponse,
 } from '#types/api.responses';
 import type { BankAccount } from '#types/global';
@@ -130,6 +133,33 @@ class MarketplaceService extends HttpClient {
     }
   };
 
+  public getCartDeliveryContacts = async (): Promise<GetDeliveryContactsResponse> => {
+    try {
+      const { data } = await this.get<GetDeliveryContactsResponse>(
+        EMarketplaceEndpoints.GET_CART_DELIVERY_CONTACTS
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getOrderDeliveryContacts = async (
+    orderId: number
+  ): Promise<GetDeliveryContactsResponse> => {
+    try {
+      const url = subs(EMarketplaceEndpoints.GET_ORDER_DELIVERY_CONTACTS, { orderId });
+      const { data } = await this.get<GetDeliveryContactsResponse>(url);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public addPaystackAccount = async (
     params: AddPaystackBankAccountParams
   ): Promise<BankAccount> => {
@@ -182,6 +212,51 @@ class MarketplaceService extends HttpClient {
           ...params,
         }
       );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public createDeliveryContact = async (
+    params: CreateDeliveryContactParams
+  ): Promise<GetDeliveryContactsResponse> => {
+    try {
+      const { data } = await this.post<GetDeliveryContactsResponse>(
+        EMarketplaceEndpoints.COMPANY_DELIVERY_CONTACTS,
+        { ...params }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public listDeliveryContacts = async (companyId: number): Promise<GetDeliveryContactsResponse> => {
+    try {
+      const url = subs(EMarketplaceEndpoints.LIST_COMPANY_DELIVERY_CONTACTS, { companyId });
+      const { data } = await this.get<GetDeliveryContactsResponse>(url);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public deleteDeliveryContactId = async (
+    params: DeleteDeliveryContactParams
+  ): Promise<unknown> => {
+    try {
+      const url = subs(EMarketplaceEndpoints.DELETE_DELIVERY_CONTACT, {
+        contactId: params.contactId,
+        companyId: params.companyId,
+      });
+      const { data } = await this.delete<unknown>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

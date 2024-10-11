@@ -457,3 +457,14 @@ export interface SetPickUpDetailsParams extends JsonObject {
     pickupMethod: EPickUpMethod;
   }>;
 }
+
+export interface CreateDeliveryContactParams extends JsonObject {
+  name: string;
+  phone: string;
+  companyId: number;
+}
+
+export interface DeleteDeliveryContactParams extends JsonObject {
+  contactId: number;
+  companyId: number;
+}

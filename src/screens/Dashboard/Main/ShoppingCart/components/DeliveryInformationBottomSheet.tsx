@@ -1,9 +1,9 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import truncate from 'lodash/truncate';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { List, Portal } from 'react-native-paper';
+import { ActivityIndicator, List, Portal } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
@@ -14,24 +14,63 @@ import { cn } from '#ui/lib/cn';
 import { useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
+import MarketplaceService from '#services/MarketplaceService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 
 export type DeliveryInformationDatum = {
-  companyName: string;
-  phoneNumber: string;
+  orderId?: number;
+  coolingUnitId: number;
 };
 
-// TODO → maybe replace Flatlist + .map() with Flashlist for better performance (would need to test it first)
 export default function DeliveryInformationBottomSheet() {
   const { t } = useTranslationUtils();
 
-  const [datum, setDatum] = useState<Array<DeliveryInformationDatum> | null>(null);
+  const [datum, setDatum] = useState<DeliveryInformationDatum>();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
   const modalRef = useRef<Modalize>(null);
 
-  useAppEventListener<[Array<DeliveryInformationDatum>]>(
+  const {
+    data: cartDeliveryContacts,
+    isLoading: isLoadingCartContacts,
+    refetch: refetchCartContacts,
+  } = useApiCall(
+    'getCartDeliveryContacts',
+    MarketplaceService.getCartDeliveryContacts,
+    {},
+    {
+      skip: !!datum?.orderId || !isVisible,
+      defaultData: [],
+    }
+  );
+
+  const {
+    data: orderDeliveryContacts,
+    isLoading: isLoadingOrderContacts,
+    refetch: refetchOrderContacts,
+  } = useApiCall(
+    'getOrderDeliveryContacts',
+    MarketplaceService.getOrderDeliveryContacts,
+    datum?.orderId as number,
+    {
+      skip: !datum?.orderId || !isVisible,
+      defaultData: [],
+    }
+  );
+
+  const data = datum?.orderId ? orderDeliveryContacts : cartDeliveryContacts;
+
+  useAppEventListener<[{ coolingUnitId: number; orderId?: number }]>(
     'DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION',
-    (info) => {
-      setDatum(info);
+    (datum) => {
+      setDatum(datum ?? null);
+      setIsVisible(true);
+
+      if (datum.orderId) refetchOrderContacts();
+      else refetchCartContacts();
+
       modalRef.current?.open();
     }
   );
@@ -48,35 +87,58 @@ export default function DeliveryInformationBottomSheet() {
           <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
         </View>
 
-        <View tw="px-4 pb-4 pt-2.5 space-y-3.5">
-          <Text tw="text-2xl mb-1.5">{t('Dashboard.ShoppingCart.contactsForDelivery')}</Text>
-          <FlatList
-            data={datum ?? []}
-            keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
-                <_Field
-                  label={t('Dashboard.ShoppingCart.companyName')}
-                  value={item.companyName}
-                  mode="text"
-                />
-                <_Field
-                  label={t('Dashboard.ShoppingCart.phoneNumber')}
-                  value={item.phoneNumber}
-                  mode="clipboard"
-                />
-              </View>
-            )}
-          />
-        </View>
+        {isLoadingCartContacts || isLoadingOrderContacts ? (
+          <View tw="flex-1 items-center justify-center">
+            <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+          </View>
+        ) : (
+          <View>
+            <View tw="px-4 pb-4 pt-2.5 space-y-3.5">
+              <Text tw="text-2xl mb-1.5">{t('Dashboard.ShoppingCart.contactsForDelivery')}</Text>
+              <FlatList
+                data={data?.filter((item) => item.coolingUnitId === datum?.coolingUnitId) ?? []}
+                keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
+                scrollEnabled={false}
+                ListEmptyComponent={
+                  <View tw="py-4 px-0">
+                    <Text tw="text-lg">
+                      {t('Dashboard.Management.Delivery.noAvailableContacts')}
+                    </Text>
+                  </View>
+                }
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
+                    <_Field
+                      label={t('Dashboard.ShoppingCart.companyName')}
+                      value={item.name}
+                      mode="text"
+                    />
+                    <_Field
+                      label={t('Dashboard.ShoppingCart.phoneNumber')}
+                      value={item.phone}
+                      mode="clipboard"
+                    />
+                  </View>
+                )}
+              />
+            </View>
 
-        <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
-          <Button mode="outlined" tw="w-5/6" uppercase onPress={() => modalRef.current?.close()}>
-            {t('Dashboard.ShoppingCart.gotItButton')}
-          </Button>
-        </View>
+            <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
+              <Button
+                mode="outlined"
+                tw="w-5/6"
+                uppercase
+                onPress={() => {
+                  setIsVisible(false);
+                  modalRef.current?.close();
+                }}
+              >
+                {t('Dashboard.ShoppingCart.gotItButton')}
+              </Button>
+            </View>
+          </View>
+        )}
       </Modalize>
     </Portal>
   );
@@ -88,7 +150,18 @@ function _Field(props: {
   value: string;
   smallText?: string;
 }) {
+  const { t } = useTranslationUtils();
   const { mode, label, value, smallText } = props;
+  const toast = InAppNotifications.useToast();
+
+  const copyToClipboard = useCallback(
+    (text: string) => {
+      Clipboard.setString(text);
+      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
+    },
+    [toast]
+  );
+
   return (
     <List.Item
       title={undefined}
@@ -107,7 +180,7 @@ function _Field(props: {
           rippleColor={colors.zinc[200]}
           onPress={(evt) => {
             evt.stopPropagation();
-            if (mode === 'clipboard') Clipboard.setString(value);
+            if (mode === 'clipboard') copyToClipboard(value);
           }}
         >
           <Text tw={cn('text-lg', mode === 'highlight' ? 'font-bold' : 'text-zinc-500')}>

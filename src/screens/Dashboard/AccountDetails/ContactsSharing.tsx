@@ -1,4 +1,5 @@
-import React from 'react';
+import isNil from 'lodash/isNil';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Divider, List, Switch } from 'react-native-paper';
 
@@ -6,12 +7,45 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-
-// TODO -> data bind screen with the backend
+import ColdtivateService from '#services/ColdtivateService';
+import { useAuthStore } from '#stores/auth';
 
 function ContactsSharing() {
   const { t } = useTranslationUtils();
+  const [user, setUser] = useAuthStore((store) => [store.user, store.setUser]);
+  const toast = InAppNotifications.useToast();
+
+  const onPreferencesChange = useCallback(
+    async (publicPhone?: boolean, publicEmail?: boolean) => {
+      if (!user) return;
+      try {
+        const userDatum = await ColdtivateService.updateUser({
+          userId: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phone: user.phone,
+          email: user.email,
+          gender: user.gender,
+          language: user.language,
+          isEmailPublic: !isNil(publicEmail) ? publicEmail : user?.isEmailPublic,
+          isPhonePublic: !isNil(publicPhone) ? publicPhone : user?.isPhonePublic,
+        });
+
+        setUser({ ...userDatum, role: user?.role });
+
+        toast.show(t('Dashboard.AccountDetails.toasts.success'), {
+          type: 'md_success',
+          style: { marginBottom: 50 },
+        });
+      } catch (exception) {
+        console.error(exception);
+      }
+    },
+    [user]
+  );
+
   return (
     <ScrollView tw="flex-1 p-3" showsVerticalScrollIndicator={false}>
       <View tw="space-y-3">
@@ -24,7 +58,12 @@ function ContactsSharing() {
                 {t('Dashboard.AccountDetails.ContactsSharing.publicPhone')}
               </Text>
             )}
-            right={() => <Switch value={false} onValueChange={() => undefined} />}
+            right={() => (
+              <Switch
+                value={user?.isPhonePublic ?? false}
+                onValueChange={(val) => onPreferencesChange(val, undefined)}
+              />
+            )}
           />
           <Divider tw="bg-gray-400" />
         </View>
@@ -37,7 +76,12 @@ function ContactsSharing() {
                 {t('Dashboard.AccountDetails.ContactsSharing.publicEmail')}
               </Text>
             )}
-            right={() => <Switch value={false} onValueChange={() => undefined} />}
+            right={() => (
+              <Switch
+                value={user?.isEmailPublic ?? false}
+                onValueChange={(val) => onPreferencesChange(undefined, val)}
+              />
+            )}
           />
           <Divider tw="bg-gray-400" />
         </View>
