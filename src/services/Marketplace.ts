@@ -94,14 +94,15 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public delistCratesByCrateId = async (params: ListedCratesBaseParams & { crateId: number }) => {
+  public delistCratesByCrateId = async (
+    params: ListedCratesBaseParams & { crateId: number }
+  ): Promise<void> => {
     try {
       const { crateId, ...rest } = params;
-      const { data } = await this.delete(
+      await this.delete(
         subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }),
         { params: rest }
       );
-      return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));

@@ -86,7 +86,6 @@ function EditCrateWeightAndPricing(
   const applyToAll = form.watch('applyToAll');
   const price = form.watch('price');
   const crates = form.watch('crates');
-  const previousSellableCrates = form.watch('previous.sellableCrates');
 
   const potentialPrice = useMemo(() => {
     if (!price) return 0;
@@ -199,7 +198,7 @@ function EditCrateWeightAndPricing(
           sellableCrates: initialCrates
             .filter((crate) => crate.isSellable)
             .map((crate) => crate.id),
-          price: Number(price),
+          price: typeof price !== 'undefined' ? Number(price) : 0,
         },
       });
     } catch (exception) {
@@ -213,16 +212,12 @@ function EditCrateWeightAndPricing(
     void debouncedInitialSetup();
   }, [params.crates]);
 
-  const hasCrateChanges = useMemo(() => {
-    const currentSellableCrates: Array<number> = crates
-      .filter((crate) => crate.isSellable)
-      .map((crate) => crate.id);
-    const isPriceChanged = Number(price) !== form.getValues('previous.price');
-    const isSellableChanged =
-      JSON.stringify(currentSellableCrates.sort()) !==
-      JSON.stringify(previousSellableCrates.sort());
-    return isPriceChanged || isSellableChanged;
-  }, [crates, price, previousSellableCrates, form]);
+  const hasChanges = _isDirty(
+    crates,
+    Number(price),
+    form.getValues('previous.price'),
+    form.getValues('previous.sellableCrates')
+  );
 
   if (isSettingUp) {
     return (
@@ -363,9 +358,15 @@ function EditCrateWeightAndPricing(
                       <TouchableOpacity
                         tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1"
                         onPress={() => {
-                          if (!applyToAll) return onChange(!value);
-                          for (let i = 0; i < crateFields.fields.length; i++) {
-                            form.setValue(`crates.${i}.isSellable`, !value);
+                          if (!applyToAll) {
+                            onChange(!value);
+                          } else {
+                            for (let i = 0; i < crateFields.fields.length; i++) {
+                              form.setValue(`crates.${i}.isSellable`, !value);
+                            }
+                          }
+                          if (!form.getValues('crates').some((c) => c.isSellable)) {
+                            form.setValue('price', '0');
                           }
                         }}
                         disabled={isDisabled}
@@ -440,9 +441,8 @@ function EditCrateWeightAndPricing(
             onPress={form.handleSubmit(onSubmit as any)}
             disabled={
               typeof form.formState.errors.crates !== 'undefined' ||
-              !hasCrateChanges ||
-              form.formState.isSubmitting ||
-              !form.formState.isDirty
+              !hasChanges ||
+              form.formState.isSubmitting
             }
           >
             {t('actions.save-changes')}
@@ -451,6 +451,22 @@ function EditCrateWeightAndPricing(
       </HideWithKeyboardView>
     </React.Fragment>
   );
+}
+
+function _isDirty(
+  crates: FormValues['crates'] = [],
+  price: number = 0,
+  previousPrice: number = 0,
+  previousSellableCrates: Array<number> = []
+) {
+  const currentSellableCrates: Array<number> = useMemo(
+    () => crates.filter((crate) => crate.isSellable).map((crate) => crate.id),
+    [crates]
+  );
+  const isPriceChanged = price !== previousPrice;
+  const isSellableChanged =
+    JSON.stringify(currentSellableCrates.sort()) !== JSON.stringify(previousSellableCrates.sort());
+  return (!isSellableChanged && isPriceChanged) || (isSellableChanged && isPriceChanged);
 }
 
 export default withSafeArea(

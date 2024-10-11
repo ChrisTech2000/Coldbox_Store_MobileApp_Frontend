@@ -67,7 +67,7 @@ export type CheckInResponse = {
   farmer: number;
   hasDt: string;
   cratesIds: Array<number>;
-  produces: Array<{ id: number; cropId: number; crates: Array<number> }>;
+  produces: Array<{ id: number; cropId: number; cratesIds: Array<number> }>;
 };
 
 export type CheckOut = Array<{

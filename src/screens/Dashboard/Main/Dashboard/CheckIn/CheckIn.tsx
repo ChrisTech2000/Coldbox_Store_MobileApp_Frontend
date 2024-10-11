@@ -205,7 +205,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
     if ('movement' in result) {
       const processedCrateListing = processMarketplaceCrateListing(produces, result.produces);
-      await Promise.all(
+      await Promise.allSettled(
         processedCrateListing.map(
           async ({ crateIds, pricePerKg }) =>
             await Marketplace.upsertListedCrate({

@@ -281,7 +281,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             }}
             ListFooterComponent={
               <Button
-                tw="w-1/4 my-3"
+                tw="w-2/6 my-3"
                 mode="text"
                 disabled={applyToAll}
                 uppercase
