@@ -15,6 +15,7 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { Geocoder } from '#screens/Dashboard/Management/AddLocation/utils';
 import { useDashboardStore } from '#stores/dashboard';
@@ -30,6 +31,7 @@ type FormValues<T = string> = {
 export default function MarketplaceLocationFilter() {
   const { t, zodResolver } = useTranslationUtils();
   const { company } = useManagementStore();
+  const toast = InAppNotifications.useToast();
   const farmerCountry = useDashboardStore((store) => store.farmerCountry);
 
   const modalRef = useRef<Modalize>(null);
@@ -65,8 +67,13 @@ export default function MarketplaceLocationFilter() {
         filterByMaxDistanceInKm: values.distance,
       });
       modalRef.current?.close();
-    } catch (exception) {
-      console.error(exception);
+    } catch (_) {
+      toast.show(t('Dashboard.Marketplace.filterError'), {
+        type: 'md_danger',
+      });
+
+      form.reset();
+      modalRef.current?.close();
     }
   }
 
