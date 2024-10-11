@@ -79,7 +79,7 @@ export type Crate = {
 export type DashboardProduce = {
   additonalInfo: string;
   checkoutComplete: boolean;
-  crates: Array<Crate>;
+  checkedInCrates: Array<Crate>;
   cratesAmount: number;
   cratesCombinedCost: number;
   cratesCombinedWeight: number;

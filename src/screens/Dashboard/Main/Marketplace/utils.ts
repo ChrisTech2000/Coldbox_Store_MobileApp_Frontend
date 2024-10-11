@@ -65,7 +65,7 @@ export function useMarketplaceListing() {
   );
 
   const { data: datums, ...rest } = useApiCall(
-    'getAvailableListing',
+    'getMarketplaceAvailableListing',
     async (params: GetAvailableListingParams) => {
       const listing = await MarketplaceService.getAvailableListing(params);
 

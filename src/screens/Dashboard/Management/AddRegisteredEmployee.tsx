@@ -151,4 +151,4 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
   );
 }
 
-export default withSafeArea(AddRegisteredEmployee);
+export default withSafeArea(AddRegisteredEmployee, ['bottom'], true);

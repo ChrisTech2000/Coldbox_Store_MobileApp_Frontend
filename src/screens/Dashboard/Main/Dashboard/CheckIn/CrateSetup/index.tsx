@@ -24,7 +24,10 @@ import {
 } from '#types/global';
 
 import { CrateSetupModal } from '../components/CrateSetupModal';
-import { useCrateWeightPricingBridge } from '../CrateWeightAndPricing';
+import {
+  resetCrateWeightPricingBridge,
+  useCrateWeightPricingBridge,
+} from '../CrateWeightAndPricing';
 import CratesAmount from './CratesAmount';
 import CropDetails from './CropDetails';
 import CropHarvest from './CropHarvest';
@@ -35,7 +38,7 @@ export type SetupSchema = {
   numberOfCrates: number;
   generalCrateWeight: number;
   crates: Array<{
-    crateWeight: number;
+    weight: number;
     crateId: number | undefined;
     isSellable: boolean | undefined;
   }>;
@@ -45,9 +48,15 @@ export type SetupSchema = {
 };
 
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
-  const { additionalInfo, crop } = route.params;
+  const contextualCrop =
+    'contextualProduce' in route.params ? route.params.contextualProduce.crop : route.params.crop;
+  const contextualAdditionalInfo =
+    'contextualProduce' in route.params
+      ? route.params.contextualProduce?.additionalInfo ?? ''
+      : route.params?.additionalInfo ?? '';
+
   const { company } = useManagementStore();
-  const { addProduce, coolingUnit, user } = useCheckInStore();
+  const { addProduce, coolingUnit, user, removeProduce } = useCheckInStore();
 
   const { t, zodResolver } = useTranslationUtils();
 
@@ -59,8 +68,21 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     setError,
     clearErrors,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<SetupSchema>({
+    ...('contextualProduce' in route.params
+      ? {
+          defaultValues: {
+            numberOfCrates: route.params.contextualProduce.crates.length,
+            generalCrateWeight: coolingUnit?.crateWeight ?? 25,
+            crates: route.params.contextualProduce.crates ?? [],
+            plannedDays: route.params.contextualProduce.crates[0].plannedDays,
+            price: route.params.contextualProduce.price,
+            dateHarvested: route.params.contextualProduce.harvestDate,
+          },
+        }
+      : {}),
     resolver: zodResolver((z, t) =>
       z.object({
         numberOfCrates: z
@@ -77,7 +99,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           .default(coolingUnit?.crateWeight ?? 0),
         crates: z
           .object({
-            crateWeight: z.number(),
+            weight: z.number(),
             crateId: z.number().optional(),
             isSellable: z.boolean(),
           })
@@ -104,9 +126,9 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   useCrateWeightPricingBridge((values) => {
     reset((state) => ({
       ...state,
-      crates: values.crates.map((crate) => ({
-        crateId: crate.id,
-        crateWeight: crate.weight,
+      crates: values.crates.map((crate, crateIdx) => ({
+        crateId: state?.crates?.[crateIdx]?.crateId,
+        weight: crate.weight,
         isSellable: crate.isSellable,
       })),
       numberOfCrates: values.crates.length,
@@ -130,8 +152,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
 
     if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
       if (!crates) return '0.00';
-      const dailyPrice =
-        crates?.reduce((acc, current) => (acc += current.crateWeight * price), 0) ?? 0;
+      const dailyPrice = crates?.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
       return (dailyPrice * multiplier).toFixed(2);
     }
 
@@ -179,7 +200,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         let newCrates =
           !crates || crates.length === 0
             ? Array.from({ length: numberOfCrates }, () => ({
-                crateWeight: weight,
+                weight,
                 crateId: undefined,
                 isSellable: false,
               }))
@@ -190,7 +211,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             const additionalCrates = Array.from(
               { length: numberOfCrates - newCrates.length },
               () => ({
-                crateWeight: weight,
+                weight,
                 crateId: undefined,
                 isSellable: false,
               })
@@ -220,53 +241,42 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     (values) => {
       if (!coolingUnit || !user) return;
 
-      const dateHarvested = values.dateHarvested;
-      let harvestDate = null;
-
-      if (dateHarvested === EDateCropped.TODAY) {
-        harvestDate = crop.harvestedToday;
-      } else if (dateHarvested === EDateCropped.YESTERDAY) {
-        harvestDate = crop.harvestedYesterday;
-      } else if (dateHarvested === EDateCropped.DAY_BEFORE) {
-        harvestDate = crop.harvestedDayBeforeYesterday;
-      } else if (dateHarvested === EDateCropped.EVEN_BEFORE) {
-        harvestDate = crop.harvestedBefore;
+      if ('contextualProduce' in route.params) {
+        removeProduce(route.params.contextualProduce);
       }
 
       addProduce({
-        crop: {
-          id: crop.id,
-          name: crop.name,
-          image: crop.image,
-        },
-        additionalInfo,
+        crop: contextualCrop,
+        additionalInfo: contextualAdditionalInfo,
         crates: values.crates.map((crate) => ({
           checkOut: null,
-          weight: crate.crateWeight,
+          weight: crate.weight,
           tag: crate.crateId?.toString() ?? '',
           coolingUnitId: coolingUnit.id,
           plannedDays: values.plannedDays,
           isSellable: crate.isSellable,
         })),
         initialGrade: null,
-        harvestDate: (harvestDate ?? dateHarvested) as number,
+        harvestDate: values.dateHarvested,
         hasPicture: false, // TODO: confirm this in the future, but sending true returns a 500 error
         price: values.price,
       });
 
+      resetCrateWeightPricingBridge();
+      reset();
       navigation.navigate('CheckIn', {
         user: user ?? undefined,
         coolingUnit: coolingUnit ?? undefined,
       });
     },
-    [coolingUnit, additionalInfo, crop, user]
+    [coolingUnit, contextualAdditionalInfo, contextualCrop, user, reset, route.params]
   );
 
   return (
     <React.Fragment>
       <KeyboardAwareScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
         <View tw="flex-1 pb-48">
-          <CropDetails cropName={crop.name} additionalInfo={additionalInfo} />
+          <CropDetails cropName={contextualCrop.name} additionalInfo={contextualAdditionalInfo} />
 
           <View tw="mt-8">
             <Text tw="text-base text-green-primary font-bold">Details</Text>
@@ -281,11 +291,20 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                 tw="px-0 m-0"
                 title={undefined}
                 onPress={(evt) => {
-                  evt?.stopPropagation();
+                  evt.stopPropagation();
+                  const totalWeight = crates.reduce(
+                    (acc, curr) => (curr.isSellable ? (acc += curr.weight) : acc),
+                    0
+                  );
+                  const sellingPrice = (getValues('price') ?? 0) / totalWeight;
                   navigation.navigate('CrateWeightAndPricing', {
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
                     currencySymbol,
-                    crates,
+                    crates: crates.map((crate) => ({
+                      weight: crate.weight,
+                      isSellable: crate.isSellable ?? false,
+                    })),
+                    sellingPrice: isNaN(sellingPrice) ? 0 : sellingPrice,
                   });
                 }}
                 left={() => (
@@ -342,6 +361,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           totalPrice={totalPrice}
           cancelFunc={(evt) => {
             evt.stopPropagation();
+            resetCrateWeightPricingBridge();
+            reset();
             navigation.navigate('CheckIn', {
               user: user as Farmer,
               coolingUnit: coolingUnit as CoolingUnit,

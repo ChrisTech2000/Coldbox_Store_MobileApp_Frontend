@@ -24,11 +24,13 @@ export function sortProduces(a: DashboardProduce, b: DashboardProduce, sorting: 
       );
     case ESortingOptions.CHECK_IN_DATE:
       return (
-        new Date(a.crates[0].checkInDate).getTime() - new Date(b.crates[0].checkInDate).getTime()
+        new Date(a.checkedInCrates[0].checkInDate).getTime() -
+        new Date(b.checkedInCrates[0].checkInDate).getTime()
       );
     case ESortingOptions.CHECK_IN_DATE_REVERSE:
       return (
-        new Date(b.crates[0].checkInDate).getTime() - new Date(a.crates[0].checkInDate).getTime()
+        new Date(b.checkedInCrates[0].checkInDate).getTime() -
+        new Date(a.checkedInCrates[0].checkInDate).getTime()
       );
     case ESortingOptions.COOLING_USER:
       return a.farmer.toLowerCase().localeCompare(b.farmer.toLowerCase());

@@ -93,7 +93,7 @@ export interface CheckInParams extends JsonObject {
     crop: { id: number };
     additionalInfo: string;
     crates: Array<{
-      checkOut: Date | null;
+      checkOut?: Date | null;
       weight: number;
       tag: string; // the id defined during checkout
       coolingUnitId: number;
@@ -431,6 +431,11 @@ export interface AddItemToCartParams extends JsonObject {
 export interface UpdateListedCrateParams extends JsonObject {
   crateIds: Array<number>;
   producePricePerKg: number;
+}
+
+export interface ListedCratesBaseParams {
+  operatorOnBehalfOfSellerFarmerId?: number;
+  operatorOnBehalfOfSellerUserId?: number;
 }
 
 export interface GetAvailableListingParams extends JsonObject {

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
+import ms from 'ms';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -24,7 +25,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
-import { ECoolingUnitMetric, EPricingType } from '#types/global';
+import { ECoolingUnitMetric, EDateCropped, EPricingType } from '#types/global';
 import type { CheckInResponse, CheckInWitCodeResponse } from '#types/api.responses';
 
 import { Button } from '#ui/components/Button';
@@ -36,6 +37,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import Marketplace from '#services/Marketplace';
+import { waitFor } from '#ui/lib/waitFor';
 
 import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
@@ -157,9 +159,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           days: produces[0].crates[0].plannedDays,
           tags: produces
             .flatMap((produce) => produce.crates)
-            .map((crate) => {
-              return crate.tag;
-            })
+            .map((crate) => crate.tag)
             .filter((tag) => typeof tag === 'string'),
         },
       });
@@ -169,15 +169,31 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         id: undefined,
         produces: cloneDeep(produces).map((produce) => {
           delete produce.price;
+          let harvestDate: number | null = null;
+          switch (produce.harvestDate) {
+            case EDateCropped.TODAY:
+              harvestDate = produce.crop.harvestedToday;
+              break;
+            case EDateCropped.YESTERDAY:
+              harvestDate = produce.crop.harvestedYesterday;
+              break;
+            case EDateCropped.DAY_BEFORE:
+              harvestDate = produce.crop.harvestedDayBeforeYesterday;
+              break;
+            case EDateCropped.EVEN_BEFORE:
+              harvestDate = produce.crop.harvestedBefore;
+              break;
+            default:
+              break;
+          }
           return {
             ...produce,
-            crop: {
-              id: produce.crop.id as number,
-            },
-            harvestDate: produce.harvestDate as number,
+            crop: { id: produce.crop.id },
+            harvestDate: (harvestDate ?? produce.harvestDate) as number,
             crates: produce.crates.map((crate) => {
               const crateShallow = { ...crate };
               delete crateShallow.isSellable;
+              if (crateShallow.checkOut === null) delete crateShallow.checkOut;
               return crateShallow;
             }),
           };
@@ -188,9 +204,15 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     if (typeof result !== 'object') return;
 
     if ('movement' in result) {
+      const processedCrateListing = processMarketplaceCrateListing(produces, result.produces);
       await Promise.allSettled(
-        processMarketplaceCrateListing(produces, result.produces).map(({ crateIds, pricePerKg }) =>
-          Marketplace.upsertListedCrate({ crateIds, producePricePerKg: pricePerKg })
+        processedCrateListing.map(
+          async ({ crateIds, pricePerKg }) =>
+            await Marketplace.upsertListedCrate({
+              crateIds,
+              producePricePerKg: pricePerKg,
+              operatorOnBehalfOfSellerFarmerId: user.id,
+            })
         )
       );
     }
@@ -200,7 +222,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       type: 'md_success',
     });
 
-    setTimeout(() => refreshData.forEach((fn) => fn()), 1000);
+    await waitFor(ms('1 second'));
+    refreshData.forEach((fn) => fn());
 
     if (guard('VIEW', 'TemperatureAlertModal')) {
       const temperatureAlertDatum = {
@@ -417,7 +440,13 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           <View tw="bg-white rounded-3xl h-auto space-y-2 mx-20 px-3 py-4">
             <TouchableOpacity
               tw="space-x-1 w-full mb-2 flex flex-row items-center"
-              onPress={() => null}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                const contextualProduce = produces.at(indexForActiveOptions);
+                if (typeof contextualProduce === 'undefined') return; // safe guard
+                setIndexForActiveOptions(-1);
+                navigation.navigate('CrateSetup', { contextualProduce });
+              }}
             >
               <Icon source="pencil" size={18} />
               <Text variant="TextMedium" tw="text-base">

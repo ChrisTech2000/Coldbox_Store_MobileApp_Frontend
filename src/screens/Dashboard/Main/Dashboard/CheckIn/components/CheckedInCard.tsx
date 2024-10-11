@@ -64,9 +64,11 @@ export function CheckedInCard({
   return (
     <View tw="rounded-md border border-gray-300 mb-2">
       <View tw="flex flex-row-reverse justify-between">
-        <TouchableOpacity tw="w-5 mr-2 mt-2" onPress={openOptionsModal}>
-          <Icon source="dots-vertical" size={20} />
-        </TouchableOpacity>
+        {!checkOutCode ? (
+          <TouchableOpacity tw="w-5 mr-2 mt-2" onPress={openOptionsModal}>
+            <Icon source="dots-vertical" size={20} />
+          </TouchableOpacity>
+        ) : null}
 
         <View tw="flex flex-row space-x-1 items-center px-1">
           <FastImage
@@ -175,7 +177,7 @@ export function CheckedInCard({
             setValue={(modalCrates) => setCrateIDs(modalCrates, item)}
             crates={item.crates.map((crate) => ({
               crateId: Number(crate.tag),
-              crateWeight: crate.weight,
+              weight: crate.weight,
               isSellable: crate.isSellable,
             }))}
             isOpen={isIdsModalOpen === index}

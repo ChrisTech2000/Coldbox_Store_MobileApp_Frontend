@@ -87,4 +87,4 @@ function CoolingUnits(props: ManagementRouteProps<'CoolingUnits'>) {
   );
 }
 
-export default withSafeArea(CoolingUnits);
+export default withSafeArea(CoolingUnits, ['bottom'], true);

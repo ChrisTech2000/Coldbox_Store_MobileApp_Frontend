@@ -28,6 +28,7 @@ export type ProduceDetailsStackRoutes = {
     companyCurrency: string;
     currencySymbol: string;
     crates: Array<Crate>;
+    farmerId: number;
   };
 };
 

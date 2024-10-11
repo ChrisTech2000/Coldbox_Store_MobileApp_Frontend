@@ -199,4 +199,4 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   );
 }
 
-export default withSafeArea(EditLocation);
+export default withSafeArea(EditLocation, ['bottom'], true);

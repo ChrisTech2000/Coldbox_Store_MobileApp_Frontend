@@ -25,7 +25,7 @@ export function processMarketplaceCrateListing(
 
     for (let crateIdx = 0; crateIdx < produce.crates.length; crateIdx++) {
       const crate = produce.crates[crateIdx];
-      const insertedCrateId = insertedProduce.crates?.[crateIdx];
+      const insertedCrateId = insertedProduce.cratesIds?.[crateIdx];
       if (!crate?.isSellable || !insertedCrateId) continue;
       accumulatedWeight += crate.weight;
       crateIds.add(insertedCrateId);
