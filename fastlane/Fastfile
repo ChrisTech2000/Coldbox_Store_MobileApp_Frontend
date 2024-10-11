@@ -218,7 +218,15 @@ platform :ios do
             code_signing_identity: ENV["sigh_"+ app_identifier +"_" + type + "_certificate-name"],
         )
 
-        ENV['ENVFILE'] = ".env." + options[:pipeline]
+        # Handle the environment file for the correct pipeline
+        env_file = File.expand_path("../.env.#{options[:pipeline]}", __FILE__)
+        # ENV['ENVFILE'] = ".env." + options[:pipeline]
+        sh('cp ' + env_file.path + ' .env')
+
+        # clear the react-native-config cache
+        dot_env_config = File.expand_path("../node_modules/react-native-config/ios/ReactNativeConfig/BuildDotenvConfig.rb", __FILE__)
+        sh('touch ' + dot_env_config)
+
         gym(
             scheme: options[:scheme],
             workspace: "ios/coldtivate.xcworkspace",
