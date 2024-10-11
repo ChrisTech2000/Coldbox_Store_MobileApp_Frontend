@@ -89,6 +89,7 @@ platform :android do
             ),
             json_key: './fastlane/google-service-account.json',
             deactivate_on_promote: false,
+            skip_upload_apk: true, # we're now building both the apk and the bundle
         )
     end
 
@@ -242,7 +243,6 @@ platform :ios do
             skip_waiting_for_build_processing: true,
             wait_for_uploaded_build: true,
             update_build_info_on_upload: false,
-            skip_upload_apk: true, # we're now building both the apk and the bundle
 
             distribute_external: false,
             notify_external_testers: false,
