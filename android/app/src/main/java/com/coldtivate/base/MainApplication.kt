@@ -1,4 +1,4 @@
-package com.coldtivate
+package com.base.coldtivate
 
 import android.app.Application
 import com.facebook.react.PackageList
