@@ -961,9 +961,9 @@ PODS:
   - React-Mapbuffer (0.74.2):
     - glog
     - React-debug
-  - react-native-config (1.5.1):
-    - react-native-config/App (= 1.5.1)
-  - react-native-config/App (1.5.1):
+  - react-native-config (1.5.3):
+    - react-native-config/App (= 1.5.3)
+  - react-native-config/App (1.5.3):
     - React-Core
   - react-native-date-picker (5.0.4):
     - React-Core
@@ -1723,7 +1723,7 @@ SPEC CHECKSUMS:
   MMKV: 506311d0494023c2f7e0b62cc1f31b7370fa3cfb
   MMKVCore: 9e2e5fd529b64a9fe15f1a7afb3d73b2e27b4db9
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
-  RCTDeprecation: e989346ee1f1a0e6c155ac0969f7834b043b2f08
+  RCTDeprecation: b03c35057846b685b3ccadc9bfe43e349989cdb2
   RCTRequired: 194626909cfa8d39ca6663138c417bc6c431648c
   RCTTypeSafety: 552aff5b8e8341660594db00e53ac889682bc120
   React: a57fe42044fe6ed3e828f8867ce070a6c5872754
@@ -1746,7 +1746,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 0fa7f78d8fdda794667cb2e6f19c874c1cf31d7e
   React-logger: 29fa3e048f5f67fe396bc08af7606426d9bd7b5d
   React-Mapbuffer: bf56147c9775491e53122a94c423ac201417e326
-  react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
+  react-native-config: 8f7283449bbb048902f4e764affbbf24504454af
   react-native-date-picker: 6891317e850deae5b53d51355226e07a495aba61
   react-native-geolocation: fe0562c94eb0b6334f266aea717448dfd9b08cd0
   react-native-html-to-pdf: 4c5c6e26819fe202971061594058877aa9b25265
@@ -1789,8 +1789,8 @@ SPEC CHECKSUMS:
   rnmapbox-maps: fe8c3204993ed3678f2c31b4b6ba55474e0c5899
   RNReanimated: f4ff116e33e0afc3d127f70efe928847c7c66355
   RNScreens: 5aeecbb09aa7285379b6e9f3c8a3c859bb16401c
-  RNSentry: bf98e0249cc38ab36a16b7c25be916a4d4e16296
-  RNSVG: 7c3f3fac9de6d67eee5525a8bafffafaaf022991
+  RNSentry: 06eb0bb6483b61486c8ee892d4ee78ee3c9110dd
+  RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Sentry: f8374b5415bc38dfb5645941b3ae31230fbeae57
@@ -1800,4 +1800,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 47368dad0052dc2d336cc671d006a2130c14ce6e
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3

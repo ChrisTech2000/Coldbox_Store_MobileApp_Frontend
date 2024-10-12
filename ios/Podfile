@@ -40,8 +40,9 @@ target 'coldtivate' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
     $RNMapboxMaps.post_install(installer)
-    
+
     installer.pods_project.targets.each do |target|
       if target.name == 'MapboxMobileEvents'
         `xcrun -sdk iphoneos bitcode_strip -r Pods/MapboxMobileEvents/MapboxMobileEvents.xcframework/ios-arm64_armv7/MapboxMobileEvents.framework/MapboxMobileEvents -o Pods/MapboxMobileEvents/MapboxMobileEvents.xcframework/ios-arm64_armv7/MapboxMobileEvents.framework/MapboxMobileEvents`
