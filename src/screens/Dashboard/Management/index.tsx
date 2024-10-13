@@ -19,6 +19,7 @@ import { EOperatorTutorialSteps } from '../Tutorial/utils/constants';
 
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
+
   const { t } = useTranslationUtils();
   const colors = useTailwindColors();
 
@@ -34,11 +35,12 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
     }
   );
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_COOLING_USERS_STEP,
+    OverlayComponent: ManagementOverlay,
     enableHardwareBack: true,
     maskAllowInteraction: true,
-    OverlayComponent: ManagementOverlay,
+    fullScreen: true,
     onPressMask: () => props.navigation.navigate('CoolingUsers'),
   });
 
@@ -46,7 +48,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const coolingUnitsColor = disabledCoolingUnits ? colors.gray[400] : colors.gray[800];
 
   return (
-    <ScrollView tw="flex-1 p-4" showsVerticalScrollIndicator={false} onLayout={onLayout}>
+    <ScrollView tw="p-4" showsVerticalScrollIndicator={false}>
       <View tw="space-y-3">
         <Text tw="text-base text-green-primary font-bold">
           {t('Dashboard.AccountDetails.sections.details')}
@@ -57,7 +59,9 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             tw="px-0 py-2"
             title={undefined}
             left={() => (
-              <Text tw="text-base w-[80%]">{t('navigation.management.CoolingUsers')}</Text>
+              <Text tw="text-base w-full">
+                {t('navigation.management.CoolingUsers')}
+              </Text>
             )}
             onPress={() => {
               navigation.navigate('CoolingUsers');

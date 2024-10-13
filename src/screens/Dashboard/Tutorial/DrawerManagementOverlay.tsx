@@ -1,17 +1,18 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import { Icon } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { Icon } from 'react-native-paper';
+import { Touchable } from '#ui/components/Touchable';
 
 export function DrawerManagementOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
 
   return (
     <View tw="h-full w-full absolute">
-      <TouchableOpacity
-        tw="bg-white absolute left-3 top-[23%] w-[70%] h-[8%] p-3 rounded-md flex flex-row items-center space-x-2"
+      <Touchable
+        tw="bg-white absolute left-3 top-[20%] w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2"
         onPress={() => {
           onPressMask?.();
           next();
@@ -19,7 +20,7 @@ export function DrawerManagementOverlay({ next, step: { onPressMask } }: IOverla
       >
         <Icon source="account-supervisor-outline" size={25} />
         <Text tw="text-base">{t('navigation.dashboard.Management')}</Text>
-      </TouchableOpacity>
+      </Touchable>
       <View
         tw="absolute left-3 top-1/3 w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={[

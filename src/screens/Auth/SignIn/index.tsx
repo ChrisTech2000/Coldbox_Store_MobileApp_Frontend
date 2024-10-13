@@ -14,7 +14,6 @@ import type { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { useTutorialStore } from '#stores/tutorial';
 import { ERoles, MAP_ROLES } from '#types/global';
 
 import { Button } from '#ui/components/Button';
@@ -48,7 +47,6 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   }));
 
   const { t, zodResolver } = useTranslationUtils();
-  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const toast = InAppNotifications.useToast();
 
   const descriptions = useMemo(
@@ -131,8 +129,6 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           refreshToken: result.refresh,
         });
         setUser({ ...result.user, role: result.role });
-
-        if (!result.user.lastLogin) toggleTutorial();
 
         toast.show(t('Auth.SignIn.accounts.toasts.success'), {
           type: 'md_success',

@@ -1,4 +1,4 @@
-import type { RouteProp } from '@react-navigation/native';
+import { DrawerActions, useNavigation, type RouteProp } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   type NativeStackNavigationOptions,
@@ -6,9 +6,12 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import DashboardMain from '#screens/Dashboard/Main/Dashboard';
+import { DrawerOverlay } from '#screens/Dashboard/Tutorial/DrawerOverlay';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
@@ -24,6 +27,7 @@ import { Text } from '#ui/components/Text';
 import CheckInStack, { type CheckInStackRoutes } from './CheckInTabStack';
 import CheckOutStack, { type CheckOutStackRoutes } from './CheckOutTabStack';
 import ProduceDetailsStack, { type ProduceDetailsStackRoutes } from './ProduceDetailsStack';
+
 
 export type MainTabStackRoutes = {
   RootMainTabStack: undefined;
@@ -71,6 +75,16 @@ const Stack = createNativeStackNavigator<MainTabStackRoutes>();
 export default function MainTabStack() {
   const { t } = useTranslationUtils();
   const dashboardHeaderFactory = useDashboardHeader();
+  const navigation = useNavigation();
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.OPEN_DRAWER_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: DrawerOverlay,
+    maskAllowInteraction: true,
+    // eslint-disable-next-line react/prop-types
+    onPressMask: () => navigation.dispatch(DrawerActions.openDrawer()),
+  });
 
   const screenOptions: ScreenOptions = useCallback(
     (props) => {
@@ -86,12 +100,15 @@ export default function MainTabStack() {
         headerShown: !!translationPath,
         header: (headerProps) =>
           translationPath !== NAVIGATOR_HEADERS.CheckInStack && (
-            <NavigatorHeader
-              {...headerProps}
-              routeTitle={routeTitle}
-              // eslint-disable-next-line react/prop-types
-              {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory, t)}
-            />
+            <View onLayout={onLayout}>
+              <NavigatorHeader
+                {...headerProps}
+                routeTitle={routeTitle}
+                // eslint-disable-next-line react/prop-types
+                {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory, t)}
+              />
+            </View>
+
           ),
         gestureDirection: 'vertical',
         animationDuration: 180,

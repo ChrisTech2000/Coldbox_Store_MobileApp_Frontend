@@ -38,7 +38,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
   const { user } = useAuthStore();
   const { company } = useManagementStore();
-  const { isTutorialOn } = useTutorialStore((store) => ({
+  const { isTutorialOn, toggleTutorial } = useTutorialStore((store) => ({
     isTutorialOn: store.isTutorialActive,
     toggleTutorial: store.toggleTutorial,
   }));
@@ -134,6 +134,13 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     if (isTutorialOn) start();
   }, [isTutorialOn]);
 
+  useEffect(() => {
+    if (user && !user.lastLogin) {
+      console.log(user?.lastLogin)
+      toggleTutorial();
+    }
+  }, [user]);
+
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}>
       <Filters
@@ -153,9 +160,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-      loadingFarmerDashboardProduces ||
-      loadingOperatorDashboardProduces ||
-      areCoolingUnitsLoading ? (
+        loadingFarmerDashboardProduces ||
+        loadingOperatorDashboardProduces ||
+        areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>

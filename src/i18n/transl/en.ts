@@ -1663,7 +1663,7 @@ const en = {
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',
       listCoolingUsers:
         'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.',
-      navigateToAddCoolingUser: "Let's try to add a new Cooling User by clicking the '+' sign.",
+      navigateToAddCoolingUser: "Clicking the '+' sign allows you to add a new Cooling User.",
       coolingUnitStep:
         'You can navigate across cooling units by clicking on the dropdown menu at the top.',
       initiate_check_in_1:
