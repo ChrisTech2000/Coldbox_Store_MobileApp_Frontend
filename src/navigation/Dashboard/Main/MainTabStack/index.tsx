@@ -28,7 +28,6 @@ import CheckInStack, { type CheckInStackRoutes } from './CheckInTabStack';
 import CheckOutStack, { type CheckOutStackRoutes } from './CheckOutTabStack';
 import ProduceDetailsStack, { type ProduceDetailsStackRoutes } from './ProduceDetailsStack';
 
-
 export type MainTabStackRoutes = {
   RootMainTabStack: undefined;
   ProduceDetailsStack: {
@@ -108,7 +107,6 @@ export default function MainTabStack() {
                 {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory, t)}
               />
             </View>
-
           ),
         gestureDirection: 'vertical',
         animationDuration: 180,

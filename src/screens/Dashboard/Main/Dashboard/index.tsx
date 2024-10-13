@@ -136,7 +136,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   useEffect(() => {
     if (user && !user.lastLogin) {
-      console.log(user?.lastLogin)
+      console.log(user?.lastLogin);
       toggleTutorial();
     }
   }, [user]);
@@ -160,9 +160,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-        loadingFarmerDashboardProduces ||
-        loadingOperatorDashboardProduces ||
-        areCoolingUnitsLoading ? (
+      loadingFarmerDashboardProduces ||
+      loadingOperatorDashboardProduces ||
+      areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>

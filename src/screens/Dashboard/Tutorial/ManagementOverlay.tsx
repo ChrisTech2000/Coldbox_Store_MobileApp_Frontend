@@ -30,9 +30,7 @@ export function ManagementOverlay({ next, step: { onPressMask } }: IOverlayCompo
             tw="pl-4 pr-7 py-2 w-[90%]"
             title={undefined}
             left={() => (
-              <Text tw="text-base w-full">
-                {t('navigation.management.CoolingUsers')}
-              </Text>
+              <Text tw="text-base w-full">{t('navigation.management.CoolingUsers')}</Text>
             )}
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
           />

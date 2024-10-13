@@ -59,9 +59,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             tw="px-0 py-2"
             title={undefined}
             left={() => (
-              <Text tw="text-base w-full">
-                {t('navigation.management.CoolingUsers')}
-              </Text>
+              <Text tw="text-base w-full">{t('navigation.management.CoolingUsers')}</Text>
             )}
             onPress={() => {
               navigation.navigate('CoolingUsers');
