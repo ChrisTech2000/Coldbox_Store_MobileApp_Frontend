@@ -6,7 +6,7 @@ import type { GetAllCropsResponse, GetCoolingUnitResponse } from '#types/api.res
 import type { GetAvailableListingParams } from '#types/api.params';
 import { useMap } from '#ui/hooks/useMap';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import MarketplaceService from '#services/Marketplace';
+import MarketplaceService from '#services/MarketplaceService';
 import ColdtivateService from '#services/ColdtivateService';
 
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
@@ -65,7 +65,7 @@ export function useMarketplaceListing() {
   );
 
   const { data: datums, ...rest } = useApiCall(
-    'getAvailableListing',
+    'getMarketplaceAvailableListing',
     async (params: GetAvailableListingParams) => {
       const listing = await MarketplaceService.getAvailableListing(params);
 

@@ -84,7 +84,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
       produces: matchingProduces.map((produce) => ({
         id: produce.id,
         crop: produce.cropName,
-        plannedDays: `${produce.plannedDays ?? ''}`,
+        plannedDays: produce?.plannedDays?.toString() ?? '',
       })),
     },
   });
@@ -181,7 +181,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
               <View tw="flex flex-row items-center space-x-2">
                 <MineCart width={16} height={16} />
                 <Text variant="TitleBold">
-                  {`${produce.crates.length} ${produce.crates.length === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
+                  {`${produce.checkedInCrates.length} ${produce.checkedInCrates.length === 1 ? t('Dashboard.ProduceDetails.crate') : t('Dashboard.ProduceDetails.crates')}`}
                 </Text>
               </View>
 

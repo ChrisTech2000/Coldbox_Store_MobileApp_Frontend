@@ -113,7 +113,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
     return sortedProduces.filter((produce) => {
       if (searchType === 'id') {
-        return produce.crates.some((crate) => crate.tag.toString() === lowerCaseSearch);
+        return produce.checkedInCrates.some((crate) => crate.tag.toString() === lowerCaseSearch);
       }
 
       return (

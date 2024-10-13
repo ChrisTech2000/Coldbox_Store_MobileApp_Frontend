@@ -67,7 +67,7 @@ export type CheckInResponse = {
   farmer: number;
   hasDt: string;
   cratesIds: Array<number>;
-  produces: Array<{ id: number; cropId: number; crates: Array<number> }>;
+  produces: Array<{ id: number; cropId: number; cratesIds: Array<number> }>;
 };
 
 export type CheckOut = Array<{
@@ -489,6 +489,19 @@ export interface GetAvailableListingResponse {
   };
 }
 
+export interface UpdateListedCrateResponse {
+  id: number;
+  movement: number;
+  ownerUser: number;
+  ownerOnBehalfOfCompany: number | null; // if it's null the owner is the user, otherwise the owner is the company
+  has_dt: string;
+  produces: Array<{
+    id: number;
+    cropId: number;
+    cratesIds: Array<number>;
+  }>;
+}
+
 export interface GetAvailableBanksResponse {
   banks: Array<Bank>;
 }
@@ -499,3 +512,35 @@ export interface ApplyCouponResponse {
 }
 
 export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
+
+export type GetDeliveryContactsResponse = Array<{
+  id: number;
+  companyName?: string;
+  phone: string;
+  name: string;
+  coolingUnitId: number;
+}>;
+
+export interface SellerListedCratesResponse {
+  availableWeightInKg: number;
+  crateId: number;
+  createdAt: string;
+  currency: string;
+  distance: number | null;
+  id: number;
+  lastUpdatedAt: string;
+  pendingInCoolingFees: number;
+  pendingInCoolingFeesPricePerKg: number;
+  producePricePerKg: number;
+  relCheckInMovementCode: string;
+  relCompanyId: number;
+  relCoolingUnitId: number;
+  relCrateRemainingShelfLife: number;
+  relCropId: number;
+  totalPricePerKg: number;
+  weightLockedInPaymentPendingOrdersInKg: number;
+}
+
+export interface GetSellerListedCrates {
+  nodes: Array<SellerListedCratesResponse>;
+}

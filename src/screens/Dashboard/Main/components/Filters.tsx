@@ -98,7 +98,7 @@ export function Filters({
 
   return (
     <View tw="mt-2 px-4">
-      {user?.role === ERoles.COOLING_USER && (
+      {user?.role === ERoles.COOLING_USER ? (
         <SelectWithStore<Company>
           emptyMessage={t('Dashboard.noCompanyAvailable')}
           datums={farmerCompanies ?? []}
@@ -114,7 +114,7 @@ export function Filters({
           autoSelect
           occupyFullWidth
         />
-      )}
+      ) : null}
       <View onLayout={onLayout}>
         <SelectWithStore<CoolingUnit>
           emptyMessage={t('Dashboard.noCoolingUnitAvailable')}

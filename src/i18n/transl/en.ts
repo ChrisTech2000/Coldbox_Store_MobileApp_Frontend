@@ -99,6 +99,7 @@ const en = {
       Wallet: 'Wallet',
       Transactions: 'Transactions',
       Transaction: '{{id}}',
+      ShoppingCart: 'Shopping Cart',
     },
     checkIn: {
       SelectCropType: 'Select Crop Type',
@@ -597,10 +598,16 @@ const en = {
       Delivery: {
         companyName: 'Company name',
         companyNamePlaceholder: 'Insert company name',
+        companyNameError: 'Please insert the company name',
         contactName: 'Contact name',
         contactNamePlaceholder: 'Insert contact name',
+        contactNameError: 'Please insert the contact name',
         phoneNumber: 'Phone number',
         phoneNumberPlaceholder: 'Insert phone number',
+        emptyMessage: 'No contacts have been added yet',
+        deleteContactMessage: 'Are you sure you want to delete this contact?',
+        noAvailableContacts: 'There are no available contacts for this particular cooling unit.',
+        contactedAddedSuccessfully: 'Contact added successfully.',
       },
       Location: {
         emptyState: 'No locations added yet. Click on the + sign to add one.',
@@ -903,6 +910,9 @@ const en = {
         selectQuantity: 'Select quantity',
         buyNowButton: 'Buy now',
       },
+      currentLocation: 'Current location',
+      filterError:
+        'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.',
     },
     AccountDetails: {
       popups: {
@@ -1167,7 +1177,7 @@ const en = {
       keepInStorageDailyRate: 'Keep in storage ({{price}} / day)',
       keepInStorageFixedRate: 'Keep in storage ({{price}})',
       delivery: 'Delivery',
-      companyName: 'Company name',
+      contactName: 'Contact name',
       phoneNumber: 'Phone number',
       thankYouMessage: 'Thank You for Ordering',
       orderOverview: 'Order overview',
@@ -1181,6 +1191,7 @@ const en = {
       discountsApplied: 'Discounts Applied',
       errors: {
         invalid: 'Invalid value',
+        minimumCartValue: 'Order must be at least ₦100.',
       },
     },
     Analytics: {

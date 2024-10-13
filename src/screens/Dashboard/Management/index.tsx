@@ -200,42 +200,25 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             </RBAC.ProtectedResource>
           </View>
 
-          <View>
-            <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
-              <View>
-                <List.Item
-                  tw="p-0 pb-2"
-                  title={undefined}
-                  left={() => <Text tw="text-base w-[80%]">Discount coupons</Text>}
-                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    props.navigation.navigate('CouponStack');
-                  }}
-                />
-                <Divider tw="bg-gray-400 mb-2" />
-              </View>
-            </RBAC.ProtectedResource>
+          <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
             <View>
               <List.Item
-                tw="p-0 pb-2"
+                tw="px-0 py-2"
                 title={undefined}
-                left={() => (
-                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.ContactsSharing')}</Text>
-                )}
+                left={() => <Text tw="text-base w-[80%]">Discount coupons</Text>}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
                   evt.stopPropagation();
-                  props.navigation.navigate('ContactsSharing');
+                  props.navigation.navigate('CouponStack');
                 }}
               />
-              <Divider tw="bg-gray-400" />
+              <Divider tw="bg-gray-400 mb-2" />
             </View>
-          </View>
+          </RBAC.ProtectedResource>
 
           <RBAC.ProtectedResource action="NAVIGATE" subject="DeliveryContacts">
             <List.Item
-              tw="px-0 py-2"
+              tw="px-0 pt-0 pb-2"
               title={undefined}
               left={() => (
                 <Text tw="text-base w-[80%]">{t('navigation.management.DeliveryContacts')}</Text>

@@ -68,5 +68,7 @@ export default withSafeArea(
   withErrorBoundary(SelectCropType, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );

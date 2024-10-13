@@ -45,10 +45,10 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               }).getValueFormated()}
             </Text>
           </View>
-          <View tw="flex-row items-center justify-between h-8">
-            <View tw="flex-row items-center space-x-1">
-              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
-              {props.discount ? (
+          {props.discount ? (
+            <View tw="flex-row items-center justify-between h-8">
+              <View tw="flex-row items-center space-x-1">
+                <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
                 <IconButton
                   tw="p-0 m-0"
                   icon="information-outline"
@@ -60,19 +60,19 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
                     emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL);
                   }}
                 />
-              ) : null}
-            </View>
+              </View>
 
-            <View tw="flex-row items-center space-x-1">
-              <Icon name="minus" size={14} color={paperTheme.colors.error} />
-              <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
-                {CurrencyStandardization.currencyCode({
-                  code: 'NGN', // TODO: get value from somewhere
-                  value: props.discount ? props.discount.toFixed(2) : 0,
-                }).getValueFormated()}
-              </Text>
+              <View tw="flex-row items-center space-x-1">
+                <Icon name="minus" size={14} color={paperTheme.colors.error} />
+                <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
+                  {CurrencyStandardization.currencyCode({
+                    code: 'NGN', // TODO: get value from somewhere
+                    value: props.discount ? props.discount.toFixed(2) : 0,
+                  }).getValueFormated()}
+                </Text>
+              </View>
             </View>
-          </View>
+          ) : null}
 
           <View tw="flex-row items-center justify-between h-8">
             <View tw="flex-row items-center space-x-1">

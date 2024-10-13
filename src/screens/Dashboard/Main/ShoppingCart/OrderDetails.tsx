@@ -21,12 +21,11 @@ import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
 
 import AddCouponBottomSheet from './components/AddCouponBottomSheet';
-import DeliveryInformationBottomSheet, {
-  DeliveryInformationDatum,
-} from './components/DeliveryInformationBottomSheet';
+import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
+import { CART_MINIMUM_VALUE } from '.';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -78,6 +77,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
       </View>
     );
   }
+
+  const orderDisabled =
+    cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
+    CART_MINIMUM_VALUE;
 
   return (
     <ScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
@@ -153,12 +156,9 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                         <Touchable
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, [
-                              {
-                                companyName: 'Lorem Ipsum', // TODO: send actual data
-                                phoneNumber: '+0123456789',
-                              },
-                            ] satisfies Array<DeliveryInformationDatum>);
+                            emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, {
+                              coolingUnitId: coolingUnit?.id,
+                            });
                           }}
                         >
                           <Text tw="text-base text-green-primary">
@@ -212,7 +212,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             mode="contained"
             uppercase
             onPress={onPay}
-            disabled={isSubmitting}
+            disabled={isSubmitting || orderDisabled}
           >
             {isSubmitting ? (
               <ActivityIndicator size="small" color="white" />
@@ -220,6 +220,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               t('Dashboard.ShoppingCart.pay')
             )}
           </Button>
+          {orderDisabled ? (
+            <Text tw="text-red-700 self-center mb-4">
+              {t('Dashboard.ShoppingCart.errors.minimumCartValue')}
+            </Text>
+          ) : null}
         </View>
       </View>
 

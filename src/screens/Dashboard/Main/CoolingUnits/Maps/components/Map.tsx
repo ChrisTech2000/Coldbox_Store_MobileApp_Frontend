@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, type PropsWithChildren } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import Mapbox, {
   MapView,
@@ -20,8 +26,6 @@ import { PIN_COLORS } from '../constants';
 const DEFAULT_STATE = {} as MapState;
 const MIN_ZOOM = 4;
 
-Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
-
 const _MapContext = createContext<MapState>(DEFAULT_STATE);
 
 function _Root(
@@ -33,6 +37,16 @@ function _Root(
   const { style, coordinates, children } = props;
 
   const [state, setState] = useState<MapState>(DEFAULT_STATE);
+  const [isReady, setIsReady] = useState<boolean>(false);
+
+  useEffect(() => {
+    Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN).then((value) => {
+      if (!value) return;
+      setIsReady(true);
+    });
+  }, []);
+
+  if (!isReady) return null;
 
   return (
     <MapView

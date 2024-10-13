@@ -8,6 +8,8 @@ import {
   WalkthroughProvider,
 } from 'react-native-interactive-walkthrough';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Sentry from '@sentry/react-native';
+import { ENVIRONMENT, SENTRY_DSN } from '#constants/environment';
 
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
@@ -22,9 +24,10 @@ import { navigatorTheme, paperTheme } from './ui/lib/theme';
 
 import './i18n';
 
+Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
 enableExperimentalLayoutAnimation();
 
-export default function App() {
+function App() {
   const isAuthenticated = useAuthManager();
   useGlobalInformation(isAuthenticated);
   useCartInformation(isAuthenticated);
@@ -50,3 +53,5 @@ export default function App() {
     </WalkthroughProvider>
   );
 }
+
+export default Sentry.wrap(App);

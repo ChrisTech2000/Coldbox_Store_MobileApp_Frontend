@@ -1,0 +1,13 @@
+##
+# Android
+##
+
+json_key_file ""
+package_name "com.base.coldtivate"
+
+##
+# iOS
+##
+app_identifier "com.base.coldtivate"
+apple_id "dev@mosano.eu"
+team_id "JS75VC2AMT"

@@ -1,0 +1,45 @@
+FROM node:20.13.1-alpine
+
+RUN apk add --update \
+    bash busybox coreutils \
+    git openssh-client curl wget tar \
+    make cmake gcc g++ musl-dev \
+    linux-headers gcompat
+
+# Android
+ENV ANDROID_HOME=/usr/local/android-sdk \
+    ANDROID_VERSION=34 \
+    ANDROID_BUILD_TOOLS_VERSION=34.0.0 \
+    ANDROID_NDK_VERSION=26.2.11394342 \
+    PATH=$PATH:/usr/local/android-sdk/tools/bin:/usr/local/android-sdk/platform-tools
+
+# Download Android SDK and Install Android Build Tool and Libraries
+RUN mkdir "$ANDROID_HOME" ~/.android && touch ~/.android/repositories.cfg \
+    && cd "$ANDROID_HOME" \
+    && curl --silent "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip" | busybox unzip -q - \
+    && chmod +x -R $ANDROID_HOME/tools/bin
+
+# Set the default JVM to OpenJDK 8
+RUN apk add openjdk8
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk/
+ENV JAVA_INCLUDE_DIR=$JAVA_HOME/include
+
+# Accept licenses and Update the SDK Manager repositories
+RUN yes | sdkmanager --licenses > /dev/null \
+    && sdkmanager --update > /dev/null
+
+# Install build, platform, and platform tools
+RUN sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_VERSION}" "platform-tools" > /dev/null
+
+# Add Ruby and Bundler (because we need fastlane)
+RUN apk add ruby-dev ruby-bundler ruby-rake
+# RUN gem install fastlane:2.221
+
+# Set the default JVM to OpenJDK 17
+RUN apk add openjdk17
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk/
+ENV JAVA_INCLUDE_DIR=$JAVA_HOME/include
+
+# Runtime necessary env
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8

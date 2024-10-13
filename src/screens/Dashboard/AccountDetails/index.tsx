@@ -50,7 +50,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       gender: user?.gender ?? EApiGender.OTHER,
       parentName: farmerParentName ?? '',
       userCode: farmerUserCode ?? '',
-      country: farmerCountry ? countriesDict().getISOByName(farmerCountry) ?? '' : '',
+      country: farmerCountry ? (countriesDict().getISOByName(farmerCountry) ?? '') : '',
       userId: user!.id,
       farmerId: farmerId!,
     } satisfies DetailsSectionParams;
@@ -154,7 +154,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       </View> */}
 
       <RBAC.ProtectedResource action="SET" subject="UserSellerSettings">
-        <View tw="space-y-3">
+        <View tw="space-y-3 mt-6">
           <Text tw="text-base text-green-primary font-bold">
             {t('Dashboard.AccountDetails.sections.sellerSettings')}
           </Text>

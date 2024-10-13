@@ -14,6 +14,7 @@ export interface IApiQueryOptions<IData> {
   dedupingInterval?: number;
   errorRetryCount?: number;
   errorRetryInterval?: number;
+  loadingTimeout?: number;
 }
 
 export const useApiCall = <IData, IParams>(
@@ -42,6 +43,7 @@ export const useApiCall = <IData, IParams>(
     dedupingInterval: options?.dedupingInterval ?? ms('3 seconds'),
     errorRetryCount: options?.errorRetryCount ?? 1,
     errorRetryInterval: options?.errorRetryInterval,
+    loadingTimeout: options?.loadingTimeout,
   });
 
   const refetch = useCallback(async () => {

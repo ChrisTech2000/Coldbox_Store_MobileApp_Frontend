@@ -71,4 +71,4 @@ function Locations(props: ManagementRouteProps<'Locations'>) {
   );
 }
 
-export default withSafeArea(Locations);
+export default withSafeArea(Locations, ['bottom'], true);

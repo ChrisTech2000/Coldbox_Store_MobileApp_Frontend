@@ -9,6 +9,8 @@ export type User = {
   language?: string;
   role?: ERoles;
   username?: string; // we get this prop when we fetch the operators
+  isPhonePublic?: boolean;
+  isEmailPublic?: boolean;
 };
 
 export type Farmer = {
@@ -77,7 +79,7 @@ export type Crate = {
 export type DashboardProduce = {
   additonalInfo: string;
   checkoutComplete: boolean;
-  crates: Array<Crate>;
+  checkedInCrates: Array<Crate>;
   cratesAmount: number;
   cratesCombinedCost: number;
   cratesCombinedWeight: number;

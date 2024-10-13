@@ -1,0 +1,302 @@
+
+def setup_dotenv(options)
+  pipeline = options[:pipeline] || "production"
+
+  # Define the source and destination paths
+  source_env_file = ".env.#{pipeline}"
+  default_env_file = ".env"
+
+  # Copy the pipeline-specific .env file to the destination
+  sh("cd ..; cp #{source_env_file} #{default_env_file}")
+  ENV['ENVFILE'] = source_env_file
+
+
+  # clear the react-native-config cache
+  sh("cd ..; touch node_modules/react-native-config/ios/ReactNativeConfig/BuildDotenvConfig.rb")
+
+  # Log the used .env file
+  UI.message("Using environment file: #{ENV['ENVFILE']}")
+end
+
+
+def generate_build_id (options)
+  version_id = options[:version_id] || "0.0.1"
+
+  # Split the version_id into major, minor, and patch components
+  version_components = version_id.split('.')
+  major = version_components[0].to_i
+  minor = version_components[1].to_i
+  patch = version_components[2].to_i
+
+  # Calculate the build_id
+  build_id = major * 10000 + minor * 100 + patch
+
+  # Print the generated build_id
+  UI.message("Generated build_id: #{build_id}")
+
+  # Return the build_id
+  build_id
+end
+
+def parse_version_id (options)
+  # Extract the version_id from the options or default to "0.0.0"
+  version_id = options[:version_id] || "0.0.1"
+
+  # Use a regular expression to remove any non-numeric leading characters like 'v'
+  sanitized_version_id = version_id.gsub(/^[^0-9]*/, '')
+
+  # Split the sanitized version_id into major, minor, and patch components
+  version_components = sanitized_version_id.split('.')
+
+  # Convert each component to an integer, defaulting to 0 if missing
+  major = version_components[0].to_i
+  minor = version_components[1].to_i
+  patch = version_components[2].to_i
+
+  # Construct the whole version string
+  id = "#{major}.#{minor}.#{patch}"
+
+  # Print the casted version
+  UI.message("Parsed version: #{id}")
+
+  # Return the casted version as a hash including the whole version string
+  {
+    major: major,
+    minor: minor,
+    patch: patch,
+    id: id
+  }
+end
+
+##
+# ANDROID
+##
+
+platform :android do
+    android_dir = File.expand_path('../android')
+
+    lane :test do
+        gradle(task: "test")
+    end
+
+    desc "Build the app"
+    lane :build do |options|
+        version = parse_version_id(version_id: options[:version_id] || "0.0.1")
+        build_id = options[:build_id] || generate_build_id(version_id: version[:id])
+
+        setup_dotenv(options)
+
+        gradle(
+            project_dir: "android",
+            tasks: ["bundleRelease", "assembleRelease"],
+            flags: "--no-daemon --max-workers 1",
+            properties: {
+                "versionCode" => build_id,
+                "versionName" => version[:id],
+                "MAPBOX_DOWNLOADS_TOKEN" => ENV["MAPBOX_DOWNLOADS_TOKEN"],
+            },
+        )
+    end
+
+    desc "Publish the app"
+    lane :publish_to_play_store do |options|
+        upload_to_play_store(
+            track: (
+                options[:pipeline] == 'production' && 'internal' ||
+                options[:pipeline] == 'staging' && 'internal' ||
+                'internal'
+            ),
+            json_key: './fastlane/google-service-account.json',
+            deactivate_on_promote: false,
+            skip_upload_apk: true, # we're now building both the apk and the bundle
+        )
+    end
+
+    ##
+    # Environment specific lanes
+    ##
+
+    desc "Submit a new Staging Build to the Play Store"
+    desc "This will also deploy just for the staging group."
+    lane :staging do |options|
+        options = options.merge(
+            pipeline: "staging",
+        )
+
+        build(options)
+        publish_to_play_store(options)
+    end
+    desc "Submit a new Production Build to the Play Store"
+    desc "This will also deploy just for the production group."
+    lane :production do |options|
+        options = options.merge(
+            pipeline: "production",
+        )
+
+        build(options)
+        publish_to_play_store(options)
+    end
+end
+
+
+##
+# iOS
+##
+
+platform :ios do
+    ios_dir = File.expand_path('../ios')
+
+    lane :test do
+        run_tests(
+            workspace: File.join(ios_dir, "ios/coldtivate.xcworkspace")
+        )
+    end
+
+    desc "Build the app"
+    lane :build do |options|
+        require 'tempfile'
+
+        # variables
+        apple_id = CredentialsManager::AppfileConfig.try_fetch_value(:apple_id) || "dev@mosano.eu"
+        app_identifier = options[:app_identifier] || CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) || "com.base.coldtivate"
+        app_name = "Coldtivate" # CredentialsManager::AppfileConfig.try_fetch_value(:app_name) || pipeline != "production" && "Coldtivate @ #{pipeline}" || "Coldtivate"
+        team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+        type = options[:type] || "appstore" # "development", "appstore", "ad-hoc"
+
+        version = parse_version_id(version_id: options[:version_id] || "0.0.1")
+        build_id = options[:build_id] || generate_build_id(version_id: version[:id])
+
+        setup_dotenv(options)
+
+        if type == 'ad-hoc'
+            register_devices(
+                devices_file: './fastlane/devices.txt',
+            )
+        end
+
+        match(
+            type: type,
+            username: apple_id,
+            app_identifier: [ app_identifier ],
+            git_url: "git@gitlab.com:b1866/coldtivate/sensitive-repositories/fastlane.git",
+            git_branch: "main",
+            shallow_clone: true,
+            force_for_new_devices: true,
+            # force: true,
+        )
+
+        netrc_file = Tempfile.new('netrc')
+        ENV['NETRC'] = netrc_file.path
+
+        # The environment variable is now accessible in the lane
+        begin
+            sh('if [ -f "~/.netrc" ]; then mv ~/.netrc ~/.netrc.original; fi; ln -s "$NETRC" ~/.netrc; exit 0')
+
+            netrc_file.write <<~CONTENT
+                machine api.mapbox.com login mapbox password #{ENV['MAPBOX_DOWNLOADS_TOKEN']}
+            CONTENT
+
+            # Ensure the content is flushed to the file
+            netrc_file.flush
+
+            puts "Using temporary .netrc file at: #{netrc_file.path}"
+            cocoapods(
+                podfile: 'ios/Podfile',
+                use_bundle_exec: false,
+            )
+        ensure
+            sh('rm ~/.netrc; if [ -f "~/.netrc.original" ]; then cp ~/.netrc.original ~/.netrc; fi;  exit 0')
+            ENV.delete('NETRC')
+            netrc_file.close
+            netrc_file.unlink
+        end
+
+        increment_version_number(
+            xcodeproj: "ios/coldtivate.xcodeproj",
+            version_number: version[:id]
+        )
+        increment_build_number(
+            xcodeproj: "ios/coldtivate.xcodeproj",
+            build_number: build_id
+        )
+
+        update_info_plist(
+            xcodeproj: "ios/coldtivate.xcodeproj",
+            plist_path: "coldtivate/Info.plist",
+            app_identifier: app_identifier,
+            display_name: app_name,
+        )
+
+        automatic_code_signing(
+            path: "ios/coldtivate.xcodeproj",
+            team_id: team_id,
+            use_automatic_signing: false
+        )
+
+        update_project_provisioning(
+            xcodeproj: "ios/coldtivate.xcodeproj",
+            profile: ENV["sigh_"+ app_identifier +"_" + type + "_profile-path"],
+            code_signing_identity: ENV["sigh_"+ app_identifier +"_" + type + "_certificate-name"],
+        )
+
+        gym(
+            scheme: options[:scheme],
+            workspace: "ios/coldtivate.xcworkspace",
+            codesigning_identity: ENV["sigh_"+ app_identifier +"_" + type + "_certificate-name"],
+            # skip_profile_detection: true,
+            export_method: type === "appstore" && "app-store" || nil,
+            include_symbols: false,
+            include_bitcode: false,
+            output_directory: "ios/build",
+        )
+    end
+
+    desc "Publish to Testflight"
+    lane :publish_to_testflight do |options|
+        commit = last_git_commit
+
+        upload_to_testflight(
+            username: "dev@mosano.eu",
+            app_platform: 'ios',
+            ipa: "#{lane_context[SharedValues::IPA_OUTPUT_PATH]}",
+            # dsym: "#{lane_context[SharedValues::DSYM_OUTPUT_PATH]}",
+            skip_waiting_for_build_processing: true,
+            wait_for_uploaded_build: true,
+            update_build_info_on_upload: false,
+
+            distribute_external: false,
+            notify_external_testers: false,
+            demo_account_required: false,
+            groups: options[:tags],
+            beta_app_description: "developer version revision: #{commit[:commit_hash]}",
+            beta_app_feedback_email: "dev@mosano.eu", # TODO: use the Appfile.apple_id, or coldtivate's public email
+        )
+    end
+
+  ################################################################################
+
+  desc "Submit a new Staging Build"
+  desc "This build is intended to be submitted to TestFlight."
+  lane :staging do |options|
+    options = options.merge(
+      pipeline: "staging",
+      type: "appstore",
+    )
+
+    build(options)
+    publish_to_testflight(options)
+  end
+
+  desc "Submit a new Production Build"
+  desc "This build is intended to be submitted to the app store."
+  lane :production do |options|
+    options = options.merge(
+      pipeline: "production",
+      type: "appstore",
+    )
+
+    build(options)
+    publish_to_testflight(options)
+  end
+
+end

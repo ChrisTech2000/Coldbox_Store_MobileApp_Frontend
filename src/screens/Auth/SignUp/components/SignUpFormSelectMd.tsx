@@ -60,7 +60,6 @@ export function SignUpFormSelectMd<T extends FieldValues>({
           error={error}
           label={`${startCase(fieldName)}${required ? '*' : ''}`}
           currentValue={currentValue}
-          minifyLabel
           isModalOpen={isModalOpen}
           content={{
             header: t('Auth.SignUp.select.header', { fieldName }),

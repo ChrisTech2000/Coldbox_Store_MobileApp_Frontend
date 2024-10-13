@@ -975,3 +975,11 @@ obj/
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/node,java,kotlin,objective-c,swift,visualstudiocode,vim,yarn,react,reactnative,fastlane,android,androidstudio,xcode,macos,windows,linux,intellij,sublimetext,ruby
+
+
+# Git secret
+.gitsecret/keys/random_seed
+
+# and the added git secret files
+android/keystores/base-key.jks
+fastlane/google-service-account.json
