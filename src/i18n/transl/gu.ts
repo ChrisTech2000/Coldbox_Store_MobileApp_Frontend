@@ -1,6 +1,10 @@
 import type { Translations } from './en';
 
 export default {
+  appVersion: {
+    newVersion: 'કોલ્ડીવેટનું નવું વર્ઝન ઉપલબ્ધ છે!',
+    pleaseUpdate: 'ચાલુ રાખતાં પહેલાં કૃપા કરીને ઍપ અપડેટ કરો.',
+  },
   languages: {
     current: 'અંગ્રેજી',
     label: 'ભાષા',
@@ -149,6 +153,7 @@ export default {
     'save-changes': 'પરિવર્તનો સાચવો',
     continue: 'જારી રાખો',
     save: 'સાચવો',
+    update: 'સુધારો',
   },
   components: {
     datePicker: {

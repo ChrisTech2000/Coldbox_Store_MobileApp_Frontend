@@ -1,6 +1,10 @@
 import type { Translations } from './en';
 
 export default {
+  appVersion: {
+    newVersion: 'कोल्ड्टिवेट का एक नया संस्करण उपलब्ध है!',
+    pleaseUpdate: 'कृपया जारी रखने से पहले ऐप को अपडेट करें।',
+  },
   languages: {
     current: 'हिन्दी',
     label: 'भाषा',
@@ -149,6 +153,7 @@ export default {
     'save-changes': 'बदलाव सहेजें',
     continue: 'जारी रखना',
     save: 'सहेजें',
+    update: 'अपडेट करें',
   },
   components: {
     datePicker: {

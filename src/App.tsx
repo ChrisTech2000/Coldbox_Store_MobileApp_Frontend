@@ -5,8 +5,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider, Portal } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Sentry from '@sentry/react-native';
-import { ENVIRONMENT, SENTRY_DSN } from '#constants/environment';
 
+import { ENVIRONMENT, SENTRY_DSN } from './constants/environment';
+import AppVersionModal from './common/AppVersion';
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import AuthNavigator from './navigation/Auth';
@@ -20,7 +21,9 @@ import { navigatorTheme, paperTheme } from './ui/lib/theme';
 
 import './i18n';
 
-Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
+if (typeof ENVIRONMENT === 'string' && ENVIRONMENT !== 'development') {
+  Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
+}
 
 function App() {
   const isAuthenticated = useAuthManager();
@@ -32,6 +35,7 @@ function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <PaperProvider theme={paperTheme}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+        <AppVersionModal />
         <InAppNotifications>
           <StaleWhileRevalidate>
             <SafeAreaProvider>
