@@ -13,17 +13,17 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
 import { CoolingUnitsOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsOverlay';
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 import SemiCircleChart from './components/SemiCircleChart';
@@ -44,13 +44,15 @@ function CoolingUnitsPlanner() {
   const { t } = useTranslationUtils();
 
   const { onLayout } = useWalkthroughStep({
-    number: EOperatorTutorialSteps.COOLING_UNITS_STEP,
+    number: ECommonTutorialSteps.COOLING_UNITS_STEP,
     enableHardwareBack: true,
     OverlayComponent: CoolingUnitsOverlay,
     onPressMask: () =>
       user?.role === ERoles.OPERATOR
         ? navigation.navigate('RoomConditions')
-        : rootNavigation.navigate('Dashboard'),
+        : user?.role === ERoles.COOLING_USER
+          ? rootNavigation.navigate('MarketPrice')
+          : rootNavigation.navigate('Dashboard'),
   });
 
   const {

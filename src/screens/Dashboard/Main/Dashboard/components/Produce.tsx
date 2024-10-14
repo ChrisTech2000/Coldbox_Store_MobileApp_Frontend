@@ -21,9 +21,11 @@ type ProduceProps = {
   currency: string;
   produce: DashboardProduce;
   onNavigate: () => void;
+  // eslint-disable-next-line
+  onLayout?: (event: any) => void;
 };
 
-export function Produce({ currency, produce, onNavigate }: ProduceProps) {
+export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProps) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const colors = useTailwindColors();
@@ -45,7 +47,7 @@ export function Produce({ currency, produce, onNavigate }: ProduceProps) {
   );
 
   return (
-    <View tw="flex flex-row w-[90%] mr-2 self-center mt-3">
+    <View tw="flex flex-row w-[90%] mr-2 self-center mt-3" onLayout={onLayout}>
       <View
         tw={cn(
           'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',

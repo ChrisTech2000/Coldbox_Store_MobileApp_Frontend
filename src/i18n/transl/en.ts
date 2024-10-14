@@ -1666,25 +1666,24 @@ const en = {
       navigateToAddCoolingUser: "Clicking the '+' sign allows you to add a new Cooling User.",
       coolingUnitStep:
         'You can navigate across cooling units by clicking on the dropdown menu at the top.',
-      initiate_check_in_1:
+      initiateCheckIn1:
         'Once you add a cooling user, you can make a check-in for that cooling user. Go ahead and click the activity button.',
-      initiate_check_in_2: 'Now click on the check-in button (the one in green).',
-      check_in_1:
+      initiateCheckIn2: 'Now click on the check-in button (the one in green).',
+      checkIn1:
         'To complete the check-in, you need to click on "Add Crates" and follow the instructions step by step. Click \'Continue\' to see what the result would look like.',
-      check_in_2:
+      checkIn2:
         'After having completed all the steps, you will see an overview of the crates you are about to check into the room.',
-      check_in_3:
+      checkIn3:
         'If you are satisfied, you can click "Confirm" and the new crates will be added to the Dashboard.',
       history: 'Clicking on "History", you can see all the movements in the room.',
-      // 'Clicking on "History", you can see all the movements in the room. The check-outs for which the market survey has not been completed are marked by a red dot.',
       coolingUnits:
         'Click on "Cooling Units" to see the capacity of a cooling unit in the next 7 days (Planner tab) and the temperature of the room (Room conditions tab).',
       roomConditions:
         ' You can manually update the temperature of the cooling room in "Room conditions" in case you do not have a sensor connected with the app.',
-      check_out_1:
+      checkOut1:
         'To start a check-out, click on the Activity button and then on the red button. Then follow the instructions to complete the check-out.',
-      check_out_2: 'You can choose the cooling unit and crops you want to check out.',
-      check_out_3:
+      checkOut2: 'You can choose the cooling unit and crops you want to check out.',
+      checkOut3:
         'Once the items are paid for, click on the respective button and finalize the check out.',
       navigateToLocations:
         'The first thing you will need to do is add a location. Go ahead and click the locations tab.',
@@ -1698,6 +1697,37 @@ const en = {
         'You can add Registered Employees and Operators through the Management screen. In order to add either role, you will need their phone number. They will receive an SMS with an invitation link. A phone number can be used for only one user.',
       employeeCoolingUnitsStep:
         'Once you have selected a cooling unit you will see an overview of: the check ins in the "Dashboard" tab, the movements in the "History" tab, and the planned utilization rate and the temperature of the room in the "Cooling Units" tab.',
+      localizationPreferences:
+        'You can change the language of the app by selecting "Localization Preferences". Make sure to click the "Save changes" button for the language to be changed!',
+      accountDetailsNavigation:
+        'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.',
+      coolingUserSurvey:
+        'It is very important that you fill in the Cooling User survey for the app to provide you with customized recommendations. Thank you for taking the time to complete the survey!',
+      coolingUserCode:
+        'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".',
+      knowledgeHub:
+        'In the menu, you can find the "Knowledge Hub", which contains advice on how long different crops can be stored, and their optimal temperature. Check it out to understand how much the cold room can help you to preserve the quality of different fruits and vegetables!',
+      faq: 'In the menu, you can also find the Frequently Asked Questions (FAQ). We recommend you check them out to learn more about the app and the benefit of storing your produce in the cold rooms.',
+      dashboardStep1:
+        'Once the operator has completed a check-in for you, you will be able to see the produce in storage in the room in the "Dashboard" section. Every card contains a set of crates of the same type of crop that were checked in together.',
+      dashboardStep2:
+        'Each card in the dashboard contains information about: the type of crop, the number of crates stored, how many days they have already been stored for, the daily price (for all crates together), and the check-in ID.',
+      dashboardStep3:
+        'The colored number of days indicates the "Time to pick up" (TTPU), which means for how many days your produce is still going to be good for, if it stays refrigerated. A red color means that the produce is losing its quality and should be picked up as soon as possible.',
+      dashboardStep4:
+        'If the color of the card is yellow (2-5 days left) or green (more than 5 days), you do not need to worry about the crates. The number of days is recalculated multiple times per day, so make sure to check the "Dashboard" regularly to see how the quality of your crates in the room is evolving.',
+      dashboardStep5:
+        'If you have crates stored in multiple rooms, you can change the room you are viewing by selecting a company and cooling unit from the dropdown.',
+      farmerHistory:
+        'In the tab "History" you can see a summary of all check-ins and check-outs that you have completed in each room. If you see a red dot next to a check out, please click on the three dots and "Fill in market survey". Here, we would like to understand at what price you have sold your produce, and if anything got spoiled. We use this information to improve the operations at the cold room, so it is important that you answer accurately.',
+      farmersCoolingUnits:
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.',
+      farmersUnitsPlanner:
+        'In the tab "Cooling Units" you can find the Map, the current and future occupancy of the room (in "Planner") and the temperature of the room (in "Room conditions"). These screens help you monitor remotely what is happening at the cold rooms, without having to go there in person to check!',
+      marketPrice:
+        'If you see a tab named "Market Price", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.',
+      farmerFinalStep:
+        'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
     },
   },
 };

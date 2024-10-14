@@ -30,7 +30,7 @@ export function OperatorActionsOverlay({ next, step: { onPressMask } }: IOverlay
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.initiate_check_in_1')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.initiateCheckIn1')}</Text>
       </View>
     </View>
   );
@@ -59,7 +59,7 @@ export function CheckInButtonOverlay({ next, step: { onPressMask } }: IOverlayCo
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.initiate_check_in_2')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.initiateCheckIn2')}</Text>
       </View>
     </View>
   );
@@ -82,7 +82,7 @@ export function CheckIn1ScreenOverlay({ next }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.check_in_1')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.checkIn1')}</Text>
         <Button
           mode="text"
           onPress={() => {
@@ -116,7 +116,7 @@ export function CheckIn2ScreenOverlay({ next }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.check_in_2')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.checkIn2')}</Text>
         <Button mode="text" onPress={next} labelStyle="text-green-primary">
           {t('actions.continue')}
         </Button>
@@ -151,7 +151,7 @@ export function CheckIn3ScreenOverlay({ next, step: { onPressMask } }: IOverlayC
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.check_in_3')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.checkIn3')}</Text>
       </View>
     </View>
   );

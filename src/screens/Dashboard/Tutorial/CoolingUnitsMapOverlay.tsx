@@ -3,14 +3,12 @@ import { Text, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useAuthStore } from '#stores/auth';
 import { Button } from '#ui/components/Button';
-import { ERoles } from '#types/global';
-import { EFarmerTutorialSteps } from './utils/constants';
 
-export function HistoryOverlay({ next, goTo, step: { onPressMask } }: IOverlayComponentProps) {
+import { ECommonTutorialSteps } from './utils/constants';
+
+export function CoolingUnitsMapOverlay({ goTo, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
-  const user = useAuthStore((store) => store.user);
 
   return (
     <View tw="h-full w-full absolute">
@@ -25,20 +23,14 @@ export function HistoryOverlay({ next, goTo, step: { onPressMask } }: IOverlayCo
           },
         ]}
       >
-        <Text tw="text-center text-base">
-          {user?.role === ERoles.COOLING_USER
-            ? t('tutorial.steps.farmerHistory')
-            : t('tutorial.steps.history')}
-        </Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.farmersCoolingUnits')}</Text>
         <Button
           mode="text"
+          labelStyle="text-green-primary"
           onPress={() => {
             onPressMask?.();
-            user?.role === ERoles.COOLING_USER
-              ? goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP)
-              : next();
+            goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
           }}
-          labelStyle="text-green-primary"
         >
           {t('actions.continue')}
         </Button>

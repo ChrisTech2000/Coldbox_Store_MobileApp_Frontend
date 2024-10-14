@@ -1,21 +1,22 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import { Icon } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useAuthStore } from '#stores/auth';
 import { Button } from '#ui/components/Button';
-import { ERoles } from '#types/global';
-import { EFarmerTutorialSteps } from './utils/constants';
 
-export function HistoryOverlay({ next, goTo, step: { onPressMask } }: IOverlayComponentProps) {
+export function DrawerFAQOverlay({ next, step }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
-  const user = useAuthStore((store) => store.user);
 
   return (
     <View tw="h-full w-full absolute">
+      <View tw="bg-white absolute left-3 top-[32%] w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2">
+        <Icon source="chat-question-outline" size={25} />
+        <Text tw="text-base">{t('navigation.dashboard.FAQ')}</Text>
+      </View>
       <View
-        tw="absolute left-5 bottom-12 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw="absolute left-3 top-[45%] w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={[
           {
             shadowColor: '#000',
@@ -25,18 +26,12 @@ export function HistoryOverlay({ next, goTo, step: { onPressMask } }: IOverlayCo
           },
         ]}
       >
-        <Text tw="text-center text-base">
-          {user?.role === ERoles.COOLING_USER
-            ? t('tutorial.steps.farmerHistory')
-            : t('tutorial.steps.history')}
-        </Text>
+        <Text tw="text-base text-center">{t('tutorial.steps.faq')}</Text>
         <Button
           mode="text"
           onPress={() => {
-            onPressMask?.();
-            user?.role === ERoles.COOLING_USER
-              ? goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP)
-              : next();
+            step.onPressMask?.();
+            next();
           }}
           labelStyle="text-green-primary"
         >

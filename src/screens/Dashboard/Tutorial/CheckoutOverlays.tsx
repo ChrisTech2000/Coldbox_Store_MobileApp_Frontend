@@ -26,7 +26,7 @@ export function OperatorActionsOverlay({ next, step: { onPressMask } }: IOverlay
           shadowRadius: 4,
         }}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.check_out_1')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.checkOut1')}</Text>
       </View>
     </View>
   );
@@ -48,7 +48,7 @@ export function CheckOutScreenOverlay({ next, step: { onPressMask } }: IOverlayC
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.check_out_2')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.checkOut2')}</Text>
         <Button
           mode="text"
           onPress={() => {
@@ -80,7 +80,7 @@ export function CheckOut2ScreenOverlay({ next, step: { onPressMask } }: IOverlay
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.check_out_3')}</Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.checkOut3')}</Text>
         <Button
           mode="text"
           onPress={() => {

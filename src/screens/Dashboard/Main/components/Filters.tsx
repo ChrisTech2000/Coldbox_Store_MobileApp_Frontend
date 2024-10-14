@@ -16,7 +16,11 @@ import { useManagementStore } from '#stores/management';
 import { Company, CoolingUnit, ERoles } from '#types/global';
 
 import { CoolingUnitOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitOverlay';
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { Dashboard5Overlay } from '#screens/Dashboard/Tutorial/FarmerDashboardOverlay';
+import {
+  EFarmerTutorialSteps,
+  EOperatorTutorialSteps,
+} from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
@@ -64,6 +68,14 @@ export function Filters({
     onPressMask: () => rootNavigation.navigate('CoolingUnits'),
   });
 
+  const { onLayout: onDashboard5Layout } = useWalkthroughStep({
+    number: EFarmerTutorialSteps.DASHBOARD_STEP_5,
+    enableHardwareBack: true,
+    OverlayComponent: Dashboard5Overlay,
+    fullScreen: true,
+    onPressMask: () => rootNavigation.navigate('History'),
+  });
+
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
 
@@ -103,41 +115,42 @@ export function Filters({
 
   return (
     <View tw="mt-2 px-4">
-      {user?.role === ERoles.COOLING_USER ? (
-        <SelectWithStore<Company>
-          emptyMessage={t('Dashboard.noCompanyAvailable')}
-          datums={farmerCompanies ?? []}
-          isModalVisible={isCompaniesModalOpen}
-          setIsModalVisible={setIsCompaniesModalOpen}
-          itemName={(item) => item?.name}
-          useSelectStore={useCompanyStore}
-          label={t('Dashboard.Company.SelectCompany.label', {
-            name: company ? company.name : '',
-          })}
-          modalHeader={t('Dashboard.Company.SelectCompany.header')}
-          divider
-          autoSelect
-          occupyFullWidth
-        />
-      ) : null}
-      <View onLayout={onLayout}>
-        <SelectWithStore<CoolingUnit>
-          emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
-          datums={units}
-          isModalVisible={isUnitsModalOpen}
-          setIsModalVisible={setIsUnitsModalOpen}
-          itemName={(item) => item?.name}
-          useSelectStore={useCoolingUnitStore}
-          label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-            name: coolingUnit ? coolingUnit.name : '',
-          })}
-          modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-          divider
-          autoSelect
-          occupyFullWidth
-        />
+      <View onLayout={onDashboard5Layout}>
+        {user?.role === ERoles.COOLING_USER ? (
+          <SelectWithStore<Company>
+            emptyMessage={t('Dashboard.noCompanyAvailable')}
+            datums={farmerCompanies ?? []}
+            isModalVisible={isCompaniesModalOpen}
+            setIsModalVisible={setIsCompaniesModalOpen}
+            itemName={(item) => item?.name}
+            useSelectStore={useCompanyStore}
+            label={t('Dashboard.Company.SelectCompany.label', {
+              name: company ? company.name : '',
+            })}
+            modalHeader={t('Dashboard.Company.SelectCompany.header')}
+            divider
+            autoSelect
+            occupyFullWidth
+          />
+        ) : null}
+        <View onLayout={onLayout}>
+          <SelectWithStore<CoolingUnit>
+            emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
+            datums={units}
+            isModalVisible={isUnitsModalOpen}
+            setIsModalVisible={setIsUnitsModalOpen}
+            itemName={(item) => item?.name}
+            useSelectStore={useCoolingUnitStore}
+            label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
+              name: coolingUnit ? coolingUnit.name : '',
+            })}
+            modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+            divider
+            autoSelect
+            occupyFullWidth
+          />
+        </View>
       </View>
-
       {searchType && (
         <View tw="flex flex-row items-center justify-center space-x-2 mt-4">
           <Button

@@ -8,7 +8,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
 
-import { EOperatorTutorialSteps } from './utils/constants';
+import { ECommonTutorialSteps } from './utils/constants';
 
 export function CoolingUnitOverlay({ next, goTo, step }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
@@ -34,7 +34,7 @@ export function CoolingUnitOverlay({ next, goTo, step }: IOverlayComponentProps)
             user?.role === ERoles.OPERATOR
               ? next
               : () => {
-                  goTo(EOperatorTutorialSteps.COOLING_UNITS_STEP);
+                  goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
                   step.onPressMask?.();
                 }
           }

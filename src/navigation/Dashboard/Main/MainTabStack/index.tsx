@@ -11,7 +11,7 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import DashboardMain from '#screens/Dashboard/Main/Dashboard';
 import { DrawerOverlay } from '#screens/Dashboard/Tutorial/DrawerOverlay';
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
@@ -77,7 +77,7 @@ export default function MainTabStack() {
   const navigation = useNavigation();
 
   const { onLayout } = useWalkthroughStep({
-    number: EOperatorTutorialSteps.OPEN_DRAWER_STEP,
+    number: ECommonTutorialSteps.OPEN_DRAWER_STEP,
     enableHardwareBack: true,
     OverlayComponent: DrawerOverlay,
     maskAllowInteraction: true,

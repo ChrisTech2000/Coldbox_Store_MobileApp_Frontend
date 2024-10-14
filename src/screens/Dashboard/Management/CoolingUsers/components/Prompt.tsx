@@ -31,7 +31,7 @@ export default function Prompt(props: Props) {
   const { t } = useTranslationUtils();
 
   const { onLayout } = useWalkthroughStep({
-    number: EOperatorTutorialSteps.COOLING_USER_MODAL,
+    number: EOperatorTutorialSteps.COOLING_USER_MODAL_STEP,
     enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: CoolingUsersModalOverlay,

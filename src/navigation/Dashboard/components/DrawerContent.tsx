@@ -2,17 +2,25 @@ import {
   DrawerContentScrollView,
   type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
+import { DrawerActions } from '@react-navigation/native';
 import { styled } from 'nativewind';
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
-import { Drawer } from 'react-native-paper';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import { Drawer } from 'react-native-paper';
 
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import { RepeatTutorialOverlay } from '#screens/Dashboard/Tutorial/RepeatTutorialOverlay';
+import { DrawerAccountDetailsOverlay } from '#screens/Dashboard/Tutorial/DrawerAccountDetailsOverlay';
+import { DrawerFAQOverlay } from '#screens/Dashboard/Tutorial/DrawerFAQOverlay';
+import { DrawerKnowledgeHubOverlay } from '#screens/Dashboard/Tutorial/DrawerKnowledgeHubOverlay';
 import { DrawerManagementOverlay } from '#screens/Dashboard/Tutorial/DrawerManagementOverlay';
+import { RepeatTutorialOverlay } from '#screens/Dashboard/Tutorial/RepeatTutorialOverlay';
+import {
+  ECommonTutorialSteps,
+  EFarmerTutorialSteps,
+  EOperatorTutorialSteps,
+} from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Image } from '#ui/components/Image';
 
@@ -64,7 +72,7 @@ export default function DrawerContent(props: Props) {
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   const { onLayout: onTutorialTabLayout } = useWalkthroughStep({
-    number: EOperatorTutorialSteps.REPEAT_TUTORIAL_STEP,
+    number: ECommonTutorialSteps.REPEAT_TUTORIAL_STEP,
     enableHardwareBack: true,
     OverlayComponent: RepeatTutorialOverlay,
   });
@@ -76,6 +84,49 @@ export default function DrawerContent(props: Props) {
     OverlayComponent: DrawerManagementOverlay,
     onPressMask: () => props.navigation.navigate('Management'),
   });
+
+  const { onLayout: onAccountDetailsLayout } = useWalkthroughStep({
+    number: EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    OverlayComponent: DrawerAccountDetailsOverlay,
+    onPressMask: () => props.navigation.navigate('AccountDetails'),
+  });
+
+  const { onLayout: onKnowledgeHubLayout } = useWalkthroughStep({
+    number: EFarmerTutorialSteps.GO_TO_KNOWLEDGE_HUB_STEP,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    OverlayComponent: DrawerKnowledgeHubOverlay,
+  });
+
+  const { onLayout: onFAQLayout } = useWalkthroughStep({
+    number: EFarmerTutorialSteps.GO_TO_FAQ_STEP,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    OverlayComponent: DrawerFAQOverlay,
+    onPressMask: () => {
+      props.navigation.dispatch(DrawerActions.closeDrawer());
+      props.navigation.navigate('Dashboard');
+    },
+  });
+
+  const getLayoutFunc = useCallback((route: string) => {
+    switch (route) {
+      case 'Tutorial':
+        return onTutorialTabLayout;
+      case 'Management':
+        return onManagementTabLayout;
+      case 'AccountDetails':
+        return onAccountDetailsLayout;
+      case 'KnowledgeHub':
+        return onKnowledgeHubLayout;
+      case 'FAQ':
+        return onFAQLayout;
+      default:
+        return undefined;
+    }
+  }, []);
 
   const onLogout = useCallback(() => {
     resetManagementStore();
@@ -111,13 +162,7 @@ export default function DrawerContent(props: Props) {
             <Drawer.Item
               label={props.t(datums.translationPath)}
               active={focusedRoute === routeName}
-              onLayout={
-                routeName === 'Tutorial'
-                  ? onTutorialTabLayout
-                  : routeName === 'Management'
-                    ? onManagementTabLayout
-                    : undefined
-              }
+              onLayout={getLayoutFunc(routeName)}
               onPress={(evt) => {
                 evt.stopPropagation();
                 if (routeName === 'Tutorial') {

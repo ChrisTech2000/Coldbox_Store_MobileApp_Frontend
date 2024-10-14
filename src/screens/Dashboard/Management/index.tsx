@@ -66,7 +66,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   });
 
   useWalkthroughStep({
-    number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS,
+    number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP,
     OverlayComponent: ManagementEmployeesOperatorsOverlay,
     enableHardwareBack: true,
     maskAllowInteraction: true,

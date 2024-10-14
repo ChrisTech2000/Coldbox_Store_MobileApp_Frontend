@@ -6,7 +6,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
-import { EOperatorTutorialSteps } from './utils/constants';
+import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
 
 export function CoolingUnitsOverlay({ next, goTo, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
@@ -28,14 +28,20 @@ export function CoolingUnitsOverlay({ next, goTo, step: { onPressMask } }: IOver
         <Text tw="text-center text-base">
           {user?.role === ERoles.OPERATOR
             ? t('tutorial.steps.coolingUnitStep')
-            : t('tutorial.steps.employeeCoolingUnitsStep')}
+            : user?.role === ERoles.COOLING_USER
+              ? t('tutorial.steps.farmersUnitsPlanner')
+              : t('tutorial.steps.employeeCoolingUnitsStep')}
         </Text>
         <Button
           mode="text"
           labelStyle="text-green-primary"
           onPress={() => {
             onPressMask?.();
-            user?.role === ERoles.OPERATOR ? next() : goTo(EOperatorTutorialSteps.FINAL_STEP);
+            user?.role === ERoles.OPERATOR
+              ? next()
+              : user?.role === ERoles.COOLING_USER
+                ? goTo(EFarmerTutorialSteps.MARKET_PRICE)
+                : goTo(ECommonTutorialSteps.FINAL_STEP);
           }}
         >
           {t('actions.continue')}

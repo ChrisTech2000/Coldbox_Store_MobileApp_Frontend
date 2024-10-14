@@ -12,11 +12,15 @@ import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
-import { ERoles, type Company, type CoolingUnit } from '#types/global';
+import { DashboardProduce, ERoles, type Company, type CoolingUnit } from '#types/global';
 
 import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
 import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import {
+  ECommonTutorialSteps,
+  EFarmerTutorialSteps,
+} from '#screens/Dashboard/Tutorial/utils/constants';
+import { MOCKED_DASHBOARD_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
 
 import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
@@ -24,6 +28,12 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
 
+import {
+  Dashboard1Overlay,
+  Dashboard2Overlay,
+  Dashboard3Overlay,
+  Dashboard4Overlay,
+} from '#screens/Dashboard/Tutorial/FarmerDashboardOverlay';
 import { Filters, type Search } from '../components/Filters';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
 import { OperatorActions } from './components/OperatorActions';
@@ -44,13 +54,41 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }));
 
   const { start } = useWalkthroughStep({
-    number: EOperatorTutorialSteps.INITIAL_STEP,
+    number: ECommonTutorialSteps.INITIAL_STEP,
     OverlayComponent: WelcomeMessageOverlay,
     fullScreen: true,
   });
 
   useWalkthroughStep({
-    number: EOperatorTutorialSteps.FINAL_STEP,
+    number: EFarmerTutorialSteps.DASHBOARD_STEP_1,
+    enableHardwareBack: true,
+    OverlayComponent: Dashboard1Overlay,
+    fullScreen: true,
+  });
+
+  const { onLayout: onDashboard2Layout } = useWalkthroughStep({
+    number: EFarmerTutorialSteps.DASHBOARD_STEP_2,
+    enableHardwareBack: true,
+    OverlayComponent: Dashboard2Overlay,
+    fullScreen: true,
+  });
+
+  const { onLayout: onDashboard3Layout } = useWalkthroughStep({
+    number: EFarmerTutorialSteps.DASHBOARD_STEP_3,
+    enableHardwareBack: true,
+    OverlayComponent: Dashboard3Overlay,
+    fullScreen: true,
+  });
+
+  useWalkthroughStep({
+    number: EFarmerTutorialSteps.DASHBOARD_STEP_4,
+    enableHardwareBack: true,
+    OverlayComponent: Dashboard4Overlay,
+    fullScreen: true,
+  });
+
+  useWalkthroughStep({
+    number: ECommonTutorialSteps.FINAL_STEP,
     OverlayComponent: TutorialFinishedMessageOverlay,
     fullScreen: true,
   });
@@ -95,8 +133,13 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
-  const dashboardProduces =
-    user?.role === ERoles.COOLING_USER ? farmerDashboardProduces : operatorDashboardProduces;
+  const dashboardProduces = isTutorialOn
+    ? // eslint-disable-next-line
+      // @ts-ignore
+      (MOCKED_DASHBOARD_DATA as DashboardProduce[])
+    : user?.role === ERoles.COOLING_USER
+      ? farmerDashboardProduces
+      : operatorDashboardProduces;
 
   const [searchType, setSearchType] = useState<Search>('details');
   const [search, setSearch] = useState<string>('');
@@ -188,6 +231,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           data={filteredProduces}
           renderItem={({ item: produce, index }) => (
             <Produce
+              onLayout={
+                index === 0 ? onDashboard2Layout : index === 1 ? onDashboard3Layout : undefined
+              }
               key={`${produce.id}-${index}`}
               produce={produce}
               onNavigate={() =>

@@ -13,6 +13,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
+import { useTutorialStore } from '#stores/tutorial';
 import { Company, CoolingUnit, ERoles } from '#types/global';
 
 import { GenericError } from '#ui/components/GenericError';
@@ -23,7 +24,8 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { HistoryOverlay } from '#screens/Dashboard/Tutorial/HistoryOverlay';
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { MOCKED_HISTORY_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
 
 import { Filters } from '../components/Filters';
 import { Movement } from './components/Movement';
@@ -42,6 +44,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const user = useAuthStore((store) => store.user);
+  const isTutorialActive = useTutorialStore((store) => store.isTutorialActive);
   const sorting = useSortingStore((store) => store.sorting);
   const { farmerId, addRefreshDataFn } = useDashboardStore((store) => ({
     farmerId: store.farmerId,
@@ -56,7 +59,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
 
   const { onLayout } = useWalkthroughStep({
-    number: EOperatorTutorialSteps.HISTORY_STEP,
+    number: ECommonTutorialSteps.HISTORY_STEP,
     enableHardwareBack: true,
     OverlayComponent: HistoryOverlay,
     onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'CoolingUnits' }),
@@ -130,10 +133,12 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
           </View>
-        ) : movements.length > 0 ? (
+        ) : movements.length > 0 || isTutorialActive ? (
           <FlashList
             showsVerticalScrollIndicator={false}
-            data={filteredMovements}
+            // eslint-disable-next-line
+            // @ts-ignore
+            data={isTutorialActive ? MOCKED_HISTORY_DATA : filteredMovements}
             renderItem={({ item: movement, index }) => (
               <Movement
                 key={`${movement.id}-${index}`}
