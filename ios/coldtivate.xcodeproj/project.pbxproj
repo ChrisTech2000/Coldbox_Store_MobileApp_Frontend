@@ -654,7 +654,6 @@
 				CODE_SIGN_ENTITLEMENTS = coldtivate/coldtivate.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEEP_LINK_DOMAIN = "$(DEEP_LINK_DOMAIN)";
 				DEVELOPMENT_TEAM = JS75VC2AMT;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
@@ -779,7 +778,6 @@
 				CODE_SIGN_ENTITLEMENTS = coldtivate/coldtivate.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEEP_LINK_DOMAIN = "$(DEEP_LINK_DOMAIN)";
 				DEVELOPMENT_TEAM = JS75VC2AMT;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
