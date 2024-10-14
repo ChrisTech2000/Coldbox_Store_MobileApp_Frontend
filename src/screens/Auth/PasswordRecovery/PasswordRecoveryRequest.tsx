@@ -8,7 +8,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
-import { DEEP_LINK_URL } from '#constants/environment';
+import { DEEP_LINK_URL } from '#navigation/deepLinking';
 import InAppNotifications from '#common/InAppNotifications';
 
 type PasswordRecoverySchema = { phone: string };

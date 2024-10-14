@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:app.coldtivate.org</string>
+		<string>applinks:$(DEEP_LINK_DOMAIN)</string>
 	</array>
 </dict>
 </plist>

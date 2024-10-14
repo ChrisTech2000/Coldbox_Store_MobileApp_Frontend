@@ -17,7 +17,7 @@ import { useManagementStore } from '#stores/management';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { useAuthStore } from '#stores/auth';
-import { DEEP_LINK_URL } from '#constants/environment';
+import { DEEP_LINK_URL } from '#navigation/deepLinking';
 import { ERoles, MAP_ROLES } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import InAppNotifications from '#common/InAppNotifications';
