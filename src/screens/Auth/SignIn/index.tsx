@@ -133,6 +133,8 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           type: 'md_success',
           style: { marginBottom: 50 },
         });
+
+        await useAuthStore.getState().renewSession();
       }
     } catch (exception) {
       toast.show(t('Auth.SignIn.accounts.toasts.login'), { type: 'md_danger' });
