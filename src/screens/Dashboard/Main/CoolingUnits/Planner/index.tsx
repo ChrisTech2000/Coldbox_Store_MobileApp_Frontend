@@ -47,7 +47,10 @@ function CoolingUnitsPlanner() {
     number: EOperatorTutorialSteps.COOLING_UNITS_STEP,
     enableHardwareBack: true,
     OverlayComponent: CoolingUnitsOverlay,
-    onPressMask: () => user?.role === ERoles.OPERATOR ? navigation.navigate('RoomConditions') : rootNavigation.navigate('Dashboard'),
+    onPressMask: () =>
+      user?.role === ERoles.OPERATOR
+        ? navigation.navigate('RoomConditions')
+        : rootNavigation.navigate('Dashboard'),
   });
 
   const {

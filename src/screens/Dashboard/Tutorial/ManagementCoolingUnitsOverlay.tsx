@@ -10,7 +10,10 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementCoolingUnitsOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+export function ManagementCoolingUnitsOverlay({
+  next,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
 
   return (

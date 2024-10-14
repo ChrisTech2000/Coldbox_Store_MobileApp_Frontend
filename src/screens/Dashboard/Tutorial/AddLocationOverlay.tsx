@@ -5,11 +5,7 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
 
-
-export function AddLocationOverlay({
-  next,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function AddLocationOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
 
   return (

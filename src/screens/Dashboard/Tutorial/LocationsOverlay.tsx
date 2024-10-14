@@ -29,9 +29,7 @@ export function LocationsOverlay({ next, step: { onPressMask } }: IOverlayCompon
           <List.Item
             tw="pl-4 pr-7 py-2 w-[90%]"
             title={undefined}
-            left={() => (
-              <Text tw="text-base w-full">{t('navigation.management.Locations')}</Text>
-            )}
+            left={() => <Text tw="text-base w-full">{t('navigation.management.Locations')}</Text>}
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
           />
         </Touchable>

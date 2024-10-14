@@ -61,9 +61,7 @@ export function RoomConditionsOverlay({ next, step: { onPressMask } }: IOverlayC
           },
         ]}
       >
-        <Text tw="text-center text-base">
-          {t('tutorial.steps.roomConditions')}
-        </Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.roomConditions')}</Text>
         <Button
           mode="text"
           onPress={() => {

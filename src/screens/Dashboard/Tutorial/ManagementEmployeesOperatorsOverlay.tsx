@@ -12,7 +12,10 @@ import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementEmployeesOperatorsOverlay({ goTo, step: { onPressMask } }: IOverlayComponentProps) {
+export function ManagementEmployeesOperatorsOverlay({
+  goTo,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
 
   return (
@@ -27,9 +30,7 @@ export function ManagementEmployeesOperatorsOverlay({ goTo, step: { onPressMask 
           <List.Item
             tw="pl-4 pr-7 py-2 w-[90%]"
             title={undefined}
-            left={() => (
-              <Text tw="text-base w-full">{t('navigation.management.Operators')}</Text>
-            )}
+            left={() => <Text tw="text-base w-full">{t('navigation.management.Operators')}</Text>}
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
           />
           <List.Item

@@ -10,9 +10,13 @@ import { Touchable } from '#ui/components/Touchable';
 
 import { EEmployeeTutorialSteps } from './utils/constants';
 
-export function DrawerManagementOverlay({ next, goTo, step: { onPressMask } }: IOverlayComponentProps) {
+export function DrawerManagementOverlay({
+  next,
+  goTo,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
-  const user = useAuthStore((store) => store.user)
+  const user = useAuthStore((store) => store.user);
 
   return (
     <View tw="h-full w-full absolute">
@@ -20,9 +24,7 @@ export function DrawerManagementOverlay({ next, goTo, step: { onPressMask } }: I
         tw="bg-white absolute left-3 top-[20%] w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2"
         onPress={() => {
           onPressMask?.();
-          user?.role === ERoles.OPERATOR
-            ? next()
-            : goTo(EEmployeeTutorialSteps.LOCATIONS_STEP);
+          user?.role === ERoles.OPERATOR ? next() : goTo(EEmployeeTutorialSteps.LOCATIONS_STEP);
         }}
       >
         <Icon source="account-supervisor-outline" size={25} />

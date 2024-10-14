@@ -45,7 +45,7 @@ const params = {
   user: MOCKED_USER,
   coolingUnit: MOCKED_COOLING_UNIT,
   crates: MOCKED_CHECK_OUT_DATA,
-}
+};
 
 export function OperatorActions({
   navigation,

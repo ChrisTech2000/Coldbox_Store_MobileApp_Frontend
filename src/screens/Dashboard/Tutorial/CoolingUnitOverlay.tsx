@@ -27,17 +27,16 @@ export function CoolingUnitOverlay({ next, goTo, step }: IOverlayComponentProps)
           },
         ]}
       >
-        <Text tw="text-center text-base">
-          {t('tutorial.steps.coolingUnitStep')}
-        </Text>
+        <Text tw="text-center text-base">{t('tutorial.steps.coolingUnitStep')}</Text>
         <Button
           mode="text"
-          onPress={user?.role === ERoles.OPERATOR
-            ? next :
-            () => {
-              goTo(EOperatorTutorialSteps.COOLING_UNITS_STEP);
-              step.onPressMask?.();
-            }
+          onPress={
+            user?.role === ERoles.OPERATOR
+              ? next
+              : () => {
+                  goTo(EOperatorTutorialSteps.COOLING_UNITS_STEP);
+                  step.onPressMask?.();
+                }
           }
           labelStyle="text-green-primary"
         >
