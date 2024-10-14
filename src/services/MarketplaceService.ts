@@ -6,16 +6,23 @@ import type {
   AddPaystackBankAccountParams,
   CreateDeliveryContactParams,
   DeleteDeliveryContactParams,
+  GetAvailableListingParams,
+  ListedCratesBaseParams,
   SetPickUpDetailsParams,
+  UpdateListedCrateParams,
 } from '#types/api.params';
 import type {
   ApplyCouponResponse,
   CheckoutWithPaystackResponse,
   GetAllOrdersResponse,
   GetAvailableBanksResponse,
+  GetAvailableListingResponse,
   GetCartResponse,
   GetDeliveryContactsResponse,
+  GetSellerListedCrates,
+  SellerListedCratesResponse,
   SetPickUpDetailsResponse,
+  UpdateListedCrateResponse,
 } from '#types/api.responses';
 import type { BankAccount } from '#types/global';
 
@@ -258,6 +265,104 @@ class MarketplaceService extends HttpClient {
       });
       const { data } = await this.delete<unknown>(url);
       return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public upsertListedCrate = async (
+    params: ListedCratesBaseParams & UpdateListedCrateParams
+  ): Promise<UpdateListedCrateResponse> => {
+    try {
+      const { operatorOnBehalfOfSellerFarmerId, operatorOnBehalfOfSellerUserId, ...body } = params;
+
+      const { data } = await this.post<UpdateListedCrateResponse>(
+        EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
+        body,
+        {
+          params: {
+            operator_on_behalf_of_seller_farmer_id: operatorOnBehalfOfSellerFarmerId,
+            operator_on_behalf_of_seller_user_id: operatorOnBehalfOfSellerUserId,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getAvailableListing = async (
+    params: GetAvailableListingParams
+  ): Promise<GetAvailableListingResponse> => {
+    try {
+      const { data } = await this.get<GetAvailableListingResponse>(
+        EMarketplaceEndpoints.AVAILABLE_LISTING,
+        {
+          params: {
+            ...params,
+            location: params.location.join(','),
+            filterByCoolingUnitsIds:
+              !params?.filterByCoolingUnitsIds || params.filterByCoolingUnitsIds.length < 1
+                ? undefined
+                : params.filterByCoolingUnitsIds.join(','),
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getSellerListedCratesByCrateId = async (
+    params: ListedCratesBaseParams & { crateId: number }
+  ): Promise<SellerListedCratesResponse> => {
+    try {
+      const { crateId, ...rest } = params;
+      const { data } = await this.get<SellerListedCratesResponse>(
+        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }),
+        { params: rest }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getSellerListedCrates = async (
+    params?: ListedCratesBaseParams
+  ): Promise<GetSellerListedCrates> => {
+    try {
+      const { data } = await this.get<GetSellerListedCrates>(
+        EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
+        { params }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public delistCratesByCrateId = async (
+    params: ListedCratesBaseParams & { crateId: number }
+  ): Promise<void> => {
+    try {
+      const { crateId, ...rest } = params;
+      await this.delete(
+        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }),
+        { params: rest }
+      );
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));

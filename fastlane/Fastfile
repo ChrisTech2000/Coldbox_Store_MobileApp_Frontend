@@ -1,6 +1,26 @@
 
-lane :generate_build_id do |options|
-  version_id = options[:version_id] || "0.0.0"
+def setup_dotenv(options)
+  pipeline = options[:pipeline] || "production"
+
+  # Define the source and destination paths
+  source_env_file = ".env.#{pipeline}"
+  default_env_file = ".env"
+
+  # Copy the pipeline-specific .env file to the destination
+  sh("cd ..; cp #{source_env_file} #{default_env_file}")
+  ENV['ENVFILE'] = source_env_file
+
+
+  # clear the react-native-config cache
+  sh("cd ..; touch node_modules/react-native-config/ios/ReactNativeConfig/BuildDotenvConfig.rb")
+
+  # Log the used .env file
+  UI.message("Using environment file: #{ENV['ENVFILE']}")
+end
+
+
+def generate_build_id (options)
+  version_id = options[:version_id] || "0.0.1"
 
   # Split the version_id into major, minor, and patch components
   version_components = version_id.split('.')
@@ -18,9 +38,9 @@ lane :generate_build_id do |options|
   build_id
 end
 
-lane :parse_version_id do |options|
+def parse_version_id (options)
   # Extract the version_id from the options or default to "0.0.0"
-  version_id = options[:version_id] || "0.0.0"
+  version_id = options[:version_id] || "0.0.1"
 
   # Use a regular expression to remove any non-numeric leading characters like 'v'
   sanitized_version_id = version_id.gsub(/^[^0-9]*/, '')
@@ -64,9 +84,8 @@ platform :android do
         version = parse_version_id(version_id: options[:version_id] || "0.0.1")
         build_id = options[:build_id] || generate_build_id(version_id: version[:id])
 
-        # TODO: build towards production or staging depending on the pipeline
+        setup_dotenv(options)
 
-        ENV['APP_ENV'] = options[:pipeline]
         gradle(
             project_dir: "android",
             tasks: ["bundleRelease", "assembleRelease"],
@@ -89,6 +108,7 @@ platform :android do
             ),
             json_key: './fastlane/google-service-account.json',
             deactivate_on_promote: false,
+            skip_upload_apk: true, # we're now building both the apk and the bundle
         )
     end
 
@@ -145,6 +165,8 @@ platform :ios do
 
         version = parse_version_id(version_id: options[:version_id] || "0.0.1")
         build_id = options[:build_id] || generate_build_id(version_id: version[:id])
+
+        setup_dotenv(options)
 
         if type == 'ad-hoc'
             register_devices(
@@ -217,7 +239,6 @@ platform :ios do
             code_signing_identity: ENV["sigh_"+ app_identifier +"_" + type + "_certificate-name"],
         )
 
-        ENV['APP_ENV'] = options[:pipeline]
         gym(
             scheme: options[:scheme],
             workspace: "ios/coldtivate.xcworkspace",

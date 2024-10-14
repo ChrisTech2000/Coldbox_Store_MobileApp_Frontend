@@ -1,11 +1,16 @@
-declare module '@env' {
-  export const REACT_APP_BASE_API_URL: string;
-  export const REACT_APP_AIR_PROD_BASE_URL: string;
-  export const REACT_APP_MAPBOX_ACCESS_TOKEN: string;
-  export const REACT_APP_IMPACT_BACKUP_BASE_URL: string;
-  export const REACT_APP_FARMER_IMPACT_BASE_URL: string;
-  export const REACT_APP_KNOWLEDGE_HUB_URL: string;
-  export const REACT_APP_YOUR_VCCA_PDF_LINK: string;
-  export const REACT_APP_SENTRY_DSN: string;
-  export const REACT_APP_ENVIRONMENT: string;
+declare module 'react-native-config' {
+  export interface NativeConfig {
+    BASE_API_URL?: string;
+    AIR_PROD_BASE_URL?: string;
+    MAPBOX_ACCESS_TOKEN?: string;
+    IMPACT_BACKUP_BASE_URL?: string;
+    FARMER_IMPACT_BASE_URL?: string;
+    KNOWLEDGE_HUB_URL?: string;
+    YOUR_VCCA_PDF_LINK?: string;
+    SENTRY_DSN?: string;
+    ENVIRONMENT?: string;
+  }
+
+  export const Config: NativeConfig;
+  export default Config;
 }

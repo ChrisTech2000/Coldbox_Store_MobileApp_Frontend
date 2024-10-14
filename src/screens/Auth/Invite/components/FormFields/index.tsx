@@ -33,6 +33,7 @@ export default function FormFields() {
             label={t('Auth.ForgotPassword.phoneInputLabel')}
             mode="flat"
             dense
+            disabled
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
