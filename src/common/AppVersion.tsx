@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { Linking, Platform, View } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { getBuildNumber } from 'react-native-device-info';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
@@ -10,10 +11,6 @@ import AuthService from '#services/AuthService';
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import { paperTheme } from '#ui/lib/theme';
-
-import { version as appVersion } from '../../package.json';
-
-const normalizeVersion = (value: string): number => Number(value.replace(/\./g, '0'));
 
 function useAppVersionCheck(cb: () => void) {
   const hasRun = useRef<boolean>(false);
@@ -30,11 +27,11 @@ function useAppVersionCheck(cb: () => void) {
 
       const result = await _getBackendVersion();
 
-      const backendVersion =
-        Platform.OS === 'android' ? normalizeVersion(result.toString()) : result;
-      const normalizedAppVersion = normalizeVersion(appVersion);
+      const backendVersionCode =
+        Platform.OS === 'android' ? result.toString().replace(/\./g, '0') : result.toString();
+      const appVersionCode = getBuildNumber();
 
-      if (normalizedAppVersion < backendVersion) cb();
+      if (appVersionCode < backendVersionCode) cb();
     } catch (exception) {
       console.error(exception);
     }
