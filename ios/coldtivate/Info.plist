@@ -73,7 +73,9 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs to get your location...</string>
+	<string>Coldtivate requires access to your location to provide accurate services when the app is in use.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Coldtivate only requests location information whenever the user is trying to find produces being sold nearby the user current geolocation.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs to get access to your photo library...</string>
 	<key>UIAppFonts</key>
