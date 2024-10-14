@@ -3,10 +3,14 @@ import { Text, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
+import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
+import { EOperatorTutorialSteps } from './utils/constants';
 
-export function CoolingUnitsOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+export function CoolingUnitsOverlay({ next, goTo, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const user = useAuthStore((store) => store.user);
 
   return (
     <View tw="h-full w-full absolute">
@@ -21,13 +25,17 @@ export function CoolingUnitsOverlay({ next, step: { onPressMask } }: IOverlayCom
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.coolingUnitStep')}</Text>
+        <Text tw="text-center text-base">
+          {user?.role === ERoles.OPERATOR
+            ? t('tutorial.steps.coolingUnitStep')
+            : t('tutorial.steps.employeeCoolingUnitsStep')}
+        </Text>
         <Button
           mode="text"
           labelStyle="text-green-primary"
           onPress={() => {
             onPressMask?.();
-            next();
+            user?.role === ERoles.OPERATOR ? next() : goTo(EOperatorTutorialSteps.FINAL_STEP);
           }}
         >
           {t('actions.continue')}
@@ -53,7 +61,9 @@ export function RoomConditionsOverlay({ next, step: { onPressMask } }: IOverlayC
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.roomConditions')}</Text>
+        <Text tw="text-center text-base">
+          {t('tutorial.steps.roomConditions')}
+        </Text>
         <Button
           mode="text"
           onPress={() => {

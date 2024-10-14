@@ -21,3 +21,11 @@ export enum EOperatorTutorialSteps {
   CHECK_OUT_STEP_3 = 20,
   FINAL_STEP = 21,
 }
+
+export enum EEmployeeTutorialSteps {
+  LOCATIONS_STEP = 22,
+  ADD_LOCATION_STEP = 23,
+  COOLING_UNITS_STEP = 24,
+  ADD_COOLING_UNIT_STEP = 25,
+  ADD_EMPLOYEES_OPERATORS = 26,
+}

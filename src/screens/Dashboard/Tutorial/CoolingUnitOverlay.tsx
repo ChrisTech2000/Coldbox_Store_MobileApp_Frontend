@@ -5,9 +5,14 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
+import { ERoles } from '#types/global';
 
-export function CoolingUnitOverlay({ next }: IOverlayComponentProps) {
+import { EOperatorTutorialSteps } from './utils/constants';
+
+export function CoolingUnitOverlay({ next, goTo, step }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const user = useAuthStore((store) => store.user);
 
   return (
     <View tw="h-full w-full absolute">
@@ -22,8 +27,20 @@ export function CoolingUnitOverlay({ next }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.coolingUnitStep')}</Text>
-        <Button mode="text" onPress={next} labelStyle="text-green-primary">
+        <Text tw="text-center text-base">
+          {t('tutorial.steps.coolingUnitStep')}
+        </Text>
+        <Button
+          mode="text"
+          onPress={user?.role === ERoles.OPERATOR
+            ? next :
+            () => {
+              goTo(EOperatorTutorialSteps.COOLING_UNITS_STEP);
+              step.onPressMask?.();
+            }
+          }
+          labelStyle="text-green-primary"
+        >
           {t('actions.continue')}
         </Button>
       </View>

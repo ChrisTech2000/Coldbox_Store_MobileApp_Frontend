@@ -4,10 +4,15 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
+import { ERoles } from '#types/global';
 import { Touchable } from '#ui/components/Touchable';
 
-export function DrawerManagementOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+import { EEmployeeTutorialSteps } from './utils/constants';
+
+export function DrawerManagementOverlay({ next, goTo, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const user = useAuthStore((store) => store.user)
 
   return (
     <View tw="h-full w-full absolute">
@@ -15,7 +20,9 @@ export function DrawerManagementOverlay({ next, step: { onPressMask } }: IOverla
         tw="bg-white absolute left-3 top-[20%] w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2"
         onPress={() => {
           onPressMask?.();
-          next();
+          user?.role === ERoles.OPERATOR
+            ? next()
+            : goTo(EEmployeeTutorialSteps.LOCATIONS_STEP);
         }}
       >
         <Icon source="account-supervisor-outline" size={25} />

@@ -21,6 +21,9 @@ import { useTranslationUtils } from '#i18n/utils';
 import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
+import { ERoles } from '#types/global';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 import SemiCircleChart from './components/SemiCircleChart';
@@ -31,8 +34,11 @@ const MAX_CAPACITY = 100;
 const screenHeight = Dimensions.get('window').height;
 
 function CoolingUnitsPlanner() {
+  const user = useAuthStore((store) => store.user);
+
   const [selectedColumn, setSelectedColumn] = useState<number>(0);
   const navigation = useNavigation<NativeStackNavigationProp<CoolingUnitsTabsRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
   const { t } = useTranslationUtils();
@@ -41,7 +47,7 @@ function CoolingUnitsPlanner() {
     number: EOperatorTutorialSteps.COOLING_UNITS_STEP,
     enableHardwareBack: true,
     OverlayComponent: CoolingUnitsOverlay,
-    onPressMask: () => navigation.navigate('RoomConditions'),
+    onPressMask: () => user?.role === ERoles.OPERATOR ? navigation.navigate('RoomConditions') : rootNavigation.navigate('Dashboard'),
   });
 
   const {

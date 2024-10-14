@@ -15,7 +15,10 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 
 import { ManagementOverlay } from '../Tutorial/ManagementOverlay';
-import { EOperatorTutorialSteps } from '../Tutorial/utils/constants';
+import { EEmployeeTutorialSteps, EOperatorTutorialSteps } from '../Tutorial/utils/constants';
+import { LocationsOverlay } from '../Tutorial/LocationsOverlay';
+import { ManagementCoolingUnitsOverlay } from '../Tutorial/ManagementCoolingUnitsOverlay';
+import { ManagementEmployeesOperatorsOverlay } from '../Tutorial/ManagementEmployeesOperatorsOverlay';
 
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
@@ -42,6 +45,33 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
     maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => props.navigation.navigate('CoolingUsers'),
+  });
+
+  useWalkthroughStep({
+    number: EEmployeeTutorialSteps.LOCATIONS_STEP,
+    OverlayComponent: LocationsOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+    onPressMask: () => props.navigation.navigate('AddLocation'),
+  });
+
+  useWalkthroughStep({
+    number: EEmployeeTutorialSteps.COOLING_UNITS_STEP,
+    OverlayComponent: ManagementCoolingUnitsOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+    onPressMask: () => props.navigation.navigate('AddCoolingUnit'),
+  });
+
+  useWalkthroughStep({
+    number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS,
+    OverlayComponent: ManagementEmployeesOperatorsOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+    onPressMask: () => props.navigation.goBack(),
   });
 
   const disabledCoolingUnits = isLoading || !data.length;

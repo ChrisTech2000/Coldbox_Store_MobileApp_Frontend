@@ -1686,6 +1686,18 @@ const en = {
       check_out_2: 'You can choose the cooling unit and crops you want to check out.',
       check_out_3:
         'Once the items are paid for, click on the respective button and finalize the check out.',
+      navigateToLocations:
+        'The first thing you will need to do is add a location. Go ahead and click the locations tab.',
+      locations:
+        'You can add a location by selecting a name and adding its latitude and longitude, by sharing your GPS coordinates (if your are at the cold room location), or by typing the address.',
+      navigateToCoolingUnits:
+        'After a location has been added, you can add a cooling unit. Go ahead and click the cooling units tab.',
+      addCoolingUnits:
+        'A cooling unit can be added by completing the details above. If you have temperature sensors in the cooling unit and an API in place, you can input the credentials and automatically connect your sensors to the app.',
+      addEmployeesOperators:
+        'You can add Registered Employees and Operators through the Management screen. In order to add either role, you will need their phone number. They will receive an SMS with an invitation link. A phone number can be used for only one user.',
+      employeeCoolingUnitsStep:
+        'Once you have selected a cooling unit you will see an overview of: the check ins in the "Dashboard" tab, the movements in the "History" tab, and the planned utilization rate and the temperature of the room in the "Cooling Units" tab.',
     },
   },
 };

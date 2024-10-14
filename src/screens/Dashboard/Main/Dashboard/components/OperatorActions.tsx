@@ -41,6 +41,12 @@ import {
 
 type ManagementMode = 'check-in' | 'check-out';
 
+const params = {
+  user: MOCKED_USER,
+  coolingUnit: MOCKED_COOLING_UNIT,
+  crates: MOCKED_CHECK_OUT_DATA,
+}
+
 export function OperatorActions({
   navigation,
   coolingUnit,
@@ -73,13 +79,9 @@ export function OperatorActions({
     onPressMask: () =>
       navigation.navigate('CheckOutStack', {
         screen: 'CrateSelection',
-        params: {
-          // eslint-disable-next-line
-          // @ts-ignore
-          user: MOCKED_USER,
-          coolingUnit: MOCKED_COOLING_UNIT,
-          crates: MOCKED_CHECK_OUT_DATA,
-        },
+        // eslint-disable-next-line
+        // @ts-ignore
+        params,
       }),
   });
 
