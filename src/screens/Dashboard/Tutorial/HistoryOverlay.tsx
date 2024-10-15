@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -7,6 +7,7 @@ import { useAuthStore } from '#stores/auth';
 import { Button } from '#ui/components/Button';
 import { ERoles } from '#types/global';
 import { EFarmerTutorialSteps } from './utils/constants';
+import { Text } from '#ui/components/Text';
 
 export function HistoryOverlay({ next, goTo, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();

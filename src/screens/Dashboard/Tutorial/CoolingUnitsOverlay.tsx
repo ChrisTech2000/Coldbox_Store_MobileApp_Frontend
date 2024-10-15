@@ -1,11 +1,13 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
+
 import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
 
 export function CoolingUnitsOverlay({ next, goTo, step: { onPressMask } }: IOverlayComponentProps) {

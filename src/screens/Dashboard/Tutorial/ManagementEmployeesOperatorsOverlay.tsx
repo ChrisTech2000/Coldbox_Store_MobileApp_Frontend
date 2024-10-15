@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 
@@ -9,6 +9,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
 import { cn } from '#ui/lib/cn';
 import { EOperatorTutorialSteps } from './utils/constants';
+import { Text } from '#ui/components/Text';
 
 const screenHeight = Dimensions.get('window').height;
 

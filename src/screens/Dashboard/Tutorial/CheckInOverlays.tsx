@@ -1,10 +1,12 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useCheckInStore } from '#stores/checkIn';
 import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
+
 import { MOCKED_CHECK_IN_DATA } from './utils/mockedData';
 
 export function OperatorActionsOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {

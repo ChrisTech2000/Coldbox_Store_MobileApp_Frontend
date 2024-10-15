@@ -16,7 +16,7 @@ image: ${CI_REGISTRY_IMAGE}:ci
 
 .bundler-install: &bundler-install
   - bundler config set path ~/.bundler
-  - bundler install --frozen
+  - bundler install
 
 .trust-git-providers: &trust-git-providers
   - mkdir -p ~/.ssh && chmod 700 ~/.ssh

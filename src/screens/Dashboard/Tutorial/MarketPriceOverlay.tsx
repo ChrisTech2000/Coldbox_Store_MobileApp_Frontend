@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
 
 import { ECommonTutorialSteps } from './utils/constants';
+import { Text } from '#ui/components/Text';
 
 export function MarketPriceOverlay({ goTo, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
