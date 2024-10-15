@@ -9,8 +9,9 @@ import {
 } from 'react-native-interactive-walkthrough';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as Sentry from '@sentry/react-native';
-import { ENVIRONMENT, SENTRY_DSN } from '#constants/environment';
 
+import { ENVIRONMENT, SENTRY_DSN } from './constants/environment';
+import AppVersionModal from './common/AppVersion';
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import AuthNavigator from './navigation/Auth';
@@ -24,7 +25,10 @@ import { navigatorTheme, paperTheme } from './ui/lib/theme';
 
 import './i18n';
 
-Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
+if (typeof ENVIRONMENT === 'string' && ENVIRONMENT !== 'development') {
+  Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
+}
+
 enableExperimentalLayoutAnimation();
 
 function App() {
@@ -37,6 +41,7 @@ function App() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <PaperProvider theme={paperTheme}>
           <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+          <AppVersionModal />
           <InAppNotifications>
             <StaleWhileRevalidate>
               <SafeAreaProvider>

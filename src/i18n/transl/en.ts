@@ -1,4 +1,8 @@
 const en = {
+  appVersion: {
+    newVersion: 'A new version of Coldtivate is available!',
+    pleaseUpdate: 'Please update app before continuing.',
+  },
   languages: {
     current: 'English',
     label: 'Language',
@@ -150,6 +154,7 @@ const en = {
     'save-changes': 'Save changes',
     save: 'Save',
     continue: 'Continue',
+    update: 'update',
   },
   components: {
     datePicker: {

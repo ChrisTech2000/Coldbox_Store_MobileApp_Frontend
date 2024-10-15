@@ -1,6 +1,10 @@
 import { Translations } from './en';
 
 export default {
+  appVersion: {
+    newVersion: 'Uma nova versão do Coldtivate está disponível!',
+    pleaseUpdate: 'Atualize o aplicativo antes de continuar.',
+  },
   languages: {
     current: 'Inglês',
     label: 'Idioma',
@@ -149,6 +153,7 @@ export default {
     'save-changes': 'Guardar alterações',
     continue: 'Continuar',
     save: 'Salvar',
+    update: 'atualizar',
   },
   components: {
     datePicker: {
