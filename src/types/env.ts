@@ -9,6 +9,7 @@ declare module 'react-native-config' {
     YOUR_VCCA_PDF_LINK?: string;
     SENTRY_DSN?: string;
     ENVIRONMENT?: string;
+    DEEP_LINK_DOMAIN?: string;
   }
 
   export const Config: NativeConfig;

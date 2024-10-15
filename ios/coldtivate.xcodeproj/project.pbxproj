@@ -96,6 +96,7 @@
 		1F03624F2C21D88E0085C32C /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		1F0362502C21D88E0085C32C /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		1F0362512C21D88E0085C32C /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
+		1F5FBA022CB95AB60024DCD1 /* coldtivate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = coldtivate.entitlements; path = coldtivate/coldtivate.entitlements; sourceTree = "<group>"; };
 		29F863ED6E684DE2B45A5727 /* coldtivate_logo.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = coldtivate_logo.svg; path = ../src/assets/images/coldtivate_logo.svg; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-coldtivate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coldtivate.debug.xcconfig"; path = "Target Support Files/Pods-coldtivate/Pods-coldtivate.debug.xcconfig"; sourceTree = "<group>"; };
 		3D1DF6D3D9024F8BA2F0BA92 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../src/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
@@ -161,6 +162,7 @@
 		13B07FAE1A68108700A75B9A /* coldtivate */ = {
 			isa = PBXGroup;
 			children = (
+				1F5FBA022CB95AB60024DCD1 /* coldtivate.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -658,6 +660,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = coldtivate/coldtivate.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JS75VC2AMT;
@@ -781,6 +784,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = coldtivate/coldtivate.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JS75VC2AMT;
