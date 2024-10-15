@@ -13,9 +13,9 @@ export function sortMovements(a: Movement, b: Movement, sorting: ESortingOptions
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     case ESortingOptions.MOVEMENT_DATE_REVERSE:
       return new Date(b.date).getTime() - new Date(a.date).getTime();
-    case ESortingOptions.CHECK_IN_FIRST:
-      return new Date(a.checkinDate).getTime() - new Date(b.checkinDate).getTime();
     case ESortingOptions.CHECK_OUT_FIRST:
+      return new Date(a.checkinDate).getTime() - new Date(b.checkinDate).getTime();
+    case ESortingOptions.CHECK_IN_FIRST:
       return new Date(b.checkinDate).getTime() - new Date(a.checkinDate).getTime();
     default:
       return 0;

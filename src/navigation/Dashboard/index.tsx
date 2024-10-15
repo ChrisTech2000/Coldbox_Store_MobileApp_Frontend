@@ -6,7 +6,6 @@ import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
 import FAQ from '#screens/Dashboard/FAQ';
-import Tutorial from '#screens/Dashboard/Tutorial';
 
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
@@ -25,11 +24,15 @@ import DashboardScreenOptions from './components/ScreenOptions';
 import TemperatureAlert from './components/TemperatureAlert';
 import KnowledgeHubStack from './KnowledgeHub';
 import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
-import DashboardMainBottomTabs from './Main';
+import DashboardMainBottomTabs, { DashboardMainRoutes } from './Main';
 import ManagementStack, { type ManagementRoutes } from './Management';
 
 export type DashboardRoutes = {
-  Main: undefined;
+  Main:
+    | {
+        screen: keyof DashboardMainRoutes;
+      }
+    | undefined;
   AccountDetails: {
     screen: keyof AccountDetailsRoutes;
     params: AccountDetailsRoutes[keyof AccountDetailsRoutes];
@@ -80,7 +83,6 @@ function DashboardNavigationRouter() {
       <NavigationDrawer.Screen name="AccountDetails" component={AccountDetailsStack} />
       <NavigationDrawer.Screen name="Management" component={ManagementStack} />
       <NavigationDrawer.Screen name="KnowledgeHub" component={KnowledgeHubStack} />
-      <NavigationDrawer.Screen name="Tutorial" component={Tutorial} />
       <NavigationDrawer.Screen name="FAQ" component={FAQ} />
       <NavigationDrawer.Screen name="About" component={AboutStack} />
     </NavigationDrawer.Navigator>

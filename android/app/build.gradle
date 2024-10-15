@@ -2,6 +2,8 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -85,6 +87,9 @@ android {
         versionCode project.hasProperty('versionCode') ? project.property('versionCode') as int : 1
         versionName project.hasProperty('versionName') ? project.property('versionName') : "0.0.0"
 
+        manifestPlaceholders = [
+            DEEP_LINK_DOMAIN: project.env.get("DEEP_LINK_DOMAIN"),
+        ]
     }
 
     signingConfigs {
@@ -121,6 +126,5 @@ dependencies {
     }
 }
 
-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")

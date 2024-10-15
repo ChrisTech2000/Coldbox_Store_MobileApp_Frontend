@@ -19,12 +19,13 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { BASE_DEEP_LINK_URL } from '#navigation/deepLinking';
+import { DEEP_LINK_URL } from '#navigation/deepLinking';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { ERoles, MAP_ROLES } from '#types/global';
+import validator from 'validator';
 
 type FormValues = {
   phoneNumber: string;
@@ -72,7 +73,13 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
     defaultValues: { phoneNumber: '', coolingUnits: [] },
     resolver: zodResolver((z) =>
       z.object({
-        phoneNumber: z.string().min(2),
+        phoneNumber: z
+          .string()
+          .min(1, { message: t('Auth.SignUp.schema.phoneError') })
+          .default('')
+          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+            message: t('Auth.SignUp.schema.invalidPhoneError'),
+          }),
         coolingUnits: z.array(z.number()).min(1),
       })
     ),
@@ -95,7 +102,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
     const userId = useAuthStore.getState().user?.id;
     if (!userId) return; // safe guard
 
-    const head = `${BASE_DEEP_LINK_URL}/invite/`;
+    const head = `${DEEP_LINK_URL}/invite/`;
     const tail = `/${MAP_ROLES[ERoles.OPERATOR]}/${values.phoneNumber}`;
 
     try {
@@ -168,9 +175,14 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           )}
           name="phoneNumber"
         />
-        <Text variant="TextMedium" tw="text-gray-400 text-center mb-7">
+        <Text variant="TextMedium" tw="text-gray-400 text-center mb-2">
           {t('Dashboard.Management.AddOperator.phoneFormat')}
         </Text>
+        {errors.phoneNumber && (
+          <Text tw="text-xs text-red-600 mt-[-2] mb-7 pl-3 w-[95%]">
+            {errors.phoneNumber.message?.toString()}
+          </Text>
+        )}
 
         <View tw="space-y-4 mx-4">
           <Select

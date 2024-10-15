@@ -8,17 +8,18 @@ import Employee from '#assets/icons/employee.svg';
 import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
 import Logo from '#assets/images/coldtivate_logo.svg';
+import InAppNotifications from '#common/InAppNotifications';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import type { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
 import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
 import { ERoles, MAP_ROLES } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import InAppNotifications from '#common/InAppNotifications';
-import { useManagementStore } from '#stores/management';
 import { AccountCard } from './components/AccountCard';
 
 const IMG_SIZE = Dimensions.get('window').width / 2.5;
@@ -133,6 +134,8 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           type: 'md_success',
           style: { marginBottom: 50 },
         });
+
+        await useAuthStore.getState().renewSession();
       }
     } catch (exception) {
       toast.show(t('Auth.SignIn.accounts.toasts.login'), { type: 'md_danger' });

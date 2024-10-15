@@ -9,3 +9,4 @@ export const KNOWLEDGE_HUB_URL = Config.KNOWLEDGE_HUB_URL;
 export const YOUR_VCCA_PDF_LINK = Config.YOUR_VCCA_PDF_LINK;
 export const SENTRY_DSN = Config.SENTRY_DSN;
 export const ENVIRONMENT = Config.ENVIRONMENT;
+export const DEEP_LINK_DOMAIN = Config.DEEP_LINK_DOMAIN;
