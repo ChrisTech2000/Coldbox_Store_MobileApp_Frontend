@@ -1,13 +1,14 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { PaperProvider, Portal } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
-import { PaperProvider, Portal } from 'react-native-paper';
+import BootSplash from 'react-native-bootsplash';
 import {
   enableExperimentalLayoutAnimation,
   WalkthroughProvider,
 } from 'react-native-interactive-walkthrough';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as Sentry from '@sentry/react-native';
 
 import { ENVIRONMENT, SENTRY_DSN } from './constants/environment';
@@ -45,7 +46,11 @@ function App() {
           <InAppNotifications>
             <StaleWhileRevalidate>
               <SafeAreaProvider>
-                <NavigationContainer theme={navigatorTheme} linking={linking}>
+                <NavigationContainer
+                  theme={navigatorTheme}
+                  linking={linking}
+                  onReady={() => BootSplash.hide({ fade: true })}
+                >
                   <Portal.Host>
                     {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
                   </Portal.Host>
