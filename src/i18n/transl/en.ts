@@ -1359,6 +1359,377 @@ const en = {
       surveyAlreadyFilled: 'Survey has already been filled',
     },
   },
+  'knowledge-hub': {
+    title: 'Knowledge Hub',
+    source: 'Source: please refer to the Operators’ Manual for further information:',
+    here: ' here',
+    comic: "Farmer's journey: Comic Strip",
+    cooling: {
+      title: 'What is Cooling-as-a-Service?',
+      business: {
+        title: 'Business Model',
+        one: 'Cooling as a Service (CaaS) offers cooling users access to cold storage for a ',
+        two: 'fixed fee, determined by the volume of stored food and storage duration.',
+        three:
+          ' Cooling users make the fee payment directly to cold room operators upon crop withdrawal. In exchange for these payments, the cooling companies own, operate, and upkeep the cold room.',
+      },
+      stakeholders: {
+        title: 'Key Stakeholders',
+        providers: {
+          title: 'Cooling service providers:',
+          details:
+            'They offer cold room services to farmers or FPOs for a nominal fee. They own and manage the cold rooms, prioritizing clean energy like solar or biomass. Beyond storage providers may facilitate market access by linking sellers and buyers, reducing information gaps. ',
+        },
+        users: {
+          title: 'Cooling Users:',
+          details:
+            'Your VCCA supports smallholder farmers and marginal traders that grapple with limited land and resources and operate at modest scales, selling their produce on roadsides or local markets. Insufficient storage undermines their bargaining power, resulting in hurried sales and low incomes. Your VCCA offers them the option to place their produce in the cold room at affordable rates.',
+        },
+        producer: {
+          title: 'Farmer Producer Organizations:',
+          details:
+            "FPOs unite farmers, offering end-to-end cultivation support. Under CaaS, FPOs can act as customers, operators, or leverage cold storage for better prices by purchasing members' produce, strengthening market linkages and farmers' economic viability.",
+        },
+      },
+    },
+    quality: {
+      title: 'How to maximize crop quality',
+      intro:
+        'The main parameters influencing postharvest product quality are temperature, relative humidity, and gas concentrations in the environment.',
+      temp: {
+        title: 'Temperature:',
+        one: 'Prolonged exposure to high temperatures can lead to spoilage and shelf life reduction.',
+        two: 'Precoolers, natural ventilation (storing in a shelter at the farm), using a passive evaporative cooler, or harvesting during early morning are useful methods to reduce the temperature of fresh produce after harvest.',
+        three:
+          ' Cold storage is useful to extend the shelf-life of the produce and preserve its quality.',
+        four: 'Ventilated packaging, such as plastic crates with vent holes, is essential for fresh produce to access cold air effectively.',
+        five: ' Extremely low temperatures should be avoided as they cause chilling or freezing injuries.',
+      },
+      humidity: {
+        title: 'Relative humidity:',
+        one: ' Low relative humidity can cause the dehydration of the product',
+        two: 'High relative humidity can cause shriveling and an increased risk for condensation, which can speed up mould growth.',
+      },
+      ethylene: {
+        title: 'Ethylene:',
+        one: 'Ethylene is a plant hormone that induces ripening. Only some plants produce ethylene, and crops can be more or less sensitive to it.',
+        two: 'Ethylene-producing and ethylene-sensitive crops should be stored in separate units. If that is not possible, they should be kept far apart, and ethylene scrubbers should be installed.',
+        three: {
+          bold: 'Storing the wrong products together can result in a significant loss of product quality and market value,',
+          details: 'especially during a long storage period.',
+        },
+      },
+      air: {
+        title: 'Air composition:',
+        one: 'Reducing the oxygen (O2) concentration and slightly increasing the carbondioxide (CO2) concentration slows down the physiological processes in fruits and vegetables, hence prolonging the storage life. This can be done in a controlled atmosphere storage or packaging.',
+      },
+    },
+    optimal: {
+      title: 'Optimal storage conditions in multi-commodity cold rooms',
+      temp: {
+        title: 'Temperature:',
+        one: 'The optimal storage temperature is influenced by the following factors: crop type and cultivar, the maturity stage at harvest, preharvest growing conditions (such as environmental temperature and precipitation) and postharvest handlings.',
+        two: 'Caution should be taken when fruits and vegetables with different optimal temperatures have to be stored simultaneously in a cold room.',
+        three: {
+          title: 'Based on storage temperature, two groups can be identified:',
+          one: {
+            bold: 'Group 1 (‘Cold’ group): ',
+            details: 'Optimal Temperature < 7 °C  ',
+          },
+          two: {
+            bold: 'Group 2 (‘Warm’ group): ',
+            details: 'Optimal Temperature > 7 °C  ',
+          },
+        },
+        four: 'When two storage rooms are available, one room could operate below 7 °C while the other could be set to a higher temperature (> 7 °C).',
+        five: {
+          one: 'When only one room is available, the temperature in the room has to be adapted to suit all crops. In general,',
+          two: 'the temperature should be increased to the highest optimal temperature of all the crops in the room.',
+          three: 'This will cause stored products of group 1 (‘Cold’) to age faster, but ',
+          four: 'it is important to prevent chilling injury: ',
+          five: 'applying too low temperatures will damage the products.',
+        },
+        six: 'The cold room design could also be manually changed to generate warmer zones, for example, by hanging tarpaulins to create different compartments within the room.',
+        seven:
+          ' Products with higher optimal temperature can also be stored in a shade or using passive coolers outside of the cold room.',
+      },
+      ethylene: {
+        title: 'Ethylene:',
+        one: 'Ethylene triggers the ripening of various crops and can thus reduce their storability.',
+        two: {
+          bold: 'Crops producing ethylene should be kept far apart from crops sensitive to ethylene, ',
+          details:
+            'should be installed to remove ethylene from the air, reducing its impact on sensitive crops. ',
+        },
+        three:
+          'Crops producing ethylene are best placed near the exit of the cold storage room (close to the doors or to where the air is leaving the room).',
+      },
+      table: {
+        title: 'Table for selected crops:',
+        one: 'In the table',
+        two: ' here',
+        three:
+          ' we present an overview of optimal temperature, ethylene sensitivity and production, and the average storage life for products kept at optimal conditions.',
+      },
+    },
+    table: {
+      title: 'Crop storage table',
+      attention: 'Attention!',
+      combinations:
+        'Crops should be stored together depending on the values ”Ethylene Production” and ”Ethylene Sensitivity”. The combinations listed below should not be stored together.',
+      identify:
+        'If you identify any of these combinations in the cold room, immediately place the crates as far away as possible.',
+      combo: 'Combo',
+      instructions:
+        'How to read the table: Crops can be placed together based on ethylene-sensitivity, you can refer to the colors in columns “Ethylene Production” and Column “Ethylene Sensitivity”.',
+    },
+    sensors: {
+      title: 'Temperature sensors and Time-to-Pick-Up model',
+      temp: {
+        title: 'Temperature sensors',
+        one: {
+          title:
+            'Temperature and humidity sensors are often placed in a cold storage room to monitor the environmental conditions. The placement of the sensor in the room depends on its purpose.',
+          one: 'If you want to verify the cooling air temperature, the sensor should be placed near the inlet of the cold  air.',
+          two: ' If you want to monitor the worst location in the cold room, i.e., where the fresh produce is the warmest or cool down the slowest, the answer is more complicated. As a rule of thumb, the worst location will likely be far away from the inlet and deep inside boxes or pallets.',
+        },
+        two: {
+          title:
+            'To understand the environment in which the commodity is stored, we advise placing the sensors as close to the commodity as possible. For example, we recommend to place the sensors:',
+          one: ' Not too close to the entrance door and not too far away.',
+          two: 'In the middle of the cooling unit.',
+          three: 'before the crate is taken out of the room!)',
+        },
+      },
+      ttpu: {
+        title: 'Time-To-Pick-Up (TTPU) model',
+        one: 'Digital fruit twins are mathematical models that have been developed to measure how different crops behave or deteriorate at different storage temperatures. They predict the quality evolution of the crops over time.',
+        two: {
+          bold: 'The ‘storage life’ is the time the product can still be stored for, i.e. the time until the product reaches the quality threshold for consumption,',
+          details: ' and is expressed in the app in ‘remaining number of days’.',
+        },
+        three:
+          'In Coldtivate, we calculate the Time-To-Pick-Up (TTPU) model, which is the expected storage life while still assuring that the product will last for at least 12 hours at an environmental temperature of 30 °C. As a result, there is still sufficient time to go to the market and sell the products, once they are taken out of storage.',
+        four: {
+          one: 'Due to the biological variability of fruits and vegetables, the TTPU model should be considered an',
+          bold: 'estimated value of the storability of a product.',
+          two: 'It is possible that the crates stored in the room have a slightly different remaining storage life than what the model predicts.',
+        },
+        five: {
+          bold: 'The initial quality of the produce when it is brought to the room plays an important role in determining the TTPU accurately.',
+          details:
+            ' To be able to predict the quality at check-in as accurately as possible, it is important to answer the question on when the crop was harvested (which appears during the check-in process) honestly.',
+        },
+        six: {
+          bold: 'The TTPU model uses temperature sensor data',
+          details:
+            '  to calculate the remaining quality during storage. To incorporate temperature variations in the room, the model regularly recomputes the remaining quality of each crate.',
+        },
+      },
+    },
+    tips: {
+      title: 'Tips for checking in crates',
+      sorting: {
+        title: 'Sorting: ',
+        one: 'Sorting means removing damaged produce (from mechanical injuries, insects, diseases, immaturity, overripeness, and deformities) and foreign matter (like plant debris, soil, and stones) from marketable fresh produce.Cooling users should sort their crates before checking them in.',
+        two: 'Cold room operators should regularly check the crates stored in the room and discard spoiled items. Mixing damaged produce can hasten spoilage or ripening of the entire batch.',
+      },
+      'pre-cooling': {
+        title: 'Pre cooling:',
+        one: 'Pre-cooling refers to the initial cooling of freshly harvested crops before they enter cold rooms. It removes field heat from the produce using methods like room cooling, forced air cooling, and water spraying.',
+        two: 'Pre-cooling benefits farmers transporting their produce to distant markets, reducing bruising susceptibility and transit refrigeration needs.',
+        three:
+          'In temperatures above 35°C, pre-cooling should be performed within an hour of harvest to increase shelf life.',
+        four: 'Passive cooling techniques such as cooling blankets can be used if pre-cooling options are unavailable.',
+        five: 'Harvesting during cooler morning hours also can be used when pre-cooling and passive cooling options are unavailable.',
+        six: 'Fruits with soft exteriors (berries, grapes, tomatoes, stone fruits, capsicum, chilli peppers, eggplant, cucumbers, green beans, peas, and spinach) need rapid pre-cooling, while harder ones (such as papaya, guava, green bananas, pomegranates, radish, cabbage, cauliflower and carrots) can store well without it.',
+      },
+      'check-in': {
+        title: 'Check-in: ',
+        one: ' All produce entering the cold room should be placed in well-vented plastic crates with company-assigned IDs.',
+        two: 'Plastic containers are preferred over cardboard boxes as they remain stable with ample perforation and high humidity and can be sanitised to prevent mould growth.',
+        three: {
+          title: ' Operators should ensure that:',
+          one: ' Crates are dry before placing produce in the cold room to prevent bacterial growth.',
+          two: 'Details like farmer name, product type, storage duration, and harvest date are logged into the Coldtivate app.',
+          three:
+            'Operator-entered data is visible to farmers, who can quickly rectify errors in the app for transparency.',
+        },
+      },
+      stacking: {
+        title: 'Stacking crates: ',
+        one: {
+          title:
+            ' To ensure that the quality of the produce in storage is preserved, follow the following tips when stacking crates:',
+          one: ' Use 20-23 kgs of produce in a 25kg standard crate for proper storage.',
+          two: 'Leave a 5-10 cm gap between crates to prevent spoilage spread.',
+          three: 'Keep crates 10-15 cm from cold room walls to avoid chilling injury.',
+          four: 'Pay special attention to bananas, grapefruit, mandarin and oranges, sweet potatoes, tomato, avocado, and mango as they are the most sensitive to chilling!',
+        },
+      },
+      maintain: {
+        title: 'To properly maintain the cold room:',
+        one: 'Install plastic curtains on doors to prevent cold air loss, decreasing condensation, ice buildup, and energy wastage.',
+        two: 'Ensure high humidity levels in cold rooms to prevent moisture loss, frost, and ice formation. High relative humidity (RH) means the air has a lot of water vapour compared to its maximum capacity at a specific temperature. However, extremely high humidity can cause condensation and dew deformation.',
+        three:
+          ' In general, around 95% relative humidity at slightly above freezing is required. Even items stored in warmer conditions benefit from a RH level of approximately 75%.',
+      },
+      sanitation: {
+        title: 'Sanitation measures:',
+        one: {
+          title:
+            'Regular tidying and maintenance of the cold room is vital to keep stored food safe. Follow these tips to ensure that both the cold rooms and the produce are kept clean:',
+          one: 'Use vacuum cleaners or scrubber dryers with mild cleaning agents to remove dirt from the floor.',
+          two: 'Cover open crates before cleaning to avoid getting cleaning sprays on the food.',
+          three:
+            'Clean the room when empty, turning off the cooling system to use water and cleaning agents.',
+          four: 'Check crates for spoiled items and remove them to prevent bacterial growth.',
+          five: 'After cleaning, let the room dry completely to prevent frozen and slippery floors.',
+        },
+      },
+      packaging: {
+        title: 'Packaging:',
+        one: {
+          title:
+            'Follow these tips to ensure that the quality of the produce is preserved during transportation:',
+          one: 'Highly dehydration-sensitive crops like lettuce benefit from plastic bags to slow dehydration.',
+          two: 'Products with high ethylene production, such as bananas, benefit from plastic coverings to contain ethylene.',
+        },
+        two: 'When fruits and vegetables get bruised, they make nearby items ripen faster. When placing delicate crops like berries, grapes, or peaches in plastic containers, use protective foams or poly liners to stop them from getting damaged from movement during transportation.',
+      },
+    },
+    response: {
+      title: 'How to respond to technical glitches in the cold room',
+      water: {
+        title: 'Water enters the cold room:',
+        details:
+          ' Thoroughly check internal pipes, joints, and roof panels. Address any issues promptly. If problems continue, notify the cooling company for pipe replacement.',
+      },
+      condensation: {
+        title: 'Condensation causes excessive water on the floor:',
+        details:
+          'Ensure cold room doors are closed or used minimally to limit humid air entering. Operators should avoid placing commodity-filled crates directly beneath the evaporator to prevent potential water from dripping into them.',
+      },
+      operators: {
+        title: 'Operators risk getting trapped in the cold room:',
+        details:
+          "Regularly inspect internal door openings and promptly report any malfunctions to the cold room's technical team. Timely reporting ensures swift resolution of any door-related issues, preserving the cold room's proper function and integrity.",
+      },
+      compressor: {
+        title: 'Water enters the cold room:',
+        details:
+          " To keep the cold room working well and safe, do not overuse the space, and do not run the compressor for too long. Consider installing lightning arrestors or protective devices to prevent overcharging of current to the cold room's components.",
+      },
+      short: {
+        title: 'Short circuit in the thermal battery charger:',
+        details:
+          ' In summer, the fan wire in the solar battery charger can overheat. Request the company technician to connect it to 24 volts to cool it down and improve performance.',
+      },
+    },
+    crop: 'Crop',
+    optimalCondition: 'Optimal conditions ',
+    temp: 'TEMP / RH',
+    name: 'Name',
+    image: 'Image',
+    temperature: 'Optimal Temp.',
+    'storage-time': 'Storage life',
+    'ethylene-prod': 'Ethylene Production',
+    'ethylene-sens': 'Ethylene Sensitivity',
+    reference:
+      'Data was extracted from Cantwell, M. (2001). Properties and recommended conditions for long-term storage of fresh fruits and vegetables. UC Davis',
+  },
+  tutorial: {
+    welcome: 'Welcome to Coldtivate. This is a walkthrough of the functions.',
+    quit: 'Quit Tutorial',
+    'back-dashboard': 'Back to Dashboard',
+    congratulations:
+      'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.',
+    comic:
+      'Congratulations! You have completed the comic strip! Go back to the dashboard to start using the app.',
+    prev: 'Prev',
+    next: 'Next',
+    start: 'Start Tutorial',
+    final:
+      'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.',
+    backToDashboard: 'Back to Dashboard',
+    steps: {
+      openDrawer:
+        'On the top left, you find a menu with the main functionalities. Go ahead and click it.',
+      repeatTutorial: 'If you want to watch this tutorial again, you can also find it in the menu.',
+      managementNavigation:
+        'In the menu, you can navigate to "Management" and tap there to add or edit Cooling Users. Go ahead and try it.',
+      addCoolingUser:
+        'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
+      navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',
+      listCoolingUsers:
+        'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.',
+      navigateToAddCoolingUser: "Clicking the '+' sign allows you to add a new Cooling User.",
+      coolingUnitStep:
+        'You can navigate across cooling units by clicking on the dropdown menu at the top.',
+      initiateCheckIn1:
+        'Once you add a cooling user, you can make a check-in for that cooling user. Go ahead and click the activity button.',
+      initiateCheckIn2: 'Now click on the check-in button (the one in green).',
+      checkIn1:
+        'To complete the check-in, you need to click on "Add Crates" and follow the instructions step by step. Click \'Continue\' to see what the result would look like.',
+      checkIn2:
+        'After having completed all the steps, you will see an overview of the crates you are about to check into the room.',
+      checkIn3:
+        'If you are satisfied, you can click "Confirm" and the new crates will be added to the Dashboard.',
+      history: 'Clicking on "History", you can see all the movements in the room.',
+      coolingUnits:
+        'Click on "Cooling Units" to see the capacity of a cooling unit in the next 7 days (Planner tab) and the temperature of the room (Room conditions tab).',
+      roomConditions:
+        ' You can manually update the temperature of the cooling room in "Room conditions" in case you do not have a sensor connected with the app.',
+      checkOut1:
+        'To start a check-out, click on the Activity button and then on the red button. Then follow the instructions to complete the check-out.',
+      checkOut2: 'You can choose the cooling unit and crops you want to check out.',
+      checkOut3:
+        'Once the items are paid for, click on the respective button and finalize the check out.',
+      navigateToLocations:
+        'The first thing you will need to do is add a location. Go ahead and click the locations tab.',
+      locations:
+        'You can add a location by selecting a name and adding its latitude and longitude, by sharing your GPS coordinates (if your are at the cold room location), or by typing the address.',
+      navigateToCoolingUnits:
+        'After a location has been added, you can add a cooling unit. Go ahead and click the cooling units tab.',
+      addCoolingUnits:
+        'A cooling unit can be added by completing the details above. If you have temperature sensors in the cooling unit and an API in place, you can input the credentials and automatically connect your sensors to the app.',
+      addEmployeesOperators:
+        'You can add Registered Employees and Operators through the Management screen. In order to add either role, you will need their phone number. They will receive an SMS with an invitation link. A phone number can be used for only one user.',
+      employeeCoolingUnitsStep:
+        'Once you have selected a cooling unit you will see an overview of: the check ins in the "Dashboard" tab, the movements in the "History" tab, and the planned utilization rate and the temperature of the room in the "Cooling Units" tab.',
+      localizationPreferences:
+        'You can change the language of the app by selecting "Localization Preferences". Make sure to click the "Save changes" button for the language to be changed!',
+      accountDetailsNavigation:
+        'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.',
+      coolingUserSurvey:
+        'It is very important that you fill in the Cooling User survey for the app to provide you with customized recommendations. Thank you for taking the time to complete the survey!',
+      coolingUserCode:
+        'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".',
+      knowledgeHub:
+        'In the menu, you can find the "Knowledge Hub", which contains advice on how long different crops can be stored, and their optimal temperature. Check it out to understand how much the cold room can help you to preserve the quality of different fruits and vegetables!',
+      faq: 'In the menu, you can also find the Frequently Asked Questions (FAQ). We recommend you check them out to learn more about the app and the benefit of storing your produce in the cold rooms.',
+      dashboardStep1:
+        'Once the operator has completed a check-in for you, you will be able to see the produce in storage in the room in the "Dashboard" section. Every card contains a set of crates of the same type of crop that were checked in together.',
+      dashboardStep2:
+        'Each card in the dashboard contains information about: the type of crop, the number of crates stored, how many days they have already been stored for, the daily price (for all crates together), and the check-in ID.',
+      dashboardStep3:
+        'The colored number of days indicates the "Time to pick up" (TTPU), which means for how many days your produce is still going to be good for, if it stays refrigerated. A red color means that the produce is losing its quality and should be picked up as soon as possible.',
+      dashboardStep4:
+        'If the color of the card is yellow (2-5 days left) or green (more than 5 days), you do not need to worry about the crates. The number of days is recalculated multiple times per day, so make sure to check the "Dashboard" regularly to see how the quality of your crates in the room is evolving.',
+      dashboardStep5:
+        'If you have crates stored in multiple rooms, you can change the room you are viewing by selecting a company and cooling unit from the dropdown.',
+      farmerHistory:
+        'In the tab "History" you can see a summary of all check-ins and check-outs that you have completed in each room. If you see a red dot next to a check out, please click on the three dots and "Fill in market survey". Here, we would like to understand at what price you have sold your produce, and if anything got spoiled. We use this information to improve the operations at the cold room, so it is important that you answer accurately.',
+      farmersCoolingUnits:
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.',
+      farmersUnitsPlanner:
+        'In the tab "Cooling Units" you can find the Map, the current and future occupancy of the room (in "Planner") and the temperature of the room (in "Room conditions"). These screens help you monitor remotely what is happening at the cold rooms, without having to go there in person to check!',
+      marketPrice:
+        'If you see a tab named "Market Price", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.',
+      farmerFinalStep:
+        'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
+    },
+  },
 };
 
 export default en;

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
 import { Divider } from 'react-native-paper';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
@@ -8,6 +9,9 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { CoolingUnit, Crate } from '#types/global';
+
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { CheckOutScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -18,6 +22,11 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { CheckoutCrate } from '../components/CheckOutCrate';
+import {
+  MOCKED_CHECK_OUT_DATA,
+  MOCKED_COOLING_UNIT,
+  MOCKED_USER,
+} from '../../../Tutorial/utils/mockedData';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 
@@ -29,6 +38,21 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [selectedCrates, setSelectedCrates] = useState<Crate[]>([]);
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.CHECK_OUT_STEP_2,
+    enableHardwareBack: true,
+    OverlayComponent: CheckOutScreenOverlay,
+    onPressMask: () => {
+      // eslint-disable-next-line
+      // @ts-ignore
+      navigation.navigate('BillingInfo', {
+        user: MOCKED_USER,
+        crates: MOCKED_CHECK_OUT_DATA,
+        coolingUnit: MOCKED_COOLING_UNIT,
+      });
+    },
+  });
 
   const { data } = useApiCall(
     'getFarmerCrates',
@@ -69,6 +93,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const onNext = useCallback(
     (evt: GestureResponderEvent) => {
       evt.stopPropagation();
+
       navigation.navigate('BillingInfo', {
         user,
         crates: selectedCrates,
@@ -84,7 +109,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   }, [_crates, _coolingUnit]);
 
   return (
-    <View tw="flex-1 p-4">
+    <View tw="flex-1 p-4" onLayout={onLayout}>
       <View tw="flex flex-row w-full justify-between items-center">
         <Text variant="TextMedium" tw="text-lg max-w-[70%]" numberOfLines={1}>
           {t('Dashboard.CrateManagement.coolingUserLabel')}

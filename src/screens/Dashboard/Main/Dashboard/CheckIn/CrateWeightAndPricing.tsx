@@ -361,8 +361,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             onPress={form.handleSubmit(onSubmit as any)}
             disabled={
               typeof form.formState.errors.crates !== 'undefined' ||
-              !crates.some((c) => c.isSellable) ||
-              !price ||
+              (crates.some((c) => c.isSellable) && !price) ||
               form.formState.isSubmitting
             }
           >
