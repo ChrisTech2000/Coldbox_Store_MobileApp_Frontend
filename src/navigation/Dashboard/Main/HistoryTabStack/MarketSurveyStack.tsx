@@ -22,7 +22,7 @@ export type MarketSurveyStackRoutes = {
   MarketSurveyBase: {
     checkoutId?: number;
     crops: Array<{ id: number; name: string }>;
-    farmer: string;
+    owner: string;
     companyCurrency?: string;
   };
   BaseSurvey: {

@@ -6,10 +6,14 @@
 # 1st step
 yarn install
 
-# 2nd step
+# 2nd step - iOS
 cd ios
 bundle install
 bundle exec pod install
+
+# 2nd step - android
+cd android
+./gradlew clean
 ```
 
 ## Dev env
@@ -112,3 +116,14 @@ The public key is used to access Mapbox API features, while the secret key is re
 #### Rebuild
 
 After this, repeat the installation process (from 2nd step).
+
+### Miscellaneous
+
+```sh
+# splash screen asset generation
+yarn react-native generate-bootsplash src/assets/images/root_hero.svg \
+  --platforms=android,ios \
+  --background=FFFFFF \
+  --logo-width=178 \
+  --assets-output=src/assets/bootsplash
+```

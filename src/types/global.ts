@@ -87,9 +87,9 @@ export type DashboardProduce = {
   cropImage: string;
   cropName: string;
   currentStorageDays: number;
-  farmer: string; // the cooling user's name
-  farmerContact: string; // the cooling user's phone?
-  farmerId: number;
+  owner: string; // the cooling user's name
+  ownerContact: string; // the cooling user's phone?
+  farmerId?: number;
   hasDigitalTwin: boolean;
   id: number;
   minimumRemainingShelfLife: number;

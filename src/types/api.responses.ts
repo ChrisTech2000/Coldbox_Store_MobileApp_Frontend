@@ -234,7 +234,8 @@ export type GetMovementsHistoryResponse = Array<{
   code: string;
   date: Date;
   movementType: EMovementType;
-  farmer: string;
+  owner: string;
+  farmer_id?: number;
   cratesWeight: number;
   movementCrops: Array<Pick<Crop, 'name' | 'id'>>;
   checkoutId?: number;
@@ -515,9 +516,9 @@ export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
 
 export type GetDeliveryContactsResponse = Array<{
   id: number;
-  companyName?: string;
+  deliveryCompanyName: string;
   phone: string;
-  name: string;
+  contactName: string;
   coolingUnitId: number;
 }>;
 

@@ -42,6 +42,7 @@ export type CheckInStackRoutes = {
       isSellable: boolean;
     }>;
     sellingPrice: number;
+    applyToAll: boolean;
   };
 };
 

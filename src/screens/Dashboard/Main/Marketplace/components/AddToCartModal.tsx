@@ -58,15 +58,13 @@ export default function AddToCartModal() {
 
     const crateAlreadyInCart = cartData?.items?.find((i) => i.relCrateId === datum.crateId);
 
-    await Promise.allSettled([
-      MarketplaceService.addItemToCart({
-        crateId: datum.crateId,
-        orderedProduceWeight: values.quantity,
-        updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
-      }),
-      fetchCart(),
-    ]);
+    await MarketplaceService.addItemToCart({
+      crateId: datum.crateId,
+      orderedProduceWeight: values.quantity,
+      updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
+    });
 
+    fetchCart();
     resetState();
     modalRef.current?.close();
   }

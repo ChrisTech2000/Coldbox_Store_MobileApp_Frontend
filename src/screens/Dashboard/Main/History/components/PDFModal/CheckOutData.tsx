@@ -44,11 +44,11 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
       <body>
         <div class="container">
           <div class="title">Check-Out Data</div>
-  
+
           <div class="section">
             <div class="column">
               <div class="label">${t('Dashboard.History.pdfModal.coolingUserLabel')}</div>
-              <div class="value">${movement.farmer}</div>
+              <div class="value">${movement.owner}</div>
             </div>
             <div class="column">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.checkOutLabel')}</div>
@@ -59,7 +59,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
               <div class="value">${dateFmt(movement.date.toString(), 'MMM dd yyyy')}</div>
             </div>
           </div>
-  
+
           <table>
             <thead>
               <tr>
@@ -82,7 +82,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
                 .join('')}
             </tbody>
           </table>
-  
+
           <div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.weightLabel')}:&nbsp;</div>
@@ -101,7 +101,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
               <div class="value">${(movement.totalPrice - movement.discount).toFixed(2)}</div>
             </div>
           </div>
-  
+
           <div class="divider"></div>
         </div>
       </body>
@@ -139,7 +139,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
             {t('Dashboard.History.pdfModal.coolingUserLabel')}
           </Text>
           <Text variant="TextMedium" numberOfLines={1}>
-            {movement.farmer}
+            {movement.owner}
           </Text>
         </View>
 

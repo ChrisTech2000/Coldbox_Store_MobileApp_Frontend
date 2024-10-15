@@ -297,14 +297,18 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                     0
                   );
                   const sellingPrice = (getValues('price') ?? 0) / totalWeight;
+                  const contextualCrates = crates.map((crate) => ({
+                    weight: crate.weight,
+                    isSellable: crate.isSellable ?? false,
+                  }));
                   navigation.navigate('CrateWeightAndPricing', {
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
                     currencySymbol,
-                    crates: crates.map((crate) => ({
-                      weight: crate.weight,
-                      isSellable: crate.isSellable ?? false,
-                    })),
+                    crates: contextualCrates,
                     sellingPrice: isNaN(sellingPrice) ? 0 : sellingPrice,
+                    applyToAll: contextualCrates.every(
+                      (crate, _, array) => crate.isSellable && crate.weight === array[0].weight
+                    ),
                   });
                 }}
                 left={() => (

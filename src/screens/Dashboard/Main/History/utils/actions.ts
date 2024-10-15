@@ -30,7 +30,7 @@ export async function sendSMS(
     movementTypeForDate,
     date,
     price,
-    farmersName: movement.farmer,
+    farmersName: movement.owner,
   });
 
   await SMSService.sendSMS({

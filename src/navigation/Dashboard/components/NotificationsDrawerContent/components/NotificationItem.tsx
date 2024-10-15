@@ -152,7 +152,7 @@ export default function NotificationItem({
         checkoutId: movementDetails.checkoutId,
         companyCurrency: managementCompany?.currency || 'NGN',
         crops: movementCropsForSurvey,
-        farmer: movementDetails.farmer,
+        owner: movementDetails.owner,
       },
     } satisfies NotificationOpenSurveyEventDatums;
 
