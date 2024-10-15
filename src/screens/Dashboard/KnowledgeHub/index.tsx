@@ -10,7 +10,6 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 function KnowledgeHub() {
-  const [loading, setLoading] = useState<boolean>(true);
   const [uri, setUri] = useState<string>(KNOWLEDGE_HUB_URL!);
 
   const onNavigationStateChange = (navState: WebViewNavigation) => {
@@ -35,18 +34,16 @@ function KnowledgeHub() {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-      {loading && (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size={18} color={paperTheme.colors.backdrop} animating />
-        </View>
-      )}
-
+    <View tw="flex-1 flex-start">
       <WebView
         source={{ uri }}
-        style={{ flex: 1 }}
-        onLoadEnd={() => setLoading(false)}
+        tw="flex-1"
         onNavigationStateChange={onNavigationStateChange}
+        renderLoading={() => (
+          <View tw="flex-1 items-center justify-center">
+            <ActivityIndicator size={18} color={paperTheme.colors.backdrop} animating />
+          </View>
+        )}
       />
     </View>
   );
