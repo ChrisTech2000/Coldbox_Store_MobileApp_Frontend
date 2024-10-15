@@ -110,8 +110,13 @@ export default function DeliveryInformationBottomSheet() {
                 renderItem={({ item }) => (
                   <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
                     <_Field
+                      label={t('Dashboard.Management.Delivery.companyName')}
+                      value={item.deliveryCompanyName}
+                      mode="text"
+                    />
+                    <_Field
                       label={t('Dashboard.ShoppingCart.contactName')}
-                      value={item.name}
+                      value={item.contactName}
                       mode="text"
                     />
                     <_Field
