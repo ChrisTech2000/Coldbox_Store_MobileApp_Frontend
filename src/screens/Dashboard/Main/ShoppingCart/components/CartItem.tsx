@@ -211,10 +211,8 @@ export function CartItem({ item }: CartItemProps) {
             containerColor={colors.white}
             onPress={async (evt) => {
               evt.stopPropagation();
-              await Promise.allSettled([
-                MarketplaceService.removeItemFromCart(item.relCrateId),
-                fetchCart(),
-              ]);
+              await MarketplaceService.removeItemFromCart(item.relCrateId);
+              fetchCart();
             }}
           />
         </View>
