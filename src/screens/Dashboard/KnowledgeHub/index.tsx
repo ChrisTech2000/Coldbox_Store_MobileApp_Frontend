@@ -1,102 +1,59 @@
-import React from 'react';
-import { Linking, View } from 'react-native';
-import { Divider, List } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import { WebView, WebViewNavigation } from 'react-native-webview';
 
-import { Text } from '#ui/components/Text';
+import { KNOWLEDGE_HUB_URL } from '#constants/environment';
+import { GenericError } from '#ui/components/GenericError';
+import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type {
-  KnowledgeHubStackRouteProps,
-  KnowledgeHubStackRoutes,
-} from '#navigation/Dashboard/KnowledgeHub';
-import { useTranslationUtils } from '#i18n/utils';
-import { KNOWLEDGE_HUB_URL, YOUR_VCCA_PDF_LINK } from '#constants/environment';
+function KnowledgeHub() {
+  const [uri, setUri] = useState<string>(KNOWLEDGE_HUB_URL!);
 
-// TODO: assign every specific uri path to each List Item
+  const onNavigationStateChange = (navState: WebViewNavigation) => {
+    if (navState.url !== uri) {
+      let modifiedUrl = navState.url;
 
-function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
-  const { navigation } = props;
+      const [baseUrl, queryString] = modifiedUrl.split('?');
+      const hideHeaderExists = queryString ? queryString.includes('hideHeader=') : false;
 
-  const { t } = useTranslationUtils();
+      if (!hideHeaderExists) {
+        modifiedUrl = `${baseUrl}?${queryString ? queryString + '&' : ''}hideHeader=true`;
+      }
+
+      setUri(modifiedUrl);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      setUri(KNOWLEDGE_HUB_URL!);
+    };
+  }, []);
 
   return (
-    <View tw="flex-1 justify-start">
-      <List.Item
-        title={t('Dashboard.KnowledgeHub.comic')}
-        onPress={() => navigation.navigate('Details', _paramsFactory(''))}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+    <View tw="flex-1 flex-start">
+      <WebView
+        source={{ uri }}
+        tw="flex-1"
+        onNavigationStateChange={onNavigationStateChange}
+        renderLoading={() => (
+          <View tw="flex-1 items-center justify-center">
+            <ActivityIndicator size={18} color={paperTheme.colors.backdrop} animating />
+          </View>
+        )}
       />
-      <Divider />
-
-      <List.Item
-        title={t('Dashboard.KnowledgeHub.cooling')}
-        onPress={() => navigation.navigate('Details', _paramsFactory(''))}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
-      />
-      <Divider />
-
-      <List.Item
-        title={t('Dashboard.KnowledgeHub.quality')}
-        onPress={() => navigation.navigate('Details', _paramsFactory(''))}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
-      />
-      <Divider />
-
-      <List.Item
-        title={t('Dashboard.KnowledgeHub.optimal')}
-        onPress={() => navigation.navigate('Details', _paramsFactory(''))}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
-      />
-      <Divider />
-
-      <List.Item
-        title={t('Dashboard.KnowledgeHub.table')}
-        onPress={() => navigation.navigate('Details', _paramsFactory(''))}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
-      />
-      <Divider />
-
-      <List.Item
-        title={t('Dashboard.KnowledgeHub.sensors')}
-        onPress={() => navigation.navigate('Details', _paramsFactory(''))}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
-      />
-      <Divider />
-
-      <List.Item
-        title={t('Dashboard.KnowledgeHub.tips')}
-        onPress={() => navigation.navigate('Details', _paramsFactory(''))}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
-      />
-      <Divider />
-
-      <List.Item
-        title={t('Dashboard.KnowledgeHub.glitches')}
-        onPress={() => navigation.navigate('Details', _paramsFactory(''))}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
-      />
-      <Divider />
-
-      <View tw="m-4">
-        <Text tw="text-zinc-500 text-sm">
-          {t('Dashboard.KnowledgeHub.source')}
-          <Text
-            tw="text-blue-500 text-sm"
-            onPress={async (evt) => {
-              evt.stopPropagation();
-              await Linking.openURL(YOUR_VCCA_PDF_LINK);
-            }}
-          >
-            &nbsp;{t('Dashboard.KnowledgeHub.clickHere')}
-          </Text>
-        </Text>
-      </View>
     </View>
   );
 }
 
-function _paramsFactory(path: string): KnowledgeHubStackRoutes['Details'] {
-  return { uri: [KNOWLEDGE_HUB_URL, path].join('') };
-}
-
-export default withSafeArea(KnowledgeHub);
+export default withSafeArea(
+  withErrorBoundary(KnowledgeHub, {
+    fallback: <GenericError />,
+    onError: (error) => console.error('Error caught:', error),
+  }),
+  ['bottom'],
+  true
+);

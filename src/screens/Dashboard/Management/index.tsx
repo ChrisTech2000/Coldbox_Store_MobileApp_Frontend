@@ -1,11 +1,11 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
-import { Text } from '#ui/components/Text';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
@@ -14,8 +14,15 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 
+import { ManagementOverlay } from '../Tutorial/ManagementOverlay';
+import { EEmployeeTutorialSteps, EOperatorTutorialSteps } from '../Tutorial/utils/constants';
+import { LocationsOverlay } from '../Tutorial/LocationsOverlay';
+import { ManagementCoolingUnitsOverlay } from '../Tutorial/ManagementCoolingUnitsOverlay';
+import { ManagementEmployeesOperatorsOverlay } from '../Tutorial/ManagementEmployeesOperatorsOverlay';
+
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
+
   const { t } = useTranslationUtils();
   const colors = useTailwindColors();
 
@@ -31,11 +38,47 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
     }
   );
 
+  useWalkthroughStep({
+    number: EOperatorTutorialSteps.GO_TO_COOLING_USERS_STEP,
+    OverlayComponent: ManagementOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+    onPressMask: () => props.navigation.navigate('CoolingUsers'),
+  });
+
+  useWalkthroughStep({
+    number: EEmployeeTutorialSteps.LOCATIONS_STEP,
+    OverlayComponent: LocationsOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+    onPressMask: () => props.navigation.navigate('AddLocation'),
+  });
+
+  useWalkthroughStep({
+    number: EEmployeeTutorialSteps.COOLING_UNITS_STEP,
+    OverlayComponent: ManagementCoolingUnitsOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+    onPressMask: () => props.navigation.navigate('AddCoolingUnit'),
+  });
+
+  useWalkthroughStep({
+    number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP,
+    OverlayComponent: ManagementEmployeesOperatorsOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+    onPressMask: () => props.navigation.goBack(),
+  });
+
   const disabledCoolingUnits = isLoading || !data.length;
   const coolingUnitsColor = disabledCoolingUnits ? colors.gray[400] : colors.gray[800];
 
   return (
-    <ScrollView tw="flex-1 p-4" showsVerticalScrollIndicator={false}>
+    <ScrollView tw="p-4" showsVerticalScrollIndicator={false}>
       <View tw="space-y-3">
         <Text tw="text-base text-green-primary font-bold">
           {t('Dashboard.AccountDetails.sections.details')}
@@ -46,7 +89,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             tw="px-0 py-2"
             title={undefined}
             left={() => (
-              <Text tw="text-base w-[80%]">{t('navigation.management.CoolingUsers')}</Text>
+              <Text tw="text-base w-full">{t('navigation.management.CoolingUsers')}</Text>
             )}
             onPress={() => {
               navigation.navigate('CoolingUsers');

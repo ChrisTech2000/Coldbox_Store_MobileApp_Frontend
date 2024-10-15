@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon, Portal, TextInput } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -15,8 +16,15 @@ import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabS
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-
 import type { CoolingUnit, Farmer } from '#types/global';
+
+import {
+  CheckInButtonOverlay,
+  OperatorActionsOverlay,
+} from '#screens/Dashboard/Tutorial/CheckInOverlays';
+import { OperatorActionsOverlay as CheckoutOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
@@ -25,8 +33,19 @@ import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
+import {
+  MOCKED_CHECK_OUT_DATA,
+  MOCKED_COOLING_UNIT,
+  MOCKED_USER,
+} from '../../../Tutorial/utils/mockedData';
 
 type ManagementMode = 'check-in' | 'check-out';
+
+const params = {
+  user: MOCKED_USER,
+  coolingUnit: MOCKED_COOLING_UNIT,
+  crates: MOCKED_CHECK_OUT_DATA,
+};
 
 export function OperatorActions({
   navigation,
@@ -42,6 +61,43 @@ export function OperatorActions({
   const [managementMode, setManagementMode] = useState<ManagementMode | undefined>();
   const [selectedUser, setSelectedUser] = useState<Farmer | undefined>();
   const [search, setSearch] = useState<string>('');
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_1,
+    enableHardwareBack: true,
+    OverlayComponent: OperatorActionsOverlay,
+    maskAllowInteraction: true,
+    onPressMask: () => setIsCrateManagementOpen(true),
+  });
+
+  const { onLayout: onInitiateCheckoutLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.CHECK_OUT_STEP_1,
+    enableHardwareBack: true,
+    OverlayComponent: CheckoutOverlay,
+    maskAllowInteraction: true,
+    onStart: () => setIsCrateManagementOpen(true),
+    onPressMask: () =>
+      navigation.navigate('CheckOutStack', {
+        screen: 'CrateSelection',
+        // eslint-disable-next-line
+        // @ts-ignore
+        params,
+      }),
+  });
+
+  const { onLayout: onCheckInLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_2,
+    enableHardwareBack: true,
+    OverlayComponent: CheckInButtonOverlay,
+    maskAllowInteraction: true,
+    onPressMask: () =>
+      navigation.navigate('CheckInStack', {
+        screen: 'CheckIn',
+        // eslint-disable-next-line
+        // @ts-ignore
+        params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
+      }),
+  });
 
   const { data, isLoading } = useApiCall(
     'getOperatorFarmers',
@@ -141,6 +197,7 @@ export function OperatorActions({
             isCrateManagementOpen ? 'bg-red-600' : 'bg-green-primary'
           )}
           onPress={() => setIsCrateManagementOpen(!isCrateManagementOpen)}
+          onLayout={onLayout}
         >
           {isCrateManagementOpen ? (
             <Icon source="close" size={25} color="white" />
@@ -155,6 +212,7 @@ export function OperatorActions({
             <TouchableOpacity
               tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-green-primary"
               onPress={onCheckIn}
+              onLayout={onCheckInLayout}
             >
               <CheckIn width={20} height={20} />
             </TouchableOpacity>
@@ -163,6 +221,7 @@ export function OperatorActions({
             <TouchableOpacity
               tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-red-400"
               onPress={onCheckOut}
+              onLayout={onInitiateCheckoutLayout}
             >
               <CheckOut width={20} height={20} />
             </TouchableOpacity>

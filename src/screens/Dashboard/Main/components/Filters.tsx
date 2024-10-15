@@ -1,15 +1,26 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { SetStateAction, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { TextInput } from 'react-native-paper';
 import { StoreApi, UseBoundStore } from 'zustand';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { Company, CoolingUnit, ERoles } from '#types/global';
+
+import { CoolingUnitOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitOverlay';
+import { Dashboard5Overlay } from '#screens/Dashboard/Tutorial/FarmerDashboardOverlay';
+import {
+  EFarmerTutorialSteps,
+  EOperatorTutorialSteps,
+} from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
@@ -42,12 +53,28 @@ export function Filters({
 }: FilterProps) {
   const { user } = useAuthStore();
   const { t } = useTranslationUtils();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const { company: _company } = useManagementStore();
   const { farmerCompanies, farmerUnitsIds, setCoolingUnits } = useDashboardStore();
 
   const { selectedItem: coolingUnit } = useCoolingUnitStore();
   const { selectedItem: company } = useCompanyStore();
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.COOLING_UNIT_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: CoolingUnitOverlay,
+    onPressMask: () => rootNavigation.navigate('CoolingUnits'),
+  });
+
+  const { onLayout: onDashboard5Layout } = useWalkthroughStep({
+    number: EFarmerTutorialSteps.DASHBOARD_STEP_5,
+    enableHardwareBack: true,
+    OverlayComponent: Dashboard5Overlay,
+    fullScreen: true,
+    onPressMask: () => rootNavigation.navigate('History'),
+  });
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
@@ -88,39 +115,42 @@ export function Filters({
 
   return (
     <View tw="mt-2 px-4">
-      {user?.role === ERoles.COOLING_USER ? (
-        <SelectWithStore<Company>
-          emptyMessage={t('Dashboard.noCompanyAvailable')}
-          datums={farmerCompanies ?? []}
-          isModalVisible={isCompaniesModalOpen}
-          setIsModalVisible={setIsCompaniesModalOpen}
-          itemName={(item) => item?.name}
-          useSelectStore={useCompanyStore}
-          label={t('Dashboard.Company.SelectCompany.label', {
-            name: company ? company.name : '',
-          })}
-          modalHeader={t('Dashboard.Company.SelectCompany.header')}
-          divider
-          autoSelect
-          occupyFullWidth
-        />
-      ) : null}
-      <SelectWithStore<CoolingUnit>
-        emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
-        datums={units}
-        isModalVisible={isUnitsModalOpen}
-        setIsModalVisible={setIsUnitsModalOpen}
-        itemName={(item) => item?.name}
-        useSelectStore={useCoolingUnitStore}
-        label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-          name: coolingUnit ? coolingUnit.name : '',
-        })}
-        modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-        divider
-        autoSelect
-        occupyFullWidth
-      />
-
+      <View onLayout={onDashboard5Layout}>
+        {user?.role === ERoles.COOLING_USER ? (
+          <SelectWithStore<Company>
+            emptyMessage={t('Dashboard.noCompanyAvailable')}
+            datums={farmerCompanies ?? []}
+            isModalVisible={isCompaniesModalOpen}
+            setIsModalVisible={setIsCompaniesModalOpen}
+            itemName={(item) => item?.name}
+            useSelectStore={useCompanyStore}
+            label={t('Dashboard.Company.SelectCompany.label', {
+              name: company ? company.name : '',
+            })}
+            modalHeader={t('Dashboard.Company.SelectCompany.header')}
+            divider
+            autoSelect
+            occupyFullWidth
+          />
+        ) : null}
+        <View onLayout={onLayout}>
+          <SelectWithStore<CoolingUnit>
+            emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
+            datums={units}
+            isModalVisible={isUnitsModalOpen}
+            setIsModalVisible={setIsUnitsModalOpen}
+            itemName={(item) => item?.name}
+            useSelectStore={useCoolingUnitStore}
+            label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
+              name: coolingUnit ? coolingUnit.name : '',
+            })}
+            modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+            divider
+            autoSelect
+            occupyFullWidth
+          />
+        </View>
+      </View>
       {searchType && (
         <View tw="flex flex-row items-center justify-center space-x-2 mt-4">
           <Button

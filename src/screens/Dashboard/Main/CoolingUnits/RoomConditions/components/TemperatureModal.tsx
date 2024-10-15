@@ -1,15 +1,15 @@
 import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { Modal, Portal, TextInput } from 'react-native-paper';
-import { Controller, useForm } from 'react-hook-form';
 
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
 
-import { useTranslationUtils } from '#i18n/utils';
-import { useToggle } from '#ui/hooks/useToggle';
-import ColdtivateService from '#services/ColdtivateService';
 import InAppNotifications from '#common/InAppNotifications';
+import { useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { useToggle } from '#ui/hooks/useToggle';
 
 type FormValues<T = string> = { temperature: T };
 type PreprocessedFormValues = FormValues<number>;
@@ -57,7 +57,7 @@ export default function TemperatureModal(props: Props) {
   }
 
   return (
-    <React.Fragment>
+    <View>
       <Button
         mode="contained"
         tw="mt-3"
@@ -115,6 +115,6 @@ export default function TemperatureModal(props: Props) {
           </View>
         </Modal>
       </Portal>
-    </React.Fragment>
+    </View>
   );
 }
