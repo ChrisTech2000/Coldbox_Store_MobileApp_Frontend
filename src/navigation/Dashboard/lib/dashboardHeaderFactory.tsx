@@ -72,7 +72,7 @@ export function useDashboardHeader() {
 
   return useCallback(
     (goBackFunc?: () => void): NavigationHeaderProps => {
-      const showShoppingCart = guard('VIEW', 'MarketplaceShoppingCart');
+      const showShoppingCart = guard('NAVIGATE', 'MarketplaceShoppingCart');
       return {
         leftContent: _buildLeftContent(dispatch, goBackFunc),
         rightContent: _buildRightContent(

@@ -209,7 +209,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
         </RBAC.ProtectedResource>
       </View>
 
-      <RBAC.ProtectedResource action="SET" subject="CompanySellerSettings">
+      <RBAC.ProtectedResource action="VIEW" subject="CompanySellerSettings">
         <View tw="space-y-3 mt-6">
           <Text tw="text-base text-green-primary font-bold">
             {t('Dashboard.AccountDetails.sections.sellerSettings')}
