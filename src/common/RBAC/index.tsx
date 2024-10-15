@@ -8,6 +8,8 @@ import React, {
 import { useShallow } from 'zustand/react/shallow';
 
 import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
 
 import permissionsFactory, { type PermissionKinds } from './abilities';
 
@@ -23,7 +25,13 @@ const RBACContext = createContext<Context>({
 
 export default function RBAC(props: PropsWithChildren) {
   const [user] = useAuthStore(useShallow((store) => [store.user]));
-  const abilities = useMemo(() => permissionsFactory(user?.role), [user?.role]);
+  const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+  const contextualCountry = companyCountry || farmerCountry || 'NG';
+  const abilities = useMemo(
+    () => permissionsFactory(user?.role, contextualCountry),
+    [user?.role, contextualCountry]
+  );
   const guard: Context['guard'] = useCallback(
     (action, subject) => abilities.can(action, subject),
     [abilities]
@@ -31,25 +39,21 @@ export default function RBAC(props: PropsWithChildren) {
   return <RBACContext.Provider value={{ guard }}>{props.children}</RBACContext.Provider>;
 }
 
-function useRBAC(): Context {
+RBAC.useRBAC = function _useRBAC(): Context {
   const ctx = useContext(RBACContext);
   if (!ctx) throw new Error('useRBAC must be within RBAC Provider');
   return useMemo(() => ({ ...ctx }), [ctx]);
-}
+};
 
-RBAC.useRBAC = useRBAC;
-
-function ProtectedResource(
+RBAC.ProtectedResource = function _ProtectedResource(
   props: PropsWithChildren<{
     action: PermissionKinds;
     subject: string;
   }>
 ) {
-  const { guard } = useRBAC();
+  const { guard } = RBAC.useRBAC();
   if (guard(props.action, props.subject)) {
     return <React.Fragment>{props.children}</React.Fragment>;
   }
   return null;
-}
-
-RBAC.ProtectedResource = ProtectedResource;
+};

@@ -643,6 +643,7 @@ export enum ERefrigerantType {
 export enum EPaymentType {
   CASH = 'CASH',
   CREDIT_CARD = 'CREDIT_CARD',
+  BANK_TRANSFER = 'BANK',
 }
 
 export enum ECropType {
