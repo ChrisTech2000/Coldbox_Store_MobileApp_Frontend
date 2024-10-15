@@ -71,7 +71,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
           can(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
           cannot(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           cannot(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
-          cannot(PERMISSION_KINDS.STORE, 'MarketplaceEditListedCrates');
+          cannot(PERMISSION_KINDS.SET, 'MarketplaceEditListedCrates');
         }
         break;
       }
