@@ -17,13 +17,14 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
-import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
+import { paperTheme } from '#ui/lib/theme';
+import { cn } from '#ui/lib/cn';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from './components/SellInMarketplaceModal';
@@ -68,6 +69,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const { params } = props.route;
 
   const { t, zodResolver } = useTranslationUtils();
+  const { guard } = RBAC.useRBAC();
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [infoVisible, setInfoVisible] = useState(false);
@@ -146,9 +148,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                 <TouchableOpacity
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
                   onPress={() => {
-                    if (!value) {
-                      for (let i = 0; i < crateFields.fields.length; i++) {
-                        form.setValue(`crates.${i}.isSellable`, crates[0].isSellable);
+                    if (guard('SET', 'MarketplaceListForSale')) {
+                      if (!value) {
+                        for (let i = 0; i < crateFields.fields.length; i++) {
+                          form.setValue(`crates.${i}.isSellable`, crates[0].isSellable);
+                        }
                       }
                     }
                     onChange(!value);
@@ -252,30 +256,34 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                     />
                   </View>
 
-                  <Controller
-                    control={form.control}
-                    name={`crates.${index}.isSellable`}
-                    render={({ field: { value, onChange } }) => (
-                      <TouchableOpacity
-                        tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1"
-                        onPress={() => {
-                          if (!applyToAll) return onChange(!value);
-                          for (let i = 0; i < crateFields.fields.length; i++) {
-                            form.setValue(`crates.${i}.isSellable`, !value);
-                          }
-                        }}
-                        disabled={isDisabled}
-                      >
-                        <Checkbox
-                          status={applyToAll || value ? 'checked' : 'unchecked'}
+                  <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
+                    <Controller
+                      control={form.control}
+                      name={`crates.${index}.isSellable`}
+                      render={({ field: { value, onChange } }) => (
+                        <TouchableOpacity
+                          tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1"
+                          onPress={() => {
+                            if (!applyToAll) return onChange(!value);
+                            for (let i = 0; i < crateFields.fields.length; i++) {
+                              form.setValue(`crates.${i}.isSellable`, !value);
+                            }
+                          }}
                           disabled={isDisabled}
-                        />
-                        <Text tw={cn('text-base', isDisabled && 'text-gray-300')}>
-                          {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list')}
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  />
+                        >
+                          <Checkbox
+                            status={applyToAll || value ? 'checked' : 'unchecked'}
+                            disabled={isDisabled}
+                          />
+                          <Text tw={cn('text-base', isDisabled && 'text-gray-300')}>
+                            {t(
+                              'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list'
+                            )}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    />
+                  </RBAC.ProtectedResource>
                 </View>
               );
             }}

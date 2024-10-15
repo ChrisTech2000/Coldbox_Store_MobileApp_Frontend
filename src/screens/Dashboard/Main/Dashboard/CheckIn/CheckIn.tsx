@@ -203,18 +203,20 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
     if (typeof result !== 'object') return;
 
-    if ('movement' in result) {
-      const processedCrateListing = processMarketplaceCrateListing(produces, result.produces);
-      await Promise.allSettled(
-        processedCrateListing.map(
-          async ({ crateIds, pricePerKg }) =>
-            await MarketplaceService.upsertListedCrate({
-              crateIds,
-              producePricePerKg: pricePerKg,
-              operatorOnBehalfOfSellerFarmerId: user.id,
-            })
-        )
-      );
+    if (guard('SET', 'MarketplaceListForSale')) {
+      if ('movement' in result) {
+        const processedCrateListing = processMarketplaceCrateListing(produces, result.produces);
+        await Promise.allSettled(
+          processedCrateListing.map(
+            async ({ crateIds, pricePerKg }) =>
+              await MarketplaceService.upsertListedCrate({
+                crateIds,
+                producePricePerKg: pricePerKg,
+                operatorOnBehalfOfSellerFarmerId: user.id,
+              })
+          )
+        );
+      }
     }
 
     resetCheckInStore();

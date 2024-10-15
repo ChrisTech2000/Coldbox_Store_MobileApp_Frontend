@@ -17,6 +17,7 @@ import EditCrateWeightAndPricing from '#screens/Dashboard/Main/Dashboard/Produce
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
 import { useTranslationUtils } from '#i18n/utils';
+import RBAC from '#common/RBAC';
 
 export type ProduceDetailsStackRoutes = {
   Root: {
@@ -51,6 +52,7 @@ const Stack = createNativeStackNavigator<ProduceDetailsStackRoutes>();
 
 export default function ProduceDetailsStack() {
   const { t } = useTranslationUtils();
+  const { guard } = RBAC.useRBAC();
 
   const screenOptions: ScreenOptions = useCallback((props) => {
     // eslint-disable-next-line react/prop-types
@@ -83,10 +85,14 @@ export default function ProduceDetailsStack() {
     };
   }, []);
 
+  const navToEditListedCrates = guard('STORE', 'MarketplaceEditListedCrates');
+
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       <Stack.Screen name="Root" component={ProduceDetails} />
-      <Stack.Screen name="EditCrateWeightAndPricing" component={EditCrateWeightAndPricing} />
+      {navToEditListedCrates ? (
+        <Stack.Screen name="EditCrateWeightAndPricing" component={EditCrateWeightAndPricing} />
+      ) : null}
     </Stack.Navigator>
   );
 }
