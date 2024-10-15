@@ -59,4 +59,4 @@ RUN sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-$
 RUN update-java-alternatives --set "$(update-java-alternatives --list | grep java-1.17 |  cut -d " " -f1)"
 
 # Install bundler
-RUN gem install bundler
+RUN gem install bundler -v 2.4.22
