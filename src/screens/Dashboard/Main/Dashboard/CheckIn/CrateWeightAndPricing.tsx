@@ -1,5 +1,5 @@
 import { currencies } from 'currencies.json';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -78,7 +78,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
 
   const form = useForm<FormValues>({
     defaultValues: {
-      applyToAll: false,
+      applyToAll: params.applyToAll,
       crates: params.crates.map((crate) => ({
         weight: crate.weight.toString(),
         isSellable: crate.isSellable,
@@ -110,23 +110,18 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const price = form.watch('price');
   const crates = form.watch('crates');
 
-  const potentialPrice = useMemo(() => {
-    if (!price) return 0;
+  const totalWeight = crates.reduce((acc, curr) => {
+    if (!curr.isSellable) return acc;
+    const wInt = Number(curr.weight);
+    if (isNaN(wInt)) return acc;
+    return (acc += wInt);
+  }, 0);
 
-    const pInt = Number(formatFloat(price ?? '0'));
-    if (isNaN(pInt) || !pInt) return 0;
-
-    return crates.reduce((acc, curr) => {
-      if (!curr.isSellable) return acc;
-      const wInt = Number(curr.weight);
-      if (isNaN(wInt)) return acc;
-      return wInt * pInt + acc;
-    }, 0);
-  }, [crates, price, applyToAll]);
+  const parsedPrice = Number(formatFloat(price ?? '0'));
+  const potentialPrice = isNaN(parsedPrice) ? 0 : totalWeight * parsedPrice;
 
   function onSubmit(values: FormValues<number>): void {
-    const { crates } = values;
-    useCrateWeightPricingStore.getState().mutate({ crates, price: potentialPrice });
+    useCrateWeightPricingStore.getState().mutate({ crates: values.crates, price: potentialPrice });
     props.navigation.goBack();
   }
 
@@ -151,10 +146,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
                   onPress={() => {
                     if (allowedToSetPricing) {
-                      if (!value) {
-                        for (let i = 0; i < crateFields.fields.length; i++) {
-                          form.setValue(`crates.${i}.isSellable`, crates[0].isSellable);
-                        }
+                      for (let i = 0; i < crateFields.fields.length; i++) {
+                        form.setValue(`crates.${i}.isSellable`, !value);
+                      }
+                      if (!form.getValues('crates').some((c) => c.isSellable)) {
+                        form.setValue('price', '0');
                       }
                     }
                     onChange(!value);
@@ -271,9 +267,19 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                         <TouchableOpacity
                           tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1"
                           onPress={() => {
-                            if (!applyToAll) return onChange(!value);
-                            for (let i = 0; i < crateFields.fields.length; i++) {
-                              form.setValue(`crates.${i}.isSellable`, !value);
+                            if (!applyToAll) {
+                              onChange(!value);
+                            } else {
+                              if (allowedToSetPricing) {
+                                for (let i = 0; i < crateFields.fields.length; i++) {
+                                  form.setValue(`crates.${i}.isSellable`, !value);
+                                }
+                              }
+                            }
+                            if (allowedToSetPricing) {
+                              if (!form.getValues('crates').some((c) => c.isSellable)) {
+                                form.setValue('price', '0');
+                              }
                             }
                           }}
                           disabled={isDisabled}
