@@ -85,7 +85,7 @@ export default function ProduceDetailsStack() {
     };
   }, []);
 
-  const navToEditListedCrates = guard('STORE', 'MarketplaceEditListedCrates');
+  const navToEditListedCrates = guard('SET', 'MarketplaceEditListedCrates');
 
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
