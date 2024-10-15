@@ -439,6 +439,13 @@ const en = {
           label: 'Payment type',
           cash: 'Cash',
           creditCard: 'Credit Card',
+          bankTransfer: 'Bank Transfer',
+        },
+        bankTransfer: {
+          title: "Receiver's Details",
+          accountName: 'Account Name',
+          accountNumber: 'Account Number',
+          bankName: 'Bank Name',
         },
         paid: 'Paid',
       },
@@ -890,6 +897,7 @@ const en = {
           label: 'Select payment methods:',
           cash: 'Cash',
           creditCard: 'Credit Card',
+          bankTransfer: 'Bank Transfer',
         },
       },
       Coupons: {

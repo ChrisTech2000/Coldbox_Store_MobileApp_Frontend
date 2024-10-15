@@ -39,6 +39,7 @@ type SelectItemProps<T> = {
   useScrollView?: boolean;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
   itemName: (item: T) => string;
+  postSelectionAction?: (val?: T) => void;
 };
 
 export default function SelectWithStore<T>({
@@ -151,7 +152,10 @@ export default function SelectWithStore<T>({
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    if (internalSelection) store.onSelect(internalSelection);
+                    if (internalSelection) {
+                      store.onSelect(internalSelection);
+                      rest.postSelectionAction?.(internalSelection);
+                    }
                     setIsModalVisible(!isModalVisible);
                   }}
                 >

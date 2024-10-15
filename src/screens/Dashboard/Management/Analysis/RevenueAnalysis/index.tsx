@@ -160,13 +160,17 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
               label: t('Dashboard.Management.RevenueAnalysis.paymentType.creditCard'),
               value: EPaymentType.CREDIT_CARD,
             },
+            {
+              label: t('Dashboard.Management.RevenueAnalysis.paymentType.bankTransfer'),
+              value: EPaymentType.BANK_TRANSFER,
+            },
           ]}
           isModalVisible={isPaymentModalOpen}
           setIsModalVisible={setIsPaymentModalOpen}
           itemName={(item) => item.label}
           useSelectStore={usePaymentType}
           label={`${t('Dashboard.Management.RevenueAnalysis.paymentType.label')} ${paymentMethods.flatMap((p) => p.label).join(', ')}`}
-          modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+          modalHeader={t('Dashboard.Management.RevenueAnalysis.paymentType.label')}
           divider
           autoSelectAll
           occupyFullWidth
