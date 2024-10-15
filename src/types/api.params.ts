@@ -464,8 +464,9 @@ export interface SetPickUpDetailsParams extends JsonObject {
 }
 
 export interface CreateDeliveryContactParams extends JsonObject {
-  name: string;
+  contactName: string;
   phone: string;
+  deliveryCompanyName: string;
   companyId: number;
 }
 

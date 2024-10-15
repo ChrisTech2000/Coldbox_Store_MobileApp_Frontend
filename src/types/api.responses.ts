@@ -515,9 +515,9 @@ export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
 
 export type GetDeliveryContactsResponse = Array<{
   id: number;
-  companyName?: string;
+  deliveryCompanyName: string;
   phone: string;
-  name: string;
+  contactName: string;
   coolingUnitId: number;
 }>;
 

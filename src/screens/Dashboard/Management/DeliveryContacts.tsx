@@ -26,6 +26,7 @@ import { useManagementStore } from '#stores/management';
 interface FormValues {
   contactName: string;
   phoneNumber: string;
+  deliveryCompanyName: string;
 }
 
 function DeliveryContacts() {
@@ -70,7 +71,7 @@ function DeliveryContacts() {
       ) : (
         <FlatList
           data={data}
-          keyExtractor={(item, index) => `contact-${item.name}-${index}`}
+          keyExtractor={(item, index) => `contact-${item.contactName}-${index}`}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
@@ -78,7 +79,7 @@ function DeliveryContacts() {
               <View>
                 <View tw="flex flex-row items-center justify-between mb-2">
                   <Text tw="text-base">{t('Dashboard.Management.Delivery.contactName')}</Text>
-                  <Text tw="text-base text-gray-500">{item.name}</Text>
+                  <Text tw="text-base text-gray-500">{item.contactName}</Text>
                 </View>
                 <Divider tw="bg-gray-400" />
               </View>
@@ -201,6 +202,12 @@ function BottomSheet() {
           .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
+        deliveryCompanyName: z
+          .string()
+          .min(1, {
+            message: t('Dashboard.Management.Delivery.companyNameError'),
+          })
+          .default(''),
       })
     ),
   });
@@ -213,9 +220,10 @@ function BottomSheet() {
     async (data: FormValues) => {
       try {
         const result = await MarketplaceService.createDeliveryContact({
-          name: data.contactName,
+          contactName: data.contactName,
           phone: data.phoneNumber,
           companyId: company!.id,
+          deliveryCompanyName: data.deliveryCompanyName,
         });
 
         if (result) {
@@ -251,6 +259,29 @@ function BottomSheet() {
         </View>
 
         <View tw="mt-4 space-y-3 mb-5">
+          <Controller
+            control={control}
+            name="deliveryCompanyName"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <TextInput
+                tw="w-full bg-transparent mt-1"
+                label={t('Dashboard.Management.Delivery.companyName')}
+                mode="flat"
+                placeholder={t('Dashboard.Management.Delivery.companyNamePlaceholder')}
+                dense
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={!!errors.deliveryCompanyName}
+              />
+            )}
+          />
+          {errors.deliveryCompanyName && (
+            <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+              {errors.deliveryCompanyName.message?.toString()}
+            </Text>
+          )}
+
           <Controller
             control={control}
             name="contactName"
