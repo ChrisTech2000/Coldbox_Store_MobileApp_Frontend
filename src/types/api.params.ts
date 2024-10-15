@@ -467,7 +467,6 @@ export interface CreateDeliveryContactParams extends JsonObject {
   contactName: string;
   phone: string;
   deliveryCompanyName: string;
-  companyId: number;
 }
 
 export interface DeleteDeliveryContactParams extends JsonObject {

@@ -78,6 +78,14 @@ function DeliveryContacts() {
             <View tw="w-full px-5 py-3 space-y-3 border border-solid border-zinc-300 rounded-2xl my-2">
               <View>
                 <View tw="flex flex-row items-center justify-between mb-2">
+                  <Text tw="text-base">{t('Dashboard.Management.Delivery.companyName')}</Text>
+                  <Text tw="text-base text-gray-500">{item.deliveryCompanyName}</Text>
+                </View>
+                <Divider tw="bg-gray-400" />
+              </View>
+
+              <View>
+                <View tw="flex flex-row items-center justify-between mb-2">
                   <Text tw="text-base">{t('Dashboard.Management.Delivery.contactName')}</Text>
                   <Text tw="text-base text-gray-500">{item.contactName}</Text>
                 </View>
@@ -177,7 +185,6 @@ function BottomSheet() {
   const { t, zodResolver } = useTranslationUtils();
   const isFocused = useIsFocused();
   const user = useAuthStore((store) => store.user);
-  const company = useManagementStore((store) => store.company);
   const toast = InAppNotifications.useToast();
 
   const modalRef = useRef<Modalize>(null);
@@ -222,7 +229,6 @@ function BottomSheet() {
         const result = await MarketplaceService.createDeliveryContact({
           contactName: data.contactName,
           phone: data.phoneNumber,
-          companyId: company!.id,
           deliveryCompanyName: data.deliveryCompanyName,
         });
 
@@ -241,7 +247,7 @@ function BottomSheet() {
         });
       }
     },
-    [user, company]
+    [user]
   );
 
   if (!isFocused) return null;
