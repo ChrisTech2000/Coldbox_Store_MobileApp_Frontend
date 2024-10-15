@@ -92,7 +92,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         label: t('Dashboard.ProduceDetails.cropType'),
         value: produce.cropName,
       },
-      ...(guard('STORE', 'MarketplaceEditListedCrates')
+      ...(guard('SET', 'MarketplaceEditListedCrates')
         ? [
             {
               key: 'crateWeightLabel',

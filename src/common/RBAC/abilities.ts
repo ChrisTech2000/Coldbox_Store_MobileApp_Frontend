@@ -71,7 +71,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
           can(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
           cannot(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           cannot(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
-          cannot(PERMISSION_KINDS.STORE, 'MarketplaceEditListedCrates');
+          cannot(PERMISSION_KINDS.SET, 'MarketplaceEditListedCrates');
         }
         break;
       }
@@ -113,7 +113,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
           cannot(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
           can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           can(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
-          cannot(PERMISSION_KINDS.STORE, 'MarketplaceEditListedCrates');
+          can(PERMISSION_KINDS.SET, 'MarketplaceEditListedCrates');
         }
         break;
       }
@@ -146,7 +146,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
           cannot(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
           can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           can(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
-          can(PERMISSION_KINDS.STORE, 'MarketplaceEditListedCrates');
+          can(PERMISSION_KINDS.SET, 'MarketplaceEditListedCrates');
         }
         break;
       }
