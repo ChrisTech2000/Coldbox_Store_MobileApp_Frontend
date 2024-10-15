@@ -6,6 +6,8 @@ export enum EAuthenticationEndpoints {
   SIGN_UP_AS_COOLING_USER = 'user/v1/farmers/',
   SIGN_UP_EMPLOYEE_BY_INVITE = 'user/v1/service-provider-invite-signup/',
   SIGN_UP_OPERATOR_BY_INVITE = 'user/v1/operator-invite-signup/',
+  BACKEND_ANDROID_VERSION = 'storage/version-code/android',
+  BACKEND_IOS_VERSION = 'storage/version-code/ios',
 }
 
 export enum EUserEndpoints {

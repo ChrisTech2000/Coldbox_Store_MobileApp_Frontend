@@ -1,6 +1,10 @@
 import type { Translations } from './en';
 
 export default {
+  appVersion: {
+    newVersion: 'Coldtivate ର ଏକ ନୂତନ ସଂସ୍କରଣ ଉପଲବ୍ଧ!',
+    pleaseUpdate: 'ଜାରି ରଖିବା ପୂର୍ବରୁ ଦୟାକରି ଆପ୍ ଅପଡେଟ୍ କରନ୍ତୁ |',
+  },
   languages: {
     current: 'ଇଂରାଜୀ',
     label: 'ଭାଷା',
@@ -149,6 +153,7 @@ export default {
     'save-changes': 'ପରିବର୍ତ୍ତନ ସଞ୍ଚୟ କରନ୍ତୁ',
     continue: 'ଜାରି ରଖନ୍ତୁ',
     save: 'ସଞ୍ଚୟ କରନ୍ତୁ',
+    update: 'ଅଦ୍ୟତନ କରନ୍ତୁ |',
   },
   components: {
     datePicker: {

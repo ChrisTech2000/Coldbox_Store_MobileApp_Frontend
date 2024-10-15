@@ -1,30 +1,33 @@
+import merge from 'lodash/merge';
 import React, { useRef } from 'react';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
-import merge from 'lodash/merge';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { useManagementStore } from '#stores/management';
+import { AddLocationOverlay } from '#screens/Dashboard/Tutorial/AddLocationOverlay';
+import { EEmployeeTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
-import { useTranslationUtils } from '#i18n/utils';
+import { useManagementStore } from '#stores/management';
 
 import FormManager, {
-  type FormValues,
   DEFAULT_VALUES,
+  type FormValues,
   type PreprocessedFormValues,
 } from './components/FormManager';
 import LocationNameModule from './modules/LocationNameModule';
-import StepModule from './modules/StepModule';
 import StepFactory from './modules/StepFactory';
+import StepModule from './modules/StepModule';
 
-import { Geocoder, getCountryFullName } from './utils';
 import InAppNotifications from '#common/InAppNotifications';
+import { Geocoder, getCountryFullName } from './utils';
 
 function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { navigation } = props;
@@ -35,6 +38,13 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
 
   const { mutate } = useSWRConfig();
   const company = useManagementStore(useShallow((store) => store.company));
+
+  const { onLayout } = useWalkthroughStep({
+    number: EEmployeeTutorialSteps.ADD_LOCATION_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: AddLocationOverlay,
+    onPressMask: () => navigation.goBack(),
+  });
 
   async function onSubmit(values: PreprocessedFormValues) {
     try {
@@ -85,6 +95,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
     <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
       {(handler, isSubmitting) => (
         <KeyboardAwareScrollView
+          onLayout={onLayout}
           tw="pt-5 mx-4"
           keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           showsVerticalScrollIndicator={false}

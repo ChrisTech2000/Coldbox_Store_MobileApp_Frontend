@@ -1,19 +1,21 @@
 import React from 'react';
 import { View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
+import { DrawerActions } from '@react-navigation/native';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import RBAC from '#common/RBAC';
+import type { TranslationLocales } from '#i18n/constants';
+import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { EApiGender, ERoles } from '#types/global';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
-import type { TranslationLocales } from '#i18n/constants';
-import RBAC from '#common/RBAC';
 import { cn } from '#ui/lib/cn';
 
 import type {
@@ -22,6 +24,10 @@ import type {
 } from '#navigation/Dashboard/AccountDetails';
 
 import { countriesDict } from '../Management/CompanyDetails/utils';
+import { CoolingUserSurveyOverlay } from '../Tutorial/CoolingUserSurveyOverlay';
+import { LocalizationPreferencesOverlay } from '../Tutorial/LocalizationPreferancesOverlay';
+import { EFarmerTutorialSteps } from '../Tutorial/utils/constants';
+import { PersonalDetailsOverlay } from '../Tutorial/PersonalDetailsOverlay';
 
 function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
@@ -55,6 +61,34 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       farmerId: farmerId!,
     } satisfies DetailsSectionParams;
   }
+
+  useWalkthroughStep({
+    number: EFarmerTutorialSteps.GO_TO_LOCALIZATION_PREFERENCES_STEP,
+    OverlayComponent: LocalizationPreferencesOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+  });
+
+  useWalkthroughStep({
+    number: EFarmerTutorialSteps.GO_TO_PERSONAL_DETAILS,
+    OverlayComponent: PersonalDetailsOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+  });
+
+  useWalkthroughStep({
+    number: EFarmerTutorialSteps.GO_TO_COOLING_USERS_SURVEY_STEP,
+    OverlayComponent: CoolingUserSurveyOverlay,
+    enableHardwareBack: true,
+    maskAllowInteraction: true,
+    fullScreen: true,
+    onPressMask: () => {
+      props.navigation.goBack();
+      props.navigation.dispatch(DrawerActions.openDrawer());
+    },
+  });
 
   return (
     <ScrollView tw="flex-1 p-4 space-y-6" showsVerticalScrollIndicator={false}>

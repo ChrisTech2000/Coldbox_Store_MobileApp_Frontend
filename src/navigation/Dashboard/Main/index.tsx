@@ -16,7 +16,7 @@ import { useAuthStore } from '#stores/auth';
 import NavigatorHeader from '../../components/NavigatorHeader';
 import BottomNavigation from '../components/BottomNavigation';
 import { BOTTOM_NAV_ROUTES_SCOPE, useDashboardHeader } from '../lib/dashboardHeaderFactory';
-import CoolingUnitsTabs from './CoolingUnitsTabs';
+import CoolingUnitsTabs, { CoolingUnitsTabsRoutes } from './CoolingUnitsTabs';
 import HistoryTabStack, { HistoryTabStackRoutes } from './HistoryTabStack';
 import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
@@ -27,12 +27,18 @@ import OrdersStack from './OrdersStack';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
-  History: {
-    screen?: keyof HistoryTabStackRoutes;
-    params?: HistoryTabStackRoutes['MarketSurveyStack'] | HistoryTabStackRoutes['EditCheckIn'];
-  };
+  History:
+    | {
+        screen?: keyof HistoryTabStackRoutes;
+        params?: HistoryTabStackRoutes['MarketSurveyStack'] | HistoryTabStackRoutes['EditCheckIn'];
+      }
+    | undefined;
   MarketPrice: undefined;
-  CoolingUnits: undefined;
+  CoolingUnits:
+    | {
+        screen?: keyof CoolingUnitsTabsRoutes;
+      }
+    | undefined;
   Analytics: undefined;
   ShoppingCart: {
     screen: keyof ShoppingCartStackRoutes;

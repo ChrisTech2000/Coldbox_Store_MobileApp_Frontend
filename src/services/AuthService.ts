@@ -155,6 +155,28 @@ class AuthService extends HttpClient {
       throw customError;
     }
   };
+
+  public getBackendAndroidVersion = async (): Promise<number> => {
+    try {
+      const { data } = await this.get<number>(EAuthenticationEndpoints.BACKEND_ANDROID_VERSION);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getBackendIOSVersion = async (): Promise<number> => {
+    try {
+      const { data } = await this.get<number>(EAuthenticationEndpoints.BACKEND_IOS_VERSION);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new AuthService();
