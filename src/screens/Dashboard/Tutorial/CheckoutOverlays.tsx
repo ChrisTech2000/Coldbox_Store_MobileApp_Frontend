@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
 
 export function OperatorActionsOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();

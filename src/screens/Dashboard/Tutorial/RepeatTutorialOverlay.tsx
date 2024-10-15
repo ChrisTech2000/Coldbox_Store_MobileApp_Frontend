@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
 
@@ -9,6 +9,7 @@ import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
 
 import { EFarmerTutorialSteps } from './utils/constants';
+import { Text } from '#ui/components/Text';
 
 export function RepeatTutorialOverlay({ next, goTo }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();

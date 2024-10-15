@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 
@@ -7,6 +7,7 @@ import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { Touchable } from '#ui/components/Touchable';
 import { cn } from '#ui/lib/cn';
+import { Text } from '#ui/components/Text';
 
 const screenHeight = Dimensions.get('window').height;
 
