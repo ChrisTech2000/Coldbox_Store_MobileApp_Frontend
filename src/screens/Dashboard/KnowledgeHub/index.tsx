@@ -13,7 +13,6 @@ function KnowledgeHub() {
   const [loading, setLoading] = useState<boolean>(true);
   const [uri, setUri] = useState<string>(KNOWLEDGE_HUB_URL!);
 
-  console.log(KNOWLEDGE_HUB_URL);
   const onNavigationStateChange = (navState: WebViewNavigation) => {
     if (navState.url !== uri) {
       let modifiedUrl = navState.url;
