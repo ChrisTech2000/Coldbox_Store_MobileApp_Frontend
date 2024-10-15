@@ -57,6 +57,14 @@ export default function CropTypeFilters() {
 
   const fieldError = !!formState.errors.crops;
 
+  const datums = useMemo(
+    () =>
+      Array.from(data.values()).filter((crop) =>
+        crop.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [data, search]
+  );
+
   return (
     <React.Fragment>
       <Controller<FormValues>
@@ -87,7 +95,7 @@ export default function CropTypeFilters() {
                     <FlashList
                       showsHorizontalScrollIndicator={false}
                       showsVerticalScrollIndicator={false}
-                      data={Array.from(data.values())}
+                      data={datums}
                       keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
                       renderItem={({ item }) => (
                         <View>
