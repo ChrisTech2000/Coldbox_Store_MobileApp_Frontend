@@ -1,24 +1,27 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 
-import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import ColdRoom from '#assets/icons/coldroom.svg';
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
-
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+
 import { useTranslationUtils } from '#i18n/utils';
+import { AddCoolingUnitOverlay } from '#screens/Dashboard/Tutorial/AddCoolingUnitOverlay';
+import { EEmployeeTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 
-import FormManager, { type PreprocessedFormValues, type FormValues } from './contexts/FormManager';
-import FormFields from './components/FormFields';
-import DataAggregator from './contexts/DataAggregator';
-import { METRIC_UNITS, PRICING_TYPE } from './constants';
 import InAppNotifications from '#common/InAppNotifications';
+import FormFields from './components/FormFields';
+import { METRIC_UNITS, PRICING_TYPE } from './constants';
+import DataAggregator from './contexts/DataAggregator';
+import FormManager, { type FormValues, type PreprocessedFormValues } from './contexts/FormManager';
 
 type Props = {
   companyId: number | undefined;
@@ -34,9 +37,16 @@ export default function ScreenContainer(props: Props) {
 
   const toast = InAppNotifications.useToast();
 
+  const { onLayout } = useWalkthroughStep({
+    number: EEmployeeTutorialSteps.ADD_COOLING_UNIT_STEP,
+    enableHardwareBack: true,
+    OverlayComponent: AddCoolingUnitOverlay,
+    onPressMask: () => navigation.goBack(),
+  });
+
   if (isLoading) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center" onLayout={onLayout}>
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
@@ -110,6 +120,7 @@ export default function ScreenContainer(props: Props) {
 
   return (
     <KeyboardAwareScrollView
+      onLayout={onLayout}
       tw="h-full"
       contentContainerStyle="pt-5 pb-8"
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}

@@ -141,7 +141,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
             render={({ field: { onChange, value } }) => (
               <Input
                 tw={cn('bg-white border rounded-sm w-[90%] my-2', errors.code && 'border-red-300')}
-                keyboardType="numeric"
+                keyboardType="default"
                 onChangeText={(newVal) => onChangeText(newVal, onChange, 'code')}
                 value={value?.toString() ?? ''}
                 label={t('Dashboard.CrateManagement.CheckIn.WithCode.codeLabel')}
@@ -163,7 +163,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
             render={({ field: { onChange, value } }) => (
               <Input
                 tw="bg-white border rounded-sm w-[90%] my-2"
-                keyboardType="numeric"
+                keyboardType="number-pad"
                 onChangeText={(newVal) => onChangeText(newVal, onChange, 'plannedDays')}
                 value={value?.toString() ?? ''}
                 label={t('Dashboard.CrateManagement.CheckIn.Setup.plannedDaysLabel')}

@@ -9,6 +9,7 @@ import React, { useCallback } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
 
+import RBAC from '#common/RBAC';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
@@ -16,7 +17,7 @@ import { useAuthStore } from '#stores/auth';
 import NavigatorHeader from '../../components/NavigatorHeader';
 import BottomNavigation from '../components/BottomNavigation';
 import { BOTTOM_NAV_ROUTES_SCOPE, useDashboardHeader } from '../lib/dashboardHeaderFactory';
-import CoolingUnitsTabs from './CoolingUnitsTabs';
+import CoolingUnitsTabs, { CoolingUnitsTabsRoutes } from './CoolingUnitsTabs';
 import HistoryTabStack, { HistoryTabStackRoutes } from './HistoryTabStack';
 import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
@@ -27,12 +28,18 @@ import OrdersStack from './OrdersStack';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
-  History: {
-    screen?: keyof HistoryTabStackRoutes;
-    params?: HistoryTabStackRoutes['MarketSurveyStack'] | HistoryTabStackRoutes['EditCheckIn'];
-  };
+  History:
+    | {
+        screen?: keyof HistoryTabStackRoutes;
+        params?: HistoryTabStackRoutes['MarketSurveyStack'] | HistoryTabStackRoutes['EditCheckIn'];
+      }
+    | undefined;
   MarketPrice: undefined;
-  CoolingUnits: undefined;
+  CoolingUnits:
+    | {
+        screen?: keyof CoolingUnitsTabsRoutes;
+      }
+    | undefined;
   Analytics: undefined;
   ShoppingCart: {
     screen: keyof ShoppingCartStackRoutes;
@@ -76,6 +83,8 @@ const TAB_METADATA: Record<
 const Tab = createBottomTabNavigator<DashboardMainRoutes>();
 
 export default function DashboardMainBottomTabs() {
+  const { guard } = RBAC.useRBAC();
+
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const dashboardHeaderFactory = useDashboardHeader();
@@ -127,6 +136,10 @@ export default function DashboardMainBottomTabs() {
     [user?.firstName, dashboardHeaderFactory]
   );
 
+  const navToMarketplace = guard('NAVIGATE', 'MarketplaceListing');
+  const navToShoppingCart = guard('NAVIGATE', 'MarketplaceShoppingCart');
+  const navToOrders = guard('NAVIGATE', 'MarketplaceOrders');
+
   return (
     <Tab.Navigator
       initialRouteName="Dashboard"
@@ -135,12 +148,12 @@ export default function DashboardMainBottomTabs() {
     >
       <Tab.Screen name="Dashboard" component={MainTabStack} />
       <Tab.Screen name="Analytics" component={AnalyticsStack} />
-      <Tab.Screen name="Marketplace" component={MarketplaceStack} />
+      {navToMarketplace ? <Tab.Screen name="Marketplace" component={MarketplaceStack} /> : null}
       <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
       <Tab.Screen name="History" component={HistoryTabStack} />
       <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
-      <Tab.Screen name="ShoppingCart" component={ShoppingCartStack} />
-      <Tab.Screen name="Orders" component={OrdersStack} />
+      {navToShoppingCart ? <Tab.Screen name="ShoppingCart" component={ShoppingCartStack} /> : null}
+      {navToOrders ? <Tab.Screen name="Orders" component={OrdersStack} /> : null}
     </Tab.Navigator>
   );
 }

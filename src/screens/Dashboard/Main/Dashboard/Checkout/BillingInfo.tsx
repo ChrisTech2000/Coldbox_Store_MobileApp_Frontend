@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import { Divider, Icon, Switch } from 'react-native-paper';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -16,6 +17,9 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { EPaymentType, EPricingType } from '#types/global';
 
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { CheckOut2ScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
+
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { Input } from '#ui/components/Input';
@@ -24,6 +28,7 @@ import { Text } from '#ui/components/Text';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { BankTransferModal } from './BankTransferDetailsModal';
 
 const usePaymentTypeStore = createSelectStore<EPaymentType>();
 
@@ -42,6 +47,15 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const [discount, setDiscount] = useState<number>(0);
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isPaymentTypeModalOpen, setIsPaymentTypeModalOpen] = useState<boolean>(false);
+  const [isBankTransferDetailsModalOpen, setIsBankTransferDetailsModalOpen] =
+    useState<boolean>(false);
+
+  const { onLayout } = useWalkthroughStep({
+    number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
+    enableHardwareBack: true,
+    OverlayComponent: CheckOut2ScreenOverlay,
+    onPressMask: () => rootNavigation.navigate('RootMainTabStack'),
+  });
 
   const { data: locations } = useApiCall(
     'getLocations',
@@ -89,7 +103,9 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     if (!paymentType) return '';
     return paymentType === EPaymentType.CASH
       ? t('Dashboard.CrateManagement.CheckOut.paymentType.cash')
-      : t('Dashboard.CrateManagement.CheckOut.paymentType.creditCard');
+      : paymentType === EPaymentType.CREDIT_CARD
+        ? t('Dashboard.CrateManagement.CheckOut.paymentType.creditCard')
+        : t('Dashboard.CrateManagement.CheckOut.paymentType.bankTransfer');
   }, [paymentType]);
 
   const checkout = useCallback(async () => {
@@ -182,15 +198,18 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             showsVerticalScrollIndicator={false}
             data={crates}
             renderItem={({ item: crate, index }) => (
-              <View key={`${crate.id}-${index}`} tw="flex flex-row items-center justify-between">
+              <View
+                key={`${crate.id}-${index}`}
+                tw="flex flex-row flex-wrap items-center justify-between"
+              >
                 <View tw="flex flex-row space-x-1 items-center">
                   <Icon source="circle-medium" size={20} />
-                  <Text
-                    variant="TextMedium"
-                    tw="text-lg"
-                  >{`${crate.name} (${crate.tag ?? ''}) — ${crate.weight}${t('Dashboard.ProduceDetails.kilogram')}/${crate.currentStorageDays} ${t('Dashboard.CrateManagement.CheckOut.days')}`}</Text>
+                  <Text variant="TextMedium" tw="text-lg">
+                    {`${crate.name} (${crate.tag ?? ''}) — ${crate.weight}${t('Dashboard.ProduceDetails.kilogram')}/${crate.currentStorageDays} ${t('Dashboard.CrateManagement.CheckOut.days')}`}
+                  </Text>
                 </View>
-                <Text variant="TextMedium" tw="text-lg">
+
+                <Text variant="TextMedium" tw="text-lg pl-2">
                   {(cratePrices[index] ?? 0).toLocaleString('en-US', {
                     style: 'currency',
                     currency: company?.currency,
@@ -221,7 +240,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           </Text>
           <View tw="flex flex-row items-center space-x-1">
             <Input
-              tw="bg-gray-100 rounded-sm mt-2 mb-3 h-7 w-12"
+              tw="bg-gray-100 rounded-sm mt-2 mb-3 h-7 w-24"
               keyboardType="numeric"
               onChangeText={(value) =>
                 setDiscount(Number.isNaN(value) ? 0 : Number.parseInt(value))
@@ -258,21 +277,30 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             </Text>
           </View>
           <SelectWithStore<EPaymentType>
-            datums={[EPaymentType.CASH, EPaymentType.CREDIT_CARD]}
+            datums={[
+              EPaymentType.CASH,
+              EPaymentType.CREDIT_CARD,
+              ...(company?.country === 'NG' ? [EPaymentType.BANK_TRANSFER] : []),
+            ]}
             isModalVisible={isPaymentTypeModalOpen}
             setIsModalVisible={setIsPaymentTypeModalOpen}
             useSelectStore={usePaymentTypeStore}
             itemName={(item) =>
               item === EPaymentType.CASH
                 ? t('Dashboard.CrateManagement.CheckOut.paymentType.cash')
-                : t('Dashboard.CrateManagement.CheckOut.paymentType.creditCard')
+                : item === EPaymentType.CREDIT_CARD
+                  ? t('Dashboard.CrateManagement.CheckOut.paymentType.creditCard')
+                  : t('Dashboard.CrateManagement.CheckOut.paymentType.bankTransfer')
             }
             label={paymentTypeLabel}
             modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+            postSelectionAction={(paymentType?: EPaymentType) => {
+              paymentType === EPaymentType.BANK_TRANSFER && setIsBankTransferDetailsModalOpen(true);
+            }}
           />
         </View>
         <Divider tw="bg-gray-400 my-2" />
-        <View tw="flex flex-row w-full justify-between items-center">
+        <View onLayout={onLayout} tw="flex flex-row w-full justify-between items-center">
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.CheckOut.paid')}
           </Text>
@@ -304,6 +332,11 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           {t('actions.ok')}
         </Button>
       </View>
+
+      <BankTransferModal
+        isOpen={isBankTransferDetailsModalOpen}
+        closeModal={() => setIsBankTransferDetailsModalOpen(false)}
+      />
     </View>
   );
 }

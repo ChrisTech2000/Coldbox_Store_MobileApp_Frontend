@@ -11,8 +11,10 @@ export const PERMISSION_KINDS = {
 
 export type PermissionKinds = keyof typeof PERMISSION_KINDS;
 
-export default function permissionsFactory(role = ERoles.AUTH) {
+export default function permissionsFactory(role = ERoles.AUTH, contextualCountry: string) {
   return defineAbility((can, cannot) => {
+    const hasCustomerTypeFeatureFlag = contextualCountry === 'NG';
+
     ///
     // General Rules
     ///
@@ -21,6 +23,12 @@ export default function permissionsFactory(role = ERoles.AUTH) {
     can(PERMISSION_KINDS.NAVIGATE, 'Tutorial');
     can(PERMISSION_KINDS.NAVIGATE, 'FAQ');
     can(PERMISSION_KINDS.NAVIGATE, 'About');
+    // scope: customer-type
+    if (hasCustomerTypeFeatureFlag) {
+      can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceShoppingCart');
+      can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceListing');
+      can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceOrders');
+    }
 
     ///
     // Role Specific Rules
@@ -48,10 +56,8 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: account details
         can(PERMISSION_KINDS.SET, 'FormEmailField');
         can(PERMISSION_KINDS.SET, 'PayoutSettings');
-        can(PERMISSION_KINDS.SET, 'CompanySellerSettings');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
-        cannot(PERMISSION_KINDS.SET, 'UserSellerSettings');
         // scope: cooling units
         can(PERMISSION_KINDS.SET, 'Temperatures');
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
@@ -60,8 +66,13 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
-        // scope: marketplace
-        cannot(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
+        // scope: customer-type
+        if (hasCustomerTypeFeatureFlag) {
+          can(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
+          cannot(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
+          cannot(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
+          cannot(PERMISSION_KINDS.STORE, 'MarketplaceEditListedCrates');
+        }
         break;
       }
 
@@ -82,16 +93,13 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.NAVIGATE, 'RevenueAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'UsageAnalysis');
         can(PERMISSION_KINDS.NAVIGATE, 'CoolingUsers');
-        can(PERMISSION_KINDS.NAVIGATE, 'DeliveryContacts');
         //
         // actions
         // scope: account details
         cannot(PERMISSION_KINDS.SET, 'FormEmailField');
         cannot(PERMISSION_KINDS.VIEW, 'FarmerFields');
         cannot(PERMISSION_KINDS.STORE, 'FarmerDetails');
-        cannot(PERMISSION_KINDS.SET, 'CompanySellerSettings');
         can(PERMISSION_KINDS.SET, 'PayoutSettings');
-        can(PERMISSION_KINDS.SET, 'UserSellerSettings');
         // scope: cooling units
         can(PERMISSION_KINDS.SET, 'Temperatures');
         can(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
@@ -100,8 +108,13 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         can(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         can(PERMISSION_KINDS.VIEW, 'OperatorActions');
-        // scope: marketplace
-        can(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
+        // scope: customer-type
+        if (hasCustomerTypeFeatureFlag) {
+          cannot(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
+          can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
+          can(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
+          cannot(PERMISSION_KINDS.STORE, 'MarketplaceEditListedCrates');
+        }
         break;
       }
 
@@ -119,7 +132,7 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         can(PERMISSION_KINDS.VIEW, 'FarmerFields');
         can(PERMISSION_KINDS.STORE, 'FarmerDetails');
         can(PERMISSION_KINDS.SET, 'PayoutSettings');
-        can(PERMISSION_KINDS.SET, 'UserSellerSettings');
+        cannot(PERMISSION_KINDS.NAVIGATE, 'DeliveryContacts');
         // scope: cooling units
         cannot(PERMISSION_KINDS.SET, 'Temperatures');
         cannot(PERMISSION_KINDS.NAVIGATE, 'CratesInfo');
@@ -128,8 +141,13 @@ export default function permissionsFactory(role = ERoles.AUTH) {
         // scope: check-in
         cannot(PERMISSION_KINDS.VIEW, 'TemperatureAlertModal');
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
-        // scope: marketplace
-        can(PERMISSION_KINDS.VIEW, 'MarketplaceShoppingCart');
+        // scope: customer-type
+        if (hasCustomerTypeFeatureFlag) {
+          cannot(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
+          can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
+          can(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
+          can(PERMISSION_KINDS.STORE, 'MarketplaceEditListedCrates');
+        }
         break;
       }
 
