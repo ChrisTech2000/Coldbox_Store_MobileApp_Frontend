@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, GestureResponderEvent } from 'react';
 import { View } from 'react-native';
 import { Divider, RadioButton } from 'react-native-paper';
 
@@ -20,6 +20,20 @@ export default function GenderField() {
 
   const selectedGender = watch('gender');
   const [internalSelection, setInternalSelection] = useState<EApiGender>(selectedGender);
+
+  const onCancel = useCallback((evt: GestureResponderEvent) => {
+    evt.stopPropagation();
+    toggleModalVisibility();
+    setInternalSelection(selectedGender);
+  }, []);
+  const onSave = useCallback(
+    (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+      toggleModalVisibility();
+      setValue('gender', internalSelection);
+    },
+    [internalSelection]
+  );
 
   return (
     <View tw="mt-5">
@@ -49,26 +63,10 @@ export default function GenderField() {
             ),
             footer: (
               <View tw="flex flex-row items-center justify-end">
-                <Button
-                  mode="text"
-                  uppercase
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    toggleModalVisibility();
-                    setInternalSelection(selectedGender);
-                  }}
-                >
+                <Button mode="text" uppercase onPress={onCancel}>
                   {t('actions.cancel')}
                 </Button>
-                <Button
-                  mode="text"
-                  uppercase
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    toggleModalVisibility();
-                    setValue('gender', internalSelection);
-                  }}
-                >
+                <Button mode="text" uppercase onPress={onSave}>
                   {t('actions.ok')}
                 </Button>
               </View>

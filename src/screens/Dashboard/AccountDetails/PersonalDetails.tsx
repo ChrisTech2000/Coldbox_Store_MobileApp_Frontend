@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -31,7 +31,7 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
   const setUser = useAuthStore((store) => store.setUser);
   const patchFarmer = useDashboardStore((store) => store.patchFarmer);
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = useCallback(async function (values: FormValues) {
     try {
       const userDatum = await ColdtivateService.updateUser({
         userId,
@@ -66,7 +66,7 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
     } catch (exception) {
       console.error(exception);
     }
-  }
+  }, []);
 
   return (
     <FormManager onSubmit={onSubmit} initialValues={{ ...initialFormValues, location: '' }}>
