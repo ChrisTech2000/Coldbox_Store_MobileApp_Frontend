@@ -61,7 +61,10 @@ export default function MarketplaceStack() {
         header: () => {
           const baseProps: NavigationHeaderProps = { routeTitle: t(NAVIGATOR_HEADERS[routeName]) };
           if (!isFiltersScreen) {
-            const { leftContent, rightContent } = dashboardHeaderFactory();
+            const { leftContent, rightContent } = dashboardHeaderFactory({
+              showShoppingCart: true,
+            });
+
             baseProps.leftContent = leftContent;
             baseProps.rightContent = rightContent;
           } else {
