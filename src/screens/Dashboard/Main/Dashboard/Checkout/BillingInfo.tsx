@@ -198,15 +198,18 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             showsVerticalScrollIndicator={false}
             data={crates}
             renderItem={({ item: crate, index }) => (
-              <View key={`${crate.id}-${index}`} tw="flex flex-row items-center justify-between">
+              <View
+                key={`${crate.id}-${index}`}
+                tw="flex flex-row flex-wrap items-center justify-between"
+              >
                 <View tw="flex flex-row space-x-1 items-center">
                   <Icon source="circle-medium" size={20} />
-                  <Text
-                    variant="TextMedium"
-                    tw="text-lg"
-                  >{`${crate.name} (${crate.tag ?? ''}) — ${crate.weight}${t('Dashboard.ProduceDetails.kilogram')}/${crate.currentStorageDays} ${t('Dashboard.CrateManagement.CheckOut.days')}`}</Text>
+                  <Text variant="TextMedium" tw="text-lg">
+                    {`${crate.name} (${crate.tag ?? ''}) — ${crate.weight}${t('Dashboard.ProduceDetails.kilogram')}/${crate.currentStorageDays} ${t('Dashboard.CrateManagement.CheckOut.days')}`}
+                  </Text>
                 </View>
-                <Text variant="TextMedium" tw="text-lg">
+
+                <Text variant="TextMedium" tw="text-lg pl-2">
                   {(cratePrices[index] ?? 0).toLocaleString('en-US', {
                     style: 'currency',
                     currency: company?.currency,
@@ -237,7 +240,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           </Text>
           <View tw="flex flex-row items-center space-x-1">
             <Input
-              tw="bg-gray-100 rounded-sm mt-2 mb-3 h-7 w-12"
+              tw="bg-gray-100 rounded-sm mt-2 mb-3 h-7 w-24"
               keyboardType="numeric"
               onChangeText={(value) =>
                 setDiscount(Number.isNaN(value) ? 0 : Number.parseInt(value))
