@@ -13,7 +13,7 @@ import { deserialize, Json, serialize, type JsonArray, type JsonObject } from '.
 type Options = {
   baseURL: string;
   getTokens: () => Tokens;
-  onUnauthorized?: () => Promise<void>;
+  onUnauthorized?: () => void;
   onForbidden?: () => void;
 };
 
@@ -35,8 +35,9 @@ export default class HttpClient {
           refreshToken: storedTokens?.refreshToken ?? '',
         };
       },
-      onUnauthorized: async () => {
-        await useAuthStore.getState().renewSession();
+      onUnauthorized: () => {
+        // await useAuthStore.getState().renewSession();
+        useAuthStore.getState().revokeSession();
       },
       ...options,
     });
@@ -57,16 +58,18 @@ export default class HttpClient {
             throw exception;
           }
 
-          await this.options.onUnauthorized();
-          const headers = this._buildHeaders();
+          this.options.onUnauthorized();
 
-          return this.axios.request({
-            ...exception.config,
-            headers: {
-              ...exception.config?.headers,
-              ...headers,
-            },
-          });
+          return Promise.reject(exception);
+          // const headers = this._buildHeaders();
+
+          // return this.axios.request({
+          //   ...exception.config,
+          //   headers: {
+          //     ...exception.config?.headers,
+          //     ...headers,
+          //   },
+          // });
         }
 
         if (exception.response?.status === 403) {
