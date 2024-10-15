@@ -65,8 +65,14 @@ export default function ShoppingCartStack() {
               routeName === 'IncompleteOrderOverview'
                 ? // eslint-disable-next-line react/prop-types
                   () => props.navigation.popToTop()
-                : // eslint-disable-next-line react/prop-types
-                  props.navigation.goBack
+                : () => {
+                    /* eslint-disable */
+                    props.navigation.navigate('Main', {
+                      screen: 'Marketplace',
+                      params: { screen: 'MarketplaceRoot' },
+                    });
+                    /* eslint-enable */
+                  }
             )}
           />
         ),
