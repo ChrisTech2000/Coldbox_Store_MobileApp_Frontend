@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, IconButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDebouncedCallback } from 'use-debounce';
 import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
@@ -24,8 +25,6 @@ import { type CartItem as CartItemType } from '#types/global';
 
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
 import CartItemInput from './CartItemInput';
-
-const countriesMeta = countriesDict();
 
 type CartItemProps = {
   item: CartItemType;
@@ -54,6 +53,37 @@ export function CartItem({ item }: CartItemProps) {
   );
 
   const crop = useMemo(() => crops?.find((c) => c.id === item.relCropId), [crops]);
+
+  const openCompanyDetailsModal = useDebouncedCallback(async () => {
+    const unit = await ColdtivateService.getCoolingUnit({
+      companyId: item.relCompanyId,
+      coolingUnitId: item.relCoolingUnitId,
+    });
+
+    const result = await ColdtivateService.getLocation({
+      companyId: item.relCompanyId,
+      locationId: unit.location,
+    });
+
+    const datum = {
+      name: result.company.name,
+      locationName: result.name,
+      address: [
+        result.streetNumber,
+        result.street,
+        result.city,
+        result.state,
+        result.zipCode,
+        countriesDict().getNameByISO(result.company.country ?? 'NG'),
+      ]
+        .filter(Boolean)
+        .join(', '),
+      latitude: result.latitude,
+      longitude: result.longitude,
+    } satisfies CompanyBottomSheetDatum;
+
+    emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, datum);
+  }, 800);
 
   if (isLoadingCompany) {
     return (
@@ -127,15 +157,13 @@ export function CartItem({ item }: CartItemProps) {
         <Touchable
           tw="flex-row items-center justify-center space-x-2.5 px-1.5 py-2 self-start mb-0.5"
           rippleColor={colors.zinc[200]}
-          onPress={(evt) => {
+          onPress={async (evt) => {
             evt.stopPropagation();
-            emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, {
-              name: company?.name,
-              locationName: countriesMeta.getNameByISO(company?.country ?? '') ?? '',
-              address: '', // TODO: add
-              latitude: 0,
-              longitude: 0,
-            } satisfies CompanyBottomSheetDatum);
+            try {
+              await openCompanyDetailsModal();
+            } catch (exception) {
+              console.error(exception);
+            }
           }}
         >
           <MaterialCommunityIcon
@@ -183,8 +211,10 @@ export function CartItem({ item }: CartItemProps) {
             containerColor={colors.white}
             onPress={async (evt) => {
               evt.stopPropagation();
-              await MarketplaceService.removeItemFromCart(item.relCrateId);
-              fetchCart();
+              await Promise.allSettled([
+                MarketplaceService.removeItemFromCart(item.relCrateId),
+                fetchCart(),
+              ]);
             }}
           />
         </View>
