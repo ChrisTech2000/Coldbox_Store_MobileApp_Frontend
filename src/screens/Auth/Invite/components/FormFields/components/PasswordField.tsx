@@ -4,17 +4,17 @@ import { TextInput, type TextInputProps } from 'react-native-paper';
 import { useToggle } from '#ui/hooks/useToggle';
 
 export default function PasswordField(props: TextInputProps) {
-  const [isPasswordVisible, togglePasswordVisibility] = useToggle(false);
+  const [isPasswordHidden, togglePasswordVisibility] = useToggle(true);
 
   return (
     <TextInput
       {...props}
       tw="w-full bg-transparent mt-1"
-      secureTextEntry={!isPasswordVisible}
+      secureTextEntry={isPasswordHidden}
       left={<TextInput.Icon icon="lock" />}
       right={
         <TextInput.Icon
-          icon={isPasswordVisible ? 'eye' : 'eye-off'}
+          icon={isPasswordHidden ? 'eye' : 'eye-off'}
           onPress={(evt) => {
             evt?.stopPropagation();
             togglePasswordVisibility();

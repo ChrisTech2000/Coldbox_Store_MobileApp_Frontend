@@ -3,6 +3,8 @@ import React, { useCallback, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon, List } from 'react-native-paper';
+import { currencies } from 'currencies.json';
+import isNil from 'lodash/isNil';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
@@ -21,15 +23,15 @@ import { cn } from '#ui/lib/cn';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import isNil from 'lodash/isNil';
 import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
-import { currencies } from 'currencies.json';
+import RBAC from '#common/RBAC';
 
 function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   const { produce, coolingUnit, currency } = props.route.params;
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
   const toast = InAppNotifications.useToast();
+  const { guard } = RBAC.useRBAC();
 
   const { data: farmers } = useApiCall(
     'getOperatorFarmers',
@@ -90,12 +92,16 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         label: t('Dashboard.ProduceDetails.cropType'),
         value: produce.cropName,
       },
-      {
-        key: 'crateWeightLabel',
-        label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
-        value: <Icon source="chevron-right" size={25} />,
-        custom: true,
-      },
+      ...(guard('STORE', 'MarketplaceEditListedCrates')
+        ? [
+            {
+              key: 'crateWeightLabel',
+              label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
+              value: <Icon source="chevron-right" size={25} />,
+              custom: true,
+            },
+          ]
+        : []),
       {
         key: 'numberOfCrates',
         label: t('Dashboard.ProduceDetails.numberOfCrates'),
@@ -148,7 +154,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         }),
       },
     ],
-    [produce, pricing, currency, dailyPrice]
+    [produce, pricing, currency, dailyPrice, guard]
   );
 
   const farmer = useMemo(
@@ -303,13 +309,15 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         </View>
       </ScrollView>
 
-      <View tw="absolute left-0 bottom-0 bg-white border-t border-zinc-300 w-full h-20 items-center justify-center">
-        <CheckoutButtonRedirect
-          coolingUnit={coolingUnit}
-          farmer={farmer}
-          crates={produce.checkedInCrates}
-        />
-      </View>
+      <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
+        <View tw="absolute left-0 bottom-0 bg-white border-t border-zinc-300 w-full h-20 items-center justify-center">
+          <CheckoutButtonRedirect
+            coolingUnit={coolingUnit}
+            farmer={farmer}
+            crates={produce.checkedInCrates}
+          />
+        </View>
+      </RBAC.ProtectedResource>
     </React.Fragment>
   );
 }

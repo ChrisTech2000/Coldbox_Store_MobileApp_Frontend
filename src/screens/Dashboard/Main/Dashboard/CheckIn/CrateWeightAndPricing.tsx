@@ -17,13 +17,14 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
-import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
+import { paperTheme } from '#ui/lib/theme';
+import { cn } from '#ui/lib/cn';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from './components/SellInMarketplaceModal';
@@ -68,6 +69,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const { params } = props.route;
 
   const { t, zodResolver } = useTranslationUtils();
+  const { guard } = RBAC.useRBAC();
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [infoVisible, setInfoVisible] = useState(false);
@@ -128,6 +130,8 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     props.navigation.goBack();
   }
 
+  const allowedToSetPricing = guard('SET', 'MarketplaceListForSale');
+
   return (
     <React.Fragment>
       <SellInMarketplaceModal visible={isModalVisible} onChangeVisible={setIsModalVisible} />
@@ -146,9 +150,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                 <TouchableOpacity
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
                   onPress={() => {
-                    if (!value) {
-                      for (let i = 0; i < crateFields.fields.length; i++) {
-                        form.setValue(`crates.${i}.isSellable`, crates[0].isSellable);
+                    if (allowedToSetPricing) {
+                      if (!value) {
+                        for (let i = 0; i < crateFields.fields.length; i++) {
+                          form.setValue(`crates.${i}.isSellable`, crates[0].isSellable);
+                        }
                       }
                     }
                     onChange(!value);
@@ -172,7 +178,12 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             renderItem={({ index }) => {
               const isDisabled = applyToAll && index > 0;
               return (
-                <View tw="flex-row items-center justify-between my-3">
+                <View
+                  tw={cn(
+                    'flex-row items-center my-3',
+                    allowedToSetPricing ? 'justify-between' : 'space-x-5'
+                  )}
+                >
                   <View tw="flex-col self-end px-3 self-center mt-5">
                     <Icon
                       name="basket-outline"
@@ -252,30 +263,34 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                     />
                   </View>
 
-                  <Controller
-                    control={form.control}
-                    name={`crates.${index}.isSellable`}
-                    render={({ field: { value, onChange } }) => (
-                      <TouchableOpacity
-                        tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1"
-                        onPress={() => {
-                          if (!applyToAll) return onChange(!value);
-                          for (let i = 0; i < crateFields.fields.length; i++) {
-                            form.setValue(`crates.${i}.isSellable`, !value);
-                          }
-                        }}
-                        disabled={isDisabled}
-                      >
-                        <Checkbox
-                          status={applyToAll || value ? 'checked' : 'unchecked'}
+                  <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
+                    <Controller
+                      control={form.control}
+                      name={`crates.${index}.isSellable`}
+                      render={({ field: { value, onChange } }) => (
+                        <TouchableOpacity
+                          tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1"
+                          onPress={() => {
+                            if (!applyToAll) return onChange(!value);
+                            for (let i = 0; i < crateFields.fields.length; i++) {
+                              form.setValue(`crates.${i}.isSellable`, !value);
+                            }
+                          }}
                           disabled={isDisabled}
-                        />
-                        <Text tw={cn('text-base', isDisabled && 'text-gray-300')}>
-                          {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list')}
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  />
+                        >
+                          <Checkbox
+                            status={applyToAll || value ? 'checked' : 'unchecked'}
+                            disabled={isDisabled}
+                          />
+                          <Text tw={cn('text-base', isDisabled && 'text-gray-300')}>
+                            {t(
+                              'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list'
+                            )}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    />
+                  </RBAC.ProtectedResource>
                 </View>
               );
             }}
@@ -302,35 +317,37 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
 
         <Divider tw="bg-gray-400" />
 
-        {crates.some((crate) => crate.isSellable) ? (
-          <View tw="pb-20">
-            <View tw="flex flex-row space-x-1 mt-6 mb-2">
-              <Text tw="text-base">
-                {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice')}
-              </Text>
-              <Sup>
-                ({currencies.find((c) => c.symbol === params.currencySymbol)?.code}/
-                {t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
-              </Sup>
-            </View>
+        <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
+          {crates.some((crate) => crate.isSellable) ? (
+            <View tw="pb-20">
+              <View tw="flex flex-row space-x-1 mt-6 mb-2">
+                <Text tw="text-base">
+                  {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice')}
+                </Text>
+                <Sup>
+                  ({currencies.find((c) => c.symbol === params.currencySymbol)?.code}/
+                  {t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
+                </Sup>
+              </View>
 
-            <Controller
-              control={form.control}
-              name="price"
-              render={({ field: { value, onChange } }) => (
-                <View>
-                  <Input
-                    tw="bg-white border rounded-sm h-14"
-                    keyboardType="numeric"
-                    value={value}
-                    placeholder="0.00"
-                    onChangeText={(text) => onChange(text)}
-                  />
-                </View>
-              )}
-            />
-          </View>
-        ) : null}
+              <Controller
+                control={form.control}
+                name="price"
+                render={({ field: { value, onChange } }) => (
+                  <View>
+                    <Input
+                      tw="bg-white border rounded-sm h-14"
+                      keyboardType="numeric"
+                      value={value}
+                      placeholder="0.00"
+                      onChangeText={(text) => onChange(text)}
+                    />
+                  </View>
+                )}
+              />
+            </View>
+          ) : null}
+        </RBAC.ProtectedResource>
       </KeyboardAwareScrollView>
 
       <HideWithKeyboardView tw="absolute bottom-0 left-0 w-full">
@@ -360,9 +377,12 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             // eslint-disable-next-line
             onPress={form.handleSubmit(onSubmit as any)}
             disabled={
-              typeof form.formState.errors.crates !== 'undefined' ||
-              (crates.some((c) => c.isSellable) && !price) ||
-              form.formState.isSubmitting
+              !allowedToSetPricing
+                ? typeof form.formState.errors.crates !== 'undefined' || form.formState.isSubmitting
+                : typeof form.formState.errors.crates !== 'undefined' ||
+                  !crates.some((c) => c.isSellable) ||
+                  !price ||
+                  form.formState.isSubmitting
             }
           >
             {t('actions.save-changes')}
