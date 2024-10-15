@@ -52,8 +52,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     'contextualProduce' in route.params ? route.params.contextualProduce.crop : route.params.crop;
   const contextualAdditionalInfo =
     'contextualProduce' in route.params
-      ? route.params.contextualProduce?.additionalInfo ?? ''
-      : route.params?.additionalInfo ?? '';
+      ? (route.params.contextualProduce?.additionalInfo ?? '')
+      : (route.params?.additionalInfo ?? '');
 
   const { company } = useManagementStore();
   const { addProduce, coolingUnit, user, removeProduce } = useCheckInStore();
@@ -148,7 +148,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   const totalPrice = useMemo(() => {
     const price = coolingUnit?.commonPricingType.value ?? 0;
     const multiplier =
-      coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY ? plannedDays ?? 0 : 1;
+      coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY ? (plannedDays ?? 0) : 1;
 
     if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
       if (!crates) return '0.00';
@@ -297,14 +297,18 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                     0
                   );
                   const sellingPrice = (getValues('price') ?? 0) / totalWeight;
+                  const contextualCrates = crates.map((crate) => ({
+                    weight: crate.weight,
+                    isSellable: crate.isSellable ?? false,
+                  }));
                   navigation.navigate('CrateWeightAndPricing', {
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
                     currencySymbol,
-                    crates: crates.map((crate) => ({
-                      weight: crate.weight,
-                      isSellable: crate.isSellable ?? false,
-                    })),
+                    crates: contextualCrates,
                     sellingPrice: isNaN(sellingPrice) ? 0 : sellingPrice,
+                    applyToAll: contextualCrates.every(
+                      (crate, _, array) => crate.isSellable && crate.weight === array[0].weight
+                    ),
                   });
                 }}
                 left={() => (

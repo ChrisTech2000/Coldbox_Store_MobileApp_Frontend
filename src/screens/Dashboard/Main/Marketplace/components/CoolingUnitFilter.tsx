@@ -58,6 +58,14 @@ export default function CoolingUnitFilters() {
 
   const fieldError = !!formState.errors.coolingUnits;
 
+  const datums = useMemo(
+    () =>
+      Array.from(data.values()).filter((unit) =>
+        unit.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [data, search]
+  );
+
   return (
     <React.Fragment>
       <Controller<FormValues>
@@ -88,7 +96,7 @@ export default function CoolingUnitFilters() {
                     <FlashList
                       showsHorizontalScrollIndicator={false}
                       showsVerticalScrollIndicator={false}
-                      data={Array.from(data.values())}
+                      data={datums}
                       keyExtractor={(item, itemIdx) =>
                         `cooling-unit-list-item-${item.id}-#${itemIdx}`
                       }

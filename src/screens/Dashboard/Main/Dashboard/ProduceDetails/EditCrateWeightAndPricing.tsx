@@ -87,19 +87,15 @@ function EditCrateWeightAndPricing(
   const price = form.watch('price');
   const crates = form.watch('crates');
 
-  const potentialPrice = useMemo(() => {
-    if (!price) return 0;
+  const totalWeight = crates.reduce((acc, curr) => {
+    if (!curr.isSellable) return acc;
+    const wInt = Number(curr.weight);
+    if (isNaN(wInt)) return acc;
+    return (acc += wInt);
+  }, 0);
 
-    const pInt = Number(formatFloat(price ?? '0'));
-    if (isNaN(pInt) || !pInt) return 0;
-
-    return crates.reduce((acc, curr) => {
-      if (!curr.isSellable) return acc;
-      const wInt = Number(curr.weight);
-      if (isNaN(wInt)) return acc;
-      return wInt * pInt + acc;
-    }, 0);
-  }, [crates, price, applyToAll]);
+  const parsedPrice = Number(formatFloat(price ?? '0'));
+  const potentialPrice = isNaN(parsedPrice) ? 0 : totalWeight * parsedPrice;
 
   async function onSubmit(values: FormValues<number>): Promise<void> {
     try {

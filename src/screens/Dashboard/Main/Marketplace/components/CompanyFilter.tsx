@@ -58,6 +58,14 @@ export default function CompanyFilters() {
 
   const fieldError = !!formState.errors.companies;
 
+  const datums = useMemo(
+    () =>
+      Array.from(data.values()).filter((company) =>
+        company.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [data, search]
+  );
+
   return (
     <React.Fragment>
       <Controller<FormValues>
@@ -88,7 +96,7 @@ export default function CompanyFilters() {
                     <FlashList
                       showsHorizontalScrollIndicator={false}
                       showsVerticalScrollIndicator={false}
-                      data={Array.from(data.values())}
+                      data={datums}
                       keyExtractor={(item, itemIdx) => `company-list-item-${item.id}-#${itemIdx}`}
                       renderItem={({ item }) => (
                         <View>
