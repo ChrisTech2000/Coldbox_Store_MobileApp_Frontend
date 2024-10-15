@@ -129,6 +129,18 @@ class MarketplaceService extends HttpClient {
     }
   };
 
+  public getCompanyBankAccounts = async (companyId: number): Promise<Array<BankAccount>> => {
+    try {
+      const url = `${EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS}?company_id=${companyId}`;
+      const { data } = await this.get<Array<BankAccount>>(url);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public getAvailableBanks = async (): Promise<GetAvailableBanksResponse> => {
     try {
       const { data } = await this.get<GetAvailableBanksResponse>(EMarketplaceEndpoints.GET_BANKS);

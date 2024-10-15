@@ -29,6 +29,11 @@ import {
 } from '../../../Tutorial/utils/mockedData';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
+const MOCKED_PARAMS = {
+  user: MOCKED_USER,
+  crates: MOCKED_CHECK_OUT_DATA,
+  coolingUnit: MOCKED_COOLING_UNIT,
+};
 
 function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
   const { user, coolingUnit: _coolingUnit, crates: _crates } = route.params;
@@ -47,9 +52,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
       // eslint-disable-next-line
       // @ts-ignore
       navigation.navigate('BillingInfo', {
-        user: MOCKED_USER,
-        crates: MOCKED_CHECK_OUT_DATA,
-        coolingUnit: MOCKED_COOLING_UNIT,
+        ...MOCKED_PARAMS,
       });
     },
   });

@@ -8,6 +8,7 @@ import type { Crate } from '#types/global';
 
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import isNil from 'lodash/isNil';
 
 type ProduceProps = {
   crate: Crate;
@@ -28,8 +29,8 @@ export function CheckoutCrate({ crate }: ProduceProps) {
           crate.remainingShelfLife <= 7 &&
             crate.remainingShelfLife > 2 &&
             'bg-yellow-400 border-yellow-400',
-          crate.remainingShelfLife < 2 && 'bg-red-500 border-red-500',
-          (!crate.remainingShelfLife || crate.remainingShelfLife === -1) &&
+          crate.remainingShelfLife <= 2 && 'bg-red-500 border-red-500',
+          (isNil(crate.remainingShelfLife) || crate.remainingShelfLife === -1) &&
             'bg-gray-300 border-gray-300'
         )}
       />
@@ -56,7 +57,17 @@ export function CheckoutCrate({ crate }: ProduceProps) {
         </View>
         <View tw="pl-2">
           {crate.remainingShelfLife ? (
-            <Text variant="TextBold" tw="text-green-400 text-base">
+            <Text
+              variant="TextBold"
+              tw={cn(
+                'text-base',
+                'text-green-400',
+                crate.remainingShelfLife <= 7 && crate.remainingShelfLife > 2 && 'text-yellow-400',
+                crate.remainingShelfLife <= 2 && 'text-red-500',
+                (isNil(crate.remainingShelfLife) || crate.remainingShelfLife === -1) &&
+                  'text-gray-300'
+              )}
+            >
               {`${t('Dashboard.CrateManagement.CheckOut.ttp')}: ${generateDaysString(crate.remainingShelfLife)}`}
             </Text>
           ) : null}
