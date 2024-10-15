@@ -61,7 +61,7 @@ export const useMarketplaceQueryParams = create<
   }
 >((set) => ({
   location: [],
-  sortBy: 'price-asc',
+  sortBy: 'nearby-me',
   filterByMaxDistanceInKm: 0,
   setParams: (params: Partial<MarketplaceQueryParams>) => set((state) => ({ ...state, ...params })),
 }));
