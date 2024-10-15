@@ -71,7 +71,7 @@ export function CheckInData({
             <div class="section">
               <div class="column">
                 <div class="label">${t('Dashboard.History.pdfModal.coolingUserLabel')}</div>
-                <div class="value">${movement.farmer}</div>
+                <div class="value">${movement.owner}</div>
               </div>
               <div class="column">
                 <div class="label">${t('Dashboard.History.pdfModal.checkIn.operatorLabel')}</div>
@@ -186,7 +186,7 @@ export function CheckInData({
             {t('Dashboard.History.pdfModal.coolingUserLabel')}
           </Text>
           <Text variant="TextMedium" numberOfLines={1}>
-            {movement.farmer}
+            {movement.owner}
           </Text>
         </View>
 

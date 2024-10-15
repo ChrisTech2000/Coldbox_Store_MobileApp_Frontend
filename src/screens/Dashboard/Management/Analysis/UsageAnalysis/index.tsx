@@ -100,7 +100,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
       const matchesSearchTerm =
         !lowerCaseSearchString ||
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.farmer.toLowerCase().includes(lowerCaseSearchString) ||
+        movement.owner.toLowerCase().includes(lowerCaseSearchString) ||
         movement.movementCrops.some((crop) =>
           crop.name.toLowerCase().includes(lowerCaseSearchString)
         );
@@ -114,7 +114,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
       .flatMap((movement) => ({
         cratesNumber: movement.cratesNumber,
         weight: movement.cratesWeight,
-        user: movement.farmer,
+        user: movement.owner,
       }))
       .reduce(
         (acc, current) => {

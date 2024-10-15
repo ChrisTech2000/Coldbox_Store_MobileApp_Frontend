@@ -93,7 +93,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
 
     return sortedMovements.filter((movement) => {
       const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-      const matchesFarmer = movement.farmer.toLowerCase().includes(lowerCaseSearchString);
+      const matchesFarmer = movement.owner.toLowerCase().includes(lowerCaseSearchString);
       const matchesCrop = movement.movementCrops.some((crop) =>
         crop.name.toLowerCase().includes(lowerCaseSearchString)
       );
@@ -155,7 +155,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.farmer, // TODO: this has been removed by the backend, we will need to review this later
+                      farmer: movement.owner, // TODO: this has been removed by the backend, we will need to review this later
                       crops: movement.movementCrops.filter(
                         (crop) => !movement.hasMarketSurvey.includes(crop.id)
                       ),

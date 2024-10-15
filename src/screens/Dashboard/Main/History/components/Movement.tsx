@@ -102,7 +102,7 @@ export function Movement({
 
   const fillMarketSurvey = useCallback(() => {
     navigateToMarketSurvey?.(
-      movement.farmer,
+      movement.owner,
       movement.movementCrops.filter((crop) => !movement.hasMarketSurvey.includes(crop.id)),
       movement.checkoutId as number,
       selectedCompany?.currency ?? company?.currency
@@ -186,7 +186,7 @@ export function Movement({
             {t('Dashboard.History.priceLabel')}: {price}
           </Text>
           <Text variant="TextMedium" tw="text-base" numberOfLines={1}>
-            {movement.farmer}
+            {movement.owner}
           </Text>
         </View>
 

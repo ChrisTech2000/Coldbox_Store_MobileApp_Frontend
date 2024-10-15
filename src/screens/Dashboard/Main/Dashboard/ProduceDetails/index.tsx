@@ -160,7 +160,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   const farmer = useMemo(
     () =>
       farmers?.find(
-        (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === produce.farmer
+        (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === produce.owner
       ),
     [produce, farmers]
   );
@@ -180,15 +180,15 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                 <Text variant="TextMedium" tw="text-gray-400">
                   {t('Dashboard.ProduceDetails.coolingUser')}
                 </Text>
-                <Text variant="TextMedium">{produce.farmer}</Text>
+                <Text variant="TextMedium">{produce.owner}</Text>
               </View>
               <View>
                 <Text variant="TextMedium" tw="text-gray-400">
                   {t('Dashboard.ProduceDetails.contact')}
                 </Text>
                 <View tw="flex flex-row items-center space-x-2">
-                  <Text variant="TextMedium">{produce.farmerContact}</Text>
-                  <TouchableOpacity onPress={() => copyToClipboard(produce.farmerContact)}>
+                  <Text variant="TextMedium">{produce.ownerContact}</Text>
+                  <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
                     <Icon source="content-copy" size={20} />
                   </TouchableOpacity>
                 </View>

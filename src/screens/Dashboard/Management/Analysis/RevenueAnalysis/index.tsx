@@ -111,7 +111,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
       const matchesSearchTerm =
         !lowerCaseSearchString ||
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.farmer.toLowerCase().includes(lowerCaseSearchString) ||
+        movement.owner.toLowerCase().includes(lowerCaseSearchString) ||
         movement.movementCrops.some((crop) =>
           crop.name.toLowerCase().includes(lowerCaseSearchString)
         );
@@ -225,7 +225,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.farmer,
+                      farmer: movement.owner,
                       crops: movement.movementCrops.filter(
                         (crop) => !movement.hasMarketSurvey.includes(crop.id)
                       ),

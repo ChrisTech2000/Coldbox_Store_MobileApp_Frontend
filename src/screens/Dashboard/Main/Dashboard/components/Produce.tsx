@@ -132,16 +132,16 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
           <View tw="flex flex-row items-center space-x-1">
             <Icon source="account-outline" size={20} color={colors.gray[400]} />
             <Text variant="TextMedium" tw="text-gray-400">
-              {produce.farmer} (#{produce.farmerId})
+              {produce.owner} {!!produce.farmerId && `(#${produce.farmerId})`}
             </Text>
           </View>
 
           <View tw="flex flex-row items-center space-x-1">
             <Icon source="cellphone" size={20} color={colors.gray[400]} />
             <Text variant="TextMedium" tw="text-gray-400">
-              {produce.farmerContact}
+              {produce.ownerContact}
             </Text>
-            <TouchableOpacity onPress={() => copyToClipboard(produce.farmerContact)}>
+            <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
               <Icon source="content-copy" size={15} color={colors.green.primary} />
             </TouchableOpacity>
           </View>
