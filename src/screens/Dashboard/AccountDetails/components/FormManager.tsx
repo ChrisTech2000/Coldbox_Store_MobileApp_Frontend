@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { useIsFocused } from '@react-navigation/native';
+import isEqual from 'lodash/isEqual';
 
 import type { DetailsSectionParams } from '#navigation/Dashboard/AccountDetails';
 import { EApiGender, ERoles } from '#types/global';
@@ -85,7 +86,7 @@ export default function FormManager(props: FormManagerProps) {
   const callbackProps = {
     submitHandler: form.handleSubmit(props.onSubmit),
     isSubmitting: form.formState.isSubmitting,
-    hasChanges: form.formState.isDirty,
+    hasChanges: !isEqual(initialValues, form.getValues()),
   } satisfies CallbackProps;
 
   return <FormProvider {...form}>{props.children(callbackProps)}</FormProvider>;

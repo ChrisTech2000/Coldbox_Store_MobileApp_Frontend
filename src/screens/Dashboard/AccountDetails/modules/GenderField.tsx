@@ -1,5 +1,5 @@
-import React, { useCallback, useState, GestureResponderEvent } from 'react';
-import { View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, type GestureResponderEvent } from 'react-native';
 import { Divider, RadioButton } from 'react-native-paper';
 
 import { Select } from '#ui/components/Select';
@@ -21,11 +21,15 @@ export default function GenderField() {
   const selectedGender = watch('gender');
   const [internalSelection, setInternalSelection] = useState<EApiGender>(selectedGender);
 
-  const onCancel = useCallback((evt: GestureResponderEvent) => {
-    evt.stopPropagation();
-    toggleModalVisibility();
-    setInternalSelection(selectedGender);
-  }, []);
+  const onCancel = useCallback(
+    (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+      toggleModalVisibility();
+      setInternalSelection(selectedGender);
+    },
+    [selectedGender]
+  );
+
   const onSave = useCallback(
     (evt: GestureResponderEvent) => {
       evt.stopPropagation();
