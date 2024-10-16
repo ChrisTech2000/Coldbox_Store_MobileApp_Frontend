@@ -8,6 +8,7 @@ import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useAuthStore } from '#stores/auth';
@@ -67,24 +68,27 @@ function ContactsSharing() {
           />
           <Divider tw="bg-gray-400" />
         </View>
-        <View>
-          <List.Item
-            tw="p-0 m-0 py-2"
-            title={undefined}
-            left={() => (
-              <Text tw="text-base self-center">
-                {t('Dashboard.AccountDetails.ContactsSharing.publicEmail')}
-              </Text>
-            )}
-            right={() => (
-              <Switch
-                value={user?.isEmailPublic ?? false}
-                onValueChange={(val) => onPreferencesChange(undefined, val)}
-              />
-            )}
-          />
-          <Divider tw="bg-gray-400" />
-        </View>
+
+        <RBAC.ProtectedResource action="VIEW" subject="ContactsSharingEmail">
+          <View>
+            <List.Item
+              tw="p-0 m-0 py-2"
+              title={undefined}
+              left={() => (
+                <Text tw="text-base self-center">
+                  {t('Dashboard.AccountDetails.ContactsSharing.publicEmail')}
+                </Text>
+              )}
+              right={() => (
+                <Switch
+                  value={user?.isEmailPublic ?? false}
+                  onValueChange={(val) => onPreferencesChange(undefined, val)}
+                />
+              )}
+            />
+            <Divider tw="bg-gray-400" />
+          </View>
+        </RBAC.ProtectedResource>
       </View>
     </ScrollView>
   );

@@ -68,6 +68,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
         // scope: customer-type
         if (hasCustomerTypeFeatureFlag) {
+          can(PERMISSION_KINDS.VIEW, 'ContactsSharingEmail');
           can(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
           cannot(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           cannot(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
@@ -110,6 +111,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
         can(PERMISSION_KINDS.VIEW, 'OperatorActions');
         // scope: customer-type
         if (hasCustomerTypeFeatureFlag) {
+          cannot(PERMISSION_KINDS.VIEW, 'ContactsSharingEmail');
           cannot(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
           can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           can(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
@@ -143,6 +145,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
         cannot(PERMISSION_KINDS.VIEW, 'OperatorActions');
         // scope: customer-type
         if (hasCustomerTypeFeatureFlag) {
+          cannot(PERMISSION_KINDS.VIEW, 'ContactsSharingEmail');
           cannot(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
           can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           can(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
