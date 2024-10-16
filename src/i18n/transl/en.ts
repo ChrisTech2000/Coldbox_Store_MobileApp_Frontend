@@ -654,6 +654,8 @@ const en = {
           addLocationSuccess: 'Successfully added location',
           editLocationSuccess: 'Successfully edited location',
           removeLocationSuccess: 'Location {{name}} was successfully deleted.',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.',
         },
       },
       Operators: {

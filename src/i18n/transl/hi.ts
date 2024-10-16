@@ -633,6 +633,8 @@ export default {
           addLocationSuccess: 'स्थान सफलतापूर्वक जोड़ा गया',
           editLocationSuccess: 'स्थान सफलतापूर्वक संपादित किया गया',
           removeLocationSuccess: 'स्थान {{name}} सफलतापूर्वक हटा दिया गया था।',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.', // TODO
         },
       },
       Operators: {
