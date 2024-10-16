@@ -46,7 +46,6 @@ export default function CoolingUnitsField(props: Props) {
           variant="md"
           label={t('Dashboard.Management.Operators.fields.coolingUnits')}
           currentValue={selectLabel}
-          minifyLabel
           isModalOpen={isModalVisible}
           onClick={toggleModalVisibility}
           content={{

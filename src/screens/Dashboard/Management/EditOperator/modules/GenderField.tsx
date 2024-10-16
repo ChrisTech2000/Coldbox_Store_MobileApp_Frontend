@@ -33,7 +33,6 @@ export default function GenderField() {
           variant="md"
           label={t('Dashboard.Management.Operators.text.gender')}
           currentValue={t(['Dashboard.Management.Operators.text', selectedGender])}
-          minifyLabel
           isModalOpen={isModalVisible}
           onClick={toggleModalVisibility}
           content={{
