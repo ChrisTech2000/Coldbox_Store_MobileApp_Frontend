@@ -21,6 +21,7 @@ const width = (Dimensions.get('window').width - 42) / 2;
 
 type Props = {
   coolingUnitId: number;
+  coolingUnitName: string;
   companyId: number | undefined;
 };
 
@@ -46,9 +47,14 @@ export default function DeleteAction(props: Props) {
       await mutate(getQueryKey('getLocations', props.companyId));
       cache.delete(getQueryKey('getCoolingUnit', { ...props }));
 
-      toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.successDelete'), {
-        type: 'md_success',
-      });
+      toast.show(
+        t('Dashboard.Management.EditCoolingUnit.toasts.successDelete', {
+          name: props.coolingUnitName,
+        }),
+        {
+          type: 'md_success',
+        }
+      );
 
       toggleModalVisibility();
       navigation.goBack();
