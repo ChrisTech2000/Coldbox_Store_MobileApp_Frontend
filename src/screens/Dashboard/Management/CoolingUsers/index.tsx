@@ -1,34 +1,34 @@
+import type { NavigationProp } from '@react-navigation/native';
+import cloneDeep from 'lodash/cloneDeep';
 import React, { useMemo } from 'react';
 import { FlatList, Linking, RefreshControl, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider, List, type ListItemProps } from 'react-native-paper';
-import type { NavigationProp } from '@react-navigation/native';
 import { useShallow } from 'zustand/react/shallow';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import { CoolingUsersOverlay } from '#screens/Dashboard/Tutorial/CoolingUsersOverlay';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
+import { AIR_PROD_BASE_URL } from '#constants/environment';
+import { useTranslationUtils } from '#i18n/utils';
 import type {
   ManagementRoutePaths,
   ManagementRouteProps,
   ManagementRoutes,
 } from '#navigation/Dashboard/Management';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { useToggle } from '#ui/hooks/useToggle';
-import { useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
-import { paperTheme } from '#ui/lib/theme';
 import type { Farmer } from '#types/global';
-import { AIR_PROD_BASE_URL } from '#constants/environment';
+import { useToggle } from '#ui/hooks/useToggle';
+import { paperTheme } from '#ui/lib/theme';
 
-import Prompt from './components/Prompt';
 import FormModal from './components/FormModal';
-import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import Prompt from './components/Prompt';
 
 function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   const user = useAuthStore(useShallow((store) => store.user));
@@ -132,6 +132,8 @@ function _propsFactory(
   datum: Farmer,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ) {
+  console.log(datum);
+  const isUserWithoutPhone = datum.user.firstName === 'User without a phone';
   const props = {} as ListItemProps;
   props.title = [datum.user.firstName, datum.user.lastName].join(' ');
   if (datum.userCode) {
@@ -143,6 +145,7 @@ function _propsFactory(
       params: {
         farmerId: datum.id,
         createdByOperator: !datum.userCode,
+        isUserWithoutPhone,
       },
     });
   };
