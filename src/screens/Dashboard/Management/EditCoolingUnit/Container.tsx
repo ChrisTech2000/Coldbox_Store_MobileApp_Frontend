@@ -174,7 +174,11 @@ export default function ScreenContainer(props: Props) {
             </View>
             <FormFields isEditMode sensorList={unit?.sensorList} />
             <View tw="w-full flex-row items-center justify-around mt-5 px-2">
-              <DeleteAction coolingUnitId={coolingUnitId} companyId={companyId} />
+              <DeleteAction
+                coolingUnitId={coolingUnitId}
+                coolingUnitName={unit.name}
+                companyId={companyId}
+              />
               <Button
                 style={{ width }}
                 mode="contained"

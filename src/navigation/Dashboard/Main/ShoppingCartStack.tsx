@@ -61,13 +61,21 @@ export default function ShoppingCartStack() {
                 : t('navigation.dashboard.ShoppingCart')
             }
             // eslint-disable-next-line react/prop-types
-            {...dashboardHeaderFactory(
-              routeName === 'IncompleteOrderOverview'
-                ? // eslint-disable-next-line react/prop-types
-                  () => props.navigation.popToTop()
-                : // eslint-disable-next-line react/prop-types
-                  props.navigation.goBack
-            )}
+            {...dashboardHeaderFactory({
+              showShoppingCart: true,
+              goBackFunc:
+                routeName === 'IncompleteOrderOverview'
+                  ? // eslint-disable-next-line react/prop-types
+                    () => props.navigation.popToTop()
+                  : () => {
+                      /* eslint-disable */
+                      props.navigation.navigate('Main', {
+                        screen: 'Marketplace',
+                        params: { screen: 'MarketplaceRoot' },
+                      });
+                      /* eslint-enable */
+                    },
+            })}
           />
         ),
       };

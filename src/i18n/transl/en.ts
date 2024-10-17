@@ -654,6 +654,8 @@ const en = {
           addLocationSuccess: 'Successfully added location',
           editLocationSuccess: 'Successfully edited location',
           removeLocationSuccess: 'Location {{name}} was successfully deleted.',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.',
         },
       },
       Operators: {
@@ -679,7 +681,7 @@ const en = {
           operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
         },
         toasts: {
-          error: 'Phone already assigned. Try a different one',
+          error: 'Please check the information provided and try again',
           success: 'Successfully invited operator',
         },
         phoneFormat: 'Make sure the entered phone number has a country code.',

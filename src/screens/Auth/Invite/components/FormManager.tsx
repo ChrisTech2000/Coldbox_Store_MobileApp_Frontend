@@ -26,7 +26,7 @@ export function buildInitialValues(params: AuthRoutes['Invite']): FormValues {
     phone: params.phoneNumber,
     firstName: '',
     lastName: '',
-    gender: EApiGender.OTHER,
+    gender: '' as EApiGender,
     email: '',
     password: '',
     confirmPassword: '',

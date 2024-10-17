@@ -632,6 +632,8 @@ export default {
           addLocationSuccess: 'ସଫଳତାର ସହିତ ସ୍ଥାନ ଯୋଗ କରାଯାଇଛି',
           editLocationSuccess: 'ସଫଳତାର ସହିତ ସ୍ଥାନ ସଂପାଦିତ କରାଯାଇଛି',
           removeLocationSuccess: 'ସ୍ଥାନ {{name}} ସଫଳତାର ସହିତ ହଟାଇଦିଆଗଲା।',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.', // TODO
         },
       },
       Operators: {
@@ -657,7 +659,7 @@ export default {
           operator: 'ଏକ ଅପରେଟର୍ ଭାବେ Coldtivate ଆପ୍ ରେ ଯୋଗ ଦେବାକୁ, ଯାଆନ୍ତୁ: {{link}}',
         },
         toasts: {
-          error: 'ଫୋନ୍ ପୂର୍ବରୁ ଅସାଇନ୍ କରାଯାଇଛି। ଏକ ବିଭିନ୍ନ ନମ୍ବର ଚେଷ୍ଟା କରନ୍ତୁ',
+          error: 'Please check the information provided and try again', // TODO
           success: 'ସଫଳତାର ସହିତ ଅପରେଟର୍ କୁ ଆମନ୍ତ୍ରଣ କରାଯାଇଛି',
         },
         phoneFormat: 'ଯାଞ୍ଚ କରନ୍ତୁ ଯେ ଦିଆଯାଇଥିବା ଫୋନ୍ ନମ୍ବରରେ ଏକ ଦେଶ କୋଡ୍ ଅଛି।',

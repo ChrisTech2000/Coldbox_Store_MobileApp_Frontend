@@ -56,7 +56,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       gender: user?.gender ?? EApiGender.OTHER,
       parentName: farmerParentName ?? '',
       userCode: farmerUserCode ?? '',
-      country: farmerCountry ? countriesDict().getISOByName(farmerCountry) ?? '' : '',
+      country: farmerCountry ? (countriesDict().getISOByName(farmerCountry) ?? '') : '',
       userId: user!.id,
       farmerId: farmerId!,
     } satisfies DetailsSectionParams;

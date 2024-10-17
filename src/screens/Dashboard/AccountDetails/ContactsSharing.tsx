@@ -17,10 +17,13 @@ function ContactsSharing() {
   const { t } = useTranslationUtils();
   const [user, setUser] = useAuthStore((store) => [store.user, store.setUser]);
   const toast = InAppNotifications.useToast();
+  const [loading, setLoading] = React.useState(false);
 
   const onPreferencesChange = useCallback(
     async (publicPhone?: boolean, publicEmail?: boolean) => {
       if (!user) return;
+      setLoading(true);
+
       try {
         const userDatum = await ColdtivateService.updateUser({
           userId: user.id,
@@ -42,9 +45,11 @@ function ContactsSharing() {
         });
       } catch (exception) {
         console.error(exception);
+      } finally {
+        setLoading(false);
       }
     },
-    [user]
+    [user, setLoading]
   );
 
   return (
@@ -61,6 +66,7 @@ function ContactsSharing() {
             )}
             right={() => (
               <Switch
+                disabled={loading}
                 value={user?.isPhonePublic ?? false}
                 onValueChange={(val) => onPreferencesChange(val, undefined)}
               />
@@ -81,6 +87,7 @@ function ContactsSharing() {
               )}
               right={() => (
                 <Switch
+                  disabled={loading}
                   value={user?.isEmailPublic ?? false}
                   onValueChange={(val) => onPreferencesChange(undefined, val)}
                 />

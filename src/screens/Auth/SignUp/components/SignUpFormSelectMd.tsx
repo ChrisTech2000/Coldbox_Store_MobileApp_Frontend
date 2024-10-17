@@ -29,10 +29,11 @@ export function SignUpFormSelectMd<T extends FieldValues>({
   isModalOpen,
   closeModal,
 }: SignUpFormSelectProps<T>) {
-  const { t } = useTranslationUtils();
   const { fieldName, currentValue, required, setCurrentValue, error } = form;
+  const initialValue = currentValue ?? '';
 
-  const [selectedValue, setSelectedValue] = useState<string>('');
+  const { t } = useTranslationUtils();
+  const [selectedValue, setSelectedValue] = useState<string>(initialValue);
 
   const submit = useCallback(
     (evt: GestureResponderEvent) => {
@@ -46,10 +47,10 @@ export function SignUpFormSelectMd<T extends FieldValues>({
   const cancel = useCallback(
     (evt: GestureResponderEvent) => {
       evt.stopPropagation();
-      setSelectedValue('');
+      setSelectedValue(initialValue);
       closeModal();
     },
-    [closeModal]
+    [initialValue, closeModal]
   );
 
   return (

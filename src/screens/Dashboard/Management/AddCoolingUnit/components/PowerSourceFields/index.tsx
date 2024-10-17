@@ -21,7 +21,7 @@ export default function PowerSourceFields() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
 
-  const selectedPowerSource = watch('powerSource', null);
+  const selectedPowerSource = watch('powerSource');
   const [internalSelection, setInternalSelection] = useState<PowerSourcesIds | null>(
     selectedPowerSource
   );

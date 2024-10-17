@@ -631,6 +631,8 @@ export default {
           addLocationSuccess: 'સફળતાપૂર્વક સ્થળ ઉમેરાયું',
           editLocationSuccess: 'સફળતાપૂર્વક સ્થળ સંપાદિત થયું',
           removeLocationSuccess: 'સ્થાન {{name}} સફળતાપૂર્વક હટાવવામાં આવ્યું.',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.', // TODO
         },
       },
       Operators: {
@@ -656,7 +658,7 @@ export default {
           operator: 'કૂલ્ટિવેટ એપ્લિકેશનમાં ઓપરેટર તરીકે જોડાવા માટે, જુઓ: {{link}}',
         },
         toasts: {
-          error: 'ફોન પહેલેથી જ નિમણૂક કરવામાં આવ્યો છે. અલગ નંબર અજમાવો',
+          error: 'Please check the information provided and try again', // TODO
           success: 'સફળતાપૂર્વક ઓપરેટર આમંત્રણ મોકલ્યું',
         },
         phoneFormat: 'જોડાવેલા ફોન નંબરમાં દેશ કોડ હોવો ચોક્કસ કરો.',
