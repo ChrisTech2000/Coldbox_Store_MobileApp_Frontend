@@ -121,6 +121,7 @@ export function FarmersSurveyModal({
       quantitySelfConsumed: Number(formatFloat(values.weightDistribution.quantitySelfConsumed)),
       quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
     };
+    onSelectSpoilageReasons([]);
     onSubmit(values);
   }, []);
 
