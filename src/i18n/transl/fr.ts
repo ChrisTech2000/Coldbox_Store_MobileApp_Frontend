@@ -15,6 +15,9 @@ export default {
       gu: 'Gujarati',
       fr: 'Français',
       pt: 'Portugais',
+      igbo: 'Igbo',
+      yoruba: 'Yoruba',
+      hausa: 'Haoussa',
     },
   },
   gender: {
@@ -56,11 +59,12 @@ export default {
       RegisteredEmployee: 'Employé enregistré',
       AddRegisteredEmployee: 'Ajouter un employé enregistré',
       RegisteredEmployeeDetails: "Détails de l'employé enregistré",
+      DeliveryContacts: 'Contacts de livraison',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
       ProduceDetails: '{{produceCode}}',
-      MarketplaceSettings: 'Marketplace settings', // TODO
+      MarketplaceSettings: 'Paramètres du marché',
       PriceTrend: 'Tendance des prix',
       PriceRanking: 'Classement des prix',
       Planner: 'Planificateur',
@@ -77,18 +81,18 @@ export default {
     },
     dashboard: {
       AccountDetails: 'Détails du compte',
-      PersonalDetails: 'Personal details', // TODO
-      LocalizationPreferences: 'Localization preferences', // TODO
-      ContactsSharing: 'Contacts sharing', // TODO
-      Coupons: 'Coupons', // TODO
-      CouponsActiveTab: 'Active', // TODO
-      CouponsRevokedTab: 'Revoked', // TODO
-      Marketplace: 'Marketplace', // TODO
-      MarketplaceFilters: 'Filters', // TODO
-      MarketplaceAllTab: 'All', // TODO
-      MarketplaceFavoritesTab: 'Favorites', // TODO
-      Orders: 'Orders', // TODO
-      MyOrders: 'My Orders', // TODO
+      PersonalDetails: 'Détails personnels',
+      LocalizationPreferences: 'Préférences de localisation',
+      ContactsSharing: 'Partage de contacts',
+      Coupons: 'Coupons',
+      CouponsActiveTab: 'Actif',
+      CouponsRevokedTab: 'Révoqué',
+      Marketplace: 'Marché',
+      MarketplaceFilters: 'Filtres',
+      MarketplaceAllTab: 'Tous',
+      MarketplaceFavoritesTab: 'Favoris',
+      Orders: 'Commandes',
+      MyOrders: 'Mes Commandes',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Centre de connaissances',
       QuitTutorial: 'Quitter le tutoriel',
@@ -100,16 +104,15 @@ export default {
       PaymentMethods: 'Méthodes de paiement',
       Wallet: 'Portefeuille',
       Transactions: 'Transactions',
-      AddCard: 'Ajouter une carte de crédit',
-      EditCard: 'Modifier une carte de crédit',
       Transaction: '{{id}}',
+      ShoppingCart: 'Panier',
     },
     checkIn: {
       SelectCropType: 'Sélectionner le type de culture',
       CheckIn: 'Enregistrement',
       CropList: '{{cropType}}',
       CrateSetup: 'Enregistrement',
-      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
+      CrateWeightAndPricing: 'Poids et tarification des caisses',
     },
     about: {
       comsolAgreement: 'Contrat de Licence Runtime COMSOL 6.0',
@@ -324,7 +327,7 @@ export default {
       title: 'Alerte de température',
       subtitle:
         "Nous avons remarqué qu'il y avait un changement. Voici les produits actuellement en stockage.",
-      edit: 'Voulez-vous modifier la température?',
+      edit: 'Voulez-vous modifier la température ?',
       temperature: 'Température',
       newTemperature: 'Nouvelle température',
       confirm: 'Confirmer la nouvelle température',
@@ -449,6 +452,13 @@ export default {
           label: 'Type de paiement',
           cash: 'Espèces',
           creditCard: 'Carte de crédit',
+          bankTransfer: 'Virement bancair',
+        },
+        bankTransfer: {
+          title: 'Détails du bénéficiaire',
+          accountName: 'Nom du compte',
+          accountNumber: 'Numéro de compte',
+          bankName: 'Nom de la banque',
         },
         paid: 'Payé',
       },
@@ -606,6 +616,21 @@ export default {
       },
     },
     Management: {
+      Delivery: {
+        companyName: "Nom de l'entreprise",
+        companyNamePlaceholder: "Insérer le nom de l'entreprise",
+        companyNameError: "Veuillez insérer le nom de l'entreprise",
+        contactName: 'Nom du contact',
+        contactNamePlaceholder: 'Insérer le nom du contact',
+        contactNameError: 'Veuillez insérer le nom du contact',
+        phoneNumber: 'Numéro de téléphone',
+        phoneNumberPlaceholder: 'Insérer le numéro de téléphone',
+        emptyMessage: "Aucun contact n'a encore été ajouté",
+        deleteContactMessage: 'Êtes-vous sûr de vouloir supprimer ce contact ?',
+        noAvailableContacts:
+          "Il n'y a aucun contact disponible pour cette unité de refroidissement en particulier.",
+        contactedAddedSuccessfully: 'Contact ajouté avec succès.',
+      },
       Location: {
         emptyState: "Aucun lieu ajouté pour l'instant. Cliquez sur le signe + pour en ajouter un.",
         text: {
@@ -640,7 +665,7 @@ export default {
           editLocationSuccess: 'Lieu modifié avec succès',
           removeLocationSuccess: 'Le lieu {{name}} a été supprimé avec succès.',
           failedToFetchLocation:
-            'Unable to retrieve the location. Please check the address and try again.', // TODO
+            "Impossible de récupérer l'emplacement. Veuillez vérifier l'adresse et réessayer.",
         },
       },
       Operators: {
@@ -667,7 +692,7 @@ export default {
             "Pour rejoindre l'application Coldtivate en tant qu'Opérateur, rendez-vous sur : {{link}}",
         },
         toasts: {
-          error: 'Please check the information provided and try again', // TODO
+          error: 'Le téléphone est déjà attribué. Essayez un autre numéro',
           success: 'Opérateur invité avec succès',
         },
         phoneFormat: 'Assurez-vous que le numéro de téléphone saisi a un code pays.',
@@ -894,6 +919,7 @@ export default {
           label: 'Sélectionner les méthodes de paiement :',
           cash: 'Espèces',
           creditCard: 'Carte de Crédit',
+          bankTransfer: 'Virement bancaire',
         },
       },
       Coupons: {
@@ -902,9 +928,27 @@ export default {
         code: 'Code du coupon',
         percentage: 'Pourcentage du coupon',
         revokeTitle: 'Révoquer le coupon',
+        revoke: 'Révoquer',
         revokeMessage:
           'Êtes-vous sûr de vouloir révoquer ce coupon ? Une fois révoqué, il ne pourra plus être utilisé et la réduction ne sera plus disponible. Cette action est permanente et ne peut pas être annulée.',
       },
+    },
+    Marketplace: {
+      sorting: {
+        priceAsc: 'Prix croissant',
+        priceDesc: 'Prix décroissant',
+        nearMe: 'Près de moi',
+      },
+      priceConfig:
+        'La configuration des prix concerne la vente de produits, pas les frais de stockage réfrigéré.',
+      addToCart: {
+        addToCartButton: 'Ajouter au panier et continuer vos achats',
+        selectQuantity: 'Sélectionnez la quantité',
+        buyNowButton: 'Acheter maintenant',
+      },
+      currentLocation: 'Localisation actuelle',
+      filterError:
+        'Une erreur est survenue. Veuillez vérifier les fautes de frappe et vous assurer que la ville saisie est située au Nigéria.',
     },
     AccountDetails: {
       popups: {
@@ -938,16 +982,25 @@ export default {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',
         editTitle: 'Les informations de votre compte bancaire',
         form: {
-          nameLabel: 'Nom complet',
-          namePlaceholder: 'Ex. : John Doe',
+          nameLabel: 'Nom du compte',
+          namePlaceholder: 'Insérer le nom du compte',
           accountNumberLabel: 'Numéro de compte',
-          accountNumberPlaceholder: 'Insérez le numéro de compte',
-          bankLabel: 'Nom de la banque',
-          bankPlaceholder: 'Insérez le nom de la banque',
+          accountNumberPlaceholder: 'Insérer le numéro de compte',
+          countryLabel: 'Pays',
+          nigeria: 'Nigéria',
+          selectBank: 'Sélectionner une banque dans la liste',
+          bank: 'Banque',
+          accountType: 'Type de compte',
+          selectAccountType: 'Sélectionner le type de compte',
+          accountTypes: {
+            personal: 'Personnel',
+            business: 'Entreprise',
+          },
           errors: {
-            name: 'Le nom complet est requis',
+            accountName: 'Le nom du compte est requis',
             account: 'Le numéro de compte est requis',
-            bank: 'Le nom de la banque est requis',
+            accountType: 'Le type de compte est requis',
+            bank: 'La sélection de la banque est requise',
           },
         },
         successMessage: 'Compte bancaire ajouté avec succès.',
@@ -1125,34 +1178,57 @@ export default {
         },
       },
     },
+    MyOrders: {
+      sort: {
+        mostRecent: 'Le plus récent',
+        oldest: 'Le plus ancien',
+        date: 'Date',
+      },
+      title: 'Aperçu des commandes',
+      orderId: 'ID de commande',
+      cropType: 'Type de culture',
+      coolingUnit: 'Unité de refroidissement',
+      orderTotal: 'Total de la commande',
+      backToTopButton: 'Retour en haut',
+    },
     ShoppingCart: {
       empty: 'Votre panier est vide',
       daysLeft: 'jours restants',
       weight: 'KG disponibles',
       perKg: '/ KG',
-      total: 'Total à payer',
+      totalToPay: 'Total à payer',
       pay: 'Payer',
       orderHeader: 'Commande',
       subtotal: 'Sous-total',
-      produce: 'Produit',
+      produce: 'Produits',
       discount: 'Remise',
       fees: 'Frais de service',
-      marketFees: 'Frais du marché',
+      marketFees: 'Frais de marché',
       paymentFee: 'Frais de paiement',
-      viewContacts: 'Voir contact(s)',
+      viewContacts: 'Voir le(s) contact(s)',
       contactsForDelivery: 'Contact(s) pour les informations de livraison',
-      gotItButton: 'Compris !',
-      pickupMethods: 'Méthode de retrait',
-      pickUpToday: "Retrait aujourd'hui",
-      keepInStorageDailyRate: 'Garder en stockage ({{price}} / jour)',
-      keepInStorageFixedRate: 'Garder en stockage ({{price}})',
+      gotItButton: 'Compris!',
+      pickupMethods: 'Méthode de ramassage',
+      pickUpToday: "Ramassage aujourd'hui",
+      keepInStorageDailyRate: 'Conserver en stockage ({{price}} / jour)',
+      keepInStorageFixedRate: 'Conserver en stockage ({{price}})',
       delivery: 'Livraison',
-      companyName: "Nom de l'entreprise",
+      contactName: 'Nom du contact',
       phoneNumber: 'Numéro de téléphone',
       thankYouMessage: 'Merci pour votre commande',
       orderOverview: 'Aperçu de la commande',
       products: 'Produits',
       consultOrders: 'Consulter mes commandes',
+      total: 'Total',
+      couponQuestion: 'Avez-vous un coupon de réduction ?',
+      redeem: 'Échanger le code.',
+      redeemCoupon: 'Échanger le coupon',
+      couponPlaceholder: 'Ex. 20OFF',
+      discountsApplied: 'Remises appliquées',
+      errors: {
+        invalid: 'Valeur invalide',
+        minimumCartValue: "La commande doit être d'au moins ₦100.",
+      },
     },
     Analytics: {
       emptyState: 'Aucune donnée à afficher',
@@ -1282,6 +1358,7 @@ export default {
           co2: '💨 Émissions de CO2e',
           co2EmissionsLabel: 'Émissions de CO2e (kg)',
           co2DistributionLabel: 'Distribution des émissions de CO2e',
+          co2Kg: 'Kg de CO2 émis',
         },
         impactTab: {
           occupancyLabel: '🏘️ Occupation moyenne des unités de refroidissement',
@@ -1319,6 +1396,101 @@ export default {
         "Veuillez informer l'utilisateur {{farmer}} que ses caisses de {{crop}} doivent être retirées dès que possible ! (date d'enregistrement : {{checkIn}}, ID de l'unité de refroidissement : {{unitId}}, ID d'enregistrement : {{movementCode}}).",
       checkIn: "L'opérateur {{farmer}} a modifié l'enregistrement {{movementCode}} le {{date}}.",
       surveyAlreadyFilled: "L'enquête a déjà été remplie",
+    },
+  },
+  tutorial: {
+    welcome: 'Bienvenue sur Coldtivate. Ceci est un guide des fonctions.',
+    quit: 'Quitter le tutoriel',
+    'back-dashboard': 'Retour au tableau de bord',
+    congratulations:
+      "Félicitations ! Vous avez terminé le tutoriel ! Retournez au tableau de bord pour commencer à utiliser l'application.",
+    comic:
+      "Félicitations ! Vous avez terminé la bande dessinée ! Retournez au tableau de bord pour commencer à utiliser l'application.",
+    prev: 'Précédent',
+    next: 'Suivant',
+    start: 'Démarrer le tutoriel',
+    final:
+      "Félicitations ! Vous avez terminé le tutoriel ! Retournez au tableau de bord pour commencer à utiliser l'application.",
+    backToDashboard: 'Retour au tableau de bord',
+    steps: {
+      openDrawer:
+        'En haut à gauche, vous trouverez un menu avec les fonctionnalités principales. Allez-y et cliquez dessus.',
+      repeatTutorial:
+        'Si vous souhaitez revoir ce tutoriel, vous pouvez également le trouver dans le menu.',
+      managementNavigation:
+        'Dans le menu, vous pouvez naviguer vers "Gestion" et cliquer là pour ajouter ou modifier des utilisateurs de refroidissement. Allez-y et essayez.',
+      addCoolingUser:
+        'Les utilisateurs de refroidissement qui ne se sont pas inscrits sur Coldtivate peuvent être ajoutés en insérant leurs coordonnées (nom, numéro de téléphone). Les utilisateurs de refroidissement déjà inscrits dans l\'application peuvent être ajoutés par code. Ils peuvent trouver leur code sur leur profil -> "Détails du compte" -> "Code d\'importation de l\'utilisateur de refroidissement".',
+      navigateToCoolingUser: "Allez-y et cliquez sur l'onglet des utilisateurs de refroidissement",
+      listCoolingUsers:
+        "Les utilisateurs de refroidissement ayant un smartphone sont identifiés par une icône de téléphone sur le côté droit des écrans. Les autres sont des utilisateurs de refroidissement avec un téléphone basique. Dans les deux cas, vous pouvez cliquer sur un nom pour accéder à leurs détails et au questionnaire de l'utilisateur de refroidissement.",
+      navigateToAddCoolingUser:
+        "En cliquant sur le signe '+' vous permet d'ajouter un nouvel utilisateur de refroidissement.",
+      coolingUnitStep:
+        'Vous pouvez naviguer entre les unités de refroidissement en cliquant sur le menu déroulant en haut.',
+      initiateCheckIn1:
+        "Une fois que vous avez ajouté un utilisateur de refroidissement, vous pouvez effectuer un enregistrement pour cet utilisateur de refroidissement. Allez-y et cliquez sur le bouton d'activité.",
+      initiateCheckIn2: "Maintenant, cliquez sur le bouton d'enregistrement (celui en vert).",
+      checkIn1:
+        'Pour compléter l\'enregistrement, vous devez cliquer sur "Ajouter des caisses" et suivre les instructions étape par étape. Cliquez sur "Continuer" pour voir à quoi ressemblerait le résultat.',
+      checkIn2:
+        "Après avoir complété toutes les étapes, vous verrez un aperçu des caisses que vous êtes sur le point d'enregistrer dans la pièce.",
+      checkIn3:
+        'Si vous êtes satisfait, vous pouvez cliquer sur "Confirmer" et les nouvelles caisses seront ajoutées au tableau de bord.',
+      history: 'En cliquant sur "Historique", vous pouvez voir tous les mouvements dans la pièce.',
+      coolingUnits:
+        'Cliquez sur "Unités de refroidissement" pour voir la capacité d\'une unité de refroidissement dans les 7 jours suivants (onglet Planificateur) et la température de la pièce (onglet Conditions de la pièce).',
+      roomConditions:
+        ' Vous pouvez mettre à jour manuellement la température de la chambre de refroidissement dans "Conditions de la chambre" si vous n\'avez pas de capteur connecté à l\'application.',
+      checkOut1:
+        "Pour commencer un départ, cliquez sur le bouton d'activité, puis sur le bouton rouge. Suivez ensuite les instructions pour compléter le départ.",
+      checkOut2:
+        "Vous pouvez choisir l'unité de refroidissement et les cultures que vous souhaitez retirer.",
+      checkOut3:
+        'Une fois que les articles sont payés, cliquez sur le bouton respectif et finalisez le départ.',
+      navigateToLocations:
+        "La première chose que vous devez faire est d'ajouter un emplacement. Allez-y et cliquez sur l'onglet des emplacements.",
+      locations:
+        "Vous pouvez ajouter un emplacement en sélectionnant un nom et en ajoutant sa latitude et sa longitude, en partageant vos coordonnées GPS (si vous êtes à l'emplacement de la chambre froide), ou en tapant l'adresse.",
+      navigateToCoolingUnits:
+        "Après qu'un emplacement ait été ajouté, vous pouvez ajouter une unité de refroidissement. Allez-y et cliquez sur l'onglet des unités de refroidissement.",
+      addCoolingUnits:
+        "Une unité de refroidissement peut être ajoutée en complétant les détails ci-dessus. Si vous avez des capteurs de température dans l'unité de refroidissement et une API en place, vous pouvez saisir les informations d'identification et connecter automatiquement vos capteurs à l'application.",
+      addEmployeesOperators:
+        "Vous pouvez ajouter des employés et des opérateurs enregistrés via l'écran de gestion. Pour ajouter l'un ou l'autre rôle, vous aurez besoin de leur numéro de téléphone. Ils recevront un SMS avec un lien d'invitation. Un numéro de téléphone ne peut être utilisé que pour un seul utilisateur.",
+      employeeCoolingUnitsStep:
+        'Une fois que vous avez sélectionné une unité de refroidissement, vous verrez un aperçu des : enregistrements dans l\'onglet "Tableau de bord", des mouvements dans l\'onglet "Historique", et du taux d\'utilisation planifié et de la température de la pièce dans l\'onglet "Unités de refroidissement".',
+      localizationPreferences:
+        'Vous pouvez changer la langue de l\'application en sélectionnant "Préférences de localisation". Assurez-vous de cliquer sur le bouton "Enregistrer les modifications" pour que la langue soit changée !',
+      accountDetailsNavigation:
+        'Dans le menu, vous pouvez naviguer vers "Détails du compte" et cliquer là pour voir/modifier un ensemble de configurations liées à votre compte. Allez-y et essayez.',
+      coolingUserSurvey:
+        "Il est très important que vous remplissiez le questionnaire de l'utilisateur de refroidissement pour que l'application puisse vous fournir des recommandations personnalisées. Merci de prendre le temps de compléter le questionnaire !",
+      coolingUserCode:
+        'La première fois que vous arrivez dans une chambre froide pour stocker vos produits, l\'opérateur vous demandera de lui fournir votre code personnel, pour vous ajouter à la liste des utilisateurs de la chambre froide. Vous pouvez trouver ce code dans "Détails personnels" -> "Code d\'importation de l\'utilisateur de refroidissement".',
+      knowledgeHub:
+        'Dans le menu, vous pouvez trouver le "Centre de connaissances", qui contient des conseils sur la durée pendant laquelle différentes cultures peuvent être stockées et leur température optimale. Consultez-le pour comprendre combien la chambre froide peut vous aider à préserver la qualité de différents fruits et légumes !',
+      faq: "Dans le menu, vous pouvez également trouver les questions fréquemment posées (FAQ). Nous vous recommandons de les consulter pour en savoir plus sur l'application et les avantages de stocker vos produits dans les chambres froides.",
+      dashboardStep1:
+        'Une fois que l\'opérateur a effectué un enregistrement pour vous, vous pourrez voir les produits stockés dans la chambre dans la section "Tableau de bord". Chaque carte contient un ensemble de caisses du même type de culture qui ont été enregistrées ensemble.',
+      dashboardStep2:
+        "Chaque carte du tableau de bord contient des informations sur : le type de culture, le nombre de caisses stockées, depuis combien de jours elles sont déjà stockées, le prix quotidien (pour toutes les caisses ensemble), et l'ID d'enregistrement.",
+      dashboardStep3:
+        'Le nombre de jours coloré indique le "Temps de retrait" (TTPU), ce qui signifie pendant combien de jours vos produits resteront bons, s\'ils sont réfrigérés. Une couleur rouge signifie que le produit perd sa qualité et doit être récupéré dès que possible.',
+      dashboardStep4:
+        'Si la couleur de la carte est jaune (2 à 5 jours restants) ou verte (plus de 5 jours), vous n\'avez pas besoin de vous inquiéter pour les caisses. Le nombre de jours est recalculé plusieurs fois par jour, alors assurez-vous de vérifier le "Tableau de bord" régulièrement pour voir comment la qualité de vos caisses dans la chambre évolue.',
+      dashboardStep5:
+        'Si vous avez des caisses stockées dans plusieurs chambres, vous pouvez changer la chambre que vous visualisez en sélectionnant une entreprise et une unité de refroidissement dans le menu déroulant.',
+      farmerHistory:
+        'Dans l\'onglet "Historique", vous pouvez voir un résumé de tous les enregistrements et départs que vous avez effectués dans chaque chambre. Si vous voyez un point rouge à côté d\'un départ, veuillez cliquer sur les trois points et "Remplir le questionnaire de marché". Ici, nous aimerions comprendre à quel prix vous avez vendu vos produits, et si quelque chose a été gâté. Nous utilisons ces informations pour améliorer les opérations à la chambre froide, donc il est important que vous complétiez le questionnaire !',
+      farmersCoolingUnits:
+        'Pour vérifier les unités de refroidissement près de chez vous, vous pouvez naviguer vers les boutons en bas de l\'écran, cliquer sur l\'onglet "Unités de refroidissement" et sélectionner "Carte". En cliquant sur chaque épingle sur la carte, vous pouvez voir le type d\'unité et le prix du stockage.',
+      farmersUnitsPlanner:
+        'Dans l\'onglet "Unités de refroidissement", vous pouvez trouver la Carte, l\'occupation actuelle et future de la chambre (dans "Planificateur") et la température de la chambre (dans "Conditions de la chambre"). Ces écrans vous aident à surveiller à distance ce qui se passe dans les chambres froides, sans avoir à vous y rendre en personne pour vérifier !',
+      marketPrice:
+        "Si vous voyez un onglet nommé \"Prix du marché\", vous pouvez consulter les prix de différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu'une prévision des prix pour l'avenir. Pour le moment, cette option n'est disponible que pour certains pays.",
+      farmerFinalStep:
+        "Félicitations ! Vous avez terminé le tutoriel ! Si vous avez des questions concernant l'application, nous vous recommandons de consulter la FAQ, de demander à un opérateur de la chambre froide, ou de nous écrire à app@yourvcca.org.",
     },
   },
 } satisfies Translations;
