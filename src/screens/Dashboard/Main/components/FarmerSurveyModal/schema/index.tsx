@@ -51,19 +51,12 @@ export const FarmerSurveySchema = (t: Translator) =>
             });
           }
         }),
-      reasonsForSpoilage: z
-        .string()
-        .array()
-        .refine((array) => array && array.length > 0, {
-          message: t(
-            'Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.reasonsForSpoilage'
-          ),
-        }),
+      reasonsForSpoilage: z.array(z.string(), {
+        message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.reasonsForSpoilage'),
+      }),
       averagePrice: z
         .string({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
-        .min(1, {
-          message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
-        }),
+        .optional(),
       crop: z.any(),
       cropSelection: z.boolean(),
     })
