@@ -19,6 +19,7 @@ export type EditCoolingUserStackRoutes = {
   Root: {
     farmerId: number;
     createdByOperator: boolean;
+    isUserWithoutPhone: boolean;
   };
   CoolingUsersSurvey: {
     farmerId: number;

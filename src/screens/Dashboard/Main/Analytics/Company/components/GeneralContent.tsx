@@ -55,19 +55,19 @@ export function GeneralContent() {
       <Logo width={50} height={50} tw="mb-4" />
       <View tw="flex flex-row flex-wrap items-center justify-center space-x-2 space-y-2">
         <View tw="bg-violet-950 rounded-md px-2 py-1 items-center">
-          <Text variant="TextMedium" tw="text-lg text-white">
+          <Text variant="TextMedium" tw="text-base text-white mb-2">
             {t(`Dashboard.Analytics.companyTab.companyNameLabel`)}
           </Text>
-          <Text variant="TextBold" tw="text-lg text-white font-bold">
+          <Text variant="TextBold" tw="text-base text-white">
             {company?.name}
           </Text>
         </View>
 
         <View tw="bg-violet-950 rounded-md px-2 py-1 items-center">
-          <Text variant="TextMedium" tw="text-lg text-white">
+          <Text variant="TextMedium" tw="text-base text-white mb-2">
             {t(`Dashboard.Analytics.companyTab.revenueLabel`)}
           </Text>
-          <Text variant="TextBold" tw="text-lg text-white font-bold">
+          <Text variant="TextBold" tw="text-base text-white">
             {companyData?.compRevenue?.[0]?.toLocaleString('en-US', {
               style: 'currency',
               currency: companyData?.currency[0],
@@ -76,10 +76,10 @@ export function GeneralContent() {
         </View>
 
         <View tw="bg-violet-950 rounded-md px-2 py-1 items-center">
-          <Text variant="TextMedium" tw="text-lg text-white">
+          <Text variant="TextMedium" tw="text-base text-white mb-2">
             {t(`Dashboard.Analytics.companyTab.coolingUnitsLabel`)}
           </Text>
-          <Text variant="TextBold" tw="text-lg text-white font-bold">
+          <Text variant="TextBold" tw="text-base text-white">
             {coolingUnits?.length && coolingUnits.length > 1
               ? t(`Dashboard.Analytics.companyTab.coolingUnitsContent`, {
                   amount: coolingUnits.length,
@@ -89,10 +89,10 @@ export function GeneralContent() {
         </View>
 
         <View tw="bg-violet-950 rounded-md px-2 py-1 items-center">
-          <Text variant="TextMedium" tw="text-lg text-white">
+          <Text variant="TextMedium" tw="text-base text-white mb-2">
             {t(`Dashboard.Analytics.companyTab.capacityLabel`)}
           </Text>
-          <Text variant="TextBold" tw="text-lg text-white font-bold">
+          <Text variant="TextBold" tw="text-base text-white">
             {t(`Dashboard.Analytics.companyTab.capacityContent`, {
               amount: coolingUnitsCapacity,
             })}
@@ -100,18 +100,18 @@ export function GeneralContent() {
         </View>
 
         <View tw="bg-violet-950 rounded-md px-2 py-1 items-center">
-          <Text variant="TextMedium" tw="text-lg text-white">
+          <Text variant="TextMedium" tw="text-base text-white mb-2">
             {t(`Dashboard.Analytics.companyTab.coolingUnitTypeLabel`)}
           </Text>
-          <Text variant="TextBold" tw="text-lg text-white font-bold">
+          <Text variant="TextBold" tw="text-base text-white">
             {t(`Dashboard.Analytics.companyTab.coolingUnitTypeMarket`, { amount: marketUnits })}
           </Text>
-          <Text variant="TextBold" tw="text-lg text-white font-bold">
+          <Text variant="TextBold" tw="text-base text-white">
             {t(`Dashboard.Analytics.companyTab.coolingUnitTypeFarmGate`, {
               amount: farmGateUnits,
             })}
           </Text>
-          <Text variant="TextBold" tw="text-lg text-white font-bold">
+          <Text variant="TextBold" tw="text-base text-white">
             {t(`Dashboard.Analytics.companyTab.coolingUnitTypeMovable`, { amount: movableUnits })}
           </Text>
         </View>

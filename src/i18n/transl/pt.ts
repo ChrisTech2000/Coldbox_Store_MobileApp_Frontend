@@ -1105,7 +1105,7 @@ export default {
       },
       stringTemplates: {
         sendSMS: `{{companyName}} - Recibo de {{movementType}}:
-          Código de movimentação: {{code}}
+          Código de movimento: {{code}}
           Produtos: {{crops}}
           Peso total: {{weight}} Kg
           {{movementTypeForDate}}: {{date}}

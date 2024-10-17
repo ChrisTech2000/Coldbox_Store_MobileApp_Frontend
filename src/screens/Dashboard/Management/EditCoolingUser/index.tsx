@@ -109,11 +109,17 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
         >
           <View tw="w-full">
             <TextFields
-              disabledFields={!params.createdByOperator ? ['firstName', 'lastName'] : undefined}
+              disabledFields={
+                !params.createdByOperator
+                  ? ['firstName', 'lastName']
+                  : params.isUserWithoutPhone
+                    ? ['firstName', 'lastName', 'parentName']
+                    : undefined
+              }
             />
-            <GenderField disabled={!params.createdByOperator} />
+            <GenderField disabled={!params.createdByOperator || params.isUserWithoutPhone} />
             <ContactField disabled />
-            <LanguageField />
+            <LanguageField disabled={params.isUserWithoutPhone} />
           </View>
           <View tw="mt-5">
             <FarmerDashboardData farmerId={params.farmerId} />
@@ -138,6 +144,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
               tw="w-full mb-4"
               mode="contained"
               onPress={submitHandler}
+              disabled={params.isUserWithoutPhone}
               icon={isSubmitting ? undefined : 'check-circle-outline'}
               uppercase
             >

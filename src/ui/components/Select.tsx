@@ -85,7 +85,7 @@ export function Select({
       <TouchableOpacity disabled={props.disabled} onPress={onClick}>
         <View
           tw={cn(
-            'flex flex-row items-center space-x-0.5',
+            'flex flex-row items-center space-x-0.75',
             variant !== 'sm' && 'justify-between',
             minifyLabel && currentValue && 'flex flex-col items-start'
           )}

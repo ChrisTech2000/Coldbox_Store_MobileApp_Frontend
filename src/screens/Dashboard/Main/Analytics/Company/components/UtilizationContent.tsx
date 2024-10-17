@@ -49,7 +49,7 @@ export function UtilizationContent() {
       showsVerticalScrollIndicator={false}
     >
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-3 my-2">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-base">
           {t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}
         </Text>
         <Text variant="HeadingRegular" tw="text-blue-800">
@@ -85,13 +85,13 @@ function Section({ title, checkedIn, checkedOut }: SectionProps) {
 
   return (
     <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
-      <Text variant="TextMedium" tw="text-lg">
+      <Text variant="TextMedium" tw="text-base">
         {title}
       </Text>
-      <Text variant="TextBold" tw="text-lg font-bold">
+      <Text variant="TextBold" tw="text-base font-bold">
         {t('Dashboard.Analytics.checkedInLabel', { amount: checkedIn })}
       </Text>
-      <Text variant="TextBold" tw="text-lg font-bold">
+      <Text variant="TextBold" tw="text-base font-bold">
         {t('Dashboard.Analytics.checkedOutLabel', { amount: checkedOut })}
       </Text>
     </View>
