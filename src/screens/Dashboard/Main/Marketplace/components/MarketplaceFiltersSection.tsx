@@ -86,24 +86,24 @@ export default function MarketplaceFiltersSection() {
 
       <Portal>
         <Modal visible={isVisible} onDismiss={resetState}>
-          <View tw="w-full items-center bg-zinc-50 rounded-3xl w-1/2 max-w-1/2 h-auto py-3 px-2 self-center space-y-2">
+          <View tw="w-full items-center bg-zinc-50 rounded-3xl w-2/3 max-w-2/3 h-auto py-3 px-2 self-center space-y-2">
             <View tw="items-start space-y-1 my-1 w-full">
               <RadioButton.Group
                 value={internalSelection}
                 onValueChange={(value) => setInternalSelection(value as InternalSelectionState)}
               >
                 <RadioButtonItem
-                  label="Price asc"
+                  label={t('Dashboard.Marketplace.sorting.priceAsc')}
                   value="price-asc"
                   tw="flex flex-row-reverse ml-[-10] w-full"
                 />
                 <RadioButtonItem
-                  label="Price desc"
+                  label={t('Dashboard.Marketplace.sorting.priceDesc')}
                   value="price-desc"
                   tw="flex flex-row-reverse ml-[-10] w-full"
                 />
                 <RadioButtonItem
-                  label="Nearby me"
+                  label={t('Dashboard.Marketplace.sorting.nearMe')}
                   value="nearby-me"
                   tw="flex flex-row-reverse ml-[-10] w-full"
                 />

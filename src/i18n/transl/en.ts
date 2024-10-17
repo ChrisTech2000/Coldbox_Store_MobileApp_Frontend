@@ -918,6 +918,11 @@ const en = {
       },
     },
     Marketplace: {
+      sorting: {
+        priceAsc: 'Price ascending',
+        priceDesc: 'Price descending',
+        nearMe: 'Nearby me',
+      },
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
       addToCart: {
         addToCartButton: 'Add to cart and continue shopping',

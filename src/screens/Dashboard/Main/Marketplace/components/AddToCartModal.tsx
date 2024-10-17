@@ -112,9 +112,12 @@ export default function AddToCartModal() {
                   tw="bg-white border rounded-sm h-14 text-center rounded-md w-full"
                   keyboardType="numeric"
                   defaultValue="1"
-                  value={value}
+                  value={`${value} kg`} // Append kg to the value
                   editable={false}
-                  onChangeText={onChange}
+                  onChangeText={(text) => {
+                    const newValue = text.replace(' kg', ''); // Strip out 'kg' before setting value
+                    onChange(newValue);
+                  }}
                   left={
                     <TextInput.Icon
                       icon="minus"
