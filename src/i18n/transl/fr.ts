@@ -665,7 +665,7 @@ export default {
             "Pour rejoindre l'application Coldtivate en tant qu'Opérateur, rendez-vous sur : {{link}}",
         },
         toasts: {
-          error: 'Le téléphone est déjà attribué. Essayez un autre numéro',
+          error: 'Please check the information provided and try again', // TODO
           success: 'Opérateur invité avec succès',
         },
         phoneFormat: 'Assurez-vous que le numéro de téléphone saisi a un code pays.',

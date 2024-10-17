@@ -662,7 +662,7 @@ export default {
           operator: 'Para se juntar ao aplicativo Coldtivate como Operador, vá para: {{link}}',
         },
         toasts: {
-          error: 'Telefone já atribuído. Tente outro',
+          error: 'Please check the information provided and try again', // TODO
           success: 'Operador convidado com sucesso',
         },
         phoneFormat: 'Certifique-se de que o número de telefone inserido tem um código de país.',
