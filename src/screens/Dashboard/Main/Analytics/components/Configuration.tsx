@@ -115,7 +115,7 @@ export function Configuration({ openModal }: { openModal: () => void }) {
 
   return (
     <View tw="bg-gray-200 px-4 py-2 items-center w-full rounded-lg space-y-2">
-      <Text variant="TextMedium" tw="text-lg text-center">
+      <Text variant="TextMedium" tw="text-base text-center">
         {t('Dashboard.Analytics.tabsShared.configurationMessage')}
       </Text>
       <Button mode="contained" contentStyle="bg-gray-800" icon="cog" onPress={openModal}>

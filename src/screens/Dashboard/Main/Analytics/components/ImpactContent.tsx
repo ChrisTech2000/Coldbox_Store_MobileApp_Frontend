@@ -94,7 +94,7 @@ export function ImpactContent<T extends Store>({
     >
       {type === 'aggregated' && (
         <View tw="w-full bg-violet-100 px-2 py-1 items-center rounded-lg space-y-3 my-2">
-          <Text variant="TextMedium" tw="text-lg">
+          <Text variant="TextMedium" tw="text-base">
             {t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}
           </Text>
           <Text variant="HeadingRegular" tw="text-blue-800">
@@ -109,26 +109,26 @@ export function ImpactContent<T extends Store>({
           title={t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
           from={
             <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
               </Text>
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {foodLoss.from.toFixed(2)}
               </Text>
-              <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
+              <Text variant="TextMedium" tw="text-base text-purple-500 font-bold">
                 %
               </Text>
             </View>
           }
           to={
             <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
               </Text>
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {foodLoss.to.toFixed(2)}
               </Text>
-              <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
+              <Text variant="TextMedium" tw="text-base text-purple-500 font-bold">
                 %
               </Text>
             </View>
@@ -136,7 +136,7 @@ export function ImpactContent<T extends Store>({
           change={
             foodLoss.to === foodLoss.from ? (
               <Icon source="equal" size={40} />
-            ) : foodLoss.to < foodLoss.from ? (
+            ) : foodLoss.evolution < 0 ? (
               <DownChange
                 value={`${foodLoss.evolution.toFixed(2)}%`}
                 message={t('Dashboard.Analytics.farmersAnalytics.decreaseInFoodLoss')}
@@ -154,20 +154,20 @@ export function ImpactContent<T extends Store>({
           title={t('Dashboard.Analytics.companyTab.impactTab.revenueLabel')}
           from={
             <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
               </Text>
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {revenueChange.from}
               </Text>
             </View>
           }
           to={
             <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
               </Text>
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {revenueChange.to}
               </Text>
             </View>
@@ -175,7 +175,7 @@ export function ImpactContent<T extends Store>({
           change={
             revenueChange.to === revenueChange.from ? (
               <Icon source="equal" size={40} />
-            ) : revenueChange.to < revenueChange.from ? (
+            ) : revenueChange.evolution < 0 ? (
               <DownChange
                 value={`${revenueChange.evolution.toFixed(2)}%`}
                 message={t('Dashboard.Analytics.farmersAnalytics.decreaseInRevenue')}
@@ -193,7 +193,7 @@ export function ImpactContent<T extends Store>({
 
         {type === 'aggregated' && (
           <View tw="w-full bg-violet-100 px-2 py-1 items-center rounded-lg space-y-3 my-2">
-            <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextMedium" tw="text-base">
               {t('Dashboard.Analytics.tabsShared.roomRevenue')}
             </Text>
             <Text variant="HeadingRegular" tw="text-blue-800">
@@ -209,11 +209,11 @@ export function ImpactContent<T extends Store>({
           title={t('Dashboard.Analytics.companyTab.impactTab.co2Label')}
           from={
             <View tw="space-y-1 items-center">
-              <Text variant="TextMedium" tw="text-lg text-purple-500 text-center">
-                <Text variant="TextMedium" tw="text-lg font-bold text-center">
+              <Text variant="TextMedium" tw="text-base text-purple-500 text-center">
+                <Text variant="TextMedium" tw="text-base font-bold text-center">
                   {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
                 </Text>
-                <Text variant="TextMedium" tw="text-lg font-bold text-center">
+                <Text variant="TextMedium" tw="text-base font-bold text-center">
                   {co2.from}{' '}
                 </Text>
                 {t('Dashboard.Analytics.companyTab.impactTab.co2WithoutCooling')}
@@ -221,11 +221,11 @@ export function ImpactContent<T extends Store>({
             </View>
           }
           to={
-            <Text variant="TextMedium" tw="text-lg text-purple-500 text-center">
-              <Text variant="TextMedium" tw="text-lg font-bold text-center">
+            <Text variant="TextMedium" tw="text-base text-purple-500 text-center">
+              <Text variant="TextMedium" tw="text-base font-bold text-center">
                 {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
               </Text>
-              <Text variant="TextMedium" tw="text-lg font-bold text-center">
+              <Text variant="TextMedium" tw="text-base font-bold text-center">
                 {co2.to}{' '}
               </Text>
               {t('Dashboard.Analytics.companyTab.impactTab.co2WithCooling')}
@@ -234,7 +234,7 @@ export function ImpactContent<T extends Store>({
           change={
             co2.to === co2.from ? (
               <Icon source="equal" size={40} />
-            ) : co2.to < co2.from ? (
+            ) : co2.evolution < 0 ? (
               <DownChange
                 value={`${co2.evolution.toFixed(2)}Kg`}
                 message={t('Dashboard.Analytics.companyTab.impactTab.co2Decrease')}
@@ -249,7 +249,7 @@ export function ImpactContent<T extends Store>({
         />
 
         <View tw="w-full bg-violet-100 p-2 items-center rounded-lg space-y-1 my-2">
-          <Text variant="TextMedium" tw="text-lg text-center">
+          <Text variant="TextMedium" tw="text-base text-center">
             {t('Dashboard.Analytics.companyTab.impactTab.surveysAmountLabel')}
           </Text>
 
@@ -277,7 +277,7 @@ export function ImpactSection({ title, from, to, change }: SectionProps) {
 
   return (
     <View tw="w-full bg-violet-100 px-2 pt-4 pb-3 items-center rounded-lg space-y-1 my-2">
-      <Text variant="TextMedium" tw="text-lg">
+      <Text variant="TextMedium" tw="text-base">
         {title}
       </Text>
 

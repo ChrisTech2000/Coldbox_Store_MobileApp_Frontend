@@ -211,16 +211,16 @@ export function FarmerAnalytics() {
               </Button>
 
               <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
-                <Text variant="TextMedium" tw="text-base font-bold">
+                <Text variant="TextMedium" tw="text-base">
                   {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                  <Text variant="TextMedium" tw="text-base text-green-primary">
                     {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
                     {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
                   </Text>
                 </Text>
-                <Text variant="TextMedium" tw="text-base font-bold">
+                <Text variant="TextMedium" tw="text-base">
                   {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                  <Text variant="TextMedium" tw="text-base text-green-primary">
                     {configData.coolingUnits?.map((unit) => unit.name).join(', ') ?? ''}
                   </Text>
                 </Text>
@@ -238,38 +238,38 @@ export function FarmerAnalytics() {
               <Logo width={50} height={50} tw="mb-4" />
               <View tw="flex flex-row flex-wrap items-center justify-center space-x-2 space-y-2">
                 <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-lg text-white">
+                  <Text variant="TextMedium" tw="text-base text-white">
                     {t(`Dashboard.Analytics.farmersAnalytics.coolingUserName`)}
                   </Text>
-                  <Text variant="TextBold" tw="text-lg text-white font-bold">
+                  <Text variant="TextBold" tw="text-base text-white">
                     {user?.firstName} {user?.lastName}
                   </Text>
                 </View>
 
                 <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-lg text-white">
+                  <Text variant="TextMedium" tw="text-base text-white">
                     {t(`Dashboard.Analytics.farmersAnalytics.coolingUserType`)}
                   </Text>
-                  <Text variant="TextBold" tw="text-lg text-white font-bold">
+                  <Text variant="TextBold" tw="text-base text-white">
                     {user?.role}
                   </Text>
                 </View>
 
                 <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-lg text-white">
+                  <Text variant="TextMedium" tw="text-base text-white">
                     {t(`Dashboard.Analytics.farmersAnalytics.avgStorageTime`)}
                   </Text>
-                  <Text variant="TextBold" tw="text-lg text-white font-bold">
+                  <Text variant="TextBold" tw="text-base text-white">
                     {farmerImpact?.avgStorageDays?.[0] ?? 0}{' '}
                     {t(`Dashboard.Analytics.farmersAnalytics.days`)}
                   </Text>
                 </View>
 
                 <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-lg text-white">
+                  <Text variant="TextMedium" tw="text-base text-white">
                     {t(`Dashboard.Analytics.farmersAnalytics.coldStorageCost`)}
                   </Text>
-                  <Text variant="TextBold" tw="text-lg text-white font-bold">
+                  <Text variant="TextBold" tw="text-base text-white">
                     {(farmerImpact?.totalStorageCost?.['0'] ?? 0).toFixed(2)}
                   </Text>
                 </View>

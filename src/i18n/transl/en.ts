@@ -1333,6 +1333,7 @@ const en = {
           co2: '💨 CO2e emitted for cooling',
           co2EmissionsLabel: 'CO2e emissions (kg)',
           co2DistributionLabel: 'CO2e crop distribution',
+          co2Kg: 'Kg CO2 emitted',
         },
         impactTab: {
           occupancyLabel: '🏘️ Average occupancy of cooling units',
