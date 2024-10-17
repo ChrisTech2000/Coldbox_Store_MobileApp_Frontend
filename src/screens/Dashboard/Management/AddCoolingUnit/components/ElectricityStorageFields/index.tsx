@@ -22,7 +22,7 @@ export default function ElectricityStorageFields() {
 
   const [isVisible, toggleVisibility] = useToggle(false);
 
-  const selectedStorageSystem = watch('electricityStorageSystem', null);
+  const selectedStorageSystem = watch('electricityStorageSystem');
   const [internalSelection, setInternalSelection] = useState<ElectricityStorageIds | null>(
     selectedStorageSystem
   );

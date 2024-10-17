@@ -18,8 +18,12 @@ export default function GenderField() {
   const { t } = useTranslationUtils();
   const [isModalVisible, toggleModalVisibility] = useToggle();
 
-  const selectedGender = watch('gender', EApiGender.OTHER);
+  const selectedGender = watch('gender');
   const [internalSelection, setInternalSelection] = useState<EApiGender>(selectedGender);
+
+  const currentValue = selectedGender
+    ? t(['Dashboard.Management.Operators.text', selectedGender])
+    : '';
 
   return (
     <View tw="mt-5">
@@ -27,7 +31,7 @@ export default function GenderField() {
         <Select
           variant="md"
           label={t('Dashboard.Management.Operators.text.gender')}
-          currentValue={t(['Dashboard.Management.Operators.text', selectedGender])}
+          currentValue={currentValue}
           isModalOpen={isModalVisible}
           onClick={toggleModalVisibility}
           content={{
