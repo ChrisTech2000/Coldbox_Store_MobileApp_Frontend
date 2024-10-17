@@ -632,6 +632,8 @@ export default {
           addLocationSuccess: 'ସଫଳତାର ସହିତ ସ୍ଥାନ ଯୋଗ କରାଯାଇଛି',
           editLocationSuccess: 'ସଫଳତାର ସହିତ ସ୍ଥାନ ସଂପାଦିତ କରାଯାଇଛି',
           removeLocationSuccess: 'ସ୍ଥାନ {{name}} ସଫଳତାର ସହିତ ହଟାଇଦିଆଗଲା।',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.', // TODO
         },
       },
       Operators: {

@@ -639,6 +639,8 @@ export default {
           addLocationSuccess: 'Lieu ajouté avec succès',
           editLocationSuccess: 'Lieu modifié avec succès',
           removeLocationSuccess: 'Le lieu {{name}} a été supprimé avec succès.',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.', // TODO
         },
       },
       Operators: {
