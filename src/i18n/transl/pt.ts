@@ -285,6 +285,9 @@ export default {
         header: 'Registar como Utilizador de Refrigeração ou Consumidor',
         languageFieldName: 'idioma',
       },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again', // TODO
+      },
     },
     ForgotPassword: {
       heading: 'Esqueceu-se da Palavra-passe',

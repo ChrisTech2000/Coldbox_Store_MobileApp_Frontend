@@ -284,6 +284,9 @@ export default {
         header: 'ઠંડક વપરાશકર્તા અથવા ઉપભોક્તા તરીકે નોંધણી કરો',
         languageFieldName: 'ભાષા',
       },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again', // TODO
+      },
     },
     ForgotPassword: {
       heading: 'પાસવર્ડ ભૂલી ગયા',

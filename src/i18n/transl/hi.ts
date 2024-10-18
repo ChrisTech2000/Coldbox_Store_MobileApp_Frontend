@@ -284,6 +284,9 @@ export default {
         header: 'शीतलन उपयोगकर्ता या उपभोक्ता के रूप में साइन अप करें',
         languageFieldName: 'भाषा',
       },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again', // TODO
+      },
     },
     ForgotPassword: {
       heading: 'पासवर्ड भूल गए',

@@ -282,6 +282,9 @@ const en = {
         header: 'Sign Up as a Cooling User or Consumer',
         languageFieldName: 'language',
       },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again',
+      },
     },
     ForgotPassword: {
       heading: 'Forgot Password',

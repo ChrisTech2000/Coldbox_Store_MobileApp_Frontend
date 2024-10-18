@@ -286,6 +286,9 @@ export default {
         header: "S'inscrire comme utilisateur de refroidissement ou consommateur",
         languageFieldName: 'langue',
       },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again', // TODO
+      },
     },
     ForgotPassword: {
       heading: 'Mot de passe oublié',

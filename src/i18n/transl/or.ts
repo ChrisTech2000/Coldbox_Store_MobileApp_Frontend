@@ -284,6 +284,9 @@ export default {
         header: 'ଏକ ଶୀତଳନ ଉପଭୋକ୍ତା କିମ୍ବା ଗ୍ରାହକ ଭାବେ ସାଇନ୍ ଅପ୍ କରନ୍ତୁ',
         languageFieldName: 'ଭାଷା',
       },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again', // TODO
+      },
     },
     ForgotPassword: {
       heading: 'ପାସ୍‌ୱାର୍ଡ ଭୁଲିଗଲା',
