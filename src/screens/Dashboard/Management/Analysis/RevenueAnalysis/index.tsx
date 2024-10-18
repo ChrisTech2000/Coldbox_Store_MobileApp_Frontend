@@ -257,7 +257,12 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           {t('Dashboard.Management.RevenueAnalysis.summary.total')}
         </Text>
         <Text variant="TextBold" tw="text-base font-bold">
-          {revenueData.reduce((acc, current) => (acc += current.totalPrice), 0)}
+          {(
+            revenueData.reduce((acc, current) => (acc += current.totalPrice), 0) ?? 0
+          ).toLocaleString('en-US', {
+            style: 'currency',
+            currency: company?.currency,
+          })}
         </Text>
       </View>
 

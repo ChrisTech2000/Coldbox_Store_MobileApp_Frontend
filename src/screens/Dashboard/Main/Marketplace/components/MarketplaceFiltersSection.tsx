@@ -47,7 +47,7 @@ export default function MarketplaceFiltersSection() {
   return (
     <React.Fragment>
       <View tw="bg-zinc-100 py-4 space-y-3">
-        <View tw="flex-row items-center justify-between px-4">
+        <View tw="flex-row items-center justify-between mx-4">
           <MarketplaceLocationFilter />
 
           <Touchable

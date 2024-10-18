@@ -12,7 +12,7 @@ export default function FilterChip() {
   if (filters.length === 0) return null;
 
   return (
-    <ScrollView tw="pl-4 pt-3.5" horizontal showsHorizontalScrollIndicator={false}>
+    <ScrollView tw="pt-3.5" horizontal showsHorizontalScrollIndicator={false}>
       <View tw="flex-row space-x-2 pr-5">
         <Chip
           tw="bg-transparent"

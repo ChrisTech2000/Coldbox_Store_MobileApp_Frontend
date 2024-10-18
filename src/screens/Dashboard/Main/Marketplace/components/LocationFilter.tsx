@@ -14,6 +14,7 @@ import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { paperTheme } from '#ui/lib/theme';
+import { cn } from '#ui/lib/cn';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -27,6 +28,8 @@ type FormValues<T = string> = {
   cityName: string;
   distance: T;
 };
+
+const TRUNCATE_TEST_THRESHOLD = 10;
 
 export default function MarketplaceLocationFilter() {
   const { t, zodResolver } = useTranslationUtils();
@@ -100,7 +103,10 @@ export default function MarketplaceLocationFilter() {
   return (
     <React.Fragment>
       <Touchable
-        tw="flex-row items-center justify-center space-x-1.5 p-1.5"
+        tw={cn(
+          'flex-row items-center justify-center space-x-1.5 py-1.5 max-w-[55%]',
+          cityName?.length > TRUNCATE_TEST_THRESHOLD ? 'ml-4' : ''
+        )}
         rippleColor={colors.zinc[200]}
         onPress={(evt) => {
           evt.stopPropagation();
@@ -108,7 +114,7 @@ export default function MarketplaceLocationFilter() {
         }}
       >
         <MaterialCommunityIcon name="map-marker-outline" size={28} color={colors.zinc[600]} />
-        <Text tw="text-base">
+        <Text tw="text-base" numberOfLines={1}>
           {cityName
             ? `${cityName} ${distance ? `(+${distance}km)` : ''}`
             : t('Dashboard.Marketplace.currentLocation')}

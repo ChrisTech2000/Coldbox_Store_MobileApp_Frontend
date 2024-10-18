@@ -112,9 +112,11 @@ export default function FormFields() {
           />
         )}
       />
-      <Text tw="mt-2.5 mb-1 px-3" style={{ color: paperTheme.colors.error }}>
-        {t('Auth.Invite.fields.password')}
-      </Text>
+      {formState.errors.password ? (
+        <Text tw="mt-2.5 mb-1 px-3" style={{ color: paperTheme.colors.error }}>
+          {t('Auth.Invite.fields.password')}
+        </Text>
+      ) : null}
 
       <Controller
         name="confirmPassword"
