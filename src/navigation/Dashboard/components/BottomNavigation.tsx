@@ -18,8 +18,11 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 
+import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
+import type { TranslationPaths } from '#i18n/index';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import { useTranslationUtils } from '#i18n/utils';
 import RBAC from '#common/RBAC';
 
 import type { DashboardMainRoutePaths } from '../Main';
@@ -29,6 +32,17 @@ type NavigationRoutes = Array<DashboardMainRoutePaths>;
 
 const BOTTOM_NAV_ITEMS: NavigationRoutes = ['Dashboard', 'Marketplace', 'Analytics'];
 const BOTTOM_SHEET_ITEMS: NavigationRoutes = ['MarketPrice', 'History', 'CoolingUnits', 'Orders'];
+
+const ROUTE_TITLE_META = {
+  Dashboard: 'navigation.bottomTabs.Dashboard',
+  Marketplace: 'navigation.dashboard.Marketplace',
+  Analytics: 'navigation.bottomTabs.Analytics',
+  MarketPrice: 'navigation.bottomTabs.MarketPrice',
+  History: 'navigation.bottomTabs.History',
+  CoolingUnits: 'navigation.bottomTabs.CoolingUnits',
+  Orders: 'navigation.dashboard.Orders',
+  ShoppingCart: 'navigation.dashboard.ShoppingCart',
+} satisfies Record<DashboardMainRoutePaths, TranslationPaths>;
 
 const ICON_SIZE = 24;
 const ICON_DEFAULT_COLOR = colors.zinc[500];
@@ -76,6 +90,7 @@ function BottomNavBar(
   const { state, descriptors, navigation, modalRef, tabBarStyle } = props;
 
   const { bottom } = useSafeAreaInsets();
+  const { t } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
 
   const includeHistoryTab = !guard('NAVIGATE', 'MarketplaceListing');
@@ -84,13 +99,13 @@ function BottomNavBar(
     <View tw="absolute bottom-0 left-0 z-[9999] w-full" style={tabBarStyle}>
       <SkiaShadow blur={3} dx={0} dy={2} color={colors.zinc[300]} borderRadius={16}>
         <View
-          tw="flex-row items-center justify-evenly h-28 px-2 bg-white pt-2"
-          style={{ paddingBottom: bottom }}
+          tw="flex-row items-center justify-evenly px-2 bg-white pt-0.5"
+          style={{ paddingBottom: bottom, height: BOTTOM_NAV_HEIGHT }}
         >
           {filterBottomNavItems(state, includeHistoryTab).map((route, idx) => (
             <TabItem
               key={route.key}
-              title={route.name}
+              title={t(ROUTE_TITLE_META[route.name as DashboardMainRoutePaths])}
               onPress={(evt: GestureResponderEvent) => {
                 evt.stopPropagation();
                 navigation.navigate(route.name);
@@ -129,6 +144,7 @@ function BottomSheet({
 }: Pick<BottomTabBarProps, 'state' | 'descriptors' | 'navigation'> & {
   modalRef: React.RefObject<Modalize>;
 }) {
+  const { t } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
 
   const excludeHistoryTab = !guard('NAVIGATE', 'MarketplaceListing');
@@ -136,7 +152,11 @@ function BottomSheet({
   return (
     <Modalize
       ref={modalRef}
-      modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32, marginBottom: 96 }}
+      modalStyle={{
+        borderTopLeftRadius: 32,
+        borderTopRightRadius: 32,
+        marginBottom: BOTTOM_NAV_HEIGHT,
+      }}
       adjustToContentHeight
       withHandle={false}
     >
@@ -154,7 +174,7 @@ function BottomSheet({
           renderItem={({ item }) => (
             <List.Item
               tw="px-0 m-0 py-2"
-              title={item.name}
+              title={t(ROUTE_TITLE_META[item.name as DashboardMainRoutePaths])}
               left={() =>
                 descriptors?.[item.key]?.options?.tabBarIcon?.({
                   focused: false,
@@ -198,7 +218,7 @@ const TabItem = ({
     <View tw="rounded-full overflow-hidden">
       <Touchable
         tw={cn(
-          'items-center justify-center w-20 h-10',
+          'items-center justify-center w-16 h-8',
           isFocused ? 'bg-green-primary' : 'bg-transparent'
         )}
         onPress={onPress}
@@ -211,7 +231,7 @@ const TabItem = ({
         })}
       </Touchable>
     </View>
-    <Text tw={cn('leading-none tracking-widest text-zinc-500', isFocused && 'text-black')}>
+    <Text tw={cn('leading-none tracking-widest text-zinc-500 text-xs', isFocused && 'text-black')}>
       {title}
     </Text>
   </View>

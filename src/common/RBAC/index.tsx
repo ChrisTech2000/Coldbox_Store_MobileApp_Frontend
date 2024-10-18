@@ -27,7 +27,7 @@ export default function RBAC(props: PropsWithChildren) {
   const [user] = useAuthStore(useShallow((store) => [store.user]));
   const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
-  const contextualCountry = companyCountry || farmerCountry || 'NG';
+  const contextualCountry = companyCountry || farmerCountry || 'Nigeria';
   const abilities = useMemo(
     () => permissionsFactory(user?.role, contextualCountry),
     [user?.role, contextualCountry]

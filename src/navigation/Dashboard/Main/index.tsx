@@ -149,8 +149,8 @@ export default function DashboardMainBottomTabs() {
       <Tab.Screen name="Dashboard" component={MainTabStack} />
       <Tab.Screen name="Analytics" component={AnalyticsStack} />
       {navToMarketplace ? <Tab.Screen name="Marketplace" component={MarketplaceStack} /> : null}
-      <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
       <Tab.Screen name="History" component={HistoryTabStack} />
+      <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
       <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       {navToShoppingCart ? <Tab.Screen name="ShoppingCart" component={ShoppingCartStack} /> : null}
       {navToOrders ? <Tab.Screen name="Orders" component={OrdersStack} /> : null}

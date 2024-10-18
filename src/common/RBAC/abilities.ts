@@ -13,7 +13,7 @@ export type PermissionKinds = keyof typeof PERMISSION_KINDS;
 
 export default function permissionsFactory(role = ERoles.AUTH, contextualCountry: string) {
   return defineAbility((can, cannot) => {
-    const hasCustomerTypeFeatureFlag = contextualCountry === 'NG';
+    const hasCustomerTypeFeatureFlag = contextualCountry === 'Nigeria';
 
     ///
     // General Rules
