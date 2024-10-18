@@ -51,7 +51,11 @@ function CoolingUnitsCratesInfo() {
     const unit = data?.find(({ id }) => id === selectedCoolingUnit.id);
     if (!unit) return [[], 0];
 
-    return [unit.commodityInfos, unit.commodityTotal.totalCrates];
+    const sortedCommodityInfos = [...unit.commodityInfos].sort(
+      (a, b) => b.percentage - a.percentage
+    );
+
+    return [sortedCommodityInfos, unit.commodityTotal.totalCrates];
   }, [selectedCoolingUnit, data]);
 
   if (isLoading) {
