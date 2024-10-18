@@ -36,6 +36,11 @@ type ScreenOptions = (props: {
   navigation: NativeStackNavigationProp<ShoppingCartStackRoutes, ShoppingCartStackRoutePaths>;
 }) => NativeStackNavigationOptions;
 
+const navParams = {
+  screen: 'Marketplace',
+  params: { screen: 'MarketplaceRoot' },
+};
+
 const Stack = createNativeStackNavigator<ShoppingCartStackRoutes>();
 
 export default function ShoppingCartStack() {
@@ -68,12 +73,13 @@ export default function ShoppingCartStack() {
                   ? // eslint-disable-next-line react/prop-types
                     () => props.navigation.popToTop()
                   : () => {
-                      /* eslint-disable */
-                      props.navigation.navigate('Main', {
-                        screen: 'Marketplace',
-                        params: { screen: 'MarketplaceRoot' },
-                      });
-                      /* eslint-enable */
+                      // eslint-disable-next-line react/prop-types
+                      props.navigation.navigate(
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        'Main',
+                        navParams
+                      );
                     },
             })}
           />

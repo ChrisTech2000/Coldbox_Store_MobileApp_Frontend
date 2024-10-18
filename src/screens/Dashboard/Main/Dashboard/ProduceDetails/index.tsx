@@ -295,7 +295,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                               currencySymbol:
                                 currencies.find((c) => c.name === currency)?.symbol ?? '',
                               crates: produce.checkedInCrates,
-                              farmerId,
+                              farmerId: farmerId!,
                             });
                           },
                         }
