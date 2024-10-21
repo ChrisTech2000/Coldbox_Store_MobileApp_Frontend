@@ -18,7 +18,6 @@ import FormManager, { type FormValues } from './components/FormManager';
 import LocationField from './modules/Location';
 import CountryField from './modules/CountryField';
 import LanguageField from './modules/LanguageField';
-import DeleteAccountAction from './components/DeleteAccountAction';
 
 function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPreferences'>) {
   const { userId, farmerId, ...initialFormValues } = props.route.params;
@@ -70,36 +69,32 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
   return (
     <FormManager onSubmit={onSubmit} initialValues={{ ...initialFormValues, location: '' }}>
       {({ submitHandler, isSubmitting, hasChanges }) => (
-        <KeyboardAwareScrollView
-          tw="h-full p-3"
-          contentContainerStyle="flex-1 justify-between"
-          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-          showsVerticalScrollIndicator={false}
-        >
-          <View>
-            <CountryField />
-            <LocationField />
-            <LanguageField />
-          </View>
+        <React.Fragment>
+          <KeyboardAwareScrollView
+            tw="h-full"
+            contentContainerStyle="flex-1 justify-between"
+            keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+            showsVerticalScrollIndicator={false}
+          >
+            <View tw="px-3 pt-3 pb-8">
+              <CountryField />
+              <LocationField />
+              <LanguageField />
+            </View>
+          </KeyboardAwareScrollView>
 
-          <View tw="flex flex-row items-center justify-evenly">
-            <DeleteAccountAction />
+          <View tw="bottom-0 right-0 w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
             <Button
-              tw="w-[48%]"
+              tw="w-4/5 my-4"
               mode="contained"
               onPress={submitHandler}
-              icon={isSubmitting ? undefined : 'check-circle-outline'}
               disabled={!hasChanges}
               uppercase
             >
-              {isSubmitting ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                t('Dashboard.Management.CompanyDetails.actions.save')
-              )}
+              {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
             </Button>
           </View>
-        </KeyboardAwareScrollView>
+        </React.Fragment>
       )}
     </FormManager>
   );

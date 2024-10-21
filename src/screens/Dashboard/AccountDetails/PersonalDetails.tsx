@@ -19,7 +19,6 @@ import FormManager, { type FormValues } from './components/FormManager';
 import NameFields from './modules/NameFields';
 import ContactFields from './modules/ContactFields';
 import GenderField from './modules/GenderField';
-import DeleteAccountAction from './components/DeleteAccountAction';
 
 function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
   const { userId, farmerId, ...initialFormValues } = props.route.params;
@@ -71,44 +70,40 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
   return (
     <FormManager onSubmit={onSubmit} initialValues={{ ...initialFormValues, location: '' }}>
       {({ submitHandler, isSubmitting, hasChanges }) => (
-        <KeyboardAwareScrollView
-          tw="h-full p-3"
-          contentContainerStyle="flex-1 justify-between"
-          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-          showsVerticalScrollIndicator={false}
-        >
-          <View>
-            <NameFields />
-            <GenderField />
-            <ContactFields />
-            <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
-              <View tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md my-1.5">
-                <Text variant="TitleSmall" tw="flex-shrink" numberOfLines={2}>
-                  {t('Dashboard.AccountDetails.fields.userCode')}
-                </Text>
-                <Text variant="TitleSmall">{initialFormValues.userCode}</Text>
-              </View>
-            </RBAC.ProtectedResource>
-          </View>
+        <React.Fragment>
+          <KeyboardAwareScrollView
+            tw="h-full"
+            contentContainerStyle="flex-1 justify-between"
+            keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+            showsVerticalScrollIndicator={false}
+          >
+            <View tw="px-3 pt-3 pb-8">
+              <NameFields />
+              <GenderField />
+              <ContactFields />
+              <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
+                <View tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md my-1.5">
+                  <Text variant="TitleSmall" tw="flex-shrink" numberOfLines={2}>
+                    {t('Dashboard.AccountDetails.fields.userCode')}
+                  </Text>
+                  <Text variant="TitleSmall">{initialFormValues.userCode}</Text>
+                </View>
+              </RBAC.ProtectedResource>
+            </View>
+          </KeyboardAwareScrollView>
 
-          <View tw="flex flex-row items-center justify-evenly">
-            <DeleteAccountAction />
+          <View tw="bottom-0 right-0 w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
             <Button
-              tw="w-[48%]"
+              tw="w-4/5 my-4"
               mode="contained"
               onPress={submitHandler}
-              icon={isSubmitting ? undefined : 'check-circle-outline'}
               disabled={!hasChanges}
               uppercase
             >
-              {isSubmitting ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                t('Dashboard.Management.CompanyDetails.actions.save')
-              )}
+              {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
             </Button>
           </View>
-        </KeyboardAwareScrollView>
+        </React.Fragment>
       )}
     </FormManager>
   );
