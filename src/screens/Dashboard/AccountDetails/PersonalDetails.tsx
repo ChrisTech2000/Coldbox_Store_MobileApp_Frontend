@@ -57,12 +57,11 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
       {({ submitHandler, isSubmitting, hasChanges }) => (
         <React.Fragment>
           <KeyboardAwareScrollView
-            tw="h-full"
-            contentContainerStyle="flex-1 justify-between"
+            tw="flex-1"
             keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
             showsVerticalScrollIndicator={false}
           >
-            <View tw="px-3 pt-3 pb-8">
+            <View tw="px-3 pb-8">
               <NameFields />
               <GenderField />
               <ContactFields />
