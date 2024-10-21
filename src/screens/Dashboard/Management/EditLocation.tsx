@@ -184,7 +184,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
                 icon={isSubmitting ? undefined : 'pencil'}
                 uppercase
               >
-                {isSubmitting ? <ButtonLoader /> : t('actions.edit')}
+                {isSubmitting ? <ButtonLoader /> : t('actions.save')}
               </Button>
             </View>
           </KeyboardAwareScrollView>
