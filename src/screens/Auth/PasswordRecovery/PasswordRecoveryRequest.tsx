@@ -36,8 +36,8 @@ function PasswordRecoveryRequest() {
           phoneNumber: values.phone,
           link: { partOne, partTwo: `/${values.phone}` },
         });
-      } catch {
-        // silent error
+      } catch (exception) {
+        console.error(exception);
       }
 
       // For security reasons, we don't want to inform the user whether the introduced phone exists in our DB or not
