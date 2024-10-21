@@ -16,7 +16,6 @@ import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { EApiGender, ERoles } from '#types/global';
-import { cn } from '#ui/lib/cn';
 
 import type {
   AccountDetailsRouteProps,
@@ -31,7 +30,6 @@ import { PersonalDetailsOverlay } from '../Tutorial/PersonalDetailsOverlay';
 
 function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
-  const { guard } = RBAC.useRBAC();
 
   const user = useAuthStore(useShallow((store) => store.user));
   const [farmerParentName, farmerUserCode, farmerCountry, farmerId] = useDashboardStore(
@@ -42,8 +40,6 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       store.farmerId,
     ])
   );
-
-  const disabledLocationPreferences = !guard('VIEW', 'FarmerFields');
 
   function buildDetailsSectionParams() {
     return {
@@ -113,32 +109,27 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             />
             <Divider tw="bg-gray-400" />
           </View>
-          <View>
-            <List.Item
-              tw="p-0 py-2"
-              title={undefined}
-              disabled={disabledLocationPreferences}
-              left={() => (
-                <Text tw={cn('text-base w-[80%]', disabledLocationPreferences && 'text-gray-400')}>
-                  {t('navigation.dashboard.LocalizationPreferences')}
-                </Text>
-              )}
-              right={(props) => (
-                <List.Icon
-                  {...props}
-                  icon="chevron-right"
-                  color={disabledLocationPreferences ? colors.gray[400] : colors.gray[800]}
-                />
-              )}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                if (!user || !farmerId) return; // safe guard
-                props.navigation.navigate('LocalizationPreferences', buildDetailsSectionParams());
-              }}
-            />
-            <Divider tw="bg-gray-400" />
-          </View>
           <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
+            <View>
+              <List.Item
+                tw="p-0 py-2"
+                title={undefined}
+                left={() => (
+                  <Text tw="text-base w-[80%]">
+                    {t('navigation.dashboard.LocalizationPreferences')}
+                  </Text>
+                )}
+                right={(props) => (
+                  <List.Icon {...props} icon="chevron-right" color={colors.gray[800]} />
+                )}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  if (!user || !farmerId) return; // safe guard
+                  props.navigation.navigate('LocalizationPreferences', buildDetailsSectionParams());
+                }}
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
             <View>
               <List.Item
                 tw="p-0 py-2"
