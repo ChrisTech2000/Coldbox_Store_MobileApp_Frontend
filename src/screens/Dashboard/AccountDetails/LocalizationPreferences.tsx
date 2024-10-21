@@ -9,6 +9,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import type { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
 import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import ColdtivateService from '#services/ColdtivateService';
@@ -23,6 +24,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
 
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
+  const { guard } = RBAC.useRBAC();
 
   const setUser = useAuthStore((store) => store.setUser);
   const patchFarmer = useDashboardStore((store) => store.patchFarmer);
@@ -41,17 +43,19 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
 
       setUser({ ...userDatum, role: values.kind });
 
-      const farmerDatum = await ColdtivateService.updateFarmer({
-        farmerId,
-        country: values.country,
-        parentName: values.parentName,
-        updateUser: true,
-      });
+      if (guard('VIEW', 'FarmerFields')) {
+        const farmerDatum = await ColdtivateService.updateFarmer({
+          farmerId,
+          country: values.country,
+          parentName: values.parentName,
+          updateUser: true,
+        });
 
-      patchFarmer({
-        farmerCountry: farmerDatum.country,
-        farmerParentName: farmerDatum.parentName,
-      });
+        patchFarmer({
+          farmerCountry: farmerDatum.country,
+          farmerParentName: farmerDatum.parentName,
+        });
+      }
 
       toast.show(t('Dashboard.AccountDetails.toasts.success'), {
         type: 'md_success',
@@ -74,8 +78,10 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
             showsVerticalScrollIndicator={false}
           >
             <View tw="px-3 pb-8">
-              <CountryField />
-              <LocationField />
+              <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
+                <CountryField />
+                <LocationField />
+              </RBAC.ProtectedResource>
               <LanguageField />
             </View>
           </KeyboardAwareScrollView>

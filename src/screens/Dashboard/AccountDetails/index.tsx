@@ -111,30 +111,27 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
               />
               <Divider tw="bg-gray-400" />
             </View>
+            <View>
+              <List.Item
+                tw="p-0 py-2"
+                title={undefined}
+                left={() => (
+                  <Text tw="text-base w-[80%]">
+                    {t('navigation.dashboard.LocalizationPreferences')}
+                  </Text>
+                )}
+                right={(props) => (
+                  <List.Icon {...props} icon="chevron-right" color={colors.gray[800]} />
+                )}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  if (!user) return; // safe guard
+                  props.navigation.navigate('LocalizationPreferences', buildDetailsSectionParams());
+                }}
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
             <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
-              <View>
-                <List.Item
-                  tw="p-0 py-2"
-                  title={undefined}
-                  left={() => (
-                    <Text tw="text-base w-[80%]">
-                      {t('navigation.dashboard.LocalizationPreferences')}
-                    </Text>
-                  )}
-                  right={(props) => (
-                    <List.Icon {...props} icon="chevron-right" color={colors.gray[800]} />
-                  )}
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    if (!user || !farmerId) return; // safe guard
-                    props.navigation.navigate(
-                      'LocalizationPreferences',
-                      buildDetailsSectionParams()
-                    );
-                  }}
-                />
-                <Divider tw="bg-gray-400" />
-              </View>
               <View>
                 <List.Item
                   tw="p-0 py-2"
