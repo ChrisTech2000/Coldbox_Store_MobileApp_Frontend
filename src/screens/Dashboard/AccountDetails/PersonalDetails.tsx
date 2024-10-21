@@ -12,7 +12,6 @@ import { useTranslationUtils } from '#i18n/utils';
 import RBAC from '#common/RBAC';
 import InAppNotifications from '#common/InAppNotifications';
 import { useAuthStore } from '#stores/auth';
-import { useDashboardStore } from '#stores/dashboard';
 import ColdtivateService from '#services/ColdtivateService';
 
 import FormManager, { type FormValues } from './components/FormManager';
@@ -21,14 +20,12 @@ import ContactFields from './modules/ContactFields';
 import GenderField from './modules/GenderField';
 
 function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
-  const { userId, farmerId, ...initialFormValues } = props.route.params;
+  const { userId, ...initialFormValues } = props.route.params;
 
   const { t } = useTranslationUtils();
-  const { guard } = RBAC.useRBAC();
   const toast = InAppNotifications.useToast();
 
   const setUser = useAuthStore((store) => store.setUser);
-  const patchFarmer = useDashboardStore((store) => store.patchFarmer);
 
   const onSubmit = useCallback(async function (values: FormValues) {
     try {
@@ -44,24 +41,12 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
 
       setUser({ ...userDatum, role: values.kind });
 
-      if (guard('STORE', 'FarmerDetails')) {
-        const farmerDatum = await ColdtivateService.updateFarmer({
-          farmerId,
-          country: values.country,
-          parentName: values.parentName,
-          updateUser: true,
-        });
-
-        patchFarmer({
-          farmerCountry: farmerDatum.country,
-          farmerParentName: farmerDatum.parentName,
-        });
-      }
-
       toast.show(t('Dashboard.AccountDetails.toasts.success'), {
         type: 'md_success',
         style: { marginBottom: 50 },
       });
+
+      props.navigation.goBack();
     } catch (exception) {
       console.error(exception);
     }
@@ -82,7 +67,7 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
               <GenderField />
               <ContactFields />
               <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
-                <View tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md my-1.5">
+                <View tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md mt-3">
                   <Text variant="TitleSmall" tw="flex-shrink" numberOfLines={2}>
                     {t('Dashboard.AccountDetails.fields.userCode')}
                   </Text>

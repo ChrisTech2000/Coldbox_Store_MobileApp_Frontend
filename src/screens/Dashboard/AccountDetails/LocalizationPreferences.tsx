@@ -8,7 +8,6 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
 import { useTranslationUtils } from '#i18n/utils';
-import RBAC from '#common/RBAC';
 import InAppNotifications from '#common/InAppNotifications';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
@@ -23,7 +22,6 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
   const { userId, farmerId, ...initialFormValues } = props.route.params;
 
   const { t } = useTranslationUtils();
-  const { guard } = RBAC.useRBAC();
   const toast = InAppNotifications.useToast();
 
   const setUser = useAuthStore((store) => store.setUser);
@@ -43,24 +41,24 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
 
       setUser({ ...userDatum, role: values.kind });
 
-      if (guard('STORE', 'FarmerDetails')) {
-        const farmerDatum = await ColdtivateService.updateFarmer({
-          farmerId,
-          country: values.country,
-          parentName: values.parentName,
-          updateUser: true,
-        });
+      const farmerDatum = await ColdtivateService.updateFarmer({
+        farmerId,
+        country: values.country,
+        parentName: values.parentName,
+        updateUser: true,
+      });
 
-        patchFarmer({
-          farmerCountry: farmerDatum.country,
-          farmerParentName: farmerDatum.parentName,
-        });
-      }
+      patchFarmer({
+        farmerCountry: farmerDatum.country,
+        farmerParentName: farmerDatum.parentName,
+      });
 
       toast.show(t('Dashboard.AccountDetails.toasts.success'), {
         type: 'md_success',
         style: { marginBottom: 50 },
       });
+
+      props.navigation.goBack();
     } catch (exception) {
       console.error(exception);
     }
