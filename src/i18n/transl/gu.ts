@@ -241,7 +241,8 @@ export default {
         firstNameError: 'પ્રથમ નામ ફરજિયાત છે.',
         lastNameError: 'અંતિમ નામ ફરજિયાત છે.',
         phoneError: 'ફોન નંબર ફરજિયાત છે.',
-        invalidPhoneError: 'ફોન નંબર અમાન્ય છે',
+        invalidPhoneError:
+          'ફોન નંબર અમાન્ય છે. ખાતરી કરો કે ક્ષેત્ર કોડ સામેલ છે (ઉદાહરણ: +910000000000).',
         languageError: 'ભાષા ફરજિયાત છે.',
         genderError: 'લિંગ પસંદ કરવું ફરજિયાત છે.',
         termsError: 'તમે ઉપયોગની શરતો સાથે સંમત થવું જરૂરી છે.',
@@ -1452,23 +1453,23 @@ export default {
       dashboardStep1:
         'જ્યારે ઓપરેટરે તમારું ચેક ઇન પૂર્ણ કર્યું છે, ત્યારે તમે "ડેશબોર્ડ" વિભાગમાં રૂમમાં સંગ્રહિત ઉત્પાદને જોઈ શકશો. દરેક કાર્ડમાં સમાન પ્રકારના પાકોની એક્સેટ્ટો સેટ છે જે એક સાથે ચેક ઇન કરવામાં આવ્યા છે.',
       dashboardStep2:
-        'Each card in the dashboard provides information about the crop type, number of crates stored, how many days they have been in storage, the total daily price for all crates, and the check-in ID.',
+        'ડેશબોર્ડમાં દરેક કાર્ડમાં પાકના પ્રકાર, જથ્થામાં રાખવામાં આવેલા ક્રેટ્સની સંખ્યા, તેઓ કેટલા દિવસોથી સંગ્રહિત છે, બધા ક્રેટ્સ માટેનો કુલ દૈનિક ભાવ, અને ચેક-ઇન આઈડીની માહિતી આપવામાં આવે છે.',
       dashboardStep3:
-        'The colored number of days indicates the "Time to Pick Up" (TTPU), which reflects how many days your produce can remain good while refrigerated. A red color signifies that the produce is losing quality and should be picked up as soon as possible.',
+        'રંગીન દિવસોની સંખ્યા "પિક અપનો સમય" (TTPU) દર્શાવે છે, જે દર્શાવે છે કે તમારા ઉત્પાદનો રેફ્રિજરેટેડ રહેવા માટે કેટલા દિવસો સુધી સારી સ્થિતિમાં રહેશે. લાલ રંગ સૂચવે છે કે ઉત્પાદન ગુણવત્તા ગુમાવતું છે અને તેને શક્ય તેટલી વહેલીથી ઉઠાવી લેવું જોઈએ.',
       dashboardStep4:
-        'If the card color is yellow (indicating 2-5 days left) or green (more than 5 days), you don’t need to worry about the crates. The number of days is recalculated multiple times daily, so make sure to check the "Dashboard" regularly to monitor the quality of your crates.',
+        'જો કાર્ડનો રંગ પીળો (2-5 દિવસ બાકી) અથવા લીલો (5 દિવસથી વધુ) હોય, તો તમને ક્રેટ્સ વિશે ચિંતા કરવાની જરૂર નથી. દિવસોની સંખ્યા દરરોજ ઘણીવાર પુનઃગણના કરવામાં આવે છે, તેથી કૃપા કરીને ડેશબોર્ડને નિયમિત રીતે તપાસતા રહો જેથી તમારા ક્રેટ્સની ગુણવત્તા કેવી રીતે બદલાઈ રહી છે તે જાણી શકો.',
       dashboardStep5:
-        'If you have crates stored in multiple rooms, you can change the room view by selecting a company and cooling unit from the dropdown menu.',
+        'જો તમારી પાસે અનેક રૂમમાં જથ્થા ભરેલા ક્રેટ્સ હોય, તો તમે ડ્રોપડાઉન મેનૂમાંથી કંપની અને કૂલિંગ યુનિટ પસંદ કરીને રૂમના દર્શન બદલી શકો છો.',
       farmerHistory:
-        'In the "History" tab, you can view a summary of all check-ins and check-outs you’ve completed in each room. If you see a red dot next to a checkout, click on the three dots and select "Fill in Market Survey." This helps us understand the price at which you sold your produce and whether any items spoiled, which is crucial for improving cold room operations.',
+        '“ઈતિહાસ” ટેબમાં, તમે દરેક રૂમમાં પૂર્ણ કરેલા બધા ચેક-ઇન અને ચેક-આઉટનો સારાંશ જોઈ શકો છો. જો તમે ચેકઆઉટની બાજુમાં લાલ બિંદુ જુઓ, તો ત્રણ બિંદુઓ પર ક્લિક કરો અને “માર્કેટ સર્વે ભરો” પસંદ કરો. આ અમને સમજીવાને મદદ કરે છે કે તમે તમારા ઉત્પાદનને કયા ભાવમાં વેચ્યું અને કોઈ વસ્તુઓ નષ્ટ થઈ છે કે નહીં, જે ઠંડા ખંડના સંચાલનમાં સુધારો કરવા માટે ખૂબ જ મહત્વપૂર્ણ છે.',
       farmersCoolingUnits:
-        'To find cooling units near you, navigate to the bottom buttons, click on the "Cooling Units" tab, and select "Map." By clicking on each pin on the map, you can view the type of unit and the storage price.',
+        'તમારા નજીકની કૂલિંગ યુનિટ શોધવા માટે, તળિયાના બટનો પર જાઓ, “કૂલિંગ યુનિટ” ટેબ પર ક્લિક કરો અને “નકશા” પસંદ કરો. નકશામાં દરેક પિન પર ક્લિક કરીને, તમે એકમનો પ્રકાર અને સંગ્રહનો ભાવ જોઈ શકો છો.',
       farmersUnitsPlanner:
-        'In the "Cooling Units" tab, you’ll find the Map, the current and future occupancy of the room (under "Planner"), and the room temperature (in "Room Conditions"). These screens allow you to monitor cold room conditions remotely, without needing to visit in person!',
+        '“કૂલિંગ યુનિટ્સ” ટેબમાં, તમે નકશા, રૂમની વર્તમાન અને ભવિષ્યની ઓક્યુપન્સી ( “પ્લેનર” હેઠળ) અને રૂમનું તાપમાન (“રૂમ કન્ડિશન્સ”માં) શોધી શકો છો. આ સ્ક્રીનો તમને નિહાળવામાંની જરૂર વિના ઠંડા ખંડની શરતો પર દૂરથી દેખાવા માટેની મંજૂરી આપે છે!',
       marketPrice:
-        'If there is a "Crop Prices" tab, you can check the recent prices of various fruits and vegetables across the country, as well as future price forecasts. Currently, this feature is only available for selected countries.', // TODO
+        'જો “માર્કેટ ભાવ” ટેબ હોય, તો તમે દેશભરમાં વિવિધ ફળો અને શાકભાજીના તાજેતરના ભાવોની તપાસ કરી શકો છો, અને ભવિષ્યના ભાવની પૂર્વાનુમાન પણ જોઈ શકો છો. હાલમાં, આ સુવિધા માત્ર કેટલાક દેશો માટે ઉપલબ્ધ છે.',
       farmerFinalStep:
-        'Congratulations! You have completed the tutorial! For any questions about the app, please check the FAQ, ask a cold room operator, or email us at app@yourvcca.org.',
+        'અભિનંદન! તમે ટ્યુટોરિયલ પૂર્ણ કર્યું છે! એપ્લિકેશન વિશે કોઈ પ્રશ્નો માટે, કૃપા કરીને FAQ તપાસો, ઠંડા ખંડના ઓપરેટરને પૂછો, અથવા અમને app@yourvcca.org પર ઇમેઇલ કરો.',
     },
   },
 } satisfies Translations;

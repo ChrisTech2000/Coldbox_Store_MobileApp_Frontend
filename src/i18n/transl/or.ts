@@ -241,7 +241,8 @@ export default {
         firstNameError: 'ପ୍ରଥମ ନାମ ଆବଶ୍ୟକ।',
         lastNameError: 'ଆଖର ନାମ ଆବଶ୍ୟକ।',
         phoneError: 'ଫୋନ୍ ନମ୍ବର ଆବଶ୍ୟକ।',
-        invalidPhoneError: 'ଫୋନ୍ ନମ୍ବର ଅବୈଧ',
+        invalidPhoneError:
+          'ଫୋନ୍ ନମ୍ବର ଅମାନ୍ୟ। ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଏରିଆ କୋଡ୍ ଅନ୍ତର୍ଭୁକ୍ତ ଅଛି (ଉଦାହରଣ: +910000000000)।',
         languageError: 'ଭାଷା ଆବଶ୍ୟକ।',
         genderError: 'ଲିଙ୍ଗ ଚୟନ ଆବଶ୍ୟକ।',
         termsError: 'ଆପଣଙ୍କୁ ବ୍ୟବହାର ଶର୍ତ୍ତ ଗ୍ରହଣ କରିବାକୁ ପଡିବ।',

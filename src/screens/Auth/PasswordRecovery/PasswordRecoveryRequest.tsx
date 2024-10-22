@@ -1,15 +1,16 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
+import { View } from 'react-native';
 import { ActivityIndicator, Text, TextInput } from 'react-native-paper';
+import validator from 'validator';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useTranslationUtils } from '#i18n/utils';
-import AuthService from '#services/AuthService';
-import { DEEP_LINK_URL } from '#navigation/deepLinking';
 import InAppNotifications from '#common/InAppNotifications';
+import { useTranslationUtils } from '#i18n/utils';
+import { DEEP_LINK_URL } from '#navigation/deepLinking';
+import AuthService from '#services/AuthService';
 
 type PasswordRecoverySchema = { phone: string };
 
@@ -20,9 +21,18 @@ function PasswordRecoveryRequest() {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<PasswordRecoverySchema>({
-    resolver: zodResolver((z) => z.object({ phone: z.string().default('') })),
+    resolver: zodResolver((z) =>
+      z.object({
+        phone: z
+          .string()
+          .default('')
+          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+            message: t('Auth.SignUp.schema.invalidPhoneError'),
+          }),
+      })
+    ),
   });
 
   const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(
@@ -58,9 +68,6 @@ function PasswordRecoveryRequest() {
 
       <Controller
         control={control}
-        rules={{
-          required: true,
-        }}
         render={({ field: { onChange, value } }) => (
           <TextInput
             tw="w-[95%] text-base border bg-white rounded-sm h-12"
@@ -72,6 +79,9 @@ function PasswordRecoveryRequest() {
         )}
         name="phone"
       />
+      {errors.phone ? (
+        <Text tw="mx-4 mt-1 text-red-700 self-start">{errors.phone.message}</Text>
+      ) : null}
 
       <Button
         tw="w-[95%] border-2 border-green-primary mt-6"

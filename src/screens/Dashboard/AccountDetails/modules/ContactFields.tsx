@@ -44,6 +44,8 @@ export default function ContactFields() {
               dense
               value={value}
               onChangeText={onChange}
+              autoCorrect={false}
+              autoCapitalize="none"
               onBlur={onBlur}
               error={!!errors.email}
             />

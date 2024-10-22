@@ -237,7 +237,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
 
               <View tw="flex flex-row items-center justify-between">
                 <Text variant="TextMedium" tw="px-2">
-                  {percentage}%
+                  {percentage.toFixed(2)}%
                 </Text>
                 <Text variant="TextMedium" tw="px-2">
                   {t('Dashboard.ProduceDetails.pickUp')}

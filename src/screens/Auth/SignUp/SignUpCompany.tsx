@@ -252,6 +252,8 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
             label={`${t('Auth.SignUp.SignUpCompany.emailLabel')}*`}
             onChangeText={onChange}
             value={value}
+            autoCorrect={false}
+            autoCapitalize="none"
             error={errors.email}
           />
         )}

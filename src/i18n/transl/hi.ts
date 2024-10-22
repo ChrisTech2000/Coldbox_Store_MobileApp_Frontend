@@ -240,7 +240,8 @@ export default {
         firstNameError: 'पहला नाम अनिवार्य है।',
         lastNameError: 'अंतिम नाम अनिवार्य है।',
         phoneError: 'फ़ोन नंबर अनिवार्य है।',
-        invalidPhoneError: 'फ़ोन नंबर अमान्य है।',
+        invalidPhoneError:
+          'फ़ोन नंबर अमान्य है। सुनिश्चित करें कि एरिया कोड शामिल है (उदाहरण: +910000000000)।',
         languageError: 'भाषा अनिवार्य है।',
         genderError: 'लिंग चयन अनिवार्य है।',
         termsError: 'आपको उपयोग की शर्तों से सहमत होना आवश्यक है।',
