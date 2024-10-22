@@ -663,6 +663,9 @@ export default {
           removeLocationSuccess: 'स्थान {{name}} सफलतापूर्वक हटा दिया गया था।',
           failedToFetchLocation:
             'Unable to retrieve the location. Please check the address and try again.', // TODO
+          positionCancelled: 'Location request canceled.', // TODO
+          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
+          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
         },
       },
       Operators: {

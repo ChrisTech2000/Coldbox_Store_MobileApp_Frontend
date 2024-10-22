@@ -668,6 +668,9 @@ export default {
           removeLocationSuccess: 'Localização {{name}} foi eliminada com sucesso.',
           failedToFetchLocation:
             'Unable to retrieve the location. Please check the address and try again.', // TODO
+          positionCancelled: 'Location request canceled.', // TODO
+          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
+          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
         },
       },
       Operators: {
