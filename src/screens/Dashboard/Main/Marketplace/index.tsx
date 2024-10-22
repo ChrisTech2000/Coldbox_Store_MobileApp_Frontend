@@ -17,7 +17,7 @@ function MarketplaceRoot() {
     <React.Fragment>
       <MarketplaceFiltersSection />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View tw="flex-1">
+        <View tw="flex-1 mb-20">
           <MarketplaceList />
         </View>
       </ScrollView>
@@ -41,5 +41,7 @@ export default withSafeArea(
   withErrorBoundary(MarketplaceRoot, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );

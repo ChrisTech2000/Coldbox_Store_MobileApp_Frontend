@@ -1,4 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
+import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, DataTable, Icon } from 'react-native-paper';
@@ -15,8 +16,8 @@ import type { PredictionCrop, PredictionState, PredictionTableData } from '#type
 
 import { Month } from '../Ranking';
 import type { AllowedCountry } from '../store';
-import { changePage, compareAsc, compareDesc, parseDateString } from '../utils';
 import { MAP_ALLOWED_COUNTRY, QueryCountry } from '../Trend';
+import { changePage, compareAsc, compareDesc, parseDateString } from '../utils';
 
 enum ECurrency {
   NG = '₦',
@@ -112,6 +113,13 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
     [predictionData]
   );
 
+  const debouncedPageChange = useCallback(
+    debounce((page) => {
+      changePage(page, totalPages, setCurrentPage);
+    }, 300),
+    [totalPages]
+  );
+
   useEffect(() => {
     setCurrentPage(0);
   }, [predictionData]);
@@ -135,7 +143,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
   }
 
   return (
-    <View>
+    <View tw="mb-20">
       <DataTable tw="py-4 px-2">
         <SkiaShadow blur={6} dx={2} dy={8} color={colors.zinc[300]} borderRadius={10}>
           <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 py-2">
@@ -196,7 +204,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
             tw="bg-gray-700 rounded-b-lg"
             page={currentPage}
             numberOfPages={totalPages}
-            onPageChange={(page) => changePage(page, totalPages, setCurrentPage)}
+            onPageChange={debouncedPageChange}
             showFastPaginationControls
             numberOfItemsPerPage={ITEMS_PER_PAGE}
             theme={{
