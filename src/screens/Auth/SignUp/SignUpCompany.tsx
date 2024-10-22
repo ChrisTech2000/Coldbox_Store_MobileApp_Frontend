@@ -7,6 +7,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { ActivityIndicator, Checkbox, Portal, Text, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import type { AuthRouteProps } from '#navigation/Auth';
+import type { SignUpAsCompanyResponse } from '#types/api.responses';
 import Danger from '#assets/icons/danger.svg';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
@@ -15,7 +17,7 @@ import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { AuthRouteProps } from 'navigation/Auth';
+import InAppNotifications from '#common/InAppNotifications';
 
 import { currenciesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
@@ -29,6 +31,7 @@ const allCountryNames = allCountries.map((code) => code.countryName);
 function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
   const { navigation } = props;
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const {
     control,
@@ -107,23 +110,30 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
       currency,
     } = data;
 
-    const result = await AuthService.signUpAsCompany({
-      user: {
-        firstName,
-        lastName,
-        phone,
-        email,
-        password,
-        gender: MAP_APP_GENDER_TO_API[gender],
-      },
-      company: {
-        name,
-        country,
-        currency: currenciesDict().getCodeByName(currency) ?? 'NGN',
-        language: LanguageStorage.read(),
-        crop: [],
-      },
-    });
+    let result: SignUpAsCompanyResponse | undefined = undefined;
+
+    try {
+      result = await AuthService.signUpAsCompany({
+        user: {
+          firstName,
+          lastName,
+          phone,
+          email,
+          password,
+          gender: MAP_APP_GENDER_TO_API[gender],
+        },
+        company: {
+          name,
+          country,
+          currency: currenciesDict().getCodeByName(currency) ?? 'NGN',
+          language: LanguageStorage.read(),
+          crop: [],
+        },
+      });
+    } catch (exception) {
+      console.error(exception);
+      toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger', style: { marginBottom: 55 } });
+    }
 
     if (result) {
       closePhoneWarningModal();

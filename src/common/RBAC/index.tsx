@@ -10,6 +10,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import permissionsFactory, { type PermissionKinds } from './abilities';
 
@@ -27,15 +28,22 @@ export default function RBAC(props: PropsWithChildren) {
   const [user] = useAuthStore(useShallow((store) => [store.user]));
   const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
-  const contextualCountry = companyCountry || farmerCountry || 'NG';
+
+  const contextualCountry = useMemo(() => {
+    if (companyCountry) return countriesDict().getNameByISO(companyCountry) ?? 'Nigeria';
+    return farmerCountry ?? 'Nigeria';
+  }, [companyCountry, farmerCountry]);
+
   const abilities = useMemo(
     () => permissionsFactory(user?.role, contextualCountry),
     [user?.role, contextualCountry]
   );
+
   const guard: Context['guard'] = useCallback(
     (action, subject) => abilities.can(action, subject),
     [abilities]
   );
+
   return <RBACContext.Provider value={{ guard }}>{props.children}</RBACContext.Provider>;
 }
 

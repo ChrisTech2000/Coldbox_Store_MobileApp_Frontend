@@ -2,6 +2,7 @@ import isNil from 'lodash/isNil';
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Divider, List, Switch } from 'react-native-paper';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
@@ -19,37 +20,40 @@ function ContactsSharing() {
   const toast = InAppNotifications.useToast();
   const [loading, setLoading] = React.useState(false);
 
-  const onPreferencesChange = useCallback(
-    async (publicPhone?: boolean, publicEmail?: boolean) => {
-      if (!user) return;
-      setLoading(true);
+  const onPreferencesChange = useDebouncedCallback(
+    useCallback(
+      async (publicPhone?: boolean, publicEmail?: boolean) => {
+        if (!user) return;
+        setLoading(true);
 
-      try {
-        const userDatum = await ColdtivateService.updateUser({
-          userId: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          phone: user.phone,
-          email: user.email,
-          gender: user.gender,
-          language: user.language,
-          isEmailPublic: !isNil(publicEmail) ? publicEmail : user?.isEmailPublic,
-          isPhonePublic: !isNil(publicPhone) ? publicPhone : user?.isPhonePublic,
-        });
+        try {
+          const userDatum = await ColdtivateService.updateUser({
+            userId: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phone: user.phone,
+            email: user.email,
+            gender: user.gender,
+            language: user.language,
+            isEmailPublic: !isNil(publicEmail) ? publicEmail : user?.isEmailPublic,
+            isPhonePublic: !isNil(publicPhone) ? publicPhone : user?.isPhonePublic,
+          });
 
-        setUser({ ...userDatum, role: user?.role });
+          setUser({ ...userDatum, role: user?.role });
 
-        toast.show(t('Dashboard.AccountDetails.toasts.success'), {
-          type: 'md_success',
-          style: { marginBottom: 50 },
-        });
-      } catch (exception) {
-        console.error(exception);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [user, setLoading]
+          toast.show(t('Dashboard.AccountDetails.toasts.success'), {
+            type: 'md_success',
+            style: { marginBottom: 50 },
+          });
+        } catch (exception) {
+          console.error(exception);
+        } finally {
+          setLoading(false);
+        }
+      },
+      [user, setLoading]
+    ),
+    800
   );
 
   return (

@@ -72,7 +72,7 @@ export default {
       CratesInfo: 'Informação das Caixas',
       Dashboard: 'Painel',
       History: 'Histórico',
-      MarketPrice: 'Preço de Mercado',
+      MarketPrice: 'Preço de Mercado', // TODO
       CoolingUnits: 'Unidades de Refrigeração',
       Analytics: 'Análises',
       CheckIn: 'Check-In',
@@ -286,6 +286,9 @@ export default {
         header: 'Registar como Utilizador de Refrigeração ou Consumidor',
         languageFieldName: 'idioma',
       },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again', // TODO
+      },
     },
     ForgotPassword: {
       heading: 'Esqueceu-se da Palavra-passe',
@@ -343,7 +346,7 @@ export default {
     noLocationsAvailable:
       'Bem-vindo ao Coldtivate. Comece adicionando localizações ao seu aplicativo no painel de gestão.',
     MarketPrice: {
-      emptyState: 'Os preços de mercado não estão disponíveis no seu país',
+      emptyState: 'Os preços de mercado não estão disponíveis no seu país', // TODO
       commodityLabel: 'Produto',
       commodityModalTitle: 'Selecione um produto',
       Trend: {
@@ -1481,7 +1484,7 @@ export default {
       farmersUnitsPlanner:
         'Na aba "Unidades de Arrefecimento", você pode encontrar o Mapa, a ocupação atual e futura da sala (na aba "Planejador") e a temperatura da sala (na aba "Condições da Sala"). Essas telas ajudam você a monitorar remotamente o que está acontecendo nas câmaras frias, sem precisar ir lá pessoalmente para verificar!',
       marketPrice:
-        'Se você ver uma aba chamada "Preço de Mercado", pode verificar os preços de diferentes frutas e vegetais em todo o país nos últimos dias e uma previsão dos preços para o futuro. Por enquanto, essa opção está disponível apenas para países selecionados.',
+        'Se você ver uma aba chamada "Preço de Mercado", pode verificar os preços de diferentes frutas e vegetais em todo o país nos últimos dias e uma previsão dos preços para o futuro. Por enquanto, essa opção está disponível apenas para países selecionados.', // TODO
       farmerFinalStep:
         'Parabéns! Completou o tutorial! Se tiver dúvidas sobre a aplicação, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da unidade de arrefecimento ou escreva-nos para app@yourvcca.org.',
     },

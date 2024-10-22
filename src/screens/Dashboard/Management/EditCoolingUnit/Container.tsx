@@ -189,7 +189,7 @@ export default function ScreenContainer(props: Props) {
                 {isSubmitting ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
-                  t('actions.edit')
+                  t('actions.save')
                 )}
               </Button>
             </View>

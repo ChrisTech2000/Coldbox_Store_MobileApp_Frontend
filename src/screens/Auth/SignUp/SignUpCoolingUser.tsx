@@ -5,10 +5,12 @@ import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Checkbox, Text, TextInput } from 'react-native-paper';
 
+import type { AuthRouteProps } from '#navigation/Auth';
+import type { SignUpAsCoolingUserResponse } from '#types/api.responses';
 import { useTranslationUtils } from '#i18n/utils';
-import { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
 import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
+import InAppNotifications from '#common/InAppNotifications';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
@@ -32,6 +34,7 @@ const allCountryNames = allCountries.map((code) => code.countryName);
 function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
   const { navigation } = props;
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const {
     control,
@@ -98,17 +101,24 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       language,
     } = data;
 
-    const result = await AuthService.signUpAsCoolingUser({
-      user: {
-        firstName,
-        lastName,
-        phone,
-        password,
-        language: getLanguageCode(language, t),
-        country,
-        gender: MAP_APP_GENDER_TO_API[gender],
-      },
-    });
+    let result: SignUpAsCoolingUserResponse | undefined = undefined;
+
+    try {
+      result = await AuthService.signUpAsCoolingUser({
+        user: {
+          firstName,
+          lastName,
+          phone,
+          password,
+          language: getLanguageCode(language, t),
+          country,
+          gender: MAP_APP_GENDER_TO_API[gender],
+        },
+      });
+    } catch (exception) {
+      console.error(exception);
+      toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger', style: { marginBottom: 55 } });
+    }
 
     if (result) {
       navigation.navigate('SignIn', { accountProfile: EAccountProfile.FARMER });

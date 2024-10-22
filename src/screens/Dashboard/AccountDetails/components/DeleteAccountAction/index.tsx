@@ -15,14 +15,9 @@ import { useManagementStore } from '#stores/management';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 
-import FormManager from '../FormManager';
 import { usePopup } from './utils';
 
 export default function DeleteAccountAction() {
-  const {
-    formState: { isSubmitting },
-  } = FormManager.useFormManager();
-
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
 
@@ -113,12 +108,11 @@ export default function DeleteAccountAction() {
   return (
     <React.Fragment>
       <Button
-        tw="w-[48%]"
+        tw="w-4/5 my-4"
         mode="contained"
         onPress={onDelete}
-        icon={isProcessing ? undefined : 'trash-can-outline'}
         buttonColor={paperTheme.colors.error}
-        disabled={isSubmitting || isProcessing}
+        disabled={isProcessing}
         uppercase
       >
         {isProcessing ? <ActivityIndicator size="small" color="white" /> : t('actions.delete')}
