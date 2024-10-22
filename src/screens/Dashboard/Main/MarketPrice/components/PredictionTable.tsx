@@ -67,17 +67,8 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
 
   const [currentPage, setCurrentPage] = useState<number>(0);
 
-  const paginatedData = useMemo(() => {
-    if (!predictionData || !predictionData.length) return [];
-
-    const startIndex = currentPage * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-
-    return predictionData.slice(startIndex, endIndex);
-  }, [predictionData, currentPage]);
-
   const sortedData = useMemo(() => {
-    if (!paginatedData?.length) return [];
+    if (!predictionData || !predictionData.length) return [];
 
     const { direction, sorting } = sortingType;
     let data: PredictionTableData = [];
@@ -86,7 +77,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
 
     switch (sorting) {
       case 'date':
-        data = paginatedData
+        data = predictionData
           .slice()
           .sort((a, b) =>
             compare(
@@ -96,17 +87,26 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
           );
         break;
       case 'state':
-        data = paginatedData.slice().sort((a, b) => compare(a.state, b.state));
+        data = predictionData.slice().sort((a, b) => compare(a.state, b.state));
         break;
       case 'price':
-        data = paginatedData
+        data = predictionData
           .slice()
           .sort((a, b) => compare(a.price ?? Infinity, b.price ?? Infinity));
         break;
     }
 
     return data;
-  }, [paginatedData, sortingType?.direction, sortingType?.sorting]);
+  }, [predictionData, sortingType?.direction, sortingType?.sorting]);
+
+  const paginatedData = useMemo(() => {
+    if (!sortedData || !sortedData.length) return [];
+
+    const startIndex = currentPage * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+
+    return sortedData.slice(startIndex, endIndex);
+  }, [sortedData, currentPage]);
 
   const totalPages = useMemo(
     () => Math.floor((predictionData?.length ?? 0) / ITEMS_PER_PAGE),
@@ -182,7 +182,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
           </DataTable.Header>
           <FlashList
             showsVerticalScrollIndicator={false}
-            data={sortedData}
+            data={paginatedData}
             keyExtractor={(item, index) => `${item.date}-#${index}-${item.price}`}
             renderItem={({ item }) => (
               <DataTable.Row tw="bg-white">
@@ -223,7 +223,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
 }
 
 function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
-  const [sortingDirection, setSortingDirection] = useState<Direction | undefined>();
+  const [sortingDirection, setSortingDirection] = useState<Direction | undefined>('ascending');
 
   const onPress = useCallback(() => {
     const newSortingDirection =
@@ -236,8 +236,7 @@ function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
     if (!isSortingActive) {
       return 'arrow-up-down';
     }
-
-    return sortingDirection === 'ascending' ? 'arrow-up' : 'arrow-down';
+    return sortingDirection === 'descending' ? 'arrow-down' : 'arrow-up';
   }, [sortingDirection, isSortingActive]);
 
   useEffect(() => {
