@@ -64,7 +64,7 @@ export default {
     bottomTabs: {
       RootMainTabStack: 'Coldtivate de {{firstName}}',
       ProduceDetails: '{{produceCode}}',
-      MarketplaceSettings: 'Marketplace settings', // TODO
+      MarketplaceSettings: 'Configurações do Marketplace',
       PriceTrend: 'Tendência de Preços',
       PriceRanking: 'Classificação de Preços',
       Planner: 'Planeador',
@@ -72,7 +72,7 @@ export default {
       CratesInfo: 'Informação das Caixas',
       Dashboard: 'Painel',
       History: 'Histórico',
-      MarketPrice: 'Preço de Mercado', // TODO
+      MarketPrice: 'Preço das Culturas',
       CoolingUnits: 'Unidades de Refrigeração',
       Analytics: 'Análises',
       CheckIn: 'Check-In',

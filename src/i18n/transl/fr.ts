@@ -72,7 +72,7 @@ export default {
       CratesInfo: 'Informations sur les caisses',
       Dashboard: 'Tableau de bord',
       History: 'Historique',
-      MarketPrice: 'Prix du marché', // TODO
+      MarketPrice: 'Prix des cultures', // TODO
       CoolingUnits: 'Unités de refroidissement',
       Analytics: 'Analytique',
       CheckIn: 'Enregistrement',
@@ -1492,7 +1492,7 @@ export default {
       farmersUnitsPlanner:
         'Dans l\'onglet "Unités de refroidissement", vous pouvez trouver la Carte, l\'occupation actuelle et future de la chambre (dans "Planificateur") et la température de la chambre (dans "Conditions de la chambre"). Ces écrans vous aident à surveiller à distance ce qui se passe dans les chambres froides, sans avoir à vous y rendre en personne pour vérifier !',
       marketPrice:
-        "Si vous voyez un onglet nommé \"Prix du marché\", vous pouvez consulter les prix de différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu'une prévision des prix pour l'avenir. Pour le moment, cette option n'est disponible que pour certains pays.", // TODO
+        "Si vous voyez un onglet nommé \"Prix des cultures\", vous pouvez consulter les prix de différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu'une prévision des prix pour l'avenir. Pour le moment, cette option n'est disponible que pour certains pays.", // TODO
       farmerFinalStep:
         "Félicitations ! Vous avez terminé le tutoriel ! Si vous avez des questions concernant l'application, nous vous recommandons de consulter la FAQ, de demander à un opérateur de la chambre froide, ou de nous écrire à app@yourvcca.org.",
     },
