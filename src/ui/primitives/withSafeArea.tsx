@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Boundaries = 'top' | 'bottom';
 
-export const BOTTOM_NAV_HEIGHT = Platform.OS === 'android' ? 75 : 115;
+export const BOTTOM_NAV_HEIGHT = Platform.OS === 'android' ? 75 : 108;
 
 export function withSafeArea<T extends object>(
   WrappedComponent: ComponentType<T>,
