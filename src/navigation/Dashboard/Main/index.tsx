@@ -67,7 +67,7 @@ const TAB_METADATA: Record<
   Dashboard: { tabBarIcon: 'basket-outline', translationPath: 'navigation.bottomTabs.Dashboard' },
   History: { tabBarIcon: 'calendar-outline', translationPath: 'navigation.bottomTabs.History' },
   MarketPrice: {
-    tabBarIcon: 'store-outline',
+    tabBarIcon: 'tag-outline',
     translationPath: 'navigation.bottomTabs.MarketPrice',
   },
   CoolingUnits: {

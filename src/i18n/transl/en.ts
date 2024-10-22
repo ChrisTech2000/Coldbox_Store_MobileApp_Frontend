@@ -70,7 +70,7 @@ const en = {
       CratesInfo: 'Crates Info',
       Dashboard: 'Dashboard',
       History: 'History',
-      MarketPrice: 'Market Price',
+      MarketPrice: 'Crop Prices',
       CoolingUnits: 'Cooling units',
       Analytics: 'Analytics',
       CheckIn: 'Check In',
@@ -341,7 +341,7 @@ const en = {
     noLocationsAvailable:
       'Welcome to Coldtivate. Get started by adding locations to your app in the management panel.',
     MarketPrice: {
-      emptyState: 'Market Prices are not available in your country',
+      emptyState: 'Crop Prices are not available in your country',
       commodityLabel: 'Commodity',
       commodityModalTitle: 'Select a commodity',
       Trend: {
@@ -1469,7 +1469,7 @@ const en = {
       farmersUnitsPlanner:
         'In the tab "Cooling Units" you can find the Map, the current and future occupancy of the room (in "Planner") and the temperature of the room (in "Room conditions"). These screens help you monitor remotely what is happening at the cold rooms, without having to go there in person to check!',
       marketPrice:
-        'If you see a tab named "Market Price", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.',
+        'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.',
       farmerFinalStep:
         'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
     },

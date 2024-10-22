@@ -72,7 +72,7 @@ export default {
       CratesInfo: 'ક્રેટ્સ માહિતી',
       Dashboard: 'ડેશબોર્ડ',
       History: 'ઇતિહાસ',
-      MarketPrice: 'માર્કેટ કિંમત',
+      MarketPrice: 'માર્કેટ કિંમત', // TODO
       CoolingUnits: 'કૂલિંગ યુનિટ્સ',
       Analytics: 'એનલિટિક્સ',
       CheckIn: 'ચેક-ઇન',
@@ -343,7 +343,7 @@ export default {
     noLocationsAvailable:
       'કોલ્ડટિવેટમાં આપનું સ્વાગત છે. મેનેજમેન્ટ પેનલમાં સ્થાન ઉમેરવાથી શરૂ કરો.',
     MarketPrice: {
-      emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી',
+      emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી', // TODO
       commodityLabel: 'વસ্তু',
       commodityModalTitle: 'એક વસ્તુ પસંદ કરો',
       Trend: {
@@ -1466,7 +1466,7 @@ export default {
       farmersUnitsPlanner:
         'In the "Cooling Units" tab, you’ll find the Map, the current and future occupancy of the room (under "Planner"), and the room temperature (in "Room Conditions"). These screens allow you to monitor cold room conditions remotely, without needing to visit in person!',
       marketPrice:
-        'If there is a "Market Price" tab, you can check the recent prices of various fruits and vegetables across the country, as well as future price forecasts. Currently, this feature is only available for selected countries.',
+        'If there is a "Crop Prices" tab, you can check the recent prices of various fruits and vegetables across the country, as well as future price forecasts. Currently, this feature is only available for selected countries.', // TODO
       farmerFinalStep:
         'Congratulations! You have completed the tutorial! For any questions about the app, please check the FAQ, ask a cold room operator, or email us at app@yourvcca.org.',
     },
