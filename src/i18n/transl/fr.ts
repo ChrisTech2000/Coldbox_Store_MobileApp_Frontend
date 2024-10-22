@@ -72,7 +72,7 @@ export default {
       CratesInfo: 'Informations sur les caisses',
       Dashboard: 'Tableau de bord',
       History: 'Historique',
-      MarketPrice: 'Prix du marché',
+      MarketPrice: 'Prix du marché', // TODO
       CoolingUnits: 'Unités de refroidissement',
       Analytics: 'Analytique',
       CheckIn: 'Enregistrement',
@@ -286,6 +286,9 @@ export default {
         header: "S'inscrire comme utilisateur de refroidissement ou consommateur",
         languageFieldName: 'langue',
       },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again', // TODO
+      },
     },
     ForgotPassword: {
       heading: 'Mot de passe oublié',
@@ -344,7 +347,7 @@ export default {
     noLocationsAvailable:
       'Bienvenue sur Coldtivate. Commencez en ajoutant des lieux à votre application dans le panneau de gestion.',
     MarketPrice: {
-      emptyState: 'Les prix du marché ne sont pas disponibles dans votre pays',
+      emptyState: 'Les prix du marché ne sont pas disponibles dans votre pays', // TODO
       commodityLabel: 'Marchandise',
       commodityModalTitle: 'Sélectionnez une marchandise',
       Trend: {
@@ -1488,7 +1491,7 @@ export default {
       farmersUnitsPlanner:
         'Dans l\'onglet "Unités de refroidissement", vous pouvez trouver la Carte, l\'occupation actuelle et future de la chambre (dans "Planificateur") et la température de la chambre (dans "Conditions de la chambre"). Ces écrans vous aident à surveiller à distance ce qui se passe dans les chambres froides, sans avoir à vous y rendre en personne pour vérifier !',
       marketPrice:
-        "Si vous voyez un onglet nommé \"Prix du marché\", vous pouvez consulter les prix de différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu'une prévision des prix pour l'avenir. Pour le moment, cette option n'est disponible que pour certains pays.",
+        "Si vous voyez un onglet nommé \"Prix du marché\", vous pouvez consulter les prix de différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu'une prévision des prix pour l'avenir. Pour le moment, cette option n'est disponible que pour certains pays.", // TODO
       farmerFinalStep:
         "Félicitations ! Vous avez terminé le tutoriel ! Si vous avez des questions concernant l'application, nous vous recommandons de consulter la FAQ, de demander à un opérateur de la chambre froide, ou de nous écrire à app@yourvcca.org.",
     },

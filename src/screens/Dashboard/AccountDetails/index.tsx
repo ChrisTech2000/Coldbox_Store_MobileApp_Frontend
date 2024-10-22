@@ -16,7 +16,6 @@ import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { EApiGender, ERoles } from '#types/global';
-import { cn } from '#ui/lib/cn';
 
 import type {
   AccountDetailsRouteProps,
@@ -28,10 +27,10 @@ import { CoolingUserSurveyOverlay } from '../Tutorial/CoolingUserSurveyOverlay';
 import { LocalizationPreferencesOverlay } from '../Tutorial/LocalizationPreferancesOverlay';
 import { EFarmerTutorialSteps } from '../Tutorial/utils/constants';
 import { PersonalDetailsOverlay } from '../Tutorial/PersonalDetailsOverlay';
+import DeleteAccountAction from './components/DeleteAccountAction';
 
 function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
-  const { guard } = RBAC.useRBAC();
 
   const user = useAuthStore(useShallow((store) => store.user));
   const [farmerParentName, farmerUserCode, farmerCountry, farmerId] = useDashboardStore(
@@ -42,8 +41,6 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       store.farmerId,
     ])
   );
-
-  const disabledLocationPreferences = !guard('VIEW', 'FarmerFields');
 
   function buildDetailsSectionParams() {
     return {
@@ -91,78 +88,74 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   });
 
   return (
-    <ScrollView tw="flex-1 p-4 space-y-6" showsVerticalScrollIndicator={false}>
-      <View tw="space-y-3">
-        <Text tw="text-base text-green-primary font-bold">
-          {t('Dashboard.AccountDetails.sections.details')}
-        </Text>
-        <View>
+    <React.Fragment>
+      <ScrollView tw="flex-1 pt-3 px-4 pb-8 space-y-6" showsVerticalScrollIndicator={false}>
+        <View tw="space-y-3">
+          <Text tw="text-base text-green-primary font-bold">
+            {t('Dashboard.AccountDetails.sections.details')}
+          </Text>
           <View>
-            <List.Item
-              tw="p-0 py-2"
-              title={undefined}
-              left={() => (
-                <Text tw="text-base w-[80%]">{t('navigation.dashboard.PersonalDetails')}</Text>
-              )}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                if (!user) return; // safe guard
-                props.navigation.navigate('PersonalDetails', buildDetailsSectionParams());
-              }}
-            />
-            <Divider tw="bg-gray-400" />
-          </View>
-          <View>
-            <List.Item
-              tw="p-0 py-2"
-              title={undefined}
-              disabled={disabledLocationPreferences}
-              left={() => (
-                <Text tw={cn('text-base w-[80%]', disabledLocationPreferences && 'text-gray-400')}>
-                  {t('navigation.dashboard.LocalizationPreferences')}
-                </Text>
-              )}
-              right={(props) => (
-                <List.Icon
-                  {...props}
-                  icon="chevron-right"
-                  color={disabledLocationPreferences ? colors.gray[400] : colors.gray[800]}
-                />
-              )}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                if (!user || !farmerId) return; // safe guard
-                props.navigation.navigate('LocalizationPreferences', buildDetailsSectionParams());
-              }}
-            />
-            <Divider tw="bg-gray-400" />
-          </View>
-          <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
             <View>
               <List.Item
                 tw="p-0 py-2"
                 title={undefined}
                 left={() => (
-                  <Text tw="text-base w-[80%]" numberOfLines={1}>
-                    {t('navigation.history.BaseSurvey')}
-                  </Text>
+                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.PersonalDetails')}</Text>
                 )}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
                   evt.stopPropagation();
-                  if (!farmerId) return; // safe guard
-                  props.navigation.navigate('CoolingUsersSurvey', { farmerId });
+                  if (!user) return; // safe guard
+                  props.navigation.navigate('PersonalDetails', buildDetailsSectionParams());
                 }}
               />
               <Divider tw="bg-gray-400" />
             </View>
-          </RBAC.ProtectedResource>
+            <View>
+              <List.Item
+                tw="p-0 py-2"
+                title={undefined}
+                left={() => (
+                  <Text tw="text-base w-[80%]">
+                    {t('navigation.dashboard.LocalizationPreferences')}
+                  </Text>
+                )}
+                right={(props) => (
+                  <List.Icon {...props} icon="chevron-right" color={colors.gray[800]} />
+                )}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  if (!user) return; // safe guard
+                  props.navigation.navigate('LocalizationPreferences', buildDetailsSectionParams());
+                }}
+              />
+              <Divider tw="bg-gray-400" />
+            </View>
+            <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
+              <View>
+                <List.Item
+                  tw="p-0 py-2"
+                  title={undefined}
+                  left={() => (
+                    <Text tw="text-base w-[80%]" numberOfLines={1}>
+                      {t('navigation.history.BaseSurvey')}
+                    </Text>
+                  )}
+                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    if (!farmerId) return; // safe guard
+                    props.navigation.navigate('CoolingUsersSurvey', { farmerId });
+                  }}
+                />
+                <Divider tw="bg-gray-400" />
+              </View>
+            </RBAC.ProtectedResource>
+          </View>
         </View>
-      </View>
 
-      {/** TODO: not sure if this will ever be a part of the app; leaving it just in case */}
-      {/* <View>
+        {/** TODO: not sure if this will ever be a part of the app; leaving it just in case */}
+        {/* <View>
         <RBAC.ProtectedResource action="SET" subject="BuyerSettings">
           <View tw="space-y-3">
             <Text tw="text-base text-green-primary font-bold">
@@ -187,64 +180,69 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
         </RBAC.ProtectedResource>
       </View> */}
 
-      <RBAC.ProtectedResource action="VIEW" subject="AccountSellerSettings">
-        <View tw="space-y-3 mt-6">
-          <Text tw="text-base text-green-primary font-bold">
-            {t('Dashboard.AccountDetails.sections.sellerSettings')}
-          </Text>
-          <View>
-            <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
-              <List.Item
-                tw="px-0 py-2"
-                title={undefined}
-                left={() => (
-                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
-                )}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  props.navigation.navigate('PayoutSettings');
-                }}
-              />
-              <Divider tw="bg-gray-400" />
-            </RBAC.ProtectedResource>
-          </View>
+        <RBAC.ProtectedResource action="VIEW" subject="AccountSellerSettings">
+          <View tw="space-y-3 mt-6">
+            <Text tw="text-base text-green-primary font-bold">
+              {t('Dashboard.AccountDetails.sections.sellerSettings')}
+            </Text>
+            <View>
+              <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
+                <List.Item
+                  tw="px-0 py-2"
+                  title={undefined}
+                  left={() => (
+                    <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
+                  )}
+                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    props.navigation.navigate('PayoutSettings');
+                  }}
+                />
+                <Divider tw="bg-gray-400" />
+              </RBAC.ProtectedResource>
+            </View>
 
-          <View>
-            <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
+            <View>
+              <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
+                <View>
+                  <List.Item
+                    tw="p-0 pb-2"
+                    title={undefined}
+                    left={() => <Text tw="text-base w-[80%]">Discount coupons</Text>}
+                    right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      props.navigation.navigate('CouponStack');
+                    }}
+                  />
+                  <Divider tw="bg-gray-400 mb-2" />
+                </View>
+              </RBAC.ProtectedResource>
               <View>
                 <List.Item
                   tw="p-0 pb-2"
                   title={undefined}
-                  left={() => <Text tw="text-base w-[80%]">Discount coupons</Text>}
+                  left={() => (
+                    <Text tw="text-base w-[80%]">{t('navigation.dashboard.ContactsSharing')}</Text>
+                  )}
                   right={(props) => <List.Icon {...props} icon="chevron-right" />}
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    props.navigation.navigate('CouponStack');
+                    props.navigation.navigate('ContactsSharing');
                   }}
                 />
-                <Divider tw="bg-gray-400 mb-2" />
+                <Divider tw="bg-gray-400" />
               </View>
-            </RBAC.ProtectedResource>
-            <View>
-              <List.Item
-                tw="p-0 pb-2"
-                title={undefined}
-                left={() => (
-                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.ContactsSharing')}</Text>
-                )}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  props.navigation.navigate('ContactsSharing');
-                }}
-              />
-              <Divider tw="bg-gray-400" />
             </View>
           </View>
-        </View>
-      </RBAC.ProtectedResource>
-    </ScrollView>
+        </RBAC.ProtectedResource>
+      </ScrollView>
+
+      <View tw="bottom-0 right-0 w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
+        <DeleteAccountAction />
+      </View>
+    </React.Fragment>
   );
 }
 

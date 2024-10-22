@@ -66,8 +66,8 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
       });
 
       navigation.navigate('SignIn');
-    } catch {
-      // silent error
+    } catch (err) {
+      console.error(err);
     }
   }, []);
 

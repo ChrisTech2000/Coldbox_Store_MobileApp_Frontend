@@ -54,6 +54,7 @@ export default function LogoField() {
                   quality: 1,
                 },
                 (result) => {
+                  if (result.didCancel) return; // safe guard
                   const file = result.assets?.at(0);
                   if (typeof file === 'undefined') return;
                   if (typeof file.fileSize !== 'undefined' && file.fileSize > 50_000) return;

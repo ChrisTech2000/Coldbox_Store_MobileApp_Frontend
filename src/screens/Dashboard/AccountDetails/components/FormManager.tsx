@@ -86,7 +86,7 @@ export default function FormManager(props: FormManagerProps) {
   const callbackProps = {
     submitHandler: form.handleSubmit(props.onSubmit),
     isSubmitting: form.formState.isSubmitting,
-    hasChanges: !isEqual(initialValues, form.getValues()),
+    hasChanges: !isEqual(initialValues, form.watch()),
   } satisfies CallbackProps;
 
   return <FormProvider {...form}>{props.children(callbackProps)}</FormProvider>;
