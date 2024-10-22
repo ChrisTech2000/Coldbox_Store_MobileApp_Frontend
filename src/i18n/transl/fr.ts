@@ -670,6 +670,9 @@ export default {
           removeLocationSuccess: 'Le lieu {{name}} a été supprimé avec succès.',
           failedToFetchLocation:
             "Impossible de récupérer l'emplacement. Veuillez vérifier l'adresse et réessayer.",
+          positionCancelled: 'Location request canceled.', // TODO
+          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
+          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
         },
       },
       Operators: {
