@@ -242,7 +242,8 @@ export default {
         firstNameError: 'Le prénom est obligatoire.',
         lastNameError: 'Le nom est obligatoire.',
         phoneError: 'Le numéro de téléphone est obligatoire.',
-        invalidPhoneError: 'Le numéro de téléphone est invalide',
+        invalidPhoneError:
+          "Numéro de téléphone invalide. Assurez-vous qu'un indicatif régional est inclus (Ex : +33600000000).",
         languageError: 'La langue est obligatoire.',
         genderError: 'La sélection du genre est obligatoire.',
         termsError: "Vous devez accepter les Conditions d'utilisation.",

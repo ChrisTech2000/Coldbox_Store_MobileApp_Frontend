@@ -52,6 +52,8 @@ export default function FormFields() {
               label={t('Auth.SignUp.SignUpCompany.emailLabel')}
               mode="flat"
               dense
+              autoCorrect={false}
+              autoCapitalize="none"
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}

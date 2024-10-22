@@ -239,7 +239,8 @@ const en = {
         firstNameError: 'First Name is mandatory.',
         lastNameError: 'Last Name is mandatory.',
         phoneError: 'Phone number is mandatory.',
-        invalidPhoneError: 'Phone number is invalid',
+        invalidPhoneError:
+          'Phone number is invalid. Please ensure the area code is included (e.g., +447000000000).',
         languageError: 'Language is mandatory.',
         genderError: 'Gender selection is mandatory.',
         termsError: 'You need to agree to the Terms of Use.',

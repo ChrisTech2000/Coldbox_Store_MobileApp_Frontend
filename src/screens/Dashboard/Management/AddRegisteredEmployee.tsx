@@ -1,26 +1,27 @@
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import { Banner, TextInput } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Controller, useForm } from 'react-hook-form';
-import { useShallow } from 'zustand/react/shallow';
-import colors from 'tailwindcss/colors';
+import { ActivityIndicator, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Banner, Text, TextInput } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
+import colors from 'tailwindcss/colors';
+import validator from 'validator';
+import { useShallow } from 'zustand/react/shallow';
 
-import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { Button } from '#ui/components/Button';
+import { paperTheme } from '#ui/lib/theme';
+import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { useTranslationUtils } from '#i18n/utils';
-import { useManagementStore } from '#stores/management';
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
-import { useAuthStore } from '#stores/auth';
-import { DEEP_LINK_URL } from '#navigation/deepLinking';
-import { ERoles, MAP_ROLES } from '#types/global';
-import { paperTheme } from '#ui/lib/theme';
 import InAppNotifications from '#common/InAppNotifications';
+import { useTranslationUtils } from '#i18n/utils';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { DEEP_LINK_URL } from '#navigation/deepLinking';
+import ColdtivateService from '#services/ColdtivateService';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
+import { ERoles, MAP_ROLES } from '#types/global';
 
 type FormValues = {
   phoneNumber: string;
@@ -52,7 +53,17 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues: { phoneNumber: '' },
-    resolver: zodResolver((z) => z.object({ phoneNumber: z.string().min(2) })),
+    resolver: zodResolver((z) =>
+      z.object({
+        phoneNumber: z
+          .string()
+          .min(1, { message: t('Auth.SignUp.schema.phoneError') })
+          .default('')
+          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+            message: t('Auth.SignUp.schema.invalidPhoneError'),
+          }),
+      })
+    ),
     reValidateMode: 'onSubmit',
   });
 
@@ -102,7 +113,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
 
   return (
     <KeyboardAwareScrollView
-      tw="h-full pt-5 mx-4 space-y-6"
+      tw="h-full pt-5 mx-4"
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
       showsVerticalScrollIndicator={false}
     >
@@ -134,10 +145,15 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
         )}
         name="phoneNumber"
       />
+      {errors.phoneNumber && (
+        <Text tw="text-xs text-red-600 mt-2 mb-7 pl-3 w-[95%]">
+          {errors.phoneNumber.message?.toString()}
+        </Text>
+      )}
 
       <Button
         mode="contained"
-        tw="w-2/3 self-center"
+        tw="w-2/3 self-center mt-6"
         icon={isSubmitting ? undefined : 'account-arrow-down-outline'}
         onPress={handleSubmit(onSubmit)}
       >

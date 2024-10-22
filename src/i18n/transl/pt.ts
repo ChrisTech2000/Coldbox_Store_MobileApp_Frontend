@@ -3,7 +3,7 @@ import { Translations } from './en';
 export default {
   appVersion: {
     newVersion: 'Uma nova versão do Coldtivate está disponível!',
-    pleaseUpdate: 'Atualize o aplicativo antes de continuar.',
+    pleaseUpdate: 'Atualize a aplicação antes de continuar.',
   },
   languages: {
     current: 'Inglês',
@@ -242,7 +242,8 @@ export default {
         firstNameError: 'O primeiro nome é obrigatório.',
         lastNameError: 'O apelido é obrigatório.',
         phoneError: 'O número de telefone é obrigatório.',
-        invalidPhoneError: 'O número de telefone é inválido.',
+        invalidPhoneError:
+          'O número de telefone é inválido. Certifique-se de que um código de área está incluído (ex: +351910000000).',
         languageError: 'A seleção de idioma é obrigatória.',
         genderError: 'A seleção de género é obrigatória.',
         termsError: 'É necessário aceitar os Termos de Uso.',
@@ -686,7 +687,7 @@ export default {
       },
       AddOperator: {
         messages: {
-          operator: 'Para se juntar ao aplicativo Coldtivate como Operador, vá para: {{link}}',
+          operator: 'Para se juntar aa aplicação Coldtivate como Operador, vá para: {{link}}',
         },
         toasts: {
           error: 'Please check the information provided and try again', // TODO
@@ -735,7 +736,7 @@ export default {
       },
       AddRegisteredEmployee: {
         message:
-          'Para se juntar ao aplicativo Coldtivate como um Funcionário Registado, vá para: {{link}}',
+          'Para se juntar aa aplicação Coldtivate como um Funcionário Registado, vá para: {{link}}',
         toasts: {
           success: 'Funcionário registado convidado com sucesso',
         },
@@ -1399,12 +1400,12 @@ export default {
     quit: 'Sair do tutorial',
     'back-dashboard': 'Voltar ao painel',
     congratulations:
-      'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar o aplicativo.',
-    comic: 'Parabéns! Você completou a tirinha! Volte ao painel para começar a usar o aplicativo.',
+      'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar a aplicação.',
+    comic: 'Parabéns! Você completou a tirinha! Volte ao painel para começar a usar a aplicação.',
     prev: 'Anterior',
     next: 'Próximo',
     start: 'Iniciar tutorial',
-    final: 'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar o aplicativo.',
+    final: 'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar a aplicação.',
     backToDashboard: 'Voltar ao painel',
     steps: {
       openDrawer:
@@ -1414,7 +1415,7 @@ export default {
       managementNavigation:
         'No menu, você pode navegar até "Gerenciamento" e tocar lá para adicionar ou editar Usuários de Resfriamento. Vá em frente e tente.',
       addCoolingUser:
-        'Usuários de resfriamento que não se registraram no Coldtivate podem ser adicionados inserindo seus dados (nome, número de telefone). Usuários de resfriamento que já se inscreveram no aplicativo podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Usuário de Resfriamento".',
+        'Usuários de resfriamento que não se registraram no Coldtivate podem ser adicionados inserindo seus dados (nome, número de telefone). Usuários de resfriamento que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Usuário de Resfriamento".',
       navigateToCoolingUser: 'Vá em frente e clique na guia Usuários de Resfriamento',
       listCoolingUsers:
         'Usuários de resfriamento com um smartphone são identificados por um ícone de telefone no lado direito das telas. Os outros são usuários de resfriamento com um telefone básico. Em ambos os casos, você pode clicar em um nome para acessar seus detalhes e a pesquisa do usuário de resfriamento.',
@@ -1447,22 +1448,22 @@ export default {
       navigateToCoolingUnits:
         'Após adicionar uma localização, você pode adicionar uma unidade de arrefecimento. Vá em frente e clique na aba de unidades de arrefecimento.',
       addCoolingUnits:
-        'Uma unidade de arrefecimento pode ser adicionada preenchendo os detalhes acima. Se você tiver sensores de temperatura na unidade de arrefecimento e uma API configurada, pode inserir as credenciais e conectar automaticamente seus sensores ao aplicativo.',
+        'Uma unidade de arrefecimento pode ser adicionada preenchendo os detalhes acima. Se você tiver sensores de temperatura na unidade de arrefecimento e uma API configurada, pode inserir as credenciais e conectar automaticamente seus sensores aa aplicação.',
       addEmployeesOperators:
         'Você pode adicionar Funcionários e Operadores Registrados através da tela de Gestão. Para adicionar qualquer um dos papéis, você precisará do número de telefone deles. Eles receberão um SMS com um link de convite. Um número de telefone pode ser usado para apenas um usuário.',
       employeeCoolingUnitsStep:
         'Uma vez que você tenha selecionado uma unidade de arrefecimento, verá uma visão geral de: os check-ins na aba "Dashboard", os movimentos na aba "Histórico" e a taxa de utilização planejada e a temperatura da sala na aba "Unidades de Arrefecimento".',
       localizationPreferences:
-        'Você pode alterar o idioma do aplicativo selecionando "Preferências de Localização". Certifique-se de clicar no botão "Salvar alterações" para que o idioma seja alterado!',
+        'Você pode alterar o idioma da aplicação selecionando "Preferências de Localização". Certifique-se de clicar no botão "Salvar alterações" para que o idioma seja alterado!',
       accountDetailsNavigation:
         'No menu, você pode navegar para "Detalhes da Conta" e tocar lá para visualizar/editar um conjunto de configurações relacionadas à sua conta. Vá em frente e experimente.',
       coolingUserSurvey:
-        'É muito importante que você preencha a pesquisa do Usuário de Arrefecimento para que o aplicativo possa fornecer recomendações personalizadas. Obrigado por dedicar seu tempo para completar a pesquisa!',
+        'É muito importante que você preencha a pesquisa do Usuário de Arrefecimento para que a aplicação possa fornecer recomendações personalizadas. Obrigado por dedicar seu tempo para completar a pesquisa!',
       coolingUserCode:
         'Na primeira vez que você chegar a uma câmara fria para armazenar sua produção, o operador lhe pedirá seu código pessoal para adicioná-lo à lista de usuários da câmara fria. Você pode encontrar este código em "Detalhes Pessoais" -> "Código de Importação do Usuário de Arrefecimento".',
       knowledgeHub:
         'No menu, você pode encontrar o "Centro de Conhecimento", que contém conselhos sobre quanto tempo diferentes culturas podem ser armazenadas e sua temperatura ideal. Confira para entender como a câmara fria pode ajudá-lo a preservar a qualidade de diferentes frutas e vegetais!',
-      faq: 'No menu, você também pode encontrar as Perguntas Frequentes (FAQ). Recomendamos que você as consulte para aprender mais sobre o aplicativo e os benefícios de armazenar sua produção nas câmaras frias.',
+      faq: 'No menu, você também pode encontrar as Perguntas Frequentes (FAQ). Recomendamos que você as consulte para aprender mais sobre a aplicação e os benefícios de armazenar sua produção nas câmaras frias.',
       dashboardStep1:
         'Uma vez que o operador tenha concluído um check-in para você, você poderá ver a produção armazenada na sala na seção "Dashboard". Cada cartão contém um conjunto de caixas do mesmo tipo de cultura que foram registradas juntas.',
       dashboardStep2:
@@ -1482,7 +1483,7 @@ export default {
       marketPrice:
         'Se você ver uma aba chamada "Preço de Mercado", pode verificar os preços de diferentes frutas e vegetais em todo o país nos últimos dias e uma previsão dos preços para o futuro. Por enquanto, essa opção está disponível apenas para países selecionados.',
       farmerFinalStep:
-        'Parabéns! Você completou o tutorial! Se tiver dúvidas sobre o aplicativo, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da câmara fria ou escreva para nós em app@yourvcca.org.',
+        'Parabéns! Completou o tutorial! Se tiver dúvidas sobre a aplicação, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da unidade de arrefecimento ou escreva-nos para app@yourvcca.org.',
     },
   },
 } satisfies Translations;
