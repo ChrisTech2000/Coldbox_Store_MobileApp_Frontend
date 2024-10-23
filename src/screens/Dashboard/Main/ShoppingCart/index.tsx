@@ -77,7 +77,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                   <Text tw="text-lg">
                     {CurrencyStandardization.currencyCode({
                       code: 'NGN', // TODO: get from somewhere
-                      value: cartData.totalAmount,
+                      value: cartData.totalProduceAmount,
                     }).getValueFormated()}
                   </Text>
                 </View>

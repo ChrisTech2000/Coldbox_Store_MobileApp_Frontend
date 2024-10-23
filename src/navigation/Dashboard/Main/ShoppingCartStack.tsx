@@ -61,7 +61,7 @@ export default function ShoppingCartStack() {
               routeName === 'IncompleteOrderOverview'
                 ? t('navigation.dashboard.OrderDetails', {
                     // eslint-disable-next-line react/prop-types
-                    orderCode: props.route?.params?.orderId ?? '',
+                    orderCode: `#${props.route?.params?.orderId}`,
                   })
                 : t('navigation.dashboard.ShoppingCart')
             }
@@ -77,7 +77,7 @@ export default function ShoppingCartStack() {
                       props.navigation.navigate(
                         // eslint-disable-next-line
                         // @ts-ignore
-                        'Main',
+                        'Marketplace',
                         navParams
                       );
                     },

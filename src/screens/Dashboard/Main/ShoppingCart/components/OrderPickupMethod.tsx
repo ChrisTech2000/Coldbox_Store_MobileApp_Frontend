@@ -82,11 +82,15 @@ export default function OrderPickupMethod({ coolingUnitsIds }: OrderPickupMethod
     <React.Fragment>
       <View tw="flex flex-row items-center">
         <Text tw="text-base text-green-primary font-bold">
-          {t('Dashboard.ShoppingCart.pickupMethods')}
+          {t('Dashboard.ShoppingCart.pickupMethods')}*
         </Text>
         <IconButton
           tw="p-0 m-0"
-          icon="information-outline"
+          icon={
+            cartData?.pickupDetails && cartData.pickupDetails.length > 0
+              ? 'pencil'
+              : 'plus-circle-outline'
+          }
           size={17}
           iconColor={colors.green.primary}
           containerColor={colors.transparent}
