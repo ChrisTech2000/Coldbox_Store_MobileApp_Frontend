@@ -96,6 +96,7 @@ export default function CropTypeFilters() {
                       showsHorizontalScrollIndicator={false}
                       showsVerticalScrollIndicator={false}
                       data={datums}
+                      extraData={internalSelection}
                       keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
                       renderItem={({ item }) => (
                         <View>
