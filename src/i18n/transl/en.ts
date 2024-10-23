@@ -722,6 +722,7 @@ const en = {
         },
         toasts: {
           success: 'Successfully edited',
+          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.',
         },
       },
       RegisteredEmployee: {
