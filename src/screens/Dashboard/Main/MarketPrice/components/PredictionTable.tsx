@@ -169,7 +169,12 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
             />
             <Header
               title={t('Dashboard.MarketPrice.Ranking.table.column3', {
-                currency: ECurrency[mappedCountry],
+                currency:
+                  mappedCountry === 'IN'
+                    ? ECurrency.IN
+                    : mappedCountry === 'NG'
+                      ? ECurrency.NG
+                      : '$',
               })}
               onSort={(direction) =>
                 setSortingType({
@@ -186,9 +191,9 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
             keyExtractor={(item, index) => `${item.date}-#${index}-${item.price}`}
             renderItem={({ item }) => (
               <DataTable.Row tw="bg-white">
-                <DataTable.Cell>{item.state}</DataTable.Cell>
-                <DataTable.Cell>{item.date}</DataTable.Cell>
-                <DataTable.Cell>
+                <DataTable.Cell tw="px-1">{item.state}</DataTable.Cell>
+                <DataTable.Cell tw="px-1">{item.date}</DataTable.Cell>
+                <DataTable.Cell numeric tw="px-1">
                   {item.price ?? t('Dashboard.MarketPrice.Ranking.table.emptyState')}
                 </DataTable.Cell>
               </DataTable.Row>
@@ -246,9 +251,9 @@ function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
   }, [isSortingActive]);
 
   return (
-    <DataTable.Title>
+    <DataTable.Title numberOfLines={2} tw="px-1">
       <TouchableOpacity tw="flex flex-row items-center" onPress={onPress}>
-        <Text variant="TextMedium" tw="text-white text-base">
+        <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
           {title}
         </Text>
         <Icon source={sortingIcon} color={colors.white} size={14} />
