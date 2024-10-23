@@ -655,6 +655,10 @@ export default {
           street: 'Rua',
           streetNumber: 'Número da Rua',
         },
+        fieldErrorMessages: {
+          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
+          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+        },
         modal: {
           message:
             'Esta operação irá eliminar todas as unidades de refrigeração associadas a esta localização. Deseja continuar?',
@@ -730,6 +734,7 @@ export default {
         },
         toasts: {
           success: 'Editado com sucesso',
+          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
         },
       },
       RegisteredEmployee: {

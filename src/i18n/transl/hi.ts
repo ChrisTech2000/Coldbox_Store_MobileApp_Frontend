@@ -650,6 +650,10 @@ export default {
           street: 'गली',
           streetNumber: 'गली नंबर',
         },
+        fieldErrorMessages: {
+          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
+          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+        },
         modal: {
           message:
             'यह कार्रवाई इस स्थान से संबद्ध सभी शीतलन इकाइयों को हटा देगी। क्या आप जारी रखना चाहते हैं?',
@@ -725,6 +729,7 @@ export default {
         },
         toasts: {
           success: 'सफलतापूर्वक संपादित किया गया',
+          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
         },
       },
       RegisteredEmployee: {
