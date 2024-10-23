@@ -231,7 +231,7 @@ export function OperatorActions({
 
       <Portal>
         <Modal visible={isModalOpen} onDismiss={onModalClose}>
-          <View tw="bg-white rounded-3xl h-auto space-y-2 items-center mx-16 px-3 py-1">
+          <View tw="bg-white rounded-3xl h-auto max-h-[95%] space-y-2 items-center mx-16 px-3 py-1">
             <Text variant="TitleMedium" tw="my-2">
               {`${t('Dashboard.CrateManagement.userModalTitle')}:`}
             </Text>

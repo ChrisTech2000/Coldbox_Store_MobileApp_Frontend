@@ -1,8 +1,10 @@
 import React, { type PropsWithChildren } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Divider, Switch } from 'react-native-paper';
 
 import { emitter, APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
+import { Text } from '#ui/components/Text';
+
 import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager, { type SensorDatum } from '../../contexts/FormManager';
