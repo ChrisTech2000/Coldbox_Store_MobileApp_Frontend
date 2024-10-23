@@ -38,7 +38,7 @@ export default function UnitCapacityFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label={t('Dashboard.Management.AddCoolingUnit.fields.capacityInNumberCrates')}
+            label={`${t('Dashboard.Management.AddCoolingUnit.fields.capacityInNumberCrates')}*`}
             mode="flat"
             dense
             value={value}
@@ -55,7 +55,7 @@ export default function UnitCapacityFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label={t('Dashboard.Management.AddCoolingUnit.fields.crateWeight')}
+            label={`${t('Dashboard.Management.AddCoolingUnit.fields.crateWeight')}*`}
             mode="flat"
             dense
             value={value}

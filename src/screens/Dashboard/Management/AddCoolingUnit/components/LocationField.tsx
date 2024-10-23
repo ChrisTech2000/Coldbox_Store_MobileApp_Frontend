@@ -39,7 +39,7 @@ export default function LocationField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label={t('Dashboard.Management.AddCoolingUnit.fields.location')}
+                label={`${t('Dashboard.Management.AddCoolingUnit.fields.location')}*`}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}

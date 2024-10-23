@@ -134,7 +134,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-6"
-            label={t('Auth.ForgotPassword.phoneInputLabel')}
+            label={`${t('Auth.ForgotPassword.phoneInputLabel')}*`}
             mode="flat"
             dense
             value={value}

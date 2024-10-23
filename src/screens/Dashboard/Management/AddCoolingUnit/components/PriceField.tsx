@@ -34,7 +34,7 @@ export default function PriceField() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label={t('Dashboard.Management.AddCoolingUnit.fields.price')}
+            label={`${t('Dashboard.Management.AddCoolingUnit.fields.price')}*`}
             mode="flat"
             dense
             value={value}
