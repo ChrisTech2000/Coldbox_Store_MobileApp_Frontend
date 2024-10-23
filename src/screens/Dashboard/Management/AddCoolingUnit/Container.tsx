@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
 
 import ColdRoom from '#assets/icons/coldroom.svg';
@@ -11,11 +12,13 @@ import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView'
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
+import { useAuthStore } from '#stores/auth';
 import { useTranslationUtils } from '#i18n/utils';
 import { AddCoolingUnitOverlay } from '#screens/Dashboard/Tutorial/AddCoolingUnitOverlay';
 import { EEmployeeTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import { ERoles } from '#types/global';
 
 import InAppNotifications from '#common/InAppNotifications';
 import FormFields from './components/FormFields';
@@ -32,6 +35,7 @@ export default function ScreenContainer(props: Props) {
   const navigation = useNavigation();
 
   const { isLoading } = DataAggregator.useDataAggregator();
+  const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
@@ -111,7 +115,21 @@ export default function ScreenContainer(props: Props) {
         type: 'md_success',
       });
 
-      await mutate(getQueryKey('getLocations', props.companyId));
+      await Promise.allSettled([
+        mutate(getQueryKey('getLocations', props.companyId)),
+        ...(typeof user?.id !== 'undefined' && typeof props.companyId !== 'undefined'
+          ? [
+              mutate(
+                getQueryKey('getCoolingUnits', {
+                  ...(user.role === ERoles.EMPLOYEE
+                    ? { company: props.companyId }
+                    : { operator: user.id }),
+                })
+              ),
+            ]
+          : []),
+      ]);
+
       navigation.goBack();
     } catch (exception) {
       console.error(exception);

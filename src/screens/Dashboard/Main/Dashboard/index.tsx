@@ -194,12 +194,12 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           />
         }
         search={search}
-        onSearch={(val) => setSearch(val)}
-        onSearchTypeChange={(type) => setSearchType(type)}
+        onSearch={setSearch}
+        onSearchTypeChange={setSearchType}
         searchType={searchType}
         useCompanyStore={useCompanyStore}
         useCoolingUnitStore={useCoolingUnitStore}
-        setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
+        setAreCoolingUnitsLoading={setAreCoolingUnitsLoading}
       />
 
       {isGlobalInfoLoading ||
