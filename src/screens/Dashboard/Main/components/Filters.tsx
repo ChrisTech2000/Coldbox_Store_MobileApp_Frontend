@@ -58,7 +58,7 @@ export function Filters({
   const { company: _company } = useManagementStore();
   const { farmerCompanies, farmerUnitsIds, setCoolingUnits } = useDashboardStore();
 
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
+  const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } = useCoolingUnitStore();
   const { selectedItem: company } = useCompanyStore();
 
   const { onLayout } = useWalkthroughStep({
@@ -111,7 +111,13 @@ export function Filters({
 
   useEffect(() => {
     if (coolingUnits) setCoolingUnits(coolingUnits);
-  }, [coolingUnits]);
+    if (!coolingUnit || !coolingUnits || coolingUnits.length === 0) return;
+    const selectedUnit = coolingUnits.find((unit) => unit.id === coolingUnit.id);
+    if (!selectedUnit) return onSelectCoolingUnit(coolingUnits.at(0)!);
+    if (JSON.stringify(selectedUnit) !== JSON.stringify(coolingUnit)) {
+      return onSelectCoolingUnit(selectedUnit);
+    }
+  }, [coolingUnits, coolingUnit]);
 
   return (
     <View tw="mt-2 px-4">
