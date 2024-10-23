@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dimensions, Platform, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { savePDF } from '#ui/lib/pdf';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -82,28 +82,24 @@ export function CompanySection() {
 
   const onDownloadData = useCallback(async () => {
     setIsCreatingPdf(true);
-    const html = generatePDFContent(t, coolingUnits, company, impactCompany, impactData, 'company');
-
-    const PDFOptions = {
-      html,
-      fileName: `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.company')}`,
-      directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
-      base64: true,
-    };
-
     try {
-      const file = await RNHTMLtoPDF.convert(PDFOptions);
-      if (!file.filePath) throw new Error();
-      setIsCreatingPdf(false);
-
-      toast.show(`${t('actions.done')}!`, {
-        type: 'md_success',
-      });
+      const html = generatePDFContent(
+        t,
+        coolingUnits,
+        company,
+        impactCompany,
+        impactData,
+        'company'
+      );
+      const fileName = `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.company')}`;
+      await savePDF(html, fileName);
+      toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch {
-      setIsCreatingPdf(false);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
+    } finally {
+      setIsCreatingPdf(false);
     }
   }, [t, toast, coolingUnits, impactCompany, impactData, company]);
 
@@ -151,7 +147,7 @@ export function CompanySection() {
               mode="contained"
               uppercase
               onPress={onDownloadData}
-              icon="check-circle-outline"
+              icon={isCreatingPdf ? undefined : 'check-circle-outline'}
               contentStyle="flex flex-row-reverse"
               tw="w-[50%] mt-2"
               disabled={isCreatingPdf}

@@ -1,7 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useState } from 'react';
-import { Platform } from 'react-native';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { ActivityIndicator } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -10,6 +8,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useApiCache, useApiCall } from '#services/hooks/useAPiCall';
 import type { Farmer } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
+import { savePDF } from '#ui/lib/pdf';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
@@ -70,21 +69,12 @@ export default function FarmerDashboardData(props: Props) {
         if (typeof data === 'undefined') return; // safe guard
         setIsCreatingPdf(true);
         try {
-          const file = await RNHTMLtoPDF.convert({
-            html: getPdfContent(data, t),
-            fileName: 'farmer',
-            directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
-            base64: true,
-          });
-
-          if (!file.filePath) throw new Error();
-          setIsCreatingPdf(false);
-          toast.show(`${t('actions.done')}!`, {
-            type: 'md_success',
-          });
+          await savePDF(getPdfContent(data, t), 'farmer');
+          toast.show(`${t('actions.done')}!`, { type: 'md_success' });
         } catch (exception) {
-          setIsCreatingPdf(false);
           console.error(exception);
+        } finally {
+          setIsCreatingPdf(false);
         }
       }}
     >

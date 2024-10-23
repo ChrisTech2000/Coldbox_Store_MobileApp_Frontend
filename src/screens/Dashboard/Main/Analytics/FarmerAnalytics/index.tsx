@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Platform, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 import Logo from '#assets/images/coldtivate_logo.svg';
 
@@ -9,6 +8,7 @@ import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { savePDF } from '#ui/lib/pdf';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
@@ -107,28 +107,15 @@ export function FarmerAnalytics() {
 
   const download = useCallback(async () => {
     if (!data) return;
-
+    setIsCreatingPdf(true);
     try {
-      setIsCreatingPdf(true);
-
-      const params = {
-        html: getPdfContent(data, t),
-        fileName: 'farmer',
-        directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
-        base64: true,
-      };
-
-      const file = await RNHTMLtoPDF.convert(params);
-
-      if (!file.filePath) throw new Error();
-      setIsCreatingPdf(false);
-
-      toast.show(`${t('actions.done')}!`, {
-        type: 'md_success',
-      });
+      await savePDF(getPdfContent(data, t), 'farmer');
+      toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
       setIsCreatingPdf(false);
       console.error(exception);
+    } finally {
+      setIsCreatingPdf(false);
     }
   }, [data]);
 
