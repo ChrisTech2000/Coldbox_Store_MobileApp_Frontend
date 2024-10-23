@@ -660,6 +660,9 @@ const en = {
           removeLocationSuccess: 'Location {{name}} was successfully deleted.',
           failedToFetchLocation:
             'Unable to retrieve the location. Please check the address and try again.',
+          positionCancelled: 'Location request canceled.',
+          positionUnauthorized: 'Location denied. Please grant permission to continue.',
+          locationUnavailable: 'Location disabled. Please enable to continue.',
         },
       },
       Operators: {

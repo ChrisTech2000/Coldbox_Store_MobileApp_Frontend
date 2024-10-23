@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
-import GetLocation from 'react-native-get-location';
+import { View } from 'react-native';
+import GetLocation, { LocationError } from 'react-native-get-location';
+import { ActivityIndicator } from 'react-native-paper';
+import colors from 'tailwindcss/colors';
 import ms from 'ms';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
-import { useToggle } from '#ui/hooks/useToggle';
+
 import { useTranslationUtils } from '#i18n/utils';
+import InAppNotifications from '#common/InAppNotifications';
+import { useToggle } from '#ui/hooks/useToggle';
 
 import FormManager from '../components/FormManager';
-import { View } from 'react-native';
+
+type LocalState = { latitude: string; longitude: string };
 
 export default function GeoLocationForm() {
   const form = FormManager.useFormManager();
-  const [isLoading, toggleLoading] = useToggle();
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
-  const [coordinates, setCoordinates] = useState({ latitude: '', longitude: '' });
+  const [isLoading, toggleLoading] = useToggle(false);
+  const [coordinates, setCoordinates] = useState<LocalState | undefined>(undefined);
 
   async function getCoordinates() {
+    toggleLoading();
     try {
-      toggleLoading();
       const result = await GetLocation.getCurrentPosition({
         enableHighAccuracy: true,
         timeout: ms('6 seconds'),
@@ -28,13 +35,22 @@ export default function GeoLocationForm() {
         latitude: result.latitude.toString(),
         longitude: result.longitude.toString(),
       };
-      form.reset((prev) => ({
-        ...prev,
-        ...newCoordinates,
-      }));
+      form.reset((prev) => ({ ...prev, ...newCoordinates }));
       setCoordinates(newCoordinates);
-    } catch {
-      // silent error
+    } catch (exception) {
+      if (exception instanceof LocationError) {
+        const _map: Record<string, string> = {
+          CANCELLED: t('Dashboard.Management.Location.toasts.positionCancelled'),
+          UNAUTHORIZED: t('Dashboard.Management.Location.toasts.positionUnauthorized'),
+        };
+        const message =
+          _map?.[exception.code] ?? t('Dashboard.Management.Location.toasts.locationUnavailable');
+        toast.show(message, { type: 'md_danger' });
+      } else if (exception instanceof Error && exception.message === 'Location not available') {
+        toast.show(t('Dashboard.Management.Location.toasts.locationUnavailable'), {
+          type: 'md_danger',
+        });
+      }
     } finally {
       toggleLoading();
     }
@@ -43,14 +59,19 @@ export default function GeoLocationForm() {
   return (
     <View>
       <Button
+        tw="self-center mb-3.5 mt-1 w-5/6"
         mode="text"
         onPress={getCoordinates}
-        tw="self-center mb-3.5 mt-1"
         disabled={isLoading}
       >
-        {t('Dashboard.Management.Location.actions.currentLocation')}
+        {isLoading ? (
+          <ActivityIndicator size="small" color={colors.zinc[400]} />
+        ) : (
+          t('Dashboard.Management.Location.actions.currentLocation')
+        )}
       </Button>
-      {coordinates.latitude && coordinates.longitude && (
+
+      {typeof coordinates !== 'undefined' ? (
         <View tw="flex flex-row justify-between mx-6 mb-4">
           <Input
             label={t('Dashboard.Management.Location.fields.latitude')}
@@ -65,7 +86,7 @@ export default function GeoLocationForm() {
             tw="flex-1 ml-2"
           />
         </View>
-      )}
+      ) : null}
     </View>
   );
 }
