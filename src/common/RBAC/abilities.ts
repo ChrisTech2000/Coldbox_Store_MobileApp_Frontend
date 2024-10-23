@@ -25,6 +25,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
     can(PERMISSION_KINDS.NAVIGATE, 'About');
     // scope: customer-type
     if (hasCustomerTypeFeatureFlag) {
+      can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
       can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceShoppingCart');
       can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceListing');
       can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceOrders');
@@ -70,7 +71,6 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
         if (hasCustomerTypeFeatureFlag) {
           can(PERMISSION_KINDS.VIEW, 'ContactsSharingEmail');
           can(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
-          cannot(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           cannot(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
           cannot(PERMISSION_KINDS.SET, 'MarketplaceEditListedCrates');
         }
@@ -113,7 +113,6 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
         if (hasCustomerTypeFeatureFlag) {
           cannot(PERMISSION_KINDS.VIEW, 'ContactsSharingEmail');
           cannot(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
-          can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           can(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
           can(PERMISSION_KINDS.SET, 'MarketplaceEditListedCrates');
         }
@@ -147,7 +146,6 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
         if (hasCustomerTypeFeatureFlag) {
           cannot(PERMISSION_KINDS.VIEW, 'ContactsSharingEmail');
           cannot(PERMISSION_KINDS.VIEW, 'CompanySellerSettings');
-          can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
           can(PERMISSION_KINDS.SET, 'MarketplaceListForSale');
           can(PERMISSION_KINDS.SET, 'MarketplaceEditListedCrates');
         }
