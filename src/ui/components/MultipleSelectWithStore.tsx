@@ -17,12 +17,14 @@ import { useTranslationUtils } from '#i18n/utils';
 type SelectStore<T> = {
   selectedItems: T[];
   onSelect: (items: T[]) => void;
+  reset: () => void;
 };
 
 export const createMultipleSelectStore = <T,>() =>
   create<SelectStore<T>>((set) => ({
     selectedItems: [],
     onSelect: (items) => set({ selectedItems: items }),
+    reset: () => set({ selectedItems: [] }),
   }));
 
 type SelectItemProps<T> = {

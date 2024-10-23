@@ -41,8 +41,8 @@ import {
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import { MarketSurveySchema, MarketSurveySchemaType } from './schema';
 
-const useMeasurementStore = createSelectStore<EUnitOfMeasurement>();
-const useSpoilageReasonsStore = createMultipleSelectStore<string>();
+export const useMeasurementStore = createSelectStore<EUnitOfMeasurement>();
+export const useSpoilageReasonsStore = createMultipleSelectStore<string>();
 
 function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
   const { cropId, companyCurrency } = props.route.params;

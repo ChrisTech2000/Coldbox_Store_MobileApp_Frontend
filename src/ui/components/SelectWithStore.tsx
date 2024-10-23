@@ -1,12 +1,12 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState, type SetStateAction } from 'react';
 import { FlatList, View } from 'react-native';
 import { Divider, RadioButton } from 'react-native-paper';
 import { create } from 'zustand';
-import { useFocusEffect } from '@react-navigation/native';
 
-import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
+import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { cn } from '#ui/lib/cn';
@@ -16,12 +16,14 @@ import { useTranslationUtils } from '#i18n/utils';
 export type SelectStore<T> = {
   selectedItem: T | null;
   onSelect: (item: T | null) => void;
+  reset: () => void;
 };
 
 export const createSelectStore = <T,>(initialState?: T) =>
   create<SelectStore<T>>((set) => ({
     selectedItem: initialState ?? null,
     onSelect: (item) => set({ selectedItem: item }),
+    reset: () => set({ selectedItem: null }),
   }));
 
 type SelectItemProps<T> = {
