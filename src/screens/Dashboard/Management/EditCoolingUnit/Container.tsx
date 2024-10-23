@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Dimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
@@ -9,11 +10,14 @@ import ColdRoom from '#assets/icons/coldroom.svg';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 
+import { useAuthStore } from '#stores/auth';
 import { useTranslationUtils } from '#i18n/utils';
+import InAppNotifications from '#common/InAppNotifications';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import type { GetCoolingUnitResponse } from '#types/api.responses';
+import { ERoles } from '#types/global';
 
 import FormManager, {
   type PreprocessedFormValues,
@@ -25,7 +29,6 @@ import { METRIC_UNITS, PRICING_TYPE } from '../AddCoolingUnit/constants';
 
 import DeleteAction from './components/DeleteAction';
 import { CropPricingManager } from '../AddCoolingUnit/utils';
-import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('window').width - 42) / 2;
 
@@ -47,6 +50,7 @@ export default function ScreenContainer(props: Props) {
   const formValuesBuilder = useRef<FormStateBuilder | undefined>(undefined);
 
   const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
+  const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
@@ -149,7 +153,22 @@ export default function ScreenContainer(props: Props) {
         type: 'md_success',
       });
 
-      await Promise.all([refetch(), mutate(getQueryKey('getLocations', props.companyId))]);
+      await Promise.allSettled([
+        refetch(),
+        mutate(getQueryKey('getLocations', props.companyId)),
+        ...(typeof user?.id !== 'undefined' && typeof props.companyId !== 'undefined'
+          ? [
+              mutate(
+                getQueryKey('getCoolingUnits', {
+                  ...(user.role === ERoles.EMPLOYEE
+                    ? { company: props.companyId }
+                    : { operator: user.id }),
+                })
+              ),
+            ]
+          : []),
+      ]);
+
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
