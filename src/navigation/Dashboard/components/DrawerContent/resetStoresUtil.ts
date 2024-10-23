@@ -35,38 +35,33 @@ import { revenueAnalysisStores } from '#screens/Dashboard/Management/Analysis/Re
 import { usageAnalysisStores } from '#screens/Dashboard/Management/Analysis/UsageAnalysis';
 import { useManagementStore } from '#stores/management';
 
+const storesToReset = [
+  usePayoutBankStore,
+  usePayoutAccountTypeStore,
+  useCoolingUnitStore,
+  useCompanyStore,
+  useDashboardCompanyStore,
+  useDashboardCoolingUnitStore,
+  useTrendCommodityStore,
+  useTrendStateStore,
+  usePaymentTypeStore,
+  useCrateSelectionCoolingUnitStore,
+  useMeasurementStore,
+  useSpoilageReasonsStore,
+  useAnalyticsConfigCoolingUnitStore,
+  useAnalyticsDateRangeStore,
+  useAggregatedData,
+  useComparisonData,
+  useCompanyData,
+  useManagementStore,
+  ...historyStores,
+  ...rankingStores,
+  ...farmerSurveyStores,
+  ...revenueAnalysisStores,
+  ...usageAnalysisStores,
+  ...downloadAnalysisStores,
+];
+
 export function resetAllStores() {
-  usePayoutBankStore.getState().reset();
-  usePayoutAccountTypeStore.getState().reset();
-
-  useCoolingUnitStore.getState().reset();
-  useCompanyStore.getState().reset();
-
-  useDashboardCompanyStore.getState().reset();
-  useDashboardCoolingUnitStore.getState().reset();
-
-  useTrendCommodityStore.getState().reset();
-  useTrendStateStore.getState().reset();
-
-  usePaymentTypeStore.getState().reset();
-
-  useCrateSelectionCoolingUnitStore.getState().reset();
-
-  useMeasurementStore.getState().reset();
-  useSpoilageReasonsStore.getState().reset();
-
-  useAnalyticsConfigCoolingUnitStore.getState().reset();
-  useAnalyticsDateRangeStore.getState().reset();
-  useAggregatedData.getState().reset();
-  useComparisonData.getState().reset();
-  useCompanyData.getState().reset();
-
-  useManagementStore.getState().reset();
-
-  historyStores.forEach((store) => store.getState().reset());
-  rankingStores.forEach((store) => store.getState().reset());
-  farmerSurveyStores.forEach((store) => store.getState().reset());
-  revenueAnalysisStores.forEach((store) => store.getState().reset());
-  usageAnalysisStores.forEach((store) => store.getState().reset());
-  downloadAnalysisStores.forEach((store) => store.getState().reset());
+  storesToReset.forEach((store) => store.getState().reset());
 }
