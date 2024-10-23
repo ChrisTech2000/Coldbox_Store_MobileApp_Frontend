@@ -648,6 +648,10 @@ export default {
           street: 'સ્ટ્રીટ',
           streetNumber: 'સ્ટ્રીટ નંબર',
         },
+        fieldErrorMessages: {
+          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
+          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+        },
         modal: {
           message:
             'આ ક્રિયા આ સ્થળ સાથે જોડાયેલ તમામ કૂલિંગ યુનિટ્સને કાઢી નાખશે. શું તમે આગળ વધવા માંગો છો?',
