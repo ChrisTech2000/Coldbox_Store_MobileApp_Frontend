@@ -647,6 +647,10 @@ const en = {
           street: 'Street',
           streetNumber: 'Street Number',
         },
+        fieldErrorMessages: {
+          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)',
+          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)',
+        },
         modal: {
           message:
             'This operation will delete all cooling units associated with this location. Do you want to continue?',

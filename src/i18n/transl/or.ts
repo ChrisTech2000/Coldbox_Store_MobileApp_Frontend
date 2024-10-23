@@ -649,6 +649,10 @@ export default {
           street: 'ସ୍ଟ୍ରୀଟ୍',
           streetNumber: 'ସ୍ଟ୍ରୀଟ୍ ନମ୍ବର',
         },
+        fieldErrorMessages: {
+          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
+          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+        },
         modal: {
           message:
             'ଏହି କାର୍ଯ୍ୟାଳୟ ଏହି ସ୍ଥାନ ସହିତ ସଂପୃକ୍ତ ସମସ୍ତ କୁଲିଂ ୟୁନିଟ୍ ହଟାଇବ। ଆପଣ ଜାରି ରଖିବାକୁ ଚାହାଁଛନ୍ତି କି?',

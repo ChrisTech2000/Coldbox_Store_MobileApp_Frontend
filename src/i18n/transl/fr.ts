@@ -657,6 +657,10 @@ export default {
           street: 'Rue',
           streetNumber: 'Numéro de rue',
         },
+        fieldErrorMessages: {
+          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
+          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+        },
         modal: {
           message:
             'Cette opération supprimera toutes les unités de refroidissement associées à ce lieu. Voulez-vous continuer?',
