@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { Platform, ScrollView, View } from 'react-native';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { ScrollView, View } from 'react-native';
 import { DataTable, Divider } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -9,6 +8,7 @@ import { Text } from '#ui/components/Text';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import InAppNotifications from '#common/InAppNotifications';
+import { savePDF } from '#ui/lib/pdf';
 
 type CheckOutDataProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -108,16 +108,10 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
     </html>
   `;
 
-    const PDFOptions = {
-      html,
-      fileName: t('Dashboard.History.pdfModal.downloadName', { code: movement.code }),
-      directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
-      base64: true,
-    };
+    const fileName = t('Dashboard.History.pdfModal.downloadName', { code: movement.code });
 
     try {
-      const file = await RNHTMLtoPDF.convert(PDFOptions);
-      if (!file.filePath) throw new Error();
+      await savePDF(html, fileName);
       toast.show(t('Dashboard.History.pdfModal.successMessage'), {
         type: 'md_success',
       });
