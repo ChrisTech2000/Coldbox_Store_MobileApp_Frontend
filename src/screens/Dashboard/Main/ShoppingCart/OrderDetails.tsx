@@ -78,6 +78,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     );
   }
 
+  const allCoolingUnitsHavePickUpMethod = cartData.items?.every((item) =>
+    cartData.pickupDetails.some((pickup) => pickup.coolingUnitId === item.relCoolingUnitId)
+  );
+
   const orderDisabled =
     cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
     CART_MINIMUM_VALUE;
@@ -212,7 +216,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             mode="contained"
             uppercase
             onPress={onPay}
-            disabled={isSubmitting || orderDisabled}
+            disabled={isSubmitting || orderDisabled || !allCoolingUnitsHavePickUpMethod}
           >
             {isSubmitting ? (
               <ActivityIndicator size="small" color="white" />
