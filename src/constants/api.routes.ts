@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
+
 export enum EAuthenticationEndpoints {
   RESET_PASSWORD = 'user/v1/reset-password/',
   REFRESH_TOKEN_ENDPOINT = 'user/token/refresh/',
@@ -6,8 +8,8 @@ export enum EAuthenticationEndpoints {
   SIGN_UP_AS_COOLING_USER = 'user/v1/farmers/',
   SIGN_UP_EMPLOYEE_BY_INVITE = 'user/v1/service-provider-invite-signup/',
   SIGN_UP_OPERATOR_BY_INVITE = 'user/v1/operator-invite-signup/',
-  BACKEND_ANDROID_VERSION = 'storage/version-code/android',
-  BACKEND_IOS_VERSION = 'storage/version-code/ios',
+  BACKEND_ANDROID_VERSION = 'storage/version-code/android/',
+  BACKEND_IOS_VERSION = 'storage/version-code/ios/',
 }
 
 export enum EUserEndpoints {
@@ -15,9 +17,9 @@ export enum EUserEndpoints {
   GET_COMPANY_EMPLOYEES = 'user/v1/service-providers/',
   GET_FARMER = 'user/v1/farmers/',
   GET_FARMER_SURVEYS = 'user/v1/farmer-survey/',
-  GET_INVITED_COMPANY_EMPLOYEES = 'user/v1/service-provider-invite',
-  GET_INVITED_OPERATORS = 'user/v1/operator-invite',
-  GET_OPERATORS = 'user/v1/operators',
+  GET_INVITED_COMPANY_EMPLOYEES = 'user/v1/service-provider-invite/',
+  GET_INVITED_OPERATORS = 'user/v1/operator-invite/',
+  GET_OPERATORS = 'user/v1/operators/',
   INVITE_EMPLOYEE = 'user/v1/service-provider-invite/',
   INVITE_OPERATOR = 'user/v1/operator-invite/',
   UPDATE_FARMER = 'user/v1/farmers/:farmerId/',
@@ -33,7 +35,7 @@ export enum EStorageEndpoints {
   GET_FARMER_CRATES = '/storage/v1/crates/',
   GET_LOCATION = '/storage/v1/locations/:locationId/',
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',
-  GET_OPERATORS = 'user/v1/operators',
+  GET_OPERATORS = 'user/v1/operators/',
   GET_CAPACITY = 'storage/v1/cooling-unit-capacity/',
   GET_COOLING_UNIT = 'storage/v1/cooling-units/:coolingUnitId/',
   GET_TEMPERATURES = 'storage/v1/cooling-unit-temperatures/',
