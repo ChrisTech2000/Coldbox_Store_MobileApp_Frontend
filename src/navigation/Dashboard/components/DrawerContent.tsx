@@ -32,6 +32,7 @@ import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 
 import type { DashboardRoutes } from '../index';
+import { useSWRConfig } from 'swr';
 
 const StyledDrawerContentScrollView = styled(DrawerContentScrollView);
 
@@ -70,6 +71,7 @@ export default function DrawerContent(props: Props) {
   const focusedRoute = routeNames[index];
   const resetManagementStore = useManagementStore((store) => store.reset);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const { mutate } = useSWRConfig();
 
   const { onLayout: onTutorialTabLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.REPEAT_TUTORIAL_STEP,
@@ -131,6 +133,7 @@ export default function DrawerContent(props: Props) {
   const onLogout = useCallback(() => {
     resetManagementStore();
     useAuthStore.getState().revokeSession();
+    mutate(() => true, undefined, false);
   }, []);
 
   return (
