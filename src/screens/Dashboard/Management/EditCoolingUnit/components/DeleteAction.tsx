@@ -3,15 +3,18 @@ import { Dimensions, View, type GestureResponderEvent } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
 import { useToggle } from '#ui/hooks/useToggle';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import { ERoles } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 
 import FormManager from '../../AddCoolingUnit/contexts/FormManager';
@@ -29,6 +32,7 @@ export default function DeleteAction(props: Props) {
   const navigation = useNavigation();
   const { mutate, cache } = useSWRConfig();
   const toast = InAppNotifications.useToast();
+  const user = useAuthStore(useShallow((store) => store.user));
 
   const {
     formState: { isSubmitting },
@@ -44,8 +48,27 @@ export default function DeleteAction(props: Props) {
     try {
       await ColdtivateService.deleteCoolingUnit(props.coolingUnitId);
 
-      await mutate(getQueryKey('getLocations', props.companyId));
-      cache.delete(getQueryKey('getCoolingUnit', { ...props }));
+      await Promise.allSettled([
+        mutate(getQueryKey('getLocations', props.companyId)),
+        ...(typeof user?.id !== 'undefined' && typeof props.companyId !== 'undefined'
+          ? [
+              mutate(
+                getQueryKey('getCoolingUnits', {
+                  ...(user.role === ERoles.EMPLOYEE
+                    ? { company: props.companyId }
+                    : { operator: user.id }),
+                })
+              ),
+            ]
+          : []),
+      ]);
+
+      cache.delete(
+        getQueryKey('getCoolingUnit', {
+          coolingUnitId: props.coolingUnitId,
+          companyId: props.companyId,
+        })
+      );
 
       toast.show(
         t('Dashboard.Management.EditCoolingUnit.toasts.successDelete', {
