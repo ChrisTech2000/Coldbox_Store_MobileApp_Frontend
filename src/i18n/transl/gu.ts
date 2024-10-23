@@ -723,6 +723,7 @@ export default {
         },
         toasts: {
           success: 'સફળતાપૂર્વક સંપાદિત',
+          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
         },
       },
       RegisteredEmployee: {

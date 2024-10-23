@@ -724,6 +724,7 @@ export default {
         },
         toasts: {
           success: 'ସଫଳତାର ସହିତ ସମ୍ପାଦିତ',
+          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
         },
       },
       RegisteredEmployee: {

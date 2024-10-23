@@ -733,6 +733,7 @@ export default {
         },
         toasts: {
           success: 'Modifié avec succès',
+          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
         },
       },
       RegisteredEmployee: {
