@@ -28,7 +28,7 @@ import {
   MOCKED_USER,
 } from '../../../Tutorial/utils/mockedData';
 
-const useCoolingUnitStore = createSelectStore<CoolingUnit>();
+export const useCrateSelectionCoolingUnitStore = createSelectStore<CoolingUnit>();
 const MOCKED_PARAMS = {
   user: MOCKED_USER,
   crates: MOCKED_CHECK_OUT_DATA,
@@ -39,7 +39,8 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const { user, coolingUnit: _coolingUnit, crates: _crates } = route.params;
   const { t } = useTranslationUtils();
   const { coolingUnits } = useDashboardStore();
-  const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } = useCoolingUnitStore();
+  const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } =
+    useCrateSelectionCoolingUnitStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [selectedCrates, setSelectedCrates] = useState<Crate[]>([]);
@@ -133,7 +134,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
             setIsModalVisible={setIsUnitsModalOpen}
             itemName={(item) => item?.name}
             disabled={!!_crates?.length}
-            useSelectStore={useCoolingUnitStore}
+            useSelectStore={useCrateSelectionCoolingUnitStore}
             label={
               coolingUnit
                 ? coolingUnit.name

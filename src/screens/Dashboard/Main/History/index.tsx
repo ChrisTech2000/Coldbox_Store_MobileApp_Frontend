@@ -36,6 +36,8 @@ const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
 const useSortingStore = createSortingStore();
 
+export const historyStores = [useCoolingUnitStore, useCompanyStore];
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 

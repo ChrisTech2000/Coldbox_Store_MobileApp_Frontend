@@ -44,6 +44,8 @@ const usePaymentType = createMultipleSelectStore<PaymentOption>();
 const useDateRangeStore = createDataRangeStore();
 const useSortingStore = createSortingStore();
 
+export const revenueAnalysisStores = [useDateRangeStore, usePaymentType, useCoolingUnitStore];
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 

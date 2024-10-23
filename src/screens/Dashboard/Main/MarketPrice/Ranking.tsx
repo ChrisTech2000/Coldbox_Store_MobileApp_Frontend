@@ -24,16 +24,22 @@ export type Month = {
   date: Date;
 };
 
-const useCommodityStore = createSelectStore<PredictionCrop>();
-const useStateStore = createMultipleSelectStore<PredictionState>();
-const useMonthsStore = createMultipleSelectStore<Month>();
+const useRankingCommodityStore = createSelectStore<PredictionCrop>();
+const useRankingStateStore = createMultipleSelectStore<PredictionState>();
+const useRankingMonthsStore = createMultipleSelectStore<Month>();
+
+export const rankingStores = [
+  useRankingCommodityStore,
+  useRankingStateStore,
+  useRankingMonthsStore,
+];
 
 function MarketPriceRanking() {
   const { t } = useTranslationUtils();
   const { country, predictionParams } = usePriceTrendsStore();
-  const { selectedItem: commodity } = useCommodityStore();
-  const { selectedItems: states } = useStateStore();
-  const { selectedItems: selectedMonths } = useMonthsStore();
+  const { selectedItem: commodity } = useRankingCommodityStore();
+  const { selectedItems: states } = useRankingStateStore();
+  const { selectedItems: selectedMonths } = useRankingMonthsStore();
 
   const [filterByLocation, setFilterByLocation] = useState<boolean>(false);
   const [isCommoditiesModalOpen, setIsCommoditiesModalOpen] = useState<boolean>(false);
@@ -76,7 +82,7 @@ function MarketPriceRanking() {
           isModalVisible={isCommoditiesModalOpen}
           setIsModalVisible={setIsCommoditiesModalOpen}
           itemName={(item) => item?.name}
-          useSelectStore={useCommodityStore}
+          useSelectStore={useRankingCommodityStore}
           label={commodity ? commodity.name : t('Dashboard.MarketPrice.commodityLabel')}
           modalHeader={t('Dashboard.MarketPrice.commodityModalTitle')}
           occupyFullWidth
@@ -90,7 +96,7 @@ function MarketPriceRanking() {
               isModalVisible={isSatesModalOpen}
               setIsModalVisible={setIsStatesModalOpen}
               itemName={(item) => item?.name}
-              useSelectStore={useStateStore}
+              useSelectStore={useRankingStateStore}
               label={
                 states.length
                   ? states.map((s) => s.name).join(', ')
@@ -109,7 +115,7 @@ function MarketPriceRanking() {
           isModalVisible={isMonthsModalOpen}
           setIsModalVisible={setIsMonthsModalOpen}
           itemName={(item) => item.name}
-          useSelectStore={useMonthsStore}
+          useSelectStore={useRankingMonthsStore}
           label={
             selectedMonths.length
               ? selectedMonths.map((s) => s.name).join(', ')

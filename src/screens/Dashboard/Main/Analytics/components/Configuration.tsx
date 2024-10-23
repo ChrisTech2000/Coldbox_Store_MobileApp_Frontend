@@ -29,8 +29,8 @@ type ConfigurationModalProps = {
   dismiss: () => void;
 };
 
-const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
-const useDateRangeStore = createDataRangeStore();
+export const useAnalyticsConfigCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
+export const useAnalyticsDateRangeStore = createDataRangeStore();
 
 export function ConfigurationModal({
   isOpen,
@@ -39,8 +39,8 @@ export function ConfigurationModal({
   confirm,
 }: ConfigurationModalProps) {
   const { t } = useTranslationUtils();
-  const { startDate, endDate } = useDateRangeStore();
-  const { selectedItems: selectedUnits } = useCoolingUnitStore();
+  const { startDate, endDate } = useAnalyticsDateRangeStore();
+  const { selectedItems: selectedUnits } = useAnalyticsConfigCoolingUnitStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
 
@@ -55,7 +55,7 @@ export function ConfigurationModal({
 
           <View tw="px-2">
             <DateRangePickerWithStore
-              useDateRangeStore={useDateRangeStore}
+              useDateRangeStore={useAnalyticsDateRangeStore}
               variant="contained"
               initialEndDate={new Date()}
               initialStartDate={new Date(2022, 9)}
@@ -73,7 +73,7 @@ export function ConfigurationModal({
               isModalVisible={isUnitsModalOpen}
               setIsModalVisible={setIsUnitsModalOpen}
               itemName={(item) => item?.name}
-              useSelectStore={useCoolingUnitStore}
+              useSelectStore={useAnalyticsConfigCoolingUnitStore}
               label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
                 name: selectedUnits.length ? selectedUnits.map((unit) => unit.name).join(', ') : '',
               })}

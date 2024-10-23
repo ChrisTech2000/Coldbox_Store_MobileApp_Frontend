@@ -24,8 +24,8 @@ import { PredictionCrop, PredictionState } from '#types/global';
 import { TrendChart } from './components/TrendChart';
 import { AllowedCountry, usePriceTrendsStore } from './store';
 
-const useCommodityStore = createSelectStore<PredictionCrop>();
-const useStateStore = createSelectStore<PredictionState>();
+export const useTrendCommodityStore = createSelectStore<PredictionCrop>();
+export const useTrendStateStore = createSelectStore<PredictionState>();
 
 export type QueryCountry = 'IN' | 'NG';
 
@@ -39,8 +39,8 @@ export const MAP_ALLOWED_COUNTRY: Record<AllowedCountry, QueryCountry> = {
 function MarketPriceTrend() {
   const { t } = useTranslationUtils();
   const { country, loadingFarmer, setPredictionParams } = usePriceTrendsStore();
-  const { selectedItem: commodity } = useCommodityStore();
-  const { selectedItem: state } = useStateStore();
+  const { selectedItem: commodity } = useTrendCommodityStore();
+  const { selectedItem: state } = useTrendStateStore();
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const [isCommoditiesModalOpen, setIsCommoditiesModalOpen] = useState<boolean>(false);
@@ -98,7 +98,7 @@ function MarketPriceTrend() {
           isModalVisible={isCommoditiesModalOpen}
           setIsModalVisible={setIsCommoditiesModalOpen}
           itemName={(item) => item?.name}
-          useSelectStore={useCommodityStore}
+          useSelectStore={useTrendCommodityStore}
           label={commodity ? commodity.name : t('Dashboard.MarketPrice.commodityLabel')}
           modalHeader={t('Dashboard.MarketPrice.commodityModalTitle')}
           occupyFullWidth
@@ -109,7 +109,7 @@ function MarketPriceTrend() {
           isModalVisible={isStatesModalOpen}
           setIsModalVisible={setIsStatesModalOpen}
           itemName={(item) => item?.name}
-          useSelectStore={useStateStore}
+          useSelectStore={useTrendStateStore}
           label={state ? state.name : t('Dashboard.MarketPrice.Trend.stateLabel')}
           modalHeader={t('Dashboard.MarketPrice.Trend.stateModalTitle')}
           occupyFullWidth

@@ -38,6 +38,8 @@ const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
 const useSortingStore = createSortingStore();
 
+export const usageAnalysisStores = [useCoolingUnitStore, useDateRangeStore];
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
