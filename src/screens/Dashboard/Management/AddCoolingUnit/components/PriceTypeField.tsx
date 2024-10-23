@@ -42,7 +42,7 @@ export default function PriceTypeField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label={t('Dashboard.Management.AddCoolingUnit.pricing.label')}
+                label={`${t('Dashboard.Management.AddCoolingUnit.pricing.label')}*`}
                 currentValue={truncate(currentValue, { length: 16 })}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}

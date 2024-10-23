@@ -164,7 +164,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="w-full bg-transparent mt-7 mb-2"
-              label={t('Auth.ForgotPassword.phoneInputLabel')}
+              label={`${t('Auth.ForgotPassword.phoneInputLabel')}*`}
               mode="flat"
               dense
               value={value}

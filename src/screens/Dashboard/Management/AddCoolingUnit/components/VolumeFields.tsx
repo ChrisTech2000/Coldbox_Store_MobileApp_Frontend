@@ -20,7 +20,7 @@ export default function VolumeFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label={t('Dashboard.Management.AddCoolingUnit.fields.capacityInMetricTons')}
+            label={`${t('Dashboard.Management.AddCoolingUnit.fields.capacityInMetricTons')}*`}
             mode="flat"
             dense
             value={value}
@@ -39,7 +39,7 @@ export default function VolumeFields() {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label={t('Dashboard.Management.AddCoolingUnit.fields.foodCapacityInMetricTons')}
+            label={`${t('Dashboard.Management.AddCoolingUnit.fields.foodCapacityInMetricTons')}*`}
             mode="flat"
             dense
             value={value}
