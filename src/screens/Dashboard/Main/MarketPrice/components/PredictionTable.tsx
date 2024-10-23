@@ -1,4 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
+import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, DataTable, Icon } from 'react-native-paper';
@@ -15,8 +16,8 @@ import type { PredictionCrop, PredictionState, PredictionTableData } from '#type
 
 import { Month } from '../Ranking';
 import type { AllowedCountry } from '../store';
-import { changePage, compareAsc, compareDesc, parseDateString } from '../utils';
 import { MAP_ALLOWED_COUNTRY, QueryCountry } from '../Trend';
+import { changePage, compareAsc, compareDesc, parseDateString } from '../utils';
 
 enum ECurrency {
   NG = '₦',
@@ -66,17 +67,8 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
 
   const [currentPage, setCurrentPage] = useState<number>(0);
 
-  const paginatedData = useMemo(() => {
-    if (!predictionData || !predictionData.length) return [];
-
-    const startIndex = currentPage * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-
-    return predictionData.slice(startIndex, endIndex);
-  }, [predictionData, currentPage]);
-
   const sortedData = useMemo(() => {
-    if (!paginatedData?.length) return [];
+    if (!predictionData || !predictionData.length) return [];
 
     const { direction, sorting } = sortingType;
     let data: PredictionTableData = [];
@@ -85,7 +77,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
 
     switch (sorting) {
       case 'date':
-        data = paginatedData
+        data = predictionData
           .slice()
           .sort((a, b) =>
             compare(
@@ -95,21 +87,37 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
           );
         break;
       case 'state':
-        data = paginatedData.slice().sort((a, b) => compare(a.state, b.state));
+        data = predictionData.slice().sort((a, b) => compare(a.state, b.state));
         break;
       case 'price':
-        data = paginatedData
+        data = predictionData
           .slice()
           .sort((a, b) => compare(a.price ?? Infinity, b.price ?? Infinity));
         break;
     }
 
     return data;
-  }, [paginatedData, sortingType?.direction, sortingType?.sorting]);
+  }, [predictionData, sortingType?.direction, sortingType?.sorting]);
+
+  const paginatedData = useMemo(() => {
+    if (!sortedData || !sortedData.length) return [];
+
+    const startIndex = currentPage * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+
+    return sortedData.slice(startIndex, endIndex);
+  }, [sortedData, currentPage]);
 
   const totalPages = useMemo(
     () => Math.floor((predictionData?.length ?? 0) / ITEMS_PER_PAGE),
     [predictionData]
+  );
+
+  const debouncedPageChange = useCallback(
+    debounce((page) => {
+      changePage(page, totalPages, setCurrentPage);
+    }, 300),
+    [totalPages]
   );
 
   useEffect(() => {
@@ -135,7 +143,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
   }
 
   return (
-    <View>
+    <View tw="mb-20">
       <DataTable tw="py-4 px-2">
         <SkiaShadow blur={6} dx={2} dy={8} color={colors.zinc[300]} borderRadius={10}>
           <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 py-2">
@@ -161,7 +169,12 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
             />
             <Header
               title={t('Dashboard.MarketPrice.Ranking.table.column3', {
-                currency: ECurrency[mappedCountry],
+                currency:
+                  mappedCountry === 'IN'
+                    ? ECurrency.IN
+                    : mappedCountry === 'NG'
+                      ? ECurrency.NG
+                      : '$',
               })}
               onSort={(direction) =>
                 setSortingType({
@@ -174,13 +187,13 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
           </DataTable.Header>
           <FlashList
             showsVerticalScrollIndicator={false}
-            data={sortedData}
+            data={paginatedData}
             keyExtractor={(item, index) => `${item.date}-#${index}-${item.price}`}
             renderItem={({ item }) => (
               <DataTable.Row tw="bg-white">
-                <DataTable.Cell>{item.state}</DataTable.Cell>
-                <DataTable.Cell>{item.date}</DataTable.Cell>
-                <DataTable.Cell>
+                <DataTable.Cell tw="px-1">{item.state}</DataTable.Cell>
+                <DataTable.Cell tw="px-1">{item.date}</DataTable.Cell>
+                <DataTable.Cell numeric tw="px-1">
                   {item.price ?? t('Dashboard.MarketPrice.Ranking.table.emptyState')}
                 </DataTable.Cell>
               </DataTable.Row>
@@ -196,7 +209,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
             tw="bg-gray-700 rounded-b-lg"
             page={currentPage}
             numberOfPages={totalPages}
-            onPageChange={(page) => changePage(page, totalPages, setCurrentPage)}
+            onPageChange={debouncedPageChange}
             showFastPaginationControls
             numberOfItemsPerPage={ITEMS_PER_PAGE}
             theme={{
@@ -215,7 +228,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
 }
 
 function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
-  const [sortingDirection, setSortingDirection] = useState<Direction | undefined>();
+  const [sortingDirection, setSortingDirection] = useState<Direction | undefined>('ascending');
 
   const onPress = useCallback(() => {
     const newSortingDirection =
@@ -228,8 +241,7 @@ function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
     if (!isSortingActive) {
       return 'arrow-up-down';
     }
-
-    return sortingDirection === 'ascending' ? 'arrow-up' : 'arrow-down';
+    return sortingDirection === 'descending' ? 'arrow-down' : 'arrow-up';
   }, [sortingDirection, isSortingActive]);
 
   useEffect(() => {
@@ -239,9 +251,9 @@ function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
   }, [isSortingActive]);
 
   return (
-    <DataTable.Title>
+    <DataTable.Title numberOfLines={2} tw="px-1">
       <TouchableOpacity tw="flex flex-row items-center" onPress={onPress}>
-        <Text variant="TextMedium" tw="text-white text-base">
+        <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
           {title}
         </Text>
         <Icon source={sortingIcon} color={colors.white} size={14} />

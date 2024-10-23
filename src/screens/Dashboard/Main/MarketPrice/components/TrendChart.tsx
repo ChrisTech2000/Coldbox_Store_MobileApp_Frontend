@@ -154,7 +154,7 @@ function Chart({ predictionData, currency }: ChartProps) {
   );
 
   return (
-    <View tw="w-full mt-4 flex flex-row items-start">
+    <View tw="w-full mt-4 mb-24 flex flex-row items-start">
       <Text
         variant="TextMedium"
         tw="text-base text-gray-500 -rotate-90 absolute -left-[10%] bottom-[50%]"

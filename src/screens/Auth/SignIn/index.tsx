@@ -230,7 +230,11 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           render={({ field: { onChange, value } }) => (
             <TextInput
               tw="w-[95%] px-4 bg-white border rounded-sm mb-2 h-12"
-              label={t('Auth.SignIn.form.user.placeholder')}
+              label={
+                activeProfile === EAccountProfile.EMPLOYEE
+                  ? t('Auth.SignIn.form.user.placeholder')
+                  : t('Auth.ForgotPassword.phoneInputLabel')
+              }
               left={<TextInput.Icon icon="phone" />}
               onChangeText={onChange}
               value={value}

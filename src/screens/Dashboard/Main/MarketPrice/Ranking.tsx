@@ -45,7 +45,7 @@ function MarketPriceRanking() {
       const date = startOfMonth(addMonths(new Date(), i));
       return {
         id: i,
-        name: dateFmt(date.toISOString(), 'MMM, yyyy'),
+        name: dateFmt(date.toISOString(), 'MMM yyyy'),
         date,
       };
     });
