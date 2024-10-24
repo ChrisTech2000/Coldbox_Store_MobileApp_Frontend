@@ -589,6 +589,7 @@ const en = {
       days: 'Days',
       noDTMessage: 'A Shelf-life model is not available for this particular commodity.',
       checkOutButton: 'Check out',
+      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale',
     },
     SearchFilter: {
       detailsMessage:

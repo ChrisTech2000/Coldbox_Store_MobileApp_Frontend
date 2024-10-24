@@ -598,6 +598,7 @@ export default {
       noDTMessage:
         "Un modèle de durée de conservation n'est pas disponible pour cette marchandise particulière.",
       checkOutButton: 'Retirer',
+      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
     },
     SearchFilter: {
       detailsMessage:

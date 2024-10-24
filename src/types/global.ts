@@ -74,6 +74,7 @@ export type Crate = {
   runDt: boolean;
   qualityDt: boolean;
   tag: string;
+  listedInTheMarketplace?: boolean;
 };
 
 export type DashboardProduce = {
