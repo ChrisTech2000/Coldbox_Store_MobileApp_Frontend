@@ -46,14 +46,14 @@ function PasswordRecoveryRequest() {
           phoneNumber: values.phone,
           link: { partOne, partTwo: `/${values.phone}` },
         });
+        // For security reasons, we don't want to inform the user whether the introduced phone exists in our DB or not
+        toast.show(t('Auth.ForgotPassword.messageSentNotification'), {
+          type: 'md_success',
+        });
       } catch (exception) {
+        toast.show('Auth.ForgotPassword.requestLimitMessage', { type: 'md_danger' });
         console.error(exception);
       }
-
-      // For security reasons, we don't want to inform the user whether the introduced phone exists in our DB or not
-      toast.show(t('Auth.ForgotPassword.messageSentNotification'), {
-        type: 'md_success',
-      });
     },
     [toast]
   );
