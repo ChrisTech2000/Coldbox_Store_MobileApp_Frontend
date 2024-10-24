@@ -595,6 +595,7 @@ export default {
       days: 'Dias',
       noDTMessage: 'Um modelo de validade não está disponível para este produto específico.',
       checkOutButton: 'Check-out',
+      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
     },
     SearchFilter: {
       detailsMessage:

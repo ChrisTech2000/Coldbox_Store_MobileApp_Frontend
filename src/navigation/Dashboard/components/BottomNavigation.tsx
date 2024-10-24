@@ -93,7 +93,7 @@ function BottomNavBar(
   const { t } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
 
-  const includeHistoryTab = !guard('NAVIGATE', 'MarketplaceListing');
+  const includeHistoryTab = !guard('VIEW', 'MarketplaceListing');
 
   return (
     <View tw="absolute bottom-0 left-0 z-[9999] w-full" style={tabBarStyle}>
@@ -147,7 +147,7 @@ function BottomSheet({
   const { t } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
 
-  const excludeHistoryTab = !guard('NAVIGATE', 'MarketplaceListing');
+  const excludeHistoryTab = !guard('VIEW', 'MarketplaceListing');
 
   return (
     <Modalize

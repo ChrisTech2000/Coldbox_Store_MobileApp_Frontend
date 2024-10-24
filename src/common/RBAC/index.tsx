@@ -30,8 +30,8 @@ export default function RBAC(props: PropsWithChildren) {
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
 
   const contextualCountry = useMemo(() => {
-    if (companyCountry) return countriesDict().getNameByISO(companyCountry) ?? 'Nigeria';
-    return farmerCountry ?? 'Nigeria';
+    if (companyCountry) return countriesDict().getNameByISO(companyCountry) || 'Nigeria';
+    return farmerCountry || 'Nigeria';
   }, [companyCountry, farmerCountry]);
 
   const abilities = useMemo(

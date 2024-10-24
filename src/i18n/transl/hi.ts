@@ -591,6 +591,7 @@ export default {
       days: 'दिन',
       noDTMessage: 'इस विशेष वस्त्र के लिए एक शेल्फ-लाइफ मॉडल उपलब्ध नहीं है।',
       checkOutButton: 'चेक आउट',
+      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
     },
     SearchFilter: {
       detailsMessage:

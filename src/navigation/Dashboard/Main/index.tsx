@@ -136,7 +136,7 @@ export default function DashboardMainBottomTabs() {
     [user?.firstName, dashboardHeaderFactory]
   );
 
-  const navToMarketplace = guard('NAVIGATE', 'MarketplaceListing');
+  const navToMarketplace = guard('VIEW', 'MarketplaceListing');
   const navToShoppingCart = guard('NAVIGATE', 'MarketplaceShoppingCart');
   const navToOrders = guard('NAVIGATE', 'MarketplaceOrders');
 

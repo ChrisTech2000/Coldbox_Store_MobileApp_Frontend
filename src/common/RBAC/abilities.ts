@@ -27,7 +27,7 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
     if (hasCustomerTypeFeatureFlag) {
       can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
       can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceShoppingCart');
-      can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceListing');
+      can(PERMISSION_KINDS.VIEW, 'MarketplaceListing');
       can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceOrders');
     }
 

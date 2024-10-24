@@ -1,7 +1,7 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { currencies } from 'currencies.json';
 import isNil from 'lodash/isNil';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon } from 'react-native-paper';
@@ -16,6 +16,7 @@ import { DashboardProduce, EPricingType } from '#types/global';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import RBAC from '#common/RBAC';
 
 type ProduceProps = {
   currency: string;
@@ -44,6 +45,15 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
       toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
     },
     [toast]
+  );
+
+  const amountOfListedCrates = useMemo(
+    () =>
+      produce.checkedInCrates.reduce(
+        (acc, curr) => (curr?.listedInTheMarketplace ? (acc += 1) : acc),
+        0
+      ),
+    [produce]
   );
 
   return (
@@ -107,9 +117,9 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
           />
         </View>
 
-        <View tw="flex flex-row justify-between">
+        <View tw="flex flex-row items-center justify-between">
           <View tw="flex flex-row items-center space-x-1">
-            <MineCart width={12} height={12} />
+            <MineCart width={14} height={14} />
             <Text variant="TextMedium" tw="text-base">
               {produce.cratesAmount}
             </Text>
@@ -118,12 +128,22 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
           <Text variant="TextMedium" tw="text-gray-400">
             {getPricing(produce, currency)}
           </Text>
+
           <View tw="flex flex-row items-center space-x-1">
-            <ColdRoom width={14} height={14} tw="text-black" />
-            <Text variant="TextMedium" tw="text-base">
+            <ColdRoom width={16} height={16} tw="text-black" />
+            <Text variant="TextMedium" tw="text-sm">
               {generateDaysString(produce.currentStorageDays)}
             </Text>
           </View>
+
+          <RBAC.ProtectedResource action="VIEW" subject="MarketplaceListing">
+            <View tw="flex flex-row items-center space-x-1">
+              <Icon source="cart-outline" size={18} color={colors.gray[400]} />
+              <Text variant="TextMedium" tw="text-base text-gray-400">
+                {amountOfListedCrates}
+              </Text>
+            </View>
+          </RBAC.ProtectedResource>
         </View>
 
         <Divider />

@@ -235,7 +235,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
               }
               key={`${produce.id}-${index}`}
               produce={produce}
-              onNavigate={() =>
+              onNavigate={() => {
                 navigation.navigate('ProduceDetailsStack', {
                   screen: 'Root',
                   params: {
@@ -243,8 +243,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
                     coolingUnit: coolingUnit,
                     currency: selectedCompany?.currency ?? company?.currency ?? '',
                   },
-                })
-              }
+                });
+              }}
               currency={selectedCompany?.currency ?? company?.currency ?? ''}
             />
           )}
