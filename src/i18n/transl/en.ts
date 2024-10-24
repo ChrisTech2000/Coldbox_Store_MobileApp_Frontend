@@ -291,9 +291,6 @@ const en = {
         'In order to reset your password, please enter the phone number with it&apos;s country code, to which the account is connected.',
       phoneInputLabel: 'Phone Number',
       resetButton: 'Reset',
-      link: {
-        partOne: 'Click on this link to reset your password {{baseLink}}',
-      },
     },
     ResetPassword: {
       schema: {
@@ -1138,7 +1135,7 @@ const en = {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} Receipt: 
+        sendSMS: `{{companyName}} - {{movementType}} Receipt:
         Movement code: {{code}}
         Crops: {{crops}}
         Total weight: {{weight}} Kg

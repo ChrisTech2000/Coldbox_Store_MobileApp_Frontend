@@ -104,8 +104,6 @@ class AuthService extends HttpClient {
   ): Promise<string | undefined> => {
     const _params = {
       phoneNumber: params.phoneNumber,
-      partOne: params.link.partOne,
-      partTwo: params.link.partTwo,
     };
 
     try {

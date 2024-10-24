@@ -43,10 +43,6 @@ export interface SignUpAsCoolingUserParams extends JsonObject {
 
 export interface RequestPasswordResetParams extends JsonObject {
   phoneNumber: string;
-  link: {
-    partOne: string;
-    partTwo: string;
-  };
 }
 
 export interface ResetPasswordParams extends JsonObject {
@@ -228,14 +224,6 @@ export interface RemoveCompanyParams extends JsonObject {
 export interface SendOperatorInvitationParams extends JsonObject {
   phone: string;
   coolingUnits: Array<number>;
-  message: {
-    partOne: string;
-    partTwo: string;
-  };
-  url: {
-    partOne: string;
-    partTwo: string;
-  };
   userId: number;
 }
 

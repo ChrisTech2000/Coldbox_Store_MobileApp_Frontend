@@ -292,9 +292,6 @@ export default {
         'Pour réinitialiser votre mot de passe, veuillez entrer le numéro de téléphone avec son indicatif du pays, auquel le compte est connecté.',
       phoneInputLabel: 'Numéro de téléphone',
       resetButton: 'Réinitialiser',
-      link: {
-        partOne: 'Cliquez sur ce lien pour réinitialiser votre mot de passe {{baseLink}}',
-      },
     },
     ResetPassword: {
       schema: {
