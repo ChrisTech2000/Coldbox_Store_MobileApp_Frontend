@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
+import { View } from 'react-native';
 import { ActivityIndicator, Text, TextInput } from 'react-native-paper';
+import validator from 'validator';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -19,9 +20,18 @@ function PasswordRecoveryRequest() {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<PasswordRecoverySchema>({
-    resolver: zodResolver((z) => z.object({ phone: z.string().default('') })),
+    resolver: zodResolver((z) =>
+      z.object({
+        phone: z
+          .string()
+          .default('')
+          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+            message: t('Auth.SignUp.schema.invalidPhoneError'),
+          }),
+      })
+    ),
   });
 
   const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(
@@ -30,8 +40,8 @@ function PasswordRecoveryRequest() {
         await AuthService.requestResetPassword({
           phoneNumber: values.phone,
         });
-      } catch {
-        // silent error
+      } catch (exception) {
+        console.error(exception);
       }
 
       // For security reasons, we don't want to inform the user whether the introduced phone exists in our DB or not
@@ -52,9 +62,6 @@ function PasswordRecoveryRequest() {
 
       <Controller
         control={control}
-        rules={{
-          required: true,
-        }}
         render={({ field: { onChange, value } }) => (
           <TextInput
             tw="w-[95%] text-base border bg-white rounded-sm h-12"
@@ -66,6 +73,9 @@ function PasswordRecoveryRequest() {
         )}
         name="phone"
       />
+      {errors.phone ? (
+        <Text tw="mx-4 mt-1 text-red-700 self-start">{errors.phone.message}</Text>
+      ) : null}
 
       <Button
         tw="w-[95%] border-2 border-green-primary mt-6"

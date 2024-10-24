@@ -10,7 +10,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
-import { getMetricName, getMetricValue, getVariationValue, type Variation } from '../../utils';
+import { getMetricName, getMetricValue, type Variation } from '../../utils';
 import { useComparisonData } from '../store';
 import { sortData } from '../utils';
 import { ESortingOptions } from './SortMenu';
@@ -86,7 +86,7 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
       return {
         column1: `${sum.toFixed(2)}%`,
         column2: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
-        column3: getVariationValue(from, to),
+        column3: sum === 0 ? 'equal' : sum < 0 ? 'decrease' : ('increase' as Variation),
         negative: true,
         coolingUnitName:
           getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
@@ -113,7 +113,7 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
           getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
         column1: `${sum.toFixed(2)}%`,
         column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
-        column3: getVariationValue(from, to),
+        column3: sum === 0 ? 'equal' : sum < 0 ? 'decrease' : ('increase' as Variation),
         sum,
       };
     });
@@ -152,7 +152,7 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
           getMetricName(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
         column1: `${sum.toFixed(2)}%`,
         column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
-        column3: getVariationValue(from, to),
+        column3: sum === 0 ? 'equal' : sum < 0 ? 'decrease' : ('increase' as Variation),
         sum,
       };
     });
@@ -362,7 +362,7 @@ function ExtendedTable({ items, column1, column2, total, fourColumnsVersion }: E
                   <Icon
                     source="chevron-double-down"
                     size={30}
-                    color={item.negative ? colors.red[500] : colors.green.primary}
+                    color={item.negative ? colors.green.primary : colors.red[500]}
                   />
                 )}
                 {item.column3 === 'increase' && (

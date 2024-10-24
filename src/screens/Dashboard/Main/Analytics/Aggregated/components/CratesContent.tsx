@@ -17,7 +17,6 @@ type SectionProps = {
   checkedIn: number;
   checkedOut: number;
 };
-
 export function CratesContent() {
   const { t } = useTranslationUtils();
   const { coolingUnitData } = useAggregatedData();
@@ -26,12 +25,12 @@ export function CratesContent() {
   const crates = useMemo(() => {
     return {
       checkedIn:
-        Object.values(coolingUnitData?.checkInCratesCrop?.['0'] ?? {}).reduce(
+        Object.values(coolingUnitData?.roomCratesIn ?? {}).reduce(
           (acc, current) => (acc += current),
           0
         ) ?? 0,
       checkedOut:
-        Object.values(coolingUnitData?.checkOutCratesCrop?.['0'] ?? {}).reduce(
+        Object.values(coolingUnitData?.roomCratesOut ?? {}).reduce(
           (acc, current) => (acc += current),
           0
         ) ?? 0,
@@ -41,12 +40,12 @@ export function CratesContent() {
   const quantity = useMemo(() => {
     return {
       checkedIn:
-        Object.values(coolingUnitData?.checkInKgCrop?.['0'] ?? {}).reduce(
+        Object.values(coolingUnitData?.roomKgIn ?? {}).reduce(
           (acc, current) => (acc += current),
           0
         ) ?? 0,
       checkedOut:
-        Object.values(coolingUnitData?.checkOutKgCrop?.['0'] ?? {}).reduce(
+        Object.values(coolingUnitData?.roomKgOut ?? {}).reduce(
           (acc, current) => (acc += current),
           0
         ) ?? 0,
@@ -55,13 +54,24 @@ export function CratesContent() {
 
   const operations = useMemo(() => {
     return {
-      checkedIn: coolingUnitData?.roomOpsIn?.['0'] ?? 0,
-      checkedOut: coolingUnitData?.roomOpsOut?.['0'] ?? 0,
+      checkedIn:
+        Object.values(coolingUnitData?.roomOpsIn ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      checkedOut:
+        Object.values(coolingUnitData?.roomOpsOut ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
     };
   }, [coolingUnitData]);
 
   const co2 = useMemo(() => {
-    return coolingUnitData?.totCo2?.['0'] ?? 0;
+    return (
+      Object.values(coolingUnitData?.totCo2 ?? {}).reduce((acc, current) => (acc += current), 0) ??
+      0
+    );
   }, [coolingUnitData]);
 
   return (
@@ -89,16 +99,16 @@ export function CratesContent() {
       />
 
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-base">
           {t('Dashboard.Analytics.tabsShared.totalCo2Label')}
         </Text>
-        <Text variant="TextBold" tw="text-lg font-bold">
-          {co2}
+        <Text variant="TextBold" tw="text-base font-bold">
+          {co2.toFixed(2)} {t('Dashboard.Analytics.comparisonTab.cratesTab.co2Kg')}
         </Text>
       </View>
 
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-base">
           {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInCropDistribution')}
         </Text>
         {generateSecondColumnContent(
@@ -109,7 +119,7 @@ export function CratesContent() {
       </View>
 
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-base">
           {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution')}
         </Text>
         {generateSecondColumnContent(
@@ -120,7 +130,7 @@ export function CratesContent() {
       </View>
 
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-base">
           {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution')}
         </Text>
         {generateSecondColumnContent(
@@ -131,7 +141,7 @@ export function CratesContent() {
       </View>
 
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-base">
           {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution')}
         </Text>
         {generateSecondColumnContent(
@@ -149,13 +159,13 @@ function Section({ title, checkedIn, checkedOut }: SectionProps) {
 
   return (
     <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
-      <Text variant="TextMedium" tw="text-lg">
+      <Text variant="TextMedium" tw="text-base">
         {title}
       </Text>
-      <Text variant="TextBold" tw="text-lg font-bold">
+      <Text variant="TextBold" tw="text-base font-bold">
         {t('Dashboard.Analytics.checkedInLabel', { amount: checkedIn })}
       </Text>
-      <Text variant="TextBold" tw="text-lg font-bold">
+      <Text variant="TextBold" tw="text-base font-bold">
         {t('Dashboard.Analytics.checkedOutLabel', { amount: checkedOut })}
       </Text>
     </View>

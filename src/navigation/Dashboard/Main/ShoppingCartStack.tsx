@@ -36,6 +36,11 @@ type ScreenOptions = (props: {
   navigation: NativeStackNavigationProp<ShoppingCartStackRoutes, ShoppingCartStackRoutePaths>;
 }) => NativeStackNavigationOptions;
 
+const navParams = {
+  screen: 'Marketplace',
+  params: { screen: 'MarketplaceRoot' },
+};
+
 const Stack = createNativeStackNavigator<ShoppingCartStackRoutes>();
 
 export default function ShoppingCartStack() {
@@ -56,18 +61,27 @@ export default function ShoppingCartStack() {
               routeName === 'IncompleteOrderOverview'
                 ? t('navigation.dashboard.OrderDetails', {
                     // eslint-disable-next-line react/prop-types
-                    orderCode: props.route?.params?.orderId ?? '',
+                    orderCode: `#${props.route?.params?.orderId}`,
                   })
                 : t('navigation.dashboard.ShoppingCart')
             }
             // eslint-disable-next-line react/prop-types
-            {...dashboardHeaderFactory(
-              routeName === 'IncompleteOrderOverview'
-                ? // eslint-disable-next-line react/prop-types
-                  () => props.navigation.popToTop()
-                : // eslint-disable-next-line react/prop-types
-                  props.navigation.goBack
-            )}
+            {...dashboardHeaderFactory({
+              showShoppingCart: true,
+              goBackFunc:
+                routeName === 'IncompleteOrderOverview'
+                  ? // eslint-disable-next-line react/prop-types
+                    () => props.navigation.popToTop()
+                  : () => {
+                      // eslint-disable-next-line react/prop-types
+                      props.navigation.navigate(
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        'Marketplace',
+                        navParams
+                      );
+                    },
+            })}
           />
         ),
       };

@@ -14,6 +14,7 @@ export type DateRangeStoreType = {
   endDate: Date | null;
   setStartDate: (date: Date | null) => void;
   setEndDate: (date: Date | null) => void;
+  reset: () => void;
 };
 
 export const createDataRangeStore = () =>
@@ -22,6 +23,7 @@ export const createDataRangeStore = () =>
     endDate: null,
     setStartDate: (date) => set({ startDate: date }),
     setEndDate: (date) => set({ endDate: date }),
+    reset: () => set({ startDate: null, endDate: null }),
   }));
 
 type DateRangePickerWithStoreProps = {

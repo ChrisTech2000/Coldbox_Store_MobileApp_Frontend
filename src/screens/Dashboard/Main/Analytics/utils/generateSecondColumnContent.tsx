@@ -42,13 +42,22 @@ export function generateSecondColumnContent(
 
     return (
       <View key={`${key}-${val}-${index}`} tw="flex flex-row space-x-1 space-y-1 items-center">
-        <FastImage
-          resizeMode={withAmount ? 'stretch' : 'contain'}
-          tw={cn(withAmount ? 'w-8 h-8 rounded-2xl' : 'w-4 h-4')}
-          source={{ uri: `${API_BASE_URL}media/${crop?.image}` }}
-        />
+        {crop ? (
+          <FastImage
+            resizeMode={withAmount ? 'stretch' : 'contain'}
+            tw={cn(withAmount ? 'w-8 h-8 rounded-2xl' : 'w-4 h-4')}
+            source={{ uri: `${API_BASE_URL}media/${crop?.image}` }}
+          />
+        ) : (
+          <ColdtivateLogo
+            width={withAmount ? 24 : 15}
+            height={withAmount ? 24 : 12}
+            tw="self-center"
+          />
+        )}
+
         <Text tw={cn('flex-wrap', withAmount ? 'text-lg font-bold' : 'w-24')} numberOfLines={1}>
-          {`${crop?.name}${withAmount ? `: ${val}` : ''}`}
+          {`${crop?.name ?? startCase(key)}${withAmount ? `: ${val}` : ''}`}
         </Text>
       </View>
     );

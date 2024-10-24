@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { Appbar, Badge } from 'react-native-paper';
 
-import RBAC from '#common/RBAC';
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import useCartStore from '#stores/shoppingCart';
 
@@ -62,8 +61,12 @@ function _buildRightContent(
   );
 }
 
+export type DashboardHeaderFactoryOptions = {
+  goBackFunc?: () => void;
+  showShoppingCart?: boolean;
+};
+
 export function useDashboardHeader() {
-  const { guard } = RBAC.useRBAC();
   const { dispatch, navigate } = useNavigation<NavigationProp<DashboardMainRoutes>>();
   const cartData = useCartStore((store) => store.cartData);
 
@@ -71,17 +74,17 @@ export function useDashboardHeader() {
   const cartItemsCount = cartData?.items?.length ?? 0;
 
   return useCallback(
-    (goBackFunc?: () => void): NavigationHeaderProps => {
-      const showShoppingCart = guard('NAVIGATE', 'MarketplaceShoppingCart');
-      return {
-        leftContent: _buildLeftContent(dispatch, goBackFunc),
-        rightContent: _buildRightContent(
-          newNotificationsCount,
-          cartItemsCount,
-          showShoppingCart ? () => navigate('ShoppingCart', { screen: 'Root' }) : undefined
-        ),
-      };
-    },
+    ({
+      goBackFunc,
+      showShoppingCart,
+    }: DashboardHeaderFactoryOptions = {}): NavigationHeaderProps => ({
+      leftContent: _buildLeftContent(dispatch, goBackFunc),
+      rightContent: _buildRightContent(
+        newNotificationsCount,
+        cartItemsCount,
+        showShoppingCart ? () => navigate('ShoppingCart', { screen: 'Root' }) : undefined
+      ),
+    }),
     [newNotificationsCount, cartItemsCount]
   );
 }

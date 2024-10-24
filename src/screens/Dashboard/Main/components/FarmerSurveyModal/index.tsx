@@ -58,6 +58,8 @@ const useSpoilageReasonsStore = createMultipleSelectStore<string>();
 const instantiateCropStore = (initialState?: Crop | GetAllCropsResponse) =>
   createSelectStore(initialState);
 
+export const farmerSurveyStores = [useMeasurementStore, useSpoilageReasonsStore];
+
 export function FarmersSurveyModal({
   company,
   companyCurrency,
@@ -121,6 +123,7 @@ export function FarmersSurveyModal({
       quantitySelfConsumed: Number(formatFloat(values.weightDistribution.quantitySelfConsumed)),
       quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
     };
+    onSelectSpoilageReasons([]);
     onSubmit(values);
   }, []);
 

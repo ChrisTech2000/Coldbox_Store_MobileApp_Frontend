@@ -3,6 +3,8 @@ import { Dimensions, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { Text } from '#ui/components/Text';
+
 import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../components/FormManager';
@@ -13,7 +15,8 @@ export default function CoordinatesForm() {
   const { control, formState } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
 
-  const errors = formState.errors;
+  const latitudeError = typeof formState.errors.latitude !== 'undefined';
+  const longitudeError = typeof formState.errors.longitude !== 'undefined';
 
   return (
     <View tw="w-full flex-row gap-3 justify-between mt-0.5">
@@ -29,11 +32,16 @@ export default function CoordinatesForm() {
               keyboardType="numeric"
               onChangeText={onChange}
               onBlur={onBlur}
-              error={!!errors.latitude}
+              error={latitudeError}
             />
           )}
           name="latitude"
         />
+        {latitudeError ? (
+          <Text tw="text-red-600 text-xs mt-1.5">
+            {t('Dashboard.Management.Location.fieldErrorMessages.latitude')}
+          </Text>
+        ) : null}
       </View>
 
       <View style={{ width }}>
@@ -48,11 +56,16 @@ export default function CoordinatesForm() {
               keyboardType="numeric"
               onChangeText={onChange}
               onBlur={onBlur}
-              error={!!errors.longitude}
+              error={longitudeError}
             />
           )}
           name="longitude"
         />
+        {longitudeError ? (
+          <Text tw="text-red-600 text-xs mt-1.5">
+            {t('Dashboard.Management.Location.fieldErrorMessages.longitude')}
+          </Text>
+        ) : null}
       </View>
     </View>
   );

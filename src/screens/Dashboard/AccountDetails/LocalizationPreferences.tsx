@@ -8,8 +8,8 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
 import { useTranslationUtils } from '#i18n/utils';
-import RBAC from '#common/RBAC';
 import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import ColdtivateService from '#services/ColdtivateService';
@@ -18,14 +18,13 @@ import FormManager, { type FormValues } from './components/FormManager';
 import LocationField from './modules/Location';
 import CountryField from './modules/CountryField';
 import LanguageField from './modules/LanguageField';
-import DeleteAccountAction from './components/DeleteAccountAction';
 
 function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPreferences'>) {
   const { userId, farmerId, ...initialFormValues } = props.route.params;
 
   const { t } = useTranslationUtils();
-  const { guard } = RBAC.useRBAC();
   const toast = InAppNotifications.useToast();
+  const { guard } = RBAC.useRBAC();
 
   const setUser = useAuthStore((store) => store.setUser);
   const patchFarmer = useDashboardStore((store) => store.patchFarmer);
@@ -44,7 +43,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
 
       setUser({ ...userDatum, role: values.kind });
 
-      if (guard('STORE', 'FarmerDetails')) {
+      if (guard('VIEW', 'FarmerFields')) {
         const farmerDatum = await ColdtivateService.updateFarmer({
           farmerId,
           country: values.country,
@@ -62,6 +61,8 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
         type: 'md_success',
         style: { marginBottom: 50 },
       });
+
+      props.navigation.goBack();
     } catch (exception) {
       console.error(exception);
     }
@@ -70,36 +71,33 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
   return (
     <FormManager onSubmit={onSubmit} initialValues={{ ...initialFormValues, location: '' }}>
       {({ submitHandler, isSubmitting, hasChanges }) => (
-        <KeyboardAwareScrollView
-          tw="h-full p-3"
-          contentContainerStyle="flex-1 justify-between"
-          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-          showsVerticalScrollIndicator={false}
-        >
-          <View>
-            <CountryField />
-            <LocationField />
-            <LanguageField />
-          </View>
+        <React.Fragment>
+          <KeyboardAwareScrollView
+            tw="flex-1"
+            keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+            showsVerticalScrollIndicator={false}
+          >
+            <View tw="px-3 pb-8">
+              <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
+                <CountryField />
+                <LocationField />
+              </RBAC.ProtectedResource>
+              <LanguageField />
+            </View>
+          </KeyboardAwareScrollView>
 
-          <View tw="flex flex-row items-center justify-evenly">
-            <DeleteAccountAction />
+          <View tw="bottom-0 right-0 w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
             <Button
-              tw="w-[48%]"
+              tw="w-4/5 my-4"
               mode="contained"
               onPress={submitHandler}
-              icon={isSubmitting ? undefined : 'check-circle-outline'}
               disabled={!hasChanges}
               uppercase
             >
-              {isSubmitting ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                t('Dashboard.Management.CompanyDetails.actions.save')
-              )}
+              {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
             </Button>
           </View>
-        </KeyboardAwareScrollView>
+        </React.Fragment>
       )}
     </FormManager>
   );

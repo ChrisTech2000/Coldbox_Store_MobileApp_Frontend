@@ -27,6 +27,8 @@ type DownloadDataModalProps = {
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
 
+export const downloadAnalysisStores = [useCoolingUnitStore, useDateRangeStore];
+
 export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: DownloadDataModalProps) {
   const { t } = useTranslationUtils();
   const { selectedItem: coolingUnit } = useCoolingUnitStore();

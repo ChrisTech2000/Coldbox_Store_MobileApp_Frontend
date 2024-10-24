@@ -15,6 +15,9 @@ export default {
       gu: 'ગુજરાતી',
       fr: 'ફ્રેન્ચ',
       pt: 'પોર્ટુગીઝ',
+      igbo: 'ઇગ્બો',
+      yoruba: 'યોરૂબા',
+      hausa: 'હાઉસા',
     },
   },
   gender: {
@@ -56,6 +59,7 @@ export default {
       RegisteredEmployee: 'નોંધાયેલ કર્મચારી',
       AddRegisteredEmployee: 'નોંધાયેલ કર્મચારી ઉમેરો',
       RegisteredEmployeeDetails: 'નોંધાયેલ કર્મચારીની વિગત',
+      DeliveryContacts: 'વિતરણ સંપર્કો',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -68,7 +72,7 @@ export default {
       CratesInfo: 'ક્રેટ્સ માહિતી',
       Dashboard: 'ડેશબોર્ડ',
       History: 'ઇતિહાસ',
-      MarketPrice: 'માર્કેટ કિંમત',
+      MarketPrice: 'માર્કેટ કિંમત', // TODO
       CoolingUnits: 'કૂલિંગ યુનિટ્સ',
       Analytics: 'એનલિટિક્સ',
       CheckIn: 'ચેક-ઇન',
@@ -76,33 +80,32 @@ export default {
       Maps: 'મૅપ્સ',
     },
     dashboard: {
-      AccountDetails: 'ખાતાનો વિગતવાર',
-      PersonalDetails: 'Personal details', // TODO
-      LocalizationPreferences: 'Localization preferences', // TODO
-      ContactsSharing: 'Contacts sharing', // TODO
-      Coupons: 'Coupons', // TODO
-      CouponsActiveTab: 'Active', // TODO
-      CouponsRevokedTab: 'Revoked', // TODO
-      Marketplace: 'Marketplace', // TODO
-      MarketplaceFilters: 'Filters', // TODO
-      MarketplaceAllTab: 'All', // TODO
-      MarketplaceFavoritesTab: 'Favorites', // TODO
-      Orders: 'Orders', // TODO
-      MyOrders: 'My Orders', // TODO
+      AccountDetails: 'ખાતાની વિગતો',
+      PersonalDetails: 'વ્યક્તિગત વિગતો',
+      LocalizationPreferences: 'સ્થાનિકીકરણ પસંદગીઓ',
+      ContactsSharing: 'સંપર્ક વહેંચવું',
+      Coupons: 'કૂપન',
+      CouponsActiveTab: 'સક્રિય',
+      CouponsRevokedTab: 'રદ થયેલ',
+      Marketplace: 'બજાર',
+      MarketplaceFilters: 'ફિલ્ટર્સ',
+      MarketplaceAllTab: 'બધા',
+      MarketplaceFavoritesTab: 'પ્રિય',
+      Orders: 'ઓર્ડર',
+      MyOrders: 'મારા ઓર્ડર',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'જ્ઞાન કેન્દ્ર',
       QuitTutorial: 'ટ્યુટોરિયલ છોડો',
-      FAQ: 'વારંવાર પુછાતા પ્રશ્નો',
-      About: 'વિશે',
-      Management: 'કુશળતા',
+      FAQ: 'વારંવાર પૂછવામાં આવતા પ્રશ્નો',
+      About: 'મિત્રો',
+      Management: 'બંને',
       Tutorial: 'ટ્યુટોરિયલ',
-      PayoutOptions: 'ચુકવણી વિકલ્પો',
-      PaymentMethods: 'પેમેન્ટ પદ્ધતિઓ',
-      Wallet: 'વૉલેટ',
-      Transactions: 'લેનદેન',
-      AddCard: 'ક્રેડિટ કાર્ડ ઉમેરો',
-      EditCard: 'ક્રેડિટ કાર્ડ સંપાદિત કરો',
+      PayoutOptions: 'પે-આઉટ વિકલ્પો',
+      PaymentMethods: 'ચુકવણી પદ્ધતિઓ',
+      Wallet: 'વાલેટ',
+      Transactions: 'અરજીઓ',
       Transaction: '{{id}}',
+      ShoppingCart: 'ખરીદી ગાડી',
     },
     checkIn: {
       SelectCropType: 'કૃષિ પ્રકાર પસંદ કરો',
@@ -238,7 +241,8 @@ export default {
         firstNameError: 'પ્રથમ નામ ફરજિયાત છે.',
         lastNameError: 'અંતિમ નામ ફરજિયાત છે.',
         phoneError: 'ફોન નંબર ફરજિયાત છે.',
-        invalidPhoneError: 'ફોન નંબર અમાન્ય છે',
+        invalidPhoneError:
+          'ફોન નંબર અમાન્ય છે. ખાતરી કરો કે ક્ષેત્ર કોડ સામેલ છે (ઉદાહરણ: +910000000000).',
         languageError: 'ભાષા ફરજિયાત છે.',
         genderError: 'લિંગ પસંદ કરવું ફરજિયાત છે.',
         termsError: 'તમે ઉપયોગની શરતો સાથે સંમત થવું જરૂરી છે.',
@@ -280,6 +284,9 @@ export default {
       SignUpCoolingUser: {
         header: 'ઠંડક વપરાશકર્તા અથવા ઉપભોક્તા તરીકે નોંધણી કરો',
         languageFieldName: 'ભાષા',
+      },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again', // TODO
       },
     },
     ForgotPassword: {
@@ -334,7 +341,7 @@ export default {
     noLocationsAvailable:
       'કોલ્ડટિવેટમાં આપનું સ્વાગત છે. મેનેજમેન્ટ પેનલમાં સ્થાન ઉમેરવાથી શરૂ કરો.',
     MarketPrice: {
-      emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી',
+      emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી', // TODO
       commodityLabel: 'વસ্তু',
       commodityModalTitle: 'એક વસ્તુ પસંદ કરો',
       Trend: {
@@ -435,10 +442,17 @@ export default {
         calculatedPrice: 'હિસાબ કરેલ ભાવ',
         discount: 'ડિસ્કાઉન્ટ',
         priceWithDiscount: 'કુલ ભાવ',
+        bankTransfer: {
+          title: 'પ્રાપ્તકર્તાના વિગતો',
+          accountName: 'ખાતાના નામ',
+          accountNumber: 'ખાતાનો નંબર',
+          bankName: 'બેંકનું નામ',
+        },
         paymentType: {
-          label: 'પેમેન્ટનો પ્રકાર',
+          label: 'ચુકવણી પ્રકાર',
           cash: 'કેશ',
           creditCard: 'ક્રેડિટ કાર્ડ',
+          bankTransfer: 'બેંક ટ્રાન્સફર',
         },
         paid: 'ચુકવવામાં આવ્યું',
       },
@@ -595,6 +609,20 @@ export default {
       },
     },
     Management: {
+      Delivery: {
+        companyName: 'કંપનીનું નામ',
+        companyNamePlaceholder: 'કંપનીનું નામ દાખલ કરો',
+        companyNameError: 'કંપનીનું નામ દાખલ કરો',
+        contactName: 'સંપર્કનું નામ',
+        contactNamePlaceholder: 'સંપર્કનું નામ દાખલ કરો',
+        contactNameError: 'સંપર્કનું નામ દાખલ કરો',
+        phoneNumber: 'ફોન નંબર',
+        phoneNumberPlaceholder: 'ફોન નંબર દાખલ કરો',
+        emptyMessage: 'અત્યાર સુધી કોઇ સંપર્ક ઉમેરાયેલ નથી',
+        deleteContactMessage: 'શું તમે ખરેખર આ સંપર્કને મિટાવા માંગો છો?',
+        noAvailableContacts: 'આ ખાસ ઠંડા એકક માટે ઉપલબ્ધ કોઇ સંપર્કો નથી.',
+        contactedAddedSuccessfully: 'સંપર્ક સફળતાપૂર્વક ઉમેરાયેલ.',
+      },
       Location: {
         emptyState: 'હજી સુધી કોઈ સ્થળ ઉમેરવામાં આવ્યું નથી. ઉમેરવા માટે + ચિહ્ન પર ક્લિક કરો.',
         text: {
@@ -617,6 +645,10 @@ export default {
           street: 'સ્ટ્રીટ',
           streetNumber: 'સ્ટ્રીટ નંબર',
         },
+        fieldErrorMessages: {
+          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
+          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+        },
         modal: {
           message:
             'આ ક્રિયા આ સ્થળ સાથે જોડાયેલ તમામ કૂલિંગ યુનિટ્સને કાઢી નાખશે. શું તમે આગળ વધવા માંગો છો?',
@@ -628,6 +660,11 @@ export default {
           addLocationSuccess: 'સફળતાપૂર્વક સ્થળ ઉમેરાયું',
           editLocationSuccess: 'સફળતાપૂર્વક સ્થળ સંપાદિત થયું',
           removeLocationSuccess: 'સ્થાન {{name}} સફળતાપૂર્વક હટાવવામાં આવ્યું.',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.', // TODO
+          positionCancelled: 'Location request canceled.', // TODO
+          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
+          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
         },
       },
       Operators: {
@@ -653,7 +690,7 @@ export default {
           operator: 'કૂલ્ટિવેટ એપ્લિકેશનમાં ઓપરેટર તરીકે જોડાવા માટે, જુઓ: {{link}}',
         },
         toasts: {
-          error: 'ફોન પહેલેથી જ નિમણૂક કરવામાં આવ્યો છે. અલગ નંબર અજમાવો',
+          error: 'Please check the information provided and try again', // TODO
           success: 'સફળતાપૂર્વક ઓપરેટર આમંત્રણ મોકલ્યું',
         },
         phoneFormat: 'જોડાવેલા ફોન નંબરમાં દેશ કોડ હોવો ચોક્કસ કરો.',
@@ -687,6 +724,7 @@ export default {
         },
         toasts: {
           success: 'સફળતાપૂર્વક સંપાદિત',
+          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
         },
       },
       RegisteredEmployee: {
@@ -871,20 +909,38 @@ export default {
           total: 'કુલ આવક',
         },
         paymentType: {
-          label: 'ભાડાની રીતો પસંદ કરો:',
-          cash: 'કેશ',
+          label: 'ચૂંટો ચૂકવણીની રીતો:',
+          cash: 'નકદ',
           creditCard: 'ક્રેડિટ કાર્ડ',
+          bankTransfer: 'બેંક ટ્રાન્સફર',
         },
       },
       Coupons: {
-        emptyMessage: 'કોઈ કૂપન હજુ સુધી ઉમેરવામાં આવ્યું નથી',
+        emptyMessage: 'અત્યાર સુધી કોઇ કૂપન ઉમેરાયેલ નથી',
         addCoupon: 'કૂપન ઉમેરો',
         code: 'કૂપન કોડ',
         percentage: 'કૂપન ટકા',
-        revokeTitle: 'કૂપન રદ કરવો',
+        revokeTitle: 'કૂપન રદ કરવું',
+        revoke: 'રદ કરો',
         revokeMessage:
-          'શું તમે ખાતરી છો કે તમે આ કૂપન રદ કરવા માંગો છો? એકવાર રદ કરવામાં આવે, તે ફરીથી ઉપયોગમાં લેવાઈ શકતું નથી અને છૂટ પણ ઉપલબ્ધ રહેશે નહીં. આ ક્રિયા શાશ્વત છે અને તેને રદ કરી શકાયતું નથી.',
+          'શું તમે ખરેખર આ કૂપન રદ કરવા માંગો છો? એક વખત રદ કરવામાં આવે પછી, તે ફરીથી ઉપયોગમાં લેવામાં આવી શકાતું નથી અને છૂટનો લાભ ઉપલબ્ધ નહીં હોય. આ ક્રિયા કાયમી છે અને પાછા લેવામાં નહીં આવે.',
       },
+    },
+    Marketplace: {
+      sorting: {
+        priceAsc: 'કીમત ચઢતી',
+        priceDesc: 'કીમત ઉતરતી',
+        nearMe: 'મને નજીક',
+      },
+      priceConfig: 'કીમત રૂપરેખાંકન ઉત્પાદની વેચાણને સંબંધિત છે, કૂલિંગ સ્ટોરેજ ફી સાથે નહીં.',
+      addToCart: {
+        addToCartButton: 'કાર્ટમાં ઉમેરો અને ખરીદી ચાલુ રાખો',
+        selectQuantity: 'જાતીયતા પસંદ કરો',
+        buyNowButton: 'હવે ખરીદો',
+      },
+      currentLocation: 'વર્તમાન સ્થાન',
+      filterError:
+        'કંઈક ખોટું થયું. કૃપા કરીને ટાઈપો તપાસો અને ખાતરી કરો કે દાખલ કરેલ શહેર નાઈજેરિયામાં આવેલું છે.',
     },
     AccountDetails: {
       popups: {
@@ -918,16 +974,25 @@ export default {
         addTitle: 'કૃપા કરીને તમારી બેંક એકાઉન્ટની માહિતી દાખલ કરો',
         editTitle: 'તમારી બેંક એકાઉન્ટની માહિતી',
         form: {
-          nameLabel: 'મૂળ નામ',
-          namePlaceholder: 'જેમ કે: John Doe',
+          nameLabel: 'એકાઉન્ટનું નામ',
+          namePlaceholder: 'એકાઉન્ટનું નામ દાખલ કરો',
           accountNumberLabel: 'એકાઉન્ટ નંબર',
           accountNumberPlaceholder: 'એકાઉન્ટ નંબર દાખલ કરો',
-          bankLabel: 'બેંકનું નામ',
-          bankPlaceholder: 'બેંકનું નામ દાખલ કરો',
+          countryLabel: 'દેશ',
+          nigeria: 'નાઇજીરિયા',
+          selectBank: 'મૂળક લિસ્ટમાંથી બેંક પસંદ કરો',
+          bank: 'બેંક',
+          accountType: 'એકાઉન્ટનો પ્રકાર',
+          selectAccountType: 'એકાઉન્ટનો પ્રકાર પસંદ કરો',
+          accountTypes: {
+            personal: 'વ્યક્તિગત',
+            business: 'વ્યાપાર',
+          },
           errors: {
-            name: 'પૂરું નામ જરૂરી છે',
-            account: 'ખાતાનો નંબર જરૂરી છે',
-            bank: 'બેંકનું નામ જરૂરી છે',
+            accountName: 'એકાઉન્ટનું નામ આવશ્યક છે',
+            account: 'એકાઉન્ટ નંબર આવશ્યક છે',
+            accountType: 'એકાઉન્ટનો પ્રકાર આવશ્યક છે',
+            bank: 'બેંકની પસંદગી આવશ્યક છે',
           },
         },
         successMessage: 'બેંક એકાઉન્ટ સફળતાપૂર્વક ઉમેરાયું.',
@@ -1104,34 +1169,57 @@ export default {
         },
       },
     },
+    MyOrders: {
+      sort: {
+        mostRecent: 'સૌથી તાજેતરના',
+        oldest: 'સૌથી જૂના',
+        date: 'તારીખ',
+      },
+      title: 'ઓર્ડર સમીક્ષા',
+      orderId: 'ઓર્ડર ID',
+      cropType: 'પાક પ્રકાર',
+      coolingUnit: 'કૂલિંગ યુનિટ',
+      orderTotal: 'ઓર્ડર ટોટલ',
+      backToTopButton: 'માટે પરત જાઓ',
+    },
     ShoppingCart: {
-      empty: 'તમારું કાર્ટ ખાલી છે',
-      daysLeft: 'દિવસ બાકી',
-      weight: 'કિલો ઉપલબ્ધ',
-      perKg: 'કિલોગ્રામ દીઠ',
-      total: 'કુલ ચૂકવણી',
-      pay: 'ચૂકવણી કરો',
+      empty: 'તમારો કાર્ટ ખાલી છે',
+      daysLeft: 'દિવસો બાકી',
+      weight: 'KG ઉપલબ્ધ',
+      perKg: '/ KG',
+      totalToPay: 'મોડેવા માટેનો કુલ રકમ',
+      pay: 'પેમેન્ટ કરો',
       orderHeader: 'ઓર્ડર',
       subtotal: 'ઉપકુલ',
       produce: 'ઉત્પાદન',
       discount: 'ડિસ્કાઉન્ટ',
       fees: 'સેવા ફી',
       marketFees: 'માર્કેટપ્લેસ ફી',
-      paymentFee: 'ચૂકવણી ફી',
+      paymentFee: 'પેમેન્ટ ફી',
       viewContacts: 'સંપર્ક જુઓ',
       contactsForDelivery: 'ડિલિવરી માહિતી માટેના સંપર્ક',
-      gotItButton: 'સમજ્યું!',
+      gotItButton: 'સમજાયું!',
       pickupMethods: 'પિકઅપ પદ્ધતિ',
       pickUpToday: 'આજે પિકઅપ કરો',
-      keepInStorageDailyRate: 'સ્ટોરેજમાં રાખો (દિવસ દીઠ {{price}})',
-      keepInStorageFixedRate: 'ફિક્સ્ડ સ્ટોરેજ દર ({{price}})',
+      keepInStorageDailyRate: 'સંગ્રહમાં રાખો ({{price}} / દિવસ)',
+      keepInStorageFixedRate: 'સંગ્રહમાં રાખો ({{price}})',
       delivery: 'ડિલિવરી',
-      companyName: 'કંપનીનું નામ',
+      contactName: 'સંપર્કનું નામ',
       phoneNumber: 'ફોન નંબર',
-      thankYouMessage: 'ઓર્ડર કરવા બદલ આભાર',
-      orderOverview: 'ઓર્ડર સારાંશ',
+      thankYouMessage: 'ઓર્ડર કરવા માટે આભાર',
+      orderOverview: 'ઓર્ડર સમિક્ષા',
       products: 'ઉત્પાદનો',
-      consultOrders: 'મારા ઓર્ડર જુઓ',
+      consultOrders: 'મારાં ઓર્ડરો તપાસો',
+      total: 'કુલ',
+      couponQuestion: 'શું તમારા પાસે ડિસ્કાઉન્ટ કૂપન છે?',
+      redeem: 'કોડનો ઉપયોગ કરો.',
+      redeemCoupon: 'કૂપનનો ઉપયોગ કરો',
+      couponPlaceholder: 'ઉદાહરણ: 20OFF',
+      discountsApplied: 'ડિસ્કાઉન્ટ લાગુ પાડવામાં આવ્યા',
+      errors: {
+        invalid: 'અમાન્ય મૂલ્ય',
+        minimumCartValue: 'ઓર્ડર ઓછામાં ઓછા ₦100 હોવું જોઈએ.',
+      },
     },
     Analytics: {
       emptyState: 'પ્રદર્શિત કરવા માટે કોઈ ડેટા નથી',
@@ -1248,18 +1336,19 @@ export default {
         cratesTab: {
           crates: 'ક્રેટ્સ',
           kg: 'કિગ્રા',
-          operations: 'ઓપરેશન્સ',
-          checkedIn: 'ચેક-ઇન',
-          checkedOut: 'ચેક-આઉટ',
-          checkedInCropDistribution: '🧺 ચેક-ઇન પાંદડા વિતરણ (ક્રેટ્સ)',
-          checkedInKgDistribution: '⚖️ ચેક-ઇન પાંદડા વિતરણ (કિગ્રા)',
-          checkInCropDistribution: 'ચેક-ઇન પાંદડા વિતરણ',
-          checkedOutCropDistribution: '🧺 ચેક-આઉટ પાંદડા વિતરણ (ક્રેટ્સ)',
-          checkedOutKgDistribution: '⚖️ ચેક-આઉટ પાંદડા વિતરણ (કિગ્રા)',
-          checkOutCropDistribution: 'ચેક-આઉટ પાંદડા વિતરણ',
-          co2: '💨 CO2e ઉત્સર્જન માટે',
-          co2EmissionsLabel: 'CO2e ઉત્સર્જન (કિગ્રા)',
-          co2DistributionLabel: 'CO2e પાંદડા વિતરણ',
+          operations: 'ઑપરેશન્સ',
+          checkedIn: 'ચેક કરવામાં આવ્યું',
+          checkedOut: 'ચેકઆઉટ કરવામાં આવ્યું',
+          checkedInCropDistribution: '🧺 ચેક-ઇન પાક વિતરણ (ક્રેટ્સ)',
+          checkedInKgDistribution: '⚖️ ચેક-ઇન પાક વિતરણ (કિગ્રા)',
+          checkInCropDistribution: 'ચેક-ઇન પાક વિતરણ',
+          checkedOutCropDistribution: '🧺 ચેક-આઉટ પાક વિતરણ (ક્રેટ્સ)',
+          checkedOutKgDistribution: '⚖️ ચેક-આઉટ પાક વિતરણ (કિગ્રા)',
+          checkOutCropDistribution: 'ચેક-આઉટ પાક વિતરણ',
+          co2: '💨 કૂળિંગ માટે ઉચ્છ્વાસિત CO2e',
+          co2EmissionsLabel: 'CO2e ઉચ્છ્વાસ (કિગ્રા)',
+          co2DistributionLabel: 'CO2e પાક વિતરણ',
+          co2Kg: 'કિગ્રા CO2 ઉચ્છ્વાસ',
         },
         impactTab: {
           occupancyLabel: '🏘️ કૂલિંગ યુનિટની સરેરાશ ભરી',
@@ -1294,6 +1383,98 @@ export default {
         'કૃપા કરીને {{farmer}} નો સૂચન કરો કે તેમના {{crop}} ના ક્રેટ્સને યથાશિઘ્ર ઉઠાવવાની જરૂર છે! (ચેક-ઇન તારીખ: {{checkIn}}, ઠંડક યુનિટ આઈડી: {{unitId}}, ચેક-ઇન આઈડી: {{movementCode}}).',
       checkIn: 'ઓપરેટર {{farmer}} એ {{date}} ના રોજ {{movementCode}} ચેક-ઇન સંપાદિત કર્યું છે.',
       surveyAlreadyFilled: 'સર્વે પહેલેથી જ ભરાયું છે',
+    },
+  },
+  tutorial: {
+    welcome: 'કોલ્ડટિવેટમાં આપનું સ્વાગત છે. આ કાર્યની માર્ગદર્શિકા છે.',
+    quit: 'ટ્યુટોરીયલ બંધ કરો',
+    'back-dashboard': 'ડેશબોર્ડ પર પાછા જાઓ',
+    congratulations:
+      'અભિનંદન! તમે ટ્યુટોરીયલ પૂરું કર્યું છે! એપ્લિકેશનનો ઉપયોગ શરૂ કરવા માટે ડેશબોર્ડ પર પાછા જાઓ.',
+    comic:
+      'અભિનંદન! તમે કોમિક સ્ટ્રિપ પૂરી કરી છે! એપ્લિકેશનનો ઉપયોગ શરૂ કરવા માટે ડેશબોર્ડ પર પાછા જાઓ.',
+    prev: 'પાછળ',
+    next: 'આગળ',
+    start: 'ટ્યુટોરીયલ શરૂ કરો',
+    final:
+      'અભિનંદન! તમે ટ્યુટોરીયલ પૂરું કર્યું છે! એપ્લિકેશનનો ઉપયોગ શરૂ કરવા માટે ડેશબોર્ડ પર પાછા જાઓ.',
+    backToDashboard: 'ડેશબોર્ડ પર પાછા જાઓ',
+    steps: {
+      openDrawer:
+        'ઉપર ડાબા ખૂણે, તમે મુખ્ય કાર્ય સાથેનું મેનૂ જોઈ શકો છો. આગળ જાઓ અને તે પર ક્લિક કરો.',
+      repeatTutorial: 'જો તમે આ ટ્યુટોરીયલ ફરી જોવું ઇચ્છતા હો, તો તમે તેને મેનૂમાં પણ જોઈ શકો છો.',
+      managementNavigation:
+        'મેનૂમાં, તમે "ગવર્નન્સ" તરફ જાવી શકો છો અને ત્યાં ક્લિક કરીને કૂલિંગ વપરાશકર્તાઓને ઉમેરવા અથવા સંપાદિત કરવા માટે પહોંચો. આગળ જાઓ અને અજમાવો.',
+      addCoolingUser:
+        'જેઓ કોલ્ડટિવેટ પર નોંધાઈ નથી એવા કૂલિંગ વપરાશકર્તાઓને તેમના વિગત (નામ, ફોન નંબર) દાખલ કરીને ઉમેરવામાં આવી શકે છે. પહેલેથી જ એપ્લિકેશનમાં સાઇન અપ કરેલા કૂલિંગ વપરાશકર્તાઓને કોડ દ્વારા ઉમેરવામાં આવી શકે છે. તેઓ તેમના પ્રોફાઇલ પર કોડ મેળવી શકે છે -> "એકાઉન્ટ વિગતો" -> "કૂલિંગ વપરાશકર્તા આયાત કોડ".',
+      navigateToCoolingUser: 'આગળ જાઓ અને કૂલિંગ વપરાશકર્તાઓ ટેબ પર ક્લિક કરો.',
+      listCoolingUsers:
+        'સ્માર્ટફોન ધરાવતા કૂલિંગ વપરાશકર્તાઓને સ્ક્રીનના જમણાં ભાગે ફોન આઈકન દ્વારા ઓળખવામાં આવે છે. અન્ય છેડતા ફોનવાળા કૂલિંગ વપરાશકર્તાઓ છે. બંનેમાં, તમે એક નામ પર ક્લિક કરીને તેમના વિગતો અને કૂલિંગ વપરાશકર્તા સર્વેની પહોંચ મેળવી શકો છો.',
+      navigateToAddCoolingUser:
+        "'+' ચિહ્ન પર ક્લિક કરવાથી તમે નવો કૂલિંગ વપરાશકર્તા ઉમેરવા માટે પરવાનગી મળે છે.",
+      coolingUnitStep: 'તમે ઉપરના ડ્રોપડાઉન મેનુ પર ક્લિક કરીને કૂલિંગ યુનિટ્સમાં ખસવાઈ શકો છો.',
+      initiateCheckIn1:
+        'જ્યારે તમે કૂલિંગ વપરાશકર્તા ઉમેરો છો, ત્યારે તમે તે કૂલિંગ વપરાશકર્તા માટે ચેક-ઇન કરી શકો છો. આગળ જાઓ અને પ્રવૃત્તિ બટન પર ક્લિક કરો.',
+      initiateCheckIn2: 'હવે ચેક-ઇન બટન પર ક્લિક કરો (યે લીલા છે).',
+      checkIn1:
+        'ચેક-ઇન પૂર્ણ કરવા માટે, તમને "કેટલો ઉમેરો" પર ક્લિક કરવાની જરૂર છે અને પગલાંને પગલાં અનુસરો. પરિણામ શું દેખાય છે તે જોવા માટે \'ઝરૂરી\' પર ક્લિક કરો.',
+      checkIn2:
+        'બધા પગલાં પૂર્ણ થયા પછી, તમને એક ઝલક મળશે જે તમે રૂમમાં ચેક કરવા માટે જઈ રહ્યા છો.',
+      checkIn3:
+        'જો તમે સંતોષ્યા હોય, તો તમે "પુષ્ટી" પર ક્લિક કરી શકો છો અને નવા કેટલાઓ ડેશબોર્ડમાં ઉમેરવામાં આવશે.',
+      history: '"ઇતિહાસ" પર ક્લિક કરીને, તમે રૂમમાં તમામ ચળવળો જોઈ શકો છો.',
+      coolingUnits:
+        '"કૂલિંગ યુનિટ્સ" પર ક્લિક કરીને આગામી 7 દિવસોમાં એક કૂલિંગ યુનિટની ક્ષમતાને (પ્લેનર ટેબ) અને રૂમનો તાપમાન (રૂમની શરતોના ટેબ) જોવાનું છે.',
+      roomConditions:
+        'જો તમારી પાસે એપ્લિકેશન સાથે સંકળાયેલ સેન્સર ન હોય, તો તમે "રૂમની શરતો"માં કૂલિંગ રૂમનો તાપમાન મેન્યુઅલી અપડેટ કરી શકો છો.',
+      checkOut1:
+        'ચેક-આઉટ શરૂ કરવા માટે, પ્રવૃતિ બટન પર ક્લિક કરો અને પછી લાલ બટન પર ક્લિક કરો. પછી ચેક-આઉટ પૂર્ણ કરવા માટે સૂચનાઓને અનુસરો.',
+      checkOut2: 'તમે ચેક-આઉટ કરવા માંગતા કૂલિંગ યુનિટ અને પાકોને પસંદ કરી શકો છો.',
+      checkOut3:
+        'એકવાર વસ્તુઓને ચૂકવવામાં આવ્યા પછી, અનુરૂપ બટન પર ક્લિક કરો અને ચેક-આઉટને અંતિમ રૂપ આપો.',
+      navigateToLocations:
+        'સૌથી પહેલા તમારે એક સ્થળ ઉમેરવું પડશે. આગળ જાઓ અને લોકેશન ટેબ પર ક્લિક કરો.',
+      locations:
+        'તમે નામ પસંદ કરીને અને તેની અક્ષાંશ અને રેખાંશ ઉમેરવા, તમારા GPS કોર્ડિનેટ્સ શેર કરીને (જો તમે કૂલ રૂમના સ્થળે છો), અથવા સરનામું લખીને એક સ્થળ ઉમેરવા શકો છો.',
+      navigateToCoolingUnits:
+        'એક સ્થળ ઉમેર્યા પછી, તમે એક કૂલિંગ યુનિટ ઉમેરવા માટે આગળ જાવી શકો છો. આગળ જાઓ અને કૂલિંગ યુનિટ્સ ટેબ પર ક્લિક કરો.',
+      addCoolingUnits:
+        'કૂલિંગ યુનિટને ઉપર જણાવેલ વિગતો પૂર્ણ કરીને ઉમેરવામાં આવે છે. જો તમને કૂલિંગ યુનિટમાં તાપમાન સેન્સર અને એક API ઉપલબ્ધ છે, તો તમે ક્રેડેંશિયલ્સ દાખલ કરી શકો છો અને આપમેળે તમારી સેન્સરોને એપ્લિકેશન સાથે કનેક્ટ કરી શકો છો.',
+      addEmployeesOperators:
+        'તમે મેનેજમેન્ટ સ્ક્રીન દ્વારા નોંધણી કરેલ કર્મચારીઓ અને ઓપરેટર્સને ઉમેરવા માટે તેમનો ફોન નંબર જરૂર છે. તેમને આમંત્રણ લિંક સાથે SMS મળશે. એક ફોન નંબર ફક્ત એક જ વપરાશકર્તા માટે ઉપયોગમાં લેવામાં આવી શકે છે.',
+      employeeCoolingUnitsStep:
+        'જ્યારે તમે એક કૂલિંગ યુનિટ પસંદ કરો છો, ત્યારે તમે "ડેશબોર્ડ" ટેબમાં ચેક ઇન્સ, "ઇતિહાસ" ટેબમાં ચળવળો, અને "કૂલિંગ યુનિટ" ટેબમાં આયોજન કરવામાં આવેલ ઉપયોગ દર અને રૂમનો તાપમાનને ઝલક જોઈ શકો છો.',
+      localizationPreferences:
+        'તમે "સ્થાનિકરણ મરામત" પસંદ કરીને એપ્લિકેશનની ભાષા બદલી શકો છો. ભાષા બદલવા માટે "ફેરફાર સાચવો" બટન પર ક્લિક કરવાનું ભૂલશો નહીં!',
+      accountDetailsNavigation:
+        'મેનૂમાં, તમે "એકાઉન્ટ વિગતો" તરફ જાવી શકો છો અને ત્યાં ટેપ કરીને તમારા એકાઉન્ટ સંબંધિત રૂપરેખાઓને જુઓ/સંપાદિત કરી શકો છો. આગળ જાઓ અને અજમાવો.',
+      coolingUserSurvey:
+        'એપ્લિકેશન તમને કસ્ટમાઇઝ્ડ ભલામણો આપવા માટે કૂલિંગ વપરાશકર્તા સર્વે પૂરી કરવી ખુબજ મહત્વપૂર્ણ છે. સર્વે પૂર્ણ કરવા માટે તમારું આભાર!',
+      coolingUserCode:
+        'જ્યારે તમે પહેલી વખત તમારું ઉત્પાદ ને ઠંડા રૂમમાં સ્ટોર કરવા જઈ રહ્યા છો, ત્યારે ઓપરેટર તમારો વ્યક્તિગત કોડ માંગશે, જેથી તે તમને ઠંડા રૂમના વપરાશકર્તાઓની યાદીમાં ઉમેરવામાં આવશે. તમે આ કોડ "વ્યક્તિગત વિગતો" -> "કૂલિંગ વપરાશકર્તા આયાત કોડ" માં જોઈ શકો છો.',
+      knowledgeHub:
+        'મેનૂમાં, તમે "જ્ઞાન કેન્દ્ર" શોધી શકો છો, જેમાં વિવિધ પાકોને કેટલાંક સમય માટે સ્ટોર કરી શકાય છે અને તેમનો શ્રેષ્ઠ તાપમાન શું છે તેની સલાહ છે. ભલામણ કરવામાં આવે છે કે કેવી રીતે ઠંડા રૂમ તમારા ફળો અને શાકભાજીના ગુણવત્તાને જાળવવામાં મદદ કરી શકે છે!',
+      faq: 'મેનૂમાં, તમે સામાન્ય પ્રશ્નો (FAQ) પણ શોધી શકો છો. અમે ભલામણ કરીએ છીએ કે તમે તેમને તપાસો, જેથી તમે એપ્લિકેશન વિશે વધુ જાણો અને તમારા ઉત્પાદોને ઠંડા રૂમમાં સ્ટોર કરવાની ફાયદા વિશે જાણો.',
+      dashboardStep1:
+        'જ્યારે ઓપરેટરે તમારું ચેક ઇન પૂર્ણ કર્યું છે, ત્યારે તમે "ડેશબોર્ડ" વિભાગમાં રૂમમાં સંગ્રહિત ઉત્પાદને જોઈ શકશો. દરેક કાર્ડમાં સમાન પ્રકારના પાકોની એક્સેટ્ટો સેટ છે જે એક સાથે ચેક ઇન કરવામાં આવ્યા છે.',
+      dashboardStep2:
+        'ડેશબોર્ડમાં દરેક કાર્ડમાં પાકના પ્રકાર, જથ્થામાં રાખવામાં આવેલા ક્રેટ્સની સંખ્યા, તેઓ કેટલા દિવસોથી સંગ્રહિત છે, બધા ક્રેટ્સ માટેનો કુલ દૈનિક ભાવ, અને ચેક-ઇન આઈડીની માહિતી આપવામાં આવે છે.',
+      dashboardStep3:
+        'રંગીન દિવસોની સંખ્યા "પિક અપનો સમય" (TTPU) દર્શાવે છે, જે દર્શાવે છે કે તમારા ઉત્પાદનો રેફ્રિજરેટેડ રહેવા માટે કેટલા દિવસો સુધી સારી સ્થિતિમાં રહેશે. લાલ રંગ સૂચવે છે કે ઉત્પાદન ગુણવત્તા ગુમાવતું છે અને તેને શક્ય તેટલી વહેલીથી ઉઠાવી લેવું જોઈએ.',
+      dashboardStep4:
+        'જો કાર્ડનો રંગ પીળો (2-5 દિવસ બાકી) અથવા લીલો (5 દિવસથી વધુ) હોય, તો તમને ક્રેટ્સ વિશે ચિંતા કરવાની જરૂર નથી. દિવસોની સંખ્યા દરરોજ ઘણીવાર પુનઃગણના કરવામાં આવે છે, તેથી કૃપા કરીને ડેશબોર્ડને નિયમિત રીતે તપાસતા રહો જેથી તમારા ક્રેટ્સની ગુણવત્તા કેવી રીતે બદલાઈ રહી છે તે જાણી શકો.',
+      dashboardStep5:
+        'જો તમારી પાસે અનેક રૂમમાં જથ્થા ભરેલા ક્રેટ્સ હોય, તો તમે ડ્રોપડાઉન મેનૂમાંથી કંપની અને કૂલિંગ યુનિટ પસંદ કરીને રૂમના દર્શન બદલી શકો છો.',
+      farmerHistory:
+        '“ઈતિહાસ” ટેબમાં, તમે દરેક રૂમમાં પૂર્ણ કરેલા બધા ચેક-ઇન અને ચેક-આઉટનો સારાંશ જોઈ શકો છો. જો તમે ચેકઆઉટની બાજુમાં લાલ બિંદુ જુઓ, તો ત્રણ બિંદુઓ પર ક્લિક કરો અને “માર્કેટ સર્વે ભરો” પસંદ કરો. આ અમને સમજીવાને મદદ કરે છે કે તમે તમારા ઉત્પાદનને કયા ભાવમાં વેચ્યું અને કોઈ વસ્તુઓ નષ્ટ થઈ છે કે નહીં, જે ઠંડા ખંડના સંચાલનમાં સુધારો કરવા માટે ખૂબ જ મહત્વપૂર્ણ છે.',
+      farmersCoolingUnits:
+        'તમારા નજીકની કૂલિંગ યુનિટ શોધવા માટે, તળિયાના બટનો પર જાઓ, “કૂલિંગ યુનિટ” ટેબ પર ક્લિક કરો અને “નકશા” પસંદ કરો. નકશામાં દરેક પિન પર ક્લિક કરીને, તમે એકમનો પ્રકાર અને સંગ્રહનો ભાવ જોઈ શકો છો.',
+      farmersUnitsPlanner:
+        '“કૂલિંગ યુનિટ્સ” ટેબમાં, તમે નકશા, રૂમની વર્તમાન અને ભવિષ્યની ઓક્યુપન્સી ( “પ્લેનર” હેઠળ) અને રૂમનું તાપમાન (“રૂમ કન્ડિશન્સ”માં) શોધી શકો છો. આ સ્ક્રીનો તમને નિહાળવામાંની જરૂર વિના ઠંડા ખંડની શરતો પર દૂરથી દેખાવા માટેની મંજૂરી આપે છે!',
+      marketPrice:
+        'જો “માર્કેટ ભાવ” ટેબ હોય, તો તમે દેશભરમાં વિવિધ ફળો અને શાકભાજીના તાજેતરના ભાવોની તપાસ કરી શકો છો, અને ભવિષ્યના ભાવની પૂર્વાનુમાન પણ જોઈ શકો છો. હાલમાં, આ સુવિધા માત્ર કેટલાક દેશો માટે ઉપલબ્ધ છે.',
+      farmerFinalStep:
+        'અભિનંદન! તમે ટ્યુટોરિયલ પૂર્ણ કર્યું છે! એપ્લિકેશન વિશે કોઈ પ્રશ્નો માટે, કૃપા કરીને FAQ તપાસો, ઠંડા ખંડના ઓપરેટરને પૂછો, અથવા અમને app@yourvcca.org પર ઇમેઇલ કરો.',
     },
   },
 } satisfies Translations;

@@ -151,7 +151,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="w-full bg-transparent mt-7 mb-2"
-              label={t('Auth.ForgotPassword.phoneInputLabel')}
+              label={`${t('Auth.ForgotPassword.phoneInputLabel')}*`}
               mode="flat"
               dense
               value={value}
@@ -162,9 +162,6 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           )}
           name="phoneNumber"
         />
-        <Text variant="TextMedium" tw="text-gray-400 text-center mb-2">
-          {t('Dashboard.Management.AddOperator.phoneFormat')}
-        </Text>
         {errors.phoneNumber && (
           <Text tw="text-xs text-red-600 mt-[-2] mb-7 pl-3 w-[95%]">
             {errors.phoneNumber.message?.toString()}

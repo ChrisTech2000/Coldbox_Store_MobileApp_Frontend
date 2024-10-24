@@ -49,7 +49,7 @@ export default function FormFields(props: {
         render={({ field: { onChange, value, onBlur } }) => (
           <TextInput
             tw="w-full bg-transparent mt-1"
-            label={t('Dashboard.Management.AddCoolingUnit.fields.name')}
+            label={`${t('Dashboard.Management.AddCoolingUnit.fields.name')}*`}
             mode="flat"
             dense
             value={value}

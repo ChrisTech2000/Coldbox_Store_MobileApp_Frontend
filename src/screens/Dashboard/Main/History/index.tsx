@@ -36,6 +36,8 @@ const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
 const useSortingStore = createSortingStore();
 
+export const historyStores = [useCoolingUnitStore, useCompanyStore];
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
@@ -128,7 +130,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
       />
 
-      <ScrollView tw="mx-4 my-2" showsVerticalScrollIndicator={false}>
+      <ScrollView tw="mx-4 mt-2 mb-28" showsVerticalScrollIndicator={false}>
         {areCoolingUnitsLoading || areMovementsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />

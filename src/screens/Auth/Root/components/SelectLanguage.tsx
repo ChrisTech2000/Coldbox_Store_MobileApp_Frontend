@@ -27,7 +27,7 @@ export function SelectLanguage() {
       setIsModalOpen(false);
       await mutate(selectedLanguage);
     },
-    [selectedLanguage]
+    [selectedLanguage, setActiveLanguage, mutate]
   );
 
   const cancelLanguageUpdate = useCallback(
@@ -36,7 +36,7 @@ export function SelectLanguage() {
       setSelectedLanguage(activeLanguage);
       setIsModalOpen(false);
     },
-    [activeLanguage]
+    [activeLanguage, setSelectedLanguage]
   );
 
   return (

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { Controller } from 'react-hook-form';
-import { Checkbox, Divider, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Checkbox, Divider, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import truncate from 'lodash/truncate';
 
@@ -30,7 +30,7 @@ export default function CoolingUnitFilters() {
   const { control, watch, formState } = MarketplaceFormManager.useForm();
   const selectedCoolingUnits = watch('coolingUnits');
 
-  const { data } = useApiCall(
+  const { data, isLoading } = useApiCall(
     'getMarketplaceCoolingUnitFilterOptions',
     async () => {
       const result = await ColdtivateService.getCoolingUnits({});
@@ -92,11 +92,16 @@ export default function CoolingUnitFilters() {
                       left={<TextInput.Icon icon="magnify" />}
                     />
                   ),
-                  options: (
+                  options: isLoading ? (
+                    <View tw="h-[80%] pt-8">
+                      <ActivityIndicator size="small" color="gray" />
+                    </View>
+                  ) : (
                     <FlashList
                       showsHorizontalScrollIndicator={false}
                       showsVerticalScrollIndicator={false}
                       data={datums}
+                      extraData={internalSelection}
                       keyExtractor={(item, itemIdx) =>
                         `cooling-unit-list-item-${item.id}-#${itemIdx}`
                       }

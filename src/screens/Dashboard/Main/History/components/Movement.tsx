@@ -156,35 +156,34 @@ export function Movement({
 
   return (
     <View tw="w-full">
-      <View tw="w-[40%] flex flex-row items-center justify-between space-x-2 my-2">
+      <View tw="flex flex-row items-center justify-between my-2">
         {isCheckIn ? (
-          <CheckIn width={25} height={25} fill={colors.green[500]} stroke={colors.green[500]} />
+          <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />
         ) : (
-          <CheckOut width={25} height={25} fill={colors.orange[400]} stroke={colors.orange[400]} />
+          <CheckOut width={20} height={20} fill={colors.orange[400]} stroke={colors.orange[400]} />
         )}
-        <View tw="w-full mr-4">
-          <View tw="flex flex-row items-center">
-            <Text variant="TextBold" tw="text-base font-bold">
-              {movement.code}
-            </Text>
-            <Text variant="TextMedium" tw="text-base w-24" numberOfLines={1}>
-              {' '}
-              - {movement.cratesNumber} - {crops}
+        <View tw="w-[50%] mx-2 h-full flex flex-col space-y-1">
+          <View tw="flex flex-row items-center flex-wrap">
+            <Text variant="TextBold" tw="text-base" numberOfLines={3}>
+              <Text tw="text-base font-bold">{movement.code}</Text> - {movement.cratesNumber} -{' '}
+              {crops}
             </Text>
           </View>
-          <Text variant="TextMedium" tw="text-base" numberOfLines={1}>
+          <Text variant="TextMedium" tw="text-base">
             {dateFmt(movement.date.toString(), 'dd/MM/yyyy HH:mm a')}
           </Text>
         </View>
 
-        <View tw="w-[90%]">
-          <Text
-            variant="TextMedium"
-            tw={cn('text-base', !isCheckIn && 'font-bold')}
-            numberOfLines={1}
-          >
-            {t('Dashboard.History.priceLabel')}: {price}
-          </Text>
+        <View tw="w-[35%] h-full flex flex-col justify-between space-y-1">
+          <View>
+            <Text variant="TextMedium" tw={cn('text-base', !isCheckIn && 'font-bold')}>
+              {t('Dashboard.History.priceLabel')}:
+            </Text>
+            <Text variant="TextMedium" tw={cn('text-base', !isCheckIn && 'font-bold')}>
+              {price}
+            </Text>
+          </View>
+
           <Text variant="TextMedium" tw="text-base" numberOfLines={1}>
             {movement.owner}
           </Text>

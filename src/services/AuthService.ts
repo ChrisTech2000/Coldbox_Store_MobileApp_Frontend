@@ -123,7 +123,11 @@ class AuthService extends HttpClient {
 
   public resetPassword = async (params: ResetPasswordParams): Promise<void> => {
     try {
-      const { data } = await this.post<void>(EAuthenticationEndpoints.RESET_PASSWORD, params);
+      const { phoneNumber, ...rest } = params;
+      const { data } = await this.post<void>(EAuthenticationEndpoints.RESET_PASSWORD, {
+        ...rest,
+        phone: phoneNumber,
+      });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

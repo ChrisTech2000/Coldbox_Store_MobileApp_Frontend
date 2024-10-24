@@ -42,7 +42,7 @@ export default function MetricUnitField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label={t('Dashboard.Management.AddCoolingUnit.metricUnit.label')}
+                label={`${t('Dashboard.Management.AddCoolingUnit.metricUnit.label')}*`}
                 currentValue={truncate(currentValue, { length: 16 })}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}

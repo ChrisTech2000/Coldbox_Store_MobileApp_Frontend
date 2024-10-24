@@ -41,7 +41,7 @@ export default function UnitTypeField() {
             <View tw="pl-4 pr-2 pb-1.5">
               <Select
                 variant="md"
-                label={t('Dashboard.Management.AddCoolingUnit.fields.coolingUnitType')}
+                label={`${t('Dashboard.Management.AddCoolingUnit.fields.coolingUnitType')}*`}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
                 onClick={toggleVisibility}

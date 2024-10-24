@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Platform, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 import Logo from '#assets/images/coldtivate_logo.svg';
 
@@ -9,6 +8,7 @@ import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { savePDF } from '#ui/lib/pdf';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
@@ -107,28 +107,15 @@ export function FarmerAnalytics() {
 
   const download = useCallback(async () => {
     if (!data) return;
-
+    setIsCreatingPdf(true);
     try {
-      setIsCreatingPdf(true);
-
-      const params = {
-        html: getPdfContent(data, t),
-        fileName: 'farmer',
-        directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
-        base64: true,
-      };
-
-      const file = await RNHTMLtoPDF.convert(params);
-
-      if (!file.filePath) throw new Error();
-      setIsCreatingPdf(false);
-
-      toast.show(`${t('actions.done')}!`, {
-        type: 'md_success',
-      });
+      await savePDF(getPdfContent(data, t), 'farmer');
+      toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
       setIsCreatingPdf(false);
       console.error(exception);
+    } finally {
+      setIsCreatingPdf(false);
     }
   }, [data]);
 
@@ -211,16 +198,16 @@ export function FarmerAnalytics() {
               </Button>
 
               <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
-                <Text variant="TextMedium" tw="text-base font-bold">
+                <Text variant="TextMedium" tw="text-base">
                   {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                  <Text variant="TextMedium" tw="text-base text-green-primary">
                     {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
                     {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
                   </Text>
                 </Text>
-                <Text variant="TextMedium" tw="text-base font-bold">
+                <Text variant="TextMedium" tw="text-base">
                   {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
+                  <Text variant="TextMedium" tw="text-base text-green-primary">
                     {configData.coolingUnits?.map((unit) => unit.name).join(', ') ?? ''}
                   </Text>
                 </Text>
@@ -238,38 +225,38 @@ export function FarmerAnalytics() {
               <Logo width={50} height={50} tw="mb-4" />
               <View tw="flex flex-row flex-wrap items-center justify-center space-x-2 space-y-2">
                 <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-lg text-white">
+                  <Text variant="TextMedium" tw="text-base text-white">
                     {t(`Dashboard.Analytics.farmersAnalytics.coolingUserName`)}
                   </Text>
-                  <Text variant="TextBold" tw="text-lg text-white font-bold">
+                  <Text variant="TextBold" tw="text-base text-white">
                     {user?.firstName} {user?.lastName}
                   </Text>
                 </View>
 
                 <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-lg text-white">
+                  <Text variant="TextMedium" tw="text-base text-white">
                     {t(`Dashboard.Analytics.farmersAnalytics.coolingUserType`)}
                   </Text>
-                  <Text variant="TextBold" tw="text-lg text-white font-bold">
+                  <Text variant="TextBold" tw="text-base text-white">
                     {user?.role}
                   </Text>
                 </View>
 
                 <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-lg text-white">
+                  <Text variant="TextMedium" tw="text-base text-white">
                     {t(`Dashboard.Analytics.farmersAnalytics.avgStorageTime`)}
                   </Text>
-                  <Text variant="TextBold" tw="text-lg text-white font-bold">
+                  <Text variant="TextBold" tw="text-base text-white">
                     {farmerImpact?.avgStorageDays?.[0] ?? 0}{' '}
                     {t(`Dashboard.Analytics.farmersAnalytics.days`)}
                   </Text>
                 </View>
 
                 <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-lg text-white">
+                  <Text variant="TextMedium" tw="text-base text-white">
                     {t(`Dashboard.Analytics.farmersAnalytics.coldStorageCost`)}
                   </Text>
-                  <Text variant="TextBold" tw="text-lg text-white font-bold">
+                  <Text variant="TextBold" tw="text-base text-white">
                     {(farmerImpact?.totalStorageCost?.['0'] ?? 0).toFixed(2)}
                   </Text>
                 </View>

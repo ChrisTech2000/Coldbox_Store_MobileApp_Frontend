@@ -14,14 +14,20 @@ type Actions = {
   setConfigData: (configData: State['configData']) => void;
   setImpactData: (impactData: State['impactData']) => void;
   setCoolingUnitData: (coolingUnitData: State['coolingUnitData']) => void;
+  reset: () => void;
 };
 
-export const useAggregatedData = create<State & Actions>((set) => ({
+const initialState = {
   configData: null,
   impactData: null,
   coolingUnitData: null,
+};
+
+export const useAggregatedData = create<State & Actions>((set) => ({
+  ...initialState,
 
   setConfigData: (configData) => set({ configData }),
   setImpactData: (impactData) => set({ impactData }),
   setCoolingUnitData: (coolingUnitData) => set({ coolingUnitData }),
+  reset: () => set(initialState),
 }));

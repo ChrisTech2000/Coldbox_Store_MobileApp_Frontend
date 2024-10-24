@@ -44,6 +44,8 @@ const usePaymentType = createMultipleSelectStore<PaymentOption>();
 const useDateRangeStore = createDataRangeStore();
 const useSortingStore = createSortingStore();
 
+export const revenueAnalysisStores = [useDateRangeStore, usePaymentType, useCoolingUnitStore];
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
@@ -257,7 +259,12 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           {t('Dashboard.Management.RevenueAnalysis.summary.total')}
         </Text>
         <Text variant="TextBold" tw="text-base font-bold">
-          {revenueData.reduce((acc, current) => (acc += current.totalPrice), 0)}
+          {(
+            revenueData.reduce((acc, current) => (acc += current.totalPrice), 0) ?? 0
+          ).toLocaleString('en-US', {
+            style: 'currency',
+            currency: company?.currency,
+          })}
         </Text>
       </View>
 

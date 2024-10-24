@@ -13,27 +13,73 @@ export function UsersContent() {
 
   const operators = useMemo(() => {
     return {
-      total: coolingUnitData?.roomOp?.['0'] ?? 0,
-      female: coolingUnitData?.roomOpFem?.['0'] ?? 0,
-      male: coolingUnitData?.roomOpMa?.['0'] ?? 0,
-      other: coolingUnitData?.roomOpOt?.['0'] ?? 0,
+      total:
+        Object.values(coolingUnitData?.roomOp ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      female:
+        Object.values(coolingUnitData?.roomOpFem ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      male:
+        Object.values(coolingUnitData?.roomOpMa ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      other:
+        Object.values(coolingUnitData?.roomOpOt ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
     };
   }, [coolingUnitData]);
 
   const users = useMemo(() => {
     return {
-      total: coolingUnitData?.roomActiveUsers?.['0'] ?? 0,
-      female: coolingUnitData?.roomActiveFem?.['0'] ?? 0,
-      male: coolingUnitData?.roomActiveMa?.['0'] ?? 0,
-      other: coolingUnitData?.roomActiveOt?.['0'] ?? 0,
+      total:
+        Object.values(coolingUnitData?.roomActiveUsers ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      female:
+        Object.values(coolingUnitData?.roomActiveFem ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      male:
+        Object.values(coolingUnitData?.roomActiveMa ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      other:
+        Object.values(coolingUnitData?.roomActiveOt ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
     };
   }, [coolingUnitData]);
 
   const beneficiaries = useMemo(() => {
     return {
-      total: coolingUnitData?.roomBeneficiaries?.['0'] ?? 0,
-      female: Math.round(coolingUnitData?.roomBeneficiariesFem?.['0'] || 0),
-      male: Math.round(coolingUnitData?.roomBeneficiariesMa?.['0'] || 0),
+      total:
+        Object.values(coolingUnitData?.roomBeneficiaries ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0,
+      female: Math.round(
+        Object.values(coolingUnitData?.roomBeneficiariesFem ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0
+      ),
+      male: Math.round(
+        Object.values(coolingUnitData?.roomBeneficiariesMa ?? {}).reduce(
+          (acc, current) => (acc += current),
+          0
+        ) ?? 0
+      ),
     };
   }, [coolingUnitData]);
 

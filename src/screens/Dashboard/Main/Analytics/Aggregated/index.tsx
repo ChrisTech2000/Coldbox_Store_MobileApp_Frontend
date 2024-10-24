@@ -1,13 +1,13 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Dimensions, Platform, TouchableOpacity, View } from 'react-native';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { savePDF } from '#ui/lib/pdf';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -92,7 +92,6 @@ export function AggregatedSection() {
 
   const onDownloadData = useCallback(async () => {
     if (!updatedImpactData) return;
-
     setIsCreatingPdf(true);
 
     const html = generatePDFContent(
@@ -103,27 +102,17 @@ export function AggregatedSection() {
       updatedImpactData,
       'aggregated'
     );
-
-    const PDFOptions = {
-      html,
-      fileName: `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.aggregated')}`,
-      directory: Platform.OS === 'android' ? 'Downloads' : 'Documents',
-      base64: true,
-    };
+    const fileName = `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.aggregated')}`;
 
     try {
-      const file = await RNHTMLtoPDF.convert(PDFOptions);
-      if (!file.filePath) throw new Error();
-      setIsCreatingPdf(false);
-
-      toast.show(`${t('actions.done')}!`, {
-        type: 'md_success',
-      });
+      await savePDF(html, fileName);
+      toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch {
-      setIsCreatingPdf(false);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
+    } finally {
+      setIsCreatingPdf(false);
     }
   }, [t, toast, coolingUnits, coolingUnitData, updatedImpactData, company]);
 

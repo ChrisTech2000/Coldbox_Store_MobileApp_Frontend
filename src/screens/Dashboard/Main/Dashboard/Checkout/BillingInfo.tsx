@@ -30,7 +30,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { BankTransferModal } from './BankTransferDetailsModal';
 
-const usePaymentTypeStore = createSelectStore<EPaymentType>();
+export const usePaymentTypeStore = createSelectStore<EPaymentType>();
 
 function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo'>) {
   const { user, crates, coolingUnit } = route.params;

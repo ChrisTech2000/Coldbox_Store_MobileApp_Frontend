@@ -8,6 +8,7 @@ import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Drawer } from 'react-native-paper';
+import { useSWRConfig } from 'swr';
 
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 
@@ -28,10 +29,10 @@ import RBAC from '#common/RBAC';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
-import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 
-import type { DashboardRoutes } from '../index';
+import type { DashboardRoutes } from '../../index';
+import { resetAllStores } from './resetStoresUtil';
 
 const StyledDrawerContentScrollView = styled(DrawerContentScrollView);
 
@@ -68,8 +69,9 @@ export default function DrawerContent(props: Props) {
   const { routeNames, index } = props.state;
   const { t } = useTranslationUtils();
   const focusedRoute = routeNames[index];
-  const resetManagementStore = useManagementStore((store) => store.reset);
+
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const { mutate } = useSWRConfig();
 
   const { onLayout: onTutorialTabLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.REPEAT_TUTORIAL_STEP,
@@ -129,7 +131,8 @@ export default function DrawerContent(props: Props) {
   }, []);
 
   const onLogout = useCallback(() => {
-    resetManagementStore();
+    resetAllStores();
+    mutate(() => true, undefined, false);
     useAuthStore.getState().revokeSession();
   }, []);
 

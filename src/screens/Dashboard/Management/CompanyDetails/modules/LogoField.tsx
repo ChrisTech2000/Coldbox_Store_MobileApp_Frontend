@@ -1,6 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
+import { PermissionsAndroid, View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { getSystemVersion } from 'react-native-device-info';
 import { Divider } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -9,12 +10,14 @@ import { Text } from '#ui/components/Text';
 
 import DefaultLogo from '#assets/images/coldtivate_logo.svg';
 import { useTranslationUtils } from '#i18n/utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 import FormManager from '../components/FormManager';
 
 export default function LogoField() {
   const { watch, setValue } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const currentLogo = watch('logo');
 
@@ -45,25 +48,42 @@ export default function LogoField() {
             tw="flex-shrink-0"
             onPress={async (evt) => {
               evt.stopPropagation();
-              await launchImageLibrary(
-                {
-                  maxWidth: 200,
-                  maxHeight: 200,
-                  mediaType: 'photo',
-                  selectionLimit: 1,
-                  quality: 1,
-                },
-                (result) => {
-                  const file = result.assets?.at(0);
-                  if (typeof file === 'undefined') return;
-                  if (typeof file.fileSize !== 'undefined' && file.fileSize > 50_000) return;
-                  setValue('logo', {
-                    uri: file.uri as string,
-                    name: file.fileName,
-                    type: file.type,
-                  });
-                }
-              );
+
+              async function _launch(): Promise<void> {
+                await launchImageLibrary(
+                  {
+                    maxWidth: 200,
+                    maxHeight: 200,
+                    mediaType: 'photo',
+                    selectionLimit: 1,
+                    quality: 1,
+                  },
+                  (result) => {
+                    const file = result.assets?.at(0);
+                    if (typeof file === 'undefined') return; // safe guard
+                    if (typeof file.fileSize !== 'undefined' && file.fileSize > 50_000) return; // file size upload limit
+                    setValue('logo', {
+                      uri: file.uri as string,
+                      name: file.fileName,
+                      type: file.type,
+                    });
+                  }
+                );
+              }
+
+              const androidVersion = Number(getSystemVersion());
+              if (androidVersion >= 13) {
+                const permissionStatus = await PermissionsAndroid.request(
+                  PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
+                );
+                if (permissionStatus === PermissionsAndroid.RESULTS.GRANTED) return await _launch();
+                toast.show(t('Dashboard.Management.CompanyDetails.toasts.photoLibrary'), {
+                  type: 'md_danger',
+                });
+                return;
+              }
+
+              await _launch();
             }}
           >
             {t('Dashboard.Management.CompanyDetails.labels.uploadLogo')}

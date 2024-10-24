@@ -41,8 +41,8 @@ import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { sortProduces } from './utils/sortProduces';
 
-const useCoolingUnitStore = createSelectStore<CoolingUnit>();
-const useCompanyStore = createSelectStore<Company>();
+export const useDashboardCoolingUnitStore = createSelectStore<CoolingUnit>();
+export const useDashboardCompanyStore = createSelectStore<Company>();
 
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
@@ -94,8 +94,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   });
 
   const { sorting } = useSortingStore();
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
-  const { selectedItem: selectedCompany } = useCompanyStore();
+  const { selectedItem: coolingUnit } = useDashboardCoolingUnitStore();
+  const { selectedItem: selectedCompany } = useDashboardCompanyStore();
   const { isLoading: isGlobalInfoLoading, farmerId, addRefreshDataFn } = useDashboardStore();
 
   const {
@@ -194,12 +194,12 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           />
         }
         search={search}
-        onSearch={(val) => setSearch(val)}
-        onSearchTypeChange={(type) => setSearchType(type)}
+        onSearch={setSearch}
+        onSearchTypeChange={setSearchType}
         searchType={searchType}
-        useCompanyStore={useCompanyStore}
-        useCoolingUnitStore={useCoolingUnitStore}
-        setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
+        useCompanyStore={useDashboardCompanyStore}
+        useCoolingUnitStore={useDashboardCoolingUnitStore}
+        setAreCoolingUnitsLoading={setAreCoolingUnitsLoading}
       />
 
       {isGlobalInfoLoading ||

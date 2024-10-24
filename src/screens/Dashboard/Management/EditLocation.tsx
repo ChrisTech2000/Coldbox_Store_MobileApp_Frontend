@@ -63,32 +63,42 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   }
 
   async function onSubmit(values: PreprocessedFormValues) {
-    try {
-      const { _step, ...rest } = values;
+    const { _step, ...rest } = values;
 
-      let datums: Partial<PreprocessedFormValues> = {};
+    const geocoder = new Geocoder();
+    let datums: Partial<PreprocessedFormValues> = {};
 
-      const geocoder = new Geocoder();
-
-      switch (_step) {
-        case 'geolocation':
-        case 'coordinates': {
+    switch (_step) {
+      case 'geolocation':
+      case 'coordinates': {
+        try {
           const address = await geocoder.getAddressFromCoords({
             latitude: rest.latitude,
             longitude: rest.longitude,
           });
           datums = merge(rest, address);
-          break;
+        } catch (exception) {
+          console.error(exception);
         }
-        case 'address': {
+        break;
+      }
+      case 'address': {
+        try {
           const coordinates = await geocoder.getCoordsFromAddress(rest);
           datums = merge(rest, coordinates);
-          break;
+        } catch (exception) {
+          toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
+            type: 'md_danger',
+          });
+          console.error(exception);
         }
-        default:
-          break;
+        break;
       }
+      default:
+        break;
+    }
 
+    try {
       await ColdtivateService.editLocation({ ...datums, locationId });
 
       toast.show(t('Dashboard.Management.Location.toasts.editLocationSuccess'), {
@@ -174,7 +184,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
                 icon={isSubmitting ? undefined : 'pencil'}
                 uppercase
               >
-                {isSubmitting ? <ButtonLoader /> : t('actions.edit')}
+                {isSubmitting ? <ButtonLoader /> : t('actions.save')}
               </Button>
             </View>
           </KeyboardAwareScrollView>

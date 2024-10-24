@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -439,7 +439,8 @@ function EditCrateWeightAndPricing(
             disabled={
               typeof form.formState.errors.crates !== 'undefined' ||
               !hasChanges ||
-              form.formState.isSubmitting
+              form.formState.isSubmitting ||
+              !(potentialPrice >= 1)
             }
           >
             {t('actions.save-changes')}
@@ -456,14 +457,13 @@ function _isDirty(
   previousPrice: number = 0,
   previousSellableCrates: Array<number> = []
 ) {
-  const currentSellableCrates: Array<number> = useMemo(
-    () => crates.filter((crate) => crate.isSellable).map((crate) => crate.id),
-    [crates]
-  );
+  const currentSellableCrates: Array<number> = crates
+    .filter((crate) => crate.isSellable)
+    .map((crate) => crate.id);
   const isPriceChanged = price !== previousPrice;
   const isSellableChanged =
     JSON.stringify(currentSellableCrates.sort()) !== JSON.stringify(previousSellableCrates.sort());
-  return (!isSellableChanged && isPriceChanged) || (isSellableChanged && isPriceChanged);
+  return isSellableChanged || isPriceChanged;
 }
 
 export default withSafeArea(

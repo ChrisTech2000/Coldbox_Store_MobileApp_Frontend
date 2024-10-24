@@ -30,8 +30,8 @@ interface FormValues {
   accountType: string;
 }
 
-const useBankStore = createSelectStore<Bank>();
-const useAccountTypeStore = createSelectStore<EBankAccountType>();
+export const usePayoutBankStore = createSelectStore<Bank>();
+export const usePayoutAccountTypeStore = createSelectStore<EBankAccountType>();
 
 const countriesMeta = countriesDict();
 
@@ -112,8 +112,8 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
   const [isAccountTypeOpen, setIsAccountTypeOpen] = useState<boolean>(false);
 
   const hasPayoutMethods = useMemo(() => !!data.length, [data.length]);
-  const [bank, setBank] = useBankStore((store) => [store.selectedItem, store.onSelect]);
-  const [accountType, setAccountType] = useAccountTypeStore((store) => [
+  const [bank, setBank] = usePayoutBankStore((store) => [store.selectedItem, store.onSelect]);
+  const [accountType, setAccountType] = usePayoutAccountTypeStore((store) => [
     store.selectedItem,
     store.onSelect,
   ]);
@@ -230,7 +230,7 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
               isModalVisible={isAccountTypeOpen}
               setIsModalVisible={setIsAccountTypeOpen}
               itemName={(item) => mapBankAccountTypes(t)[item]}
-              useSelectStore={useAccountTypeStore}
+              useSelectStore={usePayoutAccountTypeStore}
               label={
                 accountType
                   ? mapBankAccountTypes(t)[accountType]
@@ -297,7 +297,7 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
               isModalVisible={isBanksModalOpen}
               setIsModalVisible={setIsBanksModalOpen}
               itemName={(item) => item?.name}
-              useSelectStore={useBankStore}
+              useSelectStore={usePayoutBankStore}
               label={
                 bank ? bank.name : t('Dashboard.AccountDetails.PayoutSettings.form.selectBank')
               }

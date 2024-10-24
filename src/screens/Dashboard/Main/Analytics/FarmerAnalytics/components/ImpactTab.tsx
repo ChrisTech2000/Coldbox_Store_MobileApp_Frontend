@@ -276,13 +276,13 @@ export function ImpactTab() {
               </Text>
             )}
             <View tw="flex flex-row justify-center">
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
               </Text>
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {foodLoss.from}
               </Text>
-              <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
+              <Text variant="TextMedium" tw="text-base text-purple-500 font-bold">
                 %
               </Text>
             </View>
@@ -290,13 +290,13 @@ export function ImpactTab() {
         }
         to={
           <View tw="flex flex-row">
-            <Text variant="TextMedium" tw="text-lg font-bold">
+            <Text variant="TextMedium" tw="text-base font-bold">
               {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
             </Text>
-            <Text variant="TextMedium" tw="text-lg font-bold">
+            <Text variant="TextMedium" tw="text-base font-bold">
               {foodLoss.to}
             </Text>
-            <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
+            <Text variant="TextMedium" tw="text-base text-purple-500 font-bold">
               %
             </Text>
           </View>
@@ -304,7 +304,7 @@ export function ImpactTab() {
         change={
           foodLoss.to === foodLoss.from ? (
             <Icon source="equal" size={40} />
-          ) : foodLoss.to < foodLoss.from ? (
+          ) : foodLoss.change < 0 ? (
             <DownChange
               value={`${foodLoss.change.toFixed(2)}%`}
               message={t('Dashboard.Analytics.farmersAnalytics.decreaseInFoodLoss')}
@@ -348,13 +348,13 @@ export function ImpactTab() {
               </Text>
             )}
             <View tw="flex flex-row justify-center">
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
               </Text>
-              <Text variant="TextMedium" tw="text-lg font-bold">
+              <Text variant="TextMedium" tw="text-base font-bold">
                 {revenueChange.from}
               </Text>
-              <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
+              <Text variant="TextMedium" tw="text-base text-purple-500 font-bold">
                 %
               </Text>
             </View>
@@ -362,13 +362,13 @@ export function ImpactTab() {
         }
         to={
           <View tw="flex flex-row">
-            <Text variant="TextMedium" tw="text-lg font-bold">
+            <Text variant="TextMedium" tw="text-base font-bold">
               {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
             </Text>
-            <Text variant="TextMedium" tw="text-lg font-bold">
+            <Text variant="TextMedium" tw="text-base font-bold">
               {revenueChange.to}
             </Text>
-            <Text variant="TextMedium" tw="text-lg text-purple-500 font-bold">
+            <Text variant="TextMedium" tw="text-base text-purple-500 font-bold">
               %
             </Text>
           </View>
@@ -376,7 +376,7 @@ export function ImpactTab() {
         change={
           revenueChange.to === revenueChange.from ? (
             <Icon source="equal" size={40} />
-          ) : revenueChange.to < revenueChange.from ? (
+          ) : revenueChange.change < 0 ? (
             <DownChange
               value={`${revenueChange.change.toFixed(2)}%`}
               message={t('Dashboard.Analytics.farmersAnalytics.decreaseInRevenue')}
@@ -413,7 +413,7 @@ export function ImpactTab() {
       />
 
       <View tw="bg-violet-100 rounded-lg py-3 px-2 w-full items-center space-y-4 mt-2">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-base">
           {t('Dashboard.Analytics.farmersAnalytics.baselineSurveyLabel')}
         </Text>
         <View tw="flex flex-row items-center space-x-4">
@@ -453,7 +453,7 @@ export function ImpactTab() {
       </View>
 
       <View tw="bg-violet-100 rounded-lg py-3 px-2 w-full items-center space-y-4 mt-4">
-        <Text variant="TextMedium" tw="text-lg">
+        <Text variant="TextMedium" tw="text-base">
           {t('Dashboard.Analytics.farmersAnalytics.postCheckoutSurveyLabel')}
         </Text>
         <View tw="flex flex-row items-center space-x-4">

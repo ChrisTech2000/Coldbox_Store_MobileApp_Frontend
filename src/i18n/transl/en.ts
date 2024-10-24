@@ -70,7 +70,7 @@ const en = {
       CratesInfo: 'Crates Info',
       Dashboard: 'Dashboard',
       History: 'History',
-      MarketPrice: 'Market Price',
+      MarketPrice: 'Crop Prices',
       CoolingUnits: 'Cooling units',
       Analytics: 'Analytics',
       CheckIn: 'Check In',
@@ -239,7 +239,8 @@ const en = {
         firstNameError: 'First Name is mandatory.',
         lastNameError: 'Last Name is mandatory.',
         phoneError: 'Phone number is mandatory.',
-        invalidPhoneError: 'Phone number is invalid',
+        invalidPhoneError:
+          'Phone number is invalid. Please ensure the area code is included (e.g., +447000000000).',
         languageError: 'Language is mandatory.',
         genderError: 'Gender selection is mandatory.',
         termsError: 'You need to agree to the Terms of Use.',
@@ -281,6 +282,9 @@ const en = {
       SignUpCoolingUser: {
         header: 'Sign Up as a Cooling User or Consumer',
         languageFieldName: 'language',
+      },
+      toasts: {
+        error: 'Please ensure your details are accurate and try again',
       },
     },
     ForgotPassword: {
@@ -335,7 +339,7 @@ const en = {
     noLocationsAvailable:
       'Welcome to Coldtivate. Get started by adding locations to your app in the management panel.',
     MarketPrice: {
-      emptyState: 'Market Prices are not available in your country',
+      emptyState: 'Crop Prices are not available in your country',
       commodityLabel: 'Commodity',
       commodityModalTitle: 'Select a commodity',
       Trend: {
@@ -640,6 +644,10 @@ const en = {
           street: 'Street',
           streetNumber: 'Street Number',
         },
+        fieldErrorMessages: {
+          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)',
+          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)',
+        },
         modal: {
           message:
             'This operation will delete all cooling units associated with this location. Do you want to continue?',
@@ -651,6 +659,11 @@ const en = {
           addLocationSuccess: 'Successfully added location',
           editLocationSuccess: 'Successfully edited location',
           removeLocationSuccess: 'Location {{name}} was successfully deleted.',
+          failedToFetchLocation:
+            'Unable to retrieve the location. Please check the address and try again.',
+          positionCancelled: 'Location request canceled.',
+          positionUnauthorized: 'Location denied. Please grant permission to continue.',
+          locationUnavailable: 'Location disabled. Please enable to continue.',
         },
       },
       Operators: {
@@ -676,7 +689,7 @@ const en = {
           operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
         },
         toasts: {
-          error: 'Phone already assigned. Try a different one',
+          error: 'Please check the information provided and try again',
           success: 'Successfully invited operator',
         },
         phoneFormat: 'Make sure the entered phone number has a country code.',
@@ -710,6 +723,7 @@ const en = {
         },
         toasts: {
           success: 'Successfully edited',
+          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.',
         },
       },
       RegisteredEmployee: {
@@ -913,6 +927,11 @@ const en = {
       },
     },
     Marketplace: {
+      sorting: {
+        priceAsc: 'Price ascending',
+        priceDesc: 'Price descending',
+        nearMe: 'Nearby me',
+      },
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
       addToCart: {
         addToCartButton: 'Add to cart and continue shopping',
@@ -1330,6 +1349,7 @@ const en = {
           co2: '💨 CO2e emitted for cooling',
           co2EmissionsLabel: 'CO2e emissions (kg)',
           co2DistributionLabel: 'CO2e crop distribution',
+          co2Kg: 'Kg CO2 emitted',
         },
         impactTab: {
           occupancyLabel: '🏘️ Average occupancy of cooling units',
@@ -1455,7 +1475,7 @@ const en = {
       farmersUnitsPlanner:
         'In the tab "Cooling Units" you can find the Map, the current and future occupancy of the room (in "Planner") and the temperature of the room (in "Room conditions"). These screens help you monitor remotely what is happening at the cold rooms, without having to go there in person to check!',
       marketPrice:
-        'If you see a tab named "Market Price", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.',
+        'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.',
       farmerFinalStep:
         'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
     },

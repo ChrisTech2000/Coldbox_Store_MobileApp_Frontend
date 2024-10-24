@@ -48,7 +48,7 @@ export default function CropHarvest(props: {
       <Text tw="text-base mb-1">
         {t('Dashboard.CrateManagement.CheckIn.Setup.harvestDateLabel')}*
       </Text>
-      {hasError ? <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">{hasError}</Text> : null}
+      {hasError ? <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">{errorMessage}</Text> : null}
       <Controller
         name="dateHarvested"
         control={formControl}
