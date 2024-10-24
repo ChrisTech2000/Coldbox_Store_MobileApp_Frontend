@@ -1,0 +1,32 @@
+# The Apple Developer Portal account
+username("dev@mosano.eu")
+
+# Your app identifier (e.g., bundle ID)
+app_identifier(["com.base.coldtivate"])
+
+# The team ID associated with your Apple Developer account
+team_id("JS75VC2AMT")
+
+# The repository where the certificates and profiles will be stored
+git_url("git@gitlab.com:b1866/coldtivate/sensitive-repositories/fastlane.git")
+
+# The branch where certificates and profiles will be stored
+git_branch("main")
+
+# Certificate type
+type("appstore") # Can be "development", "appstore", "adhoc", "enterprise"
+
+# Additional configurations
+shallow_clone(true)        # Faster clone, requires less data transfer
+
+# Automatically add new devices for AdHoc/Development builds
+force_for_new_devices(true)
+
+# Optional: Force profile/certificate renewal (not typically used)
+# force(true)
+
+# Path to where the local copies of the certificates/profiles will be stored
+storage_mode("git")  # Options: "git", "google_cloud", "s3", "gitlab_ci_secure_files"
+
+# Set readonly based on whether the build is in CI
+readonly(ENV['CI'] == 'true')
