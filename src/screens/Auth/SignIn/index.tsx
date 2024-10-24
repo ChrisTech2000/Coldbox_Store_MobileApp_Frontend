@@ -238,6 +238,8 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
               left={<TextInput.Icon icon="phone" />}
               onChangeText={onChange}
               value={value}
+              autoCorrect={false}
+              autoCapitalize="none"
             />
           )}
           name="user"
