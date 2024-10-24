@@ -295,6 +295,7 @@ const en = {
         'In order to reset your password, please enter the phone number with it&apos;s country code, to which the account is connected.',
       phoneInputLabel: 'Phone Number',
       resetButton: 'Reset',
+      requestLimitMessage: 'Request limit reached. Try again in 2 hours.',
       link: {
         partOne: 'Click on this link to reset your password {{baseLink}}',
       },
