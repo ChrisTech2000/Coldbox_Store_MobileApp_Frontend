@@ -53,7 +53,13 @@ export default class HttpClient {
         return response;
       },
       async (exception: AxiosError) => {
-        if (exception.response?.status === 401) {
+        const config = exception.config;
+
+        // eslint-disable-next-line
+        // @ts-ignore
+        const ignoreUnauthorized = config?.ignoreUnauthorized;
+
+        if (exception.response?.status === 401 && !ignoreUnauthorized) {
           if (typeof this.options.onUnauthorized !== 'function') {
             throw exception;
           }
@@ -61,15 +67,6 @@ export default class HttpClient {
           this.options.onUnauthorized();
 
           return Promise.reject(exception);
-          // const headers = this._buildHeaders();
-
-          // return this.axios.request({
-          //   ...exception.config,
-          //   headers: {
-          //     ...exception.config?.headers,
-          //     ...headers,
-          //   },
-          // });
         }
 
         if (exception.response?.status === 403) {

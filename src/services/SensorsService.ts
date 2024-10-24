@@ -27,7 +27,11 @@ class SensorsService extends HttpClient {
           ...params,
           type: 'ecozen',
         },
-        undefined,
+        {
+          // eslint-disable-next-line
+          // @ts-ignore
+          ignoreUnauthorized: true,
+        },
         ['machineID']
       );
       return data;
@@ -47,7 +51,11 @@ class SensorsService extends HttpClient {
           ...params,
           type: 'ubibot',
         },
-        undefined,
+        {
+          // eslint-disable-next-line
+          // @ts-ignore
+          ignoreUnauthorized: true,
+        },
         ['accountKey', 'channelId']
       );
       return data;
@@ -64,7 +72,11 @@ class SensorsService extends HttpClient {
       const { data } = await this.post<VerifyFigorrSensorConnectivityResponse>(
         ESensorEndpoints.FIGORR_CHECK,
         params,
-        undefined,
+        {
+          // eslint-disable-next-line
+          // @ts-ignore
+          ignoreUnauthorized: true,
+        },
         ['apiKey', 'deviceTag']
       );
       return data;
