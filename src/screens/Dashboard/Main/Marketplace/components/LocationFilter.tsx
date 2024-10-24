@@ -2,7 +2,7 @@ import ms from 'ms';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import GetLocation from 'react-native-get-location';
+import GetLocation, { LocationError } from 'react-native-get-location';
 import { Modalize } from 'react-native-modalize';
 import { Button, Portal, TextInput } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -83,20 +83,41 @@ export default function MarketplaceLocationFilter() {
   useEffect(() => {
     async function _getInitialLocation(): Promise<void> {
       const currentLocation = useMarketplaceQueryParams.getState().location;
-      if (currentLocation.length >= 1) return; // safe guard
-      const result = await GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: ms('6 seconds'),
-      });
-      useMarketplaceQueryParams.getState().setParams({
-        location: [result.latitude, result.longitude],
-      });
-      const location = await new Geocoder().getAddressFromCoords({
-        latitude: result.latitude,
-        longitude: result.longitude,
-      });
-      form.setValue('cityName', location.city);
+
+      function _setLocation(location: [number, number]): void {
+        useMarketplaceQueryParams.getState().setParams({ location });
+      }
+
+      try {
+        const result = await GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: ms('6 seconds'),
+        });
+
+        const nextValue: [number, number] = [result.latitude, result.longitude];
+        if (JSON.stringify(nextValue) === JSON.stringify(currentLocation)) return;
+
+        _setLocation(nextValue);
+        const location = await new Geocoder().getAddressFromCoords({
+          latitude: nextValue[0],
+          longitude: nextValue[1],
+        });
+        form.setValue('cityName', location.city);
+      } catch (exception) {
+        if (exception instanceof LocationError) {
+          switch (exception.code) {
+            case 'UNAUTHORIZED': {
+              if (currentLocation.length >= 1) return;
+              return _setLocation([0, 0]);
+            }
+            default:
+              return;
+          }
+        }
+        console.error(exception);
+      }
     }
+
     void _getInitialLocation();
   }, []);
 
