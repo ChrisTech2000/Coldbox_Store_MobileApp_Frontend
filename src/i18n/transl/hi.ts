@@ -297,9 +297,7 @@ export default {
         'अपना पासवर्ड रीसेट करने के लिए, कृपया फोन नंबर दर्ज करें जिसके साथ देश कोड है, जिससे खाता जुड़ा हुआ है।',
       phoneInputLabel: 'फोन नंबर',
       resetButton: 'रीसेट',
-      link: {
-        partOne: 'अपना पासवर्ड रीसेट करने के लिए इस लिंक पर क्लिक करें {{baseLink}}',
-      },
+      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
     },
     ResetPassword: {
       schema: {
