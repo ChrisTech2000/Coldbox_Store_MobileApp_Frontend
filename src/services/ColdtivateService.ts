@@ -548,19 +548,14 @@ class ColdtivateService extends HttpClient {
 
   public sendOperatorInvitation = async (params: SendOperatorInvitationParams) => {
     try {
-      const { phone, coolingUnits, userId, message, url } = params;
+      const { phone, coolingUnits, userId } = params;
       const { data } = await this.post<Array<GetOperatorsResponse>>(
         EUserEndpoints.INVITE_OPERATOR,
         {
-          urlOne: url.partOne,
-          urlTwo: url.partTwo,
           coolingUnits,
           userId,
           phone,
-          ...message,
-        },
-        undefined,
-        ['partOne', 'partTwo', 'urlOne', 'urlTwo']
+        }
       );
       return data;
     } catch (error) {
@@ -572,19 +567,14 @@ class ColdtivateService extends HttpClient {
 
   public sendEmployeeInvitation = async (params: SendOperatorInvitationParams) => {
     try {
-      const { phone, coolingUnits, userId, message, url } = params;
+      const { phone, coolingUnits, userId } = params;
       const { data } = await this.post<Array<GetOperatorsResponse>>(
         EUserEndpoints.INVITE_EMPLOYEE,
         {
-          urlOne: url.partOne,
-          urlTwo: url.partTwo,
           coolingUnits,
           userId,
           phone,
-          ...message,
-        },
-        undefined,
-        ['partOne', 'partTwo', 'urlOne', 'urlTwo']
+        }
       );
       return data;
     } catch (error) {

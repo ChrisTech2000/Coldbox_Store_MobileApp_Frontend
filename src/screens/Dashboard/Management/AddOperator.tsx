@@ -19,12 +19,10 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { DEEP_LINK_URL } from '#navigation/deepLinking';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { ERoles, MAP_ROLES } from '#types/global';
 import validator from 'validator';
 
 type FormValues = {
@@ -102,21 +100,10 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
     const userId = useAuthStore.getState().user?.id;
     if (!userId) return; // safe guard
 
-    const head = `${DEEP_LINK_URL}/invite/`;
-    const tail = `/${MAP_ROLES[ERoles.OPERATOR]}/${values.phoneNumber}`;
-
     try {
       await ColdtivateService.sendOperatorInvitation({
         phone: values.phoneNumber,
         coolingUnits: values.coolingUnits,
-        message: {
-          partOne: t('Dashboard.Management.AddOperator.messages.operator', { link: head }),
-          partTwo: tail,
-        },
-        url: {
-          partOne: head,
-          partTwo: tail,
-        },
         userId,
       });
 

@@ -299,9 +299,6 @@ export default {
       phoneInputLabel: 'Número de Telefone',
       resetButton: 'Redefinir',
       requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
-      link: {
-        partOne: 'Clique neste link para redefinir a sua palavra-passe {{baseLink}}',
-      },
     },
     ResetPassword: {
       schema: {

@@ -298,9 +298,6 @@ export default {
       phoneInputLabel: 'ଫୋନ୍ ନମ୍ବର',
       resetButton: 'ପୁନର୍ନିର୍ମାଣ',
       requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
-      link: {
-        partOne: 'ପାସ୍‌ୱାର୍ଡ ରିସେଟ୍ କରିବାକୁ ଏହି ଲିଙ୍କ୍ କ୍ଲିକ୍ କରନ୍ତୁ {{baseLink}}',
-      },
     },
     ResetPassword: {
       schema: {

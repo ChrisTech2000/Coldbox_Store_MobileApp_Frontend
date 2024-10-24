@@ -7,10 +7,9 @@ import validator from 'validator';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import { DEEP_LINK_URL } from '#navigation/deepLinking';
 import AuthService from '#services/AuthService';
+import InAppNotifications from '#common/InAppNotifications';
 
 type PasswordRecoverySchema = { phone: string };
 
@@ -37,14 +36,9 @@ function PasswordRecoveryRequest() {
 
   const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(
     async (values) => {
-      const partOne = t('Auth.ForgotPassword.link.partOne', {
-        baseLink: `${DEEP_LINK_URL}/password-reset/`,
-      });
-
       try {
         await AuthService.requestResetPassword({
           phoneNumber: values.phone,
-          link: { partOne, partTwo: `/${values.phone}` },
         });
         // For security reasons, we don't want to inform the user whether the introduced phone exists in our DB or not
         toast.show(t('Auth.ForgotPassword.messageSentNotification'), {

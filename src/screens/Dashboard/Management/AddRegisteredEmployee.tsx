@@ -13,15 +13,13 @@ import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import InAppNotifications from '#common/InAppNotifications';
-import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import { DEEP_LINK_URL } from '#navigation/deepLinking';
-import ColdtivateService from '#services/ColdtivateService';
+import { useTranslationUtils } from '#i18n/utils';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import ColdtivateService from '#services/ColdtivateService';
+import InAppNotifications from '#common/InAppNotifications';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { ERoles, MAP_ROLES } from '#types/global';
 
 type FormValues = {
   phoneNumber: string;
@@ -71,23 +69,12 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
     const userId = useAuthStore.getState().user?.id;
     if (!userId) return; // safe guard
 
-    const head = `${DEEP_LINK_URL}/invite/`;
-    const tail = `/${MAP_ROLES[ERoles.EMPLOYEE]}/${values.phoneNumber}`;
-
     const coolingUnits = data?.map((coolingUnit) => coolingUnit.id) ?? [];
 
     try {
       await ColdtivateService.sendEmployeeInvitation({
         coolingUnits,
         phone: values.phoneNumber,
-        message: {
-          partOne: t('Dashboard.Management.AddRegisteredEmployee.message', { link: head }),
-          partTwo: tail,
-        },
-        url: {
-          partOne: head,
-          partTwo: tail,
-        },
         userId,
       });
 

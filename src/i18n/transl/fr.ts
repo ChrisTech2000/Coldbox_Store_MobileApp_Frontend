@@ -300,9 +300,6 @@ export default {
       phoneInputLabel: 'Numéro de téléphone',
       resetButton: 'Réinitialiser',
       requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
-      link: {
-        partOne: 'Cliquez sur ce lien pour réinitialiser votre mot de passe {{baseLink}}',
-      },
     },
     ResetPassword: {
       schema: {

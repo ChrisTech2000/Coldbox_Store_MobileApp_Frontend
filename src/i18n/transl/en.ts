@@ -296,9 +296,6 @@ const en = {
       phoneInputLabel: 'Phone Number',
       resetButton: 'Reset',
       requestLimitMessage: 'Request limit reached. Try again in 2 hours.',
-      link: {
-        partOne: 'Click on this link to reset your password {{baseLink}}',
-      },
     },
     ResetPassword: {
       schema: {
@@ -1158,7 +1155,7 @@ const en = {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} Receipt: 
+        sendSMS: `{{companyName}} - {{movementType}} Receipt:
         Movement code: {{code}}
         Crops: {{crops}}
         Total weight: {{weight}} Kg
