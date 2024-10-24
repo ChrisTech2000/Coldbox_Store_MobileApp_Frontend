@@ -96,6 +96,9 @@ export default function UbibotForm() {
           }));
         } catch (exception) {
           console.error(exception);
+          toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
+            type: 'md_danger',
+          });
         }
         return;
       }
