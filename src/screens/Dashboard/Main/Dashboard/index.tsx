@@ -175,14 +175,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   useEffect(() => {
     if (isTutorialOn) start();
-  }, [isTutorialOn]);
-
-  useEffect(() => {
-    if (user && !user.lastLogin) {
-      console.log(user?.lastLogin);
-      toggleTutorial();
-    }
-  }, [user]);
+    if (user && !user.lastLogin) toggleTutorial();
+  }, [isTutorialOn, user]);
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}>
