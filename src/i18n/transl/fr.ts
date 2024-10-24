@@ -299,6 +299,7 @@ export default {
         'Pour réinitialiser votre mot de passe, veuillez entrer le numéro de téléphone avec son indicatif du pays, auquel le compte est connecté.',
       phoneInputLabel: 'Numéro de téléphone',
       resetButton: 'Réinitialiser',
+      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
     },
     ResetPassword: {
       schema: {

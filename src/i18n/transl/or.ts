@@ -297,6 +297,7 @@ export default {
         'ଆପଣଙ୍କର ପାସ୍‌ୱାର୍ଡ ରିସେଟ୍ କରିବାକୁ, ଦୟାକରି ସେହି ଫୋନ୍ ନମ୍ବର ସହିତ ଦେଶ କୋଡ୍ ଦାଖଲ କରନ୍ତୁ, ଯାହାକି ଖାତା ସହିତ ଯୋଡାଯାଇଛି।',
       phoneInputLabel: 'ଫୋନ୍ ନମ୍ବର',
       resetButton: 'ପୁନର୍ନିର୍ମାଣ',
+      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
     },
     ResetPassword: {
       schema: {

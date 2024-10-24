@@ -298,6 +298,7 @@ export default {
         'Para redefinir a sua palavra-passe, por favor, insira o número de telefone com o respetivo código de país, ao qual a conta está ligada.',
       phoneInputLabel: 'Número de Telefone',
       resetButton: 'Redefinir',
+      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
     },
     ResetPassword: {
       schema: {
