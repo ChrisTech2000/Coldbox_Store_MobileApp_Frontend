@@ -942,6 +942,7 @@ export default {
       currentLocation: 'વર્તમાન સ્થાન',
       filterError:
         'કંઈક ખોટું થયું. કૃપા કરીને ટાઈપો તપાસો અને ખાતરી કરો કે દાખલ કરેલ શહેર નાઈજેરિયામાં આવેલું છે.',
+      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
     },
     AccountDetails: {
       popups: {

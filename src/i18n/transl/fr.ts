@@ -959,6 +959,7 @@ export default {
       currentLocation: 'Localisation actuelle',
       filterError:
         'Une erreur est survenue. Veuillez vérifier les fautes de frappe et vous assurer que la ville saisie est située au Nigéria.',
+      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
     },
     AccountDetails: {
       popups: {

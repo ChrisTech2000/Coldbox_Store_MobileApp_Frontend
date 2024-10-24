@@ -948,6 +948,7 @@ export default {
       currentLocation: 'वर्तमान स्थान',
       filterError:
         'कुछ गलत हो गया। कृपया टाइपो की जांच करें और सुनिश्चित करें कि दर्ज किया गया शहर नाइजीरिया में है।',
+      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
     },
     AccountDetails: {
       popups: {

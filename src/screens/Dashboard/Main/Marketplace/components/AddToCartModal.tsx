@@ -101,6 +101,8 @@ export default function AddToCartModal() {
                 <MarketplaceItemWrapper.BuyAction
                   crateWeight={datum.crateWeight}
                   currencyValue={datum.currencyValue}
+                  companyId={datum.company.id}
+                  coolingUnitId={datum.coolingUnit.id}
                 />
               </MarketplaceItemWrapper>
             ) : null}
