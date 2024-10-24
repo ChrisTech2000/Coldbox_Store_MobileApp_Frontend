@@ -244,9 +244,6 @@ function EditCrateWeightAndPricing(
                     for (let i = 0; i < crateFields.fields.length; i++) {
                       form.setValue(`crates.${i}.isSellable`, !value);
                     }
-                    if (!form.getValues('crates').some((c) => c.isSellable)) {
-                      form.setValue('price', '0');
-                    }
                     onChange(!value);
                   }}
                 >

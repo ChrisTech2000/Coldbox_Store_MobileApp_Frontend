@@ -146,11 +146,9 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
                   onPress={() => {
                     if (allowedToSetPricing) {
+                      const isSellable = form.getValues('crates.0.isSellable');
                       for (let i = 0; i < crateFields.fields.length; i++) {
-                        form.setValue(`crates.${i}.isSellable`, !value);
-                      }
-                      if (!form.getValues('crates').some((c) => c.isSellable)) {
-                        form.setValue('price', '0');
+                        form.setValue(`crates.${i}.isSellable`, isSellable);
                       }
                     }
                     onChange(!value);
@@ -213,6 +211,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                           value={value}
                           defaultValue="0"
                           placeholder="0"
+                          editable={false}
                           onChangeText={(text) => {
                             if (!applyToAll) return onChange(text);
                             for (let i = 0; i < crateFields.fields.length; i++) {
@@ -276,16 +275,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                                 }
                               }
                             }
-                            if (allowedToSetPricing) {
-                              if (!form.getValues('crates').some((c) => c.isSellable)) {
-                                form.setValue('price', '0');
-                              }
-                            }
                           }}
                           disabled={isDisabled}
                         >
                           <Checkbox
-                            status={applyToAll || value ? 'checked' : 'unchecked'}
+                            status={value ? 'checked' : 'unchecked'}
                             disabled={isDisabled}
                           />
                           <Text tw={cn('text-base', isDisabled && 'text-gray-300')}>
@@ -383,12 +377,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             // eslint-disable-next-line
             onPress={form.handleSubmit(onSubmit as any)}
             disabled={
-              !allowedToSetPricing
-                ? typeof form.formState.errors.crates !== 'undefined' || form.formState.isSubmitting
-                : typeof form.formState.errors.crates !== 'undefined' ||
-                  !crates.some((c) => c.isSellable) ||
-                  !price ||
-                  form.formState.isSubmitting
+              !!form.formState.errors.crates ||
+              !!form.formState.errors.price ||
+              form.formState.isSubmitting ||
+              !form.formState.isDirty ||
+              !form.getValues('price')
             }
           >
             {t('actions.save-changes')}
