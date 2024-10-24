@@ -1,5 +1,5 @@
-import React, { type PropsWithChildren } from 'react';
-import { View } from 'react-native';
+import React, { useState, type PropsWithChildren } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -67,21 +67,21 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
         {props.shelfLife !== null ? (
           <View tw="flex-row items-center space-x-2">
             <MaterialCommunityIcon name="timer-outline" size={23} color={iconColor} />
-            <Text variant="TextMedium" tw={cn('text-base', textColor)}>
+            <Text variant="TextMedium" tw={cn('text-sm', textColor)}>
               {props.shelfLife} {t('Dashboard.ShoppingCart.daysLeft')}
             </Text>
           </View>
         ) : null}
 
         <View tw="my-1.5">
-          <Text variant="TextMedium" tw="text-xl">
+          <Text variant="TextMedium" tw="text-lg">
             {props.cropName}
           </Text>
           <Text tw="text-base text-gray-500">{props.movementCode}</Text>
         </View>
       </View>
 
-      <FastImage tw="w-24 h-20" resizeMode="contain" source={{ uri: props.cropImageUri }} />
+      <FastImage tw="w-14 h-14" resizeMode="contain" source={{ uri: props.cropImageUri }} />
     </View>
   );
 };
@@ -93,7 +93,7 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
 }) {
   if (props.readOnly) {
     return (
-      <Text tw="text-base text-gray-500 py-2">
+      <Text tw="text-sm text-gray-500 py-2">
         {props.company.name}&nbsp;-&nbsp;{props.coolingUnitName}
       </Text>
     );
@@ -140,7 +140,7 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
         size={19}
         color={paperTheme.colors.primary}
       />
-      <Text tw="text-base text-gray-500">
+      <Text tw="text-sm text-gray-500">
         {props.company.name}&nbsp;-&nbsp;{props.coolingUnitName}
       </Text>
     </Touchable>
@@ -150,10 +150,13 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
 MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
   crateWeight: number;
   currencyValue: string;
+  standardWeight: number;
   onAddFunc?: () => void;
 }) {
   const { t } = useTranslationUtils();
   const hasAction = typeof props.onAddFunc === 'function';
+
+  const [isTooltipShowing, setIsTooltipShowing] = useState<boolean>();
 
   return (
     <React.Fragment>
@@ -161,11 +164,17 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
 
       <View tw="flex-row items-center py-1 justify-between">
         <View tw={cn('flex-row items-center justify-between pr-2', hasAction ? 'w-3/4' : 'w-full')}>
-          <Text variant="TextMedium" tw="text-base">
-            {props.crateWeight}
-            {t('Dashboard.ShoppingCart.weight')}
-          </Text>
-          <Text variant="TextMedium" tw="text-base">
+          <View tw="flex flex-row items-center space-x-1">
+            <Text variant="TextMedium" tw="text-sm">
+              {props.crateWeight}
+              {t('Dashboard.ShoppingCart.weight')}
+            </Text>
+            <TouchableOpacity onPress={() => setIsTooltipShowing(!isTooltipShowing)}>
+              <MaterialCommunityIcon name="information-outline" size={15} />
+            </TouchableOpacity>
+          </View>
+
+          <Text variant="TextMedium" tw="text-sm">
             {props.currencyValue} {t('Dashboard.ShoppingCart.perKg')}
           </Text>
         </View>
@@ -183,11 +192,19 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
               }}
             >
               <MaterialCommunityIcon name="cart-plus" size={19} color={paperTheme.colors.primary} />
-              <Text variant="TextMedium" tw="text-base text-green-primary uppercase">
+              <Text variant="TextMedium" tw="text-sm text-green-primary uppercase">
                 {t('actions.add')}
               </Text>
             </Touchable>
           </React.Fragment>
+        ) : null}
+
+        {isTooltipShowing ? (
+          <View tw="absolute bottom-8 left-4 bg-gray-800 rounded-md px-2 py-1">
+            <Text tw="text-white">
+              {t('Dashboard.Marketplace.standardCrateWeight', { value: props.standardWeight })}
+            </Text>
+          </View>
         ) : null}
       </View>
     </React.Fragment>

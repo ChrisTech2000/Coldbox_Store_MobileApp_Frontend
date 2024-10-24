@@ -56,6 +56,7 @@ export default function MarketplaceList() {
               <MarketplaceItemWrapper.BuyAction
                 currencyValue={item.currencyValue}
                 crateWeight={item.crateWeight}
+                standardWeight={item.coolingUnit.standardWeight}
                 onAddFunc={() => {
                   emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL, item);
                 }}
@@ -130,6 +131,7 @@ function _NearbyMeSection(props: {
           <MarketplaceItemWrapper.BuyAction
             crateWeight={item.crateWeight}
             currencyValue={item.currencyValue}
+            standardWeight={item.coolingUnit.standardWeight}
             onAddFunc={() => {
               emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL, item);
             }}
