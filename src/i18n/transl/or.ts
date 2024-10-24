@@ -947,6 +947,7 @@ export default {
       currentLocation: 'ବର୍ତ୍ତମାନ ଅବସ୍ଥାନ',
       filterError:
         'କିଛି ଭୁଲ ହେବାରୁ ବିକଳ୍ପ ଗଡ଼ିଛି। ଦୟାକରି ଟାଇପୋରେ ତାଲିକା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଦିଆଯାଇଥିବା ସହର ନାଇଜେରିଆରେ ଅବସ୍ଥିତ।',
+      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
     },
     AccountDetails: {
       popups: {

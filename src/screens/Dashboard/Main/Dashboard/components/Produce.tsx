@@ -50,7 +50,7 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
     <View tw="flex flex-row w-[90%] mr-2 self-center mt-3" onLayout={onLayout}>
       <View
         tw={cn(
-          'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
+          'bg-green-400 w-2 rounded-l-lg border-y-4 border-green-400',
           produce.minimumRemainingShelfLife <= 7 &&
             produce.minimumRemainingShelfLife > 2 &&
             'bg-yellow-400 border-yellow-400',
@@ -60,7 +60,7 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
         )}
       />
 
-      <View tw="h-full w-full bg-white rounded-sm border border-l-0 border-gray-300 py-2 pl-2 pr-10 space-y-3">
+      <View tw="h-full w-full bg-white rounded-r-lg border border-l-0 border-gray-300 py-2 pl-2 pr-10 space-y-3">
         <View tw="flex flex-row w-full justify-between items-start">
           <View tw="space-y-1">
             {!isNil(produce.minimumRemainingShelfLife) ? (

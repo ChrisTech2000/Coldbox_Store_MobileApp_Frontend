@@ -942,6 +942,7 @@ const en = {
       currentLocation: 'Current location',
       filterError:
         'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.',
+      standardCrateWeight: 'Standard weight of crate is {{value}} kg',
     },
     AccountDetails: {
       popups: {

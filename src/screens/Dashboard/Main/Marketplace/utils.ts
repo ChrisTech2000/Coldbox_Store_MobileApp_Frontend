@@ -31,6 +31,7 @@ export type AvailableListingDatum = {
   coolingUnit: {
     id: number;
     name: string;
+    standardWeight: number;
   };
   distance: number;
   currencyValue: string;
@@ -141,6 +142,7 @@ export function useMarketplaceListing() {
           coolingUnit: {
             id: contextualUnit?.id ?? 0,
             name: contextualUnit?.name ?? '',
+            standardWeight: contextualUnit?.crateWeight ?? 0,
           },
           crop: {
             id: contextualCrop?.id ?? 0,
