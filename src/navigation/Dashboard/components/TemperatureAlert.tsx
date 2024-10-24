@@ -124,7 +124,7 @@ export default function TemperatureAlert() {
       <Modal visible={isVisible} onDismiss={dismissHandler}>
         <KeyboardAwareScrollView
           contentContainerStyle="items-center"
-          tw="w-full bg-white rounded-3xl w-11/12 max-w-11/12 h-auto max-h-[95%] py-4 px-5 self-center space-y-2 mb-4"
+          tw="bg-white rounded-3xl w-11/12 max-w-11/12 h-auto max-h-[95%] py-4 px-5 self-center space-y-2 mb-4"
         >
           <View tw="flex items-center justify-center space-y-1">
             <Icon name="warning" size={40} color={colors.yellow[400]} />
@@ -227,6 +227,7 @@ export default function TemperatureAlert() {
               {t('Dashboard.TemperatureAlert.confirm')}
             </Button>
             <Button
+              tw="mb-6"
               mode="contained"
               onPress={async (evt) => {
                 evt?.stopPropagation();

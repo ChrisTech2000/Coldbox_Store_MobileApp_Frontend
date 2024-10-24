@@ -10,13 +10,6 @@ export interface ProduceCrate extends Omit<Produce, 'crop' | 'harvestDate'> {
   price: number | undefined;
 }
 
-const initialState = {
-  checkOutCode: null,
-  produces: [],
-  coolingUnit: null,
-  user: null,
-};
-
 type State = {
   produces: ProduceCrate[];
   coolingUnit: CoolingUnit | null;
@@ -35,7 +28,10 @@ type Actions = {
 };
 
 export const useCheckInStore = create<State & Actions>((set, get) => ({
-  ...initialState,
+  checkOutCode: null,
+  produces: [],
+  coolingUnit: null,
+  user: null,
 
   removeProduce: (produce: ProduceCrate) => {
     const currentProduces = get().produces;
@@ -49,7 +45,13 @@ export const useCheckInStore = create<State & Actions>((set, get) => ({
     set({ produces: currentProduces });
   },
 
-  resetCheckInStore: () => set(initialState),
+  resetCheckInStore: () =>
+    set({
+      checkOutCode: null,
+      produces: [],
+      coolingUnit: null,
+      user: null,
+    }),
   setCoolingUnit: (coolingUnit: CoolingUnit | null) => set({ coolingUnit }),
   setUser: (user: Farmer | null) => set({ user }),
   setCheckOutCode: (value: string | null) => set({ checkOutCode: value }),

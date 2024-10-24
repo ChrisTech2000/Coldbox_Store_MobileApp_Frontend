@@ -373,7 +373,12 @@ class MarketplaceService extends HttpClient {
       const { crateId, ...rest } = params;
       await this.delete(
         subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }),
-        { params: rest }
+        {
+          params: {
+            operator_on_behalf_of_seller_farmer_id: rest.operatorOnBehalfOfSellerFarmerId,
+            operator_on_behalf_of_seller_user_id: rest.operatorOnBehalfOfSellerUserId,
+          },
+        }
       );
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

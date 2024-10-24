@@ -75,7 +75,7 @@ export default function TemperatureModal(props: Props) {
 
       <Portal>
         <Modal visible={isModalOpen} onDismiss={toggleModalVisibility}>
-          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-5">
+          <View tw="items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-5">
             <View tw="items-start w-full">
               <Text variant="TitleSmall">
                 {t('Dashboard.CoolingUnitsRoomConditions.enterTemperature')}
