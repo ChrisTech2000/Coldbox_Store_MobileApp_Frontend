@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import { Divider, Icon, Switch } from 'react-native-paper';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -40,8 +40,11 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const toast = InAppNotifications.useToast();
   const { guard } = RBAC.useRBAC();
 
-  const { company } = useManagementStore();
-  const { selectedItem: paymentType } = usePaymentTypeStore();
+  const company = useManagementStore((store) => store.company);
+  const [paymentType, resetPaymentStore] = usePaymentTypeStore((store) => [
+    store.selectedItem,
+    store.reset,
+  ]);
   const { refreshData } = useDashboardStore();
 
   const [discount, setDiscount] = useState<number>(0);
@@ -139,6 +142,10 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
     rootNavigation.navigate('RootMainTabStack');
   }, [user, crates, discount, currency, paymentType, isPaid, refreshData, guard, coolingUnit?.id]);
+
+  useEffect(() => {
+    return () => resetPaymentStore();
+  }, []);
 
   return (
     <View tw="flex-1 p-4">
