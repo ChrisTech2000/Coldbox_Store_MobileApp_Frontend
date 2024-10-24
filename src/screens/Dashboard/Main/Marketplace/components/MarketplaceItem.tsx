@@ -15,7 +15,6 @@ import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import ColdtivateService from '#services/ColdtivateService';
-import { useApiCall } from '#services/hooks/useAPiCall';
 
 import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
 
@@ -151,28 +150,13 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
 MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
   crateWeight: number;
   currencyValue: string;
-  coolingUnitId: number;
-  companyId: number;
+  standardWeight: number;
   onAddFunc?: () => void;
 }) {
-  const { coolingUnitId, companyId } = props;
   const { t } = useTranslationUtils();
   const hasAction = typeof props.onAddFunc === 'function';
 
   const [isTooltipShowing, setIsTooltipShowing] = useState<boolean>();
-
-  const { data } = useApiCall(
-    'getCoolingUnit',
-    ColdtivateService.getCoolingUnit,
-    {
-      coolingUnitId,
-      companyId,
-    },
-    {
-      skip: !coolingUnitId || !companyId,
-      defaultData: undefined,
-    }
-  );
 
   return (
     <React.Fragment>
@@ -218,7 +202,7 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
         {isTooltipShowing ? (
           <View tw="absolute bottom-8 left-4 bg-gray-800 rounded-md px-2 py-1">
             <Text tw="text-white">
-              {t('Dashboard.Marketplace.standardCrateWeight', { value: data.crateWeight ?? '' })}
+              {t('Dashboard.Marketplace.standardCrateWeight', { value: props.standardWeight })}
             </Text>
           </View>
         ) : null}
