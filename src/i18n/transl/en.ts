@@ -666,6 +666,7 @@ const en = {
           positionCancelled: 'Location request canceled.',
           positionUnauthorized: 'Location denied. Please grant permission to continue.',
           locationUnavailable: 'Location disabled. Please enable to continue.',
+          locationSubmissionError: 'An error occurred. Please review your location and try again.',
         },
       },
       Operators: {
