@@ -1,16 +1,20 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 
 import { EFarmerTutorialSteps } from './utils/constants';
+
+const screenHeight = Dimensions.get('window').height;
 
 export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
@@ -19,13 +23,29 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
 
   return (
     <View tw="h-full w-full absolute">
-      <View tw="bg-white absolute left-3 top-[41%] w-[60%] h-auto p-3 rounded-md flex flex-row items-center space-x-2">
+      <View
+        tw={cn(
+          'bg-white absolute left-3 w-[60%] h-auto p-3 rounded-md flex flex-row items-center space-x-2',
+          user?.role === ERoles.COOLING_USER
+            ? screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-[31%]'
+              : 'top-[27%]'
+            : 'top-[41%]'
+        )}
+      >
         <Icon source="card-multiple-outline" size={20} />
         <Text tw="text-base">{t('navigation.dashboard.Tutorial')}</Text>
       </View>
 
       <View
-        tw="absolute left-3 top-1/2 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-3 w-[90%] h-auto bg-white p-3 rounded-md z-30',
+          user?.role === ERoles.COOLING_USER
+            ? screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-[40%]'
+              : 'top-1/3'
+            : 'top-1/2'
+        )}
         style={[
           {
             shadowColor: '#000',
