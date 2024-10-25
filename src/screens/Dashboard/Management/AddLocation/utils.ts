@@ -24,7 +24,7 @@ export class Geocoder {
     const result = await this._client.forwardGeocode({ query: address, limit: 1 }).send();
 
     const location = result?.body?.features?.at(0)?.center;
-    if (typeof location === 'undefined' || location.length !== 1) {
+    if (typeof location === 'undefined' || location.length !== 2) {
       throw new Error('No results found');
     }
 

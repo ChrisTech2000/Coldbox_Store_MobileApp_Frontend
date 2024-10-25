@@ -63,6 +63,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
           datums = merge(rest, address);
         } catch (exception) {
           console.error(exception);
+          return;
         }
         break;
       }
@@ -75,6 +76,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
             type: 'md_danger',
           });
           console.error(exception);
+          return;
         }
         break;
       }
