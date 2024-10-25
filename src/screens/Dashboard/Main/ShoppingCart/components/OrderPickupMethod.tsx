@@ -1,8 +1,8 @@
 import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { ActivityIndicator, Divider, IconButton, Portal, RadioButton } from 'react-native-paper';
+import { ActivityIndicator, Divider, Icon, Portal, RadioButton } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -81,24 +81,26 @@ export default function OrderPickupMethod({ coolingUnitsIds }: OrderPickupMethod
   return (
     <React.Fragment>
       <View tw="flex flex-row items-center">
-        <Text tw="text-base text-green-primary font-bold">
-          {t('Dashboard.ShoppingCart.pickupMethods')}*
-        </Text>
-        <IconButton
-          tw="p-0 m-0"
-          icon={
-            cartData?.pickupDetails && cartData.pickupDetails.length > 0
-              ? 'pencil'
-              : 'plus-circle-outline'
-          }
-          size={17}
-          iconColor={colors.green.primary}
-          containerColor={colors.transparent}
+        <TouchableOpacity
           onPress={(evt) => {
             evt.stopPropagation();
             modalRef.current?.open();
           }}
-        />
+          tw="flex flex-row items-center"
+        >
+          <Text tw="text-base text-green-primary font-bold mr-1">
+            {t('Dashboard.ShoppingCart.pickupMethods')}*
+          </Text>
+          <Icon
+            source={
+              cartData?.pickupDetails && cartData.pickupDetails.length > 0
+                ? 'pencil'
+                : 'plus-circle-outline'
+            }
+            size={17}
+            color={colors.green.primary}
+          />
+        </TouchableOpacity>
       </View>
 
       <Portal>
