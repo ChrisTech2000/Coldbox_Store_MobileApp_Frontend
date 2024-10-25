@@ -590,6 +590,7 @@ export default {
       days: 'દિવસ',
       noDTMessage: 'આ ખાસ માલ માટે Shelf-life મોડલ ઉપલબ્ધ નથી.',
       checkOutButton: 'ચેક આઉટ',
+      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
     },
     SearchFilter: {
       detailsMessage:

@@ -15,6 +15,7 @@ image: ${CI_REGISTRY_IMAGE}:ci
   - yarn install --frozen-lockfile
 
 .bundler-install: &bundler-install
+  - gem install bundler -v 2.4.22
   - bundler config set path ~/.bundler
   - bundler install
 
@@ -119,7 +120,7 @@ build ci image:
   script:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
     - export VERSION_ID=${CI_COMMIT_REF_NAME}
-    - if [ "$VERSION_ID" == "" ]; then  git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
+    - if [ "$VERSION_ID" == "" ]; then git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
     - bundler exec fastlane android "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:
@@ -153,7 +154,7 @@ build ci image:
   script:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
     - export VERSION_ID=${CI_COMMIT_REF_NAME}
-    - if [ "$VERSION_ID" == "" ]; then  git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
+    - if [ "$VERSION_ID" == "" ]; then git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
     - bundler exec fastlane ios "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:

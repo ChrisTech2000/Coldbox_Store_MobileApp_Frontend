@@ -3,6 +3,7 @@ import { View, type GestureResponderEvent } from 'react-native';
 import { ActivityIndicator, Modal, Portal } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useShallow } from 'zustand/react/shallow';
+import { useSWRConfig } from 'swr';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -14,12 +15,14 @@ import { ERoles } from '#types/global';
 import { useManagementStore } from '#stores/management';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
+import { resetAllStores } from '#navigation/Dashboard/components/DrawerContent/resetStoresUtil';
 
 import { usePopup } from './utils';
 
 export default function DeleteAccountAction() {
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
+  const { mutate } = useSWRConfig();
 
   const [isProcessing, toggleProcessing] = useToggle(false);
   const [state, { displayPopup, resetPopup }] = usePopup();
@@ -97,6 +100,8 @@ export default function DeleteAccountAction() {
       resetPopup();
       toggleProcessing();
       await ColdtivateService.deleteUser(user.id);
+      resetAllStores();
+      mutate(() => true, undefined, false);
       useAuthStore.getState().revokeSession();
     } catch (exception) {
       console.error(exception);

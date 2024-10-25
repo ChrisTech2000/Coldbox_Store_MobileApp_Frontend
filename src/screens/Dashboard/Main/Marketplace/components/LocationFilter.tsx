@@ -2,7 +2,7 @@ import ms from 'ms';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import GetLocation, { LocationError } from 'react-native-get-location';
+import GetLocation from 'react-native-get-location';
 import { Modalize } from 'react-native-modalize';
 import { Button, Portal, TextInput } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -104,8 +104,10 @@ export default function MarketplaceLocationFilter() {
         });
         form.setValue('cityName', location.city);
       } catch (exception) {
-        if (exception instanceof LocationError) {
-          switch (exception.code) {
+        console.error(exception);
+        if (exception instanceof Error) {
+          const errorCode = 'code' in exception ? exception.code : 'DENIED';
+          switch (errorCode) {
             case 'UNAUTHORIZED': {
               if (currentLocation.length >= 1) return;
               return _setLocation([0, 0]);
@@ -114,7 +116,6 @@ export default function MarketplaceLocationFilter() {
               return;
           }
         }
-        console.error(exception);
       }
     }
 

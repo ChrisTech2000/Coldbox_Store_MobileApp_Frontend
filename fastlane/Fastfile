@@ -178,11 +178,6 @@ platform :ios do
             type: type,
             username: apple_id,
             app_identifier: [ app_identifier ],
-            git_url: "git@gitlab.com:b1866/coldtivate/sensitive-repositories/fastlane.git",
-            git_branch: "main",
-            shallow_clone: true,
-            force_for_new_devices: true,
-            # force: true,
         )
 
         netrc_file = Tempfile.new('netrc')

@@ -10,7 +10,7 @@ RUN apk add --update \
 ENV ANDROID_HOME=/usr/local/android-sdk \
     ANDROID_VERSION=34 \
     ANDROID_BUILD_TOOLS_VERSION=34.0.0 \
-    ANDROID_NDK_VERSION=26.2.11394342 \
+    ANDROID_NDK_VERSION=26.1.10909125 \
     PATH=$PATH:/usr/local/android-sdk/tools/bin:/usr/local/android-sdk/platform-tools
 
 # Download Android SDK and Install Android Build Tool and Libraries

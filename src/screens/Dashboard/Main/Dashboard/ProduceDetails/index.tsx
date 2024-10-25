@@ -97,7 +97,11 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
             {
               key: 'crateWeightLabel',
               label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
-              value: <Icon source="chevron-right" size={25} />,
+              value: (
+                <View tw="self-center">
+                  <Icon source="chevron-right" size={25} />
+                </View>
+              ),
               custom: true,
             },
           ]
@@ -165,6 +169,15 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
     [produce, farmers]
   );
 
+  const amountOfListedCrates = useMemo(
+    () =>
+      produce.checkedInCrates.reduce(
+        (acc, curr) => (curr?.listedInTheMarketplace ? (acc += 1) : acc),
+        0
+      ),
+    [produce]
+  );
+
   return (
     <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -177,17 +190,13 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
             />
             <View tw="space-y-3">
               <View>
-                <Text variant="TextMedium" tw="text-gray-400">
-                  {t('Dashboard.ProduceDetails.coolingUser')}
-                </Text>
-                <Text variant="TextMedium">{produce.owner}</Text>
+                <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.coolingUser')}</Text>
+                <Text>{produce.owner}</Text>
               </View>
               <View>
-                <Text variant="TextMedium" tw="text-gray-400">
-                  {t('Dashboard.ProduceDetails.contact')}
-                </Text>
+                <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.contact')}</Text>
                 <View tw="flex flex-row items-center space-x-2">
-                  <Text variant="TextMedium">{produce.ownerContact}</Text>
+                  <Text>{produce.ownerContact}</Text>
                   <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
                     <Icon source="content-copy" size={20} />
                   </TouchableOpacity>
@@ -236,22 +245,13 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
               </View>
 
               <View tw="flex flex-row items-center justify-between">
-                <Text variant="TextMedium" tw="px-2">
-                  {percentage.toFixed(2)}%
-                </Text>
-                <Text variant="TextMedium" tw="px-2">
-                  {t('Dashboard.ProduceDetails.pickUp')}
-                </Text>
-                <Text
-                  variant="TextMedium"
-                  tw="px-2"
-                >{`${produce.minimumRemainingShelfLife ?? 0} ${t('Dashboard.ProduceDetails.days')}`}</Text>
+                <Text tw="px-2">{percentage.toFixed(2)}%</Text>
+                <Text tw="px-2">{t('Dashboard.ProduceDetails.pickUp')}</Text>
+                <Text tw="px-2">{`${produce.minimumRemainingShelfLife ?? 0} ${t('Dashboard.ProduceDetails.days')}`}</Text>
               </View>
             </View>
           ) : (
-            <Text variant="TextMedium" tw="text-lg px-2">
-              {t('Dashboard.ProduceDetails.noDTMessage')}
-            </Text>
+            <Text tw="text-base px-2">{t('Dashboard.ProduceDetails.noDTMessage')}</Text>
           )}
 
           <View tw="flex flex-row items-center space-x-2">
@@ -273,17 +273,20 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                     tw="p-0 m-0 py-1"
                     title={undefined}
                     left={() => (
-                      <Text variant="TextMedium" tw="text-base">
-                        {item.label}
-                      </Text>
+                      <View tw="flex-col">
+                        <Text tw="text-base">{item.label}</Text>
+                        {item.key === 'crateWeightLabel' ? (
+                          <Text tw="text-sm text-zinc-500">
+                            {t('Dashboard.ProduceDetails.cratesListedForSale', {
+                              amount: amountOfListedCrates,
+                            })}
+                          </Text>
+                        ) : null}
+                      </View>
                     )}
                     right={() => {
                       if (item.custom) return item.value;
-                      return (
-                        <Text variant="TextMedium" tw="text-base text-gray-400">
-                          {item.value ?? '-'}
-                        </Text>
-                      );
+                      return <Text tw="text-base text-gray-400">{item.value ?? '-'}</Text>;
                     }}
                     {...(item.key === 'crateWeightLabel'
                       ? {
