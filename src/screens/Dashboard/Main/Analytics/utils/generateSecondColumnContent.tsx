@@ -18,7 +18,8 @@ export function normalizeName(name: string) {
 export function generateSecondColumnContent(
   sortedData: { key: string; val: number; index: number }[],
   crops: Array<GetAllCropsResponse>,
-  withAmount?: boolean
+  withAmount?: boolean,
+  suffix?: string
 ) {
   return sortedData.map(({ key, val, index }) => {
     if (key.toLowerCase() === 'other') {
@@ -57,7 +58,7 @@ export function generateSecondColumnContent(
         )}
 
         <Text tw={cn('flex-wrap', withAmount ? 'text-lg font-bold' : 'w-24')} numberOfLines={1}>
-          {`${crop?.name ?? startCase(key)}${withAmount ? `: ${val}` : ''}`}
+          {`${crop?.name ?? startCase(key)}${withAmount ? `: ${Number.isFinite(+val) ? (+val % 1 === 0 ? val : (+val).toFixed(2)) : val}` : ''} ${suffix ?? ''}`}
         </Text>
       </View>
     );

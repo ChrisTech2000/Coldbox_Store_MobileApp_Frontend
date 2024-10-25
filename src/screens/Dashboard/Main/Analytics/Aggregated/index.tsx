@@ -139,7 +139,7 @@ export function AggregatedSection() {
         {!configData ? (
           <Configuration openModal={() => setIsModalOpen(true)} />
         ) : (
-          <View tw="space-y-2">
+          <View tw="space-y-2 mb-4">
             <View tw="w-full flex flex-row justify-between items-center mb-2">
               <TouchableOpacity
                 tw="flex flex-row items-center space-x-2 justify-start"
