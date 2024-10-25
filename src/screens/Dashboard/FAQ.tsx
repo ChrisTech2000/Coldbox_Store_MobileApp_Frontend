@@ -61,4 +61,4 @@ function FAQ() {
   );
 }
 
-export default withSafeArea(FAQ);
+export default withSafeArea(FAQ, ['bottom'], true);
