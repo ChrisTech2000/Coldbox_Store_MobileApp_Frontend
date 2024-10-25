@@ -95,6 +95,9 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
+      toast.show(t('Dashboard.Management.Location.toasts.locationSubmissionError'), {
+        type: 'md_danger',
+      });
     }
   }
 

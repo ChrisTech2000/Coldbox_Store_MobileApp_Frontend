@@ -107,13 +107,16 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
         type: 'md_success',
       });
 
-      await Promise.all([
+      await Promise.allSettled([
         mutate(getQueryKey('getLocation', { locationId, companyId })),
         mutate(getQueryKey('getLocations', companyId)),
       ]);
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
+      toast.show(t('Dashboard.Management.Location.toasts.locationSubmissionError'), {
+        type: 'md_danger',
+      });
     }
   }
 

@@ -669,6 +669,7 @@ export default {
           positionCancelled: 'Location request canceled.', // TODO
           positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
           locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
+          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
         },
       },
       Operators: {
