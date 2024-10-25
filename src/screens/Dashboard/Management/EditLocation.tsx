@@ -79,6 +79,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
           datums = merge(rest, address);
         } catch (exception) {
           console.error(exception);
+          return;
         }
         break;
       }
@@ -91,6 +92,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
             type: 'md_danger',
           });
           console.error(exception);
+          return;
         }
         break;
       }
