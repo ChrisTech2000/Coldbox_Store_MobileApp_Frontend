@@ -1,16 +1,45 @@
-import React from 'react';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Dimensions, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { useTranslationUtils } from '#i18n/utils';
-import { cn } from '#ui/lib/cn';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { useTranslationUtils } from '#i18n/utils';
+import { useTutorialStore } from '#stores/tutorial';
+import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerOverlay({ next, step: { mask, onPressMask } }: IOverlayComponentProps) {
+export function DrawerOverlay({ next, stop, step: { mask, onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const colors = useTailwindColors();
+
+  const blinkAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const startBlinking = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(blinkAnim, {
+            toValue: 0,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(blinkAnim, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    };
+
+    startBlinking();
+  }, [blinkAnim]);
 
   return (
     <View tw="h-full w-full absolute">
@@ -23,7 +52,21 @@ export function DrawerOverlay({ next, step: { mask, onPressMask } }: IOverlayCom
           onPressMask?.();
           next();
         }}
-      />
+      >
+        <Animated.View
+          style={[
+            {
+              top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 80 : 110),
+              left: mask.x + 25,
+              opacity: blinkAnim,
+              transform: [{ rotate: '270deg' }],
+            },
+          ]}
+        >
+          <Icon name="touch-app" size={40} color={colors.green.primary} />
+        </Animated.View>
+      </TouchableOpacity>
+
       <View
         tw="absolute bg-white p-3 rounded-md z-30"
         style={[
@@ -38,6 +81,16 @@ export function DrawerOverlay({ next, step: { mask, onPressMask } }: IOverlayCom
         ]}
       >
         <Text tw="text-base">{t('tutorial.steps.openDrawer')}</Text>
+        <Button
+          mode="text"
+          onPress={() => {
+            stop();
+            toggleTutorial();
+          }}
+          labelStyle="text-green-primary"
+        >
+          {t('tutorial.quit')}
+        </Button>
       </View>
     </View>
   );
