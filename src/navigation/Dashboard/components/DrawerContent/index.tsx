@@ -77,6 +77,7 @@ export default function DrawerContent(props: Props) {
     number: ECommonTutorialSteps.REPEAT_TUTORIAL_STEP,
     enableHardwareBack: true,
     OverlayComponent: RepeatTutorialOverlay,
+    fullScreen: true,
   });
 
   const { onLayout: onManagementTabLayout } = useWalkthroughStep({

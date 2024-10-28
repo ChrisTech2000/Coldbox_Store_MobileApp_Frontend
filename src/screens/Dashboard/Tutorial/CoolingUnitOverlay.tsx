@@ -45,14 +45,14 @@ export function CoolingUnitOverlay({ next, goTo, stop, step }: IOverlayComponent
           </Button>
           <Button
             mode="text"
-            onPress={() => {
+            onPress={
               user?.role === ERoles.OPERATOR
                 ? next
                 : () => {
                     goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
                     step.onPressMask?.();
-                  };
-            }}
+                  }
+            }
             tw="bg-green-primary border-green-primary"
             labelStyle="text-white"
           >

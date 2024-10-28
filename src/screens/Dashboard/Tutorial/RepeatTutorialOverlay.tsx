@@ -30,7 +30,9 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
             ? screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-[31%]'
               : 'top-[27%]'
-            : 'top-[41%]'
+            : screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-[41%]'
+              : 'top-[33%]'
         )}
       >
         <Icon source="card-multiple-outline" size={20} />
@@ -44,7 +46,9 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
             ? screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-[40%]'
               : 'top-1/3'
-            : 'top-1/2'
+            : screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-1/2'
+              : 'top-[40%]'
         )}
         style={[
           {
