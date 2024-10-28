@@ -63,11 +63,11 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
         tw={cn(
           'bg-green-400 w-2 rounded-l-lg border-y-4 border-green-400',
           produce.minimumRemainingShelfLife <= 7 &&
-          produce.minimumRemainingShelfLife > 2 &&
-          'bg-yellow-400 border-yellow-400',
+            produce.minimumRemainingShelfLife > 2 &&
+            'bg-yellow-400 border-yellow-400',
           produce.minimumRemainingShelfLife <= 2 && 'bg-red-700 border-red-700',
           (isNil(produce.minimumRemainingShelfLife) || produce.minimumRemainingShelfLife === -1) &&
-          'bg-gray-300 border-gray-300'
+            'bg-gray-300 border-gray-300'
         )}
       />
 
@@ -83,7 +83,7 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
                     produce.minimumRemainingShelfLife > 7
                       ? colors.green[400]
                       : produce.minimumRemainingShelfLife <= 7 &&
-                        produce.minimumRemainingShelfLife > 2
+                          produce.minimumRemainingShelfLife > 2
                         ? colors.yellow[400]
                         : colors.red[700]
                   }
@@ -93,8 +93,8 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
                   tw={cn(
                     'text-green-400 font-bold',
                     produce.minimumRemainingShelfLife <= 7 &&
-                    produce.minimumRemainingShelfLife > 2 &&
-                    'text-yellow-400',
+                      produce.minimumRemainingShelfLife > 2 &&
+                      'text-yellow-400',
                     produce.minimumRemainingShelfLife <= 2 && 'text-red-700'
                   )}
                 >

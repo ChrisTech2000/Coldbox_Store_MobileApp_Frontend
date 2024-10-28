@@ -144,8 +144,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   const dashboardProduces = isTutorialOn
     ? // eslint-disable-next-line
-    // @ts-ignore
-    (MOCKED_DASHBOARD_DATA as DashboardProduce[])
+      // @ts-ignore
+      (MOCKED_DASHBOARD_DATA as DashboardProduce[])
     : user?.role === ERoles.COOLING_USER
       ? farmerDashboardProduces
       : operatorDashboardProduces;
@@ -211,10 +211,10 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-        loadingFarmerDashboardProduces ||
-        loadingOperatorDashboardProduces ||
-        loadingFarmers ||
-        areCoolingUnitsLoading ? (
+      loadingFarmerDashboardProduces ||
+      loadingOperatorDashboardProduces ||
+      loadingFarmers ||
+      areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>
