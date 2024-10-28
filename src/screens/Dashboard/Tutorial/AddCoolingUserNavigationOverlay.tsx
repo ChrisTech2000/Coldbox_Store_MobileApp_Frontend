@@ -89,16 +89,16 @@ export function AddCoolingUserNavigationOverLay({
       >
         <Text tw="text-base text-center">{t('tutorial.steps.navigateToAddCoolingUser')}</Text>
         <Button
-            mode="text"
-            onPress={() => {
-              stop();
-              toggleTutorial();
-            }}
-            labelStyle="text-green-primary"
-            tw="mt-2"
-          >
-            {t('tutorial.quit')}
-          </Button>
+          mode="text"
+          onPress={() => {
+            stop();
+            toggleTutorial();
+          }}
+          labelStyle="text-green-primary"
+          tw="mt-2"
+        >
+          {t('tutorial.quit')}
+        </Button>
       </View>
     </View>
   );

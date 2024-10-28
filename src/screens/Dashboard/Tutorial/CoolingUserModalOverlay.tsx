@@ -11,7 +11,11 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function CoolingUsersModalOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function CoolingUsersModalOverlay({
+  next,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 

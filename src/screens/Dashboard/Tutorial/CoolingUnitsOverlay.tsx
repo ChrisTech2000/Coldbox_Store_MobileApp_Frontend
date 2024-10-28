@@ -78,7 +78,11 @@ export function CoolingUnitsOverlay({
   );
 }
 
-export function RoomConditionsOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function RoomConditionsOverlay({
+  next,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 

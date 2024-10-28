@@ -16,7 +16,11 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function OperatorActionsOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function OperatorActionsOverlay({
+  next,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -74,7 +78,7 @@ export function OperatorActionsOverlay({ next, stop, step: { onPressMask } }: IO
       <View
         tw={cn(
           'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-80' : 'top-[65%]',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-80' : 'top-[65%]'
         )}
         style={[
           {
@@ -102,7 +106,11 @@ export function OperatorActionsOverlay({ next, stop, step: { onPressMask } }: IO
   );
 }
 
-export function CheckInButtonOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function CheckInButtonOverlay({
+  next,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -195,7 +203,7 @@ export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
       <View
         tw={cn(
           'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-4' : 'bottom-12',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-4' : 'bottom-12'
         )}
         style={[
           {
@@ -280,7 +288,11 @@ export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function CheckIn3ScreenOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function CheckIn3ScreenOverlay({
+  next,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const resetCheckInStore = useCheckInStore((store) => store.resetCheckInStore);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
