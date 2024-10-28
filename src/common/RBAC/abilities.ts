@@ -2,6 +2,8 @@ import { defineAbility } from '@casl/ability';
 
 import { ERoles } from '#types/global';
 
+export const DEFAULT_CUSTOMER_TYPE_COUNTRY = 'Nigeria';
+
 export const PERMISSION_KINDS = {
   NAVIGATE: 'NAVIGATE',
   SET: 'SET',
@@ -13,7 +15,7 @@ export type PermissionKinds = keyof typeof PERMISSION_KINDS;
 
 export default function permissionsFactory(role = ERoles.AUTH, contextualCountry: string) {
   return defineAbility((can, cannot) => {
-    const hasCustomerTypeFeatureFlag = contextualCountry === 'Nigeria';
+    const hasCustomerTypeFeatureFlag = contextualCountry === DEFAULT_CUSTOMER_TYPE_COUNTRY;
 
     ///
     // General Rules

@@ -30,7 +30,7 @@ export function usePriceTrendsStore() {
   const { company } = useManagementStore();
 
   const { data: farmer, isLoading: loadingFarmer } = useApiCall(
-    'getFarmer',
+    'getFarmerByUserId',
     ColdtivateService.getFarmerByUserId,
     user?.id as number,
     {
