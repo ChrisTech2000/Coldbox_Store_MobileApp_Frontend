@@ -5,6 +5,7 @@ import { Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useDebouncedCallback } from 'use-debounce';
+import truncate from 'lodash/truncate';
 
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
@@ -88,17 +89,9 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
 
 MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
   company: { name: string; id: number; locationId: number | null };
-  coolingUnitName: string;
   readOnly?: boolean;
+  truncate?: boolean;
 }) {
-  if (props.readOnly) {
-    return (
-      <Text tw="text-sm text-gray-500 py-2">
-        {props.company.name}&nbsp;-&nbsp;{props.coolingUnitName}
-      </Text>
-    );
-  }
-
   const onPressHandler = useDebouncedCallback(async () => {
     if (!props.company.locationId) return;
     const result = await ColdtivateService.getLocation({
@@ -126,9 +119,15 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
     emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, datum);
   }, 600);
 
+  const text = props.truncate ? truncate(props.company.name, { length: 16 }) : props.company.name;
+
+  if (props.readOnly) {
+    return <Text tw="text-sm text-gray-500 py-2">{text}</Text>;
+  }
+
   return (
     <Touchable
-      tw="flex-row items-center justify-center space-x-2.5 px-1.5 py-2 self-start mb-0.5"
+      tw="flex-row items-center justify-center space-x-1.5 px-0.5 py-1.5 self-start"
       rippleColor={colors.zinc[200]}
       onPress={async (evt) => {
         evt.stopPropagation();
@@ -137,12 +136,10 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
     >
       <MaterialCommunityIcon
         name="information-outline"
-        size={19}
+        size={18}
         color={paperTheme.colors.primary}
       />
-      <Text tw="text-sm text-gray-500">
-        {props.company.name}&nbsp;-&nbsp;{props.coolingUnitName}
-      </Text>
+      <Text tw="text-base text-gray-500">{text}</Text>
     </Touchable>
   );
 };

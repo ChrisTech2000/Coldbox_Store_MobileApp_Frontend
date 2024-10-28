@@ -5,7 +5,6 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { Modal, Portal, RadioButton } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
-import capitalize from 'lodash/capitalize';
 import colors from 'tailwindcss/colors';
 
 import { Touchable } from '#ui/components/Touchable';
@@ -18,6 +17,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/MarketplaceStack';
 import { paperTheme } from '#ui/lib/theme';
+import type { TranslationPaths } from '#i18n/index';
 
 import MarketplaceLocationFilter from './LocationFilter';
 import FilterChip from './FilterChip';
@@ -25,6 +25,12 @@ import FilterChip from './FilterChip';
 import { useMarketplaceQueryParams } from '../store';
 
 type InternalSelectionState = Exclude<GetAvailableListingParams['sortBy'], undefined>;
+
+const OPTIONS_TRANSLATIONS: Record<InternalSelectionState, TranslationPaths> = {
+  'price-asc': 'Dashboard.Marketplace.sorting.price-asc',
+  'price-desc': 'Dashboard.Marketplace.sorting.price-desc',
+  'nearby-me': 'Dashboard.Marketplace.sorting.nearby-me',
+};
 
 export default function MarketplaceFiltersSection() {
   const { t } = useTranslationUtils();
@@ -41,8 +47,6 @@ export default function MarketplaceFiltersSection() {
     setInternalSelection(sortBy ?? 'price-asc');
     toggleVisibility();
   }
-
-  const sortLabel = capitalize(sortBy).replace('-', ' '); // TODO: replace with correct translation
 
   return (
     <React.Fragment>
@@ -78,7 +82,9 @@ export default function MarketplaceFiltersSection() {
               toggleVisibility();
             }}
           >
-            <Text tw="text-base text-green-primary">{sortLabel}</Text>
+            <Text tw="text-base text-green-primary">
+              {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+            </Text>
             <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
           </Touchable>
         </View>
@@ -92,21 +98,14 @@ export default function MarketplaceFiltersSection() {
                 value={internalSelection}
                 onValueChange={(value) => setInternalSelection(value as InternalSelectionState)}
               >
-                <RadioButtonItem
-                  label={t('Dashboard.Marketplace.sorting.priceAsc')}
-                  value="price-asc"
-                  tw="flex flex-row-reverse ml-[-10] w-full"
-                />
-                <RadioButtonItem
-                  label={t('Dashboard.Marketplace.sorting.priceDesc')}
-                  value="price-desc"
-                  tw="flex flex-row-reverse ml-[-10] w-full"
-                />
-                <RadioButtonItem
-                  label={t('Dashboard.Marketplace.sorting.nearMe')}
-                  value="nearby-me"
-                  tw="flex flex-row-reverse ml-[-10] w-full"
-                />
+                {Object.keys(OPTIONS_TRANSLATIONS).map((option, itemIdx) => (
+                  <RadioButtonItem
+                    key={`${option}-#${itemIdx}`}
+                    label={t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])}
+                    value={option}
+                    tw="flex flex-row-reverse ml-[-10] w-full"
+                  />
+                ))}
               </RadioButton.Group>
             </View>
             <View tw="w-full flex-row items-center justify-between px-2">

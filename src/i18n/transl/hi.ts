@@ -937,9 +937,9 @@ export default {
     },
     Marketplace: {
       sorting: {
-        priceAsc: 'कीमत बढ़ती हुई',
-        priceDesc: 'कीमत घटती हुई',
-        nearMe: 'मेरे करीब',
+        'price-asc': 'कीमत बढ़ती हुई',
+        'price-desc': 'कीमत घटती हुई',
+        'nearby-me': 'मेरे करीब',
       },
       priceConfig: 'कीमत कॉन्फ़िगरेशन उत्पाद बिक्री से संबंधित है, कूलिंग भंडारण शुल्क नहीं।',
       addToCart: {

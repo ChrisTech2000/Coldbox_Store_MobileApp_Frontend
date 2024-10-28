@@ -931,9 +931,9 @@ const en = {
     },
     Marketplace: {
       sorting: {
-        priceAsc: 'Price ascending',
-        priceDesc: 'Price descending',
-        nearMe: 'Nearby me',
+        'price-asc': 'Price ascending',
+        'price-desc': 'Price descending',
+        'nearby-me': 'Near to me',
       },
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
       addToCart: {

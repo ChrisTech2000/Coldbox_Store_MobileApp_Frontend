@@ -942,9 +942,9 @@ export default {
     },
     Marketplace: {
       sorting: {
-        priceAsc: 'Preço em ordem crescente',
-        priceDesc: 'Preço em ordem decrescente',
-        nearMe: 'Perto de mim',
+        'price-asc': 'Preço em ordem crescente',
+        'price-desc': 'Preço em ordem decrescente',
+        'nearby-me': 'Perto de mim',
       },
       priceConfig:
         'A configuração de preço refere-se à venda de produtos, não à taxa de armazenamento em resfriamento.',
