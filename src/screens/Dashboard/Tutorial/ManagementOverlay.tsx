@@ -100,7 +100,7 @@ export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverla
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
             tw="mt-4"

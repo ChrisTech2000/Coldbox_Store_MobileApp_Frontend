@@ -38,7 +38,7 @@ export function AddLocationOverlay({ next, stop, step: { onPressMask } }: IOverl
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >

@@ -56,7 +56,7 @@ export function PersonalDetailsOverlay({ next, stop }: IOverlayComponentProps) {
               mode="text"
               onPress={() => {
                 stop();
-                toggleTutorial();
+                toggleTutorial(false);
               }}
               labelStyle="text-green-primary"
             >

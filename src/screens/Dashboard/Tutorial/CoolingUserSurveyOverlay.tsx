@@ -54,7 +54,7 @@ export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponent
               mode="text"
               onPress={() => {
                 stop();
-                toggleTutorial();
+                toggleTutorial(false);
               }}
               labelStyle="text-green-primary"
             >

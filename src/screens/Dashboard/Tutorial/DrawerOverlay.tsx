@@ -85,7 +85,7 @@ export function DrawerOverlay({ next, stop, step: { mask, onPressMask } }: IOver
           mode="text"
           onPress={() => {
             stop();
-            toggleTutorial();
+            toggleTutorial(false);
           }}
           labelStyle="text-green-primary"
         >

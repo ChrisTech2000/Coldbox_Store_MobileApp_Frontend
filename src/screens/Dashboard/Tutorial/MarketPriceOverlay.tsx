@@ -33,7 +33,7 @@ export function MarketPriceOverlay({ goTo, stop, step: { onPressMask } }: IOverl
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >

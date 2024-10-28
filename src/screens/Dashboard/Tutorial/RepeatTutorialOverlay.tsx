@@ -66,7 +66,7 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >

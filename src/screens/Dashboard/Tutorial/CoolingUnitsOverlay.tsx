@@ -51,7 +51,7 @@ export function CoolingUnitsOverlay({
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >
@@ -109,7 +109,7 @@ export function RoomConditionsOverlay({
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >

@@ -37,6 +37,7 @@ function CoolingUnitsMaps() {
   const [isLoadingCoords, setLoadingCoords] = useState<boolean>(true);
   const [coordinates, setCoordinates] = useState<[number, number] | undefined>(undefined);
   const { t } = useTranslationUtils();
+
   const navigation = useNavigation<NativeStackNavigationProp<CoolingUnitsTabsRoutes>>();
 
   const [farmerId, farmerCoolingUnits] = useDashboardStore(
@@ -55,7 +56,6 @@ function CoolingUnitsMaps() {
 
   const { onLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP,
-    enableHardwareBack: true,
     OverlayComponent: CoolingUnitsMapOverlay,
     onPressMask: () => navigation.navigate('Planner'),
   });

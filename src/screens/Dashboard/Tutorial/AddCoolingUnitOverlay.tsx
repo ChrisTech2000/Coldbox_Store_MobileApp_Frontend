@@ -42,7 +42,7 @@ export function AddCoolingUnitOverlay({
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >

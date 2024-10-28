@@ -101,7 +101,7 @@ export function DrawerManagementOverlay({
           mode="text"
           onPress={() => {
             stop();
-            toggleTutorial();
+            toggleTutorial(false);
           }}
           labelStyle="text-green-primary"
           tw="mt-4"

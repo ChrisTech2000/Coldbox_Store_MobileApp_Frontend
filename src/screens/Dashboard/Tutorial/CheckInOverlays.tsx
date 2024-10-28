@@ -94,7 +94,7 @@ export function OperatorActionsOverlay({
           mode="text"
           onPress={() => {
             stop();
-            toggleTutorial();
+            toggleTutorial(false);
           }}
           labelStyle="text-green-primary"
           tw="mt-4"
@@ -182,7 +182,7 @@ export function CheckInButtonOverlay({
           mode="text"
           onPress={() => {
             stop();
-            toggleTutorial();
+            toggleTutorial(false);
           }}
           labelStyle="text-green-primary"
         >
@@ -221,7 +221,7 @@ export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >
@@ -273,7 +273,7 @@ export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >
@@ -297,6 +297,31 @@ export function CheckIn3ScreenOverlay({
   const resetCheckInStore = useCheckInStore((store) => store.resetCheckInStore);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
+  const colors = useTailwindColors();
+
+  const blinkAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const startBlinking = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(blinkAnim, {
+            toValue: 0,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(blinkAnim, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    };
+
+    startBlinking();
+  }, [blinkAnim]);
+
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
@@ -306,10 +331,31 @@ export function CheckIn3ScreenOverlay({
           resetCheckInStore();
           next();
         }}
-      />
+      >
+        <Animated.View
+          style={[
+            {
+              opacity: blinkAnim,
+              transform: [{ rotate: '180deg' }],
+              top: screenHeight <= SMALL_SCREEN_THRESHOLD ? -15 : -35,
+              left: screenHeight <= SMALL_SCREEN_THRESHOLD ? -70 : -90,
+            },
+          ]}
+          tw="-top-2/3 -right-2/3"
+        >
+          <MaterialIcon
+            name="touch-app"
+            size={screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 40}
+            color={colors.green.primary}
+          />
+        </Animated.View>
+      </TouchableOpacity>
 
       <View
-        tw="absolute left-5 bottom-24 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-32' : 'bottom-40'
+        )}
         style={[
           {
             shadowColor: '#000',
@@ -324,7 +370,7 @@ export function CheckIn3ScreenOverlay({
           mode="text"
           onPress={() => {
             stop();
-            toggleTutorial();
+            toggleTutorial(false);
           }}
           labelStyle="text-green-primary"
           tw="mt-2"

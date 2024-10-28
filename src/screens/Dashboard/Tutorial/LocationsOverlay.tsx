@@ -98,7 +98,7 @@ export function LocationsOverlay({ next, stop, step: { onPressMask } }: IOverlay
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
             tw="mt-4"

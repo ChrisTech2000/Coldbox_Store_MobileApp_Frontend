@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
-import { Divider } from 'react-native-paper';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import { Divider } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
@@ -10,8 +10,8 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { CoolingUnit, Crate } from '#types/global';
 
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import { CheckOutScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -21,12 +21,12 @@ import { Text } from '#ui/components/Text';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { CheckoutCrate } from '../components/CheckOutCrate';
 import {
   MOCKED_CHECK_OUT_DATA,
   MOCKED_COOLING_UNIT,
   MOCKED_USER,
 } from '../../../Tutorial/utils/mockedData';
+import { CheckoutCrate } from '../components/CheckOutCrate';
 
 export const useCrateSelectionCoolingUnitStore = createSelectStore<CoolingUnit>();
 const MOCKED_PARAMS = {
@@ -47,7 +47,6 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_2,
-    enableHardwareBack: true,
     OverlayComponent: CheckOutScreenOverlay,
     onPressMask: () => {
       // eslint-disable-next-line

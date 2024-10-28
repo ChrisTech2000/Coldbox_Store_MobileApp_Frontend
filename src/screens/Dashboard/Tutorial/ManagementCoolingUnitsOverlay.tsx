@@ -104,7 +104,7 @@ export function ManagementCoolingUnitsOverlay({
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
             tw="mt-2"

@@ -37,7 +37,7 @@ export function CoolingUnitsMapOverlay({
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >

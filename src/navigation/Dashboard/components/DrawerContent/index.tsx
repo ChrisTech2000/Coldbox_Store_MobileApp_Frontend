@@ -75,14 +75,12 @@ export default function DrawerContent(props: Props) {
 
   const { onLayout: onTutorialTabLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.REPEAT_TUTORIAL_STEP,
-    enableHardwareBack: true,
     OverlayComponent: RepeatTutorialOverlay,
     fullScreen: true,
   });
 
   const { onLayout: onManagementTabLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_MANAGEMENT_STEP,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: DrawerManagementOverlay,
     onPressMask: () => props.navigation.navigate('Management'),
@@ -90,7 +88,6 @@ export default function DrawerContent(props: Props) {
 
   const { onLayout: onAccountDetailsLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: DrawerAccountDetailsOverlay,
     onPressMask: () => props.navigation.navigate('AccountDetails'),
@@ -98,14 +95,12 @@ export default function DrawerContent(props: Props) {
 
   const { onLayout: onKnowledgeHubLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_KNOWLEDGE_HUB_STEP,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: DrawerKnowledgeHubOverlay,
   });
 
   const { onLayout: onFAQLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_FAQ_STEP,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: DrawerFAQOverlay,
     onPressMask: () => {

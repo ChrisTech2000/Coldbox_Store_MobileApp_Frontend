@@ -68,7 +68,7 @@ export function ManagementEmployeesOperatorsOverlay({
               mode="text"
               onPress={() => {
                 stop();
-                toggleTutorial();
+                toggleTutorial(false);
               }}
               labelStyle="text-green-primary"
             >

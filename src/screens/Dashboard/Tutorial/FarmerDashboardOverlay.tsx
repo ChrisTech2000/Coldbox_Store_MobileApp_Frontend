@@ -37,7 +37,7 @@ export function Dashboard1Overlay({ next, stop, step: { onPressMask } }: IOverla
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >
@@ -87,7 +87,7 @@ export function Dashboard2Overlay({ next, stop, step: { onPressMask } }: IOverla
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >
@@ -137,7 +137,7 @@ export function Dashboard3Overlay({ next, stop, step: { onPressMask } }: IOverla
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >
@@ -184,7 +184,7 @@ export function Dashboard4Overlay({ next, stop, step: { onPressMask } }: IOverla
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >
@@ -231,7 +231,7 @@ export function Dashboard5Overlay({ goTo, stop, step: { onPressMask } }: IOverla
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >

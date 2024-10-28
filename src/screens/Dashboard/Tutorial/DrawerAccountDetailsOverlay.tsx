@@ -91,7 +91,7 @@ export function DrawerAccountDetailsOverlay({
           mode="text"
           onPress={() => {
             stop();
-            toggleTutorial();
+            toggleTutorial(false);
           }}
           labelStyle="text-green-primary"
         >

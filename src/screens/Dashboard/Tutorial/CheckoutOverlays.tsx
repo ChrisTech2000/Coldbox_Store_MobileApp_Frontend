@@ -89,7 +89,7 @@ export function OperatorActionsOverlay({
           mode="text"
           onPress={() => {
             stop();
-            toggleTutorial();
+            toggleTutorial(false);
           }}
           labelStyle="text-green-primary"
         >
@@ -131,7 +131,7 @@ export function CheckOutScreenOverlay({
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >
@@ -182,7 +182,7 @@ export function CheckOut2ScreenOverlay({
             mode="text"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-green-primary"
           >

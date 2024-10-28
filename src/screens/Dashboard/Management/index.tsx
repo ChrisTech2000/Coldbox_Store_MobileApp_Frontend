@@ -4,8 +4,8 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
-import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { Text } from '#ui/components/Text';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
@@ -15,11 +15,11 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 
-import { ManagementOverlay } from '../Tutorial/ManagementOverlay';
-import { EEmployeeTutorialSteps, EOperatorTutorialSteps } from '../Tutorial/utils/constants';
 import { LocationsOverlay } from '../Tutorial/LocationsOverlay';
 import { ManagementCoolingUnitsOverlay } from '../Tutorial/ManagementCoolingUnitsOverlay';
 import { ManagementEmployeesOperatorsOverlay } from '../Tutorial/ManagementEmployeesOperatorsOverlay';
+import { ManagementOverlay } from '../Tutorial/ManagementOverlay';
+import { EEmployeeTutorialSteps, EOperatorTutorialSteps } from '../Tutorial/utils/constants';
 
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
@@ -42,7 +42,6 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_COOLING_USERS_STEP,
     OverlayComponent: ManagementOverlay,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => props.navigation.navigate('CoolingUsers'),
@@ -51,7 +50,6 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.LOCATIONS_STEP,
     OverlayComponent: LocationsOverlay,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => props.navigation.navigate('AddLocation'),
@@ -60,7 +58,6 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.COOLING_UNITS_STEP,
     OverlayComponent: ManagementCoolingUnitsOverlay,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => props.navigation.navigate('AddCoolingUnit'),
@@ -69,7 +66,6 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP,
     OverlayComponent: ManagementEmployeesOperatorsOverlay,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => props.navigation.goBack(),

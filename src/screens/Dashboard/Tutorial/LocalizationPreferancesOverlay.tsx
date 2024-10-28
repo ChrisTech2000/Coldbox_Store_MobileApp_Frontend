@@ -56,7 +56,7 @@ export function LocalizationPreferencesOverlay({ next, stop }: IOverlayComponent
               mode="text"
               onPress={() => {
                 stop();
-                toggleTutorial();
+                toggleTutorial(false);
               }}
               labelStyle="text-green-primary"
             >

@@ -65,28 +65,24 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_1,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard1Overlay,
     fullScreen: true,
   });
 
   const { onLayout: onDashboard2Layout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_2,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard2Overlay,
     fullScreen: true,
   });
 
   const { onLayout: onDashboard3Layout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_3,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard3Overlay,
     fullScreen: true,
   });
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_4,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard4Overlay,
     fullScreen: true,
   });
@@ -183,7 +179,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   useEffect(() => {
     if (user && (!user.lastLogin || user.lastLogin === 'None')) {
-      toggleTutorial();
+      toggleTutorial(true);
     }
   }, [user]);
 
