@@ -14,7 +14,7 @@ import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/M
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import { ECoolingUnitMetric, EPricingType } from '#types/global';
+import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
 
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -26,6 +26,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
 import RBAC from '#common/RBAC';
 
+// TODO: add operator contacts, if BE ever sends it back
 function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   const { produce, coolingUnit, currency } = props.route.params;
   const { t } = useTranslationUtils();
@@ -94,17 +95,17 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       },
       ...(guard('SET', 'MarketplaceEditListedCrates')
         ? [
-            {
-              key: 'crateWeightLabel',
-              label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
-              value: (
-                <View tw="self-center">
-                  <Icon source="chevron-right" size={25} />
-                </View>
-              ),
-              custom: true,
-            },
-          ]
+          {
+            key: 'crateWeightLabel',
+            label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
+            value: (
+              <View tw="self-center">
+                <Icon source="chevron-right" size={25} />
+              </View>
+            ),
+            custom: true,
+          },
+        ]
         : []),
       {
         key: 'numberOfCrates',
@@ -141,13 +142,13 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       },
       produce.checkedInCrates[0].pricing[0].pricingType === EPricingType.PERIODICITY
         ? {
-            key: 'pricePerDay',
-            label: t('Dashboard.ProduceDetails.pricePerDay'),
-            value: dailyPrice?.toLocaleString('en-US', {
-              style: 'currency',
-              currency: currency,
-            }),
-          }
+          key: 'pricePerDay',
+          label: t('Dashboard.ProduceDetails.pricePerDay'),
+          value: dailyPrice?.toLocaleString('en-US', {
+            style: 'currency',
+            currency: currency,
+          }),
+        }
         : {},
       {
         key: 'plannedStorageCost',
@@ -188,21 +189,23 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
               tw="w-32 h-32"
               source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}
             />
-            <View tw="space-y-3">
-              <View>
-                <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.coolingUser')}</Text>
-                <Text>{produce.owner}</Text>
-              </View>
-              <View>
-                <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.contact')}</Text>
-                <View tw="flex flex-row items-center space-x-2">
-                  <Text>{produce.ownerContact}</Text>
-                  <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
-                    <Icon source="content-copy" size={20} />
-                  </TouchableOpacity>
+            {user?.role !== ERoles.COOLING_USER ? (
+              <View tw="space-y-3">
+                <View>
+                  <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.coolingUser')}</Text>
+                  <Text>{produce.owner}</Text>
+                </View>
+                <View>
+                  <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.contact')}</Text>
+                  <View tw="flex flex-row items-center space-x-2">
+                    <Text>{produce.ownerContact}</Text>
+                    <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
+                      <Icon source="content-copy" size={20} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
+            ) : null}
           </View>
 
           {produce.runDt && produce.qualityDt !== -1 ? (
@@ -212,12 +215,12 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                   tw={cn(
                     'absolute top-0 left-0 w-full bg-green-100 rounded-lg h-3',
                     produce.minimumRemainingShelfLife <= 7 &&
-                      produce.minimumRemainingShelfLife > 2 &&
-                      'bg-yellow-400',
+                    produce.minimumRemainingShelfLife > 2 &&
+                    'bg-yellow-400',
                     produce.minimumRemainingShelfLife <= 2 && 'bg-red-300',
                     (isNil(produce.minimumRemainingShelfLife) ||
                       produce.minimumRemainingShelfLife === -1) &&
-                      'bg-gray-300'
+                    'bg-gray-300'
                   )}
                   style={{
                     width: `${100 - percentage + (percentage > 1 ? 10 : 0)}%`,
@@ -230,12 +233,12 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                     tw={cn(
                       'absolute top-0 right-0 w-full bg-green-300 rounded-lg h-3',
                       produce.minimumRemainingShelfLife <= 7 &&
-                        produce.minimumRemainingShelfLife > 2 &&
-                        'bg-yellow-400',
+                      produce.minimumRemainingShelfLife > 2 &&
+                      'bg-yellow-400',
                       produce.minimumRemainingShelfLife <= 2 && 'bg-red-700',
                       (isNil(produce.minimumRemainingShelfLife) ||
                         produce.minimumRemainingShelfLife === -1) &&
-                        'bg-gray-300'
+                      'bg-gray-300'
                     )}
                     style={{
                       width: `${percentage}%`,
@@ -290,18 +293,18 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                     }}
                     {...(item.key === 'crateWeightLabel'
                       ? {
-                          onPress: (evt) => {
-                            evt.stopPropagation();
-                            const farmerId = farmer?.id ?? produce.farmerId;
-                            props.navigation.navigate('EditCrateWeightAndPricing', {
-                              companyCurrency: currency,
-                              currencySymbol:
-                                currencies.find((c) => c.name === currency)?.symbol ?? '',
-                              crates: produce.checkedInCrates,
-                              farmerId: farmerId!,
-                            });
-                          },
-                        }
+                        onPress: (evt) => {
+                          evt.stopPropagation();
+                          const farmerId = farmer?.id ?? produce.farmerId;
+                          props.navigation.navigate('EditCrateWeightAndPricing', {
+                            companyCurrency: currency,
+                            currencySymbol:
+                              currencies.find((c) => c.name === currency)?.symbol ?? '',
+                            crates: produce.checkedInCrates,
+                            farmerId: farmerId!,
+                          });
+                        },
+                      }
                       : {})}
                   />
                   <Divider />

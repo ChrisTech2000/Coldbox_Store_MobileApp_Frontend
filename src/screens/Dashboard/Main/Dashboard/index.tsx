@@ -12,7 +12,7 @@ import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
-import { DashboardProduce, ERoles, type Company, type CoolingUnit } from '#types/global';
+import { DashboardProduce, ERoles, Farmer, type Company, type CoolingUnit } from '#types/global';
 
 import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
 import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
@@ -133,10 +133,19 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     }
   );
 
+  const { data: farmers, isLoading: loadingFarmers } = useApiCall(
+    'getFarmers',
+    ColdtivateService.getFarmers,
+    {},
+    {
+      defaultData: [],
+    }
+  );
+
   const dashboardProduces = isTutorialOn
     ? // eslint-disable-next-line
-      // @ts-ignore
-      (MOCKED_DASHBOARD_DATA as DashboardProduce[])
+    // @ts-ignore
+    (MOCKED_DASHBOARD_DATA as DashboardProduce[])
     : user?.role === ERoles.COOLING_USER
       ? farmerDashboardProduces
       : operatorDashboardProduces;
@@ -202,9 +211,10 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-      loadingFarmerDashboardProduces ||
-      loadingOperatorDashboardProduces ||
-      areCoolingUnitsLoading ? (
+        loadingFarmerDashboardProduces ||
+        loadingOperatorDashboardProduces ||
+        loadingFarmers ||
+        areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>
@@ -235,6 +245,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
               }
               key={`${produce.id}-${index}`}
               produce={produce}
+              farmer={farmers?.find((f) => f.id === produce.farmerId) as Farmer}
               onNavigate={() => {
                 navigation.navigate('ProduceDetailsStack', {
                   screen: 'Root',

@@ -70,12 +70,12 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
     try {
       const userDatum = await ColdtivateService.updateUser({
         userId: data?.user.id as number,
-        firstName: values.firstName,
-        lastName: values.lastName,
+        firstName: values.firstName ?? '',
+        lastName: values.lastName ?? '',
         phone: values.phone,
         gender: values.gender,
         language: values.language,
-        parentName: values.parentName,
+        parentName: values.parentName ?? '',
       });
 
       if (typeof userDatum !== 'undefined' && typeof data !== 'undefined') {

@@ -11,22 +11,23 @@ import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardProduce, EPricingType } from '#types/global';
+import { type DashboardProduce, EPricingType, type Farmer } from '#types/global';
 
-import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
-import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import RBAC from '#common/RBAC';
+import { Text } from '#ui/components/Text';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 
 type ProduceProps = {
   currency: string;
   produce: DashboardProduce;
+  farmer: Farmer;
   onNavigate: () => void;
   // eslint-disable-next-line
   onLayout?: (event: any) => void;
 };
 
-export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProps) {
+export function Produce({ currency, produce, onNavigate, onLayout, farmer }: ProduceProps) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const colors = useTailwindColors();
@@ -62,11 +63,11 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
         tw={cn(
           'bg-green-400 w-2 rounded-l-lg border-y-4 border-green-400',
           produce.minimumRemainingShelfLife <= 7 &&
-            produce.minimumRemainingShelfLife > 2 &&
-            'bg-yellow-400 border-yellow-400',
+          produce.minimumRemainingShelfLife > 2 &&
+          'bg-yellow-400 border-yellow-400',
           produce.minimumRemainingShelfLife <= 2 && 'bg-red-700 border-red-700',
           (isNil(produce.minimumRemainingShelfLife) || produce.minimumRemainingShelfLife === -1) &&
-            'bg-gray-300 border-gray-300'
+          'bg-gray-300 border-gray-300'
         )}
       />
 
@@ -82,7 +83,7 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
                     produce.minimumRemainingShelfLife > 7
                       ? colors.green[400]
                       : produce.minimumRemainingShelfLife <= 7 &&
-                          produce.minimumRemainingShelfLife > 2
+                        produce.minimumRemainingShelfLife > 2
                         ? colors.yellow[400]
                         : colors.red[700]
                   }
@@ -92,8 +93,8 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
                   tw={cn(
                     'text-green-400 font-bold',
                     produce.minimumRemainingShelfLife <= 7 &&
-                      produce.minimumRemainingShelfLife > 2 &&
-                      'text-yellow-400',
+                    produce.minimumRemainingShelfLife > 2 &&
+                    'text-yellow-400',
                     produce.minimumRemainingShelfLife <= 2 && 'text-red-700'
                   )}
                 >
@@ -152,7 +153,7 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
           <View tw="flex flex-row items-center space-x-1">
             <Icon source="account-outline" size={20} color={colors.gray[400]} />
             <Text variant="TextMedium" tw="text-gray-400">
-              {produce.owner} {!!produce.farmerId && `(#${produce.farmerId})`}
+              {produce.owner} {!!farmer.parentName && `(#${farmer.parentName})`}
             </Text>
           </View>
 
