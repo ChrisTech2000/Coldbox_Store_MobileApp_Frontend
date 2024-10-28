@@ -12,7 +12,10 @@ import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
-import permissionsFactory, { type PermissionKinds } from './abilities';
+import permissionsFactory, {
+  DEFAULT_CUSTOMER_TYPE_COUNTRY,
+  type PermissionKinds,
+} from './abilities';
 
 export type RBACGuardFunc = (action: PermissionKinds, subject: string) => boolean;
 
@@ -30,8 +33,8 @@ export default function RBAC(props: PropsWithChildren) {
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
 
   const contextualCountry = useMemo(() => {
-    if (companyCountry) return countriesDict().getNameByISO(companyCountry) || 'Nigeria';
-    return farmerCountry || 'Nigeria';
+    const datum = countriesDict().getByValue(companyCountry || farmerCountry || '');
+    return datum?.name || DEFAULT_CUSTOMER_TYPE_COUNTRY;
   }, [companyCountry, farmerCountry]);
 
   const abilities = useMemo(
