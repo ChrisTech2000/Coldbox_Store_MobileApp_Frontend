@@ -150,6 +150,18 @@ export function CratesContent() {
           true
         )}
       </View>
+
+      <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-2 my-2">
+        <Text variant="TextMedium" tw="text-base">
+          {t('Dashboard.Analytics.comparisonTab.cratesTab.co2')}
+        </Text>
+        {generateSecondColumnContent(
+          sortAndMapData(sumCropValues(coolingUnitData?.co2Crops ?? {})),
+          crops,
+          true,
+          t('Dashboard.Analytics.comparisonTab.cratesTab.co2Kg')
+        )}
+      </View>
     </ScrollView>
   );
 }

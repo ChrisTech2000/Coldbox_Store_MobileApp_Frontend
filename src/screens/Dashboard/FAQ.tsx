@@ -28,7 +28,7 @@ function FAQ() {
         (faq.title.toLowerCase().includes(searchTerm) ||
           faq.text.toLowerCase().includes(searchTerm))
     );
-  }, [search, user?.role]);
+  }, [search, user?.role, language]);
 
   return (
     <View tw="w-full h-full">
