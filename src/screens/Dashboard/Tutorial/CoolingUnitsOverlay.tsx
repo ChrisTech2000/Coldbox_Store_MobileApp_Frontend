@@ -1,15 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 
 import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
+
+const screenHeight = Dimensions.get('window').height;
 
 export function CoolingUnitsOverlay({
   next,
@@ -74,13 +78,17 @@ export function CoolingUnitsOverlay({
   );
 }
 
-export function RoomConditionsOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+export function RoomConditionsOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <View tw="h-full w-full absolute">
       <View
-        tw="absolute left-5 bottom-12 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-8' : 'bottom-12'
+        )}
         style={[
           {
             shadowColor: '#000',
@@ -91,16 +99,30 @@ export function RoomConditionsOverlay({ next, step: { onPressMask } }: IOverlayC
         ]}
       >
         <Text tw="text-center text-base">{t('tutorial.steps.roomConditions')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            onPressMask?.();
-            next();
-          }}
-          labelStyle="text-green-primary"
-        >
-          {t('actions.continue')}
-        </Button>
+
+        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial();
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.quit')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              onPressMask?.();
+              next();
+            }}
+            labelStyle="text-white"
+            tw="bg-green-primary"
+          >
+            {t('actions.continue')}
+          </Button>
+        </View>
       </View>
     </View>
   );
