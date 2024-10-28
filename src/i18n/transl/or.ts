@@ -936,9 +936,9 @@ export default {
     },
     Marketplace: {
       sorting: {
-        priceAsc: 'ମୂଲ୍ୟ ବୃଦ୍ଧି',
-        priceDesc: 'ମୂଲ୍ୟ କମିବା',
-        nearMe: 'ମୋ ପାଖରେ',
+        'price-asc': 'ମୂଲ୍ୟ ବୃଦ୍ଧି',
+        'price-desc': 'ମୂଲ୍ୟ କମିବା',
+        'nearby-me': 'ମୋ ପାଖରେ',
       },
       priceConfig: 'ମୂଲ୍ୟ କନଫିଗରେସନ୍ ଉତ୍ପାଦ ବିକ୍ରୟକୁ ସନ୍ଦର୍ଭ କରେ, କୁଲିଂ ସ୍ଥାନ ଶୁଳ୍କକୁ ନୁହେଁ।',
       addToCart: {

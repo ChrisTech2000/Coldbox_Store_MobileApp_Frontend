@@ -931,9 +931,9 @@ export default {
     },
     Marketplace: {
       sorting: {
-        priceAsc: 'કીમત ચઢતી',
-        priceDesc: 'કીમત ઉતરતી',
-        nearMe: 'મને નજીક',
+        'price-asc': 'કીમત ચઢતી',
+        'price-desc': 'કીમત ઉતરતી',
+        'nearby-me': 'મને નજીક',
       },
       priceConfig: 'કીમત રૂપરેખાંકન ઉત્પાદની વેચાણને સંબંધિત છે, કૂલિંગ સ્ટોરેજ ફી સાથે નહીં.',
       addToCart: {

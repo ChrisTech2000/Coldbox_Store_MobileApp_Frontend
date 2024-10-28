@@ -947,9 +947,9 @@ export default {
     },
     Marketplace: {
       sorting: {
-        priceAsc: 'Prix croissant',
-        priceDesc: 'Prix décroissant',
-        nearMe: 'Près de moi',
+        'price-asc': 'Prix croissant',
+        'price-desc': 'Prix décroissant',
+        'nearby-me': 'Près de moi',
       },
       priceConfig:
         'La configuration des prix concerne la vente de produits, pas les frais de stockage réfrigéré.',
