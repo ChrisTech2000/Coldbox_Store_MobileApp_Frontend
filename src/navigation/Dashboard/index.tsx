@@ -1,7 +1,8 @@
 import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
 import ms from 'ms';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Drawer } from 'react-native-drawer-layout';
+import { useWalkthrough } from 'react-native-interactive-walkthrough';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -13,6 +14,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
+import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 
 import AboutStack from './About';
@@ -102,6 +104,16 @@ export default function DashboardNavigator() {
 
   const isOpen = useRightDrawerStore((store) => store.isOpen);
   const toggle = useRightDrawerStore((store) => store.toggle);
+
+  const { isWalkthroughOn } = useWalkthrough();
+  const [toggleTutorial, isTutorialActive] = useTutorialStore((store) => [
+    store.toggleTutorial,
+    store.isTutorialActive,
+  ]);
+
+  useEffect(() => {
+    if (!isWalkthroughOn && isTutorialActive) toggleTutorial(false);
+  }, [isWalkthroughOn, isTutorialActive]);
 
   return (
     <RBAC>

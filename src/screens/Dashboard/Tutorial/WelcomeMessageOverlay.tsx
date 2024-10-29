@@ -33,7 +33,7 @@ export const WelcomeMessageOverlay = ({ next, isWalkthroughOn, stop }: IOverlayC
               mode="outlined"
               onPress={() => {
                 stop();
-                toggleTutorial();
+                toggleTutorial(false);
               }}
               labelStyle="text-green-primary"
               tw="border border-green-primary"

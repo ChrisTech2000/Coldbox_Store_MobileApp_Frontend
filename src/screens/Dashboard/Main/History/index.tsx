@@ -46,7 +46,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const user = useAuthStore((store) => store.user);
-  const isTutorialActive = useTutorialStore((store) => store.isTutorialActive);
+  const [isTutorialActive] = useTutorialStore((store) => [store.isTutorialActive]);
   const sorting = useSortingStore((store) => store.sorting);
   const { farmerId, addRefreshDataFn } = useDashboardStore((store) => ({
     farmerId: store.farmerId,
@@ -62,7 +62,6 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
 
   const { onLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.HISTORY_STEP,
-    enableHardwareBack: true,
     OverlayComponent: HistoryOverlay,
     onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'CoolingUnits' }),
   });

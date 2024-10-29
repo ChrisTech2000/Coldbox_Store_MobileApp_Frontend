@@ -45,7 +45,6 @@ function CoolingUnitsPlanner() {
 
   const { onLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.COOLING_UNITS_STEP,
-    enableHardwareBack: true,
     OverlayComponent: CoolingUnitsOverlay,
     onPressMask: () =>
       user?.role === ERoles.OPERATOR
