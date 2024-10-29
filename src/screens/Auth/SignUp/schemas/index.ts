@@ -1,4 +1,4 @@
-import { passwordRegex } from '#constants/schemas';
+import { passwordRegex, stripSpacesRegex } from '#constants/schemas';
 import { Path, Translator } from '#i18n/utils';
 import { EAppGender } from '#types/global';
 
@@ -64,6 +64,7 @@ const passwordSchema = (t: Translator) =>
     .object({
       password: z
         .string()
+        .transform((val) => val.replace(stripSpacesRegex, ''))
         .refine((pass) => passwordRegex.test(pass), {
           message: t('Auth.SignUp.schema.passwordError'),
         })
@@ -71,6 +72,7 @@ const passwordSchema = (t: Translator) =>
       confirmPassword: z
         .string()
         .min(1, { message: t('Auth.SignUp.schema.confirmPasswordError') })
+        .transform((val) => val.replace(stripSpacesRegex, ''))
         .default(''),
     })
     .superRefine(({ confirmPassword, password }, ctx) => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import validator from 'validator';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { EApiGender } from '#types/global';
@@ -32,11 +33,17 @@ export default function FormManager(props: FormManagerProps) {
 
   const form = useForm<FormValues>({
     defaultValues: initialValues,
-    resolver: zodResolver((z) =>
+    resolver: zodResolver((z, t) =>
       z.object({
         firstName: z.string().min(1),
         lastName: z.string().min(1),
-        phone: z.string().min(1),
+        phone: z
+          .string()
+          .min(1, { message: t('Auth.SignUp.schema.phoneError') })
+          .default('')
+          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+            message: t('Auth.SignUp.schema.invalidPhoneError'),
+          }),
         gender: z.union([
           z.literal(EApiGender.OTHER),
           z.literal(EApiGender.FEMALE),
