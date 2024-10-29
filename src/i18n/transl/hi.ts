@@ -1163,14 +1163,6 @@ export default {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:
-          गतिविधि कोड: {{code}}
-          फसलें: {{crops}}
-          कुल वजन: {{weight}} किलोग्राम
-          {{movementTypeForDate}}: {{date}}
-          मूल्य: {{price}}
-          द्वारा भुगतान: {{farmersName}}
-          `,
         movementType: {
           checkOut: 'चेक आउट',
           checkIn: 'चेक इन',

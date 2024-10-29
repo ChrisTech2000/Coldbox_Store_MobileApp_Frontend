@@ -1170,14 +1170,6 @@ export default {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - Recibo de {{movementType}}:
-          Código de movimento: {{code}}
-          Produtos: {{crops}}
-          Peso total: {{weight}} Kg
-          {{movementTypeForDate}}: {{date}}
-          Preço: {{price}}
-          Pago por: {{farmersName}}
-          `,
         movementType: {
           checkOut: 'Check-Out',
           checkIn: 'Check-In',
