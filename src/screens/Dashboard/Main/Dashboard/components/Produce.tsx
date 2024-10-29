@@ -153,7 +153,7 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
           <View tw="flex flex-row items-center space-x-1">
             <Icon source="account-outline" size={20} color={colors.gray[400]} />
             <Text variant="TextMedium" tw="text-gray-400">
-              {produce.owner} {!!farmer.parentName && `(#${farmer.parentName})`}
+              {produce.owner} {!!farmer?.parentName && `(#${farmer.parentName})`}
             </Text>
           </View>
 
