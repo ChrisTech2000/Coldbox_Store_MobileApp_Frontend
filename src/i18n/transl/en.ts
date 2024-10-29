@@ -292,7 +292,7 @@ const en = {
       messageSentNotification:
         'If the phone number exists, an sms has been sent to reset your password.',
       instructions:
-        'In order to reset your password, please enter the phone number with it&apos;s country code, to which the account is connected.',
+        "In order to reset your password, please enter the phone number with it's country code, to which the account is connected.",
       phoneInputLabel: 'Phone Number',
       resetButton: 'Reset',
       requestLimitMessage: 'Request limit reached. Try again in 2 hours.',
