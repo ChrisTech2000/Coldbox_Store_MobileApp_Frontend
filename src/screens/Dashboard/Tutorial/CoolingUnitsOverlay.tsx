@@ -41,9 +41,7 @@ export function CoolingUnitsOverlay({
         <Text tw="text-center text-base">
           {user?.role === ERoles.OPERATOR
             ? t('tutorial.steps.coolingUnitStep')
-            : user?.role === ERoles.COOLING_USER
-              ? t('tutorial.steps.farmersUnitsPlanner')
-              : t('tutorial.steps.employeeCoolingUnitsStep')}
+            : t('tutorial.steps.farmersUnitsPlanner')}
         </Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">

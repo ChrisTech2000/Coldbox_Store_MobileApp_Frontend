@@ -1411,7 +1411,7 @@ const en = {
         'On the top left, you find a menu with the main functionalities. Go ahead and click it.',
       repeatTutorial: 'If you want to watch this tutorial again, you can also find it in the menu.',
       managementNavigation:
-        'In the menu, you can navigate to "Management" and tap there to add or edit Cooling Users. Go ahead and try it.',
+        'In the menu, you can navigate to the "Management" tab and there add new Locations, Cooling Units, Registered Employees and Operators.',
       addCoolingUser:
         'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',
@@ -1450,7 +1450,7 @@ const en = {
       addEmployeesOperators:
         'You can add Registered Employees and Operators through the Management screen. In order to add either role, you will need their phone number. They will receive an SMS with an invitation link. A phone number can be used for only one user.',
       employeeCoolingUnitsStep:
-        'Once you have selected a cooling unit you will see an overview of: the check ins in the "Dashboard" tab, the movements in the "History" tab, and the planned utilization rate and the temperature of the room in the "Cooling Units" tab.',
+        'Once you have selected a cooling unit you will see an overview of: the crates currently in storage in the "Dashboard" tab, statistics about utilisation and impact in the "Analytics" tab, and the list of crates for sale in the "Marketplace" tab. Clicking on "More", you can also navigate to the "Crop Prices", "History", "Cooling Units", and "Orders" tab.',
       localizationPreferences:
         'You can change the language of the app by selecting "Localization Preferences". Make sure to click the "Save changes" button for the language to be changed!',
       accountDetailsNavigation:

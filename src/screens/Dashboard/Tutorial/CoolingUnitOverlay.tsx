@@ -10,7 +10,7 @@ import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
 import { useTutorialStore } from '#stores/tutorial';
 
-import { ECommonTutorialSteps } from './utils/constants';
+import { ECommonTutorialSteps, EEmployeeTutorialSteps } from './utils/constants';
 
 export function CoolingUnitOverlay({ next, goTo, stop, step }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
@@ -48,10 +48,14 @@ export function CoolingUnitOverlay({ next, goTo, stop, step }: IOverlayComponent
             onPress={
               user?.role === ERoles.OPERATOR
                 ? next
-                : () => {
-                    goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
-                    step.onPressMask?.();
-                  }
+                : user?.role === ERoles.EMPLOYEE
+                  ? () => {
+                      goTo(EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP);
+                    }
+                  : () => {
+                      goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
+                      step.onPressMask?.();
+                    }
             }
             tw="bg-green-primary border-green-primary"
             labelStyle="text-white"
