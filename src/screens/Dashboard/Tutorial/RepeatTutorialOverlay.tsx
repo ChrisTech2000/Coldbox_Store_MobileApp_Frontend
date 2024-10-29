@@ -1,28 +1,55 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
+import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 
 import { EFarmerTutorialSteps } from './utils/constants';
-import { Text } from '#ui/components/Text';
 
-export function RepeatTutorialOverlay({ next, goTo }: IOverlayComponentProps) {
+const screenHeight = Dimensions.get('window').height;
+
+export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <View tw="h-full w-full absolute">
-      <View tw="bg-white absolute left-3 top-[41%] w-[60%] h-auto p-3 rounded-md flex flex-row items-center space-x-2">
+      <View
+        tw={cn(
+          'bg-white absolute left-3 w-[60%] h-auto p-3 rounded-md flex flex-row items-center space-x-2',
+          user?.role === ERoles.COOLING_USER
+            ? screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-[31%]'
+              : 'top-[27%]'
+            : screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-[41%]'
+              : 'top-[33%]'
+        )}
+      >
         <Icon source="card-multiple-outline" size={20} />
         <Text tw="text-base">{t('navigation.dashboard.Tutorial')}</Text>
       </View>
+
       <View
-        tw="absolute left-3 top-1/2 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-3 w-[90%] h-auto bg-white p-3 rounded-md z-30',
+          user?.role === ERoles.COOLING_USER
+            ? screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-[40%]'
+              : 'top-1/3'
+            : screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-1/2'
+              : 'top-[40%]'
+        )}
         style={[
           {
             shadowColor: '#000',
@@ -33,17 +60,31 @@ export function RepeatTutorialOverlay({ next, goTo }: IOverlayComponentProps) {
         ]}
       >
         <Text tw="text-base text-center">{t('tutorial.steps.repeatTutorial')}</Text>
-        <Button
-          mode="text"
-          onPress={
-            user?.role === ERoles.COOLING_USER
-              ? () => goTo(EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP)
-              : next
-          }
-          labelStyle="text-green-primary"
-        >
-          {t('actions.continue')}
-        </Button>
+
+        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.quit')}
+          </Button>
+          <Button
+            mode="contained"
+            onPress={
+              user?.role === ERoles.COOLING_USER
+                ? () => goTo(EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP)
+                : next
+            }
+            labelStyle="text-white"
+            tw="bg-green-primary border-green-primary"
+          >
+            {t('actions.continue')}
+          </Button>
+        </View>
       </View>
     </View>
   );

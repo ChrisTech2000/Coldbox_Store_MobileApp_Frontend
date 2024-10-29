@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
-import { Divider, Icon, Switch } from 'react-native-paper';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import { Divider, Icon, Switch } from 'react-native-paper';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -17,8 +17,8 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { EPaymentType, EPricingType } from '#types/global';
 
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import { CheckOut2ScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -28,6 +28,7 @@ import { Text } from '#ui/components/Text';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
 import { BankTransferModal } from './BankTransferDetailsModal';
 
 export const usePaymentTypeStore = createSelectStore<EPaymentType>();
@@ -55,7 +56,6 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
-    enableHardwareBack: true,
     OverlayComponent: CheckOut2ScreenOverlay,
     onPressMask: () => rootNavigation.navigate('RootMainTabStack'),
   });

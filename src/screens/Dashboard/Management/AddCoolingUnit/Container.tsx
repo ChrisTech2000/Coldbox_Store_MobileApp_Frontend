@@ -3,8 +3,8 @@ import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
+import { useShallow } from 'zustand/react/shallow';
 
 import ColdRoom from '#assets/icons/coldroom.svg';
 import { Button } from '#ui/components/Button';
@@ -12,12 +12,12 @@ import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView'
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
-import { useAuthStore } from '#stores/auth';
 import { useTranslationUtils } from '#i18n/utils';
 import { AddCoolingUnitOverlay } from '#screens/Dashboard/Tutorial/AddCoolingUnitOverlay';
 import { EEmployeeTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -43,7 +43,6 @@ export default function ScreenContainer(props: Props) {
 
   const { onLayout } = useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_COOLING_UNIT_STEP,
-    enableHardwareBack: true,
     OverlayComponent: AddCoolingUnitOverlay,
     onPressMask: () => navigation.goBack(),
   });

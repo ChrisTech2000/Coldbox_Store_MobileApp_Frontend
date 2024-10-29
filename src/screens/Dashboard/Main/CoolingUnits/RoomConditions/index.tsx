@@ -34,11 +34,8 @@ function CoolingUnitsRoomConditions() {
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.ROOM_CONDITIONS_STEP,
-    enableHardwareBack: true,
     OverlayComponent: RoomConditionsOverlay,
-    onPressMask: () => {
-      rootNavigation.navigate('RootMainTabStack');
-    },
+    onPressMask: () => rootNavigation.navigate('RootMainTabStack'),
   });
 
   const {

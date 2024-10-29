@@ -1,18 +1,47 @@
-import React from 'react';
-import { Dimensions, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
-import { Touchable } from '#ui/components/Touchable';
-import { cn } from '#ui/lib/cn';
+import { useTutorialStore } from '#stores/tutorial';
+import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const colors = useTailwindColors();
+
+  const blinkAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const startBlinking = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(blinkAnim, {
+            toValue: 0,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(blinkAnim, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    };
+
+    startBlinking();
+  }, [blinkAnim]);
 
   return (
     <View tw="h-full w-full absolute">
@@ -35,12 +64,27 @@ export function ManagementOverlay({ next, step: { onPressMask } }: IOverlayCompo
             )}
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
           />
+
+          <Animated.View
+            style={[
+              {
+                opacity: blinkAnim,
+              },
+            ]}
+            tw="-top-2/3 -right-2/3"
+          >
+            <MaterialIcon
+              name="touch-app"
+              size={screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 40}
+              color={colors.green.primary}
+            />
+          </Animated.View>
         </Touchable>
 
         <View
           tw={cn(
             'absolute left-8 w-[70%] h-auto bg-white p-3 rounded-md z-40',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-44' : 'top-56'
+            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-48' : 'top-56'
           )}
           style={[
             {
@@ -52,6 +96,17 @@ export function ManagementOverlay({ next, step: { onPressMask } }: IOverlayCompo
           ]}
         >
           <Text tw="text-base">{t('tutorial.steps.navigateToCoolingUser')}</Text>
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-green-primary"
+            tw="mt-4"
+          >
+            {t('tutorial.quit')}
+          </Button>
         </View>
       </View>
     </View>

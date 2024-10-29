@@ -63,14 +63,12 @@ export function Filters({
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.COOLING_UNIT_STEP,
-    enableHardwareBack: true,
     OverlayComponent: CoolingUnitOverlay,
     onPressMask: () => rootNavigation.navigate('CoolingUnits'),
   });
 
   const { onLayout: onDashboard5Layout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_5,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard5Overlay,
     fullScreen: true,
     onPressMask: () => rootNavigation.navigate('History'),

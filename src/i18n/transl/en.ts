@@ -292,7 +292,7 @@ const en = {
       messageSentNotification:
         'If the phone number exists, an sms has been sent to reset your password.',
       instructions:
-        'In order to reset your password, please enter the phone number with it&apos;s country code, to which the account is connected.',
+        "In order to reset your password, please enter the phone number with it's country code, to which the account is connected.",
       phoneInputLabel: 'Phone Number',
       resetButton: 'Reset',
       requestLimitMessage: 'Request limit reached. Try again in 2 hours.',
@@ -1442,7 +1442,7 @@ const en = {
       navigateToLocations:
         'The first thing you will need to do is add a location. Go ahead and click the locations tab.',
       locations:
-        'You can add a location by selecting a name and adding its latitude and longitude, by sharing your GPS coordinates (if your are at the cold room location), or by typing the address.',
+        'You can add a location by selecting a name and adding its latitude and longitude, by sharing your GPS coordinates (if you are at the cold room location), or by typing the address.',
       navigateToCoolingUnits:
         'After a location has been added, you can add a cooling unit. Go ahead and click the cooling units tab.',
       addCoolingUnits:

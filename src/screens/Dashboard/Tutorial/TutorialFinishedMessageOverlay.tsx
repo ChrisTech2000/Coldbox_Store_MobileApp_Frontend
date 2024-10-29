@@ -41,7 +41,7 @@ export const TutorialFinishedMessageOverlay = ({
             mode="contained-tonal"
             onPress={() => {
               stop();
-              toggleTutorial();
+              toggleTutorial(false);
             }}
             labelStyle="text-white"
             tw="bg-green-primary border border-green-primary mt-3"

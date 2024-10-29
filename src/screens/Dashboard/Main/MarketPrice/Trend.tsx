@@ -63,7 +63,6 @@ function MarketPriceTrend() {
 
   const { onLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.MARKET_PRICE,
-    enableHardwareBack: true,
     OverlayComponent: MarketPriceOverlay,
     onPressMask: () => rootNavigation.navigate('Dashboard'),
   });

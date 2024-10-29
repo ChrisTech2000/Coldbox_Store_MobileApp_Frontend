@@ -14,7 +14,7 @@ import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/M
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import { ECoolingUnitMetric, EPricingType } from '#types/global';
+import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
 
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -26,6 +26,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
 import RBAC from '#common/RBAC';
 
+// TODO: add operator contacts, if BE ever sends it back
 function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   const { produce, coolingUnit, currency } = props.route.params;
   const { t } = useTranslationUtils();
@@ -188,21 +189,23 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
               tw="w-32 h-32"
               source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}
             />
-            <View tw="space-y-3">
-              <View>
-                <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.coolingUser')}</Text>
-                <Text>{produce.owner}</Text>
-              </View>
-              <View>
-                <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.contact')}</Text>
-                <View tw="flex flex-row items-center space-x-2">
-                  <Text>{produce.ownerContact}</Text>
-                  <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
-                    <Icon source="content-copy" size={20} />
-                  </TouchableOpacity>
+            {user?.role !== ERoles.COOLING_USER ? (
+              <View tw="space-y-3">
+                <View>
+                  <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.coolingUser')}</Text>
+                  <Text>{produce.owner}</Text>
+                </View>
+                <View>
+                  <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.contact')}</Text>
+                  <View tw="flex flex-row items-center space-x-2">
+                    <Text>{produce.ownerContact}</Text>
+                    <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
+                      <Icon source="content-copy" size={20} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
+            ) : null}
           </View>
 
           {produce.runDt && produce.qualityDt !== -1 ? (

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { useIsFocused } from '@react-navigation/native';
 import isEqual from 'lodash/isEqual';
+import validator from 'validator';
 
 import type { DetailsSectionParams } from '#navigation/Dashboard/AccountDetails';
 import { EApiGender, ERoles } from '#types/global';
@@ -30,7 +31,7 @@ export default function FormManager(props: FormManagerProps) {
 
   const form = useForm<FormValues>({
     defaultValues: initialValues,
-    resolver: zodResolver((z) => {
+    resolver: zodResolver((z, t) => {
       const baseSchema = z.object({
         kind: z.union([
           z.literal(ERoles.EMPLOYEE),
@@ -40,7 +41,13 @@ export default function FormManager(props: FormManagerProps) {
         firstName: z.string().min(1),
         lastName: z.string().min(1),
         language: z.string(),
-        phone: z.string().min(1),
+        phone: z
+          .string()
+          .min(1, { message: t('Auth.SignUp.schema.phoneError') })
+          .default('')
+          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+            message: t('Auth.SignUp.schema.invalidPhoneError'),
+          }),
         gender: z.union([
           z.literal(EApiGender.OTHER),
           z.literal(EApiGender.FEMALE),
