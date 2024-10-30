@@ -11,6 +11,8 @@ import ColdtivateService from '#services/ColdtivateService';
 
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 
+export const DEFAULT_COORDINATES: [number, number] = [0, 0];
+
 export type AvailableListingDatum = {
   id: number;
   movementCode: string;

@@ -5,6 +5,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import camelCase from 'lodash/camelCase';
 import colors from 'tailwindcss/colors';
+import isEqual from 'lodash/isEqual';
 
 import { Text } from '#ui/components/Text';
 
@@ -16,7 +17,7 @@ import { useMap } from '#ui/hooks/useMap';
 import MarketplaceItemWrapper from '../components/MarketplaceItem';
 
 import { useMarketplaceQueryParams } from '../store';
-import { type AvailableListingDatum, useMarketplaceListing } from '../utils';
+import { type AvailableListingDatum, useMarketplaceListing, DEFAULT_COORDINATES } from '../utils';
 
 export default function MarketplaceList() {
   const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
@@ -75,6 +76,9 @@ function _NearbyMeSection(props: {
 }) {
   const { listing, isValidating, refetch } = props;
 
+  const coordinates = useMarketplaceQueryParams((store) => store.location);
+  const isLocationDenied = isEqual(coordinates, DEFAULT_COORDINATES);
+
   const [unitMap, unitMapActions] = useMap<
     string,
     Pick<AvailableListingDatum, 'company' | 'coolingUnit'>
@@ -102,8 +106,9 @@ function _NearbyMeSection(props: {
       Record<string, Record<string, Array<AvailableListingDatum>>>
     >((acc, datum) => {
       const key = camelCase(datum.coolingUnit.name);
-      const distanceBucket =
-        datum.distance <= 5
+      const distanceBucket = isLocationDenied
+        ? 'default'
+        : datum.distance <= 5
           ? '1 to 5 KM away'
           : datum.distance <= 10
             ? '5 to 10 KM away'
@@ -125,7 +130,7 @@ function _NearbyMeSection(props: {
         data,
       }))
     );
-  }, [listing]);
+  }, [listing, isLocationDenied]);
 
   return (
     <SectionList
@@ -145,10 +150,16 @@ function _NearbyMeSection(props: {
               </Text>
               <MarketplaceItemWrapper.CompanyAction company={datum.company} truncate />
             </View>
-            <View tw="flex-row items-center space-x-2 mb-1.5">
-              <MaterialCommunityIcon name="map-marker-outline" size={19} color={colors.zinc[500]} />
-              <Text tw="text-base text-zinc-500">{section.distance}</Text>
-            </View>
+            {section.distance !== 'default' ? (
+              <View tw="flex-row items-center space-x-2 mb-1.5">
+                <MaterialCommunityIcon
+                  name="map-marker-outline"
+                  size={19}
+                  color={colors.zinc[500]}
+                />
+                <Text tw="text-base text-zinc-500">{section.distance}</Text>
+              </View>
+            ) : null}
           </View>
         );
       }}
