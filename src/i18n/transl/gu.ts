@@ -937,9 +937,9 @@ export default {
       },
       priceConfig: 'કીમત રૂપરેખાંકન ઉત્પાદની વેચાણને સંબંધિત છે, કૂલિંગ સ્ટોરેજ ફી સાથે નહીં.',
       addToCart: {
+        buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'કાર્ટમાં ઉમેરો અને ખરીદી ચાલુ રાખો',
         selectQuantity: 'જાતીયતા પસંદ કરો',
-        buyNowButton: 'હવે ખરીદો',
       },
       currentLocation: 'વર્તમાન સ્થાન',
       filterError:

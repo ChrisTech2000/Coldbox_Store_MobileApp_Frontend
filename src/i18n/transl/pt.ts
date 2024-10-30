@@ -951,7 +951,7 @@ export default {
       addToCart: {
         addToCartButton: 'Adicionar ao carrinho e continuar comprando',
         selectQuantity: 'Selecionar quantidade',
-        buyNowButton: 'Comprar agora',
+        buyFullCrate: 'Buy full crate', // TODO
       },
       currentLocation: 'Localização atual',
       filterError:

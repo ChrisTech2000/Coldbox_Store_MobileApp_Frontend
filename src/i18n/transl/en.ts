@@ -938,8 +938,8 @@ const en = {
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
       addToCart: {
         addToCartButton: 'Add to cart and continue shopping',
+        buyFullCrate: 'Buy full crate',
         selectQuantity: 'Select quantity',
-        buyNowButton: 'Buy now',
       },
       currentLocation: 'Current location',
       filterError:

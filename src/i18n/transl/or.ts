@@ -944,7 +944,7 @@ export default {
       addToCart: {
         addToCartButton: 'କାର୍ଟରେ ଯୋଡନ୍ତୁ ଏବଂ ଶପିଂ ଜାରି ରଖନ୍ତୁ',
         selectQuantity: 'ମାତ୍ରା ବାଛନ୍ତୁ',
-        buyNowButton: 'ଏବେ କିଣନ୍ତୁ',
+        buyFullCrate: 'Buy full crate', // TODO
       },
       currentLocation: 'ବର୍ତ୍ତମାନ ଅବସ୍ଥାନ',
       filterError:
