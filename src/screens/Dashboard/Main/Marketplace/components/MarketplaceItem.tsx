@@ -22,13 +22,14 @@ import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
 export default function MarketplaceItemWrapper(
   props: PropsWithChildren<{ shelfLife: number | null }>
 ) {
-  const bgColor = !props.shelfLife
-    ? 'bg-gray-300'
-    : props.shelfLife <= 2
-      ? 'bg-red-700'
-      : props.shelfLife <= 7
-        ? 'bg-yellow-400'
-        : 'bg-green-400';
+  const bgColor =
+    props.shelfLife === null
+      ? 'bg-gray-300'
+      : props.shelfLife <= 2
+        ? 'bg-red-700'
+        : props.shelfLife <= 7
+          ? 'bg-yellow-400'
+          : 'bg-green-400';
 
   return (
     <View tw="flex-row w-full my-2 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
@@ -46,21 +47,23 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
 }) {
   const { t } = useTranslationUtils();
 
-  const iconColor = !props.shelfLife
-    ? undefined
-    : props.shelfLife <= 2
-      ? colors.red[700]
-      : props.shelfLife <= 7
-        ? colors.yellow[400]
-        : colors.green[400];
+  const iconColor =
+    props.shelfLife === null
+      ? undefined
+      : props.shelfLife <= 2
+        ? colors.red[700]
+        : props.shelfLife <= 7
+          ? colors.yellow[400]
+          : colors.green[400];
 
-  const textColor = !props.shelfLife
-    ? undefined
-    : props.shelfLife <= 2
-      ? 'text-red-700'
-      : props.shelfLife <= 7
-        ? 'text-yellow-400'
-        : 'text-green-400';
+  const textColor =
+    props.shelfLife === null
+      ? undefined
+      : props.shelfLife <= 2
+        ? 'text-red-700'
+        : props.shelfLife <= 7
+          ? 'text-yellow-400'
+          : 'text-green-400';
 
   return (
     <View tw="w-full flex-row items-start justify-between">

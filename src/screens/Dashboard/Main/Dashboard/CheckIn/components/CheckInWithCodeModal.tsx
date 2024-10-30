@@ -1,7 +1,7 @@
 import isArray from 'lodash/isArray';
 import React, { useCallback } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import { Portal } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -56,14 +56,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
 
   const onChangeText = useCallback(
     (newVal: string, onChange: (...event: unknown[]) => void, field: keyof Schema) => {
-      let value: string | number = newVal;
-
-      if (field === 'plannedDays') {
-        value = Number(newVal);
-        if (isNaN(value)) return;
-      }
-
-      onChange(value);
+      onChange(newVal);
       clearErrors(field);
     },
     []
@@ -124,75 +117,80 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
   return (
     <Portal>
       <Modal visible={isModalOpen} onDismiss={closeModal}>
-        <View tw="bg-white rounded-3xl w-[90%] h-auto self-center space-y-2 items-center mx-8 py-1">
-          <Text variant="TitleMedium" tw="mb-1 mt-2 text-center w-2/3">
-            {t('Dashboard.CrateManagement.CheckIn.WithCode.modalTitle')}
-          </Text>
-
-          <Text variant="TextMedium" tw="text-base mb-1 mt-2 text-center mx-4">
-            {t('Dashboard.CrateManagement.CheckIn.WithCode.modalDescription')}
-          </Text>
-
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, value } }) => (
-              <Input
-                tw={cn('bg-white border rounded-sm w-[90%] my-2', errors.code && 'border-red-300')}
-                keyboardType="default"
-                onChangeText={(newVal) => onChangeText(newVal, onChange, 'code')}
-                value={value?.toString() ?? ''}
-                label={t('Dashboard.CrateManagement.CheckIn.WithCode.codeLabel')}
-              />
-            )}
-            name="code"
-          />
-          {errors.code && (
-            <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
-              {errors.code.message?.toString()}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View tw="bg-white rounded-3xl w-[90%] h-auto self-center space-y-2 items-center mx-8 py-1">
+            <Text variant="TitleMedium" tw="mb-1 mt-2 text-center w-2/3">
+              {t('Dashboard.CrateManagement.CheckIn.WithCode.modalTitle')}
             </Text>
-          )}
 
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, value } }) => (
-              <Input
-                tw="bg-white border rounded-sm w-[90%] my-2"
-                keyboardType="number-pad"
-                onChangeText={(newVal) => onChangeText(newVal, onChange, 'plannedDays')}
-                value={value?.toString() ?? ''}
-                label={t('Dashboard.CrateManagement.CheckIn.Setup.plannedDaysLabel')}
-              />
+            <Text variant="TextMedium" tw="text-base mb-1 mt-2 text-center mx-4">
+              {t('Dashboard.CrateManagement.CheckIn.WithCode.modalDescription')}
+            </Text>
+
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  tw={cn(
+                    'bg-white border rounded-sm w-[90%] my-2',
+                    errors.code && 'border-red-300'
+                  )}
+                  keyboardType="default"
+                  onChangeText={(newVal) => onChangeText(newVal, onChange, 'code')}
+                  value={value?.toString() ?? ''}
+                  label={t('Dashboard.CrateManagement.CheckIn.WithCode.codeLabel')}
+                />
+              )}
+              name="code"
+            />
+            {errors.code && (
+              <Text tw="text-xs text-red-600 mt-[2] pl-3 w-[95%]">
+                {errors.code.message?.toString()}
+              </Text>
             )}
-            name="plannedDays"
-          />
 
-          <Button
-            tw="w-[90%] border-2 border-green-primary my-2"
-            mode="contained"
-            onPress={handleSubmit(onSubmit)}
-            icon="check-circle-outline"
-            contentStyle="flex flex-row-reverse items-center"
-          >
-            {t('actions.confirm')}
-          </Button>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  tw="bg-white border rounded-sm w-[90%] my-2"
+                  keyboardType="number-pad"
+                  onChangeText={(newVal) => onChangeText(newVal, onChange, 'plannedDays')}
+                  value={value?.toString() ?? ''}
+                  label={t('Dashboard.CrateManagement.CheckIn.Setup.plannedDaysLabel')}
+                />
+              )}
+              name="plannedDays"
+            />
 
-          <Button
-            tw="w-[90%] border-2 border-red-400 my-2"
-            mode="outlined"
-            onPress={closeModal}
-            icon="close-circle-outline"
-            contentStyle="flex flex-row-reverse items-center"
-            labelStyle="text-red-400"
-          >
-            {t('actions.cancel')}
-          </Button>
-        </View>
+            <Button
+              tw="w-[90%] border-2 border-green-primary my-2"
+              mode="contained"
+              onPress={handleSubmit(onSubmit)}
+              icon="check-circle-outline"
+              contentStyle="flex flex-row-reverse items-center"
+            >
+              {t('actions.confirm')}
+            </Button>
+
+            <Button
+              tw="w-[90%] border-2 border-red-400 my-2"
+              mode="outlined"
+              onPress={closeModal}
+              icon="close-circle-outline"
+              contentStyle="flex flex-row-reverse items-center"
+              labelStyle="text-red-400"
+            >
+              {t('actions.cancel')}
+            </Button>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </Portal>
   );
