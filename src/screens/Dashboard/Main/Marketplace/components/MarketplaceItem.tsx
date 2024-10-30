@@ -170,7 +170,11 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
             <TouchableOpacity onPress={() => setIsTooltipShowing(!isTooltipShowing)}>
-              <MaterialCommunityIcon name="information-outline" size={15} />
+              <MaterialCommunityIcon
+                name="information-outline"
+                size={15}
+                color={colors.gray[700]}
+              />
             </TouchableOpacity>
           </View>
 
