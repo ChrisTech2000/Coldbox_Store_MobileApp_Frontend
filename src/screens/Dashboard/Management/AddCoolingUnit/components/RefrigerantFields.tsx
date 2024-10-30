@@ -40,7 +40,10 @@ export default function RefrigerantFields() {
                 label={t('Dashboard.Management.AddCoolingUnit.fields.refrigerantType')}
                 currentValue={selectedRefrigerantType}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedRefrigerantType);
+                }}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.fields.refrigerantType'),
                   options: (

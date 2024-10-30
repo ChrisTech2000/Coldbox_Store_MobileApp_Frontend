@@ -79,7 +79,10 @@ export default function CoolingUnitFilters() {
                 label="Cooling unit"
                 currentValue={currentValue}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  setInternalSelection(selectedCoolingUnits.map(({ value }) => value));
+                  toggleVisibility();
+                }}
                 useScrollView={false}
                 content={{
                   header: 'Select cooling units',

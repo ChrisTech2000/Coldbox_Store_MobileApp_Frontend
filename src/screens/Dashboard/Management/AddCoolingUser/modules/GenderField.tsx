@@ -35,7 +35,10 @@ export default function GenderField(props: Props) {
           label={t('Dashboard.Management.Operators.text.gender')}
           currentValue={t(['Dashboard.Management.Operators.text', selectedGender])}
           isModalOpen={isModalVisible}
-          onClick={toggleModalVisibility}
+          onClick={() => {
+            toggleModalVisibility();
+            setInternalSelection(selectedGender);
+          }}
           content={{
             header: t('Dashboard.Management.Operators.text.gender'),
             options: (

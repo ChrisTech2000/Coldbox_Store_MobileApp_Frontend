@@ -92,7 +92,10 @@ export function SignUpFormSelectMd<T extends FieldValues>({
               </ScrollView>
             ),
           }}
-          onClick={closeModal}
+          onClick={() => {
+            setSelectedValue(initialValue);
+            closeModal?.();
+          }}
         />
       </View>
       <Divider tw={cn('w-full bg-gray-700 mt-2 my-2', error && 'bg-red-700 h-0.5')} />

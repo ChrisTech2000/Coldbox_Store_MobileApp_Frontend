@@ -79,7 +79,10 @@ export default function CompanyFilters() {
                 label="Company"
                 currentValue={currentValue}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  setInternalSelection(selectedCompanies.map(({ value }) => value));
+                  toggleVisibility();
+                }}
                 useScrollView={false}
                 content={{
                   header: 'Select companies',

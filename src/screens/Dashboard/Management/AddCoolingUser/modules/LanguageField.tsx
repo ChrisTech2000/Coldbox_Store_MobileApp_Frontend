@@ -35,7 +35,10 @@ export default function LanguageField(props: Props) {
           label={t('languages.label')}
           currentValue={t(['languages.options', selectedLanguage])}
           isModalOpen={isVisible}
-          onClick={toggleVisibility}
+          onClick={() => {
+            setInternalSelection(selectedLanguage);
+            toggleVisibility();
+          }}
           content={{
             header: t('languages.label'),
             options: (
