@@ -195,11 +195,15 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
       <View>
         {hasPayoutMethods ? (
           <Text tw="text-base font-bold text-green-primary">
-            {t('Dashboard.AccountDetails.PayoutSettings.editTitle')}
+            {user?.role === ERoles.EMPLOYEE
+              ? t('Dashboard.AccountDetails.PayoutSettings.editTitleForCompany')
+              : t('Dashboard.AccountDetails.PayoutSettings.editTitle')}
           </Text>
         ) : (
           <Text tw="text-base font-bold text-green-primary">
-            {t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
+            {user?.role === ERoles.EMPLOYEE
+              ? t('Dashboard.AccountDetails.PayoutSettings.addTittleForCompany')
+              : t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
           </Text>
         )}
 
