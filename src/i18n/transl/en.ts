@@ -967,6 +967,7 @@ const en = {
       },
       sections: {
         sellerSettings: 'Seller Settings',
+        companySellerSettings: 'Seller Settings (Company)',
         buyerSettings: 'Buyer Settings',
         details: 'Details',
       },
@@ -977,6 +978,8 @@ const en = {
       PayoutSettings: {
         addTitle: 'Please insert your bank account information',
         editTitle: 'Your bank account information',
+        addTittleForCompany: "Please insert you company's bank account information",
+        editTitleForCompany: "Your company's bank account information",
         form: {
           nameLabel: 'Account name',
           namePlaceholder: 'Insert account name',
