@@ -14,7 +14,7 @@ export function sortMovements(a: Movement, b: Movement, sorting: ESortingOptions
     case ESortingOptions.MOVEMENT_DATE_REVERSE:
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     case ESortingOptions.COOLING_USER_NAME:
-      return a.farmer.toLowerCase().localeCompare(b.farmer.toLowerCase());
+      return a.owner.toLowerCase().localeCompare(b.owner.toLowerCase());
     default:
       return 0;
   }

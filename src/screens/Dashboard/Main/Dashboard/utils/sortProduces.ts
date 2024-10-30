@@ -33,7 +33,7 @@ export function sortProduces(a: DashboardProduce, b: DashboardProduce, sorting: 
         new Date(a.checkedInCrates[0].checkInDate).getTime()
       );
     case ESortingOptions.COOLING_USER:
-      return a.farmer.toLowerCase().localeCompare(b.farmer.toLowerCase());
+      return a.owner.toLowerCase().localeCompare(b.owner.toLowerCase());
     default:
       return 0;
   }
