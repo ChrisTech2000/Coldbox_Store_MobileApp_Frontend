@@ -954,9 +954,9 @@ export default {
       priceConfig:
         'La configuration des prix concerne la vente de produits, pas les frais de stockage réfrigéré.',
       addToCart: {
+        buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'Ajouter au panier et continuer vos achats',
         selectQuantity: 'Sélectionnez la quantité',
-        buyNowButton: 'Acheter maintenant',
       },
       currentLocation: 'Localisation actuelle',
       filterError:

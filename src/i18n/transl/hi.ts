@@ -945,7 +945,7 @@ export default {
       addToCart: {
         addToCartButton: 'कार्ट में जोड़ें और खरीदारी जारी रखें',
         selectQuantity: 'मात्रा चुनें',
-        buyNowButton: 'अभी खरीदें',
+        buyFullCrate: 'Buy full crate', // TODO
       },
       currentLocation: 'वर्तमान स्थान',
       filterError:
