@@ -9,7 +9,7 @@ import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDerivedValue } from 'react-native-reanimated';
-import { CartesianChart, Line, useChartPressState } from 'victory-native';
+import { CartesianChart, Line, Scatter, useChartPressState } from 'victory-native';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -17,6 +17,8 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import type { PredictionCrop, PredictionData, PredictionState } from '#types/global';
 
 import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
+
 import useSkiaFont from '#ui/hooks/useSkiaFont';
 import { paperTheme } from '#ui/lib/theme';
 
@@ -154,33 +156,15 @@ function Chart({ predictionData, currency }: ChartProps) {
   );
 
   return (
-    <View tw="w-full mt-4 mb-24 flex flex-row items-start">
-      <Text
-        variant="TextMedium"
-        tw="text-base text-gray-500 -rotate-90 absolute -left-[10%] bottom-[50%]"
-      >
-        {t('Dashboard.MarketPrice.Trend.chartLabel', { currency })}
-      </Text>
-
-      <View tw="flex-1 h-96 w-[90%] ml-6">
-        <View tw="flex flex-row items-center justify-center space-x-2 my-2">
-          <View tw="flex flex-row items-center space-x-1">
-            <View tw="w-8 h-4 rounded-sm border-2 border-green-primary bg-green-transparency" />
-            <Text variant="TitleMedium" tw="text-center">
-              {t('Dashboard.MarketPrice.Trend.pastLabel')}
-            </Text>
-          </View>
-          <View tw="flex flex-row items-center space-x-1">
-            <View tw="w-8 h-4 rounded-sm border-2 border-yellow-500 bg-yellow-100" />
-            <Text variant="TitleMedium" tw="text-center">
-              {t('Dashboard.MarketPrice.Trend.forecastLabel')}
-            </Text>
-          </View>
-        </View>
+    <View tw="w-full mt-6 mb-24 flex flex-row items-start">
+      <View tw="flex-1 h-96 w-full">
+        <Text tw="text-xs text-gray-500 mb-1">
+          {t('Dashboard.MarketPrice.Trend.chartLabel', { currency })}
+        </Text>
         <CartesianChart
           data={groupedData}
           xKey="date"
-          domainPadding={{ top: 45, left: 25, right: 25, bottom: 10 }}
+          domainPadding={{ top: 100, left: 50, right: 50, bottom: 10 }}
           yKeys={['pastPrice', 'forecast']}
           axisOptions={{
             font,
@@ -189,7 +173,7 @@ function Chart({ predictionData, currency }: ChartProps) {
             lineWidth: StyleSheet.hairlineWidth,
             labelOffset: 10,
             formatXLabel: (date) => (date ? dateFmt(date, 'MMM yy') : ''),
-            formatYLabel: (val) => `${val}`,
+            formatYLabel: () => ' ',
           }}
           chartPressState={state}
         >
@@ -211,6 +195,24 @@ function Chart({ predictionData, currency }: ChartProps) {
                 animate={{ type: 'timing', duration: 500 }}
                 curveType="linear"
                 connectMissingData
+                antiAlias
+              />
+              {/* Past Price data points */}
+              <Scatter
+                points={points.pastPrice}
+                shape="circle"
+                radius={2.5}
+                style="fill"
+                color={paperTheme.colors.onPrimaryContainer}
+                antiAlias
+              />
+              {/* Forecast data points */}
+              <Scatter
+                points={points.forecast}
+                shape="circle"
+                radius={2.5}
+                style="fill"
+                color={paperTheme.colors.onPrimaryContainer}
                 antiAlias
               />
               {isActive && (
@@ -267,6 +269,33 @@ function Chart({ predictionData, currency }: ChartProps) {
             </>
           )}
         </CartesianChart>
+
+        <View tw="flex flex-row items-center justify-center space-x-6 pt-4">
+          <Touchable
+            tw="flex flex-row items-center space-x-2 px-1"
+            rippleColor={paperTheme.colors.backdrop}
+            onPress={() => {
+              console.log('12');
+            }}
+          >
+            <View tw="w-8 h-4 rounded-sm border-2 border-green-primary bg-green-transparency" />
+            <Text tw="text-base text-zinc-600 text-center">
+              {t('Dashboard.MarketPrice.Trend.pastLabel')}
+            </Text>
+          </Touchable>
+          <Touchable
+            tw="flex flex-row items-center space-x-2 px-1"
+            rippleColor={paperTheme.colors.backdrop}
+            onPress={() => {
+              console.log('12');
+            }}
+          >
+            <View tw="w-8 h-4 rounded-sm border-2 border-yellow-500 bg-yellow-100" />
+            <Text tw="text-base text-zinc-600 text-center">
+              {t('Dashboard.MarketPrice.Trend.forecastLabel')}
+            </Text>
+          </Touchable>
+        </View>
       </View>
     </View>
   );
