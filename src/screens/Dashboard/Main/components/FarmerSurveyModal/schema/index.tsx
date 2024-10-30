@@ -18,7 +18,7 @@ export const FarmerSurveySchema = (t: Translator) =>
         EUnitOfMeasurement.CRATES,
       ]),
       unitaryWeight: z
-        .number({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
+        .string({ message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number') })
         .min(1, {
           message: t('Dashboard.CrateManagement.FarmerSurvey.modal.errorMessages.number'),
         }),
@@ -72,5 +72,5 @@ export const FarmerSurveySchema = (t: Translator) =>
 
 export const defaultValues = {
   unitOfMeasurement: EUnitOfMeasurement.KILOGRAMS,
-  unitaryWeight: 25,
+  unitaryWeight: '25',
 };
