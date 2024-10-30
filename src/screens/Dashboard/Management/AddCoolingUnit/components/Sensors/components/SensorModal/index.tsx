@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import { Modal, Portal } from 'react-native-paper';
 
-import { Text } from '#ui/components/Text';
-
-import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import { useAppEventListener } from '#ui/lib/emitter';
 
@@ -22,50 +17,13 @@ export default function SensorModal() {
     setSelectedSensor(sensorType);
   });
 
-  return (
-    <Portal>
-      <Modal visible={isVisible} onDismiss={toggleVisibility}>
-        <View tw="w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2">
-          <_SensorFactory sensorType={selectedSensor} />
-        </View>
-      </Modal>
-    </Portal>
-  );
-}
-
-function _SensorFactory(props: { sensorType: SensorTypes | undefined }) {
-  const { t } = useTranslationUtils();
-
-  switch (props.sensorType) {
+  switch (selectedSensor) {
     case 'ecozen':
-      return (
-        <React.Fragment>
-          <Text variant="TitleRegular" tw="px-6">
-            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
-          </Text>
-          <Text tw="px-6 mt-2">
-            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
-          </Text>
-          <EcozenForm />
-        </React.Fragment>
-      );
-
-    case 'ubibot':
-      return <UbibotForm />;
-
+      return <EcozenForm isVisible={isVisible} onDismiss={toggleVisibility} />;
     case 'figorr':
-      return (
-        <React.Fragment>
-          <Text variant="TitleRegular" tw="px-6">
-            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
-          </Text>
-          <Text tw="px-6 mt-2">
-            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
-          </Text>
-          <FigorrForm />
-        </React.Fragment>
-      );
-
+      return <FigorrForm isVisible={isVisible} onDismiss={toggleVisibility} />;
+    case 'ubibot':
+      return <UbibotForm isVisible={isVisible} onDismiss={toggleVisibility} />;
     default:
       return null;
   }
