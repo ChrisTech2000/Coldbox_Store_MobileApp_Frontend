@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { FlatList, View } from 'react-native';
-import { Divider, List, Modal, Portal } from 'react-native-paper';
+import { FlatList } from 'react-native';
+import { Divider, List, Dialog, Portal } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
@@ -27,22 +27,23 @@ export default function Prompt() {
 
   return (
     <Portal>
-      <Modal visible={isVisible} onDismiss={toggleVisibility}>
-        <View tw="w-full bg-white rounded-3xl w-2/3 max-w-2/3 h-auto pt-6 pb-4 self-center space-y-2">
-          <Text variant="TitleRegular" tw="px-6">
-            {t('Dashboard.Management.AddCoolingUnit.fields.selectSensorType')}
-          </Text>
-          <View tw="w-full py-1.5">
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              nestedScrollEnabled
-              data={SENSOR_TYPES}
-              keyExtractor={(item, itemIdx) => `sensor-type-item-${item}-#${itemIdx}`}
-              ItemSeparatorComponent={Divider}
-              renderItem={({ item }) => (
+      <Dialog visible={isVisible} onDismiss={toggleVisibility} style={{ backgroundColor: 'white' }}>
+        <Dialog.Title>
+          {t('Dashboard.Management.AddCoolingUnit.fields.selectSensorType')}
+        </Dialog.Title>
+        <Dialog.Content>
+          <FlatList
+            tw="m-0 p-0"
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled
+            data={SENSOR_TYPES}
+            keyExtractor={(item, itemIdx) => `sensor-type-item-${item}-#${itemIdx}`}
+            renderItem={({ item }) => (
+              <React.Fragment>
                 <List.Item
-                  title={item}
-                  tw="px-2"
+                  title={undefined}
+                  left={() => <Text tw="text-base">{item}</Text>}
+                  tw="m-0 py-2 px-2.5"
                   onPress={() => {
                     toggleVisibility();
                     timeoutRef.current = setTimeout(
@@ -51,16 +52,15 @@ export default function Prompt() {
                     );
                   }}
                 />
-              )}
-            />
-          </View>
-          <View tw="self-end px-6">
-            <Button mode="text" onPress={toggleVisibility}>
-              {t('actions.close')}
-            </Button>
-          </View>
-        </View>
-      </Modal>
+                <Divider tw="bg-zinc-400" />
+              </React.Fragment>
+            )}
+          />
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={toggleVisibility}>{t('actions.close')}</Button>
+        </Dialog.Actions>
+      </Dialog>
     </Portal>
   );
 }
