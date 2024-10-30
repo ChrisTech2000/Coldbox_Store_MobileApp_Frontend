@@ -28,6 +28,8 @@ import KnowledgeHubStack from './KnowledgeHub';
 import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
 import DashboardMainBottomTabs, { DashboardMainRoutes } from './Main';
 import ManagementStack, { type ManagementRoutes } from './Management';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type DashboardRoutes = {
   Main:
@@ -100,6 +102,8 @@ export const useRightDrawerStore = create<{
 }));
 
 export default function DashboardNavigator() {
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+
   const { data } = useNotifications({ refreshInterval: ms('10 seconds') });
 
   const isOpen = useRightDrawerStore((store) => store.isOpen);
@@ -112,7 +116,8 @@ export default function DashboardNavigator() {
   ]);
 
   useEffect(() => {
-    if (!isWalkthroughOn && isTutorialActive) toggleTutorial(false);
+    if (!isWalkthroughOn && isTutorialActive)
+      toggleTutorial(false, () => rootNavigation.navigate('Dashboard'));
   }, [isWalkthroughOn, isTutorialActive]);
 
   return (
