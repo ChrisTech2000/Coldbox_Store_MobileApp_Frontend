@@ -166,7 +166,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                       </Text>
                     </View>
                   </View>
-                  <MaterialCommunityIcon name="chevron-right" size={28} />
+                  <MaterialCommunityIcon name="chevron-right" size={28} color={colors.gray[700]} />
                 </Touchable>
               );
             }}
