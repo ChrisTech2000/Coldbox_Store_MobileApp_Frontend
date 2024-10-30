@@ -286,7 +286,8 @@ export default {
         languageFieldName: 'ભાષા',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again', // TODO
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
       },
     },
     ForgotPassword: {
@@ -693,7 +694,6 @@ export default {
           operator: 'કૂલ્ટિવેટ એપ્લિકેશનમાં ઓપરેટર તરીકે જોડાવા માટે, જુઓ: {{link}}',
         },
         toasts: {
-          error: 'Please check the information provided and try again', // TODO
           success: 'સફળતાપૂર્વક ઓપરેટર આમંત્રણ મોકલ્યું',
         },
         phoneFormat: 'જોડાવેલા ફોન નંબરમાં દેશ કોડ હોવો ચોક્કસ કરો.',

@@ -19,7 +19,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 
 function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>) {
-  const { crops, farmer, companyCurrency, checkoutId } = props.route.params;
+  const { crops, owner, companyCurrency, checkoutId } = props.route.params;
 
   const { t } = useTranslationUtils();
   const { setSurveys, setFarmerId, setRefetchSurveys, setCheckoutId } = useMarketSurveyStore();
@@ -112,7 +112,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
                 props.navigation.navigate('MarketSurvey', {
                   cropId: item.id,
                   companyCurrency,
-                  farmer,
+                  farmer: owner,
                 })
               }
               disabled={!item.hasSurvey}

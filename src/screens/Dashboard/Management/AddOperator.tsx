@@ -114,9 +114,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
       await mutate(getQueryKey('getInvitedOperators', company?.id));
       navigation.goBack();
     } catch (exception) {
-      toast.show(t('Dashboard.Management.AddOperator.toasts.error'), {
-        type: 'md_danger',
-      });
+      toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger' });
       console.error(exception);
     }
   }

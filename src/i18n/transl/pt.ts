@@ -287,7 +287,8 @@ export default {
         languageFieldName: 'idioma',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again', // TODO
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
       },
     },
     ForgotPassword: {
@@ -700,7 +701,6 @@ export default {
           operator: 'Para se juntar aa aplicação Coldtivate como Operador, vá para: {{link}}',
         },
         toasts: {
-          error: 'Please check the information provided and try again', // TODO
           success: 'Operador convidado com sucesso',
         },
         phoneFormat: 'Certifique-se de que o número de telefone inserido tem um código de país.',
