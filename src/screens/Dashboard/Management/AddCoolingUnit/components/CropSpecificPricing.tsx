@@ -97,7 +97,13 @@ export default function CropSpecificPricing() {
       <Divider tw="w-full bg-gray-700" />
 
       <Portal>
-        <Modal visible={isVisible} onDismiss={toggleVisibility}>
+        <Modal
+          visible={isVisible}
+          onDismiss={() => {
+            localForm.reset(_buildInitialValues());
+            toggleVisibility();
+          }}
+        >
           <View
             tw={cn(
               'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto max-h-[90%] pt-6 pb-4 self-center space-y-2'

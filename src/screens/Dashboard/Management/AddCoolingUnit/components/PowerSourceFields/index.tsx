@@ -43,7 +43,10 @@ export default function PowerSourceFields() {
                 label={t('Dashboard.Management.AddCoolingUnit.fields.powerSource')}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedPowerSource);
+                }}
                 content={{
                   options: (
                     <RadioButton.Group

@@ -155,7 +155,7 @@ export function Filters({
           />
         </View>
       </View>
-      {searchType && (
+      {searchType ? (
         <View tw="flex flex-row items-center justify-center space-x-2 mt-4">
           <Button
             tw={cn('w-[50%]', searchType === 'details' ? 'bg-gray-700' : 'bg-gray-400')}
@@ -173,15 +173,15 @@ export function Filters({
             {t('Dashboard.SearchFilter.crateIdButton')}
           </Button>
         </View>
-      )}
+      ) : null}
 
-      {searchType && (
+      {searchType ? (
         <Text variant="TextMedium" tw="text-base mt-2">
           {searchType === 'details'
             ? t('Dashboard.SearchFilter.detailsMessage')
             : t('Dashboard.SearchFilter.idMessage')}
         </Text>
-      )}
+      ) : null}
 
       <View tw="flex flex-row items-center justify-between">
         <Input

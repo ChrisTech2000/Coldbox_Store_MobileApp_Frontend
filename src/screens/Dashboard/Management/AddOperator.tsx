@@ -168,7 +168,10 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
             variant="md"
             label={selectLabel}
             isModalOpen={isModalVisible}
-            onClick={toggleModalVisibility}
+            onClick={() => {
+              setInternalSelection(selectedCoolingUnits);
+              toggleModalVisibility();
+            }}
             error={!!errors.coolingUnits}
             content={{
               options: (
