@@ -284,7 +284,8 @@ const en = {
         languageFieldName: 'language',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again',
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.',
       },
     },
     ForgotPassword: {
@@ -692,7 +693,6 @@ const en = {
           operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
         },
         toasts: {
-          error: 'Please check the information provided and try again',
           success: 'Successfully invited operator',
         },
         phoneFormat: 'Make sure the entered phone number has a country code.',
