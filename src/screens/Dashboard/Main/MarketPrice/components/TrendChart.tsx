@@ -1,6 +1,7 @@
 import {
   Circle,
   DashPathEffect,
+  RoundedRect,
   Line as SkiaLine,
   Text as SkiaText,
   vec,
@@ -78,10 +79,12 @@ export function TrendChart({ commodity, state, country }: TrendChartProps) {
   return <Chart predictionData={predictionData} currency={ECurrency[mappedCountry]} />;
 }
 
+const TOOLTIP_GAP = 24;
+
 function Chart({ predictionData, currency }: ChartProps) {
   const { t } = useTranslationUtils();
   const font = useSkiaFont();
-  const tooltipFont = useSkiaFont(18);
+  const tooltipFont = useSkiaFont(16);
 
   const groupedData = useMemo(() => {
     const { pastValues, forecastsValues } = predictionData;
@@ -115,7 +118,7 @@ function Chart({ predictionData, currency }: ChartProps) {
     },
   });
 
-  const pastTextValue = useDerivedValue(() => state.y.pastPrice.value.value.toFixed(1), [state]);
+  const pastTextValue = useDerivedValue(() => state.y.pastPrice.value.value.toFixed(2), [state]);
   const pastTextXPosition = useDerivedValue(() => {
     if (!tooltipFont) return 0;
     const textWidth = tooltipFont.measureText(pastTextValue.value).width;
@@ -126,7 +129,7 @@ function Chart({ predictionData, currency }: ChartProps) {
     [pastTextValue]
   );
 
-  const forecastTextValue = useDerivedValue(() => state.y.forecast.value.value.toFixed(1), [state]);
+  const forecastTextValue = useDerivedValue(() => state.y.forecast.value.value.toFixed(2), [state]);
   const forecastTextXPosition = useDerivedValue(() => {
     if (!tooltipFont) return 0;
     const textWidth = tooltipFont.measureText(forecastTextValue.value).width;
@@ -155,16 +158,31 @@ function Chart({ predictionData, currency }: ChartProps) {
     [forecastTextValue]
   );
 
+  const pastTextTooltipWidth = tooltipFont ? tooltipFont.measureText(pastTextValue.value).width : 0;
+  const pastTextTooltipHeight = tooltipFont
+    ? tooltipFont.measureText(pastTextValue.value).height
+    : 0;
+
+  const pastTextTooltipYPosition = useDerivedValue(
+    () => pastTextYPosition.value - pastTextTooltipHeight - TOOLTIP_GAP / 2,
+    [pastTextYPosition, pastTextTooltipHeight]
+  );
+
+  const pastTextTooltipXPosition = useDerivedValue(
+    () => pastTextXPosition.value - TOOLTIP_GAP / 2,
+    [pastTextXPosition]
+  );
+
   return (
     <View tw="w-full mt-6 mb-24 flex flex-row items-start">
       <View tw="flex-1 h-96 w-full">
-        <Text tw="text-xs text-gray-500 mb-1">
+        <Text tw="text-sm text-gray-500 mb-1">
           {t('Dashboard.MarketPrice.Trend.chartLabel', { currency })}
         </Text>
         <CartesianChart
           data={groupedData}
           xKey="date"
-          domainPadding={{ top: 100, left: 50, right: 50, bottom: 10 }}
+          domainPadding={{ top: 80, left: 60, right: 60, bottom: 10 }}
           yKeys={['pastPrice', 'forecast']}
           axisOptions={{
             font,
@@ -218,12 +236,20 @@ function Chart({ predictionData, currency }: ChartProps) {
               {isActive && (
                 <>
                   {/* Past Price Tooltip */}
+                  <RoundedRect
+                    x={pastTextTooltipXPosition}
+                    y={pastTextTooltipYPosition}
+                    width={pastTextTooltipWidth + TOOLTIP_GAP}
+                    height={pastTextTooltipHeight + TOOLTIP_GAP}
+                    color={paperTheme.colors.primary}
+                    r={10}
+                  />
                   <SkiaText
                     x={pastTextXPosition}
                     y={pastTextYPosition}
                     text={pastTextValue}
                     font={tooltipFont}
-                    color={paperTheme.colors.tertiary}
+                    color={colors.white}
                     style="fill"
                   />
                   <Circle
