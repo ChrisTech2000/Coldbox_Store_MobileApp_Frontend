@@ -138,16 +138,22 @@ function _NearbyMeSection(props: {
         const datum = unitMap.get(section.sectionKey);
         if (typeof datum === 'undefined') return null;
         return (
-          <View tw="flex-row items-end justify-between py-2">
-            <View tw="flex-col">
+          <View tw="flex-col py-2">
+            <View>
               <Text variant="TextMedium" tw="text-lg">
                 {datum.coolingUnit.name}
               </Text>
-              <MarketplaceItemWrapper.CompanyAction company={datum.company} truncate />
             </View>
-            <View tw="flex-row items-center space-x-2 mb-1.5">
-              <MaterialCommunityIcon name="map-marker-outline" size={19} color={colors.zinc[500]} />
-              <Text tw="text-base text-zinc-500">{section.distance}</Text>
+            <View tw="flex-row items-end justify-between">
+              <MarketplaceItemWrapper.CompanyAction company={datum.company} truncate />
+              <View tw="flex-row items-center space-x-2 mb-1.5">
+                <MaterialCommunityIcon
+                  name="map-marker-outline"
+                  size={19}
+                  color={colors.zinc[500]}
+                />
+                <Text tw="text-base text-zinc-500">{section.distance}</Text>
+              </View>
             </View>
           </View>
         );
