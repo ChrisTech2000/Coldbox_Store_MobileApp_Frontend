@@ -20,7 +20,7 @@ type TableProps = {
   empty: boolean;
   items: Array<{
     coolingUnitName: string;
-    value: string;
+    value: number[];
     sum: number;
   }>;
   total: number;
@@ -56,15 +56,17 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
       const fem = coolingUnitData?.roomOpFem?.[i] ?? 0;
       const male = coolingUnitData?.roomOpMa?.[i] ?? 0;
       const ot = coolingUnitData?.roomOpOt?.[i] ?? 0;
+      const coolingUnitName = coolingUnitData?.unitName?.[i] ?? '';
 
+      if (!coolingUnitName) return;
       return {
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
-        value: `${male} | ${fem} | ${ot}`,
+        coolingUnitName,
+        value: [male, fem, ot],
         sum: coolingUnitData?.roomOp?.[i] ?? 0,
       };
-    });
+    }).filter(Boolean);
 
-    return sortData(data, sorting);
+    return sortData(data as TableProps['items'], sorting);
   }, [coolingUnitData, sorting, configData]);
 
   const usersData = useMemo(() => {
@@ -73,15 +75,17 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
       const fem = coolingUnitData?.roomActiveFem?.[i] ?? 0;
       const male = coolingUnitData?.roomActiveMa?.[i] ?? 0;
       const ot = coolingUnitData?.roomActiveOt?.[i] ?? 0;
+      const coolingUnitName = coolingUnitData?.unitName?.[i] ?? '';
 
+      if (!coolingUnitName) return;
       return {
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
-        value: `${male} | ${fem} | ${ot}`,
+        coolingUnitName,
+        value: [male, fem, ot],
         sum: coolingUnitData?.roomActiveUsers?.[i] ?? 0,
       };
-    });
+    }).filter(Boolean);
 
-    return sortData(data, sorting);
+    return sortData(data as TableProps['items'], sorting);
   }, [coolingUnitData, sorting, configData]);
 
   const beneficiariesData = useMemo(() => {
@@ -89,15 +93,17 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
     const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
       const fem = Math.floor(coolingUnitData?.roomBeneficiariesFem?.[i] ?? 0);
       const male = Math.floor(coolingUnitData?.roomBeneficiariesMa?.[i] ?? 0);
+      const coolingUnitName = coolingUnitData?.unitName?.[i] ?? '';
 
+      if (!coolingUnitName) return;
       return {
-        coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
-        value: `${male} | ${fem}`,
+        coolingUnitName,
+        value: [male, fem],
         sum: male + fem,
       };
-    });
+    }).filter(Boolean);
 
-    return sortData(data, sorting);
+    return sortData(data as TableProps['items'], sorting);
   }, [coolingUnitData, sorting, configData]);
 
   return (
@@ -115,7 +121,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
             ]}
             empty={noDataAvailable}
             items={operatorsData}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
           />
         }
       />
@@ -133,7 +139,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
             ]}
             empty={noDataAvailable}
             items={usersData}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
           />
         }
       />
@@ -151,7 +157,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
             ]}
             empty={noDataAvailable}
             items={beneficiariesData}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
           />
         }
       />
@@ -162,30 +168,41 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
 function Table({ items, header, total, empty }: TableProps) {
   const { t } = useTranslationUtils();
 
+  const headers = header[1].split('|');
+
   return (
-    <DataTable tw="py-4 px-2">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18">
-        <DataTable.Cell>
-          <Text variant="TextMedium" tw="text-white text-base">
+    <DataTable tw="py-4 px-2 min-w-full">
+      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 space-x-4 min-w-full">
+        <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
+          <Text variant="TextMedium" tw="text-white text-base text-center text-wrap">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
-        <DataTable.Cell>
+        <DataTable.Cell tw="max-w-[50%] min-w-[50%]">
           <View>
-            {header.map((text, index) => (
-              <Text
-                key={`${text}-${index}`}
-                variant="TextMedium"
-                tw="text-white text-base flex-wrap"
-                numberOfLines={3}
-              >
-                {text}
-              </Text>
-            ))}
+            <Text variant="TextMedium" tw="text-white text-base text-center">
+              {header[0]}
+            </Text>
+            <View tw="flex flex-row justify-between items-center w-full">
+              {headers.map((text, index) => (
+                <React.Fragment key={`val-${text}-${index}`}>
+                  <Text
+                    key={`${text}-${index}`}
+                    variant="TextMedium"
+                    tw="text-white text-base text-center"
+                  >
+                    {text}
+                  </Text>
+                  {index < headers.length - 1 ? (
+                    <Text tw="text-wrap text-center text-white"> | </Text>
+                  ) : null}
+                </React.Fragment>
+              ))}
+            </View>
           </View>
         </DataTable.Cell>
-        <DataTable.Cell tw="max-w-[20%]">
-          <Text variant="TextMedium" tw="text-white text-base">
+        <DataTable.Cell tw="max-w-[20%] min-w-[20%] px-2">
+          <Text variant="TextMedium" tw="text-white text-base text-center">
             {startCase(t('Dashboard.Analytics.comparisonTab.total'))}
           </Text>
         </DataTable.Cell>
@@ -204,10 +221,27 @@ function Table({ items, header, total, empty }: TableProps) {
         ) : (
           <React.Fragment>
             {items.map((item, index) => (
-              <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
-                <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
-                <DataTable.Cell>{item.value}</DataTable.Cell>
-                <DataTable.Cell tw="max-w-[20%]">{item.sum}</DataTable.Cell>
+              <DataTable.Row tw="bg-white space-x-4" key={`${item.coolingUnitName}-${index}`}>
+                <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
+                  <Text tw="text-wrap" numberOfLines={3}>
+                    {item.coolingUnitName}
+                  </Text>
+                </DataTable.Cell>
+                <DataTable.Cell tw="max-w-[50%] min-w-[50%]">
+                  <View tw="flex flex-row justify-between items-center w-full h-full px-2">
+                    {item.value.map((val, index) => (
+                      <React.Fragment key={`val-${val}-${index}`}>
+                        <Text tw="text-wrap text-center">{val}</Text>
+                        {index < item.value.length - 1 ? (
+                          <Text tw="text-wrap text-center"> | </Text>
+                        ) : null}
+                      </React.Fragment>
+                    ))}
+                  </View>
+                </DataTable.Cell>
+                <DataTable.Cell tw="max-w-[20%] min-w-[20%] px-4">
+                  <Text tw="text-wrap text-center">{item.sum}</Text>
+                </DataTable.Cell>
               </DataTable.Row>
             ))}
 

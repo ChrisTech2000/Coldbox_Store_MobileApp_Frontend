@@ -5,6 +5,7 @@ import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { ScrollView } from '#ui/components/ScrollView';
 
 type SectionAccordionProps = {
   expanded: boolean;
@@ -49,7 +50,11 @@ export function SectionAccordion({
           />
         </View>
       </TouchableWithoutFeedback>
-      {expanded && content}
+      {expanded ? (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} tw="w-full">
+          {content}
+        </ScrollView>
+      ) : null}
     </View>
   );
 }
