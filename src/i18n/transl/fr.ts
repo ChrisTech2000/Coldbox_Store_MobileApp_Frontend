@@ -1175,14 +1175,6 @@ export default {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} Reçu :
-        Code de mouvement : {{code}}
-        Cultures : {{crops}}
-        Poids total : {{weight}} Kg
-        {{movementTypeForDate}} : {{date}}
-        Prix : {{price}}
-        Payé par : {{farmersName}}
-        `,
         movementType: {
           checkOut: 'Sortie',
           checkIn: 'Entrée',
