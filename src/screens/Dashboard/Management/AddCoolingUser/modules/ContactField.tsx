@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
+
+import { Input } from '#ui/components/Input';
 
 import { useTranslationUtils } from '#i18n/utils';
 
@@ -22,14 +23,14 @@ export default function ContactField(props: Props) {
         name="phone"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
+          <Input
             tw="w-full bg-transparent mt-1"
             label={t('Auth.ForgotPassword.phoneInputLabel')}
             mode="flat"
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
-            error={!!errors.phone}
+            error={errors.phone}
             disabled={props.disabled}
             dense
           />

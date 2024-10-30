@@ -78,11 +78,11 @@ export default function MainTabStack() {
 
   const { onLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.OPEN_DRAWER_STEP,
-    enableHardwareBack: true,
     OverlayComponent: DrawerOverlay,
     maskAllowInteraction: true,
     // eslint-disable-next-line react/prop-types
     onPressMask: () => navigation.dispatch(DrawerActions.openDrawer()),
+    //onFinish: () => toggleTutorial(false),
   });
 
   const screenOptions: ScreenOptions = useCallback(

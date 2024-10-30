@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { RefreshControl, View } from 'react-native';
+import { Dimensions, RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
@@ -14,6 +14,7 @@ import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 import { DashboardProduce, ERoles, Farmer, type Company, type CoolingUnit } from '#types/global';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
 import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
 import {
@@ -44,10 +45,13 @@ import { sortProduces } from './utils/sortProduces';
 export const useDashboardCoolingUnitStore = createSelectStore<CoolingUnit>();
 export const useDashboardCompanyStore = createSelectStore<Company>();
 
+const screenHeight = Dimensions.get('window').height;
+
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
   const { user } = useAuthStore();
   const { company } = useManagementStore();
+
   const { isTutorialOn, toggleTutorial } = useTutorialStore((store) => ({
     isTutorialOn: store.isTutorialActive,
     toggleTutorial: store.toggleTutorial,
@@ -61,28 +65,24 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_1,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard1Overlay,
     fullScreen: true,
   });
 
   const { onLayout: onDashboard2Layout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_2,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard2Overlay,
     fullScreen: true,
   });
 
   const { onLayout: onDashboard3Layout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_3,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard3Overlay,
     fullScreen: true,
   });
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_4,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard4Overlay,
     fullScreen: true,
   });
@@ -187,24 +187,29 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, [isTutorialOn]);
 
   useEffect(() => {
-    if (user && !user.lastLogin) {
-      toggleTutorial();
+    if (user && (!user.lastLogin || user.lastLogin === 'None')) {
+      toggleTutorial(true);
     }
   }, [user]);
+
+  const hideInTutorial =
+    isTutorialOn && user?.role === ERoles.COOLING_USER && screenHeight <= SMALL_SCREEN_THRESHOLD;
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}>
       <Filters
         sortingMenu={
-          <SortingMenu
-            isModalVisible={isSortingModalOpen}
-            setIsModalVisible={setIsSortingModalOpen}
-          />
+          !hideInTutorial ? (
+            <SortingMenu
+              isModalVisible={isSortingModalOpen}
+              setIsModalVisible={setIsSortingModalOpen}
+            />
+          ) : undefined
         }
         search={search}
         onSearch={setSearch}
         onSearchTypeChange={setSearchType}
-        searchType={searchType}
+        searchType={!hideInTutorial ? searchType : undefined}
         useCompanyStore={useDashboardCompanyStore}
         useCoolingUnitStore={useDashboardCoolingUnitStore}
         setAreCoolingUnitsLoading={setAreCoolingUnitsLoading}

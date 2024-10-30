@@ -53,7 +53,7 @@ export function BankTransferModal(props: BankTransferModalProps) {
             <Text tw="text-base">
               {t('Dashboard.CrateManagement.CheckOut.bankTransfer.accountName')}
             </Text>
-            <Text tw="text-base">{data?.[0]?.company.bankDetails.accountName ?? ''}</Text>
+            <Text tw="text-base">{data?.[0]?.company.bankDetails?.accountName ?? ''}</Text>
           </View>
           <Divider tw="w-[90%] bg-gray-400 my-2" />
 
@@ -61,7 +61,7 @@ export function BankTransferModal(props: BankTransferModalProps) {
             <Text tw="text-base">
               {t('Dashboard.CrateManagement.CheckOut.bankTransfer.accountNumber')}
             </Text>
-            <Text tw="text-base">{data?.[0]?.company.bankDetails.accountNumber ?? ''}</Text>
+            <Text tw="text-base">{data?.[0]?.company.bankDetails?.accountNumber ?? ''}</Text>
           </View>
           <Divider tw="w-[90%] bg-gray-400 my-2" />
 
@@ -69,7 +69,7 @@ export function BankTransferModal(props: BankTransferModalProps) {
             <Text tw="text-base">
               {t('Dashboard.CrateManagement.CheckOut.bankTransfer.bankName')}
             </Text>
-            <Text tw="text-base">{data?.[0]?.company.bankDetails.bankName ?? ''}</Text>
+            <Text tw="text-base">{data?.[0]?.company.bankDetails?.bankName ?? ''}</Text>
           </View>
           <Divider tw="w-[90%] bg-gray-400 my-2" />
 

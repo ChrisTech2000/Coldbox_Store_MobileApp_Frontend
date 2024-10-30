@@ -1,13 +1,49 @@
-import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Dimensions, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { useTutorialStore } from '#stores/tutorial';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { cn } from '#ui/lib/cn';
 
-export function OperatorActionsOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+const screenHeight = Dimensions.get('window').height;
+
+export function OperatorActionsOverlay({
+  next,
+  stop,
+  step: { onPressMask, mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const colors = useTailwindColors();
+
+  const blinkAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const startBlinking = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(blinkAnim, {
+            toValue: 0,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(blinkAnim, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    };
+
+    startBlinking();
+  }, [blinkAnim]);
 
   return (
     <View tw="h-full w-full absolute">
@@ -17,9 +53,30 @@ export function OperatorActionsOverlay({ next, step: { onPressMask } }: IOverlay
           onPressMask?.();
           next();
         }}
-      />
+      >
+        <Animated.View
+          style={[
+            {
+              top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 80 : 110),
+              left: mask.x + 25,
+              opacity: blinkAnim,
+              transform: [{ rotate: '270deg' }],
+            },
+          ]}
+        >
+          <MaterialIcon
+            name="touch-app"
+            size={screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 40}
+            color={colors.green.primary}
+          />
+        </Animated.View>
+      </TouchableOpacity>
+
       <View
-        tw="absolute left-5 top-2/3 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-[27%]' : 'top-2/3'
+        )}
         style={{
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },
@@ -28,18 +85,36 @@ export function OperatorActionsOverlay({ next, step: { onPressMask } }: IOverlay
         }}
       >
         <Text tw="text-center text-base">{t('tutorial.steps.checkOut1')}</Text>
+        <Button
+          mode="text"
+          onPress={() => {
+            stop();
+            toggleTutorial(false);
+          }}
+          labelStyle="text-green-primary"
+        >
+          {t('tutorial.quit')}
+        </Button>
       </View>
     </View>
   );
 }
 
-export function CheckOutScreenOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+export function CheckOutScreenOverlay({
+  next,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <View tw="h-full w-full absolute">
       <View
-        tw="absolute left-5 bottom-16 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-4' : 'bottom-16'
+        )}
         style={[
           {
             shadowColor: '#000',
@@ -50,23 +125,42 @@ export function CheckOutScreenOverlay({ next, step: { onPressMask } }: IOverlayC
         ]}
       >
         <Text tw="text-center text-base">{t('tutorial.steps.checkOut2')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            onPressMask?.();
-            next();
-          }}
-          labelStyle="text-green-primary"
-        >
-          {t('actions.continue')}
-        </Button>
+
+        <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.quit')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              onPressMask?.();
+              next();
+            }}
+            labelStyle="text-white"
+            tw="bg-green-primary"
+          >
+            {t('actions.continue')}
+          </Button>
+        </View>
       </View>
     </View>
   );
 }
 
-export function CheckOut2ScreenOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+export function CheckOut2ScreenOverlay({
+  next,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <View tw="h-full w-full absolute">
@@ -82,16 +176,30 @@ export function CheckOut2ScreenOverlay({ next, step: { onPressMask } }: IOverlay
         ]}
       >
         <Text tw="text-center text-base">{t('tutorial.steps.checkOut3')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            onPressMask?.();
-            next();
-          }}
-          labelStyle="text-green-primary"
-        >
-          {t('actions.continue')}
-        </Button>
+
+        <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.quit')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              onPressMask?.();
+              next();
+            }}
+            labelStyle="text-white"
+            tw="bg-green-primary"
+          >
+            {t('actions.continue')}
+          </Button>
+        </View>
       </View>
     </View>
   );

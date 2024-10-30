@@ -32,7 +32,6 @@ export default function Prompt(props: Props) {
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.COOLING_USER_MODAL_STEP,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     OverlayComponent: CoolingUsersModalOverlay,
     layoutAdjustments: {

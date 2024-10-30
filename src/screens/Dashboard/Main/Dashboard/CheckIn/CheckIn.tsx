@@ -46,7 +46,6 @@ import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CheckedInCard } from './components/CheckedInCard';
-
 import { processMarketplaceCrateListing } from './utils';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
@@ -70,19 +69,16 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   const { onLayout: onCheckIn1Layout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_1,
-    enableHardwareBack: true,
     OverlayComponent: CheckIn1ScreenOverlay,
   });
 
   const { onLayout: onCheckIn2Layout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_2,
-    enableHardwareBack: true,
     OverlayComponent: CheckIn2ScreenOverlay,
   });
 
   const { onLayout: onCheckIn3Layout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_3,
-    enableHardwareBack: true,
     OverlayComponent: CheckIn3ScreenOverlay,
     maskAllowInteraction: true,
     onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'History' }),

@@ -5,11 +5,17 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { useTutorialStore } from '#stores/tutorial';
 
 import { ECommonTutorialSteps } from './utils/constants';
 
-export function CoolingUnitsMapOverlay({ goTo, step: { onPressMask } }: IOverlayComponentProps) {
+export function CoolingUnitsMapOverlay({
+  goTo,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <View tw="h-full w-full absolute">
@@ -25,16 +31,30 @@ export function CoolingUnitsMapOverlay({ goTo, step: { onPressMask } }: IOverlay
         ]}
       >
         <Text tw="text-center text-base">{t('tutorial.steps.farmersCoolingUnits')}</Text>
-        <Button
-          mode="text"
-          labelStyle="text-green-primary"
-          onPress={() => {
-            onPressMask?.();
-            goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
-          }}
-        >
-          {t('actions.continue')}
-        </Button>
+
+        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.quit')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              onPressMask?.();
+              goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
+            }}
+            tw="bg-green-primary border-green-primary"
+            labelStyle="text-white"
+          >
+            {t('actions.continue')}
+          </Button>
+        </View>
       </View>
     </View>
   );
