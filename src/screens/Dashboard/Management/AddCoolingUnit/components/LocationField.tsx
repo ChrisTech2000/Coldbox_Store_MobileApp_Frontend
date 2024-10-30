@@ -42,7 +42,10 @@ export default function LocationField() {
                 label={`${t('Dashboard.Management.AddCoolingUnit.fields.location')}*`}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedLocationId?.toString() ?? null);
+                }}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.fields.location'),
                   options: (

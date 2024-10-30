@@ -117,7 +117,10 @@ export default function MultipleSelectWithStore<T>({
           variant="md"
           label={rest.label}
           isModalOpen={isModalVisible}
-          onClick={() => setIsModalVisible(!isModalVisible)}
+          onClick={() => {
+            setInternalSelection(store.selectedItems);
+            setIsModalVisible(!isModalVisible);
+          }}
           content={{
             header: rest.modalHeader ?? '',
             options: (

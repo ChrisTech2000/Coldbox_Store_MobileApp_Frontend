@@ -49,7 +49,10 @@ export default function OperatorsField() {
                 label={t('navigation.management.Operators')}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedOperators);
+                }}
                 useScrollView={false}
                 content={{
                   header: t('navigation.management.Operators'),

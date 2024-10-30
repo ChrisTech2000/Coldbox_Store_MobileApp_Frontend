@@ -78,7 +78,10 @@ export default function CropTypeFilters() {
                 label="Produce / Crop Type"
                 currentValue={currentValue}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  setInternalSelection(selectedCrops.map(({ value }) => value));
+                  toggleVisibility();
+                }}
                 useScrollView={false}
                 content={{
                   header: 'Select crops',

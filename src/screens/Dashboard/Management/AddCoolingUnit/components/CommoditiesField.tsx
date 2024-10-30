@@ -67,7 +67,10 @@ export default function CommoditiesField() {
                 label={t('Dashboard.Management.AddCoolingUnit.fields.crops')}
                 currentValue={selectLabel}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  setInternalSelection(selectedCrops);
+                  toggleVisibility();
+                }}
                 useScrollView={false}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.fields.selectCrops'),
