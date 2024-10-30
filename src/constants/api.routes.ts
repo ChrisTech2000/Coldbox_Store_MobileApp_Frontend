@@ -46,6 +46,7 @@ export enum EOperationEndpoints {
   ADD_MARKET_SURVEY = 'operation/market-survey/',
   CHECK_IN = 'operation/checkins/',
   CHECK_OUT = 'operation/checkouts/',
+  SEND_CHECK_OUT_SMS_REPORT = 'operation/checkouts/:movement_id/send_sms_report/',
   EDIT_CHECK_IN = '/operation/checkins/:id/',
   GET_COOLING_UNIT_REVENUE = '/operation/movements/revenue/',
   GET_COOLING_UNIT_USAGE = '/operation/movements/usage/',
@@ -56,10 +57,6 @@ export enum EOperationEndpoints {
 export enum ECompanyEndpoints {
   GET_COMPANIES = 'user/v1/companies/',
   GET_COMPANY = 'user/v1/companies/:companyId/',
-}
-
-export enum ESMSEndpoints {
-  SEND_SMS = 'storage/v1/send-sms/',
 }
 
 export enum ENotificationsEndpoints {

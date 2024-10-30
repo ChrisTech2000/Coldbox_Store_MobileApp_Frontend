@@ -1158,14 +1158,6 @@ const en = {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} Receipt:
-        Movement code: {{code}}
-        Crops: {{crops}}
-        Total weight: {{weight}} Kg
-        {{movementTypeForDate}}: {{date}}
-        Price: {{price}}
-        Paid by: {{farmersName}}
-        `,
         movementType: {
           checkOut: 'Check Out',
           checkIn: 'Check In',
