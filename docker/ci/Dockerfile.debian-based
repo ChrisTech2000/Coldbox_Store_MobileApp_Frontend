@@ -37,9 +37,6 @@ RUN mkdir -p $NODE_HOME $YARN_HOME \
 
 # Android
 ENV ANDROID_HOME=/usr/local/android-sdk \
-    ANDROID_VERSION=34 \
-    ANDROID_BUILD_TOOLS_VERSION=34.0.0 \
-    ANDROID_NDK_VERSION=26.1.10909125 \
     PATH=$PATH:/usr/local/android-sdk/tools/bin:/usr/local/android-sdk/platform-tools
 
 # Download Android SDK and Install Android Build Tool and Libraries
@@ -53,7 +50,7 @@ RUN yes | sdkmanager --licenses > /dev/null \
     && sdkmanager --update > /dev/null
 
 # Install build, platform, and platform tools
-RUN sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_VERSION}" "platform-tools" > /dev/null
+RUN sdkmanager "build-tools;34.0.0" "platforms;android-33" "platforms;android-34" "ndk;26.1.10909125" "platform-tools" > /dev/null
 
 # Set the default JVM to OpenJDK 17
 RUN update-java-alternatives --set "$(update-java-alternatives --list | grep java-1.17 |  cut -d " " -f1)"
