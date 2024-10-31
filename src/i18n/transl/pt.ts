@@ -484,6 +484,8 @@ export default {
             'Você precisará do código de check-out para iniciar um novo check-in desta forma. Se não o tiver, considere iniciar um novo check-in. Se souber por quanto tempo planeia armazenar, considere adicionar o número de dias aqui.',
           codeLabel: 'Adicionar código',
           codeErrorMessage: 'Código é obrigatório',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
         },
         SelectCropType: {
           fruits: 'Frutas',
@@ -977,6 +979,7 @@ export default {
       sections: {
         sellerSettings: 'Configurações do vendedor',
         buyerSettings: 'Configurações do comprador',
+        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'Detalhes',
       },
       toasts: {
