@@ -284,7 +284,8 @@ const en = {
         languageFieldName: 'language',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again',
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.',
       },
     },
     ForgotPassword: {
@@ -692,7 +693,6 @@ const en = {
           operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
         },
         toasts: {
-          error: 'Please check the information provided and try again',
           success: 'Successfully invited operator',
         },
         phoneFormat: 'Make sure the entered phone number has a country code.',
@@ -938,8 +938,8 @@ const en = {
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
       addToCart: {
         addToCartButton: 'Add to cart and continue shopping',
+        buyFullCrate: 'Buy full crate',
         selectQuantity: 'Select quantity',
-        buyNowButton: 'Buy now',
       },
       currentLocation: 'Current location',
       filterError:
@@ -967,6 +967,7 @@ const en = {
       },
       sections: {
         sellerSettings: 'Seller Settings',
+        companySellerSettings: 'Seller Settings (Company)',
         buyerSettings: 'Buyer Settings',
         details: 'Details',
       },
@@ -977,6 +978,8 @@ const en = {
       PayoutSettings: {
         addTitle: 'Please insert your bank account information',
         editTitle: 'Your bank account information',
+        addTittleForCompany: "Please insert you company's bank account information",
+        editTitleForCompany: "Your company's bank account information",
         form: {
           nameLabel: 'Account name',
           namePlaceholder: 'Insert account name',
@@ -1158,14 +1161,6 @@ const en = {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} Receipt:
-        Movement code: {{code}}
-        Crops: {{crops}}
-        Total weight: {{weight}} Kg
-        {{movementTypeForDate}}: {{date}}
-        Price: {{price}}
-        Paid by: {{farmersName}}
-        `,
         movementType: {
           checkOut: 'Check Out',
           checkIn: 'Check In',

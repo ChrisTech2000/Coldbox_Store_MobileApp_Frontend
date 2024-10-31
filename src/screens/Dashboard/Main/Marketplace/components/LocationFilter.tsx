@@ -23,6 +23,7 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 
 import { useMarketplaceQueryParams } from '../store';
+import { DEFAULT_COORDINATES } from '../utils';
 
 type FormValues<T = string> = {
   cityName: string;
@@ -70,7 +71,7 @@ export default function MarketplaceLocationFilter() {
         filterByMaxDistanceInKm: values.distance,
       });
       modalRef.current?.close();
-    } catch (_) {
+    } catch {
       toast.show(t('Dashboard.Marketplace.filterError'), {
         type: 'md_danger',
       });
@@ -110,7 +111,7 @@ export default function MarketplaceLocationFilter() {
           switch (errorCode) {
             case 'UNAUTHORIZED': {
               if (currentLocation.length >= 1) return;
-              return _setLocation([0, 0]);
+              return _setLocation(DEFAULT_COORDINATES);
             }
             default:
               return;

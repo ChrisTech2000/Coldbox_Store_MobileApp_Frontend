@@ -286,7 +286,8 @@ export default {
         languageFieldName: 'भाषा',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again', // TODO
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
       },
     },
     ForgotPassword: {
@@ -945,7 +946,7 @@ export default {
       addToCart: {
         addToCartButton: 'कार्ट में जोड़ें और खरीदारी जारी रखें',
         selectQuantity: 'मात्रा चुनें',
-        buyNowButton: 'अभी खरीदें',
+        buyFullCrate: 'Buy full crate', // TODO
       },
       currentLocation: 'वर्तमान स्थान',
       filterError:
@@ -1163,14 +1164,6 @@ export default {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} प्राप्ति:
-          गतिविधि कोड: {{code}}
-          फसलें: {{crops}}
-          कुल वजन: {{weight}} किलोग्राम
-          {{movementTypeForDate}}: {{date}}
-          मूल्य: {{price}}
-          द्वारा भुगतान: {{farmersName}}
-          `,
         movementType: {
           checkOut: 'चेक आउट',
           checkIn: 'चेक इन',

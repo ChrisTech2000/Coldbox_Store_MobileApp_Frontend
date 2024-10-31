@@ -149,7 +149,7 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
 
         <Divider />
 
-        <View tw="flex flex-row justify-between items-center">
+        <View tw="flex flex-wrap flex-row justify-between items-center gap-0.5">
           <View tw="flex flex-row items-center space-x-1">
             <Icon source="account-outline" size={20} color={colors.gray[400]} />
             <Text variant="TextMedium" tw="text-gray-400">

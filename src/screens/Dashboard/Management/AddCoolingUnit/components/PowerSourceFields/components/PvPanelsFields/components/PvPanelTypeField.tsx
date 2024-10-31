@@ -46,7 +46,10 @@ export default function PvPanelTypeField() {
                 label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelType')}
                 currentValue={truncate(currentValue, { length: 30 })}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedPvPanelType);
+                }}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.fields.pvPanelType'),
                   options: (

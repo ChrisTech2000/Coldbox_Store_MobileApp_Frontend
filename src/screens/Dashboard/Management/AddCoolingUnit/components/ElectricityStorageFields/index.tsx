@@ -44,7 +44,10 @@ export default function ElectricityStorageFields() {
                 label={t('Dashboard.Management.AddCoolingUnit.fields.electricityStorageSystem')}
                 currentValue={truncate(currentValue, { length: 25 })}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedStorageSystem);
+                }}
                 content={{
                   options: (
                     <RadioButton.Group

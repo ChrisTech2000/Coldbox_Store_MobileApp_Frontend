@@ -107,7 +107,10 @@ export default function SelectWithStore<T>({
           variant="md"
           label={rest.label}
           isModalOpen={isModalVisible}
-          onClick={() => setIsModalVisible(!isModalVisible)}
+          onClick={() => {
+            setInternalSelection(store.selectedItem);
+            setIsModalVisible(!isModalVisible);
+          }}
           useScrollView={useScrollView}
           disabled={rest.disabled}
           content={{

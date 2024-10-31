@@ -135,7 +135,7 @@ export function ComparisonSection() {
 
   return (
     <ScrollView tw="mt-8 h-full w-full" showsVerticalScrollIndicator={false}>
-      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-12' : ''}>
+      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-20' : 'mb-12'}>
         {!configData ? (
           <Configuration openModal={() => setIsModalOpen(true)} />
         ) : (

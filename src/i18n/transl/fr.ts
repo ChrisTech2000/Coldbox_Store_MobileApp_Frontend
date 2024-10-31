@@ -288,7 +288,8 @@ export default {
         languageFieldName: 'langue',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again', // TODO
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
       },
     },
     ForgotPassword: {
@@ -954,9 +955,9 @@ export default {
       priceConfig:
         'La configuration des prix concerne la vente de produits, pas les frais de stockage réfrigéré.',
       addToCart: {
+        buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'Ajouter au panier et continuer vos achats',
         selectQuantity: 'Sélectionnez la quantité',
-        buyNowButton: 'Acheter maintenant',
       },
       currentLocation: 'Localisation actuelle',
       filterError:
@@ -1175,14 +1176,6 @@ export default {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} Reçu :
-        Code de mouvement : {{code}}
-        Cultures : {{crops}}
-        Poids total : {{weight}} Kg
-        {{movementTypeForDate}} : {{date}}
-        Prix : {{price}}
-        Payé par : {{farmersName}}
-        `,
         movementType: {
           checkOut: 'Sortie',
           checkIn: 'Entrée',

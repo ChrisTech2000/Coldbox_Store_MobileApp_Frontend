@@ -91,7 +91,13 @@ export function SortingMenu({ useSortingStore, ...props }: SortingMenuProps) {
         <Icon source="sort" size={32} />
       </TouchableOpacity>
       <Portal>
-        <Modal visible={isModalVisible} onDismiss={() => setIsModalVisible(false)}>
+        <Modal
+          visible={isModalVisible}
+          onDismiss={() => {
+            setInternalSelection(store.sorting);
+            setIsModalVisible(!isModalVisible);
+          }}
+        >
           <View tw="bg-white rounded-3xl h-auto space-y-2 items-center mx-16 py-1">
             <Text variant="TitleBold">{t('Dashboard.SortMenu.title')}</Text>
             <Divider tw="w-full bg-grey-700 my-1" />

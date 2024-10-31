@@ -334,6 +334,17 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  public sendCheckOutSmsReport = async (movement_id: number): Promise<void> => {
+    try {
+      const url = subs(EOperationEndpoints.SEND_CHECK_OUT_SMS_REPORT, { movement_id });
+      await this.post(url, {});
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public checkIn = async (params: CheckInParams): Promise<CheckInResponse> => {
     const _params = {
       ...params,
