@@ -479,6 +479,8 @@ export default {
             'આ રીતથી નવો ચેક-ઇન શરૂ કરવા માટે તમારે ચેક-આઉટ કોડની જરૂર પડશે. જો તમારું પાસે ન હોય, તો નવા ચેક-ઇન શરૂ કરવાનો વિચાર કરો. જો તમે કેટલો સમય સ્ટોર કરવાનું યોજના બનાવો છો, તો અહીં દિવસોની સંખ્યા ઉમેરવાની વિચારો.',
           codeLabel: 'કોડ ઉમેરો',
           codeErrorMessage: 'કોડ જરૂરી છે',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
         },
         SelectCropType: {
           fruits: 'ફળ',
@@ -968,6 +970,7 @@ export default {
       sections: {
         sellerSettings: 'વિક્રેતા સેટિંગ્સ',
         buyerSettings: 'ખરીદદાર સેટિંગ્સ',
+        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'વિગતવાર',
       },
       ContactsSharing: {
@@ -977,6 +980,8 @@ export default {
       PayoutSettings: {
         addTitle: 'કૃપા કરીને તમારી બેંક એકાઉન્ટની માહિતી દાખલ કરો',
         editTitle: 'તમારી બેંક એકાઉન્ટની માહિતી',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'એકાઉન્ટનું નામ',
           namePlaceholder: 'એકાઉન્ટનું નામ દાખલ કરો',
