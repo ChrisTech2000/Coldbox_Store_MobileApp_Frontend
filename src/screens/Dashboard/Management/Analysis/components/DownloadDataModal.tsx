@@ -1,7 +1,7 @@
+import { format } from 'date-fns';
 import React, { useCallback, useState } from 'react';
 import { Linking, View } from 'react-native';
 import { Divider, Portal } from 'react-native-paper';
-import { format } from 'date-fns';
 
 import { Button } from '#ui/components/Button';
 import {
@@ -9,13 +9,15 @@ import {
   DateRangePickerWithStore,
 } from '#ui/components/DateRangePickerWithStore';
 import { Modal } from '#ui/components/Modal';
-import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
+import MultipleSelectWithStore, {
+  createMultipleSelectStore,
+} from '#ui/components/MultipleSelectWithStore';
 import { Text } from '#ui/components/Text';
 
+import { AIR_PROD_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { CoolingUnit } from '#types/global';
-import { AIR_PROD_BASE_URL } from '#constants/environment';
 
 type DownloadDataModalProps = {
   coolingUnits?: Array<CoolingUnit>;
@@ -24,14 +26,14 @@ type DownloadDataModalProps = {
   dismiss: () => void;
 };
 
-const useCoolingUnitStore = createSelectStore<CoolingUnit>();
+const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
 
 export const downloadAnalysisStores = [useCoolingUnitStore, useDateRangeStore];
 
 export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: DownloadDataModalProps) {
   const { t } = useTranslationUtils();
-  const { selectedItem: coolingUnit } = useCoolingUnitStore();
+  const { selectedItems: selectedUnits } = useCoolingUnitStore();
   const { startDate, endDate } = useDateRangeStore();
   const { company } = useManagementStore();
 
@@ -45,12 +47,12 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
     const _startDate = format(new Date(startDate), 'yyyy-MM-dd');
     const _endDate = format(new Date(endDate), 'yyyy-MM-dd');
 
-    const url = `${AIR_PROD_BASE_URL}company/${_company}/${_mode}?start_date=${_startDate}&end_date=${_endDate}&cooling_unit_ids=${coolingUnit?.id}`;
+    const url = `${AIR_PROD_BASE_URL}company/${_company}/${_mode}?start_date=${_startDate}&end_date=${_endDate}&cooling_unit_ids=${selectedUnits.map((cu) => cu.id).join(',')}`;
 
     Linking.openURL(url).catch((err) => {
       console.error('Failed to open URL: ', err);
     });
-  }, [coolingUnit, startDate, endDate, company]);
+  }, [selectedUnits, startDate, endDate, company]);
 
   return (
     <Portal>
@@ -75,7 +77,7 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
             <Text variant="TextMedium" tw="text-base mt-2 px-2">
               {t('Dashboard.Management.UsageAnalysis.modal.coolingUnitSelection')}
             </Text>
-            <SelectWithStore<CoolingUnit>
+            <MultipleSelectWithStore<CoolingUnit>
               emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
               datums={coolingUnits ?? []}
               isModalVisible={isUnitsModalOpen}
@@ -83,7 +85,7 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
               itemName={(item) => item?.name}
               useSelectStore={useCoolingUnitStore}
               label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-                name: coolingUnit ? coolingUnit.name : '',
+                name: selectedUnits ? selectedUnits.map((unit) => unit.name).join(', ') : '',
               })}
               modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
               divider

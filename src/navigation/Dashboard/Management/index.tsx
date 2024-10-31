@@ -209,7 +209,6 @@ function _rightContentFactory(
 ): NavigationHeaderProps {
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.ADD_COOLING_USER_NAVIGATION_STEP,
-    enableHardwareBack: true,
     OverlayComponent: AddCoolingUserNavigationOverLay,
     onPressMask: () => emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true),
   });

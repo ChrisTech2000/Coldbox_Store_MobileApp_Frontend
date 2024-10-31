@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import { useSWRConfig } from 'swr';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
@@ -13,6 +14,7 @@ import RBAC from '#common/RBAC';
 import InAppNotifications from '#common/InAppNotifications';
 import { useAuthStore } from '#stores/auth';
 import ColdtivateService from '#services/ColdtivateService';
+import { getQueryKey } from '#services/hooks/useAPiCall';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import NameFields from './modules/NameFields';
@@ -24,6 +26,8 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
 
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
+  const { guard } = RBAC.useRBAC();
+  const { mutate } = useSWRConfig();
 
   const setUser = useAuthStore((store) => store.setUser);
 
@@ -40,6 +44,11 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
       });
 
       setUser({ ...userDatum, role: values.kind });
+
+      // cooling users only
+      if (guard('VIEW', 'FarmerFields')) {
+        await mutate(getQueryKey('getFarmerByUserId', userId)); // revalidation
+      }
 
       toast.show(t('Dashboard.AccountDetails.toasts.success'), {
         type: 'md_success',

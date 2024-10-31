@@ -7,6 +7,8 @@ import { ActivityIndicator, Divider, List, type ListItemProps } from 'react-nati
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
+import { useToggle } from '#ui/hooks/useToggle';
+import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { CoolingUsersOverlay } from '#screens/Dashboard/Tutorial/CoolingUsersOverlay';
@@ -24,8 +26,6 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import type { Farmer } from '#types/global';
-import { useToggle } from '#ui/hooks/useToggle';
-import { paperTheme } from '#ui/lib/theme';
 
 import FormModal from './components/FormModal';
 import Prompt from './components/Prompt';
@@ -39,7 +39,6 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.LIST_COOLING_USERS_STEP,
-    enableHardwareBack: true,
     OverlayComponent: CoolingUsersOverlay,
   });
 
@@ -132,7 +131,6 @@ function _propsFactory(
   datum: Farmer,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ) {
-  console.log(datum);
   const isUserWithoutPhone = datum.user.firstName === 'User without a phone';
   const props = {} as ListItemProps;
   props.title = [datum.user.firstName, datum.user.lastName].join(' ');

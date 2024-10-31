@@ -31,7 +31,7 @@ type TableProps = {
   header: string;
   items: Array<{
     coolingUnitName: string;
-    value: string;
+    value: number[];
   }>;
   total: number;
   empty: boolean;
@@ -87,10 +87,10 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
 
       return {
         coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
-        value: `${checkInCratesCrop} | ${checkOutCratesCrop}`,
+        value: [checkInCratesCrop, checkOutCratesCrop],
         sum,
       };
-    });
+    }).filter((item) => item.coolingUnitName);
 
     return sortData(data, sorting);
   }, [coolingUnitData, sorting, configData]);
@@ -104,10 +104,10 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
 
       return {
         coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
-        value: `${checkIn} | ${checkOut}`,
+        value: [checkIn, checkOut],
         sum,
       };
-    });
+    }).filter((item) => item.coolingUnitName);
 
     return sortData(data, sorting);
   }, [coolingUnitData, sorting, configData]);
@@ -121,10 +121,10 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
 
       return {
         coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
-        value: `${checkIn} | ${checkOut}`,
+        value: [checkIn, checkOut],
         sum,
       };
-    });
+    }).filter((item) => item.coolingUnitName);
 
     return sortData(data, sorting);
   }, [coolingUnitData, sorting, configData]);
@@ -151,7 +151,10 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
       });
     }
 
-    return sortData(data, sorting);
+    return sortData(
+      data.filter((item) => item.coolingUnitName),
+      sorting
+    );
   }, [coolingUnitData, crops, sorting, configData]);
 
   const generateDistributionData = useCallback(
@@ -166,20 +169,22 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
         return {
           coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
           column1: (
-            <View tw="space-y-1 my-1 items-center">
+            <View tw="space-y-1 h-full">
               {sortedData.map(({ val, index }) => (
-                <Text key={`${dataKey}-${index}`} variant="TextMedium">
+                <Text key={`${dataKey}-${index}`} tw="text-sm" variant="TextMedium">
                   {val}
                 </Text>
               ))}
             </View>
           ),
           column2: (
-            <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
+            <View tw="space-y-1 my-1 h-full w-full pr-1">
+              {generateSecondColumnContent(sortedData, crops)}
+            </View>
           ),
           sum: sortedData.reduce((acc, current) => acc + current.val, 0),
         };
-      });
+      }).filter((item) => item.coolingUnitName);
 
       return sortData(data, sorting);
     },
@@ -214,7 +219,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
           <Table
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.crates')}
             items={totalCratesData}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
             empty={noDataAvailable}
           />
         }
@@ -228,7 +233,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
           <Table
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.kg')}
             items={totalKgData}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
             empty={noDataAvailable}
           />
         }
@@ -242,7 +247,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
           <Table
             header={t('Dashboard.Analytics.comparisonTab.cratesTab.operations')}
             items={operationsData}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
             empty={noDataAvailable}
           />
         }
@@ -258,7 +263,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkInCropDistribution')}
             items={distributionCratesIn}
             empty={noDataAvailable}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
           />
         }
       />
@@ -272,7 +277,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.crates')}
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution')}
             items={distributionCratesOut}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
             empty={noDataAvailable}
           />
         }
@@ -287,7 +292,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.kg')}
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution')}
             items={distributionKgIn}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
             empty={noDataAvailable}
           />
         }
@@ -302,7 +307,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.kg')}
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutKgDistribution')}
             items={distributionKgOut}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
             empty={noDataAvailable}
           />
         }
@@ -317,7 +322,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             column1={t('Dashboard.Analytics.comparisonTab.cratesTab.co2EmissionsLabel')}
             column2={t('Dashboard.Analytics.comparisonTab.cratesTab.co2DistributionLabel')}
             items={distributionCo2Data}
-            total={configData?.coolingUnits.length ?? 0}
+            total={Object.values(coolingUnitData?.unitName ?? {}).length}
             empty={noDataAvailable}
           />
         }
@@ -330,28 +335,32 @@ function Table({ items, header, total, empty }: TableProps) {
   const { t } = useTranslationUtils();
 
   return (
-    <DataTable tw="py-4 px-2 w-full">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
-        <DataTable.Title>
+    <DataTable tw="py-4 px-2 w-full min-w-full">
+      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14 space-x-4 min-w-full">
+        <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
           <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
-        </DataTable.Title>
-        <DataTable.Title>
-          <View>
-            <Text variant="TextMedium" tw="text-white text-base">
+        </DataTable.Cell>
+        <DataTable.Cell tw="max-w-[70%] min-w-[70%]">
+          <View tw="px-2">
+            <Text variant="TextMedium" tw="text-white text-base text-center">
               {header}
             </Text>
-            <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-white text-base">
-                {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn')} |{' '}
+            <View tw="flex flex-row justify-between w-full">
+              <Text variant="TextMedium" tw="text-white text-base text-center">
+                {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn')}
               </Text>
-              <Text variant="TextMedium" tw="text-white text-base">
+              <Text variant="TextMedium" tw="text-white text-base text-center">
+                {' '}
+                |{' '}
+              </Text>
+              <Text variant="TextMedium" tw="text-white text-base text-center">
                 {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOut')}
               </Text>
             </View>
           </View>
-        </DataTable.Title>
+        </DataTable.Cell>
       </DataTable.Header>
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
         {empty ? (
@@ -366,12 +375,41 @@ function Table({ items, header, total, empty }: TableProps) {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            {items.map((item, index) => (
-              <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
-                <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
-                <DataTable.Cell>{item.value}</DataTable.Cell>
-              </DataTable.Row>
-            ))}
+            {items.map((item, index) => {
+              const value0 = item.value[0].toString();
+              const value1 = item.value[1].toString();
+
+              const paddedValue1 =
+                value1.length < value0.length ? value1.padEnd(value0.length, ' ') : value1;
+
+              const paddedValue0 =
+                value1.length > value0.length ? value0.padEnd(value1.length, ' ') : value0;
+
+              return (
+                <DataTable.Row tw="bg-white space-x-4" key={`${item.coolingUnitName}-${index}`}>
+                  <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
+                    <Text tw="text-wrap" numberOfLines={3}>
+                      {item.coolingUnitName}
+                    </Text>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell tw="max-w-[70%] min-w-[70%]">
+                    <View tw="flex flex-row justify-between items-center w-full h-full px-4">
+                      <Text variant="TextMedium" tw="text-base text-center">
+                        {paddedValue0}
+                      </Text>
+                      <Text variant="TextMedium" tw="text-base text-center">
+                        {' '}
+                        |{' '}
+                      </Text>
+                      <Text variant="TextMedium" tw="text-base text-center">
+                        {paddedValue1}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              );
+            })}
 
             <DataTable.Row tw="bg-white rounded-b-lg">
               <DataTable.Cell>
@@ -389,20 +427,18 @@ function ExtendedTable({ items, column1, column2, total, empty }: ExtendedTableP
   const { t } = useTranslationUtils();
 
   return (
-    <DataTable tw="py-4 px-2">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
-        <DataTable.Cell>
-          <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
+    <DataTable tw="py-4 px-2 min-w-full">
+      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14 space-x-4 min-w-full">
+        <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
+          <Text variant="TextMedium" tw="text-white text-base text-center">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
-        <DataTable.Cell tw="w-[33%]">
-          <Text tw="flex-wrap text-base text-white" numberOfLines={2}>
-            {column1}
-          </Text>
+        <DataTable.Cell tw="max-w-[15%] min-w-[15%]">
+          <Text tw="flex-wrap text-base text-white text-center">{column1}</Text>
         </DataTable.Cell>
-        <DataTable.Cell tw="w-[33%]">
-          <Text tw="flex-wrap text-base text-white" numberOfLines={2}>
+        <DataTable.Cell tw="max-w-[55%] min-w-[55%]">
+          <Text tw="flex-wrap text-base text-white text-center w-[90%]" numberOfLines={2}>
             {column2}
           </Text>
         </DataTable.Cell>
@@ -421,10 +457,14 @@ function ExtendedTable({ items, column1, column2, total, empty }: ExtendedTableP
         ) : (
           <React.Fragment>
             {items.map((item, index) => (
-              <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
-                <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
-                <DataTable.Cell>{item.column1}</DataTable.Cell>
-                <DataTable.Cell>{item.column2}</DataTable.Cell>
+              <DataTable.Row tw="bg-white space-x-4" key={`${item.coolingUnitName}-${index}`}>
+                <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
+                  <Text tw="text-wrap" numberOfLines={3}>
+                    {item.coolingUnitName}
+                  </Text>
+                </DataTable.Cell>
+                <DataTable.Cell tw="max-w-[15%] min-w-[15%]">{item.column1}</DataTable.Cell>
+                <DataTable.Cell tw="max-w-[55%] min-w-[55%]">{item.column2}</DataTable.Cell>
               </DataTable.Row>
             ))}
 

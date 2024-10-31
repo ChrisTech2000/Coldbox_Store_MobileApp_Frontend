@@ -45,7 +45,10 @@ export default function MetricUnitField() {
                 label={`${t('Dashboard.Management.AddCoolingUnit.metricUnit.label')}*`}
                 currentValue={truncate(currentValue, { length: 16 })}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedMetricUnitId);
+                }}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.metricUnit.label'),
                   options: (

@@ -47,7 +47,10 @@ export default function CoolingUnitsField(props: Props) {
           label={t('Dashboard.Management.Operators.fields.coolingUnits')}
           currentValue={selectLabel}
           isModalOpen={isModalVisible}
-          onClick={toggleModalVisibility}
+          onClick={() => {
+            setInternalSelection(selectedCoolingUnits);
+            toggleModalVisibility();
+          }}
           content={{
             header: t('Dashboard.Management.Operators.fields.coolingUnits'),
             options: (

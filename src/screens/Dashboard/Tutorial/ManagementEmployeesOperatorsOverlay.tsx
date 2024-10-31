@@ -5,19 +5,22 @@ import { List } from 'react-native-paper';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
-
 import { Button } from '#ui/components/Button';
 import { cn } from '#ui/lib/cn';
-import { EOperatorTutorialSteps } from './utils/constants';
 import { Text } from '#ui/components/Text';
+import { useTutorialStore } from '#stores/tutorial';
+
+import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
 export function ManagementEmployeesOperatorsOverlay({
   goTo,
+  stop,
   step: { onPressMask },
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <View tw="h-full w-full absolute">
@@ -25,7 +28,7 @@ export function ManagementEmployeesOperatorsOverlay({
         <View
           tw={cn(
             'absolute w-full h-28 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-56' : 'top-80'
+            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-72' : 'top-80'
           )}
         >
           <List.Item
@@ -46,8 +49,8 @@ export function ManagementEmployeesOperatorsOverlay({
 
         <View
           tw={cn(
-            'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-40',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-24' : 'top-28'
+            'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-40 items-center',
+            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-16' : 'top-24'
           )}
           style={[
             {
@@ -58,17 +61,31 @@ export function ManagementEmployeesOperatorsOverlay({
             },
           ]}
         >
-          <Text tw="text-base">{t('tutorial.steps.addEmployeesOperators')}</Text>
-          <Button
-            mode="text"
-            onPress={() => {
-              onPressMask?.();
-              goTo(EOperatorTutorialSteps.COOLING_UNIT_STEP);
-            }}
-            labelStyle="text-green-primary"
-          >
-            {t('actions.continue')}
-          </Button>
+          <Text tw="text-base text-center">{t('tutorial.steps.addEmployeesOperators')}</Text>
+
+          <View tw="flex flex-row space-x-2 mt-2 items-center justify-center">
+            <Button
+              mode="text"
+              onPress={() => {
+                stop();
+                toggleTutorial(false);
+              }}
+              labelStyle="text-green-primary"
+            >
+              {t('tutorial.quit')}
+            </Button>
+            <Button
+              mode="text"
+              onPress={() => {
+                onPressMask?.();
+                goTo(EOperatorTutorialSteps.COOLING_UNIT_STEP);
+              }}
+              labelStyle="text-white"
+              tw="bg-green-primary"
+            >
+              {t('actions.continue')}
+            </Button>
+          </View>
         </View>
       </View>
     </View>

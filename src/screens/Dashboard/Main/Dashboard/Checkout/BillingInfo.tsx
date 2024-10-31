@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
-import { Divider, Icon, Switch } from 'react-native-paper';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import { Divider, Icon, Switch } from 'react-native-paper';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -17,8 +17,8 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { EPaymentType, EPricingType } from '#types/global';
 
-import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import { CheckOut2ScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
+import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -28,6 +28,7 @@ import { Text } from '#ui/components/Text';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+
 import { BankTransferModal } from './BankTransferDetailsModal';
 
 export const usePaymentTypeStore = createSelectStore<EPaymentType>();
@@ -47,7 +48,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   ]);
   const { refreshData } = useDashboardStore();
 
-  const [discount, setDiscount] = useState<number>(0);
+  const [discount, setDiscount] = useState<string>('');
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isPaymentTypeModalOpen, setIsPaymentTypeModalOpen] = useState<boolean>(false);
   const [isBankTransferDetailsModalOpen, setIsBankTransferDetailsModalOpen] =
@@ -55,7 +56,6 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
-    enableHardwareBack: true,
     OverlayComponent: CheckOut2ScreenOverlay,
     onPressMask: () => rootNavigation.navigate('RootMainTabStack'),
   });
@@ -119,33 +119,44 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       return;
     }
 
-    await ColdtivateService.checkOut({
-      crates: crates?.map((crate) => crate.id),
-      operatorId: user.user,
-      priceDiscount: discount,
-      currency: currency,
-      paymentType: paymentType as EPaymentType,
-      paid: isPaid,
-    });
+    const dInt = Number(discount);
+    if (isNaN(dInt)) return;
 
-    refreshData.forEach((fn) => fn());
+    try {
+      await ColdtivateService.checkOut({
+        crates: crates?.map((crate) => crate.id),
+        operatorId: user.user,
+        priceDiscount: dInt,
+        currency: currency,
+        paymentType: paymentType as EPaymentType,
+        paid: isPaid,
+      });
 
-    if (guard('VIEW', 'TemperatureAlertModal')) {
-      const temperatureAlertDatum = {
-        coolingUnitId: coolingUnit!.id,
-        companyId: company!.id,
-        showCompleteInfo: true,
-      } satisfies TemperatureAlertEvtDatum;
+      refreshData.forEach((fn) => fn());
 
-      emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
+      if (guard('VIEW', 'TemperatureAlertModal')) {
+        const temperatureAlertDatum = {
+          coolingUnitId: coolingUnit!.id,
+          companyId: company!.id,
+          showCompleteInfo: true,
+        } satisfies TemperatureAlertEvtDatum;
+
+        emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
+      }
+
+      rootNavigation.navigate('RootMainTabStack');
+    } catch (error) {
+      toast.show(t('Dashboard.CrateManagement.operationError'), {
+        type: 'md_danger',
+      });
     }
-
-    rootNavigation.navigate('RootMainTabStack');
   }, [user, crates, discount, currency, paymentType, isPaid, refreshData, guard, coolingUnit?.id]);
 
   useEffect(() => {
     return () => resetPaymentStore();
   }, []);
+
+  const finalPrice = total - (isNaN(Number(discount)) ? 0 : Math.min(Number(discount), total));
 
   return (
     <View tw="flex-1 p-4">
@@ -249,10 +260,13 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             <Input
               tw="bg-gray-100 rounded-sm mt-2 mb-3 h-7 w-24"
               keyboardType="numeric"
-              onChangeText={(value) =>
-                setDiscount(Number.isNaN(value) ? 0 : Number.parseInt(value))
-              }
-              value={Number.isNaN(discount) ? '0' : discount.toString()}
+              onChangeText={(value) => {
+                const int = Number(value);
+                if (isNaN(int)) return;
+                if (int > total) setDiscount(total.toString());
+                else setDiscount(value);
+              }}
+              value={discount}
             />
             <Text variant="TextMedium" tw="text-lg">
               {currency}
@@ -266,7 +280,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             {t('Dashboard.CrateManagement.CheckOut.priceWithDiscount')}
           </Text>
           <Text variant="TextMedium" tw="text-lg">
-            {(Number.isNaN(discount) ? total : total - discount).toLocaleString('en-US', {
+            {finalPrice.toLocaleString('en-US', {
               style: 'currency',
               currency: company?.currency,
             })}

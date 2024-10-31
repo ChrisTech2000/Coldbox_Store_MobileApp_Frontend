@@ -5,14 +5,16 @@ import { List } from 'react-native-paper';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
-import { cn } from '#ui/lib/cn';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function LocalizationPreferencesOverlay({ next }: IOverlayComponentProps) {
+export function LocalizationPreferencesOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <View tw="h-full w-full absolute">
@@ -48,9 +50,27 @@ export function LocalizationPreferencesOverlay({ next }: IOverlayComponentProps)
           ]}
         >
           <Text tw="text-base">{t('tutorial.steps.localizationPreferences')}</Text>
-          <Button mode="text" onPress={next} labelStyle="text-green-primary">
-            {t('actions.continue')}
-          </Button>
+
+          <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+            <Button
+              mode="text"
+              onPress={() => {
+                stop();
+                toggleTutorial(false);
+              }}
+              labelStyle="text-green-primary"
+            >
+              {t('tutorial.quit')}
+            </Button>
+            <Button
+              mode="text"
+              onPress={next}
+              labelStyle="text-white"
+              tw="bg-green-primary border-green-primary"
+            >
+              {t('actions.continue')}
+            </Button>
+          </View>
         </View>
       </View>
     </View>

@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Icon, Portal, TextInput } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
@@ -33,6 +33,7 @@ import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
+
 import {
   MOCKED_CHECK_OUT_DATA,
   MOCKED_COOLING_UNIT,
@@ -64,7 +65,6 @@ export function OperatorActions({
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_1,
-    enableHardwareBack: true,
     OverlayComponent: OperatorActionsOverlay,
     maskAllowInteraction: true,
     onPressMask: () => setIsCrateManagementOpen(true),
@@ -72,7 +72,6 @@ export function OperatorActions({
 
   const { onLayout: onInitiateCheckoutLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_1,
-    enableHardwareBack: true,
     OverlayComponent: CheckoutOverlay,
     maskAllowInteraction: true,
     onStart: () => setIsCrateManagementOpen(true),
@@ -87,7 +86,6 @@ export function OperatorActions({
 
   const { onLayout: onCheckInLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_2,
-    enableHardwareBack: true,
     OverlayComponent: CheckInButtonOverlay,
     maskAllowInteraction: true,
     onPressMask: () =>

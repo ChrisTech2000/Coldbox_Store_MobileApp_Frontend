@@ -71,7 +71,10 @@ export default function FormManager(props: FormManagerProps) {
         city: z.string().min(1),
         zipCode: z.string().optional(),
         street: z.string().optional(),
-        streetNumber: z.string().optional(),
+        streetNumber: z.preprocess(
+          (val) => (val === '' ? undefined : val),
+          z.string().regex(/^\d+$/).optional() // must contain only numers
+        ),
       });
 
       const schemaConditions = z.discriminatedUnion('_step', [

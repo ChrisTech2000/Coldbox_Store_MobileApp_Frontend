@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import { useSWRConfig } from 'swr';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Button } from '#ui/components/Button';
@@ -13,6 +14,7 @@ import RBAC from '#common/RBAC';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import ColdtivateService from '#services/ColdtivateService';
+import { getQueryKey } from '#services/hooks/useAPiCall';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import LocationField from './modules/Location';
@@ -25,6 +27,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const { guard } = RBAC.useRBAC();
+  const { mutate } = useSWRConfig();
 
   const setUser = useAuthStore((store) => store.setUser);
   const patchFarmer = useDashboardStore((store) => store.patchFarmer);
@@ -50,6 +53,8 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
           parentName: values.parentName,
           updateUser: true,
         });
+
+        await mutate(getQueryKey('getFarmerByUserId', userId)); // revalidation
 
         patchFarmer({
           farmerCountry: farmerDatum.country,

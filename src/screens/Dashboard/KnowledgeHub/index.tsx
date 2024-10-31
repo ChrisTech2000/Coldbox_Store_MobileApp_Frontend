@@ -2,15 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { WebView, WebViewNavigation } from 'react-native-webview';
+import { useIsFocused } from '@react-navigation/native';
 
 import { KNOWLEDGE_HUB_URL } from '#constants/environment';
+import { mmkv } from '#stores/lib/storage';
 import { GenericError } from '#ui/components/GenericError';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 function KnowledgeHub() {
-  const [uri, setUri] = useState<string>(KNOWLEDGE_HUB_URL!);
+  const language = mmkv.getString('i18n-locale');
+  const isFocused = useIsFocused();
+
+  const [uri, setUri] = useState<string>(
+    `${KNOWLEDGE_HUB_URL}${language ? `&language=${language}` : ''}`
+  );
 
   const onNavigationStateChange = (navState: WebViewNavigation) => {
     if (navState.url !== uri) {
@@ -18,9 +25,12 @@ function KnowledgeHub() {
 
       const [baseUrl, queryString] = modifiedUrl.split('?');
       const hideHeaderExists = queryString ? queryString.includes('hideHeader=') : false;
+      const languageExists = queryString ? queryString.includes('language=') : false;
 
-      if (!hideHeaderExists) {
-        modifiedUrl = `${baseUrl}?${queryString ? queryString + '&' : ''}hideHeader=true`;
+      if (!hideHeaderExists || !languageExists) {
+        modifiedUrl = `${baseUrl}?${queryString ? queryString + '&' : ''}${
+          !hideHeaderExists ? 'hideHeader=true&' : ''
+        }${!languageExists ? `language=${language}` : ''}`;
       }
 
       setUri(modifiedUrl);
@@ -28,10 +38,8 @@ function KnowledgeHub() {
   };
 
   useEffect(() => {
-    return () => {
-      setUri(KNOWLEDGE_HUB_URL!);
-    };
-  }, []);
+    setUri(`${KNOWLEDGE_HUB_URL}${language ? `&language=${language}` : ''}`);
+  }, [isFocused]);
 
   return (
     <View tw="flex-1 flex-start">

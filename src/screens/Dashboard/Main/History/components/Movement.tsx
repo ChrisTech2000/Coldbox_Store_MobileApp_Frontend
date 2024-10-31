@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
+import ColdtivateService from '#services/ColdtivateService';
 
 import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
@@ -23,7 +24,6 @@ import {
   type CoolingUnit,
 } from '#types/global';
 
-import { sendSMS } from '../utils/actions';
 import { isWithinLast24Hours } from '../utils/dates';
 import { DetailsModal } from './DetailsModal';
 import { PDFModal } from './PDFModal';
@@ -135,14 +135,7 @@ export function Movement({
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-              action: async () =>
-                await sendSMS(
-                  user?.phone ?? '',
-                  movement,
-                  company?.name ?? selectedCompany?.name ?? '',
-                  price,
-                  t
-                ),
+              action: () => ColdtivateService.sendCheckOutSmsReport(movement.id),
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),

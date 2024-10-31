@@ -1,20 +1,20 @@
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { StatusBar } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { PaperProvider, Portal } from 'react-native-paper';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import BootSplash from 'react-native-bootsplash';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   enableExperimentalLayoutAnimation,
   WalkthroughProvider,
 } from 'react-native-interactive-walkthrough';
-import * as Sentry from '@sentry/react-native';
+import { PaperProvider, Portal } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { ENVIRONMENT, SENTRY_DSN } from './constants/environment';
 import AppVersionModal from './common/AppVersion';
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
+import { ENVIRONMENT, SENTRY_DSN } from './constants/environment';
 import AuthNavigator from './navigation/Auth';
 import DashboardNavigator from './navigation/Dashboard';
 

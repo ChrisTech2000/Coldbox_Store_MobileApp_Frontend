@@ -2,14 +2,14 @@ import React, { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Banner, Checkbox, Divider, TextInput } from 'react-native-paper';
+import { Banner, Checkbox, Divider } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Select } from '#ui/components/Select';
-import { Text } from '#ui/components/Text';
+import { Input } from '#ui/components/Input';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
@@ -114,9 +114,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
       await mutate(getQueryKey('getInvitedOperators', company?.id));
       navigation.goBack();
     } catch (exception) {
-      toast.show(t('Dashboard.Management.AddOperator.toasts.error'), {
-        type: 'md_danger',
-      });
+      toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger' });
       console.error(exception);
     }
   }
@@ -149,7 +147,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
         <Controller
           control={control}
           render={({ field: { onChange, value, onBlur } }) => (
-            <TextInput
+            <Input
               tw="w-full bg-transparent mt-7 mb-2"
               label={`${t('Auth.ForgotPassword.phoneInputLabel')}*`}
               mode="flat"
@@ -157,23 +155,21 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              error={!!errors.phoneNumber}
+              error={errors.phoneNumber}
             />
           )}
           name="phoneNumber"
         />
-        {errors.phoneNumber && (
-          <Text tw="text-xs text-red-600 mt-[-2] mb-7 pl-3 w-[95%]">
-            {errors.phoneNumber.message?.toString()}
-          </Text>
-        )}
 
-        <View tw="space-y-4 mx-4">
+        <View tw="space-y-4 mx-4 mt-2">
           <Select
             variant="md"
             label={selectLabel}
             isModalOpen={isModalVisible}
-            onClick={toggleModalVisibility}
+            onClick={() => {
+              setInternalSelection(selectedCoolingUnits);
+              toggleModalVisibility();
+            }}
             error={!!errors.coolingUnits}
             content={{
               options: (

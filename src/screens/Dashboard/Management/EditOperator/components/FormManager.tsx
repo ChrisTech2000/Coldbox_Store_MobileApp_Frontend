@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -49,6 +49,10 @@ export default function FormManager(props: FormManagerProps) {
     submitHandler: form.handleSubmit(props.onSubmit),
     isSubmitting: form.formState.isSubmitting,
   } satisfies CallbackProps;
+
+  useEffect(() => {
+    form.reset(initialValues);
+  }, [initialValues]);
 
   return <FormProvider {...form}>{props.children(callbackProps)}</FormProvider>;
 }

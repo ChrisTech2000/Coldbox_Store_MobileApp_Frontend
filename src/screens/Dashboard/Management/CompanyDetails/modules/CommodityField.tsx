@@ -62,7 +62,10 @@ export default function CommodityField(props: Props) {
               label={t('Dashboard.Management.CompanyDetails.labels.commodity')}
               currentValue={selectLabel}
               isModalOpen={isVisible}
-              onClick={toggleVisibility}
+              onClick={() => {
+                setInternalSelection(selectedCommodities);
+                toggleVisibility();
+              }}
               useScrollView={false}
               content={{
                 header: t('Dashboard.Management.CompanyDetails.headings.commodity'),

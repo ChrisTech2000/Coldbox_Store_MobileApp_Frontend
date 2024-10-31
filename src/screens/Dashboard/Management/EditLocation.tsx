@@ -79,6 +79,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
           datums = merge(rest, address);
         } catch (exception) {
           console.error(exception);
+          return;
         }
         break;
       }
@@ -91,6 +92,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
             type: 'md_danger',
           });
           console.error(exception);
+          return;
         }
         break;
       }
@@ -105,13 +107,16 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
         type: 'md_success',
       });
 
-      await Promise.all([
+      await Promise.allSettled([
         mutate(getQueryKey('getLocation', { locationId, companyId })),
         mutate(getQueryKey('getLocations', companyId)),
       ]);
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
+      toast.show(t('Dashboard.Management.Location.toasts.locationSubmissionError'), {
+        type: 'md_danger',
+      });
     }
   }
 
@@ -139,17 +144,16 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   if (!formInitialValues.current) {
     const values = { ...DEFAULT_VALUES } as FormValues;
     values.name = data.name;
-    values.country = getCountryFullName(data.company.country) ?? '';
+    values.country = getCountryFullName(data.company.country) ?? ''; // TODO: we don't get the country we submitted, just the company country
 
     values._step = 'coordinates';
     values.latitude = data.latitude.toString();
     values.longitude = data.longitude.toString();
     values.city = data.city ?? '';
-    values.street = data.street ?? '';
     values.state = data.state ?? '';
     values.zipCode = data.zipCode ?? '';
     values.street = data.street ?? '';
-    values.streetNumber = data.streetNumber ?? '';
+    values.streetNumber = data.streetNumber?.toString() ?? '';
 
     formInitialValues.current = values;
   }

@@ -288,7 +288,8 @@ export default {
         languageFieldName: 'langue',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again', // TODO
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
       },
     },
     ForgotPassword: {
@@ -485,6 +486,8 @@ export default {
             "Vous aurez besoin du code de retrait pour commencer un nouvel enregistrement de cette manière. Si vous ne l'avez pas, envisagez de commencer un nouvel enregistrement. Si vous savez combien de temps vous prévoyez de stocker, envisagez d'ajouter le nombre de jours ici.",
           codeLabel: 'Ajouter le code',
           codeErrorMessage: 'Le code est requis',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
         },
         SelectCropType: {
           fruits: 'Fruits',
@@ -676,6 +679,7 @@ export default {
           positionCancelled: 'Location request canceled.', // TODO
           positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
           locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
+          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
         },
       },
       Operators: {
@@ -702,7 +706,6 @@ export default {
             "Pour rejoindre l'application Coldtivate en tant qu'Opérateur, rendez-vous sur : {{link}}",
         },
         toasts: {
-          error: 'Le téléphone est déjà attribué. Essayez un autre numéro',
           success: 'Opérateur invité avec succès',
         },
         phoneFormat: 'Assurez-vous que le numéro de téléphone saisi a un code pays.',
@@ -946,16 +949,16 @@ export default {
     },
     Marketplace: {
       sorting: {
-        priceAsc: 'Prix croissant',
-        priceDesc: 'Prix décroissant',
-        nearMe: 'Près de moi',
+        'price-asc': 'Prix croissant',
+        'price-desc': 'Prix décroissant',
+        'nearby-me': 'Près de moi',
       },
       priceConfig:
         'La configuration des prix concerne la vente de produits, pas les frais de stockage réfrigéré.',
       addToCart: {
+        buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'Ajouter au panier et continuer vos achats',
         selectQuantity: 'Sélectionnez la quantité',
-        buyNowButton: 'Acheter maintenant',
       },
       currentLocation: 'Localisation actuelle',
       filterError:
@@ -984,6 +987,7 @@ export default {
       sections: {
         sellerSettings: 'Paramètres du vendeur',
         buyerSettings: "Paramètres de l'acheteur",
+        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'Détails',
       },
       ContactsSharing: {
@@ -993,6 +997,8 @@ export default {
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',
         editTitle: 'Les informations de votre compte bancaire',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'Nom du compte',
           namePlaceholder: 'Insérer le nom du compte',
@@ -1174,14 +1180,6 @@ export default {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} Reçu :
-        Code de mouvement : {{code}}
-        Cultures : {{crops}}
-        Poids total : {{weight}} Kg
-        {{movementTypeForDate}} : {{date}}
-        Prix : {{price}}
-        Payé par : {{farmersName}}
-        `,
         movementType: {
           checkOut: 'Sortie',
           checkIn: 'Entrée',

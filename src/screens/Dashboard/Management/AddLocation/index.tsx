@@ -9,6 +9,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { AddLocationOverlay } from '#screens/Dashboard/Tutorial/AddLocationOverlay';
@@ -25,8 +26,6 @@ import FormManager, {
 import LocationNameModule from './modules/LocationNameModule';
 import StepFactory from './modules/StepFactory';
 import StepModule from './modules/StepModule';
-
-import InAppNotifications from '#common/InAppNotifications';
 import { Geocoder, getCountryFullName } from './utils';
 
 function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
@@ -41,7 +40,6 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
 
   const { onLayout } = useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_LOCATION_STEP,
-    enableHardwareBack: true,
     OverlayComponent: AddLocationOverlay,
     onPressMask: () => navigation.goBack(),
   });
@@ -63,6 +61,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
           datums = merge(rest, address);
         } catch (exception) {
           console.error(exception);
+          return;
         }
         break;
       }
@@ -75,6 +74,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
             type: 'md_danger',
           });
           console.error(exception);
+          return;
         }
         break;
       }
@@ -93,6 +93,9 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
       navigation.goBack();
     } catch (exception) {
       console.error(exception);
+      toast.show(t('Dashboard.Management.Location.toasts.locationSubmissionError'), {
+        type: 'md_danger',
+      });
     }
   }
 

@@ -63,14 +63,12 @@ export function Filters({
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.COOLING_UNIT_STEP,
-    enableHardwareBack: true,
     OverlayComponent: CoolingUnitOverlay,
     onPressMask: () => rootNavigation.navigate('CoolingUnits'),
   });
 
   const { onLayout: onDashboard5Layout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_5,
-    enableHardwareBack: true,
     OverlayComponent: Dashboard5Overlay,
     fullScreen: true,
     onPressMask: () => rootNavigation.navigate('History'),
@@ -157,7 +155,7 @@ export function Filters({
           />
         </View>
       </View>
-      {searchType && (
+      {searchType ? (
         <View tw="flex flex-row items-center justify-center space-x-2 mt-4">
           <Button
             tw={cn('w-[50%]', searchType === 'details' ? 'bg-gray-700' : 'bg-gray-400')}
@@ -175,15 +173,15 @@ export function Filters({
             {t('Dashboard.SearchFilter.crateIdButton')}
           </Button>
         </View>
-      )}
+      ) : null}
 
-      {searchType && (
+      {searchType ? (
         <Text variant="TextMedium" tw="text-base mt-2">
           {searchType === 'details'
             ? t('Dashboard.SearchFilter.detailsMessage')
             : t('Dashboard.SearchFilter.idMessage')}
         </Text>
-      )}
+      ) : null}
 
       <View tw="flex flex-row items-center justify-between">
         <Input

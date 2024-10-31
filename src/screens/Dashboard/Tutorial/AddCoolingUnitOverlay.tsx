@@ -1,18 +1,31 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
-export function AddCoolingUnitOverlay({ next, step: { onPressMask } }: IOverlayComponentProps) {
+const screenHeight = Dimensions.get('window').height;
+
+export function AddCoolingUnitOverlay({
+  next,
+  stop,
+  step: { onPressMask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
   return (
     <View tw="h-full w-full absolute">
       <View
-        tw="absolute left-5 bottom-32 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-6' : 'bottom-16'
+        )}
         style={[
           {
             shadowColor: '#000',
@@ -23,16 +36,31 @@ export function AddCoolingUnitOverlay({ next, step: { onPressMask } }: IOverlayC
         ]}
       >
         <Text tw="text-base text-center">{t('tutorial.steps.addCoolingUnits')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            onPressMask?.();
-            next();
-          }}
-          labelStyle="text-green-primary"
-        >
-          {t('actions.continue')}
-        </Button>
+
+        <View tw="flex flex-row space-x-2 items-center justify-center mt-4">
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.quit')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              onPressMask?.();
+              next();
+            }}
+            labelStyle="text-white"
+            tw="bg-green-primary"
+          >
+            {t('actions.continue')}
+          </Button>
+        </View>
       </View>
     </View>
   );

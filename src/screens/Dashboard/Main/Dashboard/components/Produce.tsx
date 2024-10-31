@@ -11,22 +11,23 @@ import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardProduce, EPricingType } from '#types/global';
+import { type DashboardProduce, EPricingType, type Farmer } from '#types/global';
 
-import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
-import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import RBAC from '#common/RBAC';
+import { Text } from '#ui/components/Text';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 
 type ProduceProps = {
   currency: string;
   produce: DashboardProduce;
+  farmer: Farmer;
   onNavigate: () => void;
   // eslint-disable-next-line
   onLayout?: (event: any) => void;
 };
 
-export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProps) {
+export function Produce({ currency, produce, onNavigate, onLayout, farmer }: ProduceProps) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const colors = useTailwindColors();
@@ -148,11 +149,11 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
 
         <Divider />
 
-        <View tw="flex flex-row justify-between items-center">
+        <View tw="flex flex-wrap flex-row justify-between items-center gap-0.5">
           <View tw="flex flex-row items-center space-x-1">
             <Icon source="account-outline" size={20} color={colors.gray[400]} />
             <Text variant="TextMedium" tw="text-gray-400">
-              {produce.owner} {!!produce.farmerId && `(#${produce.farmerId})`}
+              {produce.owner} {!!farmer?.parentName && `(#${farmer.parentName})`}
             </Text>
           </View>
 

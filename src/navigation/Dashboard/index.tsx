@@ -1,7 +1,8 @@
 import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
 import ms from 'ms';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Drawer } from 'react-native-drawer-layout';
+import { useWalkthrough } from 'react-native-interactive-walkthrough';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -13,6 +14,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
+import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 
 import AboutStack from './About';
@@ -26,6 +28,8 @@ import KnowledgeHubStack from './KnowledgeHub';
 import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
 import DashboardMainBottomTabs, { DashboardMainRoutes } from './Main';
 import ManagementStack, { type ManagementRoutes } from './Management';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type DashboardRoutes = {
   Main:
@@ -98,10 +102,23 @@ export const useRightDrawerStore = create<{
 }));
 
 export default function DashboardNavigator() {
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+
   const { data } = useNotifications({ refreshInterval: ms('10 seconds') });
 
   const isOpen = useRightDrawerStore((store) => store.isOpen);
   const toggle = useRightDrawerStore((store) => store.toggle);
+
+  const { isWalkthroughOn } = useWalkthrough();
+  const [toggleTutorial, isTutorialActive] = useTutorialStore((store) => [
+    store.toggleTutorial,
+    store.isTutorialActive,
+  ]);
+
+  useEffect(() => {
+    if (!isWalkthroughOn && isTutorialActive)
+      toggleTutorial(false, () => rootNavigation.navigate('Dashboard'));
+  }, [isWalkthroughOn, isTutorialActive]);
 
   return (
     <RBAC>

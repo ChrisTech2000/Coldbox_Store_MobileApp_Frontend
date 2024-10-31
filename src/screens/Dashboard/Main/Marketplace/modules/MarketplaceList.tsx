@@ -1,20 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FlatList, RefreshControl, SectionList, View } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ActivityIndicator } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
+import camelCase from 'lodash/camelCase';
 import colors from 'tailwindcss/colors';
+import isEqual from 'lodash/isEqual';
 
 import { Text } from '#ui/components/Text';
 
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { API_BASE_URL } from '#constants/environment';
 import { paperTheme } from '#ui/lib/theme';
+import { useMap } from '#ui/hooks/useMap';
 
 import MarketplaceItemWrapper from '../components/MarketplaceItem';
 
 import { useMarketplaceQueryParams } from '../store';
-import { type AvailableListingDatum, useMarketplaceListing } from '../utils';
+import { type AvailableListingDatum, useMarketplaceListing, DEFAULT_COORDINATES } from '../utils';
 
 export default function MarketplaceList() {
   const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
@@ -49,10 +52,7 @@ export default function MarketplaceList() {
                 movementCode={item.movementCode}
                 cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
               />
-              <MarketplaceItemWrapper.CompanyAction
-                company={item.company}
-                coolingUnitName={item.coolingUnit.name}
-              />
+              <MarketplaceItemWrapper.CompanyAction company={item.company} />
               <MarketplaceItemWrapper.BuyAction
                 currencyValue={item.currencyValue}
                 crateWeight={item.crateWeight}
@@ -76,46 +76,95 @@ function _NearbyMeSection(props: {
 }) {
   const { listing, isValidating, refetch } = props;
 
-  const groupedByDistance = useMemo(() => {
-    const datums = listing.reduce(
-      (acc: Record<string, Array<AvailableListingDatum>>, datum: AvailableListingDatum) => {
-        let bucket: string;
-        if (datum.distance <= 5) {
-          bucket = '1 to 5 KM away';
-        } else if (datum.distance <= 10) {
-          bucket = '5 to 10 KM away';
-        } else if (datum.distance <= 25) {
-          bucket = '10 to 25 KM away';
-        } else {
-          bucket = 'More than 25 KM away';
-        }
-        if (!acc[bucket]) acc[bucket] = [];
-        acc[bucket].push(datum);
-        return acc;
-      },
-      {}
+  const coordinates = useMarketplaceQueryParams((store) => store.location);
+  const isLocationDenied = isEqual(coordinates, DEFAULT_COORDINATES);
+
+  const [unitMap, unitMapActions] = useMap<
+    string,
+    Pick<AvailableListingDatum, 'company' | 'coolingUnit'>
+  >();
+
+  useEffect(() => {
+    const nextEntries = new Map(unitMap);
+
+    for (const { coolingUnit, company } of listing) {
+      const key = camelCase(coolingUnit.name);
+      if (nextEntries.has(key)) continue;
+      nextEntries.set(key, { company, coolingUnit });
+    }
+
+    const currentKeys = Array.from(unitMap.keys()).sort();
+    const newKeys = Array.from(nextEntries.keys()).sort();
+
+    if (JSON.stringify(newKeys) !== JSON.stringify(currentKeys)) {
+      unitMapActions.setAll(nextEntries);
+    }
+  }, [listing, unitMap, unitMapActions]);
+
+  const groupedData = useMemo(() => {
+    const dataByDistance = listing.reduce<
+      Record<string, Record<string, Array<AvailableListingDatum>>>
+    >((acc, datum) => {
+      const key = camelCase(datum.coolingUnit.name);
+      const distanceBucket = isLocationDenied
+        ? 'default'
+        : datum.distance <= 5
+          ? '1 to 5 KM away'
+          : datum.distance <= 10
+            ? '5 to 10 KM away'
+            : datum.distance <= 25
+              ? '10 to 25 KM away'
+              : 'More than 25 KM away';
+
+      acc[key] ??= {};
+      acc[key][distanceBucket] ??= [];
+      acc[key][distanceBucket].push(datum);
+
+      return acc;
+    }, {});
+
+    return Object.entries(dataByDistance).flatMap(([key, distances]) =>
+      Object.entries(distances).map(([distance, data]) => ({
+        sectionKey: key,
+        distance,
+        data,
+      }))
     );
-    return Object.keys(datums).map((key) => ({
-      title: key,
-      data: datums[key],
-    }));
-  }, [listing]);
+  }, [listing, isLocationDenied]);
 
   return (
     <SectionList
       tw="px-4 pt-2"
-      sections={groupedByDistance}
-      keyExtractor={(item) => `marketplace-nearby-list-item-${item.id}`}
+      sections={groupedData}
+      keyExtractor={(_, itemIdx) => `marketplace-nearby-list-item-#${itemIdx}`}
       scrollEnabled={false}
       showsVerticalScrollIndicator={false}
-      renderSectionHeader={({ section }) => (
-        <View tw="flex-row items-center space-x-2 py-2">
-          <MaterialCommunityIcon name="map-marker-outline" size={28} color={colors.zinc[600]} />
-          <Text variant="TextMedium" tw="text-base">
-            {section.title}
-          </Text>
-        </View>
-      )}
+      renderSectionHeader={({ section }) => {
+        const datum = unitMap.get(section.sectionKey);
+        if (typeof datum === 'undefined') return null;
+        return (
+          <View tw="flex-col py-2">
+            <View>
+              <Text variant="TextMedium" tw="text-lg">
+                {datum.coolingUnit.name}
+              </Text>
+            </View>
+            <View tw="flex-row items-end justify-between">
+              <MarketplaceItemWrapper.CompanyAction company={datum.company} truncate />
+              {section.distance !== 'default' ? (
+                <View tw="flex-row items-center space-x-2 mb-1.5">
+                  <MaterialCommunityIcon
+                    name="map-marker-outline"
+                    size={19}
+                    color={colors.zinc[500]}
+                  />
+                  <Text tw="text-base text-zinc-500">{section.distance}</Text>
+                </View>
+              ) : null}
+            </View>
+          </View>
+        );
+      }}
       renderItem={({ item }) => (
         <MarketplaceItemWrapper shelfLife={item.shelfLife}>
           <MarketplaceItemWrapper.Body
@@ -123,10 +172,6 @@ function _NearbyMeSection(props: {
             cropName={item.crop.name}
             movementCode={item.movementCode}
             cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
-          />
-          <MarketplaceItemWrapper.CompanyAction
-            company={item.company}
-            coolingUnitName={item.coolingUnit.name}
           />
           <MarketplaceItemWrapper.BuyAction
             crateWeight={item.crateWeight}

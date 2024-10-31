@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 
 import type { AuthRouteProps } from '#navigation/Auth';
-import { passwordRegex } from '#constants/schemas';
+import { passwordRegex, stripSpacesRegex } from '#constants/schemas';
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
 import { Button } from '#ui/components/Button';
@@ -34,6 +34,7 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
         .object({
           password: z
             .string()
+            .transform((val) => val.replace(stripSpacesRegex, ''))
             .refine((pass) => passwordRegex.test(pass), {
               message: t('Auth.ResetPassword.schema.passwordError'),
             })
@@ -41,6 +42,7 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
           confirmPassword: z
             .string()
             .min(1, { message: t('Auth.ResetPassword.schema.confirmPasswordError') })
+            .transform((val) => val.replace(stripSpacesRegex, ''))
             .default(''),
         })
         .superRefine(({ confirmPassword, password }, ctx) => {

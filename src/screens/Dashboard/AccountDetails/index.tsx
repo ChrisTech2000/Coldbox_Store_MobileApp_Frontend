@@ -1,10 +1,10 @@
+import { DrawerActions } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
-import { DrawerActions } from '@react-navigation/native';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
@@ -25,8 +25,8 @@ import type {
 import { countriesDict } from '../Management/CompanyDetails/utils';
 import { CoolingUserSurveyOverlay } from '../Tutorial/CoolingUserSurveyOverlay';
 import { LocalizationPreferencesOverlay } from '../Tutorial/LocalizationPreferancesOverlay';
-import { EFarmerTutorialSteps } from '../Tutorial/utils/constants';
 import { PersonalDetailsOverlay } from '../Tutorial/PersonalDetailsOverlay';
+import { EFarmerTutorialSteps } from '../Tutorial/utils/constants';
 import DeleteAccountAction from './components/DeleteAccountAction';
 
 function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
@@ -53,7 +53,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       gender: user?.gender ?? EApiGender.OTHER,
       parentName: farmerParentName ?? '',
       userCode: farmerUserCode ?? '',
-      country: farmerCountry ? (countriesDict().getISOByName(farmerCountry) ?? '') : '',
+      country: farmerCountry ? (countriesDict().getByValue(farmerCountry)?.name ?? '') : '',
       userId: user!.id,
       farmerId: farmerId!,
     } satisfies DetailsSectionParams;
@@ -62,7 +62,6 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_LOCALIZATION_PREFERENCES_STEP,
     OverlayComponent: LocalizationPreferencesOverlay,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     fullScreen: true,
   });
@@ -70,7 +69,6 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_PERSONAL_DETAILS,
     OverlayComponent: PersonalDetailsOverlay,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     fullScreen: true,
   });
@@ -78,7 +76,6 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_COOLING_USERS_SURVEY_STEP,
     OverlayComponent: CoolingUserSurveyOverlay,
-    enableHardwareBack: true,
     maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => {
