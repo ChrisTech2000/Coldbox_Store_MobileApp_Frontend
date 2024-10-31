@@ -1382,7 +1382,9 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'કોલ્ડટિવેટમાં આપનું સ્વાગત છે. આ કાર્યની માર્ગદર્શિકા છે.',
+    welcome: 'કોલ્ડટિવેટમાં આપનું સ્વાગત છે! આ કાર્યની માર્ગદર્શિકા છે.',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'ટ્યુટોરીયલ બંધ કરો',
     'back-dashboard': 'ડેશબોર્ડ પર પાછા જાઓ',
     congratulations:
@@ -1445,7 +1447,7 @@ export default {
       accountDetailsNavigation:
         'મેનૂમાં, તમે "એકાઉન્ટ વિગતો" તરફ જાવી શકો છો અને ત્યાં ટેપ કરીને તમારા એકાઉન્ટ સંબંધિત રૂપરેખાઓને જુઓ/સંપાદિત કરી શકો છો. આગળ જાઓ અને અજમાવો.',
       coolingUserSurvey:
-        'એપ્લિકેશન તમને કસ્ટમાઇઝ્ડ ભલામણો આપવા માટે કૂલિંગ વપરાશકર્તા સર્વે પૂરી કરવી ખુબજ મહત્વપૂર્ણ છે. સર્વે પૂર્ણ કરવા માટે તમારું આભાર!',
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
       coolingUserCode:
         'જ્યારે તમે પહેલી વખત તમારું ઉત્પાદ ને ઠંડા રૂમમાં સ્ટોર કરવા જઈ રહ્યા છો, ત્યારે ઓપરેટર તમારો વ્યક્તિગત કોડ માંગશે, જેથી તે તમને ઠંડા રૂમના વપરાશકર્તાઓની યાદીમાં ઉમેરવામાં આવશે. તમે આ કોડ "વ્યક્તિગત વિગતો" -> "કૂલિંગ વપરાશકર્તા આયાત કોડ" માં જોઈ શકો છો.',
       knowledgeHub:
@@ -1461,10 +1463,12 @@ export default {
         'જો કાર્ડનો રંગ પીળો (2-5 દિવસ બાકી) અથવા લીલો (5 દિવસથી વધુ) હોય, તો તમને ક્રેટ્સ વિશે ચિંતા કરવાની જરૂર નથી. દિવસોની સંખ્યા દરરોજ ઘણીવાર પુનઃગણના કરવામાં આવે છે, તેથી કૃપા કરીને ડેશબોર્ડને નિયમિત રીતે તપાસતા રહો જેથી તમારા ક્રેટ્સની ગુણવત્તા કેવી રીતે બદલાઈ રહી છે તે જાણી શકો.',
       dashboardStep5:
         'જો તમારી પાસે અનેક રૂમમાં જથ્થા ભરેલા ક્રેટ્સ હોય, તો તમે ડ્રોપડાઉન મેનૂમાંથી કંપની અને કૂલિંગ યુનિટ પસંદ કરીને રૂમના દર્શન બદલી શકો છો.',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         '“ઈતિહાસ” ટેબમાં, તમે દરેક રૂમમાં પૂર્ણ કરેલા બધા ચેક-ઇન અને ચેક-આઉટનો સારાંશ જોઈ શકો છો. જો તમે ચેકઆઉટની બાજુમાં લાલ બિંદુ જુઓ, તો ત્રણ બિંદુઓ પર ક્લિક કરો અને “માર્કેટ સર્વે ભરો” પસંદ કરો. આ અમને સમજીવાને મદદ કરે છે કે તમે તમારા ઉત્પાદનને કયા ભાવમાં વેચ્યું અને કોઈ વસ્તુઓ નષ્ટ થઈ છે કે નહીં, જે ઠંડા ખંડના સંચાલનમાં સુધારો કરવા માટે ખૂબ જ મહત્વપૂર્ણ છે.',
       farmersCoolingUnits:
-        'તમારા નજીકની કૂલિંગ યુનિટ શોધવા માટે, તળિયાના બટનો પર જાઓ, “કૂલિંગ યુનિટ” ટેબ પર ક્લિક કરો અને “નકશા” પસંદ કરો. નકશામાં દરેક પિન પર ક્લિક કરીને, તમે એકમનો પ્રકાર અને સંગ્રહનો ભાવ જોઈ શકો છો.',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
         '“કૂલિંગ યુનિટ્સ” ટેબમાં, તમે નકશા, રૂમની વર્તમાન અને ભવિષ્યની ઓક્યુપન્સી ( “પ્લેનર” હેઠળ) અને રૂમનું તાપમાન (“રૂમ કન્ડિશન્સ”માં) શોધી શકો છો. આ સ્ક્રીનો તમને નિહાળવામાંની જરૂર વિના ઠંડા ખંડની શરતો પર દૂરથી દેખાવા માટેની મંજૂરી આપે છે!',
       marketPrice:

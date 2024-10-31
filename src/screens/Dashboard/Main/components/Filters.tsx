@@ -71,7 +71,6 @@ export function Filters({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_5,
     OverlayComponent: Dashboard5Overlay,
     fullScreen: true,
-    onPressMask: () => rootNavigation.navigate('History'),
   });
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);

@@ -1405,7 +1405,9 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Bienvenue sur Coldtivate. Ceci est un guide des fonctions.',
+    welcome: 'Bienvenue sur Coldtivate! Ceci est un guide des fonctions.',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'Quitter le tutoriel',
     'back-dashboard': 'Retour au tableau de bord',
     congratulations:
@@ -1471,7 +1473,7 @@ export default {
       accountDetailsNavigation:
         'Dans le menu, vous pouvez naviguer vers "Détails du compte" et cliquer là pour voir/modifier un ensemble de configurations liées à votre compte. Allez-y et essayez.',
       coolingUserSurvey:
-        "Il est très important que vous remplissiez le questionnaire de l'utilisateur de refroidissement pour que l'application puisse vous fournir des recommandations personnalisées. Merci de prendre le temps de compléter le questionnaire !",
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
       coolingUserCode:
         'La première fois que vous arrivez dans une chambre froide pour stocker vos produits, l\'opérateur vous demandera de lui fournir votre code personnel, pour vous ajouter à la liste des utilisateurs de la chambre froide. Vous pouvez trouver ce code dans "Détails personnels" -> "Code d\'importation de l\'utilisateur de refroidissement".',
       knowledgeHub:
@@ -1487,10 +1489,12 @@ export default {
         'Si la couleur de la carte est jaune (2 à 5 jours restants) ou verte (plus de 5 jours), vous n\'avez pas besoin de vous inquiéter pour les caisses. Le nombre de jours est recalculé plusieurs fois par jour, alors assurez-vous de vérifier le "Tableau de bord" régulièrement pour voir comment la qualité de vos caisses dans la chambre évolue.',
       dashboardStep5:
         'Si vous avez des caisses stockées dans plusieurs chambres, vous pouvez changer la chambre que vous visualisez en sélectionnant une entreprise et une unité de refroidissement dans le menu déroulant.',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         'Dans l\'onglet "Historique", vous pouvez voir un résumé de tous les enregistrements et départs que vous avez effectués dans chaque chambre. Si vous voyez un point rouge à côté d\'un départ, veuillez cliquer sur les trois points et "Remplir le questionnaire de marché". Ici, nous aimerions comprendre à quel prix vous avez vendu vos produits, et si quelque chose a été gâté. Nous utilisons ces informations pour améliorer les opérations à la chambre froide, donc il est important que vous complétiez le questionnaire !',
       farmersCoolingUnits:
-        'Pour vérifier les unités de refroidissement près de chez vous, vous pouvez naviguer vers les boutons en bas de l\'écran, cliquer sur l\'onglet "Unités de refroidissement" et sélectionner "Carte". En cliquant sur chaque épingle sur la carte, vous pouvez voir le type d\'unité et le prix du stockage.',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
         'Dans l\'onglet "Unités de refroidissement", vous pouvez trouver la Carte, l\'occupation actuelle et future de la chambre (dans "Planificateur") et la température de la chambre (dans "Conditions de la chambre"). Ces écrans vous aident à surveiller à distance ce qui se passe dans les chambres froides, sans avoir à vous y rendre en personne pour vérifier !',
       marketPrice:

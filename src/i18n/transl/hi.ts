@@ -1394,6 +1394,8 @@ export default {
   },
   tutorial: {
     welcome: 'कोल्टिवेट में आपका स्वागत है। यह कार्यों की प्रक्रिया है।',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'ट्यूटोरियल छोड़ें',
     'back-dashboard': 'डैशबोर्ड पर वापस जाएं',
     congratulations:
@@ -1457,7 +1459,7 @@ export default {
       accountDetailsNavigation:
         'मेनू में, आप "खाता विवरण" पर नेविगेट कर सकते हैं और वहां टैप करके अपने खाते से संबंधित कॉन्फ़िगरेशन के सेट को देख/संपादित कर सकते हैं। आगे बढ़ें और इसे आजमाएं।',
       coolingUserSurvey:
-        'यह बहुत महत्वपूर्ण है कि आप कूलिंग उपयोगकर्ता सर्वेक्षण को भरें ताकि ऐप आपको व्यक्तिगत सिफारिशें प्रदान कर सके। सर्वेक्षण पूरा करने के लिए आपका धन्यवाद!',
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
       coolingUserCode:
         'जब आप अपने उत्पाद को संग्रहित करने के लिए पहली बार एक ठंडे कमरे में पहुंचते हैं, तो ऑपरेटर आपसे अपना व्यक्तिगत कोड देने के लिए कहेगा, ताकि आपको ठंडे कमरे के उपयोगकर्ताओं की सूची में जोड़ा जा सके। आप यह कोड "व्यक्तिगत विवरण" -> "कूलिंग उपयोगकर्ता आयात कोड" में पा सकते हैं।',
       knowledgeHub:
@@ -1473,10 +1475,12 @@ export default {
         'यदि कार्ड का रंग पीला (2-5 दिन बचे) या हरा (5 से अधिक दिन) है, तो आपको क्रेट्स की चिंता करने की आवश्यकता नहीं है। दिनों की संख्या दिन में कई बार फिर से गणना की जाती है, इसलिए सुनिश्चित करें कि आप नियमित रूप से "डैशबोर्ड" की जांच करें ताकि यह देख सकें कि कमरे में आपके क्रेट्स की गुणवत्ता कैसे विकसित हो रही है।',
       dashboardStep5:
         'यदि आपके पास कई कमरों में क्रेट्स संग्रहीत हैं, तो आप ड्रॉपडाउन से कंपनी और कूलिंग इकाई का चयन करके जिस कमरे को आप देख रहे हैं, उसे बदल सकते हैं।',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         'टैब "इतिहास" में, आप प्रत्येक कमरे में किए गए सभी चेक-इन और चेक-आउट का सारांश देख सकते हैं। यदि आप किसी चेक-आउट के बगल में एक लाल बिंदु देखते हैं, तो कृपया तीन बिंदुओं पर क्लिक करें और "बाजार सर्वेक्षण भरें" चुनें। यहां, हम जानना चाहते हैं कि आपने अपने उत्पाद को किस कीमत पर बेचा है, और क्या कुछ खराब हो गया है। हम इस जानकारी का उपयोग ठंडे कमरे के संचालन में सुधार के लिए करते हैं, इसलिए महत्वपूर्ण है कि आप सही उत्तर दें।',
       farmersCoolingUnits:
-        'अपने पास के कूलिंग इकाइयों की जांच करने के लिए, आप स्क्रीन के नीचे के बटन पर जाकर "कूलिंग इकाइयाँ" टैब पर क्लिक करें और "मानचित्र" चुनें। मानचित्र पर प्रत्येक पिन पर क्लिक करके, आप इकाई का प्रकार और भंडारण की कीमत देख सकते हैं।',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
         'टैब "कूलिंग इकाइयाँ" में आप मानचित्र, कमरे की वर्तमान और भविष्य की भरी हुई स्थिति ("योजनाकार" में) और कमरे का तापमान ("कमरे की स्थिति" में) देख सकते हैं। ये स्क्रीन आपको दूर से यह देखने में मदद करती हैं कि ठंडे कमरों में क्या हो रहा है, बिना वहां व्यक्तिगत रूप से जाने की आवश्यकता के!',
       marketPrice:

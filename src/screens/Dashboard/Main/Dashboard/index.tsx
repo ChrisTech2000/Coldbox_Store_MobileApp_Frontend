@@ -191,11 +191,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, [user?.role]);
 
   useEffect(() => {
-    if (isTutorialOn) start();
-  }, [isTutorialOn]);
-
-  useEffect(() => {
     if (user && (!user.lastLogin || user.lastLogin === 'None')) {
+      start();
       toggleTutorial(true);
     }
   }, [user]);

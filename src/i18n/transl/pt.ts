@@ -1402,7 +1402,9 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Bem-vindo ao Coldtivate. Este é um tutorial das funções.',
+    welcome: 'Bem-vindo ao Coldtivate! Este é um tutorial das funções.',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'Sair do tutorial',
     'back-dashboard': 'Voltar ao painel',
     congratulations:
@@ -1464,7 +1466,7 @@ export default {
       accountDetailsNavigation:
         'No menu, você pode navegar para "Detalhes da Conta" e tocar lá para visualizar/editar um conjunto de configurações relacionadas à sua conta. Vá em frente e experimente.',
       coolingUserSurvey:
-        'É muito importante que você preencha a pesquisa do Usuário de Arrefecimento para que a aplicação possa fornecer recomendações personalizadas. Obrigado por dedicar seu tempo para completar a pesquisa!',
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
       coolingUserCode:
         'Na primeira vez que você chegar a uma câmara fria para armazenar sua produção, o operador lhe pedirá seu código pessoal para adicioná-lo à lista de usuários da câmara fria. Você pode encontrar este código em "Detalhes Pessoais" -> "Código de Importação do Usuário de Arrefecimento".',
       knowledgeHub:
@@ -1480,10 +1482,12 @@ export default {
         'Se a cor do cartão for amarela (2-5 dias restantes) ou verde (mais de 5 dias), você não precisa se preocupar com as caixas. O número de dias é recalculado várias vezes ao dia, então, certifique-se de verificar o "Dashboard" regularmente para ver como a qualidade de suas caixas na sala está evoluindo.',
       dashboardStep5:
         'Se você tiver caixas armazenadas em várias salas, pode mudar a sala que está visualizando selecionando uma empresa e uma unidade de arrefecimento no menu suspenso.',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         'Na aba "Histórico", você pode ver um resumo de todos os check-ins e check-outs que você completou em cada sala. Se você ver um ponto vermelho ao lado de um check-out, clique nos três pontos e em "Preencher pesquisa de mercado". Aqui, gostaríamos de entender a que preço você vendeu sua produção e se algo estragou. Usamos essas informações para melhorar as operações na câmara fria, portanto, é importante que você responda com precisão.',
       farmersCoolingUnits:
-        'Para verificar as unidades de arrefecimento próximas a você, pode navegar pelos botões na parte inferior das telas, clicando na aba "Unidades de Arrefecimento" e selecionando "Mapa". Ao clicar em cada pin no mapa, você pode ver o tipo de unidade e o preço de armazenamento.',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
         'Na aba "Unidades de Arrefecimento", você pode encontrar o Mapa, a ocupação atual e futura da sala (na aba "Planejador") e a temperatura da sala (na aba "Condições da Sala"). Essas telas ajudam você a monitorar remotamente o que está acontecendo nas câmaras frias, sem precisar ir lá pessoalmente para verificar!',
       marketPrice:

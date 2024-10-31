@@ -73,7 +73,7 @@ export default function DrawerContent(props: Props) {
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const { mutate } = useSWRConfig();
 
-  const { onLayout: onTutorialTabLayout } = useWalkthroughStep({
+  const { onLayout: onTutorialTabLayout, start } = useWalkthroughStep({
     number: ECommonTutorialSteps.REPEAT_TUTORIAL_STEP,
     OverlayComponent: RepeatTutorialOverlay,
     fullScreen: true,
@@ -165,6 +165,7 @@ export default function DrawerContent(props: Props) {
               onPress={(evt) => {
                 evt.stopPropagation();
                 if (routeName === 'Tutorial') {
+                  start();
                   toggleTutorial(true);
                   props.navigation.navigate('Dashboard');
                   return;

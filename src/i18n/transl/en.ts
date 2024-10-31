@@ -1388,7 +1388,9 @@ const en = {
     },
   },
   tutorial: {
-    welcome: 'Welcome to Coldtivate. This is a walkthrough of the functions.',
+    welcome: 'Welcome to Coldtivate! This is a walkthrough of the functionalities.',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.',
     quit: 'Quit Tutorial',
     'back-dashboard': 'Back to Dashboard',
     congratulations:
@@ -1452,7 +1454,7 @@ const en = {
       accountDetailsNavigation:
         'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.',
       coolingUserSurvey:
-        'It is very important that you fill in the Cooling User survey for the app to provide you with customized recommendations. Thank you for taking the time to complete the survey!',
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!',
       coolingUserCode:
         'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".',
       knowledgeHub:
@@ -1468,10 +1470,12 @@ const en = {
         'If the color of the card is yellow (2-5 days left) or green (more than 5 days), you do not need to worry about the crates. The number of days is recalculated multiple times per day, so make sure to check the "Dashboard" regularly to see how the quality of your crates in the room is evolving.',
       dashboardStep5:
         'If you have crates stored in multiple rooms, you can change the room you are viewing by selecting a company and cooling unit from the dropdown.',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advises you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         'In the tab "History" you can see a summary of all check-ins and check-outs that you have completed in each room. If you see a red dot next to a check out, please click on the three dots and "Fill in market survey". Here, we would like to understand at what price you have sold your produce, and if anything got spoiled. We use this information to improve the operations at the cold room, so it is important that you answer accurately.',
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.',
       farmersUnitsPlanner:
         'In the tab "Cooling Units" you can find the Map, the current and future occupancy of the room (in "Planner") and the temperature of the room (in "Room conditions"). These screens help you monitor remotely what is happening at the cold rooms, without having to go there in person to check!',
       marketPrice:
