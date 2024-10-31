@@ -1424,7 +1424,8 @@ const en = {
         'After having completed all the steps, you will see an overview of the crates you are about to check into the room.',
       checkIn3:
         'If you are satisfied, you can click "Confirm" and the new crates will be added to the Dashboard.',
-      history: 'Clicking on "History", you can see all the movements in the room.',
+      history:
+        'Clicking on "History", you can see all the movements in the room. The check-outs for which the after-storage survey has not been completed are marked by a red dot.',
       coolingUnits:
         'Click on "Cooling Units" to see the capacity of a cooling unit in the next 7 days (Planner tab) and the temperature of the room (Room conditions tab).',
       roomConditions:
@@ -1477,6 +1478,7 @@ const en = {
         'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.',
       farmerFinalStep:
         'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
+      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.',
     },
   },
 };

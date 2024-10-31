@@ -989,6 +989,8 @@ export default {
       PayoutSettings: {
         addTitle: 'Por favor, insira as informações da sua conta bancária',
         editTitle: 'Suas informações da conta bancária',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'Nome da Conta',
           namePlaceholder: 'Insira o nome da conta',
@@ -1488,6 +1490,7 @@ export default {
         'Se você ver uma aba chamada "Preço de Mercado", pode verificar os preços de diferentes frutas e vegetais em todo o país nos últimos dias e uma previsão dos preços para o futuro. Por enquanto, essa opção está disponível apenas para países selecionados.', // TODO
       farmerFinalStep:
         'Parabéns! Completou o tutorial! Se tiver dúvidas sobre a aplicação, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da unidade de arrefecimento ou escreva-nos para app@yourvcca.org.',
+      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
     },
   },
 } satisfies Translations;

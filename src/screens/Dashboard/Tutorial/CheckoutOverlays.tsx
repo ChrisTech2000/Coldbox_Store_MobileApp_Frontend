@@ -16,7 +16,7 @@ const screenHeight = Dimensions.get('window').height;
 export function OperatorActionsOverlay({
   next,
   stop,
-  step: { onPressMask, mask },
+  step: { onPressMask },
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
@@ -57,10 +57,10 @@ export function OperatorActionsOverlay({
         <Animated.View
           style={[
             {
-              top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 80 : 110),
-              left: mask.x + 25,
+              top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 22 : 45,
+              left: -40,
               opacity: blinkAnim,
-              transform: [{ rotate: '270deg' }],
+              transform: [{ rotate: '90deg' }],
             },
           ]}
         >

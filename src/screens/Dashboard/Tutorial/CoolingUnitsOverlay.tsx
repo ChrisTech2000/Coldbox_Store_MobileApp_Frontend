@@ -40,7 +40,7 @@ export function CoolingUnitsOverlay({
       >
         <Text tw="text-center text-base">
           {user?.role === ERoles.OPERATOR
-            ? t('tutorial.steps.coolingUnitStep')
+            ? t('tutorial.steps.coolingUnits')
             : t('tutorial.steps.farmersUnitsPlanner')}
         </Text>
 

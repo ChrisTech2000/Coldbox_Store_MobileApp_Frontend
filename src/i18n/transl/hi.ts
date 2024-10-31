@@ -1483,6 +1483,7 @@ export default {
         'यदि आप "बाजार मूल्य" नामक टैब देखते हैं, तो आप पिछले दिनों में देश भर में विभिन्न फलों और सब्जियों के मूल्य और भविष्य के लिए कीमतों का पूर्वानुमान देख सकते हैं। फिलहाल, यह विकल्प केवल चयनित देशों के लिए उपलब्ध है।', // TODO
       farmerFinalStep:
         'बधाई हो! आपने ट्यूटोरियल पूरा कर लिया है! यदि आपके पास ऐप के बारे में कोई प्रश्न हैं, तो हम आपको सुझाव देते हैं कि आप FAQ की जांच करें, ठंडे कमरे के एक ऑपरेटर से पूछें, या हमें app@yourvcca.org पर लिखें।',
+      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
     },
   },
 } satisfies Translations;
