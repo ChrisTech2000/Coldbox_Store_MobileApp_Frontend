@@ -46,7 +46,11 @@ export type AccountDetailsRoutes = {
   ContactsSharing: undefined;
   CoolingUsersSurvey: EditCoolingUserStackRoutes['CoolingUsersSurvey'];
   CouponStack: undefined;
-  PayoutSettings: undefined;
+  PayoutSettings:
+    | {
+        isCompanyView?: boolean;
+      }
+    | undefined;
   //PaymentSettings: undefined;
 };
 
