@@ -105,7 +105,7 @@ function EditCrateWeightAndPricing(
 
   async function onSubmit(values: FormValues<number>): Promise<void> {
     try {
-      const _produce = cloneDeep(params.produce)
+      const _produce = cloneDeep(params.produce);
       const { previous, crates, price } = values;
 
       const cratesToList: Array<number> = [];
@@ -172,7 +172,7 @@ function EditCrateWeightAndPricing(
 
       const results = await Promise.allSettled(promises);
 
-      const allFulfilled = results.every(result => result.status === 'fulfilled');
+      const allFulfilled = results.every((result) => result.status === 'fulfilled');
 
       if (allFulfilled) {
         toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.updateSuccess'), {
@@ -458,7 +458,8 @@ function EditCrateWeightAndPricing(
             </View>
 
             <Text tw="text-lg text-green-primary">
-              {currencies.find((c) => c.name === params.companyCurrency)?.symbol ?? ''} {potentialPrice.toFixed(2)}
+              {currencies.find((c) => c.name === params.companyCurrency)?.symbol ?? ''}{' '}
+              {potentialPrice.toFixed(2)}
             </Text>
           </View>
         ) : null}
