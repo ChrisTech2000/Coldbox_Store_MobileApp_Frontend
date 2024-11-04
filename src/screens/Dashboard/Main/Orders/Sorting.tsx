@@ -1,19 +1,21 @@
+import React, { type SetStateAction, useCallback, useMemo, useState } from 'react';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { Dialog, Portal, RadioButton } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { SetStateAction, useCallback, useMemo, useState } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Divider, Portal, RadioButton } from 'react-native-paper';
-import { create } from 'zustand';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { create } from 'zustand';
+
+import { RadioButtonItem } from '#ui/components/RadioButton';
+import { Text } from '#ui/components/Text';
+import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
-
-import { Button } from '#ui/components/Button';
-import { Modal } from '#ui/components/Modal';
-import { RadioButtonItem } from '#ui/components/RadioButton';
-import { Text } from '#ui/components/Text';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+
+const DIALOG_MAX_WIDTH = Dimensions.get('window').width * 0.68;
+const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.31;
 
 export enum ESortingOptions {
   MOST_RECENT = 'most_recent',
@@ -72,7 +74,7 @@ export function SortingMenu(props: SortingMenuProps) {
         tw="flex flex-row space-x-1 items-center"
       >
         <Text tw="text-green-primary">
-          {options.find((o) => o.id === internalSelection)?.label ?? ''}
+          {options.find((o) => o.id === store.sorting)?.label ?? ''}
         </Text>
         <Icon
           name="arrow-drop-down"
@@ -84,67 +86,64 @@ export function SortingMenu(props: SortingMenuProps) {
         />
       </TouchableOpacity>
       <Portal>
-        <Modal
+        <Dialog
           visible={isModalVisible}
           onDismiss={() => {
             setInternalSelection(store.sorting);
             setIsModalVisible(false);
           }}
+          style={{
+            backgroundColor: 'white',
+            maxWidth: DIALOG_MAX_WIDTH,
+            maxHeight: DIALOG_MAX_HEIGHT,
+            alignSelf: 'center',
+          }}
         >
-          <View tw="bg-white rounded-3xl h-auto space-y-2 p-4 mx-16">
-            <Text variant="TitleBold">{t('Dashboard.SortMenu.title')}</Text>
-            <Divider tw="w-full bg-grey-700 my-1" />
+          <Dialog.Title>{t('Dashboard.SortMenu.title')}</Dialog.Title>
+          <Dialog.Content tw="mb-0 android:pb-1.5">
             <RadioButton.Group
               value={internalSelection ?? ''}
               onValueChange={(value) => {
                 const item = options.find((datum) => datum.id === value);
-                if (!item) return;
+                if (typeof item === 'undefined') return;
                 setInternalSelection(item.id);
               }}
             >
-              <View tw="max-h-60">
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={options}
-                  keyExtractor={(item, index) => `${item.label}-${index}`}
-                  renderItem={({ item }) => (
-                    <RadioButtonItem
-                      label={item.label}
-                      value={item.id}
-                      tw="flex flex-row ml-[-10]"
-                    />
-                  )}
-                  nestedScrollEnabled
+              {options.map((item, itemIdx) => (
+                <RadioButtonItem
+                  key={`${item.label}-${itemIdx}`}
+                  label={item.label}
+                  value={item.id}
+                  tw="flex flex-row-reverse ml-[-10] w-full"
                 />
-              </View>
+              ))}
             </RadioButton.Group>
-            <Divider tw="w-full bg-grey-700 mt-1" />
-            <View tw="flex flex-row items-center justify-end w-full">
-              <Button
-                mode="text"
-                uppercase
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  setInternalSelection(store.sorting);
-                  setIsModalVisible(!isModalVisible);
-                }}
-              >
-                {t('actions.cancel')}
-              </Button>
-              <Button
-                mode="text"
-                uppercase
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  if (internalSelection) store.onSelect(internalSelection);
-                  setIsModalVisible(!isModalVisible);
-                }}
-              >
-                {t('actions.ok')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+          </Dialog.Content>
+          <Dialog.Actions tw="mt-0 justify-around android:pt-1.5">
+            <Button
+              tw="w-1/2"
+              mode="text"
+              onPress={(evt) => {
+                evt.stopPropagation();
+                setInternalSelection(store.sorting);
+                setIsModalVisible(!isModalVisible);
+              }}
+            >
+              {t('actions.cancel')}
+            </Button>
+            <Button
+              tw="w-1/2"
+              mode="contained"
+              onPress={(evt) => {
+                evt.stopPropagation();
+                if (internalSelection) store.onSelect(internalSelection);
+                setIsModalVisible(!isModalVisible);
+              }}
+            >
+              {t('actions.ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </View>
   );

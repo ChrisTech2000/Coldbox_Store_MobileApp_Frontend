@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { Dimensions, TouchableWithoutFeedback, View } from 'react-native';
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Modal, Portal, RadioButton } from 'react-native-paper';
+import { Dialog, Portal, RadioButton } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import colors from 'tailwindcss/colors';
 
@@ -24,6 +24,9 @@ import MarketplaceLocationFilter from './LocationFilter';
 import FilterChip from './FilterChip';
 
 import { useMarketplaceQueryParams } from '../store';
+
+const DIALOG_MAX_WIDTH = Dimensions.get('window').width * 0.68;
+const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.31;
 
 type InternalSelectionState = Exclude<GetAvailableListingParams['sortBy'], undefined>;
 
@@ -96,48 +99,55 @@ export default function MarketplaceFiltersSection() {
       </TouchableWithoutFeedback>
 
       <Portal>
-        <Modal visible={isVisible} onDismiss={resetState}>
-          <View tw="w-full items-center bg-zinc-50 rounded-3xl w-2/3 max-w-2/3 h-auto py-3 px-2 self-center space-y-2">
-            <View tw="items-start space-y-1 my-1 w-full">
-              <RadioButton.Group
-                value={internalSelection}
-                onValueChange={(value) => setInternalSelection(value as InternalSelectionState)}
-              >
-                {Object.keys(OPTIONS_TRANSLATIONS).map((option, itemIdx) => (
-                  <RadioButtonItem
-                    key={`${option}-#${itemIdx}`}
-                    label={t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])}
-                    value={option}
-                    tw="flex flex-row-reverse ml-[-10] w-full"
-                  />
-                ))}
-              </RadioButton.Group>
-            </View>
-            <View tw="w-full flex-row items-center justify-between px-2">
-              <Button
-                tw="w-1/2"
-                mode="text"
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  resetState();
-                }}
-              >
-                {t('actions.cancel')}
-              </Button>
-              <Button
-                tw="w-1/2"
-                mode="contained"
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
-                  toggleVisibility();
-                }}
-              >
-                {t('actions.ok')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+        <Dialog
+          visible={isVisible}
+          onDismiss={resetState}
+          style={{
+            backgroundColor: 'white',
+            maxWidth: DIALOG_MAX_WIDTH,
+            maxHeight: DIALOG_MAX_HEIGHT,
+            alignSelf: 'center',
+          }}
+        >
+          <Dialog.Content tw="mb-0 android:pb-1.5">
+            <RadioButton.Group
+              value={internalSelection}
+              onValueChange={(value) => setInternalSelection(value as InternalSelectionState)}
+            >
+              {Object.keys(OPTIONS_TRANSLATIONS).map((option, itemIdx) => (
+                <RadioButtonItem
+                  key={`${option}-#${itemIdx}`}
+                  label={t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])}
+                  value={option}
+                  tw="flex flex-row-reverse ml-[-10] w-full"
+                />
+              ))}
+            </RadioButton.Group>
+          </Dialog.Content>
+          <Dialog.Actions tw="mt-0 justify-around android:pt-1.5">
+            <Button
+              tw="w-1/2"
+              mode="text"
+              onPress={(evt) => {
+                evt.stopPropagation();
+                resetState();
+              }}
+            >
+              {t('actions.cancel')}
+            </Button>
+            <Button
+              tw="w-1/2"
+              mode="contained"
+              onPress={(evt) => {
+                evt.stopPropagation();
+                useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
+                toggleVisibility();
+              }}
+            >
+              {t('actions.ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </React.Fragment>
   );

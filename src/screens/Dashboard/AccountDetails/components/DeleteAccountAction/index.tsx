@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, type GestureResponderEvent } from 'react-native';
-import { ActivityIndicator, Modal, Portal } from 'react-native-paper';
+import { type GestureResponderEvent } from 'react-native';
+import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
@@ -124,10 +124,14 @@ export default function DeleteAccountAction() {
       </Button>
 
       <Portal>
-        <Modal visible={state.isVisible} onDismiss={resetPopup}>
-          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
-            <View tw="items-center space-y-3">
-              {state.showActions ? (
+        <Dialog
+          visible={state.isVisible}
+          onDismiss={resetPopup}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Dialog.Icon
+            icon={() =>
+              state.showActions ? (
                 <MaterialIcons
                   name="check-circle-outline"
                   size={50}
@@ -135,27 +139,29 @@ export default function DeleteAccountAction() {
                 />
               ) : (
                 <MaterialIcons name="warning" size={50} color={paperTheme.colors.error} />
-              )}
-              <Text variant="TitleSmall">{state.message}</Text>
-            </View>
-            <View tw="flex-row self-end space-x-2">
-              {state.showActions ? (
-                <React.Fragment>
-                  <Button mode="text" onPress={resetPopup}>
-                    {t('actions.cancel')}
-                  </Button>
-                  <Button mode="text" onPress={onConfirm}>
-                    {t('actions.confirm')}
-                  </Button>
-                </React.Fragment>
-              ) : (
+              )
+            }
+          />
+          <Dialog.Content>
+            <Text tw="text-base">{state.message}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            {state.showActions ? (
+              <React.Fragment>
                 <Button mode="text" onPress={resetPopup}>
-                  {t('actions.close')}
+                  {t('actions.cancel')}
                 </Button>
-              )}
-            </View>
-          </View>
-        </Modal>
+                <Button mode="text" onPress={onConfirm}>
+                  {t('actions.confirm')}
+                </Button>
+              </React.Fragment>
+            ) : (
+              <Button mode="text" onPress={resetPopup}>
+                {t('actions.close')}
+              </Button>
+            )}
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </React.Fragment>
   );
