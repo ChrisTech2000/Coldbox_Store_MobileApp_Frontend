@@ -18,10 +18,14 @@ export class Geocoder {
     this._client = geocodingService({ accessToken: MAPBOX_ACCESS_TOKEN });
   }
 
-  public getCoordsFromAddress = async (datums: Omit<PreprocessedFormValues, '_step'>) => {
-    const address = `${datums.streetNumber} ${datums.street}, ${datums.city}, ${datums.state}, ${datums.zipCode}, ${datums.country}`;
+  ///
+  // Public Methods
+  ///
 
-    const result = await this._client.forwardGeocode({ query: address, limit: 1 }).send();
+  public getCoordsFromAddress = async (datums: Omit<PreprocessedFormValues, '_step'>) => {
+    const result = await this._client
+      .forwardGeocode({ query: this._buildAdressFromDatum(datums), limit: 1 })
+      .send();
 
     const location = result?.body?.features?.at(0)?.center;
     if (typeof location === 'undefined' || location.length !== 2) {
@@ -80,4 +84,24 @@ export class Geocoder {
     const [longitude, latitude] = location;
     return { longitude, latitude };
   };
+
+  ///
+  // Private Methods
+  ///
+
+  private _buildAdressFromDatum(datum: Omit<PreprocessedFormValues, '_step'>) {
+    const parts: Array<string> = [];
+
+    if (datum?.streetNumber || datum?.street) {
+      const streetAddress = [datum?.streetNumber, datum?.street].filter(Boolean).join(' ');
+      parts.push(streetAddress);
+    }
+
+    if (datum.city) parts.push(datum.city);
+    if (datum.state) parts.push(datum.state);
+    if (datum?.zipCode) parts.push(datum.zipCode);
+    if (datum.country) parts.push(datum.country);
+
+    return parts.join(', ');
+  }
 }
