@@ -1,19 +1,21 @@
-import React, { useMemo, useState } from 'react';
-import { Dimensions, View } from 'react-native';
-import { Controller } from 'react-hook-form';
-import { Checkbox, Divider, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import truncate from 'lodash/truncate';
+import React, { useMemo, useState } from 'react';
+import { Controller } from 'react-hook-form';
+import { Dimensions, View } from 'react-native';
+import { Divider, TextInput } from 'react-native-paper';
 
-import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
+import { Checkbox } from '#ui/components/Checkbox';
+import { Select } from '#ui/components/Select';
+import { Text } from '#ui/components/Text';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
-import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { useToggle } from '#ui/hooks/useToggle';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
 
 import MarketplaceFormManager, {
@@ -103,19 +105,23 @@ export default function CropTypeFilters() {
                       keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
                       renderItem={({ item }) => (
                         <View>
-                          <Checkbox.Item
-                            label={item.name}
-                            status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
-                            onPress={() => {
-                              setInternalSelection((prev) => {
-                                const clone = [...prev];
-                                const idx = clone.indexOf(item.id);
-                                if (idx === -1) clone.push(item.id);
-                                else clone.splice(idx, 1);
-                                return clone;
-                              });
-                            }}
-                          />
+                          <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                            <Text tw="text-base w-[70%]" numberOfLines={2}>
+                              {item.name}
+                            </Text>
+                            <Checkbox
+                              status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
+                              onPress={() => {
+                                setInternalSelection((prev) => {
+                                  const clone = [...prev];
+                                  const idx = clone.indexOf(item.id);
+                                  if (idx === -1) clone.push(item.id);
+                                  else clone.splice(idx, 1);
+                                  return clone;
+                                });
+                              }}
+                            />
+                          </View>
                           <Divider />
                         </View>
                       )}

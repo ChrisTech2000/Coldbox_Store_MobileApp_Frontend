@@ -5,7 +5,7 @@ import { Divider } from 'react-native-paper';
 import { create } from 'zustand';
 
 import { Button } from '#ui/components/Button';
-import { CheckboxItem } from '#ui/components/Checkbox';
+import { Checkbox } from '#ui/components/Checkbox';
 import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
 import { useControlledState } from '#ui/hooks/useControlledState';
@@ -130,18 +130,22 @@ export default function MultipleSelectWithStore<T>({
                 keyExtractor={(item, index) => `${item}-${index}`}
                 renderItem={({ item }) => {
                   return (
-                    <CheckboxItem
-                      label={rest.itemName(item)}
-                      tw="flex flex-row-reverse ml-[-10]"
-                      status={
-                        internalSelection.some(
-                          (selectedItem) => rest.itemName(selectedItem) === rest.itemName(item)
-                        )
-                          ? 'checked'
-                          : 'unchecked'
-                      }
-                      onPress={() => handleSelect(item)}
-                    />
+                    <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                      <Text tw="text-base w-[70%]" numberOfLines={2}>
+                        {rest.itemName(item)}
+                      </Text>
+                      <Checkbox
+                        tw="flex flex-row-reverse ml-[-10]"
+                        status={
+                          internalSelection.some(
+                            (selectedItem) => rest.itemName(selectedItem) === rest.itemName(item)
+                          )
+                            ? 'checked'
+                            : 'unchecked'
+                        }
+                        onPress={() => handleSelect(item)}
+                      />
+                    </View>
                   );
                 }}
                 nestedScrollEnabled

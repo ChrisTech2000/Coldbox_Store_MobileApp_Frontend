@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { Checkbox, Portal, TextInput } from 'react-native-paper';
+import { Portal, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
@@ -19,6 +19,7 @@ import useCartStore from '#stores/shoppingCart';
 
 import type { AvailableListingDatum } from '../utils';
 import MarketplaceItemWrapper from './MarketplaceItem';
+import { Checkbox } from '#ui/components/Checkbox';
 
 type FormValues<T = string> = {
   quantity: T;
@@ -174,7 +175,7 @@ export default function AddToCartModal() {
           <View tw="w-full flex-col items-center space-y-2">
             <Button
               tw="w-11/12 mb-4"
-              mode="outlined"
+              mode="contained"
               // eslint-disable-next-line
               onPress={form.handleSubmit(onSubmit as any)}
               disabled={form.formState.isSubmitting}
