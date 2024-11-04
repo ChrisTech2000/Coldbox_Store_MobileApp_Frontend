@@ -937,6 +937,12 @@ const en = {
         'price-desc': 'Price descending',
         'nearby-me': 'Near to me',
       },
+      distance: {
+        withing5Km: '1 to 5 KM away',
+        within10Km: '5 to 10 KM away',
+        within25Km: '10 to 25 KM away',
+        beyond25Km: 'More than 25 KM away',
+      },
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
       addToCart: {
         addToCartButton: 'Add to cart and continue shopping',

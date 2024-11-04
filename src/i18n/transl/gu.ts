@@ -937,6 +937,12 @@ export default {
         'price-desc': 'કીમત ઉતરતી',
         'nearby-me': 'મને નજીક',
       },
+      distance: {
+        withing5Km: '1 to 5 KM away', // TODO
+        within10Km: '5 to 10 KM away', // TODO
+        within25Km: '10 to 25 KM away', // TODO
+        beyond25Km: 'More than 25 KM away', // TODO
+      },
       priceConfig: 'કીમત રૂપરેખાંકન ઉત્પાદની વેચાણને સંબંધિત છે, કૂલિંગ સ્ટોરેજ ફી સાથે નહીં.',
       addToCart: {
         buyFullCrate: 'Buy full crate', // TODO

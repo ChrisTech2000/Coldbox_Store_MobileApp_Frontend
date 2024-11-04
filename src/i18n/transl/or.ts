@@ -942,6 +942,12 @@ export default {
         'price-desc': 'ମୂଲ୍ୟ କମିବା',
         'nearby-me': 'ମୋ ପାଖରେ',
       },
+      distance: {
+        withing5Km: '1 to 5 KM away', // TODO
+        within10Km: '5 to 10 KM away', // TODO
+        within25Km: '10 to 25 KM away', // TODO
+        beyond25Km: 'More than 25 KM away', // TODO
+      },
       priceConfig: 'ମୂଲ୍ୟ କନଫିଗରେସନ୍ ଉତ୍ପାଦ ବିକ୍ରୟକୁ ସନ୍ଦର୍ଭ କରେ, କୁଲିଂ ସ୍ଥାନ ଶୁଳ୍କକୁ ନୁହେଁ।',
       addToCart: {
         addToCartButton: 'କାର୍ଟରେ ଯୋଡନ୍ତୁ ଏବଂ ଶପିଂ ଜାରି ରଖନ୍ତୁ',
