@@ -486,6 +486,8 @@ export default {
             "Vous aurez besoin du code de retrait pour commencer un nouvel enregistrement de cette manière. Si vous ne l'avez pas, envisagez de commencer un nouvel enregistrement. Si vous savez combien de temps vous prévoyez de stocker, envisagez d'ajouter le nombre de jours ici.",
           codeLabel: 'Ajouter le code',
           codeErrorMessage: 'Le code est requis',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
         },
         SelectCropType: {
           fruits: 'Fruits',
@@ -704,7 +706,6 @@ export default {
             "Pour rejoindre l'application Coldtivate en tant qu'Opérateur, rendez-vous sur : {{link}}",
         },
         toasts: {
-          error: 'Le téléphone est déjà attribué. Essayez un autre numéro',
           success: 'Opérateur invité avec succès',
         },
         phoneFormat: 'Assurez-vous que le numéro de téléphone saisi a un code pays.',
@@ -952,6 +953,12 @@ export default {
         'price-desc': 'Prix décroissant',
         'nearby-me': 'Près de moi',
       },
+      distance: {
+        withing5Km: '1 to 5 KM away', // TODO
+        within10Km: '5 to 10 KM away', // TODO
+        within25Km: '10 to 25 KM away', // TODO
+        beyond25Km: 'More than 25 KM away', // TODO
+      },
       priceConfig:
         'La configuration des prix concerne la vente de produits, pas les frais de stockage réfrigéré.',
       addToCart: {
@@ -986,6 +993,7 @@ export default {
       sections: {
         sellerSettings: 'Paramètres du vendeur',
         buyerSettings: "Paramètres de l'acheteur",
+        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'Détails',
       },
       ContactsSharing: {
@@ -995,6 +1003,8 @@ export default {
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',
         editTitle: 'Les informations de votre compte bancaire',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'Nom du compte',
           namePlaceholder: 'Insérer le nom du compte',

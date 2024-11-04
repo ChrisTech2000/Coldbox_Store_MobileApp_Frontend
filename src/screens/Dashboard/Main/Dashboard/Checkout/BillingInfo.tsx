@@ -122,28 +122,34 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     const dInt = Number(discount);
     if (isNaN(dInt)) return;
 
-    await ColdtivateService.checkOut({
-      crates: crates?.map((crate) => crate.id),
-      operatorId: user.user,
-      priceDiscount: dInt,
-      currency: currency,
-      paymentType: paymentType as EPaymentType,
-      paid: isPaid,
-    });
+    try {
+      await ColdtivateService.checkOut({
+        crates: crates?.map((crate) => crate.id),
+        operatorId: user.user,
+        priceDiscount: dInt,
+        currency: currency,
+        paymentType: paymentType as EPaymentType,
+        paid: isPaid,
+      });
 
-    refreshData.forEach((fn) => fn());
+      refreshData.forEach((fn) => fn());
 
-    if (guard('VIEW', 'TemperatureAlertModal')) {
-      const temperatureAlertDatum = {
-        coolingUnitId: coolingUnit!.id,
-        companyId: company!.id,
-        showCompleteInfo: true,
-      } satisfies TemperatureAlertEvtDatum;
+      if (guard('VIEW', 'TemperatureAlertModal')) {
+        const temperatureAlertDatum = {
+          coolingUnitId: coolingUnit!.id,
+          companyId: company!.id,
+          showCompleteInfo: true,
+        } satisfies TemperatureAlertEvtDatum;
 
-      emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
+        emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
+      }
+
+      rootNavigation.navigate('RootMainTabStack');
+    } catch (error) {
+      toast.show(t('Dashboard.CrateManagement.operationError'), {
+        type: 'md_danger',
+      });
     }
-
-    rootNavigation.navigate('RootMainTabStack');
   }, [user, crates, discount, currency, paymentType, isPaid, refreshData, guard, coolingUnit?.id]);
 
   useEffect(() => {

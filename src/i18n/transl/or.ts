@@ -480,6 +480,8 @@ export default {
             'ଆପଣଙ୍କୁ ନୂତନ ଚେକ୍-ଇନ୍ ଆରମ୍ଭ କରିବା ପାଇଁ ଚେକ୍-ଆଉଟ୍ କୋଡ୍ ଆବଶ୍ୟକ। ଯଦି ଆପଣଙ୍କ ପାଖରେ ନାହିଁ, ତେବେ ଏକ ନୂତନ ଚେକ୍-ଇନ୍ ଆରମ୍ଭ କରିବାକୁ ବିଚାର କରନ୍ତୁ। ଯଦି ଆପଣ କେତେ ସମୟ ସ୍ଟୋର୍ କରିବା ଯୋଜନା କରୁଛନ୍ତି, ତେବେ ଏଠାରେ ଦିନଗୁଡିକର ସଂଖ୍ୟା ଯୋଡନ୍ତୁ।',
           codeLabel: 'କୋଡ୍ ଯୋଡନ୍ତୁ',
           codeErrorMessage: 'କୋଡ୍ ଆବଶ୍ୟକ',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
         },
         SelectCropType: {
           fruits: 'ଫଳ',
@@ -940,6 +942,12 @@ export default {
         'price-desc': 'ମୂଲ୍ୟ କମିବା',
         'nearby-me': 'ମୋ ପାଖରେ',
       },
+      distance: {
+        withing5Km: '1 to 5 KM away', // TODO
+        within10Km: '5 to 10 KM away', // TODO
+        within25Km: '10 to 25 KM away', // TODO
+        beyond25Km: 'More than 25 KM away', // TODO
+      },
       priceConfig: 'ମୂଲ୍ୟ କନଫିଗରେସନ୍ ଉତ୍ପାଦ ବିକ୍ରୟକୁ ସନ୍ଦର୍ଭ କରେ, କୁଲିଂ ସ୍ଥାନ ଶୁଳ୍କକୁ ନୁହେଁ।',
       addToCart: {
         addToCartButton: 'କାର୍ଟରେ ଯୋଡନ୍ତୁ ଏବଂ ଶପିଂ ଜାରି ରଖନ୍ତୁ',
@@ -973,6 +981,7 @@ export default {
       sections: {
         sellerSettings: 'ବିକ୍ରେତା ସେଟିଂସ୍',
         buyerSettings: 'କ୍ରେତା ସେଟିଂସ୍',
+        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'ବିବରଣୀ',
       },
       ContactsSharing: {
@@ -982,6 +991,8 @@ export default {
       PayoutSettings: {
         addTitle: 'ଦୟାକରି ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା ଯୋଗ କରନ୍ତୁ',
         editTitle: 'ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'ଖାତା ନାମ',
           namePlaceholder: 'ଖାତା ନାମ ଯୋଗ କରନ୍ତୁ',

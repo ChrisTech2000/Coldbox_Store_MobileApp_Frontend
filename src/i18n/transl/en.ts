@@ -375,7 +375,7 @@ const en = {
       coolingUnitLabel: 'Cooling unit',
       noUnitWarning: 'Please select a cooling unit',
       noCratesWarning: "The selected Cooling user doesn't have any crates in this cooling unit",
-      operationError: 'Something went wrong. Please try again later.',
+      operationError: 'Something went wrong. Please try again later or contact support.',
       FarmerSurvey: {
         warningMessage: 'Please fill in the baseline survey for {{crop}}!',
         modal: {
@@ -478,6 +478,8 @@ const en = {
             'You will need the check out code to start a new check in in this way. If you don’t have it, consider starting a new check in. If you know how long you plan to store, consider adding the number of days here.',
           codeLabel: 'Add code',
           codeErrorMessage: 'Code is required',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.",
         },
         SelectCropType: {
           fruits: 'Fruits',
@@ -934,6 +936,12 @@ const en = {
         'price-asc': 'Price ascending',
         'price-desc': 'Price descending',
         'nearby-me': 'Near to me',
+      },
+      distance: {
+        withing5Km: '1 to 5 KM away',
+        within10Km: '5 to 10 KM away',
+        within25Km: '10 to 25 KM away',
+        beyond25Km: 'More than 25 KM away',
       },
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
       addToCart: {

@@ -220,7 +220,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
                   evt.stopPropagation();
-                  props.navigation.navigate('PayoutSettings');
+                  props.navigation.navigate('PayoutSettings', { isCompanyView: true });
                 }}
               />
               <Divider tw="bg-gray-400" />

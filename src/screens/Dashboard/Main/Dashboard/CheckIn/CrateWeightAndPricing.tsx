@@ -1,17 +1,18 @@
+import { useIsFocused } from '@react-navigation/native';
 import { currencies } from 'currencies.json';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Checkbox, Divider, TextInput } from 'react-native-paper';
+import { Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
-import { useIsFocused } from '@react-navigation/native';
 
 import { Button } from '#ui/components/Button';
+import { Checkbox } from '#ui/components/Checkbox';
 import { GenericError } from '#ui/components/GenericError';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { Input } from '#ui/components/Input';
@@ -23,8 +24,8 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
-import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from './components/SellInMarketplaceModal';

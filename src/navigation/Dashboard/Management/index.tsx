@@ -94,7 +94,11 @@ export type ManagementRoutes = {
     params: EditCoolingUserStackRoutes[keyof EditCoolingUserStackRoutes];
   };
   CouponStack: undefined;
-  PayoutSettings: undefined;
+  PayoutSettings:
+    | {
+        isCompanyView?: boolean;
+      }
+    | undefined;
   DeliveryContacts: undefined;
 };
 
