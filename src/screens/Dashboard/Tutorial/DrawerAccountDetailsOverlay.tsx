@@ -17,7 +17,7 @@ const screenHeight = Dimensions.get('window').height;
 export function DrawerAccountDetailsOverlay({
   next,
   stop,
-  step: { onPressMask, mask },
+  step: { onPressMask },
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
@@ -62,8 +62,8 @@ export function DrawerAccountDetailsOverlay({
       <Animated.View
         style={[
           {
-            top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 45 : 30),
-            right: mask.x + (screenHeight <= SMALL_SCREEN_THRESHOLD ? 90 : 70),
+            top: screenHeight <= SMALL_SCREEN_THRESHOLD ? '16%' : '17%',
+            left: '50%',
             opacity: blinkAnim,
           },
         ]}
