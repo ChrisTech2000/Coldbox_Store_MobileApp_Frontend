@@ -1,19 +1,20 @@
-import React, { useMemo, useState } from 'react';
-import { View, FlatList } from 'react-native';
-import { Controller } from 'react-hook-form';
-import { Divider } from 'react-native-paper';
 import truncate from 'lodash/truncate';
+import React, { useMemo, useState } from 'react';
+import { Controller } from 'react-hook-form';
+import { FlatList, View } from 'react-native';
+import { Divider } from 'react-native-paper';
 
-import { Select } from '#ui/components/Select';
-import { CheckboxItem } from '#ui/components/Checkbox';
 import { Button } from '#ui/components/Button';
-
+import { Checkbox } from '#ui/components/Checkbox';
+import { Select } from '#ui/components/Select';
+import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
-import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
-import FormManager, { type FormValues } from '../contexts/FormManager';
+import { useTranslationUtils } from '#i18n/utils';
+
 import DataAggregator from '../contexts/DataAggregator';
+import FormManager, { type FormValues } from '../contexts/FormManager';
 
 export default function OperatorsField() {
   const { control, watch, formState } = FormManager.useFormManager();
@@ -66,20 +67,24 @@ export default function OperatorsField() {
                       renderItem={({ item }) => {
                         const itemId = parseInt(item);
                         return (
-                          <CheckboxItem
-                            tw="flex-row-reverse ml-[-10]"
-                            label={companyOperators[itemId]}
-                            status={internalSelection.includes(itemId) ? 'checked' : 'unchecked'}
-                            onPress={() => {
-                              setInternalSelection((prev) => {
-                                const clone = [...prev];
-                                const idx = clone.indexOf(itemId);
-                                if (idx === -1) clone.push(itemId);
-                                else clone.splice(idx, 1);
-                                return clone;
-                              });
-                            }}
-                          />
+                          <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                            <Text tw="text-base w-[70%]" numberOfLines={2}>
+                              {companyOperators[itemId]}
+                            </Text>
+                            <Checkbox
+                              tw="flex-row-reverse ml-[-10]"
+                              status={internalSelection.includes(itemId) ? 'checked' : 'unchecked'}
+                              onPress={() => {
+                                setInternalSelection((prev) => {
+                                  const clone = [...prev];
+                                  const idx = clone.indexOf(itemId);
+                                  if (idx === -1) clone.push(itemId);
+                                  else clone.splice(idx, 1);
+                                  return clone;
+                                });
+                              }}
+                            />
+                          </View>
                         );
                       }}
                     />
