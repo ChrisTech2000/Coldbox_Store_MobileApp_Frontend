@@ -948,6 +948,12 @@ export default {
         'price-desc': 'Preço em ordem decrescente',
         'nearby-me': 'Perto de mim',
       },
+      distance: {
+        withing5Km: '1 to 5 KM away', // TODO
+        within10Km: '5 to 10 KM away', // TODO
+        within25Km: '10 to 25 KM away', // TODO
+        beyond25Km: 'More than 25 KM away', // TODO
+      },
       priceConfig:
         'A configuração de preço refere-se à venda de produtos, não à taxa de armazenamento em resfriamento.',
       addToCart: {
