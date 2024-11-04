@@ -133,9 +133,9 @@ export default function TemperatureAlert() {
         style={{ backgroundColor: 'white', maxHeight: DIALOG_MAX_HEIGHT }}
       >
         <Dialog.Icon
-          icon={(props) => <Icon {...props} name="warning" size={35} color={colors.yellow[400]} />}
+          icon={(props) => <Icon {...props} name="warning" size={40} color={colors.yellow[400]} />}
         />
-        <Dialog.Title tw="text-center">{t('Dashboard.TemperatureAlert.title')}</Dialog.Title>
+        <Dialog.Title tw="text-center mt-0">{t('Dashboard.TemperatureAlert.title')}</Dialog.Title>
         <Container>
           <ContextualView {...(showCompleteInfo ? { showsVerticalScrollIndicator: false } : {})}>
             <View tw={cn(showCompleteInfo && 'h-full pt-2')}>
@@ -235,7 +235,7 @@ export default function TemperatureAlert() {
                   {t('Dashboard.TemperatureAlert.confirm')}
                 </Button>
                 <Button
-                  tw="mb-6"
+                  tw={cn(showCompleteInfo && 'mb-4')}
                   mode="contained"
                   onPress={async (evt) => {
                     evt?.stopPropagation();

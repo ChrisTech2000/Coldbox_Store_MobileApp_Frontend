@@ -423,8 +423,8 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
           onDismiss={closePhoneWarningModal}
           style={{ backgroundColor: 'white' }}
         >
-          <Dialog.Icon icon={() => <Danger width={50} height={50} />} />
-          <Dialog.Title tw="text-center">Warning</Dialog.Title>
+          <Dialog.Icon icon={() => <Danger width={45} height={45} />} />
+          <Dialog.Title tw="text-center mt-0">Warning</Dialog.Title>
           <Dialog.Content>
             <Text tw="text-center mb-4">{t('Auth.SignUp.SignUpCompany.modal.warning')}</Text>
             {[
