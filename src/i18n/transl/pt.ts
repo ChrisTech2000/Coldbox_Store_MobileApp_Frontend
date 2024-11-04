@@ -287,7 +287,8 @@ export default {
         languageFieldName: 'idioma',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again', // TODO
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
       },
     },
     ForgotPassword: {
@@ -483,6 +484,8 @@ export default {
             'Você precisará do código de check-out para iniciar um novo check-in desta forma. Se não o tiver, considere iniciar um novo check-in. Se souber por quanto tempo planeia armazenar, considere adicionar o número de dias aqui.',
           codeLabel: 'Adicionar código',
           codeErrorMessage: 'Código é obrigatório',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
         },
         SelectCropType: {
           fruits: 'Frutas',
@@ -700,7 +703,6 @@ export default {
           operator: 'Para se juntar aa aplicação Coldtivate como Operador, vá para: {{link}}',
         },
         toasts: {
-          error: 'Please check the information provided and try again', // TODO
           success: 'Operador convidado com sucesso',
         },
         phoneFormat: 'Certifique-se de que o número de telefone inserido tem um código de país.',
@@ -951,7 +953,7 @@ export default {
       addToCart: {
         addToCartButton: 'Adicionar ao carrinho e continuar comprando',
         selectQuantity: 'Selecionar quantidade',
-        buyNowButton: 'Comprar agora',
+        buyFullCrate: 'Buy full crate', // TODO
       },
       currentLocation: 'Localização atual',
       filterError:
@@ -977,6 +979,7 @@ export default {
       sections: {
         sellerSettings: 'Configurações do vendedor',
         buyerSettings: 'Configurações do comprador',
+        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'Detalhes',
       },
       toasts: {
@@ -1170,14 +1173,6 @@ export default {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - Recibo de {{movementType}}:
-          Código de movimento: {{code}}
-          Produtos: {{crops}}
-          Peso total: {{weight}} Kg
-          {{movementTypeForDate}}: {{date}}
-          Preço: {{price}}
-          Pago por: {{farmersName}}
-          `,
         movementType: {
           checkOut: 'Check-Out',
           checkIn: 'Check-In',

@@ -207,7 +207,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
       <RBAC.ProtectedResource action="VIEW" subject="CompanySellerSettings">
         <View tw="space-y-3 mt-6">
           <Text tw="text-base text-green-primary font-bold">
-            {t('Dashboard.AccountDetails.sections.sellerSettings')}
+            {t('Dashboard.AccountDetails.sections.companySellerSettings')}
           </Text>
           <View>
             <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
@@ -220,7 +220,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
                   evt.stopPropagation();
-                  props.navigation.navigate('PayoutSettings');
+                  props.navigation.navigate('PayoutSettings', { isCompanyView: true });
                 }}
               />
               <Divider tw="bg-gray-400" />

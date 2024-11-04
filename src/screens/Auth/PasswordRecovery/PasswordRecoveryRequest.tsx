@@ -45,7 +45,7 @@ function PasswordRecoveryRequest() {
           type: 'md_success',
         });
       } catch (exception) {
-        toast.show('Auth.ForgotPassword.requestLimitMessage', { type: 'md_danger' });
+        toast.show(t('Auth.ForgotPassword.requestLimitMessage'), { type: 'md_danger' });
         console.error(exception);
       }
     },

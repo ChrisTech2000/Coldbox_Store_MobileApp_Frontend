@@ -1529,6 +1529,27 @@ PODS:
     - ReactCommon/turbomodule/core
     - Sentry/HybridSDK (= 8.36.0)
     - Yoga
+  - RNShare (11.0.4):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNSVG (15.7.1):
     - React-Core
   - SDWebImage (5.11.1):
@@ -1623,6 +1644,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
+  - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1799,6 +1821,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSentry:
     :path: "../node_modules/@sentry/react-native"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -1890,6 +1914,7 @@ SPEC CHECKSUMS:
   RNReanimated: e4f45f26ac30208ad2c53dadc304d070aa262bfd
   RNScreens: aa943ad421c3ced3ef5a47ede02b0cbfc43a012e
   RNSentry: 06eb0bb6483b61486c8ee892d4ee78ee3c9110dd
+  RNShare: 9a265cd17f5bf78726c5e77bdee51d3735afb15c
   RNSVG: 4590aa95758149fa27c5c83e54a6a466349a1688
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

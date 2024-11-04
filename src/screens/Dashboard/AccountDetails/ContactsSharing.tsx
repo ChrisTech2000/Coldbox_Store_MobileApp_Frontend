@@ -1,5 +1,5 @@
 import isNil from 'lodash/isNil';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { Divider, List, Switch } from 'react-native-paper';
 import { useDebouncedCallback } from 'use-debounce';
@@ -18,43 +18,49 @@ function ContactsSharing() {
   const { t } = useTranslationUtils();
   const [user, setUser] = useAuthStore((store) => [store.user, store.setUser]);
   const toast = InAppNotifications.useToast();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onPreferencesChange = useDebouncedCallback(
-    useCallback(
-      async (publicPhone?: boolean, publicEmail?: boolean) => {
-        if (!user) return;
-        setLoading(true);
+  const [localPhonePublic, setLocalPhonePublic] = useState(user?.isPhonePublic ?? false);
+  const [localEmailPublic, setLocalEmailPublic] = useState(user?.isEmailPublic ?? false);
 
-        try {
-          const userDatum = await ColdtivateService.updateUser({
-            userId: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            phone: user.phone,
-            email: user.email,
-            gender: user.gender,
-            language: user.language,
-            isEmailPublic: !isNil(publicEmail) ? publicEmail : user?.isEmailPublic,
-            isPhonePublic: !isNil(publicPhone) ? publicPhone : user?.isPhonePublic,
-          });
+  const updatePreferences = useDebouncedCallback(async (publicPhone, publicEmail) => {
+    if (!user) return;
+    setLoading(true);
 
-          setUser({ ...userDatum, role: user?.role });
+    try {
+      const userDatum = await ColdtivateService.updateUser({
+        userId: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        email: user.email,
+        gender: user.gender,
+        language: user.language,
+        isEmailPublic: !isNil(publicEmail) ? publicEmail : user.isEmailPublic,
+        isPhonePublic: !isNil(publicPhone) ? publicPhone : user.isPhonePublic,
+      });
 
-          toast.show(t('Dashboard.AccountDetails.toasts.success'), {
-            type: 'md_success',
-            style: { marginBottom: 50 },
-          });
-        } catch (exception) {
-          console.error(exception);
-        } finally {
-          setLoading(false);
-        }
-      },
-      [user, setLoading]
-    ),
-    800
-  );
+      setUser({ ...userDatum, role: user?.role });
+      toast.show(t('Dashboard.AccountDetails.toasts.success'), {
+        type: 'md_success',
+        style: { marginBottom: 50 },
+      });
+    } catch (exception) {
+      console.error(exception);
+    } finally {
+      setLoading(false);
+    }
+  }, 800);
+
+  const handlePhoneSwitchChange = useCallback((value: boolean) => {
+    setLocalPhonePublic(value);
+    updatePreferences(value, undefined);
+  }, []);
+
+  const handleEmailSwitchChange = useCallback((value: boolean) => {
+    setLocalEmailPublic(value);
+    updatePreferences(undefined, value);
+  }, []);
 
   return (
     <ScrollView tw="flex-1 p-3" showsVerticalScrollIndicator={false}>
@@ -71,8 +77,8 @@ function ContactsSharing() {
             right={() => (
               <Switch
                 disabled={loading}
-                value={user?.isPhonePublic ?? false}
-                onValueChange={(val) => onPreferencesChange(val, undefined)}
+                value={localPhonePublic}
+                onValueChange={handlePhoneSwitchChange}
               />
             )}
           />
@@ -92,8 +98,8 @@ function ContactsSharing() {
               right={() => (
                 <Switch
                   disabled={loading}
-                  value={user?.isEmailPublic ?? false}
-                  onValueChange={(val) => onPreferencesChange(undefined, val)}
+                  value={localEmailPublic}
+                  onValueChange={handleEmailSwitchChange}
                 />
               )}
             />

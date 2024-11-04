@@ -71,7 +71,10 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
       };
     });
 
-    return sortData(data, sorting);
+    return sortData(
+      data.filter((item) => item.coolingUnitName),
+      sorting
+    );
   }, [impactData, sorting, configData]);
 
   const foodLossData = useMemo(() => {
@@ -153,6 +156,7 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
         column1: `${sum.toFixed(2)}%`,
         column2: `${from.toFixed(2)} to ${to.toFixed(2)}`,
         column3: sum === 0 ? 'equal' : sum < 0 ? 'decrease' : ('increase' as Variation),
+        negative: true,
         sum,
       };
     });
@@ -282,14 +286,14 @@ function Table({ items, header, total }: TableProps) {
   const colors = useTailwindColors();
 
   return (
-    <DataTable tw="py-4 px-2">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
-        <DataTable.Title>
+    <DataTable tw="py-4 px-2 min-w-full">
+      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14 min-w-full">
+        <DataTable.Title tw="max-w-[50%] min-w-[50%]">
           <Text variant="TextMedium" tw="text-white text-base">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Title>
-        <DataTable.Title>
+        <DataTable.Title tw="max-w-[50%] min-w-[50%]">
           <Text variant="TextMedium" tw="text-white text-base">
             {header}
           </Text>
@@ -298,8 +302,8 @@ function Table({ items, header, total }: TableProps) {
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
         {items.map((item, index) => (
           <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
-            <DataTable.Cell>{item.coolingUnitName}</DataTable.Cell>
-            <DataTable.Cell>{item.value}</DataTable.Cell>
+            <DataTable.Cell tw="max-w-[50%] min-w-[50%]">{item.coolingUnitName}</DataTable.Cell>
+            <DataTable.Cell tw="max-w-[50%] min-w-[50%]">{item.value}</DataTable.Cell>
           </DataTable.Row>
         ))}
 
@@ -318,45 +322,69 @@ function ExtendedTable({ items, column1, column2, total, fourColumnsVersion }: E
   const colors = useTailwindColors();
 
   return (
-    <DataTable tw="py-4 px-2">
+    <DataTable tw="py-4 px-2 min-w-full">
       <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
-        <DataTable.Cell>
+        <DataTable.Cell
+          tw={fourColumnsVersion ? 'max-w-[30%] min-w-[30%]' : 'max-w-[35%] min-w-[35%]'}
+        >
           <Text variant="TextMedium" tw="text-white text-base">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
-        <DataTable.Cell tw="w-[25%]">
-          <Text tw="flex-wrap text-base text-white" numberOfLines={2}>
+        <DataTable.Cell
+          tw={fourColumnsVersion ? 'max-w-[25%] min-w-[25%]' : 'max-w-[35%] min-w-[35%]'}
+        >
+          <Text tw="flex-wrap text-base text-white" numberOfLines={3}>
             {column1}
           </Text>
         </DataTable.Cell>
-        <DataTable.Cell tw="w-[25%]">
-          <Text tw="flex-wrap text-base text-white" numberOfLines={2}>
+        <DataTable.Cell
+          tw={fourColumnsVersion ? 'max-w-[35%] min-w-[35%]' : 'max-w-[30%] min-w-[30%]'}
+        >
+          <Text tw="flex-wrap text-base text-white" numberOfLines={3}>
             {column2}
           </Text>
         </DataTable.Cell>
-        {fourColumnsVersion && <DataTable.Cell tw="w-[25%]">{''}</DataTable.Cell>}
+        {fourColumnsVersion && <DataTable.Cell tw="max-w-[10%] min-w-[10%]">{''}</DataTable.Cell>}
       </DataTable.Header>
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
         {items.map((item, index) => (
           <DataTable.Row tw="bg-white" key={`${item.coolingUnitName}-${index}`}>
-            <DataTable.Cell tw={fourColumnsVersion ? 'border-r border-gray-200' : ''}>
-              <Text tw="text-base flex-wrap" numberOfLines={2}>
+            <DataTable.Cell
+              tw={
+                fourColumnsVersion
+                  ? 'border-r border-gray-200 max-w-[30%] min-w-[30%]'
+                  : 'max-w-[35%] min-w-[35%]'
+              }
+            >
+              <Text tw="text-base flex-wrap" numberOfLines={3}>
                 {item.coolingUnitName}
               </Text>
             </DataTable.Cell>
-            <DataTable.Cell tw={fourColumnsVersion ? 'border-r border-gray-200' : ''}>
-              <Text tw="text-base flex-wrap pl-1" numberOfLines={2}>
+            <DataTable.Cell
+              tw={
+                fourColumnsVersion
+                  ? 'border-r border-gray-200 max-w-[25%] min-w-[25%]'
+                  : 'max-w-[35%] min-w-[35%]'
+              }
+            >
+              <Text tw="text-base flex-wrap pl-1" numberOfLines={3}>
                 {item.column1}
               </Text>
             </DataTable.Cell>
-            <DataTable.Cell tw={fourColumnsVersion ? 'border-r border-gray-200' : ''}>
-              <Text tw="text-base flex-wrap pl-1" numberOfLines={2}>
+            <DataTable.Cell
+              tw={
+                fourColumnsVersion
+                  ? 'border-r border-gray-200 max-w-[35%] min-w-[35%]'
+                  : 'max-w-[30%] min-w-[30%]'
+              }
+            >
+              <Text tw="text-base flex-wrap pl-1" numberOfLines={3}>
                 {item.column2}
               </Text>
             </DataTable.Cell>
             {fourColumnsVersion && (
-              <DataTable.Cell tw="pl-2">
+              <DataTable.Cell tw="pl-2 max-w-[10%] min-w-[10%]">
                 {item.column3 === 'equal' && <Icon source="equal" size={25} />}
                 {item.column3 === 'decrease' && (
                   <Icon

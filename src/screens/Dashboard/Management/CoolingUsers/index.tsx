@@ -131,7 +131,6 @@ function _propsFactory(
   datum: Farmer,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ) {
-  console.log(datum);
   const isUserWithoutPhone = datum.user.firstName === 'User without a phone';
   const props = {} as ListItemProps;
   props.title = [datum.user.firstName, datum.user.lastName].join(' ');

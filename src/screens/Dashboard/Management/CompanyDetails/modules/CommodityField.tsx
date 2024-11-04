@@ -1,18 +1,20 @@
-import React, { useMemo, useState } from 'react';
-import { Dimensions, View } from 'react-native';
-import { Controller } from 'react-hook-form';
-import { Checkbox, Divider, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import truncate from 'lodash/truncate';
+import React, { useMemo, useState } from 'react';
+import { Controller } from 'react-hook-form';
+import { Dimensions, View } from 'react-native';
+import { Divider, TextInput } from 'react-native-paper';
 
-import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
+import { Checkbox } from '#ui/components/Checkbox';
+import { Select } from '#ui/components/Select';
+import { Text } from '#ui/components/Text';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { useTranslationUtils } from '#i18n/utils';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
-import { useTranslationUtils } from '#i18n/utils';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 import FormManager, { type FormValues } from '../components/FormManager';
 
@@ -62,7 +64,10 @@ export default function CommodityField(props: Props) {
               label={t('Dashboard.Management.CompanyDetails.labels.commodity')}
               currentValue={selectLabel}
               isModalOpen={isVisible}
-              onClick={toggleVisibility}
+              onClick={() => {
+                setInternalSelection(selectedCommodities);
+                toggleVisibility();
+              }}
               useScrollView={false}
               content={{
                 header: t('Dashboard.Management.CompanyDetails.headings.commodity'),
@@ -81,20 +86,26 @@ export default function CommodityField(props: Props) {
                     data={[...datums]}
                     renderItem={({ item, index }) => (
                       <React.Fragment>
-                        <Checkbox.Item
+                        <View
                           key={`commodity-item-${item.id}-#${index}`}
-                          label={item.name}
-                          status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
-                          onPress={() => {
-                            setInternalSelection((prev) => {
-                              const clone = [...prev];
-                              const idx = clone.indexOf(item.id);
-                              if (idx === -1) clone.push(item.id);
-                              else clone.splice(idx, 1);
-                              return clone;
-                            });
-                          }}
-                        />
+                          tw="w-full flex flex-row items-center justify-between px-4 py-2"
+                        >
+                          <Text tw="text-base w-[70%]" numberOfLines={2}>
+                            {item.name}
+                          </Text>
+                          <Checkbox
+                            status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
+                            onPress={() => {
+                              setInternalSelection((prev) => {
+                                const clone = [...prev];
+                                const idx = clone.indexOf(item.id);
+                                if (idx === -1) clone.push(item.id);
+                                else clone.splice(idx, 1);
+                                return clone;
+                              });
+                            }}
+                          />
+                        </View>
                         <Divider />
                       </React.Fragment>
                     )}

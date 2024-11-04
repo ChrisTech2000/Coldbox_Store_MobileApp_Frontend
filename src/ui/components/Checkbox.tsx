@@ -3,7 +3,7 @@ import React from 'react';
 import { Checkbox, CheckboxItemProps, CheckboxProps } from 'react-native-paper';
 
 function _Wrapper({ ...props }: CheckboxProps) {
-  return <Checkbox {...props} />;
+  return <Checkbox.Android {...props} />;
 }
 
 function _ItemWrapper({ ...props }: CheckboxItemProps) {

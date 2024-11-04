@@ -45,7 +45,10 @@ export default function PriceTypeField() {
                 label={`${t('Dashboard.Management.AddCoolingUnit.pricing.label')}*`}
                 currentValue={truncate(currentValue, { length: 16 })}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedPriceTypeId);
+                }}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.pricing.label'),
                   options: (

@@ -111,6 +111,7 @@ export default function AddressForm() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.streetNumber}
+            keyboardType="numeric"
           />
         )}
         name="streetNumber"

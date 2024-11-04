@@ -7,6 +7,7 @@ import { Portal, TextInput } from 'react-native-paper';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
 import { useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
@@ -18,6 +19,7 @@ import useCartStore from '#stores/shoppingCart';
 
 import type { AvailableListingDatum } from '../utils';
 import MarketplaceItemWrapper from './MarketplaceItem';
+import { Checkbox } from '#ui/components/Checkbox';
 
 type FormValues<T = string> = {
   quantity: T;
@@ -30,6 +32,8 @@ export default function AddToCartModal() {
   const [cartData, fetchCart] = useCartStore((store) => [store.cartData, store.fetchCart]);
 
   const [datum, setDatum] = useState<AvailableListingDatum | undefined>(undefined);
+  const [buyFullCrate, setBuyFullCrate] = useState(false);
+
   useAppEventListener<[AvailableListingDatum]>(
     'DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL',
     (datum) => {
@@ -43,13 +47,16 @@ export default function AddToCartModal() {
   const form = useForm<FormValues>({
     defaultValues: { quantity: '1' },
     resolver: zodResolver((z) =>
-      z.object({ quantity: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gt(0)) })
+      z.object({
+        quantity: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gt(0)),
+      })
     ),
     reValidateMode: 'onSubmit',
   });
 
   function resetState() {
     setDatum(undefined);
+    setBuyFullCrate(false);
     form.reset({ quantity: '1' });
   }
 
@@ -93,11 +100,7 @@ export default function AddToCartModal() {
                   movementCode={datum.movementCode}
                   cropImageUri={`${API_BASE_URL}media/${datum.crop.image}`}
                 />
-                <MarketplaceItemWrapper.CompanyAction
-                  company={datum.company}
-                  coolingUnitName={datum.coolingUnit.name}
-                  readOnly
-                />
+                <MarketplaceItemWrapper.CompanyAction company={datum.company} readOnly />
                 <MarketplaceItemWrapper.BuyAction
                   crateWeight={datum.crateWeight}
                   currencyValue={datum.currencyValue}
@@ -113,21 +116,22 @@ export default function AddToCartModal() {
                   tw="bg-white border rounded-sm h-14 text-center rounded-md w-full"
                   keyboardType="numeric"
                   defaultValue="1"
-                  value={`${value} kg`} // Append kg to the value
+                  value={`${value} kg`}
                   editable={false}
+                  disabled={buyFullCrate}
                   onChangeText={(text) => {
-                    const newValue = text.replace(' kg', ''); // Strip out 'kg' before setting value
+                    const newValue = text.replace(' kg', '');
                     onChange(newValue);
                   }}
                   left={
                     <TextInput.Icon
                       icon="minus"
                       color={paperTheme.colors.primary}
-                      disabled={Number(value) - 1 === 0}
+                      disabled={Number(value) - 1 === 0 || buyFullCrate}
                       onPress={(evt) => {
                         evt.stopPropagation();
                         const int = Number(value);
-                        if (isNaN(int)) return; // safe guard
+                        if (isNaN(int)) return;
                         if (int - 1 > 0) onChange((int - 1).toString());
                         else
                           toast.show(t('Dashboard.ShoppingCart.errors.invalid'), {
@@ -139,12 +143,12 @@ export default function AddToCartModal() {
                   right={
                     <TextInput.Icon
                       icon="plus"
-                      disabled={datum && Number(value) + 1 > datum.crateWeight}
+                      disabled={(datum && Number(value) + 1 > datum.crateWeight) || buyFullCrate}
                       color={paperTheme.colors.primary}
                       onPress={(evt) => {
                         evt.stopPropagation();
                         const int = Number(value);
-                        if (isNaN(int)) return; // safe guard
+                        if (isNaN(int)) return;
                         if (datum?.crateWeight && int + 1 <= datum.crateWeight)
                           onChange((int + 1).toString());
                         else
@@ -157,11 +161,21 @@ export default function AddToCartModal() {
                 />
               )}
             />
+            <Touchable
+              tw="flex flex-row items-center max-w-[75%] py-2 space-x-2"
+              onPress={() => {
+                setBuyFullCrate(!buyFullCrate);
+                if (!buyFullCrate) form.setValue('quantity', datum?.crateWeight.toString() || '1');
+              }}
+            >
+              <Checkbox status={buyFullCrate ? 'checked' : 'unchecked'} />
+              <Text tw="text-base">{t('Dashboard.Marketplace.addToCart.buyFullCrate')}</Text>
+            </Touchable>
           </View>
           <View tw="w-full flex-col items-center space-y-2">
             <Button
               tw="w-11/12 mb-4"
-              mode="outlined"
+              mode="contained"
               // eslint-disable-next-line
               onPress={form.handleSubmit(onSubmit as any)}
               disabled={form.formState.isSubmitting}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -11,6 +11,7 @@ import { Touchable } from '#ui/components/Touchable';
 import { Text } from '#ui/components/Text';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Button } from '#ui/components/Button';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import type { GetAvailableListingParams } from '#types/api.params';
 import { useTranslationUtils } from '#i18n/utils';
@@ -50,45 +51,49 @@ export default function MarketplaceFiltersSection() {
 
   return (
     <React.Fragment>
-      <View tw="bg-zinc-100 py-4 space-y-3">
-        <View tw="flex-row items-center justify-between mx-4">
-          <MarketplaceLocationFilter />
+      <TouchableWithoutFeedback
+        onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
+      >
+        <View tw="bg-zinc-100 py-4 space-y-3">
+          <View tw="flex-row items-center justify-between mx-4">
+            <MarketplaceLocationFilter />
 
-          <Touchable
-            tw="flex-row items-center justify-center space-x-2.5 p-1.5"
-            rippleColor={colors.zinc[200]}
-            onPress={(evt) => {
-              evt.stopPropagation();
-              navigation.navigate('MarketplaceFilters');
-            }}
-          >
-            <MaterialCommunityIcon name="filter-variant" size={28} color={colors.zinc[600]} />
-            <Text tw="text-base">Filters</Text>
-          </Touchable>
-        </View>
+            <Touchable
+              tw="flex-row items-center justify-center space-x-2.5 p-1.5"
+              rippleColor={colors.zinc[200]}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                navigation.navigate('MarketplaceFilters');
+              }}
+            >
+              <MaterialCommunityIcon name="filter-variant" size={28} color={colors.zinc[600]} />
+              <Text tw="text-base">Filters</Text>
+            </Touchable>
+          </View>
 
-        <FilterChip />
+          <FilterChip />
 
-        <View tw="flex-row items-center justify-between px-4">
-          <Text variant="TextMedium" tw="text-xl">
-            Produces
-          </Text>
-
-          <Touchable
-            tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
-            rippleColor={colors.zinc[200]}
-            onPress={(evt) => {
-              evt.stopPropagation();
-              toggleVisibility();
-            }}
-          >
-            <Text tw="text-base text-green-primary">
-              {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+          <View tw="flex-row items-center justify-between px-4">
+            <Text variant="TextMedium" tw="text-xl">
+              Produces
             </Text>
-            <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
-          </Touchable>
+
+            <Touchable
+              tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
+              rippleColor={colors.zinc[200]}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                toggleVisibility();
+              }}
+            >
+              <Text tw="text-base text-green-primary">
+                {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+              </Text>
+              <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
+            </Touchable>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
 
       <Portal>
         <Modal visible={isVisible} onDismiss={resetState}>

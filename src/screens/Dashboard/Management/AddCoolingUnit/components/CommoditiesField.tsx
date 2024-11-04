@@ -3,11 +3,13 @@ import truncate from 'lodash/truncate';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { Dimensions, View } from 'react-native';
-import { Checkbox, Divider, TextInput } from 'react-native-paper';
+import { Divider, TextInput } from 'react-native-paper';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { Button } from '#ui/components/Button';
+import { Checkbox } from '#ui/components/Checkbox';
 import { Select } from '#ui/components/Select';
+import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 
@@ -67,7 +69,10 @@ export default function CommoditiesField() {
                 label={t('Dashboard.Management.AddCoolingUnit.fields.crops')}
                 currentValue={selectLabel}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  setInternalSelection(selectedCrops);
+                  toggleVisibility();
+                }}
                 useScrollView={false}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.fields.selectCrops'),
@@ -86,20 +91,26 @@ export default function CommoditiesField() {
                       data={[...datums]}
                       renderItem={({ item: [id, name], index }) => (
                         <React.Fragment>
-                          <Checkbox.Item
+                          <View
+                            tw="w-full flex flex-row items-center justify-between px-4 py-2"
                             key={`commodity-item-${id}-#${index}`}
-                            label={name}
-                            status={internalSelection.includes(id) ? 'checked' : 'unchecked'}
-                            onPress={() => {
-                              setInternalSelection((prev) => {
-                                const clone = [...prev];
-                                const idx = clone.indexOf(id);
-                                if (idx === -1) clone.push(id);
-                                else clone.splice(idx, 1);
-                                return clone;
-                              });
-                            }}
-                          />
+                          >
+                            <Text tw="text-base w-[70%]" numberOfLines={2}>
+                              {name}
+                            </Text>
+                            <Checkbox
+                              status={internalSelection.includes(id) ? 'checked' : 'unchecked'}
+                              onPress={() => {
+                                setInternalSelection((prev) => {
+                                  const clone = [...prev];
+                                  const idx = clone.indexOf(id);
+                                  if (idx === -1) clone.push(id);
+                                  else clone.splice(idx, 1);
+                                  return clone;
+                                });
+                              }}
+                            />
+                          </View>
                           <Divider />
                         </React.Fragment>
                       )}

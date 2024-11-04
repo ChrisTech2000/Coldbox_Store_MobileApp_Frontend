@@ -123,7 +123,7 @@ export function CompanySection() {
 
   return (
     <ScrollView tw="mt-4 h-full" showsVerticalScrollIndicator={false}>
-      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-10' : ''}>
+      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-20' : 'mb-12'}>
         {activeTab && (
           <TouchableOpacity
             tw="flex flex-row w-full items-center space-x-2 justify-start"

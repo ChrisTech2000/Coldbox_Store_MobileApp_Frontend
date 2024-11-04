@@ -44,7 +44,10 @@ export default function UnitTypeField() {
                 label={`${t('Dashboard.Management.AddCoolingUnit.fields.coolingUnitType')}*`}
                 currentValue={currentValue}
                 isModalOpen={isVisible}
-                onClick={toggleVisibility}
+                onClick={() => {
+                  toggleVisibility();
+                  setInternalSelection(selectedUnitTypeId);
+                }}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.fields.coolingUnitType'),
                   options: (

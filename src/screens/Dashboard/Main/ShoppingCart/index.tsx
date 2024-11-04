@@ -73,7 +73,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
             ListFooterComponent={
               <View tw="flex-col w-full mt-6">
                 <View tw="flex-row items-center justify-between">
-                  <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
+                  <Text tw="text-lg">{t('Dashboard.ShoppingCart.subtotal')}</Text>
                   <Text tw="text-lg">
                     {CurrencyStandardization.currencyCode({
                       code: 'NGN', // TODO: get from somewhere

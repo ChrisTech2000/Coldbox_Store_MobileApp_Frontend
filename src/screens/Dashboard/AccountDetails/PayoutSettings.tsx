@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -8,10 +8,12 @@ import { Input } from '#ui/components/Input';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { Translator, useTranslationUtils } from '#i18n/utils';
 import { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -54,6 +56,8 @@ function mapEnum(t: Translator) {
       EBankAccountType.BUSINESS,
   };
 }
+
+const screenHeight = Dimensions.get('window').height;
 
 function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
   const { t, zodResolver } = useTranslationUtils();
@@ -122,7 +126,9 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
     async (data: FormValues) => {
       try {
         await MarketplaceService.addPaystackAccount({
-          ...(user?.role === ERoles.EMPLOYEE ? { companyId: company?.id } : {}),
+          ...(user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
+            ? { companyId: company?.id }
+            : {}),
           accountType: mapEnum(t)[data.accountType],
           bankCode: data.bank,
           accountNumber: data.accountNumber,
@@ -187,19 +193,26 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
 
   return (
     <KeyboardAwareScrollView
-      tw="h-full p-3"
-      contentContainerStyle="flex-1 justify-between"
+      tw="h-full"
+      contentContainerStyle={cn(
+        'justify-between p-3',
+        screenHeight > SMALL_SCREEN_THRESHOLD ? 'flex-1' : ''
+      )}
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
       showsVerticalScrollIndicator={false}
     >
       <View>
         {hasPayoutMethods ? (
           <Text tw="text-base font-bold text-green-primary">
-            {t('Dashboard.AccountDetails.PayoutSettings.editTitle')}
+            {user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
+              ? t('Dashboard.AccountDetails.PayoutSettings.editTitleForCompany')
+              : t('Dashboard.AccountDetails.PayoutSettings.editTitle')}
           </Text>
         ) : (
           <Text tw="text-base font-bold text-green-primary">
-            {t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
+            {user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
+              ? t('Dashboard.AccountDetails.PayoutSettings.addTittleForCompany')
+              : t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
           </Text>
         )}
 
@@ -314,7 +327,12 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
         </View>
       </View>
 
-      <View tw="flex flex-row items-end justify-evenly">
+      <View
+        tw={cn(
+          'flex flex-row items-end justify-evenly',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mt-6 pb-6' : ''
+        )}
+      >
         <Button
           tw="w-[48%] border-green-primary"
           mode="outlined"

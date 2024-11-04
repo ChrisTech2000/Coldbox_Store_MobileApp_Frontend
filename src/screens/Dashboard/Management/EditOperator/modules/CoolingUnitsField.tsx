@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { Checkbox, Divider } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 
-import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
+import { Select } from '#ui/components/Select';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { Checkbox } from '#ui/components/Checkbox';
+import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 
@@ -47,26 +49,35 @@ export default function CoolingUnitsField(props: Props) {
           label={t('Dashboard.Management.Operators.fields.coolingUnits')}
           currentValue={selectLabel}
           isModalOpen={isModalVisible}
-          onClick={toggleModalVisibility}
+          onClick={() => {
+            setInternalSelection(selectedCoolingUnits);
+            toggleModalVisibility();
+          }}
           content={{
             header: t('Dashboard.Management.Operators.fields.coolingUnits'),
             options: (
               <React.Fragment>
                 {coolingUnits.map((option, optionIdx) => (
-                  <Checkbox.Item
+                  <View
                     key={`cooling-unit-item-${option.id}-#${optionIdx}`}
-                    label={option.name}
-                    status={internalSelection.includes(option.id) ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                      setInternalSelection((prev) => {
-                        const clone = [...prev];
-                        const idx = clone.indexOf(option.id);
-                        if (idx === -1) clone.push(option.id);
-                        else clone.splice(idx, 1);
-                        return clone;
-                      });
-                    }}
-                  />
+                    tw="w-full flex flex-row items-center justify-between px-4 py-2"
+                  >
+                    <Text tw="text-base w-[70%]" numberOfLines={2}>
+                      {option.name}
+                    </Text>
+                    <Checkbox
+                      status={internalSelection.includes(option.id) ? 'checked' : 'unchecked'}
+                      onPress={() => {
+                        setInternalSelection((prev) => {
+                          const clone = [...prev];
+                          const idx = clone.indexOf(option.id);
+                          if (idx === -1) clone.push(option.id);
+                          else clone.splice(idx, 1);
+                          return clone;
+                        });
+                      }}
+                    />
+                  </View>
                 ))}
               </React.Fragment>
             ),

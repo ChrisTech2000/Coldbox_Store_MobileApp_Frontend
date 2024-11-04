@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import type { ValueOf } from '#types/miscellaneous';
@@ -304,6 +304,10 @@ export default function FormManager(props: FormManagerProps) {
       return z.intersection(schemaWithPowerSource, electricityStorageConditions);
     }),
   });
+
+  useEffect(() => {
+    form.reset(initialValues);
+  }, [initialValues]);
 
   const callbackProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

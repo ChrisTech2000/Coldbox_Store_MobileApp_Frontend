@@ -286,7 +286,8 @@ export default {
         languageFieldName: 'ભાષા',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again', // TODO
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
       },
     },
     ForgotPassword: {
@@ -478,6 +479,8 @@ export default {
             'આ રીતથી નવો ચેક-ઇન શરૂ કરવા માટે તમારે ચેક-આઉટ કોડની જરૂર પડશે. જો તમારું પાસે ન હોય, તો નવા ચેક-ઇન શરૂ કરવાનો વિચાર કરો. જો તમે કેટલો સમય સ્ટોર કરવાનું યોજના બનાવો છો, તો અહીં દિવસોની સંખ્યા ઉમેરવાની વિચારો.',
           codeLabel: 'કોડ ઉમેરો',
           codeErrorMessage: 'કોડ જરૂરી છે',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
         },
         SelectCropType: {
           fruits: 'ફળ',
@@ -693,7 +696,6 @@ export default {
           operator: 'કૂલ્ટિવેટ એપ્લિકેશનમાં ઓપરેટર તરીકે જોડાવા માટે, જુઓ: {{link}}',
         },
         toasts: {
-          error: 'Please check the information provided and try again', // TODO
           success: 'સફળતાપૂર્વક ઓપરેટર આમંત્રણ મોકલ્યું',
         },
         phoneFormat: 'જોડાવેલા ફોન નંબરમાં દેશ કોડ હોવો ચોક્કસ કરો.',
@@ -937,9 +939,9 @@ export default {
       },
       priceConfig: 'કીમત રૂપરેખાંકન ઉત્પાદની વેચાણને સંબંધિત છે, કૂલિંગ સ્ટોરેજ ફી સાથે નહીં.',
       addToCart: {
+        buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'કાર્ટમાં ઉમેરો અને ખરીદી ચાલુ રાખો',
         selectQuantity: 'જાતીયતા પસંદ કરો',
-        buyNowButton: 'હવે ખરીદો',
       },
       currentLocation: 'વર્તમાન સ્થાન',
       filterError:
@@ -968,6 +970,7 @@ export default {
       sections: {
         sellerSettings: 'વિક્રેતા સેટિંગ્સ',
         buyerSettings: 'ખરીદદાર સેટિંગ્સ',
+        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'વિગતવાર',
       },
       ContactsSharing: {
@@ -977,6 +980,8 @@ export default {
       PayoutSettings: {
         addTitle: 'કૃપા કરીને તમારી બેંક એકાઉન્ટની માહિતી દાખલ કરો',
         editTitle: 'તમારી બેંક એકાઉન્ટની માહિતી',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'એકાઉન્ટનું નામ',
           namePlaceholder: 'એકાઉન્ટનું નામ દાખલ કરો',
@@ -1157,14 +1162,6 @@ export default {
         },
       },
       stringTemplates: {
-        sendSMS: `{{companyName}} - {{movementType}} રસીદ:
-        ચલન કોડ: {{code}}
-        ફસલો: {{crops}}
-        કુલ વજન: {{weight}} કિગ્રા
-        {{movementTypeForDate}}: {{date}}
-        કિંમંત: {{price}}
-        ચૂકવ્યું: {{farmersName}}
-        `,
         movementType: {
           checkOut: 'ચેક-આઉટ',
           checkIn: 'ચેક-ઇન',
