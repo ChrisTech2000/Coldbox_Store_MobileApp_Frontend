@@ -1,11 +1,13 @@
+import { currencies } from 'currencies.json';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useDebouncedCallback } from 'use-debounce';
 import colors from 'tailwindcss/colors';
+import { useDebouncedCallback } from 'use-debounce';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -14,18 +16,20 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
+import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
-import { useAuthStore } from '#stores/auth';
-import { ERoles } from '#types/global';
 import MarketplaceService from '#services/MarketplaceService';
-import { useToggle } from '#ui/hooks/useToggle';
+import { useAuthStore } from '#stores/auth';
+import { useDashboardStore } from '#stores/dashboard';
 import type { ListedCratesBaseParams } from '#types/api.params';
+import { ERoles } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import SellInMarketplaceModal from '../CheckIn/components/SellInMarketplaceModal';
@@ -50,7 +54,9 @@ function EditCrateWeightAndPricing(
   const { params } = props.route;
 
   const { user } = useAuthStore();
+  const refreshData = useDashboardStore((store) => store.refreshData);
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const [isSettingUp, toggleIsSettingUp] = useToggle(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -99,6 +105,7 @@ function EditCrateWeightAndPricing(
 
   async function onSubmit(values: FormValues<number>): Promise<void> {
     try {
+      const _produce = cloneDeep(params.produce)
       const { previous, crates, price } = values;
 
       const cratesToList: Array<number> = [];
@@ -119,6 +126,12 @@ function EditCrateWeightAndPricing(
           : {};
 
       if (cratesToList.length > 0) {
+        _produce.checkedInCrates.forEach((crate) => {
+          if (cratesToList.includes(crate.id)) {
+            crate.listedInTheMarketplace = true;
+          }
+        });
+
         promises.push(
           MarketplaceService.upsertListedCrate({
             crateIds: cratesToList,
@@ -142,6 +155,12 @@ function EditCrateWeightAndPricing(
         );
       }
 
+      _produce.checkedInCrates.forEach((crate) => {
+        if (cratesToDelist.includes(crate.id)) {
+          crate.listedInTheMarketplace = false;
+        }
+      });
+
       promises.push(
         ...cratesToDelist.map((crateId) =>
           MarketplaceService.delistCratesByCrateId({
@@ -151,9 +170,29 @@ function EditCrateWeightAndPricing(
         )
       );
 
-      await Promise.allSettled(promises);
+      const results = await Promise.allSettled(promises);
 
-      props.navigation.goBack();
+      const allFulfilled = results.every(result => result.status === 'fulfilled');
+
+      if (allFulfilled) {
+        toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.updateSuccess'), {
+          type: 'md_success',
+        });
+
+        refreshData.forEach((fn) => fn());
+        props.navigation.navigate('Root', {
+          produce: _produce,
+          currency: params.companyCurrency,
+          coolingUnit: params.coolingUnit,
+        });
+      } else {
+        toast.show(
+          user?.role === ERoles.OPERATOR
+            ? t('Dashboard.ProduceDetails.preSaleErrorOperator')
+            : t('Dashboard.ProduceDetails.preSaleErrorUser'),
+          { type: 'md_danger' }
+        );
+      }
     } catch (exception) {
       console.error(exception);
     }
@@ -167,7 +206,7 @@ function EditCrateWeightAndPricing(
           : undefined
       );
 
-      const initialCrates: FormValues['crates'] = params.crates.map((crate) => ({
+      const initialCrates: FormValues['crates'] = params.produce.checkedInCrates.map((crate) => ({
         id: crate.id,
         weight: crate.weight.toString(),
         isSellable: false,
@@ -206,7 +245,7 @@ function EditCrateWeightAndPricing(
 
   useEffect(() => {
     void debouncedInitialSetup();
-  }, [params.crates]);
+  }, [params.produce.checkedInCrates]);
 
   const hasChanges = _isDirty(
     crates,
@@ -242,7 +281,7 @@ function EditCrateWeightAndPricing(
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
                   onPress={() => {
                     for (let i = 0; i < crateFields.fields.length; i++) {
-                      form.setValue(`crates.${i}.isSellable`, !value);
+                      form.setValue(`crates.${i}.isSellable`, crates[0].isSellable);
                     }
                     onChange(!value);
                   }}
@@ -263,7 +302,7 @@ function EditCrateWeightAndPricing(
             keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
             scrollEnabled={false}
             renderItem={({ index }) => {
-              const isDisabled = applyToAll && index >= 0;
+              const isDisabled = applyToAll && index > 0;
               return (
                 <View tw="flex-row items-center justify-between my-3">
                   <View tw="flex-col self-end px-3">
@@ -359,9 +398,6 @@ function EditCrateWeightAndPricing(
                               form.setValue(`crates.${i}.isSellable`, !value);
                             }
                           }
-                          if (!form.getValues('crates').some((c) => c.isSellable)) {
-                            form.setValue('price', '0');
-                          }
                         }}
                         disabled={isDisabled}
                       >
@@ -422,7 +458,7 @@ function EditCrateWeightAndPricing(
             </View>
 
             <Text tw="text-lg text-green-primary">
-              {params.currencySymbol} {potentialPrice.toFixed(2)}
+              {currencies.find((c) => c.name === params.companyCurrency)?.symbol ?? ''} {potentialPrice.toFixed(2)}
             </Text>
           </View>
         ) : null}

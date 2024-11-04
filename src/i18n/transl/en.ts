@@ -593,6 +593,8 @@ const en = {
       noDTMessage: 'A Shelf-life model is not available for this particular commodity.',
       checkOutButton: 'Check out',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale',
+      preSaleErrorOperator: 'Something went wrong. Please make sure the user has a valid Paystack account or contact support.',
+      preSaleErrorUser: 'Something went wrong. Please make sure you have a valid Paystack account or contact support.',
     },
     SearchFilter: {
       detailsMessage:

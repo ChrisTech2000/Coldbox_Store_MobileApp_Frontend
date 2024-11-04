@@ -594,6 +594,8 @@ export default {
       noDTMessage: 'આ ખાસ માલ માટે Shelf-life મોડલ ઉપલબ્ધ નથી.',
       checkOutButton: 'ચેક આઉટ',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      preSaleErrorOperator: 'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
+      preSaleErrorUser: 'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
     },
     SearchFilter: {
       detailsMessage:
