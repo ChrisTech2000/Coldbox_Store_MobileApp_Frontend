@@ -1,34 +1,35 @@
-import React, { useRef } from 'react';
-import { Dimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import isEmpty from 'lodash/isEmpty';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
+import { useShallow } from 'zustand/react/shallow';
 
-import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import ColdRoom from '#assets/icons/coldroom.svg';
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { Text } from '#ui/components/Text';
 
-import { useAuthStore } from '#stores/auth';
-import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
-import { paperTheme } from '#ui/lib/theme';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
 import type { GetCoolingUnitResponse } from '#types/api.responses';
 import { ERoles } from '#types/global';
+import { paperTheme } from '#ui/lib/theme';
 
-import FormManager, {
-  type PreprocessedFormValues,
-  type FormValues,
-} from '../AddCoolingUnit/contexts/FormManager';
-import DataAggregator from '../AddCoolingUnit/contexts/DataAggregator';
 import FormFields from '../AddCoolingUnit/components/FormFields';
 import { METRIC_UNITS, PRICING_TYPE } from '../AddCoolingUnit/constants';
+import DataAggregator from '../AddCoolingUnit/contexts/DataAggregator';
+import FormManager, {
+  type FormValues,
+  type PreprocessedFormValues,
+} from '../AddCoolingUnit/contexts/FormManager';
 
-import DeleteAction from './components/DeleteAction';
 import { CropPricingManager } from '../AddCoolingUnit/utils';
+import DeleteAction from './components/DeleteAction';
 
 const width = (Dimensions.get('window').width - 42) / 2;
 
@@ -47,7 +48,9 @@ export default function ScreenContainer(props: Props) {
 
   const navigation = useNavigation();
 
-  const formValuesBuilder = useRef<FormStateBuilder | undefined>(undefined);
+  const [formValuesBuilder, setFormValuesBuilder] = useState<FormStateBuilder | undefined>(
+    undefined
+  );
 
   const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
   const user = useAuthStore(useShallow((store) => store.user));
@@ -73,7 +76,18 @@ export default function ScreenContainer(props: Props) {
     }
   );
 
-  if (isLoading || isUnitLoading) {
+  useEffect(() => {
+    if (!isEmpty(unit)) {
+      setFormValuesBuilder(
+        _buildInitialValues(
+          unit,
+          Object.keys(companyCrops).map((cropId) => parseInt(cropId))
+        )
+      );
+    }
+  }, [unit]);
+
+  if (isLoading || isUnitLoading || !formValuesBuilder) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -81,15 +95,8 @@ export default function ScreenContainer(props: Props) {
     );
   }
 
-  if (!formValuesBuilder.current) {
-    formValuesBuilder.current = _buildInitialValues(
-      unit,
-      Object.keys(companyCrops).map((cropId) => parseInt(cropId))
-    );
-  }
-
   async function onSubmit(values: PreprocessedFormValues): Promise<void> {
-    if (typeof formValuesBuilder.current === 'undefined') return;
+    if (typeof formValuesBuilder === 'undefined') return;
 
     try {
       await ColdtivateService.editCoolingUnit(
@@ -144,7 +151,7 @@ export default function ScreenContainer(props: Props) {
           roomWidth: values.roomWidth,
           coolingUnitType: values.coolingUnitType ?? '',
           editableCheckins: values.editableCheckins,
-          ...formValuesBuilder.current.getExtraValues(),
+          ...formValuesBuilder.getExtraValues(),
         },
         coolingUnitId
       );
@@ -182,7 +189,7 @@ export default function ScreenContainer(props: Props) {
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
       showsVerticalScrollIndicator={false}
     >
-      <FormManager onSubmit={onSubmit} initialValues={formValuesBuilder.current?.getFormValues()}>
+      <FormManager onSubmit={onSubmit} initialValues={formValuesBuilder.getFormValues()}>
         {({ submitHandler, isSubmitting }) => (
           <React.Fragment>
             <View tw="flex-row items-center space-x-3 mb-3 mx-3.5 w-[85%]">

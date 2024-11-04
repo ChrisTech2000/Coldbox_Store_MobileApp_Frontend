@@ -3,8 +3,10 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {
   DocumentDirectoryPath,
   ExternalStorageDirectoryPath,
+  unlink,
   writeFile,
 } from '@dr.pogodin/react-native-fs';
+import Share from 'react-native-share';
 
 const IS_ANDROID = Platform.OS === 'android';
 const BASE_PATH = IS_ANDROID ? `${ExternalStorageDirectoryPath}/Download` : DocumentDirectoryPath;
@@ -24,5 +26,14 @@ export async function savePDF(html: string, fileName: string): Promise<void> {
     throw new Error('Failed to convert HTML to PDF');
   }
 
-  await writeFile(`${BASE_PATH}/${fileName.toLowerCase()}.pdf`, result.base64, 'base64');
+  const filePath = `${BASE_PATH}/${fileName.toLowerCase()}.pdf`;
+  await writeFile(filePath, result.base64, 'base64');
+
+  if (!IS_ANDROID) {
+    await Share.open({
+      url: `file://${filePath}`,
+      type: 'application/pdf',
+    });
+    await unlink(filePath);
+  }
 }

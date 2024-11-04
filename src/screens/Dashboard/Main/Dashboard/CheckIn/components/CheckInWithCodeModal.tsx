@@ -66,49 +66,55 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
     async (values) => {
       if (!coolingUnit) return;
 
-      const result = await ColdtivateService.getCheckOut(values);
+      try {
+        const result = await ColdtivateService.getCheckOut(values);
 
-      if (!isArray(result) && result.message) {
-        toast.show(result.message, {
+        if (!isArray(result) && result.message) {
+          toast.show(result.message, {
+            type: 'md_danger',
+          });
+          return;
+        }
+        //3ZFMHO
+        if (isArray(result)) {
+          const grouped = Object.values(
+            result.reduce((acc, item) => {
+              if (!acc[item.produce]) {
+                acc[item.produce] = [];
+              }
+              acc[item.produce].push(item);
+              return acc;
+            }, {} as GroupedProduce)
+          );
+
+          for (const group of grouped) {
+            addProduce({
+              crop: {
+                id: undefined,
+                name: group[0].name,
+                image: group[0].cropImage,
+              } as unknown as Crop,
+              additionalInfo: '',
+              crates: group.map((crate) => ({
+                checkOut: null,
+                weight: crate.weight,
+                tag: '',
+                coolingUnitId: coolingUnit.id,
+                plannedDays: plannedDays ?? crate.plannedDays ?? undefined,
+              })),
+              price: undefined,
+              initialGrade: null,
+              harvestDate: undefined,
+              hasPicture: false,
+            });
+          }
+
+          setCheckOutCode(values.code);
+        }
+      } catch (error) {
+        toast.show(t('Dashboard.CrateManagement.CheckIn.WithCode.failedMessage'), {
           type: 'md_danger',
         });
-        return;
-      }
-
-      if (isArray(result)) {
-        const grouped = Object.values(
-          result.reduce((acc, item) => {
-            if (!acc[item.produce]) {
-              acc[item.produce] = [];
-            }
-            acc[item.produce].push(item);
-            return acc;
-          }, {} as GroupedProduce)
-        );
-
-        for (const group of grouped) {
-          addProduce({
-            crop: {
-              id: undefined,
-              name: group[0].name,
-              image: group[0].cropImage,
-            } as unknown as Crop,
-            additionalInfo: '',
-            crates: group.map((crate) => ({
-              checkOut: null,
-              weight: crate.weight,
-              tag: '',
-              coolingUnitId: coolingUnit.id,
-              plannedDays: plannedDays ?? crate.plannedDays ?? undefined,
-            })),
-            price: undefined,
-            initialGrade: null,
-            harvestDate: undefined,
-            hasPicture: false,
-          });
-        }
-
-        setCheckOutCode(values.code);
       }
     },
     [coolingUnit, plannedDays]

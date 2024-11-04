@@ -284,7 +284,8 @@ const en = {
         languageFieldName: 'language',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again',
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.',
       },
     },
     ForgotPassword: {
@@ -374,7 +375,7 @@ const en = {
       coolingUnitLabel: 'Cooling unit',
       noUnitWarning: 'Please select a cooling unit',
       noCratesWarning: "The selected Cooling user doesn't have any crates in this cooling unit",
-      operationError: 'Something went wrong. Please try again later.',
+      operationError: 'Something went wrong. Please try again later or contact support.',
       FarmerSurvey: {
         warningMessage: 'Please fill in the baseline survey for {{crop}}!',
         modal: {
@@ -477,6 +478,8 @@ const en = {
             'You will need the check out code to start a new check in in this way. If you don’t have it, consider starting a new check in. If you know how long you plan to store, consider adding the number of days here.',
           codeLabel: 'Add code',
           codeErrorMessage: 'Code is required',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.",
         },
         SelectCropType: {
           fruits: 'Fruits',
@@ -692,7 +695,6 @@ const en = {
           operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
         },
         toasts: {
-          error: 'Please check the information provided and try again',
           success: 'Successfully invited operator',
         },
         phoneFormat: 'Make sure the entered phone number has a country code.',
@@ -938,8 +940,8 @@ const en = {
       priceConfig: 'The price configuration refers to product sale, not cooling storage fee.',
       addToCart: {
         addToCartButton: 'Add to cart and continue shopping',
+        buyFullCrate: 'Buy full crate',
         selectQuantity: 'Select quantity',
-        buyNowButton: 'Buy now',
       },
       currentLocation: 'Current location',
       filterError:
@@ -967,6 +969,7 @@ const en = {
       },
       sections: {
         sellerSettings: 'Seller Settings',
+        companySellerSettings: 'Seller Settings (Company)',
         buyerSettings: 'Buyer Settings',
         details: 'Details',
       },
@@ -977,6 +980,8 @@ const en = {
       PayoutSettings: {
         addTitle: 'Please insert your bank account information',
         editTitle: 'Your bank account information',
+        addTittleForCompany: "Please insert you company's bank account information",
+        editTitleForCompany: "Your company's bank account information",
         form: {
           nameLabel: 'Account name',
           namePlaceholder: 'Insert account name',

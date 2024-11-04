@@ -1,25 +1,25 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
 
-import { ScrollView } from '#ui/components/ScrollView';
 import { Button } from '#ui/components/Button';
+import { ScrollView } from '#ui/components/ScrollView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useTranslationUtils } from '#i18n/utils';
-import { useManagementStore } from '#stores/management';
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
-import { paperTheme } from '#ui/lib/theme';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { useManagementStore } from '#stores/management';
 import { EApiGender } from '#types/global';
+import { paperTheme } from '#ui/lib/theme';
 
-import FormManager, { type FormValues } from './components/FormManager';
-import GenderField from './modules/GenderField';
-import CoolingUnitsField from './modules/CoolingUnitsField';
 import InAppNotifications from '#common/InAppNotifications';
+import FormManager, { type FormValues } from './components/FormManager';
+import CoolingUnitsField from './modules/CoolingUnitsField';
+import GenderField from './modules/GenderField';
 
 const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
 
@@ -87,19 +87,21 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
     }
   }
 
+  useEffect(() => {
+    const currentValues = {
+      gender: contextualOperator?.user.gender ?? EApiGender.OTHER,
+      coolingUnits: contextualOperator?.coolingUnits ?? [],
+    };
+
+    formInitialValues.current = currentValues;
+  }, [contextualOperator]);
+
   if (isLoadingOperator || isLoadingCoolingUnits) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
-  }
-
-  if (!formInitialValues.current) {
-    const values = {} as FormValues;
-    values.gender = contextualOperator?.user.gender ?? EApiGender.OTHER;
-    values.coolingUnits = contextualOperator?.coolingUnits ?? [];
-    formInitialValues.current = values;
   }
 
   return (

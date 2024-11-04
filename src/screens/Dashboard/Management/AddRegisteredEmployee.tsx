@@ -85,7 +85,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
       await mutate(getQueryKey('getInvitedCompanyEmployees', company?.id));
       navigation.goBack();
     } catch (exception) {
-      toast.show(t('Dashboard.Management.AddOperator.toasts.error'), { type: 'md_danger' });
+      toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger' });
       console.error(exception);
     }
   }

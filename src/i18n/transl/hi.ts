@@ -286,7 +286,8 @@ export default {
         languageFieldName: 'भाषा',
       },
       toasts: {
-        error: 'Please ensure your details are accurate and try again', // TODO
+        error:
+          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
       },
     },
     ForgotPassword: {
@@ -479,6 +480,8 @@ export default {
             'इस तरह से नया चेक इन शुरू करने के लिए आपको चेक आउट कोड की आवश्यकता होगी। यदि आपके पास नहीं है, तो नया चेक इन शुरू करने पर विचार करें। यदि आप जानते हैं कि आप कितने दिनों तक भंडारण करने की योजना बना रहे हैं, तो यहां दिनों की संख्या जोड़ने पर विचार करें।',
           codeLabel: 'कोड जोड़ें',
           codeErrorMessage: 'कोड आवश्यक है',
+          failedMessage:
+            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
         },
         SelectCropType: {
           fruits: 'फल',
@@ -695,7 +698,6 @@ export default {
           operator: 'एक ऑपरेटर के रूप में Coldtivate ऐप में शामिल होने के लिए, यहां जाएं: {{link}}',
         },
         toasts: {
-          error: 'कृपया दी गई जानकारी की जाँच करें और पुनः प्रयास करें',
           success: 'ऑपरेटर को सफलतापूर्वक आमंत्रित किया गया',
         },
         phoneFormat: 'फोन नंबर में कंट्री कोड ज़रूर होना चाहिए।',
@@ -945,7 +947,7 @@ export default {
       addToCart: {
         addToCartButton: 'कार्ट में जोड़ें और खरीदारी जारी रखें',
         selectQuantity: 'मात्रा चुनें',
-        buyNowButton: 'अभी खरीदें',
+        buyFullCrate: 'Buy full crate', // TODO
       },
       currentLocation: 'वर्तमान स्थान',
       filterError:
@@ -974,6 +976,7 @@ export default {
       sections: {
         sellerSettings: 'विक्रेता सेटिंग्स',
         buyerSettings: 'खरीदार सेटिंग्स',
+        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'विवरण',
       },
       ContactsSharing: {
@@ -983,6 +986,8 @@ export default {
       PayoutSettings: {
         addTitle: 'कृपया अपना बैंक खाता विवरण डालें',
         editTitle: 'आपका बैंक खाता विवरण',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'खाता नाम',
           namePlaceholder: 'खाता नाम डालें',
