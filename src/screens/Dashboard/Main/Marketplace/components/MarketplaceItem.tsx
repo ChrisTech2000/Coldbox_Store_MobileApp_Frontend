@@ -1,5 +1,5 @@
 import React, { useState, type PropsWithChildren } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,7 +10,7 @@ import truncate from 'lodash/truncate';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { cn } from '#ui/lib/cn';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -156,7 +156,11 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
   const { t } = useTranslationUtils();
   const hasAction = typeof props.onAddFunc === 'function';
 
-  const [isTooltipShowing, setIsTooltipShowing] = useState<boolean>();
+  const [isTooltipShowing, setIsTooltipShowing] = useState<boolean>(false);
+
+  useAppEventListener(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS, () =>
+    setIsTooltipShowing(false)
+  );
 
   return (
     <React.Fragment>
@@ -169,7 +173,12 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
               {props.crateWeight}
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
-            <TouchableOpacity onPress={() => setIsTooltipShowing(!isTooltipShowing)}>
+            <TouchableOpacity
+              onPress={() => {
+                emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
+                setIsTooltipShowing(!isTooltipShowing);
+              }}
+            >
               <MaterialCommunityIcon
                 name="information-outline"
                 size={15}
@@ -186,7 +195,6 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
         {hasAction ? (
           <React.Fragment>
             <View tw="w-[1px] bg-zinc-300 h-2/3" />
-
             <Touchable
               tw="flex-row items-center justify-center space-x-1.5 py-1.5 px-3 w-auto"
               rippleColor={colors.zinc[200]}
@@ -204,11 +212,13 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
         ) : null}
 
         {isTooltipShowing ? (
-          <View tw="absolute bottom-8 left-4 bg-gray-800 rounded-md px-2 py-1">
-            <Text tw="text-white">
-              {t('Dashboard.Marketplace.standardCrateWeight', { value: props.standardWeight })}
-            </Text>
-          </View>
+          <TouchableWithoutFeedback onPress={() => setIsTooltipShowing(false)}>
+            <View tw="absolute bottom-8 left-4 bg-gray-800 rounded-md px-2 py-1">
+              <Text tw="text-white">
+                {t('Dashboard.Marketplace.standardCrateWeight', { value: props.standardWeight })}
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
         ) : null}
       </View>
     </React.Fragment>
