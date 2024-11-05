@@ -15,6 +15,7 @@ import { usePopup } from '#screens/Dashboard/AccountDetails/components/DeleteAcc
 import { useToggle } from '#ui/hooks/useToggle';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
+import InAppNotifications from '#common/InAppNotifications';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
 
@@ -33,6 +34,7 @@ export default function DeleteAction(props: Props) {
 
   const company = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const [state, { displayPopup, resetPopup }] = usePopup();
   const [isProcessing, toggleProcessing] = useToggle(false);
@@ -58,6 +60,7 @@ export default function DeleteAction(props: Props) {
       displayPopup(t('Dashboard.Management.EditCoolingUsers.toasts.confirmation'), true); // confirmation popup
     } catch (exception) {
       console.error(exception);
+      toast.show(t('actions.error'), { type: 'md_danger' });
     } finally {
       toggleProcessing();
     }
@@ -66,14 +69,15 @@ export default function DeleteAction(props: Props) {
   async function onConfirm(): Promise<void> {
     if (typeof contextualFarmer === 'undefined' || !company) return; // safe guard
     try {
-      resetPopup();
       toggleProcessing();
       if (!contextualFarmer.userCode) await ColdtivateService.deleteUser(userId);
       else await ColdtivateService.removeCompany({ farmerId, companyId: company.id });
       await revalidateCache();
+      resetPopup();
       goBack();
     } catch (exception) {
       console.error(exception);
+      toast.show(t('actions.error'), { type: 'md_danger' });
     } finally {
       toggleProcessing();
     }
