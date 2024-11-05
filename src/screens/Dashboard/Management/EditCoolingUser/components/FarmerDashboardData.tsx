@@ -56,6 +56,11 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
                   { type: 'md_danger' }
                 );
                 break;
+              case CONSTRAINT_EXCEPTIONS.NO_SURVEYS:
+                toastId = toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.noSurveys'), {
+                  type: 'md_danger',
+                });
+                break;
               default:
                 break;
             }

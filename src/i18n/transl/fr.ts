@@ -783,6 +783,7 @@ export default {
             "Êtes-vous sûr de vouloir supprimer cet utilisateur de votre liste d'utilisateurs de refroidissement? Cette opération supprimera cet utilisateur de refroidissement et ne pourra pas être annulée !",
           edit: 'Utilisateur de refroidissement modifié avec succès',
           noCoolingUnits: "Vous n'avez pas encore d'unités de refroidissement",
+          noSurveys: 'No surveys have been completed yet.', // TODO
           updateSuccess: 'Mise à jour réussie',
         },
         pdf: {
