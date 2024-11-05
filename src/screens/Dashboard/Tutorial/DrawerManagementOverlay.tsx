@@ -23,7 +23,7 @@ export function DrawerManagementOverlay({
   next,
   goTo,
   stop,
-  step: { onPressMask, mask },
+  step: { onPressMask },
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
@@ -72,8 +72,8 @@ export function DrawerManagementOverlay({
       <Animated.View
         style={[
           {
-            top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 55 : 45),
-            right: mask.x + (screenHeight <= SMALL_SCREEN_THRESHOLD ? 90 : 70),
+            top: screenHeight <= SMALL_SCREEN_THRESHOLD ? '23%' : '22%',
+            left: '50%',
             opacity: blinkAnim,
           },
         ]}

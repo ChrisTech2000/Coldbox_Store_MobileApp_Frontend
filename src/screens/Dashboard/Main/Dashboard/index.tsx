@@ -5,6 +5,7 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -14,11 +15,12 @@ import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 import { DashboardProduce, ERoles, Farmer, type Company, type CoolingUnit } from '#types/global';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { CoolingUnitsOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsOverlay';
 import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
 import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
 import {
   ECommonTutorialSteps,
+  EEmployeeTutorialSteps,
   EFarmerTutorialSteps,
 } from '#screens/Dashboard/Tutorial/utils/constants';
 import { MOCKED_DASHBOARD_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
@@ -84,6 +86,12 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_4,
     OverlayComponent: Dashboard4Overlay,
+    fullScreen: true,
+  });
+
+  useWalkthroughStep({
+    number: EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP,
+    OverlayComponent: CoolingUnitsOverlay,
     fullScreen: true,
   });
 
@@ -183,11 +191,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, [user?.role]);
 
   useEffect(() => {
-    if (isTutorialOn) start();
-  }, [isTutorialOn]);
-
-  useEffect(() => {
     if (user && (!user.lastLogin || user.lastLogin === 'None')) {
+      start();
       toggleTutorial(true);
     }
   }, [user]);

@@ -1400,7 +1400,9 @@ const en = {
     },
   },
   tutorial: {
-    welcome: 'Welcome to Coldtivate. This is a walkthrough of the functions.',
+    welcome: 'Welcome to Coldtivate! This is a walkthrough of the functionalities.',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.',
     quit: 'Quit Tutorial',
     'back-dashboard': 'Back to Dashboard',
     congratulations:
@@ -1418,7 +1420,7 @@ const en = {
         'On the top left, you find a menu with the main functionalities. Go ahead and click it.',
       repeatTutorial: 'If you want to watch this tutorial again, you can also find it in the menu.',
       managementNavigation:
-        'In the menu, you can navigate to "Management" and tap there to add or edit Cooling Users. Go ahead and try it.',
+        'In the menu, you can navigate to the "Management" tab and there add new Locations, Cooling Units, Registered Employees and Operators.',
       addCoolingUser:
         'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',
@@ -1436,7 +1438,8 @@ const en = {
         'After having completed all the steps, you will see an overview of the crates you are about to check into the room.',
       checkIn3:
         'If you are satisfied, you can click "Confirm" and the new crates will be added to the Dashboard.',
-      history: 'Clicking on "History", you can see all the movements in the room.',
+      history:
+        'Clicking on "History", you can see all the movements in the room. The check-outs for which the after-storage survey has not been completed are marked by a red dot.',
       coolingUnits:
         'Click on "Cooling Units" to see the capacity of a cooling unit in the next 7 days (Planner tab) and the temperature of the room (Room conditions tab).',
       roomConditions:
@@ -1457,13 +1460,13 @@ const en = {
       addEmployeesOperators:
         'You can add Registered Employees and Operators through the Management screen. In order to add either role, you will need their phone number. They will receive an SMS with an invitation link. A phone number can be used for only one user.',
       employeeCoolingUnitsStep:
-        'Once you have selected a cooling unit you will see an overview of: the check ins in the "Dashboard" tab, the movements in the "History" tab, and the planned utilization rate and the temperature of the room in the "Cooling Units" tab.',
+        'Once you have selected a cooling unit you will see an overview of: the crates currently in storage in the "Dashboard" tab, statistics about utilisation and impact in the "Analytics" tab, and the list of crates for sale in the "Marketplace" tab. Clicking on "More", you can also navigate to the "Crop Prices", "History", "Cooling Units", and "Orders" tab.',
       localizationPreferences:
         'You can change the language of the app by selecting "Localization Preferences". Make sure to click the "Save changes" button for the language to be changed!',
       accountDetailsNavigation:
         'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.',
       coolingUserSurvey:
-        'It is very important that you fill in the Cooling User survey for the app to provide you with customized recommendations. Thank you for taking the time to complete the survey!',
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!',
       coolingUserCode:
         'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".',
       knowledgeHub:
@@ -1479,16 +1482,19 @@ const en = {
         'If the color of the card is yellow (2-5 days left) or green (more than 5 days), you do not need to worry about the crates. The number of days is recalculated multiple times per day, so make sure to check the "Dashboard" regularly to see how the quality of your crates in the room is evolving.',
       dashboardStep5:
         'If you have crates stored in multiple rooms, you can change the room you are viewing by selecting a company and cooling unit from the dropdown.',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advises you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         'In the tab "History" you can see a summary of all check-ins and check-outs that you have completed in each room. If you see a red dot next to a check out, please click on the three dots and "Fill in market survey". Here, we would like to understand at what price you have sold your produce, and if anything got spoiled. We use this information to improve the operations at the cold room, so it is important that you answer accurately.',
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.',
       farmersUnitsPlanner:
         'In the tab "Cooling Units" you can find the Map, the current and future occupancy of the room (in "Planner") and the temperature of the room (in "Room conditions"). These screens help you monitor remotely what is happening at the cold rooms, without having to go there in person to check!',
       marketPrice:
         'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.',
       farmerFinalStep:
         'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
+      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.',
     },
   },
 };

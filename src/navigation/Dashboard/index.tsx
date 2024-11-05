@@ -116,8 +116,9 @@ export default function DashboardNavigator() {
   ]);
 
   useEffect(() => {
-    if (!isWalkthroughOn && isTutorialActive)
+    if (!isWalkthroughOn && isTutorialActive) {
       toggleTutorial(false, () => rootNavigation.navigate('Dashboard'));
+    }
   }, [isWalkthroughOn, isTutorialActive]);
 
   return (

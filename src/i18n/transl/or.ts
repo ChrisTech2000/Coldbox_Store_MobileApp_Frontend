@@ -1403,6 +1403,8 @@ export default {
   },
   tutorial: {
     welcome: 'କୋଲ୍ଡଟିଭେଟ୍‌ରେ ଆପଣଙ୍କୁ ସ୍ବାଗତ। ଏହା କାର୍ୟଗତିର ଏକ ବ୍ରିଫିଂ।',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'ଟ୍ୟୁଟୋରିଆଲ୍ ବନ୍ଦ କରନ୍ତୁ',
     'back-dashboard': 'ଡ୍ୟାସବୋର୍ଡକୁ ଫେରନ୍ତୁ',
     congratulations:
@@ -1464,7 +1466,7 @@ export default {
       accountDetailsNavigation:
         'ମେନୁରେ, ଆପଣ "ଆକାଉଣ୍ଟ ବିବରଣୀ" ଉପରେ ଗତି କରିପାରିବେ ଏବଂ ତାହାରେ ଆପଣଙ୍କର ଆକାଉଣ୍ଟ ସହିତ ସମ୍ବନ୍ଧିତ କିଛି ବିବରଣୀ ଦେଖିବା/ସଂପାଦନା କରିବାକୁ କ୍ଲିକ୍ କରନ୍ତୁ। ଆଗକୁ ଯାଆନ୍ତୁ ଏବଂ ଏହାକୁ ପ୍ରୟୋଗ କରନ୍ତୁ।',
       coolingUserSurvey:
-        'ଆପଣଙ୍କର ମାନ୍ୟକୁ ସ୍ବୀକାର କରିବା ପାଇଁ ଏହା ଖୁବ୍ ଦରକାରୀ ଯେ ଆପଣ ଏହି କୁଲିଂ ୟୁଜର ସର୍ବେକ୍ଷଣ ପୂରଣ କରନ୍ତୁ, ଯାହା ଆପଣଙ୍କୁ ବ୍ୟକ୍ତିଗତ ସୁପାରିଶ ଦେବା ପାଇଁ ଏପ୍ପକୁ ସହାୟ କରିବ। ସର୍ବେକ୍ଷଣ ପୂରଣ କରିବାକୁ ସମୟ ନେବା ପାଇଁ ଧନ୍ୟବାଦ!',
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
       coolingUserCode:
         'ଆପଣ ଯେତେବେଳେ ପ୍ରଥମେ କୌଣସି କାଲା ଘରକୁ ଗଲେ, ତେବେ ଓପରେଟର ଆପଣଙ୍କୁ ଆପଣଙ୍କର ବ୍ୟକ୍ତିଗତ କୋଡ୍ ପ୍ରଦାନ କରିବାକୁ ମାଙ୍ଗିବେ, ଯାହା ଆପଣଙ୍କୁ କାଲା ଘର ୟୁଜର୍ ତାଲିକାରେ ଯୋଗ କରିବ। ଆପଣ ଏହି କୋଡ୍ "ବ୍ୟକ୍ତିଗତ ବିବରଣୀ" -> "କୁଲିଂ ୟୁଜର ଇମ୍ପୋର୍ଟ କୋଡ୍" ରେ ପାଇପାରିବେ।',
       knowledgeHub:
@@ -1480,16 +1482,19 @@ export default {
         'ଯଦି କାର୍ଡର ରଙ୍ଗ ହଳକା ହେଉଛି (2-5 ଦିନ ଅବଶିଷ୍ଟ) କିମ୍ବା ସବୁଜ (5 ଦିନରୁ ଅଧିକ), ତେବେ ଆପଣଙ୍କୁ କ୍ରେଟ୍ ସମ୍ପର୍କରେ ଚିନ୍ତା କରିବାକୁ ଆବଶ୍ୟକ ନାହିଁ। ଦିନ ସଂଖ୍ୟା ଦିନକୁ ଅନେକ ଥର ପୁନଃଗଣନା କରାଯାଏ, ସେହିପାଇଁ ଦୟାକରି "ଡ୍ୟାସବୋର୍ଡ" କୁ ନିୟମିତ ଭାବେ ଚେକ୍ କରନ୍ତୁ କିପରି ଆପଣଙ୍କର କ୍ରେଟ୍ ଗୁଣବତ୍ତା ବିକାଶ ପାଇଁ ବଦଳାଯାଉଛି।',
       dashboardStep5:
         'ଯଦି ଆପଣଙ୍କର ମଲ୍ଟିପ୍ଲ ଘରରେ କ୍ରେଟ୍ ରହିଛି, ତେବେ ଆପଣ ଏକ କମ୍ପାନୀ ଓ କୁଲିଂ ୟୁନିଟ୍ ଚୟନ କରି ଦେଖିବାକୁ କକ୍ଷ ବଦଳାଇପାରିବେ।',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         'ତାଲିକା "ଇତିହାସ" ରେ ଆପଣ ପ୍ରତିଟି କକ୍ଷରେ ଆପଣଙ୍କର ସମସ୍ତ ଚେକ-ଇନ୍ ଓ ଚେକ-ଆଉଟ୍ ର ସାରାଂଶ ଦେଖିପାରିବେ। ଯଦି ଆପଣ ଏକ ଚେକ-ଆଉଟ୍ ପାଖରେ ଏକ ଲାଲ ତାରା ଦେଖନ୍ତି, ଦୟାକରି ତିନି ଡଟ୍ ସେଲକ୍ଟ କରିବା ପାଇଁ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ "ବଜାର ସର୍ଭେ ପୂରଣ କରନ୍ତୁ"। ଏଠାରେ, ଆମେ ଆପଣଙ୍କର ପ୍ରଦାନକୃତ ଉତ୍ପାଦ କେତେ ମୂଲ୍ୟରେ ବିକ୍ରୟ କରାଯାଇଛି ଏବଂ କିଛି ବିକୃତ ହୋଇଛି କି ନାହିଁ ବୁଝିବାକୁ ଚାହାଁୁ। ଏହି ସୂଚନାଗୁଡିକୁ କୋଲ୍ଡ ରୁମର କାର୍ୟକଳାପ ସୁଧାର କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯିବ, ତେଣୁ ଦୟାକରି ସଠିକ୍ ଉତ୍ତର ଦେବାକୁ ଯାଚନା କରୁଛୁ।',
       farmersCoolingUnits:
-        'ଆପଣଙ୍କ ନିକଟରେ ଥିବା କୋଲିଂ ଇଉନିଟ୍‌ଗୁଡିକୁ ଯାଞ୍ଚ କରିବାକୁ, ଆପଣ ସ୍କ୍ରିନ୍‌ଗୁଡିକର ତଳରେ ଥିବା ବଟନ୍‌ଗୁଡିକୁ ଯାଆନ୍ତୁ, "କୋଲିଂ ଇଉନିଟ୍‌ଗୁଡିକ" ଟାବ୍‌କୁ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ "ମାପ" ବାଛନ୍ତୁ। ମାପରେ ପ୍ରତିଟି ପିନ୍‌ରେ କ୍ଲିକ୍ କରି, ଆପଣ ଇଉନିଟ୍‌ର ପ୍ରକାର ଏବଂ ସଞ୍ଚୟର ମୂଲ୍ୟ ଦେଖିପାରିବେ।',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
         '"କୋଲିଂ ଇଉନିଟ୍‌ଗୁଡିକ" ଟାବ୍‌ରେ, ଆପଣ ମାପ, କକ୍ଷର ବର୍ତ୍ତମାନ ଏବଂ ଭବିଷ୍ୟତ ସଂଖ୍ୟାକୁ ("ପ୍ଲାନର" ରେ) ଏବଂ କକ୍ଷର ତାପମାତ୍ରା ("କକ୍ଷର ସ୍ଥିତି" ରେ) ଦେଖିପାରିବେ। ଏହି ସ୍କ୍ରିନ୍‌ଗୁଡିକ ଆପଣଙ୍କୁ କୋଲ୍ଡ ରୁମଗୁଡିକର କାର୍ଯ୍ୟ ନିରୀକ୍ଷଣ କରିବାରେ ସାହାଯ୍ୟ କରିବ, ଯାହାକି ସେଠାରେ ଯାଆଁ ସହ ବିନା ଯାଞ୍ଚ କରିବାକୁ।',
       marketPrice:
         'ଯଦି ଆପଣଙ୍କୁ "ବଜାର ମୂଲ୍ୟ" ନାମକ ଏକ ଟାବ୍‌ ଦେଖାଯାଉଛି, ତେବେ ଆପଣ ଦେଶର ବିଭିନ୍ନ ଫଳ ଓ ଶାକସାଗୁଲିର ମୂଲ୍ୟଗୁଡିକୁ ଗତ କିଛି ଦିନରେ ଏବଂ ଭବିଷ୍ୟତରେ ମୂଲ୍ୟ ଆବହାର ଚେକ୍ କରିପାରିବେ। ବର୍ତ୍ତମାନ, ଏହି ବିକଳ୍ପ କେବଳ ଚୟନିତ ଦେଶମାନଙ୍କ ପାଇଁ ଉପଲବ୍ଧ।', // TODO
       farmerFinalStep:
         'ବଧାଇ! ଆପଣ ଟ୍ୟୁଟୋରିଆଲ୍‌ ସମ୍ପୂର୍ଣ୍ଣ କରିଛନ୍ତି! ଯଦି ଆପଣଙ୍କୁ ଏହି ଆପ୍‌ ବିଷୟରେ ପ୍ରଶ୍ନ ଅଛି, ତେବେ ଆମେ ଏହି FAQ ଚେକ୍ କରିବାକୁ, କୋଲ୍ଡ ରୁମର ଏକ ଅପରେଟରଙ୍କୁ ପ୍ରଶ୍ନ କରିବାକୁ କିମ୍ବା app@yourvcca.org ଠାରେ ଲେଖିବାକୁ ପ୍ରଶଂସା କରୁଛୁ।',
+      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
     },
   },
 } satisfies Translations;

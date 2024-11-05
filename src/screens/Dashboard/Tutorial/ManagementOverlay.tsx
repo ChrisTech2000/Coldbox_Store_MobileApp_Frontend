@@ -83,7 +83,7 @@ export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverla
 
         <View
           tw={cn(
-            'absolute left-8 w-[70%] h-auto bg-white p-3 rounded-md z-40',
+            'absolute left-8 w-[80%] h-auto bg-white p-3 rounded-md z-40',
             screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-48' : 'top-56'
           )}
           style={[
@@ -95,7 +95,7 @@ export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverla
             },
           ]}
         >
-          <Text tw="text-base">{t('tutorial.steps.navigateToCoolingUser')}</Text>
+          <Text tw="text-base text-center">{t('tutorial.steps.navigateToCoolingUser')}</Text>
           <Button
             mode="text"
             onPress={() => {

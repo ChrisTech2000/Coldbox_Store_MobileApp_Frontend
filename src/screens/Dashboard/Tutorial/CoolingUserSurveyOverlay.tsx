@@ -36,7 +36,7 @@ export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponent
         <View
           tw={cn(
             'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-40',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-14' : 'top-28'
+            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-80' : 'top-96'
           )}
           style={[
             {

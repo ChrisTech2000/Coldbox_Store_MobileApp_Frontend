@@ -11,7 +11,11 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import DashboardMain from '#screens/Dashboard/Main/Dashboard';
 import { DrawerOverlay } from '#screens/Dashboard/Tutorial/DrawerOverlay';
-import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { Dashboard6Overlay } from '#screens/Dashboard/Tutorial/FarmerDashboardOverlay';
+import {
+  ECommonTutorialSteps,
+  EFarmerTutorialSteps,
+} from '#screens/Dashboard/Tutorial/utils/constants';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
@@ -82,7 +86,12 @@ export default function MainTabStack() {
     maskAllowInteraction: true,
     // eslint-disable-next-line react/prop-types
     onPressMask: () => navigation.dispatch(DrawerActions.openDrawer()),
-    //onFinish: () => toggleTutorial(false),
+  });
+
+  const { onLayout: onRightLayout } = useWalkthroughStep({
+    number: EFarmerTutorialSteps.DASHBOARD_STEP_6,
+    OverlayComponent: Dashboard6Overlay,
+    maskAllowInteraction: true,
   });
 
   const screenOptions: ScreenOptions = useCallback(
@@ -100,12 +109,14 @@ export default function MainTabStack() {
         header: (headerProps) =>
           translationPath !== NAVIGATOR_HEADERS.CheckInStack && (
             <View onLayout={onLayout}>
-              <NavigatorHeader
-                {...headerProps}
-                routeTitle={routeTitle}
-                // eslint-disable-next-line react/prop-types
-                {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory, t)}
-              />
+              <View onLayout={onRightLayout}>
+                <NavigatorHeader
+                  {...headerProps}
+                  routeTitle={routeTitle}
+                  // eslint-disable-next-line react/prop-types
+                  {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory, t)}
+                />
+              </View>
             </View>
           ),
         gestureDirection: 'vertical',
