@@ -103,6 +103,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
       });
     } catch (exception) {
       console.error(exception);
+      toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger', style: { marginBottom: 55 } });
     }
   }
 
