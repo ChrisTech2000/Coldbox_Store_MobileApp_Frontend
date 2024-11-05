@@ -1,11 +1,12 @@
 import { CurrencyStandardization } from 'currency-format-utils';
+import isNil from 'lodash/isNil';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, IconButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useDebouncedCallback } from 'use-debounce';
 import colors from 'tailwindcss/colors';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
@@ -93,26 +94,24 @@ export function CartItem({ item }: CartItemProps) {
     );
   }
 
+  const color =
+    isNil(item.relCrateRemainingShelfLife) || item.relCrateRemainingShelfLife === -1
+      ? 'bg-gray-300 border-gray-300'
+      : item.relCrateRemainingShelfLife && item.relCrateRemainingShelfLife > 7
+        ? 'bg-green-400 border-green-400'
+        : item.relCrateRemainingShelfLife &&
+            item.relCrateRemainingShelfLife <= 7 &&
+            item.relCrateRemainingShelfLife > 2
+          ? 'bg-yellow-400 border-yellow-400'
+          : 'bg-red-500 border-red-500';
+
   return (
     <View tw="flex-row w-full my-3 rounded-lg overflow-hidden border border-solid border-zinc-300 bg-white">
-      <View
-        tw={cn(
-          'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
-          item.relCrateRemainingShelfLife &&
-            item.relCrateRemainingShelfLife <= 7 &&
-            item.relCrateRemainingShelfLife > 2 &&
-            'bg-yellow-400 border-yellow-400',
-          item.relCrateRemainingShelfLife &&
-            item.relCrateRemainingShelfLife <= 2 &&
-            'bg-red-500 border-red-500',
-          (!item.relCrateRemainingShelfLife || item.relCrateRemainingShelfLife === -1) &&
-            'bg-gray-300 border-gray-300'
-        )}
-      />
+      <View tw={cn('w-2 rounded-l-sm border-y-4', color)} />
       <View tw="flex-col p-3">
         <View tw="w-full flex-row items-start justify-between">
           <View tw="flex-col">
-            {item.relCrateRemainingShelfLife ? (
+            {!isNil(item.relCrateRemainingShelfLife) ? (
               <View tw="flex-row items-center space-x-2">
                 <MaterialCommunityIcon
                   name="timer-outline"
