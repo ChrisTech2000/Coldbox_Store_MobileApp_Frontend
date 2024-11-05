@@ -1,60 +1,30 @@
-import isEmpty from 'lodash/isEmpty';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { ActivityIndicator } from 'react-native-paper';
+import isEmpty from 'lodash/isEmpty';
 
 import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useApiCache, useApiCall } from '#services/hooks/useAPiCall';
+import InAppNotifications from '#common/InAppNotifications';
+import { useApiCache, useLazyApiCall } from '#services/hooks/useAPiCall';
 import type { Farmer } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import { savePDF } from '#ui/lib/pdf';
 
-import InAppNotifications from '#common/InAppNotifications';
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
 import { DataLoader, getPdfContent } from '../utils';
 
-const SWR_CACHE_KEY = 'getFarmerRelatedEntities';
-
-const _ButtonLoader = () => <ActivityIndicator size="small" color={paperTheme.colors.outline} />;
-
-type Props = {
-  farmerId: number;
-};
-
-export default function FarmerDashboardData(props: Props) {
+export default function FarmerDashboardData(props: { farmerId: number }) {
   const { farmerId } = props;
 
-  const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
-  const [isCreatingPdf, setIsCreatingPdf] = useState<boolean>(false);
+  const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
 
-  const { data, isLoading, hasError } = useApiCall(
-    SWR_CACHE_KEY,
-    useCallback(async (farmer: Farmer) => {
-      try {
-        return await DataLoader.aggregateFarmerData(farmer);
-      } catch (exception) {
-        // intercept
-        if (exception instanceof Error) {
-          if (exception.message === 'farmer does not have any check-ins') {
-            toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'), {
-              type: 'md_danger',
-            });
-          }
-        }
-        // let it bubble up
-        throw exception;
-      }
-    }, []),
-    contextualFarmer!,
-    {
-      skip: !farmerId || !contextualFarmer?.id,
-      defaultData: undefined,
-      errorRetryCount: 0,
-    }
+  const { execute, isLoading } = useLazyApiCall(
+    'getFarmerRelatedAnalytics',
+    DataLoader.aggregateFarmerData
   );
 
   return (
@@ -63,23 +33,37 @@ export default function FarmerDashboardData(props: Props) {
       mode="contained"
       icon={isLoading ? undefined : 'check-circle-outline'}
       uppercase
-      disabled={isLoading || hasError || isEmpty(data)}
-      onPress={async (evt) => {
+      disabled={isLoading}
+      onPress={async (evt): Promise<void> => {
         evt.stopPropagation();
-        if (typeof data === 'undefined') return; // safe guard
-        setIsCreatingPdf(true);
+        if (typeof contextualFarmer === 'undefined') {
+          toast.show(t('actions.error'), { type: 'md_danger' });
+          return;
+        }
         try {
-          await savePDF(getPdfContent(data, t), 'farmer');
+          const result = await execute(contextualFarmer);
+          if (isEmpty(result)) throw new Error('empty farmer data response');
+
+          await savePDF(getPdfContent(result, t), 'farmer');
           toast.show(`${t('actions.done')}!`, { type: 'md_success' });
         } catch (exception) {
-          console.error(exception);
-        } finally {
-          setIsCreatingPdf(false);
+          let toastId: string | undefined;
+          if (exception instanceof Error) {
+            if (exception.message === 'farmer does not have any check-ins') {
+              toastId = toast.show(
+                t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'),
+                {
+                  type: 'md_danger',
+                }
+              );
+            }
+          }
+          if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
         }
       }}
     >
-      {isLoading || isCreatingPdf ? (
-        <_ButtonLoader />
+      {isLoading ? (
+        <ActivityIndicator size="small" color={paperTheme.colors.outline} />
       ) : (
         t('Dashboard.Management.EditCoolingUsers.actions.downloadFarmers')
       )}
