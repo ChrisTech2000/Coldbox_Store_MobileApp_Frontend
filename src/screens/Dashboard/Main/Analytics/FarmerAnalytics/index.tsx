@@ -18,7 +18,11 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { Farmer } from '#types/global';
 
-import { DataLoader, getPdfContent } from '#screens/Dashboard/Management/EditCoolingUser/utils';
+import {
+  CONSTRAINT_EXCEPTIONS,
+  DataLoader,
+  getPdfContent,
+} from '#screens/Dashboard/Management/EditCoolingUser/utils';
 
 import { ConfigData, Configuration, ConfigurationModal } from '../components/Configuration';
 import { CommonFooter } from '../components/Footer';
@@ -75,14 +79,20 @@ export function FarmerAnalytics() {
       try {
         return await DataLoader.aggregateFarmerData(farmer);
       } catch (exception) {
+        let toastId: string | undefined;
         if (exception instanceof Error) {
-          if (exception.message === 'farmer does not have any check-ins') {
-            toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'), {
-              type: 'md_danger',
-            });
+          switch (exception.message) {
+            case CONSTRAINT_EXCEPTIONS.NO_CHECK_INS:
+              toastId = toast.show(
+                t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'),
+                { type: 'md_danger' }
+              );
+              break;
+            default:
+              break;
           }
         }
-        throw exception;
+        if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
       }
     }, []),
     farmerResponse?.[0] as Farmer,
