@@ -4,7 +4,7 @@ import useSWRMutation, { type MutationFetcher } from 'swr/mutation';
 import type { AxiosError } from 'axios';
 import ms from 'ms';
 
-import ErrorUtil, { CustomError } from '../utils/ErrorUtil';
+import ErrorUtil, { type CustomError } from '../utils/ErrorUtil';
 
 export interface IApiQueryOptions<IData> {
   skip?: boolean;
@@ -89,7 +89,7 @@ export const useLazyApiCall = <IData, IParams>(
       [trigger]
     ),
     data,
-    isLoading: !data && isMutating,
+    isLoading: isMutating,
     hasError: !!error,
     error,
   };
