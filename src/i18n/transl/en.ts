@@ -13,9 +13,9 @@ const en = {
       gu: 'Gujarati',
       fr: 'French',
       pt: 'Portuguese',
-      igbo: 'Igbo',
-      yoruba: 'Yoruba',
-      hausa: 'Hausa',
+      ig: 'Igbo',
+      yo: 'Yoruba',
+      ha: 'Hausa',
     },
   },
   gender: {
@@ -1404,11 +1404,8 @@ const en = {
     farmerWelcome:
       'Welcome to Coldtivate! This tutorial will help you understand how to use the app.',
     quit: 'Quit Tutorial',
-    'back-dashboard': 'Back to Dashboard',
     congratulations:
       'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.',
-    comic:
-      'Congratulations! You have completed the comic strip! Go back to the dashboard to start using the app.',
     prev: 'Prev',
     next: 'Next',
     start: 'Start Tutorial',

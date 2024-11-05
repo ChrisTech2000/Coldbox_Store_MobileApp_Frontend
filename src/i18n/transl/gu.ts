@@ -15,9 +15,9 @@ export default {
       gu: 'ગુજરાતી',
       fr: 'ફ્રેન્ચ',
       pt: 'પોર્ટુગીઝ',
-      igbo: 'ઇગ્બો',
-      yoruba: 'યોરૂબા',
-      hausa: 'હાઉસા',
+      ig: 'ઇગ્બો',
+      yo: 'યોરૂબા',
+      ha: 'હાઉસા',
     },
   },
   gender: {
@@ -1401,11 +1401,8 @@ export default {
     farmerWelcome:
       'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'ટ્યુટોરીયલ બંધ કરો',
-    'back-dashboard': 'ડેશબોર્ડ પર પાછા જાઓ',
     congratulations:
       'અભિનંદન! તમે ટ્યુટોરીયલ પૂરું કર્યું છે! એપ્લિકેશનનો ઉપયોગ શરૂ કરવા માટે ડેશબોર્ડ પર પાછા જાઓ.',
-    comic:
-      'અભિનંદન! તમે કોમિક સ્ટ્રિપ પૂરી કરી છે! એપ્લિકેશનનો ઉપયોગ શરૂ કરવા માટે ડેશબોર્ડ પર પાછા જાઓ.',
     prev: 'પાછળ',
     next: 'આગળ',
     start: 'ટ્યુટોરીયલ શરૂ કરો',

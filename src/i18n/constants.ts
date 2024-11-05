@@ -7,6 +7,9 @@ export const APP_LOCALES = {
   GUJARATI: 'gu',
   FRENCH: 'fr',
   PORTUGUESE: 'pt',
+  YORUBA: 'yo',
+  HAUSA: 'ha',
+  IGBO: 'ig',
 } as const;
 
 export type TranslationLocales = ValueOf<typeof APP_LOCALES>;
