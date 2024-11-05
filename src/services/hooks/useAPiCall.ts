@@ -1,9 +1,10 @@
+import { useCallback, useMemo, useRef } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
+import useSWRMutation, { type MutationFetcher } from 'swr/mutation';
 import type { AxiosError } from 'axios';
 import ms from 'ms';
 
-import ErrorUtil from '../utils/ErrorUtil';
-import { useCallback, useMemo, useRef } from 'react';
+import ErrorUtil, { CustomError } from '../utils/ErrorUtil';
 
 export interface IApiQueryOptions<IData> {
   skip?: boolean;
@@ -57,6 +58,40 @@ export const useApiCall = <IData, IParams>(
     error,
     isValidating,
     refetch,
+  };
+};
+
+export const useLazyApiCall = <IData, IParams>(
+  name: string,
+  method: (params: IParams) => Promise<IData>
+) => {
+  const fetcher: MutationFetcher<IData, string, IParams> = useCallback(
+    async (_, extra) => {
+      try {
+        return await method(extra.arg);
+      } catch (exception) {
+        throw ErrorUtil.handleAxiosError(exception as AxiosError);
+      }
+    },
+    [method]
+  );
+
+  const { data, trigger, error, isMutating } = useSWRMutation<IData, CustomError, string, IParams>(
+    name,
+    fetcher
+  );
+
+  return {
+    execute: useCallback(
+      // eslint-disable-next-line
+      // @ts-ignore
+      async (params: IParams): Promise<IData> => await trigger(params),
+      [trigger]
+    ),
+    data,
+    isLoading: !data && isMutating,
+    hasError: !!error,
+    error,
   };
 };
 
