@@ -9,7 +9,7 @@ import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
 import type { TranslationPaths } from '#i18n/index';
-import type { CoolingUnit, Crate, DashboardProduce } from '#types/global';
+import type { CoolingUnit, DashboardProduce } from '#types/global';
 
 import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
 import EditCrateWeightAndPricing from '#screens/Dashboard/Main/Dashboard/ProduceDetails/EditCrateWeightAndPricing';
@@ -27,8 +27,8 @@ export type ProduceDetailsStackRoutes = {
   };
   EditCrateWeightAndPricing: {
     companyCurrency: string;
-    currencySymbol: string;
-    crates: Array<Crate>;
+    coolingUnit: CoolingUnit | null;
+    produce: DashboardProduce;
     farmerId: number;
   };
 };

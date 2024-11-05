@@ -599,6 +599,10 @@ export default {
       noDTMessage: 'Um modelo de validade não está disponível para este produto específico.',
       checkOutButton: 'Check-out',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      preSaleErrorOperator:
+        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
+      preSaleErrorUser:
+        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -998,6 +1002,8 @@ export default {
       PayoutSettings: {
         addTitle: 'Por favor, insira as informações da sua conta bancária',
         editTitle: 'Suas informações da conta bancária',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'Nome da Conta',
           namePlaceholder: 'Insira o nome da conta',

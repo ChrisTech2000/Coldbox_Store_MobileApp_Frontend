@@ -46,7 +46,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     store.selectedItem,
     store.reset,
   ]);
-  const { refreshData } = useDashboardStore();
+  const refreshData = useDashboardStore((store) => store.refreshData);
 
   const [discount, setDiscount] = useState<string>('');
   const [isPaid, setIsPaid] = useState<boolean>(false);

@@ -595,6 +595,10 @@ export default {
       noDTMessage: 'ଏହି ବିଶେଷ ସାମଗ୍ରୀ ପାଇଁ ସେଲ୍ଫ-ଲାଇଫ୍ ମୋଡେଲ୍ ଉପଲବ୍ଧ ନୁହେଁ।',
       checkOutButton: 'ଚେକ୍-ଆଉଟ୍',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      preSaleErrorOperator:
+        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
+      preSaleErrorUser:
+        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
     },
     SearchFilter: {
       detailsMessage:
