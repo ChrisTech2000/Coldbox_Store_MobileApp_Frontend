@@ -12,7 +12,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { savePDF } from '#ui/lib/pdf';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
-import { DataLoader, getPdfContent } from '../utils';
+import { CONSTRAINT_EXCEPTIONS, DataLoader, getPdfContent } from '../utils';
 
 export default function FarmerDashboardData(props: { farmerId: number }) {
   const { farmerId } = props;
@@ -49,13 +49,15 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
         } catch (exception) {
           let toastId: string | undefined;
           if (exception instanceof Error) {
-            if (exception.message === 'farmer does not have any check-ins') {
-              toastId = toast.show(
-                t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'),
-                {
-                  type: 'md_danger',
-                }
-              );
+            switch (exception.message) {
+              case CONSTRAINT_EXCEPTIONS.NO_CHECK_INS:
+                toastId = toast.show(
+                  t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'),
+                  { type: 'md_danger' }
+                );
+                break;
+              default:
+                break;
             }
           }
           if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
