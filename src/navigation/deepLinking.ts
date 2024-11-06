@@ -22,6 +22,8 @@ export default {
 
       if (url.includes('auth/reset/')) {
         const queryParams = _stripURL(url);
+        if (!queryParams) return null;
+
         const datums = _queryParamsToObject(queryParams);
 
         return [DEEP_LINK_URL, subs(DEEP_LINK_PATHS.PASSWORD_RESET, datums)].join('/');
@@ -29,6 +31,8 @@ export default {
 
       if (url.includes('auth/signup-invitation/')) {
         const queryParams = _stripURL(url);
+        if (!queryParams) return null;
+
         const datums = _queryParamsToObject(queryParams);
 
         const link = subs(DEEP_LINK_PATHS.INVITE, {
@@ -78,9 +82,9 @@ export default {
 // Internal Util Functions
 ///
 
-function _stripURL(url: string): string {
+function _stripURL(url: string): string | undefined {
   const queryIndex = url.indexOf('?');
-  return queryIndex !== -1 ? url.slice(queryIndex + 1) : url;
+  return queryIndex !== -1 ? url.slice(queryIndex + 1) : undefined;
 }
 
 function _queryParamsToObject(queryString: string): Record<string, string> {
@@ -89,7 +93,7 @@ function _queryParamsToObject(queryString: string): Record<string, string> {
     const [key, value] = pair.split('=');
     if (!key || !value) continue;
     const k = camelCase(key);
-    const v = decodeURIComponent(value || '');
+    const v = decodeURIComponent(value);
     datums[k] = v;
   }
   return datums;
