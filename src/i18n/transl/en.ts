@@ -936,6 +936,11 @@ const en = {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company',
+        forMyself: 'Buy for myself',
+        label: 'Buyer',
+      },
       sorting: {
         'price-asc': 'Price ascending',
         'price-desc': 'Price descending',
@@ -957,6 +962,7 @@ const en = {
       filterError:
         'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg',
+      owner: 'Owner',
     },
     AccountDetails: {
       popups: {

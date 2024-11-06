@@ -448,6 +448,7 @@ export interface GetCartResponse {
   totalDiscountAmount: number;
   totalPaymentFeesAmount: number;
   totalProduceAmount: number;
+  onBehalfOfCompanyId: number | undefined;
   pickupDetails: Array<{
     coolingUnitId: number;
     pickupMethod: EPickUpMethod;

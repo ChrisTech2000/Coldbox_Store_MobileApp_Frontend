@@ -852,6 +852,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'Price ascending', // TODO
         'price-desc': 'Price descending', // TODO
@@ -873,6 +878,7 @@ export default {
       filterError:
         'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.', // TODO
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {

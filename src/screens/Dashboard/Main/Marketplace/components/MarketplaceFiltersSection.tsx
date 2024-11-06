@@ -1,31 +1,34 @@
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
-import { type NavigationProp, useNavigation } from '@react-navigation/native';
+import { Divider, Modal, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Modal, Portal, RadioButton } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
-import { Touchable } from '#ui/components/Touchable';
-import { Text } from '#ui/components/Text';
-import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Button } from '#ui/components/Button';
+import { RadioButtonItem } from '#ui/components/RadioButton';
+import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-
-import type { GetAvailableListingParams } from '#types/api.params';
-import { useTranslationUtils } from '#i18n/utils';
-import { useToggle } from '#ui/hooks/useToggle';
-import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/MarketplaceStack';
 import { paperTheme } from '#ui/lib/theme';
-import type { TranslationPaths } from '#i18n/index';
 
-import MarketplaceLocationFilter from './LocationFilter';
+import RBAC from '#common/RBAC';
+import type { TranslationPaths } from '#i18n/index';
+import { useTranslationUtils } from '#i18n/utils';
+import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/MarketplaceStack';
+import MarketplaceService from '#services/MarketplaceService';
+import useCartStore from '#stores/shoppingCart';
+import type { GetAvailableListingParams } from '#types/api.params';
+
 import FilterChip from './FilterChip';
+import MarketplaceLocationFilter from './LocationFilter';
 
 import { useMarketplaceQueryParams } from '../store';
 
 type InternalSelectionState = Exclude<GetAvailableListingParams['sortBy'], undefined>;
+type BuyerInternalSelectionState = 'for-myself' | 'on-behalf';
 
 const OPTIONS_TRANSLATIONS: Record<InternalSelectionState, TranslationPaths> = {
   'price-asc': 'Dashboard.Marketplace.sorting.price-asc',
@@ -33,20 +36,32 @@ const OPTIONS_TRANSLATIONS: Record<InternalSelectionState, TranslationPaths> = {
   'nearby-me': 'Dashboard.Marketplace.sorting.nearby-me',
 };
 
+const BUYER_OPTIONS_TRANSLATIONS: Record<BuyerInternalSelectionState, TranslationPaths> = {
+  'for-myself': 'Dashboard.Marketplace.buyerSelection.forMyself',
+  'on-behalf': 'Dashboard.Marketplace.buyerSelection.onBehalfOfCompany',
+};
+
 export default function MarketplaceFiltersSection() {
   const { t } = useTranslationUtils();
-  const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
+  const [sortBy] = useMarketplaceQueryParams(useShallow((store) => [store.sortBy]));
+  const [cartData, fetchCart] = useCartStore((store) => [store.cartData, store.fetchCart]);
 
   const navigation = useNavigation<NavigationProp<MarketplaceRoutes>>();
 
-  const [isVisible, toggleVisibility] = useToggle(false);
+  const [visibleModal, setVisibleModal] = useState<'buyer' | 'crates' | undefined>(undefined);
   const [internalSelection, setInternalSelection] = useState<InternalSelectionState>(
     sortBy ?? 'price-asc'
   );
 
+  const [buyerInternalSelection, setBuyerInternalSelectionState] =
+    useState<BuyerInternalSelectionState>(
+      cartData?.onBehalfOfCompanyId ? 'on-behalf' : 'for-myself'
+    );
+
   function resetState() {
     setInternalSelection(sortBy ?? 'price-asc');
-    toggleVisibility();
+    setBuyerInternalSelectionState(cartData?.onBehalfOfCompanyId ? 'on-behalf' : 'for-myself');
+    setVisibleModal(undefined);
   }
 
   return (
@@ -73,40 +88,90 @@ export default function MarketplaceFiltersSection() {
 
           <FilterChip />
 
-          <View tw="flex-row items-center justify-between px-4">
-            <Text variant="TextMedium" tw="text-xl">
-              Produces
-            </Text>
-
-            <Touchable
-              tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
-              rippleColor={colors.zinc[200]}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                toggleVisibility();
-              }}
-            >
-              <Text tw="text-base text-green-primary">
-                {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+          <View tw="space-y-1 px-4">
+            <View tw="flex-row items-center justify-between">
+              <Text variant="TextMedium" tw="text-lg">
+                {t('Dashboard.CoolingUnitsCratesInfo.crates')}
               </Text>
-              <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
-            </Touchable>
+
+              <Touchable
+                tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
+                rippleColor={colors.zinc[200]}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  setVisibleModal('crates');
+                }}
+              >
+                <Text tw="text-base text-green-primary">
+                  {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+                </Text>
+                <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
+              </Touchable>
+            </View>
+
+            <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
+              <Divider tw="bg-gray-600" />
+
+              <View tw="flex-row items-center justify-between">
+                <Text variant="TextMedium" tw="text-lg">
+                  {t('Dashboard.Marketplace.buyerSelection.label')}
+                </Text>
+
+                <Touchable
+                  tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
+                  rippleColor={colors.zinc[200]}
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    setVisibleModal('buyer');
+                  }}
+                >
+                  <Text tw="text-base text-green-primary">
+                    {t(
+                      BUYER_OPTIONS_TRANSLATIONS[
+                        cartData?.onBehalfOfCompanyId
+                          ? 'on-behalf'
+                          : ('for-myself' as BuyerInternalSelectionState)
+                      ]
+                    )}
+                  </Text>
+                  <MaterialIcon
+                    name="arrow-drop-down"
+                    size={26}
+                    color={paperTheme.colors.primary}
+                  />
+                </Touchable>
+              </View>
+            </RBAC.ProtectedResource>
           </View>
         </View>
       </TouchableWithoutFeedback>
 
       <Portal>
-        <Modal visible={isVisible} onDismiss={resetState}>
+        <Modal visible={visibleModal !== undefined} onDismiss={resetState}>
           <View tw="w-full items-center bg-zinc-50 rounded-3xl w-2/3 max-w-2/3 h-auto py-3 px-2 self-center space-y-2">
             <View tw="items-start space-y-1 my-1 w-full">
               <RadioButton.Group
-                value={internalSelection}
-                onValueChange={(value) => setInternalSelection(value as InternalSelectionState)}
+                value={visibleModal === 'buyer' ? buyerInternalSelection : internalSelection}
+                onValueChange={(value) =>
+                  visibleModal === 'buyer'
+                    ? setBuyerInternalSelectionState(value as BuyerInternalSelectionState)
+                    : setInternalSelection(value as InternalSelectionState)
+                }
               >
-                {Object.keys(OPTIONS_TRANSLATIONS).map((option, itemIdx) => (
+                {Object.keys(
+                  visibleModal === 'buyer' ? BUYER_OPTIONS_TRANSLATIONS : OPTIONS_TRANSLATIONS
+                ).map((option, itemIdx) => (
                   <RadioButtonItem
                     key={`${option}-#${itemIdx}`}
-                    label={t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])}
+                    label={
+                      visibleModal === 'buyer'
+                        ? t(
+                            BUYER_OPTIONS_TRANSLATIONS[
+                              option as unknown as BuyerInternalSelectionState
+                            ]
+                          )
+                        : t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])
+                    }
                     value={option}
                     tw="flex flex-row-reverse ml-[-10] w-full"
                   />
@@ -127,10 +192,15 @@ export default function MarketplaceFiltersSection() {
               <Button
                 tw="w-1/2"
                 mode="contained"
-                onPress={(evt) => {
+                onPress={async (evt) => {
                   evt.stopPropagation();
-                  useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
-                  toggleVisibility();
+                  if (visibleModal === 'buyer') {
+                    await MarketplaceService.toggleCartOwnership();
+                    fetchCart();
+                  } else {
+                    useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
+                  }
+                  setVisibleModal(undefined);
                 }}
               >
                 {t('actions.ok')}

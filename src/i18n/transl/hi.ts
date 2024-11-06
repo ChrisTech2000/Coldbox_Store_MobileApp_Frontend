@@ -942,6 +942,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'कीमत बढ़ती हुई',
         'price-desc': 'कीमत घटती हुई',
@@ -963,6 +968,7 @@ export default {
       filterError:
         'कुछ गलत हो गया। कृपया टाइपो की जांच करें और सुनिश्चित करें कि दर्ज किया गया शहर नाइजीरिया में है।',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {

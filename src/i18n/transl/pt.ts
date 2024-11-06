@@ -947,6 +947,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'Preço em ordem crescente',
         'price-desc': 'Preço em ordem decrescente',
@@ -969,6 +974,7 @@ export default {
       filterError:
         'Algo deu errado. Verifique se há erros de digitação e certifique-se de que a cidade inserida está localizada na Nigéria.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {

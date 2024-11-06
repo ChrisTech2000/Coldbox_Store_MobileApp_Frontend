@@ -81,7 +81,9 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
           <Text variant="TextMedium" tw="text-lg">
             {props.cropName}
           </Text>
-          <Text tw="text-base text-gray-500">{props.movementCode}</Text>
+          <Text variant="TextMedium" tw="text-sm text-gray-600">
+            {t('Dashboard.Marketplace.owner')}: TODO
+          </Text>
         </View>
       </View>
 

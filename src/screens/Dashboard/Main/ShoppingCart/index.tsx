@@ -30,6 +30,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
     isLoading: store.isLoading,
   }));
 
+  console.log(cartData, '#');
   if (isLoading && !cartData) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">

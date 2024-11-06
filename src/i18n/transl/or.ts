@@ -941,6 +941,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'ମୂଲ୍ୟ ବୃଦ୍ଧି',
         'price-desc': 'ମୂଲ୍ୟ କମିବା',
@@ -962,6 +967,7 @@ export default {
       filterError:
         'କିଛି ଭୁଲ ହେବାରୁ ବିକଳ୍ପ ଗଡ଼ିଛି। ଦୟାକରି ଟାଇପୋରେ ତାଲିକା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଦିଆଯାଇଥିବା ସହର ନାଇଜେରିଆରେ ଅବସ୍ଥିତ।',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {

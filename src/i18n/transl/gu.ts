@@ -936,6 +936,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'કીમત ચઢતી',
         'price-desc': 'કીમત ઉતરતી',
@@ -957,6 +962,7 @@ export default {
       filterError:
         'કંઈક ખોટું થયું. કૃપા કરીને ટાઈપો તપાસો અને ખાતરી કરો કે દાખલ કરેલ શહેર નાઈજેરિયામાં આવેલું છે.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {
