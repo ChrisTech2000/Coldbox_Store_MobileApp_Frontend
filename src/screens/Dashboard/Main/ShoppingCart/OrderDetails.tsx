@@ -121,7 +121,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
         />
 
         <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
-          <Button mode="outlined" tw="border border-green-primary">
+          <Button
+            mode="outlined"
+            tw="border border-green-primary mb-8"
+            onPress={() => setIsModalOpen(true)}
+          >
             {t('Dashboard.ShoppingCart.ownership')}
           </Button>
         </RBAC.ProtectedResource>
