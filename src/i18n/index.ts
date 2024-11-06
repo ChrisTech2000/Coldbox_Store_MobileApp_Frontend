@@ -11,6 +11,9 @@ import gujaratiTranslations from './transl/gu';
 import hindiTranslations from './transl/hi';
 import oriyaTranslations from './transl/or';
 import portugueseTranslations from './transl/pt';
+import hausaTranslations from './transl/ha';
+import igboTranslations from './transl/ig';
+import yorubaTranslations from './transl/yo';
 
 import { LanguageStorage } from './utils';
 
@@ -44,6 +47,15 @@ function _optionsFactory() {
       },
       [APP_LOCALES.ORIYA]: {
         translation: oriyaTranslations,
+      },
+      [APP_LOCALES.HAUSA]: {
+        translation: hausaTranslations,
+      },
+      [APP_LOCALES.IGBO]: {
+        translation: igboTranslations,
+      },
+      [APP_LOCALES.YORUBA]: {
+        translation: yorubaTranslations,
       },
     },
     lng: initialLanguage,

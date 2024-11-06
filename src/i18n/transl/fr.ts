@@ -15,9 +15,9 @@ export default {
       gu: 'Gujarati',
       fr: 'Français',
       pt: 'Portugais',
-      igbo: 'Igbo',
-      yoruba: 'Yoruba',
-      hausa: 'Haoussa',
+      ig: 'Igbo',
+      yo: 'Yoruba',
+      ha: 'Haoussa',
     },
   },
   gender: {
@@ -1423,11 +1423,8 @@ export default {
     farmerWelcome:
       'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'Quitter le tutoriel',
-    'back-dashboard': 'Retour au tableau de bord',
     congratulations:
       "Félicitations ! Vous avez terminé le tutoriel ! Retournez au tableau de bord pour commencer à utiliser l'application.",
-    comic:
-      "Félicitations ! Vous avez terminé la bande dessinée ! Retournez au tableau de bord pour commencer à utiliser l'application.",
     prev: 'Précédent',
     next: 'Suivant',
     start: 'Démarrer le tutoriel',

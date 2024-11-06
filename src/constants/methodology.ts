@@ -544,4 +544,287 @@ export const METHODOLOGY_CONTENT: Record<TranslationLocales, MethodologyEntry[]>
       text: 'O Relatório Diário de Emissões de CO2 apresentado no Impact Dashboard é meticulosamente derivado de uma combinação de análises em tempo real do armazenamento da câmara frigorífica e de modelos robustos de Avaliação do Ciclo de Vida (LCA) fornecidos pela Eco-Invent. Ao integrar os dados de check-in ao vivo da nossa aplicação, monitorizamos sistematicamente o volume de cada tipo de produto armazenado nas câmaras frigoríficas diariamente. Estes dados relevantes, juntamente com parâmetros auxiliares extraídos das bases de dados LCA abrangentes da Eco-Invent, são utilizados para recalcular com precisão as emissões diárias de CO2 atribuíveis a cada produto armazenado. Os insights resultantes são então elegantemente visualizados e disponibilizados para exportação através do Impact Dashboard, garantindo que os nossos utilizadores têm à sua disposição dados transparentes e acionáveis sobre o impacto ambiental.',
     },
   ],
+  [APP_LOCALES.HAUSA]: [
+    {
+      title: 'Sunan kamfani',
+      text: 'Sunan kamfani kamar yadda aka yi rajista a Coldtivate.',
+    },
+    {
+      title: 'Jimlar kudaden shiga',
+      text: 'Jimillar kudaden shiga da kamfanin ke samu ta hanyar tattara kudaden ajiya na akwatunan da aka bincika a cikin aikace-aikacen Coldtivate.',
+    },
+    {
+      title: 'Jimlar iyawar sanyaya',
+      text: "Ƙarfin jimlar duk raka'a sanyaya rajista a cikin app don kamfanin ku.",
+    },
+    {
+      title: "Yawan raka'a sanyaya",
+      text: "Jimlar adadin raka'a sanyaya rajista a cikin app na kamfanin ku.",
+    },
+    {
+      title: "Nau'in naúrar sanyaya",
+      text: "Jimlar adadin raka'o'in sanyaya da ke bakin kofar gona, a kasuwa, ko manyan motoci masu sanyi. An shigar da bayanin ta ma'aikaci mai rijista wanda ya ƙirƙiri sashin sanyaya a cikin ƙa'idar.",
+    },
+    {
+      title: "Jimlar adadin ma'aikatan da suka yi rajista",
+      text: "Adadin masu amfani da ke da alaƙa da kamfanin ku waɗanda suka yi rajista a matsayin 'Ma'aikacin Rijista', watau membobin ƙungiyar gudanarwa waɗanda ke sa ido kan ayyuka a sassan sanyaya. Ana tambayar duk masu amfani da suka yi rajista su bayyana jinsinsu a matsayin 'Namiji', 'Mace', ko 'Sauran'. Wannan alamar tana nan ne kawai a cikin ra'ayin 'Kamfani' saboda ma'aikatan da aka yi rajista ba su da alaƙa da rukunin sanyaya guda ɗaya, amma ga duka kamfani.",
+    },
+    {
+      title: 'Jimlar adadin masu aiki',
+      text: "Adadin masu amfani da ke da alaƙa da kamfanin ku waɗanda suka yi rajista a matsayin 'Masu aiki', watau ma'aikata suna halarta a zahiri a rukunin sanyaya da yin hulɗa tare da abokan ciniki masu sanyaya. Ana tambayar duk masu amfani da suka yi rajista su bayyana jinsinsu a matsayin 'Namiji', 'Mace', ko 'Sauran'. A cikin ra'ayoyin 'Aggregated' da 'Comparison', masu aiki da aka sanya wa zaɓaɓɓun raka'a sanyaya ana la'akari dasu.",
+    },
+    {
+      title: 'Jimlar adadin keɓaɓɓen masu amfani da sanyaya',
+      text: "Adadin abokan ciniki masu sanyaya a duk raka'o'in sanyaya na kamfani tun shiga app ɗin. Ana tambayar duk masu amfani da suka yi rajista su bayyana jinsinsu a matsayin 'Namiji', 'Mace', ko 'Sauran'. Wannan alamar tana nan ne kawai a kallon 'Kamfani'. A cikin ra'ayoyin 'Aggregated' da 'Comparison', maimakon mu ba da rahoto kan adadin masu amfani da sanyaya aiki.",
+    },
+    {
+      title: 'Jimlar adadin masu amfani da sanyaya aiki',
+      text: "Adadin masu amfani daban-daban waɗanda suka yi aikin rajistar shiga ko dubawa a cikin aƙalla ɗaya daga cikin raka'o'in sanyaya a cikin zaɓin lokacin lokaci. Ana ƙididdige rarrabuwar jinsi daga jinsi na masu amfani da sanyaya, kamar yadda aka bayyana yayin rajista. Wannan alamar tana nan ne kawai a cikin ra'ayoyin 'Aggregated' da 'Comparison'.",
+    },
+    {
+      title: "Nau'in masu amfani da sanyaya",
+      text: "Masu amfani masu sanyaya sanyi waɗanda suka cika binciken 'Cooling User Survey' ana tambayar su don tantance ko sun bayyana kansu a matsayin 'manoma', ko kuma 'kananan dillalai / yan kasuwa / dillalai'. Wannan alamar tana nuna taƙaitaccen ƙididdiga na ɓangaren masu amfani da sanyaya waɗanda suka amsa wannan tambaya a cikin binciken.",
+    },
+    {
+      title: 'Jimlar adadin masu amfana kai tsaye',
+      text: "Ana ƙididdige adadin masu cin gajiyar kai tsaye ta hanyar ninka jimillar adadin masu amfani da sanyaya zuwa matsakaicin girman iyali na ƙasar da kamfanin yake. A cikin ra'ayi na 'Kamfani', ana amfani da 'Jimlar adadin masu amfani da sanyaya sanyaya', yayin da a cikin 'Haɗaɗɗen' ra'ayoyin' da 'Comparison', ana amfani da 'Jimlar adadin masu amfani da sanyaya aiki'. Ana ƙididdige rarrabuwar mace-mace ta hanyar amfani da matsakaicin adadin jinsi na ƙasar kamfanin. An ciro bayanin game da matsakaicin girman iyali da rabon jinsi daga https://population.un.org/Household/index.html#/countries/.",
+    },
+    {
+      title: 'Rarraba amfanin gona (akwatuna)',
+      text: "Adadin akwatunan da aka bincika ta hanyar aikace-aikacen Coldtivate na kowane nau'in kayayyaki. An ba da umarnin jerin kayayyaki ta adadin akwatunan da aka bincika.",
+    },
+    {
+      title: 'Duba rarraba amfanin gona (akwatuna)',
+      text: "Adadin akwatunan da aka bincika ta hanyar aikace-aikacen Coldtivate na kowane nau'in kayayyaki. An ba da umarnin jerin kayayyaki ta adadin akwatunan da aka bincika.",
+    },
+    {
+      title: 'Rarraba amfanin gona (kg)',
+      text: "Jimlar adadi, cikin kilogiram, waɗanda aka bincika ta hanyar aikace-aikacen Coldtivate don kowane nau'in kayayyaki. An ba da umarnin jerin kayayyaki ta adadin akwatunan da aka bincika.",
+    },
+    {
+      title: 'Duba rarraba amfanin gona (kg)',
+      text: "Jimlar adadi, cikin kilogiram, waɗanda aka bincika ta hanyar aikace-aikacen Coldtivate don kowane nau'in kayayyaki. An ba da umarnin jerin kayayyaki ta adadin akwatunan da aka bincika.",
+    },
+    {
+      title: 'Matsakaicin zama na sassan sanyaya',
+      text: "Ga kowace naúrar, ana ƙididdige matsakaicin yawan zama na yau da kullun a matsayin adadin akwatunan da aka adana a cikin naúrar da adadin adadin akwatunan da za a iya adanawa a cikin naúrar, wanda ma'aikacin da ke da rajista ya bayyana wanda ya ƙirƙiri sashin sanyaya a cikin app. Ana ƙididdige wannan ƙimar a cikin duk raka'a don kamfani da tsawon lokaci. A cikin ra'ayin 'Kamfani', duk raka'a da kwanakin tun lokacin ƙirƙirar kamfani a Coldtivate ana la'akari da su. A cikin 'Aggregated' da 'Comparison' ra'ayoyi, za a iya saita raka'a da lokacin lokaci danna kan 'Configure'.",
+    },
+    {
+      title: 'Jimlar akwatuna',
+      text: "Jimlar adadin akwatunan da aka bincika kuma aka bincika ta app. A cikin ra'ayin 'Kamfani', duk raka'a da kwanakin tun lokacin ƙirƙirar kamfani a Coldtivate ana la'akari da su. A cikin 'Aggregated' da 'Comparison' view, za a iya saita raka'a da lokacin lokaci danna kan 'Configure'.",
+    },
+    {
+      title: 'Jimlar yawa (kg)',
+      text: "Jimlar kilogiram na kayan amfanin da aka bincika kuma aka bincika ta hanyar app. An ayyana kilogiram a kowane akwati a lokacin shigarwa. A cikin ra'ayin 'Kamfani', duk raka'a da kwanakin tun lokacin ƙirƙirar kamfani a Coldtivate ana la'akari da su. A cikin 'Aggregated' da 'Comparison' view, za a iya saita raka'a da lokacin lokaci danna kan 'Configure'.",
+    },
+    {
+      title: 'Jimlar ayyuka',
+      text: "Jimlar adadin rajista da ayyukan duba da aka yi rikodin ta app. Kowane aiki na iya haɗawa da rajista ko bincika akwatunan kayayyaki daban-daban. A cikin ra'ayin 'Kamfani', duk raka'a da kwanakin tun lokacin ƙirƙirar kamfani a Coldtivate ana la'akari da su. A cikin 'Aggregated' da 'Comparison' view, za a iya saita raka'a da lokacin lokaci danna kan 'Configure'.",
+    },
+    {
+      title: 'Juyin asarar abinci',
+      text: "An bayyana juyin halittar asarar abinci azaman kashi don kwatanta matsakaicin adadin abincin da aka rasa/ajiye kowane wata ga kowane mai amfani da nau'in amfanin gona. Don ƙididdige wannan ƙimar, ga kowane mai amfani da amfanin gona, bayanan asarar asali (watau bayanan da aka tattara daga masu amfani da sanyaya lokacin da suka yi rajista a kan ƙa'idar) ana kwatanta su da bayanan asarar bayan girbi da aka tattara akai-akai kamar yadda mai amfani ke adana amfanin gona a sashin sanyaya. Ana tattara bayanan asali daga ‘Cooling User Survey’, inda ake yiwa manoma da ‘yan kasuwa tambayoyi game da adadin abincin da ake samarwa, da sayar da su, da rasa abin da suke samu (ba tare da ajiyar sanyi ba) na kowane amfanin gona. Yayin da manoma da ‘yan kasuwa ke amfani da sassan sanyaya, ana gudanar da binciken ‘Post-checkout’ a mako-mako ga kowane irin amfanin gona da mai amfani ya ajiye a dakin. A cikin wannan binciken, ana tambayar mai amfani game da adadin da aka sayar da aka rasa bayan ajiyar sanyi. Ana tattara bayanai daga binciken binciken bayan-bincike kowane wata don kimanta menene matakin asarar bayan amfanin gona da kowane mai amfani da nau'in amfanin gona ya samu yayin da suke amfani da ajiyar sanyi, kuma idan aka kwatanta da tushe. Bayanai a cikin amfanin gona da masu amfani da kowace naúrar sanyaya ana ƙididdige su na tsawon lokaci da raka'o'in sanyaya don samar da adadin da aka nuna akan Dashboard ɗin Tasiri. Juyin hasarar abinci shine bambancin kashi tsakanin adadin da aka rasa a cikin binciken 'bayan dubawa' (watau yayin amfani da sanyaya) da kuma adadin da aka rasa a cikin tushe (watau kafin ajiyar sanyi).",
+    },
+    {
+      title: 'Sanyaya juyin halittar kudaden shiga mai amfani',
+      text: "Juyin haɓakar kudaden shiga don masu amfani da sanyaya ya bayyana matsakaicin canjin kashi a cikin kudaden shigar manoma da aka ƙididdige su idan aka kwatanta kudaden shigar da ake samu ta hanyar siyar da kayan amfanin da aka adana a cikin ɗakin sanyi da kuma ta hanyar sayar da amfanin gona kafin manomi ya fara amfani da ajiyar sanyi ('baseline' data). Ana tattara bayanan asali ne daga ‘Cooling User Survey’, inda manoma da ‘yan kasuwa ake yi musu tambayoyi game da adadin da kuma farashin sayar da amfanin gona da ake sayarwa a duk mako idan sun shiga app, wato kafin su fara amfani da ajiyar sanyi. Yayin da manoma da ‘yan kasuwa ke amfani da sassan sanyaya, ana gudanar da binciken ‘Post-checkout’ a mako-mako ga kowane irin amfanin gona da mai amfani ya ajiye a dakin. A cikin wannan binciken, ana tambayar mai amfani game da adadin da aka sayar da farashinsa bayan ajiyar sanyi. Ana tattara bayanai daga binciken binciken bayan-checkout kowane wata don kimanta menene jimillar kudaden shiga na wata-wata da kowane mai amfani da nau'in amfanin gona ya samu yayin da suke amfani da ajiyar sanyi, kuma ana kwatanta wannan ƙimar da tushe. Bayanai a cikin amfanin gona da masu amfani da kowace naúrar sanyaya ana ƙididdige su a tsawon lokaci da raka'o'in sanyaya don samar da ƙimar da aka nuna akan Dashboard ɗin Tasiri. Juyin haɓakar kudaden shiga shine bambancin kashi tsakanin matsakaicin kudaden shiga da aka kiyasta daga binciken 'bayan-checkout' (watau yayin amfani da sanyaya) da matsakaicin kudaden shiga da aka kiyasta daga tushe (watau kafin ajiyar sanyi).",
+    },
+    {
+      title:
+        'Yawan binciken da aka yi amfani da shi don ƙididdige asarar abinci da haɓakar kudaden shiga',
+      text: "Ma'auni akan asarar abinci da haɓakar kudaden shiga sun dogara da binciken da ake buƙatar masu amfani da sanyaya su cika yayin da suke aiki akan ƙa'idar. Don samun hangen nesa kan adadin bayanan da ake tarawa don ƙididdige waɗannan kaso, muna ƙidaya a nan jimillar binciken 'Post-checkout' da aka cika ta masu amfani da sanyaya tun lokacin da aka ƙirƙiri kamfani har zuwa watan da muke ciki, idan aka kwatanta da matsakaicin adadin da zai yiwu. na safiyo da za a iya cika wa kamfanin a cikin wannan watan. Matsakaicin adadin binciken da za a iya cike ana ƙididdige shi ta amfani da jimillar adadin amfanin gona daban-daban da aka bincika don kowane mai amfani da sanyaya tun lokacin ƙirƙirar kamfani.",
+    },
+    {
+      title: 'CO2 juyin halitta',
+      text: "Rahoton Daily CO2 Emissions Daily wanda aka nuna akan Dashboard Tasirin an samo shi sosai daga haɗaɗɗun ƙididdigar ajiyar ɗakin sanyi na ainihin lokacin da kuma ƙirar Rayuwa mai ƙarfi (LCA) wanda Eco-Invent ya samar. Ta hanyar haɗa bayanan shiga kai tsaye daga aikace-aikacenmu, muna bin tsarin ƙima na kowane nau'in samfura da aka adana a cikin ɗakunan sanyi a kullun. Ana amfani da wannan bayanan da suka dace, haɗe tare da sigogin taimako waɗanda aka samo daga cikakkun bayanan LCA na Eco-Invent, don sake ƙididdige yawan hayaƙin CO2 na yau da kullun ga kowane amfanin gona da aka adana. Sakamakon fahimtar da aka samu ana iya gani da kyau kuma an samar da su don fitarwa ta hanyar Dashboard ɗin Tasiri, tabbatar da cewa masu amfani da mu suna da bayanan tasirin muhalli na gaskiya da aiki a hannunsu.",
+    },
+  ],
+  [APP_LOCALES.IGBO]: [
+    {
+      title: 'Aha Ụlọ Ọrụ',
+      text: 'Aha ụlọ ọrụ dịka edebanyere ya na Coldtivate.',
+    },
+    {
+      title: 'Mkpokọta ego ha nwetara',
+      text: 'Ngụkọta ego ụlọ ọrụ a na-enweta site na ịnakọta ụgwọ nchekwa maka akpa ndị enyochagoro na ngwa Coldtivate.',
+    },
+    {
+      title: 'Mkpokọta ike jụrụ oyi',
+      text: 'Ike nchikota nke nkeji jụrụ oyi niile edebara aha na ngwa maka ụlọ ọrụ gị.',
+    },
+    {
+      title: 'Ọnụọgụ nke nkeji jụrụ oyi',
+      text: 'Ngụkọta ọnụ ọgụgụ nkeji jụrụ oyi edebara aha na ngwa maka ụlọ ọrụ gị.',
+    },
+    {
+      title: 'Ụdị nkeji oyi',
+      text: "Ngụkọta ọnụ ụlọ jụrụ oyi nke dị n'ọnụ ụzọ ugbo, n'ahịa, ma ọ bụ gwongworo friji. A na-etinye ozi ahụ site n'aka onye ọrụ edebanyere aha nke na-emepụta nkeji oyi na ngwa ahụ.",
+    },
+    {
+      title: 'Ngụkọta ọnụ ọgụgụ ndị ọrụ debanyere aha',
+      text: "Ọnụọgụ ndị ọrụ jikọtara na ụlọ ọrụ gị nke debanyere aha dị ka 'Onye ọrụ edebanyere aha', ya bụ, ndị otu njikwa na-ahụ maka ọrụ na ngalaba jụrụ oyi. A na-agwa ndị ọrụ niile debanyere aha ka ha kwupụta okike ha dị ka 'Nwoke', 'Nwanyi' ma ọ bụ 'Ndị ọzọ'. Ihe ngosi a dị naanị na echiche 'Company' n'ihi na ndị ọrụ edebanyere aha anaghị ejikọta ya na otu nkeji jụrụ oyi, kama na ụlọ ọrụ dum.",
+    },
+    {
+      title: 'Ngụkọta ọnụ ọgụgụ ndị ọrụ',
+      text: "Ọnụọgụ ndị ọrụ jikọtara na ụlọ ọrụ gị nke debanyere aha dị ka 'Ndị na-arụ ọrụ', ya bụ, ndị ọrụ nọ n'anụ ahụ na nkeji jụrụ oyi na iso ndị ahịa na-emekọrịta ihe. A na-agwa ndị ọrụ niile debanyere aha ka ha kwupụta okike ha dị ka 'Nwoke', 'Nwanyi' ma ọ bụ 'Ndị ọzọ'. Na echiche 'Aggregated' na 'Comparison', ọ bụ naanị ndị na-arụ ọrụ ekenyere na ngalaba jụrụ oyi ahọpụtara ka a na-atụle.",
+    },
+    {
+      title: 'Ngụkọta ọnụ ọgụgụ ndị ọrụ jụrụ oyi dị iche',
+      text: "Ọnụọgụ nke ndị ahịa jụrụ oyi n'ofe akụkụ niile nke ụlọ ọrụ kemgbe ịbanye na ngwa ahụ. A na-agwa ndị ọrụ niile debanyere aha ka ha kwupụta okike ha dị ka 'Nwoke', 'Nwanyi' ma ọ bụ 'Ndị ọzọ'. Ihe ngosi a dị naanị na nlele 'Ụlọ ọrụ'. Na echiche 'Agbakọtara' na 'Ntụle', anyị na-akọ akụkọ maka ọnụọgụ ndị ọrụ jụrụ oyi.",
+    },
+    {
+      title: 'Ngụkọta ọnụ ọgụgụ ndị ọrụ jụrụ oyi na-arụ ọrụ',
+      text: "Ọnụọgụ nke ndị ọrụ dị iche nke megoro ọrụ nbanye ma ọ bụ nlele n'ime opekata mpe otu nkeji jụrụ n'ime oge ahọpụtara. A na-agbakọ nkewa nke nwoke na nwanyị site na okike nke ndị ọrụ jụrụ oyi, dịka ekwuputara n'oge ndebanye aha. Ihe ngosi a dị naanị na echiche 'Achịkọta' na 'Ntụle'.",
+    },
+    {
+      title: 'Ụdị ndị ọrụ jụrụ oyi',
+      text: "A na-ajụ ndị ọrụ jụrụ oyi na-emeju nyocha 'Cooling User Survey' ka ha kọwaa ma ha na-akọwapụta onwe ha dị ka 'ndị ọrụ ugbo', ma ọ bụ 'obere ndị na-ere ahịa / ndị ahịa / ndị na-ere ahịa'. Ihe ngosi a na-egosi nchịkọta nchịkọta maka mpaghara nke ndị ọrụ jụrụ oyi zara ajụjụ a na nyocha ahụ.",
+    },
+    {
+      title: 'Ngụkọta ọnụ ọgụgụ ndị ga-erite uru na-apụtachaghị ìhè',
+      text: "A na-agbakọ ọnụ ọgụgụ nke ndị na-erite uru na-apụtaghị ìhè site n'ịba ụba ọnụ ọgụgụ ndị ọrụ jụrụ oyi site na nkezi nha ezinụlọ maka obodo ebe ụlọ ọrụ dị. N'uche 'Company', a na-eji 'Ngụkọta ọnụ ọgụgụ nke ndị ọrụ jụrụ oyi na mpaghara', ebe n'echiche 'Aggregated' na 'Comparison', a na-eji 'Ngụkọta ọnụ ọgụgụ nke ndị ọrụ jụrụ oyi na-arụ ọrụ'. A na-agbakọ nkewa nwoke na nwanyị site na iji nkezi oke nwoke na nwanyị maka obodo ụlọ ọrụ ahụ. A na-ewepụta ozi gbasara nkezi nha ezinụlọ na oke okike site na ya https://population.un.org/Household/index.html#/countries/.",
+    },
+    {
+      title: 'Nleba anya nkesa ihe ọkụkụ (crates)',
+      text: 'Ọnụọgụ akpa ndị enyochagoro site na ngwa Coldtivate maka ụdị ngwa ahịa ọ bụla. A na-enye ndepụta nke ngwa ahịa iwu site na ọnụ ọgụgụ nke igbe ndị enyochara.',
+    },
+    {
+      title: 'Lelee nkesa ihe ọkụkụ (crates)',
+      text: 'Ọnụọgụ akpa ndị enyochala site na ngwa Coldtivate maka ụdị ngwa ahịa ọ bụla. A na-enye ndepụta nke ngwa ahịa iwu site na ọnụ ọgụgụ nke igbe elebatara.',
+    },
+    {
+      title: 'Nleba anya ihe ọkụkụ (kg)',
+      text: 'Ngụkọta ọnụọgụ, na kilogram, nke enyochagoro site na ngwa Coldtivate maka ụdị ngwa ahịa ọ bụla. A na-enye ndepụta nke ngwa ahịa iwu site na ọnụ ọgụgụ nke igbe ndị enyochara.',
+    },
+    {
+      title: 'Lelee nkesa ihe ọkụkụ (kg)',
+      text: 'Ngụkọta ọnụọgụ, na kilogram, nke enyochagoro site na ngwa Coldtivate maka ụdị ngwa ahịa ọ bụla. A na-enye ndepụta nke ngwa ahịa iwu site na ọnụ ọgụgụ nke igbe elebatara.',
+    },
+    {
+      title: 'Nkezi ọnụnọ nke nkeji jụrụ oyi',
+      text: "Maka nkeji nke ọ bụla, a na-agbakọ nkezi ọnụ ụlọ kwa ụbọchị ka ọnụọgụ nke echekwabara na nkeji kewara site na ngụkọta nke crates nwere ike ịchekwa na unit ahụ, nke akọwapụtara site na onye ọrụ debanyere aha nke na-emepụta nkeji jụrụ oyi na ngwa ahụ. A na-agbakọ uru a n'ofe nkeji niile maka ụlọ ọrụ na oge. N'uche 'Company', a na-atụle nkeji niile na ụbọchị kemgbe ụlọ ọrụ mepụtara na Coldtivate. Na echiche 'Aggregated' na 'Comparison', nkeji na oge nwere ike ịtọlite ​​ịpị na 'Hazie'.",
+    },
+    {
+      title: 'Ngụkọta igbe',
+      text: "Ngụkọta ọnụ ọgụgụ crates enyochagoro wee lelee site na ngwa ahụ. N'uche 'Company', a na-atụle nkeji niile na ụbọchị kemgbe ụlọ ọrụ mepụtara na Coldtivate. Na nlele 'Agbakọtara' na 'Ntụle', nkeji na oge nwere ike ịtọlite ​​ịpị na 'Hazie'.",
+    },
+    {
+      title: 'Ngụkọta ọnụọgụ (kg)',
+      text: "Ngụkọta kilogram nke ngwaahịa enyochagoro wee chọpụta site na ngwa ahụ. A na-akọwapụta kilogram kwa crate n'oge nbanye. N'uche 'Company', a na-atụle nkeji niile na ụbọchị kemgbe ụlọ ọrụ mepụtara na Coldtivate. Na nlele 'Agbakọtara' na 'Ntụle', nkeji na oge nwere ike ịtọlite ​​ịpị na 'Hazie'.",
+    },
+    {
+      title: 'Mgbakọta arụmọrụ',
+      text: "Ngụkọta ọnụọgụ nbanye na ọrụ nlele nke edekọtara site na ngwa ahụ. Ọrụ ọ bụla nwere ike ịgụnye nbanye ma ọ bụ nlele nke ọtụtụ igbe nke ngwa ahịa dị iche iche. N'uche 'Company', a na-atụle nkeji niile na ụbọchị kemgbe ụlọ ọrụ mepụtara na Coldtivate. Na nlele 'Agbakọtara' na 'Ntụle', nkeji na oge nwere ike ịtọlite ​​ịpị na 'Hazie'.",
+    },
+    {
+      title: 'Nri ọnwụ evolushọn',
+      text: "Ekwuputara evolushọn nri na-efunahụ dị ka pasenti iji kọwaa nkezi ọnụọgụ nri furu efu / echekwara kwa ọnwa maka onye ọrụ ọ bụla na ụdị ihe ọkụkụ. Iji tụọ uru a, maka onye ọrụ na ihe ọkụkụ ọ bụla, a na-atụnyere data mfu ndabere (ya bụ data anakọtara n'aka ndị ọrụ jụrụ oyi mgbe ha debanyere aha na ngwa a) tụnyere data mfu nbibi nke anakọtara mgbe niile ka onye ọrụ na-echekwa ihe ọkụkụ na ngalaba jụrụ oyi. A na-anakọta data Baseline site na 'Cooling User Survey', ebe a na-ajụ ndị ọrụ ugbo na ndị ahịa ajụjụ gbasara ọnụ ọgụgụ nri a na-emepụta kwa izu, ree, na furu efu nke ha nwetara (na-enweghị nchekwa oyi) maka ihe ọkụkụ ọ bụla. Ka ndị ọrụ ugbo na ndị na-azụ ahịa na-eji nkeji oyi, a na-eme nyocha 'Post-checkout' kwa izu maka ụdị ihe ọkụkụ ọ bụla nke onye ọrụ debere n'ime ụlọ. N'ime nyocha a, a na-ajụ onye ọrụ gbasara ọnụọgụ ere na furu efu mgbe nchekwa oyi gasịrị. A na-achịkọta data sitere na nyocha nyocha mgbe emechara kwa ọnwa iji tụọ ihe bụ ọkwa mfu nbibi nke onye ọrụ ọ bụla na ụdị ihe ọkụkụ na-enweta ka ha na-eji nchekwa oyi, ma atụnyere usoro ntọala. A na-agbakọ data n'ofe ihe ọkụkụ na ndị ọrụ nke ngalaba jụrụ oyi n'oge oge yana nkeji oyi iji wepụta pasentị egosiri na Dashboard Mmetụta. Evolushọn nri ọnwụ bụ ọdịiche dị n'etiti pasentị furu efu na nyocha 'post-checkout' (ya bụ mgbe ị na-eji nju oyi) na pasent furu efu na ntọala (ya bụ tupu nchekwa oyi).",
+    },
+    {
+      title: 'Evolushọn ego ndị ọrụ na-eme ka ọ dị jụụ',
+      text: "Mgbanwe ego enwetara maka ndị ọrụ jụrụ oyi na-akọwa nkezi pasentị mgbanwe na ego ndị ọrụ ugbo gbakọrọ atụnyere ego a na-enweta site na ire ngwaahịa echekwara n'ime ụlọ oyi yana site n'ire ihe tupu onye ọrụ ugbo amalite iji nchekwa oyi ('baseline' data). A na-anakọta data Baseline site na 'Cooling User Survey', ebe a na-ajụ ndị ọrụ ugbo na ndị na-azụ ahịa ajụjụ gbasara ego na ọnụahịa ire ere kwa izu mgbe ha sonyere ngwa ahụ, ya bụ tupu ha amalite iji nchekwa oyi. Ka ndị ọrụ ugbo na ndị na-azụ ahịa na-eji nkeji jụrụ oyi, a na-eme nyocha 'Post-checkout' kwa izu maka ụdị ihe ọkụkụ ọ bụla onye ọrụ debere n'ime ụlọ. N'ime nyocha a, a na-ajụ onye ọrụ gbasara ọnụọgụ ere na ọnụahịa ere mgbe nchekwa oyi gasịrị. A na-achịkọta data sitere na nyocha nleba anya mgbe ọ bụla kwa ọnwa iji chọpụta ihe bụ mkpokọta ego kwa ọnwa nke onye ọrụ ọ bụla na-enweta na ụdị ihe ọkụkụ ka ha na-eji nchekwa oyi, ma a na-atụnyere uru a na ntọala. A na-agbakọ data n'ofe ihe ọkụkụ na ndị ọrụ nke nkeji oyi ọ bụla n'ime oge na nkeji oyi iji wepụta ụkpụrụ egosiri na Dashboard Mmetụta. Evolushọn ego enwetara bụ ọdịiche dị na pasentị n'etiti nkezi ego enwetara atụmatụ site na nyocha 'post-checkout' (ya bụ mgbe ị na-eji nju oyi) na nkezi ego enwetara atụmatụ site na ntọala (ya bụ tupu nchekwa oyi).",
+    },
+    {
+      title: 'Ọnụọgụ nyocha ndị ejiri wee gbakọọ mfu nri na mgbanwe ego ha nwetara',
+      text: "Ihe metrik dị na mfu nri na mgbanwe ego ha nwetara na-adabere na nyocha a na-ajụ ndị ọrụ jụrụ ka ha mejupụta ka ha na-arụ ọrụ na ngwa ahụ. Iji hụtụ ọnụ ọgụgụ data a na-achịkọta iji gbakọọ pasentị ndị a, anyị na-agụta ebe a ọnụọgụ nyocha 'Post-checkout' nke ndị ọrụ jụrụ oyi kemgbe ụlọ ọrụ mepụtara ruo ọnwa dị ugbu a, ma e jiri ya tụnyere ọnụọgụ kachasị enwere ike. nke nyocha nke enwere ike jupụta maka ụlọ ọrụ na ọnwa dị ugbu a. A na-eme atụmatụ ọnụọgụ nyocha kachasị elu nke enwere ike imeju site na iji ngụkọta ọnụọgụ ihe ọkụkụ dị iche iche enyochara maka onye ọrụ ọ bụla jụrụ oyi kemgbe ụlọ ọrụ mepụtara.",
+    },
+    {
+      title: 'CO2 evolushọn',
+      text: "Akuko CO2 Emissions Daily nke egosipụtara na Dashboard Mmetụta sitere na nchikota nyocha nchekwa ụlọ oyi na-ekpo ọkụ na ụdị ndụ ndụ ndụ siri ike (LCA) nke Eco-Invent wetara. Site na ijikọ data nbanye dị ndụ sitere na ngwa anyị, anyị na-enyocha olu ụdị ngwaahịa ọ bụla echekwara n'ime ụlọ oyi kwa ụbọchị. A na-eji data a dị mkpa yana paramita inyeaka enwetara site na ọdụ data LCA zuru oke nke Eco-Invent, iji wee gbakọọ nke ọma ikuku CO2 kwa ụbọchị sitere na ihe ọkụkụ ọ bụla echekwara. A na-egosipụtakwa nleba anya nke nsonaazụ ya nke ọma wee mee ka ọ dị maka mbupụ site na Dashboard Mmetụta, na-ahụ na ndị ọrụ anyị nwere data mmetụta gburugburu ebe obibi doro anya na arụ ọrụ n'aka ha.",
+    },
+  ],
+  [APP_LOCALES.YORUBA]: [
+    {
+      title: 'Orukọ Ile-iṣẹ',
+      text: 'Orukọ ile-iṣẹ naa bi o ti forukọsilẹ ni Coldtivate.',
+    },
+    {
+      title: 'Lapapọ wiwọle',
+      text: 'Apapọ owo ti n wọle ti ile-iṣẹ ti ipilẹṣẹ nipasẹ gbigba awọn idiyele ibi ipamọ fun awọn apoti ti a ti ṣayẹwo-ni ninu ohun elo Coldtivate.',
+    },
+    {
+      title: 'Lapapọ agbara itutu agbaiye',
+      text: 'Agbara akopọ ti gbogbo awọn ẹya itutu agbaiye ti a forukọsilẹ ninu app fun ile-iṣẹ rẹ.',
+    },
+    {
+      title: 'Nọmba ti itutu sipo',
+      text: 'Nọmba apapọ awọn ẹya itutu agbaiye ti a forukọsilẹ ninu app fun ile-iṣẹ rẹ.',
+    },
+    {
+      title: 'Itutu agbaiye iru',
+      text: 'Lapapọ nọmba ti awọn itutu agbaiye ti o wa ni ẹnu-ọna oko, ni ọja, tabi awọn oko nla ti o ni firiji. Alaye naa ti fi sii nipasẹ oṣiṣẹ ti o forukọsilẹ ti o ṣẹda ẹyọ itutu agbaiye ninu ohun elo naa.',
+    },
+    {
+      title: 'Lapapọ nọmba ti aami-abáni',
+      text: "Nọmba awọn olumulo ti o sopọ mọ ile-iṣẹ rẹ ti o forukọsilẹ bi 'Oṣiṣẹ Iforukọsilẹ', ie awọn ọmọ ẹgbẹ ti ẹgbẹ iṣakoso ti n ṣakoso awọn iṣẹ ni awọn ẹya itutu agbaiye. Gbogbo awọn olumulo ti o forukọsilẹ ni a beere lati kede akọ-abo wọn bi 'Ọkunrin', 'Obirin', tabi 'Miiran'. Atọka yii wa nikan ni wiwo 'Ile-iṣẹ' nitori awọn oṣiṣẹ ti o forukọsilẹ ko ni asopọ si ẹyọ itutu agbaiye kan, ṣugbọn si gbogbo ile-iṣẹ naa.",
+    },
+    {
+      title: 'Lapapọ nọmba ti awọn oniṣẹ',
+      text: "Nọmba awọn olumulo ti o sopọ mọ ile-iṣẹ rẹ ti o forukọsilẹ bi 'Awọn oniṣẹ', ie awọn oṣiṣẹ wa ni ti ara ni awọn ẹya itutu agbaiye ati ibaraenisọrọ pẹlu awọn alabara itutu agbaiye. Gbogbo awọn olumulo ti o forukọsilẹ ni a beere lati kede akọ-abo wọn bi 'Ọkunrin', 'Obirin', tabi 'Miiran'. Ninu awọn iwo 'Akopọ' ati 'Ifiwera', awọn oniṣẹ nikan ti a yàn si awọn ẹya itutu agbaiye ti a yan ni a gbero.",
+    },
+    {
+      title: 'Lapapọ nọmba ti pato itutu awọn olumulo',
+      text: "Nọmba awọn onibara itutu agbaiye kọja gbogbo awọn ẹya itutu agbaiye ti ile-iṣẹ kan lati igba ti o darapọ mọ ohun elo naa. Gbogbo awọn olumulo ti o forukọsilẹ ni a beere lati kede akọ-abo wọn bi 'Ọkunrin', 'Obirin', tabi 'Miiran'. Atọka yii wa nikan ni wiwo 'Ile-iṣẹ'. Ninu awọn iwo 'Akopọ' ati 'Ifiwera', a dipo jabo lori nọmba awọn olumulo itutu agbaiye ti nṣiṣe lọwọ.",
+    },
+    {
+      title: 'Lapapọ nọmba ti nṣiṣe lọwọ itutu awọn olumulo',
+      text: "Nọmba awọn olumulo ọtọtọ ti o ti ṣe ayẹwo-iwọle tabi iṣẹ-ṣayẹwo ni o kere ju ọkan ninu awọn ẹya itutu agbaiye ni akoko akoko ti a yan. Iyasọtọ akọ tabi abo jẹ iṣiro lati inu akọ-abo ti awọn olumulo itutu agbaiye, gẹgẹbi a ti kede lakoko iforukọsilẹ. Atọka yii wa nikan ni awọn iwo 'Akopọ' ati 'Ifiwera'.",
+    },
+    {
+      title: 'Iru awọn olumulo itutu agbaiye',
+      text: 'Awọn olumulo itutu agbaiye ti o kun ni ‘Iwadi olumulo Itutu’ ni a beere lati pato boya wọn ṣe idanimọ ara wọn bi ‘awọn agbẹ’, tabi bi ‘awọn olutaja kekere / awọn oniṣowo / alatapọ’. Atọka yii ṣe afihan awọn iṣiro akopọ fun ipin ti awọn olumulo itutu agbaiye ti o ti dahun ibeere yii ninu iwadii naa.',
+    },
+    {
+      title: 'Lapapọ nọmba ti awọn anfani aiṣe-taara',
+      text: "Nọmba awọn alanfani aiṣe-taara jẹ iṣiro nipasẹ isodipupo nọmba lapapọ ti awọn olumulo itutu agbaiye nipasẹ apapọ iwọn ile fun orilẹ-ede nibiti ile-iṣẹ naa wa. Ni wiwo 'Ile-iṣẹ', 'Lapapọ Nọmba ti awọn olumulo itutu agbaiye agbegbe' ni a lo, lakoko ti o wa ninu awọn iwo 'Akopọ' ati 'Ifiwera', 'Lapapọ nọmba ti awọn olumulo itutu agbaiye lọwọ' lo. Iyapa akọ ati abo jẹ iṣiro ni lilo apapọ iwọn abo fun orilẹ-ede ti ile-iṣẹ naa. Alaye nipa apapọ iwọn ile ati ipin abo jẹ jade lati https://population.un.org/Household/index.html#/countries/.",
+    },
+    {
+      title: 'Ṣiṣayẹwo pinpin irugbin na (awọn apoti)',
+      text: 'Nọmba awọn apoti ti o ti ṣayẹwo-ni nipasẹ ohun elo Coldtivate fun iru eru kọọkan. Akojọ awọn ọja ti wa ni pipaṣẹ nipasẹ nọmba awọn apoti ti a ṣayẹwo.',
+    },
+    {
+      title: 'Ṣayẹwo-jade pinpin irugbin na (awọn apoti)',
+      text: 'Nọmba awọn apoti ti a ti ṣayẹwo-jade nipasẹ ohun elo Coldtivate fun iru eru kọọkan. Akojọ awọn ọja ti wa ni pipaṣẹ nipasẹ nọmba awọn apoti ti a ṣayẹwo jade.',
+    },
+    {
+      title: 'Ṣiṣayẹwo pinpin irugbin na (kg)',
+      text: 'Lapapọ awọn iwọn, ni awọn kilo, ti a ti ṣayẹwo-ni nipasẹ ohun elo Coldtivate fun iru ọja kọọkan. Akojọ awọn ọja ti wa ni pipaṣẹ nipasẹ nọmba awọn apoti ti a ṣayẹwo.',
+    },
+    {
+      title: 'Ṣayẹwo-jade pinpin irugbin na (kg)',
+      text: 'Lapapọ awọn iwọn, ni awọn kilo, ti a ti ṣayẹwo-jade nipasẹ ohun elo Coldtivate fun iru ọja kọọkan. Akojọ awọn ọja ti wa ni pipaṣẹ nipasẹ nọmba awọn apoti ti a ṣayẹwo jade.',
+    },
+    {
+      title: 'Apapọ ibugbe ti itutu sipo',
+      text: "Fun ẹyọkan kọọkan, apapọ ibugbe ojoojumọ jẹ iṣiro bi nọmba awọn apoti ti o fipamọ sinu ẹyọ ti pin nipasẹ nọmba lapapọ ti awọn apoti ti o le wa ni fipamọ sinu ẹyọkan, eyiti o jẹ asọye nipasẹ oṣiṣẹ ti o forukọsilẹ ti o ṣẹda ẹyọ itutu agbaiye ninu ohun elo naa. Iye yii lẹhinna jẹ aropin kọja gbogbo awọn ẹya fun ile-iṣẹ ati akoko akoko. Ni wiwo 'Ile-iṣẹ', gbogbo awọn ẹya ati awọn ọjọ lati igba ẹda ile-iṣẹ ni Coldtivate ni a gbero. Ninu awọn iwo 'Akopọ' ati 'Ifiwera', awọn iwọn ati akoko akoko le ṣee ṣeto tite lori 'Ṣiṣe atunto'.",
+    },
+    {
+      title: 'Lapapọ awọn apoti',
+      text: "Lapapọ nọmba ti awọn apoti ti a ti ṣayẹwo-ni ati ṣayẹwo-jade nipasẹ ohun elo naa. Ni wiwo 'Ile-iṣẹ', gbogbo awọn ẹya ati awọn ọjọ lati igba ẹda ile-iṣẹ ni Coldtivate ni a gbero. Ni wiwo 'Akopọ' ati 'Ifiwera', awọn iwọn ati akoko akoko le ṣee ṣeto tite lori 'Ṣiṣe atunto'.",
+    },
+    {
+      title: 'Apapọ opoiye (kg)',
+      text: "Lapapọ awọn kilo ti ọja ti a ti ṣayẹwo-ni ati ṣayẹwo-jade nipasẹ ohun elo naa. Awọn kilo fun apoti ti wa ni asọye ni akoko ayẹwo. Ni wiwo 'Ile-iṣẹ', gbogbo awọn ẹya ati awọn ọjọ lati igba ẹda ile-iṣẹ ni Coldtivate ni a gbero. Ni wiwo 'Akopọ' ati 'Ifiwera', awọn sipo ati akoko akoko le ṣee ṣeto tite lori 'Ṣiṣe atunto'.",
+    },
+    {
+      title: 'Lapapọ awọn iṣẹ ṣiṣe',
+      text: "Lapapọ nọmba ti ṣayẹwo-in ati ṣayẹwo-jade awọn iṣẹ ṣiṣe ti o ti gbasilẹ nipasẹ ohun elo naa. Iṣiṣẹ kọọkan le pẹlu wiwa tabi ṣayẹwo-jade ti awọn apoti ọpọ ti awọn ọja oriṣiriṣi. Ni wiwo 'Ile-iṣẹ', gbogbo awọn ẹya ati awọn ọjọ lati igba ẹda ile-iṣẹ ni Coldtivate ni a gbero. Ni wiwo 'Akopọ' ati 'Ifiwera', awọn iwọn ati akoko akoko le ṣee ṣeto tite lori 'Ṣiṣe atunto'.",
+    },
+    {
+      title: 'Onje isonu itankalẹ',
+      text: "Itankalẹ ipadanu ounjẹ jẹ afihan bi ipin kan lati ṣapejuwe apapọ iye ounjẹ ti o sọnu/ti o fipamọ ni oṣu fun olumulo kọọkan ati iru irugbin. Lati ṣe iṣiro iye yii, fun olumulo kọọkan ati irugbin na, data ipadanu ipilẹ (eyun data ti a gba lati ọdọ awọn olumulo itutu agbaiye nigbati wọn forukọsilẹ lori ohun elo) jẹ akawe si data ipadanu lẹhin ikore ti a gba nigbagbogbo bi olumulo ṣe tọju awọn irugbin sinu ẹyọ itutu agbaiye. Awọn data ipilẹ ni a gba lati inu 'Iwadii Olumulo Itutu agbaiye', nibiti a ti beere awọn agbe ati awọn oniṣowo ni ibeere nipa iye ounjẹ ti ọsẹ kan ti a ṣe, ti wọn ta, ati sọnu ti wọn ni iriri (laisi ibi ipamọ tutu) fun irugbin kọọkan. Bi awọn agbe ati awọn oniṣowo ṣe nlo awọn apa itutu agbaiye, awọn iwadii 'Post-checkout' ni a ṣe ni ọsẹ kọọkan fun iru irugbin kọọkan ti olumulo kan ti fipamọ sinu yara naa. Ninu iwadi yii, a beere olumulo nipa awọn iwọn ti o ta ati sisọnu lẹhin ibi ipamọ otutu. Awọn data lati awọn iwadi lẹhin ibi isanwo jẹ akojọpọ oṣooṣu lati ṣe iṣiro kini ipele ipadanu lẹhin ikore ti o ni iriri nipasẹ olumulo kọọkan ati iru irugbin bi wọn ṣe nlo ibi ipamọ tutu, ati ni akawe si ipilẹ. Awọn data kọja awọn irugbin ati awọn olumulo ti ẹyọ itutu agbaiye kọọkan jẹ aropin lori awọn akoko akoko ati awọn ẹya itutu agbaiye lati mu awọn ipin ogorun ti o han lori Dasibodu Ipa. Itankalẹ ipadanu ounjẹ jẹ iyatọ ipin laarin ipin ti o sọnu ninu awọn iwadii 'lẹhin-iṣayẹwo' (ie lakoko lilo itutu agbaiye) ati ipin ti o sọnu ni ipilẹṣẹ (ie ṣaaju ibi ipamọ tutu).",
+    },
+    {
+      title: 'Itutu agbaiye olumulo wiwọle itankalẹ',
+      text: "Itankalẹ owo-wiwọle fun awọn olumulo itutu agbaiye ṣe apejuwe iyipada ipin ogorun ninu owo-wiwọle agbẹ ti a ṣe iṣiro ifiwera owo ti n wọle nipasẹ tita ọja ti a fipamọ sinu yara tutu ati nipa tita ọja ṣaaju ki agbe to bẹrẹ lilo ibi ipamọ tutu (data 'ipile'). Awọn data ipilẹ ni a gba lati inu 'Iwadii Olumulo Itutu agbaiye', nibiti awọn agbe ati awọn oniṣowo ti beere awọn ibeere nipa iye ati idiyele tita awọn irugbin ti wọn ta ni ọsẹ kan nigbati wọn darapọ mọ app, ie ṣaaju ki wọn to bẹrẹ lilo ibi ipamọ tutu. Bi awọn agbe ati awọn oniṣowo ṣe nlo awọn apa itutu agbaiye, awọn iwadii 'Post-checkout' ni a ṣe ni ọsẹ kọọkan fun iru irugbin kọọkan ti olumulo kan ti fipamọ sinu yara naa. Ninu iwadi yii, a beere olumulo nipa awọn iwọn ti o ta ati idiyele tita lẹhin ibi ipamọ otutu. Data lati awọn iwadi lẹhin ibi isanwo ti wa ni akojọpọ oṣooṣu lati ṣe iṣiro kini apapọ owo-wiwọle oṣooṣu ti o ni iriri nipasẹ olumulo kọọkan ati iru irugbin bi wọn ṣe nlo ibi ipamọ tutu, ati pe iye yii jẹ afiwe si ipilẹ. Awọn data kọja awọn irugbin ati awọn olumulo ti ẹyọ itutu agbaiye kọọkan jẹ aropin lori awọn akoko akoko ati awọn ẹya itutu agbaiye lati mu awọn iye ti o han lori Dasibodu Ipa. Itankalẹ owo-wiwọle jẹ iyatọ ipin laarin apapọ owo-wiwọle ti a pinnu lati awọn iwadii 'lẹhin-iṣayẹwo' (ie lakoko lilo itutu agbaiye) ati owo-wiwọle apapọ ti a pinnu lati ipilẹṣẹ (ie ṣaaju ibi ipamọ tutu).",
+    },
+    {
+      title: 'Nọmba awọn iwadi ti a lo lati ṣe iṣiro pipadanu ounjẹ ati itankalẹ wiwọle',
+      text: "Awọn metiriki lori pipadanu ounjẹ ati itankalẹ owo-wiwọle gbarale awọn iwadii ti a beere lọwọ awọn olumulo itutu agbaiye lati kun bi wọn ṣe n ṣiṣẹ lori ohun elo naa. Lati ni ṣoki lori iye data ti o ṣajọpọ lati ṣe iṣiro awọn ipin wọnyi, a ka nibi nọmba lapapọ ti awọn iwadii 'Post-checkout' ti o kun nipasẹ awọn olumulo itutu agbaiye lati igba ti iṣelọpọ ile-iṣẹ titi di oṣu lọwọlọwọ, ni akawe pẹlu nọmba ti o pọju ti ṣee ṣe. ti awọn iwadi ti o le kun fun ile-iṣẹ ni oṣu to wa. Nọmba ti o pọ julọ ti awọn iwadii ti o le kun ni ifoju ni lilo nọmba lapapọ ti awọn irugbin pato ti a ṣayẹwo fun olumulo itutu agbaiye kọọkan lati igba ti iṣelọpọ ile-iṣẹ.",
+    },
+    {
+      title: 'CO2 itankalẹ',
+      text: 'Ijabọ Ojoojumọ Awọn itujade CO2 ti a ṣe ifihan lori Dasibodu Ipa jẹ ni itara ni itara lati apapo awọn atupale ibi ipamọ yara otutu gidi-akoko ati awọn awoṣe Igbelewọn Igbesi aye ti o lagbara (LCA) ti a pese nipasẹ Eco-Invent. Nipa iṣakojọpọ data wiwa laaye lati inu ohun elo wa, a ṣe atẹle iwọn didun ti iru ọja kọọkan ti o fipamọ sinu awọn yara tutu ni ipilẹ ojoojumọ. Awọn data to ṣe pataki yii, pẹlu awọn paramita oluranlọwọ ti o jade lati awọn data data LCA okeerẹ Eco-Invent, ni a lo lati ṣe atunto deedee awọn itujade CO2 ojoojumọ ti o jẹri si irugbin kọọkan ti o fipamọ. Awọn oye abajade lẹhinna ni wiwo ti o wuyi ati jẹ ki o wa fun okeere nipasẹ Dasibodu Ipa, ni idaniloju pe awọn olumulo wa ni ṣiṣafihan ati data ipa ayika ti iṣe iṣe ni ika ọwọ wọn.',
+    },
+  ],
 };
