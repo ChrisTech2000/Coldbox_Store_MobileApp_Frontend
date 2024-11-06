@@ -27,11 +27,13 @@ import DeliveryInformationBottomSheet from './components/DeliveryInformationBott
 import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
+import { OwnershipModal } from './components/OwnershipModal';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
   const [cartData, coolingUnits] = useCartStore((store) => [store.cartData, store.allCoolingUnits]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const onPay = useCallback(async (evt: GestureResponderEvent) => {
     evt.stopPropagation();
@@ -242,6 +244,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
       <AddCouponBottomSheet />
       <ListCouponsBottomSheet />
       <_PortalsWrapper />
+      <OwnershipModal isVisible={isModalOpen} close={() => setIsModalOpen(false)} />
     </ScrollView>
   );
 }
