@@ -14,18 +14,19 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
 
+import { CART_MINIMUM_VALUE } from '.';
 import AddCouponBottomSheet from './components/AddCouponBottomSheet';
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
-import { CART_MINIMUM_VALUE } from '.';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -116,6 +117,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             );
           }}
         />
+
+        <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
+          <Button mode="outlined" tw="border border-green-primary">
+            {t('Dashboard.ShoppingCart.ownership')}
+          </Button>
+        </RBAC.ProtectedResource>
 
         <View>
           <OrderPickupMethod

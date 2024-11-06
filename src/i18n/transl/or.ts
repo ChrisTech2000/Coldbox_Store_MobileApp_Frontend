@@ -1205,6 +1205,9 @@ export default {
       backToTopButton: 'ଉପରକୁ ଫେରିବେ',
     },
     ShoppingCart: {
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'ଆପଣଙ୍କର କାର୍ଟ ଖାଲି ଅଛି',
       daysLeft: 'ଦିନ ବାକି',
       weight: 'କେଜି ଉପଲବ୍ଧ',

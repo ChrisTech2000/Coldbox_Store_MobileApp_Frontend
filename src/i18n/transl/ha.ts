@@ -1130,6 +1130,9 @@ export default {
       backToTopButton: 'Back to the top', // TODO
     },
     ShoppingCart: {
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'Your cart is empty', // TODO
       daysLeft: 'days left', // TODO
       weight: 'KG available', // TODO
