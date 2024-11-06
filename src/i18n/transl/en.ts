@@ -58,6 +58,7 @@ const en = {
       AddRegisteredEmployee: 'Add Registered Employee',
       RegisteredEmployeeDetails: 'Registered Employee Details',
       DeliveryContacts: 'Delivery Contacts',
+      AddUserBankAccount: '{{user}} Bank Account',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -597,6 +598,17 @@ const en = {
         'Something went wrong. Please make sure the user has a valid Paystack account or contact support.',
       preSaleErrorUser:
         'Something went wrong. Please make sure you have a valid Paystack account or contact support.',
+      operatorNoBankAccountWarning:
+        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.",
+      farmerNoBankAccountWarning:
+        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details",
+      operatorNoCompanyBankAccount:
+        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.",
+      employeeNoBankAccount:
+        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.",
+      addBankAccountButton: 'Add bank account details',
+      addBankAccountHeader:
+        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.",
     },
     SearchFilter: {
       detailsMessage:
@@ -1237,6 +1249,13 @@ const en = {
       redeemCoupon: 'Redeem coupon',
       couponPlaceholder: 'E.g. 20OFF',
       discountsApplied: 'Discounts Applied',
+      pickupModal: {
+        today: 'Please pick up your order at {{company}}, located at {{location}}, today.',
+        storage:
+          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.',
+        delivery:
+          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.",
+      },
       errors: {
         invalid: 'Invalid value',
         minimumCartValue: 'Order must be at least ₦100.',

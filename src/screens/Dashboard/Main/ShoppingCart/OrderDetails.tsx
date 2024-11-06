@@ -132,7 +132,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
         <View>
           <OrderPickupMethod
-            coolingUnitsIds={cartData?.items?.flatMap((item) => item.relCoolingUnitId)}
+            data={cartData?.items?.flatMap((item) => ({
+              unit: item.relCoolingUnitId,
+              company: item.relCompanyId,
+            }))}
           />
 
           {cartData.pickupDetails?.length ? (
