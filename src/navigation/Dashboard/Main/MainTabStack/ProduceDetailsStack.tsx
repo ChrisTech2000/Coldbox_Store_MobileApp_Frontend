@@ -9,28 +9,33 @@ import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
 import type { TranslationPaths } from '#i18n/index';
-import type { CoolingUnit, DashboardProduce } from '#types/global';
+import type { CoolingUnit, DashboardProduce, Farmer } from '#types/global';
 
 import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
 import EditCrateWeightAndPricing from '#screens/Dashboard/Main/Dashboard/ProduceDetails/EditCrateWeightAndPricing';
+import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
-import { useTranslationUtils } from '#i18n/utils';
 import RBAC from '#common/RBAC';
+import { useTranslationUtils } from '#i18n/utils';
+import { AccountDetailsRoutes } from '#navigation/Dashboard/AccountDetails';
 
 export type ProduceDetailsStackRoutes = {
   Root: {
     produce: DashboardProduce;
     coolingUnit: CoolingUnit | null;
     currency: string;
+    companyId: number;
   };
   EditCrateWeightAndPricing: {
     companyCurrency: string;
     coolingUnit: CoolingUnit | null;
     produce: DashboardProduce;
     farmerId: number;
+    companyId: number;
   };
+  AddFarmerBankAccount: AccountDetailsRoutes['PayoutSettings'];
 };
 
 export type ProduceDetailsStackRoutePaths = keyof ProduceDetailsStackRoutes;
@@ -46,6 +51,7 @@ type ScreenOptions = (props: {
 const NAVIGATOR_HEADERS: Record<ProduceDetailsStackRoutePaths, TranslationPaths | undefined> = {
   Root: 'navigation.bottomTabs.ProduceDetails',
   EditCrateWeightAndPricing: 'navigation.checkIn.CrateWeightAndPricing',
+  AddFarmerBankAccount: 'navigation.dashboard.PayoutOptions',
 };
 
 const Stack = createNativeStackNavigator<ProduceDetailsStackRoutes>();
@@ -59,10 +65,17 @@ export default function ProduceDetailsStack() {
     const routeName = props.route.name;
     // eslint-disable-next-line react/prop-types
     const produce = (props.route.params as { produce: DashboardProduce })?.produce;
+    // eslint-disable-next-line react/prop-types
+    const farmer = (props.route.params as { farmer: Farmer })?.farmer?.user;
 
-    const translationPath = NAVIGATOR_HEADERS[routeName];
+    const translationPath = farmer
+      ? 'navigation.management.AddUserBankAccount'
+      : NAVIGATOR_HEADERS[routeName];
     const routeTitle = translationPath
-      ? t(translationPath, { produceCode: produce?.movementCode })
+      ? t(translationPath, {
+          produceCode: produce?.movementCode,
+          user: `${farmer?.firstName ?? ''} ${farmer?.lastName ?? ''}`,
+        })
       : undefined;
 
     return {
@@ -93,6 +106,7 @@ export default function ProduceDetailsStack() {
       {navToEditListedCrates ? (
         <Stack.Screen name="EditCrateWeightAndPricing" component={EditCrateWeightAndPricing} />
       ) : null}
+      <Stack.Screen name="AddFarmerBankAccount" component={PayoutSettings} />
     </Stack.Navigator>
   );
 }

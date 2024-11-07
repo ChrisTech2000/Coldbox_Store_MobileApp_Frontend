@@ -21,9 +21,12 @@ import { Translator, useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { ECropType, type CoolingUnit, type Crop, type Farmer } from '#types/global';
+import { AccountDetailsRoutes } from 'navigation/Dashboard/AccountDetails';
+import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 
 export type CheckInStackRoutes = {
   CheckIn: { coolingUnit: CoolingUnit; user: Farmer };
+  AddFarmerBankAccount: AccountDetailsRoutes['PayoutSettings'];
   SelectCropType: undefined;
   CropList: { type: ECropType };
   CrateSetup:
@@ -59,6 +62,7 @@ export const NAVIGATOR_HEADERS: Record<CheckInStackRoutePaths, TranslationPaths 
   CropList: 'navigation.checkIn.CropList',
   CrateSetup: 'navigation.checkIn.CrateSetup',
   CrateWeightAndPricing: 'navigation.checkIn.CrateWeightAndPricing',
+  AddFarmerBankAccount: 'navigation.management.AddUserBankAccount',
 };
 
 type ScreenOptions = (props: {
@@ -78,9 +82,16 @@ export default function CheckInStack() {
     // eslint-disable-next-line react/prop-types
     const type = (props.route.params as { type: ECropType })?.type;
     const cropType = mapCroppedType(type, t);
+    // eslint-disable-next-line react/prop-types
+    const farmer = (props.route.params as { farmer: Farmer })?.farmer?.user;
 
     const translationPath = NAVIGATOR_HEADERS[routeName];
-    const routeTitle = translationPath ? t(translationPath, { cropType }) : undefined;
+    const routeTitle = translationPath
+      ? t(translationPath, {
+          cropType,
+          user: `${farmer?.firstName ?? ''} ${farmer?.lastName ?? ''}`,
+        })
+      : undefined;
     return {
       ...props,
       header: (headerProps) => (
@@ -118,6 +129,7 @@ export default function CheckInStack() {
       <Stack.Screen name="CropList" component={CropList} />
       <Stack.Screen name="CrateSetup" component={CrateSetup} />
       <Stack.Screen name="CrateWeightAndPricing" component={CrateWeightAndPricing} />
+      <Stack.Screen name="AddFarmerBankAccount" component={PayoutSettings} />
     </Stack.Navigator>
   );
 }

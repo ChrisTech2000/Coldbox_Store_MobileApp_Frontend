@@ -300,6 +300,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                               produce,
                               coolingUnit,
                               farmerId: farmerId!,
+                              companyId: props.route.params.companyId,
                             });
                           },
                         }

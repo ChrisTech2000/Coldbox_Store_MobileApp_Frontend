@@ -8,6 +8,7 @@ import { GenericError } from '#ui/components/GenericError';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -23,6 +24,7 @@ import {
   EPricingType,
 } from '#types/global';
 
+import colors from 'tailwindcss/colors';
 import { CrateSetupModal } from '../components/CrateSetupModal';
 import {
   resetCrateWeightPricingBridge,
@@ -55,8 +57,13 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       ? (route.params.contextualProduce?.additionalInfo ?? '')
       : (route.params?.additionalInfo ?? '');
 
-  const { company } = useManagementStore();
-  const { addProduce, coolingUnit, user, removeProduce } = useCheckInStore();
+  const company = useManagementStore((store) => store.company);
+  const [addProduce, coolingUnit, user, removeProduce] = useCheckInStore((store) => [
+    store.addProduce,
+    store.coolingUnit,
+    store.user,
+    store.removeProduce,
+  ]);
 
   const { t, zodResolver } = useTranslationUtils();
 
@@ -290,6 +297,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
               <List.Item
                 tw="px-0 m-0"
                 title={undefined}
+                disabled={!crates || crates.length === 0}
                 onPress={(evt) => {
                   evt.stopPropagation();
                   const totalWeight = crates.reduce(
@@ -312,11 +320,17 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                   });
                 }}
                 left={() => (
-                  <Text tw="text-base">
+                  <Text tw={cn('text-base', !crates || crates.length === 0 ? 'text-gray-400' : '')}>
                     {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel')}
                   </Text>
                 )}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                right={(props) => (
+                  <List.Icon
+                    {...props}
+                    icon="chevron-right"
+                    color={!crates || crates.length === 0 ? colors.gray[400] : colors.gray[800]}
+                  />
+                )}
               />
               <Divider tw="bg-gray-400" />
             </View>

@@ -546,3 +546,8 @@ export interface SellerListedCratesResponse {
 export interface GetSellerListedCrates {
   nodes: Array<SellerListedCratesResponse>;
 }
+
+export interface CheckMarketplaceEligibilityResponse {
+  companies: Record<string, boolean>;
+  users: Record<string, boolean>;
+}

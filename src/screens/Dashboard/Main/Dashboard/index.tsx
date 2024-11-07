@@ -263,6 +263,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
                     produce,
                     coolingUnit: coolingUnit,
                     currency: selectedCompany?.currency ?? company?.currency ?? '',
+                    companyId: (selectedCompany?.id ?? company?.id) as number,
                   },
                 });
               }}

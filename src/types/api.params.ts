@@ -437,6 +437,7 @@ export interface AddPaystackBankAccountParams extends JsonObject {
   countryCode: string;
   accountName: string;
   companyId?: number;
+  userId?: number;
 }
 
 export interface SetPickUpDetailsParams extends JsonObject {
@@ -455,4 +456,9 @@ export interface CreateDeliveryContactParams extends JsonObject {
 export interface DeleteDeliveryContactParams extends JsonObject {
   contactId: number;
   companyId: number;
+}
+
+export interface CheckMarketplaceEligibilityParams extends JsonObject {
+  userIds: number[];
+  companyIds: number[];
 }

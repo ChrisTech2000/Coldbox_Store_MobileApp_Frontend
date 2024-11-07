@@ -16,13 +16,13 @@ import InAppNotifications from '#common/InAppNotifications';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { Translator, useTranslationUtils } from '#i18n/utils';
 import { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
+import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type Bank, EBankAccountType, ERoles } from '#types/global';
-
-import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 interface FormValues {
   accountName: string;
@@ -59,18 +59,23 @@ function mapEnum(t: Translator) {
 
 const screenHeight = Dimensions.get('window').height;
 
-function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
+function PayoutSettings(
+  props: AccountDetailsRouteProps<'PayoutSettings'> | CheckInStackRouteProps<'AddFarmerBankAccount'>
+) {
   const { t, zodResolver } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
   const toast = InAppNotifications.useToast();
 
+  const farmer = props.route.params?.farmer;
+
   const { data, isLoading: isLoadingBankAccounts } = useApiCall(
     'getUserBankAccounts',
     MarketplaceService.getUserBankAccounts,
-    {},
+    props.route.params?.isCompanyView ? company?.id : undefined,
     {
       defaultData: undefined,
+      skip: !!farmer,
     }
   );
 
@@ -125,10 +130,12 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
   const onSubmit = useCallback(
     async (data: FormValues) => {
       try {
+        // TODO: sending BA like this is associating the account with the OP instead of the farmer
         await MarketplaceService.addPaystackAccount({
           ...(user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
             ? { companyId: company?.id }
             : {}),
+          ...(farmer ? { userId: farmer?.user.id } : {}),
           accountType: mapEnum(t)[data.accountType],
           bankCode: data.bank,
           accountNumber: data.accountNumber,
@@ -141,6 +148,11 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
           style: { marginBottom: 50 },
         });
 
+        if (farmer) {
+          props.route.params?.recheckEligibility?.();
+          reset();
+        }
+
         props.navigation.goBack();
       } catch (error) {
         toast.show(t('navigation.error.errorMessage'), {
@@ -149,7 +161,7 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
         });
       }
     },
-    [user, company]
+    [user, company, farmer]
   );
 
   useEffect(() => {
@@ -212,7 +224,11 @@ function PayoutSettings(props: AccountDetailsRouteProps<'PayoutSettings'>) {
           <Text tw="text-base font-bold text-green-primary">
             {user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
               ? t('Dashboard.AccountDetails.PayoutSettings.addTittleForCompany')
-              : t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
+              : farmer
+                ? t('Dashboard.ProduceDetails.addBankAccountHeader', {
+                    name: `${farmer.user.firstName} ${farmer.user.lastName}`,
+                  })
+                : t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
           </Text>
         )}
 
