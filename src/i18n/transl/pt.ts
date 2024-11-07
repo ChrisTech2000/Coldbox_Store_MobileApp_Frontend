@@ -792,6 +792,7 @@ export default {
             'Tem a certeza de que deseja eliminar este utilizador da sua lista de utilizadores de refrigeração? Esta operação irá eliminar este utilizador e não poderá ser revertida!',
           edit: 'Utilizador de refrigeração editado com sucesso',
           noCoolingUnits: 'Você ainda não tem nenhuma unidade de refrigeração',
+          noSurveys: 'No surveys have been completed yet.', // TODO
           updateSuccess: 'Atualização bem-sucedida',
         },
         pdf: {

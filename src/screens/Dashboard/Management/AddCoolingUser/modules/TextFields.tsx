@@ -48,7 +48,7 @@ export default function TextFields(props: Props) {
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
-            error={!!errors.firstName}
+            error={!!errors.lastName}
             disabled={props.disabled || props.disabledFields?.includes('lastName')}
             dense
           />

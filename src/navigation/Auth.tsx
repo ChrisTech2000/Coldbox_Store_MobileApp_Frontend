@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import type { RouteProp } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
@@ -68,7 +69,6 @@ export default function AuthNavigator() {
   const { t } = useTranslationUtils();
 
   const screenOptions: ScreenOptions = useCallback((props) => {
-    // eslint-disable-next-line react/prop-types
     const routeName = props.route.name;
     const headerShown = !routeName || routeName !== 'Root';
 
@@ -85,15 +85,8 @@ export default function AuthNavigator() {
           leftContent={
             <Appbar.BackAction
               onPress={() => {
-                switch (routeName) {
-                  case 'Invite':
-                  case 'SignIn':
-                    // eslint-disable-next-line react/prop-types
-                    return props.navigation.goBack();
-                  default:
-                    // eslint-disable-next-line react/prop-types
-                    return props.navigation.navigate('Root');
-                }
+                if (props.navigation.canGoBack()) return props.navigation.goBack();
+                return props.navigation.navigate('Root');
               }}
               size={22}
             />
