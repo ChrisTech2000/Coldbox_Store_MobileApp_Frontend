@@ -11,6 +11,16 @@ const INJECTED_JS = `
   (function() {
     const header = document.querySelector('ion-header');
     if (header) header.remove();
+
+    function removeToasts() {
+      const toasts = document.querySelectorAll('ion-toast');
+      toasts.forEach(toast => toast.remove());
+    }
+    removeToasts();
+
+    const observer = new MutationObserver(removeToasts);
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 2_000);
   })();
 `;
 
