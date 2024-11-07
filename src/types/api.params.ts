@@ -77,8 +77,7 @@ export interface GetFarmerCratesParams extends JsonObject {
 
 export interface CheckOutParams extends JsonObject {
   crates: Array<number>;
-  operatorId: User;
-  priceDiscount: number;
+  discountAmount: number;
   currency: string;
   paymentThrough: EPaymentThrough;
   paymentGateway: EPaymentGateway | null;

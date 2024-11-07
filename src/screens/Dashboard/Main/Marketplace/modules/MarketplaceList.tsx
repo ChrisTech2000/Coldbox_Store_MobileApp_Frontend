@@ -1,26 +1,26 @@
-import React, { useEffect, useMemo } from 'react';
-import { FlatList, RefreshControl, SectionList, View } from 'react-native';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ActivityIndicator } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import camelCase from 'lodash/camelCase';
-import colors from 'tailwindcss/colors';
 import isEqual from 'lodash/isEqual';
+import React, { useEffect, useMemo } from 'react';
+import { FlatList, SectionList, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Text } from '#ui/components/Text';
 
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { API_BASE_URL } from '#constants/environment';
-import { paperTheme } from '#ui/lib/theme';
-import type { ValueOf } from '#types/miscellaneous';
-import type { TranslationPaths } from 'i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
+import type { ValueOf } from '#types/miscellaneous';
 import { useMap } from '#ui/hooks/useMap';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
+import type { TranslationPaths } from 'i18n/index';
 
 import MarketplaceItemWrapper from '../components/MarketplaceItem';
 
 import { useMarketplaceQueryParams } from '../store';
-import { type AvailableListingDatum, useMarketplaceListing, DEFAULT_COORDINATES } from '../utils';
+import { type AvailableListingDatum, DEFAULT_COORDINATES, useMarketplaceListing } from '../utils';
 
 export default function MarketplaceList() {
   const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
@@ -67,7 +67,7 @@ export default function MarketplaceList() {
               />
             </MarketplaceItemWrapper>
           )}
-          refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
+          //refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
         />
       );
   }
@@ -103,7 +103,7 @@ function _NearbyMeSection(props: {
   isValidating: boolean;
   refetch: () => void;
 }) {
-  const { listing, isValidating, refetch } = props;
+  const { listing } = props;
 
   const { t } = useTranslationUtils();
   const coordinates = useMarketplaceQueryParams((store) => store.location);
@@ -215,7 +215,6 @@ function _NearbyMeSection(props: {
           />
         </MarketplaceItemWrapper>
       )}
-      refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
     />
   );
 }
