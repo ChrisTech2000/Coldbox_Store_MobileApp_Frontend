@@ -20,6 +20,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit, EPickUpMethod, EPricingType } from '#types/global';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 
 type OrderPickupMethodProps = {
   data: Array<{ unit: number; company: number }>;
@@ -78,7 +79,7 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
     try {
       setIsSubmitting(true);
       const result = await MarketplaceService.setPickUpMethods({
-        pickUpDetails: selectedItems,
+        pickupDetails: selectedItems,
       });
 
       if (result) {
@@ -90,11 +91,16 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
         });
       }
     } catch (error) {
+      setIsSubmitting(false);
       toast.show(t('navigation.error.errorMessage'), {
         type: 'md_danger',
       });
     }
   }, [selectedItems]);
+
+  useAppEventListener(APP_EVENTS.DISPATCH_PICK_UP_METHODS_SELECTION, () =>
+    modalRef.current?.open()
+  );
 
   return (
     <React.Fragment>
@@ -104,20 +110,15 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
             evt.stopPropagation();
             modalRef.current?.open();
           }}
+          disabled={cartData?.pickupDetails && cartData.pickupDetails.length > 0}
           tw="flex flex-row items-center"
         >
           <Text tw="text-base text-green-primary font-bold mr-1">
             {t('Dashboard.ShoppingCart.pickupMethods')}*
           </Text>
-          <Icon
-            source={
-              cartData?.pickupDetails && cartData.pickupDetails.length > 0
-                ? 'pencil'
-                : 'plus-circle-outline'
-            }
-            size={17}
-            color={colors.green.primary}
-          />
+          {!cartData?.pickupDetails || cartData.pickupDetails.length === 0 ? (
+            <Icon source="plus-circle-outline" size={17} color={colors.green.primary} />
+          ) : null}
         </TouchableOpacity>
       </View>
 

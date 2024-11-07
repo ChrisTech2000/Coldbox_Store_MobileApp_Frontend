@@ -265,12 +265,12 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                             <TextInput.Icon
                               icon="minus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled}
+                              disabled={isDisabled || value === '0'}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
                                 if (isNaN(int)) return; // safe guard
-                                const finalValue = (int - 1).toString();
+                                const finalValue = (int > 0 ? int - 1 : 0).toString();
                                 if (!applyToAll) return onChange(finalValue);
                                 for (let i = 0; i < crateFields.fields.length; i++) {
                                   form.setValue(`crates.${i}.weight`, finalValue);
