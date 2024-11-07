@@ -2,8 +2,10 @@ import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
 import type {
+  AddFirstPaystackBankAccountParams,
   AddItemToCartParams,
   AddPaystackBankAccountParams,
+  CheckMarketplaceEligibilityParams,
   CreateDeliveryContactParams,
   DeleteDeliveryContactParams,
   GetAvailableListingParams,
@@ -13,6 +15,7 @@ import type {
 } from '#types/api.params';
 import type {
   ApplyCouponResponse,
+  CheckMarketplaceEligibilityResponse,
   CheckoutWithPaystackResponse,
   GetAllOrdersResponse,
   GetAvailableBanksResponse,
@@ -116,10 +119,11 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getUserBankAccounts = async (): Promise<Array<BankAccount>> => {
+  public getUserBankAccounts = async (companyId?: number): Promise<Array<BankAccount>> => {
     try {
       const { data } = await this.get<Array<BankAccount>>(
-        EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS
+        EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS,
+        companyId ? { params: { company_id: companyId } } : undefined
       );
       return data;
     } catch (error) {
@@ -390,6 +394,40 @@ class MarketplaceService extends HttpClient {
   public toggleCartOwnership = async (): Promise<unknown> => {
     try {
       const { data } = await this.post<unknown>(EMarketplaceEndpoints.TOGGLE_OWNERSHIP, {});
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public checkMarketplaceEligibility = async (
+    params: CheckMarketplaceEligibilityParams
+  ): Promise<CheckMarketplaceEligibilityResponse> => {
+    try {
+      const { data } = await this.post<CheckMarketplaceEligibilityResponse>(
+        EMarketplaceEndpoints.CHECK_MARKETPLACE_ELIGIBILITY,
+        {
+          ...params,
+        }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public addFirstPaystackAccount = async (
+    params: AddFirstPaystackBankAccountParams
+  ): Promise<BankAccount> => {
+    try {
+      const { data } = await this.post<BankAccount>(
+        EMarketplaceEndpoints.SET_FARMER_BANK_ACCOUNT,
+        params
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

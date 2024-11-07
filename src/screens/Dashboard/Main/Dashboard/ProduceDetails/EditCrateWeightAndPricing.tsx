@@ -1,5 +1,6 @@
 import { currencies } from 'currencies.json';
-import React, { useEffect, useRef, useState } from 'react';
+import cloneDeep from 'lodash/cloneDeep';
+import React, { useEffect, useRef } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -7,7 +8,6 @@ import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useDebouncedCallback } from 'use-debounce';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -25,14 +25,16 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import type { ListedCratesBaseParams } from '#types/api.params';
-import { ERoles } from '#types/global';
+import { ERoles, Farmer } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
-import SellInMarketplaceModal from '../CheckIn/components/SellInMarketplaceModal';
+import RBAC from '#common/RBAC';
 
 type FormValues<T = string> = {
   applyToAll: boolean;
@@ -53,14 +55,38 @@ function EditCrateWeightAndPricing(
 ) {
   const { params } = props.route;
 
-  const { user } = useAuthStore();
+  const user = useAuthStore((store) => store.user);
   const refreshData = useDashboardStore((store) => store.refreshData);
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
   const [isSettingUp, toggleIsSettingUp] = useToggle(true);
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+
+  const { data: farmer, isLoading: isLoadingFarmer } = useApiCall(
+    'getFarmerById',
+    ColdtivateService.getFarmerById,
+    params.farmerId,
+    {
+      skip: !params.farmerId,
+    }
+  );
+
+  const {
+    data: eligibility,
+    isLoading: isLoadingEligibility,
+    refetch,
+  } = useApiCall(
+    'checkMarketplaceEligibility',
+    MarketplaceService.checkMarketplaceEligibility,
+    {
+      userIds: [farmer?.user?.id as number],
+      companyIds: [params.companyId],
+    },
+    {
+      skip: !params.companyId || !farmer?.user?.id,
+    }
+  );
 
   const form = useForm<FormValues>({
     defaultValues: { applyToAll: false, crates: [], price: '0' },
@@ -184,6 +210,7 @@ function EditCrateWeightAndPricing(
           produce: _produce,
           currency: params.companyCurrency,
           coolingUnit: params.coolingUnit,
+          companyId: params.companyId,
         });
       } else {
         toast.show(
@@ -254,7 +281,10 @@ function EditCrateWeightAndPricing(
     form.getValues('previous.sellableCrates')
   );
 
-  if (isSettingUp) {
+  const companyEligible = eligibility.companies?.[params.companyId ?? ''];
+  const farmerEligible = eligibility.users?.[farmer?.user.id ?? ''];
+
+  if (isSettingUp || isLoadingEligibility || isLoadingFarmer) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -264,8 +294,42 @@ function EditCrateWeightAndPricing(
 
   return (
     <React.Fragment>
-      <SellInMarketplaceModal visible={isModalVisible} onChangeVisible={setIsModalVisible} />
-
+      <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
+        {!companyEligible ? (
+          <Text tw="mx-4">{t('Dashboard.ProduceDetails.operatorNoCompanyBankAccount')}</Text>
+        ) : !farmerEligible ? (
+          user?.role === ERoles.COOLING_USER ? (
+            <View tw="mx-4">
+              <Text>{t('Dashboard.ProduceDetails.farmerNoBankAccountWarning')}</Text>
+              <Button
+                tw="self-end mt-2"
+                onPress={() => props.navigation.navigate('AddFarmerBankAccount')}
+              >
+                {t('Dashboard.ProduceDetails.addBankAccountButton')}
+              </Button>
+            </View>
+          ) : (
+            <View tw="mx-4">
+              <Text>
+                {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
+                  name: `${farmer?.user.firstName ?? ''} ${farmer?.user.lastName ?? ''}`,
+                })}
+              </Text>
+              <Button
+                tw="self-end mt-2"
+                onPress={() =>
+                  props.navigation.navigate('AddFarmerBankAccount', {
+                    farmer: farmer as Farmer,
+                    recheckEligibility: refetch,
+                  })
+                }
+              >
+                {t('Dashboard.ProduceDetails.addBankAccountButton')}
+              </Button>
+            </View>
+          )
+        ) : null}
+      </RBAC.ProtectedResource>
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         tw="px-3 pt-3 bg-white mb-20"
@@ -279,6 +343,7 @@ function EditCrateWeightAndPricing(
               render={({ field: { value, onChange } }) => (
                 <TouchableOpacity
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
+                  disabled={!farmerEligible || !companyEligible}
                   onPress={() => {
                     for (let i = 0; i < crateFields.fields.length; i++) {
                       form.setValue(`crates.${i}.isSellable`, crates[0].isSellable);
@@ -286,10 +351,15 @@ function EditCrateWeightAndPricing(
                     onChange(!value);
                   }}
                 >
-                  <Text tw="text-base">
+                  <Text
+                    tw={cn('text-base', !farmerEligible || !companyEligible ? 'text-gray-400' : '')}
+                  >
                     {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.applyAll')}
                   </Text>
-                  <Checkbox status={value ? 'checked' : 'unchecked'} />
+                  <Checkbox
+                    disabled={!farmerEligible || !companyEligible}
+                    status={value ? 'checked' : 'unchecked'}
+                  />
                 </TouchableOpacity>
               )}
             />
@@ -399,10 +469,18 @@ function EditCrateWeightAndPricing(
                             }
                           }
                         }}
-                        disabled={isDisabled}
+                        disabled={isDisabled || !farmerEligible || !companyEligible}
                       >
-                        <Checkbox status={value ? 'checked' : 'unchecked'} disabled={isDisabled} />
-                        <Text tw={cn('text-base', isDisabled && 'text-gray-300')}>
+                        <Checkbox
+                          status={value ? 'checked' : 'unchecked'}
+                          disabled={isDisabled || !farmerEligible || !companyEligible}
+                        />
+                        <Text
+                          tw={cn(
+                            'text-base',
+                            (isDisabled || !farmerEligible || !companyEligible) && 'text-gray-300'
+                          )}
+                        >
                           {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list')}
                         </Text>
                       </TouchableOpacity>
