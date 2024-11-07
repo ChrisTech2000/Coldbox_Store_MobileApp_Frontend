@@ -22,6 +22,7 @@ type SignUpFormSelectProps<T extends FieldValues> = {
   search: string;
   closeModal: () => void;
   setSearch: (val: string) => void;
+  onSelectCallback?: (prev: string | undefined, next: string) => void;
 };
 
 const deviceWidth = Dimensions.get('window').width;
@@ -34,6 +35,7 @@ export function SignUpFormSelectLg<T extends FieldValues>({
   search,
   closeModal,
   setSearch,
+  ...props
 }: SignUpFormSelectProps<T>) {
   const { control, fieldName, currentValue, required, error } = form;
   const { t } = useTranslationUtils();
@@ -72,6 +74,7 @@ export function SignUpFormSelectLg<T extends FieldValues>({
                           key={`${item}-${index}`}
                           onPress={() => {
                             onChange(item);
+                            props.onSelectCallback?.(currentValue, item);
                             closeModal();
                           }}
                         >

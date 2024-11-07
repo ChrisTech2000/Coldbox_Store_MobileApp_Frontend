@@ -1,6 +1,6 @@
 import { CurrencyStandardization } from 'currency-format-utils';
 import isArray from 'lodash/isArray';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   GestureResponderEvent,
@@ -35,7 +35,10 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   const { t } = useTranslationUtils();
   const { sorting } = useSortingStore();
   const scrollRef = useRef<RNScrollView>(null);
-  const crops = useDashboardStore((store) => store.allCrops ?? []);
+  const [crops, addRefreshDataFn] = useDashboardStore((store) => [
+    store.allCrops ?? [],
+    store.addRefreshDataFn,
+  ]);
   const allUnits = useCartStore((store) => store.allCoolingUnits);
 
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
@@ -71,6 +74,10 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
     },
     [scrollRef.current]
   );
+
+  useEffect(() => {
+    addRefreshDataFn(refetch);
+  }, []);
 
   if (isLoading) {
     return (

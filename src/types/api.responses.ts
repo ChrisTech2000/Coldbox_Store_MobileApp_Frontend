@@ -4,7 +4,9 @@ import {
   ECoolingUnitMetric,
   EMovementType,
   EOrderStatus,
-  EPaymentType,
+  EPaymentMethod,
+  EPaymentGateway,
+  EPaymentThrough,
   EPickUpMethod,
   ERoles,
   ESellingLocation,
@@ -52,7 +54,9 @@ export type CheckOutResponse = {
   movement: number;
   paid: boolean;
   price: number;
-  paymentType: EPaymentType;
+  paymentThrough: EPaymentThrough;
+  paymentGateway: EPaymentGateway;
+  paymentMethod: EPaymentMethod;
   currency: string;
   priceDiscount: number;
 };
@@ -258,7 +262,9 @@ export type GetMovementsHistoryResponse = Array<{
     tag: string;
     weight: number;
   }>;
-  paymentType: EPaymentType;
+  paymentThrough: EPaymentThrough;
+  paymentGateway: EPaymentGateway;
+  paymentMethod: EPaymentMethod;
   operator: string;
 }>;
 
@@ -448,6 +454,7 @@ export interface GetCartResponse {
   totalDiscountAmount: number;
   totalPaymentFeesAmount: number;
   totalProduceAmount: number;
+  onBehalfOfCompanyId: number | undefined;
   pickupDetails: Array<{
     coolingUnitId: number;
     pickupMethod: EPickUpMethod;
@@ -481,6 +488,8 @@ export interface GetAvailableListingResponse {
     relCropId: number;
     totalPricePerKg: number;
     weightLockedInPaymentPendingOrdersInKg: number;
+    ownedByUserId: number | null;
+    ownedOnBehalfOfCompanyId: number | null;
   }>;
   pagination: {
     itemsPerPage: number;
@@ -544,4 +553,9 @@ export interface SellerListedCratesResponse {
 
 export interface GetSellerListedCrates {
   nodes: Array<SellerListedCratesResponse>;
+}
+
+export interface CheckMarketplaceEligibilityResponse {
+  companies: Record<string, boolean>;
+  users: Record<string, boolean>;
 }

@@ -66,7 +66,7 @@ export type Crate = {
   checkOut: Date; // TODO: confirm this type
   pricing: Array<Pricing>;
   coolingUnitMetric: ECoolingUnitMetric;
-  checkInDate: Date;
+  checkinDate: Date;
   name: string;
   cropImage: string;
   movementCode: string;
@@ -531,6 +531,8 @@ export type CartItem = {
   relCrateRemainingShelfLife: number | null;
   relCheckInMovementCode: string;
   relCouponCode: string | undefined;
+  ownedByUserId: number | null;
+  ownedOnBehalfOfCompanyId: number | null;
 };
 
 export type BankAccount = {
@@ -641,10 +643,24 @@ export enum ERefrigerantType {
   OTHER = 'Other',
 }
 
-export enum EPaymentType {
+export enum EPaymentThrough {
+  DIRECT = 'DIRECT',
+  COLDTIVATE = 'COLDTIVATE',
+}
+
+export enum EPaymentGateway {
+  PAYTACK = 'PAYTACK',
+  STRIPE = 'STRIPE',
+}
+
+export enum EPaymentMethod {
   CASH = 'CASH',
   CREDIT_CARD = 'CREDIT_CARD',
-  BANK_TRANSFER = 'BANK',
+  QR_CODE = 'QR_CODE',
+  BANK_TRANSFER = 'BANK_TRANSFER',
+  USSD = 'USSD',
+  OPAY = 'OPAY',
+  UPI = 'UPI',
 }
 
 export enum ECropType {

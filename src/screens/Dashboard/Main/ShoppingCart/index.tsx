@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,12 +13,14 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import useCartStore from '#stores/shoppingCart';
 
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
+import { OwnershipModal } from './components/OwnershipModal';
 
 export const CART_MINIMUM_VALUE = 100;
 
@@ -29,6 +31,8 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
     cartData: store.cartData,
     isLoading: store.isLoading,
   }));
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   if (isLoading && !cartData) {
     return (
@@ -72,6 +76,16 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
             renderItem={({ item }) => <CartItem item={item} />}
             ListFooterComponent={
               <View tw="flex-col w-full mt-6">
+                <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
+                  <Button
+                    mode="outlined"
+                    tw="border border-green-primary mb-8"
+                    onPress={() => setIsModalOpen(true)}
+                  >
+                    {t('Dashboard.ShoppingCart.ownership')}
+                  </Button>
+                </RBAC.ProtectedResource>
+
                 <View tw="flex-row items-center justify-between">
                   <Text tw="text-lg">{t('Dashboard.ShoppingCart.subtotal')}</Text>
                   <Text tw="text-lg">
@@ -81,7 +95,9 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                     }).getValueFormated()}
                   </Text>
                 </View>
+
                 <Divider tw="bg-zinc-400 my-3" />
+
                 <Button
                   tw="w-5/6 self-center my-4"
                   mode="contained"
@@ -106,6 +122,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
       </ScrollView>
 
       <_PortalsWrapper />
+      <OwnershipModal isVisible={isModalOpen} close={() => setIsModalOpen(false)} />
     </React.Fragment>
   );
 }

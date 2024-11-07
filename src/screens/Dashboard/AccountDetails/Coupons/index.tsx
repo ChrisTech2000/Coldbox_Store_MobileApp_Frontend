@@ -40,7 +40,12 @@ function CouponsRoot() {
               code: values.code,
               discountPercentage: values.percentage,
             });
-            await mutate(getQueryKey('getCouponList'));
+
+            await Promise.allSettled([
+              mutate(getQueryKey('getCouponList')),
+              mutate(getQueryKey('getCouponList', { revoked: 'included' })),
+            ]);
+
             modalRef.current?.close();
           } catch (exception) {
             console.error(exception);

@@ -109,10 +109,8 @@ export default function MarketplaceLocationFilter() {
         if (exception instanceof Error) {
           const errorCode = 'code' in exception ? exception.code : 'DENIED';
           switch (errorCode) {
-            case 'UNAUTHORIZED': {
-              if (currentLocation.length >= 1) return;
+            case 'UNAUTHORIZED':
               return _setLocation(DEFAULT_COORDINATES);
-            }
             default:
               return;
           }
@@ -196,9 +194,10 @@ export default function MarketplaceLocationFilter() {
                           evt.stopPropagation();
                           const int = Number(value);
                           if (isNaN(int)) return; // safe value
-                          const finalValue = (int - 1).toString();
+                          const finalValue = (int > 0 ? int - 1 : 0).toString();
                           onChange(finalValue);
                         }}
+                        disabled={form.watch('distance') === '0'}
                       />
                     }
                     right={

@@ -44,6 +44,7 @@ export type DashboardRoutes = {
   Management:
     | {
         screen: keyof ManagementRoutes;
+        params?: { isCompanyView: boolean };
       }
     | undefined;
   KnowledgeHub: undefined;

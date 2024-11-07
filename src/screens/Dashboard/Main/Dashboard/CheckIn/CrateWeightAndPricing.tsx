@@ -18,17 +18,22 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
-import { cn } from '#ui/lib/cn';
-import { paperTheme } from '#ui/lib/theme';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import MarketplaceService from '#services/MarketplaceService';
+import { useCheckInStore } from '#stores/checkIn';
+import { useManagementStore } from '#stores/management';
+import type { CheckMarketplaceEligibilityResponse } from '#types/api.responses';
+import type { Farmer } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
-import SellInMarketplaceModal from './components/SellInMarketplaceModal';
 import { InfoModal } from './CrateSetup/InfoModal';
 
 type FormValues<T = string> = {
@@ -72,10 +77,25 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const { t, zodResolver } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
 
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const user = useCheckInStore((store) => store.user);
+  const company = useManagementStore((store) => store.company);
+
   const [infoVisible, setInfoVisible] = useState(false);
 
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+
+  const { data: eligibility, refetch } = useApiCall(
+    'checkMarketplaceEligibility',
+    MarketplaceService.checkMarketplaceEligibility,
+    {
+      userIds: [user!.user.id],
+      companyIds: [company!.id],
+    },
+    {
+      skip: !user || !company,
+      defaultData: {} as CheckMarketplaceEligibilityResponse,
+    }
+  );
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -126,11 +146,37 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     props.navigation.goBack();
   }
 
-  const allowedToSetPricing = guard('SET', 'MarketplaceListForSale');
+  const companyEligible = eligibility.companies?.[company?.id ?? ''];
+  const farmerEligible = eligibility.users?.[user?.user.id ?? ''];
+  const allowedToSetPricing =
+    guard('SET', 'MarketplaceListForSale') && companyEligible && farmerEligible;
 
   return (
     <React.Fragment>
-      <SellInMarketplaceModal visible={isModalVisible} onChangeVisible={setIsModalVisible} />
+      <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
+        {!companyEligible ? (
+          <Text tw="mx-4">{t('Dashboard.ProduceDetails.operatorNoCompanyBankAccount')}</Text>
+        ) : !farmerEligible ? (
+          <View tw="mx-4">
+            <Text>
+              {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
+                name: `${user?.user.firstName ?? ''} ${user?.user.lastName ?? ''}`,
+              })}
+            </Text>
+            <Button
+              tw="self-end mt-2"
+              onPress={() =>
+                props.navigation.navigate('AddFarmerBankAccount', {
+                  farmer: user as Farmer,
+                  recheckEligibility: refetch,
+                })
+              }
+            >
+              {t('Dashboard.ProduceDetails.addBankAccountButton')}
+            </Button>
+          </View>
+        ) : null}
+      </RBAC.ProtectedResource>
 
       <KeyboardAwareScrollView
         ref={scrollViewRef}
@@ -173,12 +219,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             renderItem={({ index }) => {
               const isDisabled = applyToAll && index > 0;
               return (
-                <View
-                  tw={cn(
-                    'flex-row items-center my-3',
-                    allowedToSetPricing ? 'justify-between' : 'space-x-5'
-                  )}
-                >
+                <View tw="flex-row items-center my-3 justify-between">
                   <View tw="flex-col self-end px-3 self-center mt-5">
                     <Icon
                       name="basket-outline"
@@ -224,12 +265,12 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                             <TextInput.Icon
                               icon="minus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled}
+                              disabled={isDisabled || value === '0'}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
                                 if (isNaN(int)) return; // safe guard
-                                const finalValue = (int - 1).toString();
+                                const finalValue = (int > 0 ? int - 1 : 0).toString();
                                 if (!applyToAll) return onChange(finalValue);
                                 for (let i = 0; i < crateFields.fields.length; i++) {
                                   form.setValue(`crates.${i}.weight`, finalValue);
@@ -277,13 +318,18 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                               }
                             }
                           }}
-                          disabled={isDisabled}
+                          disabled={isDisabled || !allowedToSetPricing}
                         >
                           <Checkbox
                             status={value ? 'checked' : 'unchecked'}
-                            disabled={isDisabled}
+                            disabled={isDisabled || !allowedToSetPricing}
                           />
-                          <Text tw={cn('text-base', isDisabled && 'text-gray-300')}>
+                          <Text
+                            tw={cn(
+                              'text-base',
+                              (isDisabled || !allowedToSetPricing) && 'text-gray-300'
+                            )}
+                          >
                             {t(
                               'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list'
                             )}

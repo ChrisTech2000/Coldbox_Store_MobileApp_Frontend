@@ -3,7 +3,9 @@ import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/c
 import {
   EBankAccountType,
   EImpactMode,
-  EPaymentType,
+  EPaymentThrough,
+  EPaymentGateway,
+  EPaymentMethod,
   EPickUpMethod,
   ERoles,
   ESellingLocation,
@@ -78,7 +80,9 @@ export interface CheckOutParams extends JsonObject {
   operatorId: User;
   priceDiscount: number;
   currency: string;
-  paymentType: EPaymentType;
+  paymentThrough: EPaymentThrough;
+  paymentGateway: EPaymentGateway | null;
+  paymentMethod: EPaymentMethod;
   paid: boolean;
 }
 
@@ -344,7 +348,9 @@ export interface AddCoolingUnitTemperatureParams extends JsonObject {
 
 export interface GetRevenueAnalysisParams extends JsonObject {
   coolingUnits: number | Array<number>;
-  paymentMethods: Array<EPaymentType>;
+  // paymentThroughs: Array<EPaymentThrough>;
+  // paymentGateways: Array<EPaymentGateway>;
+  paymentMethods: Array<EPaymentMethod>;
 }
 
 export interface GetImpactParams extends JsonObject {
@@ -437,10 +443,11 @@ export interface AddPaystackBankAccountParams extends JsonObject {
   countryCode: string;
   accountName: string;
   companyId?: number;
+  userId?: number;
 }
 
 export interface SetPickUpDetailsParams extends JsonObject {
-  pickUpDetails: Array<{
+  pickupDetails: Array<{
     coolingUnitId: number;
     pickupMethod: EPickUpMethod;
   }>;
@@ -455,4 +462,19 @@ export interface CreateDeliveryContactParams extends JsonObject {
 export interface DeleteDeliveryContactParams extends JsonObject {
   contactId: number;
   companyId: number;
+}
+
+export interface CheckMarketplaceEligibilityParams extends JsonObject {
+  userIds: number[];
+  companyIds: number[];
+}
+
+export interface AddFirstPaystackBankAccountParams extends JsonObject {
+  accountType: EBankAccountType;
+  bankCode: string;
+  accountNumber: string;
+  countryCode: string;
+  accountName: string;
+  companyId?: number;
+  ownedByUserId?: number;
 }

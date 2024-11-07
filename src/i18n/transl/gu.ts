@@ -60,6 +60,7 @@ export default {
       AddRegisteredEmployee: 'નોંધાયેલ કર્મચારી ઉમેરો',
       RegisteredEmployeeDetails: 'નોંધાયેલ કર્મચારીની વિગત',
       DeliveryContacts: 'વિતરણ સંપર્કો',
+      AddUserBankAccount: '{{user}} Bank Account', // TODO
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -259,9 +260,14 @@ export default {
         confirmPasswordLabel: 'પાસવર્ડની પુષ્ટિ',
         countryFieldName: 'દેશ',
         genderFieldName: 'લિંગ',
-        terms:
-          'હું Coldtivate વપરાશકર્તા લાઇસન્સ કરાર, ગોપનીયતા નીતિ અને COMSOL ઉપયોગની શરતો સાથે સંમત છું',
         submit: 'સાઇન અપ',
+        terms: {
+          agree: 'હું કોલ્ડીવેટ સાથે સંમત છું',
+          license: 'વપરાશકર્તા લાઇસન્સ સંમતિ',
+          privacy: 'ખાનગીપણું નીતિ',
+          and: 'અને',
+          comsol: 'COMSOL /કોમસોલ ઉપયોગની શરતો',
+        },
       },
       SignUpCompany: {
         companyHeader: 'સાઇન અપ કંપની',
@@ -598,6 +604,17 @@ export default {
         'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
       preSaleErrorUser:
         'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      operatorNoBankAccountWarning:
+        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+      farmerNoBankAccountWarning:
+        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+      operatorNoCompanyBankAccount:
+        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+      employeeNoBankAccount:
+        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
+      addBankAccountButton: 'Add bank account details', // TODO
+      addBankAccountHeader:
+        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -772,6 +789,7 @@ export default {
             'શું તમે ખરેખર તમારા કૂલિંગ યુઝર્સની યાદીમાંથી આ વપરાશકર્તાને કાઢી નાખવા માંગો છો? આ પ્રક્રિયા આ કૂલિંગ યુઝરને કાઢી નાખશે અને પાછું મળી શકશે નહીં!',
           edit: 'કુલિંગ વપરાશકર્તાને સફળતાપૂર્વક સંપાદિત કર્યું',
           noCoolingUnits: 'તમારા પાસે હજુ કોઈ કૂલિંગ યુનિટ્સ નથી',
+          noSurveys: 'No surveys have been completed yet.', // TODO
           updateSuccess: 'સફળતાપૂર્વક અપડેટ થયું',
         },
         pdf: {
@@ -936,6 +954,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'કીમત ચઢતી',
         'price-desc': 'કીમત ઉતરતી',
@@ -957,6 +980,7 @@ export default {
       filterError:
         'કંઈક ખોટું થયું. કૃપા કરીને ટાઈપો તપાસો અને ખાતરી કરો કે દાખલ કરેલ શહેર નાઈજેરિયામાં આવેલું છે.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {
@@ -1194,6 +1218,9 @@ export default {
       backToTopButton: 'માટે પરત જાઓ',
     },
     ShoppingCart: {
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'તમારો કાર્ટ ખાલી છે',
       daysLeft: 'દિવસો બાકી',
       weight: 'KG ઉપલબ્ધ',
@@ -1227,6 +1254,13 @@ export default {
       redeemCoupon: 'કૂપનનો ઉપયોગ કરો',
       couponPlaceholder: 'ઉદાહરણ: 20OFF',
       discountsApplied: 'ડિસ્કાઉન્ટ લાગુ પાડવામાં આવ્યા',
+      pickupModal: {
+        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
+        storage:
+          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+        delivery:
+          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+      },
       errors: {
         invalid: 'અમાન્ય મૂલ્ય',
         minimumCartValue: 'ઓર્ડર ઓછામાં ઓછા ₦100 હોવું જોઈએ.',
