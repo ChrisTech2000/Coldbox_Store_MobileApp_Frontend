@@ -44,7 +44,7 @@ const BUYER_OPTIONS_TRANSLATIONS: Record<BuyerInternalSelectionState, Translatio
 export default function MarketplaceFiltersSection() {
   const { t } = useTranslationUtils();
   const [sortBy] = useMarketplaceQueryParams(useShallow((store) => [store.sortBy]));
-  const [cartData, fetchCart] = useCartStore((store) => [store.cartData, store.fetchCart]);
+  const [cartData, setCart] = useCartStore((store) => [store.cartData, store.setCart]);
 
   const navigation = useNavigation<NavigationProp<MarketplaceRoutes>>();
 
@@ -55,12 +55,12 @@ export default function MarketplaceFiltersSection() {
 
   const [buyerInternalSelection, setBuyerInternalSelectionState] =
     useState<BuyerInternalSelectionState>(
-      cartData?.onBehalfOfCompanyId ? 'on-behalf' : 'for-myself'
+      cartData?.ownedOnBehalfOfCompanyId ? 'on-behalf' : 'for-myself'
     );
 
   function resetState() {
     setInternalSelection(sortBy ?? 'price-asc');
-    setBuyerInternalSelectionState(cartData?.onBehalfOfCompanyId ? 'on-behalf' : 'for-myself');
+    setBuyerInternalSelectionState(cartData?.ownedOnBehalfOfCompanyId ? 'on-behalf' : 'for-myself');
     setVisibleModal(undefined);
   }
 
@@ -128,7 +128,7 @@ export default function MarketplaceFiltersSection() {
                   <Text tw="text-base text-green-primary">
                     {t(
                       BUYER_OPTIONS_TRANSLATIONS[
-                        cartData?.onBehalfOfCompanyId
+                        cartData?.ownedOnBehalfOfCompanyId
                           ? 'on-behalf'
                           : ('for-myself' as BuyerInternalSelectionState)
                       ]
@@ -195,8 +195,10 @@ export default function MarketplaceFiltersSection() {
                 onPress={async (evt) => {
                   evt.stopPropagation();
                   if (visibleModal === 'buyer') {
-                    await MarketplaceService.toggleCartOwnership();
-                    fetchCart();
+                    const result = await MarketplaceService.toggleCartOwnership();
+                    if (result.cart) {
+                      setCart(result.cart);
+                    }
                   } else {
                     useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
                   }
