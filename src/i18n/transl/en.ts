@@ -257,9 +257,14 @@ const en = {
         confirmPasswordLabel: 'Confirm Password',
         countryFieldName: 'country',
         genderFieldName: 'gender',
-        terms:
-          'I agree to Coldtivate User License Agreement, Privacy Policy and COMSOL Terms of Use',
         submit: 'Sign Up',
+        terms: {
+          agree: 'I agree to Coldtivate',
+          license: 'User License Agreement',
+          privacy: 'Privacy Policy',
+          and: 'and',
+          comsol: 'COMSOL Terms of Use',
+        },
       },
       SignUpCompany: {
         companyHeader: 'Sign Up Company',

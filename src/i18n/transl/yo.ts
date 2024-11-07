@@ -240,9 +240,14 @@ export default {
         confirmPasswordLabel: 'Jẹrisi ọrọ igbaniwọle',
         countryFieldName: 'Orilẹ-ede',
         genderFieldName: 'Akọ abi abo',
-        terms:
-          'Mo gba lati Coldtivate Adehun Iwe-aṣẹ Olumulo, Ilana Aṣiri ati Awọn ofin Lilo COMSOL',
         submit: 'Forukọsilẹ',
+        terms: {
+          agree: 'Mo gba lati Coldtivate',
+          license: 'Adehun iwe-aṣẹ olumulo',
+          privacy: 'ikoko Ilana',
+          and: 'ati',
+          comsol: 'COMSOL Awọn ofin lilo',
+        },
       },
       SignUpCompany: {
         companyHeader: 'Wọlé Up Company',

@@ -244,9 +244,14 @@ export default {
         confirmPasswordLabel: 'tabbatar da kalmar sirri ta shiga',
         countryFieldName: 'Ƙasa',
         genderFieldName: 'Jinsi',
-        terms:
-          'Na yarda da Ƙaddamar Yarjejeniyar Lasisin Mai Amfani, Manufar Sirri da Sharuɗɗan Amfani COMSOL',
         submit: 'Shiga',
+        terms: {
+          agree: 'Na yarda da Coldtivate',
+          license: 'Yarjejeniyar lasisin mai amfani',
+          privacy: 'Keɓanta Siyasa',
+          and: 'kuma',
+          comsol: 'COMSOL Sharuɗɗan Amfani',
+        },
       },
       SignUpCompany: {
         companyHeader: 'Kamfanin Shiga',

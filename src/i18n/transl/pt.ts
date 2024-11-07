@@ -260,9 +260,14 @@ export default {
         confirmPasswordLabel: 'Confirmar Palavra-passe',
         countryFieldName: 'país',
         genderFieldName: 'género',
-        terms:
-          'Aceito o Acordo de Licença do Utilizador do Coldtivate, a Política de Privacidade e os Termos de Uso da COMSOL',
         submit: 'Registar',
+        terms: {
+          agree: 'Eu concordo com Coldtivate',
+          license: 'Contrato de licença de usuário',
+          privacy: 'Privacidade Política',
+          and: 'e',
+          comsol: 'COMSOL Termos de uso',
+        },
       },
       SignUpCompany: {
         companyHeader: 'Registar Empresa',
