@@ -391,9 +391,12 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public toggleCartOwnership = async (): Promise<unknown> => {
+  public toggleCartOwnership = async (): Promise<{ cart: GetCartResponse; message: string }> => {
     try {
-      const { data } = await this.post<unknown>(EMarketplaceEndpoints.TOGGLE_OWNERSHIP, {});
+      const { data } = await this.post<{ cart: GetCartResponse; message: string }>(
+        EMarketplaceEndpoints.TOGGLE_OWNERSHIP,
+        {}
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
