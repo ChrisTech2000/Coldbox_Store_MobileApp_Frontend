@@ -66,7 +66,7 @@ export type Crate = {
   checkOut: Date; // TODO: confirm this type
   pricing: Array<Pricing>;
   coolingUnitMetric: ECoolingUnitMetric;
-  checkInDate: Date;
+  checkinDate: Date;
   name: string;
   cropImage: string;
   movementCode: string;
