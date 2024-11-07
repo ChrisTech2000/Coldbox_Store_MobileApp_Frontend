@@ -17,7 +17,7 @@ export default function FilterChip() {
         <Chip
           tw="bg-transparent"
           mode="outlined"
-          onClose={() => useMarketplaceFilters.getState().clearFilters()}
+          onClose={() => useMarketplaceFilters.getState().reset()}
         >
           Clear all
         </Chip>
