@@ -13,6 +13,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
@@ -29,6 +30,8 @@ import { CART_MINIMUM_VALUE } from '.';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
+  const colors = useTailwindColors();
+
   const [cartData, coolingUnits] = useCartStore((store) => [store.cartData, store.allCoolingUnits]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -134,7 +137,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                 return (
                   <View tw="mb-4">
                     <Text tw="text-base">{coolingUnit?.name ?? ''}</Text>
-                    <View tw="flex flex-row items-center justify-between mt-1 p-4 border border-gray-300 rounded-xl">
+                    <Touchable
+                      tw="flex flex-row items-center justify-between mt-1 p-4 border border-gray-300 rounded-xl"
+                      onPress={() => emitter.emit(APP_EVENTS.DISPATCH_PICK_UP_METHODS_SELECTION)}
+                    >
                       <Text tw="text-base">
                         {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
                           ? t('Dashboard.ShoppingCart.pickUpToday')
@@ -170,7 +176,9 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                           </Text>
                         </Touchable>
                       ) : null}
-                    </View>
+
+                      <Icon source="pencil" size={17} color={colors.green.primary} />
+                    </Touchable>
                   </View>
                 );
               }}

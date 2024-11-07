@@ -446,7 +446,7 @@ export interface AddPaystackBankAccountParams extends JsonObject {
 }
 
 export interface SetPickUpDetailsParams extends JsonObject {
-  pickUpDetails: Array<{
+  pickupDetails: Array<{
     coolingUnitId: number;
     pickupMethod: EPickUpMethod;
   }>;
