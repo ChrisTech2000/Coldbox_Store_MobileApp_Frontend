@@ -18,7 +18,7 @@ import NavigatorHeader from '#navigation/components/NavigatorHeader';
 export type KnowledgeHubStackRoutes = {
   Root: undefined;
   Details: {
-    uri: string;
+    sourceUri: string;
   };
 };
 
