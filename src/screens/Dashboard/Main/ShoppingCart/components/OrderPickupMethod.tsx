@@ -218,7 +218,7 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
         version={activePickupModal?.[1] as PickUpMethod}
         close={() => setActivePickupModal(undefined)}
         cu={activePickupModal?.[0] as CoolingUnit}
-        companyId={data.filter((el) => el.unit === activePickupModal?.[0].id)?.[0]?.company}
+        companyId={data?.filter((el) => el.unit === activePickupModal?.[0].id)?.[0]?.company}
       />
     </React.Fragment>
   );
