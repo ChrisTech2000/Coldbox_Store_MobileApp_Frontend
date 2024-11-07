@@ -1,24 +1,27 @@
 import React from 'react';
-import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { ActivityIndicator } from 'react-native-paper';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { KNOWLEDGE_HUB_URL } from '#constants/environment';
-import { paperTheme } from '#ui/lib/theme';
+
+import { DEEP_LINK_DOMAIN } from '#constants/environment';
+
+const SOURCE_URI = `https://${DEEP_LINK_DOMAIN}/comsol-about`;
+
+const INJECTED_JS = `
+  (function() {
+    const header = document.querySelector('ion-header');
+    if (header) header.remove();
+  })();
+`;
 
 function ComsolAbout() {
   return (
     <WebView
-      source={{ uri: KNOWLEDGE_HUB_URL }}
-      style={{ flex: 1 }}
-      renderLoading={() => (
-        <View tw="flex-1 items-center justify-center">
-          <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-        </View>
-      )}
+      style={{ flex: 1, marginHorizontal: 10 }}
+      source={{ uri: SOURCE_URI }}
+      injectedJavaScript={INJECTED_JS}
     />
   );
 }
 
-export default withSafeArea(ComsolAbout);
+export default withSafeArea(ComsolAbout, ['bottom'], true);

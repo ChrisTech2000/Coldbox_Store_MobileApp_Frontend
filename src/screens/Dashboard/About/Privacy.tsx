@@ -17,7 +17,7 @@ const INJECTED_JS = `
 function PrivacyPolicy() {
   return (
     <WebView
-      style={{ flex: 1, marginHorizontal: 10, marginTop: 10 }}
+      style={{ flex: 1, marginHorizontal: 10 }}
       source={{ uri: SOURCE_URI }}
       injectedJavaScript={INJECTED_JS}
     />
