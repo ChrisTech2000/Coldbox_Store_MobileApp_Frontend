@@ -196,9 +196,10 @@ export default function MarketplaceLocationFilter() {
                           evt.stopPropagation();
                           const int = Number(value);
                           if (isNaN(int)) return; // safe value
-                          const finalValue = (int - 1).toString();
+                          const finalValue = (int > 0 ? int - 1 : 0).toString();
                           onChange(finalValue);
                         }}
+                        disabled={form.watch('distance') === '0'}
                       />
                     }
                     right={
