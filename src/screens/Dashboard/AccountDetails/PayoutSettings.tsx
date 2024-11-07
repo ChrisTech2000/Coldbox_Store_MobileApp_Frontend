@@ -130,18 +130,27 @@ function PayoutSettings(
   const onSubmit = useCallback(
     async (data: FormValues) => {
       try {
-        // TODO: sending BA like this is associating the account with the OP instead of the farmer
-        await MarketplaceService.addPaystackAccount({
-          ...(user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
-            ? { companyId: company?.id }
-            : {}),
-          ...(farmer ? { userId: farmer?.user.id } : {}),
-          accountType: mapEnum(t)[data.accountType],
-          bankCode: data.bank,
-          accountNumber: data.accountNumber,
-          countryCode: countriesMeta.getISOByName(data.country) ?? 'NG',
-          accountName: data.accountName,
-        });
+        if (farmer) {
+          await MarketplaceService.addFirstPaystackAccount({
+            ownedByUserId: farmer.user.id,
+            accountType: mapEnum(t)[data.accountType],
+            bankCode: data.bank,
+            accountNumber: data.accountNumber,
+            countryCode: countriesMeta.getISOByName(data.country) ?? 'NG',
+            accountName: data.accountName,
+          });
+        } else {
+          await MarketplaceService.addPaystackAccount({
+            ...(user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
+              ? { companyId: company?.id }
+              : {}),
+            accountType: mapEnum(t)[data.accountType],
+            bankCode: data.bank,
+            accountNumber: data.accountNumber,
+            countryCode: countriesMeta.getISOByName(data.country) ?? 'NG',
+            accountName: data.accountName,
+          });
+        }
 
         toast.show(t('Dashboard.AccountDetails.PayoutSettings.successMessage'), {
           type: 'md_success',

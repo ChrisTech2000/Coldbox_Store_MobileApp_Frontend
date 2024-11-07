@@ -2,6 +2,7 @@ import type { AxiosError } from 'axios';
 
 import { EMarketplaceEndpoints } from '#constants/api.routes';
 import type {
+  AddFirstPaystackBankAccountParams,
   AddItemToCartParams,
   AddPaystackBankAccountParams,
   CheckMarketplaceEligibilityParams,
@@ -410,6 +411,22 @@ class MarketplaceService extends HttpClient {
         {
           ...params,
         }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public addFirstPaystackAccount = async (
+    params: AddFirstPaystackBankAccountParams
+  ): Promise<BankAccount> => {
+    try {
+      const { data } = await this.post<BankAccount>(
+        EMarketplaceEndpoints.SET_FARMER_BANK_ACCOUNT,
+        params
       );
       return data;
     } catch (error) {

@@ -462,3 +462,13 @@ export interface CheckMarketplaceEligibilityParams extends JsonObject {
   userIds: number[];
   companyIds: number[];
 }
+
+export interface AddFirstPaystackBankAccountParams extends JsonObject {
+  accountType: EBankAccountType;
+  bankCode: string;
+  accountNumber: string;
+  countryCode: string;
+  accountName: string;
+  companyId?: number;
+  ownedByUserId?: number;
+}
