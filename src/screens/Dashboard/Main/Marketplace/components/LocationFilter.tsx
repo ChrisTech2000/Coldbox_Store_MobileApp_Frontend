@@ -109,10 +109,8 @@ export default function MarketplaceLocationFilter() {
         if (exception instanceof Error) {
           const errorCode = 'code' in exception ? exception.code : 'DENIED';
           switch (errorCode) {
-            case 'UNAUTHORIZED': {
-              if (currentLocation.length >= 1) return;
+            case 'UNAUTHORIZED':
               return _setLocation(DEFAULT_COORDINATES);
-            }
             default:
               return;
           }

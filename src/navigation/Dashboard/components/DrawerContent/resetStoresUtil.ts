@@ -34,6 +34,11 @@ import { downloadAnalysisStores } from '#screens/Dashboard/Management/Analysis/c
 import { revenueAnalysisStores } from '#screens/Dashboard/Management/Analysis/RevenueAnalysis';
 import { usageAnalysisStores } from '#screens/Dashboard/Management/Analysis/UsageAnalysis';
 import { useManagementStore } from '#stores/management';
+import {
+  useMarketplaceFilters,
+  useMarketplaceQueryParams,
+} from '#screens/Dashboard/Main/Marketplace/store';
+import useCartStore from '#stores/shoppingCart';
 
 const storesToReset = [
   usePayoutBankStore,
@@ -60,6 +65,9 @@ const storesToReset = [
   ...revenueAnalysisStores,
   ...usageAnalysisStores,
   ...downloadAnalysisStores,
+  useMarketplaceFilters,
+  useMarketplaceQueryParams,
+  useCartStore,
 ];
 
 export function resetAllStores() {

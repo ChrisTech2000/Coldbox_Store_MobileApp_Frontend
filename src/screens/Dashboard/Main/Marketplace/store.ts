@@ -23,7 +23,7 @@ type MarketplaceFilterState = {
   addFilters: (newFilters: Array<FilterItem>, overwrite?: boolean) => void;
   removeFilter: (key: keyof FormValues, value: number) => void;
   removeFilterByIndex: (filterIndex: number) => void;
-  clearFilters: () => void;
+  reset: () => void;
 };
 
 export const useMarketplaceFilters = create<MarketplaceFilterState>((set) => ({
@@ -44,10 +44,7 @@ export const useMarketplaceFilters = create<MarketplaceFilterState>((set) => ({
     set((state) => ({
       filters: state.filters.filter((_, idx) => idx !== filterIndex),
     })),
-  clearFilters: () =>
-    set(() => ({
-      filters: [],
-    })),
+  reset: () => set(() => ({ filters: [] })),
 }));
 
 type MarketplaceQueryParams = Pick<
@@ -58,10 +55,12 @@ type MarketplaceQueryParams = Pick<
 export const useMarketplaceQueryParams = create<
   MarketplaceQueryParams & {
     setParams: (params: Partial<MarketplaceQueryParams>) => void;
+    reset: () => void;
   }
 >((set) => ({
   location: [],
   sortBy: 'nearby-me',
   filterByMaxDistanceInKm: 0,
   setParams: (params: Partial<MarketplaceQueryParams>) => set((state) => ({ ...state, ...params })),
+  reset: () => set({ location: [], sortBy: 'nearby-me', filterByMaxDistanceInKm: 0 }),
 }));
