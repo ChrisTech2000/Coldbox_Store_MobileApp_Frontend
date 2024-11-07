@@ -416,7 +416,22 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
                 status={value ? 'checked' : 'unchecked'}
               />
             </View>
-            <Text>{t('Auth.SignUp.commonForm.terms')}</Text>
+
+            <Text>
+              {t('Auth.SignUp.commonForm.terms.agree')}&nbsp;
+              <Text tw="underline" onPress={() => props.navigation.navigate('LicenseAgreement')}>
+                {t('Auth.SignUp.commonForm.terms.license')}
+              </Text>
+              ,&nbsp;
+              <Text tw="underline" onPress={() => props.navigation.navigate('PrivacyPolicy')}>
+                {t('Auth.SignUp.commonForm.terms.privacy')}
+              </Text>
+              &nbsp;
+              <Text>{t('Auth.SignUp.commonForm.terms.and')}</Text>&nbsp;
+              <Text tw="underline" onPress={() => props.navigation.navigate('ComsolTerms')}>
+                {t('Auth.SignUp.commonForm.terms.comsol')}
+              </Text>
+            </Text>
           </View>
         )}
         name="terms"

@@ -260,9 +260,14 @@ export default {
         confirmPasswordLabel: 'ପାସ୍‌ୱାର୍ଡ ସ୍ଥାପନା',
         countryFieldName: 'ଦେଶ',
         genderFieldName: 'ଲିଙ୍ଗ',
-        terms:
-          'ମୁଁ Coldtivate ବ୍ୟବହାରକାରୀ ଲାଇସେନ୍ସ ସମ୍ଝୋତା, ଗୋପନୀୟତା ନୀତି ଏବଂ COMSOL ବ୍ୟବହାର ଶର୍ତ୍ତଗୁଡିକୁ ସହମତି ଦେଉଛି',
         submit: 'ସାଇନ୍ ଅପ୍',
+        terms: {
+          agree: 'ମୁଁ Coldtivate ରେ ରାଜି ଅଟେ |',
+          license: 'ଉପଯୋଗକର୍ତ୍ତା ଲାଇସେନ୍ସ ଚୁକ୍ତିନାମା',
+          privacy: 'ଗୋପନୀୟତା ନୀତି',
+          and: 'ଏବଂ',
+          comsol: 'COMSOL ବ୍ୟବହାର ସର୍ତ୍ତାବଳୀ',
+        },
       },
       SignUpCompany: {
         companyHeader: 'ସାଇନ୍ ଅପ୍ କମ୍ପାନୀ',

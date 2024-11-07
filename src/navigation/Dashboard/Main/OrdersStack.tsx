@@ -10,6 +10,7 @@ import { Appbar } from 'react-native-paper';
 
 import OrdersRoot from '#screens/Dashboard/Main/Orders';
 import OrdersDetails from '#screens/Dashboard/Main/Orders/OrdersDetails';
+import OrderOverview from '#screens/Dashboard/Main/ShoppingCart/OrderOverview';
 import PaystackPayment from '#screens/Dashboard/Main/ShoppingCart/PaystackPayment';
 
 import type { TranslationPaths } from '#i18n/index';
@@ -25,6 +26,7 @@ export type OrdersRoutes = {
     orderId: number;
   };
   PaystackPayment: { url: string; orderId: number };
+  OrderOverview: { orderId: number };
 };
 
 export type OrdersRoutePaths = keyof OrdersRoutes;
@@ -37,6 +39,7 @@ export type OrdersRouteProps<Path extends OrdersRoutePaths> = NativeStackScreenP
 export const NAVIGATOR_HEADERS: Record<OrdersRoutePaths, TranslationPaths | undefined> = {
   OrdersRoot: 'navigation.dashboard.MyOrders',
   OrdersDetails: 'navigation.dashboard.OrderDetails',
+  OrderOverview: 'navigation.dashboard.OrderDetails',
   PaystackPayment: undefined,
 };
 
@@ -57,6 +60,7 @@ export default function OrdersStack() {
       const routeName = props.route.name;
       return {
         ...props,
+        headerShown: routeName !== 'PaystackPayment',
         header: () => {
           const baseProps: NavigationHeaderProps = {
             routeTitle: routeName
@@ -89,6 +93,7 @@ export default function OrdersStack() {
       <Stack.Screen name="OrdersRoot" component={OrdersRoot} />
       <Stack.Screen name="OrdersDetails" component={OrdersDetails} />
       <Stack.Screen name="PaystackPayment" component={PaystackPayment} />
+      <Stack.Screen name="OrderOverview" component={OrderOverview} />
     </Stack.Navigator>
   );
 }

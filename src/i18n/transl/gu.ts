@@ -260,9 +260,14 @@ export default {
         confirmPasswordLabel: 'પાસવર્ડની પુષ્ટિ',
         countryFieldName: 'દેશ',
         genderFieldName: 'લિંગ',
-        terms:
-          'હું Coldtivate વપરાશકર્તા લાઇસન્સ કરાર, ગોપનીયતા નીતિ અને COMSOL ઉપયોગની શરતો સાથે સંમત છું',
         submit: 'સાઇન અપ',
+        terms: {
+          agree: 'હું કોલ્ડીવેટ સાથે સંમત છું',
+          license: 'વપરાશકર્તા લાઇસન્સ સંમતિ',
+          privacy: 'ખાનગીપણું નીતિ',
+          and: 'અને',
+          comsol: 'COMSOL /કોમસોલ ઉપયોગની શરતો',
+        },
       },
       SignUpCompany: {
         companyHeader: 'સાઇન અપ કંપની',

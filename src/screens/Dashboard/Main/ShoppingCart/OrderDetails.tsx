@@ -9,12 +9,13 @@ import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
+import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
@@ -33,6 +34,7 @@ import { OwnershipModal } from './components/OwnershipModal';
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
   const colors = useTailwindColors();
+  const toast = InAppNotifications.useToast();
 
   const [cartData, coolingUnits] = useCartStore((store) => [store.cartData, store.allCoolingUnits]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -41,13 +43,20 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const onPay = useCallback(async (evt: GestureResponderEvent) => {
     evt.stopPropagation();
     setIsSubmitting(true);
-    const result = await MarketplaceService.checkoutWithPaystack();
+    try {
+      const result = await MarketplaceService.checkoutWithPaystack();
 
-    if (result.authorizationUrl) {
+      if (result.authorizationUrl) {
+        setIsSubmitting(false);
+        props.navigation.navigate('PaystackPayment', {
+          url: result.authorizationUrl,
+          orderId: result.orderId,
+        });
+      }
+    } catch (e) {
       setIsSubmitting(false);
-      props.navigation.navigate('PaystackPayment', {
-        url: result.authorizationUrl,
-        orderId: result.orderId,
+      toast.show(t('navigation.error.errorMessage'), {
+        type: 'md_danger',
       });
     }
   }, []);

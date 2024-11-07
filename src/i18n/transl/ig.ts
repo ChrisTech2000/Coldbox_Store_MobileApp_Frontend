@@ -246,9 +246,14 @@ export default {
         confirmPasswordLabel: 'Kwado paswọọdụ',
         countryFieldName: 'Obodo',
         genderFieldName: 'Okike',
-        terms:
-          'Ekwenyere m na Coldtivate nkwekọrịta ikike onye ọrụ, amụma nzuzo yana Usoro ojiji COMSOL',
         submit: 'Debanye aha',
+        terms: {
+          agree: 'Ekwenyere m na Coldtivate',
+          license: 'Nkwekọrịta ikike onye ọrụ(User License Agreement)',
+          privacy: 'Nzuzo (Privacy) Iwu',
+          and: 'na',
+          comsol: 'Usoro eji aru oru',
+        },
       },
       SignUpCompany: {
         companyHeader: 'Debanye aha ụlọ ọrụ',

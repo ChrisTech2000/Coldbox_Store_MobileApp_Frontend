@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { TextInput } from 'react-native-paper';
 
@@ -24,6 +24,8 @@ export default function CartItemInput(props: {
   const toast = InAppNotifications.useToast();
   const fetchCart = useCartStore((store) => store.fetchCart);
 
+  const [internalValue, setInternalValue] = useState<number>(props.initialValue);
+
   const form = useForm<FormValues>({
     defaultValues: { quantity: props.initialValue.toString() },
     resolver: zodResolver((z) =>
@@ -34,29 +36,33 @@ export default function CartItemInput(props: {
 
   const debouncedSubmit = useMemo(
     () =>
-      debounce(async (values: FormValues<number>) => {
-        if (values.quantity && values.quantity !== props.initialValue) {
+      debounce(async (value: number) => {
+        if (value && value !== internalValue) {
           await MarketplaceService.addItemToCart({
             crateId: props.crateId,
-            orderedProduceWeight: values.quantity,
+            orderedProduceWeight: value,
             updateStrategy: 'replace',
           });
 
+          setInternalValue(value);
           fetchCart();
         }
       }, 500),
-    [props.crateId]
+    [props.crateId, internalValue]
   );
 
   useEffect(() => {
-    // eslint-disable-next-line
-    const handler = form.handleSubmit(debouncedSubmit as any);
-    const subscription = form.watch(() => handler());
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'quantity' && value.quantity) {
+        debouncedSubmit(Number.parseInt(value.quantity));
+      }
+    });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [debouncedSubmit, form.watch]);
 
   useEffect(() => {
     form.setValue('quantity', props.initialValue.toString());
+    setInternalValue(props.initialValue);
   }, [props.initialValue]);
 
   return (

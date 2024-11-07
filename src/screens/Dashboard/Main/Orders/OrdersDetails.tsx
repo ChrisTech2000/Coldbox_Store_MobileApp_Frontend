@@ -107,9 +107,9 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
       try {
         setIsSubmitting(true);
         const result = await MarketplaceService.payWithPaystack(props.route.params.orderId);
-        setIsSubmitting(false);
 
         if (result.authorizationUrl) {
+          setIsSubmitting(false);
           props.navigation.navigate('PaystackPayment', {
             url: result.authorizationUrl,
             orderId: props.route.params.orderId,
