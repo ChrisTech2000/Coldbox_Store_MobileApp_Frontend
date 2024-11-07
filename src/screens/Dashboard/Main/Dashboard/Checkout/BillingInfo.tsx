@@ -15,7 +15,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
-import { EPaymentType, EPricingType } from '#types/global';
+import { EPaymentMethod, EPaymentThrough, EPricingType } from '#types/global';
 
 import { CheckOut2ScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
@@ -31,7 +31,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { BankTransferModal } from './BankTransferDetailsModal';
 
-export const usePaymentTypeStore = createSelectStore<EPaymentType>();
+export const usePaymentTypeStore = createSelectStore<EPaymentMethod>();
 
 function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo'>) {
   const { user, crates, coolingUnit } = route.params;
@@ -42,7 +42,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const { guard } = RBAC.useRBAC();
 
   const company = useManagementStore((store) => store.company);
-  const [paymentType, resetPaymentStore] = usePaymentTypeStore((store) => [
+  const [paymentMethod, resetPaymentStore] = usePaymentTypeStore((store) => [
     store.selectedItem,
     store.reset,
   ]);
@@ -102,14 +102,14 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     return cratePrices?.reduce((acc: number, current) => (acc += current ?? 0), 0) ?? 0;
   }, [cratePrices]);
 
-  const paymentTypeLabel = useMemo(() => {
-    if (!paymentType) return '';
-    return paymentType === EPaymentType.CASH
+  const paymentMethodLabel = useMemo(() => {
+    if (!paymentMethod) return '';
+    return paymentMethod === EPaymentMethod.CASH
       ? t('Dashboard.CrateManagement.CheckOut.paymentType.cash')
-      : paymentType === EPaymentType.CREDIT_CARD
+      : paymentMethod === EPaymentMethod.CREDIT_CARD
         ? t('Dashboard.CrateManagement.CheckOut.paymentType.creditCard')
         : t('Dashboard.CrateManagement.CheckOut.paymentType.bankTransfer');
-  }, [paymentType]);
+  }, [paymentMethod]);
 
   const checkout = useCallback(async () => {
     if (!crates || !user) {
@@ -128,7 +128,9 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         operatorId: user.user,
         priceDiscount: dInt,
         currency: currency,
-        paymentType: paymentType as EPaymentType,
+        paymentThrough: EPaymentThrough.DIRECT,
+        paymentGateway: null,
+        paymentMethod: paymentMethod as EPaymentMethod,
         paid: isPaid,
       });
 
@@ -150,7 +152,17 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         type: 'md_danger',
       });
     }
-  }, [user, crates, discount, currency, paymentType, isPaid, refreshData, guard, coolingUnit?.id]);
+  }, [
+    user,
+    crates,
+    discount,
+    currency,
+    paymentMethod,
+    isPaid,
+    refreshData,
+    guard,
+    coolingUnit?.id,
+  ]);
 
   useEffect(() => {
     return () => resetPaymentStore();
@@ -297,26 +309,27 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
               *
             </Text>
           </View>
-          <SelectWithStore<EPaymentType>
+          <SelectWithStore<EPaymentMethod>
             datums={[
-              EPaymentType.CASH,
-              EPaymentType.CREDIT_CARD,
-              ...(company?.country === 'NG' ? [EPaymentType.BANK_TRANSFER] : []),
+              EPaymentMethod.CASH,
+              EPaymentMethod.CREDIT_CARD,
+              ...(company?.country === 'NG' ? [EPaymentMethod.BANK_TRANSFER] : []),
             ]}
             isModalVisible={isPaymentTypeModalOpen}
             setIsModalVisible={setIsPaymentTypeModalOpen}
             useSelectStore={usePaymentTypeStore}
             itemName={(item) =>
-              item === EPaymentType.CASH
+              item === EPaymentMethod.CASH
                 ? t('Dashboard.CrateManagement.CheckOut.paymentType.cash')
-                : item === EPaymentType.CREDIT_CARD
+                : item === EPaymentMethod.CREDIT_CARD
                   ? t('Dashboard.CrateManagement.CheckOut.paymentType.creditCard')
                   : t('Dashboard.CrateManagement.CheckOut.paymentType.bankTransfer')
             }
-            label={paymentTypeLabel}
+            label={paymentMethodLabel}
             modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-            postSelectionAction={(paymentType?: EPaymentType) => {
-              paymentType === EPaymentType.BANK_TRANSFER && setIsBankTransferDetailsModalOpen(true);
+            postSelectionAction={(paymentMethod?: EPaymentMethod) => {
+              paymentMethod === EPaymentMethod.BANK_TRANSFER &&
+                setIsBankTransferDetailsModalOpen(true);
             }}
           />
         </View>
@@ -348,7 +361,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           onPress={checkout}
           contentStyle="flex flex-row-reverse items-center"
           icon="check-circle-outline"
-          disabled={!isPaid || !paymentType}
+          disabled={!isPaid || !paymentMethod}
         >
           {t('actions.ok')}
         </Button>

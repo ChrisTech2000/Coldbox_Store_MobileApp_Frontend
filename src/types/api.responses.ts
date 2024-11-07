@@ -4,7 +4,9 @@ import {
   ECoolingUnitMetric,
   EMovementType,
   EOrderStatus,
-  EPaymentType,
+  EPaymentMethod,
+  EPaymentGateway,
+  EPaymentThrough,
   EPickUpMethod,
   ERoles,
   ESellingLocation,
@@ -52,7 +54,9 @@ export type CheckOutResponse = {
   movement: number;
   paid: boolean;
   price: number;
-  paymentType: EPaymentType;
+  paymentThrough: EPaymentThrough;
+  paymentGateway: EPaymentGateway;
+  paymentMethod: EPaymentMethod;
   currency: string;
   priceDiscount: number;
 };
@@ -258,7 +262,9 @@ export type GetMovementsHistoryResponse = Array<{
     tag: string;
     weight: number;
   }>;
-  paymentType: EPaymentType;
+  paymentThrough: EPaymentThrough;
+  paymentGateway: EPaymentGateway;
+  paymentMethod: EPaymentMethod;
   operator: string;
 }>;
 
@@ -482,6 +488,8 @@ export interface GetAvailableListingResponse {
     relCropId: number;
     totalPricePerKg: number;
     weightLockedInPaymentPendingOrdersInKg: number;
+    ownedByUserId: number | null;
+    ownedOnBehalfOfCompanyId: number | null;
   }>;
   pagination: {
     itemsPerPage: number;

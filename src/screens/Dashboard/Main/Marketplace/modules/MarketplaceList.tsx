@@ -54,6 +54,7 @@ export default function MarketplaceList() {
                 cropName={item.crop.name}
                 movementCode={item.movementCode}
                 cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
+                owner={item.owner}
               />
               <MarketplaceItemWrapper.CompanyAction company={item.company} />
               <MarketplaceItemWrapper.BuyAction
@@ -202,6 +203,7 @@ function _NearbyMeSection(props: {
             cropName={item.crop.name}
             movementCode={item.movementCode}
             cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
+            owner={item.owner}
           />
           <MarketplaceItemWrapper.BuyAction
             crateWeight={item.crateWeight}
