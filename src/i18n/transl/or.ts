@@ -60,6 +60,7 @@ export default {
       AddRegisteredEmployee: 'ପଞ୍ଜିକୃତ କର୍ମଚାରୀ ଯୋଡନ୍ତୁ',
       RegisteredEmployeeDetails: 'ପଞ୍ଜିକୃତ କର୍ମଚାରୀ ବିବରଣୀ',
       DeliveryContacts: 'ଡେଲିଭରୀ ସଂପର୍କ',
+      AddUserBankAccount: '{{user}} Bank Account', // TODO
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -599,6 +600,17 @@ export default {
         'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
       preSaleErrorUser:
         'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      operatorNoBankAccountWarning:
+        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+      farmerNoBankAccountWarning:
+        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+      operatorNoCompanyBankAccount:
+        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+      employeeNoBankAccount:
+        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
+      addBankAccountButton: 'Add bank account details', // TODO
+      addBankAccountHeader:
+        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -941,6 +953,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'ମୂଲ୍ୟ ବୃଦ୍ଧି',
         'price-desc': 'ମୂଲ୍ୟ କମିବା',
@@ -962,6 +979,7 @@ export default {
       filterError:
         'କିଛି ଭୁଲ ହେବାରୁ ବିକଳ୍ପ ଗଡ଼ିଛି। ଦୟାକରି ଟାଇପୋରେ ତାଲିକା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଦିଆଯାଇଥିବା ସହର ନାଇଜେରିଆରେ ଅବସ୍ଥିତ।',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {
@@ -1199,6 +1217,9 @@ export default {
       backToTopButton: 'ଉପରକୁ ଫେରିବେ',
     },
     ShoppingCart: {
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'ଆପଣଙ୍କର କାର୍ଟ ଖାଲି ଅଛି',
       daysLeft: 'ଦିନ ବାକି',
       weight: 'କେଜି ଉପଲବ୍ଧ',
@@ -1232,6 +1253,13 @@ export default {
       redeemCoupon: 'ଛୁଟ ବ୍ୟବହାର କରନ୍ତୁ',
       couponPlaceholder: 'ଉଦାହରଣ: 20OFF',
       discountsApplied: 'ଛୁଟ ଲାଗୁ କରାଯାଇଛି',
+      pickupModal: {
+        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
+        storage:
+          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+        delivery:
+          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+      },
       errors: {
         invalid: 'ଅବୈଧ ମୂଲ୍ୟ',
         minimumCartValue: 'ଆର୍ଡର ଅତିକମ୍ ₦100 ହେବା ଉଚିତ।',

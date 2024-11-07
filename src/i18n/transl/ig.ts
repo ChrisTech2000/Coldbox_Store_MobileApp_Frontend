@@ -56,6 +56,7 @@ export default {
       AddRegisteredEmployee: 'Tinye onye ọrụ edebanyere aha',
       RegisteredEmployeeDetails: 'Nkọwa ndị ọrụ edebanyere aha',
       DeliveryContacts: 'Delivery Contacts', // TODO
+      AddUserBankAccount: '{{user}} Bank Account', // TODO
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate  {{firstName}}',
@@ -567,6 +568,17 @@ export default {
         'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
       preSaleErrorUser:
         'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      operatorNoBankAccountWarning:
+        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+      farmerNoBankAccountWarning:
+        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+      operatorNoCompanyBankAccount:
+        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+      employeeNoBankAccount:
+        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
+      addBankAccountButton: 'Add bank account details', // TODO
+      addBankAccountHeader:
+        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -862,6 +874,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'Price ascending', // TODO
         'price-desc': 'Price descending', // TODO
@@ -883,6 +900,7 @@ export default {
       filterError:
         'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.', // TODO
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {
@@ -1111,6 +1129,9 @@ export default {
       backToTopButton: 'Back to the top', // TODO
     },
     ShoppingCart: {
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'Your cart is empty', // TODO
       daysLeft: 'days left', // TODO
       weight: 'KG available', // TODO
@@ -1144,6 +1165,13 @@ export default {
       redeemCoupon: 'Redeem coupon', // TODO
       couponPlaceholder: 'E.g. 20OFF', // TODO
       discountsApplied: 'Discounts Applied', // TODO
+      pickupModal: {
+        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
+        storage:
+          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+        delivery:
+          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+      },
       errors: {
         invalid: 'Invalid value', // TODO
         minimumCartValue: 'Order must be at least ₦100.', // TODO
@@ -1312,7 +1340,7 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Welcome to Coldtivate! This is a walkthrough of the functionalities.', // TODO
+    welcome: 'Nnọọ na Coldtivate. Nke a bụ ngagharị nke ọrụ.',
     farmerWelcome:
       'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'Kwụsị nkuzi',
@@ -1326,37 +1354,36 @@ export default {
     steps: {
       openDrawer:
         'On the top left, you find a menu with the main functionalities. Go ahead and click it.', // TODO
-      repeatTutorial: 'If you want to watch this tutorial again, you can also find it in the menu.', // TODO
+      repeatTutorial: 'Ọ bụrụ na ịchọrọ ikiri nkuzi a ọzọ, ị nwekwara ike ịhụ ya na menu.',
       managementNavigation:
-        'In the menu, you can navigate to the "Management" tab and there add new Locations, Cooling Units, Registered Employees and Operators.', // TODO
+        'N\'ime menu, ị nwere ike ịnyagharịa na taabụ "Management" wee tinye ebe ọhụrụ, nkeji oyi, ndị ọrụ edebanyere aha na ndị ọrụ.',
       addCoolingUser:
-        'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".', // TODO
+        'Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi na-edebeghị aha na Coldtivate site na itinye nkọwa ha (aha, nọmba ekwentị). Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi ndị debanyere aha na ngwa ahụ site na koodu. Ha nwere ike ịchọta koodu ha na profaịlụ ha -> "Nkọwa akaụntụ" -> "koodu na-ebubata onye ọrụ oyi".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO
       listCoolingUsers:
-        'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.', // TODO
+        "A na-amata ndị ọrụ jụrụ oyi nwere smartphone site na akara ekwentị dị n'akụkụ aka nri nke ihuenyo ahụ. Ndị ọzọ na-eji ekwentị bụ isi na-eme ka ndị ọrụ jụrụ oyi. N'okwu abụọ a, ị nwere ike pịa aha iji nweta nkọwa ha yana nyocha onye ọrụ jụrụ oyi.",
       navigateToAddCoolingUser: "Clicking the '+' sign allows you to add a new Cooling User.", // TODO
       coolingUnitStep:
-        'You can navigate across cooling units by clicking on the dropdown menu at the top.', // TODO
+        "Ị nwere ike ịnyagharịa gafee nkeji jụrụ site na ịpị menu dropdown dị n'elu.",
       initiateCheckIn1:
         'Once you add a cooling user, you can make a check-in for that cooling user. Go ahead and click the activity button.', // TODO
       initiateCheckIn2: 'Now click on the check-in button (the one in green).', // TODO
       checkIn1:
         'To complete the check-in, you need to click on "Add Crates" and follow the instructions step by step. Click \'Continue\' to see what the result would look like.', // TODO
       checkIn2:
-        'After having completed all the steps, you will see an overview of the crates you are about to check into the room.', // TODO
+        "Mgbe ịmechara usoro ahụ niile, ị ga-ahụ nkọwa nke igbe ndị ị na-achọ ịbanye n'ime ụlọ ahụ.",
       checkIn3:
-        'If you are satisfied, you can click "Confirm" and the new crates will be added to the Dashboard.', // TODO
+        'Ọ bụrụ na afọ juru gị afọ, ị nwere ike pịa "Kwenye" na a ga-agbakwunye krates ọhụrụ na Dashboard.',
       history:
         'Clicking on "History", you can see all the movements in the room. The check-outs for which the after-storage survey has not been completed are marked by a red dot.', // TODO
       coolingUnits:
-        'Click on "Cooling Units" to see the capacity of a cooling unit in the next 7 days (Planner tab) and the temperature of the room (Room conditions tab).', // TODO
+        'Pịa na " nkeji jụrụ oyi "ka ịhụ ike nke a jụrụ oyi ụbọchị 7 na-esote (Planner tab) na okpomọkụ nke ụlọ (room ọnọdụ taabụ).',
       roomConditions:
-        ' You can manually update the temperature of the cooling room in "Room conditions" in case you do not have a sensor connected with the app.', // TODO
+        'Ị nwere ike iji aka kwalite ọnọdụ okpomọkụ nke ụlọ jụrụ oyi na "Ọnọdụ ime ụlọ" ma ọ bụrụ na ịnweghị ihe mmetụta ejikọrọ na ngwa ahụ.',
       checkOut1:
-        'To start a check-out, click on the Activity button and then on the red button. Then follow the instructions to complete the check-out.', // TODO
-      checkOut2: 'You can choose the cooling unit and crops you want to check out.', // TODO
-      checkOut3:
-        'Once the items are paid for, click on the respective button and finalize the check out.', // TODO
+        'Iji malite ndenye ọpụpụ, pịa bọtịnụ Ọrụ wee pịa bọtịnụ uhie. Mgbe ahụ soro ntuziaka ka mezue ndenye ọpụpụ.',
+      checkOut2: 'Ị nwere ike ịhọrọ ngalaba jụrụ oyi na ihe ọkụkụ ịchọrọ ịlele.',
+      checkOut3: 'Ozugbo akwụchara ihe ndị ahụ, pịa bọtịnụ dị iche iche wee mechaa nlele ahụ.',
       navigateToLocations:
         'The first thing you will need to do is add a location. Go ahead and click the locations tab.', // TODO
       locations:
@@ -1374,22 +1401,22 @@ export default {
       accountDetailsNavigation:
         'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.', // TODO
       coolingUserSurvey:
-        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
+        'Oge izizi imepe ngwa ahụ, a na-agwa gị ka ịmechaa nyocha dị mkpirikpi. Ọ dị ezigbo mkpa na ị dejupụta nyocha maka ngwa ahụ iji nye gị ndụmọdụ ahaziri ahazi. Ọ bụrụ na ịnweghị ike imeju nyocha ahụ oge mbụ ị banyere, ị nwere ike ịnweta nyocha ahụ na "Nkọwa akaụntụ" -> "Nyocha onye ọrụ jụrụ oyi". Daalụ maka iwepụta oge iji mezue nyocha ahụ!',
       coolingUserCode:
         'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".', // TODO
       knowledgeHub:
-        'In the menu, you can find the "Knowledge Hub", which contains advice on how long different crops can be stored, and their optimal temperature. Check it out to understand how much the cold room can help you to preserve the quality of different fruits and vegetables!', // TODO
-      faq: 'In the menu, you can also find the Frequently Asked Questions (FAQ). We recommend you check them out to learn more about the app and the benefit of storing your produce in the cold rooms.', // TODO
+        'N\'ime menu, ị nwere ike ịchọta "Ebe Ọmụma", nke nwere ndụmọdụ gbasara ogologo oge a ga-echekwa ihe ọkụkụ dị iche iche, na okpomọkụ ha kacha mma. Lelee ya ka ị ghọta otú ụlọ oyi nwere ike isi nyere gị aka ichekwa àgwà nke mkpụrụ osisi na akwụkwọ nri dị iche iche!',
+      faq: "Na menu, ị nwekwara ike ịhụ ajụjụ a na-ajụkarị (FAQ). Anyị na-akwado ka ịlele ha ka ịmatakwu gbasara ngwa na uru nke ịchekwa ngwaahịa gị n'ime ụlọ oyi.",
       dashboardStep1:
-        'Once the operator has completed a check-in for you, you will be able to see the produce in storage in the room in the "Dashboard" section. Every card contains a set of crates of the same type of crop that were checked in together.', // TODO
+        'Ozugbo onye ọrụ ahụ mechara nyocha gị, ị ga-enwe ike ịhụ ihe ndị a na-emepụta na nchekwa n\'ime ụlọ dị na ngalaba "Dashboard". Kaadị ọ bụla nwere oghere nke otu ụdị ihe ubi a tụlere ọnụ.',
       dashboardStep2:
-        'Each card in the dashboard contains information about: the type of crop, the number of crates stored, how many days they have already been stored for, the daily price (for all crates together), and the check-in ID.', // TODO
+        'Kaadị ọ bụla dị na dashboard nwere ozi gbasara: ụdị ihe ọkụkụ, ọnụọgụ crates echekwara, ụbọchị ole echekwara ya, ọnụahịa ụbọchị (maka akpa niile ọnụ), na NJ ndebanye.',
       dashboardStep3:
-        'The colored number of days indicates the "Time to pick up" (TTPU), which means for how many days your produce is still going to be good for, if it stays refrigerated. A red color means that the produce is losing its quality and should be picked up as soon as possible.', // TODO
+        'Ọnụ ọgụgụ ụcha nke ụbọchị na-egosi "Oge iji bulie" (TTPU), nke pụtara ụbọchị ole ihe ọkụkụ gị ka ga-adị mma, ma ọ bụrụ na ọ na-anọ na friji. Agba uhie pụtara na ihe a na-emepụta na-efunahụ àgwà ya ma ekwesịrị iburu ya ozugbo enwere ike.',
       dashboardStep4:
-        'If the color of the card is yellow (2-5 days left) or green (more than 5 days), you do not need to worry about the crates. The number of days is recalculated multiple times per day, so make sure to check the "Dashboard" regularly to see how the quality of your crates in the room is evolving.', // TODO
+        'Ọ bụrụ na agba nke kaadị ahụ bụ edo edo (ụbọchị 2-5 fọdụrụ) ma ọ bụ akwụkwọ ndụ akwụkwọ ndụ (ihe karịrị ụbọchị 5), ịkwesighi ichegbu onwe gị banyere crates. A na-agbakọ ọnụ ọgụgụ nke ụbọchị ọtụtụ ugboro kwa ụbọchị, yabụ gbaa mbọ hụ na ị na-elele "Dashboard" mgbe niile ka ịhụ ka àgwà nke krates gị n\'ime ụlọ si na-agbanwe.',
       dashboardStep5:
-        'If you have crates stored in multiple rooms, you can change the room you are viewing by selecting a company and cooling unit from the dropdown.', // TODO
+        "Ọ bụrụ na ị nwere crates echekwara n'ọtụtụ ọnụ ụlọ, ị nwere ike ịgbanwe ụlọ ị na-elele site na ịhọrọ ụlọ ọrụ na nkeji oyi site na dropdown.",
       dashboardStep6:
         'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advises you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.', // TODO
       farmerHistory:
@@ -1397,7 +1424,7 @@ export default {
       farmersCoolingUnits:
         'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
-        'In the tab "Cooling Units" you can find the Map, the current and future occupancy of the room (in "Planner") and the temperature of the room (in "Room conditions"). These screens help you monitor remotely what is happening at the cold rooms, without having to go there in person to check!', // TODO
+        'Na taabụ "Ụdị jụrụ oyi" ị nwere ike ịhụ Map ahụ, ebe obibi ugbu a na ọdịnihu nke ụlọ (na "Planner") na okpomọkụ nke ụlọ ahụ (na "ọnọdụ ime ụlọ"). Ihuenyo ndị a na-enyere gị aka inyocha anya ihe na-eme na ụlọ oyi, na-enweghị ịga ebe ahụ n\'onwe gị ịlele!',
       marketPrice:
         'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.', // TODO
       farmerFinalStep:

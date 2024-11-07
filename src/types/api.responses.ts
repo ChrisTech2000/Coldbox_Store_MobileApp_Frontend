@@ -454,6 +454,7 @@ export interface GetCartResponse {
   totalDiscountAmount: number;
   totalPaymentFeesAmount: number;
   totalProduceAmount: number;
+  onBehalfOfCompanyId: number | undefined;
   pickupDetails: Array<{
     coolingUnitId: number;
     pickupMethod: EPickUpMethod;
@@ -487,6 +488,8 @@ export interface GetAvailableListingResponse {
     relCropId: number;
     totalPricePerKg: number;
     weightLockedInPaymentPendingOrdersInKg: number;
+    ownedByUserId: number | null;
+    ownedOnBehalfOfCompanyId: number | null;
   }>;
   pagination: {
     itemsPerPage: number;

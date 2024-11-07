@@ -117,4 +117,5 @@ export enum EMarketplaceEndpoints {
   COMPANY_DELIVERY_CONTACTS = 'marketplace/company/delivery-contacts/',
   LIST_COMPANY_DELIVERY_CONTACTS = 'marketplace/company/delivery-contacts/?company_id=:companyId',
   DELETE_DELIVERY_CONTACT = 'marketplace/company/delivery-contacts/:contactId/?company_id=companyId',
+  TOGGLE_OWNERSHIP = 'marketplace/buyer/cart/toggle-ownership/',
 }

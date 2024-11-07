@@ -531,6 +531,8 @@ export type CartItem = {
   relCrateRemainingShelfLife: number | null;
   relCheckInMovementCode: string;
   relCouponCode: string | undefined;
+  ownedByUserId: number | null;
+  ownedOnBehalfOfCompanyId: number | null;
 };
 
 export type BankAccount = {

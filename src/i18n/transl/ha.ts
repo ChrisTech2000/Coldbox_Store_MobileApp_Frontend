@@ -56,6 +56,7 @@ export default {
       AddRegisteredEmployee: "Ƙara Ma'aikacin Rijista",
       RegisteredEmployeeDetails: "Cikakkun Bayanan Ma'aikata",
       DeliveryContacts: 'Delivery Contacts', // TODO
+      AddUserBankAccount: '{{user}} Bank Account', // TODO
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -573,6 +574,17 @@ export default {
         'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
       preSaleErrorUser:
         'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      operatorNoBankAccountWarning:
+        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+      farmerNoBankAccountWarning:
+        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+      operatorNoCompanyBankAccount:
+        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+      employeeNoBankAccount:
+        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
+      addBankAccountButton: 'Add bank account details', // TODO
+      addBankAccountHeader:
+        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -875,6 +887,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'Price ascending', // TODO
         'price-desc': 'Price descending', // TODO
@@ -896,6 +913,7 @@ export default {
       filterError:
         'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.', // TODO
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {
@@ -1124,6 +1142,9 @@ export default {
       backToTopButton: 'Back to the top', // TODO
     },
     ShoppingCart: {
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'Your cart is empty', // TODO
       daysLeft: 'days left', // TODO
       weight: 'KG available', // TODO
@@ -1157,6 +1178,13 @@ export default {
       redeemCoupon: 'Redeem coupon', // TODO
       couponPlaceholder: 'E.g. 20OFF', // TODO
       discountsApplied: 'Discounts Applied', // TODO
+      pickupModal: {
+        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
+        storage:
+          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+        delivery:
+          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+      },
       errors: {
         invalid: 'Invalid value', // TODO
         minimumCartValue: 'Order must be at least ₦100.', // TODO
@@ -1331,9 +1359,9 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Welcome to Coldtivate! This is a walkthrough of the functionalities.', // TODO
+    welcome: 'Barka da zuwa Coldtivate. Wannan tafiya ce ta ayyukan.',
     farmerWelcome:
-      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
+      'Barka da zuwa Coldtivate! Wannan koyaswar zata taimaka muku fahimtar yadda ake amfani da app.',
     quit: 'Bar koyarwa',
     congratulations: 'Taya murna! Kun gama koyawa! Koma kan dashboard don fara amfani da app.',
     prev: 'Prev',
@@ -1345,37 +1373,35 @@ export default {
     steps: {
       openDrawer:
         'On the top left, you find a menu with the main functionalities. Go ahead and click it.', // TODO
-      repeatTutorial: 'If you want to watch this tutorial again, you can also find it in the menu.', // TODO
+      repeatTutorial: 'Idan kuna son sake kallon wannan koyawa, kuna iya samunsa a cikin menu.',
       managementNavigation:
-        'In the menu, you can navigate to the "Management" tab and there add new Locations, Cooling Units, Registered Employees and Operators.', // TODO
+        'A cikin menu, zaku iya kewayawa zuwa shafin "Management" kuma a can za ku ƙara sabbin Wurare, Rukunin sanyaya, Ma\'aikata masu rijista da Ma\'aikata.',
       addCoolingUser:
-        'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".', // TODO
+        'Ana iya ƙara masu amfani da sanyaya waɗanda ba su yi rajista ba akan Coldtivate ta saka bayanansu (suna, lambar waya). Ana iya ƙara masu amfani da sanyaya waɗanda suka riga sun yi rajista a cikin ƙa\'idar ta lamba. Za su iya nemo lambar su akan bayanan martabarsu -> "Bayanan asusu" -> "Lambar shigo da mai amfani mai sanyaya".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO
       listCoolingUsers:
-        'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.', // TODO
+        'Ana gano masu amfani da sanyaya tare da wayar hannu ta alamar waya a gefen dama na allo. Sauran suna sanyaya masu amfani da wayar asali. A cikin lokuta biyu, zaku iya danna sunan don samun damar bayanan su da binciken mai sanyaya mai amfani.',
       navigateToAddCoolingUser: "Clicking the '+' sign allows you to add a new Cooling User.", // TODO
-      coolingUnitStep:
-        'You can navigate across cooling units by clicking on the dropdown menu at the top.', // TODO
+      coolingUnitStep: "Kuna iya kewaya rak'o'in sanyaya ta danna menu na zazzage a saman.",
       initiateCheckIn1:
         'Once you add a cooling user, you can make a check-in for that cooling user. Go ahead and click the activity button.', // TODO
       initiateCheckIn2: 'Now click on the check-in button (the one in green).', // TODO
       checkIn1:
         'To complete the check-in, you need to click on "Add Crates" and follow the instructions step by step. Click \'Continue\' to see what the result would look like.', // TODO
       checkIn2:
-        'After having completed all the steps, you will see an overview of the crates you are about to check into the room.', // TODO
+        'Bayan kammala duk matakan, za ku ga bayyani na akwatunan da kuke shirin bincika cikin ɗakin.',
       checkIn3:
-        'If you are satisfied, you can click "Confirm" and the new crates will be added to the Dashboard.', // TODO
+        'Idan kun gamsu, za ku iya danna "Tabbatar" kuma za a ƙara sabon akwatuna a cikin Dashboard.',
       history:
         'Clicking on "History", you can see all the movements in the room. The check-outs for which the after-storage survey has not been completed are marked by a red dot.', // TODO
       coolingUnits:
-        'Click on "Cooling Units" to see the capacity of a cooling unit in the next 7 days (Planner tab) and the temperature of the room (Room conditions tab).', // TODO
+        'Danna "Raka\'a sanyaya" don ganin ƙarfin naúrar sanyaya a cikin kwanaki 7 masu zuwa (Tsarin shirin) da zafin jiki na ɗakin (Shafin yanayin ɗaki).',
       roomConditions:
-        ' You can manually update the temperature of the cooling room in "Room conditions" in case you do not have a sensor connected with the app.', // TODO
+        'Kuna iya sabunta zafin dakin sanyaya da hannu a cikin "Yanayin ɗaki" idan ba ku da firikwensin haɗe da ƙa\'idar.',
       checkOut1:
-        'To start a check-out, click on the Activity button and then on the red button. Then follow the instructions to complete the check-out.', // TODO
-      checkOut2: 'You can choose the cooling unit and crops you want to check out.', // TODO
-      checkOut3:
-        'Once the items are paid for, click on the respective button and finalize the check out.', // TODO
+        'Don fara rajistan shiga, danna maɓallin Aiki sannan a kan maɓallin ja. Sannan bi umarnin don kammala rajistan.',
+      checkOut2: 'Kuna iya zaɓar sashin sanyaya da amfanin gona da kuke son dubawa.',
+      checkOut3: 'Da zarar an biya kayan, danna maɓallin daban kuma kammala rajistan.',
       navigateToLocations:
         'The first thing you will need to do is add a location. Go ahead and click the locations tab.', // TODO
       locations:
@@ -1393,22 +1419,22 @@ export default {
       accountDetailsNavigation:
         'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.', // TODO
       coolingUserSurvey:
-        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
+        'Da farko da ka bude app, ana tambayarka don kammala ɗan gajeren bincike. Yana da matukar mahimmanci ku cika binciken don ƙa\'idar don samar muku da shawarwari na musamman. Idan ba za ku iya cika binciken a karon farko da kuka shiga ba, za ku iya samun damar binciken a cikin "Bayanan Asusu" -> "Binciken Mai Amfani". Na gode don ɗaukar lokaci don kammala binciken!',
       coolingUserCode:
         'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".', // TODO
       knowledgeHub:
-        'In the menu, you can find the "Knowledge Hub", which contains advice on how long different crops can be stored, and their optimal temperature. Check it out to understand how much the cold room can help you to preserve the quality of different fruits and vegetables!', // TODO
-      faq: 'In the menu, you can also find the Frequently Asked Questions (FAQ). We recommend you check them out to learn more about the app and the benefit of storing your produce in the cold rooms.', // TODO
+        'A cikin menu, zaku iya samun "Cibiyar Ilimi", wanda ya ƙunshi shawarwari kan tsawon lokacin adana amfanin gona daban-daban, da mafi kyawun zafin jiki. Duba shi don fahimtar yadda ɗakin sanyi zai iya taimaka muku don adana ingancin \'ya\'yan itatuwa da kayan marmari daban-daban!',
+      faq: "A cikin menu, zaku iya samun Tambayoyin Tambayoyi akai-akai (FAQ). Muna ba da shawarar ku duba su don ƙarin koyo game da ƙa'idar da fa'idar adana kayan amfanin ku a cikin dakuna masu sanyi.",
       dashboardStep1:
-        'Once the operator has completed a check-in for you, you will be able to see the produce in storage in the room in the "Dashboard" section. Every card contains a set of crates of the same type of crop that were checked in together.', // TODO
+        'Da zarar mai aiki ya kammala rajistar ku, za ku iya ganin samfuran da ke cikin ajiya a cikin ɗakin a cikin sashin "Dashboard". Kowane kati ya ƙunshi saitin akwatuna na nau\'in amfanin gona iri ɗaya waɗanda aka bincika tare.',
       dashboardStep2:
-        'Each card in the dashboard contains information about: the type of crop, the number of crates stored, how many days they have already been stored for, the daily price (for all crates together), and the check-in ID.', // TODO
+        "Kowane katin da ke cikin dashboard ya ƙunshi bayanai game da: nau'in amfanin gona, adadin akwatunan da aka adana, kwanakin nawa aka ajiye su, farashin yau da kullun (na duk akwatuna tare), da ID ɗin rajista.",
       dashboardStep3:
-        'The colored number of days indicates the "Time to pick up" (TTPU), which means for how many days your produce is still going to be good for, if it stays refrigerated. A red color means that the produce is losing its quality and should be picked up as soon as possible.', // TODO
+        'Adadin kwanaki masu launi yana nuna "Lokacin da za a ɗauka" (TTPU), wanda ke nufin tsawon kwanaki nawa kayan aikin ku zai yi kyau, idan ya kasance a cikin firiji. Launi ja yana nufin cewa samfurin yana rasa ingancinsa kuma yakamata a ɗauke shi da wuri-wuri.',
       dashboardStep4:
-        'If the color of the card is yellow (2-5 days left) or green (more than 5 days), you do not need to worry about the crates. The number of days is recalculated multiple times per day, so make sure to check the "Dashboard" regularly to see how the quality of your crates in the room is evolving.', // TODO
+        'Idan launi na katin rawaya ne (2-5 days bar) ko kore (fiye da kwanaki 5), ba kwa buƙatar damuwa game da akwatunan. Ana sake ƙididdige adadin kwanakin sau da yawa a kowace rana, don haka tabbatar da duba "Dashboard" akai-akai don ganin yadda ingancin akwatunan ku a cikin ɗakin ke haɓaka.',
       dashboardStep5:
-        'If you have crates stored in multiple rooms, you can change the room you are viewing by selecting a company and cooling unit from the dropdown.', // TODO
+        'Idan kuna da akwatunan da aka adana a ɗakuna da yawa, zaku iya canza ɗakin da kuke kallo ta zaɓi kamfani da sashin sanyaya daga jerin zaɓuka.',
       dashboardStep6:
         'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advises you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.', // TODO
       farmerHistory:
@@ -1416,7 +1442,7 @@ export default {
       farmersCoolingUnits:
         'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
-        'In the tab "Cooling Units" you can find the Map, the current and future occupancy of the room (in "Planner") and the temperature of the room (in "Room conditions"). These screens help you monitor remotely what is happening at the cold rooms, without having to go there in person to check!', // TODO
+        'A cikin shafin "Cooling Units" zaka iya samun Taswirar, zama na yanzu da na gaba na dakin (a cikin "Mai Tsara") da kuma yawan zafin jiki na ɗakin (a cikin "Yanayin ɗakin"). Wadannan allon suna taimaka muku saka idanu daga nesa abin da ke faruwa a dakunan sanyi, ba tare da zuwa wurin da mutum don dubawa ba!',
       marketPrice:
         'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.', // TODO
       farmerFinalStep:
