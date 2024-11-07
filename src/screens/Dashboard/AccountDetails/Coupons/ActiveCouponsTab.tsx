@@ -47,7 +47,7 @@ function ActiveCouponsTab() {
                     </Text>
                   </View>
                   <Text tw="text-lg text-zinc-500">
-                    -&nbsp;{item.discountPercentage * 100}&#37;
+                    -&nbsp;{(item.discountPercentage * 100).toFixed(0)}&#37;
                   </Text>
                 </View>
                 <Button
@@ -77,7 +77,12 @@ function ActiveCouponsTab() {
           if (typeof selectedCoupon.current === 'number') {
             try {
               await CouponService.revokeCoupon(selectedCoupon.current);
-              await mutate(getQueryKey('getCouponList'));
+
+              await Promise.allSettled([
+                mutate(getQueryKey('getCouponList')),
+                mutate(getQueryKey('getCouponList', { revoked: 'included' })),
+                mutate(getQueryKey('getCouponList', { revoked: 'only' })),
+              ]);
             } catch (exception) {
               console.error(exception);
             }

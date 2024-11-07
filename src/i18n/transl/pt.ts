@@ -60,6 +60,7 @@ export default {
       AddRegisteredEmployee: 'Adicionar Empregado Registrado',
       RegisteredEmployeeDetails: 'Detalhes do Empregado Registrado',
       DeliveryContacts: 'Contatos de Entrega',
+      AddUserBankAccount: '{{user}} Bank Account', // TODO
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate de {{firstName}}',
@@ -608,6 +609,17 @@ export default {
         'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
       preSaleErrorUser:
         'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      operatorNoBankAccountWarning:
+        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+      farmerNoBankAccountWarning:
+        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+      operatorNoCompanyBankAccount:
+        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+      employeeNoBankAccount:
+        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
+      addBankAccountButton: 'Add bank account details', // TODO
+      addBankAccountHeader:
+        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -785,6 +797,7 @@ export default {
             'Tem a certeza de que deseja eliminar este utilizador da sua lista de utilizadores de refrigeração? Esta operação irá eliminar este utilizador e não poderá ser revertida!',
           edit: 'Utilizador de refrigeração editado com sucesso',
           noCoolingUnits: 'Você ainda não tem nenhuma unidade de refrigeração',
+          noSurveys: 'No surveys have been completed yet.', // TODO
           updateSuccess: 'Atualização bem-sucedida',
         },
         pdf: {
@@ -952,6 +965,11 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'Preço em ordem crescente',
         'price-desc': 'Preço em ordem decrescente',
@@ -974,6 +992,7 @@ export default {
       filterError:
         'Algo deu errado. Verifique se há erros de digitação e certifique-se de que a cidade inserida está localizada na Nigéria.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
     },
     AccountDetails: {
       popups: {
@@ -1212,7 +1231,10 @@ export default {
       backToTopButton: 'Voltar ao topo',
     },
     ShoppingCart: {
-      empty: 'Seu carrinho está vazio',
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
+      empty: 'O carrinho está vazio',
       daysLeft: 'dias restantes',
       weight: 'KG disponíveis',
       perKg: '/ KG',
@@ -1245,6 +1267,13 @@ export default {
       redeemCoupon: 'Resgatar cupom',
       couponPlaceholder: 'Ex: 20OFF',
       discountsApplied: 'Descontos Aplicados',
+      pickupModal: {
+        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
+        storage:
+          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+        delivery:
+          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+      },
       errors: {
         invalid: 'Valor inválido',
         minimumCartValue: 'O pedido deve ser de pelo menos ₦100.',

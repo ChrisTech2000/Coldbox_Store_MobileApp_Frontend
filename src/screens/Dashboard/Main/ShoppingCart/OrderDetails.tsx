@@ -13,24 +13,30 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
+import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
 
+import { CART_MINIMUM_VALUE } from '.';
 import AddCouponBottomSheet from './components/AddCouponBottomSheet';
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
-import { CART_MINIMUM_VALUE } from '.';
+import { OwnershipModal } from './components/OwnershipModal';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
+  const colors = useTailwindColors();
+
   const [cartData, coolingUnits] = useCartStore((store) => [store.cartData, store.allCoolingUnits]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const onPay = useCallback(async (evt: GestureResponderEvent) => {
     evt.stopPropagation();
@@ -117,9 +123,22 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           }}
         />
 
+        <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
+          <Button
+            mode="outlined"
+            tw="border border-green-primary mb-8"
+            onPress={() => setIsModalOpen(true)}
+          >
+            {t('Dashboard.ShoppingCart.ownership')}
+          </Button>
+        </RBAC.ProtectedResource>
+
         <View>
           <OrderPickupMethod
-            coolingUnitsIds={cartData?.items?.flatMap((item) => item.relCoolingUnitId)}
+            data={cartData?.items?.flatMap((item) => ({
+              unit: item.relCoolingUnitId,
+              company: item.relCompanyId,
+            }))}
           />
 
           {cartData.pickupDetails?.length ? (
@@ -134,7 +153,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                 return (
                   <View tw="mb-4">
                     <Text tw="text-base">{coolingUnit?.name ?? ''}</Text>
-                    <View tw="flex flex-row items-center justify-between mt-1 p-4 border border-gray-300 rounded-xl">
+                    <Touchable
+                      tw="flex flex-row items-center justify-between mt-1 p-4 border border-gray-300 rounded-xl"
+                      onPress={() => emitter.emit(APP_EVENTS.DISPATCH_PICK_UP_METHODS_SELECTION)}
+                    >
                       <Text tw="text-base">
                         {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
                           ? t('Dashboard.ShoppingCart.pickUpToday')
@@ -170,7 +192,9 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                           </Text>
                         </Touchable>
                       ) : null}
-                    </View>
+
+                      <Icon source="pencil" size={17} color={colors.green.primary} />
+                    </Touchable>
                   </View>
                 );
               }}
@@ -235,6 +259,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
       <AddCouponBottomSheet />
       <ListCouponsBottomSheet />
       <_PortalsWrapper />
+      <OwnershipModal isVisible={isModalOpen} close={() => setIsModalOpen(false)} />
     </ScrollView>
   );
 }

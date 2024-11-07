@@ -117,4 +117,7 @@ export enum EMarketplaceEndpoints {
   COMPANY_DELIVERY_CONTACTS = 'marketplace/company/delivery-contacts/',
   LIST_COMPANY_DELIVERY_CONTACTS = 'marketplace/company/delivery-contacts/?company_id=:companyId',
   DELETE_DELIVERY_CONTACT = 'marketplace/company/delivery-contacts/:contactId/?company_id=companyId',
+  TOGGLE_OWNERSHIP = 'marketplace/buyer/cart/toggle-ownership/',
+  CHECK_MARKETPLACE_ELIGIBILITY = 'marketplace/company/setup/eligibility-check/',
+  SET_FARMER_BANK_ACCOUNT = 'marketplace/company/setup/users-first-paystack-bank-account/',
 }

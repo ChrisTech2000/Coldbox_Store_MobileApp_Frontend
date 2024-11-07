@@ -443,10 +443,11 @@ export interface AddPaystackBankAccountParams extends JsonObject {
   countryCode: string;
   accountName: string;
   companyId?: number;
+  userId?: number;
 }
 
 export interface SetPickUpDetailsParams extends JsonObject {
-  pickUpDetails: Array<{
+  pickupDetails: Array<{
     coolingUnitId: number;
     pickupMethod: EPickUpMethod;
   }>;
@@ -461,4 +462,19 @@ export interface CreateDeliveryContactParams extends JsonObject {
 export interface DeleteDeliveryContactParams extends JsonObject {
   contactId: number;
   companyId: number;
+}
+
+export interface CheckMarketplaceEligibilityParams extends JsonObject {
+  userIds: number[];
+  companyIds: number[];
+}
+
+export interface AddFirstPaystackBankAccountParams extends JsonObject {
+  accountType: EBankAccountType;
+  bankCode: string;
+  accountNumber: string;
+  countryCode: string;
+  accountName: string;
+  companyId?: number;
+  ownedByUserId?: number;
 }
