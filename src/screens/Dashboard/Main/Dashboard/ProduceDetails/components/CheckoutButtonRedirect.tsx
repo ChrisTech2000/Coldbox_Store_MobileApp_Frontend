@@ -9,9 +9,10 @@ import { useTranslationUtils } from '#i18n/utils';
 export default function CheckoutButtonRedirect(props: {
   coolingUnit: CoolingUnit | null;
   farmer?: Farmer;
+  owner?: string;
   crates: Array<Crate>;
 }) {
-  const { coolingUnit, farmer, crates } = props;
+  const { coolingUnit, farmer, owner, crates } = props;
 
   // eslint-disable-next-line
   const navigation = useNavigation<NavigationProp<any>>();
@@ -33,6 +34,7 @@ export default function CheckoutButtonRedirect(props: {
               params: {
                 coolingUnit,
                 user: farmer,
+                owner,
                 crates,
               },
             },

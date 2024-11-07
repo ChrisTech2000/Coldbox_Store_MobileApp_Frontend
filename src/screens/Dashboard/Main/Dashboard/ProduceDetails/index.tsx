@@ -318,7 +318,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         <View tw="absolute left-0 bottom-0 bg-white border-t border-zinc-300 w-full h-20 items-center justify-center">
           <CheckoutButtonRedirect
             coolingUnit={coolingUnit}
-            farmer={farmer}
+            owner={produce.owner}
             crates={produce.checkedInCrates}
           />
         </View>

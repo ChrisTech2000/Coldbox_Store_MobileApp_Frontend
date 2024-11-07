@@ -65,7 +65,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     ColdtivateService.getLocations,
     company?.id ?? 0,
     {
-      skip: !user?.id || !coolingUnit?.id,
+      skip: !coolingUnit?.id,
     }
   );
 
@@ -112,7 +112,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   }, [paymentMethod]);
 
   const checkout = useCallback(async () => {
-    if (!crates || !user) {
+    if (!crates) {
       toast.show(t('Dashboard.CrateManagement.operationError'), {
         type: 'md_danger',
       });
@@ -125,8 +125,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     try {
       await ColdtivateService.checkOut({
         crates: crates?.map((crate) => crate.id),
-        operatorId: user.user,
-        priceDiscount: dInt,
+        discountAmount: dInt,
         currency: currency,
         paymentThrough: EPaymentThrough.DIRECT,
         paymentGateway: null,
@@ -152,17 +151,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         type: 'md_danger',
       });
     }
-  }, [
-    user,
-    crates,
-    discount,
-    currency,
-    paymentMethod,
-    isPaid,
-    refreshData,
-    guard,
-    coolingUnit?.id,
-  ]);
+  }, [crates, discount, currency, paymentMethod, isPaid, refreshData, guard, coolingUnit?.id]);
 
   useEffect(() => {
     return () => resetPaymentStore();
@@ -178,7 +167,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             {t('Dashboard.CrateManagement.coolingUserLabel')}
           </Text>
           <Text variant="TextMedium" tw="text-lg">
-            {user?.user.firstName}
+            {user}
           </Text>
         </View>
         <Divider tw="bg-gray-400 my-2" />

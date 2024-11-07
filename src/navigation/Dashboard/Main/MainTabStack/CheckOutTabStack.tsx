@@ -13,8 +13,8 @@ import CrateSelectionScreen from '#screens/Dashboard/Main/Dashboard/Checkout/Cra
 import type { CoolingUnit, Crate, Farmer } from '#types/global';
 
 export type CheckOutStackRoutes = {
-  CrateSelection: { user?: Farmer; crates?: Crate[]; coolingUnit?: CoolingUnit };
-  BillingInfo: { user?: Farmer; crates?: Crate[]; coolingUnit?: CoolingUnit };
+  CrateSelection: { user?: Farmer; owner?: string; crates?: Crate[]; coolingUnit?: CoolingUnit };
+  BillingInfo: { user?: string; crates?: Crate[]; coolingUnit?: CoolingUnit };
 };
 
 export type CheckOutStackRoutePaths = keyof CheckOutStackRoutes;

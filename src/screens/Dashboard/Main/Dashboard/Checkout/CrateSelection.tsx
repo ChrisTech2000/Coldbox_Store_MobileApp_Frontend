@@ -36,7 +36,7 @@ const MOCKED_PARAMS = {
 };
 
 function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
-  const { user, coolingUnit: _coolingUnit, crates: _crates } = route.params;
+  const { user, owner, coolingUnit: _coolingUnit, crates: _crates } = route.params;
   const { t } = useTranslationUtils();
   const { coolingUnits } = useDashboardStore();
   const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } =
@@ -98,7 +98,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
       evt.stopPropagation();
 
       navigation.navigate('BillingInfo', {
-        user,
+        user: (user ? `${user?.user.firstName} ${user?.user.lastName}` : owner) ?? '',
         crates: selectedCrates,
         coolingUnit: coolingUnit ?? undefined,
       });
