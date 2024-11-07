@@ -488,6 +488,8 @@ export interface GetAvailableListingResponse {
     relCropId: number;
     totalPricePerKg: number;
     weightLockedInPaymentPendingOrdersInKg: number;
+    ownedByUserId: number | null;
+    ownedOnBehalfOfCompanyId: number | null;
   }>;
   pagination: {
     itemsPerPage: number;

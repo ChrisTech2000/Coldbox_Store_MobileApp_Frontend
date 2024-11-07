@@ -44,6 +44,7 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
   cropName: string;
   movementCode: string;
   cropImageUri: string;
+  owner: string;
 }) {
   const { t } = useTranslationUtils();
 
@@ -82,7 +83,7 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
             {props.cropName}
           </Text>
           <Text variant="TextMedium" tw="text-sm text-gray-600">
-            {t('Dashboard.Marketplace.owner')}: TODO
+            {t('Dashboard.Marketplace.owner')}: {props.owner}
           </Text>
         </View>
       </View>
