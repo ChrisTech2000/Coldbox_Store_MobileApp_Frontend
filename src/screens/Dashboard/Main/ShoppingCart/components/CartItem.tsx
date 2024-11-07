@@ -209,7 +209,7 @@ export function CartItem({ item }: CartItemProps) {
             </Text>
             <Text variant="TextMedium" tw="text-base">
               {CurrencyStandardization.currencyCode({
-                code: company.currency,
+                code: company?.currency ?? 'NGN',
                 value: item.producePricePerKg,
               }).getValueFormated()}
               {t('Dashboard.ShoppingCart.perKg')}

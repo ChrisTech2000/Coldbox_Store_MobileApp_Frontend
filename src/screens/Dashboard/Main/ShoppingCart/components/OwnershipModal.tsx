@@ -19,7 +19,7 @@ type OwnershipModalProps = {
 
 export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
   const { t } = useTranslationUtils();
-  const [cartData, fetchCart] = useCartStore((store) => [store.cartData, store.fetchCart]);
+  const [cartData, setCart] = useCartStore((store) => [store.cartData, store.setCart]);
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
 
@@ -29,9 +29,9 @@ export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
         <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
           <Text tw="text-base text-center">
             {t('Dashboard.ShoppingCart.changeOwnership', {
-              name: cartData?.onBehalfOfCompanyId
-                ? (company?.name ?? '')
-                : `${user?.firstName ?? ''} ${user?.lastName ?? ''}`,
+              name: cartData?.ownedOnBehalfOfCompanyId
+                ? `${user?.firstName ?? ''} ${user?.lastName ?? ''}`
+                : (company?.name ?? ''),
             })}
           </Text>
 
@@ -43,8 +43,10 @@ export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
               mode="contained"
               tw="border border-green-primary"
               onPress={async () => {
-                await MarketplaceService.toggleCartOwnership();
-                fetchCart();
+                const result = await MarketplaceService.toggleCartOwnership();
+                if (result.cart) {
+                  setCart(result.cart);
+                }
                 close();
               }}
             >
