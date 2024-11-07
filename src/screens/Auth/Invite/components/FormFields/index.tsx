@@ -2,10 +2,12 @@ import React from 'react';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 
 import { Text } from '#ui/components/Text';
 import { Checkbox } from '#ui/components/Checkbox';
 
+import type { AuthRoutes } from '#navigation/Auth';
 import { ERoles } from '#types/global';
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
@@ -18,6 +20,7 @@ import PasswordField from './components/PasswordField';
 export default function FormFields() {
   const { control, watch, formState } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
+  const navigation = useNavigation<NavigationProp<AuthRoutes>>();
 
   const currentUserType = watch('kind');
   const errors = formState.errors;
@@ -142,7 +145,21 @@ export default function FormFields() {
         render={({ field: { onChange, value } }) => (
           <View tw="flex flex-row items-center max-w-[75%] mt-5 space-x-2">
             <Checkbox onPress={() => onChange(!value)} status={value ? 'checked' : 'unchecked'} />
-            <Text>{t('Auth.SignUp.commonForm.terms')}</Text>
+            <Text>
+              {t('Auth.SignUp.commonForm.terms.agree')}&nbsp;
+              <Text tw="underline" onPress={() => navigation.navigate('LicenseAgreement')}>
+                {t('Auth.SignUp.commonForm.terms.license')}
+              </Text>
+              ,&nbsp;
+              <Text tw="underline" onPress={() => navigation.navigate('PrivacyPolicy')}>
+                {t('Auth.SignUp.commonForm.terms.privacy')}
+              </Text>
+              &nbsp;
+              <Text>{t('Auth.SignUp.commonForm.terms.and')}</Text>&nbsp;
+              <Text tw="underline" onPress={() => navigation.navigate('ComsolTerms')}>
+                {t('Auth.SignUp.commonForm.terms.comsol')}
+              </Text>
+            </Text>
           </View>
         )}
       />
