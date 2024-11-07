@@ -37,7 +37,7 @@ export default {
 
         const link = subs(DEEP_LINK_PATHS.INVITE, {
           inviteCode: datums.invitationCode,
-          userType: datums.userType === 'operator' ? 'op' : 'sp',
+          userType: Number(datums.userType) === 2 ? 'op' : 'sp',
           phoneNumber: datums.phoneNumber,
         });
 
