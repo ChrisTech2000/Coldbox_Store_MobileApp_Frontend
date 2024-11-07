@@ -18,6 +18,9 @@ import SignIn, { type EAccountProfile } from '#screens/Auth/SignIn';
 import SignUpCompany from '#screens/Auth/SignUp/SignUpCompany';
 import SignUpCoolingUser from '#screens/Auth/SignUp/SignUpCoolingUser';
 import Invite from '#screens/Auth/Invite';
+import UserAgreement from '#screens/Dashboard/About/UserAgreement';
+import PrivacyPolicy from '#screens/Dashboard/About/Privacy';
+import ComsolTerms from '#screens/Dashboard/About/ComsolAgreement';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -42,6 +45,9 @@ export type AuthRoutes = {
     inviteCode: string;
     phoneNumber: string;
   };
+  LicenseAgreement: undefined;
+  PrivacyPolicy: undefined;
+  ComsolTerms: undefined;
 };
 
 export type AuthRoutePaths = keyof AuthRoutes;
@@ -61,6 +67,9 @@ const NAVIGATOR_HEADERS: Record<keyof AuthRoutes, TranslationPaths | undefined> 
   AppInfo: 'navigation.auth.AppInfo',
   Root: undefined,
   Invite: 'navigation.auth.SignUp',
+  LicenseAgreement: 'navigation.about.userLicense',
+  PrivacyPolicy: 'navigation.about.privacyPolicy',
+  ComsolTerms: 'navigation.about.comsolAgreement',
 };
 
 const Stack = createNativeStackNavigator<AuthRoutes>();
@@ -107,6 +116,9 @@ export default function AuthNavigator() {
       <Stack.Screen name="PasswordReset" component={PasswordReset} />
       <Stack.Screen name="AppInfo" component={AppInfo} />
       <Stack.Screen name="Invite" component={Invite} />
+      <Stack.Screen name="LicenseAgreement" component={UserAgreement} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="ComsolTerms" component={ComsolTerms} />
     </Stack.Navigator>
   );
 }

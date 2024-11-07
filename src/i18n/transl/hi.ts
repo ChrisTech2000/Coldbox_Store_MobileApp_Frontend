@@ -259,9 +259,14 @@ export default {
         confirmPasswordLabel: 'पासवर्ड की पुष्टि करें',
         countryFieldName: 'देश',
         genderFieldName: 'लिंग',
-        terms:
-          'मैं Coldtivate उपयोगकर्ता लाइसेंस समझौते, गोपनीयता नीति और COMSOL उपयोग की शर्तों से सहमत हूँ',
         submit: 'साइन अप',
+        terms: {
+          agree: 'मैं कोल्ड्टीवेट से सहमत हूं',
+          license: 'अंत उपयोगकर्ता लाइसेंस समझौता',
+          privacy: 'गोपनीयता नीति',
+          and: 'तथा',
+          comsol: 'COMSOL उपयोग की शर्तें',
+        },
       },
       SignUpCompany: {
         companyHeader: 'कंपनी का साइन अप करें',
