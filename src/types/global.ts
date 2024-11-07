@@ -641,10 +641,24 @@ export enum ERefrigerantType {
   OTHER = 'Other',
 }
 
-export enum EPaymentType {
+export enum EPaymentThrough {
+  DIRECT = 'DIRECT',
+  COLDTIVATE = 'COLDTIVATE',
+}
+
+export enum EPaymentGateway {
+  PAYTACK = 'PAYTACK',
+  STRIPE = 'STRIPE',
+}
+
+export enum EPaymentMethod {
   CASH = 'CASH',
   CREDIT_CARD = 'CREDIT_CARD',
-  BANK_TRANSFER = 'BANK',
+  QR_CODE = 'QR_CODE',
+  BANK_TRANSFER = 'BANK_TRANSFER',
+  USSD = 'USSD',
+  OPAY = 'OPAY',
+  UPI = 'UPI',
 }
 
 export enum ECropType {

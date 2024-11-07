@@ -3,7 +3,9 @@ import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/c
 import {
   EBankAccountType,
   EImpactMode,
-  EPaymentType,
+  EPaymentThrough,
+  EPaymentGateway,
+  EPaymentMethod,
   EPickUpMethod,
   ERoles,
   ESellingLocation,
@@ -78,7 +80,9 @@ export interface CheckOutParams extends JsonObject {
   operatorId: User;
   priceDiscount: number;
   currency: string;
-  paymentType: EPaymentType;
+  paymentThrough: EPaymentThrough;
+  paymentGateway: EPaymentGateway | null;
+  paymentMethod: EPaymentMethod;
   paid: boolean;
 }
 
@@ -344,7 +348,9 @@ export interface AddCoolingUnitTemperatureParams extends JsonObject {
 
 export interface GetRevenueAnalysisParams extends JsonObject {
   coolingUnits: number | Array<number>;
-  paymentMethods: Array<EPaymentType>;
+  // paymentThroughs: Array<EPaymentThrough>;
+  // paymentGateways: Array<EPaymentGateway>;
+  paymentMethods: Array<EPaymentMethod>;
 }
 
 export interface GetImpactParams extends JsonObject {
