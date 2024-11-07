@@ -1,12 +1,10 @@
 import React, { type RefObject } from 'react';
 import { View } from 'react-native';
-import { Portal } from 'react-native-paper';
+import { Portal, TextInput } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
 import { Controller, useForm } from 'react-hook-form';
 
-import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
-import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Button } from '#ui/components/Button';
 
@@ -20,7 +18,7 @@ type FormValues<T = string> = {
 export default function CouponModal(props: {
   modalRef: RefObject<Modalize>;
   datum?: FormValues<number>;
-  onSubmit?: (values: FormValues<number>) => void;
+  onSubmit?: (values: FormValues<number>) => Promise<void>;
 }) {
   const { modalRef, datum } = props;
 
@@ -35,13 +33,20 @@ export default function CouponModal(props: {
     resolver: zodResolver((z) =>
       z.object({
         code: z.string(),
-        percentage: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0)),
+        percentage: z.preprocess(
+          (v) => {
+            const int = Number(v);
+            if (!Number.isInteger(int)) return 0;
+            return int;
+          },
+          z.number().refine((val) => val > 0 && val < 100)
+        ),
       })
     ),
   });
 
-  function onSubmit(values: FormValues<number>) {
-    props.onSubmit?.(values);
+  async function onSubmit(values: FormValues<number>) {
+    await props.onSubmit?.(values);
     form.reset({
       code: datum?.code ?? '',
       percentage: datum?.percentage.toString() ?? '',
@@ -60,45 +65,47 @@ export default function CouponModal(props: {
           <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
         </View>
 
-        <KeyboardAwareScrollView tw="pb-7 pt-4" showsVerticalScrollIndicator={false}>
-          <View tw="px-4 space-y-5">
-            <View>
-              <Text tw="text-base mb-1.5">{t('Dashboard.Management.Coupons.code')}</Text>
-              <Controller
-                control={form.control}
-                name="code"
-                render={({ field: { value, onChange } }) => (
-                  <Input
-                    tw="bg-white border rounded-sm"
-                    placeholder="E.g. 20OFF"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                )}
-              />
-            </View>
-
-            <View>
-              <View tw="flex-row space-x-1 mb-1.5">
-                <Text tw="text-base">{t('Dashboard.Management.Coupons.percentage')}</Text>
-                <Sup>(%)</Sup>
-              </View>
-              <Controller
-                control={form.control}
-                name="percentage"
-                render={({ field: { value, onChange } }) => (
-                  <Input
-                    tw="bg-white border rounded-sm"
-                    keyboardType="numeric"
-                    placeholder="E.g. 20"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                )}
-              />
-            </View>
+        <View tw="px-4 space-y-5">
+          <View>
+            <Text tw="text-base mb-1.5">{t('Dashboard.Management.Coupons.code')}</Text>
+            <Controller
+              control={form.control}
+              name="code"
+              render={({ field: { value, onChange } }) => (
+                <TextInput
+                  tw="bg-white border rounded-sm"
+                  placeholder="E.g. 20OFF"
+                  value={value}
+                  onChangeText={onChange}
+                  error={!!form.formState.errors.code}
+                  disabled={form.formState.isSubmitting}
+                />
+              )}
+            />
           </View>
-        </KeyboardAwareScrollView>
+
+          <View>
+            <View tw="flex-row space-x-1 mb-1.5">
+              <Text tw="text-base">{t('Dashboard.Management.Coupons.percentage')}</Text>
+              <Sup>(%)</Sup>
+            </View>
+            <Controller
+              control={form.control}
+              name="percentage"
+              render={({ field: { value, onChange } }) => (
+                <TextInput
+                  tw="bg-white border rounded-sm"
+                  keyboardType="numeric"
+                  placeholder="E.g. 20"
+                  value={value}
+                  onChangeText={onChange}
+                  error={!!form.formState.errors.percentage}
+                  disabled={form.formState.isSubmitting}
+                />
+              )}
+            />
+          </View>
+        </View>
 
         <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
           <Button
@@ -110,6 +117,7 @@ export default function CouponModal(props: {
               modalRef.current?.close();
               form.reset();
             }}
+            disabled={form.formState.isSubmitting}
           >
             {t('actions.cancel')}
           </Button>
