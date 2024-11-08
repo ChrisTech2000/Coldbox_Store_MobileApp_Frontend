@@ -67,7 +67,6 @@ export default function MarketplaceList() {
               />
             </MarketplaceItemWrapper>
           )}
-          //refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
         />
       );
   }

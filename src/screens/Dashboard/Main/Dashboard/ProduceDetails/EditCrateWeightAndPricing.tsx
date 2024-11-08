@@ -552,7 +552,7 @@ function EditCrateWeightAndPricing(
               typeof form.formState.errors.crates !== 'undefined' ||
               !hasChanges ||
               form.formState.isSubmitting ||
-              !(potentialPrice >= 1)
+              (crates.some((crate) => crate.isSellable) && !(potentialPrice >= 1))
             }
           >
             {t('actions.save-changes')}
@@ -569,12 +569,17 @@ function _isDirty(
   previousPrice: number = 0,
   previousSellableCrates: Array<number> = []
 ) {
-  const currentSellableCrates: Array<number> = crates
-    .filter((crate) => crate.isSellable)
-    .map((crate) => crate.id);
+  const currentSellableCrates = new Set(
+    crates.filter((crate) => crate.isSellable).map((crate) => crate.id)
+  );
+
+  const previousSellableSet = new Set(previousSellableCrates);
   const isPriceChanged = price !== previousPrice;
+
   const isSellableChanged =
-    JSON.stringify(currentSellableCrates.sort()) !== JSON.stringify(previousSellableCrates.sort());
+    currentSellableCrates.size !== previousSellableSet.size ||
+    [...currentSellableCrates].some((id) => !previousSellableSet.has(id));
+
   return isSellableChanged || isPriceChanged;
 }
 
