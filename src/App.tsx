@@ -38,29 +38,29 @@ function App() {
   useCartInformation(isAuthenticated);
 
   return (
-    <WalkthroughProvider useIsFocused={useIsFocused}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <PaperProvider theme={paperTheme}>
-          <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-          <AppVersionModal />
-          <InAppNotifications>
-            <StaleWhileRevalidate>
-              <SafeAreaProvider>
-                <NavigationContainer
-                  theme={navigatorTheme}
-                  linking={linking}
-                  onReady={() => BootSplash.hide({ fade: true })}
-                >
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PaperProvider theme={paperTheme}>
+        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+        <AppVersionModal />
+        <InAppNotifications>
+          <StaleWhileRevalidate>
+            <SafeAreaProvider>
+              <NavigationContainer
+                theme={navigatorTheme}
+                linking={linking}
+                onReady={() => BootSplash.hide({ fade: true })}
+              >
+                <WalkthroughProvider useIsFocused={useIsFocused}>
                   <Portal.Host>
                     {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
                   </Portal.Host>
-                </NavigationContainer>
-              </SafeAreaProvider>
-            </StaleWhileRevalidate>
-          </InAppNotifications>
-        </PaperProvider>
-      </GestureHandlerRootView>
-    </WalkthroughProvider>
+                </WalkthroughProvider>
+              </NavigationContainer>
+            </SafeAreaProvider>
+          </StaleWhileRevalidate>
+        </InAppNotifications>
+      </PaperProvider>
+    </GestureHandlerRootView>
   );
 }
 

@@ -1,11 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTutorialStore } from '#stores/tutorial';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 import { ECommonTutorialSteps } from './utils/constants';
 
@@ -16,6 +19,7 @@ export function CoolingUnitsMapOverlay({
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -38,6 +42,7 @@ export function CoolingUnitsMapOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
           >

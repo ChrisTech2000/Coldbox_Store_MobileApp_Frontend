@@ -1,18 +1,21 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useCheckInStore } from '#stores/checkIn';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 
 import { MOCKED_CHECK_IN_DATA } from './utils/mockedData';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -24,6 +27,7 @@ export function OperatorActionsOverlay({
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -95,6 +99,7 @@ export function OperatorActionsOverlay({
           onPress={() => {
             stop();
             toggleTutorial(false);
+            rootNavigation.navigate('Dashboard');
           }}
           labelStyle="text-green-primary"
           tw="mt-4"
@@ -114,6 +119,7 @@ export function CheckInButtonOverlay({
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -183,6 +189,7 @@ export function CheckInButtonOverlay({
           onPress={() => {
             stop();
             toggleTutorial(false);
+            rootNavigation.navigate('Dashboard');
           }}
           labelStyle="text-green-primary"
         >
@@ -197,6 +204,7 @@ export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const setProduces = useCheckInStore((store) => store.setProduces);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -222,6 +230,7 @@ export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
           >
@@ -249,6 +258,7 @@ export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
 export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -274,6 +284,7 @@ export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
           >
@@ -296,6 +307,7 @@ export function CheckIn3ScreenOverlay({
   const { t } = useTranslationUtils();
   const resetCheckInStore = useCheckInStore((store) => store.resetCheckInStore);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const colors = useTailwindColors();
 
@@ -371,6 +383,7 @@ export function CheckIn3ScreenOverlay({
           onPress={() => {
             stop();
             toggleTutorial(false);
+            rootNavigation.navigate('Dashboard');
           }}
           labelStyle="text-green-primary"
           tw="mt-2"

@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
@@ -10,6 +12,7 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { useTutorialStore } from '#stores/tutorial';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -21,6 +24,7 @@ export function OperatorActionsOverlay({
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -90,6 +94,7 @@ export function OperatorActionsOverlay({
           onPress={() => {
             stop();
             toggleTutorial(false);
+            rootNavigation.navigate('Dashboard');
           }}
           labelStyle="text-green-primary"
         >
@@ -107,6 +112,7 @@ export function CheckOutScreenOverlay({
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -132,6 +138,7 @@ export function CheckOutScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
           >
@@ -161,6 +168,7 @@ export function CheckOut2ScreenOverlay({
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -183,6 +191,7 @@ export function CheckOut2ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
           >

@@ -8,8 +8,8 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 
 import { ECommonTutorialSteps } from './utils/constants';
 
