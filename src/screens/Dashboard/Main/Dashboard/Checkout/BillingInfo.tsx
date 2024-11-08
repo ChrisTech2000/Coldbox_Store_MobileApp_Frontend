@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
-import { Divider, Icon, Switch } from 'react-native-paper';
+import { ActivityIndicator, Divider, Icon, Switch } from 'react-native-paper';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -53,6 +53,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const [isPaymentTypeModalOpen, setIsPaymentTypeModalOpen] = useState<boolean>(false);
   const [isBankTransferDetailsModalOpen, setIsBankTransferDetailsModalOpen] =
     useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>();
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
@@ -122,6 +123,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     const dInt = Number(discount);
     if (isNaN(dInt)) return;
 
+    setIsSubmitting(true);
     try {
       await ColdtivateService.checkOut({
         crates: crates?.map((crate) => crate.id),
@@ -135,6 +137,10 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
       refreshData.forEach((fn) => fn());
 
+      toast.show(t('actions.update-success'), {
+        type: 'md_success',
+      });
+
       if (guard('VIEW', 'TemperatureAlertModal')) {
         const temperatureAlertDatum = {
           coolingUnitId: coolingUnit!.id,
@@ -146,7 +152,9 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       }
 
       rootNavigation.navigate('RootMainTabStack');
+      setIsSubmitting(false);
     } catch (error) {
+      setIsSubmitting(true);
       toast.show(t('Dashboard.CrateManagement.operationError'), {
         type: 'md_danger',
       });
@@ -352,7 +360,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           icon="check-circle-outline"
           disabled={!isPaid || !paymentMethod}
         >
-          {t('actions.ok')}
+          {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.ok')}
         </Button>
       </View>
 
