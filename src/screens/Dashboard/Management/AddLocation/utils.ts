@@ -24,7 +24,7 @@ export class Geocoder {
 
   public getCoordsFromAddress = async (datums: Omit<PreprocessedFormValues, '_step'>) => {
     const result = await this._client
-      .forwardGeocode({ query: this._buildAdressFromDatum(datums), limit: 1 })
+      .forwardGeocode({ query: this.buildAdressFromDatum(datums), limit: 1 })
       .send();
 
     const location = result?.body?.features?.at(0)?.center;
@@ -86,10 +86,10 @@ export class Geocoder {
   };
 
   ///
-  // Private Methods
+  // Util functions
   ///
 
-  private _buildAdressFromDatum(datum: Omit<PreprocessedFormValues, '_step'>) {
+  public buildAdressFromDatum = (datum: Partial<Omit<PreprocessedFormValues, '_step'>>) => {
     const parts: Array<string> = [];
 
     if (datum?.streetNumber || datum?.street) {
@@ -103,5 +103,5 @@ export class Geocoder {
     if (datum.country) parts.push(datum.country);
 
     return parts.join(', ');
-  }
+  };
 }

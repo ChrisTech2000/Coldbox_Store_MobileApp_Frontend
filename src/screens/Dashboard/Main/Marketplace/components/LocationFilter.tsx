@@ -8,6 +8,7 @@ import { Button, Portal, TextInput } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import colors from 'tailwindcss/colors';
+import isEqual from 'lodash/isEqual';
 
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
@@ -21,9 +22,18 @@ import { useTranslationUtils } from '#i18n/utils';
 import { Geocoder } from '#screens/Dashboard/Management/AddLocation/utils';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import { useMarketplaceQueryParams } from '../store';
 import { DEFAULT_COORDINATES } from '../utils';
+
+function _getContextualCountry(value: string): string | undefined {
+  if (!value) return undefined;
+  const dict = countriesDict();
+  const datum = dict.getByValue(value);
+  if (typeof datum === 'undefined') return undefined;
+  return dict.getISOByName(datum.name);
+}
 
 type FormValues<T = string> = {
   cityName: string;
@@ -31,6 +41,10 @@ type FormValues<T = string> = {
 };
 
 const TRUNCATE_TEST_THRESHOLD = 10;
+const DEFAULT_FORM_VALUES: FormValues = {
+  cityName: '',
+  distance: '0',
+};
 
 export default function MarketplaceLocationFilter() {
   const { t, zodResolver } = useTranslationUtils();
@@ -41,10 +55,7 @@ export default function MarketplaceLocationFilter() {
   const modalRef = useRef<Modalize>(null);
 
   const form = useForm<FormValues>({
-    defaultValues: {
-      cityName: '',
-      distance: '0',
-    },
+    defaultValues: DEFAULT_FORM_VALUES,
     resolver: zodResolver((z) =>
       z.object({
         cityName: z.string(),
@@ -53,14 +64,14 @@ export default function MarketplaceLocationFilter() {
     ),
     reValidateMode: 'onSubmit',
   });
+  const previousValues = useRef<FormValues>(DEFAULT_FORM_VALUES);
 
   const cityName = form.watch('cityName');
   const distance = form.watch('distance');
 
   async function onSubmit(values: FormValues<number>): Promise<void> {
-    const countryCode = company?.country ?? farmerCountry;
+    const countryCode = _getContextualCountry(company?.country || farmerCountry || '');
     if (!countryCode) return;
-
     try {
       const result = await new Geocoder().getCoordsFromLocation({
         cityName: values.cityName,
@@ -70,14 +81,13 @@ export default function MarketplaceLocationFilter() {
         location: [result.latitude, result.longitude],
         filterByMaxDistanceInKm: values.distance,
       });
+      previousValues.current = form.getValues();
       modalRef.current?.close();
-    } catch {
+    } catch (exception) {
+      console.error(exception);
       toast.show(t('Dashboard.Marketplace.filterError'), {
         type: 'md_danger',
       });
-
-      form.reset();
-      modalRef.current?.close();
     }
   }
 
@@ -99,11 +109,19 @@ export default function MarketplaceLocationFilter() {
         if (JSON.stringify(nextValue) === JSON.stringify(currentLocation)) return;
 
         _setLocation(nextValue);
-        const location = await new Geocoder().getAddressFromCoords({
+        const geocoder = new Geocoder();
+
+        const location = await geocoder.getAddressFromCoords({
           latitude: nextValue[0],
           longitude: nextValue[1],
         });
-        form.setValue('cityName', location.city);
+        const address = geocoder.buildAdressFromDatum({
+          city: location.city,
+          state: location.state,
+        });
+
+        form.setValue('cityName', address);
+        previousValues.current = { cityName: address, distance: form.getValues('distance') };
       } catch (exception) {
         console.error(exception);
         if (exception instanceof Error) {
@@ -131,6 +149,7 @@ export default function MarketplaceLocationFilter() {
         rippleColor={colors.zinc[200]}
         onPress={(evt) => {
           evt.stopPropagation();
+          previousValues.current = form.getValues();
           modalRef.current?.open();
         }}
       >
@@ -149,6 +168,11 @@ export default function MarketplaceLocationFilter() {
           modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
           adjustToContentHeight
           withHandle={false}
+          onClose={() => {
+            if (!isEqual(previousValues.current, form.getValues())) {
+              form.reset(previousValues.current);
+            }
+          }}
         >
           <View tw="w-full items-center justify-center h-10">
             <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
@@ -226,6 +250,7 @@ export default function MarketplaceLocationFilter() {
               uppercase
               onPress={(evt) => {
                 evt.stopPropagation();
+                form.reset(previousValues.current);
                 modalRef.current?.close();
               }}
               disabled={form.formState.isSubmitting}
