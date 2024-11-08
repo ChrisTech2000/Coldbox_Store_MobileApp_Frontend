@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { WebView } from 'react-native-webview';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -25,11 +25,16 @@ const INJECTED_JS = `
 `;
 
 function UserAgreement() {
+  const ref = useRef<WebView>(null);
+
   return (
     <WebView
+      ref={ref}
       style={{ flex: 1, marginHorizontal: 10 }}
       source={{ uri: SOURCE_URI }}
-      injectedJavaScript={INJECTED_JS}
+      onLoadEnd={() => {
+        ref.current?.injectJavaScript(INJECTED_JS);
+      }}
     />
   );
 }

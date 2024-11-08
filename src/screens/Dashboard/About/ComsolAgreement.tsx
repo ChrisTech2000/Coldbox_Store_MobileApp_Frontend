@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { WebView } from 'react-native-webview';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -25,8 +25,17 @@ const INJECTED_JS = `
 `;
 
 function ComsolAgreement() {
+  const ref = useRef<WebView>(null);
+
   return (
-    <WebView style={{ flex: 1 }} source={{ uri: SOURCE_URI }} injectedJavaScript={INJECTED_JS} />
+    <WebView
+      ref={ref}
+      style={{ flex: 1 }}
+      source={{ uri: SOURCE_URI }}
+      onLoadEnd={() => {
+        ref.current?.injectJavaScript(INJECTED_JS);
+      }}
+    />
   );
 }
 
