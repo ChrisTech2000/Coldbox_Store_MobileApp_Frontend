@@ -93,6 +93,8 @@ export default function MarketplaceLocationFilter() {
 
   useEffect(() => {
     async function _getInitialLocation(): Promise<void> {
+      if (form.getValues('cityName').length > 0) return;
+
       const currentLocation = useMarketplaceQueryParams.getState().location;
 
       function _setLocation(location: [number, number]): void {
