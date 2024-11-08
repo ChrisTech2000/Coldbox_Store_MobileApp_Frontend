@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Modal, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
@@ -9,6 +11,7 @@ import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
@@ -19,6 +22,7 @@ export const TutorialFinishedMessageOverlay = ({
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const user = useAuthStore((store) => store.user);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <Modal transparent visible={isWalkthroughOn} animationType="fade">
@@ -42,6 +46,7 @@ export const TutorialFinishedMessageOverlay = ({
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-white"
             tw="bg-green-primary border border-green-primary mt-3"

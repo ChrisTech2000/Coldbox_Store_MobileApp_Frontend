@@ -1,9 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
@@ -24,6 +27,7 @@ export function CoolingUnitsOverlay({
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -52,6 +56,7 @@ export function CoolingUnitsOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
           >

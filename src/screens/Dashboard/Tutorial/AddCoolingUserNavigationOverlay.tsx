@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
@@ -5,6 +7,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -21,6 +24,7 @@ export function AddCoolingUserNavigationOverLay({
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -93,6 +97,7 @@ export function AddCoolingUserNavigationOverLay({
           onPress={() => {
             stop();
             toggleTutorial(false);
+            rootNavigation.navigate('Dashboard');
           }}
           labelStyle="text-green-primary"
           tw="mt-2"

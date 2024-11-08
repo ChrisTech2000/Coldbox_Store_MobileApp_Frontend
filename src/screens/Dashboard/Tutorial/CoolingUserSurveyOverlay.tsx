@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
@@ -5,6 +7,7 @@ import { List } from 'react-native-paper';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -15,6 +18,7 @@ const screenHeight = Dimensions.get('window').height;
 export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -55,6 +59,7 @@ export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponent
               onPress={() => {
                 stop();
                 toggleTutorial(false);
+                rootNavigation.navigate('Dashboard');
               }}
               labelStyle="text-green-primary"
             >
