@@ -1,11 +1,12 @@
-import camelCase from 'lodash/camelCase';
-import isEqual from 'lodash/isEqual';
 import React, { useEffect, useMemo } from 'react';
 import { FlatList, SectionList, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
+import camelCase from 'lodash/camelCase';
+import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 
 import { Text } from '#ui/components/Text';
 
@@ -107,7 +108,7 @@ function _NearbyMeSection(props: {
 
   const { t } = useTranslationUtils();
   const coordinates = useMarketplaceQueryParams((store) => store.location);
-  const isLocationDenied = isEqual(coordinates, DEFAULT_COORDINATES);
+  const isLocationDenied = isEmpty(coordinates) || isEqual(coordinates, DEFAULT_COORDINATES);
 
   const [unitMap, unitMapActions] = useMap<
     string,

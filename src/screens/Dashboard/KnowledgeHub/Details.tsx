@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { WebView } from 'react-native-webview';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -24,13 +24,18 @@ const INJECTED_JS = `
 `;
 
 function KnowledgeHubDetails(props: KnowledgeHubStackRouteProps<'Details'>) {
+  const ref = useRef<WebView>(null);
+
   const language = mmkv.getString('i18n-locale');
 
   return (
     <WebView
+      ref={ref}
       style={{ flex: 1 }}
       source={{ uri: `${props.route.params.sourceUri}?language=${language}` }}
-      injectedJavaScript={INJECTED_JS}
+      onLoadEnd={() => {
+        ref.current?.injectJavaScript(INJECTED_JS);
+      }}
     />
   );
 }
