@@ -45,12 +45,16 @@ export default function CouponModal(props: {
     ),
   });
 
-  async function onSubmit(values: FormValues<number>) {
-    await props.onSubmit?.(values);
+  function resetValues() {
     form.reset({
       code: datum?.code ?? '',
       percentage: datum?.percentage.toString() ?? '',
     });
+  }
+
+  async function onSubmit(values: FormValues<number>) {
+    await props.onSubmit?.(values);
+    resetValues();
   }
 
   return (
@@ -60,6 +64,7 @@ export default function CouponModal(props: {
         modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
         adjustToContentHeight
         withHandle={false}
+        onClose={() => resetValues()}
       >
         <View tw="w-full items-center justify-center h-10">
           <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
@@ -115,7 +120,7 @@ export default function CouponModal(props: {
             onPress={(evt) => {
               evt.stopPropagation();
               modalRef.current?.close();
-              form.reset();
+              resetValues();
             }}
             disabled={form.formState.isSubmitting}
           >
