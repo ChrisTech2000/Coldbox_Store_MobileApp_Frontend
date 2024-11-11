@@ -385,21 +385,21 @@ function ExtendedTable({ items, column1, column2, total, fourColumnsVersion }: E
             </DataTable.Cell>
             {fourColumnsVersion && (
               <DataTable.Cell tw="pl-2 max-w-[10%] min-w-[10%]">
-                {item.column3 === 'equal' && <Icon source="equal" size={25} />}
-                {item.column3 === 'decrease' && (
+                {item.column3 === 'equal' ? (
+                  <Icon source="equal" size={25} />
+                ) : item.column3 === 'decrease' ? (
                   <Icon
                     source="chevron-double-down"
                     size={30}
                     color={item.negative ? colors.green.primary : colors.red[500]}
                   />
-                )}
-                {item.column3 === 'increase' && (
+                ) : item.column3 === 'increase' ? (
                   <Icon
                     source="chevron-double-up"
                     size={30}
                     color={item.negative ? colors.red[500] : colors.green.primary}
                   />
-                )}
+                ) : null}
               </DataTable.Cell>
             )}
           </DataTable.Row>
