@@ -8,11 +8,13 @@ import colors from 'tailwindcss/colors';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { ScrollView } from '#ui/components/ScrollView';
 
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { PredictionCrop, PredictionState, PredictionTableData } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 import { Month } from '../Ranking';
 import type { AllowedCountry } from '../store';
@@ -38,6 +40,7 @@ type TableHeaderProps = {
   isSortingActive: boolean;
   title: string;
   onSort: (direction: Direction) => void;
+  alignEnd?: boolean;
 };
 
 const deviceWidth = Dimensions.get('window').width;
@@ -143,7 +146,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
   }
 
   return (
-    <View tw="mb-20">
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} tw="mb-20">
       <DataTable tw="py-4 px-2">
         <SkiaShadow blur={6} dx={2} dy={8} color={colors.zinc[300]} borderRadius={10}>
           <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 py-2">
@@ -183,10 +186,12 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
                 })
               }
               isSortingActive={sortingType.sorting === 'price'}
+              alignEnd
             />
           </DataTable.Header>
           <FlashList
             showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
             data={paginatedData}
             keyExtractor={(item, index) => `${item.date}-#${index}-${item.price}`}
             renderItem={({ item }) => (
@@ -223,11 +228,11 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
           />
         </SkiaShadow>
       </DataTable>
-    </View>
+    </ScrollView>
   );
 }
 
-function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
+function Header({ onSort, title, isSortingActive, ...props }: TableHeaderProps) {
   const [sortingDirection, setSortingDirection] = useState<Direction | undefined>('ascending');
 
   const onPress = useCallback(() => {
@@ -251,7 +256,7 @@ function Header({ onSort, title, isSortingActive }: TableHeaderProps) {
   }, [isSortingActive]);
 
   return (
-    <DataTable.Title numberOfLines={2} tw="px-1">
+    <DataTable.Title numberOfLines={2} tw={cn('px-1', props.alignEnd && 'justify-end')}>
       <TouchableOpacity tw="flex flex-row items-center" onPress={onPress}>
         <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
           {title}
