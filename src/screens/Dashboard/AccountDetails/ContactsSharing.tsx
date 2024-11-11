@@ -1,33 +1,48 @@
-import isNil from 'lodash/isNil';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Divider, List, Switch } from 'react-native-paper';
 import { useDebouncedCallback } from 'use-debounce';
+import isNil from 'lodash/isNil';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import InAppNotifications from '#common/InAppNotifications';
-import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
 import { useAuthStore } from '#stores/auth';
+import InAppNotifications from '#common/InAppNotifications';
+import { useToggle } from '#ui/hooks/useToggle';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import ColdtivateService from '#services/ColdtivateService';
+import RBAC from '#common/RBAC';
 
 function ContactsSharing() {
   const { t } = useTranslationUtils();
   const [user, setUser] = useAuthStore((store) => [store.user, store.setUser]);
   const toast = InAppNotifications.useToast();
-  const [loading, setLoading] = useState(false);
 
-  const [localPhonePublic, setLocalPhonePublic] = useState(user?.isPhonePublic ?? false);
-  const [localEmailPublic, setLocalEmailPublic] = useState(user?.isEmailPublic ?? false);
+  const [isProcessing, toggleIsProcessing] = useToggle();
 
-  const updatePreferences = useDebouncedCallback(async (publicPhone, publicEmail) => {
-    if (!user) return;
-    setLoading(true);
+  const { data, isLoading, refetch } = useApiCall('getUser', ColdtivateService.getUser, user!.id, {
+    skip: !user?.id,
+    defaultData: null,
+  });
 
-    try {
+  const [localPhonePublic, setLocalPhonePublic] = useState<boolean>(data?.isPhonePublic ?? false);
+  const [localEmailPublic, setLocalEmailPublic] = useState<boolean>(data?.isEmailPublic ?? false);
+
+  useEffect(() => {
+    if (!data) return;
+    const _isEmailPublic = data?.isEmailPublic || false;
+    const _isPhonePublic = data?.isPhonePublic || false;
+    if (localEmailPublic !== _isEmailPublic) setLocalEmailPublic(_isEmailPublic);
+    if (localPhonePublic !== _isPhonePublic) setLocalPhonePublic(_isPhonePublic);
+  }, [data?.isEmailPublic, data?.isPhonePublic]);
+
+  const updatePreferences = useDebouncedCallback(
+    async (publicPhone: boolean | undefined, publicEmail: boolean | undefined) => {
+      if (!user) return;
+
       const userDatum = await ColdtivateService.updateUser({
         userId: user.id,
         firstName: user.firstName,
@@ -45,22 +60,49 @@ function ContactsSharing() {
         type: 'md_success',
         style: { marginBottom: 50 },
       });
-    } catch (exception) {
-      console.error(exception);
-    } finally {
-      setLoading(false);
-    }
-  }, 800);
 
-  const handlePhoneSwitchChange = useCallback((value: boolean) => {
-    setLocalPhonePublic(value);
-    updatePreferences(value, undefined);
-  }, []);
+      await refetch();
+    },
+    400
+  );
 
-  const handleEmailSwitchChange = useCallback((value: boolean) => {
-    setLocalEmailPublic(value);
-    updatePreferences(undefined, value);
-  }, []);
+  const handlePhoneSwitchChange = useCallback(
+    async (value: boolean) => {
+      const previousValue = localPhonePublic;
+      try {
+        toggleIsProcessing();
+        setLocalPhonePublic(value);
+        await updatePreferences(value, undefined);
+      } catch (exception) {
+        console.error(exception);
+        toast.show(t('actions.error'), { type: 'md_danger' });
+        setLocalPhonePublic(previousValue);
+      } finally {
+        toggleIsProcessing();
+      }
+    },
+    [updatePreferences]
+  );
+
+  const handleEmailSwitchChange = useCallback(
+    async (value: boolean) => {
+      const previousValue = localEmailPublic;
+      try {
+        toggleIsProcessing();
+        setLocalEmailPublic(value);
+        await updatePreferences(undefined, value);
+      } catch (exception) {
+        console.error(exception);
+        toast.show(t('actions.error'), { type: 'md_danger' });
+        setLocalEmailPublic(previousValue);
+      } finally {
+        toggleIsProcessing();
+      }
+    },
+    [updatePreferences]
+  );
+
+  const isDisabled = isLoading || isProcessing;
 
   return (
     <ScrollView tw="flex-1 p-3" showsVerticalScrollIndicator={false}>
@@ -76,7 +118,7 @@ function ContactsSharing() {
             )}
             right={() => (
               <Switch
-                disabled={loading}
+                disabled={isDisabled}
                 value={localPhonePublic}
                 onValueChange={handlePhoneSwitchChange}
               />
@@ -97,7 +139,7 @@ function ContactsSharing() {
               )}
               right={() => (
                 <Switch
-                  disabled={loading}
+                  disabled={isDisabled}
                   value={localEmailPublic}
                   onValueChange={handleEmailSwitchChange}
                 />
