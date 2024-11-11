@@ -2,6 +2,7 @@ import { createNanoEvents, type Unsubscribe } from 'nanoevents';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 
 export const APP_EVENTS = {
+  DISPATCH_CROPS_BOTTOM_SHEET: 'DISPATCH_CROPS_BOTTOM_SHEET',
   DISPATCH_CU_PROMPT: 'DISPATCH_CU_PROMPT',
   DISPATCH_CU_FORM_MODAL: 'DISPATCH_CU_FORM_MODAL',
   DISPATCH_SENSOR_PROMPT: 'DISPATCH_SENSOR_PROMPT',

@@ -9,7 +9,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { MarketplaceRouteProps } from '#navigation/Dashboard/Main/MarketplaceStack';
+import type { MarketplaceRouteProps } from 'navigation/Dashboard/Main/Marketplace/MarketplaceStack';
 
 import CompanyFilters from './components/CompanyFilter';
 import CoolingUnitFilters from './components/CoolingUnitFilter';

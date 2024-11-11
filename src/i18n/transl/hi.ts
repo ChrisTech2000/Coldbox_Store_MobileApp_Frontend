@@ -94,6 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'पसंदीदा',
       Orders: 'ऑर्डर',
       MyOrders: 'मेरे ऑर्डर',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'नॉलेज हब',
       QuitTutorial: 'ट्यूटोरियल छोड़ें',
@@ -1211,10 +1212,18 @@ export default {
       },
     },
     MyOrders: {
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'सबसे हाल का',
         oldest: 'सबसे पुराना',
         date: 'तारीख',
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'आदेश का अवलोकन',
       orderId: 'आदेश आईडी',

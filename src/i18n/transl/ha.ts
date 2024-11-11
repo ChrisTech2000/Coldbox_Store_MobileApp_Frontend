@@ -90,6 +90,7 @@ export default {
       MarketplaceFavoritesTab: 'Abubuwan da aka fi so',
       Orders: 'Umarni',
       MyOrders: 'Umarnina',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Cibiyar Ilimi',
       QuitTutorial: 'Bar koyarwa',
@@ -1134,10 +1135,18 @@ export default {
       },
     },
     MyOrders: {
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'Most recent', // TODO
         oldest: 'Oldest', // TODO
         date: 'Date', // TODO
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'Order Overview', // TODO
       orderId: 'Order ID', // TODO

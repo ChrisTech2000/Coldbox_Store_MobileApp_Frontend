@@ -12,15 +12,18 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from 'tailwindcss/colors';
+import { useIsFocused } from '@react-navigation/native';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { cn } from '#ui/lib/cn';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
@@ -30,9 +33,20 @@ import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
+import CropsBottomSheet from './components/CropsBottomSheet';
+
+type Status = 'payment-pending' | 'cancelled' | 'paid' | 'payment-expired';
+
+const COLORS: Record<Status, string> = {
+  paid: 'border-green-600 text-green-600',
+  'payment-pending': 'border-blue-600 text-blue-600',
+  cancelled: 'border-red-600 text-red-600',
+  'payment-expired': 'border-orange-600 text-orange-600',
+};
 
 function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   const { t } = useTranslationUtils();
+  const colors = useTailwindColors();
   const { sorting } = useSortingStore();
   const scrollRef = useRef<RNScrollView>(null);
   const [crops, addRefreshDataFn] = useDashboardStore((store) => [
@@ -139,20 +153,26 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                         {dateFmt(item.createdAt, 'dd/MM/yyyy')}
                       </Text>
                     </View>
+
                     <View tw="flex-row items-center">
-                      <Text variant="TextMedium" tw="text-base w-[50%]">
-                        {t('Dashboard.MyOrders.orderId')}
-                      </Text>
-                      <Text tw="text-base text-zinc-500">{item.id}</Text>
-                    </View>
-                    <View tw="flex-row items-center">
-                      <Text variant="TextMedium" tw="text-base w-[50%]">
-                        {t('Dashboard.MyOrders.cropType')}
-                      </Text>
-                      <Text tw="text-base text-zinc-500 w-40" numberOfLines={2}>
+                      <Touchable
+                        tw="flex flex-row w-[50%] items-center space-x-1"
+                        onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CROPS_BOTTOM_SHEET, item)}
+                      >
+                        <Text variant="TextMedium" tw="text-base">
+                          {t('Dashboard.MyOrders.cropType')}
+                        </Text>
+                        <MaterialCommunityIcon
+                          name="information-outline"
+                          size={18}
+                          color={colors.green.primary}
+                        />
+                      </Touchable>
+                      <Text tw="text-base text-zinc-500 w-40" numberOfLines={1}>
                         {[...new Set(_crops)].join(', ')}
                       </Text>
                     </View>
+
                     <View tw="flex-row items-center">
                       <Text variant="TextMedium" tw="text-base w-[50%]">
                         {t('Dashboard.MyOrders.coolingUnit')}
@@ -161,6 +181,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                         {[...new Set(_coolingUnits)].join(', ')}
                       </Text>
                     </View>
+
                     <View tw="flex-row items-center">
                       <Text variant="TextMedium" tw="text-base w-[50%]">
                         {t('Dashboard.MyOrders.orderTotal')}
@@ -170,6 +191,28 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                           code: 'NGN', // TODO: get value from somewhere
                           value: item.totalAmount,
                         }).getValueFormated()}
+                      </Text>
+                    </View>
+
+                    <View tw="flex-row items-center">
+                      <Text variant="TextMedium" tw="text-base w-[50%]">
+                        {t('Dashboard.MyOrders.ownedBy')}
+                      </Text>
+                      <Text tw="text-base text-zinc-500">
+                        {item.ownedOnBehalfOfCompanyId
+                          ? t('Dashboard.Analytics.company')
+                          : t('Dashboard.MyOrders.you')}
+                      </Text>
+                    </View>
+
+                    <View
+                      tw={cn(
+                        'self-end px-1 py-0.5 border rounded-lg',
+                        COLORS[item.status as Status]
+                      )}
+                    >
+                      <Text tw={COLORS[item.status as Status]}>
+                        {t(`Dashboard.MyOrders.status.${item.status as Status}`)}
                       </Text>
                     </View>
                   </View>
@@ -189,7 +232,19 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
           </SkiaShadow>
         </View>
       ) : null}
+
+      <_PortalsWrapper />
     </View>
+  );
+}
+
+function _PortalsWrapper() {
+  const isFocused = useIsFocused();
+  if (!isFocused) return null;
+  return (
+    <React.Fragment>
+      <CropsBottomSheet />
+    </React.Fragment>
   );
 }
 

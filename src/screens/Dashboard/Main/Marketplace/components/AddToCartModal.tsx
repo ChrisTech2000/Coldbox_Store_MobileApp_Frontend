@@ -98,6 +98,7 @@ export default function AddToCartModal() {
                   shelfLife={datum.shelfLife}
                   cropName={datum.crop.name}
                   movementCode={datum.movementCode}
+                  owner={datum.owner}
                   cropImageUri={`${API_BASE_URL}media/${datum.crop.image}`}
                 />
                 <MarketplaceItemWrapper.CompanyAction company={datum.company} readOnly />

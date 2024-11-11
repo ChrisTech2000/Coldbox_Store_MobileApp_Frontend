@@ -94,6 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'પ્રિય',
       Orders: 'ઓર્ડર',
       MyOrders: 'મારા ઓર્ડર',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'જ્ઞાન કેન્દ્ર',
       QuitTutorial: 'ટ્યુટોરિયલ છોડો',
@@ -1205,10 +1206,18 @@ export default {
       },
     },
     MyOrders: {
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'સૌથી તાજેતરના',
         oldest: 'સૌથી જૂના',
         date: 'તારીખ',
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'ઓર્ડર સમીક્ષા',
       orderId: 'ઓર્ડર ID',

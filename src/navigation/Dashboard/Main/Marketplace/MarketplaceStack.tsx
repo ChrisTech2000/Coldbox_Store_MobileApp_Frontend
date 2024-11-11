@@ -8,11 +8,11 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
-import MarketplaceRoot from '#screens/Dashboard/Main/Marketplace';
 import MarketplaceFilters from '#screens/Dashboard/Main/Marketplace/MarketplaceFilters';
+import type { FormValues } from '#screens/Dashboard/Main/Marketplace/modules/MarketplaceFormManager';
 
-import { Touchable } from '#ui/components/Touchable';
 import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
@@ -21,7 +21,8 @@ import NavigatorHeader, {
 } from '#navigation/components/NavigatorHeader';
 import { useDashboardHeader } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import type { FormValues } from '#screens/Dashboard/Main/Marketplace/modules/MarketplaceFormManager';
+
+import MarketplaceTabs from './MarketplaceTabs';
 
 export type MarketplaceRoutes = {
   MarketplaceRoot: undefined;
@@ -101,7 +102,7 @@ export default function MarketplaceStack() {
 
   return (
     <Stack.Navigator initialRouteName="MarketplaceRoot" screenOptions={screenOptions}>
-      <Stack.Screen name="MarketplaceRoot" component={MarketplaceRoot} />
+      <Stack.Screen name="MarketplaceRoot" component={MarketplaceTabs} />
       <Stack.Screen name="MarketplaceFilters" component={MarketplaceFilters} />
     </Stack.Navigator>
   );

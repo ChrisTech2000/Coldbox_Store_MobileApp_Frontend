@@ -23,7 +23,7 @@ import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
 import AnalyticsStack from './AnalyticsStack';
 import ShoppingCartStack, { type ShoppingCartStackRoutes } from './ShoppingCartStack';
-import MarketplaceStack from './MarketplaceStack';
+import MarketplaceStack from './Marketplace/MarketplaceStack';
 import OrdersStack from './OrdersStack';
 
 export type DashboardMainRoutes = {

@@ -17,7 +17,7 @@ import { paperTheme } from '#ui/lib/theme';
 import RBAC from '#common/RBAC';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
-import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/MarketplaceStack';
+import type { MarketplaceRoutes } from 'navigation/Dashboard/Main/Marketplace/MarketplaceStack';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import type { GetAvailableListingParams } from '#types/api.params';

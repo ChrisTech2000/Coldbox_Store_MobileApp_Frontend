@@ -92,6 +92,7 @@ const en = {
       MarketplaceFavoritesTab: 'Favorites',
       Orders: 'Orders',
       MyOrders: 'My Orders',
+      MySales: 'My Sales',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Knowledge Hub',
       QuitTutorial: 'Quit Tutorial',
@@ -1206,10 +1207,18 @@ const en = {
       },
     },
     MyOrders: {
+      ownedBy: 'Owned by',
+      you: 'You',
       sort: {
         mostRecent: 'Most recent',
         oldest: 'Oldest',
         date: 'Date',
+      },
+      status: {
+        'payment-pending': 'Payment Pending',
+        'payment-expired': 'Payment Expired',
+        cancelled: 'Cancelled',
+        paid: 'Paid',
       },
       title: 'Order Overview',
       orderId: 'Order ID',

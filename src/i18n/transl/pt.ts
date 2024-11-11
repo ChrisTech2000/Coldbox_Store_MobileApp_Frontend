@@ -94,6 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'Favoritos',
       Orders: 'Pedidos',
       MyOrders: 'Meus Pedidos',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Centro de Conhecimento',
       QuitTutorial: 'Sair do Tutorial',
@@ -1218,10 +1219,18 @@ export default {
       },
     },
     MyOrders: {
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'Mais recente',
         oldest: 'Mais antigo',
         date: 'Data',
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'Visão Geral do Pedido',
       orderId: 'ID do Pedido',
