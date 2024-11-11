@@ -1,24 +1,53 @@
-import cloneDeep from 'lodash/cloneDeep';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
+import { CurrencyStandardization } from 'currency-format-utils';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { MarketplaceRouteProps } from '#navigation/Dashboard/Main/MarketplaceStack';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
+import { useTranslationUtils } from '#i18n/utils';
 
 import CompanyFilters from './components/CompanyFilter';
 import CoolingUnitFilters from './components/CoolingUnitFilter';
 import CropTypeFilters from './components/CropTypeFilter';
 import RangePrice from './components/RangePrice';
 import MarketplaceFormManager, { type FormValues } from './modules/MarketplaceFormManager';
+
 import { type FilterItem, useMarketplaceFilters } from './store';
+import { DEFAULT_CURRENCY_CODE } from './utils';
 
 function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) {
+  const { t } = useTranslationUtils();
+
+  const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const currencyCode = useMemo(() => {
+    const datum = countriesDict().getByValue(companyCountry || farmerCountry || '');
+    return datum?.currency || DEFAULT_CURRENCY_CODE;
+  }, [companyCountry, farmerCountry]);
+
+  const currencyFormatterFunc = useCallback(
+    (value: number) =>
+      CurrencyStandardization.currencyCode({
+        code: currencyCode,
+        value: value,
+        isCents: false,
+      }).getValueFormated(),
+    [currencyCode]
+  );
+
   return (
     <React.Fragment>
       <ScrollView tw="px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
@@ -36,14 +65,18 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
                     }))
                   : []
               );
-              if (min > 0 && max > 0) {
+              if (min > 0 || max > 0) {
+                const minLabel = min > 0 ? `${currencyFormatterFunc(min)}/KG` : '';
+                const maxLabel = max > 0 ? `${currencyFormatterFunc(max)}/KG` : '';
+                const label = [minLabel, maxLabel].filter(Boolean).join(' - ');
                 filters.push({
                   key: 'priceRange',
-                  label: `$${min}KG - $${max}KG`,
+                  label,
                   value: [min, max],
                 });
               }
               useMarketplaceFilters.getState().addFilters(filters, true);
+              props.navigation.goBack();
             }}
           >
             <View tw="w-full">
@@ -56,7 +89,7 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
         </View>
       </ScrollView>
 
-      <View tw="w-full bottom-0 left-0 py-6 px-4 flex-row items-center justify-evenly bg-zinc-50 border-t border-solid border-zinc-400">
+      <HideWithKeyboardView tw="w-full bottom-0 left-0 py-6 px-4 flex-row items-center justify-evenly bg-zinc-50 border-t border-solid border-zinc-400">
         <Button
           tw="w-[47%]"
           mode="outlined"
@@ -67,7 +100,7 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
             props.navigation.goBack();
           }}
         >
-          Cancel
+          {t('actions.cancel')}
         </Button>
         <Button
           tw="w-[47%]"
@@ -76,12 +109,11 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
           onPress={(evt) => {
             evt.stopPropagation();
             emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_SUBMISSION);
-            props.navigation.goBack();
           }}
         >
-          Apply
+          {t('actions.apply')}
         </Button>
-      </View>
+      </HideWithKeyboardView>
     </React.Fragment>
   );
 }

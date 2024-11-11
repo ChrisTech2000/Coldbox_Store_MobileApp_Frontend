@@ -198,7 +198,7 @@ export default function MarketplaceLocationFilter() {
             </View>
             <View tw="space-y-2">
               <View tw="flex-row items-center">
-                <Text tw="text-base">Max Distance</Text>
+                <Text tw="text-base">{t('Dashboard.Marketplace.maxDistance')}</Text>
                 <Sup>(KM)</Sup>
               </View>
               <Controller
@@ -267,7 +267,7 @@ export default function MarketplaceLocationFilter() {
               onPress={form.handleSubmit(onSubmit as any)}
               disabled={form.formState.isSubmitting}
             >
-              Apply
+              {t('actions.apply')}
             </Button>
           </View>
         </Modalize>

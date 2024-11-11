@@ -12,6 +12,7 @@ import AddToCartModal from './components/AddToCartModal';
 import CompanyBottomSheet from './components/CompanyBottomSheet';
 import MarketplaceFiltersSection from './components/MarketplaceFiltersSection';
 import MarketplaceList from './modules/MarketplaceList';
+
 import { useMarketplaceListing } from './utils';
 
 function MarketplaceRoot() {

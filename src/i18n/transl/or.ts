@@ -158,6 +158,8 @@ export default {
     continue: 'ଜାରି ରଖନ୍ତୁ',
     save: 'ସଞ୍ଚୟ କରନ୍ତୁ',
     update: 'ଅଦ୍ୟତନ କରନ୍ତୁ |',
+    clearAll: 'Clear all', // TODO
+    apply: 'Apply', // TODO
   },
   components: {
     datePicker: {
@@ -986,6 +988,13 @@ export default {
         'କିଛି ଭୁଲ ହେବାରୁ ବିକଳ୍ପ ଗଡ଼ିଛି। ଦୟାକରି ଟାଇପୋରେ ତାଲିକା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଦିଆଯାଇଥିବା ସହର ନାଇଜେରିଆରେ ଅବସ୍ଥିତ।',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
+      priceRange: 'Range Price / KG',
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+      },
+      maxDistance: 'Max Distance',
     },
     AccountDetails: {
       popups: {
