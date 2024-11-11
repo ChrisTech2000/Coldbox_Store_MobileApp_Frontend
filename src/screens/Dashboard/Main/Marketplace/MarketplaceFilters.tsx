@@ -66,12 +66,11 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
                   : []
               );
               if (min > 0 || max > 0) {
-                const minLabel = min > 0 ? `${currencyFormatterFunc(min)}/KG` : '';
-                const maxLabel = max > 0 ? `${currencyFormatterFunc(max)}/KG` : '';
-                const label = [minLabel, maxLabel].filter(Boolean).join(' - ');
+                const minLabel = `${currencyFormatterFunc(min)}/KG`;
+                const maxLabel = `${currencyFormatterFunc(max)}/KG`;
                 filters.push({
                   key: 'priceRange',
-                  label,
+                  label: [minLabel, maxLabel].join(' - '),
                   value: [min, max],
                 });
               }
