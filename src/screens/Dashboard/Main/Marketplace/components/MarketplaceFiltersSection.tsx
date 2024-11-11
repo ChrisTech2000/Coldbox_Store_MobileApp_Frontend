@@ -82,7 +82,7 @@ export default function MarketplaceFiltersSection() {
               }}
             >
               <MaterialCommunityIcon name="filter-variant" size={28} color={colors.zinc[600]} />
-              <Text tw="text-base">Filters</Text>
+              <Text tw="text-base">{t('Dashboard.Marketplace.Filters.label')}</Text>
             </Touchable>
           </View>
 

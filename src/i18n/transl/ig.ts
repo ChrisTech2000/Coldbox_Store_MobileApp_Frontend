@@ -152,6 +152,8 @@ export default {
     save: 'Chekwa',
     continue: 'Aga nihu',
     update: 'update', // TODO
+    clearAll: 'Clear all', // TODO
+    apply: 'Apply', // TODO
   },
   components: {
     datePicker: {
@@ -906,6 +908,13 @@ export default {
         'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.', // TODO
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
+      priceRange: 'Range Price / KG',
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+      },
+      maxDistance: 'Max Distance',
     },
     AccountDetails: {
       popups: {

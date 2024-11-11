@@ -156,6 +156,8 @@ const en = {
     save: 'Save',
     continue: 'Continue',
     update: 'update',
+    clearAll: 'Clear all',
+    apply: 'Apply',
   },
   components: {
     datePicker: {
@@ -981,6 +983,13 @@ const en = {
         'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg',
       owner: 'Owner',
+      priceRange: 'Range Price / KG',
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+      },
+      maxDistance: 'Max Distance',
     },
     AccountDetails: {
       popups: {
