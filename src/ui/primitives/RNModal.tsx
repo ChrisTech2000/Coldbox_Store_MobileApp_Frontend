@@ -1,12 +1,11 @@
 import React, { type PropsWithChildren } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import { Modal, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Platform } from 'react-native';
+import { Modal as PaperModal } from 'react-native-paper';
 
-export default function RNModal(
-  props: PropsWithChildren<{ visible: boolean; keyboardAware?: boolean; onDismiss: () => void }>
+function _KeyboardAwareModalIOS(
+  props: PropsWithChildren<{ visible: boolean; onDismiss: () => void }>
 ) {
-  const { visible, keyboardAware, onDismiss, children } = props;
-
+  const { visible, onDismiss, children } = props;
   return (
     <Modal
       visible={visible}
@@ -16,17 +15,15 @@ export default function RNModal(
       onRequestClose={onDismiss}
     >
       <TouchableWithoutFeedback onPress={onDismiss}>
-        {typeof keyboardAware !== 'undefined' ? (
-          <KeyboardAvoidingView
-            tw="items-center justify-center flex-1 px-3 bg-zinc-900/40"
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          >
-            {children}
-          </KeyboardAvoidingView>
-        ) : (
-          <View tw="items-center justify-center flex-1 px-3 bg-zinc-900/40">{children}</View>
-        )}
+        <KeyboardAvoidingView
+          tw="items-center justify-center flex-1 px-3 bg-zinc-900/40"
+          behavior="padding"
+        >
+          {children}
+        </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </Modal>
   );
 }
+
+export const RNModal = Platform.OS === 'ios' ? _KeyboardAwareModalIOS : PaperModal;

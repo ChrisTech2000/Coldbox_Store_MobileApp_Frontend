@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Portal } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
-import RNModal from '#ui/primitives/RNModal';
+import { RNModal } from '#ui/primitives/RNModal';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
@@ -25,7 +25,7 @@ export default function SensorModal() {
 
   return (
     <Portal>
-      <RNModal visible={isVisible} keyboardAware onDismiss={toggleVisibility}>
+      <RNModal visible={isVisible} onDismiss={toggleVisibility}>
         <View tw="w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2">
           <_SensorFactory sensorType={selectedSensor} />
         </View>
