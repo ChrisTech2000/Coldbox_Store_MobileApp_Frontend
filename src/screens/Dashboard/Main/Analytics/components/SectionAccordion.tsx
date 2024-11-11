@@ -32,11 +32,11 @@ export function SectionAccordion({
   };
 
   return (
-    <View tw="space-y-2 my-2">
+    <View tw="space-y-2 my-2 w-full">
       <TouchableWithoutFeedback onPress={toggleExpand}>
         <View
           tw={cn(
-            'flex flex-row items-center justify-between h-16 px-3 py-1 items-center justify-between rounded-lg',
+            'flex flex-row items-center justify-between h-16 px-3 py-1 items-center justify-between rounded-lg w-full',
             color
           )}
         >
@@ -51,7 +51,11 @@ export function SectionAccordion({
         </View>
       </TouchableWithoutFeedback>
       {expanded ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} tw="w-full">
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle="w-full"
+        >
           {content}
         </ScrollView>
       ) : null}

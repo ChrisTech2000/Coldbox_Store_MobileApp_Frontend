@@ -466,7 +466,7 @@ function generateCratesHtmlContent(
       UtilizationSection({
         title: t('Dashboard.Analytics.tabsShared.totalCo2Label'),
         content: t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
-          amount: `${(data && 'totCo2' in data ? data.totCo2['0'] ?? 0 : 0).toFixed(2)}`,
+          amount: `${(data && 'totCo2' in data ? (data.totCo2['0'] ?? 0) : 0).toFixed(2)}`,
         }).split('%')[0],
       }),
     ],
@@ -900,7 +900,7 @@ function generateComparisonHtmlContent(
           return {
             unit: cuData?.unitName?.[i] ?? '',
             percentage: `${Number.isNaN(percentage) ? 0 : percentage.toFixed(2)}%`,
-            impact: `${getMetricValue(data?.impactMetrics?.[0]?.numPostHarvestSurveys, i) ?? 0} / ${getMetricValue(data?.impactMetrics?.[0].possiblePostCheckoutSurveyRoom, i) ?? 0}`,
+            impact: `${getMetricValue(data?.impactMetrics?.[0]?.numPostHarvestSurveys, i) ?? 0} / ${getMetricValue(data?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom, i) ?? 0}`,
           };
         }),
       }),
