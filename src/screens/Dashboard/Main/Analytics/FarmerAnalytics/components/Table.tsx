@@ -82,7 +82,7 @@ export function ExtendedTable({ items, column1, column2, total }: ExtendedTableP
   const { t } = useTranslationUtils();
 
   return (
-    <DataTable tw="py-4 px-2">
+    <DataTable tw="py-4 px-2 min-w-full">
       <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
         <DataTable.Cell>
           <Text variant="TextMedium" tw="text-white text-base">

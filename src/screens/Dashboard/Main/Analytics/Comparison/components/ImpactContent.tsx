@@ -287,7 +287,7 @@ function Table({ items, header, total }: TableProps) {
 
   return (
     <DataTable tw="py-4 px-2 min-w-full">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14 min-w-full">
+      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
         <DataTable.Title tw="max-w-[50%] min-w-[50%]">
           <Text variant="TextMedium" tw="text-white text-base">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
