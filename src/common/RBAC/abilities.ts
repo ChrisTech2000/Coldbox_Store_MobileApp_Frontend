@@ -30,7 +30,6 @@ export default function permissionsFactory(role = ERoles.AUTH, contextualCountry
       can(PERMISSION_KINDS.VIEW, 'AccountSellerSettings');
       can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceShoppingCart');
       can(PERMISSION_KINDS.VIEW, 'MarketplaceListing');
-      can(PERMISSION_KINDS.NAVIGATE, 'MarketplaceOrders');
     }
 
     ///

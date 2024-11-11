@@ -45,7 +45,6 @@ export type DashboardMainRoutes = {
     params?: ShoppingCartStackRoutes | ShoppingCartStackRoutes;
   };
   Marketplace: undefined;
-  Orders: undefined;
 };
 
 export type DashboardMainRoutePaths = keyof DashboardMainRoutes;
@@ -76,7 +75,6 @@ const TAB_METADATA: Record<
   Analytics: { tabBarIcon: 'chart-line', translationPath: 'navigation.bottomTabs.Analytics' },
   ShoppingCart: undefined,
   Marketplace: { tabBarIcon: 'store-outline', translationPath: 'navigation.dashboard.Marketplace' },
-  Orders: { tabBarIcon: 'receipt', translationPath: 'navigation.dashboard.Orders' },
 };
 
 const Tab = createBottomTabNavigator<DashboardMainRoutes>();
@@ -103,8 +101,7 @@ export default function DashboardMainBottomTabs() {
         focusedRoute !== 'Analytics' &&
         routeName !== 'Analytics' &&
         routeName !== 'ShoppingCart' &&
-        routeName !== 'Marketplace' &&
-        routeName !== 'Orders';
+        routeName !== 'Marketplace';
 
       // eslint-disable-next-line
       // @ts-ignore

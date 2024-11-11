@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import type { RouteProp } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
@@ -88,12 +89,10 @@ export default function MarketplaceStack() {
           } else {
             if (routeName === 'IncompleteOrderOverview') {
               baseProps.routeTitle = t('navigation.dashboard.OrderDetails', {
-                // eslint-disable-next-line react/prop-types
                 orderCode: `#${props.route?.params?.orderId}`,
               });
 
               baseProps.leftContent = (
-                // eslint-disable-next-line react/prop-types
                 <Appbar.BackAction
                   size={26}
                   onPress={() => props.navigation.replace('MarketplaceRoot')}
@@ -101,7 +100,6 @@ export default function MarketplaceStack() {
               );
             } else {
               baseProps.leftContent = (
-                // eslint-disable-next-line react/prop-types
                 <Appbar.BackAction size={26} onPress={props.navigation.goBack} />
               );
               baseProps.rightContent = (

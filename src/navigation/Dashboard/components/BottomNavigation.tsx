@@ -34,7 +34,7 @@ type NavigationState = TabNavigationState<ParamListBase>;
 type NavigationRoutes = Array<DashboardMainRoutePaths>;
 
 const BOTTOM_NAV_ITEMS: NavigationRoutes = ['Dashboard', 'Marketplace', 'Analytics'];
-const BOTTOM_SHEET_ITEMS: NavigationRoutes = ['MarketPrice', 'History', 'CoolingUnits', 'Orders'];
+const BOTTOM_SHEET_ITEMS: NavigationRoutes = ['MarketPrice', 'History', 'CoolingUnits'];
 
 const ROUTE_TITLE_META = {
   Dashboard: 'navigation.bottomTabs.Dashboard',
@@ -43,7 +43,6 @@ const ROUTE_TITLE_META = {
   MarketPrice: 'navigation.bottomTabs.MarketPrice',
   History: 'navigation.bottomTabs.History',
   CoolingUnits: 'navigation.bottomTabs.CoolingUnits',
-  Orders: 'navigation.dashboard.Orders',
   ShoppingCart: 'navigation.dashboard.ShoppingCart',
 } satisfies Record<DashboardMainRoutePaths, TranslationPaths>;
 
