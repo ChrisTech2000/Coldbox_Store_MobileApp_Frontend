@@ -80,13 +80,15 @@ function EditCrateWeightAndPricing(
     'checkMarketplaceEligibility',
     MarketplaceService.checkMarketplaceEligibility,
     {
-      userIds: [farmer?.user?.id as number],
+      userIds: farmer?.user?.id ? [farmer.user.id] : [user?.id as number],
       companyIds: [params.companyId],
     },
     {
-      skip: !params.companyId || !farmer?.user?.id,
+      skip: !params.companyId || (!farmer?.user?.id && !user?.id),
     }
   );
+
+  console.log(params.companyId, farmer?.user?.id);
 
   const form = useForm<FormValues>({
     defaultValues: { applyToAll: false, crates: [], price: '0' },
@@ -282,7 +284,7 @@ function EditCrateWeightAndPricing(
   );
 
   const companyEligible = eligibility.companies?.[params.companyId ?? ''];
-  const farmerEligible = eligibility.users?.[farmer?.user.id ?? ''];
+  const farmerEligible = eligibility.users?.[farmer?.user?.id ?? user?.id ?? ''];
 
   if (isSettingUp || isLoadingEligibility || isLoadingFarmer) {
     return (

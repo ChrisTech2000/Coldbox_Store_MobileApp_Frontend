@@ -34,6 +34,7 @@ import { EPickUpMethod, EPricingType } from '#types/global';
 import colors from 'tailwindcss/colors';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
 
+// TODO: this screen needs implementation
 function SalesDetails(props: SalesRouteProps<'SalesDetails'>) {
   const { t } = useTranslationUtils();
   const scrollRef = useRef<ScrollView>(null);
@@ -43,8 +44,8 @@ function SalesDetails(props: SalesRouteProps<'SalesDetails'>) {
   const [showButton, setShowButton] = useState<boolean>(false);
 
   const { data, isLoading } = useApiCall(
-    'getOrder',
-    MarketplaceService.getOrder,
+    'getSale',
+    MarketplaceService.getSale,
     props.route.params.orderId,
     {
       defaultData: undefined,

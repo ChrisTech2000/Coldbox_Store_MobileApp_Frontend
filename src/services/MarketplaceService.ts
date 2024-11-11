@@ -451,6 +451,30 @@ class MarketplaceService extends HttpClient {
       throw customError;
     }
   };
+
+  public getSale = async (orderId: number): Promise<GetAllOrdersResponse> => {
+    try {
+      const url = subs(EMarketplaceEndpoints.GET_SALE, { orderId });
+      const { data } = await this.get<GetAllOrdersResponse>(url);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public cancelOrder = async (orderId: number): Promise<CheckoutWithPaystackResponse> => {
+    try {
+      const url = subs(EMarketplaceEndpoints.CANCEL_ORDER, { order: orderId });
+      const { data } = await this.post<CheckoutWithPaystackResponse>(url, {});
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new MarketplaceService();

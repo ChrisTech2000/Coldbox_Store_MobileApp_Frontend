@@ -50,7 +50,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const [showButton, setShowButton] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const { data, isLoading } = useApiCall(
+  const { data, isLoading, refetch } = useApiCall(
     'getOrder',
     MarketplaceService.getOrder,
     props.route.params.orderId,
@@ -110,6 +110,29 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
             orderId: props.route.params.orderId,
           });
         }
+      } catch (error) {
+        setIsSubmitting(false);
+        toast.show(t('navigation.error.errorMessage'), {
+          type: 'md_danger',
+        });
+      }
+    },
+    [props.route.params.orderId]
+  );
+
+  const onCancel = useCallback(
+    async (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+
+      try {
+        setIsSubmitting(true);
+
+        await MarketplaceService.cancelOrder(props.route.params.orderId);
+        refetch();
+        setIsSubmitting(false);
+        toast.show(t('actions.update-success'), {
+          type: 'md_success',
+        });
       } catch (error) {
         setIsSubmitting(false);
         toast.show(t('navigation.error.errorMessage'), {
@@ -199,6 +222,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               onPress={() =>
                 emitter.emit(APP_EVENTS.DISPATCH_PAYMENT_PENDING_BOTTOM_SHEET, {
                   onPay,
+                  onCancel,
                 })
               }
               disabled={isSubmitting}
@@ -375,7 +399,7 @@ function ProduceCard(props: {
     MarketplaceService.listDeliveryContacts,
     ownerCompany.id,
     {
-      skip: !ownerCompany,
+      skip: !ownerCompany.id,
       defaultData: [],
     }
   );

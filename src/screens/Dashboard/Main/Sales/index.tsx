@@ -25,7 +25,6 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import { SalesRouteProps } from '#navigation/Dashboard/Main/SalesStack';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
@@ -33,7 +32,7 @@ import { useDashboardStore } from '#stores/dashboard';
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
 
-function SalesRoot(props: SalesRouteProps<'SalesRoot'>) {
+function SalesRoot() {
   const { t } = useTranslationUtils();
   const colors = useTailwindColors();
   const { sorting } = useSortingStore();
@@ -113,7 +112,7 @@ function SalesRoot(props: SalesRouteProps<'SalesRoot'>) {
           </View>
           <FlatList
             data={sortedData}
-            keyExtractor={(item) => `orders-history-list-item-#${item.id}`}
+            keyExtractor={(item) => `sales-history-list-item-#${item.id}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
@@ -122,16 +121,7 @@ function SalesRoot(props: SalesRouteProps<'SalesRoot'>) {
               );
 
               return (
-                <Touchable
-                  tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2"
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    props.navigation.navigate('SalesDetails', {
-                      orderId: item.id,
-                      isTabsView: true,
-                    });
-                  }}
-                >
+                <View tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2">
                   <View tw="w-[90%] space-y-2">
                     <View tw="flex-row items-center">
                       <Text variant="TextMedium" tw="text-base w-[50%]">
@@ -181,7 +171,10 @@ function SalesRoot(props: SalesRouteProps<'SalesRoot'>) {
                       <Text tw="text-base text-zinc-500">
                         {CurrencyStandardization.currencyCode({
                           code: 'NGN', // TODO: get value from somewhere
-                          value: item.totalProduceAmount,
+                          value: item.items.reduce(
+                            (acc, current) => (acc += current.produceAmount),
+                            0
+                          ),
                         }).getValueFormated()}
                       </Text>
                     </View>
@@ -193,13 +186,15 @@ function SalesRoot(props: SalesRouteProps<'SalesRoot'>) {
                       <Text tw="text-base text-zinc-500">
                         {CurrencyStandardization.currencyCode({
                           code: 'NGN', // TODO: get value from somewhere
-                          value: item.totalCoolingFeesAmount,
+                          value: item.items.reduce(
+                            (acc, current) => (acc += current.coolingFeesAmount),
+                            0
+                          ),
                         }).getValueFormated()}
                       </Text>
                     </View>
                   </View>
-                  <MaterialCommunityIcon name="chevron-right" size={28} color={colors.gray[700]} />
-                </Touchable>
+                </View>
               );
             }}
           />

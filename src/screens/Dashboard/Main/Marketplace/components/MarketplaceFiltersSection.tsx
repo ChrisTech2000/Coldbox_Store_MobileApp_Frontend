@@ -148,7 +148,7 @@ export default function MarketplaceFiltersSection() {
 
       <Portal>
         <Modal visible={visibleModal !== undefined} onDismiss={resetState}>
-          <View tw="w-full items-center bg-zinc-50 rounded-3xl w-2/3 max-w-2/3 h-auto py-3 px-2 self-center space-y-2">
+          <View tw="w-full items-center bg-zinc-50 rounded-3xl w-3/4 max-w-3/4 py-3 px-2 self-center">
             <View tw="items-start space-y-1 my-1 w-full">
               <RadioButton.Group
                 value={visibleModal === 'buyer' ? buyerInternalSelection : internalSelection}

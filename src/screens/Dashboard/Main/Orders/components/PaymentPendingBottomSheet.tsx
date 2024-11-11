@@ -44,14 +44,20 @@ export default function PaymentPendingBottomSheet() {
           <List.Item
             title={t('Dashboard.ShoppingCart.pay')}
             onPress={async (evt: GestureResponderEvent) => {
-              await data?.onPay(evt);
               modalRef.current?.close();
+              await data?.onPay(evt);
             }}
           />
 
           <Divider />
 
-          <List.Item title={t('actions.cancel')} onPress={() => null} />
+          <List.Item
+            title={t('actions.cancel')}
+            onPress={async (evt: GestureResponderEvent) => {
+              modalRef.current?.close();
+              await data?.onCancel(evt);
+            }}
+          />
         </View>
 
         <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300 mb-4">
