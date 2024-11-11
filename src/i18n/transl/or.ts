@@ -1211,6 +1211,8 @@ export default {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees', // TODO
+      soldFor: 'Sold for', // TODO
       ownedBy: 'Owned by', // TODO
       you: 'You', // TODO
       sort: {

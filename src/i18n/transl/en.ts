@@ -1207,6 +1207,8 @@ const en = {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees',
+      soldFor: 'Sold for',
       ownedBy: 'Owned by',
       you: 'You',
       sort: {

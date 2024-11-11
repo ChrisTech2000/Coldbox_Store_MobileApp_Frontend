@@ -24,7 +24,6 @@ import MarketPriceTabs from './MarketPriceTabs';
 import AnalyticsStack from './AnalyticsStack';
 import ShoppingCartStack, { type ShoppingCartStackRoutes } from './ShoppingCartStack';
 import MarketplaceStack from './Marketplace/MarketplaceStack';
-import OrdersStack from './OrdersStack';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
@@ -138,7 +137,6 @@ export default function DashboardMainBottomTabs() {
 
   const navToMarketplace = guard('VIEW', 'MarketplaceListing');
   const navToShoppingCart = guard('NAVIGATE', 'MarketplaceShoppingCart');
-  const navToOrders = guard('NAVIGATE', 'MarketplaceOrders');
 
   return (
     <Tab.Navigator
@@ -153,7 +151,6 @@ export default function DashboardMainBottomTabs() {
       <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
       <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       {navToShoppingCart ? <Tab.Screen name="ShoppingCart" component={ShoppingCartStack} /> : null}
-      {navToOrders ? <Tab.Screen name="Orders" component={OrdersStack} /> : null}
     </Tab.Navigator>
   );
 }

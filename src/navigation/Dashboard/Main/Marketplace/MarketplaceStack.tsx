@@ -10,6 +10,9 @@ import { Appbar } from 'react-native-paper';
 
 import MarketplaceFilters from '#screens/Dashboard/Main/Marketplace/MarketplaceFilters';
 import type { FormValues } from '#screens/Dashboard/Main/Marketplace/modules/MarketplaceFormManager';
+import OrdersDetails from '#screens/Dashboard/Main/Orders/OrdersDetails';
+import OrderOverview from '#screens/Dashboard/Main/ShoppingCart/OrderOverview';
+import PaystackPayment from '#screens/Dashboard/Main/ShoppingCart/PaystackPayment';
 
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
@@ -27,6 +30,9 @@ import MarketplaceTabs from './MarketplaceTabs';
 export type MarketplaceRoutes = {
   MarketplaceRoot: undefined;
   MarketplaceFilters: undefined;
+  PaystackPayment: { url: string; orderId: number };
+  OrderOverview: { orderId: number };
+  IncompleteOrderOverview: { orderId: number };
 };
 
 export type MarketplaceRoutePaths = keyof MarketplaceRoutes;
@@ -36,9 +42,12 @@ export type MarketplaceRouteProps<Path extends MarketplaceRoutePaths> = NativeSt
   Path
 >;
 
-export const NAVIGATOR_HEADERS: Record<MarketplaceRoutePaths, TranslationPaths> = {
+export const NAVIGATOR_HEADERS: Record<MarketplaceRoutePaths, TranslationPaths | undefined> = {
   MarketplaceRoot: 'navigation.dashboard.Marketplace',
   MarketplaceFilters: 'navigation.dashboard.MarketplaceFilters',
+  OrderOverview: 'navigation.dashboard.OrderDetails',
+  PaystackPayment: undefined,
+  IncompleteOrderOverview: 'navigation.dashboard.OrderDetails',
 };
 
 type ScreenOptions = (props: {
@@ -57,11 +66,19 @@ export default function MarketplaceStack() {
       // eslint-disable-next-line react/prop-types
       const routeName = props.route.name;
       const isFiltersScreen = routeName === 'MarketplaceFilters';
+      const isOrderIncompleteScreen = routeName === 'IncompleteOrderOverview';
+
       return {
         ...props,
+        headerShown: routeName !== 'PaystackPayment' && routeName !== 'OrderOverview',
         header: () => {
-          const baseProps: NavigationHeaderProps = { routeTitle: t(NAVIGATOR_HEADERS[routeName]) };
-          if (!isFiltersScreen) {
+          const baseProps: NavigationHeaderProps = {
+            routeTitle:
+              routeName === 'PaystackPayment'
+                ? ''
+                : t(NAVIGATOR_HEADERS[routeName] as TranslationPaths),
+          };
+          if (!isFiltersScreen && !isOrderIncompleteScreen) {
             const { leftContent, rightContent } = dashboardHeaderFactory({
               showShoppingCart: true,
             });
@@ -69,29 +86,44 @@ export default function MarketplaceStack() {
             baseProps.leftContent = leftContent;
             baseProps.rightContent = rightContent;
           } else {
-            baseProps.leftContent = (
-              // eslint-disable-next-line react/prop-types
-              <Appbar.BackAction size={26} onPress={props.navigation.goBack} />
-            );
-            baseProps.rightContent = (
-              <Touchable
-                tw="flex-row items-center justify-center space-x-2 px-4 py-1.5 mr-2"
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_RESET, {
-                    companies: [],
-                    coolingUnits: [],
-                    crops: [],
-                    min: 0,
-                    max: 0,
-                  } satisfies FormValues<number>);
-                }}
-              >
-                <Text variant="TextMedium" tw="text-lg text-green-primary">
-                  Reset
-                </Text>
-              </Touchable>
-            );
+            if (routeName === 'IncompleteOrderOverview') {
+              baseProps.routeTitle = t('navigation.dashboard.OrderDetails', {
+                // eslint-disable-next-line react/prop-types
+                orderCode: `#${props.route?.params?.orderId}`,
+              });
+
+              baseProps.leftContent = (
+                // eslint-disable-next-line react/prop-types
+                <Appbar.BackAction
+                  size={26}
+                  onPress={() => props.navigation.replace('MarketplaceRoot')}
+                />
+              );
+            } else {
+              baseProps.leftContent = (
+                // eslint-disable-next-line react/prop-types
+                <Appbar.BackAction size={26} onPress={props.navigation.goBack} />
+              );
+              baseProps.rightContent = (
+                <Touchable
+                  tw="flex-row items-center justify-center space-x-2 px-4 py-1.5 mr-2"
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_FILTERS_FORM_RESET, {
+                      companies: [],
+                      coolingUnits: [],
+                      crops: [],
+                      min: 0,
+                      max: 0,
+                    } satisfies FormValues<number>);
+                  }}
+                >
+                  <Text variant="TextMedium" tw="text-lg text-green-primary">
+                    {t('navigation.auth.PasswordReset')}
+                  </Text>
+                </Touchable>
+              );
+            }
           }
           return <NavigatorHeader {...baseProps} />;
         },
@@ -104,6 +136,14 @@ export default function MarketplaceStack() {
     <Stack.Navigator initialRouteName="MarketplaceRoot" screenOptions={screenOptions}>
       <Stack.Screen name="MarketplaceRoot" component={MarketplaceTabs} />
       <Stack.Screen name="MarketplaceFilters" component={MarketplaceFilters} />
+      <Stack.Screen name="PaystackPayment" component={PaystackPayment} />
+      <Stack.Screen name="OrderOverview" component={OrderOverview} />
+      <Stack.Screen
+        name="IncompleteOrderOverview"
+        // eslint-disable-next-line
+        // @ts-ignore
+        component={OrdersDetails}
+      />
     </Stack.Navigator>
   );
 }

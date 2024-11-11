@@ -120,4 +120,5 @@ export enum EMarketplaceEndpoints {
   TOGGLE_OWNERSHIP = 'marketplace/buyer/cart/toggle-ownership/',
   CHECK_MARKETPLACE_ELIGIBILITY = 'marketplace/company/setup/eligibility-check/',
   SET_FARMER_BANK_ACCOUNT = 'marketplace/company/setup/users-first-paystack-bank-account/',
+  GET_MY_SALES = 'marketplace/seller/orders/',
 }

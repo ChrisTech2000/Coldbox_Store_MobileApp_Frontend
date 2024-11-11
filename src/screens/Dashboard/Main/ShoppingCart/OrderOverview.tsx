@@ -278,15 +278,10 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
           onPress={(evt) => {
             evt.stopPropagation();
             fetchCart();
-            navigation.navigate('Main', {
-              screen: 'Orders',
-              params: {
-                screen: 'OrdersRoot',
-              },
-            });
+            navigation.navigate('MarketplaceRoot');
           }}
         >
-          {t('Dashboard.ShoppingCart.consultOrders')}
+          {t('Dashboard.ShoppingCart.gotItButton')}
         </Button>
       </View>
     </React.Fragment>

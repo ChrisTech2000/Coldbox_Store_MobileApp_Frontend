@@ -438,6 +438,19 @@ class MarketplaceService extends HttpClient {
       throw customError;
     }
   };
+
+  public getSales = async (): Promise<Array<GetAllOrdersResponse>> => {
+    try {
+      const { data } = await this.get<Array<GetAllOrdersResponse>>(
+        EMarketplaceEndpoints.GET_MY_SALES
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new MarketplaceService();
