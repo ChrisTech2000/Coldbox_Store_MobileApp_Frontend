@@ -156,15 +156,15 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           datums={[
             {
               label: t('Dashboard.Management.RevenueAnalysis.paymentType.cash'),
-              value: EPaymentType.CASH,
+              value: EPaymentMethod.CASH,
             },
             {
               label: t('Dashboard.Management.RevenueAnalysis.paymentType.creditCard'),
-              value: EPaymentType.CREDIT_CARD,
+              value: EPaymentMethod.CREDIT_CARD,
             },
             {
               label: t('Dashboard.Management.RevenueAnalysis.paymentType.bankTransfer'),
-              value: EPaymentType.BANK_TRANSFER,
+              value: EPaymentMethod.BANK_TRANSFER,
             },
           ]}
           isModalVisible={isPaymentModalOpen}
