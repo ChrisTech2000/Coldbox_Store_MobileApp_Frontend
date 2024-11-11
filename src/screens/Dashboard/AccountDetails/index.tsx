@@ -94,7 +94,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
           <View>
             <View>
               <List.Item
-                tw="p-0 py-2"
+                tw="px-0 py-2"
                 title={undefined}
                 left={() => (
                   <Text tw="text-base w-[80%]">{t('navigation.dashboard.PersonalDetails')}</Text>
@@ -110,7 +110,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             </View>
             <View>
               <List.Item
-                tw="p-0 py-2"
+                tw="px-0 py-2"
                 title={undefined}
                 left={() => (
                   <Text tw="text-base w-[80%]">
@@ -183,28 +183,28 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
               {t('Dashboard.AccountDetails.sections.sellerSettings')}
             </Text>
             <View>
-              <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
-                <List.Item
-                  tw="px-0 py-2"
-                  title={undefined}
-                  left={() => (
-                    <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
-                  )}
-                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    props.navigation.navigate('PayoutSettings');
-                  }}
-                />
-                <Divider tw="bg-gray-400" />
-              </RBAC.ProtectedResource>
-            </View>
+              <View>
+                <RBAC.ProtectedResource action="SET" subject="PayoutSettings">
+                  <List.Item
+                    tw="px-0 py-2"
+                    title={undefined}
+                    left={() => (
+                      <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
+                    )}
+                    right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      props.navigation.navigate('PayoutSettings');
+                    }}
+                  />
+                  <Divider tw="bg-gray-400" />
+                </RBAC.ProtectedResource>
+              </View>
 
-            <View>
               <RBAC.ProtectedResource action="NAVIGATE" subject="ManageCouponsSettings">
                 <View>
                   <List.Item
-                    tw="p-0 pb-2"
+                    tw="px-0 py-2"
                     title={undefined}
                     left={() => <Text tw="text-base w-[80%]">Discount coupons</Text>}
                     right={(props) => <List.Icon {...props} icon="chevron-right" />}
@@ -213,12 +213,12 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                       props.navigation.navigate('CouponStack');
                     }}
                   />
-                  <Divider tw="bg-gray-400 mb-2" />
+                  <Divider tw="bg-gray-400" />
                 </View>
               </RBAC.ProtectedResource>
               <View>
                 <List.Item
-                  tw="p-0 pb-2"
+                  tw="px-0 py-2"
                   title={undefined}
                   left={() => (
                     <Text tw="text-base w-[80%]">{t('navigation.dashboard.ContactsSharing')}</Text>
