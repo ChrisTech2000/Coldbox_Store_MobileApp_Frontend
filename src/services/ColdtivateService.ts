@@ -1037,6 +1037,18 @@ class ColdtivateService extends HttpClient {
       throw customError;
     }
   };
+
+  ///////// USER
+  public getUser = async (userId: number): Promise<User> => {
+    try {
+      const { data } = await this.get<User>(subs(EUserEndpoints.UPDATE_USER, { userId }));
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new ColdtivateService();
