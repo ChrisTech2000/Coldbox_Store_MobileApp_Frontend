@@ -1,5 +1,4 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import { useIsFocused } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
@@ -14,45 +13,39 @@ import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
+import { SalesRouteProps } from '#navigation/Dashboard/Main/SalesStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
-import { EOrderStatus, EPickUpMethod, EPricingType } from '#types/global';
+import { EPickUpMethod, EPricingType } from '#types/global';
 
 import colors from 'tailwindcss/colors';
-import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
-import PaymentPendingBottomSheet from './components/PaymentPendingBottomSheet';
 
-function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
+// TODO: this screen needs implementation
+function SalesDetails(props: SalesRouteProps<'SalesDetails'>) {
   const { t } = useTranslationUtils();
-  const toast = InAppNotifications.useToast();
   const scrollRef = useRef<ScrollView>(null);
   const coolingUnits = useCartStore((store) => store.allCoolingUnits);
   const colors = useTailwindColors();
 
   const [showButton, setShowButton] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const { data, isLoading, refetch } = useApiCall(
-    'getOrder',
-    MarketplaceService.getOrder,
+  const { data, isLoading } = useApiCall(
+    'getSale',
+    MarketplaceService.getSale,
     props.route.params.orderId,
     {
       defaultData: undefined,
@@ -91,57 +84,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
       items,
     }));
   }, [data, coolingUnits]);
-
-  const onPay = useCallback(
-    async (evt: GestureResponderEvent) => {
-      evt.stopPropagation();
-
-      try {
-        setIsSubmitting(true);
-
-        const result = await MarketplaceService.payWithPaystack(props.route.params.orderId);
-
-        if (result.authorizationUrl) {
-          setIsSubmitting(false);
-          // eslint-disable-next-line
-          // @ts-ignore
-          props.navigation.navigate('PaystackPayment', {
-            url: result.authorizationUrl,
-            orderId: props.route.params.orderId,
-          });
-        }
-      } catch (error) {
-        setIsSubmitting(false);
-        toast.show(t('navigation.error.errorMessage'), {
-          type: 'md_danger',
-        });
-      }
-    },
-    [props.route.params.orderId]
-  );
-
-  const onCancel = useCallback(
-    async (evt: GestureResponderEvent) => {
-      evt.stopPropagation();
-
-      try {
-        setIsSubmitting(true);
-
-        await MarketplaceService.cancelOrder(props.route.params.orderId);
-        refetch();
-        setIsSubmitting(false);
-        toast.show(t('actions.update-success'), {
-          type: 'md_success',
-        });
-      } catch (error) {
-        setIsSubmitting(false);
-        toast.show(t('navigation.error.errorMessage'), {
-          type: 'md_danger',
-        });
-      }
-    },
-    [props.route.params.orderId]
-  );
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;
@@ -213,28 +155,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
             }}
           />
 
-          {data.status === EOrderStatus.PAYMENT_PENDING ? (
-            <Button
-              tw="w-full self-center my-4 border-blue-400 rounded-lg"
-              labelStyle="text-blue-400"
-              rippleColor={colors.blue[50]}
-              mode="outlined"
-              onPress={() =>
-                emitter.emit(APP_EVENTS.DISPATCH_PAYMENT_PENDING_BOTTOM_SHEET, {
-                  onPay,
-                  onCancel,
-                })
-              }
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <ActivityIndicator size="small" color={colors.blue[400]} />
-              ) : (
-                t('Dashboard.MyOrders.status.payment-pending')
-              )}
-            </Button>
-          ) : null}
-
           <View tw="flex-col space-y-5">
             <Text tw="text-base text-green-primary font-bold">
               {t('Dashboard.ShoppingCart.pickupMethods')}
@@ -274,21 +194,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                               )
                             : ''}
                         </Text>
-                        {item.pickupMethod === EPickUpMethod.DELIVERY ? (
-                          <Touchable
-                            onPress={(evt) => {
-                              evt.stopPropagation();
-                              emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, {
-                                orderId: props.route.params.orderId,
-                                coolingUnitId: item.coolingUnitId,
-                              });
-                            }}
-                          >
-                            <Text tw="text-base text-green-primary">
-                              {t('Dashboard.ShoppingCart.viewContacts')}
-                            </Text>
-                          </Touchable>
-                        ) : null}
                       </View>
                     </View>
                   );
@@ -350,7 +255,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         </View>
       </ScrollView>
 
-      <_PortalsWrapper />
       {showButton ? (
         <View tw="absolute top-8 right-[35%] ">
           <SkiaShadow blur={4} dx={1} dy={6} color={colors.zinc[200]} borderRadius={20}>
@@ -361,17 +265,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         </View>
       ) : null}
     </View>
-  );
-}
-
-function _PortalsWrapper() {
-  const isFocused = useIsFocused();
-  if (!isFocused) return null;
-  return (
-    <React.Fragment>
-      <DeliveryInformationBottomSheet />
-      <PaymentPendingBottomSheet />
-    </React.Fragment>
   );
 }
 
@@ -399,7 +292,7 @@ function ProduceCard(props: {
     MarketplaceService.listDeliveryContacts,
     ownerCompany.id,
     {
-      skip: !ownerCompany.id,
+      skip: !ownerCompany,
       defaultData: [],
     }
   );
@@ -485,7 +378,7 @@ function ProduceCard(props: {
 }
 
 export default withSafeArea(
-  withErrorBoundary(OrdersDetails, {
+  withErrorBoundary(SalesDetails, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
   }),

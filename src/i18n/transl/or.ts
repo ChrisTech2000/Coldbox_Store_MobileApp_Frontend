@@ -94,6 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'ପସନ୍ଦ',
       Orders: 'ଅର୍ଡର',
       MyOrders: 'ମୋର ଅର୍ଡର',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'ଜ୍ଞାନ କେନ୍ଦ୍ର',
       QuitTutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍ ବାର୍ତ୍ତା',
@@ -1219,10 +1220,20 @@ export default {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees', // TODO
+      soldFor: 'Sold for', // TODO
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'ସମ୍ପ୍ରତି',
         oldest: 'ପୁରୁଣା',
         date: 'ତାରିଖ',
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'ଆର୍ଡର ସାରାଂଶ',
       orderId: 'ଆର୍ଡର ID',
@@ -1270,8 +1281,7 @@ export default {
       discountsApplied: 'ଛୁଟ ଲାଗୁ କରାଯାଇଛି',
       pickupModal: {
         today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage:
-          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
         delivery:
           "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
       },

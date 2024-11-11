@@ -12,7 +12,7 @@ import type { AnalyticsStackRoutePaths } from '../Main/AnalyticsStack';
 import type { CoolingUnitsTabsRoutePaths } from '../Main/CoolingUnitsTabs';
 import type { HistoryTabStackRoutePaths } from '../Main/HistoryTabStack';
 import type { MainTabStackRoutePaths } from '../Main/MainTabStack';
-import type { MarketplaceRoutePaths } from '../Main/MarketplaceStack';
+import type { MarketplaceRoutePaths } from '../Main/Marketplace/MarketplaceStack';
 import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { OrdersRoutePaths } from '../Main/OrdersStack';
 import { useNotifications } from './notifications';

@@ -90,6 +90,7 @@ export default {
       MarketplaceFavoritesTab: 'Awọn ayanfẹ',
       Orders: 'Awọn ibere',
       MyOrders: 'Awọn aṣẹ Mi',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Ibudo Imọ',
       QuitTutorial: 'fi eko kiko sile',
@@ -1120,10 +1121,20 @@ export default {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees', // TODO
+      soldFor: 'Sold for', // TODO
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'Most recent', // TODO
         oldest: 'Oldest', // TODO
         date: 'Date', // TODO
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'Order Overview', // TODO
       orderId: 'Order ID', // TODO

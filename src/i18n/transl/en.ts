@@ -92,6 +92,7 @@ const en = {
       MarketplaceFavoritesTab: 'Favorites',
       Orders: 'Orders',
       MyOrders: 'My Orders',
+      MySales: 'My Sales',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Knowledge Hub',
       QuitTutorial: 'Quit Tutorial',
@@ -1215,10 +1216,20 @@ const en = {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees',
+      soldFor: 'Sold for',
+      ownedBy: 'Owned by',
+      you: 'You',
       sort: {
         mostRecent: 'Most recent',
         oldest: 'Oldest',
         date: 'Date',
+      },
+      status: {
+        'payment-pending': 'Payment Pending',
+        'payment-expired': 'Payment Expired',
+        cancelled: 'Cancelled',
+        paid: 'Paid',
       },
       title: 'Order Overview',
       orderId: 'Order ID',
@@ -1266,8 +1277,7 @@ const en = {
       discountsApplied: 'Discounts Applied',
       pickupModal: {
         today: 'Please pick up your order at {{company}}, located at {{location}}, today.',
-        storage:
-          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.',
+        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.',
         delivery:
           "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.",
       },

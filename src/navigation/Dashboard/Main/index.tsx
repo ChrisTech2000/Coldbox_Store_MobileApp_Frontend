@@ -23,8 +23,7 @@ import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
 import AnalyticsStack from './AnalyticsStack';
 import ShoppingCartStack, { type ShoppingCartStackRoutes } from './ShoppingCartStack';
-import MarketplaceStack from './MarketplaceStack';
-import OrdersStack from './OrdersStack';
+import MarketplaceStack from './Marketplace/MarketplaceStack';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
@@ -46,7 +45,6 @@ export type DashboardMainRoutes = {
     params?: ShoppingCartStackRoutes | ShoppingCartStackRoutes;
   };
   Marketplace: undefined;
-  Orders: undefined;
 };
 
 export type DashboardMainRoutePaths = keyof DashboardMainRoutes;
@@ -77,7 +75,6 @@ const TAB_METADATA: Record<
   Analytics: { tabBarIcon: 'chart-line', translationPath: 'navigation.bottomTabs.Analytics' },
   ShoppingCart: undefined,
   Marketplace: { tabBarIcon: 'store-outline', translationPath: 'navigation.dashboard.Marketplace' },
-  Orders: { tabBarIcon: 'receipt', translationPath: 'navigation.dashboard.Orders' },
 };
 
 const Tab = createBottomTabNavigator<DashboardMainRoutes>();
@@ -104,8 +101,7 @@ export default function DashboardMainBottomTabs() {
         focusedRoute !== 'Analytics' &&
         routeName !== 'Analytics' &&
         routeName !== 'ShoppingCart' &&
-        routeName !== 'Marketplace' &&
-        routeName !== 'Orders';
+        routeName !== 'Marketplace';
 
       // eslint-disable-next-line
       // @ts-ignore
@@ -138,7 +134,6 @@ export default function DashboardMainBottomTabs() {
 
   const navToMarketplace = guard('VIEW', 'MarketplaceListing');
   const navToShoppingCart = guard('NAVIGATE', 'MarketplaceShoppingCart');
-  const navToOrders = guard('NAVIGATE', 'MarketplaceOrders');
 
   return (
     <Tab.Navigator
@@ -153,7 +148,6 @@ export default function DashboardMainBottomTabs() {
       <Tab.Screen name="MarketPrice" component={MarketPriceTabs} />
       <Tab.Screen name="CoolingUnits" component={CoolingUnitsTabs} />
       {navToShoppingCart ? <Tab.Screen name="ShoppingCart" component={ShoppingCartStack} /> : null}
-      {navToOrders ? <Tab.Screen name="Orders" component={OrdersStack} /> : null}
     </Tab.Navigator>
   );
 }

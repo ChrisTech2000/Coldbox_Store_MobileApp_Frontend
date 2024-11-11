@@ -94,6 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'Favoris',
       Orders: 'Commandes',
       MyOrders: 'Mes Commandes',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Centre de connaissances',
       QuitTutorial: 'Quitter le tutoriel',
@@ -1232,10 +1233,20 @@ export default {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees', // TODO
+      soldFor: 'Sold for', // TODO
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'Le plus récent',
         oldest: 'Le plus ancien',
         date: 'Date',
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'Aperçu des commandes',
       orderId: 'ID de commande',
@@ -1283,8 +1294,7 @@ export default {
       discountsApplied: 'Remises appliquées',
       pickupModal: {
         today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage:
-          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
         delivery:
           "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
       },

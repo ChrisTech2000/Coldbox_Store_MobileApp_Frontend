@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
 import isArray from 'lodash/isArray';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -12,7 +13,6 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useIsFocused } from '@react-navigation/native';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
@@ -23,28 +23,16 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { cn } from '#ui/lib/cn';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
-import useCartStore from '#stores/shoppingCart';
 
-import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
-import CropsBottomSheet from './components/CropsBottomSheet';
+import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
+import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
 
-type Status = 'payment-pending' | 'cancelled' | 'paid' | 'payment-expired';
-
-const COLORS: Record<Status, string> = {
-  paid: 'border-green-600 text-green-600',
-  'payment-pending': 'border-blue-400 text-blue-400',
-  cancelled: 'border-red-600 text-red-600',
-  'payment-expired': 'border-orange-600 text-orange-600',
-};
-
-function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
+function SalesRoot() {
   const { t } = useTranslationUtils();
   const colors = useTailwindColors();
   const { sorting } = useSortingStore();
@@ -53,14 +41,13 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
     store.allCrops ?? [],
     store.addRefreshDataFn,
   ]);
-  const allUnits = useCartStore((store) => store.allCoolingUnits);
 
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
   const [showButton, setShowButton] = useState<boolean>(false);
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
-    'getOrders',
-    MarketplaceService.getOrders,
+    'getSales',
+    MarketplaceService.getSales,
     {},
     {
       defaultData: undefined,
@@ -125,28 +112,16 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
           </View>
           <FlatList
             data={sortedData}
-            keyExtractor={(item) => `orders-history-list-item-#${item.id}`}
+            keyExtractor={(item) => `sales-history-list-item-#${item.id}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
               const _crops = item.items.map(
                 (i) => crops.find((c) => c.id === i.relCropId)?.name ?? ''
               );
-              const _coolingUnits = item.items.map(
-                (i) => allUnits?.find((c) => c.id === i.relCoolingUnitId)?.name ?? ''
-              );
 
               return (
-                <Touchable
-                  tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2"
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    props.navigation.navigate('OrdersDetails', {
-                      orderId: item.id,
-                      isTabsView: true,
-                    });
-                  }}
-                >
+                <View tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2">
                   <View tw="w-[90%] space-y-2">
                     <View tw="flex-row items-center">
                       <Text variant="TextMedium" tw="text-base w-[50%]">
@@ -178,49 +153,48 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
 
                     <View tw="flex-row items-center">
                       <Text variant="TextMedium" tw="text-base w-[50%]">
-                        {t('Dashboard.MyOrders.coolingUnit')}
+                        {t('Dashboard.CrateManagement.CheckOut.totalWeight')}
                       </Text>
-                      <Text tw="text-base text-zinc-500 w-40" numberOfLines={2}>
-                        {[...new Set(_coolingUnits)].join(', ')}
+                      <Text tw="text-base text-zinc-500">
+                        {item.items.reduce(
+                          (acc, current) => (acc += current.orderedProduceWeight),
+                          0
+                        )}
+                        {t('Dashboard.ProduceDetails.kilogram')}
                       </Text>
                     </View>
 
                     <View tw="flex-row items-center">
                       <Text variant="TextMedium" tw="text-base w-[50%]">
-                        {t('Dashboard.MyOrders.orderTotal')}
+                        {t('Dashboard.MyOrders.soldFor')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
                         {CurrencyStandardization.currencyCode({
                           code: 'NGN', // TODO: get value from somewhere
-                          value: item.totalAmount,
+                          value: item.items.reduce(
+                            (acc, current) => (acc += current.produceAmount),
+                            0
+                          ),
                         }).getValueFormated()}
                       </Text>
                     </View>
 
                     <View tw="flex-row items-center">
                       <Text variant="TextMedium" tw="text-base w-[50%]">
-                        {t('Dashboard.MyOrders.ownedBy')}
+                        {t('Dashboard.MyOrders.coolingFees')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
-                        {item.ownedOnBehalfOfCompanyId
-                          ? t('Dashboard.Analytics.company')
-                          : t('Dashboard.MyOrders.you')}
-                      </Text>
-                    </View>
-
-                    <View
-                      tw={cn(
-                        'self-end px-1 py-0.5 border rounded-lg',
-                        COLORS[item.status as Status]
-                      )}
-                    >
-                      <Text tw={COLORS[item.status as Status]}>
-                        {t(`Dashboard.MyOrders.status.${item.status as Status}`)}
+                        {CurrencyStandardization.currencyCode({
+                          code: 'NGN', // TODO: get value from somewhere
+                          value: item.items.reduce(
+                            (acc, current) => (acc += current.coolingFeesAmount),
+                            0
+                          ),
+                        }).getValueFormated()}
                       </Text>
                     </View>
                   </View>
-                  <MaterialCommunityIcon name="chevron-right" size={28} color={colors.gray[700]} />
-                </Touchable>
+                </View>
               );
             }}
           />
@@ -252,7 +226,7 @@ function _PortalsWrapper() {
 }
 
 export default withSafeArea(
-  withErrorBoundary(OrdersRoot, {
+  withErrorBoundary(SalesRoot, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
   }),

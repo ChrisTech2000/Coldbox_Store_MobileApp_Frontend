@@ -90,6 +90,7 @@ export default {
       MarketplaceFavoritesTab: 'ọkacha mma',
       Orders: 'Iwu',
       MyOrders: 'Iwu m',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Ebe Ọmụmamihe',
       QuitTutorial: 'Wepụ nkuzi',
@@ -1130,10 +1131,20 @@ export default {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees', // TODO
+      soldFor: 'Sold for', // TODO
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'Most recent', // TODO
         oldest: 'Oldest', // TODO
         date: 'Date', // TODO
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'Order Overview', // TODO
       orderId: 'Order ID', // TODO
@@ -1181,8 +1192,7 @@ export default {
       discountsApplied: 'Discounts Applied', // TODO
       pickupModal: {
         today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage:
-          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
         delivery:
           "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
       },

@@ -1,22 +1,22 @@
+import { CurrencyStandardization } from 'currency-format-utils';
+import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
-import { CurrencyStandardization } from 'currency-format-utils';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { ScrollView } from '#ui/components/ScrollView';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
-import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import type { MarketplaceRouteProps } from '#navigation/Dashboard/Main/MarketplaceStack';
-import { useManagementStore } from '#stores/management';
-import { useDashboardStore } from '#stores/dashboard';
-import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { useTranslationUtils } from '#i18n/utils';
+import { MarketplaceRouteProps } from '#navigation/Dashboard/Main/Marketplace/MarketplaceStack';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
+import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 
 import CompanyFilters from './components/CompanyFilter';
 import CoolingUnitFilters from './components/CoolingUnitFilter';
