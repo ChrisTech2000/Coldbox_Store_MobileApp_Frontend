@@ -159,6 +159,8 @@ export default {
     continue: 'જારી રાખો',
     save: 'સાચવો',
     update: 'સુધારો',
+    clearAll: 'Clear all', // TODO
+    apply: 'Apply', // TODO
   },
   components: {
     datePicker: {
@@ -982,6 +984,13 @@ export default {
         'કંઈક ખોટું થયું. કૃપા કરીને ટાઈપો તપાસો અને ખાતરી કરો કે દાખલ કરેલ શહેર નાઈજેરિયામાં આવેલું છે.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
+      priceRange: 'Range Price / KG',
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+      },
+      maxDistance: 'Max Distance',
     },
     AccountDetails: {
       popups: {

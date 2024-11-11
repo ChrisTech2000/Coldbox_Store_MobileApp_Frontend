@@ -159,6 +159,8 @@ export default {
     continue: 'Continuar',
     save: 'Salvar',
     update: 'atualizar',
+    clearAll: 'Clear all', // TODO
+    apply: 'Apply', // TODO
   },
   components: {
     datePicker: {
@@ -994,6 +996,13 @@ export default {
         'Algo deu errado. Verifique se há erros de digitação e certifique-se de que a cidade inserida está localizada na Nigéria.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
+      priceRange: 'Range Price / KG',
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+      },
+      maxDistance: 'Max Distance',
     },
     AccountDetails: {
       popups: {

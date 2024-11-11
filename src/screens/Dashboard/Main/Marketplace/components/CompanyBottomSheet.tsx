@@ -11,6 +11,7 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { Button } from '#ui/components/Button';
 
+import { useTranslationUtils } from '#i18n/utils';
 import { useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
@@ -23,6 +24,8 @@ export type CompanyBottomSheetDatum = {
 };
 
 export default function CompanyBottomSheet() {
+  const { t } = useTranslationUtils();
+
   const [datum, setDatum] = useState<CompanyBottomSheetDatum | null>(null);
   const modalRef = useRef<Modalize>(null);
 
@@ -75,7 +78,7 @@ export default function CompanyBottomSheet() {
               modalRef.current?.close();
             }}
           >
-            Got it!
+            {t('Dashboard.ShoppingCart.gotItButton')}
           </Button>
         </View>
       </Modalize>

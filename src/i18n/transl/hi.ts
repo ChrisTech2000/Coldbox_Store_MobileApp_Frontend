@@ -159,6 +159,8 @@ export default {
     continue: 'जारी रखना',
     save: 'सहेजें',
     update: 'अपडेट करें',
+    clearAll: 'Clear all', // TODO
+    apply: 'Apply', // TODO
   },
   components: {
     datePicker: {
@@ -988,6 +990,13 @@ export default {
         'कुछ गलत हो गया। कृपया टाइपो की जांच करें और सुनिश्चित करें कि दर्ज किया गया शहर नाइजीरिया में है।',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
+      priceRange: 'Range Price / KG',
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+      },
+      maxDistance: 'Max Distance',
     },
     AccountDetails: {
       popups: {
