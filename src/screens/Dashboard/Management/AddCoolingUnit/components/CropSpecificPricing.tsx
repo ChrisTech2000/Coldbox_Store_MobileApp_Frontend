@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { FlatList, View } from 'react-native';
-import { Divider, Modal, Portal, TextInput } from 'react-native-paper';
+import { Divider, Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
+import RNModal from '#ui/primitives/RNModal';
 
 import type { RecursiveKeyOf } from '#types/miscellaneous';
 import { useToggle } from '#ui/hooks/useToggle';
@@ -97,8 +98,9 @@ export default function CropSpecificPricing() {
       <Divider tw="w-full bg-gray-700" />
 
       <Portal>
-        <Modal
+        <RNModal
           visible={isVisible}
+          keyboardAware
           onDismiss={() => {
             localForm.reset(_buildInitialValues());
             toggleVisibility();
@@ -106,7 +108,7 @@ export default function CropSpecificPricing() {
         >
           <View
             tw={cn(
-              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto max-h-[90%] pt-6 pb-4 self-center space-y-2'
+              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto max-h-[70%] pt-6 pb-4 self-center space-y-2'
             )}
           >
             <Text variant="TitleRegular" tw="px-6">
@@ -175,7 +177,7 @@ export default function CropSpecificPricing() {
               </Button>
             </View>
           </View>
-        </Modal>
+        </RNModal>
       </Portal>
     </React.Fragment>
   );

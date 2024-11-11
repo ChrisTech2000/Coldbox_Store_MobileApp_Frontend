@@ -1,11 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 import { type NavigationProp } from '@react-navigation/native';
-import { Modal, Portal, TextInput } from 'react-native-paper';
+import { Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
+
+import RNModal from '#ui/primitives/RNModal';
 
 import type { ManagementRoutePaths, ManagementRoutes } from '#navigation/Dashboard/Management';
 import { useToggle } from '#ui/hooks/useToggle';
@@ -77,7 +79,7 @@ export default function FormModal(props: Props) {
 
   return (
     <Portal>
-      <Modal visible={isVisible} onDismiss={onClose}>
+      <RNModal visible={isVisible} keyboardAware onDismiss={onClose}>
         <View tw="w-full bg-white rounded-3xl w-2/3 max-w-2/3 h-auto pt-6 pb-4 self-center space-y-2">
           <Text variant="TitleRegular" tw="px-6">
             {t('Dashboard.Management.CoolingUsers.modals.userCode')}
@@ -109,7 +111,7 @@ export default function FormModal(props: Props) {
             </Button>
           </View>
         </View>
-      </Modal>
+      </RNModal>
     </Portal>
   );
 }
