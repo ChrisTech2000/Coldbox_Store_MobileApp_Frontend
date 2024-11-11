@@ -1268,8 +1268,7 @@ const en = {
       discountsApplied: 'Discounts Applied',
       pickupModal: {
         today: 'Please pick up your order at {{company}}, located at {{location}}, today.',
-        storage:
-          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.',
+        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.',
         delivery:
           "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.",
       },
