@@ -62,5 +62,7 @@ export default withSafeArea(
   withErrorBoundary(Methodology, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );

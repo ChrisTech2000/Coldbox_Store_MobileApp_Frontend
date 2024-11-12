@@ -278,7 +278,8 @@ export interface CompanyData {
   coolingUnitTypes: {
     [key: string]: {
       farmGateStorageRoom: number;
-      // TODO: this might need completion
+      movableUnit: number;
+      marketStorageRoom: number;
     };
   };
   currency: { [key: string]: string };

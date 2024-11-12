@@ -7,48 +7,23 @@ import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
-import { ECoolingUnitType } from '#types/global';
 
-import { useAnalyticsData } from '../../store';
 import { useCompanyData } from '../store';
 
 export function GeneralContent() {
   const { t } = useTranslationUtils();
   const { company } = useManagementStore();
-  const { coolingUnits } = useAnalyticsData();
   const { companyData } = useCompanyData();
 
-  const coolingUnitsCapacity = useMemo(() => {
-    return coolingUnits?.reduce((acc, unit) => (acc += unit.capacityInMetricTons), 0);
-  }, [coolingUnits]);
-
   const { marketUnits, farmGateUnits, movableUnits } = useMemo(() => {
-    const counters = {
-      farmGateUnits: 0,
-      marketUnits: 0,
-      movableUnits: 0,
+    return {
+      farmGateUnits: companyData?.coolingUnitTypes?.[0]?.farmGateStorageRoom ?? 0,
+      marketUnits: companyData?.coolingUnitTypes?.[0]?.marketStorageRoom ?? 0,
+      movableUnits: companyData?.coolingUnitTypes?.[0]?.movableUnit ?? 0,
     };
+  }, [companyData]);
 
-    if (coolingUnits) {
-      coolingUnits.forEach((unit) => {
-        switch (unit.coolingUnitType) {
-          case ECoolingUnitType.FARM_GATE_STORAGE_ROOM:
-            counters.farmGateUnits += 1;
-            break;
-          case ECoolingUnitType.MARKET_STORAGE_ROOM:
-            counters.marketUnits += 1;
-            break;
-          case ECoolingUnitType.MOVABLE_UNIT:
-            counters.movableUnits += 1;
-            break;
-          default:
-            break;
-        }
-      });
-    }
-
-    return counters;
-  }, [coolingUnits]);
+  const numberOfUnits = marketUnits + farmGateUnits + movableUnits;
 
   return (
     <View tw="bg-violet-100 items-center w-full rounded-lg py-2 my-2">
@@ -80,9 +55,9 @@ export function GeneralContent() {
             {t(`Dashboard.Analytics.companyTab.coolingUnitsLabel`)}
           </Text>
           <Text variant="TextBold" tw="text-base text-white">
-            {coolingUnits?.length && coolingUnits.length > 1
+            {numberOfUnits > 1
               ? t(`Dashboard.Analytics.companyTab.coolingUnitsContent`, {
-                  amount: coolingUnits.length,
+                  amount: numberOfUnits,
                 })
               : t(`Dashboard.Analytics.companyTab.singleCoolingUnitContent`)}
           </Text>
@@ -94,7 +69,7 @@ export function GeneralContent() {
           </Text>
           <Text variant="TextBold" tw="text-base text-white">
             {t(`Dashboard.Analytics.companyTab.capacityContent`, {
-              amount: coolingUnitsCapacity,
+              amount: companyData?.compCapTons?.[0] ?? 0,
             })}
           </Text>
         </View>
