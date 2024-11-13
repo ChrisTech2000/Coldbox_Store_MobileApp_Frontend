@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -26,7 +26,11 @@ export function PersonalDetailsOverlay({ next, stop }: IOverlayComponentProps) {
         <View
           tw={cn(
             'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-36' : 'top-44'
+            screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-36'
+              : Platform.OS === 'ios'
+                ? 'top-44'
+                : 'top-40'
           )}
         >
           <List.Item

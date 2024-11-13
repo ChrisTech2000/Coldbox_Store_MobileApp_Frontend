@@ -230,6 +230,7 @@ function _buildInitialValues(
   unit: GetCoolingUnitResponse,
   companyCrops: Array<number>
 ): FormStateBuilder {
+  console.log(unit);
   return {
     getFormValues: () => {
       const crops: FormValues['crops'] = [];
@@ -241,7 +242,7 @@ function _buildInitialValues(
       }
 
       const powerOptions = unit.powerOptions.at(0);
-      const commonPrice = unit.commonPricingType.value?.toString() ?? '';
+      const commonPrice = unit.commonPricingType?.value?.toString() ?? '';
 
       const cropSpecificPricing = CropPricingManager.init({
         unitCrops: unit.crops.filter((unitCrop) => crops.includes(unitCrop.cropId)),
@@ -252,9 +253,10 @@ function _buildInitialValues(
         name: unit.name ?? '',
         location: unit.location ?? null,
         coolingUnitType: (unit?.coolingUnitType as FormValues['coolingUnitType']) ?? null,
-        priceType: (unit.commonPricingType.type as FormValues['priceType']) ?? PRICING_TYPE.PER_DAY,
+        priceType:
+          (unit.commonPricingType?.type as FormValues['priceType']) ?? PRICING_TYPE.PER_DAY,
         metricUnit:
-          (unit.commonPricingType.metric as FormValues['metricUnit']) ?? METRIC_UNITS.CRATES,
+          (unit.commonPricingType?.metric as FormValues['metricUnit']) ?? METRIC_UNITS.CRATES,
         price: commonPrice,
         capacityInMetricTons: unit.capacityInMetricTons?.toString() ?? '',
         foodCapacityInMetricTons: unit.foodCapacityInMetricTons?.toString() ?? '',
@@ -303,6 +305,6 @@ function _buildInitialValues(
         thermalStorageMethod: powerOptions?.thermalStorageMethod ?? null,
       };
     },
-    getExtraValues: () => ({ pricingId: unit.commonPricingType.pricingId }),
+    getExtraValues: () => ({ pricingId: unit.commonPricingType?.pricingId }),
   };
 }

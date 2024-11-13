@@ -13,14 +13,11 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function AddCoolingUserNavigationOverLay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function AddCoolingUserNavigationOverLay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -57,7 +54,7 @@ export function AddCoolingUserNavigationOverLay({
           screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-6' : 'top-14'
         )}
         onPress={() => {
-          onPressMask?.();
+          emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true);
           next();
         }}
       >

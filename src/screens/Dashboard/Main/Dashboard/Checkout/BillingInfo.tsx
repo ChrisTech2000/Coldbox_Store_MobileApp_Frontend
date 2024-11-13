@@ -81,16 +81,16 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   }, [crates]);
 
   const priceType = useMemo(() => {
-    const type = coolingUnit?.commonPricingType.type;
-    const price = coolingUnit?.commonPricingType.value;
+    const type = coolingUnit?.commonPricingType?.type;
+    const price = coolingUnit?.commonPricingType?.value;
     return type === EPricingType.PERIODICITY
       ? `${price}${currency} / ${t('Dashboard.CrateManagement.CheckOut.crate')} / ${t('Dashboard.CrateManagement.CheckOut.day')}`
       : price;
   }, [coolingUnit, currency]);
 
   const cratePrices = useMemo(() => {
-    const type = coolingUnit?.commonPricingType.type;
-    const price = coolingUnit?.commonPricingType.value;
+    const type = coolingUnit?.commonPricingType?.type;
+    const price = coolingUnit?.commonPricingType?.value;
 
     return (
       crates?.map((crate) =>

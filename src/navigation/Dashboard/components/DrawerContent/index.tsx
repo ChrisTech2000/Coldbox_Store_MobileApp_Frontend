@@ -24,12 +24,14 @@ import {
 } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Image } from '#ui/components/Image';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import RBAC from '#common/RBAC';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
+import { ERoles } from '#types/global';
 
 import type { DashboardRoutes } from '../../index';
 import { resetAllStores } from './resetStoresUtil';
@@ -68,6 +70,7 @@ type Props = {
 export default function DrawerContent(props: Props) {
   const { routeNames, index } = props.state;
   const { t } = useTranslationUtils();
+  const user = useAuthStore((store) => store.user);
   const focusedRoute = routeNames[index];
 
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
@@ -81,7 +84,6 @@ export default function DrawerContent(props: Props) {
 
   useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_MANAGEMENT_STEP,
-    maskAllowInteraction: true,
     OverlayComponent: DrawerManagementOverlay,
     onPressMask: () => props.navigation.navigate('Management'),
     fullScreen: true,
@@ -89,7 +91,6 @@ export default function DrawerContent(props: Props) {
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP,
-    maskAllowInteraction: true,
     OverlayComponent: DrawerAccountDetailsOverlay,
     onPressMask: () => props.navigation.navigate('AccountDetails'),
     fullScreen: true,
@@ -97,14 +98,12 @@ export default function DrawerContent(props: Props) {
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_KNOWLEDGE_HUB_STEP,
-    maskAllowInteraction: true,
     OverlayComponent: DrawerKnowledgeHubOverlay,
     fullScreen: true,
   });
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_FAQ_STEP,
-    maskAllowInteraction: true,
     OverlayComponent: DrawerFAQOverlay,
     onPressMask: () => {
       props.navigation.dispatch(DrawerActions.closeDrawer());
@@ -153,6 +152,8 @@ export default function DrawerContent(props: Props) {
                 if (routeName === 'Tutorial') {
                   start();
                   toggleTutorial(true);
+                  if (user?.role === ERoles.OPERATOR)
+                    emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
                   props.navigation.navigate('Dashboard');
                   return;
                 }

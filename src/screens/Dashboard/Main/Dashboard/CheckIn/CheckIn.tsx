@@ -80,7 +80,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { onLayout: onCheckIn3Layout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_3,
     OverlayComponent: CheckIn3ScreenOverlay,
-    maskAllowInteraction: true,
     onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'History' }),
   });
 
@@ -112,10 +111,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [produces, produces.length]);
 
   const total = useMemo(() => {
-    const price = coolingUnit.commonPricingType.value;
+    const price = coolingUnit.commonPricingType?.value;
 
-    if (!allHavePlannedDays || coolingUnit.commonPricingType.type === EPricingType.FIXED) {
-      if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+    if (!allHavePlannedDays || coolingUnit.commonPricingType?.type === EPricingType.FIXED) {
+      if (coolingUnit.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
         return allCrates.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
       }
       return (price * allCrates.length).toFixed(2);
@@ -123,7 +122,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
     return allCrates
       .reduce((acc, current) => {
-        if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+        if (coolingUnit.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
           acc += (current.plannedDays ?? 1) * price * current.weight;
         } else {
           acc += (current.plannedDays ?? 1) * price;
@@ -394,7 +393,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             </Button>
           ) : null}
 
-          {!allHavePlannedDays && coolingUnit.commonPricingType.type !== EPricingType.FIXED ? (
+          {!allHavePlannedDays && coolingUnit.commonPricingType?.type !== EPricingType.FIXED ? (
             <Text variant="TextMedium" tw="text-base">
               {t('Dashboard.CrateManagement.CheckIn.noPlannedDaysMessage')}
             </Text>
@@ -448,7 +447,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           </Text>
           <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
             {`${currencySymbol}${total}`}
-            {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY && !allHavePlannedDays
+            {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY && !allHavePlannedDays
               ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
               : ''}
           </Text>

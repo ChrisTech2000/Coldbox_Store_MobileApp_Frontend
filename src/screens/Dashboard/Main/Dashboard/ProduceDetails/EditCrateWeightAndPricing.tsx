@@ -88,8 +88,6 @@ function EditCrateWeightAndPricing(
     }
   );
 
-  console.log(params.companyId, farmer?.user?.id);
-
   const form = useForm<FormValues>({
     defaultValues: { applyToAll: false, crates: [], price: '0' },
     resolver: zodResolver((z) => {

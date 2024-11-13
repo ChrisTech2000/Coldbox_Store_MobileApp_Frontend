@@ -167,13 +167,13 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
                     <Divider tw="bg-zinc-400" />
                     <RadioButtonItem
                       label={t(
-                        coolingUnit.commonPricingType.type === EPricingType.PERIODICITY
+                        coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY
                           ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
                           : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                         {
                           price: CurrencyStandardization.currencyCode({
                             code: 'NGN', // TODO: get value from somewhere
-                            value: coolingUnit.commonPricingType.value,
+                            value: coolingUnit.commonPricingType?.value,
                           }).getValueFormated(),
                         }
                       )}

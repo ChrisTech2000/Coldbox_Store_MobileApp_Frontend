@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 
@@ -26,7 +26,13 @@ export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponent
         <View
           tw={cn(
             'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-64' : 'top-72'
+            screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? Platform.OS === 'ios'
+                ? 'top-64'
+                : 'top-60'
+              : Platform.OS === 'ios'
+                ? 'top-72'
+                : 'top-64'
           )}
         >
           <List.Item

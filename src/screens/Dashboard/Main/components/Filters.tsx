@@ -1,5 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { SetStateAction, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -7,7 +5,6 @@ import { TextInput } from 'react-native-paper';
 import { StoreApi, UseBoundStore } from 'zustand';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
@@ -53,7 +50,6 @@ export function Filters({
 }: FilterProps) {
   const { user } = useAuthStore();
   const { t } = useTranslationUtils();
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const { company: _company } = useManagementStore();
   const { farmerCompanies, farmerUnitsIds, setCoolingUnits } = useDashboardStore();
@@ -64,7 +60,6 @@ export function Filters({
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.COOLING_UNIT_STEP,
     OverlayComponent: CoolingUnitOverlay,
-    onPressMask: () => rootNavigation.navigate('CoolingUnits'),
   });
 
   const { onLayout: onDashboard5Layout } = useWalkthroughStep({

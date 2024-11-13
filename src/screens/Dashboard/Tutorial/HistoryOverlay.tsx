@@ -1,29 +1,26 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardRoutes } from '#navigation/Dashboard';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 import { EFarmerTutorialSteps } from './utils/constants';
 
-export function HistoryOverlay({
-  next,
-  goTo,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -38,7 +35,7 @@ export function HistoryOverlay({
           },
         ]}
       >
-        <Text tw="text-center text-base">
+        <Text tw="text-base">
           {user?.role === ERoles.COOLING_USER
             ? t('tutorial.steps.farmerHistory')
             : t('tutorial.steps.history')}
@@ -59,7 +56,7 @@ export function HistoryOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              bottomTabNavigation.navigate('Main', { screen: 'CoolingUnits' });
               user?.role === ERoles.COOLING_USER
                 ? goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP)
                 : next();

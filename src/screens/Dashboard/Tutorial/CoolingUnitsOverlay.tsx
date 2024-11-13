@@ -7,6 +7,7 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
@@ -18,16 +19,12 @@ import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function CoolingUnitsOverlay({
-  next,
-  stop,
-  goTo,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const navigation = useNavigation<NativeStackNavigationProp<CoolingUnitsTabsRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -42,7 +39,7 @@ export function CoolingUnitsOverlay({
           },
         ]}
       >
-        <Text tw="text-center text-base">
+        <Text tw="text-base">
           {user?.role === ERoles.OPERATOR
             ? t('tutorial.steps.coolingUnits')
             : user?.role === ERoles.EMPLOYEE
@@ -65,12 +62,16 @@ export function CoolingUnitsOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
-              user?.role === ERoles.OPERATOR
-                ? next()
-                : user?.role === ERoles.COOLING_USER
-                  ? goTo(EFarmerTutorialSteps.MARKET_PRICE)
-                  : goTo(ECommonTutorialSteps.FINAL_STEP);
+              if (user?.role === ERoles.OPERATOR) {
+                navigation.navigate('RoomConditions');
+                next();
+              } else if (user?.role === ERoles.COOLING_USER) {
+                rootNavigation.navigate('MarketPrice');
+                goTo(EFarmerTutorialSteps.MARKET_PRICE);
+              } else {
+                rootNavigation.navigate('Dashboard');
+                goTo(ECommonTutorialSteps.FINAL_STEP);
+              }
             }}
             tw="bg-green-primary border-green-primary"
             labelStyle="text-white"

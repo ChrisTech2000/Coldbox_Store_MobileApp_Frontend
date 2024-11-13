@@ -14,7 +14,7 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function AddLocationOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function AddLocationOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -52,7 +52,7 @@ export function AddLocationOverlay({ next, stop, step: { onPressMask } }: IOverl
           <Button
             mode="contained"
             onPress={() => {
-              onPressMask?.();
+              rootNavigation.goBack();
               next();
             }}
             labelStyle="text-white"

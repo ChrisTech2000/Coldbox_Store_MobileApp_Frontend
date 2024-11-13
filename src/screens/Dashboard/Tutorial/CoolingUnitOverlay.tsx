@@ -15,7 +15,7 @@ import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 import { ECommonTutorialSteps, EEmployeeTutorialSteps } from './utils/constants';
 
-export function CoolingUnitOverlay({ next, goTo, stop, step }: IOverlayComponentProps) {
+export function CoolingUnitOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
@@ -59,7 +59,7 @@ export function CoolingUnitOverlay({ next, goTo, stop, step }: IOverlayComponent
                     }
                   : () => {
                       goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
-                      step.onPressMask?.();
+                      rootNavigation.navigate('CoolingUnits');
                     }
             }
             tw="bg-green-primary border-green-primary"

@@ -42,7 +42,6 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_COOLING_USERS_STEP,
     OverlayComponent: ManagementOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => props.navigation.navigate('CoolingUsers'),
   });
@@ -50,7 +49,6 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.LOCATIONS_STEP,
     OverlayComponent: LocationsOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => props.navigation.navigate('AddLocation'),
   });
@@ -58,7 +56,6 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.COOLING_UNITS_STEP,
     OverlayComponent: ManagementCoolingUnitsOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => navigation.navigate('AddCoolingUnit'),
   });
@@ -66,7 +63,6 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP,
     OverlayComponent: ManagementEmployeesOperatorsOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => props.navigation.goBack(),
   });

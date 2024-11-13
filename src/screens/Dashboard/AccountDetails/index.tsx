@@ -62,21 +62,18 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_LOCALIZATION_PREFERENCES_STEP,
     OverlayComponent: LocalizationPreferencesOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
   });
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_PERSONAL_DETAILS,
     OverlayComponent: PersonalDetailsOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
   });
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_COOLING_USERS_SURVEY_STEP,
     OverlayComponent: CoolingUserSurveyOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
     onPressMask: () => {
       props.navigation.goBack();
