@@ -1,15 +1,25 @@
 import React from 'react';
-import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
-import { Divider, Icon } from 'react-native-paper';
+import { FlatList, ScrollView, View, Dimensions } from 'react-native';
+import { Dialog, Divider, Icon } from 'react-native-paper';
+import colors from 'tailwindcss/colors';
 
-import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
+import { Button } from '#ui/components/Button';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import colors from 'tailwindcss/colors';
+import { EPaymentMethod } from '#types/global';
+import type { TranslationPaths } from '#i18n/index';
+
+const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
+
+const PAYMENT_METHOD_TRANSLATIONS: Partial<Record<EPaymentMethod, TranslationPaths>> = {
+  [EPaymentMethod.CASH]: 'Dashboard.Management.RevenueAnalysis.paymentType.cash',
+  [EPaymentMethod.CREDIT_CARD]: 'Dashboard.Management.RevenueAnalysis.paymentType.creditCard',
+  [EPaymentMethod.BANK_TRANSFER]: 'Dashboard.Management.RevenueAnalysis.paymentType.bankTransfer',
+};
 
 type DetailsModalProps = {
   isOpen: boolean;
@@ -27,49 +37,51 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
     { defaultData: [], skip: !isOpen }
   );
 
-  return (
-    <Modal visible={isOpen} onDismiss={dismiss}>
-      <View tw="w-[90%] bg-white mx-5 py-1 max-h-[95%] space-y-2 rounded-3xl">
-        <View tw="flex flex-row space-x-2 p-2">
-          <TouchableOpacity onPress={dismiss}>
-            <Icon source="arrow-left" size={25} />
-          </TouchableOpacity>
-          <Text variant="TitleMedium">
-            {t('Dashboard.History.stringTemplates.movementType.checkOut')}
-          </Text>
-        </View>
-        <Divider tw="w-full bg-gray-400" />
+  const paymentMethod = PAYMENT_METHOD_TRANSLATIONS?.[movement.paymentMethod];
 
-        <ScrollView tw="px-2" showsVerticalScrollIndicator={false}>
+  return (
+    <Dialog
+      visible={isOpen}
+      onDismiss={dismiss}
+      style={{ backgroundColor: 'white', maxHeight: DIALOG_MAX_HEIGHT }}
+    >
+      <Dialog.Title>{t('Dashboard.History.stringTemplates.movementType.checkOut')}</Dialog.Title>
+      <Dialog.ScrollArea tw="px-0">
+        <ScrollView tw="px-6 py-2" showsVerticalScrollIndicator>
           <View tw="space-y-1">
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.coolingUserLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {movement.owner}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.operatorNameLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {movement.operator}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.operatorNumberLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {data[0]?.user.phone ?? ''}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.checkOutLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {movement.code}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.checkOutDateLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {dateFmt(movement.date.toString(), 'dd-MM-yyyy')}
             </Text>
             <View tw="flex flex-row space-x-2 items-center">
@@ -90,37 +102,43 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {movement.cratesCheckin.length}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {movement.cratesWeight}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.paymentMethodLabel')}:
-              </Text>{' '}
-              {movement.paymentType}
+              </Text>
+              &nbsp;
+              {paymentMethod ? t(paymentMethod) : ''}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {movement.calculatedPrice?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.discountLabel')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {movement.discount?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:
-              </Text>{' '}
+              </Text>
+              &nbsp;
               {movement.totalPrice?.toFixed(2)}
             </Text>
           </View>
@@ -132,6 +150,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
           </Text>
 
           <FlatList
+            scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             data={movement.cratesCheckin}
             keyExtractor={(item, index) => `${item.code}-${index}`}
@@ -179,10 +198,20 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 </View>
               </View>
             )}
-            nestedScrollEnabled
           />
         </ScrollView>
-      </View>
-    </Modal>
+      </Dialog.ScrollArea>
+      <Dialog.Actions>
+        <Button
+          uppercase
+          onPress={(evt) => {
+            evt.stopPropagation();
+            dismiss();
+          }}
+        >
+          {t('actions.close')}
+        </Button>
+      </Dialog.Actions>
+    </Dialog>
   );
 }
