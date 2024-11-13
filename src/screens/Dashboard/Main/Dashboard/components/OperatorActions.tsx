@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
-import { ActivityIndicator, Icon, Portal, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Dialog, Icon, Portal, TextInput } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import CheckIn from '#assets/icons/check-in.svg';
@@ -27,7 +27,6 @@ import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/consta
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
-import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
@@ -228,11 +227,9 @@ export function OperatorActions({
       ) : null}
 
       <Portal>
-        <Modal visible={isModalOpen} onDismiss={onModalClose}>
-          <View tw="bg-white rounded-3xl h-auto max-h-[95%] space-y-2 items-center mx-16 px-3 py-1">
-            <Text variant="TitleMedium" tw="my-2">
-              {`${t('Dashboard.CrateManagement.userModalTitle')}:`}
-            </Text>
+        <Dialog visible={isModalOpen} onDismiss={onModalClose} style={{ backgroundColor: 'white' }}>
+          <Dialog.Title>{`${t('Dashboard.CrateManagement.userModalTitle')}:`}</Dialog.Title>
+          <Dialog.Content>
             <Input
               tw="border bg-white border-gray-700 rounded-sm mt-2 mb-3 h-11 w-full"
               label={`${t('Dashboard.SearchFilter.searchLabel')}...`}
@@ -241,7 +238,7 @@ export function OperatorActions({
               left={<TextInput.Icon icon="magnify" />}
               disabled={isLoading}
             />
-            <ScrollView tw="w-full" showsVerticalScrollIndicator={false}>
+            <ScrollView tw="max-h-52" showsVerticalScrollIndicator>
               {isLoading ? (
                 <View tw="w-full flex-1 items-center justify-center">
                   <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -257,10 +254,10 @@ export function OperatorActions({
                     <TouchableOpacity
                       onPress={() => setSelectedUser(item)}
                       tw={cn(
-                        'my-1 border-b border-gray-300 p-1',
+                        'border-gray-300 px-1 py-2',
                         (selectedUser as Farmer)?.id === item?.id
-                          ? 'border-2 border-green-primary'
-                          : ''
+                          ? 'border border-green-primary'
+                          : 'border-b'
                       )}
                     >
                       <Text variant="TextMedium" tw="text-base">
@@ -273,7 +270,7 @@ export function OperatorActions({
             </ScrollView>
 
             <Button
-              tw="w-[85%] mt-4 mb-1"
+              tw="w-[85%] mt-4 mb-1 self-center"
               mode="contained"
               uppercase
               onPress={onNavigate}
@@ -284,15 +281,15 @@ export function OperatorActions({
               {t('actions.confirm')}
             </Button>
 
-            {managementMode === 'check-in' && (
+            {managementMode === 'check-in' ? (
               <TouchableOpacity onPress={navigateToCoolingUsers} tw="mb-3">
                 <Text variant="TextMedium" tw="text-base text-green-primary">
                   {t('Dashboard.CrateManagement.addUserLink')}
                 </Text>
               </TouchableOpacity>
-            )}
-          </View>
-        </Modal>
+            ) : null}
+          </Dialog.Content>
+        </Dialog>
       </Portal>
     </View>
   );
