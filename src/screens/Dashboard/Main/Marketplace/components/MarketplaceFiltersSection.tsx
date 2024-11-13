@@ -69,7 +69,7 @@ export default function MarketplaceFiltersSection() {
       <TouchableWithoutFeedback
         onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
       >
-        <View tw="bg-zinc-100 py-4 space-y-3">
+        <View tw="bg-zinc-100 py-4 space-y-1">
           <View tw="flex-row items-center justify-between mx-4">
             <MarketplaceLocationFilter />
 
