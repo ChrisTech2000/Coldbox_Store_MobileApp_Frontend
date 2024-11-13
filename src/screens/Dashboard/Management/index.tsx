@@ -239,13 +239,13 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
                   props.navigation.navigate('CouponStack');
                 }}
               />
-              <Divider tw="bg-gray-400 mb-2" />
+              <Divider tw="bg-gray-400" />
             </View>
           </RBAC.ProtectedResource>
 
           <RBAC.ProtectedResource action="NAVIGATE" subject="DeliveryContacts">
             <List.Item
-              tw="px-0 pt-0 pb-2"
+              tw="px-0 py-2"
               title={undefined}
               left={() => (
                 <Text tw="text-base w-[80%]">{t('navigation.management.DeliveryContacts')}</Text>
