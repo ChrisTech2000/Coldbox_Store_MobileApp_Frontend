@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
-import { ActivityIndicator, Portal } from 'react-native-paper';
+import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -35,7 +35,6 @@ import { MOCKED_DASHBOARD_DATA } from '#screens/Dashboard/Tutorial/utils/mockedD
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
-import { Modal } from '#ui/components/Modal';
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
@@ -311,14 +310,16 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
       <RBAC.ProtectedResource action="VIEW" subject="MarketplaceListing">
         <Portal>
-          <Modal
+          <Dialog
             visible={isBankAccountModalOpen}
             onDismiss={() => setIsBankAccountModalOpen(false)}
+            style={{ backgroundColor: 'white' }}
           >
-            <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
+            <Dialog.Content>
               <Text tw="text-base">{t('Dashboard.ProduceDetails.employeeNoBankAccount')}</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
               <Button
-                tw="mt-2"
                 onPress={() => {
                   rootNavigation.navigate('Management', {
                     screen: 'PayoutSettings',
@@ -329,8 +330,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
               >
                 {t('Dashboard.ProduceDetails.addBankAccountButton')}
               </Button>
-            </View>
-          </Modal>
+            </Dialog.Actions>
+          </Dialog>
         </Portal>
       </RBAC.ProtectedResource>
     </View>
