@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+import { Dialog } from 'react-native-paper';
 
-import { Modal } from '#ui/components/Modal';
-
-import { GetMovementsHistoryResponse } from '#types/api.responses';
+import { useTranslationUtils } from '#i18n/utils';
+import type { GetMovementsHistoryResponse } from '#types/api.responses';
 import { type CoolingUnit, EMovementType } from '#types/global';
 
 import { CheckOutData } from './CheckOutData';
@@ -25,23 +25,30 @@ export function PDFModal({
   movement,
   dismiss,
 }: PDFModalProps) {
-  const isCheckIn = useMemo(() => {
-    return movement.movementType === EMovementType.IN;
-  }, [movement]);
+  const { t } = useTranslationUtils();
+
+  const isCheckIn = movement.movementType === EMovementType.IN;
 
   return (
-    <Modal visible={isOpen} onDismiss={dismiss}>
-      {isCheckIn ? (
-        <CheckInData
-          companyName={companyName}
-          coolingUnit={coolingUnit}
-          currency={currency}
-          movement={movement}
-          dismissModal={dismiss}
-        />
-      ) : (
-        <CheckOutData movement={movement} dismissModal={dismiss} />
-      )}
-    </Modal>
+    <Dialog visible={isOpen} onDismiss={dismiss} style={{ backgroundColor: 'white' }}>
+      <Dialog.Title>
+        {isCheckIn
+          ? t('Dashboard.History.pdfModal.checkIn.title')
+          : t('Dashboard.History.pdfModal.checkOut.title')}
+      </Dialog.Title>
+      <Dialog.Content>
+        {isCheckIn ? (
+          <CheckInData
+            companyName={companyName}
+            coolingUnit={coolingUnit}
+            currency={currency}
+            movement={movement}
+            dismissModal={dismiss}
+          />
+        ) : (
+          <CheckOutData movement={movement} dismissModal={dismiss} />
+        )}
+      </Dialog.Content>
+    </Dialog>
   );
 }
