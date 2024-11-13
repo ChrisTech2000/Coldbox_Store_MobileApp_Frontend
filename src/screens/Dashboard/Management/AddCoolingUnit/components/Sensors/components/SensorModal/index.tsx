@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
+import { View } from 'react-native';
+import { Portal } from 'react-native-paper';
 
+import { Text } from '#ui/components/Text';
+import { RNModal } from '#ui/primitives/RNModal';
+
+import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
-import type { SensorTypes } from '#screens/Dashboard/Management/AddCoolingUnit/constants';
 import { useAppEventListener } from '#ui/lib/emitter';
 
+import type { SensorTypes } from '#screens/Dashboard/Management/AddCoolingUnit/constants';
 import EcozenForm from './components/EcozenForm';
 import UbibotForm from './components/UbibotForm';
 import FigorrForm from './components/FigorrForm';
@@ -17,13 +23,50 @@ export default function SensorModal() {
     setSelectedSensor(sensorType);
   });
 
-  switch (selectedSensor) {
+  return (
+    <Portal>
+      <RNModal visible={isVisible} onDismiss={toggleVisibility}>
+        <View tw="w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2">
+          <_SensorFactory sensorType={selectedSensor} />
+        </View>
+      </RNModal>
+    </Portal>
+  );
+}
+
+function _SensorFactory(props: { sensorType: SensorTypes | undefined }) {
+  const { t } = useTranslationUtils();
+
+  switch (props.sensorType) {
     case 'ecozen':
-      return <EcozenForm isVisible={isVisible} onDismiss={toggleVisibility} />;
-    case 'figorr':
-      return <FigorrForm isVisible={isVisible} onDismiss={toggleVisibility} />;
+      return (
+        <React.Fragment>
+          <Text variant="TitleRegular" tw="px-6">
+            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
+          </Text>
+          <Text tw="px-6 mt-2">
+            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
+          </Text>
+          <EcozenForm />
+        </React.Fragment>
+      );
+
     case 'ubibot':
-      return <UbibotForm isVisible={isVisible} onDismiss={toggleVisibility} />;
+      return <UbibotForm />;
+
+    case 'figorr':
+      return (
+        <React.Fragment>
+          <Text variant="TitleRegular" tw="px-6">
+            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
+          </Text>
+          <Text tw="px-6 mt-2">
+            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
+          </Text>
+          <FigorrForm />
+        </React.Fragment>
+      );
+
     default:
       return null;
   }
