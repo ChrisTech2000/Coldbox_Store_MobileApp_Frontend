@@ -1,24 +1,42 @@
-import React from 'react';
-import { View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import React, { useRef } from 'react';
 import { WebView } from 'react-native-webview';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { KNOWLEDGE_HUB_URL } from '#constants/environment';
-import { paperTheme } from '#ui/lib/theme';
+
+import { DEEP_LINK_DOMAIN } from '#constants/environment';
+
+const SOURCE_URI = `https://${DEEP_LINK_DOMAIN}/end-user-licence`;
+
+const INJECTED_JS = `
+  (function() {
+    const header = document.querySelector('ion-header');
+    if (header) header.remove();
+
+    function removeToasts() {
+      const toasts = document.querySelectorAll('ion-toast');
+      toasts.forEach(toast => toast.remove());
+    }
+    removeToasts();
+
+    const observer = new MutationObserver(removeToasts);
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 2_000);
+  })();
+`;
 
 function UserAgreement() {
+  const ref = useRef<WebView>(null);
+
   return (
     <WebView
-      source={{ uri: KNOWLEDGE_HUB_URL }}
-      style={{ flex: 1 }}
-      renderLoading={() => (
-        <View tw="flex-1 items-center justify-center">
-          <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-        </View>
-      )}
+      ref={ref}
+      style={{ flex: 1, marginHorizontal: 10 }}
+      source={{ uri: SOURCE_URI }}
+      onLoadEnd={() => {
+        ref.current?.injectJavaScript(INJECTED_JS);
+      }}
     />
   );
 }
 
-export default withSafeArea(UserAgreement);
+export default withSafeArea(UserAgreement, ['bottom'], true);

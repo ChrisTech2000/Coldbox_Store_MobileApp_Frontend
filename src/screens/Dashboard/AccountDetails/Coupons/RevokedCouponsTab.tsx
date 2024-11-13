@@ -34,7 +34,9 @@ function RevokedCouponsTab() {
                     {item.code}
                   </Text>
                 </View>
-                <Text tw="text-lg text-zinc-500">-&nbsp;{item.discountPercentage * 100}&#37;</Text>
+                <Text tw="text-lg text-zinc-500">
+                  -&nbsp;{(item.discountPercentage * 100).toFixed(0)}&#37;
+                </Text>
               </View>
             </View>
           )}

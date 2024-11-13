@@ -1,10 +1,14 @@
 import React from 'react';
+import { View } from 'react-native';
 import { type NavigationProp } from '@react-navigation/native';
-import { Dialog, Portal, TextInput } from 'react-native-paper';
+import { Portal, TextInput } from 'react-native-paper';
+
 import { Controller, useForm } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
+
+import { RNModal } from '#ui/primitives/RNModal';
 
 import type { ManagementRoutePaths, ManagementRoutes } from '#navigation/Dashboard/Management';
 import { useToggle } from '#ui/hooks/useToggle';
@@ -76,31 +80,39 @@ export default function FormModal(props: Props) {
 
   return (
     <Portal>
-      <Dialog visible={isVisible} onDismiss={onClose} style={{ backgroundColor: 'white' }}>
-        <Dialog.Title>{t('Dashboard.Management.CoolingUsers.modals.userCode')}</Dialog.Title>
-        <Dialog.Content>
-          <Text tw="text-base">{t('Dashboard.Management.CoolingUsers.modals.userCodeDesc')}</Text>
-          <Controller
-            name="code"
-            control={form.control}
-            render={({ field: { onChange, value, onBlur } }) => (
-              <TextInput
-                tw="bg-transparent"
-                placeholder="AS23F4AD"
-                mode="flat"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={!!form.formState.errors.code}
-              />
-            )}
-          />
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={onClose}>{t('actions.cancel')}</Button>
-          <Button onPress={form.handleSubmit(onSubmit)}>{t('actions.import')}</Button>
-        </Dialog.Actions>
-      </Dialog>
+      <RNModal visible={isVisible} onDismiss={onClose}>
+        <View tw="w-full bg-white rounded-3xl w-2/3 max-w-2/3 h-auto pt-6 pb-4 self-center space-y-2">
+          <Text variant="TitleRegular" tw="px-6">
+            {t('Dashboard.Management.CoolingUsers.modals.userCode')}
+          </Text>
+          <Text tw="px-6">{t('Dashboard.Management.CoolingUsers.modals.userCodeDesc')}</Text>
+          <View tw="w-full pt-1.5 pb-3">
+            <Controller
+              name="code"
+              control={form.control}
+              render={({ field: { onChange, value, onBlur } }) => (
+                <TextInput
+                  tw="bg-transparent mx-6"
+                  placeholder="AS23F4AD"
+                  mode="flat"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={!!form.formState.errors.code}
+                />
+              )}
+            />
+          </View>
+          <View tw="flex-row self-end px-6">
+            <Button mode="text" onPress={onClose}>
+              {t('actions.cancel')}
+            </Button>
+            <Button mode="text" onPress={form.handleSubmit(onSubmit)}>
+              {t('actions.import')}
+            </Button>
+          </View>
+        </View>
+      </RNModal>
     </Portal>
   );
 }

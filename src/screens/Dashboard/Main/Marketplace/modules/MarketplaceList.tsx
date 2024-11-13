@@ -1,23 +1,27 @@
 import React, { useEffect, useMemo } from 'react';
-import { FlatList, RefreshControl, SectionList, View } from 'react-native';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FlatList, SectionList, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
 import camelCase from 'lodash/camelCase';
-import colors from 'tailwindcss/colors';
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 
 import { Text } from '#ui/components/Text';
 
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { API_BASE_URL } from '#constants/environment';
-import { paperTheme } from '#ui/lib/theme';
+import { useTranslationUtils } from '#i18n/utils';
+import type { ValueOf } from '#types/miscellaneous';
 import { useMap } from '#ui/hooks/useMap';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
+import type { TranslationPaths } from 'i18n/index';
 
 import MarketplaceItemWrapper from '../components/MarketplaceItem';
 
 import { useMarketplaceQueryParams } from '../store';
-import { type AvailableListingDatum, useMarketplaceListing, DEFAULT_COORDINATES } from '../utils';
+import { type AvailableListingDatum, DEFAULT_COORDINATES, useMarketplaceListing } from '../utils';
 
 export default function MarketplaceList() {
   const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
@@ -51,6 +55,7 @@ export default function MarketplaceList() {
                 cropName={item.crop.name}
                 movementCode={item.movementCode}
                 cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
+                owner={item.owner}
               />
               <MarketplaceItemWrapper.CompanyAction company={item.company} />
               <MarketplaceItemWrapper.BuyAction
@@ -63,21 +68,46 @@ export default function MarketplaceList() {
               />
             </MarketplaceItemWrapper>
           )}
-          refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
         />
       );
   }
 }
+
+const DISTANCE_BUCKETS = {
+  DEFAULT: 0,
+  WITHIN_5_KM: 1,
+  WITHIN_10_KM: 2,
+  WITHIN_25_KM: 3,
+  BEYOND_25_KM: 4,
+} as const;
+
+const DISTANCE_BUCKETS_TRANSLATIONS: Record<
+  ValueOf<typeof DISTANCE_BUCKETS>,
+  TranslationPaths | undefined
+> = {
+  [DISTANCE_BUCKETS.DEFAULT]: undefined,
+  [DISTANCE_BUCKETS.WITHIN_5_KM]: 'Dashboard.Marketplace.distance.withing5Km',
+  [DISTANCE_BUCKETS.WITHIN_10_KM]: 'Dashboard.Marketplace.distance.within10Km',
+  [DISTANCE_BUCKETS.WITHIN_25_KM]: 'Dashboard.Marketplace.distance.within25Km',
+  [DISTANCE_BUCKETS.BEYOND_25_KM]: 'Dashboard.Marketplace.distance.beyond25Km',
+};
+
+type NearbyMeDatum = {
+  sectionKey: string;
+  distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
+  data: Array<AvailableListingDatum>;
+};
 
 function _NearbyMeSection(props: {
   listing: Array<AvailableListingDatum>;
   isValidating: boolean;
   refetch: () => void;
 }) {
-  const { listing, isValidating, refetch } = props;
+  const { listing } = props;
 
+  const { t } = useTranslationUtils();
   const coordinates = useMarketplaceQueryParams((store) => store.location);
-  const isLocationDenied = isEqual(coordinates, DEFAULT_COORDINATES);
+  const isLocationDenied = isEmpty(coordinates) || isEqual(coordinates, DEFAULT_COORDINATES);
 
   const [unitMap, unitMapActions] = useMap<
     string,
@@ -101,22 +131,22 @@ function _NearbyMeSection(props: {
     }
   }, [listing, unitMap, unitMapActions]);
 
-  const groupedData = useMemo(() => {
+  const groupedData: Array<NearbyMeDatum> = useMemo(() => {
     const dataByDistance = listing.reduce<
-      Record<string, Record<string, Array<AvailableListingDatum>>>
+      Record<string, Record<NearbyMeDatum['distance'], Array<AvailableListingDatum>>>
     >((acc, datum) => {
       const key = camelCase(datum.coolingUnit.name);
       const distanceBucket = isLocationDenied
-        ? 'default'
+        ? DISTANCE_BUCKETS.DEFAULT
         : datum.distance <= 5
-          ? '1 to 5 KM away'
+          ? DISTANCE_BUCKETS.WITHIN_5_KM
           : datum.distance <= 10
-            ? '5 to 10 KM away'
+            ? DISTANCE_BUCKETS.WITHIN_10_KM
             : datum.distance <= 25
-              ? '10 to 25 KM away'
-              : 'More than 25 KM away';
+              ? DISTANCE_BUCKETS.WITHIN_25_KM
+              : DISTANCE_BUCKETS.BEYOND_25_KM;
 
-      acc[key] ??= {};
+      acc[key] ??= {} as Record<NearbyMeDatum['distance'], Array<AvailableListingDatum>>;
       acc[key][distanceBucket] ??= [];
       acc[key][distanceBucket].push(datum);
 
@@ -126,7 +156,7 @@ function _NearbyMeSection(props: {
     return Object.entries(dataByDistance).flatMap(([key, distances]) =>
       Object.entries(distances).map(([distance, data]) => ({
         sectionKey: key,
-        distance,
+        distance: Number(distance) as NearbyMeDatum['distance'],
         data,
       }))
     );
@@ -142,6 +172,7 @@ function _NearbyMeSection(props: {
       renderSectionHeader={({ section }) => {
         const datum = unitMap.get(section.sectionKey);
         if (typeof datum === 'undefined') return null;
+        const translationPath = DISTANCE_BUCKETS_TRANSLATIONS?.[section.distance];
         return (
           <View tw="flex-col py-2">
             <View>
@@ -151,14 +182,14 @@ function _NearbyMeSection(props: {
             </View>
             <View tw="flex-row items-end justify-between">
               <MarketplaceItemWrapper.CompanyAction company={datum.company} truncate />
-              {section.distance !== 'default' ? (
+              {typeof translationPath !== 'undefined' ? (
                 <View tw="flex-row items-center space-x-2 mb-1.5">
                   <MaterialCommunityIcon
                     name="map-marker-outline"
                     size={19}
                     color={colors.zinc[500]}
                   />
-                  <Text tw="text-base text-zinc-500">{section.distance}</Text>
+                  <Text tw="text-base text-zinc-500">{t(translationPath)}</Text>
                 </View>
               ) : null}
             </View>
@@ -172,6 +203,7 @@ function _NearbyMeSection(props: {
             cropName={item.crop.name}
             movementCode={item.movementCode}
             cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
+            owner={item.owner}
           />
           <MarketplaceItemWrapper.BuyAction
             crateWeight={item.crateWeight}
@@ -183,7 +215,6 @@ function _NearbyMeSection(props: {
           />
         </MarketplaceItemWrapper>
       )}
-      refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
     />
   );
 }

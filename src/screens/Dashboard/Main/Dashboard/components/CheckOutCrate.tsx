@@ -72,7 +72,7 @@ export function CheckoutCrate({ crate }: ProduceProps) {
             </Text>
           ) : null}
           <Text variant="TextMedium">{`${t('Dashboard.CrateManagement.CheckOut.checkIn')}:`}</Text>
-          <Text variant="TextMedium">{dateFmt(crate.checkInDate.toString(), 'MMM dd yyyy')}</Text>
+          <Text variant="TextMedium">{dateFmt(crate.checkinDate.toString(), 'MMM dd yyyy')}</Text>
           <Text variant="TextMedium">{`(${generateDaysString(crate.currentStorageDays)})`}</Text>
         </View>
       </View>

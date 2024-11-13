@@ -1,27 +1,43 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useRef } from 'react';
 import { WebView } from 'react-native-webview';
-import { ActivityIndicator } from 'react-native-paper';
 
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { KnowledgeHubStackRouteProps } from '#navigation/Dashboard/KnowledgeHub';
-import { paperTheme } from '#ui/lib/theme';
+import { mmkv } from '#stores/lib/storage';
+
+const INJECTED_JS = `
+  (function() {
+    const header = document.querySelector('ion-header');
+    if (header) header.remove();
+
+    function removeToasts() {
+      const toasts = document.querySelectorAll('ion-toast');
+      toasts.forEach(toast => toast.remove());
+    }
+    removeToasts();
+
+    const observer = new MutationObserver(removeToasts);
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 2_000);
+  })();
+`;
 
 function KnowledgeHubDetails(props: KnowledgeHubStackRouteProps<'Details'>) {
-  const { params } = props.route;
+  const ref = useRef<WebView>(null);
+
+  const language = mmkv.getString('i18n-locale');
 
   return (
     <WebView
-      source={{ uri: params.uri }}
+      ref={ref}
       style={{ flex: 1 }}
-      renderLoading={() => (
-        <View tw="flex-1 items-center justify-center">
-          <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-        </View>
-      )}
+      source={{ uri: `${props.route.params.sourceUri}?language=${language}` }}
+      onLoadEnd={() => {
+        ref.current?.injectJavaScript(INJECTED_JS);
+      }}
     />
   );
 }
 
-export default withSafeArea(KnowledgeHubDetails);
+export default withSafeArea(KnowledgeHubDetails, ['bottom'], true);

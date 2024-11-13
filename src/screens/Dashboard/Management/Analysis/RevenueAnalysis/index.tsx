@@ -28,7 +28,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { type CoolingUnit, EPaymentType, ERoles } from '#types/global';
+import { type CoolingUnit, EPaymentMethod, ERoles } from '#types/global';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
 import { sortMovements } from '../utils';
@@ -36,7 +36,7 @@ import { DownloadDataModal } from '../components/DownloadDataModal';
 
 type PaymentOption = {
   label: string;
-  value: EPaymentType;
+  value: EPaymentMethod;
 };
 
 const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
@@ -156,15 +156,15 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           datums={[
             {
               label: t('Dashboard.Management.RevenueAnalysis.paymentType.cash'),
-              value: EPaymentType.CASH,
+              value: EPaymentMethod.CASH,
             },
             {
               label: t('Dashboard.Management.RevenueAnalysis.paymentType.creditCard'),
-              value: EPaymentType.CREDIT_CARD,
+              value: EPaymentMethod.CREDIT_CARD,
             },
             {
               label: t('Dashboard.Management.RevenueAnalysis.paymentType.bankTransfer'),
-              value: EPaymentType.BANK_TRANSFER,
+              value: EPaymentMethod.BANK_TRANSFER,
             },
           ]}
           isModalVisible={isPaymentModalOpen}

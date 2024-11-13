@@ -287,7 +287,7 @@ function Table({ items, header, total }: TableProps) {
 
   return (
     <DataTable tw="py-4 px-2 min-w-full">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14 min-w-full">
+      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
         <DataTable.Title tw="max-w-[50%] min-w-[50%]">
           <Text variant="TextMedium" tw="text-white text-base">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
@@ -385,21 +385,21 @@ function ExtendedTable({ items, column1, column2, total, fourColumnsVersion }: E
             </DataTable.Cell>
             {fourColumnsVersion && (
               <DataTable.Cell tw="pl-2 max-w-[10%] min-w-[10%]">
-                {item.column3 === 'equal' && <Icon source="equal" size={25} />}
-                {item.column3 === 'decrease' && (
+                {item.column3 === 'equal' ? (
+                  <Icon source="equal" size={25} />
+                ) : item.column3 === 'decrease' ? (
                   <Icon
                     source="chevron-double-down"
                     size={30}
                     color={item.negative ? colors.green.primary : colors.red[500]}
                   />
-                )}
-                {item.column3 === 'increase' && (
+                ) : item.column3 === 'increase' ? (
                   <Icon
                     source="chevron-double-up"
                     size={30}
                     color={item.negative ? colors.red[500] : colors.green.primary}
                   />
-                )}
+                ) : null}
               </DataTable.Cell>
             )}
           </DataTable.Row>

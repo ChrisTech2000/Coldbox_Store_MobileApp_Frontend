@@ -2,6 +2,8 @@ import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
@@ -9,6 +11,7 @@ import { Button } from '#ui/components/Button';
 import { cn } from '#ui/lib/cn';
 import { Text } from '#ui/components/Text';
 import { useTutorialStore } from '#stores/tutorial';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 import { EOperatorTutorialSteps } from './utils/constants';
 
@@ -21,6 +24,7 @@ export function ManagementEmployeesOperatorsOverlay({
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -69,6 +73,7 @@ export function ManagementEmployeesOperatorsOverlay({
               onPress={() => {
                 stop();
                 toggleTutorial(false);
+                rootNavigation.navigate('Dashboard');
               }}
               labelStyle="text-green-primary"
             >

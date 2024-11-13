@@ -15,9 +15,9 @@ export default {
       gu: 'ଗୁଜରାଟୀ',
       fr: 'ଫ୍ରେଞ୍ଚ',
       pt: 'ପୋର୍ତୁଗୀଜ୍',
-      igbo: 'ଇଗ୍ବୋ',
-      yoruba: 'ୟୋରୁବା',
-      hausa: 'ହାଉସା',
+      ig: 'ଇଗ୍ବୋ',
+      yo: 'ୟୋରୁବା',
+      ha: 'ହାଉସା',
     },
   },
   gender: {
@@ -60,6 +60,7 @@ export default {
       AddRegisteredEmployee: 'ପଞ୍ଜିକୃତ କର୍ମଚାରୀ ଯୋଡନ୍ତୁ',
       RegisteredEmployeeDetails: 'ପଞ୍ଜିକୃତ କର୍ମଚାରୀ ବିବରଣୀ',
       DeliveryContacts: 'ଡେଲିଭରୀ ସଂପର୍କ',
+      AddUserBankAccount: '{{user}} Bank Account', // TODO
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -93,6 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'ପସନ୍ଦ',
       Orders: 'ଅର୍ଡର',
       MyOrders: 'ମୋର ଅର୍ଡର',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'ଜ୍ଞାନ କେନ୍ଦ୍ର',
       QuitTutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍ ବାର୍ତ୍ତା',
@@ -157,6 +159,8 @@ export default {
     continue: 'ଜାରି ରଖନ୍ତୁ',
     save: 'ସଞ୍ଚୟ କରନ୍ତୁ',
     update: 'ଅଦ୍ୟତନ କରନ୍ତୁ |',
+    clearAll: 'Clear all', // TODO
+    apply: 'Apply', // TODO
   },
   components: {
     datePicker: {
@@ -259,9 +263,14 @@ export default {
         confirmPasswordLabel: 'ପାସ୍‌ୱାର୍ଡ ସ୍ଥାପନା',
         countryFieldName: 'ଦେଶ',
         genderFieldName: 'ଲିଙ୍ଗ',
-        terms:
-          'ମୁଁ Coldtivate ବ୍ୟବହାରକାରୀ ଲାଇସେନ୍ସ ସମ୍ଝୋତା, ଗୋପନୀୟତା ନୀତି ଏବଂ COMSOL ବ୍ୟବହାର ଶର୍ତ୍ତଗୁଡିକୁ ସହମତି ଦେଉଛି',
         submit: 'ସାଇନ୍ ଅପ୍',
+        terms: {
+          agree: 'ମୁଁ Coldtivate ରେ ରାଜି ଅଟେ |',
+          license: 'ଉପଯୋଗକର୍ତ୍ତା ଲାଇସେନ୍ସ ଚୁକ୍ତିନାମା',
+          privacy: 'ଗୋପନୀୟତା ନୀତି',
+          and: 'ଏବଂ',
+          comsol: 'COMSOL ବ୍ୟବହାର ସର୍ତ୍ତାବଳୀ',
+        },
       },
       SignUpCompany: {
         companyHeader: 'ସାଇନ୍ ଅପ୍ କମ୍ପାନୀ',
@@ -595,6 +604,21 @@ export default {
       noDTMessage: 'ଏହି ବିଶେଷ ସାମଗ୍ରୀ ପାଇଁ ସେଲ୍ଫ-ଲାଇଫ୍ ମୋଡେଲ୍ ଉପଲବ୍ଧ ନୁହେଁ।',
       checkOutButton: 'ଚେକ୍-ଆଉଟ୍',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      preSaleErrorOperator:
+        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
+      preSaleErrorUser:
+        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      operatorNoBankAccountWarning:
+        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+      farmerNoBankAccountWarning:
+        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+      operatorNoCompanyBankAccount:
+        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+      employeeNoBankAccount:
+        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
+      addBankAccountButton: 'Add bank account details', // TODO
+      addBankAccountHeader:
+        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -771,6 +795,7 @@ export default {
             'ଆପଣ ଆପଣଙ୍କର କୁଲିଂ ୟୁଜର୍ ତାଲିକାରୁ ଏହି ବ୍ୟବହାରକାରୀକୁ ମିଟାଇବାକୁ ନିଶ୍ଚିତ କି? ଏହି କ୍ରିୟା ବ୍ୟବହାରକାରୀକୁ ମିଟାଇବେ ଏବଂ ପୂର୍ଣ୍ଣ ବାପସ ପାଇବା ସମ୍ଭବ ନୁହେଁ!',
           edit: 'ସଫଳତାର ସହିତ କୁଲିଂ ୟୁଜର୍ ସମ୍ପାଦନା',
           noCoolingUnits: 'ଆପଣଙ୍କର କୌଣସି କୁଲିଂ ୟୁନିଟ୍ ନାହିଁ',
+          noSurveys: 'No surveys have been completed yet.', // TODO
           updateSuccess: 'ସଫଳତାର ସହିତ ଅଦ୍ୟତନ କରାଗଲା',
         },
         pdf: {
@@ -937,10 +962,21 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'ମୂଲ୍ୟ ବୃଦ୍ଧି',
         'price-desc': 'ମୂଲ୍ୟ କମିବା',
         'nearby-me': 'ମୋ ପାଖରେ',
+      },
+      distance: {
+        withing5Km: '1 to 5 KM away', // TODO
+        within10Km: '5 to 10 KM away', // TODO
+        within25Km: '10 to 25 KM away', // TODO
+        beyond25Km: 'More than 25 KM away', // TODO
       },
       priceConfig: 'ମୂଲ୍ୟ କନଫିଗରେସନ୍ ଉତ୍ପାଦ ବିକ୍ରୟକୁ ସନ୍ଦର୍ଭ କରେ, କୁଲିଂ ସ୍ଥାନ ଶୁଳ୍କକୁ ନୁହେଁ।',
       addToCart: {
@@ -952,6 +988,14 @@ export default {
       filterError:
         'କିଛି ଭୁଲ ହେବାରୁ ବିକଳ୍ପ ଗଡ଼ିଛି। ଦୟାକରି ଟାଇପୋରେ ତାଲିକା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଦିଆଯାଇଥିବା ସହର ନାଇଜେରିଆରେ ଅବସ୍ଥିତ।',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
+      priceRange: 'Range Price / KG',
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+      },
+      maxDistance: 'Max Distance',
     },
     AccountDetails: {
       popups: {
@@ -1176,10 +1220,20 @@ export default {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees', // TODO
+      soldFor: 'Sold for', // TODO
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'ସମ୍ପ୍ରତି',
         oldest: 'ପୁରୁଣା',
         date: 'ତାରିଖ',
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'ଆର୍ଡର ସାରାଂଶ',
       orderId: 'ଆର୍ଡର ID',
@@ -1189,6 +1243,9 @@ export default {
       backToTopButton: 'ଉପରକୁ ଫେରିବେ',
     },
     ShoppingCart: {
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'ଆପଣଙ୍କର କାର୍ଟ ଖାଲି ଅଛି',
       daysLeft: 'ଦିନ ବାକି',
       weight: 'କେଜି ଉପଲବ୍ଧ',
@@ -1222,6 +1279,12 @@ export default {
       redeemCoupon: 'ଛୁଟ ବ୍ୟବହାର କରନ୍ତୁ',
       couponPlaceholder: 'ଉଦାହରଣ: 20OFF',
       discountsApplied: 'ଛୁଟ ଲାଗୁ କରାଯାଇଛି',
+      pickupModal: {
+        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
+        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
+        delivery:
+          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+      },
       errors: {
         invalid: 'ଅବୈଧ ମୂଲ୍ୟ',
         minimumCartValue: 'ଆର୍ଡର ଅତିକମ୍ ₦100 ହେବା ଉଚିତ।',
@@ -1393,12 +1456,11 @@ export default {
   },
   tutorial: {
     welcome: 'କୋଲ୍ଡଟିଭେଟ୍‌ରେ ଆପଣଙ୍କୁ ସ୍ବାଗତ। ଏହା କାର୍ୟଗତିର ଏକ ବ୍ରିଫିଂ।',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'ଟ୍ୟୁଟୋରିଆଲ୍ ବନ୍ଦ କରନ୍ତୁ',
-    'back-dashboard': 'ଡ୍ୟାସବୋର୍ଡକୁ ଫେରନ୍ତୁ',
     congratulations:
       'ବଧାଇ! ଆପଣ ଟ୍ୟୁଟୋରିଆଲ୍ ସମାପ୍ତ କରିଛନ୍ତି! ଆପଣଙ୍କୁ ଆପ୍ଲିକେସନ୍ ବ୍ୟବହାର କରିବାକୁ ଡ୍ୟାସବୋର୍ଡକୁ ଫେରିବାକୁ କହାଯାଉଛି।',
-    comic:
-      'ବଧାଇ! ଆପଣ କୋମିକ୍ ଷ୍ଟ୍ରିପ୍ ସମାପ୍ତ କରିଛନ୍ତି! ଆପଣଙ୍କୁ ଆପ୍ଲିକେସନ୍ ବ୍ୟବହାର କରିବାକୁ ଡ୍ୟାସବୋର୍ଡକୁ ଫେରିବାକୁ କହାଯାଉଛି।',
     prev: 'ପୂର୍ବ',
     next: 'ପରବର୍ତ୍ତୀ',
     start: 'ଟ୍ୟୁଟୋରିଆଲ୍ ଆରମ୍ଭ କରନ୍ତୁ',
@@ -1454,7 +1516,7 @@ export default {
       accountDetailsNavigation:
         'ମେନୁରେ, ଆପଣ "ଆକାଉଣ୍ଟ ବିବରଣୀ" ଉପରେ ଗତି କରିପାରିବେ ଏବଂ ତାହାରେ ଆପଣଙ୍କର ଆକାଉଣ୍ଟ ସହିତ ସମ୍ବନ୍ଧିତ କିଛି ବିବରଣୀ ଦେଖିବା/ସଂପାଦନା କରିବାକୁ କ୍ଲିକ୍ କରନ୍ତୁ। ଆଗକୁ ଯାଆନ୍ତୁ ଏବଂ ଏହାକୁ ପ୍ରୟୋଗ କରନ୍ତୁ।',
       coolingUserSurvey:
-        'ଆପଣଙ୍କର ମାନ୍ୟକୁ ସ୍ବୀକାର କରିବା ପାଇଁ ଏହା ଖୁବ୍ ଦରକାରୀ ଯେ ଆପଣ ଏହି କୁଲିଂ ୟୁଜର ସର୍ବେକ୍ଷଣ ପୂରଣ କରନ୍ତୁ, ଯାହା ଆପଣଙ୍କୁ ବ୍ୟକ୍ତିଗତ ସୁପାରିଶ ଦେବା ପାଇଁ ଏପ୍ପକୁ ସହାୟ କରିବ। ସର୍ବେକ୍ଷଣ ପୂରଣ କରିବାକୁ ସମୟ ନେବା ପାଇଁ ଧନ୍ୟବାଦ!',
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
       coolingUserCode:
         'ଆପଣ ଯେତେବେଳେ ପ୍ରଥମେ କୌଣସି କାଲା ଘରକୁ ଗଲେ, ତେବେ ଓପରେଟର ଆପଣଙ୍କୁ ଆପଣଙ୍କର ବ୍ୟକ୍ତିଗତ କୋଡ୍ ପ୍ରଦାନ କରିବାକୁ ମାଙ୍ଗିବେ, ଯାହା ଆପଣଙ୍କୁ କାଲା ଘର ୟୁଜର୍ ତାଲିକାରେ ଯୋଗ କରିବ। ଆପଣ ଏହି କୋଡ୍ "ବ୍ୟକ୍ତିଗତ ବିବରଣୀ" -> "କୁଲିଂ ୟୁଜର ଇମ୍ପୋର୍ଟ କୋଡ୍" ରେ ପାଇପାରିବେ।',
       knowledgeHub:
@@ -1470,16 +1532,19 @@ export default {
         'ଯଦି କାର୍ଡର ରଙ୍ଗ ହଳକା ହେଉଛି (2-5 ଦିନ ଅବଶିଷ୍ଟ) କିମ୍ବା ସବୁଜ (5 ଦିନରୁ ଅଧିକ), ତେବେ ଆପଣଙ୍କୁ କ୍ରେଟ୍ ସମ୍ପର୍କରେ ଚିନ୍ତା କରିବାକୁ ଆବଶ୍ୟକ ନାହିଁ। ଦିନ ସଂଖ୍ୟା ଦିନକୁ ଅନେକ ଥର ପୁନଃଗଣନା କରାଯାଏ, ସେହିପାଇଁ ଦୟାକରି "ଡ୍ୟାସବୋର୍ଡ" କୁ ନିୟମିତ ଭାବେ ଚେକ୍ କରନ୍ତୁ କିପରି ଆପଣଙ୍କର କ୍ରେଟ୍ ଗୁଣବତ୍ତା ବିକାଶ ପାଇଁ ବଦଳାଯାଉଛି।',
       dashboardStep5:
         'ଯଦି ଆପଣଙ୍କର ମଲ୍ଟିପ୍ଲ ଘରରେ କ୍ରେଟ୍ ରହିଛି, ତେବେ ଆପଣ ଏକ କମ୍ପାନୀ ଓ କୁଲିଂ ୟୁନିଟ୍ ଚୟନ କରି ଦେଖିବାକୁ କକ୍ଷ ବଦଳାଇପାରିବେ।',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         'ତାଲିକା "ଇତିହାସ" ରେ ଆପଣ ପ୍ରତିଟି କକ୍ଷରେ ଆପଣଙ୍କର ସମସ୍ତ ଚେକ-ଇନ୍ ଓ ଚେକ-ଆଉଟ୍ ର ସାରାଂଶ ଦେଖିପାରିବେ। ଯଦି ଆପଣ ଏକ ଚେକ-ଆଉଟ୍ ପାଖରେ ଏକ ଲାଲ ତାରା ଦେଖନ୍ତି, ଦୟାକରି ତିନି ଡଟ୍ ସେଲକ୍ଟ କରିବା ପାଇଁ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ "ବଜାର ସର୍ଭେ ପୂରଣ କରନ୍ତୁ"। ଏଠାରେ, ଆମେ ଆପଣଙ୍କର ପ୍ରଦାନକୃତ ଉତ୍ପାଦ କେତେ ମୂଲ୍ୟରେ ବିକ୍ରୟ କରାଯାଇଛି ଏବଂ କିଛି ବିକୃତ ହୋଇଛି କି ନାହିଁ ବୁଝିବାକୁ ଚାହାଁୁ। ଏହି ସୂଚନାଗୁଡିକୁ କୋଲ୍ଡ ରୁମର କାର୍ୟକଳାପ ସୁଧାର କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯିବ, ତେଣୁ ଦୟାକରି ସଠିକ୍ ଉତ୍ତର ଦେବାକୁ ଯାଚନା କରୁଛୁ।',
       farmersCoolingUnits:
-        'ଆପଣଙ୍କ ନିକଟରେ ଥିବା କୋଲିଂ ଇଉନିଟ୍‌ଗୁଡିକୁ ଯାଞ୍ଚ କରିବାକୁ, ଆପଣ ସ୍କ୍ରିନ୍‌ଗୁଡିକର ତଳରେ ଥିବା ବଟନ୍‌ଗୁଡିକୁ ଯାଆନ୍ତୁ, "କୋଲିଂ ଇଉନିଟ୍‌ଗୁଡିକ" ଟାବ୍‌କୁ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ "ମାପ" ବାଛନ୍ତୁ। ମାପରେ ପ୍ରତିଟି ପିନ୍‌ରେ କ୍ଲିକ୍ କରି, ଆପଣ ଇଉନିଟ୍‌ର ପ୍ରକାର ଏବଂ ସଞ୍ଚୟର ମୂଲ୍ୟ ଦେଖିପାରିବେ।',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
         '"କୋଲିଂ ଇଉନିଟ୍‌ଗୁଡିକ" ଟାବ୍‌ରେ, ଆପଣ ମାପ, କକ୍ଷର ବର୍ତ୍ତମାନ ଏବଂ ଭବିଷ୍ୟତ ସଂଖ୍ୟାକୁ ("ପ୍ଲାନର" ରେ) ଏବଂ କକ୍ଷର ତାପମାତ୍ରା ("କକ୍ଷର ସ୍ଥିତି" ରେ) ଦେଖିପାରିବେ। ଏହି ସ୍କ୍ରିନ୍‌ଗୁଡିକ ଆପଣଙ୍କୁ କୋଲ୍ଡ ରୁମଗୁଡିକର କାର୍ଯ୍ୟ ନିରୀକ୍ଷଣ କରିବାରେ ସାହାଯ୍ୟ କରିବ, ଯାହାକି ସେଠାରେ ଯାଆଁ ସହ ବିନା ଯାଞ୍ଚ କରିବାକୁ।',
       marketPrice:
         'ଯଦି ଆପଣଙ୍କୁ "ବଜାର ମୂଲ୍ୟ" ନାମକ ଏକ ଟାବ୍‌ ଦେଖାଯାଉଛି, ତେବେ ଆପଣ ଦେଶର ବିଭିନ୍ନ ଫଳ ଓ ଶାକସାଗୁଲିର ମୂଲ୍ୟଗୁଡିକୁ ଗତ କିଛି ଦିନରେ ଏବଂ ଭବିଷ୍ୟତରେ ମୂଲ୍ୟ ଆବହାର ଚେକ୍ କରିପାରିବେ। ବର୍ତ୍ତମାନ, ଏହି ବିକଳ୍ପ କେବଳ ଚୟନିତ ଦେଶମାନଙ୍କ ପାଇଁ ଉପଲବ୍ଧ।', // TODO
       farmerFinalStep:
         'ବଧାଇ! ଆପଣ ଟ୍ୟୁଟୋରିଆଲ୍‌ ସମ୍ପୂର୍ଣ୍ଣ କରିଛନ୍ତି! ଯଦି ଆପଣଙ୍କୁ ଏହି ଆପ୍‌ ବିଷୟରେ ପ୍ରଶ୍ନ ଅଛି, ତେବେ ଆମେ ଏହି FAQ ଚେକ୍ କରିବାକୁ, କୋଲ୍ଡ ରୁମର ଏକ ଅପରେଟରଙ୍କୁ ପ୍ରଶ୍ନ କରିବାକୁ କିମ୍ବା app@yourvcca.org ଠାରେ ଲେଖିବାକୁ ପ୍ରଶଂସା କରୁଛୁ।',
+      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
     },
   },
 } satisfies Translations;

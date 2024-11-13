@@ -3,6 +3,8 @@ import { Animated, Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
@@ -12,6 +14,7 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -19,6 +22,7 @@ export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverla
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -83,7 +87,7 @@ export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverla
 
         <View
           tw={cn(
-            'absolute left-8 w-[70%] h-auto bg-white p-3 rounded-md z-40',
+            'absolute left-8 w-[80%] h-auto bg-white p-3 rounded-md z-40',
             screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-48' : 'top-56'
           )}
           style={[
@@ -95,12 +99,13 @@ export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverla
             },
           ]}
         >
-          <Text tw="text-base">{t('tutorial.steps.navigateToCoolingUser')}</Text>
+          <Text tw="text-base text-center">{t('tutorial.steps.navigateToCoolingUser')}</Text>
           <Button
             mode="text"
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
             tw="mt-4"

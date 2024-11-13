@@ -23,6 +23,7 @@ import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { GENDERS, SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
 import { customCountrySort } from './utils';
+import phoneNumberCodes from '#constants/phoneNumberCodes';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -39,6 +40,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
     setValue,
     clearErrors,
     formState: { errors, isSubmitting },
+    getValues,
   } = useForm<SignUpCompanySchemaType>({
     resolver: zodResolver(() => SignUpAsCompanySchema(t)),
   });
@@ -207,6 +209,24 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         isModalOpen={isCountriesModalOpen}
         search={search}
         closeModal={closeCountryModal}
+        onSelectCallback={(previous, next) => {
+          let prevDial = '';
+          let newDial = '';
+          for (const item of phoneNumberCodes) {
+            if ((prevDial && newDial) || (!previous && newDial)) break;
+            if (previous && item.name === previous) prevDial = item.dialCode;
+            if (item.name === next) newDial = item.dialCode;
+          }
+          const phoneValue = getValues('phone');
+          if (!phoneValue) {
+            setValue('phone', newDial);
+          } else {
+            const newValue = phoneValue.includes(prevDial)
+              ? phoneValue.replace(prevDial, newDial)
+              : [newDial, phoneValue].join('');
+            setValue('phone', newValue);
+          }
+        }}
         setSearch={setSearch}
         data={countries}
       />
@@ -395,7 +415,22 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
                 status={value ? 'checked' : 'unchecked'}
               />
             </View>
-            <Text>{t('Auth.SignUp.commonForm.terms')}</Text>
+
+            <Text>
+              {t('Auth.SignUp.commonForm.terms.agree')}&nbsp;
+              <Text tw="underline" onPress={() => props.navigation.navigate('LicenseAgreement')}>
+                {t('Auth.SignUp.commonForm.terms.license')}
+              </Text>
+              ,&nbsp;
+              <Text tw="underline" onPress={() => props.navigation.navigate('PrivacyPolicy')}>
+                {t('Auth.SignUp.commonForm.terms.privacy')}
+              </Text>
+              &nbsp;
+              <Text>{t('Auth.SignUp.commonForm.terms.and')}</Text>&nbsp;
+              <Text tw="underline" onPress={() => props.navigation.navigate('ComsolTerms')}>
+                {t('Auth.SignUp.commonForm.terms.comsol')}
+              </Text>
+            </Text>
           </View>
         )}
         name="terms"

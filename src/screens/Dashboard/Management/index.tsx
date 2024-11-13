@@ -60,7 +60,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
     OverlayComponent: ManagementCoolingUnitsOverlay,
     maskAllowInteraction: true,
     fullScreen: true,
-    onPressMask: () => props.navigation.navigate('AddCoolingUnit'),
+    onPressMask: () => navigation.navigate('AddCoolingUnit'),
   });
 
   useWalkthroughStep({

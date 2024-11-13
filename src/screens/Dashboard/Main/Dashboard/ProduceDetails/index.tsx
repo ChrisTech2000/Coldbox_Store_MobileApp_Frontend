@@ -1,10 +1,9 @@
 import Clipboard from '@react-native-clipboard/clipboard';
+import isNil from 'lodash/isNil';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon, List } from 'react-native-paper';
-import { currencies } from 'currencies.json';
-import isNil from 'lodash/isNil';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
@@ -23,8 +22,8 @@ import { cn } from '#ui/lib/cn';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
 import RBAC from '#common/RBAC';
+import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
 
 // TODO: add operator contacts, if BE ever sends it back
 function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
@@ -298,10 +297,10 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                             const farmerId = farmer?.id ?? produce.farmerId;
                             props.navigation.navigate('EditCrateWeightAndPricing', {
                               companyCurrency: currency,
-                              currencySymbol:
-                                currencies.find((c) => c.name === currency)?.symbol ?? '',
-                              crates: produce.checkedInCrates,
+                              produce,
+                              coolingUnit,
                               farmerId: farmerId!,
+                              companyId: props.route.params.companyId,
                             });
                           },
                         }
@@ -319,7 +318,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         <View tw="absolute left-0 bottom-0 bg-white border-t border-zinc-300 w-full h-20 items-center justify-center">
           <CheckoutButtonRedirect
             coolingUnit={coolingUnit}
-            farmer={farmer}
+            owner={produce.owner}
             crates={produce.checkedInCrates}
           />
         </View>

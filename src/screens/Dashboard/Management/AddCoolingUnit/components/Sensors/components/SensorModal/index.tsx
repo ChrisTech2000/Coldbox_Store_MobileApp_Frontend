@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 import { useToggle } from '#ui/hooks/useToggle';
+import type { SensorTypes } from '#screens/Dashboard/Management/AddCoolingUnit/constants';
 import { useAppEventListener } from '#ui/lib/emitter';
 
-import type { SensorTypes } from '#screens/Dashboard/Management/AddCoolingUnit/constants';
 import EcozenForm from './components/EcozenForm';
 import UbibotForm from './components/UbibotForm';
 import FigorrForm from './components/FigorrForm';

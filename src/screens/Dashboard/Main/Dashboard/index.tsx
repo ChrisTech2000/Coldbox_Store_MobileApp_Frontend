@@ -2,11 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Portal } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { useTranslationUtils } from '#i18n/utils';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
+import MarketplaceService from '#services/MarketplaceService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
@@ -14,33 +17,40 @@ import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 import { DashboardProduce, ERoles, Farmer, type Company, type CoolingUnit } from '#types/global';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
-import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
-import {
-  ECommonTutorialSteps,
-  EFarmerTutorialSteps,
-} from '#screens/Dashboard/Tutorial/utils/constants';
-import { MOCKED_DASHBOARD_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
-
-import { GenericError } from '#ui/components/GenericError';
-import { createSelectStore } from '#ui/components/SelectWithStore';
-import { paperTheme } from '#ui/lib/theme';
-import { withErrorBoundary } from '#ui/primitives/error-boundary';
-import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
-
+import { CoolingUnitsOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsOverlay';
 import {
   Dashboard1Overlay,
   Dashboard2Overlay,
   Dashboard3Overlay,
   Dashboard4Overlay,
 } from '#screens/Dashboard/Tutorial/FarmerDashboardOverlay';
+import { TutorialFinishedMessageOverlay } from '#screens/Dashboard/Tutorial/TutorialFinishedMessageOverlay';
+import { WelcomeMessageOverlay } from '#screens/Dashboard/Tutorial/WelcomeMessageOverlay';
+import {
+  ECommonTutorialSteps,
+  EEmployeeTutorialSteps,
+  EFarmerTutorialSteps,
+} from '#screens/Dashboard/Tutorial/utils/constants';
+import { MOCKED_DASHBOARD_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
+
+import { Button } from '#ui/components/Button';
+import { GenericError } from '#ui/components/GenericError';
+import { Modal } from '#ui/components/Modal';
+import { createSelectStore } from '#ui/components/SelectWithStore';
+import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
+
 import { Filters, type Search } from '../components/Filters';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
 import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { sortProduces } from './utils/sortProduces';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { DashboardRoutes } from '#navigation/Dashboard';
 
 export const useDashboardCoolingUnitStore = createSelectStore<CoolingUnit>();
 export const useDashboardCompanyStore = createSelectStore<Company>();
@@ -49,8 +59,15 @@ const screenHeight = Dimensions.get('window').height;
 
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
+  const { t } = useTranslationUtils();
   const { user } = useAuthStore();
   const { company } = useManagementStore();
+  const { guard } = RBAC.useRBAC();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
+
+  const [isBankAccountModalOpen, setIsBankAccountModalOpen] = useState<boolean>(false);
+  const [isBankAccountModalAllowedToOpen, setIsBankAccountModalAllowedToOpen] =
+    useState<boolean>(false);
 
   const { isTutorialOn, toggleTutorial } = useTutorialStore((store) => ({
     isTutorialOn: store.isTutorialActive,
@@ -84,6 +101,12 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_4,
     OverlayComponent: Dashboard4Overlay,
+    fullScreen: true,
+  });
+
+  useWalkthroughStep({
+    number: EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP,
+    OverlayComponent: CoolingUnitsOverlay,
     fullScreen: true,
   });
 
@@ -183,14 +206,28 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, [user?.role]);
 
   useEffect(() => {
-    if (isTutorialOn) start();
-  }, [isTutorialOn]);
-
-  useEffect(() => {
     if (user && (!user.lastLogin || user.lastLogin === 'None')) {
+      start();
       toggleTutorial(true);
+      setIsBankAccountModalAllowedToOpen(true);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (isTutorialOn || !isBankAccountModalAllowedToOpen) return;
+    const marketplaceUser = guard('VIEW', 'MarketplaceListing');
+
+    if (user?.role === ERoles.EMPLOYEE && marketplaceUser && company) {
+      MarketplaceService.checkMarketplaceEligibility({
+        companyIds: [company.id],
+        userIds: [user.id],
+      }).then((result) => {
+        if (!result.companies[company.id]) {
+          setIsBankAccountModalOpen(true);
+        }
+      });
+    }
+  }, [isTutorialOn, isBankAccountModalAllowedToOpen, user, company]);
 
   const hideInTutorial =
     isTutorialOn && user?.role === ERoles.COOLING_USER && screenHeight <= SMALL_SCREEN_THRESHOLD;
@@ -258,6 +295,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
                     produce,
                     coolingUnit: coolingUnit,
                     currency: selectedCompany?.currency ?? company?.currency ?? '',
+                    companyId: (selectedCompany?.id ?? company?.id) as number,
                   },
                 });
               }}
@@ -269,6 +307,31 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
       <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
         <OperatorActions {...props} coolingUnit={coolingUnit} />
+      </RBAC.ProtectedResource>
+
+      <RBAC.ProtectedResource action="VIEW" subject="MarketplaceListing">
+        <Portal>
+          <Modal
+            visible={isBankAccountModalOpen}
+            onDismiss={() => setIsBankAccountModalOpen(false)}
+          >
+            <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
+              <Text tw="text-base">{t('Dashboard.ProduceDetails.employeeNoBankAccount')}</Text>
+              <Button
+                tw="mt-2"
+                onPress={() => {
+                  rootNavigation.navigate('Management', {
+                    screen: 'PayoutSettings',
+                    params: { isCompanyView: true },
+                  });
+                  setIsBankAccountModalOpen(false);
+                }}
+              >
+                {t('Dashboard.ProduceDetails.addBankAccountButton')}
+              </Button>
+            </View>
+          </Modal>
+        </Portal>
       </RBAC.ProtectedResource>
     </View>
   );

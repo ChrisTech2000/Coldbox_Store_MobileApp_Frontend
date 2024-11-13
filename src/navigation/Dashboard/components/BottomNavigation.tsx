@@ -1,3 +1,5 @@
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import React from 'react';
 import {
   FlatList,
@@ -6,24 +8,25 @@ import {
   View,
   type ViewStyle,
 } from 'react-native';
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Modalize } from 'react-native-modalize';
 import { Divider, List } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
-import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
-import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
-import type { TranslationPaths } from '#i18n/index';
-import { paperTheme } from '#ui/lib/theme';
-import { cn } from '#ui/lib/cn';
-import { useTranslationUtils } from '#i18n/utils';
 import RBAC from '#common/RBAC';
+import type { TranslationPaths } from '#i18n/index';
+import { useTranslationUtils } from '#i18n/utils';
+import { MoreNavigationOverlay } from '#screens/Dashboard/Tutorial/MoreNavigationOverlay';
+import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
+import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
 import type { DashboardMainRoutePaths } from '../Main';
 
@@ -31,7 +34,7 @@ type NavigationState = TabNavigationState<ParamListBase>;
 type NavigationRoutes = Array<DashboardMainRoutePaths>;
 
 const BOTTOM_NAV_ITEMS: NavigationRoutes = ['Dashboard', 'Marketplace', 'Analytics'];
-const BOTTOM_SHEET_ITEMS: NavigationRoutes = ['MarketPrice', 'History', 'CoolingUnits', 'Orders'];
+const BOTTOM_SHEET_ITEMS: NavigationRoutes = ['MarketPrice', 'History', 'CoolingUnits'];
 
 const ROUTE_TITLE_META = {
   Dashboard: 'navigation.bottomTabs.Dashboard',
@@ -40,7 +43,6 @@ const ROUTE_TITLE_META = {
   MarketPrice: 'navigation.bottomTabs.MarketPrice',
   History: 'navigation.bottomTabs.History',
   CoolingUnits: 'navigation.bottomTabs.CoolingUnits',
-  Orders: 'navigation.dashboard.Orders',
   ShoppingCart: 'navigation.dashboard.ShoppingCart',
 } satisfies Record<DashboardMainRoutePaths, TranslationPaths>;
 
@@ -95,6 +97,12 @@ function BottomNavBar(
 
   const includeHistoryTab = !guard('VIEW', 'MarketplaceListing');
 
+  const { onLayout } = useWalkthroughStep({
+    number: ECommonTutorialSteps.MORE_STEP,
+    OverlayComponent: MoreNavigationOverlay,
+    onPressMask: () => navigation.navigate('Main', { screen: 'History' }),
+  });
+
   return (
     <View tw="absolute bottom-0 left-0 z-[9999] w-full" style={tabBarStyle}>
       <SkiaShadow blur={3} dx={0} dy={2} color={colors.zinc[300]} borderRadius={16}>
@@ -115,21 +123,23 @@ function BottomNavBar(
               isFocused={state.index === idx}
             />
           ))}
-          <TabItem
-            title="More"
-            onPress={(evt: GestureResponderEvent) => {
-              evt.stopPropagation();
-              modalRef.current?.open();
-            }}
-            renderIcon={() => (
-              <MaterialCommunityIcon
-                name="dots-vertical"
-                color={state.index >= 3 ? colors.white : ICON_DEFAULT_COLOR}
-                size={ICON_SIZE}
-              />
-            )}
-            isFocused={state.index >= 3}
-          />
+          <View onLayout={onLayout}>
+            <TabItem
+              title="More"
+              onPress={(evt: GestureResponderEvent) => {
+                evt.stopPropagation();
+                modalRef.current?.open();
+              }}
+              renderIcon={() => (
+                <MaterialCommunityIcon
+                  name="dots-vertical"
+                  color={state.index >= 3 ? colors.white : ICON_DEFAULT_COLOR}
+                  size={ICON_SIZE}
+                />
+              )}
+              isFocused={state.index >= 3}
+            />
+          </View>
         </View>
       </SkiaShadow>
     </View>

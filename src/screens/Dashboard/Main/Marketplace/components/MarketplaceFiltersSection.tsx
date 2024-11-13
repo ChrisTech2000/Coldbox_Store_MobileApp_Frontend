@@ -3,25 +3,27 @@ import { Dimensions, TouchableWithoutFeedback, View } from 'react-native';
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Dialog, Portal, RadioButton } from 'react-native-paper';
+import { Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import colors from 'tailwindcss/colors';
 
-import { Touchable } from '#ui/components/Touchable';
-import { Text } from '#ui/components/Text';
-import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Button } from '#ui/components/Button';
+import { RadioButtonItem } from '#ui/components/RadioButton';
+import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-
-import type { GetAvailableListingParams } from '#types/api.params';
-import { useTranslationUtils } from '#i18n/utils';
-import { useToggle } from '#ui/hooks/useToggle';
-import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/MarketplaceStack';
 import { paperTheme } from '#ui/lib/theme';
-import type { TranslationPaths } from '#i18n/index';
 
-import MarketplaceLocationFilter from './LocationFilter';
+import RBAC from '#common/RBAC';
+import type { TranslationPaths } from '#i18n/index';
+import { useTranslationUtils } from '#i18n/utils';
+import type { MarketplaceRoutes } from 'navigation/Dashboard/Main/Marketplace/MarketplaceStack';
+import MarketplaceService from '#services/MarketplaceService';
+import useCartStore from '#stores/shoppingCart';
+import type { GetAvailableListingParams } from '#types/api.params';
+
 import FilterChip from './FilterChip';
+import MarketplaceLocationFilter from './LocationFilter';
 
 import { useMarketplaceQueryParams } from '../store';
 
@@ -29,6 +31,7 @@ const DIALOG_MAX_WIDTH = Dimensions.get('window').width * 0.68;
 const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.31;
 
 type InternalSelectionState = Exclude<GetAvailableListingParams['sortBy'], undefined>;
+type BuyerInternalSelectionState = 'for-myself' | 'on-behalf';
 
 const OPTIONS_TRANSLATIONS: Record<InternalSelectionState, TranslationPaths> = {
   'price-asc': 'Dashboard.Marketplace.sorting.price-asc',
@@ -36,20 +39,32 @@ const OPTIONS_TRANSLATIONS: Record<InternalSelectionState, TranslationPaths> = {
   'nearby-me': 'Dashboard.Marketplace.sorting.nearby-me',
 };
 
+const BUYER_OPTIONS_TRANSLATIONS: Record<BuyerInternalSelectionState, TranslationPaths> = {
+  'for-myself': 'Dashboard.Marketplace.buyerSelection.forMyself',
+  'on-behalf': 'Dashboard.Marketplace.buyerSelection.onBehalfOfCompany',
+};
+
 export default function MarketplaceFiltersSection() {
   const { t } = useTranslationUtils();
-  const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
+  const [sortBy] = useMarketplaceQueryParams(useShallow((store) => [store.sortBy]));
+  const [cartData, setCart] = useCartStore((store) => [store.cartData, store.setCart]);
 
   const navigation = useNavigation<NavigationProp<MarketplaceRoutes>>();
 
-  const [isVisible, toggleVisibility] = useToggle(false);
+  const [visibleModal, setVisibleModal] = useState<'buyer' | 'crates' | undefined>(undefined);
   const [internalSelection, setInternalSelection] = useState<InternalSelectionState>(
     sortBy ?? 'price-asc'
   );
 
+  const [buyerInternalSelection, setBuyerInternalSelectionState] =
+    useState<BuyerInternalSelectionState>(
+      cartData?.ownedOnBehalfOfCompanyId ? 'on-behalf' : 'for-myself'
+    );
+
   function resetState() {
     setInternalSelection(sortBy ?? 'price-asc');
-    toggleVisibility();
+    setBuyerInternalSelectionState(cartData?.ownedOnBehalfOfCompanyId ? 'on-behalf' : 'for-myself');
+    setVisibleModal(undefined);
   }
 
   return (
@@ -57,7 +72,7 @@ export default function MarketplaceFiltersSection() {
       <TouchableWithoutFeedback
         onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
       >
-        <View tw="bg-zinc-100 py-4 space-y-3">
+        <View tw="bg-zinc-100 py-4 space-y-1">
           <View tw="flex-row items-center justify-between mx-4">
             <MarketplaceLocationFilter />
 
@@ -70,37 +85,73 @@ export default function MarketplaceFiltersSection() {
               }}
             >
               <MaterialCommunityIcon name="filter-variant" size={28} color={colors.zinc[600]} />
-              <Text tw="text-base">Filters</Text>
+              <Text tw="text-base">{t('Dashboard.Marketplace.Filters.label')}</Text>
             </Touchable>
           </View>
 
           <FilterChip />
 
-          <View tw="flex-row items-center justify-between px-4">
-            <Text variant="TextMedium" tw="text-xl">
-              Produces
-            </Text>
-
-            <Touchable
-              tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
-              rippleColor={colors.zinc[200]}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                toggleVisibility();
-              }}
-            >
-              <Text tw="text-base text-green-primary">
-                {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+          <View tw="space-y-1 px-4">
+            <View tw="flex-row items-center justify-between">
+              <Text variant="TextMedium" tw="text-lg">
+                {t('Dashboard.CoolingUnitsCratesInfo.crates')}
               </Text>
-              <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
-            </Touchable>
+
+              <Touchable
+                tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
+                rippleColor={colors.zinc[200]}
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  setVisibleModal('crates');
+                }}
+              >
+                <Text tw="text-base text-green-primary">
+                  {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+                </Text>
+                <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
+              </Touchable>
+            </View>
+
+            <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
+              <Divider tw="bg-gray-600" />
+
+              <View tw="flex-row items-center justify-between">
+                <Text variant="TextMedium" tw="text-lg">
+                  {t('Dashboard.Marketplace.buyerSelection.label')}
+                </Text>
+
+                <Touchable
+                  tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
+                  rippleColor={colors.zinc[200]}
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    setVisibleModal('buyer');
+                  }}
+                >
+                  <Text tw="text-base text-green-primary">
+                    {t(
+                      BUYER_OPTIONS_TRANSLATIONS[
+                        cartData?.ownedOnBehalfOfCompanyId
+                          ? 'on-behalf'
+                          : ('for-myself' as BuyerInternalSelectionState)
+                      ]
+                    )}
+                  </Text>
+                  <MaterialIcon
+                    name="arrow-drop-down"
+                    size={26}
+                    color={paperTheme.colors.primary}
+                  />
+                </Touchable>
+              </View>
+            </RBAC.ProtectedResource>
           </View>
         </View>
       </TouchableWithoutFeedback>
 
       <Portal>
         <Dialog
-          visible={isVisible}
+          visible={visibleModal !== undefined}
           onDismiss={resetState}
           style={{
             backgroundColor: 'white',
@@ -111,13 +162,27 @@ export default function MarketplaceFiltersSection() {
         >
           <Dialog.Content tw="mb-0 android:pb-1.5">
             <RadioButton.Group
-              value={internalSelection}
-              onValueChange={(value) => setInternalSelection(value as InternalSelectionState)}
+              value={visibleModal === 'buyer' ? buyerInternalSelection : internalSelection}
+              onValueChange={(value) =>
+                visibleModal === 'buyer'
+                  ? setBuyerInternalSelectionState(value as BuyerInternalSelectionState)
+                  : setInternalSelection(value as InternalSelectionState)
+              }
             >
-              {Object.keys(OPTIONS_TRANSLATIONS).map((option, itemIdx) => (
+              {Object.keys(
+                visibleModal === 'buyer' ? BUYER_OPTIONS_TRANSLATIONS : OPTIONS_TRANSLATIONS
+              ).map((option, itemIdx) => (
                 <RadioButtonItem
                   key={`${option}-#${itemIdx}`}
-                  label={t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])}
+                  label={
+                    visibleModal === 'buyer'
+                      ? t(
+                          BUYER_OPTIONS_TRANSLATIONS[
+                            option as unknown as BuyerInternalSelectionState
+                          ]
+                        )
+                      : t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])
+                  }
                   value={option}
                   tw="flex flex-row-reverse ml-[-10] w-full"
                 />
@@ -138,10 +203,17 @@ export default function MarketplaceFiltersSection() {
             <Button
               tw="w-1/2"
               mode="contained"
-              onPress={(evt) => {
+              onPress={async (evt) => {
                 evt.stopPropagation();
-                useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
-                toggleVisibility();
+                if (visibleModal === 'buyer') {
+                  const result = await MarketplaceService.toggleCartOwnership();
+                  if (result.cart) {
+                    setCart(result.cart);
+                  }
+                } else {
+                  useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
+                }
+                setVisibleModal(undefined);
               }}
             >
               {t('actions.ok')}

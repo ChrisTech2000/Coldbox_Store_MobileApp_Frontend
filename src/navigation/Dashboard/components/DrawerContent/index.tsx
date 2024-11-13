@@ -73,33 +73,36 @@ export default function DrawerContent(props: Props) {
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const { mutate } = useSWRConfig();
 
-  const { onLayout: onTutorialTabLayout } = useWalkthroughStep({
+  const { start } = useWalkthroughStep({
     number: ECommonTutorialSteps.REPEAT_TUTORIAL_STEP,
     OverlayComponent: RepeatTutorialOverlay,
     fullScreen: true,
   });
 
-  const { onLayout: onManagementTabLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_MANAGEMENT_STEP,
     maskAllowInteraction: true,
     OverlayComponent: DrawerManagementOverlay,
     onPressMask: () => props.navigation.navigate('Management'),
+    fullScreen: true,
   });
 
-  const { onLayout: onAccountDetailsLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP,
     maskAllowInteraction: true,
     OverlayComponent: DrawerAccountDetailsOverlay,
     onPressMask: () => props.navigation.navigate('AccountDetails'),
+    fullScreen: true,
   });
 
-  const { onLayout: onKnowledgeHubLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_KNOWLEDGE_HUB_STEP,
     maskAllowInteraction: true,
     OverlayComponent: DrawerKnowledgeHubOverlay,
+    fullScreen: true,
   });
 
-  const { onLayout: onFAQLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_FAQ_STEP,
     maskAllowInteraction: true,
     OverlayComponent: DrawerFAQOverlay,
@@ -107,24 +110,8 @@ export default function DrawerContent(props: Props) {
       props.navigation.dispatch(DrawerActions.closeDrawer());
       props.navigation.navigate('Dashboard');
     },
+    fullScreen: true,
   });
-
-  const getLayoutFunc = useCallback((route: string) => {
-    switch (route) {
-      case 'Tutorial':
-        return onTutorialTabLayout;
-      case 'Management':
-        return onManagementTabLayout;
-      case 'AccountDetails':
-        return onAccountDetailsLayout;
-      case 'KnowledgeHub':
-        return onKnowledgeHubLayout;
-      case 'FAQ':
-        return onFAQLayout;
-      default:
-        return undefined;
-    }
-  }, []);
 
   const onLogout = useCallback(() => {
     resetAllStores();
@@ -161,10 +148,10 @@ export default function DrawerContent(props: Props) {
             <Drawer.Item
               label={props.t(datums.translationPath)}
               active={focusedRoute === routeName}
-              onLayout={getLayoutFunc(routeName)}
               onPress={(evt) => {
                 evt.stopPropagation();
                 if (routeName === 'Tutorial') {
+                  start();
                   toggleTutorial(true);
                   props.navigation.navigate('Dashboard');
                   return;

@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -9,13 +11,15 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
 import { useTutorialStore } from '#stores/tutorial';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
-import { ECommonTutorialSteps } from './utils/constants';
+import { ECommonTutorialSteps, EEmployeeTutorialSteps } from './utils/constants';
 
 export function CoolingUnitOverlay({ next, goTo, stop, step }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -38,6 +42,7 @@ export function CoolingUnitOverlay({ next, goTo, stop, step }: IOverlayComponent
             onPress={() => {
               stop();
               toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
           >
@@ -48,10 +53,14 @@ export function CoolingUnitOverlay({ next, goTo, stop, step }: IOverlayComponent
             onPress={
               user?.role === ERoles.OPERATOR
                 ? next
-                : () => {
-                    goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
-                    step.onPressMask?.();
-                  }
+                : user?.role === ERoles.EMPLOYEE
+                  ? () => {
+                      goTo(EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP);
+                    }
+                  : () => {
+                      goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
+                      step.onPressMask?.();
+                    }
             }
             tw="bg-green-primary border-green-primary"
             labelStyle="text-white"

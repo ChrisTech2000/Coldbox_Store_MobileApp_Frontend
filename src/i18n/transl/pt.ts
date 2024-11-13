@@ -15,9 +15,9 @@ export default {
       gu: 'Guzerate',
       fr: 'Francês',
       pt: 'Português',
-      igbo: 'Igbo',
-      yoruba: 'Iorubá',
-      hausa: 'Hausa',
+      ig: 'Igbo',
+      yo: 'Iorubá',
+      ha: 'Hausa',
     },
   },
   gender: {
@@ -60,6 +60,7 @@ export default {
       AddRegisteredEmployee: 'Adicionar Empregado Registrado',
       RegisteredEmployeeDetails: 'Detalhes do Empregado Registrado',
       DeliveryContacts: 'Contatos de Entrega',
+      AddUserBankAccount: '{{user}} Bank Account', // TODO
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate de {{firstName}}',
@@ -93,6 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'Favoritos',
       Orders: 'Pedidos',
       MyOrders: 'Meus Pedidos',
+      MySales: 'My Sales', // TODO
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Centro de Conhecimento',
       QuitTutorial: 'Sair do Tutorial',
@@ -157,6 +159,8 @@ export default {
     continue: 'Continuar',
     save: 'Salvar',
     update: 'atualizar',
+    clearAll: 'Clear all', // TODO
+    apply: 'Apply', // TODO
   },
   components: {
     datePicker: {
@@ -260,9 +264,14 @@ export default {
         confirmPasswordLabel: 'Confirmar Palavra-passe',
         countryFieldName: 'país',
         genderFieldName: 'género',
-        terms:
-          'Aceito o Acordo de Licença do Utilizador do Coldtivate, a Política de Privacidade e os Termos de Uso da COMSOL',
         submit: 'Registar',
+        terms: {
+          agree: 'Eu concordo com Coldtivate',
+          license: 'Contrato de licença de usuário',
+          privacy: 'Privacidade Política',
+          and: 'e',
+          comsol: 'COMSOL Termos de uso',
+        },
       },
       SignUpCompany: {
         companyHeader: 'Registar Empresa',
@@ -599,6 +608,21 @@ export default {
       noDTMessage: 'Um modelo de validade não está disponível para este produto específico.',
       checkOutButton: 'Check-out',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      preSaleErrorOperator:
+        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
+      preSaleErrorUser:
+        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      operatorNoBankAccountWarning:
+        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+      farmerNoBankAccountWarning:
+        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+      operatorNoCompanyBankAccount:
+        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+      employeeNoBankAccount:
+        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
+      addBankAccountButton: 'Add bank account details', // TODO
+      addBankAccountHeader:
+        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -776,6 +800,7 @@ export default {
             'Tem a certeza de que deseja eliminar este utilizador da sua lista de utilizadores de refrigeração? Esta operação irá eliminar este utilizador e não poderá ser revertida!',
           edit: 'Utilizador de refrigeração editado com sucesso',
           noCoolingUnits: 'Você ainda não tem nenhuma unidade de refrigeração',
+          noSurveys: 'No surveys have been completed yet.', // TODO
           updateSuccess: 'Atualização bem-sucedida',
         },
         pdf: {
@@ -943,10 +968,21 @@ export default {
       },
     },
     Marketplace: {
+      buyerSelection: {
+        onBehalfOfCompany: 'Buy on behalf of company', // TODO
+        forMyself: 'Buy for myself', // TODO
+        label: 'Buyer', // TODO
+      },
       sorting: {
         'price-asc': 'Preço em ordem crescente',
         'price-desc': 'Preço em ordem decrescente',
         'nearby-me': 'Perto de mim',
+      },
+      distance: {
+        withing5Km: '1 to 5 KM away', // TODO
+        within10Km: '5 to 10 KM away', // TODO
+        within25Km: '10 to 25 KM away', // TODO
+        beyond25Km: 'More than 25 KM away', // TODO
       },
       priceConfig:
         'A configuração de preço refere-se à venda de produtos, não à taxa de armazenamento em resfriamento.',
@@ -959,6 +995,14 @@ export default {
       filterError:
         'Algo deu errado. Verifique se há erros de digitação e certifique-se de que a cidade inserida está localizada na Nigéria.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
+      owner: 'Owner', // TODO
+      priceRange: 'Range Price / KG',
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+      },
+      maxDistance: 'Max Distance',
     },
     AccountDetails: {
       popups: {
@@ -992,6 +1036,8 @@ export default {
       PayoutSettings: {
         addTitle: 'Por favor, insira as informações da sua conta bancária',
         editTitle: 'Suas informações da conta bancária',
+        addTittleForCompany: "Please insert you company's bank account information", //TODO
+        editTitleForCompany: "Your company's bank account information", //TODO
         form: {
           nameLabel: 'Nome da Conta',
           namePlaceholder: 'Insira o nome da conta',
@@ -1182,10 +1228,20 @@ export default {
       },
     },
     MyOrders: {
+      coolingFees: 'Cooling fees', // TODO
+      soldFor: 'Sold for', // TODO
+      ownedBy: 'Owned by', // TODO
+      you: 'You', // TODO
       sort: {
         mostRecent: 'Mais recente',
         oldest: 'Mais antigo',
         date: 'Data',
+      },
+      status: {
+        'payment-pending': 'Payment Pending', // TODO
+        'payment-expired': 'Payment Expired', // TODO
+        cancelled: 'Cancelled', // TODO
+        paid: 'Paid', // TODO
       },
       title: 'Visão Geral do Pedido',
       orderId: 'ID do Pedido',
@@ -1195,7 +1251,10 @@ export default {
       backToTopButton: 'Voltar ao topo',
     },
     ShoppingCart: {
-      empty: 'Seu carrinho está vazio',
+      ownership: 'Change cart ownership', // TODO
+      changeOwnership:
+        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
+      empty: 'O carrinho está vazio',
       daysLeft: 'dias restantes',
       weight: 'KG disponíveis',
       perKg: '/ KG',
@@ -1228,6 +1287,12 @@ export default {
       redeemCoupon: 'Resgatar cupom',
       couponPlaceholder: 'Ex: 20OFF',
       discountsApplied: 'Descontos Aplicados',
+      pickupModal: {
+        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
+        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
+        delivery:
+          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+      },
       errors: {
         invalid: 'Valor inválido',
         minimumCartValue: 'O pedido deve ser de pelo menos ₦100.',
@@ -1403,12 +1468,12 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Bem-vindo ao Coldtivate. Este é um tutorial das funções.',
+    welcome: 'Bem-vindo ao Coldtivate! Este é um tutorial das funções.',
+    farmerWelcome:
+      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'Sair do tutorial',
-    'back-dashboard': 'Voltar ao painel',
     congratulations:
       'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar a aplicação.',
-    comic: 'Parabéns! Você completou a tirinha! Volte ao painel para começar a usar a aplicação.',
     prev: 'Anterior',
     next: 'Próximo',
     start: 'Iniciar tutorial',
@@ -1465,7 +1530,7 @@ export default {
       accountDetailsNavigation:
         'No menu, você pode navegar para "Detalhes da Conta" e tocar lá para visualizar/editar um conjunto de configurações relacionadas à sua conta. Vá em frente e experimente.',
       coolingUserSurvey:
-        'É muito importante que você preencha a pesquisa do Usuário de Arrefecimento para que a aplicação possa fornecer recomendações personalizadas. Obrigado por dedicar seu tempo para completar a pesquisa!',
+        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
       coolingUserCode:
         'Na primeira vez que você chegar a uma câmara fria para armazenar sua produção, o operador lhe pedirá seu código pessoal para adicioná-lo à lista de usuários da câmara fria. Você pode encontrar este código em "Detalhes Pessoais" -> "Código de Importação do Usuário de Arrefecimento".',
       knowledgeHub:
@@ -1481,16 +1546,19 @@ export default {
         'Se a cor do cartão for amarela (2-5 dias restantes) ou verde (mais de 5 dias), você não precisa se preocupar com as caixas. O número de dias é recalculado várias vezes ao dia, então, certifique-se de verificar o "Dashboard" regularmente para ver como a qualidade de suas caixas na sala está evoluindo.',
       dashboardStep5:
         'Se você tiver caixas armazenadas em várias salas, pode mudar a sala que está visualizando selecionando uma empresa e uma unidade de arrefecimento no menu suspenso.',
+      dashboardStep6:
+        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
         'Na aba "Histórico", você pode ver um resumo de todos os check-ins e check-outs que você completou em cada sala. Se você ver um ponto vermelho ao lado de um check-out, clique nos três pontos e em "Preencher pesquisa de mercado". Aqui, gostaríamos de entender a que preço você vendeu sua produção e se algo estragou. Usamos essas informações para melhorar as operações na câmara fria, portanto, é importante que você responda com precisão.',
       farmersCoolingUnits:
-        'Para verificar as unidades de arrefecimento próximas a você, pode navegar pelos botões na parte inferior das telas, clicando na aba "Unidades de Arrefecimento" e selecionando "Mapa". Ao clicar em cada pin no mapa, você pode ver o tipo de unidade e o preço de armazenamento.',
+        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
       farmersUnitsPlanner:
         'Na aba "Unidades de Arrefecimento", você pode encontrar o Mapa, a ocupação atual e futura da sala (na aba "Planejador") e a temperatura da sala (na aba "Condições da Sala"). Essas telas ajudam você a monitorar remotamente o que está acontecendo nas câmaras frias, sem precisar ir lá pessoalmente para verificar!',
       marketPrice:
         'Se você ver uma aba chamada "Preço de Mercado", pode verificar os preços de diferentes frutas e vegetais em todo o país nos últimos dias e uma previsão dos preços para o futuro. Por enquanto, essa opção está disponível apenas para países selecionados.', // TODO
       farmerFinalStep:
         'Parabéns! Completou o tutorial! Se tiver dúvidas sobre a aplicação, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da unidade de arrefecimento ou escreva-nos para app@yourvcca.org.',
+      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
     },
   },
 } satisfies Translations;

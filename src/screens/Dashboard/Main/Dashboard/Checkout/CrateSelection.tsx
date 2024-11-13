@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  GestureResponderEvent,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider } from 'react-native-paper';
 
@@ -18,6 +24,7 @@ import { GenericError } from '#ui/components/GenericError';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
+import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -36,7 +43,7 @@ const MOCKED_PARAMS = {
 };
 
 function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
-  const { user, coolingUnit: _coolingUnit, crates: _crates } = route.params;
+  const { user, owner, coolingUnit: _coolingUnit, crates: _crates } = route.params;
   const { t } = useTranslationUtils();
   const { coolingUnits } = useDashboardStore();
   const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } =
@@ -57,7 +64,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     },
   });
 
-  const { data } = useApiCall(
+  const { data, isLoading } = useApiCall(
     'getFarmerCrates',
     ColdtivateService.getFarmerCrates,
     {
@@ -98,7 +105,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
       evt.stopPropagation();
 
       navigation.navigate('BillingInfo', {
-        user,
+        user: (user ? `${user?.user.firstName} ${user?.user.lastName}` : owner) ?? '',
         crates: selectedCrates,
         coolingUnit: coolingUnit ?? undefined,
       });
@@ -110,6 +117,14 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     if (_crates) setSelectedCrates(_crates);
     if (_coolingUnit) onSelectCoolingUnit(_coolingUnit);
   }, [_crates, _coolingUnit]);
+
+  if (isLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
 
   return (
     <View tw="flex-1 p-4" onLayout={onLayout}>

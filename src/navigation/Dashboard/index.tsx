@@ -44,6 +44,7 @@ export type DashboardRoutes = {
   Management:
     | {
         screen: keyof ManagementRoutes;
+        params?: { isCompanyView: boolean };
       }
     | undefined;
   KnowledgeHub: undefined;
@@ -116,8 +117,11 @@ export default function DashboardNavigator() {
   ]);
 
   useEffect(() => {
-    if (!isWalkthroughOn && isTutorialActive)
-      toggleTutorial(false, () => rootNavigation.navigate('Dashboard'));
+    if (!isWalkthroughOn && isTutorialActive) {
+      toggleTutorial(false, () => {
+        rootNavigation.navigate('Dashboard');
+      });
+    }
   }, [isWalkthroughOn, isTutorialActive]);
 
   return (

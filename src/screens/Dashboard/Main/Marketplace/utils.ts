@@ -12,6 +12,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
+export const DEFAULT_CURRENCY_CODE = 'NGN';
 
 export type AvailableListingDatum = {
   id: number;
@@ -37,6 +38,7 @@ export type AvailableListingDatum = {
   };
   distance: number;
   currencyValue: string;
+  owner: string;
 };
 
 export function useMarketplaceListing() {
@@ -79,6 +81,23 @@ export function useMarketplaceListing() {
           .filter((companyId) => !companyMap.has(companyId))
           .map(async (companyId) => await ColdtivateService.getCompanyById(companyId))
       );
+
+      const ownerCompaniesIds = new Set<number>(
+        listing.nodes.map((node) => node.ownedOnBehalfOfCompanyId).filter(Boolean) as number[]
+      );
+      const ownerCompanies = await Promise.all(
+        Array.from(ownerCompaniesIds)
+          .filter((companyId) => !companyMap.has(companyId))
+          .map(async (companyId) => await ColdtivateService.getCompanyById(companyId))
+      );
+
+      const ownerUserIds = new Set<number>(
+        listing.nodes.map((node) => node.ownedByUserId).filter(Boolean) as number[]
+      );
+      const _ownerUsers = await Promise.all(
+        Array.from(ownerUserIds).map(async (id) => await ColdtivateService.getFarmerByUserId(id))
+      );
+      const ownerUsers = _ownerUsers.flatMap((user) => user);
 
       const companiesMapCopy = new Map(companyMap);
       for (const company of companies) {
@@ -136,6 +155,14 @@ export function useMarketplaceListing() {
           crateWeight: node.availableWeightInKg,
           shelfLife: node.relCrateRemainingShelfLife,
           price: node.producePricePerKg,
+          owner: node.ownedOnBehalfOfCompanyId
+            ? (ownerCompanies.find((c) => c.id === node.ownedOnBehalfOfCompanyId)?.name ?? '')
+            : node.ownedByUserId
+              ? (() => {
+                  const owner = ownerUsers.find((u) => u?.user.id === node.ownedByUserId);
+                  return `${owner?.user.firstName ?? ''} ${owner?.user.lastName ?? ''}`;
+                })()
+              : '',
           company: {
             id: node.relCompanyId,
             name: company?.name ?? '',

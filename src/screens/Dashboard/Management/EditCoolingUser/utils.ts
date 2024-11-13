@@ -22,6 +22,13 @@ import { dateFmt, type Translator } from '#i18n/utils';
 import { countriesDict } from '../CompanyDetails/utils';
 import { STATIC_START_DATE } from './index';
 
+export const CONSTRAINT_EXCEPTIONS = {
+  FARMER_NOT_FOUND: 'farmer not found',
+  NO_COMPANY_ASSIGNED: 'farmer not assigned to any company',
+  NO_CHECK_INS: 'farmer does not have any check-ins',
+  NO_SURVEYS: 'farmer dit not fill-in any surveys',
+} as const;
+
 type FarmerRevenueImpactMetrics = Top5Data & { currency: string };
 type FarmerCoolingUnitStats = Omit<FarmerData, 'firstName' | 'lastName' | 'userType'> & {
   checkInCratesImages?: Array<string>;
@@ -42,12 +49,12 @@ export class DataLoader {
   public static async loadFarmerRecord(farmerId: number): Promise<Farmer> {
     // load farmer record
     const farmer = await ColdtivateService.getFarmerById(farmerId);
-    if (!farmer) throw new Error('farmer not found');
+    if (!farmer) throw new Error(CONSTRAINT_EXCEPTIONS.FARMER_NOT_FOUND);
 
     // load farmer companies and cooling units
     const farmerResults = await ColdtivateService.getFarmerByUserId(farmer.user.id);
     const contextualFarmer = farmerResults?.at(0);
-    if (!contextualFarmer) throw new Error('farmer not found');
+    if (!contextualFarmer) throw new Error(CONSTRAINT_EXCEPTIONS.FARMER_NOT_FOUND);
 
     return contextualFarmer;
   }
@@ -57,17 +64,17 @@ export class DataLoader {
       await DataLoader._loadFarmerInfoAndCompanies(farmer);
 
     if (!(farmerCompanies.length >= 1) || !contextualCompanyId) {
-      throw new Error('farmer not assigned to any company');
+      throw new Error(CONSTRAINT_EXCEPTIONS.NO_COMPANY_ASSIGNED);
     }
 
     const { farmerCoolingUnits, contextualCoolingUnitId } =
       await DataLoader._loadFarmerCoolingUnits(farmer, contextualCompanyId);
     if (!(farmerCoolingUnits.length >= 1) || !contextualCoolingUnitId) {
-      throw new Error('farmer does not have any check-ins');
+      throw new Error(CONSTRAINT_EXCEPTIONS.NO_CHECK_INS);
     }
 
     const { farmerSlice, impactSlice } = await DataLoader._loadFarmerAnalytics(farmer);
-    if (!farmerSlice || !impactSlice) throw new Error('farmer dit not fill-in any surveys');
+    if (!farmerSlice || !impactSlice) throw new Error(CONSTRAINT_EXCEPTIONS.NO_SURVEYS);
 
     const coolingUnitsNames = farmerCoolingUnits.map((unit) => unit.name);
     const countryCurrency = countriesDict().getByValue(farmer.country);

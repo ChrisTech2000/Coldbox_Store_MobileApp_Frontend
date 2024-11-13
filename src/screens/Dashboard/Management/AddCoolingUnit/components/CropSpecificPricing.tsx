@@ -1,19 +1,21 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Dimensions, FlatList, View } from 'react-native';
-import { Divider, Dialog, Portal, TextInput } from 'react-native-paper';
+import { Dimensions, FlatList, Platform, View } from 'react-native';
+import { Divider, Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
+import { RNModal } from '#ui/primitives/RNModal';
 
 import type { RecursiveKeyOf } from '#types/miscellaneous';
-import { useToggle } from '#ui/hooks/useToggle';
 import { useTranslationUtils } from '#i18n/utils';
+import { useToggle } from '#ui/hooks/useToggle';
+import { cn } from '#ui/lib/cn';
 
 import FormManager from '../contexts/FormManager';
 import DataAggregator from '../contexts/DataAggregator';
 import { PRICING_TYPE } from '../constants';
-import { useDebouncedCallback } from 'use-debounce';
 
 type LocalFormValues<T = string> = { search: string; pricing: Record<string, T> };
 type PreprocessedLocalFormValues = LocalFormValues<number>;
@@ -98,7 +100,7 @@ export default function CropSpecificPricing() {
       <Divider tw="w-full bg-gray-700" />
 
       <Portal>
-        <Dialog
+        <RNModal
           visible={isVisible}
           onDismiss={() => {
             localForm.reset(_buildInitialValues());
@@ -106,22 +108,32 @@ export default function CropSpecificPricing() {
           }}
           style={{ backgroundColor: 'white', maxHeight: DIALOG_MAX_HEIGHT }}
         >
-          <Dialog.Title>{t('Dashboard.Management.AddCoolingUnit.fields.selectCrops')}</Dialog.Title>
-          <Dialog.ScrollArea>
-            <Controller
-              name="search"
-              control={localForm.control}
-              render={({ field: { value, onChange, onBlur } }) => (
-                <TextInput
-                  tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600 mb-2"
-                  label={t('actions.search')}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  left={<TextInput.Icon icon="magnify" />}
-                />
-              )}
-            />
+          <View
+            tw={cn(
+              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2',
+              Platform.OS === 'ios' ? 'max-h-[70%]' : 'max-h-[90%]'
+            )}
+          >
+            <Text variant="TitleRegular" tw="px-6">
+              {t('Dashboard.Management.AddCoolingUnit.fields.selectCrops')}
+            </Text>
+            <View>
+              <Controller
+                name="search"
+                control={localForm.control}
+                render={({ field: { value, onChange, onBlur } }) => (
+                  <TextInput
+                    tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600 mb-2"
+                    label={t('actions.search')}
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    left={<TextInput.Icon icon="magnify" />}
+                  />
+                )}
+              />
+            </View>
+
             <FlatList
               scrollEnabled
               nestedScrollEnabled
@@ -146,27 +158,29 @@ export default function CropSpecificPricing() {
                 />
               )}
             />
-          </Dialog.ScrollArea>
-          <Dialog.Actions>
-            <Button
-              uppercase
-              onPress={(evt) => {
-                evt.stopPropagation();
-                localForm.reset(_buildInitialValues());
-                toggleVisibility();
-              }}
-            >
-              {t('actions.cancel')}
-            </Button>
-            <Button
-              uppercase
-              // eslint-disable-next-line
-              onPress={localForm.handleSubmit(onConfirm as any)}
-            >
-              {t('actions.ok')}
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
+            <View tw="flex-row items-center justify-end px-3">
+              <Button
+                mode="text"
+                uppercase
+                onPress={(evt) => {
+                  evt.stopPropagation();
+                  localForm.reset(_buildInitialValues());
+                  toggleVisibility();
+                }}
+              >
+                {t('actions.cancel')}
+              </Button>
+              <Button
+                mode="text"
+                uppercase
+                // eslint-disable-next-line
+                onPress={localForm.handleSubmit(onConfirm as any)}
+              >
+                {t('actions.ok')}
+              </Button>
+            </View>
+          </View>
+        </RNModal>
       </Portal>
     </React.Fragment>
   );

@@ -29,6 +29,7 @@ import * as Map from './components/Map';
 import PointAnnotationModal from './components/PointAnnotationModal';
 import { PIN_COLORS } from './constants';
 import { processLocationMarkers } from './utils';
+import { DEFAULT_COORDINATES } from '../../Marketplace/utils';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 const screenHeight = Dimensions.get('window').height;
@@ -92,6 +93,7 @@ function CoolingUnitsMaps() {
         });
         setCoordinates([result.longitude, result.latitude]);
       } catch (exception) {
+        setCoordinates(DEFAULT_COORDINATES);
         console.error(exception);
       } finally {
         setLoadingCoords(false);

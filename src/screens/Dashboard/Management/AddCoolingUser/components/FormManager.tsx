@@ -36,7 +36,7 @@ export default function FormManager(props: FormManagerProps) {
     resolver: zodResolver((z, t) =>
       z.object({
         firstName: z.string().min(1),
-        lastName: z.string().min(1),
+        lastName: z.string().optional(),
         phone: z
           .string()
           .min(1, { message: t('Auth.SignUp.schema.phoneError') })

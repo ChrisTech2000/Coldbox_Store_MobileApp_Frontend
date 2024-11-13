@@ -16,6 +16,7 @@ import { useManagementStore } from '#stores/management';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import { resetAllStores } from '#navigation/Dashboard/components/DrawerContent/resetStoresUtil';
+import InAppNotifications from '#common/InAppNotifications';
 
 import { usePopup } from './utils';
 
@@ -23,6 +24,7 @@ export default function DeleteAccountAction() {
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+  const toast = InAppNotifications.useToast();
 
   const [isProcessing, toggleProcessing] = useToggle(false);
   const [state, { displayPopup, resetPopup }] = usePopup();
@@ -89,6 +91,7 @@ export default function DeleteAccountAction() {
       displayPopup(t('Dashboard.AccountDetails.popups.default'), true); // confirmation popup
     } catch (exception) {
       console.error(exception);
+      toast.show(t('actions.error'), { type: 'md_danger' });
     } finally {
       toggleProcessing();
     }
@@ -105,6 +108,7 @@ export default function DeleteAccountAction() {
       useAuthStore.getState().revokeSession();
     } catch (exception) {
       console.error(exception);
+      toast.show(t('actions.error'), { type: 'md_danger' });
     } finally {
       toggleProcessing();
     }
