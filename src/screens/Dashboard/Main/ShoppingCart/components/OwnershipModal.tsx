@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Portal } from 'react-native-paper';
+import { Dialog, Portal } from 'react-native-paper';
 
 import useCartStore from '#stores/shoppingCart';
 import { useTranslationUtils } from '#i18n/utils';
@@ -8,7 +8,6 @@ import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import MarketplaceService from '#services/MarketplaceService';
 
-import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 
@@ -25,9 +24,9 @@ export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
 
   return (
     <Portal>
-      <Modal visible={isVisible} onDismiss={close}>
-        <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
-          <Text tw="text-base text-center">
+      <Dialog visible={isVisible} onDismiss={close} style={{ backgroundColor: 'white' }}>
+        <Dialog.Content>
+          <Text tw="text-base">
             {t('Dashboard.ShoppingCart.changeOwnership', {
               name: cartData?.ownedOnBehalfOfCompanyId
                 ? `${user?.firstName ?? ''} ${user?.lastName ?? ''}`
@@ -35,13 +34,13 @@ export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
             })}
           </Text>
 
-          <View tw="pt-4 flex flex-row space-x-4">
-            <Button mode="outlined" tw="border border-green-primary" onPress={close}>
+          <View tw="mt-5 flex flex-row items-center justify-between">
+            <Button mode="outlined" tw="border border-green-primary w-[48%]" onPress={close}>
               {t('actions.cancel')}
             </Button>
             <Button
               mode="contained"
-              tw="border border-green-primary"
+              tw="border border-green-primary w-[48%]"
               onPress={async () => {
                 const result = await MarketplaceService.toggleCartOwnership();
                 if (result.cart) {
@@ -53,8 +52,8 @@ export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
               {t('actions.continue')}
             </Button>
           </View>
-        </View>
-      </Modal>
+        </Dialog.Content>
+      </Dialog>
     </Portal>
   );
 }
