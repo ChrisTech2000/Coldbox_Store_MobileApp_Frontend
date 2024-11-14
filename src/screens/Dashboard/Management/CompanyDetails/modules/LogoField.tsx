@@ -1,8 +1,8 @@
 import React from 'react';
-import { PermissionsAndroid, View } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { getSystemVersion } from 'react-native-device-info';
+import { Platform, View } from 'react-native';
 import { Divider } from 'react-native-paper';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { request, PERMISSIONS, type PermissionStatus, RESULTS } from 'react-native-permissions';
 
 import { Button } from '#ui/components/Button';
 import { Image } from '#ui/components/Image';
@@ -13,6 +13,13 @@ import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
 
 import FormManager from '../components/FormManager';
+
+const PERMISSION = Platform.select({
+  android: PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+  ios: PERMISSIONS.IOS.PHOTO_LIBRARY,
+})!;
+
+const PERMISSION_OUTCOMES: Array<PermissionStatus> = [RESULTS.GRANTED, RESULTS.LIMITED];
 
 export default function LogoField() {
   const { watch, setValue } = FormManager.useFormManager();
@@ -49,41 +56,33 @@ export default function LogoField() {
             onPress={async (evt) => {
               evt.stopPropagation();
 
-              async function _launch(): Promise<void> {
-                await launchImageLibrary(
-                  {
-                    maxWidth: 200,
-                    maxHeight: 200,
-                    mediaType: 'photo',
-                    selectionLimit: 1,
-                    quality: 1,
-                  },
-                  (result) => {
-                    const file = result.assets?.at(0);
-                    if (typeof file === 'undefined') return; // safe guard
-                    if (typeof file.fileSize !== 'undefined' && file.fileSize > 50_000) return; // file size upload limit
-                    setValue('logo', {
-                      uri: file.uri as string,
-                      name: file.fileName,
-                      type: file.type,
-                    });
-                  }
-                );
-              }
-
-              const androidVersion = Number(getSystemVersion());
-              if (androidVersion >= 13) {
-                const permissionStatus = await PermissionsAndroid.request(
-                  PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
-                );
-                if (permissionStatus === PermissionsAndroid.RESULTS.GRANTED) return await _launch();
+              const outcome = await request(PERMISSION);
+              if (!PERMISSION_OUTCOMES.includes(outcome)) {
                 toast.show(t('Dashboard.Management.CompanyDetails.toasts.photoLibrary'), {
                   type: 'md_danger',
                 });
                 return;
               }
 
-              await _launch();
+              await launchImageLibrary(
+                {
+                  maxWidth: 200,
+                  maxHeight: 200,
+                  mediaType: 'photo',
+                  selectionLimit: 1,
+                  quality: 1,
+                },
+                (result) => {
+                  const file = result.assets?.at(0);
+                  if (typeof file === 'undefined') return; // safe guard
+                  if (typeof file.fileSize !== 'undefined' && file.fileSize > 50_000) return; // file size upload limit
+                  setValue('logo', {
+                    uri: file.uri as string,
+                    name: file.fileName,
+                    type: file.type,
+                  });
+                }
+              );
             }}
           >
             {t('Dashboard.Management.CompanyDetails.labels.uploadLogo')}

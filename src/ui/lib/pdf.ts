@@ -1,4 +1,5 @@
-import { PermissionsAndroid, Platform } from 'react-native';
+import { Platform } from 'react-native';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {
   DocumentDirectoryPath,
@@ -9,14 +10,14 @@ import {
 import Share from 'react-native-share';
 
 const IS_ANDROID = Platform.OS === 'android';
+const IS_ANDROID_PERMISSION_REQUIRED = Number(Platform.Version) < 33;
+
 const BASE_PATH = IS_ANDROID ? `${ExternalStorageDirectoryPath}/Download` : DocumentDirectoryPath;
 
 export async function savePDF(html: string, fileName: string): Promise<void> {
-  if (IS_ANDROID) {
-    const outcome = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-    );
-    if (outcome === PermissionsAndroid.RESULTS.DENIED) {
+  if (IS_ANDROID && IS_ANDROID_PERMISSION_REQUIRED) {
+    const outcome = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
+    if (outcome !== RESULTS.GRANTED) {
       throw new Error('DENIED "WRITE_EXTERNAL_STORAGE" PERMISSION');
     }
   }
@@ -29,11 +30,24 @@ export async function savePDF(html: string, fileName: string): Promise<void> {
   const filePath = `${BASE_PATH}/${fileName.toLowerCase()}.pdf`;
   await writeFile(filePath, result.base64, 'base64');
 
-  if (!IS_ANDROID) {
-    await Share.open({
-      url: `file://${filePath}`,
-      type: 'application/pdf',
-    });
+  async function _deleteTempFile(): Promise<void> {
     await unlink(filePath);
+  }
+
+  if (!IS_ANDROID) {
+    try {
+      await Share.open({
+        url: `file://${filePath}`,
+        type: 'application/pdf',
+      });
+      await _deleteTempFile();
+    } catch (exception) {
+      if (exception instanceof Error) {
+        if (exception.message === 'User did not share') {
+          return await _deleteTempFile();
+        }
+      }
+      throw exception; // let it bubble up
+    }
   }
 }
