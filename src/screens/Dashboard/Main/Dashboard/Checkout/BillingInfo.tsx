@@ -58,7 +58,6 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
     OverlayComponent: CheckOut2ScreenOverlay,
-    onPressMask: () => rootNavigation.navigate('RootMainTabStack'),
   });
 
   const { data: locations } = useApiCall(

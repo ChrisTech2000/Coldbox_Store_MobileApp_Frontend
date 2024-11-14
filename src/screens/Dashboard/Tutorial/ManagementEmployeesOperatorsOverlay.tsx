@@ -17,11 +17,7 @@ import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementEmployeesOperatorsOverlay({
-  goTo,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function ManagementEmployeesOperatorsOverlay({ goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -82,7 +78,7 @@ export function ManagementEmployeesOperatorsOverlay({
             <Button
               mode="text"
               onPress={() => {
-                onPressMask?.();
+                rootNavigation.goBack();
                 goTo(EOperatorTutorialSteps.COOLING_UNIT_STEP);
               }}
               labelStyle="text-white"

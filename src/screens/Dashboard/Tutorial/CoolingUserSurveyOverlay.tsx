@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, Platform, View } from 'react-native';
@@ -15,7 +15,7 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponentProps) {
+export function CoolingUserSurveyOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -74,7 +74,8 @@ export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponent
             <Button
               mode="text"
               onPress={() => {
-                step.onPressMask?.();
+                rootNavigation.goBack();
+                rootNavigation.dispatch(DrawerActions.openDrawer());
                 next();
               }}
               tw="bg-green-primary border-green-primary"

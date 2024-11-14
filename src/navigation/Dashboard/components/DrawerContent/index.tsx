@@ -2,7 +2,6 @@ import {
   DrawerContentScrollView,
   type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import { DrawerActions } from '@react-navigation/native';
 import { styled } from 'nativewind';
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
@@ -85,14 +84,12 @@ export default function DrawerContent(props: Props) {
   useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_MANAGEMENT_STEP,
     OverlayComponent: DrawerManagementOverlay,
-    onPressMask: () => props.navigation.navigate('Management'),
     fullScreen: true,
   });
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP,
     OverlayComponent: DrawerAccountDetailsOverlay,
-    onPressMask: () => props.navigation.navigate('AccountDetails'),
     fullScreen: true,
   });
 
@@ -105,10 +102,6 @@ export default function DrawerContent(props: Props) {
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_FAQ_STEP,
     OverlayComponent: DrawerFAQOverlay,
-    onPressMask: () => {
-      props.navigation.dispatch(DrawerActions.closeDrawer());
-      props.navigation.navigate('Dashboard');
-    },
     fullScreen: true,
   });
 

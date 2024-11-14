@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
@@ -7,28 +8,24 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
+import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
+import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
-import { Button } from '#ui/components/Button';
-import { useTutorialStore } from '#stores/tutorial';
 
 import { EEmployeeTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerManagementOverlay({
-  next,
-  goTo,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const colors = useTailwindColors();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const navigation = useNavigation();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -61,7 +58,9 @@ export function DrawerManagementOverlay({
           screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-[22%]' : 'top-[20%]'
         )}
         onPress={() => {
-          onPressMask?.();
+          // eslint-disable-next-line
+          // @ts-ignore
+          navigation.navigate('Management');
           user?.role === ERoles.OPERATOR ? next() : goTo(EEmployeeTutorialSteps.LOCATIONS_STEP);
         }}
       >

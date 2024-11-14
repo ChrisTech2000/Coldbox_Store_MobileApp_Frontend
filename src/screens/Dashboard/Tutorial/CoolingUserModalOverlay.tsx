@@ -57,6 +57,9 @@ export function CoolingUsersModalOverlay({
             mode="text"
             onPress={() => {
               onPressMask?.();
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('RootMainTabStack');
               next();
             }}
             tw="bg-green-primary"

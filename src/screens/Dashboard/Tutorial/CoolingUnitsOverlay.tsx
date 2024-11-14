@@ -8,12 +8,15 @@ import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
+import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
 
@@ -84,13 +87,10 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
   );
 }
 
-export function RoomConditionsOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function RoomConditionsOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -124,7 +124,8 @@ export function RoomConditionsOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              rootNavigation.navigate('RootMainTabStack');
+              emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
               next();
             }}
             labelStyle="text-white"

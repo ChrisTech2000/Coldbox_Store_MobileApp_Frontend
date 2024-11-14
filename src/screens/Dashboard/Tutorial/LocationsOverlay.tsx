@@ -18,7 +18,7 @@ import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function LocationsOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function LocationsOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -56,7 +56,9 @@ export function LocationsOverlay({ next, stop, step: { onPressMask } }: IOverlay
             screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-44' : 'top-52'
           )}
           onPress={() => {
-            onPressMask?.();
+            // eslint-disable-next-line
+            // @ts-ignore
+            rootNavigation.navigate('AddLocation');
             next();
           }}
         >

@@ -17,7 +17,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function Dashboard1Overlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function Dashboard1Overlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -50,7 +50,6 @@ export function Dashboard1Overlay({ next, stop, step: { onPressMask } }: IOverla
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
               next();
             }}
             tw="bg-green-primary border-green-primary"
@@ -64,7 +63,7 @@ export function Dashboard1Overlay({ next, stop, step: { onPressMask } }: IOverla
   );
 }
 
-export function Dashboard2Overlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function Dashboard2Overlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -100,7 +99,6 @@ export function Dashboard2Overlay({ next, stop, step: { onPressMask } }: IOverla
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
               next();
             }}
             tw="bg-green-primary border-green-primary"
@@ -114,7 +112,7 @@ export function Dashboard2Overlay({ next, stop, step: { onPressMask } }: IOverla
   );
 }
 
-export function Dashboard3Overlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function Dashboard3Overlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -150,7 +148,6 @@ export function Dashboard3Overlay({ next, stop, step: { onPressMask } }: IOverla
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
               next();
             }}
             tw="bg-green-primary border-green-primary"
@@ -164,7 +161,7 @@ export function Dashboard3Overlay({ next, stop, step: { onPressMask } }: IOverla
   );
 }
 
-export function Dashboard4Overlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function Dashboard4Overlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -197,7 +194,6 @@ export function Dashboard4Overlay({ next, stop, step: { onPressMask } }: IOverla
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
               next();
             }}
             tw="bg-green-primary border-green-primary"

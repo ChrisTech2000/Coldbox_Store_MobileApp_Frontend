@@ -14,17 +14,23 @@ import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
+import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
+import { CheckOutStackRoutes } from 'navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
+
 const screenHeight = Dimensions.get('window').height;
 
-export function OperatorActionsOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+const MOCKED_PARAMS = {
+  user: MOCKED_USER,
+  crates: MOCKED_CHECK_OUT_DATA,
+  coolingUnit: MOCKED_COOLING_UNIT,
+};
+
+export function OperatorActionsOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const navigation = useNavigation<NativeStackNavigationProp<CheckOutStackRoutes>>();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -54,8 +60,12 @@ export function OperatorActionsOverlay({
       <TouchableOpacity
         tw="absolute bottom-28 right-14 w-[14%] h-[9%]"
         onPress={() => {
-          onPressMask?.();
-          next();
+          navigation.navigate('CrateSelection', {
+            // eslint-disable-next-line
+            // @ts-ignore
+            MOCKED_PARAMS,
+          }),
+            next();
         }}
       >
         <Animated.View
@@ -105,14 +115,11 @@ export function OperatorActionsOverlay({
   );
 }
 
-export function CheckOutScreenOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CheckOutScreenOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const navigation = useNavigation<NativeStackNavigationProp<CheckOutStackRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -147,7 +154,12 @@ export function CheckOutScreenOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              navigation.navigate(
+                'BillingInfo',
+                // eslint-disable-next-line
+                // @ts-ignore
+                { ...MOCKED_PARAMS }
+              );
               next();
             }}
             labelStyle="text-white"
@@ -161,11 +173,7 @@ export function CheckOutScreenOverlay({
   );
 }
 
-export function CheckOut2ScreenOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CheckOut2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -200,7 +208,7 @@ export function CheckOut2ScreenOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              rootNavigation.navigate('Dashboard');
               next();
             }}
             labelStyle="text-white"

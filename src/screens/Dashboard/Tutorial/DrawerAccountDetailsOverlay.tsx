@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
@@ -16,14 +17,11 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerAccountDetailsOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function DrawerAccountDetailsOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const navigation = useNavigation();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -63,7 +61,9 @@ export function DrawerAccountDetailsOverlay({
               : 'top-[12.5%]'
         )}
         onPress={() => {
-          onPressMask?.();
+          // eslint-disable-next-line
+          // @ts-ignore
+          navigation.navigate('AccountDetails');
           next();
         }}
       >

@@ -7,9 +7,12 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardRoutes } from '#navigation/Dashboard';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { useCheckInStore } from '#stores/checkIn';
 import { useTutorialStore } from '#stores/tutorial';
+
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
@@ -111,15 +114,12 @@ export function OperatorActionsOverlay({
   );
 }
 
-export function CheckInButtonOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CheckInButtonOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const navigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -149,8 +149,13 @@ export function CheckInButtonOverlay({
       <TouchableOpacity
         tw="absolute bottom-28 right-1/4 w-[20%] h-[9%]"
         onPress={() => {
-          onPressMask?.();
-          next();
+          navigation.navigate('CheckInStack', {
+            screen: 'CheckIn',
+            // eslint-disable-next-line
+            // @ts-ignore
+            params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
+          }),
+            next();
         }}
       >
         <Animated.View
@@ -299,15 +304,12 @@ export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function CheckIn3ScreenOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CheckIn3ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const resetCheckInStore = useCheckInStore((store) => store.resetCheckInStore);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const colors = useTailwindColors();
 
@@ -339,7 +341,7 @@ export function CheckIn3ScreenOverlay({
       <TouchableOpacity
         tw="absolute bottom-4 right-3 w-[46%] h-[8%]"
         onPress={() => {
-          onPressMask?.();
+          bottomTabNavigation.navigate('Main', { screen: 'History' });
           resetCheckInStore();
           next();
         }}

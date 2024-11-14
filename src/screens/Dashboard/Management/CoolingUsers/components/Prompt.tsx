@@ -1,5 +1,4 @@
-import { useNavigation, type NavigationProp } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { type NavigationProp } from '@react-navigation/native';
 import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -15,7 +14,6 @@ import { useUnmount } from '#ui/hooks/useUnmount';
 import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import type { ManagementRoutePaths, ManagementRoutes } from '#navigation/Dashboard/Management';
 
 type Props = {
@@ -24,7 +22,6 @@ type Props = {
 
 export default function Prompt(props: Props) {
   const { navigation } = props;
-  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const [isVisible, toggleVisibility, setModalVisibility] = useToggle(false);
@@ -39,10 +36,7 @@ export default function Prompt(props: Props) {
       addX: -10,
       addY: -10,
     },
-    onPressMask: () => {
-      toggleVisibility();
-      rootNavigation.navigate('RootMainTabStack');
-    },
+    onPressMask: () => toggleVisibility(),
   });
 
   useAppEventListener<[boolean]>('DISPATCH_CU_PROMPT', setModalVisibility);

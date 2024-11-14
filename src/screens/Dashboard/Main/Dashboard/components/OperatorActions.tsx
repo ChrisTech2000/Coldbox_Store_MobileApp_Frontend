@@ -35,19 +35,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
-import {
-  MOCKED_CHECK_OUT_DATA,
-  MOCKED_COOLING_UNIT,
-  MOCKED_USER,
-} from '../../../Tutorial/utils/mockedData';
-
 type ManagementMode = 'check-in' | 'check-out';
-
-const params = {
-  user: MOCKED_USER,
-  coolingUnit: MOCKED_COOLING_UNIT,
-  crates: MOCKED_CHECK_OUT_DATA,
-};
 
 export function OperatorActions({
   navigation,
@@ -74,25 +62,11 @@ export function OperatorActions({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_1,
     OverlayComponent: CheckoutOverlay,
     onStart: () => setIsCrateManagementOpen(true),
-    onPressMask: () =>
-      navigation.navigate('CheckOutStack', {
-        screen: 'CrateSelection',
-        // eslint-disable-next-line
-        // @ts-ignore
-        params,
-      }),
   });
 
   const { onLayout: onCheckInLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_2,
     OverlayComponent: CheckInButtonOverlay,
-    onPressMask: () =>
-      navigation.navigate('CheckInStack', {
-        screen: 'CheckIn',
-        // eslint-disable-next-line
-        // @ts-ignore
-        params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
-      }),
   });
 
   const { data, isLoading } = useApiCall(

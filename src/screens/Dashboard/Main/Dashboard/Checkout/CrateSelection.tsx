@@ -28,19 +28,9 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import {
-  MOCKED_CHECK_OUT_DATA,
-  MOCKED_COOLING_UNIT,
-  MOCKED_USER,
-} from '../../../Tutorial/utils/mockedData';
 import { CheckoutCrate } from '../components/CheckOutCrate';
 
 export const useCrateSelectionCoolingUnitStore = createSelectStore<CoolingUnit>();
-const MOCKED_PARAMS = {
-  user: MOCKED_USER,
-  crates: MOCKED_CHECK_OUT_DATA,
-  coolingUnit: MOCKED_COOLING_UNIT,
-};
 
 function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
   const { user, owner, coolingUnit: _coolingUnit, crates: _crates } = route.params;
@@ -55,13 +45,6 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_2,
     OverlayComponent: CheckOutScreenOverlay,
-    onPressMask: () => {
-      // eslint-disable-next-line
-      // @ts-ignore
-      navigation.navigate('BillingInfo', {
-        ...MOCKED_PARAMS,
-      });
-    },
   });
 
   const { data, isLoading } = useApiCall(

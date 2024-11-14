@@ -2,6 +2,7 @@ import React from 'react';
 import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
@@ -12,9 +13,10 @@ import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerFAQOverlay({ next, step, stop }: IOverlayComponentProps) {
+export function DrawerFAQOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const navigation = useNavigation();
 
   return (
     <View tw="h-full w-full absolute">
@@ -64,7 +66,10 @@ export function DrawerFAQOverlay({ next, step, stop }: IOverlayComponentProps) {
           <Button
             mode="text"
             onPress={() => {
-              step.onPressMask?.();
+              navigation.dispatch(DrawerActions.closeDrawer());
+              // eslint-disable-next-line
+              // @ts-ignore
+              navigation.navigate('Dashboard');
               next();
             }}
             tw="bg-green-primary border-green-primary"

@@ -1,5 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useMemo, useRef } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -14,7 +12,6 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 
@@ -30,12 +27,10 @@ function CoolingUnitsRoomConditions() {
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
   const { t } = useTranslationUtils();
   const scrollRef = useRef<ScrollView>(null);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.ROOM_CONDITIONS_STEP,
     OverlayComponent: RoomConditionsOverlay,
-    onPressMask: () => rootNavigation.navigate('RootMainTabStack'),
   });
 
   const {

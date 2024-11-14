@@ -18,7 +18,7 @@ import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function ManagementOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -56,7 +56,9 @@ export function ManagementOverlay({ next, stop, step: { onPressMask } }: IOverla
             screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-32' : 'top-40'
           )}
           onPress={() => {
-            onPressMask?.();
+            // eslint-disable-next-line
+            // @ts-ignore
+            rootNavigation.navigate('CoolingUsers');
             next();
           }}
         >

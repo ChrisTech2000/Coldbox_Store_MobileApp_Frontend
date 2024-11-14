@@ -12,7 +12,6 @@ import colors from 'tailwindcss/colors';
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardRoutes } from '#navigation/Dashboard';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
@@ -53,7 +52,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   const { t } = useTranslationUtils();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
-  const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const company = useManagementStore((store) => store.company);
   const refreshData = useDashboardStore((store) => store.refreshData);
@@ -80,7 +78,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { onLayout: onCheckIn3Layout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_3,
     OverlayComponent: CheckIn3ScreenOverlay,
-    onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'History' }),
   });
 
   const toast = InAppNotifications.useToast();

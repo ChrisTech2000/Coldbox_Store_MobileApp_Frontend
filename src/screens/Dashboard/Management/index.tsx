@@ -43,28 +43,24 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
     number: EOperatorTutorialSteps.GO_TO_COOLING_USERS_STEP,
     OverlayComponent: ManagementOverlay,
     fullScreen: true,
-    onPressMask: () => props.navigation.navigate('CoolingUsers'),
   });
 
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.LOCATIONS_STEP,
     OverlayComponent: LocationsOverlay,
     fullScreen: true,
-    onPressMask: () => props.navigation.navigate('AddLocation'),
   });
 
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.COOLING_UNITS_STEP,
     OverlayComponent: ManagementCoolingUnitsOverlay,
     fullScreen: true,
-    onPressMask: () => navigation.navigate('AddCoolingUnit'),
   });
 
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP,
     OverlayComponent: ManagementEmployeesOperatorsOverlay,
     fullScreen: true,
-    onPressMask: () => props.navigation.goBack(),
   });
 
   const disabledCoolingUnits = isLoading || !data.length;
