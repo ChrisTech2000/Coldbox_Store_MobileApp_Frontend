@@ -65,9 +65,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     resetCheckInStore,
   } = useCheckInStore();
 
-  const { onLayout: onCheckIn1Layout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_1,
     OverlayComponent: CheckIn1ScreenOverlay,
+    fullScreen: true,
   });
 
   const { onLayout: onCheckIn2Layout } = useWalkthroughStep({
@@ -288,7 +289,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [coolingUnit, user, checkOutCode]);
 
   return (
-    <View tw="flex-1" onLayout={onCheckIn1Layout}>
+    <View tw="flex-1">
       <View tw="flex-1 p-4">
         <List.Item
           tw="p-0 m-0"

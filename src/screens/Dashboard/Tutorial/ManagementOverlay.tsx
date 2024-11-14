@@ -101,7 +101,7 @@ export function ManagementOverlay({ next, stop }: IOverlayComponentProps) {
             },
           ]}
         >
-          <Text tw="text-base text-center">{t('tutorial.steps.navigateToCoolingUser')}</Text>
+          <Text tw="text-base">{t('tutorial.steps.navigateToCoolingUser')}</Text>
           <Button
             mode="text"
             onPress={() => {

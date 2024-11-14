@@ -88,7 +88,7 @@ export function AddCoolingUserNavigationOverLay({ next, stop }: IOverlayComponen
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.navigateToAddCoolingUser')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.navigateToAddCoolingUser')}</Text>
         <Button
           mode="text"
           onPress={() => {

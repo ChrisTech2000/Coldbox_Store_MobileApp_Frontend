@@ -55,9 +55,10 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>();
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
     OverlayComponent: CheckOut2ScreenOverlay,
+    fullScreen: true,
   });
 
   const { data: locations } = useApiCall(
@@ -330,7 +331,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           />
         </View>
         <Divider tw="bg-gray-400 my-2" />
-        <View onLayout={onLayout} tw="flex flex-row w-full justify-between items-center">
+        <View tw="flex flex-row w-full justify-between items-center">
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.CheckOut.paid')}
           </Text>

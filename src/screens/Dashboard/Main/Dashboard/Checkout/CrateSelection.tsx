@@ -42,9 +42,10 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [selectedCrates, setSelectedCrates] = useState<Crate[]>([]);
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_2,
     OverlayComponent: CheckOutScreenOverlay,
+    fullScreen: true,
   });
 
   const { data, isLoading } = useApiCall(
@@ -110,7 +111,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   }
 
   return (
-    <View tw="flex-1 p-4" onLayout={onLayout}>
+    <View tw="flex-1 p-4">
       <View tw="flex flex-row w-full justify-between items-center">
         <Text variant="TextMedium" tw="text-lg max-w-[70%]" numberOfLines={1}>
           {t('Dashboard.CrateManagement.coolingUserLabel')}

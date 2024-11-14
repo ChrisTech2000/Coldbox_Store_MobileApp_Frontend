@@ -62,6 +62,7 @@ export function OperatorActions({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_1,
     OverlayComponent: CheckoutOverlay,
     onStart: () => setIsCrateManagementOpen(true),
+    onFinish: () => setIsCrateManagementOpen(false),
   });
 
   const { onLayout: onCheckInLayout } = useWalkthroughStep({

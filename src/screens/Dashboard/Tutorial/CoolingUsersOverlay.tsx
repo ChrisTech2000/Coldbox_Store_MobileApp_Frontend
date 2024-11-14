@@ -51,7 +51,7 @@ export function CoolingUsersOverlay({ next, stop }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.listCoolingUsers')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.listCoolingUsers')}</Text>
 
         <View tw="flex flex-row items-center justify-center space-x-2 mt-2">
           <Button

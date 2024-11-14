@@ -1486,6 +1486,8 @@ export default {
         'Se você quiser assistir a este tutorial novamente, também pode encontrá-lo no menu.',
       managementNavigation:
         'No menu, você pode navegar até "Gerenciamento" e tocar lá para adicionar ou editar Usuários de Resfriamento. Vá em frente e tente.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'Usuários de resfriamento que não se registraram no Coldtivate podem ser adicionados inserindo seus dados (nome, número de telefone). Usuários de resfriamento que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Usuário de Resfriamento".',
       navigateToCoolingUser: 'Vá em frente e clique na guia Usuários de Resfriamento',

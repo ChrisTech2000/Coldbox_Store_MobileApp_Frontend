@@ -61,7 +61,7 @@ export function ManagementEmployeesOperatorsOverlay({ goTo, stop }: IOverlayComp
             },
           ]}
         >
-          <Text tw="text-base text-center">{t('tutorial.steps.addEmployeesOperators')}</Text>
+          <Text tw="text-base">{t('tutorial.steps.addEmployeesOperators')}</Text>
 
           <View tw="flex flex-row space-x-2 mt-2 items-center justify-center">
             <Button

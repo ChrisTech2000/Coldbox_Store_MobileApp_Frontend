@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, View } from 'react-native';
+import { Animated, Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -55,12 +55,16 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
       <Touchable
         tw={cn(
           'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-[22%]' : 'top-[20%]'
+          screenHeight <= SMALL_SCREEN_THRESHOLD
+            ? 'top-[22%]'
+            : Platform.OS === 'ios'
+              ? 'top-[20%]'
+              : 'top-[18%]'
         )}
         onPress={() => {
           // eslint-disable-next-line
           // @ts-ignore
-          navigation.navigate('Management');
+          navigation.navigate('Management', { screen: 'Root' });
           user?.role === ERoles.OPERATOR ? next() : goTo(EEmployeeTutorialSteps.LOCATIONS_STEP);
         }}
       >
@@ -71,7 +75,12 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
       <Animated.View
         style={[
           {
-            top: screenHeight <= SMALL_SCREEN_THRESHOLD ? '23%' : '22%',
+            top:
+              screenHeight <= SMALL_SCREEN_THRESHOLD
+                ? '23%'
+                : Platform.OS === 'ios'
+                  ? '23%'
+                  : '20%',
             left: '50%',
             opacity: blinkAnim,
           },
@@ -95,7 +104,11 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.managementNavigation')}</Text>
+        <Text tw="text-base">
+          {user?.role === ERoles.EMPLOYEE
+            ? t('tutorial.steps.managementNavigation')
+            : t('tutorial.steps.operatorManagementNavigation')}
+        </Text>
         <Button
           mode="text"
           onPress={() => {

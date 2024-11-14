@@ -28,9 +28,10 @@ function CoolingUnitsRoomConditions() {
   const { t } = useTranslationUtils();
   const scrollRef = useRef<ScrollView>(null);
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.ROOM_CONDITIONS_STEP,
     OverlayComponent: RoomConditionsOverlay,
+    fullScreen: true,
   });
 
   const {
@@ -50,7 +51,7 @@ function CoolingUnitsRoomConditions() {
   const chartDatums = useMemo(() => processTemperatures(temperatures), [temperatures]);
 
   return (
-    <View tw="pt-5" onLayout={onLayout}>
+    <View tw="pt-5">
       <GenericFilter>
         <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
           <GenericFilter.Companies />

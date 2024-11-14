@@ -36,7 +36,6 @@ export default function Prompt(props: Props) {
       addX: -10,
       addY: -10,
     },
-    onPressMask: () => toggleVisibility(),
   });
 
   useAppEventListener<[boolean]>('DISPATCH_CU_PROMPT', setModalVisibility);

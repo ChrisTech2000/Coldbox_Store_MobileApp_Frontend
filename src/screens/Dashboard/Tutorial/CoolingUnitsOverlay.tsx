@@ -108,7 +108,7 @@ export function RoomConditionsOverlay({ next, stop }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.roomConditions')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.roomConditions')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
