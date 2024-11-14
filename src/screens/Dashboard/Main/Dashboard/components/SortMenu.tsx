@@ -33,7 +33,7 @@ type SortingMenuProps = {
 };
 
 export const useSortingStore = create<SortingStore>((set) => ({
-  sorting: ESortingOptions.CHECK_IN_DATE,
+  sorting: ESortingOptions.CHECK_IN_DATE_REVERSE,
   onSelect: (sorting) => set({ sorting }),
 }));
 
