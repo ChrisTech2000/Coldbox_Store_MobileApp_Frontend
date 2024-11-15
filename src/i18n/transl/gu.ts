@@ -978,6 +978,7 @@ export default {
         buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'કાર્ટમાં ઉમેરો અને ખરીદી ચાલુ રાખો',
         selectQuantity: 'જાતીયતા પસંદ કરો',
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'વર્તમાન સ્થાન',
       filterError:

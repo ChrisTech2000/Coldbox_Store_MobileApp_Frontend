@@ -995,6 +995,7 @@ export default {
         buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'Ajouter au panier et continuer vos achats',
         selectQuantity: 'Sélectionnez la quantité',
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Localisation actuelle',
       filterError:

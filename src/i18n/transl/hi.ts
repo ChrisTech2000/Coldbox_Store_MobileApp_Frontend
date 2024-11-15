@@ -984,6 +984,7 @@ export default {
         addToCartButton: 'कार्ट में जोड़ें और खरीदारी जारी रखें',
         selectQuantity: 'मात्रा चुनें',
         buyFullCrate: 'Buy full crate', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'वर्तमान स्थान',
       filterError:

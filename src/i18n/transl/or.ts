@@ -983,6 +983,7 @@ export default {
         addToCartButton: 'କାର୍ଟରେ ଯୋଡନ୍ତୁ ଏବଂ ଶପିଂ ଜାରି ରଖନ୍ତୁ',
         selectQuantity: 'ମାତ୍ରା ବାଛନ୍ତୁ',
         buyFullCrate: 'Buy full crate', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'ବର୍ତ୍ତମାନ ଅବସ୍ଥାନ',
       filterError:
