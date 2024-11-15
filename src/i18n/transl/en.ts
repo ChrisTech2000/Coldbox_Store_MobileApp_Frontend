@@ -978,6 +978,7 @@ const en = {
         addToCartButton: 'Add to cart and continue shopping',
         buyFullCrate: 'Buy full crate',
         selectQuantity: 'Select quantity',
+        goToCart: 'Add to Cart and view summary',
       },
       currentLocation: 'Current location',
       filterError:

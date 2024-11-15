@@ -990,6 +990,7 @@ export default {
         addToCartButton: 'Adicionar ao carrinho e continuar comprando',
         selectQuantity: 'Selecionar quantidade',
         buyFullCrate: 'Buy full crate', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Localização atual',
       filterError:

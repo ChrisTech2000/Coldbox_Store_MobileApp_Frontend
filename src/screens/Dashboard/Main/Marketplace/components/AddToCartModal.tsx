@@ -3,6 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal, TextInput } from 'react-native-paper';
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
@@ -16,8 +17,10 @@ import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
+import { cn } from '#ui/lib/cn';
 
 import type { AvailableListingDatum } from '../utils';
+import type { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import MarketplaceItemWrapper from './MarketplaceItem';
 import { Checkbox } from '#ui/components/Checkbox';
 
@@ -27,8 +30,10 @@ type FormValues<T = string> = {
 
 export default function AddToCartModal() {
   const { t, zodResolver } = useTranslationUtils();
-  const modalRef = useRef<Modalize>(null);
   const toast = InAppNotifications.useToast();
+  const navigation = useNavigation<NavigationProp<DashboardMainRoutes>>();
+
+  const modalRef = useRef<Modalize>(null);
   const [cartData, fetchCart] = useCartStore((store) => [store.cartData, store.fetchCart]);
 
   const [datum, setDatum] = useState<AvailableListingDatum | undefined>(undefined);
@@ -60,20 +65,25 @@ export default function AddToCartModal() {
     form.reset({ quantity: '1' });
   }
 
-  async function onSubmit(values: FormValues<number>): Promise<void> {
-    if (!datum) return;
+  function buildAddToCartFunc(redirect = false) {
+    return async function onSubmit(values: FormValues<number>): Promise<void> {
+      if (!datum) return;
 
-    const crateAlreadyInCart = cartData?.items?.find((i) => i.relCrateId === datum.crateId);
+      const crateAlreadyInCart = cartData?.items?.find((i) => i.relCrateId === datum.crateId);
 
-    await MarketplaceService.addItemToCart({
-      crateId: datum.crateId,
-      orderedProduceWeight: values.quantity,
-      updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
-    });
+      await MarketplaceService.addItemToCart({
+        crateId: datum.crateId,
+        orderedProduceWeight: values.quantity,
+        updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
+      });
+      await fetchCart();
 
-    fetchCart();
-    resetState();
-    modalRef.current?.close();
+      resetState();
+      modalRef.current?.close();
+      if (redirect) {
+        navigation.navigate('ShoppingCart', { screen: 'Root' });
+      }
+    };
   }
 
   return (
@@ -119,7 +129,7 @@ export default function AddToCartModal() {
                   defaultValue="1"
                   value={`${value} kg`}
                   editable={false}
-                  disabled={buyFullCrate}
+                  disabled={buyFullCrate || form.formState.isSubmitting}
                   onChangeText={(text) => {
                     const newValue = text.replace(' kg', '');
                     onChange(newValue);
@@ -128,7 +138,9 @@ export default function AddToCartModal() {
                     <TextInput.Icon
                       icon="minus"
                       color={paperTheme.colors.primary}
-                      disabled={Number(value) - 1 === 0 || buyFullCrate}
+                      disabled={
+                        Number(value) - 1 === 0 || buyFullCrate || form.formState.isSubmitting
+                      }
                       onPress={(evt) => {
                         evt.stopPropagation();
                         const int = Number(value);
@@ -144,7 +156,11 @@ export default function AddToCartModal() {
                   right={
                     <TextInput.Icon
                       icon="plus"
-                      disabled={(datum && Number(value) + 1 > datum.crateWeight) || buyFullCrate}
+                      disabled={
+                        (datum && Number(value) + 1 > datum.crateWeight) ||
+                        buyFullCrate ||
+                        form.formState.isSubmitting
+                      }
                       color={paperTheme.colors.primary}
                       onPress={(evt) => {
                         evt.stopPropagation();
@@ -168,20 +184,35 @@ export default function AddToCartModal() {
                 setBuyFullCrate(!buyFullCrate);
                 if (!buyFullCrate) form.setValue('quantity', datum?.crateWeight.toString() || '1');
               }}
+              disabled={form.formState.isSubmitting}
             >
-              <Checkbox status={buyFullCrate ? 'checked' : 'unchecked'} />
-              <Text tw="text-base">{t('Dashboard.Marketplace.addToCart.buyFullCrate')}</Text>
+              <Checkbox
+                status={buyFullCrate ? 'checked' : 'unchecked'}
+                disabled={form.formState.isSubmitting}
+              />
+              <Text tw={cn('text-base', form.formState.isSubmitting && 'text-zinc-500')}>
+                {t('Dashboard.Marketplace.addToCart.buyFullCrate')}
+              </Text>
             </Touchable>
           </View>
-          <View tw="w-full flex-col items-center space-y-2">
+          <View tw="w-full flex-col items-center space-y-3 mb-4">
             <Button
-              tw="w-11/12 mb-4"
+              tw="w-11/12"
               mode="contained"
               // eslint-disable-next-line
-              onPress={form.handleSubmit(onSubmit as any)}
+              onPress={form.handleSubmit(buildAddToCartFunc() as any)}
               disabled={form.formState.isSubmitting}
             >
               {t('Dashboard.Marketplace.addToCart.addToCartButton')}
+            </Button>
+            <Button
+              tw="w-11/12"
+              mode="outlined"
+              // eslint-disable-next-line
+              onPress={form.handleSubmit(buildAddToCartFunc(true) as any)}
+              disabled={form.formState.isSubmitting}
+            >
+              {t('Dashboard.Marketplace.addToCart.goToCart')}
             </Button>
           </View>
         </View>

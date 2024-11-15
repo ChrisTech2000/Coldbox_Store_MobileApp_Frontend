@@ -903,6 +903,7 @@ export default {
         addToCartButton: 'Add to cart and continue shopping', // TODO
         buyFullCrate: 'Buy full crate', // TODO
         selectQuantity: 'Select quantity', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Current location', // TODO
       filterError:
