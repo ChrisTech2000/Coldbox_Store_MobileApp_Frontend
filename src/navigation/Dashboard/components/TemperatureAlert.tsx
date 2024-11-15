@@ -1,6 +1,6 @@
 import React from 'react';
-import { DataTable, Modal, Portal, TextInput } from 'react-native-paper';
-import { FlatList, View } from 'react-native';
+import { DataTable, Dialog, Portal, TextInput } from 'react-native-paper';
+import { FlatList, View, Dimensions } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import cloneDeep from 'lodash/cloneDeep';
@@ -9,7 +9,7 @@ import { useSWRConfig } from 'swr';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
-import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { ScrollView } from '#ui/components/ScrollView';
 
 import type { CommodityInfo } from '#types/global';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
@@ -17,6 +17,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import { cn } from '#ui/lib/cn';
 
 type LocalState<T = string> = {
   coolingUnitId: number | undefined;
@@ -41,6 +42,8 @@ const DEFAULT_STATE = {
   lastUpdated: undefined,
   showCompleteInfo: false,
 } satisfies LocalState;
+
+const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
 export default function TemperatureAlert() {
   const { t, zodResolver } = useTranslationUtils();
@@ -119,126 +122,133 @@ export default function TemperatureAlert() {
 
   const isVisible = typeof commodityInfo !== 'undefined';
 
+  const Container = showCompleteInfo ? Dialog.ScrollArea : Dialog.Content;
+  const ContextualView = showCompleteInfo ? ScrollView : React.Fragment;
+
   return (
     <Portal>
-      <Modal visible={isVisible} onDismiss={dismissHandler}>
-        <KeyboardAwareScrollView
-          contentContainerStyle="items-center"
-          tw="bg-white rounded-3xl w-11/12 max-w-11/12 h-auto max-h-[95%] py-4 px-5 self-center space-y-2 mb-4"
-        >
-          <View tw="flex items-center justify-center space-y-1">
-            <Icon name="warning" size={40} color={colors.yellow[400]} />
-            <Text variant="TitleRegular">{t('Dashboard.TemperatureAlert.title')}</Text>
-          </View>
+      <Dialog
+        visible={isVisible}
+        onDismiss={dismissHandler}
+        style={{ backgroundColor: 'white', maxHeight: DIALOG_MAX_HEIGHT }}
+      >
+        <Dialog.Icon
+          icon={(props) => <Icon {...props} name="warning" size={40} color={colors.yellow[400]} />}
+        />
+        <Dialog.Title tw="text-center mt-0">{t('Dashboard.TemperatureAlert.title')}</Dialog.Title>
+        <Container>
+          <ContextualView {...(showCompleteInfo ? { showsVerticalScrollIndicator: false } : {})}>
+            <View tw={cn(showCompleteInfo && 'h-full pt-2')}>
+              {showCompleteInfo ? (
+                <View tw="w-full">
+                  <Text tw="p-2">{t('Dashboard.TemperatureAlert.subtitle')}</Text>
+                  <DataTable>
+                    <FlatList
+                      nestedScrollEnabled
+                      showsVerticalScrollIndicator={false}
+                      ListHeaderComponent={
+                        <DataTable.Header>
+                          <DataTable.Title>
+                            {t('Dashboard.CoolingUnitsCratesInfo.commodity')}
+                          </DataTable.Title>
+                          <DataTable.Title>
+                            {t('Dashboard.CoolingUnitsCratesInfo.percentage')}
+                          </DataTable.Title>
+                          <DataTable.Title>
+                            {t('Dashboard.CoolingUnitsCratesInfo.weight')}
+                          </DataTable.Title>
+                          <DataTable.Title>
+                            {t('Dashboard.CoolingUnitsCratesInfo.crates')}
+                          </DataTable.Title>
+                          <DataTable.Title>
+                            {t('Dashboard.CoolingUnitsCratesInfo.optimalTemp')}
+                          </DataTable.Title>
+                        </DataTable.Header>
+                      }
+                      data={commodityInfo}
+                      keyExtractor={(item) => `data-table-row-${item.commodity}`}
+                      renderItem={({ item }) => (
+                        <DataTable.Row>
+                          <DataTable.Cell>{item.commodity}</DataTable.Cell>
+                          <DataTable.Cell>{item.percentage}%</DataTable.Cell>
+                          <DataTable.Cell>{item.combinedWeight}kg</DataTable.Cell>
+                          <DataTable.Cell>{item.cratesNumber}</DataTable.Cell>
+                          <DataTable.Cell>{item.optimalStorageTemperature}</DataTable.Cell>
+                        </DataTable.Row>
+                      )}
+                    />
+                  </DataTable>
 
-          {showCompleteInfo ? (
-            <View tw="w-full">
-              <Text tw="px-2">{t('Dashboard.TemperatureAlert.subtitle')}</Text>
-              <DataTable>
-                <FlatList
-                  nestedScrollEnabled
-                  showsVerticalScrollIndicator={false}
-                  ListHeaderComponent={
-                    <DataTable.Header>
-                      <DataTable.Title>
-                        {t('Dashboard.CoolingUnitsCratesInfo.commodity')}
-                      </DataTable.Title>
-                      <DataTable.Title>
-                        {t('Dashboard.CoolingUnitsCratesInfo.percentage')}
-                      </DataTable.Title>
-                      <DataTable.Title>
-                        {t('Dashboard.CoolingUnitsCratesInfo.weight')}
-                      </DataTable.Title>
-                      <DataTable.Title>
-                        {t('Dashboard.CoolingUnitsCratesInfo.crates')}
-                      </DataTable.Title>
-                      <DataTable.Title>
-                        {t('Dashboard.CoolingUnitsCratesInfo.optimalTemp')}
-                      </DataTable.Title>
-                    </DataTable.Header>
-                  }
-                  data={commodityInfo}
-                  keyExtractor={(item) => `data-table-row-${item.commodity}`}
-                  renderItem={({ item }) => (
-                    <DataTable.Row>
-                      <DataTable.Cell>{item.commodity}</DataTable.Cell>
-                      <DataTable.Cell>{item.percentage}%</DataTable.Cell>
-                      <DataTable.Cell>{item.combinedWeight}kg</DataTable.Cell>
-                      <DataTable.Cell>{item.cratesNumber}</DataTable.Cell>
-                      <DataTable.Cell>{item.optimalStorageTemperature}</DataTable.Cell>
-                    </DataTable.Row>
+                  {coolingUnitHasSensorIntegration ? (
+                    <Button
+                      tw="mt-4"
+                      mode="contained"
+                      onPress={async (evt) => {
+                        evt?.stopPropagation();
+                        await dismissHandler();
+                      }}
+                    >
+                      {t('actions.confirm')}
+                    </Button>
+                  ) : null}
+                </View>
+              ) : null}
+
+              <View tw="items-start w-full mt-3">
+                {!showCompleteInfo && latestTemperatureTimestamp ? (
+                  <Text variant="TitleSmall" tw="text-center">
+                    {t('Dashboard.TemperatureAlert.latestTemperature', {
+                      date: dateFmt(latestTemperatureTimestamp.toISOString(), 'dd-MM-yyyy HH:mm'),
+                    })}
+                  </Text>
+                ) : null}
+                {/** ADD LAST TEMPERATURE REGISTERED */}
+                <Text variant="TitleSmall" tw="text-center w-full">
+                  {t('Dashboard.TemperatureAlert.edit')}
+                </Text>
+                <Controller
+                  name="temperature"
+                  control={form.control}
+                  render={({ field: { onChange, value, onBlur } }) => (
+                    <TextInput
+                      label={t('Dashboard.TemperatureAlert.newTemperature')}
+                      mode="outlined"
+                      keyboardType="numeric"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      error={!!form.formState.errors.temperature}
+                      tw="w-full bg-transparent mt-2"
+                      dense
+                    />
                   )}
                 />
-              </DataTable>
-
-              {coolingUnitHasSensorIntegration ? (
+              </View>
+              <View tw="space-y-3 mt-5">
                 <Button
-                  tw="mt-4"
+                  mode="outlined"
+                  icon="check-circle-outline"
+                  disabled={!form.watch('temperature')}
+                  // eslint-disable-next-line
+                  onPress={form.handleSubmit(onSubmit as any)}
+                >
+                  {t('Dashboard.TemperatureAlert.confirm')}
+                </Button>
+                <Button
+                  tw={cn(showCompleteInfo && 'mb-4')}
                   mode="contained"
                   onPress={async (evt) => {
                     evt?.stopPropagation();
                     await dismissHandler();
                   }}
                 >
-                  {t('actions.confirm')}
+                  {t('Dashboard.TemperatureAlert.continueWithoutUpdate')}
                 </Button>
-              ) : null}
+              </View>
             </View>
-          ) : null}
-
-          <View tw="items-start w-full mt-3">
-            {!showCompleteInfo && latestTemperatureTimestamp && (
-              <Text variant="TitleSmall" tw="text-center">
-                {t('Dashboard.TemperatureAlert.latestTemperature', {
-                  date: dateFmt(latestTemperatureTimestamp.toISOString(), 'dd-MM-yyyy HH:mm'),
-                })}
-              </Text>
-            )}
-            {/** ADD LAST TEMPERATURE REGISTERED */}
-            <Text variant="TitleSmall" tw="text-center w-full">
-              {t('Dashboard.TemperatureAlert.edit')}
-            </Text>
-            <Controller
-              name="temperature"
-              control={form.control}
-              render={({ field: { onChange, value, onBlur } }) => (
-                <TextInput
-                  label={t('Dashboard.TemperatureAlert.newTemperature')}
-                  mode="outlined"
-                  keyboardType="numeric"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={!!form.formState.errors.temperature}
-                  tw="w-full bg-transparent mt-2"
-                  dense
-                />
-              )}
-            />
-          </View>
-          <View tw="space-y-3 mt-5">
-            <Button
-              mode="outlined"
-              icon="check-circle-outline"
-              disabled={!form.watch('temperature')}
-              // eslint-disable-next-line
-              onPress={form.handleSubmit(onSubmit as any)}
-            >
-              {t('Dashboard.TemperatureAlert.confirm')}
-            </Button>
-            <Button
-              tw="mb-6"
-              mode="contained"
-              onPress={async (evt) => {
-                evt?.stopPropagation();
-                await dismissHandler();
-              }}
-            >
-              {t('Dashboard.TemperatureAlert.continueWithoutUpdate')}
-            </Button>
-          </View>
-        </KeyboardAwareScrollView>
-      </Modal>
+          </ContextualView>
+        </Container>
+      </Dialog>
     </Portal>
   );
 }

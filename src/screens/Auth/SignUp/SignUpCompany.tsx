@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ActivityIndicator, Checkbox, Portal, Text, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Checkbox, Portal, Text, TextInput, Dialog } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import type { AuthRouteProps } from '#navigation/Auth';
@@ -15,7 +15,6 @@ import AuthService from '#services/AuthService';
 import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
-import { Modal } from '#ui/components/Modal';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
 
@@ -454,11 +453,15 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
 
       {/** USER WITHOUT PHONE MODAL */}
       <Portal>
-        <Modal visible={isPhoneModalOpen} onDismiss={closePhoneWarningModal}>
-          <View tw="bg-white rounded-3xl w-2/3 max-w-2/3 self-center space-y-2 items-center mx-16 bg-white py-1 max-h-80">
-            <Text tw="text-lg font-bold mb-1 mt-2">Warning</Text>
-            <Danger tw="max-h-16 mb-1" />
-            <Text tw="text-center mb-2">{t('Auth.SignUp.SignUpCompany.modal.warning')}</Text>
+        <Dialog
+          visible={isPhoneModalOpen}
+          onDismiss={closePhoneWarningModal}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Dialog.Icon icon={() => <Danger width={45} height={45} />} />
+          <Dialog.Title tw="text-center mt-0">Warning</Dialog.Title>
+          <Dialog.Content>
+            <Text tw="text-center mb-4">{t('Auth.SignUp.SignUpCompany.modal.warning')}</Text>
             {[
               t('Auth.SignUp.SignUpCompany.modal.reasons.1'),
               t('Auth.SignUp.SignUpCompany.modal.reasons.2'),
@@ -468,32 +471,34 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
                 <Text>{item}</Text>
               </View>
             ))}
-            <Button
-              tw="border-2 border-green-primary mt-4 mb-2"
-              mode="contained"
-              uppercase
-              onPress={handleSubmit(onSubmit)}
-              icon="close-circle-outline"
-              contentStyle="flex flex-row-reverse items-center"
-            >
-              {isSubmitting ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                t('Auth.SignUp.SignUpCompany.modal.buttons.continue')
-              )}
-            </Button>
-            <Button
-              tw="border-2 border-green-primary mb-2"
-              mode="contained"
-              uppercase
-              onPress={closePhoneWarningModal}
-              icon="phone"
-              contentStyle="flex flex-row-reverse items-center"
-            >
-              {t('Auth.SignUp.SignUpCompany.modal.buttons.addPhone')}
-            </Button>
-          </View>
-        </Modal>
+            <View tw="mt-5 space-y-2">
+              <Button
+                tw="border-2 border-green-primary"
+                mode="contained"
+                uppercase
+                onPress={handleSubmit(onSubmit)}
+                icon="close-circle-outline"
+                contentStyle="flex flex-row-reverse items-center"
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  t('Auth.SignUp.SignUpCompany.modal.buttons.continue')
+                )}
+              </Button>
+              <Button
+                tw="border-2 border-green-primary"
+                mode="contained"
+                uppercase
+                onPress={closePhoneWarningModal}
+                icon="phone"
+                contentStyle="flex flex-row-reverse items-center"
+              >
+                {t('Auth.SignUp.SignUpCompany.modal.buttons.addPhone')}
+              </Button>
+            </View>
+          </Dialog.Content>
+        </Dialog>
       </Portal>
     </KeyboardAwareScrollView>
   );

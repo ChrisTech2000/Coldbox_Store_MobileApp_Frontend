@@ -1,5 +1,11 @@
 import React, { type PropsWithChildren } from 'react';
-import { Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Platform } from 'react-native';
+import {
+  Modal,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Platform,
+  Keyboard,
+} from 'react-native';
 import { Modal as PaperModal } from 'react-native-paper';
 
 function _KeyboardAwareModalIOS(
@@ -14,7 +20,13 @@ function _KeyboardAwareModalIOS(
       statusBarTranslucent
       onRequestClose={onDismiss}
     >
-      <TouchableWithoutFeedback onPress={onDismiss}>
+      <TouchableWithoutFeedback
+        onPress={(evt) => {
+          evt.stopPropagation();
+          Keyboard.dismiss();
+          onDismiss();
+        }}
+      >
         <KeyboardAvoidingView
           tw="items-center justify-center flex-1 px-3 bg-zinc-900/40"
           behavior="padding"

@@ -1,25 +1,27 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { FlatList, Platform, View } from 'react-native';
+import { Dimensions, FlatList, Platform, View } from 'react-native';
 import { Divider, Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 import { RNModal } from '#ui/primitives/RNModal';
 
 import type { RecursiveKeyOf } from '#types/miscellaneous';
-import { useToggle } from '#ui/hooks/useToggle';
 import { useTranslationUtils } from '#i18n/utils';
+import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 
 import FormManager from '../contexts/FormManager';
 import DataAggregator from '../contexts/DataAggregator';
 import { PRICING_TYPE } from '../constants';
-import { useDebouncedCallback } from 'use-debounce';
 
 type LocalFormValues<T = string> = { search: string; pricing: Record<string, T> };
 type PreprocessedLocalFormValues = LocalFormValues<number>;
+
 const ROOT_PRICING_PATH: RecursiveKeyOf<LocalFormValues> = 'pricing';
+const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
 export default function CropSpecificPricing() {
   const { watch, setValue } = FormManager.useFormManager();
@@ -104,6 +106,7 @@ export default function CropSpecificPricing() {
             localForm.reset(_buildInitialValues());
             toggleVisibility();
           }}
+          style={{ backgroundColor: 'white', maxHeight: DIALOG_MAX_HEIGHT }}
         >
           <View
             tw={cn(
@@ -132,9 +135,10 @@ export default function CropSpecificPricing() {
             </View>
 
             <FlatList
+              scrollEnabled
+              nestedScrollEnabled
               showsVerticalScrollIndicator={false}
               data={datums}
-              nestedScrollEnabled
               keyExtractor={(item, itemIdx) => `crop-specific-${item.path}-field-#${itemIdx}`}
               renderItem={({ item }) => (
                 <Controller
@@ -154,7 +158,6 @@ export default function CropSpecificPricing() {
                 />
               )}
             />
-
             <View tw="flex-row items-center justify-end px-3">
               <Button
                 mode="text"

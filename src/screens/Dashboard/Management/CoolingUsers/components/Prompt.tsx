@@ -2,13 +2,12 @@ import { type NavigationProp } from '@react-navigation/native';
 import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
-import { Divider, List, Modal, Portal } from 'react-native-paper';
+import { Divider, List, Dialog, Portal } from 'react-native-paper';
 
 import { CoolingUsersModalOverlay } from '#screens/Dashboard/Tutorial/CoolingUserModalOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
-import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
 import { useUnmount } from '#ui/hooks/useUnmount';
 import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
@@ -48,15 +47,12 @@ export default function Prompt(props: Props) {
 
   return (
     <Portal>
-      <Modal visible={isVisible} onDismiss={toggleVisibility}>
-        <View
-          onLayout={onLayout}
-          tw="w-full bg-white rounded-3xl w-2/3 max-w-2/3 h-auto pt-6 pb-4 self-center space-y-2"
-        >
-          <Text variant="TitleRegular" tw="px-6">
+      <Dialog visible={isVisible} onDismiss={toggleVisibility} style={{ backgroundColor: 'white' }}>
+        <View tw="m-0 p-0" onLayout={onLayout}>
+          <Dialog.Title tw="mt-0 pt-0">
             {t('Dashboard.Management.CoolingUsers.modals.selectMethod')}
-          </Text>
-          <View tw="w-full py-1.5">
+          </Dialog.Title>
+          <Dialog.Content onLayout={onLayout}>
             <List.Item
               title={t('Dashboard.Management.CoolingUsers.modals.addWithDetails')}
               tw="px-2"
@@ -81,14 +77,12 @@ export default function Prompt(props: Props) {
               }}
             />
             <Divider />
-          </View>
-          <View tw="self-end px-6">
-            <Button mode="text" onPress={toggleVisibility}>
-              {t('actions.close')}
-            </Button>
-          </View>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={toggleVisibility}>{t('actions.close')}</Button>
+          </Dialog.Actions>
         </View>
-      </Modal>
+      </Dialog>
     </Portal>
   );
 }

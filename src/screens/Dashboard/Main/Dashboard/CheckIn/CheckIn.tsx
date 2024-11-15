@@ -5,7 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
-import { Divider, Icon, List, Portal } from 'react-native-paper';
+import { Dialog, Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -25,7 +25,6 @@ import { ECoolingUnitMetric, EDateCropped, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
-import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
@@ -450,13 +449,14 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       </View>
 
       <Portal>
-        <Modal
+        <Dialog
           visible={indexForActiveOptions !== -1}
           onDismiss={() => setIndexForActiveOptions(-1)}
+          style={{ backgroundColor: 'white' }}
         >
-          <View tw="bg-white rounded-3xl h-auto space-y-2 mx-20 px-3 py-4">
+          <Dialog.Content tw="px-0">
             <TouchableOpacity
-              tw="space-x-1 w-full mb-2 flex flex-row items-center"
+              tw="space-x-3 w-full py-2.5 px-6 flex flex-row items-center"
               onPress={(evt) => {
                 evt.stopPropagation();
                 const contextualProduce = produces.at(indexForActiveOptions);
@@ -470,11 +470,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                 {t('actions.edit')}
               </Text>
             </TouchableOpacity>
-
-            <Divider tw="w-full bg-gray-400" />
-
+            <Divider tw="bg-zinc-400" />
             <TouchableOpacity
-              tw="space-x-1 w-full pt-2 flex flex-row items-center"
+              tw="space-x-3 w-full py-2.5 px-6 flex flex-row items-center"
               onPress={() => {
                 removeProduce(produces[indexForActiveOptions]);
                 setIndexForActiveOptions(-1);
@@ -485,8 +483,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                 {t('actions.delete')}
               </Text>
             </TouchableOpacity>
-          </View>
-        </Modal>
+          </Dialog.Content>
+        </Dialog>
       </Portal>
     </View>
   );

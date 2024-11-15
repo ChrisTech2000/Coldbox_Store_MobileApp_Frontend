@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { Modal, Portal, TextInput } from 'react-native-paper';
+import { Dialog, Portal, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -74,46 +74,43 @@ export default function TemperatureModal(props: Props) {
       ) : null}
 
       <Portal>
-        <Modal visible={isModalOpen} onDismiss={toggleModalVisibility}>
-          <View tw="items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-5">
-            <View tw="items-start w-full">
-              <Text variant="TitleSmall">
-                {t('Dashboard.CoolingUnitsRoomConditions.enterTemperature')}
-              </Text>
-              <Controller
-                name="temperature"
-                control={form.control}
-                render={({ field: { onChange, value, onBlur } }) => (
-                  <TextInput
-                    label={t('Dashboard.TemperatureAlert.temperature')}
-                    mode="flat"
-                    keyboardType="numeric"
-                    value={value}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    error={!!form.formState.errors.temperature}
-                    left={<TextInput.Icon icon="thermometer" />}
-                    right={<TextInput.Affix text={`${props.temp}°C`} />}
-                    tw="w-full bg-transparent mt-2"
-                    dense
-                  />
-                )}
-              />
-            </View>
-
-            <View tw="self-center w-full">
-              <Button
-                mode="contained"
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onPress={form.handleSubmit(onSubmit as any)}
-                icon={form.formState.isSubmitting ? undefined : 'check-circle-outline'}
-                disabled={form.formState.isSubmitting}
-              >
-                {t('actions.confirm')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+        <Dialog
+          visible={isModalOpen}
+          onDismiss={toggleModalVisibility}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Dialog.Title>{t('Dashboard.CoolingUnitsRoomConditions.enterTemperature')}</Dialog.Title>
+          <Dialog.Content>
+            <Controller
+              name="temperature"
+              control={form.control}
+              render={({ field: { onChange, value, onBlur } }) => (
+                <TextInput
+                  label={t('Dashboard.TemperatureAlert.temperature')}
+                  mode="flat"
+                  keyboardType="numeric"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={!!form.formState.errors.temperature}
+                  left={<TextInput.Icon icon="thermometer" />}
+                  right={<TextInput.Affix text={`${props.temp}°C`} />}
+                  tw="w-full bg-transparent mt-2"
+                  dense
+                />
+              )}
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              onPress={form.handleSubmit(onSubmit as any)}
+              disabled={form.formState.isSubmitting}
+            >
+              {t('actions.confirm')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </View>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { type NavigationProp } from '@react-navigation/native';
 import { Portal, TextInput } from 'react-native-paper';
+
 import { Controller, useForm } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';

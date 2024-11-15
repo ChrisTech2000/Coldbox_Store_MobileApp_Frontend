@@ -1,7 +1,7 @@
 import React from 'react';
-import { Dimensions, View, type GestureResponderEvent } from 'react-native';
+import { Dimensions, type GestureResponderEvent } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { ActivityIndicator, Modal, Portal } from 'react-native-paper';
+import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
@@ -110,24 +110,26 @@ export default function DeleteAction(props: Props) {
       </Button>
 
       <Portal>
-        <Modal visible={isModalVisible} onDismiss={toggleModalVisibility}>
-          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
-            <View tw="items-center space-y-3">
-              <Icon name="warning" size={40} color={paperTheme.colors.error} />
-              <Text variant="TitleSmall">
-                {t('Dashboard.Management.EditCoolingUnit.modal.askDelete')}
-              </Text>
-            </View>
-            <View tw="flex-row self-end space-x-2">
-              <Button mode="text" onPress={toggleModalVisibility}>
-                {t('actions.cancel')}
-              </Button>
-              <Button mode="text" onPress={onConfirm}>
-                {t('actions.confirm')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+        <Dialog
+          visible={isModalVisible}
+          onDismiss={toggleModalVisibility}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Dialog.Icon
+            icon={() => <Icon name="warning" size={50} color={paperTheme.colors.error} />}
+          />
+          <Dialog.Content tw="mt-2.5">
+            <Text tw="text-base">{t('Dashboard.Management.EditCoolingUnit.modal.askDelete')}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button mode="text" onPress={toggleModalVisibility}>
+              {t('actions.cancel')}
+            </Button>
+            <Button mode="text" onPress={onConfirm}>
+              {t('actions.confirm')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </React.Fragment>
   );
