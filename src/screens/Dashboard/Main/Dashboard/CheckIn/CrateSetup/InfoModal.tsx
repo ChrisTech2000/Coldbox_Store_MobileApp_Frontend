@@ -1,10 +1,8 @@
 import React from 'react';
-import { Button, Portal } from 'react-native-paper';
-import { View } from 'react-native';
+import { Button, Dialog, Portal } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
 
-import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 
 type InfoModalProps = {
@@ -17,14 +15,16 @@ export function InfoModal({ visible, onDismiss }: InfoModalProps) {
 
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss}>
-        <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto pt-6 pb-4 px-5 self-center space-y-2">
-          <Text tw="text-base mb-4">
+      <Dialog visible={visible} onDismiss={onDismiss} style={{ backgroundColor: 'white' }}>
+        <Dialog.Content>
+          <Text tw="text-base">
             {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.info')}
           </Text>
+        </Dialog.Content>
+        <Dialog.Actions>
           <Button onPress={onDismiss}>{t('actions.close')}</Button>
-        </View>
-      </Modal>
+        </Dialog.Actions>
+      </Dialog>
     </Portal>
   );
 }

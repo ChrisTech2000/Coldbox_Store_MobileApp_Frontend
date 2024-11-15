@@ -153,11 +153,11 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   }, [company]);
 
   const totalPrice = useMemo(() => {
-    const price = coolingUnit?.commonPricingType.value ?? 0;
+    const price = coolingUnit?.commonPricingType?.value ?? 0;
     const multiplier =
-      coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY ? (plannedDays ?? 0) : 1;
+      coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY ? (plannedDays ?? 0) : 1;
 
-    if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+    if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
       if (!crates) return '0.00';
       const dailyPrice = crates?.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
       return (dailyPrice * multiplier).toFixed(2);
@@ -167,10 +167,10 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   }, [crates, coolingUnit, plannedDays]);
 
   const dailyPriceLabel = useMemo(() => {
-    if (coolingUnit?.commonPricingType.type === EPricingType.FIXED) {
+    if (coolingUnit?.commonPricingType?.type === EPricingType.FIXED) {
       return t('Dashboard.CrateManagement.CheckIn.Setup.fixedPriceLabel');
     }
-    if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+    if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
       return t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayAndKilogramLabel');
     }
     return t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayAndCrateLabel');
@@ -375,7 +375,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         <FloatingFooter
           dailyPriceLabel={dailyPriceLabel}
           currencySymbol={currencySymbol}
-          commonPrice={(coolingUnit?.commonPricingType.value ?? 0).toFixed(2)}
+          commonPrice={(coolingUnit?.commonPricingType?.value ?? 0).toFixed(2)}
           totalPrice={totalPrice}
           cancelFunc={(evt) => {
             evt.stopPropagation();

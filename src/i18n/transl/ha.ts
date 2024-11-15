@@ -1398,6 +1398,8 @@ export default {
       openDrawer:
         'On the top left, you find a menu with the main functionalities. Go ahead and click it.', // TODO
       repeatTutorial: 'Idan kuna son sake kallon wannan koyawa, kuna iya samunsa a cikin menu.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       managementNavigation:
         'A cikin menu, zaku iya kewayawa zuwa shafin "Management" kuma a can za ku ƙara sabbin Wurare, Rukunin sanyaya, Ma\'aikata masu rijista da Ma\'aikata.',
       addCoolingUser:

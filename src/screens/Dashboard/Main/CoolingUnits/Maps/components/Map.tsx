@@ -40,7 +40,7 @@ function _Root(
   const [isReady, setIsReady] = useState<boolean>(false);
 
   useEffect(() => {
-    Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN).then((value) => {
+    Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN as string).then((value) => {
       if (!value) return;
       setIsReady(true);
     });

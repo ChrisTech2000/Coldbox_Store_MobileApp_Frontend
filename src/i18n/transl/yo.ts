@@ -1375,6 +1375,8 @@ export default {
       repeatTutorial: 'Ti o ba fẹ wo ikẹkọ yii lẹẹkansi, o tun le rii ninu akojọ aṣayan.',
       managementNavigation:
         'Ninu akojọ aṣayan, o le lilö kiri si taabu “Iṣakoso” ati pe o ṣafikun Awọn ipo tuntun, Awọn ẹya Itutu agbaiye, Awọn oṣiṣẹ ti o forukọsilẹ ati Awọn oniṣẹ.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'Awọn olumulo itutu ti ko forukọsilẹ lori Coldtivate ni a le ṣafikun nipasẹ fifi awọn alaye wọn sii (orukọ, nọmba foonu). Awọn olumulo itutu ti o forukọsilẹ tẹlẹ ninu ohun elo naa le ṣafikun nipasẹ koodu. Wọn le wa koodu wọn lori profaili wọn -> "Awọn alaye akọọlẹ" -> "Koodu agbewọle Olumulo Itutu".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO

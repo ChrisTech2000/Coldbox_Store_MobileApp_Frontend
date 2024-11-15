@@ -1,9 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ActivityIndicator, Divider, Portal } from 'react-native-paper';
+import { ActivityIndicator, Dialog, Divider, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
-import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
@@ -42,49 +41,39 @@ export function BankTransferModal(props: BankTransferModalProps) {
 
   return (
     <Portal>
-      <Modal visible={isOpen} onDismiss={closeModal}>
-        <View tw="bg-white rounded-3xl h-auto w-[90%] self-center space-y-2 items-center py-2">
-          <Text tw="text-lg font-bold mb-1 mt-2">
-            {t('Dashboard.CrateManagement.CheckOut.bankTransfer.title')}
-          </Text>
-          <Divider tw="w-full bg-gray-400 my-2" />
-
-          <View tw="w-[90%] flex flex-row justify-between">
+      <Dialog visible={isOpen} onDismiss={closeModal} style={{ backgroundColor: 'white' }}>
+        <Dialog.Title>{t('Dashboard.CrateManagement.CheckOut.bankTransfer.title')}</Dialog.Title>
+        <Dialog.Content>
+          <View tw="flex flex-row justify-between">
             <Text tw="text-base">
               {t('Dashboard.CrateManagement.CheckOut.bankTransfer.accountName')}
             </Text>
             <Text tw="text-base">{data?.[0]?.company.bankDetails?.accountName ?? ''}</Text>
           </View>
-          <Divider tw="w-[90%] bg-gray-400 my-2" />
+          <Divider tw="bg-gray-400 my-2" />
 
-          <View tw="w-[90%] flex flex-row justify-between">
+          <View tw="flex flex-row justify-between">
             <Text tw="text-base">
               {t('Dashboard.CrateManagement.CheckOut.bankTransfer.accountNumber')}
             </Text>
             <Text tw="text-base">{data?.[0]?.company.bankDetails?.accountNumber ?? ''}</Text>
           </View>
-          <Divider tw="w-[90%] bg-gray-400 my-2" />
+          <Divider tw="bg-gray-400 my-2" />
 
-          <View tw="w-[90%] flex flex-row justify-between">
+          <View tw="flex flex-row justify-between">
             <Text tw="text-base">
               {t('Dashboard.CrateManagement.CheckOut.bankTransfer.bankName')}
             </Text>
             <Text tw="text-base">{data?.[0]?.company.bankDetails?.bankName ?? ''}</Text>
           </View>
-          <Divider tw="w-[90%] bg-gray-400 my-2" />
-
-          <Button
-            mode="contained"
-            tw="my-3"
-            uppercase
-            contentStyle="flex flex-row-reverse items-center"
-            icon="check-circle-outline"
-            onPress={closeModal}
-          >
+          <Divider tw="bg-gray-400 my-2" />
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button uppercase onPress={closeModal}>
             {t('actions.close')}
           </Button>
-        </View>
-      </Modal>
+        </Dialog.Actions>
+      </Dialog>
     </Portal>
   );
 }

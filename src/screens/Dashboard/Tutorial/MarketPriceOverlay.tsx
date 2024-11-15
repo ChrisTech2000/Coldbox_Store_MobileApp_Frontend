@@ -12,7 +12,7 @@ import { Text } from '#ui/components/Text';
 
 import { ECommonTutorialSteps } from './utils/constants';
 
-export function MarketPriceOverlay({ goTo, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function MarketPriceOverlay({ goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -30,7 +30,7 @@ export function MarketPriceOverlay({ goTo, stop, step: { onPressMask } }: IOverl
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.marketPrice')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.marketPrice')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -47,7 +47,7 @@ export function MarketPriceOverlay({ goTo, stop, step: { onPressMask } }: IOverl
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              rootNavigation.navigate('Dashboard');
               goTo(ECommonTutorialSteps.FINAL_STEP);
             }}
             tw="bg-green-primary border-green-primary"

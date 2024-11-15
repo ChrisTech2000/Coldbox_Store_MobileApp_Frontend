@@ -201,8 +201,13 @@ export default function ManagementStack() {
       <Stack.Screen name="RegisteredEmployeeDetails" component={RegisteredEmployeeDetails} />
       <Stack.Screen name="MarketSurveyStack" component={MarketSurveyStack} />
       <Stack.Screen name="CouponStack" component={CouponsSettingsStack} />
-      <Stack.Screen name="PayoutSettings" component={PayoutSettings} />
       <Stack.Screen name="DeliveryContacts" component={DeliveryContacts} />
+      <Stack.Screen
+        name="PayoutSettings"
+        // eslint-disable-next-line
+        // @ts-ignore
+        component={PayoutSettings}
+      />
     </Stack.Navigator>
   );
 }
@@ -214,7 +219,6 @@ function _rightContentFactory(
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.ADD_COOLING_USER_NAVIGATION_STEP,
     OverlayComponent: AddCoolingUserNavigationOverLay,
-    onPressMask: () => emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true),
   });
 
   switch (routeName) {

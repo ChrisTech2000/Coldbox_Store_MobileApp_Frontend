@@ -6,7 +6,7 @@ import { Divider, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
-import { Modal } from '#ui/components/Modal';
+import { RNModal } from '#ui/primitives/RNModal';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 
@@ -82,13 +82,14 @@ export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }:
 
   return (
     <Portal>
-      <Modal visible={isOpen} onDismiss={dismissModal}>
-        <View tw="bg-white rounded-3xl max-h-[90%] w-[90%] self-center space-y-2 items-center py-1">
-          <Text tw="text-lg font-bold mb-1 mt-2">{title}</Text>
-          <Divider tw="w-full bg-gray-400 my-2" />
+      <RNModal visible={isOpen} onDismiss={dismissModal}>
+        <View tw="w-full bg-white rounded-3xl w-11/12 max-w-11/12 h-auto py-4 self-center space-y-2">
+          <Text tw="text-lg px-6 py-2">{title}</Text>
+          <Divider tw="bg-zinc-400 w-full" />
 
-          <ScrollView tw="w-full h-[60%]" showsVerticalScrollIndicator={false}>
+          <ScrollView tw="w-full max-h-56 px-4" showsVerticalScrollIndicator>
             <FlashList
+              scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               data={modalCrates}
               extraData={crates}
@@ -121,7 +122,7 @@ export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }:
             />
           </ScrollView>
 
-          <View tw="w-full px-3 mt-4 mb-2">
+          <View tw="w-full px-6 mb-1.5 space-y-1.5">
             <Text variant="TextMedium" tw="text-base my-1">
               {t('Dashboard.CrateManagement.CheckIn.Setup.modals.selectInitialId')}
             </Text>
@@ -138,18 +139,19 @@ export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }:
             </View>
           </View>
 
-          <Button
-            mode="contained"
-            tw="my-3"
-            uppercase
-            contentStyle="flex flex-row-reverse items-center"
-            icon="check-circle-outline"
-            onPress={saveChanges}
-          >
-            {t('actions.save-changes')}
-          </Button>
+          <View tw="px-6">
+            <Button
+              mode="contained"
+              uppercase
+              contentStyle="flex flex-row-reverse items-center"
+              icon="check-circle-outline"
+              onPress={saveChanges}
+            >
+              {t('actions.save-changes')}
+            </Button>
+          </View>
         </View>
-      </Modal>
+      </RNModal>
     </Portal>
   );
 }

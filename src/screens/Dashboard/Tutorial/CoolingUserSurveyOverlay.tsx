@@ -1,7 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 
@@ -15,7 +15,7 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponentProps) {
+export function CoolingUserSurveyOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -26,7 +26,13 @@ export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponent
         <View
           tw={cn(
             'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-64' : 'top-72'
+            screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? Platform.OS === 'ios'
+                ? 'top-64'
+                : 'top-60'
+              : Platform.OS === 'ios'
+                ? 'top-72'
+                : 'top-64'
           )}
         >
           <List.Item
@@ -68,7 +74,8 @@ export function CoolingUserSurveyOverlay({ next, step, stop }: IOverlayComponent
             <Button
               mode="text"
               onPress={() => {
-                step.onPressMask?.();
+                rootNavigation.goBack();
+                rootNavigation.dispatch(DrawerActions.openDrawer());
                 next();
               }}
               tw="bg-green-primary border-green-primary"

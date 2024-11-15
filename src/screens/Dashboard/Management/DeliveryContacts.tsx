@@ -3,7 +3,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { ActivityIndicator, Divider, Modal, Portal, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Dialog, Divider, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import validator from 'validator';
 
@@ -56,70 +56,74 @@ function DeliveryContacts() {
   }
 
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle="h-full justify-between p-3"
-      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-      showsVerticalScrollIndicator={false}
-    >
-      {!data?.length ? (
-        <View tw="items-center space-y-3.5 mt-[50%]">
-          <View tw="h-36 w-36 items-center justify-center rounded-full bg-zinc-100">
-            <Icon name="phone-outline" size={60} color={paperTheme.colors.primary} />
-          </View>
-          <Text tw="text-base">{t('Dashboard.Management.Delivery.emptyMessage')}</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={data}
-          keyExtractor={(item, index) => `contact-${item.contactName}-${index}`}
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View tw="w-full px-5 py-3 space-y-3 border border-solid border-zinc-300 rounded-2xl my-2">
-              <View>
-                <View tw="flex flex-row items-center justify-between mb-2">
-                  <Text tw="text-base">{t('Dashboard.Management.Delivery.companyName')}</Text>
-                  <Text tw="text-base text-gray-500">{item.deliveryCompanyName}</Text>
-                </View>
-                <Divider tw="bg-gray-400" />
+    <React.Fragment>
+      <KeyboardAwareScrollView
+        tw="px-3 pt-3 bg-white"
+        keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+        showsVerticalScrollIndicator={false}
+      >
+        <View tw="flex-1 pb-8">
+          {!data?.length ? (
+            <View tw="items-center space-y-3.5 mt-[50%]">
+              <View tw="h-36 w-36 items-center justify-center rounded-full bg-zinc-100">
+                <Icon name="phone-outline" size={60} color={paperTheme.colors.primary} />
               </View>
-
-              <View>
-                <View tw="flex flex-row items-center justify-between mb-2">
-                  <Text tw="text-base">{t('Dashboard.Management.Delivery.contactName')}</Text>
-                  <Text tw="text-base text-gray-500">{item.contactName}</Text>
-                </View>
-                <Divider tw="bg-gray-400" />
-              </View>
-
-              <View>
-                <View tw="flex flex-row items-center justify-between mb-2">
-                  <Text tw="text-base">{t('Dashboard.Management.Delivery.phoneNumber')}</Text>
-                  <Text tw="text-base text-gray-500">{item.phone}</Text>
-                </View>
-                <Divider tw="bg-gray-400" />
-              </View>
-
-              <View tw="flex flex-row justify-end">
-                <Button
-                  labelStyle="text-red-700"
-                  mode="text"
-                  onPress={() => setContactToDelete(item.id)}
-                  uppercase
-                  icon="trash-can-outline"
-                  contentStyle="flex flex-row-reverse items-center"
-                >
-                  {t('actions.delete')}
-                </Button>
-              </View>
+              <Text tw="text-base">{t('Dashboard.Management.Delivery.emptyMessage')}</Text>
             </View>
-          )}
-        />
-      )}
+          ) : (
+            <FlatList
+              data={data}
+              keyExtractor={(item, index) => `contact-${item.contactName}-${index}`}
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <View tw="w-full px-5 py-3 space-y-3 border border-solid border-zinc-300 rounded-2xl my-2">
+                  <View>
+                    <View tw="flex flex-row items-center justify-between mb-2">
+                      <Text tw="text-base">{t('Dashboard.Management.Delivery.companyName')}</Text>
+                      <Text tw="text-base text-gray-500">{item.deliveryCompanyName}</Text>
+                    </View>
+                    <Divider tw="bg-gray-400" />
+                  </View>
 
-      <View tw="flex flex-row items-end justify-evenly">
+                  <View>
+                    <View tw="flex flex-row items-center justify-between mb-2">
+                      <Text tw="text-base">{t('Dashboard.Management.Delivery.contactName')}</Text>
+                      <Text tw="text-base text-gray-500">{item.contactName}</Text>
+                    </View>
+                    <Divider tw="bg-gray-400" />
+                  </View>
+
+                  <View>
+                    <View tw="flex flex-row items-center justify-between mb-2">
+                      <Text tw="text-base">{t('Dashboard.Management.Delivery.phoneNumber')}</Text>
+                      <Text tw="text-base text-gray-500">{item.phone}</Text>
+                    </View>
+                    <Divider tw="bg-gray-400" />
+                  </View>
+
+                  <View tw="flex flex-row justify-end">
+                    <Button
+                      labelStyle="text-red-700"
+                      mode="text"
+                      onPress={() => setContactToDelete(item.id)}
+                      uppercase
+                      icon="trash-can-outline"
+                      contentStyle="flex flex-row-reverse items-center"
+                    >
+                      {t('actions.delete')}
+                    </Button>
+                  </View>
+                </View>
+              )}
+            />
+          )}
+        </View>
+      </KeyboardAwareScrollView>
+
+      <View tw="w-full bottom-0 left-0 py-3.5 px-4 flex-row items-center justify-evenly bg-zinc-50 border-t border-solid border-zinc-400">
         <Button
-          tw="w-[48%]"
+          tw="w-full"
           mode="contained"
           onPress={() => emitter.emit('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', null)}
           icon="plus-circle-outline"
@@ -132,43 +136,41 @@ function DeliveryContacts() {
       <BottomSheet />
 
       <Portal>
-        <Modal visible={!!contactToDelete} onDismiss={() => setContactToDelete(null)}>
-          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
-            <View tw="items-start space-y-4 my-2.5">
-              <Text variant="TitleMedium">
-                {t('Dashboard.Management.Delivery.deleteContactMessage')}
-              </Text>
-            </View>
-            <View tw="flex-row self-end space-x-2">
-              <Button
-                mode="text"
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  setContactToDelete(null);
-                }}
-              >
-                {t('actions.cancel')}
-              </Button>
-              <Button
-                mode="text"
-                textColor={paperTheme.colors.error}
-                onPress={async (evt) => {
-                  evt.stopPropagation();
-                  await MarketplaceService.deleteDeliveryContactId({
-                    contactId: contactToDelete as number,
-                    companyId: company!.id,
-                  });
-                  refetch();
-                  setContactToDelete(null);
-                }}
-              >
-                {t('actions.confirm')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+        <Dialog
+          visible={!!contactToDelete}
+          onDismiss={() => setContactToDelete(null)}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Dialog.Content>
+            <Text tw="text-base">{t('Dashboard.Management.Delivery.deleteContactMessage')}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              onPress={(evt) => {
+                evt.stopPropagation();
+                setContactToDelete(null);
+              }}
+            >
+              {t('actions.cancel')}
+            </Button>
+            <Button
+              textColor={paperTheme.colors.error}
+              onPress={async (evt) => {
+                evt.stopPropagation();
+                await MarketplaceService.deleteDeliveryContactId({
+                  contactId: contactToDelete as number,
+                  companyId: company!.id,
+                });
+                refetch();
+                setContactToDelete(null);
+              }}
+            >
+              {t('actions.confirm')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
-    </KeyboardAwareScrollView>
+    </React.Fragment>
   );
 }
 

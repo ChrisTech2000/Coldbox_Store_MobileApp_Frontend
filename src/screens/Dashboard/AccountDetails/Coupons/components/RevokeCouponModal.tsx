@@ -1,6 +1,5 @@
 import React, { type SetStateAction } from 'react';
-import { View } from 'react-native';
-import { Modal, Portal } from 'react-native-paper';
+import { Dialog, Portal } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
@@ -20,36 +19,36 @@ export default function RevokeCouponModal(props: {
 
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={() => onChangeVisible(false)}>
-        <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-4 px-5 self-center space-y-2">
-          <View tw="items-start space-y-4 my-2.5">
-            <Text variant="TitleMedium">{t('Dashboard.Management.Coupons.revokeTitle')}</Text>
-            <Text>{t('Dashboard.Management.Coupons.revokeMessage')}</Text>
-          </View>
-          <View tw="flex-row self-end space-x-2">
-            <Button
-              mode="text"
-              onPress={(evt) => {
-                evt.stopPropagation();
-                onChangeVisible(false);
-              }}
-            >
-              {t('actions.cancel')}
-            </Button>
-            <Button
-              mode="text"
-              textColor={paperTheme.colors.error}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                props.onConfirm?.();
-                onChangeVisible(false);
-              }}
-            >
-              {t('actions.confirm')}
-            </Button>
-          </View>
-        </View>
-      </Modal>
+      <Dialog
+        visible={visible}
+        onDismiss={() => onChangeVisible(false)}
+        style={{ backgroundColor: 'white' }}
+      >
+        <Dialog.Title>{t('Dashboard.Management.Coupons.revokeTitle')}</Dialog.Title>
+        <Dialog.Content>
+          <Text>{t('Dashboard.Management.Coupons.revokeMessage')}</Text>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button
+            onPress={(evt) => {
+              evt.stopPropagation();
+              onChangeVisible(false);
+            }}
+          >
+            {t('actions.cancel')}
+          </Button>
+          <Button
+            textColor={paperTheme.colors.error}
+            onPress={(evt) => {
+              evt.stopPropagation();
+              props.onConfirm?.();
+              onChangeVisible(false);
+            }}
+          >
+            {t('actions.confirm')}
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
     </Portal>
   );
 }

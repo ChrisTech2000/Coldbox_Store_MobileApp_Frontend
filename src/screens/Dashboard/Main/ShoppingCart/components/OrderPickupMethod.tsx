@@ -2,12 +2,11 @@ import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { ActivityIndicator, Divider, Icon, Portal, RadioButton } from 'react-native-paper';
+import { ActivityIndicator, Dialog, Divider, Icon, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialIcons';
 import { addDays } from 'date-fns';
 
 import { Button } from '#ui/components/Button';
-import { Modal } from '#ui/components/Modal';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
@@ -167,13 +166,13 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
                     <Divider tw="bg-zinc-400" />
                     <RadioButtonItem
                       label={t(
-                        coolingUnit.commonPricingType.type === EPricingType.PERIODICITY
+                        coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY
                           ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
                           : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                         {
                           price: CurrencyStandardization.currencyCode({
                             code: 'NGN', // TODO: get value from somewhere
-                            value: coolingUnit.commonPricingType.value,
+                            value: coolingUnit.commonPricingType?.value,
                           }).getValueFormated(),
                         }
                       )}
@@ -256,11 +255,14 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
 
   return (
     <Portal>
-      <Modal visible={isVisible} onDismiss={close}>
-        <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto py-6 px-5 self-center">
-          <MaterialCommunityIcon name="location-on" size={45} color={colors.green.primary} />
-
-          <Text tw="text-base text-center mt-4 mb-6">
+      <Dialog visible={isVisible} onDismiss={close} style={{ backgroundColor: 'white' }}>
+        <Dialog.Icon
+          icon={() => (
+            <MaterialCommunityIcon name="location-on" size={45} color={colors.green.primary} />
+          )}
+        />
+        <Dialog.Content>
+          <Text tw="text-base text-center mt-4">
             {t(`Dashboard.ShoppingCart.pickupModal.${version}`, {
               company: company.name,
               location: data.city,
@@ -276,12 +278,11 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
                   : '', // TODO: I'm using the lowest TTPU here, but this needs to be confirmed
             })}
           </Text>
-
-          <Button mode="outlined" tw="border border-green-primary" onPress={close}>
+          <Button mode="outlined" tw="border border-green-primary mt-6" onPress={close}>
             {t('Dashboard.ShoppingCart.gotItButton')}
           </Button>
-        </View>
-      </Modal>
+        </Dialog.Content>
+      </Dialog>
     </Portal>
   );
 }

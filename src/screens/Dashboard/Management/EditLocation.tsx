@@ -1,13 +1,12 @@
 import React, { useRef } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Dimensions, View } from 'react-native';
-import { ActivityIndicator, Portal } from 'react-native-paper';
+import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import merge from 'lodash/merge';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { Modal } from '#ui/components/Modal';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
@@ -194,20 +193,23 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
           </KeyboardAwareScrollView>
         )}
       </FormManager>
+
       <Portal>
-        <Modal visible={isModalVisible} onDismiss={toggleModalVisibility}>
-          <View tw="w-full items-center bg-white rounded-3xl w-3/4 max-w-3/4 h-auto p-8 self-center space-y-6">
-            <Text variant="TitleSmall">{t('Dashboard.Management.Location.modal.message')}</Text>
-            <View tw="flex-row self-end space-x-2">
-              <Button mode="text" onPress={toggleModalVisibility}>
-                {t('actions.cancel')}
-              </Button>
-              <Button mode="text" onPress={onDelete}>
-                {t('actions.ok')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+        <Dialog
+          visible={isModalVisible}
+          onDismiss={toggleModalVisibility}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Dialog.Content>
+            <Text tw="text-base">{t('Dashboard.Management.Location.modal.message')}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={toggleModalVisibility}>{t('actions.cancel')}</Button>
+            <Button textColor={paperTheme.colors.error} onPress={onDelete}>
+              {t('actions.ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </React.Fragment>
   );

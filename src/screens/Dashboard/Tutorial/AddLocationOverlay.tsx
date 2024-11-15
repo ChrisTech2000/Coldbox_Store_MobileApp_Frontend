@@ -14,7 +14,7 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function AddLocationOverlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function AddLocationOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -35,7 +35,7 @@ export function AddLocationOverlay({ next, stop, step: { onPressMask } }: IOverl
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.locations')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.locations')}</Text>
 
         <View tw="flex flex-row space-x-2 items-center justify-center mt-4">
           <Button
@@ -52,7 +52,7 @@ export function AddLocationOverlay({ next, stop, step: { onPressMask } }: IOverl
           <Button
             mode="contained"
             onPress={() => {
-              onPressMask?.();
+              rootNavigation.goBack();
               next();
             }}
             labelStyle="text-white"

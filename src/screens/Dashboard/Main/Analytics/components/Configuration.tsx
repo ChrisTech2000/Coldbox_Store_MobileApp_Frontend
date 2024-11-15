@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Divider, Portal } from 'react-native-paper';
+import { Dialog, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import {
   createDataRangeStore,
   DateRangePickerWithStore,
 } from '#ui/components/DateRangePickerWithStore';
-import { Modal } from '#ui/components/Modal';
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
 } from '#ui/components/MultipleSelectWithStore';
@@ -46,14 +45,10 @@ export function ConfigurationModal({
 
   return (
     <Portal>
-      <Modal visible={isOpen} onDismiss={dismiss}>
-        <View tw="bg-white mx-10 p-2 rounded-3xl h-auto space-y-4">
-          <Text variant="TextMedium" tw="text-base mt-2 px-2">
-            {t('Dashboard.Management.UsageAnalysis.modal.title')}
-          </Text>
-          <Divider tw="w-full" />
-
-          <View tw="px-2">
+      <Dialog visible={isOpen} onDismiss={dismiss} style={{ backgroundColor: 'white' }}>
+        <Dialog.Title>{t('Dashboard.Management.UsageAnalysis.modal.title')}</Dialog.Title>
+        <Dialog.Content tw="space-y-3">
+          <View>
             <DateRangePickerWithStore
               useDateRangeStore={useAnalyticsDateRangeStore}
               variant="contained"
@@ -62,8 +57,7 @@ export function ConfigurationModal({
               showSelectionTitle
             />
           </View>
-
-          <View tw="w-[98%]">
+          <View>
             <Text variant="TextMedium" tw="text-base mt-2 px-2">
               {t('Dashboard.Management.UsageAnalysis.modal.coolingUnitSelection')}
             </Text>
@@ -90,7 +84,7 @@ export function ConfigurationModal({
             uppercase
             icon="check-circle-outline"
             contentStyle="flex flex-row-reverse"
-            tw="w-[90%] self-center"
+            tw="w-full"
             onPress={() => {
               if (startDate && endDate && selectedUnits.length) {
                 confirm({
@@ -104,8 +98,8 @@ export function ConfigurationModal({
           >
             {t('actions.done')}
           </Button>
-        </View>
-      </Modal>
+        </Dialog.Content>
+      </Dialog>
     </Portal>
   );
 }

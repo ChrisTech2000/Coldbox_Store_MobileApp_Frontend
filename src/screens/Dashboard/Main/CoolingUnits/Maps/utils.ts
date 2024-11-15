@@ -63,11 +63,11 @@ export function processLocationMarkers(args: {
       );
       const priceMetric = t([
         'Dashboard.Management.AddCoolingUnit.metricUnit',
-        unit.commonPricingType.metric,
+        unit.commonPricingType?.metric,
       ]);
       const priceType = t([
         'Dashboard.Management.AddCoolingUnit.pricing',
-        unit.commonPricingType.type,
+        unit.commonPricingType?.type,
       ]);
 
       const commodity =
@@ -82,7 +82,7 @@ export function processLocationMarkers(args: {
         name: unit.name,
         commodity,
         remainingCapacity: remainingCapacity < 0 ? 0 : remainingCapacity,
-        price: `${unit.commonPricingType.value} ${location.company.currency} / ${priceMetric} / ${priceType}`,
+        price: `${unit.commonPricingType?.value} ${location.company.currency} / ${priceMetric} / ${priceType}`,
       });
       markersMap.set(location.id, marker);
     }

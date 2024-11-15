@@ -1381,6 +1381,8 @@ export default {
       repeatTutorial: 'Ọ bụrụ na ịchọrọ ikiri nkuzi a ọzọ, ị nwekwara ike ịhụ ya na menu.',
       managementNavigation:
         'N\'ime menu, ị nwere ike ịnyagharịa na taabụ "Management" wee tinye ebe ọhụrụ, nkeji oyi, ndị ọrụ edebanyere aha na ndị ọrụ.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi na-edebeghị aha na Coldtivate site na itinye nkọwa ha (aha, nọmba ekwentị). Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi ndị debanyere aha na ngwa ahụ site na koodu. Ha nwere ike ịchọta koodu ha na profaịlụ ha -> "Nkọwa akaụntụ" -> "koodu na-ebubata onye ọrụ oyi".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO

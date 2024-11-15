@@ -100,7 +100,6 @@ function BottomNavBar(
   const { onLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.MORE_STEP,
     OverlayComponent: MoreNavigationOverlay,
-    onPressMask: () => navigation.navigate('Main', { screen: 'History' }),
   });
 
   return (

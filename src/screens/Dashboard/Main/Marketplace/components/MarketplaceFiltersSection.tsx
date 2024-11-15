@@ -1,11 +1,11 @@
-import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
-import { Divider, Modal, Portal, RadioButton } from 'react-native-paper';
+import { Dimensions, TouchableWithoutFeedback, View } from 'react-native';
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import colors from 'tailwindcss/colors';
+import { Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
+import colors from 'tailwindcss/colors';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -26,6 +26,9 @@ import FilterChip from './FilterChip';
 import MarketplaceLocationFilter from './LocationFilter';
 
 import { useMarketplaceQueryParams } from '../store';
+
+const DIALOG_MAX_WIDTH = Dimensions.get('window').width * 0.68;
+const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.31;
 
 type InternalSelectionState = Exclude<GetAvailableListingParams['sortBy'], undefined>;
 type BuyerInternalSelectionState = 'for-myself' | 'on-behalf';
@@ -147,69 +150,76 @@ export default function MarketplaceFiltersSection() {
       </TouchableWithoutFeedback>
 
       <Portal>
-        <Modal visible={visibleModal !== undefined} onDismiss={resetState}>
-          <View tw="w-full items-center bg-zinc-50 rounded-3xl w-3/4 max-w-3/4 py-3 px-2 self-center">
-            <View tw="items-start space-y-1 my-1 w-full">
-              <RadioButton.Group
-                value={visibleModal === 'buyer' ? buyerInternalSelection : internalSelection}
-                onValueChange={(value) =>
-                  visibleModal === 'buyer'
-                    ? setBuyerInternalSelectionState(value as BuyerInternalSelectionState)
-                    : setInternalSelection(value as InternalSelectionState)
-                }
-              >
-                {Object.keys(
-                  visibleModal === 'buyer' ? BUYER_OPTIONS_TRANSLATIONS : OPTIONS_TRANSLATIONS
-                ).map((option, itemIdx) => (
-                  <RadioButtonItem
-                    key={`${option}-#${itemIdx}`}
-                    label={
-                      visibleModal === 'buyer'
-                        ? t(
-                            BUYER_OPTIONS_TRANSLATIONS[
-                              option as unknown as BuyerInternalSelectionState
-                            ]
-                          )
-                        : t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])
-                    }
-                    value={option}
-                    tw="flex flex-row-reverse ml-[-10] w-full"
-                  />
-                ))}
-              </RadioButton.Group>
-            </View>
-            <View tw="w-full flex-row items-center justify-between px-2">
-              <Button
-                tw="w-1/2"
-                mode="text"
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  resetState();
-                }}
-              >
-                {t('actions.cancel')}
-              </Button>
-              <Button
-                tw="w-1/2"
-                mode="contained"
-                onPress={async (evt) => {
-                  evt.stopPropagation();
-                  if (visibleModal === 'buyer') {
-                    const result = await MarketplaceService.toggleCartOwnership();
-                    if (result.cart) {
-                      setCart(result.cart);
-                    }
-                  } else {
-                    useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
+        <Dialog
+          visible={visibleModal !== undefined}
+          onDismiss={resetState}
+          style={{
+            backgroundColor: 'white',
+            maxWidth: DIALOG_MAX_WIDTH,
+            maxHeight: DIALOG_MAX_HEIGHT,
+            alignSelf: 'center',
+          }}
+        >
+          <Dialog.Content tw="mb-0 android:pb-1.5">
+            <RadioButton.Group
+              value={visibleModal === 'buyer' ? buyerInternalSelection : internalSelection}
+              onValueChange={(value) =>
+                visibleModal === 'buyer'
+                  ? setBuyerInternalSelectionState(value as BuyerInternalSelectionState)
+                  : setInternalSelection(value as InternalSelectionState)
+              }
+            >
+              {Object.keys(
+                visibleModal === 'buyer' ? BUYER_OPTIONS_TRANSLATIONS : OPTIONS_TRANSLATIONS
+              ).map((option, itemIdx) => (
+                <RadioButtonItem
+                  key={`${option}-#${itemIdx}`}
+                  label={
+                    visibleModal === 'buyer'
+                      ? t(
+                          BUYER_OPTIONS_TRANSLATIONS[
+                            option as unknown as BuyerInternalSelectionState
+                          ]
+                        )
+                      : t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])
                   }
-                  setVisibleModal(undefined);
-                }}
-              >
-                {t('actions.ok')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+                  value={option}
+                  tw="flex flex-row-reverse ml-[-10] w-full"
+                />
+              ))}
+            </RadioButton.Group>
+          </Dialog.Content>
+          <Dialog.Actions tw="mt-0 justify-around android:pt-1.5">
+            <Button
+              tw="w-1/2"
+              mode="text"
+              onPress={(evt) => {
+                evt.stopPropagation();
+                resetState();
+              }}
+            >
+              {t('actions.cancel')}
+            </Button>
+            <Button
+              tw="w-1/2"
+              mode="contained"
+              onPress={async (evt) => {
+                evt.stopPropagation();
+                if (visibleModal === 'buyer') {
+                  const result = await MarketplaceService.toggleCartOwnership();
+                  if (result.cart) {
+                    setCart(result.cart);
+                  }
+                } else {
+                  useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });
+                }
+                setVisibleModal(undefined);
+              }}
+            >
+              {t('actions.ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </React.Fragment>
   );
