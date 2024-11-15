@@ -1,30 +1,30 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
+import { useShallow } from 'zustand/react/shallow';
 
-import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Button } from '#ui/components/Button';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import type { TranslationLocales } from '#i18n/constants';
+import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import AuthService from '#services/AuthService';
+import ColdtivateService from '#services/ColdtivateService';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
-import AuthService from '#services/AuthService';
 import { EApiGender, type Farmer } from '#types/global';
-import type { TranslationLocales } from '#i18n/constants';
 import { paperTheme } from '#ui/lib/theme';
 
-import FormManager, { type FormValues } from './components/FormManager';
-import TextFields from './modules/TextFields';
-import GenderField from './modules/GenderField';
-import ContactField from './modules/ContactField';
-import LanguageField from './modules/LanguageField';
 import InAppNotifications from '#common/InAppNotifications';
+import FormManager, { type FormValues } from './components/FormManager';
+import ContactField from './modules/ContactField';
+import GenderField from './modules/GenderField';
+import LanguageField from './modules/LanguageField';
+import TextFields from './modules/TextFields';
 
 const width = (Dimensions.get('window').width - 42) / 2;
 
@@ -112,17 +112,17 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   return (
     <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(contextualFarmer)}>
       {({ submitHandler, isSubmitting }) => (
-        <KeyboardAwareScrollView
-          contentContainerStyle="flex-1 justify-between pt-6 pb-8 mx-4"
-          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-          showsVerticalScrollIndicator={false}
-        >
-          <View tw="w-full">
+        <View tw="flex-1 justify-between pt-6 pb-8 mx-4">
+          <KeyboardAwareScrollView
+            keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+            showsVerticalScrollIndicator={false}
+            tw="w-full"
+          >
             <TextFields disabled={disabled} />
             <GenderField disabled={disabled} />
             <ContactField disabled={disabled} />
             <LanguageField disabled={disabled} />
-          </View>
+          </KeyboardAwareScrollView>
           <View tw="w-full flex-row items-center justify-between mt-5">
             <Button
               style={{ width }}
@@ -144,7 +144,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
               {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
             </Button>
           </View>
-        </KeyboardAwareScrollView>
+        </View>
       )}
     </FormManager>
   );
