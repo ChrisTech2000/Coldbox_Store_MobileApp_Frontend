@@ -213,16 +213,13 @@ function PayoutSettings(
   }
 
   return (
-    <KeyboardAwareScrollView
-      tw="h-full"
-      contentContainerStyle={cn(
-        'justify-between p-3',
-        screenHeight > SMALL_SCREEN_THRESHOLD ? 'flex-1' : ''
-      )}
-      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-      showsVerticalScrollIndicator={false}
+    <View
+      tw={cn('h-full justify-between p-3', screenHeight > SMALL_SCREEN_THRESHOLD ? 'flex-1' : '')}
     >
-      <View>
+      <KeyboardAwareScrollView
+        keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+        showsVerticalScrollIndicator={false}
+      >
         {hasPayoutMethods ? (
           <Text tw="text-base font-bold text-green-primary">
             {user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
@@ -350,12 +347,12 @@ function PayoutSettings(
             )}
           </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
 
       <View
         tw={cn(
           'flex flex-row items-end justify-evenly',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mt-6 pb-6' : ''
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mt-3 pb-3' : ''
         )}
       >
         <Button
@@ -384,7 +381,7 @@ function PayoutSettings(
           )}
         </Button>
       </View>
-    </KeyboardAwareScrollView>
+    </View>
   );
 }
 
