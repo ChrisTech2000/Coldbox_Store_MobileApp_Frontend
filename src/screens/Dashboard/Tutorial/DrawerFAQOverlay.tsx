@@ -1,7 +1,8 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
@@ -12,16 +13,23 @@ import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerFAQOverlay({ next, step, stop }: IOverlayComponentProps) {
+export function DrawerFAQOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const navigation = useNavigation();
 
   return (
     <View tw="h-full w-full absolute">
       <View
         tw={cn(
           'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-[42%]' : 'top-[32%]'
+          screenHeight <= SMALL_SCREEN_THRESHOLD
+            ? Platform.OS === 'ios'
+              ? 'top-[42%]'
+              : 'top-[40%]'
+            : Platform.OS === 'ios'
+              ? 'top-[32%]'
+              : 'top-[30%]'
         )}
       >
         <Icon source="chat-question-outline" size={25} />
@@ -42,7 +50,7 @@ export function DrawerFAQOverlay({ next, step, stop }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.faq')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.faq')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -58,7 +66,10 @@ export function DrawerFAQOverlay({ next, step, stop }: IOverlayComponentProps) {
           <Button
             mode="text"
             onPress={() => {
-              step.onPressMask?.();
+              navigation.dispatch(DrawerActions.closeDrawer());
+              // eslint-disable-next-line
+              // @ts-ignore
+              navigation.navigate('Dashboard');
               next();
             }}
             tw="bg-green-primary border-green-primary"

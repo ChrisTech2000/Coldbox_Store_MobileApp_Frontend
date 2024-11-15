@@ -44,7 +44,6 @@ export default function ScreenContainer(props: Props) {
   const { onLayout } = useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_COOLING_UNIT_STEP,
     OverlayComponent: AddCoolingUnitOverlay,
-    onPressMask: () => navigation.goBack(),
   });
 
   if (isLoading) {

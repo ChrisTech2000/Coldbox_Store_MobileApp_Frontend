@@ -1,25 +1,23 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
+import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { useTutorialStore } from '#stores/tutorial';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 import { ECommonTutorialSteps } from './utils/constants';
 
-export function CoolingUnitsMapOverlay({
-  goTo,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CoolingUnitsMapOverlay({ goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const navigation = useNavigation<NativeStackNavigationProp<CoolingUnitsTabsRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -34,7 +32,7 @@ export function CoolingUnitsMapOverlay({
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.farmersCoolingUnits')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.farmersCoolingUnits')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -51,7 +49,7 @@ export function CoolingUnitsMapOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              navigation.navigate('Planner');
               goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
             }}
             tw="bg-green-primary border-green-primary"

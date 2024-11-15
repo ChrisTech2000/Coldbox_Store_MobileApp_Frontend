@@ -182,13 +182,13 @@ function SalesDetails(props: SalesRouteProps<'SalesDetails'>) {
                             : ''}
                           {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
                             ? t(
-                                coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+                                coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY
                                   ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
                                   : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                                 {
                                   price: CurrencyStandardization.currencyCode({
                                     code: 'NGN', // TODO: get value from somewhere
-                                    value: coolingUnit?.commonPricingType.value ?? 0,
+                                    value: coolingUnit?.commonPricingType?.value ?? 0,
                                   }).getValueFormated(),
                                 }
                               )

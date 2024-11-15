@@ -1471,6 +1471,8 @@ const en = {
       repeatTutorial: 'If you want to watch this tutorial again, you can also find it in the menu.',
       managementNavigation:
         'In the menu, you can navigate to the "Management" tab and there add new Locations, Cooling Units, Registered Employees and Operators.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users',
       addCoolingUser:
         'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',

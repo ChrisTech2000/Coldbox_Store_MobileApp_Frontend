@@ -6,6 +6,9 @@ import { Appbar, Badge } from 'react-native-paper';
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import useCartStore from '#stores/shoppingCart';
 
+import { DrawerOverlay } from '#screens/Dashboard/Tutorial/DrawerOverlay';
+import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { useRightDrawerStore } from '../index';
 import type { DashboardMainRoutePaths, DashboardMainRoutes } from '../Main';
 import type { AnalyticsStackRoutePaths } from '../Main/AnalyticsStack';
@@ -19,13 +22,20 @@ import { useNotifications } from './notifications';
 
 function _buildLeftContent<Params extends Record<string, unknown>, Path extends string>(
   dispatch: NavigationProp<Params, Path>['dispatch'],
-  goBackFunc?: () => void
+  goBackFunc?: () => void,
+  onLayout?: (event: unknown) => void
 ) {
   if (typeof goBackFunc === 'function') {
     return <Appbar.BackAction size={26} onPress={() => goBackFunc?.()} />;
   }
+
   return (
-    <Appbar.Action icon="menu" size={26} onPress={() => dispatch(DrawerActions.openDrawer())} />
+    <Appbar.Action
+      onLayout={onLayout}
+      icon="menu"
+      size={26}
+      onPress={() => dispatch(DrawerActions.openDrawer())}
+    />
   );
 }
 
@@ -73,12 +83,17 @@ export function useDashboardHeader() {
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
   const cartItemsCount = cartData?.items?.length ?? 0;
 
+  const { onLayout } = useWalkthroughStep({
+    number: ECommonTutorialSteps.OPEN_DRAWER_STEP,
+    OverlayComponent: DrawerOverlay,
+  });
+
   return useCallback(
     ({
       goBackFunc,
       showShoppingCart,
     }: DashboardHeaderFactoryOptions = {}): NavigationHeaderProps => ({
-      leftContent: _buildLeftContent(dispatch, goBackFunc),
+      leftContent: _buildLeftContent(dispatch, goBackFunc, onLayout),
       rightContent: _buildRightContent(
         newNotificationsCount,
         cartItemsCount,
@@ -113,7 +128,6 @@ export const BOTTOM_NAV_ROUTES_SCOPE: Array<BottomNavRoutePaths> = [
   'Analytics',
   'Marketplace',
   'MarketplaceRoot',
-  'Orders',
   'OrdersRoot',
   'OrdersDetails',
 ];

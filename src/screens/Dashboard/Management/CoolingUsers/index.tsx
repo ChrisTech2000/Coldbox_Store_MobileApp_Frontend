@@ -37,9 +37,10 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
   const [isDownloading, toggleDownloading] = useToggle(false);
   const { t } = useTranslationUtils();
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.LIST_COOLING_USERS_STEP,
     OverlayComponent: CoolingUsersOverlay,
+    fullScreen: true,
   });
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
@@ -71,14 +72,14 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
 
   if (isLoading) {
     return (
-      <View tw="flex-1 items-center justify-center" onLayout={onLayout}>
+      <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
   }
 
   return (
-    <View tw="flex-1 justify-start" onLayout={onLayout}>
+    <View tw="flex-1 justify-start">
       <FlatList
         showsVerticalScrollIndicator={false}
         data={datums}

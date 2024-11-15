@@ -1,5 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, View } from 'react-native';
+import { Animated, Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -7,21 +8,20 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
+
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerAccountDetailsOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function DrawerAccountDetailsOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const navigation = useNavigation();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -46,12 +46,24 @@ export function DrawerAccountDetailsOverlay({
     startBlinking();
   }, [blinkAnim]);
 
+  /**
+     
+   */
   return (
     <View tw="h-full w-full absolute">
       <Touchable
-        tw="bg-white absolute left-3 top-[15.5%] w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2"
+        tw={cn(
+          'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
+          Platform.OS === 'ios'
+            ? 'top-[15.5%]'
+            : screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-[15.5%]'
+              : 'top-[12.5%]'
+        )}
         onPress={() => {
-          onPressMask?.();
+          // eslint-disable-next-line
+          // @ts-ignore
+          navigation.navigate('AccountDetails');
           next();
         }}
       >
@@ -62,7 +74,14 @@ export function DrawerAccountDetailsOverlay({
       <Animated.View
         style={[
           {
-            top: screenHeight <= SMALL_SCREEN_THRESHOLD ? '16%' : '17%',
+            top:
+              Platform.OS === 'ios'
+                ? screenHeight <= SMALL_SCREEN_THRESHOLD
+                  ? '16%'
+                  : '17%'
+                : screenHeight <= SMALL_SCREEN_THRESHOLD
+                  ? '16%'
+                  : '13.5%',
             left: '50%',
             opacity: blinkAnim,
           },
@@ -86,7 +105,7 @@ export function DrawerAccountDetailsOverlay({
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.accountDetailsNavigation')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.accountDetailsNavigation')}</Text>
         <Button
           mode="text"
           onPress={() => {

@@ -1491,6 +1491,8 @@ export default {
         'Si vous souhaitez revoir ce tutoriel, vous pouvez également le trouver dans le menu.',
       managementNavigation:
         'Dans le menu, vous pouvez naviguer vers "Gestion" et cliquer là pour ajouter ou modifier des utilisateurs de refroidissement. Allez-y et essayez.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'Les utilisateurs de refroidissement qui ne se sont pas inscrits sur Coldtivate peuvent être ajoutés en insérant leurs coordonnées (nom, numéro de téléphone). Les utilisateurs de refroidissement déjà inscrits dans l\'application peuvent être ajoutés par code. Ils peuvent trouver leur code sur leur profil -> "Détails du compte" -> "Code d\'importation de l\'utilisateur de refroidissement".',
       navigateToCoolingUser: "Allez-y et cliquez sur l'onglet des utilisateurs de refroidissement",

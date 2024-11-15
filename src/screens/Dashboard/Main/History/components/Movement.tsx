@@ -72,13 +72,13 @@ export function Movement({
     if (!isCheckIn)
       return `${movement.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
 
-    const price = coolingUnit?.commonPricingType.value ?? 0;
+    const price = coolingUnit?.commonPricingType?.value ?? 0;
     const suffix =
-      coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+      coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY
         ? `/ ${t('Dashboard.CrateManagement.CheckIn.day')}`
         : '';
 
-    if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.CRATES) {
+    if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
       return `${price * movement.cratesNumber} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
     }
 

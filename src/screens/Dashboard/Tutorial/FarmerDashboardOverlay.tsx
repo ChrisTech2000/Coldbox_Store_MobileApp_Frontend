@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { useRightDrawerStore } from '#navigation/Dashboard';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -12,10 +13,11 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 
 import { ECommonTutorialSteps } from './utils/constants';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function Dashboard1Overlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function Dashboard1Overlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -32,7 +34,7 @@ export function Dashboard1Overlay({ next, stop, step: { onPressMask } }: IOverla
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.dashboardStep1')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.dashboardStep1')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -48,7 +50,6 @@ export function Dashboard1Overlay({ next, stop, step: { onPressMask } }: IOverla
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
               next();
             }}
             tw="bg-green-primary border-green-primary"
@@ -62,7 +63,7 @@ export function Dashboard1Overlay({ next, stop, step: { onPressMask } }: IOverla
   );
 }
 
-export function Dashboard2Overlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function Dashboard2Overlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -82,7 +83,7 @@ export function Dashboard2Overlay({ next, stop, step: { onPressMask } }: IOverla
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.dashboardStep2')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.dashboardStep2')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -98,7 +99,6 @@ export function Dashboard2Overlay({ next, stop, step: { onPressMask } }: IOverla
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
               next();
             }}
             tw="bg-green-primary border-green-primary"
@@ -112,7 +112,7 @@ export function Dashboard2Overlay({ next, stop, step: { onPressMask } }: IOverla
   );
 }
 
-export function Dashboard3Overlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function Dashboard3Overlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -132,7 +132,7 @@ export function Dashboard3Overlay({ next, stop, step: { onPressMask } }: IOverla
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.dashboardStep3')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.dashboardStep3')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -148,7 +148,6 @@ export function Dashboard3Overlay({ next, stop, step: { onPressMask } }: IOverla
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
               next();
             }}
             tw="bg-green-primary border-green-primary"
@@ -162,7 +161,7 @@ export function Dashboard3Overlay({ next, stop, step: { onPressMask } }: IOverla
   );
 }
 
-export function Dashboard4Overlay({ next, stop, step: { onPressMask } }: IOverlayComponentProps) {
+export function Dashboard4Overlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -179,7 +178,7 @@ export function Dashboard4Overlay({ next, stop, step: { onPressMask } }: IOverla
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.dashboardStep4')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.dashboardStep4')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -195,7 +194,6 @@ export function Dashboard4Overlay({ next, stop, step: { onPressMask } }: IOverla
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
               next();
             }}
             tw="bg-green-primary border-green-primary"
@@ -226,7 +224,7 @@ export function Dashboard5Overlay({ next, stop }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.dashboardStep5')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.dashboardStep5')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -257,21 +255,26 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const navigation = useNavigation();
+
+  const [isOpen, toggle] = useRightDrawerStore((store) => [store.isOpen, store.toggle]);
 
   return (
     <View tw="h-full w-full absolute">
-      <View
-        style={[
-          {
-            position: 'absolute',
-            top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 30 : 70,
-            left: screenHeight <= SMALL_SCREEN_THRESHOLD ? '78%' : '80%',
-            transform: [{ rotate: '90deg' }],
-          },
-        ]}
-      >
-        <Icon name="cursor-pointer" size={40} color={colors.green.primary} />
-      </View>
+      {isOpen ? null : (
+        <View
+          style={[
+            {
+              position: 'absolute',
+              top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 30 : 70,
+              left: screenHeight <= SMALL_SCREEN_THRESHOLD ? '78%' : '80%',
+              transform: [{ rotate: '90deg' }],
+            },
+          ]}
+        >
+          <Icon name="cursor-pointer" size={40} color={colors.green.primary} />
+        </View>
+      )}
 
       <View
         tw="absolute left-5 top-40 w-[90%] h-auto bg-white p-3 rounded-md z-30"
@@ -284,7 +287,7 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.dashboardStep6')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.dashboardStep6')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button
@@ -300,6 +303,10 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
           <Button
             mode="text"
             onPress={() => {
+              if (isOpen) {
+                toggle();
+              }
+              navigation.dispatch(DrawerActions.closeDrawer());
               goTo(ECommonTutorialSteps.MORE_STEP);
             }}
             tw="bg-green-primary border-green-primary"

@@ -1,4 +1,4 @@
-import { DrawerActions, useNavigation, type RouteProp } from '@react-navigation/native';
+import { type RouteProp } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   type NativeStackNavigationOptions,
@@ -10,12 +10,8 @@ import { TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 
 import DashboardMain from '#screens/Dashboard/Main/Dashboard';
-import { DrawerOverlay } from '#screens/Dashboard/Tutorial/DrawerOverlay';
 import { Dashboard6Overlay } from '#screens/Dashboard/Tutorial/FarmerDashboardOverlay';
-import {
-  ECommonTutorialSteps,
-  EFarmerTutorialSteps,
-} from '#screens/Dashboard/Tutorial/utils/constants';
+import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils, type Translator } from '#i18n/utils';
@@ -78,15 +74,6 @@ const Stack = createNativeStackNavigator<MainTabStackRoutes>();
 export default function MainTabStack() {
   const { t } = useTranslationUtils();
   const dashboardHeaderFactory = useDashboardHeader();
-  const navigation = useNavigation();
-
-  const { onLayout } = useWalkthroughStep({
-    number: ECommonTutorialSteps.OPEN_DRAWER_STEP,
-    OverlayComponent: DrawerOverlay,
-    maskAllowInteraction: true,
-    // eslint-disable-next-line react/prop-types
-    onPressMask: () => navigation.dispatch(DrawerActions.openDrawer()),
-  });
 
   const { onLayout: onRightLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.DASHBOARD_STEP_6,
@@ -108,15 +95,13 @@ export default function MainTabStack() {
         headerShown: !!translationPath,
         header: (headerProps) =>
           translationPath !== NAVIGATOR_HEADERS.CheckInStack && (
-            <View onLayout={onLayout}>
-              <View onLayout={onRightLayout}>
-                <NavigatorHeader
-                  {...headerProps}
-                  routeTitle={routeTitle}
-                  // eslint-disable-next-line react/prop-types
-                  {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory, t)}
-                />
-              </View>
+            <View onLayout={onRightLayout}>
+              <NavigatorHeader
+                {...headerProps}
+                routeTitle={routeTitle}
+                // eslint-disable-next-line react/prop-types
+                {..._renderContentFactory(routeName, props.navigation, dashboardHeaderFactory, t)}
+              />
             </View>
           ),
         gestureDirection: 'vertical',

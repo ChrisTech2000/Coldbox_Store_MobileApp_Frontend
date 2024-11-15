@@ -100,7 +100,7 @@ export function CheckInData({
                     );
                     const totalWeight = crates.reduce((acc, current) => (acc += current.weight), 0);
                     const totalPrice = (
-                      (coolingUnit?.commonPricingType.value ?? 0) * crates.length
+                      (coolingUnit?.commonPricingType?.value ?? 0) * crates.length
                     ).toFixed(2);
 
                     return `
@@ -117,7 +117,7 @@ export function CheckInData({
                   <td>${t('Dashboard.History.pdfModal.checkIn.totalLabel')}</td>
                   <td>${movement.cratesCheckin.length}</td>
                   <td>${movement.cratesWeight}</td>
-                  <td>${((coolingUnit?.commonPricingType.value ?? 0) * movement.cratesCheckin.length).toFixed(2)}</td>
+                  <td>${((coolingUnit?.commonPricingType?.value ?? 0) * movement.cratesCheckin.length).toFixed(2)}</td>
                 </tr>
               </tbody>
             </table>
@@ -231,7 +231,7 @@ export function CheckInData({
                   {crates.reduce((acc, current) => (acc += current.weight), 0)}
                 </DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {((coolingUnit?.commonPricingType.value ?? 0) * crates.length).toFixed(2)}
+                  {((coolingUnit?.commonPricingType?.value ?? 0) * crates.length).toFixed(2)}
                 </DataTable.Cell>
               </DataTable.Row>
             );
@@ -250,7 +250,7 @@ export function CheckInData({
             <DataTable.Cell numeric>
               <Text tw="font-bold">
                 {(
-                  (coolingUnit?.commonPricingType.value ?? 0) * movement.cratesCheckin.length
+                  (coolingUnit?.commonPricingType?.value ?? 0) * movement.cratesCheckin.length
                 ).toFixed(2)}
               </Text>
             </DataTable.Cell>

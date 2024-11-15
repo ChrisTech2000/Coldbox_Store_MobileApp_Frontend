@@ -14,11 +14,7 @@ import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function MoreNavigationOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function MoreNavigationOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -62,7 +58,7 @@ export function MoreNavigationOverlay({
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.more')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.more')}</Text>
 
         <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
           <Button
@@ -79,7 +75,7 @@ export function MoreNavigationOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              rootNavigation.navigate('History');
               next();
             }}
             tw="bg-green-primary border-green-primary"

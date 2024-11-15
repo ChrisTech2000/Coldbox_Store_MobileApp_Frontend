@@ -1,5 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -14,7 +12,6 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { MarketPriceOverlay } from '#screens/Dashboard/Tutorial/MarketPriceOverlay';
 import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import ColdtivateService from '#services/ColdtivateService';
@@ -41,7 +38,6 @@ function MarketPriceTrend() {
   const { country, loadingFarmer, setPredictionParams } = usePriceTrendsStore();
   const { selectedItem: commodity } = useTrendCommodityStore();
   const { selectedItem: state } = useTrendStateStore();
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const [isCommoditiesModalOpen, setIsCommoditiesModalOpen] = useState<boolean>(false);
   const [isStatesModalOpen, setIsStatesModalOpen] = useState<boolean>(false);
@@ -61,15 +57,15 @@ function MarketPriceTrend() {
     }
   }, [predictionParams]);
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EFarmerTutorialSteps.MARKET_PRICE,
     OverlayComponent: MarketPriceOverlay,
-    onPressMask: () => rootNavigation.navigate('Dashboard'),
+    fullScreen: true,
   });
 
   if (loadingPredictionParams || loadingFarmer) {
     return (
-      <View tw="flex-1 items-center justify-center" onLayout={onLayout}>
+      <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
@@ -77,7 +73,7 @@ function MarketPriceTrend() {
 
   if (!country) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10" onLayout={onLayout}>
+      <View tw="flex-1 items-center justify-center mx-10">
         <Text variant="TitleMedium" tw="text-center text-green-primary">
           {t('Dashboard.MarketPrice.emptyState')}
         </Text>
@@ -86,7 +82,7 @@ function MarketPriceTrend() {
   }
 
   return (
-    <View tw="absolute bottom-0 top-0 pb-1" onLayout={onLayout}>
+    <View tw="absolute bottom-0 top-0 pb-1">
       <ScrollView tw="h-full m-4 space-y-2" showsVerticalScrollIndicator={false}>
         <Text variant="TextBold" tw="text-lg font-bold mb-4">
           {t('Dashboard.MarketPrice.Trend.title')}

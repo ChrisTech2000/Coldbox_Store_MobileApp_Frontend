@@ -28,19 +28,9 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import {
-  MOCKED_CHECK_OUT_DATA,
-  MOCKED_COOLING_UNIT,
-  MOCKED_USER,
-} from '../../../Tutorial/utils/mockedData';
 import { CheckoutCrate } from '../components/CheckOutCrate';
 
 export const useCrateSelectionCoolingUnitStore = createSelectStore<CoolingUnit>();
-const MOCKED_PARAMS = {
-  user: MOCKED_USER,
-  crates: MOCKED_CHECK_OUT_DATA,
-  coolingUnit: MOCKED_COOLING_UNIT,
-};
 
 function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSelection'>) {
   const { user, owner, coolingUnit: _coolingUnit, crates: _crates } = route.params;
@@ -52,16 +42,10 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [selectedCrates, setSelectedCrates] = useState<Crate[]>([]);
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_2,
     OverlayComponent: CheckOutScreenOverlay,
-    onPressMask: () => {
-      // eslint-disable-next-line
-      // @ts-ignore
-      navigation.navigate('BillingInfo', {
-        ...MOCKED_PARAMS,
-      });
-    },
+    fullScreen: true,
   });
 
   const { data, isLoading } = useApiCall(
@@ -127,7 +111,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   }
 
   return (
-    <View tw="flex-1 p-4" onLayout={onLayout}>
+    <View tw="flex-1 p-4">
       <View tw="flex flex-row w-full justify-between items-center">
         <Text variant="TextMedium" tw="text-lg max-w-[70%]" numberOfLines={1}>
           {t('Dashboard.CrateManagement.coolingUserLabel')}

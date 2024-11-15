@@ -30,23 +30,12 @@ import { Input } from '#ui/components/Input';
 import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
-import {
-  MOCKED_CHECK_OUT_DATA,
-  MOCKED_COOLING_UNIT,
-  MOCKED_USER,
-} from '../../../Tutorial/utils/mockedData';
-
 type ManagementMode = 'check-in' | 'check-out';
-
-const params = {
-  user: MOCKED_USER,
-  coolingUnit: MOCKED_COOLING_UNIT,
-  crates: MOCKED_CHECK_OUT_DATA,
-};
 
 export function OperatorActions({
   navigation,
@@ -66,35 +55,19 @@ export function OperatorActions({
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_1,
     OverlayComponent: OperatorActionsOverlay,
-    maskAllowInteraction: true,
     onPressMask: () => setIsCrateManagementOpen(true),
   });
 
   const { onLayout: onInitiateCheckoutLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_1,
     OverlayComponent: CheckoutOverlay,
-    maskAllowInteraction: true,
     onStart: () => setIsCrateManagementOpen(true),
-    onPressMask: () =>
-      navigation.navigate('CheckOutStack', {
-        screen: 'CrateSelection',
-        // eslint-disable-next-line
-        // @ts-ignore
-        params,
-      }),
+    onFinish: () => setIsCrateManagementOpen(false),
   });
 
   const { onLayout: onCheckInLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_2,
     OverlayComponent: CheckInButtonOverlay,
-    maskAllowInteraction: true,
-    onPressMask: () =>
-      navigation.navigate('CheckInStack', {
-        screen: 'CheckIn',
-        // eslint-disable-next-line
-        // @ts-ignore
-        params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
-      }),
   });
 
   const { data, isLoading } = useApiCall(
@@ -175,6 +148,10 @@ export function OperatorActions({
     setSearch('');
     setSelectedUser(undefined);
   }, []);
+
+  useAppEventListener(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS, () =>
+    setIsCrateManagementOpen(false)
+  );
 
   const combinedUsers = [
     ...filteredUsers,
