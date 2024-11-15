@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
-import ms from 'ms';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -31,7 +30,6 @@ import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import { waitFor } from '#ui/lib/waitFor';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -239,13 +237,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       }
     }
 
-    resetCheckInStore();
     toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), {
       type: 'md_success',
     });
-
-    await waitFor(ms('1 second'));
-    refreshData.forEach((fn) => fn());
 
     if (guard('VIEW', 'TemperatureAlertModal')) {
       const temperatureAlertDatum = {
@@ -257,7 +251,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
     }
 
+    resetCheckInStore();
     rootNavigation.navigate('RootMainTabStack');
+    refreshData.forEach((fn) => fn());
   }
 
   const navigateToCropSelection = useCallback(() => {
