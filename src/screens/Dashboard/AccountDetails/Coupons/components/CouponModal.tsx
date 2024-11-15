@@ -47,7 +47,7 @@ export default function CouponModal(props: {
     ),
   });
 
-  function resetValues() {
+  function _resetValues() {
     form.reset({
       code: datum?.code ?? '',
       percentage: datum?.percentage.toString() ?? '',
@@ -57,7 +57,7 @@ export default function CouponModal(props: {
   async function onSubmit(values: FormValues<number>) {
     try {
       await props.onSubmit?.(values);
-      resetValues();
+      _resetValues();
     } catch (exception) {
       console.error(exception);
       toast.show(t('navigation.error.errorMessage'), {
@@ -74,7 +74,7 @@ export default function CouponModal(props: {
         modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
         adjustToContentHeight
         withHandle={false}
-        onClose={() => resetValues()}
+        onClose={_resetValues}
       >
         <View tw="w-full items-center justify-center h-10">
           <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
@@ -130,7 +130,7 @@ export default function CouponModal(props: {
             onPress={(evt) => {
               evt.stopPropagation();
               modalRef.current?.close();
-              resetValues();
+              _resetValues();
             }}
             disabled={form.formState.isSubmitting}
           >
