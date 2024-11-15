@@ -9,6 +9,7 @@ import { Sup } from '#ui/components/SuperscriptText';
 import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 type FormValues<T = string> = {
   code: string;
@@ -23,6 +24,7 @@ export default function CouponModal(props: {
   const { modalRef, datum } = props;
 
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -53,8 +55,16 @@ export default function CouponModal(props: {
   }
 
   async function onSubmit(values: FormValues<number>) {
-    await props.onSubmit?.(values);
-    resetValues();
+    try {
+      await props.onSubmit?.(values);
+      resetValues();
+    } catch (exception) {
+      console.error(exception);
+      toast.show(t('navigation.error.errorMessage'), {
+        type: 'md_danger',
+        style: { marginBottom: 56 },
+      });
+    }
   }
 
   return (
@@ -89,7 +99,7 @@ export default function CouponModal(props: {
             />
           </View>
 
-          <View>
+          <View tw="mb-7">
             <View tw="flex-row space-x-1 mb-1.5">
               <Text tw="text-base">{t('Dashboard.Management.Coupons.percentage')}</Text>
               <Sup>(%)</Sup>

@@ -35,21 +35,17 @@ function CouponsRoot() {
       <CouponModal
         modalRef={modalRef}
         onSubmit={async (values) => {
-          try {
-            await CouponService.createCoupon({
-              code: values.code,
-              discountPercentage: values.percentage,
-            });
+          await CouponService.createCoupon({
+            code: values.code,
+            discountPercentage: values.percentage,
+          });
 
-            await Promise.allSettled([
-              mutate(getQueryKey('getCouponList')),
-              mutate(getQueryKey('getCouponList', { revoked: 'included' })),
-            ]);
+          await Promise.allSettled([
+            mutate(getQueryKey('getCouponList')),
+            mutate(getQueryKey('getCouponList', { revoked: 'included' })),
+          ]);
 
-            modalRef.current?.close();
-          } catch (exception) {
-            console.error(exception);
-          }
+          modalRef.current?.close();
         }}
       />
 
