@@ -195,7 +195,7 @@ export default function AddToCartModal() {
               </Text>
             </Touchable>
           </View>
-          <View tw="w-full flex-col items-center space-y-3">
+          <View tw="w-full flex-col items-center space-y-3 mb-4">
             <Button
               tw="w-11/12"
               mode="contained"
@@ -206,7 +206,7 @@ export default function AddToCartModal() {
               {t('Dashboard.Marketplace.addToCart.addToCartButton')}
             </Button>
             <Button
-              tw="w-11/12 mb-4"
+              tw="w-11/12"
               mode="outlined"
               // eslint-disable-next-line
               onPress={form.handleSubmit(buildAddToCartFunc(true) as any)}
