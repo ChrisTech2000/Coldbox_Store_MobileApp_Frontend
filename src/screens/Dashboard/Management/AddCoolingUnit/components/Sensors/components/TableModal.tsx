@@ -31,7 +31,7 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
 
     const commonFields = [
       { name: 'Sensor Type', value: sensorType.charAt(0).toUpperCase() + sensorType.slice(1) },
-      { name: 'Date Added', value: dateFmt(dateSensorFirstLinked) },
+      { name: 'Date Added', value: dateSensorFirstLinked ? dateFmt(dateSensorFirstLinked) : '' },
       { name: 'Username', value: username },
     ] satisfies RowsDatums;
 
