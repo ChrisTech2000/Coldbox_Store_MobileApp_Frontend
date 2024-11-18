@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { CurrencyStandardization } from 'currency-format-utils';
 
-import type { Company } from '#types/global';
+import type { Company, User } from '#types/global';
 import type { GetAllCropsResponse, GetCoolingUnitResponse } from '#types/api.responses';
 import type { GetAvailableListingParams } from '#types/api.params';
 import { useMap } from '#ui/hooks/useMap';
@@ -38,7 +38,11 @@ export type AvailableListingDatum = {
   };
   distance: number;
   currencyValue: string;
-  owner: string;
+  owner: {
+    name: string;
+    contact: string;
+    isPhonePublic: boolean;
+  };
 };
 
 export function useMarketplaceListing() {
@@ -95,10 +99,10 @@ export function useMarketplaceListing() {
         listing.nodes.map((node) => node.ownedByUserId).filter(Boolean) as number[]
       );
       const _ownerUsers = await Promise.all(
-        Array.from(ownerUserIds).map(async (id) => await ColdtivateService.getFarmerByUserId(id))
+        Array.from(ownerUserIds).map(async (id) => await ColdtivateService.getUser(id))
       );
       const ownerUsers = _ownerUsers.flatMap((user) => user);
-
+      console.log(ownerUsers, '#');
       const companiesMapCopy = new Map(companyMap);
       for (const company of companies) {
         companiesMapCopy.set(company.id, company);
@@ -148,6 +152,10 @@ export function useMarketplaceListing() {
           code: node.currency,
           value: node.producePricePerKg,
         });
+        const owner = node.ownedOnBehalfOfCompanyId
+          ? ownerCompanies.find((c) => c.id === node.ownedOnBehalfOfCompanyId)
+          : ownerUsers.find((u) => u?.id === node.ownedByUserId);
+
         return {
           id: node.id,
           distance: node.distance,
@@ -155,14 +163,15 @@ export function useMarketplaceListing() {
           crateWeight: node.availableWeightInKg,
           shelfLife: node.relCrateRemainingShelfLife,
           price: node.producePricePerKg,
-          owner: node.ownedOnBehalfOfCompanyId
-            ? (ownerCompanies.find((c) => c.id === node.ownedOnBehalfOfCompanyId)?.name ?? '')
-            : node.ownedByUserId
-              ? (() => {
-                  const owner = ownerUsers.find((u) => u?.user.id === node.ownedByUserId);
-                  return `${owner?.user.firstName ?? ''} ${owner?.user.lastName ?? ''}`;
-                })()
-              : '',
+          owner: {
+            name: node.ownedOnBehalfOfCompanyId
+              ? ((owner as Company)?.name ?? '')
+              : node.ownedByUserId
+                ? `${(owner as User)?.firstName ?? ''} ${(owner as User)?.lastName ?? ''}`
+                : '',
+            contact: node.ownedOnBehalfOfCompanyId ? '' : ((owner as User)?.phone ?? ''),
+            isPhonePublic: !node.ownedOnBehalfOfCompanyId && !!(owner as User)?.isPhonePublic,
+          },
           company: {
             id: node.relCompanyId,
             name: company?.name ?? '',
