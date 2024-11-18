@@ -17,6 +17,8 @@ import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import useCartStore from '#stores/shoppingCart';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
 
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
@@ -26,6 +28,8 @@ export const CART_MINIMUM_VALUE = 100;
 
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
+  const user = useAuthStore((store) => store.user);
+  const company = useManagementStore((store) => store.company);
   const { fetchCart, cartData, isLoading } = useCartStore((store) => ({
     fetchCart: store.fetchCart,
     cartData: store.cartData,
@@ -82,7 +86,11 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                     tw="border border-green-primary mb-8"
                     onPress={() => setIsModalOpen(true)}
                   >
-                    {t('Dashboard.ShoppingCart.ownership')}
+                    {t('Dashboard.ShoppingCart.ownership', {
+                      name: cartData?.ownedOnBehalfOfCompanyId
+                        ? `${user?.firstName ?? ''} ${user?.lastName ?? ''}`
+                        : (company?.name ?? ''),
+                    })}
                   </Button>
                 </RBAC.ProtectedResource>
 
