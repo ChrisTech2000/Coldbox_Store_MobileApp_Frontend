@@ -7,6 +7,8 @@ import { useSWRConfig } from 'swr';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { useToggle } from '#ui/hooks/useToggle';
+import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -14,9 +16,6 @@ import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import { useManagementStore } from '#stores/management';
-import { useToggle } from '#ui/hooks/useToggle';
-import { paperTheme } from '#ui/lib/theme';
 
 import FormManager, {
   DEFAULT_VALUES,
@@ -37,7 +36,6 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   const navigation = props.navigation;
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
-  const company = useManagementStore((store) => store.company);
   const [isModalVisible, toggleModalVisibility] = useToggle();
   const [isProcessing, toggleProcessing] = useToggle();
 
@@ -145,11 +143,11 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
   if (!formInitialValues.current) {
     const values = { ...DEFAULT_VALUES } as FormValues;
     values.name = data.name;
-    values.country = getCountryFullName(data.company?.country ?? company?.country) ?? ''; // TODO: we don't get the country we submitted, just the company country
+    values.country = getCountryFullName(data.company?.country) ?? ''; // TODO: we don't get the country we submitted, just the company country
 
     values._step = 'coordinates';
-    values.latitude = data.latitude.toString();
-    values.longitude = data.longitude.toString();
+    values.latitude = data.latitude?.toString();
+    values.longitude = data.longitude?.toString();
     values.city = data.city ?? '';
     values.state = data.state ?? '';
     values.zipCode = data.zipCode ?? '';
