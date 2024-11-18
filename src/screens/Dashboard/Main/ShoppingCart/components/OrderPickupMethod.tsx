@@ -1,15 +1,17 @@
 import { CurrencyStandardization } from 'currency-format-utils';
+import { addDays } from 'date-fns';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Dialog, Divider, Icon, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialIcons';
-import { addDays } from 'date-fns';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
@@ -19,7 +21,6 @@ import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit, EPickUpMethod, EPricingType } from '#types/global';
-import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 
 type OrderPickupMethodProps = {
   data: Array<{ unit: number; company: number }>;
@@ -230,7 +231,7 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
     store.cartData?.items?.filter((item) => item.relCoolingUnitId === cu?.id)
   );
 
-  const { data } = useApiCall(
+  const { data, isLoading } = useApiCall(
     'getLocation',
     ColdtivateService.getLocation,
     {
@@ -239,16 +240,6 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
     },
     {
       skip: !companyId || !cu,
-      defaultData: undefined,
-    }
-  );
-
-  const { data: company } = useApiCall(
-    'getCompanyById',
-    ColdtivateService.getCompanyById,
-    companyId as number,
-    {
-      skip: !companyId,
       defaultData: undefined,
     }
   );
@@ -262,22 +253,26 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
           )}
         />
         <Dialog.Content>
-          <Text tw="text-base text-center mt-4">
-            {t(`Dashboard.ShoppingCart.pickupModal.${version}`, {
-              company: company.name,
-              location: data.city,
-              ttpu:
-                items && items.length > 0
-                  ? dateFmt(
-                      addDays(
-                        new Date(),
-                        Math.min(...items.map((item) => item.relCrateRemainingShelfLife ?? 0))
-                      ).toISOString(),
-                      'MMMM d'
-                    )
-                  : '', // TODO: I'm using the lowest TTPU here, but this needs to be confirmed
-            })}
-          </Text>
+          {isLoading ? (
+            <ActivityIndicator tw="mt-1" size={18} color={paperTheme.colors.backdrop} animating />
+          ) : (
+            <Text tw="text-base text-center mt-4">
+              {t(`Dashboard.ShoppingCart.pickupModal.${version}`, {
+                company: cu?.name,
+                location: data.city,
+                ttpu:
+                  items && items.length > 0
+                    ? dateFmt(
+                        addDays(
+                          new Date(),
+                          Math.min(...items.map((item) => item.relCrateRemainingShelfLife ?? 0))
+                        ).toISOString(),
+                        'MMMM d'
+                      )
+                    : '', // TODO: I'm using the lowest TTPU here, but this needs to be confirmed
+              })}
+            </Text>
+          )}
           <Button mode="outlined" tw="border border-green-primary mt-6" onPress={close}>
             {t('Dashboard.ShoppingCart.gotItButton')}
           </Button>
