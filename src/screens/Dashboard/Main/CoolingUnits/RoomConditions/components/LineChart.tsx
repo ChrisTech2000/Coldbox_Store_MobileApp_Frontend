@@ -38,15 +38,13 @@ export default function LineChart(props: LineChartProps) {
   });
   // temperature
   // scope: animated text
-  const textValue = useDerivedValue(
-    () => state.y.temperature.value.value.toFixed(1) + ' °C',
-    [state]
-  );
+  const textValue = useDerivedValue(() => state.x.value.value, [state]);
   // scope: animated position
   const textXPosition = useDerivedValue(() => {
     if (!tooltipFont) return 0;
     const textWidth = tooltipFont.measureText(textValue.value).width;
-    return state.x.position.value - textWidth / 2;
+    const position = state.x.position.value;
+    return position < textWidth ? position : position - textWidth / 2;
   }, [tooltipFont, textValue]);
   const textYPosition = useDerivedValue(() => state.y.temperature.position.value - 25, [textValue]);
   //
@@ -65,7 +63,7 @@ export default function LineChart(props: LineChartProps) {
       data={datums}
       xKey="timestamp"
       yKeys={['temperature']}
-      domainPadding={{ top: 35, left: 30, right: 30, bottom: 10 }}
+      domainPadding={{ top: 40, left: 35, right: 35, bottom: 10 }}
       axisOptions={{
         font,
         lineColor: paperTheme.colors.outlineVariant,
@@ -93,11 +91,20 @@ export default function LineChart(props: LineChartProps) {
               <SkiaText
                 x={textXPosition}
                 y={textYPosition}
-                text={textValue}
+                text={`${state.y.temperature.value.value.toFixed(1)} °C`}
                 font={tooltipFont}
                 color={paperTheme.colors.tertiary}
                 style="fill"
               />
+              <SkiaText
+                x={textXPosition.value}
+                y={textYPosition.value + 20}
+                text={dateFmt(textValue.value, 'dd/MM, hh:mm:ss')}
+                font={tooltipFont}
+                color={paperTheme.colors.tertiary}
+                style="fill"
+              />
+
               <Circle
                 cx={state.x.position}
                 cy={state.y.temperature.position}
