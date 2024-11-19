@@ -35,11 +35,14 @@ export default function CouponModal(props: {
         code: z.string(),
         percentage: z.preprocess(
           (v) => {
-            const int = Number(v);
-            if (!Number.isInteger(int)) return 0;
-            return int;
+            const int = parseInt(v as string, 10);
+            return isNaN(int) ? 0 : int;
           },
-          z.number().refine((val) => val > 0 && val < 100)
+          z
+            .number()
+            .int()
+            .min(1, { message: 'Percentage must be at least 1' })
+            .max(100, { message: 'Percentage must be at most 100' })
         ),
       })
     ),
