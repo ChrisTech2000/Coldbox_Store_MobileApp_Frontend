@@ -84,6 +84,7 @@ export function CheckedInCard({
             <Text tw="text-base text-green-primary">
               {item.crop.name} ({item.crates.length})
             </Text>
+            <Text tw="text-sm">{item.additionalInfo}</Text>
 
             {item.price ? (
               <View tw="flex flex-row space-x-1 items-center">
