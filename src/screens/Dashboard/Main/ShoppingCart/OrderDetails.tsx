@@ -20,6 +20,8 @@ import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import MarketplaceService from '#services/MarketplaceService';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
 
@@ -35,6 +37,8 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
   const colors = useTailwindColors();
   const toast = InAppNotifications.useToast();
+  const user = useAuthStore((store) => store.user);
+  const company = useManagementStore((store) => store.company);
 
   const [cartData, coolingUnits] = useCartStore((store) => [store.cartData, store.allCoolingUnits]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -138,7 +142,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             tw="border border-green-primary mb-8"
             onPress={() => setIsModalOpen(true)}
           >
-            {t('Dashboard.ShoppingCart.ownership')}
+            {t('Dashboard.ShoppingCart.ownership', {
+              name: cartData?.ownedOnBehalfOfCompanyId
+                ? `${user?.firstName ?? ''} ${user?.lastName ?? ''}`
+                : (company?.name ?? ''),
+            })}
           </Button>
         </RBAC.ProtectedResource>
 

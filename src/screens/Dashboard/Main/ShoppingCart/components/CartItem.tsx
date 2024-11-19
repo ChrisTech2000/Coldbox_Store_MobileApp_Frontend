@@ -1,9 +1,11 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 import { CurrencyStandardization } from 'currency-format-utils';
 import isNil from 'lodash/isNil';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { ActivityIndicator, Divider, IconButton } from 'react-native-paper';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ActivityIndicator, Divider, Icon, IconButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useDebouncedCallback } from 'use-debounce';
@@ -14,6 +16,7 @@ import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
@@ -33,6 +36,8 @@ type CartItemProps = {
 
 export function CartItem({ item }: CartItemProps) {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
+
   const [fetchCart, coolingUnits] = useCartStore((store) => [
     store.fetchCart,
     store.allCoolingUnits,
@@ -59,8 +64,8 @@ export function CartItem({ item }: CartItemProps) {
   );
 
   const { data: owner, isLoading: isLoadingOwner } = useApiCall(
-    'getFarmerByUserId',
-    ColdtivateService.getFarmerByUserId,
+    'getUser',
+    ColdtivateService.getUser,
     item.ownedByUserId as number,
     {
       defaultData: undefined,
@@ -167,9 +172,27 @@ export function CartItem({ item }: CartItemProps) {
               <Text variant="TextMedium" tw="text-sm text-gray-600">
                 {t('Dashboard.Marketplace.owner')}:{' '}
                 {owner
-                  ? `${owner[0]?.user.firstName ?? ''} ${owner[0]?.user.lastName ?? ''}`
+                  ? `${owner?.firstName ?? ''} ${owner?.lastName ?? ''}`
                   : (ownerCompany.name ?? '')}
               </Text>
+              {owner.isPhonePublic ? (
+                <View tw="flex flex-row space-x-1 items-center">
+                  <Icon source="cellphone" size={20} color={colors.gray[600]} />
+                  <Text variant="TextMedium" tw="text-sm text-gray-600">
+                    {owner.phone}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Clipboard.setString(owner.phone);
+                      toast.show(t('Dashboard.ProduceDetails.contactCopied'), {
+                        type: 'md_success',
+                      });
+                    }}
+                  >
+                    <Icon source="content-copy" size={15} color={paperTheme.colors.primary} />
+                  </TouchableOpacity>
+                </View>
+              ) : null}
             </View>
           </View>
           <FastImage

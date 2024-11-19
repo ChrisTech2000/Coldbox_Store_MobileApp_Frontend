@@ -69,7 +69,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   async function onSubmit(values: FormValues): Promise<void> {
     try {
       const userDatum = await ColdtivateService.updateUser({
-        userId: data?.user.id as number,
+        userId: data?.user?.id as number,
         firstName: values.firstName ?? '',
         lastName: values.lastName ?? '',
         phone: values.phone,
@@ -158,7 +158,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
 
             <DeleteAction
               farmerId={params.farmerId}
-              userId={data?.user.id as number}
+              userId={data?.user?.id as number}
               isSubmitting={isSubmitting}
               goBack={props.navigation.goBack}
               revalidateCache={revalidateCUCache}
