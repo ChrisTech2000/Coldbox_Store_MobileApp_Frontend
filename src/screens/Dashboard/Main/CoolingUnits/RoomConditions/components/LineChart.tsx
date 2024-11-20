@@ -62,8 +62,13 @@ export default function LineChart(props: LineChartProps) {
     () => vec(state.x.position.value, state.y.temperature.position.value * 12), // ← fyk: this multiplication by eight is made up :shurg:
     [textValue]
   );
-  //
-  // formatted date
+  // tooltip
+  // scope: temperature label
+  const temperatureLabel = useDerivedValue(
+    () => `${state.y.temperature.value.value.toFixed(1)} °C`,
+    [state.y.temperature]
+  );
+  // scope: formatted date
   const formattedDate = useSharedValue<string>('');
   function setFormattedDate(timestamp: string) {
     formattedDate.value = dateFmt(timestamp, 'dd/MM, hh:mm:ss');
@@ -109,7 +114,7 @@ export default function LineChart(props: LineChartProps) {
               <SkiaText
                 x={textXPosition}
                 y={textYPosition}
-                text={`${state.y.temperature.value.value.toFixed(1)} °C`}
+                text={temperatureLabel}
                 font={tooltipFont}
                 color={paperTheme.colors.tertiary}
                 style="fill"
