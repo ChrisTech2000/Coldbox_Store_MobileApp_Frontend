@@ -257,13 +257,13 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
             <Divider tw="bg-zinc-400 my-3" />
 
             <View tw="flex-row items-center justify-between h-8">
-              <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
+              <Text tw="text-base">{t('Dashboard.ShoppingCart.marketFees')}</Text>
               <View tw="flex-row items-center space-x-1">
                 <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
                 <Text tw="text-base">
                   {CurrencyStandardization.currencyCode({
                     code: 'NGN', // TODO: get value from somewhere
-                    value: data.totalPaymentFeesAmount,
+                    value: data.totalPaymentFeesAmount + data.totalColdtivateAmount,
                   }).getValueFormated()}
                 </Text>
               </View>

@@ -1259,7 +1259,7 @@ export default {
       discount: 'ଛୁଟ',
       fees: 'ସେବା ଶୁଳ୍କ',
       marketFees: 'ବଜାର ଶୁଳ୍କ',
-      paymentFee: 'ଜମା ଶୁଳ୍କ',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'ସଂପର୍କ(ଗୁଡିକ) ଦେଖନ୍ତୁ',
       contactsForDelivery: 'ଡେଲିଭରୀ ସୂଚନା ପାଇଁ ସଂପର୍କ(ଗୁଡିକ)',
       gotItButton: 'ବୁଝିଗଲି!',
@@ -1291,7 +1291,7 @@ export default {
         minimumCartValue: 'ଆର୍ଡର ଅତିକମ୍ ₦100 ହେବା ଉଚିତ।',
       },
       deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling unit storage fee of {{value}} will also be applied.', // TODO
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'ଦେଖାଇବାକୁ କୌଣସି ତଥ୍ୟ ନାହିଁ',

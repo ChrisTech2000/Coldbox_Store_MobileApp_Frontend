@@ -1255,7 +1255,7 @@ const en = {
       discount: 'Discount',
       fees: 'Service fees',
       marketFees: 'Marketplace fee',
-      paymentFee: 'Payment fee',
+      coolingFees: 'Cooling fee',
       viewContacts: 'View contact(s)',
       contactsForDelivery: 'Contact(s) for delivery information',
       gotItButton: 'Got it!',
@@ -1277,7 +1277,7 @@ const en = {
       couponPlaceholder: 'E.g. 20OFF',
       discountsApplied: 'Discounts Applied',
       deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling unit storage fee of {{value}} will also be applied.',
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.',
       pickupModal: {
         today: 'Please pick up your order at {{company}}, located at {{location}}, today.',
         storage: 'Your crates are now being stored at {{company}}, located at {{location}}.',
