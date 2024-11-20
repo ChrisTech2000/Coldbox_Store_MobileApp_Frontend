@@ -80,12 +80,13 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
-        coolingUnits: z.array(z.number()).min(1),
+        coolingUnits: z.array(z.number()),
       })
     ),
     reValidateMode: 'onSubmit',
   });
 
+  console.log(errors);
   const [internalSelection, setInternalSelection] = useState<Array<number>>([]);
   const selectedCoolingUnits = watch('coolingUnits');
 

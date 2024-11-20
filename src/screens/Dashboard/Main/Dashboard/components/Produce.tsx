@@ -108,6 +108,11 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
             <Text tw="text-base font-bold" numberOfLines={1}>
               {produce.cropName}
             </Text>
+            {produce.additionalInfo ? (
+              <Text tw="text-gray-700" numberOfLines={1}>
+                {produce.additionalInfo}
+              </Text>
+            ) : null}
 
             <Text tw="text-gray-400">{produce.movementCode}</Text>
           </View>

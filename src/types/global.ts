@@ -78,7 +78,7 @@ export type Crate = {
 };
 
 export type DashboardProduce = {
-  additonalInfo: string;
+  additionalInfo: string;
   checkoutComplete: boolean;
   checkedInCrates: Array<Crate>;
   cratesAmount: number;

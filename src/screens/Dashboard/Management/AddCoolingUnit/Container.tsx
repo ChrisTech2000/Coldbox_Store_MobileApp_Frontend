@@ -31,10 +31,13 @@ type Props = {
 };
 
 export default function ScreenContainer(props: Props) {
-  const initialFormValues = useRef<FormValues>(_buildInitialValues());
+  const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
+
+  const initialFormValues = useRef<FormValues>(
+    _buildInitialValues(Object.keys(companyCrops).map((key) => parseInt(key)))
+  );
   const navigation = useNavigation();
 
-  const { isLoading } = DataAggregator.useDataAggregator();
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
@@ -166,7 +169,7 @@ export default function ScreenContainer(props: Props) {
   );
 }
 
-function _buildInitialValues() {
+function _buildInitialValues(crops: number[]) {
   return {
     name: '',
     location: null,
@@ -191,7 +194,7 @@ function _buildInitialValues() {
     sensorData: undefined,
     public: false,
     operators: [],
-    crops: [],
+    crops,
     cropSpecificPricing: [],
     refrigerantType: 'other',
     amountRefrigerant: '',
