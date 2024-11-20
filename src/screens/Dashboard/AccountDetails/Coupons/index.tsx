@@ -38,7 +38,7 @@ function CouponsRoot() {
           try {
             await CouponService.createCoupon({
               code: values.code,
-              discountPercentage: values.percentage,
+              discountPercentage: Math.min(values.percentage / 100, 1.0),
             });
 
             await Promise.allSettled([

@@ -102,7 +102,6 @@ export function useMarketplaceListing() {
         Array.from(ownerUserIds).map(async (id) => await ColdtivateService.getUser(id))
       );
       const ownerUsers = _ownerUsers.flatMap((user) => user);
-      console.log(ownerUsers, '#');
       const companiesMapCopy = new Map(companyMap);
       for (const company of companies) {
         companiesMapCopy.set(company.id, company);
