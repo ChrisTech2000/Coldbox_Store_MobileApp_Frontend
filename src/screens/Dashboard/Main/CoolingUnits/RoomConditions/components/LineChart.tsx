@@ -7,7 +7,12 @@ import {
 } from '@shopify/react-native-skia';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { useDerivedValue } from 'react-native-reanimated';
+import {
+  runOnJS,
+  useAnimatedReaction,
+  useDerivedValue,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { CartesianChart, Line, useChartPressState } from 'victory-native';
 
 import useSkiaFont from '#ui/hooks/useSkiaFont';
@@ -57,6 +62,19 @@ export default function LineChart(props: LineChartProps) {
     () => vec(state.x.position.value, state.y.temperature.position.value * 12), // ← fyk: this multiplication by eight is made up :shurg:
     [textValue]
   );
+  //
+  // formatted date
+  const formattedDate = useSharedValue<string>('');
+  function setFormattedDate(timestamp: string) {
+    formattedDate.value = dateFmt(timestamp, 'dd/MM, hh:mm:ss');
+  }
+  useAnimatedReaction(
+    () => state.x.value,
+    (newValue) => {
+      runOnJS(setFormattedDate)(newValue.value);
+    }
+  );
+  const formattedDateYPosition = useDerivedValue(() => textYPosition.value + 20, [textYPosition]);
 
   return (
     <CartesianChart
@@ -97,9 +115,9 @@ export default function LineChart(props: LineChartProps) {
                 style="fill"
               />
               <SkiaText
-                x={textXPosition.value}
-                y={textYPosition.value + 20}
-                text={dateFmt(textValue.value, 'dd/MM, hh:mm:ss')}
+                x={textXPosition}
+                y={formattedDateYPosition}
+                text={formattedDate}
                 font={tooltipFont}
                 color={paperTheme.colors.tertiary}
                 style="fill"
