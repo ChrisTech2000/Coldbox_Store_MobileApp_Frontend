@@ -170,9 +170,11 @@ export interface UpdateCompanyParams extends JsonObject {
 
 export interface UpdateFarmerParams extends JsonObject {
   farmerId: number;
-  country: string;
-  parentName: string;
-  updateUser: true;
+  country?: string;
+  parentName?: string;
+  updateUser?: true;
+  coolingUnitId?: number;
+  updateCoolingUnits?: boolean;
 }
 
 export interface GetCoolingUnitsByStatusParams extends JsonObject {
