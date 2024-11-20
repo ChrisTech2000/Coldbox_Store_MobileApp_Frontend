@@ -51,7 +51,7 @@ function CoolingUnitsRoomConditions() {
   const chartDatums = useMemo(() => processTemperatures(temperatures), [temperatures]);
 
   return (
-    <View tw="pt-5">
+    <View tw="py-5">
       <GenericFilter>
         <RBAC.ProtectedResource action="VIEW" subject="CompaniesFilter">
           <GenericFilter.Companies />

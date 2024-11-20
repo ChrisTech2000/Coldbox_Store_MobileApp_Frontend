@@ -7,7 +7,12 @@ import {
 } from '@shopify/react-native-skia';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { useDerivedValue } from 'react-native-reanimated';
+import {
+  runOnJS,
+  useAnimatedReaction,
+  useDerivedValue,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { CartesianChart, Line, useChartPressState } from 'victory-native';
 
 import useSkiaFont from '#ui/hooks/useSkiaFont';
@@ -38,15 +43,13 @@ export default function LineChart(props: LineChartProps) {
   });
   // temperature
   // scope: animated text
-  const textValue = useDerivedValue(
-    () => state.y.temperature.value.value.toFixed(1) + ' °C',
-    [state]
-  );
+  const textValue = useDerivedValue(() => state.x.value.value, [state]);
   // scope: animated position
   const textXPosition = useDerivedValue(() => {
     if (!tooltipFont) return 0;
     const textWidth = tooltipFont.measureText(textValue.value).width;
-    return state.x.position.value - textWidth / 2;
+    const position = state.x.position.value;
+    return position < textWidth ? position : position - textWidth / 2;
   }, [tooltipFont, textValue]);
   const textYPosition = useDerivedValue(() => state.y.temperature.position.value - 25, [textValue]);
   //
@@ -59,13 +62,31 @@ export default function LineChart(props: LineChartProps) {
     () => vec(state.x.position.value, state.y.temperature.position.value * 12), // ← fyk: this multiplication by eight is made up :shurg:
     [textValue]
   );
+  // tooltip
+  // scope: temperature label
+  const temperatureLabel = useDerivedValue(
+    () => `${state.y.temperature.value.value.toFixed(1)} °C`,
+    [state.y.temperature]
+  );
+  // scope: formatted date
+  const formattedDate = useSharedValue<string>('');
+  function setFormattedDate(timestamp: string) {
+    formattedDate.value = dateFmt(timestamp, 'dd/MM, hh:mm:ss');
+  }
+  useAnimatedReaction(
+    () => state.x.value,
+    (newValue) => {
+      runOnJS(setFormattedDate)(newValue.value);
+    }
+  );
+  const formattedDateYPosition = useDerivedValue(() => textYPosition.value + 20, [textYPosition]);
 
   return (
     <CartesianChart
       data={datums}
       xKey="timestamp"
       yKeys={['temperature']}
-      domainPadding={{ top: 35, left: 30, right: 30, bottom: 10 }}
+      domainPadding={{ top: 40, left: 35, right: 35, bottom: 10 }}
       axisOptions={{
         font,
         lineColor: paperTheme.colors.outlineVariant,
@@ -93,11 +114,20 @@ export default function LineChart(props: LineChartProps) {
               <SkiaText
                 x={textXPosition}
                 y={textYPosition}
-                text={textValue}
+                text={temperatureLabel}
                 font={tooltipFont}
                 color={paperTheme.colors.tertiary}
                 style="fill"
               />
+              <SkiaText
+                x={textXPosition}
+                y={formattedDateYPosition}
+                text={formattedDate}
+                font={tooltipFont}
+                color={paperTheme.colors.tertiary}
+                style="fill"
+              />
+
               <Circle
                 cx={state.x.position}
                 cy={state.y.temperature.position}
