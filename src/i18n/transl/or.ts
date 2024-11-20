@@ -1290,6 +1290,8 @@ export default {
         invalid: 'ଅବୈଧ ମୂଲ୍ୟ',
         minimumCartValue: 'ଆର୍ଡର ଅତିକମ୍ ₦100 ହେବା ଉଚିତ।',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling unit storage fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'ଦେଖାଇବାକୁ କୌଣସି ତଥ୍ୟ ନାହିଁ',

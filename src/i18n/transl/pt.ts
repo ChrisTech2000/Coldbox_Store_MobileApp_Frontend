@@ -1298,6 +1298,8 @@ export default {
         invalid: 'Valor inválido',
         minimumCartValue: 'O pedido deve ser de pelo menos ₦100.',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling unit storage fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'Sem dados para exibir',
