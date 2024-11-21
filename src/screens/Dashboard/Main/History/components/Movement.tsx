@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Dialog, Divider, Icon, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
@@ -149,7 +150,9 @@ export function Movement({
   return (
     <View tw="w-full">
       <View tw="flex flex-row items-center justify-between my-2">
-        {isCheckIn ? (
+        {movement.code.startsWith('MO-') ? (
+          <MaterialIcon name="cart-outline" size={25} color={colors.blue[400]} />
+        ) : isCheckIn ? (
           <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />
         ) : (
           <CheckOut width={20} height={20} fill={colors.orange[400]} stroke={colors.orange[400]} />
