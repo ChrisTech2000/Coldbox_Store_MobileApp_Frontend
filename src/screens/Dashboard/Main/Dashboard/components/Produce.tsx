@@ -61,7 +61,7 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
     <View tw="flex flex-row w-[90%] mr-2 self-center mt-3" onLayout={onLayout}>
       <View
         tw={cn(
-          'bg-green-400 w-2 rounded-l-lg border-y-4 border-green-400',
+          'bg-green-400 w-2 rounded-l-lg border-green-400',
           produce.minimumRemainingShelfLife <= 7 &&
             produce.minimumRemainingShelfLife > 2 &&
             'bg-yellow-400 border-yellow-400',

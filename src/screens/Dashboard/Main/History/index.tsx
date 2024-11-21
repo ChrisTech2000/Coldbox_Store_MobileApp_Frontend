@@ -1,6 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, Platform, ScrollView, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -19,6 +19,7 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { cn } from '#ui/lib/cn';
 
 import { HistoryOverlay } from '#screens/Dashboard/Tutorial/HistoryOverlay';
 import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
@@ -125,7 +126,10 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
       />
 
-      <ScrollView tw="mx-4 mt-2 mb-28" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        tw={cn('mx-4 mt-2', Platform.OS === 'ios' ? 'mb-28' : 'mb-20')}
+        showsVerticalScrollIndicator={false}
+      >
         {areCoolingUnitsLoading || areMovementsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
