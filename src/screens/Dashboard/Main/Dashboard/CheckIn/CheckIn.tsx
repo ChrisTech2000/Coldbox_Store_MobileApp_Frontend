@@ -200,6 +200,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             default:
               break;
           }
+
           return {
             ...produce,
             crop: { id: produce.crop.id },
@@ -212,6 +213,12 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             }),
           };
         }),
+      });
+
+      await ColdtivateService.updateFarmer({
+        farmerId: user.id,
+        coolingUnitId: coolingUnit.id,
+        updateCoolingUnits: true,
       });
     }
 
