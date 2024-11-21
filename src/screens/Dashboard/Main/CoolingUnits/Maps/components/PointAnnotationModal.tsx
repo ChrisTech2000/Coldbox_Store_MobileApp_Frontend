@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { FlatList, View } from 'react-native';
-import { Divider, List, Modal, Portal } from 'react-native-paper';
+import { Dimensions, FlatList } from 'react-native';
+import { Dialog, Divider, List, Portal } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
@@ -8,9 +8,10 @@ import { Button } from '#ui/components/Button';
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import { useAppEventListener } from '#ui/lib/emitter';
-import { cn } from '#ui/lib/cn';
 
 import type { MarkerDatum } from '../utils';
+
+const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.55;
 
 type Props = {
   markers: Array<MarkerDatum>;
@@ -30,27 +31,26 @@ export default function PointAnnotationModal(props: Props) {
   });
 
   const safeValue = marker?.coolingUnitsInfo ?? [];
+  const isScrollable = safeValue.length >= 2;
+  const Container = isScrollable ? Dialog.ScrollArea : Dialog.Content;
 
   return (
     <Portal>
-      <Modal visible={isVisible} onDismiss={toggleVisibility}>
-        <View
-          tw={cn(
-            'w-full bg-white rounded-3xl w-4/5 max-w-4/5 h-auto pt-6 pb-4 self-center',
-            safeValue.length >= 2 && 'h-2/3'
-          )}
-        >
-          <Text variant="TitleSmall" tw="px-6">
-            {marker?.title}
-          </Text>
+      <Dialog
+        visible={isVisible}
+        onDismiss={toggleVisibility}
+        style={{ backgroundColor: 'white', maxHeight: DIALOG_MAX_HEIGHT }}
+      >
+        <Dialog.Title tw="text-lg">{marker?.title}</Dialog.Title>
+        <Container {...(isScrollable ? { showsVerticalScrollIndicator: false } : {})}>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={safeValue}
             nestedScrollEnabled
+            data={safeValue}
             keyExtractor={(_, itemIdx) => `marker-cooling-unit-info-#${itemIdx}`}
             ItemSeparatorComponent={Divider}
             renderItem={({ item }) => (
-              <List.Section tw="pt-3 px-6 m-0">
+              <List.Section tw="p-3 m-0">
                 <List.Subheader tw="m-0 p-0">
                   <Text variant="TitleSmall" tw="m-0 p-0">
                     {item.name}:
@@ -62,20 +62,19 @@ export default function PointAnnotationModal(props: Props) {
               </List.Section>
             )}
           />
-          <View tw="self-end pr-6">
-            <Button
-              mode="text"
-              onPress={(evt) => {
-                evt?.stopPropagation();
-                toggleVisibility();
-                setMarker(undefined);
-              }}
-            >
-              {t('actions.close')}
-            </Button>
-          </View>
-        </View>
-      </Modal>
+        </Container>
+        <Dialog.Actions>
+          <Button
+            onPress={(evt) => {
+              evt?.stopPropagation();
+              toggleVisibility();
+              setMarker(undefined);
+            }}
+          >
+            {t('actions.close')}
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
     </Portal>
   );
 }

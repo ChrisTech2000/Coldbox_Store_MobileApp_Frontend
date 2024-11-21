@@ -1,13 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, Platform, ScrollView, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardRoutes } from '#navigation/Dashboard';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -22,6 +19,7 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { cn } from '#ui/lib/cn';
 
 import { HistoryOverlay } from '#screens/Dashboard/Tutorial/HistoryOverlay';
 import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
@@ -43,7 +41,6 @@ const deviceHeight = Dimensions.get('window').height;
 
 function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const { t } = useTranslationUtils();
-  const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const user = useAuthStore((store) => store.user);
   const [isTutorialActive] = useTutorialStore((store) => [store.isTutorialActive]);
@@ -60,10 +57,10 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const [areCoolingUnitsLoading, setAreCoolingUnitsLoading] = useState<boolean>(false);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: ECommonTutorialSteps.HISTORY_STEP,
     OverlayComponent: HistoryOverlay,
-    onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'CoolingUnits' }),
+    fullScreen: true,
   });
 
   const {
@@ -112,7 +109,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   }, []);
 
   return (
-    <View tw="absolute bottom-0 top-0 right-0 left-0" onLayout={onLayout}>
+    <View tw="absolute bottom-0 top-0 right-0 left-0">
       <Filters
         sortingMenu={
           <SortingMenu
@@ -129,7 +126,10 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
       />
 
-      <ScrollView tw="mx-4 mt-2 mb-28" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        tw={cn('mx-4 mt-2', Platform.OS === 'ios' ? 'mb-28' : 'mb-20')}
+        showsVerticalScrollIndicator={false}
+      >
         {areCoolingUnitsLoading || areMovementsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />

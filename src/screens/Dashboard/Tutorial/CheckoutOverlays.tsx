@@ -1,26 +1,33 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, TouchableOpacity, View } from 'react-native';
-import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Dimensions, Platform, TouchableOpacity, View } from 'react-native';
+import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
+import { CheckOutStackRoutes } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
+import { useTutorialStore } from '#stores/tutorial';
+
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { useTutorialStore } from '#stores/tutorial';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+
+import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function OperatorActionsOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+const MOCKED_PARAMS = {
+  user: MOCKED_USER,
+  crates: MOCKED_CHECK_OUT_DATA,
+  coolingUnit: MOCKED_COOLING_UNIT,
+};
+
+export function OperatorActionsOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -52,9 +59,24 @@ export function OperatorActionsOverlay({
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw="absolute bottom-28 right-14 w-[14%] h-[9%]"
+        tw={cn(
+          'absolute right-14 w-[14%] h-[9%]',
+          Platform.OS === 'ios' ? 'bottom-28' : 'bottom-20'
+        )}
         onPress={() => {
-          onPressMask?.();
+          // eslint-disable-next-line
+          // @ts-ignore
+          rootNavigation.navigate('Main', {
+            screen: 'Dashboard',
+            params: {
+              screen: 'CheckOutStack',
+              params: {
+                screen: 'CrateSelection',
+                params: MOCKED_PARAMS,
+              },
+            },
+          });
+
           next();
         }}
       >
@@ -88,7 +110,7 @@ export function OperatorActionsOverlay({
           shadowRadius: 4,
         }}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.checkOut1')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.checkOut1')}</Text>
         <Button
           mode="text"
           onPress={() => {
@@ -105,14 +127,11 @@ export function OperatorActionsOverlay({
   );
 }
 
-export function CheckOutScreenOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CheckOutScreenOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const navigation = useNavigation<NativeStackNavigationProp<CheckOutStackRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -130,7 +149,7 @@ export function CheckOutScreenOverlay({
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.checkOut2')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.checkOut2')}</Text>
 
         <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
           <Button
@@ -147,7 +166,15 @@ export function CheckOutScreenOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              navigation.navigate(
+                'BillingInfo',
+                // eslint-disable-next-line
+                // @ts-ignore
+                {
+                  ...MOCKED_PARAMS,
+                  user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
+                }
+              );
               next();
             }}
             labelStyle="text-white"
@@ -161,14 +188,10 @@ export function CheckOutScreenOverlay({
   );
 }
 
-export function CheckOut2ScreenOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CheckOut2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -183,7 +206,7 @@ export function CheckOut2ScreenOverlay({
           },
         ]}
       >
-        <Text tw="text-center text-base">{t('tutorial.steps.checkOut3')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.checkOut3')}</Text>
 
         <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
           <Button
@@ -191,7 +214,7 @@ export function CheckOut2ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
+              rootNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-green-primary"
           >
@@ -200,7 +223,7 @@ export function CheckOut2ScreenOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              rootNavigation.navigate('RootMainTabStack');
               next();
             }}
             labelStyle="text-white"

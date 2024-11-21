@@ -1,11 +1,15 @@
+import Clipboard from '@react-native-clipboard/clipboard';
+import truncate from 'lodash/truncate';
 import React, { useState, type PropsWithChildren } from 'react';
 import { TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider } from 'react-native-paper';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  default as Icon,
+  default as MaterialCommunityIcon,
+} from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useDebouncedCallback } from 'use-debounce';
-import truncate from 'lodash/truncate';
 
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
@@ -13,6 +17,7 @@ import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -44,9 +49,10 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
   cropName: string;
   movementCode: string;
   cropImageUri: string;
-  owner: string;
+  owner: { name: string; contact: string; isPhonePublic: boolean };
 }) {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const iconColor =
     props.shelfLife === null
@@ -82,9 +88,27 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
           <Text variant="TextMedium" tw="text-lg">
             {props.cropName}
           </Text>
-          <Text variant="TextMedium" tw="text-sm text-gray-600">
-            {t('Dashboard.Marketplace.owner')}: {props.owner}
-          </Text>
+          {props.owner.name.trim() ? (
+            <Text variant="TextMedium" tw="text-sm text-gray-600">
+              {t('Dashboard.Marketplace.owner')}: {props.owner.name}
+            </Text>
+          ) : null}
+          {props.owner.contact && props.owner.isPhonePublic ? (
+            <View tw="flex flex-row space-x-1 items-center">
+              <Icon name="cellphone" size={20} color={colors.gray[600]} />
+              <Text variant="TextMedium" tw="text-sm text-gray-600">
+                {props.owner.contact}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  Clipboard.setString(props.owner.contact);
+                  toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
+                }}
+              >
+                <Icon name="content-copy" size={15} color={paperTheme.colors.primary} />
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
       </View>
 

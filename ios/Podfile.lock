@@ -1419,6 +1419,8 @@ PODS:
     - React
     - React-Core
     - Turf
+  - RNPermissions (5.1.0):
+    - React-Core
   - RNReanimated (3.15.5):
     - DoubleConversion
     - glog
@@ -1641,6 +1643,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - "rnmapbox-maps (from `../node_modules/@rnmapbox/maps`)"
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
@@ -1815,6 +1818,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localize"
   rnmapbox-maps:
     :path: "../node_modules/@rnmapbox/maps"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1911,6 +1916,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 28078232f2868d3dcb4d4b6c8ab8691700187664
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
   rnmapbox-maps: 86b215fe77632a897b34a2dbf0c3ad4e9e8c3570
+  RNPermissions: a4fea37c439263af4f1394bcf53538f20149e434
   RNReanimated: e4f45f26ac30208ad2c53dadc304d070aa262bfd
   RNScreens: aa943ad421c3ced3ef5a47ede02b0cbfc43a012e
   RNSentry: 06eb0bb6483b61486c8ee892d4ee78ee3c9110dd
@@ -1923,6 +1929,6 @@ SPEC CHECKSUMS:
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
   Yoga: ae3c32c514802d30f687a04a6a35b348506d411f
 
-PODFILE CHECKSUM: 9192cfa6c2f6cadf0322fc3a476ccc06d64ed1c2
+PODFILE CHECKSUM: 221ad209505f6a44714e236e4c25c7f82519cb9f
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

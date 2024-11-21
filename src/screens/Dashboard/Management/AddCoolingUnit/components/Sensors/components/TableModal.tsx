@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { FlatList, View } from 'react-native';
-import { DataTable, Modal, Portal } from 'react-native-paper';
+import { FlatList } from 'react-native';
+import { DataTable, Dialog, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 
@@ -31,7 +31,7 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
 
     const commonFields = [
       { name: 'Sensor Type', value: sensorType.charAt(0).toUpperCase() + sensorType.slice(1) },
-      { name: 'Date Added', value: dateFmt(dateSensorFirstLinked) },
+      { name: 'Date Added', value: dateSensorFirstLinked ? dateFmt(dateSensorFirstLinked) : '' },
       { name: 'Username', value: username },
     ] satisfies RowsDatums;
 
@@ -71,8 +71,12 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
       </Button>
 
       <Portal>
-        <Modal visible={isVisible} onDismiss={toggleVisibility}>
-          <View tw="w-full bg-white rounded-3xl w-11/12 max-w-11/12 h-auto self-center">
+        <Dialog
+          visible={isVisible}
+          onDismiss={toggleVisibility}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Dialog.Content>
             <DataTable>
               <DataTable.Header>
                 <DataTable.Title>Name</DataTable.Title>
@@ -92,14 +96,11 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
                 nestedScrollEnabled
               />
             </DataTable>
-
-            <View tw="self-end px-6 py-2">
-              <Button mode="text" onPress={toggleVisibility}>
-                {t('actions.close')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={toggleVisibility}>{t('actions.close')}</Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </React.Fragment>
   );

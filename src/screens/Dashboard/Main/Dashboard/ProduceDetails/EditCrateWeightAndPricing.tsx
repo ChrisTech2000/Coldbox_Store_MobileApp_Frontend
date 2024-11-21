@@ -88,8 +88,6 @@ function EditCrateWeightAndPricing(
     }
   );
 
-  console.log(params.companyId, farmer?.user?.id);
-
   const form = useForm<FormValues>({
     defaultValues: { applyToAll: false, crates: [], price: '0' },
     resolver: zodResolver((z) => {
@@ -149,7 +147,7 @@ function EditCrateWeightAndPricing(
       const promises: Array<Promise<unknown>> = [];
 
       const operatorParams =
-        user?.role === ERoles.OPERATOR
+        user?.role === ERoles.OPERATOR && params.farmerId
           ? ({ operatorOnBehalfOfSellerFarmerId: params.farmerId } satisfies ListedCratesBaseParams)
           : {};
 

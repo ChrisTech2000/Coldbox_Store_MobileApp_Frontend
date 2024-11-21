@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Platform, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -8,15 +8,17 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerOverlay({ next, stop, step: { mask, onPressMask } }: IOverlayComponentProps) {
+export function DrawerOverlay({ next, stop, step: { mask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
+  const navigation = useNavigation();
 
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
@@ -45,11 +47,17 @@ export function DrawerOverlay({ next, stop, step: { mask, onPressMask } }: IOver
     <View tw="h-full w-full absolute">
       <TouchableOpacity
         tw={cn(
-          'absolute left-3 w-[10%] h-[5%]',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-8' : 'top-14'
+          'absolute left-4 w-[10%] h-[5%]',
+          Platform.OS === 'ios'
+            ? screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-8'
+              : 'top-14'
+            : screenHeight <= SMALL_SCREEN_THRESHOLD
+              ? 'top-10'
+              : 'top-16'
         )}
         onPress={() => {
-          onPressMask?.();
+          navigation.dispatch(DrawerActions.openDrawer());
           next();
         }}
       >
@@ -71,7 +79,7 @@ export function DrawerOverlay({ next, stop, step: { mask, onPressMask } }: IOver
         tw="absolute bg-white p-3 rounded-md z-30"
         style={[
           {
-            top: mask.y + mask.height - 10,
+            top: mask.y + mask.height + 10,
             left: mask.x + 10,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },

@@ -19,39 +19,19 @@ export default {
     try {
       const url = await Linking.getInitialURL();
       if (!url) return null;
-
-      if (url.includes('auth/reset/')) {
-        const queryParams = _stripURL(url);
-        if (!queryParams) return null;
-
-        const datums = _queryParamsToObject(queryParams);
-
-        return [DEEP_LINK_URL, subs(DEEP_LINK_PATHS.PASSWORD_RESET, datums)].join('/');
-      }
-
-      if (url.includes('auth/signup-invitation/')) {
-        const queryParams = _stripURL(url);
-        if (!queryParams) return null;
-
-        const datums = _queryParamsToObject(queryParams);
-
-        const link = subs(DEEP_LINK_PATHS.INVITE, {
-          inviteCode: datums.invitationCode,
-          userType: Number(datums.userType) === 2 ? 'op' : 'sp',
-          phoneNumber: datums.phoneNumber,
-        });
-
-        return [DEEP_LINK_URL, link].join('/');
-      }
-
-      return url;
-    } catch {
+      return DeepLinkProcessor.processDeepLink(url);
+    } catch (exception) {
+      console.warn('Error processing deep link:', exception);
       return null;
     }
   },
   subscribe(listener) {
     const linkingSubscription = Linking.addEventListener('url', ({ url }) => {
-      listener(url);
+      try {
+        listener(DeepLinkProcessor.processDeepLink(url));
+      } catch (exception) {
+        console.warn('Error processing deep link:', exception);
+      }
     });
     return () => {
       linkingSubscription.remove();
@@ -79,22 +59,61 @@ export default {
 } satisfies LinkingOptions<ReactNavigation.RootParamList>;
 
 ///
-// Internal Util Functions
+// Internals
 ///
 
-function _stripURL(url: string): string | undefined {
-  const queryIndex = url.indexOf('?');
-  return queryIndex !== -1 ? url.slice(queryIndex + 1) : undefined;
-}
+const WEB_APP_ROUTER_PATHS = {
+  PASSWORD_RESET: 'auth/reset/',
+  SIGNUP_INVITATION: 'auth/signup-invitation/',
+} as const;
 
-function _queryParamsToObject(queryString: string): Record<string, string> {
-  const datums: Record<string, string> = {};
-  for (const pair of queryString.split('&')) {
-    const [key, value] = pair.split('=');
-    if (!key || !value) continue;
-    const k = camelCase(key);
-    const v = decodeURIComponent(value);
-    datums[k] = v;
+class DeepLinkProcessor {
+  static processDeepLink(url: string): string {
+    if (url.includes(WEB_APP_ROUTER_PATHS.PASSWORD_RESET)) {
+      return DeepLinkProcessor._processPasswordResetLink(url);
+    }
+    if (url.includes(WEB_APP_ROUTER_PATHS.SIGNUP_INVITATION)) {
+      return DeepLinkProcessor._processInviteLink(url);
+    }
+    return url;
   }
-  return datums;
+
+  //
+  // private methods
+  private static _processPasswordResetLink(url: string): string {
+    const queryParams = DeepLinkProcessor._stripURL(url);
+    const datums = DeepLinkProcessor._queryParamsToObject(queryParams);
+    return [DEEP_LINK_URL, subs(DEEP_LINK_PATHS.PASSWORD_RESET, datums)].join('/');
+  }
+
+  private static _processInviteLink(url: string): string {
+    const queryParams = DeepLinkProcessor._stripURL(url);
+    const datums = DeepLinkProcessor._queryParamsToObject(queryParams);
+    return [
+      DEEP_LINK_URL,
+      subs(DEEP_LINK_PATHS.INVITE, {
+        inviteCode: datums.invitationCode,
+        userType: Number(datums.userType) === 2 ? 'op' : 'sp',
+        phoneNumber: datums.phoneNumber,
+      }),
+    ].join('/');
+  }
+
+  private static _stripURL(url: string): string {
+    const queryIdx = url.indexOf('?');
+    if (queryIdx !== -1) return url.slice(queryIdx + 1);
+    throw new Error('[DEEP_LINK_EXCEPTION]: URL QUERY STRIP');
+  }
+
+  private static _queryParamsToObject(queryString: string): Record<string, string> {
+    const datums: Record<string, string> = {};
+    for (const pair of queryString.split('&')) {
+      const [key, value] = pair.split('=');
+      if (!key || !value) throw new Error('[DEEP_LINK_EXCEPTION]: URL QUERY PARAMS PARSE');
+      const k = camelCase(key);
+      const v = decodeURIComponent(value);
+      datums[k] = v;
+    }
+    return datums;
+  }
 }

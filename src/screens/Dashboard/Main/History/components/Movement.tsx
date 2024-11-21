@@ -1,20 +1,19 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Divider, Icon, Portal } from 'react-native-paper';
+import { Dialog, Divider, Icon, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
-import ColdtivateService from '#services/ColdtivateService';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
 
-import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
-import { ManagementCompany, useManagementStore } from '#stores/management';
-import { GetMovementsHistoryResponse } from '#types/api.responses';
+import ColdtivateService from '#services/ColdtivateService';
+import { type ManagementCompany, useManagementStore } from '#stores/management';
+import { type GetMovementsHistoryResponse } from '#types/api.responses';
 import {
   ECoolingUnitMetric,
   EMovementType,
@@ -23,6 +22,7 @@ import {
   type Company,
   type CoolingUnit,
 } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 import { isWithinLast24Hours } from '../utils/dates';
 import { DetailsModal } from './DetailsModal';
@@ -72,13 +72,13 @@ export function Movement({
     if (!isCheckIn)
       return `${movement.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
 
-    const price = coolingUnit?.commonPricingType.value ?? 0;
+    const price = coolingUnit?.commonPricingType?.value ?? 0;
     const suffix =
-      coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+      coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY
         ? `/ ${t('Dashboard.CrateManagement.CheckIn.day')}`
         : '';
 
-    if (coolingUnit?.commonPricingType.metric === ECoolingUnitMetric.CRATES) {
+    if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
       return `${price * movement.cratesNumber} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
     }
 
@@ -150,7 +150,9 @@ export function Movement({
   return (
     <View tw="w-full">
       <View tw="flex flex-row items-center justify-between my-2">
-        {isCheckIn ? (
+        {movement.code.startsWith('MO-') ? (
+          <MaterialIcon name="cart-outline" size={25} color={colors.blue[400]} />
+        ) : isCheckIn ? (
           <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />
         ) : (
           <CheckOut width={20} height={20} fill={colors.orange[400]} stroke={colors.orange[400]} />
@@ -188,28 +190,32 @@ export function Movement({
       </View>
       <Divider tw="w-full bg-gray-400" />
       <Portal>
-        <Modal visible={isOptionsModalOpen} onDismiss={() => setIsOptionsModalOpen(false)}>
-          <View tw="bg-white rounded-3xl h-auto space-y-2 mx-16 px-3 py-2">
+        <Dialog
+          visible={isOptionsModalOpen}
+          onDismiss={() => setIsOptionsModalOpen(false)}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Dialog.Content tw="px-0">
             <FlatList
+              scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               data={optionsMenu}
               keyExtractor={(item, index) => `opt-${item.label}-#${index}`}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  tw="space-y-2 w-full my-1"
+                  tw="w-full py-2.5 px-6"
                   onPress={item.action}
                   disabled={item.disabled}
                 >
                   <Text variant="TextMedium" tw={cn('text-base', item.disabled && 'text-gray-400')}>
                     {item.label}
                   </Text>
-                  <Divider tw="w-full bg-gray-400" />
                 </TouchableOpacity>
               )}
-              nestedScrollEnabled
+              ItemSeparatorComponent={Divider}
             />
-          </View>
-        </Modal>
+          </Dialog.Content>
+        </Dialog>
         <PDFModal
           isOpen={isPDFModalOpen}
           dismiss={() => setIsPDFModalOpen(false)}

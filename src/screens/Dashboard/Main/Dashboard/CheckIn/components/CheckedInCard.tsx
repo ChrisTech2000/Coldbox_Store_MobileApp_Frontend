@@ -43,9 +43,9 @@ export function CheckedInCard({
 
   const getCratePrice = useCallback(
     (crates: ProduceCrate['crates']) => {
-      const price = coolingUnit.commonPricingType.value;
+      const price = coolingUnit.commonPricingType?.value;
 
-      if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.CRATES) {
+      if (coolingUnit.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
         return (price * crates.length).toFixed(2);
       }
 
@@ -84,6 +84,7 @@ export function CheckedInCard({
             <Text tw="text-base text-green-primary">
               {item.crop.name} ({item.crates.length})
             </Text>
+            <Text tw="text-sm">{item.additionalInfo}</Text>
 
             {item.price ? (
               <View tw="flex flex-row space-x-1 items-center">
@@ -100,7 +101,7 @@ export function CheckedInCard({
               <Text variant="TextMedium" tw="text-base">
                 {currencySymbol}
                 {getCratePrice(item.crates)}
-                {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY
+                {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY
                   ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
                   : ''}
               </Text>

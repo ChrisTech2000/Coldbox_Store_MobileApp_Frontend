@@ -55,10 +55,10 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>();
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
     OverlayComponent: CheckOut2ScreenOverlay,
-    onPressMask: () => rootNavigation.navigate('RootMainTabStack'),
+    fullScreen: true,
   });
 
   const { data: locations } = useApiCall(
@@ -81,16 +81,16 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   }, [crates]);
 
   const priceType = useMemo(() => {
-    const type = coolingUnit?.commonPricingType.type;
-    const price = coolingUnit?.commonPricingType.value;
+    const type = coolingUnit?.commonPricingType?.type;
+    const price = coolingUnit?.commonPricingType?.value;
     return type === EPricingType.PERIODICITY
       ? `${price}${currency} / ${t('Dashboard.CrateManagement.CheckOut.crate')} / ${t('Dashboard.CrateManagement.CheckOut.day')}`
       : price;
   }, [coolingUnit, currency]);
 
   const cratePrices = useMemo(() => {
-    const type = coolingUnit?.commonPricingType.type;
-    const price = coolingUnit?.commonPricingType.value;
+    const type = coolingUnit?.commonPricingType?.type;
+    const price = coolingUnit?.commonPricingType?.value;
 
     return (
       crates?.map((crate) =>
@@ -331,7 +331,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           />
         </View>
         <Divider tw="bg-gray-400 my-2" />
-        <View onLayout={onLayout} tw="flex flex-row w-full justify-between items-center">
+        <View tw="flex flex-row w-full justify-between items-center">
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.CheckOut.paid')}
           </Text>

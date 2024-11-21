@@ -995,6 +995,7 @@ export default {
         buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'Ajouter au panier et continuer vos achats',
         selectQuantity: 'Sélectionnez la quantité',
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Localisation actuelle',
       filterError:
@@ -1256,7 +1257,7 @@ export default {
       backToTopButton: 'Retour en haut',
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership', // TODO
+      ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'Votre panier est vide',
@@ -1271,7 +1272,7 @@ export default {
       discount: 'Remise',
       fees: 'Frais de service',
       marketFees: 'Frais de marché',
-      paymentFee: 'Frais de paiement',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'Voir le(s) contact(s)',
       contactsForDelivery: 'Contact(s) pour les informations de livraison',
       gotItButton: 'Compris!',
@@ -1302,6 +1303,8 @@ export default {
         invalid: 'Valeur invalide',
         minimumCartValue: "La commande doit être d'au moins ₦100.",
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'Aucune donnée à afficher',
@@ -1491,6 +1494,8 @@ export default {
         'Si vous souhaitez revoir ce tutoriel, vous pouvez également le trouver dans le menu.',
       managementNavigation:
         'Dans le menu, vous pouvez naviguer vers "Gestion" et cliquer là pour ajouter ou modifier des utilisateurs de refroidissement. Allez-y et essayez.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'Les utilisateurs de refroidissement qui ne se sont pas inscrits sur Coldtivate peuvent être ajoutés en insérant leurs coordonnées (nom, numéro de téléphone). Les utilisateurs de refroidissement déjà inscrits dans l\'application peuvent être ajoutés par code. Ils peuvent trouver leur code sur leur profil -> "Détails du compte" -> "Code d\'importation de l\'utilisateur de refroidissement".',
       navigateToCoolingUser: "Allez-y et cliquez sur l'onglet des utilisateurs de refroidissement",

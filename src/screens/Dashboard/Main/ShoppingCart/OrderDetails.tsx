@@ -20,6 +20,8 @@ import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import MarketplaceService from '#services/MarketplaceService';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
 
@@ -35,6 +37,8 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
   const colors = useTailwindColors();
   const toast = InAppNotifications.useToast();
+  const user = useAuthStore((store) => store.user);
+  const company = useManagementStore((store) => store.company);
 
   const [cartData, coolingUnits] = useCartStore((store) => [store.cartData, store.allCoolingUnits]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -138,7 +142,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             tw="border border-green-primary mb-8"
             onPress={() => setIsModalOpen(true)}
           >
-            {t('Dashboard.ShoppingCart.ownership')}
+            {t('Dashboard.ShoppingCart.ownership', {
+              name: cartData?.ownedOnBehalfOfCompanyId
+                ? `${user?.firstName ?? ''} ${user?.lastName ?? ''}`
+                : (company?.name ?? ''),
+            })}
           </Button>
         </RBAC.ProtectedResource>
 
@@ -175,13 +183,13 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                           : ''}
                         {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
                           ? t(
-                              coolingUnit?.commonPricingType.type === EPricingType.PERIODICITY
+                              coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY
                                 ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
                                 : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                               {
                                 price: CurrencyStandardization.currencyCode({
                                   code: 'NGN', // TODO: get value from somewhere
-                                  value: coolingUnit?.commonPricingType.value ?? 0,
+                                  value: coolingUnit?.commonPricingType?.value ?? 0,
                                 }).getValueFormated(),
                               }
                             )
@@ -222,13 +230,13 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
         <View tw="flex-col w-full mt-6">
           <View tw="flex-row items-center justify-between h-8">
-            <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
+            <Text tw="text-base">{t('Dashboard.ShoppingCart.marketFees')}</Text>
             <View tw="flex-row items-center space-x-1">
               <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">
                 {CurrencyStandardization.currencyCode({
                   code: 'NGN', // TODO: get value from somewhere
-                  value: cartData.totalPaymentFeesAmount,
+                  value: cartData.totalPaymentFeesAmount + cartData.totalColdtivateAmount,
                 }).getValueFormated()}
               </Text>
             </View>

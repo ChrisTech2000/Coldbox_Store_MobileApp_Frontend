@@ -78,7 +78,7 @@ export type Crate = {
 };
 
 export type DashboardProduce = {
-  additonalInfo: string;
+  additionalInfo: string;
   checkoutComplete: boolean;
   checkedInCrates: Array<Crate>;
   cratesAmount: number;
@@ -278,7 +278,8 @@ export interface CompanyData {
   coolingUnitTypes: {
     [key: string]: {
       farmGateStorageRoom: number;
-      // TODO: this might need completion
+      movableUnit: number;
+      marketStorageRoom: number;
     };
   };
   currency: { [key: string]: string };

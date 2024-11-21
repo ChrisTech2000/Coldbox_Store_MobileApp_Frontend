@@ -916,6 +916,7 @@ export default {
         addToCartButton: 'Add to cart and continue shopping', // TODO
         buyFullCrate: 'Buy full crate', // TODO
         selectQuantity: 'Select quantity', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Current location', // TODO
       filterError:
@@ -1167,7 +1168,7 @@ export default {
       backToTopButton: 'Back to the top', // TODO
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership', // TODO
+      ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'Your cart is empty', // TODO
@@ -1182,7 +1183,7 @@ export default {
       discount: 'Discount', // TODO
       fees: 'Service fees', // TODO
       marketFees: 'Marketplace fee', // TODO
-      paymentFee: 'Payment fee', // TODO
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'View contact(s)', // TODO
       contactsForDelivery: 'Contact(s) for delivery information', // TODO
       gotItButton: 'Got it!', // TODO
@@ -1213,6 +1214,8 @@ export default {
         invalid: 'Invalid value', // TODO
         minimumCartValue: 'Order must be at least ₦100.', // TODO
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'Babu bayanai don nunawa',
@@ -1398,6 +1401,8 @@ export default {
       openDrawer:
         'On the top left, you find a menu with the main functionalities. Go ahead and click it.', // TODO
       repeatTutorial: 'Idan kuna son sake kallon wannan koyawa, kuna iya samunsa a cikin menu.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       managementNavigation:
         'A cikin menu, zaku iya kewayawa zuwa shafin "Management" kuma a can za ku ƙara sabbin Wurare, Rukunin sanyaya, Ma\'aikata masu rijista da Ma\'aikata.',
       addCoolingUser:

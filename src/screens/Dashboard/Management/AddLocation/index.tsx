@@ -41,7 +41,6 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { onLayout } = useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_LOCATION_STEP,
     OverlayComponent: AddLocationOverlay,
-    onPressMask: () => navigation.goBack(),
   });
 
   async function onSubmit(values: PreprocessedFormValues) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
 
@@ -21,7 +21,11 @@ export function DrawerKnowledgeHubOverlay({ next, stop }: IOverlayComponentProps
       <View
         tw={cn(
           'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-[24%]' : 'top-[20%]'
+          screenHeight <= SMALL_SCREEN_THRESHOLD
+            ? 'top-[24%]'
+            : Platform.OS === 'ios'
+              ? 'top-[20%]'
+              : 'top-[18.5%]'
         )}
       >
         <Icon source="information-outline" size={25} />
@@ -38,7 +42,7 @@ export function DrawerKnowledgeHubOverlay({ next, stop }: IOverlayComponentProps
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.knowledgeHub')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.knowledgeHub')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button

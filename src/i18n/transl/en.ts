@@ -978,6 +978,7 @@ const en = {
         addToCartButton: 'Add to cart and continue shopping',
         buyFullCrate: 'Buy full crate',
         selectQuantity: 'Select quantity',
+        goToCart: 'Add to Cart and view summary',
       },
       currentLocation: 'Current location',
       filterError:
@@ -1239,7 +1240,7 @@ const en = {
       backToTopButton: 'Back to the top',
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership',
+      ownership: 'Change cart ownership to {{name}}',
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?',
       empty: 'Your cart is empty',
@@ -1254,7 +1255,7 @@ const en = {
       discount: 'Discount',
       fees: 'Service fees',
       marketFees: 'Marketplace fee',
-      paymentFee: 'Payment fee',
+      coolingFees: 'Cooling fee',
       viewContacts: 'View contact(s)',
       contactsForDelivery: 'Contact(s) for delivery information',
       gotItButton: 'Got it!',
@@ -1275,6 +1276,8 @@ const en = {
       redeemCoupon: 'Redeem coupon',
       couponPlaceholder: 'E.g. 20OFF',
       discountsApplied: 'Discounts Applied',
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.',
       pickupModal: {
         today: 'Please pick up your order at {{company}}, located at {{location}}, today.',
         storage: 'Your crates are now being stored at {{company}}, located at {{location}}.',
@@ -1471,6 +1474,8 @@ const en = {
       repeatTutorial: 'If you want to watch this tutorial again, you can also find it in the menu.',
       managementNavigation:
         'In the menu, you can navigate to the "Management" tab and there add new Locations, Cooling Units, Registered Employees and Operators.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users',
       addCoolingUser:
         'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',

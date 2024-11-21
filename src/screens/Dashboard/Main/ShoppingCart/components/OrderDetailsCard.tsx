@@ -76,7 +76,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
 
           <View tw="flex-row items-center justify-between h-8">
             <View tw="flex-row items-center space-x-1">
-              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.marketFees')}</Text>
+              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.coolingFees')}</Text>
             </View>
 
             <View tw="flex-row items-center space-x-1">

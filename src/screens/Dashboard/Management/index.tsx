@@ -42,33 +42,25 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_COOLING_USERS_STEP,
     OverlayComponent: ManagementOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
-    onPressMask: () => props.navigation.navigate('CoolingUsers'),
   });
 
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.LOCATIONS_STEP,
     OverlayComponent: LocationsOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
-    onPressMask: () => props.navigation.navigate('AddLocation'),
   });
 
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.COOLING_UNITS_STEP,
     OverlayComponent: ManagementCoolingUnitsOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
-    onPressMask: () => navigation.navigate('AddCoolingUnit'),
   });
 
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP,
     OverlayComponent: ManagementEmployeesOperatorsOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
-    onPressMask: () => props.navigation.goBack(),
   });
 
   const disabledCoolingUnits = isLoading || !data.length;
@@ -239,13 +231,13 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
                   props.navigation.navigate('CouponStack');
                 }}
               />
-              <Divider tw="bg-gray-400 mb-2" />
+              <Divider tw="bg-gray-400" />
             </View>
           </RBAC.ProtectedResource>
 
           <RBAC.ProtectedResource action="NAVIGATE" subject="DeliveryContacts">
             <List.Item
-              tw="px-0 pt-0 pb-2"
+              tw="px-0 py-2"
               title={undefined}
               left={() => (
                 <Text tw="text-base w-[80%]">{t('navigation.management.DeliveryContacts')}</Text>

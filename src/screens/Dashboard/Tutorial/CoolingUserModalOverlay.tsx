@@ -11,14 +11,11 @@ import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function CoolingUsersModalOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function CoolingUsersModalOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -39,7 +36,7 @@ export function CoolingUsersModalOverlay({
           },
         ]}
       >
-        <Text tw="text-center">{t('tutorial.steps.addCoolingUser')}</Text>
+        <Text>{t('tutorial.steps.addCoolingUser')}</Text>
 
         <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
           <Button
@@ -47,6 +44,7 @@ export function CoolingUsersModalOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
+              emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, false);
               rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-green-primary"
@@ -56,7 +54,10 @@ export function CoolingUsersModalOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, false);
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('RootMainTabStack');
               next();
             }}
             tw="bg-green-primary"

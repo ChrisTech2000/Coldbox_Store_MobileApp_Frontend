@@ -983,6 +983,7 @@ export default {
         addToCartButton: 'କାର୍ଟରେ ଯୋଡନ୍ତୁ ଏବଂ ଶପିଂ ଜାରି ରଖନ୍ତୁ',
         selectQuantity: 'ମାତ୍ରା ବାଛନ୍ତୁ',
         buyFullCrate: 'Buy full crate', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'ବର୍ତ୍ତମାନ ଅବସ୍ଥାନ',
       filterError:
@@ -1243,7 +1244,7 @@ export default {
       backToTopButton: 'ଉପରକୁ ଫେରିବେ',
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership', // TODO
+      ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'ଆପଣଙ୍କର କାର୍ଟ ଖାଲି ଅଛି',
@@ -1258,7 +1259,7 @@ export default {
       discount: 'ଛୁଟ',
       fees: 'ସେବା ଶୁଳ୍କ',
       marketFees: 'ବଜାର ଶୁଳ୍କ',
-      paymentFee: 'ଜମା ଶୁଳ୍କ',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'ସଂପର୍କ(ଗୁଡିକ) ଦେଖନ୍ତୁ',
       contactsForDelivery: 'ଡେଲିଭରୀ ସୂଚନା ପାଇଁ ସଂପର୍କ(ଗୁଡିକ)',
       gotItButton: 'ବୁଝିଗଲି!',
@@ -1289,6 +1290,8 @@ export default {
         invalid: 'ଅବୈଧ ମୂଲ୍ୟ',
         minimumCartValue: 'ଆର୍ଡର ଅତିକମ୍ ₦100 ହେବା ଉଚିତ।',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'ଦେଖାଇବାକୁ କୌଣସି ତଥ୍ୟ ନାହିଁ',
@@ -1473,6 +1476,8 @@ export default {
         'ଯଦି ଆପଣ ଏହି ଟ୍ୟୁଟୋରିଆଲ୍ ପୁନର୍ବାର ଦେଖିବାକୁ ଚାହାନ୍ତି, ତେବେ ଆପଣ ମେନୁରେ ଏହାକୁ ମିଳାଇପାରିବେ।',
       managementNavigation:
         'ମେନୁରେ, ଆପଣ "ମ୍ୟାନେଜ୍ମେଣ୍ଟ"କୁ ନାଭିଗେଟ୍ କରିପାରିବେ ଏବଂ ସେଠାରେ କୁଲିଙ୍ଗ୍ ୟୁଜର୍ସକୁ ଯୋଡିବା କିମ୍ବା ସଂପାଦନା କରିବାକୁ ଦବାଇପାରିବେ। ଏହାକୁ ଚେଷ୍ଟା କରନ୍ତୁ।',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'କୋଲ୍ଡଟିଭେଟ୍‌ରେ ରେଜିଷ୍ଟର୍ ହୋଇନଥିବା କୁଲିଙ୍ଗ୍ ୟୁଜର୍ସକୁ ସେମାନଙ୍କର ବିବରଣୀ (ନାମ, ଫୋନ୍ ନମ୍ବର) ପ୍ରବେଶ କରି ଯୋଡାଯିବ। ଆପ୍ଲିକେସନ୍‌ରେ ରେଜିଷ୍ଟର୍ ହୋଇଥିବା କୁଲିଙ୍ଗ୍ ୟୁଜର୍ସକୁ କୋଡ୍ ଦ୍ୱାରା ଯୋଡାଯିବ। ସେମାନେ ସେମାନଙ୍କର ପ୍ରୋଫାଇଲ୍ -> "ଆକାଉଣ୍ଟ ବିବରଣୀ" -> "କୁଲିଙ୍ଗ୍ ୟୁଜର୍ ଇମ୍ପୋର୍ଟ୍ କୋଡ୍" ଉପରେ ଏହାକୁ ମିଳିବ।',
       navigateToCoolingUser: 'ଆଗକୁ ଯାଇ କୁଲିଙ୍ଗ୍ ୟୁଜର୍ସ ଟ୍ୟାବ୍କୁ ଦବାନ୍ତୁ',

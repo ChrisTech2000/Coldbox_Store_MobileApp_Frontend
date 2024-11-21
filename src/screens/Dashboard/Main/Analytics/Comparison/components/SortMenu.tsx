@@ -1,14 +1,12 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { SetStateAction, useCallback, useMemo, useState } from 'react';
-import { FlatList, View } from 'react-native';
-import { Divider, Portal, RadioButton } from 'react-native-paper';
+import { FlatList, ScrollView, View } from 'react-native';
+import { Dialog, Portal, RadioButton } from 'react-native-paper';
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { Button } from '#ui/components/Button';
-import { Modal } from '#ui/components/Modal';
 import { RadioButtonItem } from '#ui/components/RadioButton';
-import { Text } from '#ui/components/Text';
 import { useControlledState } from '#ui/hooks/useControlledState';
 
 export enum ESortingOptions {
@@ -83,67 +81,66 @@ export function SortingMenu({ useSortingStore, ...props }: SortingMenuProps) {
         {t('Dashboard.Analytics.comparisonTab.sortingLabel')}
       </Button>
       <Portal>
-        <Modal
+        <Dialog
           visible={isModalVisible}
           onDismiss={() => {
             setInternalSelection(store.sorting);
             setIsModalVisible(false);
           }}
+          style={{ backgroundColor: 'white' }}
         >
-          <View tw="bg-white rounded-3xl h-auto space-y-2 items-center mx-16 py-1">
-            <Text variant="TitleBold">{t('Dashboard.SortMenu.title')}</Text>
-            <Divider tw="w-full bg-grey-700 my-1" />
-            <RadioButton.Group
-              value={internalSelection ?? ''}
-              onValueChange={(value) => {
-                const item = options.find((datum) => datum.id === value);
-                if (!item) return;
-                setInternalSelection(item.id);
+          <Dialog.Title>{t('Dashboard.SortMenu.title')}</Dialog.Title>
+          <Dialog.ScrollArea tw="px-0">
+            <ScrollView tw="max-h-52" showsVerticalScrollIndicator>
+              <RadioButton.Group
+                value={internalSelection ?? ''}
+                onValueChange={(value) => {
+                  const item = options.find((datum) => datum.id === value);
+                  if (!item) return;
+                  setInternalSelection(item.id);
+                }}
+              >
+                <View tw="max-h-40">
+                  <FlatList
+                    scrollEnabled={false}
+                    showsVerticalScrollIndicator={false}
+                    data={options}
+                    keyExtractor={(item, index) => `${item.label}-${index}`}
+                    renderItem={({ item }) => (
+                      <RadioButtonItem
+                        label={item.label}
+                        value={item.id}
+                        tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
+                      />
+                    )}
+                  />
+                </View>
+              </RadioButton.Group>
+            </ScrollView>
+          </Dialog.ScrollArea>
+          <Dialog.Actions>
+            <Button
+              uppercase
+              onPress={(evt) => {
+                evt.stopPropagation();
+                setInternalSelection(store.sorting);
+                setIsModalVisible(!isModalVisible);
               }}
             >
-              <View tw="max-h-40">
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={options}
-                  keyExtractor={(item, index) => `${item.label}-${index}`}
-                  renderItem={({ item }) => (
-                    <RadioButtonItem
-                      label={item.label}
-                      value={item.id}
-                      tw="flex flex-row ml-[-10]"
-                    />
-                  )}
-                  nestedScrollEnabled
-                />
-              </View>
-            </RadioButton.Group>
-            <Divider tw="w-full bg-grey-700 mt-1" />
-            <View tw="flex flex-row items-center justify-end w-full">
-              <Button
-                mode="text"
-                uppercase
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  setInternalSelection(store.sorting);
-                  setIsModalVisible(!isModalVisible);
-                }}
-              >
-                {t('actions.cancel')}
-              </Button>
-              <Button
-                mode="text"
-                uppercase
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  if (internalSelection) store.onSelect(internalSelection);
-                  setIsModalVisible(!isModalVisible);
-                }}
-              >
-                {t('actions.ok')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
+              {t('actions.cancel')}
+            </Button>
+            <Button
+              uppercase
+              onPress={(evt) => {
+                evt.stopPropagation();
+                if (internalSelection) store.onSelect(internalSelection);
+                setIsModalVisible(!isModalVisible);
+              }}
+            >
+              {t('actions.ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </View>
   );

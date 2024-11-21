@@ -88,7 +88,7 @@ InAppNotifications.useToast = function _useToast() {
   const showFunc = useCallback(
     (message: string | JSX.Element, opts?: CustomToastOptions): string => {
       const type = opts?.type ?? 'md_default';
-      return toastCtx.show(message, { ...opts, type });
+      return toastCtx?.show?.(message, { ...opts, type });
     },
     [toastCtx]
   );

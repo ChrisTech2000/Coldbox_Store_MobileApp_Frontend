@@ -2,17 +2,15 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
-import ms from 'ms';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
-import { Divider, Icon, List, Portal } from 'react-native-paper';
+import { Dialog, Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardRoutes } from '#navigation/Dashboard';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
@@ -27,11 +25,9 @@ import { ECoolingUnitMetric, EDateCropped, EPricingType } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
-import { Modal } from '#ui/components/Modal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import { waitFor } from '#ui/lib/waitFor';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -53,7 +49,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   const { t } = useTranslationUtils();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
-  const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const company = useManagementStore((store) => store.company);
   const refreshData = useDashboardStore((store) => store.refreshData);
@@ -67,9 +62,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     resetCheckInStore,
   } = useCheckInStore();
 
-  const { onLayout: onCheckIn1Layout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_1,
     OverlayComponent: CheckIn1ScreenOverlay,
+    fullScreen: true,
   });
 
   const { onLayout: onCheckIn2Layout } = useWalkthroughStep({
@@ -80,8 +76,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { onLayout: onCheckIn3Layout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_3,
     OverlayComponent: CheckIn3ScreenOverlay,
-    maskAllowInteraction: true,
-    onPressMask: () => bottomTabNavigation.navigate('Main', { screen: 'History' }),
   });
 
   const toast = InAppNotifications.useToast();
@@ -112,10 +106,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [produces, produces.length]);
 
   const total = useMemo(() => {
-    const price = coolingUnit.commonPricingType.value;
+    const price = coolingUnit.commonPricingType?.value;
 
-    if (!allHavePlannedDays || coolingUnit.commonPricingType.type === EPricingType.FIXED) {
-      if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+    if (!allHavePlannedDays || coolingUnit.commonPricingType?.type === EPricingType.FIXED) {
+      if (coolingUnit.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
         return allCrates.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
       }
       return (price * allCrates.length).toFixed(2);
@@ -123,7 +117,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
     return allCrates
       .reduce((acc, current) => {
-        if (coolingUnit.commonPricingType.metric === ECoolingUnitMetric.KILOGRAMS) {
+        if (coolingUnit.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
           acc += (current.plannedDays ?? 1) * price * current.weight;
         } else {
           acc += (current.plannedDays ?? 1) * price;
@@ -206,6 +200,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             default:
               break;
           }
+
           return {
             ...produce,
             crop: { id: produce.crop.id },
@@ -218,6 +213,12 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             }),
           };
         }),
+      });
+
+      await ColdtivateService.updateFarmer({
+        farmerId: user.id,
+        coolingUnitId: coolingUnit.id,
+        updateCoolingUnits: true,
       });
     }
 
@@ -239,13 +240,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       }
     }
 
-    resetCheckInStore();
     toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), {
       type: 'md_success',
     });
-
-    await waitFor(ms('1 second'));
-    refreshData.forEach((fn) => fn());
 
     if (guard('VIEW', 'TemperatureAlertModal')) {
       const temperatureAlertDatum = {
@@ -257,7 +254,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
     }
 
+    resetCheckInStore();
     rootNavigation.navigate('RootMainTabStack');
+    refreshData.forEach((fn) => fn());
   }
 
   const navigateToCropSelection = useCallback(() => {
@@ -292,7 +291,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [coolingUnit, user, checkOutCode]);
 
   return (
-    <View tw="flex-1" onLayout={onCheckIn1Layout}>
+    <View tw="flex-1">
       <View tw="flex-1 p-4">
         <List.Item
           tw="p-0 m-0"
@@ -394,7 +393,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             </Button>
           ) : null}
 
-          {!allHavePlannedDays && coolingUnit.commonPricingType.type !== EPricingType.FIXED ? (
+          {!allHavePlannedDays && coolingUnit.commonPricingType?.type !== EPricingType.FIXED ? (
             <Text variant="TextMedium" tw="text-base">
               {t('Dashboard.CrateManagement.CheckIn.noPlannedDaysMessage')}
             </Text>
@@ -448,7 +447,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           </Text>
           <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
             {`${currencySymbol}${total}`}
-            {coolingUnit.commonPricingType.type === EPricingType.PERIODICITY && !allHavePlannedDays
+            {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY && !allHavePlannedDays
               ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
               : ''}
           </Text>
@@ -457,13 +456,14 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       </View>
 
       <Portal>
-        <Modal
+        <Dialog
           visible={indexForActiveOptions !== -1}
           onDismiss={() => setIndexForActiveOptions(-1)}
+          style={{ backgroundColor: 'white' }}
         >
-          <View tw="bg-white rounded-3xl h-auto space-y-2 mx-20 px-3 py-4">
+          <Dialog.Content tw="px-0">
             <TouchableOpacity
-              tw="space-x-1 w-full mb-2 flex flex-row items-center"
+              tw="space-x-3 w-full py-2.5 px-6 flex flex-row items-center"
               onPress={(evt) => {
                 evt.stopPropagation();
                 const contextualProduce = produces.at(indexForActiveOptions);
@@ -477,11 +477,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                 {t('actions.edit')}
               </Text>
             </TouchableOpacity>
-
-            <Divider tw="w-full bg-gray-400" />
-
+            <Divider tw="bg-zinc-400" />
             <TouchableOpacity
-              tw="space-x-1 w-full pt-2 flex flex-row items-center"
+              tw="space-x-3 w-full py-2.5 px-6 flex flex-row items-center"
               onPress={() => {
                 removeProduce(produces[indexForActiveOptions]);
                 setIndexForActiveOptions(-1);
@@ -492,8 +490,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                 {t('actions.delete')}
               </Text>
             </TouchableOpacity>
-          </View>
-        </Modal>
+          </Dialog.Content>
+        </Dialog>
       </Portal>
     </View>
   );

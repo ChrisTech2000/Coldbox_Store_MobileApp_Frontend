@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
 
@@ -29,7 +29,9 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
           user?.role === ERoles.COOLING_USER
             ? screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-[31%]'
-              : 'top-[27%]'
+              : Platform.OS === 'ios'
+                ? 'top-[27%]'
+                : 'top-[25%]'
             : screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-[41%]'
               : 'top-[33%]'
@@ -59,7 +61,7 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.repeatTutorial')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.repeatTutorial')}</Text>
 
         <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
           <Button

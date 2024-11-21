@@ -1,5 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import ms from 'ms';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, View } from 'react-native';
@@ -18,18 +16,17 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
 import { CoolingUnitsMapOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsMapOverlay';
 import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 
+import { DEFAULT_COORDINATES } from '../../Marketplace/utils';
 import * as Map from './components/Map';
 import PointAnnotationModal from './components/PointAnnotationModal';
 import { PIN_COLORS } from './constants';
 import { processLocationMarkers } from './utils';
-import { DEFAULT_COORDINATES } from '../../Marketplace/utils';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
 const screenHeight = Dimensions.get('window').height;
@@ -38,8 +35,6 @@ function CoolingUnitsMaps() {
   const [isLoadingCoords, setLoadingCoords] = useState<boolean>(true);
   const [coordinates, setCoordinates] = useState<[number, number] | undefined>(undefined);
   const { t } = useTranslationUtils();
-
-  const navigation = useNavigation<NativeStackNavigationProp<CoolingUnitsTabsRoutes>>();
 
   const [farmerId, farmerCoolingUnits] = useDashboardStore(
     useShallow((store) => [store.farmerId, store.coolingUnits])
@@ -55,10 +50,10 @@ function CoolingUnitsMaps() {
     }
   );
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP,
     OverlayComponent: CoolingUnitsMapOverlay,
-    onPressMask: () => navigation.navigate('Planner'),
+    fullScreen: true,
   });
 
   const { data: markers, isLoading: isLoadingMarkers } = useApiCall(
@@ -104,7 +99,7 @@ function CoolingUnitsMaps() {
 
   if (typeof farmerId === 'number' && (isLoadingMarkers || isLoadingCoords)) {
     return (
-      <View tw="flex-1 items-center justify-center" onLayout={onLayout}>
+      <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
@@ -113,7 +108,7 @@ function CoolingUnitsMaps() {
   if (typeof coordinates === 'undefined') return null;
 
   return (
-    <ScrollView onLayout={onLayout} showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <Map.Root coordinates={coordinates} style={{ width: '100%', height: screenHeight * 0.55 }}>
         <Map.Markers
           markers={markers}

@@ -1,4 +1,3 @@
-import { DrawerActions } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -62,26 +61,19 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_LOCALIZATION_PREFERENCES_STEP,
     OverlayComponent: LocalizationPreferencesOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
   });
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_PERSONAL_DETAILS,
     OverlayComponent: PersonalDetailsOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
   });
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_COOLING_USERS_SURVEY_STEP,
     OverlayComponent: CoolingUserSurveyOverlay,
-    maskAllowInteraction: true,
     fullScreen: true,
-    onPressMask: () => {
-      props.navigation.goBack();
-      props.navigation.dispatch(DrawerActions.openDrawer());
-    },
   });
 
   return (
@@ -150,32 +142,6 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             </RBAC.ProtectedResource>
           </View>
         </View>
-
-        {/** TODO: not sure if this will ever be a part of the app; leaving it just in case */}
-        {/* <View>
-        <RBAC.ProtectedResource action="SET" subject="BuyerSettings">
-          <View tw="space-y-3">
-            <Text tw="text-base text-green-primary font-bold">
-              {t('Dashboard.AccountDetails.sections.buyerSettings')}
-            </Text>
-            <View>
-              <List.Item
-                tw="p-0 py-2"
-                title={undefined}
-                left={() => (
-                  <Text tw="text-base w-[80%]">{t('navigation.dashboard.PaymentMethods')}</Text>
-                )}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  props.navigation.navigate('PaymentSettings');
-                }}
-              />
-              <Divider tw="bg-gray-400" />
-            </View>
-          </View>
-        </RBAC.ProtectedResource>
-      </View> */}
 
         <RBAC.ProtectedResource action="VIEW" subject="AccountSellerSettings">
           <View tw="space-y-3 mt-6">

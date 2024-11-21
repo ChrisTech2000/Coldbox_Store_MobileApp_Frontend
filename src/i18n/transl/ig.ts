@@ -903,6 +903,7 @@ export default {
         addToCartButton: 'Add to cart and continue shopping', // TODO
         buyFullCrate: 'Buy full crate', // TODO
         selectQuantity: 'Select quantity', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Current location', // TODO
       filterError:
@@ -1154,7 +1155,7 @@ export default {
       backToTopButton: 'Back to the top', // TODO
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership', // TODO
+      ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'Your cart is empty', // TODO
@@ -1169,7 +1170,7 @@ export default {
       discount: 'Discount', // TODO
       fees: 'Service fees', // TODO
       marketFees: 'Marketplace fee', // TODO
-      paymentFee: 'Payment fee', // TODO
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'View contact(s)', // TODO
       contactsForDelivery: 'Contact(s) for delivery information', // TODO
       gotItButton: 'Got it!', // TODO
@@ -1200,6 +1201,8 @@ export default {
         invalid: 'Invalid value', // TODO
         minimumCartValue: 'Order must be at least ₦100.', // TODO
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'Enweghị data igosi',
@@ -1381,6 +1384,8 @@ export default {
       repeatTutorial: 'Ọ bụrụ na ịchọrọ ikiri nkuzi a ọzọ, ị nwekwara ike ịhụ ya na menu.',
       managementNavigation:
         'N\'ime menu, ị nwere ike ịnyagharịa na taabụ "Management" wee tinye ebe ọhụrụ, nkeji oyi, ndị ọrụ edebanyere aha na ndị ọrụ.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi na-edebeghị aha na Coldtivate site na itinye nkọwa ha (aha, nọmba ekwentị). Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi ndị debanyere aha na ngwa ahụ site na koodu. Ha nwere ike ịchọta koodu ha na profaịlụ ha -> "Nkọwa akaụntụ" -> "koodu na-ebubata onye ọrụ oyi".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO

@@ -990,6 +990,7 @@ export default {
         addToCartButton: 'Adicionar ao carrinho e continuar comprando',
         selectQuantity: 'Selecionar quantidade',
         buyFullCrate: 'Buy full crate', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Localização atual',
       filterError:
@@ -1251,7 +1252,7 @@ export default {
       backToTopButton: 'Voltar ao topo',
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership', // TODO
+      ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'O carrinho está vazio',
@@ -1266,7 +1267,7 @@ export default {
       discount: 'Desconto',
       fees: 'Taxas de serviço',
       marketFees: 'Taxa de mercado',
-      paymentFee: 'Taxa de pagamento',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'Ver contato(s)',
       contactsForDelivery: 'Contato(s) para informações de entrega',
       gotItButton: 'Entendi!',
@@ -1297,6 +1298,8 @@ export default {
         invalid: 'Valor inválido',
         minimumCartValue: 'O pedido deve ser de pelo menos ₦100.',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'Sem dados para exibir',
@@ -1486,6 +1489,8 @@ export default {
         'Se você quiser assistir a este tutorial novamente, também pode encontrá-lo no menu.',
       managementNavigation:
         'No menu, você pode navegar até "Gerenciamento" e tocar lá para adicionar ou editar Usuários de Resfriamento. Vá em frente e tente.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'Usuários de resfriamento que não se registraram no Coldtivate podem ser adicionados inserindo seus dados (nome, número de telefone). Usuários de resfriamento que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Usuário de Resfriamento".',
       navigateToCoolingUser: 'Vá em frente e clique na guia Usuários de Resfriamento',

@@ -893,6 +893,7 @@ export default {
         addToCartButton: 'Add to cart and continue shopping', // TODO
         buyFullCrate: 'Buy full crate', // TODO
         selectQuantity: 'Select quantity', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Current location', // TODO
       filterError:
@@ -1144,7 +1145,7 @@ export default {
       backToTopButton: 'Back to the top', // TODO
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership', // TODO
+      ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'Your cart is empty', // TODO
@@ -1159,7 +1160,7 @@ export default {
       discount: 'Discount', // TODO
       fees: 'Service fees', // TODO
       marketFees: 'Marketplace fee', // TODO
-      paymentFee: 'Payment fee', // TODO
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'View contact(s)', // TODO
       contactsForDelivery: 'Contact(s) for delivery information', // TODO
       gotItButton: 'Got it!', // TODO
@@ -1191,6 +1192,8 @@ export default {
         invalid: 'Invalid value', // TODO
         minimumCartValue: 'Order must be at least ₦100.', // TODO
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'Ko si data lati ṣafihan',
@@ -1375,6 +1378,8 @@ export default {
       repeatTutorial: 'Ti o ba fẹ wo ikẹkọ yii lẹẹkansi, o tun le rii ninu akojọ aṣayan.',
       managementNavigation:
         'Ninu akojọ aṣayan, o le lilö kiri si taabu “Iṣakoso” ati pe o ṣafikun Awọn ipo tuntun, Awọn ẹya Itutu agbaiye, Awọn oṣiṣẹ ti o forukọsilẹ ati Awọn oniṣẹ.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'Awọn olumulo itutu ti ko forukọsilẹ lori Coldtivate ni a le ṣafikun nipasẹ fifi awọn alaye wọn sii (orukọ, nọmba foonu). Awọn olumulo itutu ti o forukọsilẹ tẹlẹ ninu ohun elo naa le ṣafikun nipasẹ koodu. Wọn le wa koodu wọn lori profaili wọn -> "Awọn alaye akọọlẹ" -> "Koodu agbewọle Olumulo Itutu".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO

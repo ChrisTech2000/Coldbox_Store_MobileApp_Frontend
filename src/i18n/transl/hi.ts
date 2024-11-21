@@ -984,6 +984,7 @@ export default {
         addToCartButton: 'कार्ट में जोड़ें और खरीदारी जारी रखें',
         selectQuantity: 'मात्रा चुनें',
         buyFullCrate: 'Buy full crate', // TODO
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'वर्तमान स्थान',
       filterError:
@@ -1244,7 +1245,7 @@ export default {
       backToTopButton: 'ऊपर वापस जाएं',
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership', // TODO
+      ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'आपकी गाड़ी खाली है',
@@ -1259,7 +1260,7 @@ export default {
       discount: 'छूट',
       fees: 'सेवा शुल्क',
       marketFees: 'मार्केटप्लेस शुल्क',
-      paymentFee: 'भुगतान शुल्क',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'संपर्क देखें',
       contactsForDelivery: 'डिलीवरी जानकारी के लिए संपर्क',
       gotItButton: 'समझ गया!',
@@ -1290,6 +1291,8 @@ export default {
         invalid: 'अमान्य मूल्य',
         minimumCartValue: 'ऑर्डर कम से कम ₦100 होना चाहिए।',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',
@@ -1479,6 +1482,8 @@ export default {
         'यदि आप इस ट्यूटोरियल को फिर से देखना चाहते हैं, तो आप इसे मेनू में भी पा सकते हैं।',
       managementNavigation:
         'मेनू में, आप "प्रबंधन" पर नेविगेट कर सकते हैं और वहां टैप करके कूलिंग उपयोगकर्ताओं को जोड़ सकते हैं या संपादित कर सकते हैं। आगे बढ़ें और इसे आजमाएं।',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'जो कूलिंग उपयोगकर्ता कोल्टिवेट पर पंजीकृत नहीं हैं, उन्हें उनके विवरण (नाम, फोन नंबर) दर्ज करके जोड़ा जा सकता है। जो कूलिंग उपयोगकर्ता पहले से ऐप में साइन अप कर चुके हैं, उन्हें कोड द्वारा जोड़ा जा सकता है। वे अपना कोड अपने प्रोफ़ाइल में -> "खाता विवरण" -> "कूलिंग उपयोगकर्ता आयात कोड" पर पा सकते हैं।',
       navigateToCoolingUser: 'आगे बढ़ें और कूलिंग उपयोगकर्ता टैब पर क्लिक करें।',

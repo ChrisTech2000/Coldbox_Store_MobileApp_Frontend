@@ -18,11 +18,7 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementCoolingUnitsOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function ManagementCoolingUnitsOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -60,7 +56,9 @@ export function ManagementCoolingUnitsOverlay({
             screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-56' : 'top-64'
           )}
           onPress={() => {
-            onPressMask?.();
+            // eslint-disable-next-line
+            // @ts-ignore
+            rootNavigation.navigate('AddCoolingUnit');
             next();
           }}
         >

@@ -978,6 +978,7 @@ export default {
         buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'કાર્ટમાં ઉમેરો અને ખરીદી ચાલુ રાખો',
         selectQuantity: 'જાતીયતા પસંદ કરો',
+        goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'વર્તમાન સ્થાન',
       filterError:
@@ -1238,7 +1239,7 @@ export default {
       backToTopButton: 'માટે પરત જાઓ',
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership', // TODO
+      ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
       empty: 'તમારો કાર્ટ ખાલી છે',
@@ -1253,7 +1254,7 @@ export default {
       discount: 'ડિસ્કાઉન્ટ',
       fees: 'સેવા ફી',
       marketFees: 'માર્કેટપ્લેસ ફી',
-      paymentFee: 'પેમેન્ટ ફી',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'સંપર્ક જુઓ',
       contactsForDelivery: 'ડિલિવરી માહિતી માટેના સંપર્ક',
       gotItButton: 'સમજાયું!',
@@ -1284,6 +1285,8 @@ export default {
         invalid: 'અમાન્ય મૂલ્ય',
         minimumCartValue: 'ઓર્ડર ઓછામાં ઓછા ₦100 હોવું જોઈએ.',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'પ્રદર્શિત કરવા માટે કોઈ ડેટા નથી',
@@ -1468,6 +1471,8 @@ export default {
       repeatTutorial: 'જો તમે આ ટ્યુટોરીયલ ફરી જોવું ઇચ્છતા હો, તો તમે તેને મેનૂમાં પણ જોઈ શકો છો.',
       managementNavigation:
         'મેનૂમાં, તમે "ગવર્નન્સ" તરફ જાવી શકો છો અને ત્યાં ક્લિક કરીને કૂલિંગ વપરાશકર્તાઓને ઉમેરવા અથવા સંપાદિત કરવા માટે પહોંચો. આગળ જાઓ અને અજમાવો.',
+      operatorManagementNavigation:
+        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       addCoolingUser:
         'જેઓ કોલ્ડટિવેટ પર નોંધાઈ નથી એવા કૂલિંગ વપરાશકર્તાઓને તેમના વિગત (નામ, ફોન નંબર) દાખલ કરીને ઉમેરવામાં આવી શકે છે. પહેલેથી જ એપ્લિકેશનમાં સાઇન અપ કરેલા કૂલિંગ વપરાશકર્તાઓને કોડ દ્વારા ઉમેરવામાં આવી શકે છે. તેઓ તેમના પ્રોફાઇલ પર કોડ મેળવી શકે છે -> "એકાઉન્ટ વિગતો" -> "કૂલિંગ વપરાશકર્તા આયાત કોડ".',
       navigateToCoolingUser: 'આગળ જાઓ અને કૂલિંગ વપરાશકર્તાઓ ટેબ પર ક્લિક કરો.',

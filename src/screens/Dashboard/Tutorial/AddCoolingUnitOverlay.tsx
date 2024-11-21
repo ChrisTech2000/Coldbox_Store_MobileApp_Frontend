@@ -14,11 +14,7 @@ import { cn } from '#ui/lib/cn';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function AddCoolingUnitOverlay({
-  next,
-  stop,
-  step: { onPressMask },
-}: IOverlayComponentProps) {
+export function AddCoolingUnitOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -39,7 +35,7 @@ export function AddCoolingUnitOverlay({
           },
         ]}
       >
-        <Text tw="text-base text-center">{t('tutorial.steps.addCoolingUnits')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.addCoolingUnits')}</Text>
 
         <View tw="flex flex-row space-x-2 items-center justify-center mt-4">
           <Button
@@ -57,7 +53,7 @@ export function AddCoolingUnitOverlay({
           <Button
             mode="text"
             onPress={() => {
-              onPressMask?.();
+              rootNavigation.goBack();
               next();
             }}
             labelStyle="text-white"

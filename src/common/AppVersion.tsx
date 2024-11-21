@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Linking, Platform, View } from 'react-native';
-import { Modal, Portal } from 'react-native-paper';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Linking, Platform } from 'react-native';
+import { Dialog, Portal } from 'react-native-paper';
 import { getBuildNumber } from 'react-native-device-info';
 
 import { Text } from '#ui/components/Text';
@@ -62,7 +61,7 @@ export default function AppVersionModal() {
 
   return (
     <Portal>
-      <Modal
+      <Dialog
         dismissable={state.isDismissable}
         visible={state.isVisible}
         onDismiss={() => {
@@ -71,44 +70,36 @@ export default function AppVersionModal() {
             isVisible: false,
           }));
         }}
+        style={{ backgroundColor: 'white' }}
       >
-        <View tw="w-full items-center bg-white rounded-3xl w-4/5 max-w-4/5 h-auto py-4 px-5 self-center space-y-2">
-          <View tw="space-y-3">
-            <View tw="self-center">
-              <MaterialCommunityIcon
-                name="cloud-download"
-                size={50}
-                color={paperTheme.colors.primary}
-              />
-            </View>
-            <View>
-              <Text variant="TextMedium">{t('appVersion.newVersion')}</Text>
-              <Text variant="TextMedium">{t('appVersion.pleaseUpdate')}</Text>
-            </View>
-          </View>
-          <View tw="flex-row self-end space-x-2">
-            <Button
-              mode="text"
-              onPress={async (evt) => {
-                try {
-                  evt.stopPropagation();
-                  if (Platform.OS === 'android') {
-                    await Linking.openURL(
-                      'https://play.google.com/store/apps/details?id=com.base.coldtivate&hl=en&gl=US&pli=1'
-                    );
-                    return;
-                  }
-                  await Linking.openURL('https://apps.apple.com/sg/app/coldtivate/id1613730873');
-                } catch (exception) {
-                  console.error(exception);
+        <Dialog.Icon icon="cloud-download" size={50} color={paperTheme.colors.primary} />
+        <Dialog.Content>
+          <Text variant="TextMedium" tw="text-base mt-2 mb-0.5">
+            {t('appVersion.newVersion')}
+          </Text>
+          <Text tw="text-base">{t('appVersion.pleaseUpdate')}</Text>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button
+            onPress={async (evt) => {
+              try {
+                evt.stopPropagation();
+                if (Platform.OS === 'android') {
+                  await Linking.openURL(
+                    'https://play.google.com/store/apps/details?id=com.base.coldtivate&hl=en&gl=US&pli=1'
+                  );
+                  return;
                 }
-              }}
-            >
-              {t('actions.update')}
-            </Button>
-          </View>
-        </View>
-      </Modal>
+                await Linking.openURL('https://apps.apple.com/sg/app/coldtivate/id1613730873');
+              } catch (exception) {
+                console.error(exception);
+              }
+            }}
+          >
+            {t('actions.update')}
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
     </Portal>
   );
 }

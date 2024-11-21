@@ -12,12 +12,14 @@ import { paperTheme } from '#ui/lib/theme';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import CouponService from '#services/CouponService';
 import { useTranslationUtils } from '#i18n/utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 import CouponModal from './components/CouponModal';
 import RevokeCouponModal from './components/RevokeCouponModal';
 
 function ActiveCouponsTab() {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
   const { mutate } = useSWRConfig();
 
   const modalRef = useRef<Modalize>(null);
@@ -85,6 +87,7 @@ function ActiveCouponsTab() {
               ]);
             } catch (exception) {
               console.error(exception);
+              toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
             }
           }
         }}

@@ -1,14 +1,13 @@
 import { format } from 'date-fns';
 import React, { useCallback, useState } from 'react';
 import { Linking, View } from 'react-native';
-import { Divider, Portal } from 'react-native-paper';
+import { Dialog, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import {
   createDataRangeStore,
   DateRangePickerWithStore,
 } from '#ui/components/DateRangePickerWithStore';
-import { Modal } from '#ui/components/Modal';
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
 } from '#ui/components/MultipleSelectWithStore';
@@ -56,42 +55,39 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
 
   return (
     <Portal>
-      <Modal visible={isOpen} onDismiss={dismiss}>
-        <View tw="items-center bg-white mx-14 p-2 rounded-3xl h-auto space-y-4">
-          <Text variant="TextMedium" tw="text-base mt-2 px-2">
-            {t('Dashboard.Management.UsageAnalysis.modal.title')}
-          </Text>
-          <Divider />
-
-          <View tw="px-2">
-            <DateRangePickerWithStore
-              useDateRangeStore={useDateRangeStore}
-              variant="contained"
-              initialEndDate={new Date()}
-              initialStartDate={new Date(2022, 9)}
-              showSelectionTitle
-            />
-          </View>
-
-          <View tw="w-[90%]">
-            <Text variant="TextMedium" tw="text-base mt-2 px-2">
-              {t('Dashboard.Management.UsageAnalysis.modal.coolingUnitSelection')}
-            </Text>
-            <MultipleSelectWithStore<CoolingUnit>
-              emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
-              datums={coolingUnits ?? []}
-              isModalVisible={isUnitsModalOpen}
-              setIsModalVisible={setIsUnitsModalOpen}
-              itemName={(item) => item?.name}
-              useSelectStore={useCoolingUnitStore}
-              label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-                name: selectedUnits ? selectedUnits.map((unit) => unit.name).join(', ') : '',
-              })}
-              modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-              divider
-              autoSelect
-              occupyFullWidth
-            />
+      <Dialog visible={isOpen} onDismiss={dismiss} style={{ backgroundColor: 'white' }}>
+        <Dialog.Title>{t('Dashboard.Management.UsageAnalysis.modal.title')}</Dialog.Title>
+        <Dialog.Content>
+          <View tw="space-y-2">
+            <View>
+              <DateRangePickerWithStore
+                useDateRangeStore={useDateRangeStore}
+                variant="contained"
+                initialEndDate={new Date()}
+                initialStartDate={new Date(2022, 9)}
+                showSelectionTitle
+              />
+            </View>
+            <View>
+              <Text variant="TextMedium" tw="text-base mt-3 px-2">
+                {t('Dashboard.Management.UsageAnalysis.modal.coolingUnitSelection')}
+              </Text>
+              <MultipleSelectWithStore<CoolingUnit>
+                emptyMessage={t('Dashboard.noCoolingUnitAvailable')}
+                datums={coolingUnits ?? []}
+                isModalVisible={isUnitsModalOpen}
+                setIsModalVisible={setIsUnitsModalOpen}
+                itemName={(item) => item?.name}
+                useSelectStore={useCoolingUnitStore}
+                label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
+                  name: selectedUnits ? selectedUnits.map((unit) => unit.name).join(', ') : '',
+                })}
+                modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+                divider
+                autoSelect
+                occupyFullWidth
+              />
+            </View>
           </View>
 
           <Button
@@ -99,7 +95,7 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
             uppercase
             icon="check-circle-outline"
             contentStyle="flex flex-row-reverse"
-            tw="w-[90%]"
+            tw="w-full mt-4"
             onPress={() => {
               downloadDataAsXlsx();
               dismiss();
@@ -107,8 +103,8 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
           >
             {t('actions.done')}
           </Button>
-        </View>
-      </Modal>
+        </Dialog.Content>
+      </Dialog>
     </Portal>
   );
 }
