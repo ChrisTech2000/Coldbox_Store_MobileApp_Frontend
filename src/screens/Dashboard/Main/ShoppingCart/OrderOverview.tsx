@@ -148,45 +148,58 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                     return (
                       <View tw="mb-4">
                         <Text tw="text-base">{coolingUnit?.name ?? ''}</Text>
-                        <View tw="flex flex-row items-center justify-between mt-1 p-4 border border-gray-300 rounded-xl">
-                          <Text tw="text-base">
-                            {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
-                              ? t('Dashboard.ShoppingCart.pickUpToday')
-                              : ''}
-                            {item.pickupMethod === EPickUpMethod.DELIVERY
-                              ? t('Dashboard.ShoppingCart.delivery')
-                              : ''}
-                            {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
-                              ? t(
-                                  coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY
-                                    ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
-                                    : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
-                                  {
-                                    price: CurrencyStandardization.currencyCode({
-                                      code: 'NGN', // TODO: get value from somewhere
-                                      value: coolingUnit?.commonPricingType?.value ?? 0,
-                                    }).getValueFormated(),
-                                  }
-                                )
-                              : ''}
-                          </Text>
+                        <View tw="p-4 border border-gray-300 rounded-xl">
+                          <View tw="flex flex-row items-center justify-between">
+                            <Text tw="text-base">
+                              {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
+                                ? t('Dashboard.ShoppingCart.pickUpToday')
+                                : ''}
+                              {item.pickupMethod === EPickUpMethod.DELIVERY
+                                ? t('Dashboard.ShoppingCart.delivery')
+                                : ''}
+                              {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
+                                ? t(
+                                    coolingUnit?.commonPricingType?.type ===
+                                      EPricingType.PERIODICITY
+                                      ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
+                                      : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
+                                    {
+                                      price: CurrencyStandardization.currencyCode({
+                                        code: 'NGN', // TODO: get value from somewhere
+                                        value: coolingUnit?.commonPricingType?.value ?? 0,
+                                      }).getValueFormated(),
+                                    }
+                                  )
+                                : ''}
+                            </Text>
+                            {item.pickupMethod === EPickUpMethod.DELIVERY ? (
+                              <Touchable
+                                onPress={(evt) => {
+                                  evt.stopPropagation();
+                                  emitter.emit(
+                                    APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION,
+                                    {
+                                      orderId: props.route.params.orderId,
+                                      coolingUnitId: item.coolingUnitId,
+                                    }
+                                  );
+                                }}
+                              >
+                                <Text tw="text-base text-green-primary">
+                                  {t('Dashboard.ShoppingCart.viewContacts')}
+                                </Text>
+                              </Touchable>
+                            ) : null}
+                          </View>
                           {item.pickupMethod === EPickUpMethod.DELIVERY ? (
-                            <Touchable
-                              onPress={(evt) => {
-                                evt.stopPropagation();
-                                emitter.emit(
-                                  APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION,
-                                  {
-                                    orderId: props.route.params.orderId,
-                                    coolingUnitId: item.coolingUnitId,
-                                  }
-                                );
-                              }}
-                            >
-                              <Text tw="text-base text-green-primary">
-                                {t('Dashboard.ShoppingCart.viewContacts')}
-                              </Text>
-                            </Touchable>
+                            <Text tw="text-sm text-gray-500">
+                              {t('Dashboard.ShoppingCart.deliveryInfo', {
+                                value: CurrencyStandardization.currencyCode({
+                                  code: 'NGN',
+                                  value: coolingUnit?.commonPricingType?.value ?? 0,
+                                }).getValueFormated(),
+                              })}
+                            </Text>
                           ) : null}
                         </View>
                       </View>
@@ -244,13 +257,13 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
             <Divider tw="bg-zinc-400 my-3" />
 
             <View tw="flex-row items-center justify-between h-8">
-              <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
+              <Text tw="text-base">{t('Dashboard.ShoppingCart.marketFees')}</Text>
               <View tw="flex-row items-center space-x-1">
                 <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
                 <Text tw="text-base">
                   {CurrencyStandardization.currencyCode({
                     code: 'NGN', // TODO: get value from somewhere
-                    value: data.totalPaymentFeesAmount,
+                    value: data.totalPaymentFeesAmount + data.totalColdtivateAmount,
                   }).getValueFormated()}
                 </Text>
               </View>

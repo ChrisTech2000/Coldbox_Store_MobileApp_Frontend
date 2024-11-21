@@ -1170,7 +1170,7 @@ export default {
       discount: 'Discount', // TODO
       fees: 'Service fees', // TODO
       marketFees: 'Marketplace fee', // TODO
-      paymentFee: 'Payment fee', // TODO
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'View contact(s)', // TODO
       contactsForDelivery: 'Contact(s) for delivery information', // TODO
       gotItButton: 'Got it!', // TODO
@@ -1201,6 +1201,8 @@ export default {
         invalid: 'Invalid value', // TODO
         minimumCartValue: 'Order must be at least ₦100.', // TODO
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'Enweghị data igosi',

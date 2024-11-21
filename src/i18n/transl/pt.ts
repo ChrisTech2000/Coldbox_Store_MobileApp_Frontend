@@ -1267,7 +1267,7 @@ export default {
       discount: 'Desconto',
       fees: 'Taxas de serviço',
       marketFees: 'Taxa de mercado',
-      paymentFee: 'Taxa de pagamento',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'Ver contato(s)',
       contactsForDelivery: 'Contato(s) para informações de entrega',
       gotItButton: 'Entendi!',
@@ -1298,6 +1298,8 @@ export default {
         invalid: 'Valor inválido',
         minimumCartValue: 'O pedido deve ser de pelo menos ₦100.',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'Sem dados para exibir',

@@ -1254,7 +1254,7 @@ export default {
       discount: 'ડિસ્કાઉન્ટ',
       fees: 'સેવા ફી',
       marketFees: 'માર્કેટપ્લેસ ફી',
-      paymentFee: 'પેમેન્ટ ફી',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'સંપર્ક જુઓ',
       contactsForDelivery: 'ડિલિવરી માહિતી માટેના સંપર્ક',
       gotItButton: 'સમજાયું!',
@@ -1285,6 +1285,8 @@ export default {
         invalid: 'અમાન્ય મૂલ્ય',
         minimumCartValue: 'ઓર્ડર ઓછામાં ઓછા ₦100 હોવું જોઈએ.',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'પ્રદર્શિત કરવા માટે કોઈ ડેટા નથી',

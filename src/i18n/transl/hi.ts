@@ -1260,7 +1260,7 @@ export default {
       discount: 'छूट',
       fees: 'सेवा शुल्क',
       marketFees: 'मार्केटप्लेस शुल्क',
-      paymentFee: 'भुगतान शुल्क',
+      coolingFees: 'Cooling fee', // TODO
       viewContacts: 'संपर्क देखें',
       contactsForDelivery: 'डिलीवरी जानकारी के लिए संपर्क',
       gotItButton: 'समझ गया!',
@@ -1291,6 +1291,8 @@ export default {
         invalid: 'अमान्य मूल्य',
         minimumCartValue: 'ऑर्डर कम से कम ₦100 होना चाहिए।',
       },
+      deliveryInfo:
+        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
     },
     Analytics: {
       emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',

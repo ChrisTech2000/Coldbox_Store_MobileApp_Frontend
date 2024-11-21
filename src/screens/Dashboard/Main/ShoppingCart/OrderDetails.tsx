@@ -230,13 +230,13 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
         <View tw="flex-col w-full mt-6">
           <View tw="flex-row items-center justify-between h-8">
-            <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
+            <Text tw="text-base">{t('Dashboard.ShoppingCart.marketFees')}</Text>
             <View tw="flex-row items-center space-x-1">
               <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">
                 {CurrencyStandardization.currencyCode({
                   code: 'NGN', // TODO: get value from somewhere
-                  value: cartData.totalPaymentFeesAmount,
+                  value: cartData.totalPaymentFeesAmount + cartData.totalColdtivateAmount,
                 }).getValueFormated()}
               </Text>
             </View>
