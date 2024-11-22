@@ -67,7 +67,9 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
       <List.Item
         title={t('Dashboard.KnowledgeHub.optimal')}
         onPress={() =>
-          navigation.navigate('Details', { sourceUri: buildPath('/multi-commodity-storage') })
+          navigation.navigate('Details', {
+            sourceUri: buildPath('/multi-commodity-storage', countryCode),
+          })
         }
         titleNumberOfLines={2}
         right={(props) => <List.Icon {...props} icon="chevron-right" />}
