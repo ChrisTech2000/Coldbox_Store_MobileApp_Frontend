@@ -46,7 +46,7 @@ export function SelectLanguage() {
         <Select.Dialog
           enableScroll
           header={t('languages.label')}
-          footer={
+          FooterElement={
             <View tw="flex flex-row items-center justify-end">
               <Button mode="text" uppercase onPress={cancelLanguageUpdate}>
                 {t('actions.cancel')}

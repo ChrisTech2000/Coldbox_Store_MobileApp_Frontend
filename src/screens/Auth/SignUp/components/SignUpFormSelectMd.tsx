@@ -61,7 +61,7 @@ export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
           <Select.Dialog
             enableScroll
             header={t('Auth.SignUp.select.header', { fieldName: label })}
-            footer={
+            FooterElement={
               <View tw="flex flex-row items-center justify-end">
                 <Button mode="text" uppercase onPress={cancel}>
                   {t('Auth.SignUp.select.cancel')}

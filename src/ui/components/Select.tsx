@@ -128,11 +128,11 @@ Select.Touchable = function SelectTouchable(props: {
 Select.Dialog = function _SelectDialog(
   props: PropsWithChildren<{
     header?: string;
-    footer?: React.ReactElement;
+    FooterElement?: React.ReactElement;
     enableScroll?: boolean;
   }>
 ) {
-  const { header, footer, children, enableScroll = false } = props;
+  const { header, FooterElement, children, enableScroll = false } = props;
 
   const { isOpen, setIsOpen, variant = DEFAULT_VARIANT } = useSelectContext();
 
@@ -156,7 +156,9 @@ Select.Dialog = function _SelectDialog(
       >
         <Dialog.Title>{header}</Dialog.Title>
         <Container tw="px-0">{renderContent()}</Container>
-        {typeof footer !== 'undefined' ? <Dialog.Actions>{footer}</Dialog.Actions> : null}
+        {typeof FooterElement !== 'undefined' ? (
+          <Dialog.Actions>{FooterElement}</Dialog.Actions>
+        ) : null}
       </Dialog>
     </Portal>
   );
