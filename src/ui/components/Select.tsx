@@ -141,7 +141,7 @@ Select.Dialog = function _SelectDialog(
   function renderContent() {
     const size = {
       sm: 'max-h-44',
-      md: 'max-h-52',
+      md: 'max-h-56',
       lg: 'max-h-96',
     }[variant];
     return enableScroll ? <ScrollView tw={size}>{children}</ScrollView> : children;
