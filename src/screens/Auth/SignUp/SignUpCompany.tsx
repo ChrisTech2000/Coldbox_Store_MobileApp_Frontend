@@ -1,7 +1,7 @@
 import { currencies as _currencies } from 'currencies.json';
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Controller, Path, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Checkbox, Portal, Text, TextInput, Dialog } from 'react-native-paper';
@@ -12,7 +12,7 @@ import type { SignUpAsCompanyResponse } from '#types/api.responses';
 import Danger from '#assets/icons/danger.svg';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
-import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
+import { MAP_APP_GENDER_TO_API } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -46,12 +46,9 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
   });
 
   ////////////// SIGN UP COMPANY
-  const [isCountriesModalOpen, setIsCountriesModalOpen] = useState<boolean>(false);
-  const [isCurrenciesModalOpen, setIsCurrenciesModalOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
 
   const selectedCountry = watch('country');
-  const selectedCurrency = watch('currency');
   const termsAgreement = watch('terms');
 
   const countries = useMemo(() => {
@@ -69,33 +66,12 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
       .map((currency) => currency.name);
   }, [search]);
 
-  const closeCountryModal = useCallback(() => {
-    setIsCountriesModalOpen(!isCountriesModalOpen);
-    if (search) setSearch('');
-  }, [search, isCountriesModalOpen]);
-
-  const closeCurrenciesModal = useCallback(() => {
-    setIsCurrenciesModalOpen(!isCurrenciesModalOpen);
-    if (search) setSearch('');
-  }, [search, isCurrenciesModalOpen]);
-
   ////////////// SIGN UP EMPLOYEE
   const [hidePass, setHidePass] = useState<boolean>(true);
   const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
-  const [isGenderModalOpen, setIsGenderModalOpen] = useState<boolean>(false);
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState<boolean>(false);
 
-  const selectedGender = watch('gender');
   const phoneNumber = watch('phone');
-
-  const closeGenderModal = useCallback(() => {
-    setIsGenderModalOpen(!isGenderModalOpen);
-  }, [isGenderModalOpen]);
-
-  const setGenderValue = useCallback((val: string) => {
-    setValue('gender', val as EAppGender);
-    clearErrors('gender');
-  }, []);
 
   ////////////// ACTIONS
   const onSubmit: SubmitHandler<SignUpCompanySchemaType> = useCallback(async (data) => {
@@ -201,54 +177,43 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
 
       {/** COUNTRY */}
       <SignUpFormSelectLg<SignUpCompanySchemaType>
-        form={{
-          control,
-          fieldName: t('Auth.SignUp.commonForm.countryFieldName') as Path<SignUpCompanySchemaType>,
-          currentValue: selectedCountry ?? '',
-        }}
-        isModalOpen={isCountriesModalOpen}
+        items={countries}
+        name="country"
+        control={control}
+        label={t('Auth.SignUp.commonForm.countryFieldName')}
         search={search}
-        closeModal={closeCountryModal}
-        onSelectCallback={(previous, next) => {
-          let prevDial = '';
-          let newDial = '';
-          for (const item of phoneNumberCodes) {
-            if ((prevDial && newDial) || (!previous && newDial)) break;
-            if (previous && item.name === previous) prevDial = item.dialCode;
-            if (item.name === next) newDial = item.dialCode;
-          }
-          const phoneValue = getValues('phone');
-          if (!phoneValue) {
-            setValue('phone', newDial);
-          } else {
-            const newValue = phoneValue.includes(prevDial)
-              ? phoneValue.replace(prevDial, newDial)
-              : [newDial, phoneValue].join('');
-            setValue('phone', newValue);
-          }
-        }}
         setSearch={setSearch}
-        data={countries}
+        onValueChange={(previous, next) => {
+          const prevDial = previous
+            ? phoneNumberCodes.find((item) => item.name === previous)?.dialCode || ''
+            : '';
+          const newDial = phoneNumberCodes.find((item) => item.name === next)?.dialCode || '';
+
+          const phoneValue = getValues('phone');
+          const newValue = !phoneValue
+            ? newDial
+            : phoneValue.includes(prevDial)
+              ? phoneValue.replace(prevDial, newDial)
+              : `${newDial}${phoneValue}`;
+
+          setValue('phone', newValue);
+        }}
       />
 
       {/** CURRENCY */}
       <SignUpFormSelectLg<SignUpCompanySchemaType>
-        form={{
-          control,
-          fieldName: t(
-            'Auth.SignUp.SignUpCompany.currencyFieldName'
-          ) as Path<SignUpCompanySchemaType>,
-          required: true,
-          error: !!errors.currency,
-          currentValue: selectedCurrency
-            ? `${_currencies.find((c) => c.name === selectedCurrency)?.symbol ?? ''}-${selectedCurrency}`
-            : '',
-        }}
-        isModalOpen={isCurrenciesModalOpen}
+        items={currencies}
+        name="currency"
+        control={control}
+        label={t('Auth.SignUp.SignUpCompany.currencyFieldName')}
         search={search}
-        closeModal={closeCurrenciesModal}
         setSearch={setSearch}
-        data={currencies}
+        computedDisplayValue={(value) => {
+          if (!value) return '';
+          const currency = _currencies.find((currency) => currency.name === value);
+          if (typeof currency === 'undefined') return '';
+          return `${currency.symbol} - ${value}`;
+        }}
       />
       {errors.currency && (
         <Text tw="text-xs text-red-600 mt-[-2] pl-3 w-[95%]">
@@ -317,16 +282,10 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
 
       {/** GENDER */}
       <SignUpFormSelectMd
-        form={{
-          fieldName: t('Auth.SignUp.commonForm.genderFieldName') as Path<SignUpCompanySchemaType>,
-          required: true,
-          error: !!errors.gender,
-          currentValue: selectedGender,
-          setCurrentValue: setGenderValue,
-        }}
-        isModalOpen={isGenderModalOpen}
-        closeModal={closeGenderModal}
-        data={GENDERS(t)}
+        items={GENDERS(t)}
+        name="gender"
+        control={control}
+        label={t('Auth.SignUp.commonForm.genderFieldName')}
       />
       {errors.gender && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">

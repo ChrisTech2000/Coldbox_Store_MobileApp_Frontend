@@ -1,6 +1,6 @@
 import { getAllISOCodes } from 'iso-country-currency';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Controller, Path, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Checkbox, Text, TextInput } from 'react-native-paper';
@@ -9,7 +9,7 @@ import type { AuthRouteProps } from '#navigation/Auth';
 import type { SignUpAsCoolingUserResponse } from '#types/api.responses';
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
-import { EAppGender, MAP_APP_GENDER_TO_API } from '#types/global';
+import { MAP_APP_GENDER_TO_API } from '#types/global';
 import InAppNotifications from '#common/InAppNotifications';
 
 import { Button } from '#ui/components/Button';
@@ -42,7 +42,6 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
     handleSubmit,
     watch,
     setValue,
-    clearErrors,
     formState: { errors, isSubmitting },
     getValues,
   } = useForm<SignUpCoolingUserSchemaType>({
@@ -53,13 +52,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
   const [search, setSearch] = useState<string>('');
   const [hidePass, setHidePass] = useState<boolean>(true);
   const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
-  const [isCountriesModalOpen, setIsCountriesModalOpen] = useState<boolean>(false);
-  const [isGenderModalOpen, setIsGenderModalOpen] = useState<boolean>(false);
-  const [isLanguageModalOpen, setIsLanguageModalOpen] = useState<boolean>(false);
 
-  const selectedCountry = watch('country');
-  const selectedGender = watch('gender');
-  const selectedLanguage = watch('language');
   const termsAgreement = watch('terms');
 
   const countries = useMemo(() => {
@@ -68,29 +61,6 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       .filter((country) => country.toLowerCase().includes(lowerSearch))
       .sort(customCountrySort);
   }, [search]);
-
-  const closeCountryModal = useCallback(() => {
-    setIsCountriesModalOpen(!isCountriesModalOpen);
-    if (search) setSearch('');
-  }, [search, isCountriesModalOpen]);
-
-  const closeGenderModal = useCallback(() => {
-    setIsGenderModalOpen(!isGenderModalOpen);
-  }, [isGenderModalOpen]);
-
-  const closeLanguageModal = useCallback(() => {
-    setIsLanguageModalOpen(!isLanguageModalOpen);
-  }, [isLanguageModalOpen]);
-
-  const setGenderValue = useCallback((val: string) => {
-    setValue('gender', val as EAppGender);
-    clearErrors('gender');
-  }, []);
-
-  const setLanguageValue = useCallback((val: string) => {
-    setValue('language', val);
-    clearErrors('language');
-  }, []);
 
   const onSubmit: SubmitHandler<SignUpCoolingUserSchemaType> = useCallback(async (data) => {
     const {
@@ -142,38 +112,27 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
 
       {/** COUNTRY */}
       <SignUpFormSelectLg<SignUpCoolingUserSchemaType>
-        form={{
-          control,
-          fieldName: t(
-            'Auth.SignUp.commonForm.countryFieldName'
-          ) as Path<SignUpCoolingUserSchemaType>,
-          required: true,
-          error: !!errors.country,
-          currentValue: selectedCountry ?? '',
-        }}
-        isModalOpen={isCountriesModalOpen}
+        items={countries}
+        label={t('Auth.SignUp.commonForm.countryFieldName')}
+        name="country"
+        control={control}
         search={search}
-        closeModal={closeCountryModal}
-        onSelectCallback={(previous, next) => {
-          let prevDial = '';
-          let newDial = '';
-          for (const item of phoneNumberCodes) {
-            if ((prevDial && newDial) || (!previous && newDial)) break;
-            if (previous && item.name === previous) prevDial = item.dialCode;
-            if (item.name === next) newDial = item.dialCode;
-          }
-          const phoneValue = getValues('phone');
-          if (!phoneValue) {
-            setValue('phone', newDial);
-          } else {
-            const newValue = phoneValue.includes(prevDial)
-              ? phoneValue.replace(prevDial, newDial)
-              : [newDial, phoneValue].join('');
-            setValue('phone', newValue);
-          }
-        }}
         setSearch={setSearch}
-        data={countries}
+        onValueChange={(previous, next) => {
+          const prevDial = previous
+            ? phoneNumberCodes.find((item) => item.name === previous)?.dialCode || ''
+            : '';
+          const newDial = phoneNumberCodes.find((item) => item.name === next)?.dialCode || '';
+
+          const phoneValue = getValues('phone');
+          const newValue = !phoneValue
+            ? newDial
+            : phoneValue.includes(prevDial)
+              ? phoneValue.replace(prevDial, newDial)
+              : `${newDial}${phoneValue}`;
+
+          setValue('phone', newValue);
+        }}
       />
       {errors.country && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
@@ -237,18 +196,11 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
 
       {/** LANGUAGES */}
       <SignUpFormSelectMd<SignUpCoolingUserSchemaType>
-        form={{
-          fieldName: t(
-            'Auth.SignUp.SignUpCoolingUser.languageFieldName'
-          ) as Path<SignUpCoolingUserSchemaType>,
-          required: true,
-          error: !!errors.language,
-          currentValue: selectedLanguage,
-          setCurrentValue: setLanguageValue,
-        }}
-        isModalOpen={isLanguageModalOpen}
-        closeModal={closeLanguageModal}
-        data={LANGUAGES(t)}
+        label={t('Auth.SignUp.SignUpCoolingUser.languageFieldName')}
+        name="language"
+        control={control}
+        items={LANGUAGES(t)}
+        required
       />
       {errors.language && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
@@ -258,18 +210,11 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
 
       {/** GENDER */}
       <SignUpFormSelectMd<SignUpCoolingUserSchemaType>
-        form={{
-          fieldName: t(
-            'Auth.SignUp.commonForm.genderFieldName'
-          ) as Path<SignUpCoolingUserSchemaType>,
-          required: true,
-          error: !!errors.gender,
-          currentValue: selectedGender,
-          setCurrentValue: setGenderValue,
-        }}
-        isModalOpen={isGenderModalOpen}
-        closeModal={closeGenderModal}
-        data={GENDERS(t)}
+        label={t('Auth.SignUp.commonForm.genderFieldName')}
+        name="gender"
+        control={control}
+        items={GENDERS(t)}
+        required
       />
       {errors.gender && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
