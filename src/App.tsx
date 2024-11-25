@@ -15,9 +15,9 @@ import AppVersionModal from './common/AppVersion';
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import { ENVIRONMENT, SENTRY_DSN } from './constants/environment';
+import { TUTORIAL_BACKDROP_COLOR } from './constants/ui';
 import AuthNavigator from './navigation/Auth';
 import DashboardNavigator from './navigation/Dashboard';
-
 import linking from './navigation/deepLinking';
 import { useAuthManager } from './stores/auth';
 import { useGlobalInformation } from './stores/dashboard';
@@ -50,7 +50,10 @@ function App() {
                 linking={linking}
                 onReady={() => BootSplash.hide({ fade: true })}
               >
-                <WalkthroughProvider useIsFocused={useIsFocused}>
+                <WalkthroughProvider
+                  useIsFocused={useIsFocused}
+                  backdropColor={TUTORIAL_BACKDROP_COLOR}
+                >
                   <Portal.Host>
                     {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
                   </Portal.Host>
