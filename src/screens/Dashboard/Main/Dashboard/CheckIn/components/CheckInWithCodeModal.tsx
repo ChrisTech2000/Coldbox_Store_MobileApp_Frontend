@@ -44,7 +44,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
   } = useForm<Schema>({
     resolver: zodResolver((z, t) =>
       z.object({
-        plannedDays: z.number().optional(),
+        plannedDays: z.string().optional(),
         code: z
           .string()
           .min(1, { message: t('Dashboard.CrateManagement.CheckIn.WithCode.codeErrorMessage') })
@@ -76,7 +76,6 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
           });
           return;
         }
-        //3ZFMHO
         if (isArray(result)) {
           const grouped = Object.values(
             result.reduce((acc, item) => {
@@ -101,7 +100,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
                 weight: crate.weight,
                 tag: '',
                 coolingUnitId: coolingUnit.id,
-                plannedDays: plannedDays ?? crate.plannedDays ?? undefined,
+                plannedDays: plannedDays ? Number(plannedDays) : (crate.plannedDays ?? undefined),
               })),
               price: undefined,
               initialGrade: null,
