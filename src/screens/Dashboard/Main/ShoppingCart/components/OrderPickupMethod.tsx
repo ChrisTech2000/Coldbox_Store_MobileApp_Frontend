@@ -261,6 +261,16 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
               })}
             </Text>
           )}
+          {version === EPickUpMethod.DELIVERY ? (
+            <Text tw="mt-2 text-center text-gray-500">
+              {t('Dashboard.ShoppingCart.deliveryInfo', {
+                value: CurrencyStandardization.currencyCode({
+                  code: 'NGN',
+                  value: cu?.commonPricingType?.value ?? 0,
+                }).getValueFormated(),
+              })}
+            </Text>
+          ) : null}
           <Button mode="outlined" tw="border border-green-primary mt-6" onPress={close}>
             {t('Dashboard.ShoppingCart.gotItButton')}
           </Button>
