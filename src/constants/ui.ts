@@ -1,1 +1,2 @@
 export const SMALL_SCREEN_THRESHOLD = 800;
+export const TUTORIAL_BACKDROP_COLOR = '#88888880';

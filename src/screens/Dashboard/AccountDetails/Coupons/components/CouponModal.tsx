@@ -125,7 +125,6 @@ export default function CouponModal(props: {
         <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
           <Button
             mode="outlined"
-            tw="w-2/5"
             uppercase
             onPress={(evt) => {
               evt.stopPropagation();
@@ -138,7 +137,6 @@ export default function CouponModal(props: {
           </Button>
           <Button
             mode="contained"
-            tw="w-2/5"
             uppercase
             // eslint-disable-next-line
             onPress={form.handleSubmit(onSubmit as any)}
