@@ -64,8 +64,8 @@ export function Select(
 }
 
 Select.Touchable = function SelectTouchable(props: {
-  displayValue: string;
   label: string;
+  displayValue?: string;
   minifyLabel?: boolean;
 }) {
   const { label, minifyLabel, displayValue } = props;
@@ -104,14 +104,14 @@ Select.Touchable = function SelectTouchable(props: {
         >
           {label}
         </Text>
-        {displayValue && (
+        {displayValue ? (
           <Text
             tw={cn('text-base ml-2 flex-1 text-right', disabled && 'text-gray-400')}
             numberOfLines={1}
           >
             {displayValue}
           </Text>
-        )}
+        ) : null}
         <Icon
           name={variant !== 'lg' ? 'arrow-drop-down' : 'keyboard-arrow-down'}
           size={variant !== 'lg' ? 20 : 30}
@@ -140,7 +140,7 @@ Select.Dialog = function _SelectDialog(
 
   function renderContent() {
     const size = {
-      sm: 'max-h-40',
+      sm: 'max-h-44',
       md: 'max-h-52',
       lg: 'max-h-96',
     }[variant];
