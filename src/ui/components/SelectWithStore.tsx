@@ -80,12 +80,11 @@ export default function SelectWithStore<T>(props: SelectItemProps<T>) {
   const store = useSelectStore();
   const { t } = useTranslationUtils();
 
+  const [internalSelection, setInternalSelection] = useState<T | null>(store.selectedItem);
   const [isModalVisible, setIsModalVisible] = useControlledState<boolean>(
     rest.isModalVisible,
     rest.setIsModalVisible
   );
-
-  const [internalSelection, setInternalSelection] = useState<T | null>(store.selectedItem);
 
   useEffect(() => {
     function handleEmptyDatums() {
