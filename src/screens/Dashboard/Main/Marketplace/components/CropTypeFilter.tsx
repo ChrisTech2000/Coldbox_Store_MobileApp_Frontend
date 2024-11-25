@@ -84,7 +84,7 @@ export default function CropTypeFilters() {
                   setInternalSelection(selectedCrops.map(({ value }) => value));
                   toggleVisibility();
                 }}
-                useScrollView={false}
+                enableScroll={false}
                 content={{
                   header: 'Select crops',
                   headerComponent: (

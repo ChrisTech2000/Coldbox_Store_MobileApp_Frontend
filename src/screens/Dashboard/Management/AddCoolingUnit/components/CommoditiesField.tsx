@@ -73,7 +73,7 @@ export default function CommoditiesField() {
                   setInternalSelection(selectedCrops);
                   toggleVisibility();
                 }}
-                useScrollView={false}
+                enableScroll={false}
                 content={{
                   header: t('Dashboard.Management.AddCoolingUnit.fields.selectCrops'),
                   headerComponent: (

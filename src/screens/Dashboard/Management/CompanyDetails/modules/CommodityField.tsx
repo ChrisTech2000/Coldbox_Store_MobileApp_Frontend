@@ -68,7 +68,7 @@ export default function CommodityField(props: Props) {
                 setInternalSelection(selectedCommodities);
                 toggleVisibility();
               }}
-              useScrollView={false}
+              enableScroll={false}
               content={{
                 header: t('Dashboard.Management.CompanyDetails.headings.commodity'),
                 headerComponent: (

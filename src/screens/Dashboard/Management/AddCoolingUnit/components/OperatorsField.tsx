@@ -54,7 +54,7 @@ export default function OperatorsField() {
                   toggleVisibility();
                   setInternalSelection(selectedOperators);
                 }}
-                useScrollView={false}
+                enableScroll={false}
                 content={{
                   header: t('navigation.management.Operators'),
                   options: (

@@ -85,7 +85,7 @@ export default function CoolingUnitFilters() {
                   setInternalSelection(selectedCoolingUnits.map(({ value }) => value));
                   toggleVisibility();
                 }}
-                useScrollView={false}
+                enableScroll={false}
                 content={{
                   header: 'Select cooling units',
                   headerComponent: (

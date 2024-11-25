@@ -201,7 +201,7 @@ export default function UbibotForm() {
                   <View tw="pl-7 pr-4 pb-1.5">
                     <Select
                       variant="md"
-                      useScrollView={false}
+                      enableScroll={false}
                       label={t('Dashboard.Management.AddCoolingUnit.fields.ubibot.field')}
                       currentValue={temperatureField}
                       isModalOpen={isInternalModalVisible}

@@ -1,6 +1,6 @@
-import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState, type SetStateAction } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, type GestureResponderEvent } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Divider, RadioButton } from 'react-native-paper';
 import { create } from 'zustand';
 
@@ -8,23 +8,16 @@ import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
-import { useControlledState } from '#ui/hooks/useControlledState';
-import { cn } from '#ui/lib/cn';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { useControlledState } from '#ui/hooks/useControlledState';
+import { type Translator, useTranslationUtils } from '#i18n/utils';
+import { cn } from '#ui/lib/cn';
 
 export type SelectStore<T> = {
   selectedItem: T | null;
   onSelect: (item: T | null) => void;
   reset: () => void;
 };
-
-export const createSelectStore = <T,>(initialState?: T) =>
-  create<SelectStore<T>>((set) => ({
-    selectedItem: initialState ?? null,
-    onSelect: (item) => set({ selectedItem: item }),
-    reset: () => set({ selectedItem: null }),
-  }));
 
 type SelectItemProps<T> = {
   autoSelect?: boolean;
@@ -38,18 +31,54 @@ type SelectItemProps<T> = {
   modalHeader?: string;
   occupyFullWidth?: boolean;
   useSelectStore: ReturnType<typeof createSelectStore<T>>;
-  useScrollView?: boolean;
+  enableScroll?: boolean;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
   itemName: (item: T) => string;
   postSelectionAction?: (val?: T) => void;
 };
 
-export default function SelectWithStore<T>({
-  useSelectStore,
-  useScrollView = true,
-  ...rest
-}: SelectItemProps<T>) {
+export const createSelectStore = <T,>(initialState?: T) =>
+  create<SelectStore<T>>((set) => ({
+    selectedItem: initialState ?? null,
+    onSelect: (item) => set({ selectedItem: item }),
+    reset: () => set({ selectedItem: null }),
+  }));
+
+function EmptyState(props: { occupyFullWidth?: boolean; emptyMessage: string }) {
+  const { occupyFullWidth, emptyMessage } = props;
+  return (
+    <View tw={occupyFullWidth ? 'w-full' : ''}>
+      <Text variant="TextMedium" tw="text-base pl-2">
+        {emptyMessage}
+      </Text>
+      <Divider tw="bg-gray-600 my-1" />
+    </View>
+  );
+}
+
+function DialogFooter(props: {
+  onCancel: (evt: GestureResponderEvent) => void;
+  onConfirm: (evt: GestureResponderEvent) => void;
+  t: Translator;
+}) {
+  const { onCancel, onConfirm, t } = props;
+  return (
+    <View tw="flex flex-row items-center justify-end">
+      <Button mode="text" uppercase onPress={onCancel}>
+        {t('actions.cancel')}
+      </Button>
+      <Button mode="text" uppercase onPress={onConfirm}>
+        {t('actions.ok')}
+      </Button>
+    </View>
+  );
+}
+
+export default function SelectWithStore<T>(props: SelectItemProps<T>) {
+  const { useSelectStore, enableScroll = true, ...rest } = props;
+
   const store = useSelectStore();
+  const { t } = useTranslationUtils();
 
   const [isModalVisible, setIsModalVisible] = useControlledState<boolean>(
     rest.isModalVisible,
@@ -59,16 +88,23 @@ export default function SelectWithStore<T>({
   const [internalSelection, setInternalSelection] = useState<T | null>(store.selectedItem);
 
   useEffect(() => {
-    if (!rest.datums.length && store.selectedItem) {
-      setInternalSelection(null);
-      store.onSelect(null);
+    function handleEmptyDatums() {
+      if (!rest.datums.length && store.selectedItem) {
+        setInternalSelection(null);
+        store.onSelect(null);
+      }
     }
 
-    if (!store.selectedItem && rest.autoSelect && rest.datums.length > 0) {
-      const firstDatum = rest.datums[0];
-      store.onSelect(firstDatum);
-      setInternalSelection(firstDatum);
+    function handleAutoSelect() {
+      if (!store.selectedItem && rest.autoSelect && rest.datums.length > 0) {
+        const firstDatum = rest.datums[0];
+        store.onSelect(firstDatum);
+        setInternalSelection(firstDatum);
+      }
     }
+
+    handleEmptyDatums();
+    handleAutoSelect();
   }, [rest.datums, store.selectedItem]);
 
   useFocusEffect(
@@ -82,96 +118,66 @@ export default function SelectWithStore<T>({
     }, [store.selectedItem])
   );
 
-  const { t } = useTranslationUtils();
+  function handleCancel(evt: GestureResponderEvent) {
+    evt.stopPropagation();
+    setInternalSelection(store.selectedItem);
+    setIsModalVisible(!isModalVisible);
+  }
+
+  function handleConfirm(evt: GestureResponderEvent) {
+    evt.stopPropagation();
+    if (internalSelection) {
+      store.onSelect(internalSelection);
+      rest.postSelectionAction?.(internalSelection);
+    }
+    setIsModalVisible(!isModalVisible);
+  }
 
   if (!rest.datums.length && rest.emptyMessage) {
-    return (
-      <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
-        <Text variant="TextMedium" tw="text-base pl-2">
-          {rest.emptyMessage}
-        </Text>
-        <Divider tw="bg-gray-600 my-1" />
-      </View>
-    );
+    return <EmptyState occupyFullWidth={rest.occupyFullWidth} emptyMessage={rest.emptyMessage} />;
   }
 
   return (
-    <View
-      tw={cn(
-        rest.occupyFullWidth ? 'w-full' : '',
-        rest.border ? 'border border-gray-900 py-4' : ''
-      )}
-    >
+    <View tw={cn(rest.occupyFullWidth && 'w-full', rest.border && 'border border-gray-900 py-4')}>
       <View tw="px-2">
         <Select
           variant="md"
-          label={rest.label}
-          isModalOpen={isModalVisible}
-          onClick={() => {
-            setInternalSelection(store.selectedItem);
-            setIsModalVisible(!isModalVisible);
-          }}
-          useScrollView={useScrollView}
+          isOpen={isModalVisible}
+          onOpenChange={setIsModalVisible}
           disabled={rest.disabled}
-          content={{
-            header: rest.modalHeader ?? '',
-            options: (
-              <RadioButton.Group
-                value={internalSelection ? rest.itemName(internalSelection) : ''}
-                onValueChange={(value) => {
-                  const item = rest.datums.find((datum) => rest.itemName(datum) === value);
-                  if (!item) return;
-                  setInternalSelection(item);
-                }}
-              >
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={rest.datums}
-                  keyExtractor={(item, index) => `${item}-${index}`}
-                  renderItem={({ item }) => (
-                    <RadioButtonItem
-                      label={rest.itemName(item)}
-                      value={rest.itemName(item)}
-                      tw="flex flex-row-reverse ml-[-10]"
-                    />
-                  )}
-                  nestedScrollEnabled
-                />
-              </RadioButton.Group>
-            ),
-            footer: (
-              <View tw="flex flex-row items-center justify-end">
-                <Button
-                  mode="text"
-                  uppercase
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    setInternalSelection(store.selectedItem);
-                    setIsModalVisible(!isModalVisible);
-                  }}
-                >
-                  {t('actions.cancel')}
-                </Button>
-                <Button
-                  mode="text"
-                  uppercase
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    if (internalSelection) {
-                      store.onSelect(internalSelection);
-                      rest.postSelectionAction?.(internalSelection);
-                    }
-                    setIsModalVisible(!isModalVisible);
-                  }}
-                >
-                  {t('actions.ok')}
-                </Button>
-              </View>
-            ),
-          }}
-        />
+        >
+          <Select.Touchable label={rest.label || ''} />
+          <Select.Dialog
+            enableScroll={enableScroll}
+            header={rest.modalHeader || ''}
+            FooterElement={<DialogFooter onCancel={handleCancel} onConfirm={handleConfirm} t={t} />}
+          >
+            <RadioButton.Group
+              value={internalSelection ? rest.itemName(internalSelection) : ''}
+              onValueChange={(value) => {
+                const item = rest.datums.find((datum) => rest.itemName(datum) === value);
+                if (!item) return;
+                setInternalSelection(item);
+              }}
+            >
+              <FlatList
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                data={rest.datums}
+                keyExtractor={(item, index) => `${item}-${index}`}
+                renderItem={({ item }) => (
+                  <RadioButtonItem
+                    label={rest.itemName(item)}
+                    value={rest.itemName(item)}
+                    tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
+                  />
+                )}
+              />
+            </RadioButton.Group>
+          </Select.Dialog>
+        </Select>
       </View>
-      {rest.divider && <Divider tw="bg-gray-600 my-1" />}
+      {rest.divider ? <Divider tw="bg-gray-600 my-1" /> : null}
     </View>
   );
 }
