@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Divider, RadioButton } from 'react-native-paper';
 
 import { Select } from '#ui/components/Select';
@@ -7,58 +7,44 @@ import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useToggle } from '#ui/hooks/useToggle';
 import { EApiGender } from '#types/global';
 
 import FormManager from '../components/FormManager';
 
+const GENDER_LIST = Object.values(EApiGender);
+
 export default function GenderField() {
   const { watch, setValue } = FormManager.useFormManager();
-
   const { t } = useTranslationUtils();
-  const [isModalVisible, toggleModalVisibility] = useToggle();
 
   const selectedGender = watch('gender');
-  const [internalSelection, setInternalSelection] = useState<EApiGender>(selectedGender);
 
-  const currentValue = selectedGender
+  const [internalSelection, setInternalSelection] = useState<EApiGender>(selectedGender);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const displayValue = selectedGender
     ? t(['Dashboard.Management.Operators.text', selectedGender])
     : '';
 
   return (
     <View tw="mt-5">
       <View tw="px-3">
-        <Select
-          variant="md"
-          label={t('Dashboard.Management.Operators.text.gender')}
-          currentValue={currentValue}
-          isModalOpen={isModalVisible}
-          onClick={toggleModalVisibility}
-          content={{
-            header: t('Dashboard.Management.Operators.text.gender'),
-            options: (
-              <RadioButton.Group
-                value={internalSelection}
-                onValueChange={(value) => setInternalSelection(value as EApiGender)}
-              >
-                {Object.values(EApiGender).map((value, optionIdx) => (
-                  <RadioButtonItem
-                    key={`gender-option-${value}-#${optionIdx}`}
-                    label={t(['Dashboard.Management.Operators.text', value])}
-                    value={value}
-                    tw="flex flex-row-reverse ml-[-10]"
-                  />
-                ))}
-              </RadioButton.Group>
-            ),
-            footer: (
+        <Select variant="md" isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
+          <Select.Touchable
+            label={t('Dashboard.Management.Operators.text.gender')}
+            displayValue={displayValue}
+          />
+          <Select.Dialog
+            enableScroll
+            header={t('Dashboard.Management.Operators.text.gender')}
+            footer={
               <View tw="flex flex-row items-center justify-end">
                 <Button
                   mode="text"
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    toggleModalVisibility();
+                    setIsModalOpen(false);
                     setInternalSelection(selectedGender);
                   }}
                 >
@@ -69,16 +55,35 @@ export default function GenderField() {
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    toggleModalVisibility();
+                    setIsModalOpen(false);
                     setValue('gender', internalSelection);
                   }}
                 >
                   {t('actions.ok')}
                 </Button>
               </View>
-            ),
-          }}
-        />
+            }
+          >
+            <RadioButton.Group
+              value={internalSelection}
+              onValueChange={(value) => setInternalSelection(value as EApiGender)}
+            >
+              <FlatList
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                data={GENDER_LIST}
+                keyExtractor={(item, itemIdx) => `${item}-${itemIdx}`}
+                renderItem={({ item }) => (
+                  <RadioButtonItem
+                    label={t(['Dashboard.Management.Operators.text', item])}
+                    value={item}
+                    tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
+                  />
+                )}
+              />
+            </RadioButton.Group>
+          </Select.Dialog>
+        </Select>
       </View>
       <Divider tw="w-full bg-gray-700 mt-2 my-3" />
     </View>
