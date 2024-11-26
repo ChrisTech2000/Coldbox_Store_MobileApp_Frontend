@@ -49,13 +49,13 @@ export function Select(
     onDismiss,
   } = props;
 
-  const [dialogVisible, setDialogVisible] = useControlledState<boolean>(isOpen, onOpenChange);
+  const [isVisible, setVisibility] = useControlledState<boolean>(isOpen, onOpenChange);
 
   return (
     <SelectContext.Provider
       value={{
-        isOpen: dialogVisible,
-        setIsOpen: setDialogVisible,
+        isOpen: isVisible,
+        setIsOpen: setVisibility,
         variant,
         error,
         disabled,
@@ -141,9 +141,7 @@ Select.Dialog = function _SelectDialog(
 
   const { isOpen, setIsOpen, onDismiss, variant = DEFAULT_VARIANT } = useSelectContext();
 
-  const Container = enableScroll ? Dialog.ScrollArea : Dialog.Content;
-
-  function renderContent() {
+  function renderBody() {
     if (!enableScroll) return children;
 
     const size = {
@@ -156,11 +154,15 @@ Select.Dialog = function _SelectDialog(
 
     return (
       <ScrollView tw={cn('flex-col', size)} stickyHeaderIndices={hasStickyHeader ? [0] : undefined}>
-        {hasStickyHeader && <View tw="bg-white">{StickyHeaderElement}</View>}
+        {hasStickyHeader ? <View tw="bg-white">{StickyHeaderElement}</View> : null}
         {children}
       </ScrollView>
     );
   }
+
+  const Container = enableScroll ? Dialog.ScrollArea : Dialog.Content;
+
+  const hasFooter = typeof FooterElement !== 'undefined';
 
   return (
     <Portal>
@@ -173,10 +175,8 @@ Select.Dialog = function _SelectDialog(
         style={{ backgroundColor: 'white' }}
       >
         <Dialog.Title>{header}</Dialog.Title>
-        <Container tw="px-0">{renderContent()}</Container>
-        {typeof FooterElement !== 'undefined' ? (
-          <Dialog.Actions>{FooterElement}</Dialog.Actions>
-        ) : null}
+        <Container tw="px-0">{renderBody()}</Container>
+        {hasFooter ? <Dialog.Actions>{FooterElement}</Dialog.Actions> : null}
       </Dialog>
     </Portal>
   );
