@@ -46,13 +46,13 @@ export function Select(
     children,
   } = props;
 
-  const [_isOpen, _setIsOpen] = useControlledState<boolean>(isOpen, onOpenChange);
+  const [dialogVisible, setDialogVisible] = useControlledState<boolean>(isOpen, onOpenChange);
 
   return (
     <SelectContext.Provider
       value={{
-        isOpen: _isOpen,
-        setIsOpen: _setIsOpen,
+        isOpen: dialogVisible,
+        setIsOpen: setDialogVisible,
         variant,
         error,
         disabled,
@@ -128,23 +128,34 @@ Select.Touchable = function SelectTouchable(props: {
 Select.Dialog = function _SelectDialog(
   props: PropsWithChildren<{
     header?: string;
+    StickyHeaderElement?: React.ReactElement;
     FooterElement?: React.ReactElement;
     enableScroll?: boolean;
   }>
 ) {
-  const { header, FooterElement, children, enableScroll = false } = props;
+  const { header, StickyHeaderElement, FooterElement, children, enableScroll = false } = props;
 
   const { isOpen, setIsOpen, variant = DEFAULT_VARIANT } = useSelectContext();
 
   const Container = enableScroll ? Dialog.ScrollArea : Dialog.Content;
 
   function renderContent() {
+    if (!enableScroll) return children;
+
     const size = {
       sm: 'max-h-44',
       md: 'max-h-56',
       lg: 'max-h-96',
     }[variant];
-    return enableScroll ? <ScrollView tw={size}>{children}</ScrollView> : children;
+
+    const hasStickyHeader = typeof StickyHeaderElement !== 'undefined';
+
+    return (
+      <ScrollView tw={cn('flex-col', size)} stickyHeaderIndices={hasStickyHeader ? [0] : undefined}>
+        {hasStickyHeader && <View tw="bg-white">{StickyHeaderElement}</View>}
+        {children}
+      </ScrollView>
+    );
   }
 
   return (
