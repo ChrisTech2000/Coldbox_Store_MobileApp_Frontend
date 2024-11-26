@@ -6,6 +6,7 @@ import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -24,7 +25,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
-import { EPickUpMethod, EPricingType } from '#types/global';
+import { CoolingUnit, EPickUpMethod, EPricingType } from '#types/global';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
@@ -55,6 +56,31 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
       defaultData: [],
     }
   );
+
+  // const [locations, setLocations] = useState<Map<number, string>>(new Map());
+
+  // const fetchLocation = useCallback(
+  //   async (locationId: number, companyId: number) => {
+  //     if (locations.has(locationId)) {
+  //       return locations.get(locationId); // Return cached address
+  //     }
+
+  //     try {
+  //       const location = await ColdtivateService.getLocation({
+  //         locationId,
+  //         companyId,
+  //       });
+
+  //       const address = `${location.street ? location.street + ' ' : ''}${location.streetNumber ? location.streetNumber + ', ' : ''} ${location.city}${location.latitude ? ` (${location.latitude}, ${location.longitude})` : ''}`;
+  //       setLocations((prev) => new Map(prev).set(locationId, address));
+  //       return address;
+  //     } catch (error) {
+  //       console.error('Error fetching location:', error);
+  //       return 'Error fetching address';
+  //     }
+  //   },
+  //   [locations]
+  // );
 
   const orderDataByCoolingUnit = useMemo(() => {
     if (!data?.items) return [];
@@ -143,11 +169,22 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                   scrollEnabled={false}
                   showsVerticalScrollIndicator={false}
                   renderItem={({ item }) => {
-                    const coolingUnit = coolingUnits?.find((cu) => cu.id === item.coolingUnitId);
+                    const coolingUnit = coolingUnits?.find(
+                      (cu) => cu.id === item.coolingUnitId
+                    ) as CoolingUnit;
+                    const locationAddress = '';
 
                     return (
                       <View tw="mb-4">
-                        <Text tw="text-base">{coolingUnit?.name ?? ''}</Text>
+                        <Text tw="text-base ml-1">{coolingUnit?.name ?? ''}</Text>
+                        <View tw="flex flex-row items-center space-x-2 my-1 ml-1">
+                          <MaterialIcon
+                            name="location-pin"
+                            size={18}
+                            color={paperTheme.colors.primary}
+                          />
+                          <Text>{locationAddress}</Text>
+                        </View>
                         <View tw="p-4 border border-gray-300 rounded-xl">
                           <View tw="flex flex-row items-center justify-between">
                             <Text tw="text-base">
@@ -192,7 +229,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                             ) : null}
                           </View>
                           {item.pickupMethod === EPickUpMethod.DELIVERY ? (
-                            <Text tw="text-sm text-gray-500">
+                            <Text tw="text-sm text-gray-500 mt-2">
                               {t('Dashboard.ShoppingCart.deliveryInfo', {
                                 value: CurrencyStandardization.currencyCode({
                                   code: 'NGN',
