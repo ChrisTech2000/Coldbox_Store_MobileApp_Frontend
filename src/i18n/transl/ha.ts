@@ -738,6 +738,7 @@ export default {
       },
       EditCoolingUsers: {
         toasts: {
+          noSurveys: 'No surveys have been completed yet.', // TODO
           warning:
             'Ba za a iya share wannan asusun ba saboda mai amfani yana da rajistan shiga mai aiki a cikin naúrar sanyayawa {{name}}. Da fatan za a sanar da mai amfani don zuwa ɗakin don ɗaukar waɗannan abubuwan kuma ya kammala rajistan shiga kafin share asusun!',
           confirmation:
@@ -1214,8 +1215,14 @@ export default {
         invalid: 'Invalid value', // TODO
         minimumCartValue: 'Order must be at least ₦100.', // TODO
       },
+      method: 'Method:', // TODO
       deliveryInfo:
         'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
+      pickUpTodayInfo:
+        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
+      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+      orderOverviewSubtitle:
+        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
     },
     Analytics: {
       emptyState: 'Babu bayanai don nunawa',

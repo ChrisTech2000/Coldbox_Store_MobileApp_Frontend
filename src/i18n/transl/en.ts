@@ -1276,8 +1276,14 @@ const en = {
       redeemCoupon: 'Redeem coupon',
       couponPlaceholder: 'E.g. 20OFF',
       discountsApplied: 'Discounts Applied',
+      method: 'Method:',
       deliveryInfo:
         'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.',
+      pickUpTodayInfo:
+        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.',
+      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.',
+      orderOverviewSubtitle:
+        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.",
       pickupModal: {
         today: 'Please pick up your order at {{company}}, located at {{location}}, today.',
         storage: 'Your crates are now being stored at {{company}}, located at {{location}}.',

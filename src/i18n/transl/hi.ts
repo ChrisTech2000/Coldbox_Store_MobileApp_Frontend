@@ -1291,8 +1291,14 @@ export default {
         invalid: 'अमान्य मूल्य',
         minimumCartValue: 'ऑर्डर कम से कम ₦100 होना चाहिए।',
       },
+      method: 'Method:', // TODO
       deliveryInfo:
         'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
+      pickUpTodayInfo:
+        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
+      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+      orderOverviewSubtitle:
+        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
     },
     Analytics: {
       emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',

@@ -1,6 +1,6 @@
 import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
@@ -39,6 +39,8 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     store.allCoolingUnits,
   ]);
 
+  const [locations, setLocations] = useState<Map<number, string>>(new Map());
+
   const { data, isLoading } = useApiCall(
     'getOrder',
     MarketplaceService.getOrder,
@@ -56,31 +58,6 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
       defaultData: [],
     }
   );
-
-  // const [locations, setLocations] = useState<Map<number, string>>(new Map());
-
-  // const fetchLocation = useCallback(
-  //   async (locationId: number, companyId: number) => {
-  //     if (locations.has(locationId)) {
-  //       return locations.get(locationId); // Return cached address
-  //     }
-
-  //     try {
-  //       const location = await ColdtivateService.getLocation({
-  //         locationId,
-  //         companyId,
-  //       });
-
-  //       const address = `${location.street ? location.street + ' ' : ''}${location.streetNumber ? location.streetNumber + ', ' : ''} ${location.city}${location.latitude ? ` (${location.latitude}, ${location.longitude})` : ''}`;
-  //       setLocations((prev) => new Map(prev).set(locationId, address));
-  //       return address;
-  //     } catch (error) {
-  //       console.error('Error fetching location:', error);
-  //       return 'Error fetching address';
-  //     }
-  //   },
-  //   [locations]
-  // );
 
   const orderDataByCoolingUnit = useMemo(() => {
     if (!data?.items) return [];
@@ -106,6 +83,48 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     }));
   }, [data, coolingUnits]);
 
+  useEffect(() => {
+    if (!coolingUnits || !data.items) return;
+
+    const fetchLocations = async () => {
+      try {
+        const locationPromises = coolingUnits.map(async (coolingUnit) => {
+          try {
+            const location = await ColdtivateService.getLocation({
+              locationId: coolingUnit.location,
+              companyId: data.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
+                ?.relCompanyId as number,
+            });
+
+            const address = `${location.street ? location.street + ' ' : ''}${location.streetNumber ? location.streetNumber + ', ' : ''} ${location.city}${location.latitude ? ` (${location.latitude}, ${location.longitude})` : ''}`;
+            return { coolingUnitId: coolingUnit.id, address };
+          } catch (error) {
+            console.error(`Error fetching location for ${coolingUnit.id}:`, error);
+          }
+        });
+
+        const results = await Promise.allSettled(locationPromises);
+        const updatedLocations = new Map();
+
+        results.forEach((result) => {
+          if (result.status === 'fulfilled') {
+            const { value } = result;
+            if (!value) return;
+            updatedLocations.set(value?.coolingUnitId, value?.address);
+          } else {
+            console.error(`Failed to fetch location: ${result.reason}`);
+          }
+        });
+
+        setLocations(updatedLocations);
+      } catch (error) {
+        console.error('Error fetching locations:', error);
+      }
+    };
+
+    fetchLocations();
+  }, [coolingUnits, data.items]);
+
   if (isLoading || isLoadingCrops || !data.items?.length) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
@@ -128,7 +147,15 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               <Text tw="text-2xl">{t('Dashboard.ShoppingCart.thankYouMessage')}</Text>
             </View>
 
-            <Text tw="text-base text-green-primary font-bold">{t('Dashboard.MyOrders.title')}</Text>
+            <View>
+              <Text tw="text-base text-green-primary font-bold">
+                {t('Dashboard.MyOrders.title')}
+              </Text>
+              <Text tw="text-gray-500 mt-0.5">
+                {t('Dashboard.ShoppingCart.orderOverviewSubtitle')}
+              </Text>
+            </View>
+
             <FlatList
               data={orderDataByCoolingUnit}
               keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
@@ -172,43 +199,57 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                     const coolingUnit = coolingUnits?.find(
                       (cu) => cu.id === item.coolingUnitId
                     ) as CoolingUnit;
-                    const locationAddress = '';
+                    const locationAddress = locations.get(coolingUnit.id);
 
                     return (
                       <View tw="mb-4">
                         <Text tw="text-base ml-1">{coolingUnit?.name ?? ''}</Text>
-                        <View tw="flex flex-row items-center space-x-2 my-1 ml-1">
+                        <View tw="flex flex-row items-center space-x-1 mt-1 mb-2 ml-1">
                           <MaterialIcon
                             name="location-pin"
                             size={18}
                             color={paperTheme.colors.primary}
                           />
-                          <Text>{locationAddress}</Text>
+                          {locations.size ? (
+                            <Text numberOfLines={1}>{locationAddress}</Text>
+                          ) : (
+                            <ActivityIndicator
+                              animating
+                              color={paperTheme.colors.primary}
+                              size={12}
+                            />
+                          )}
                         </View>
                         <View tw="p-4 border border-gray-300 rounded-xl">
                           <View tw="flex flex-row items-center justify-between">
-                            <Text tw="text-base">
-                              {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
-                                ? t('Dashboard.ShoppingCart.pickUpToday')
-                                : ''}
-                              {item.pickupMethod === EPickUpMethod.DELIVERY
-                                ? t('Dashboard.ShoppingCart.delivery')
-                                : ''}
-                              {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
-                                ? t(
-                                    coolingUnit?.commonPricingType?.type ===
-                                      EPricingType.PERIODICITY
-                                      ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
-                                      : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
-                                    {
-                                      price: CurrencyStandardization.currencyCode({
-                                        code: 'NGN', // TODO: get value from somewhere
-                                        value: coolingUnit?.commonPricingType?.value ?? 0,
-                                      }).getValueFormated(),
-                                    }
-                                  )
-                                : ''}
-                            </Text>
+                            <View tw="flex flex-row items-center">
+                              <Text tw="font-bold text-base">
+                                {t('Dashboard.ShoppingCart.method')}{' '}
+                              </Text>
+                              <Text tw="text-base">
+                                {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
+                                  ? t('Dashboard.ShoppingCart.pickUpToday')
+                                  : ''}
+                                {item.pickupMethod === EPickUpMethod.DELIVERY
+                                  ? t('Dashboard.ShoppingCart.delivery')
+                                  : ''}
+                                {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
+                                  ? t(
+                                      coolingUnit?.commonPricingType?.type ===
+                                        EPricingType.PERIODICITY
+                                        ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
+                                        : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
+                                      {
+                                        price: CurrencyStandardization.currencyCode({
+                                          code: 'NGN', // TODO: get value from somewhere
+                                          value: coolingUnit?.commonPricingType?.value ?? 0,
+                                        }).getValueFormated(),
+                                      }
+                                    )
+                                  : ''}
+                              </Text>
+                            </View>
+
                             {item.pickupMethod === EPickUpMethod.DELIVERY ? (
                               <Touchable
                                 onPress={(evt) => {
@@ -237,7 +278,15 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                                 }).getValueFormated(),
                               })}
                             </Text>
-                          ) : null}
+                          ) : item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY ? (
+                            <Text tw="text-sm text-gray-500 mt-2">
+                              {t('Dashboard.ShoppingCart.pickUpTodayInfo')}
+                            </Text>
+                          ) : (
+                            <Text tw="text-sm text-gray-500 mt-2">
+                              {t('Dashboard.ShoppingCart.keepInStorageInfo')}
+                            </Text>
+                          )}
                         </View>
                       </View>
                     );
