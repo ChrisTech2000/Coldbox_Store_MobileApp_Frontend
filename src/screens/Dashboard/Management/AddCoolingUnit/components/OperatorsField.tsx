@@ -1,127 +1,114 @@
-import truncate from 'lodash/truncate';
 import React, { useMemo, useState } from 'react';
-import { Controller } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
 import { Divider } from 'react-native-paper';
+import { useController } from 'react-hook-form';
+import truncate from 'lodash/truncate';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
 import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
-import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 
 import { useTranslationUtils } from '#i18n/utils';
 
 import DataAggregator from '../contexts/DataAggregator';
-import FormManager, { type FormValues } from '../contexts/FormManager';
+import FormManager from '../contexts/FormManager';
 
 export default function OperatorsField() {
-  const { control, watch, formState } = FormManager.useFormManager();
+  const { control } = FormManager.useFormManager();
   const { companyOperators } = DataAggregator.useDataAggregator();
   const { t } = useTranslationUtils();
 
-  const [isVisible, toggleVisibility] = useToggle(false);
+  const { field, fieldState } = useController({ name: 'operators', control });
 
-  const selectedOperators = watch('operators');
-  const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedOperators);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [internalSelection, setInternalSelection] = useState<Array<number>>(field.value);
 
-  const fieldError = !!formState.errors.operators;
+  const displayValue = useMemo(() => {
+    const selectedOperatorNames = Object.entries(companyOperators)
+      .filter(([operatorId]) => field.value.includes(parseInt(operatorId)))
+      .map(([, operatorName]) => operatorName);
+    return truncate(selectedOperatorNames.join(', '), { length: 34 });
+  }, [companyOperators, field.value]);
 
-  const currentValue = useMemo(() => {
-    const _str: Array<string> = [];
-    for (const [operatorId, operatorName] of Object.entries(companyOperators)) {
-      if (!selectedOperators.includes(parseInt(operatorId))) continue;
-      _str.push(operatorName);
-    }
-    return truncate(_str.join(', '), { length: 34 });
-  }, [companyOperators, selectedOperators]);
+  const fieldError = typeof fieldState.error !== 'undefined';
 
   return (
-    <React.Fragment>
-      <Controller<FormValues>
-        name="operators"
-        control={control}
-        render={({ field: { onChange } }) => (
-          <View tw="mt-4">
-            <View tw="pl-4 pr-2 pb-1.5">
-              <Select
-                variant="md"
-                label={t('navigation.management.Operators')}
-                currentValue={currentValue}
-                isModalOpen={isVisible}
-                onClick={() => {
-                  toggleVisibility();
-                  setInternalSelection(selectedOperators);
-                }}
-                enableScroll={false}
-                content={{
-                  header: t('navigation.management.Operators'),
-                  options: (
-                    <FlatList
-                      showsVerticalScrollIndicator={false}
-                      nestedScrollEnabled
-                      data={Object.keys(companyOperators)}
-                      keyExtractor={(item, itemIdx) => `operator-item-${item}-#${itemIdx}`}
-                      ItemSeparatorComponent={Divider}
-                      renderItem={({ item }) => {
-                        const itemId = parseInt(item);
-                        return (
-                          <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
-                            <Text tw="text-base w-[70%]" numberOfLines={2}>
-                              {companyOperators[itemId]}
-                            </Text>
-                            <Checkbox
-                              tw="flex-row-reverse ml-[-10]"
-                              status={internalSelection.includes(itemId) ? 'checked' : 'unchecked'}
-                              onPress={() => {
-                                setInternalSelection((prev) => {
-                                  const clone = [...prev];
-                                  const idx = clone.indexOf(itemId);
-                                  if (idx === -1) clone.push(itemId);
-                                  else clone.splice(idx, 1);
-                                  return clone;
-                                });
-                              }}
-                            />
-                          </View>
+    <View tw="mt-5">
+      <View tw="px-4 pb-2">
+        <Select
+          variant="md"
+          isOpen={isModalVisible}
+          onOpenChange={setIsModalVisible}
+          onDismiss={() => setInternalSelection(field.value)}
+        >
+          <Select.Touchable
+            label={t('navigation.management.Operators')}
+            displayValue={displayValue}
+          />
+          <Select.Dialog
+            enableScroll
+            header={t('navigation.management.Operators')}
+            FooterElement={
+              <View tw="flex flex-row items-center justify-end">
+                <Button
+                  mode="text"
+                  uppercase
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    setIsModalVisible(false);
+                    setInternalSelection(field.value);
+                  }}
+                >
+                  {t('actions.cancel')}
+                </Button>
+                <Button
+                  mode="text"
+                  uppercase
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    setIsModalVisible(false);
+                    field.onChange(internalSelection);
+                  }}
+                >
+                  {t('actions.ok')}
+                </Button>
+              </View>
+            }
+          >
+            <FlatList
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              data={Object.keys(companyOperators)}
+              keyExtractor={(item, itemIdx) => `operator-item-${item}-#${itemIdx}`}
+              renderItem={({ item }) => {
+                const itemId = parseInt(item);
+                return (
+                  <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                    <Text tw="text-base w-[70%]" numberOfLines={2}>
+                      {companyOperators[itemId]}
+                    </Text>
+                    <Checkbox
+                      tw="flex-row-reverse ml-[-10]"
+                      status={internalSelection.includes(itemId) ? 'checked' : 'unchecked'}
+                      onPress={() => {
+                        setInternalSelection((prev) =>
+                          prev.includes(itemId)
+                            ? prev.filter((id) => id !== itemId)
+                            : [...prev, itemId]
                         );
                       }}
                     />
-                  ),
-                  footer: (
-                    <View tw="flex flex-row items-center justify-end">
-                      <Button
-                        mode="text"
-                        uppercase
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          toggleVisibility();
-                          setInternalSelection(selectedOperators);
-                        }}
-                      >
-                        {t('actions.cancel')}
-                      </Button>
-                      <Button
-                        mode="text"
-                        uppercase
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          toggleVisibility();
-                          onChange(internalSelection);
-                        }}
-                      >
-                        {t('actions.ok')}
-                      </Button>
-                    </View>
-                  ),
-                }}
-              />
-            </View>
-            <Divider tw={cn('w-full bg-gray-700', fieldError && 'bg-red-700 h-0.5')} />
-          </View>
-        )}
-      />
-    </React.Fragment>
+                  </View>
+                );
+              }}
+              ItemSeparatorComponent={Divider}
+            />
+          </Select.Dialog>
+        </Select>
+      </View>
+      <Divider tw={cn('w-full bg-gray-700', fieldError && 'bg-red-700 h-0.5')} />
+    </View>
   );
 }
