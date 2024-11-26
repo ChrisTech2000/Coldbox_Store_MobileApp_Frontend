@@ -31,7 +31,7 @@ export default function UnitTypeField() {
   const fieldError = typeof fieldState.error !== 'undefined';
 
   return (
-    <View tw="mt-4">
+    <View tw="mt-5">
       <View tw="px-4 pb-2">
         <Select
           variant="md"
