@@ -12,7 +12,10 @@ class CouponService extends HttpClient {
   public getCouponList = async (params?: GetCouponListParams): Promise<GetCouponListResponse> => {
     try {
       const { data } = await this.get<GetCouponListResponse>(CouponsEndpoints.LIST_OWN_COUPONS, {
-        params: { show_revoked: params?.revoked ?? '' },
+        params: {
+          show_revoked: params?.revoked ?? '',
+          owned_on_behalf_of_company_id: params?.ownedOnBehalfOfCompanyId ?? '',
+        },
       });
       return data;
     } catch (error) {

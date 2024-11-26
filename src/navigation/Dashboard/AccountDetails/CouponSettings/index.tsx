@@ -15,11 +15,14 @@ import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import CouponService from '#services/CouponService';
+import { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { useManagementStore } from '#stores/management';
 
 import CouponStatusTabs from './CouponStatusTabs';
+import { AccountDetailsRouteProps } from '..';
 
 export type CouponsSettingsRoutes = {
-  Root: undefined;
+  Root: { source: string } | undefined;
 };
 
 export type CouponsSettingsRoutePaths = keyof CouponsSettingsRoutes;
@@ -38,11 +41,14 @@ type ScreenOptions = (props: {
 
 const Stack = createNativeStackNavigator<CouponsSettingsRoutes>();
 
-export default function CouponsSettingsStack() {
+export default function CouponsSettingsStack(
+  props: ManagementRouteProps<'CouponStack'> | AccountDetailsRouteProps<'CouponStack'>
+) {
   const { t } = useTranslationUtils();
+  const company = useManagementStore((store) => store.company);
 
-  const screenOptions: ScreenOptions = useCallback(
-    (props) => ({
+  const screenOptions: ScreenOptions = useCallback((props) => {
+    return {
       ...props,
       header: (headerProps) => (
         <NavigatorHeader
@@ -53,14 +59,18 @@ export default function CouponsSettingsStack() {
           leftContent={<Appbar.BackAction onPress={props.navigation.goBack} size={22} />}
         />
       ),
-    }),
-    []
-  );
+    };
+  }, []);
+
+  const isManagementStack = props.route.params?.source === 'Management';
 
   const { data } = useApiCall(
-    'getCouponList',
+    isManagementStack ? 'getCompanyCouponList' : 'getCouponList',
     CouponService.getCouponList,
-    { revoked: 'included' },
+    {
+      revoked: 'included',
+      ownedOnBehalfOfCompanyId: isManagementStack ? (company?.id as number) : undefined,
+    },
     {
       defaultData: { nodes: [] },
     }
@@ -69,9 +79,9 @@ export default function CouponsSettingsStack() {
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>
       {data.nodes.length === 0 ? (
-        <Stack.Screen name="Root" component={Coupons} />
+        <Stack.Screen name="Root" component={Coupons} initialParams={props.route.params} />
       ) : (
-        <Stack.Screen name="Root" component={CouponStatusTabs} />
+        <Stack.Screen name="Root" component={CouponStatusTabs} initialParams={props.route.params} />
       )}
     </Stack.Navigator>
   );

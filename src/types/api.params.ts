@@ -407,10 +407,12 @@ export type GetPredictionTableParams = {
 export interface CreateCouponParams extends JsonObject {
   code: string;
   discountPercentage: number;
+  ownedOnBehalfOfCompany?: number;
 }
 
 export interface GetCouponListParams extends JsonObject {
-  revoked: 'only' | 'included';
+  revoked?: 'only' | 'included';
+  ownedOnBehalfOfCompanyId?: number;
 }
 
 export interface AddItemToCartParams extends JsonObject {

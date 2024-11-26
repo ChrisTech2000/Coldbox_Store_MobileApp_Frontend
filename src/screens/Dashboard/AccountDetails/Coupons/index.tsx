@@ -1,25 +1,30 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Modalize } from 'react-native-modalize';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSWRConfig } from 'swr';
 
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { CouponsSettingsRouteProps } from '#navigation/Dashboard/AccountDetails/CouponSettings';
 import CouponService from '#services/CouponService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import { useManagementStore } from '#stores/management';
 
 import CouponModal from './components/CouponModal';
 
-function CouponsRoot() {
+function CouponsRoot(props: CouponsSettingsRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
+  const company = useManagementStore((store) => store.company);
 
   const modalRef = useRef<Modalize>(null);
+
+  const isManagementStack = props.route.params?.source === 'Management';
 
   return (
     <View tw="py-3 flex-1 flex-col items-center justify-between">
@@ -36,13 +41,18 @@ function CouponsRoot() {
         modalRef={modalRef}
         onSubmit={async (values) => {
           await CouponService.createCoupon({
+            ownedOnBehalfOfCompany: isManagementStack ? company?.id : undefined,
             code: values.code,
             discountPercentage: Math.min(values.percentage / 100, 1.0),
           });
 
           await Promise.allSettled([
-            mutate(getQueryKey('getCouponList')),
-            mutate(getQueryKey('getCouponList', { revoked: 'included' })),
+            mutate(getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList')),
+            mutate(
+              getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
+                revoked: 'included',
+              })
+            ),
           ]);
 
           modalRef.current?.close();

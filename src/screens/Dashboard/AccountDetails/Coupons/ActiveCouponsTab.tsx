@@ -3,31 +3,45 @@ import { FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { useSWRConfig } from 'swr';
 
+import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { Button } from '#ui/components/Button';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { paperTheme } from '#ui/lib/theme';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import CouponService from '#services/CouponService';
-import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
+import { useTranslationUtils } from '#i18n/utils';
+import CouponService from '#services/CouponService';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 
+import { useManagementStore } from '#stores/management';
 import CouponModal from './components/CouponModal';
 import RevokeCouponModal from './components/RevokeCouponModal';
+import { CouponStatusTabsRouteProps } from 'navigation/Dashboard/AccountDetails/CouponSettings/CouponStatusTabs';
 
-function ActiveCouponsTab() {
+function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const { mutate } = useSWRConfig();
+  const company = useManagementStore((store) => store.company);
 
   const modalRef = useRef<Modalize>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  const { data } = useApiCall('getCouponList', CouponService.getCouponList, undefined, {
-    defaultData: { nodes: [] },
-  });
+  // eslint-disable-next-line
+  // @ts-ignore
+  const isManagementStack = props?.route?.params?.source === 'Management';
+
+  const { data } = useApiCall(
+    isManagementStack ? 'getCompanyCouponList' : 'getCouponList',
+    CouponService.getCouponList,
+    {
+      ownedOnBehalfOfCompanyId: isManagementStack ? (company?.id as number) : undefined,
+    },
+    {
+      defaultData: { nodes: [] },
+    }
+  );
 
   const selectedCoupon = useRef<number | null>(null);
 
@@ -81,9 +95,17 @@ function ActiveCouponsTab() {
               await CouponService.revokeCoupon(selectedCoupon.current);
 
               await Promise.allSettled([
-                mutate(getQueryKey('getCouponList')),
-                mutate(getQueryKey('getCouponList', { revoked: 'included' })),
-                mutate(getQueryKey('getCouponList', { revoked: 'only' })),
+                mutate(getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList')),
+                mutate(
+                  getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
+                    revoked: 'included',
+                  })
+                ),
+                mutate(
+                  getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
+                    revoked: 'only',
+                  })
+                ),
               ]);
             } catch (exception) {
               console.error(exception);
@@ -98,10 +120,11 @@ function ActiveCouponsTab() {
         onSubmit={async (values) => {
           try {
             await CouponService.createCoupon({
+              ownedOnBehalfOfCompany: isManagementStack ? company?.id : undefined,
               code: values.code,
               discountPercentage: Math.min(values.percentage / 100, 1.0),
             });
-            await mutate(getQueryKey('getCouponList'));
+            await mutate(getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList'));
             modalRef.current?.close();
           } catch (exception) {
             console.error(exception);
