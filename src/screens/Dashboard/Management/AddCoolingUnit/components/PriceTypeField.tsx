@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, FlatList } from 'react-native';
 import { useController } from 'react-hook-form';
 import { Divider, RadioButton } from 'react-native-paper';
+import truncate from 'lodash/truncate';
 
 import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -41,7 +42,7 @@ export default function PriceTypeField() {
         >
           <Select.Touchable
             label={`${t('Dashboard.Management.AddCoolingUnit.pricing.label')}*`}
-            displayValue={displayValue}
+            displayValue={truncate(displayValue, { length: 16 })}
           />
           <Select.Dialog
             header={t('Dashboard.Management.AddCoolingUnit.pricing.label')}
