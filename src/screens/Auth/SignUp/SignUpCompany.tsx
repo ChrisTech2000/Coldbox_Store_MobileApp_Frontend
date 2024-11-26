@@ -286,6 +286,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         name="gender"
         control={control}
         label={t('Auth.SignUp.commonForm.genderFieldName')}
+        enableScroll={false}
       />
       {errors.gender && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">

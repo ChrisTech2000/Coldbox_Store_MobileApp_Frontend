@@ -214,6 +214,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         name="gender"
         control={control}
         items={GENDERS(t)}
+        enableScroll={false}
         required
       />
       {errors.gender && (

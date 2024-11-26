@@ -42,16 +42,21 @@ export function SignUpFormSelectLg<T extends FieldValues>(props: Props<T>) {
           label={required ? `${startCase(label)}*` : startCase(label)}
           displayValue={computedDisplayValue?.(field.value) || field.value || ''}
         />
-        <Select.Dialog enableScroll header={t('Auth.SignUp.select.header', { fieldName: label })}>
-          <View tw="px-6 py-3">
-            <TextInput
-              tw="bg-white rounded-sm h-12 border border-gray-600"
-              label={t('Auth.SignUp.select.label')}
-              onChangeText={(val) => setSearch(val)}
-              value={search}
-              left={<TextInput.Icon icon="magnify" />}
-            />
-          </View>
+        <Select.Dialog
+          enableScroll
+          header={t('Auth.SignUp.select.header', { fieldName: label })}
+          StickyHeaderElement={
+            <View tw="px-6 py-3">
+              <TextInput
+                tw="bg-white rounded-sm h-12 border border-gray-600"
+                label={t('Auth.SignUp.select.label')}
+                onChangeText={(val) => setSearch(val)}
+                value={search}
+                left={<TextInput.Icon icon="magnify" />}
+              />
+            </View>
+          }
+        >
           <FlashList
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}

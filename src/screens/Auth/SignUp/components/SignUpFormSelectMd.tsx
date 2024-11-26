@@ -17,10 +17,11 @@ type Props<T extends FieldValues> = {
   label: string;
   control: Control<T>;
   required?: boolean;
+  enableScroll?: boolean;
 };
 
 export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
-  const { items, name, label, control, required } = props;
+  const { items, name, label, control, required, enableScroll = true } = props;
 
   const { field, fieldState } = useController({ name, control, rules: { required } });
   const { t } = useTranslationUtils();
@@ -59,7 +60,7 @@ export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
             displayValue={field.value || ''}
           />
           <Select.Dialog
-            enableScroll
+            enableScroll={enableScroll}
             header={t('Auth.SignUp.select.header', { fieldName: label })}
             FooterElement={
               <View tw="flex flex-row items-center justify-end">
