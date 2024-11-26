@@ -92,9 +92,17 @@ class ColdtivateService extends HttpClient {
   }
 
   ///////// DASHBOARD
-  public getCompanies = async (): Promise<Company[] | undefined> => {
+  public getCompanies = async (params?: {
+    isMarketplace: boolean;
+  }): Promise<Company[] | undefined> => {
     try {
-      const { data } = await this.get<Company[]>(ECompanyEndpoints.GET_COMPANIES, {});
+      let url = ECompanyEndpoints.GET_COMPANIES.toString();
+
+      if (params?.isMarketplace) {
+        url += `?marketplace_filter_scoped=1`;
+      }
+      console.log(url);
+      const { data } = await this.get<Company[]>(url, {});
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
