@@ -41,7 +41,12 @@ export function SelectLanguage() {
 
   return (
     <View tw="mt-8">
-      <Select variant="sm" isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Select
+        variant="sm"
+        isOpen={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        onDismiss={() => setSelectedLanguage(activeLanguage)}
+      >
         <Select.Touchable label={t(['languages.options', activeLanguage])} />
         <Select.Dialog
           enableScroll

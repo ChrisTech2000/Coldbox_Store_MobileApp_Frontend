@@ -29,7 +29,12 @@ export default function GenderField() {
   return (
     <View tw="mt-5">
       <View tw="px-3">
-        <Select variant="md" isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
+        <Select
+          variant="md"
+          isOpen={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          onDismiss={() => setInternalSelection(selectedGender)}
+        >
           <Select.Touchable
             label={t('Dashboard.Management.Operators.text.gender')}
             displayValue={displayValue}

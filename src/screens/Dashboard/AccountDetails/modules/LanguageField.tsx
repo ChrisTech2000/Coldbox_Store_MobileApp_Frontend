@@ -27,7 +27,12 @@ export default function LanguageField() {
   return (
     <View tw="mt-4">
       <View tw="mx-4">
-        <Select variant="md" isOpen={isModalVisible} onOpenChange={setIsModalVisible}>
+        <Select
+          variant="md"
+          isOpen={isModalVisible}
+          onOpenChange={setIsModalVisible}
+          onDismiss={() => setInternalSelection(field.value)}
+        >
           <Select.Touchable
             label={t('languages.label')}
             displayValue={t(['languages.options', field.value])}

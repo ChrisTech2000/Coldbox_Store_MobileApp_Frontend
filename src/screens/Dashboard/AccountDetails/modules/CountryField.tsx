@@ -38,7 +38,12 @@ export default function CountryField() {
 
   return (
     <React.Fragment>
-      <Select variant="lg" isOpen={isModalVisible} onOpenChange={setIsModalVisible}>
+      <Select
+        variant="lg"
+        isOpen={isModalVisible}
+        onOpenChange={setIsModalVisible}
+        onDismiss={() => setSearch('')}
+      >
         <Select.Touchable
           label={t('Dashboard.Management.CompanyDetails.labels.country')}
           displayValue={selectedCountry}

@@ -44,7 +44,12 @@ export default function GenderField() {
   return (
     <View tw="mt-5">
       <View tw="px-3">
-        <Select variant="md" isOpen={isModalVisible} onOpenChange={setIsModalVisible}>
+        <Select
+          variant="md"
+          isOpen={isModalVisible}
+          onOpenChange={setIsModalVisible}
+          onDismiss={() => setInternalSelection(field.value)}
+        >
           <Select.Touchable
             label={t('Dashboard.Management.Operators.text.gender')}
             displayValue={t(['Dashboard.Management.Operators.text', field.value])}

@@ -54,7 +54,13 @@ export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
   return (
     <View tw="mt-2">
       <View tw="w-full px-4 mb-1">
-        <Select variant="md" isOpen={isModalOpen} onOpenChange={setIsModalOpen} error={error}>
+        <Select
+          variant="md"
+          isOpen={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          error={error}
+          onDismiss={() => setSelectedValue(field.value)}
+        >
           <Select.Touchable
             label={required ? `${startCase(label)}*` : startCase(label)}
             displayValue={field.value || ''}
