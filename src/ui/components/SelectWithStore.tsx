@@ -144,6 +144,7 @@ export default function SelectWithStore<T>(props: SelectItemProps<T>) {
           isOpen={isModalVisible}
           onOpenChange={setIsModalVisible}
           disabled={rest.disabled}
+          onDismiss={() => setInternalSelection(store.selectedItem)}
         >
           <Select.Touchable label={rest.label || ''} />
           <Select.Dialog

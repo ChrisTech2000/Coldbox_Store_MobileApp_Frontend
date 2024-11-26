@@ -16,6 +16,7 @@ type SelectContextType = {
   variant?: Variant;
   error?: boolean;
   disabled?: boolean;
+  onDismiss?: () => void;
 };
 
 const SelectContext = createContext<SelectContextType | undefined>(undefined);
@@ -35,6 +36,7 @@ export function Select(
     variant?: Variant;
     error?: boolean;
     disabled?: boolean;
+    onDismiss?: () => void;
   }>
 ) {
   const {
@@ -44,6 +46,7 @@ export function Select(
     error,
     disabled,
     children,
+    onDismiss,
   } = props;
 
   const [dialogVisible, setDialogVisible] = useControlledState<boolean>(isOpen, onOpenChange);
@@ -56,6 +59,7 @@ export function Select(
         variant,
         error,
         disabled,
+        onDismiss,
       }}
     >
       <View>{children}</View>
@@ -135,7 +139,7 @@ Select.Dialog = function _SelectDialog(
 ) {
   const { header, StickyHeaderElement, FooterElement, children, enableScroll = false } = props;
 
-  const { isOpen, setIsOpen, variant = DEFAULT_VARIANT } = useSelectContext();
+  const { isOpen, setIsOpen, onDismiss, variant = DEFAULT_VARIANT } = useSelectContext();
 
   const Container = enableScroll ? Dialog.ScrollArea : Dialog.Content;
 
@@ -162,7 +166,10 @@ Select.Dialog = function _SelectDialog(
     <Portal>
       <Dialog
         visible={isOpen}
-        onDismiss={() => setIsOpen(false)}
+        onDismiss={() => {
+          setIsOpen(false);
+          onDismiss?.();
+        }}
         style={{ backgroundColor: 'white' }}
       >
         <Dialog.Title>{header}</Dialog.Title>
