@@ -11,7 +11,7 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { cn } from '#ui/lib/cn';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -63,7 +63,7 @@ export default function DeliveryInformationBottomSheet() {
   const data = datum?.orderId ? orderDeliveryContacts : cartDeliveryContacts;
 
   useAppEventListener<[{ coolingUnitId: number; orderId?: number }]>(
-    'DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION',
+    APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION,
     (datum) => {
       setDatum(datum ?? null);
       setIsVisible(true);

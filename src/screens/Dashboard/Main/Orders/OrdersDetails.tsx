@@ -1,5 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
+import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -32,13 +33,13 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
-import { EOrderStatus, EPickUpMethod, EPricingType } from '#types/global';
+import { CoolingUnit, EOrderStatus } from '#types/global';
 
 import colors from 'tailwindcss/colors';
 import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
+import { PickupDetailsCard } from '../ShoppingCart/components/PickupDetailsCard';
 import PaymentPendingBottomSheet from './components/PaymentPendingBottomSheet';
-import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
@@ -247,50 +248,20 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => {
-                  const coolingUnit = coolingUnits?.find((cu) => cu.id === item.coolingUnitId);
+                  const coolingUnit = coolingUnits?.find(
+                    (cu) => cu.id === item.coolingUnitId
+                  ) as CoolingUnit;
 
                   return (
-                    <View tw="mb-4">
-                      <Text tw="text-base">{coolingUnit?.name ?? ''}</Text>
-                      <View tw="flex flex-row items-center justify-between mt-1 p-4 border border-gray-300 rounded-xl">
-                        <Text tw="text-base">
-                          {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
-                            ? t('Dashboard.ShoppingCart.pickUpToday')
-                            : ''}
-                          {item.pickupMethod === EPickUpMethod.DELIVERY
-                            ? t('Dashboard.ShoppingCart.delivery')
-                            : ''}
-                          {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
-                            ? t(
-                                coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY
-                                  ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
-                                  : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
-                                {
-                                  price: formatCurrencyWithSymbol(
-                                    'NGN',
-                                    coolingUnit?.commonPricingType?.value ?? 0
-                                  ),
-                                }
-                              )
-                            : ''}
-                        </Text>
-                        {item.pickupMethod === EPickUpMethod.DELIVERY ? (
-                          <Touchable
-                            onPress={(evt) => {
-                              evt.stopPropagation();
-                              emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, {
-                                orderId: props.route.params.orderId,
-                                coolingUnitId: item.coolingUnitId,
-                              });
-                            }}
-                          >
-                            <Text tw="text-base text-green-primary">
-                              {t('Dashboard.ShoppingCart.viewContacts')}
-                            </Text>
-                          </Touchable>
-                        ) : null}
-                      </View>
-                    </View>
+                    <PickupDetailsCard
+                      coolingUnit={coolingUnit}
+                      orderId={props.route.params.orderId}
+                      companyId={
+                        data.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
+                          ?.relCompanyId as number
+                      }
+                      pickupMethod={item.pickupMethod}
+                    />
                   );
                 }}
               />
@@ -329,10 +300,10 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               <View tw="flex-row items-center space-x-1">
                 <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
                 <Text tw="text-base">
-                  {formatCurrencyWithSymbol(
-                    'NGN', // TODO: get value from somewhere
-                    data.totalPaymentFeesAmount + data.totalColdtivateAmount
-                  )}
+                  {CurrencyStandardization.currencyCode({
+                    code: 'NGN', // TODO: get value from somewhere
+                    value: data.totalPaymentFeesAmount + data.totalColdtivateAmount,
+                  }).getValueFormated()}
                 </Text>
               </View>
             </View>
@@ -340,10 +311,10 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
             <View tw="flex-row items-center justify-between">
               <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
               <Text tw="text-lg">
-                {formatCurrencyWithSymbol(
-                  'NGN', // TODO: get value from somewhere
-                  data.totalAmount
-                )}
+                {CurrencyStandardization.currencyCode({
+                  code: 'NGN', // TODO: get value from somewhere
+                  value: data.totalAmount,
+                }).getValueFormated()}
               </Text>
             </View>
           </View>
@@ -414,7 +385,6 @@ function ProduceCard(props: {
     }
   );
 
-  // TODO: get company contacts
   return (
     <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
       <View tw="flex-row items-start justify-between">
@@ -473,7 +443,10 @@ function ProduceCard(props: {
           {t('Dashboard.ProduceDetails.kilogram')}
         </Text>
         <Text tw="font-bold">
-          {formatCurrencyWithSymbol('NGN', props.producePricePerKg.toFixed(2))}&nbsp;
+          {CurrencyStandardization.currencyCode({
+            code: 'NGN', // TODO: get value from somewhere
+            value: props.producePricePerKg.toFixed(2),
+          }).getValueFormated()}{' '}
           {t('Dashboard.ShoppingCart.perKg')}
         </Text>
       </View>

@@ -3,7 +3,6 @@ import { DataTable, Dialog, Portal, TextInput } from 'react-native-paper';
 import { FlatList, View, Dimensions } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import cloneDeep from 'lodash/cloneDeep';
 import colors from 'tailwindcss/colors';
 import { useSWRConfig } from 'swr';
 
@@ -72,8 +71,9 @@ export default function TemperatureAlert() {
   });
 
   async function dismissHandler() {
-    await mutate(getQueryKey('getCoolingUnitTemperatures', form.getValues('coolingUnitId')));
+    const unitId = form.getValues('coolingUnitId');
     form.reset(DEFAULT_STATE);
+    await mutate(getQueryKey('getCoolingUnitTemperatures', unitId));
   }
 
   async function onSubmit(values: LocalState<number>) {
@@ -90,8 +90,9 @@ export default function TemperatureAlert() {
       });
 
       await dismissHandler();
-    } catch {
-      // silent error
+    } catch (exception) {
+      console.error(exception);
+      toast.show(t('actions.error'), { type: 'md_danger' });
     }
   }
 
@@ -101,16 +102,23 @@ export default function TemperatureAlert() {
       try {
         const result = await ColdtivateService.getCoolingUnit({ coolingUnitId, companyId });
         form.reset({
+          ...DEFAULT_STATE,
           coolingUnitId,
           coolingUnitHasSensorIntegration: result.sensor,
           showCompleteInfo: showCompleteInfo === undefined ? false : showCompleteInfo,
           lastUpdated: result.latestTemperatureTimestamp
             ? new Date(result.latestTemperatureTimestamp)
             : undefined,
-          datums: cloneDeep(result.commodityInfos).sort((a, b) => b.percentage - a.percentage),
+          datums: result.commodityInfos
+            .map((item) => ({
+              ...item,
+              optimalStorageTemperature: item.optimalStorageTemperature || 'N/A',
+            }))
+            .sort((a, b) => b.percentage - a.percentage),
         });
       } catch (exception) {
         console.error(exception);
+        toast.show(t('actions.error'), { type: 'md_danger' });
       }
     }
   );
@@ -209,26 +217,36 @@ export default function TemperatureAlert() {
                 <Controller
                   name="temperature"
                   control={form.control}
-                  render={({ field: { onChange, value, onBlur } }) => (
-                    <TextInput
-                      label={t('Dashboard.TemperatureAlert.newTemperature')}
-                      mode="outlined"
-                      keyboardType="numeric"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      error={!!form.formState.errors.temperature}
-                      tw="w-full bg-transparent mt-2"
-                      dense
-                    />
-                  )}
+                  render={({ field: { onChange, value, onBlur }, fieldState }) => {
+                    const hasError = typeof fieldState.error?.message !== 'undefined';
+                    return (
+                      <TextInput
+                        label={t('Dashboard.TemperatureAlert.newTemperature')}
+                        mode="outlined"
+                        keyboardType="numeric"
+                        value={value}
+                        onChangeText={(newValue) => {
+                          if (hasError) {
+                            form.setError('temperature', { message: undefined });
+                          }
+                          onChange(newValue);
+                        }}
+                        onBlur={onBlur}
+                        error={hasError}
+                        tw="w-full bg-transparent mt-2"
+                        dense
+                      />
+                    );
+                  }}
                 />
               </View>
               <View tw="space-y-3 mt-5">
                 <Button
                   mode="outlined"
                   icon="check-circle-outline"
-                  disabled={!form.watch('temperature')}
+                  disabled={
+                    !form.watch('temperature') || !!form.formState.errors.temperature?.message
+                  }
                   // eslint-disable-next-line
                   onPress={form.handleSubmit(onSubmit as any)}
                 >
