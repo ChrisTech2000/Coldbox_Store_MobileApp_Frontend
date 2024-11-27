@@ -525,6 +525,7 @@ const en = {
             sellingPrice: 'Listing selling price',
             potentialSellingPrice: 'Potential selling value',
             info: 'The price configuration refers to product sale, not cooling storage fee.',
+            unavailableId: 'ID not set',
           },
           cratesError: 'Please insert a positive crate number',
           crateWeightError: 'Please insert a positive crate weight',
@@ -784,6 +785,7 @@ const en = {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details',
         toasts: {
           warning:
             'This account cannot be deleted because the user has active check-ins in the cooling unit(s) {{names}}. Please notify the user to come to the room to pick up these items and complete the check-outs before deleting the account!',
@@ -946,6 +948,7 @@ const en = {
         },
       },
       Coupons: {
+        title: 'Discount coupons',
         emptyMessage: 'No coupons have been added yet',
         addCoupon: 'Add Coupon',
         code: 'Coupon code',

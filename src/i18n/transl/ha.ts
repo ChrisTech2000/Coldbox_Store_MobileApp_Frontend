@@ -508,6 +508,7 @@ export default {
             sellingPrice: 'Listing selling price', // TODO
             potentialSellingPrice: 'Potential selling value', // TODO
             info: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
+            unavailableId: 'ID not set', // TODO
           },
           cratesError: 'Da fatan za a saka lambar kwano tabbatacce',
           crateWeightError: "Da fatan za a saka ma'auni mai inganci",
@@ -737,6 +738,7 @@ export default {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details', // TODO
         toasts: {
           noSurveys: 'No surveys have been completed yet.', // TODO
           warning:
@@ -885,6 +887,7 @@ export default {
         },
       },
       Coupons: {
+        title: 'Discount coupons', // TODO
         emptyMessage: 'Babu takardun shaida da aka kara har yanzu',
         addCoupon: 'Ƙara Coupon',
         code: 'Lambar kuɗi',

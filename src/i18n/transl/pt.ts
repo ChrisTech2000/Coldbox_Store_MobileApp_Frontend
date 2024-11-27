@@ -531,6 +531,7 @@ export default {
             sellingPrice: 'Preço de venda',
             potentialSellingPrice: 'Valor potencial de venda',
             info: 'A configuração de preço refere-se à venda do produto, não à taxa de armazenamento a frio.',
+            unavailableId: 'ID not set', // TODO
           },
           cratesError: 'Por favor, insira um número positivo de paletes',
           crateWeightError: 'Por favor, insira um peso positivo para a palete',
@@ -793,6 +794,7 @@ export default {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details', // TODO
         toasts: {
           warning:
             'Esta conta não pode ser eliminada porque o utilizador tem check-ins ativos na(s) unidade(s) de refrigeração {{names}}. Por favor, notifique o utilizador para vir à sala para recolher estes itens e concluir os check-outs antes de eliminar a conta!',
@@ -957,6 +959,7 @@ export default {
         },
       },
       Coupons: {
+        title: 'Discount coupons', // TODO
         emptyMessage: 'Nenhum cupom foi adicionado ainda',
         addCoupon: 'Adicionar Cupom',
         code: 'Código do Cupom',

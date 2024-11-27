@@ -526,6 +526,7 @@ export default {
             sellingPrice: 'વેચાણ માટેની કિંમતની યાદી',
             potentialSellingPrice: 'સમ্ভવિત વેચાણ મૂલ્ય',
             info: 'કિંમતની રચના ઉત્પાદનના વેચાણનો ઉદ્દેશ છે, ઠંડક સંગ્રહ શુલ્કનો નહીં.',
+            unavailableId: 'ID not set', // TODO
           },
           cratesError: 'કૃપા કરીને સકારાત્મક કરેટ સંખ્યા દાખલ કરો',
           crateWeightError: 'કૃપા કરીને સકારાત્મક કરેટ વજન દાખલ કરો',
@@ -785,6 +786,7 @@ export default {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details', // TODO
         toasts: {
           warning:
             'આ ખાતું હટાવવામાં ન શક્ય છે કારણ કે આ વપરાશકર્તાની કૂલિંગ યુનિટ(s) {{names}} માં સક્રિય ચેક-ઇન્સ છે. કૃપા કરીને વપરાશકર્તાને સૂચિત કરો કે તેઓ રૂમમાં આવીને આ વસ્તુઓ ઉઠાવવી અને ચેક-આઉટ્સ પૂર્ણ કરવી જોઈએ પહેલા ખાતું કાઢી નાખવું!',
@@ -946,6 +948,7 @@ export default {
         },
       },
       Coupons: {
+        title: 'Discount coupons', // TODO
         emptyMessage: 'અત્યાર સુધી કોઇ કૂપન ઉમેરાયેલ નથી',
         addCoupon: 'કૂપન ઉમેરો',
         code: 'કૂપન કોડ',

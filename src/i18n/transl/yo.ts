@@ -498,6 +498,7 @@ export default {
             sellingPrice: 'Listing selling price', // TODO
             potentialSellingPrice: 'Potential selling value', // TODO
             info: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
+            unavailableId: 'ID not set', // TODO
           },
           cratesError: 'Jọwọ fi kan rere nọmba crate',
           crateWeightError: 'Jọwọ fi iwuwo apoti rere sii',
@@ -720,6 +721,7 @@ export default {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details', // TODO
         toasts: {
           noSurveys: 'No surveys have been completed yet.', // TODO
           warning:
@@ -862,6 +864,7 @@ export default {
         },
       },
       Coupons: {
+        title: 'Discount coupons', // TODO
         emptyMessage: 'Ko si awọn kuponu ti a ti ṣafikun sibẹsibẹ',
         addCoupon: 'Fi Kupọọnu kun',
         code: 'koodu kupọọnu',

@@ -527,6 +527,7 @@ export default {
             sellingPrice: 'ବିକ୍ରୟ ମୂଲ୍ୟ ତାଲିକାକରଣ',
             potentialSellingPrice: 'ସମ୍ଭାବ୍ୟ ବିକ୍ରୟ ମୂଲ୍ୟ',
             info: 'ମୂଲ୍ୟ ବ୍ୟବସ୍ଥାପନ ପ୍ରସ୍ତୁତି ବିକ୍ରୟ ସହ ଜଡିତ, ଠଣ୍ଡା ଗୋଦାମ ଫିସ୍‌ ସହ ନୁହେଁ।',
+            unavailableId: 'ID not set', // TODO
           },
           cratesError: 'ଦୟାକରି ସକାରାତ୍ମକ କ୍ରେଟ୍ ସଂଖ୍ୟା ଦିଅନ୍ତୁ',
           crateWeightError: 'ଦୟାକରି ସକାରାତ୍ମକ କ୍ରେଟ୍ ଓଜନ ଦିଅନ୍ତୁ',
@@ -788,6 +789,7 @@ export default {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details', // TODO
         toasts: {
           warning:
             'ଏହି ଖାତାକୁ ମିଟାଇବା ସମ୍ଭବ ନୁହେଁ କାରଣ ଏହି ବ୍ୟବହାରକାରୀଙ୍କର କୁଲିଂ ୟୁନିଟ୍(s) {{names}}ରେ ସକ୍ରିୟ ଚେକ-ଇନ୍ ଅଛି। ଦୟାକରି ବ୍ୟବହାରକାରୀକୁ ଅନୁସୂଚନା କରନ୍ତୁ ଯେ ସେ କମରେ ଆସି ଏହି ସାମଗ୍ରୀଗୁଡିକୁ ଆଣିବାକୁ ଓ ଚେକ-ଆଉଟ୍ ସମ୍ପୂର୍ଣ୍ଣ କରିବାକୁ। ତାପରେ ଖାତାକୁ ମିଟାଇବେ!',
@@ -951,6 +953,7 @@ export default {
         },
       },
       Coupons: {
+        title: 'Discount coupons', // TODO
         emptyMessage: 'କୌଣସି କୁପନ୍ ଯୋଡାଯାଇନି',
         addCoupon: 'କୁପନ୍ ଯୋଡନ୍ତୁ',
         code: 'କୁପନ୍ କୋଡ୍',
