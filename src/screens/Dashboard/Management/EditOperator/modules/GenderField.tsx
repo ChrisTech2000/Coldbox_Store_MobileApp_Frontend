@@ -41,7 +41,7 @@ export default function GenderField() {
             displayValue={t(['Dashboard.Management.Operators.text', field.value])}
           />
           <Select.Dialog
-            enableScroll
+            enableScroll={false}
             header={t('Dashboard.Management.Operators.text.gender')}
             FooterElement={
               <View tw="flex flex-row items-center justify-end">
