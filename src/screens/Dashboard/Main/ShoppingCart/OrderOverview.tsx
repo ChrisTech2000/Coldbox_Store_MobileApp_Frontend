@@ -11,8 +11,6 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { Touchable } from '#ui/components/Touchable';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -24,10 +22,11 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
-import { EPickUpMethod, EPricingType } from '#types/global';
+import { CoolingUnit } from '#types/global';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
+import { PickupDetailsCard } from './components/PickupDetailsCard';
 
 function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
@@ -102,7 +101,15 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               <Text tw="text-2xl">{t('Dashboard.ShoppingCart.thankYouMessage')}</Text>
             </View>
 
-            <Text tw="text-base text-green-primary font-bold">{t('Dashboard.MyOrders.title')}</Text>
+            <View>
+              <Text tw="text-base text-green-primary font-bold">
+                {t('Dashboard.MyOrders.title')}
+              </Text>
+              <Text tw="text-gray-500 mt-0.5">
+                {t('Dashboard.ShoppingCart.orderOverviewSubtitle')}
+              </Text>
+            </View>
+
             <FlatList
               data={orderDataByCoolingUnit}
               keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
@@ -143,66 +150,20 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                   scrollEnabled={false}
                   showsVerticalScrollIndicator={false}
                   renderItem={({ item }) => {
-                    const coolingUnit = coolingUnits?.find((cu) => cu.id === item.coolingUnitId);
+                    const coolingUnit = coolingUnits?.find(
+                      (cu) => cu.id === item.coolingUnitId
+                    ) as CoolingUnit;
 
                     return (
-                      <View tw="mb-4">
-                        <Text tw="text-base">{coolingUnit?.name ?? ''}</Text>
-                        <View tw="p-4 border border-gray-300 rounded-xl">
-                          <View tw="flex flex-row items-center justify-between">
-                            <Text tw="text-base">
-                              {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
-                                ? t('Dashboard.ShoppingCart.pickUpToday')
-                                : ''}
-                              {item.pickupMethod === EPickUpMethod.DELIVERY
-                                ? t('Dashboard.ShoppingCart.delivery')
-                                : ''}
-                              {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
-                                ? t(
-                                    coolingUnit?.commonPricingType?.type ===
-                                      EPricingType.PERIODICITY
-                                      ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
-                                      : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
-                                    {
-                                      price: CurrencyStandardization.currencyCode({
-                                        code: 'NGN', // TODO: get value from somewhere
-                                        value: coolingUnit?.commonPricingType?.value ?? 0,
-                                      }).getValueFormated(),
-                                    }
-                                  )
-                                : ''}
-                            </Text>
-                            {item.pickupMethod === EPickUpMethod.DELIVERY ? (
-                              <Touchable
-                                onPress={(evt) => {
-                                  evt.stopPropagation();
-                                  emitter.emit(
-                                    APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION,
-                                    {
-                                      orderId: props.route.params.orderId,
-                                      coolingUnitId: item.coolingUnitId,
-                                    }
-                                  );
-                                }}
-                              >
-                                <Text tw="text-base text-green-primary">
-                                  {t('Dashboard.ShoppingCart.viewContacts')}
-                                </Text>
-                              </Touchable>
-                            ) : null}
-                          </View>
-                          {item.pickupMethod === EPickUpMethod.DELIVERY ? (
-                            <Text tw="text-sm text-gray-500">
-                              {t('Dashboard.ShoppingCart.deliveryInfo', {
-                                value: CurrencyStandardization.currencyCode({
-                                  code: 'NGN',
-                                  value: coolingUnit?.commonPricingType?.value ?? 0,
-                                }).getValueFormated(),
-                              })}
-                            </Text>
-                          ) : null}
-                        </View>
-                      </View>
+                      <PickupDetailsCard
+                        coolingUnit={coolingUnit}
+                        orderId={props.route.params.orderId}
+                        companyId={
+                          data.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
+                            ?.relCompanyId as number
+                        }
+                        pickupMethod={item.pickupMethod}
+                      />
                     );
                   }}
                 />

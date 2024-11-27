@@ -224,7 +224,9 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
               <List.Item
                 tw="px-0 py-2"
                 title={undefined}
-                left={() => <Text tw="text-base w-[80%]">Discount coupons</Text>}
+                left={() => (
+                  <Text tw="text-base w-[80%]">{t('Dashboard.Management.Coupons.title')}</Text>
+                )}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
                 onPress={(evt) => {
                   evt.stopPropagation();

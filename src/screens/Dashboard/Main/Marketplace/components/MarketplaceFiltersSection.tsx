@@ -1,11 +1,11 @@
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Dimensions, TouchableWithoutFeedback, View } from 'react-native';
-import { type NavigationProp, useNavigation } from '@react-navigation/native';
+import { Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -15,9 +15,10 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 import RBAC from '#common/RBAC';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
-import type { MarketplaceRoutes } from 'navigation/Dashboard/Main/Marketplace/MarketplaceStack';
+import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/Marketplace/MarketplaceStack';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import type { GetAvailableListingParams } from '#types/api.params';
@@ -28,7 +29,8 @@ import MarketplaceLocationFilter from './LocationFilter';
 import { useMarketplaceQueryParams } from '../store';
 
 const DIALOG_MAX_WIDTH = Dimensions.get('window').width * 0.68;
-const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.31;
+const screenHeight = Dimensions.get('window').height;
+const DIALOG_MAX_HEIGHT = screenHeight * (screenHeight < SMALL_SCREEN_THRESHOLD ? 0.4 : 0.3);
 
 type InternalSelectionState = Exclude<GetAvailableListingParams['sortBy'], undefined>;
 type BuyerInternalSelectionState = 'for-myself' | 'on-behalf';
