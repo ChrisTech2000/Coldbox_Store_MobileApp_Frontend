@@ -6,13 +6,15 @@ import { ERoles, type User } from '#types/global';
 import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
 import { type IApiQueryOptions, useApiCall } from '#services/hooks/useAPiCall';
+import { useAppEventListener } from '#ui/lib/emitter';
 
 import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
-import { useAppEventListener } from '#ui/lib/emitter';
 
 function _buildFetcher(t: Translator) {
   return async function fetchNotifications(user: User) {
     const result = await NotificationService.getNotifications(user.id);
+
+    let newNotificationsCount: number = 0;
 
     const notifications = (result ?? []).map((item) => {
       const isFarmer = user.role === ERoles.COOLING_USER;
@@ -61,6 +63,11 @@ function _buildFetcher(t: Translator) {
           message = t('Dashboard.Notifications.checkIn', { ...commonParams, date });
           break;
         }
+        case 'ORDER_REQUIRES_MOVEMENT': {
+          const date = dateFmt(item.date, 'dd-MM-yyyy HH:mm');
+          console.log(date, item.specificId);
+          break;
+        }
         default: {
           message = undefined;
           link = undefined;
@@ -68,13 +75,11 @@ function _buildFetcher(t: Translator) {
         }
       }
 
+      if (!item.seen) newNotificationsCount += 1;
       return { ...item, message, link };
     });
 
-    return {
-      notifications,
-      newNotificationsCount: notifications.filter((item) => !item.seen).length,
-    };
+    return { notifications, newNotificationsCount };
   };
 }
 
@@ -87,7 +92,10 @@ export function useNotifications(opts?: IApiQueryOptions<ProcessedNotifications>
   return useApiCall('getNotifications', _buildFetcher(t), user!, {
     ...opts,
     skip: !user?.id,
-    defaultData: { notifications: [], newNotificationsCount: 0 },
+    defaultData: {
+      notifications: [],
+      newNotificationsCount: 0,
+    },
   });
 }
 
