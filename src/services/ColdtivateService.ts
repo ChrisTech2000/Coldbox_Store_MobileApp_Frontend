@@ -99,9 +99,9 @@ class ColdtivateService extends HttpClient {
       let url = ECompanyEndpoints.GET_COMPANIES.toString();
 
       if (params?.isMarketplace) {
-        url += `?marketplace_filter_scoped=1`;
+        url += `?marketplace_filter_scoped=true`;
       }
-      console.log(url);
+
       const { data } = await this.get<Company[]>(url, {});
       return data;
     } catch (error) {

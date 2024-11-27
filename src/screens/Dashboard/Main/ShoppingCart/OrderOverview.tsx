@@ -1,19 +1,16 @@
 import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
-import { Touchable } from '#ui/components/Touchable';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -25,10 +22,11 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
-import { CoolingUnit, EPickUpMethod, EPricingType } from '#types/global';
+import { CoolingUnit } from '#types/global';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
+import { PickupDetailsCard } from './components/PickupDetailsCard';
 
 function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
@@ -38,8 +36,6 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     store.fetchCart,
     store.allCoolingUnits,
   ]);
-
-  const [locations, setLocations] = useState<Map<number, string>>(new Map());
 
   const { data, isLoading } = useApiCall(
     'getOrder',
@@ -82,48 +78,6 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
       items,
     }));
   }, [data, coolingUnits]);
-
-  useEffect(() => {
-    if (!coolingUnits || !data.items) return;
-
-    const fetchLocations = async () => {
-      try {
-        const locationPromises = coolingUnits.map(async (coolingUnit) => {
-          try {
-            const location = await ColdtivateService.getLocation({
-              locationId: coolingUnit.location,
-              companyId: data.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
-                ?.relCompanyId as number,
-            });
-
-            const address = `${location.street ? location.street + ' ' : ''}${location.streetNumber ? location.streetNumber + ', ' : ''} ${location.city}${location.latitude ? ` (${location.latitude}, ${location.longitude})` : ''}`;
-            return { coolingUnitId: coolingUnit.id, address };
-          } catch (error) {
-            console.error(`Error fetching location for ${coolingUnit.id}:`, error);
-          }
-        });
-
-        const results = await Promise.allSettled(locationPromises);
-        const updatedLocations = new Map();
-
-        results.forEach((result) => {
-          if (result.status === 'fulfilled') {
-            const { value } = result;
-            if (!value) return;
-            updatedLocations.set(value?.coolingUnitId, value?.address);
-          } else {
-            console.error(`Failed to fetch location: ${result.reason}`);
-          }
-        });
-
-        setLocations(updatedLocations);
-      } catch (error) {
-        console.error('Error fetching locations:', error);
-      }
-    };
-
-    fetchLocations();
-  }, [coolingUnits, data.items]);
 
   if (isLoading || isLoadingCrops || !data.items?.length) {
     return (
@@ -199,96 +153,17 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                     const coolingUnit = coolingUnits?.find(
                       (cu) => cu.id === item.coolingUnitId
                     ) as CoolingUnit;
-                    const locationAddress = locations.get(coolingUnit.id);
 
                     return (
-                      <View tw="mb-4">
-                        <Text tw="text-base ml-1">{coolingUnit?.name ?? ''}</Text>
-                        <View tw="flex flex-row items-center space-x-1 mt-1 mb-2 ml-1">
-                          <MaterialIcon
-                            name="location-pin"
-                            size={18}
-                            color={paperTheme.colors.primary}
-                          />
-                          {locations.size ? (
-                            <Text numberOfLines={1}>{locationAddress}</Text>
-                          ) : (
-                            <ActivityIndicator
-                              animating
-                              color={paperTheme.colors.primary}
-                              size={12}
-                            />
-                          )}
-                        </View>
-                        <View tw="p-4 border border-gray-300 rounded-xl">
-                          <View tw="flex flex-row items-center justify-between">
-                            <View tw="flex flex-row items-center">
-                              <Text tw="font-bold text-base">
-                                {t('Dashboard.ShoppingCart.method')}{' '}
-                              </Text>
-                              <Text tw="text-base">
-                                {item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY
-                                  ? t('Dashboard.ShoppingCart.pickUpToday')
-                                  : ''}
-                                {item.pickupMethod === EPickUpMethod.DELIVERY
-                                  ? t('Dashboard.ShoppingCart.delivery')
-                                  : ''}
-                                {item.pickupMethod === EPickUpMethod.KEEP_IN_STORAGE
-                                  ? t(
-                                      coolingUnit?.commonPricingType?.type ===
-                                        EPricingType.PERIODICITY
-                                        ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
-                                        : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
-                                      {
-                                        price: CurrencyStandardization.currencyCode({
-                                          code: 'NGN', // TODO: get value from somewhere
-                                          value: coolingUnit?.commonPricingType?.value ?? 0,
-                                        }).getValueFormated(),
-                                      }
-                                    )
-                                  : ''}
-                              </Text>
-                            </View>
-
-                            {item.pickupMethod === EPickUpMethod.DELIVERY ? (
-                              <Touchable
-                                onPress={(evt) => {
-                                  evt.stopPropagation();
-                                  emitter.emit(
-                                    APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION,
-                                    {
-                                      orderId: props.route.params.orderId,
-                                      coolingUnitId: item.coolingUnitId,
-                                    }
-                                  );
-                                }}
-                              >
-                                <Text tw="text-base text-green-primary">
-                                  {t('Dashboard.ShoppingCart.viewContacts')}
-                                </Text>
-                              </Touchable>
-                            ) : null}
-                          </View>
-                          {item.pickupMethod === EPickUpMethod.DELIVERY ? (
-                            <Text tw="text-sm text-gray-500 mt-2">
-                              {t('Dashboard.ShoppingCart.deliveryInfo', {
-                                value: CurrencyStandardization.currencyCode({
-                                  code: 'NGN',
-                                  value: coolingUnit?.commonPricingType?.value ?? 0,
-                                }).getValueFormated(),
-                              })}
-                            </Text>
-                          ) : item.pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY ? (
-                            <Text tw="text-sm text-gray-500 mt-2">
-                              {t('Dashboard.ShoppingCart.pickUpTodayInfo')}
-                            </Text>
-                          ) : (
-                            <Text tw="text-sm text-gray-500 mt-2">
-                              {t('Dashboard.ShoppingCart.keepInStorageInfo')}
-                            </Text>
-                          )}
-                        </View>
-                      </View>
+                      <PickupDetailsCard
+                        coolingUnit={coolingUnit}
+                        orderId={props.route.params.orderId}
+                        companyId={
+                          data.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
+                            ?.relCompanyId as number
+                        }
+                        pickupMethod={item.pickupMethod}
+                      />
                     );
                   }}
                 />
