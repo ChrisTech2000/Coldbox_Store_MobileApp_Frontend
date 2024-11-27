@@ -64,17 +64,32 @@ export default function CouponsSettingsStack(
 
   const isManagementStack = props.route.params?.source === 'Management';
 
-  const { data } = useApiCall(
-    isManagementStack ? 'getCompanyCouponList' : 'getCouponList',
+  const { data: coupons } = useApiCall(
+    'getCouponList',
     CouponService.getCouponList,
     {
       revoked: 'included',
-      ownedOnBehalfOfCompanyId: isManagementStack ? (company?.id as number) : undefined,
     },
     {
       defaultData: { nodes: [] },
+      skip: isManagementStack,
     }
   );
+
+  const { data: companyCoupons } = useApiCall(
+    'getCompanyCouponList',
+    CouponService.getCouponList,
+    {
+      revoked: 'included',
+      ownedOnBehalfOfCompanyId: company?.id as number,
+    },
+    {
+      defaultData: { nodes: [] },
+      skip: !isManagementStack,
+    }
+  );
+
+  const data = isManagementStack ? companyCoupons : coupons;
 
   return (
     <Stack.Navigator initialRouteName="Root" screenOptions={screenOptions}>

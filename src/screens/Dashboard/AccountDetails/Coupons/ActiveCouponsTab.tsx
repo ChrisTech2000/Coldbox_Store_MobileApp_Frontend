@@ -32,17 +32,24 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
   // @ts-ignore
   const isManagementStack = props?.route?.params?.source === 'Management';
 
-  const { data } = useApiCall(
-    isManagementStack ? 'getCompanyCouponList' : 'getCouponList',
+  const { data: coupons } = useApiCall('getCouponList', CouponService.getCouponList, undefined, {
+    defaultData: { nodes: [] },
+    skip: isManagementStack,
+  });
+
+  const { data: companyCoupons } = useApiCall(
+    'getCompanyCouponList',
     CouponService.getCouponList,
     {
-      ownedOnBehalfOfCompanyId: isManagementStack ? (company?.id as number) : undefined,
+      ownedOnBehalfOfCompanyId: company?.id as number,
     },
     {
       defaultData: { nodes: [] },
+      skip: !isManagementStack,
     }
   );
 
+  const data = isManagementStack ? companyCoupons : coupons;
   const selectedCoupon = useRef<number | null>(null);
 
   return (
@@ -92,18 +99,27 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
           setIsModalVisible(false);
           if (typeof selectedCoupon.current === 'number') {
             try {
-              await CouponService.revokeCoupon(selectedCoupon.current);
+              await CouponService.revokeCoupon({
+                couponId: selectedCoupon.current,
+                ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
+              });
 
               await Promise.allSettled([
-                mutate(getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList')),
+                mutate(
+                  getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
+                    ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
+                  })
+                ),
                 mutate(
                   getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
                     revoked: 'included',
+                    ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
                   })
                 ),
                 mutate(
                   getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
                     revoked: 'only',
+                    ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
                   })
                 ),
               ]);
@@ -120,11 +136,15 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
         onSubmit={async (values) => {
           try {
             await CouponService.createCoupon({
-              ownedOnBehalfOfCompany: isManagementStack ? company?.id : undefined,
+              ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
               code: values.code,
               discountPercentage: Math.min(values.percentage / 100, 1.0),
             });
-            await mutate(getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList'));
+            await mutate(
+              getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
+                ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
+              })
+            );
             modalRef.current?.close();
           } catch (exception) {
             console.error(exception);

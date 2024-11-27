@@ -27,10 +27,16 @@ class CouponService extends HttpClient {
 
   public createCoupon = async (params: CreateCouponParams): Promise<CreateCouponResponse> => {
     try {
-      const { data } = await this.post<CreateCouponResponse>(
-        CouponsEndpoints.LIST_OWN_COUPONS,
-        params
-      );
+      let url = CouponsEndpoints.LIST_OWN_COUPONS.toString();
+
+      if (params.ownedOnBehalfOfCompanyId) {
+        url += `?owned_on_behalf_of_company_id=${params.ownedOnBehalfOfCompanyId}`;
+      }
+
+      const { data } = await this.post<CreateCouponResponse>(url, {
+        code: params.code,
+        discountPercentage: params.discountPercentage,
+      });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -39,9 +45,20 @@ class CouponService extends HttpClient {
     }
   };
 
-  public revokeCoupon = async (couponId: number): Promise<void> => {
+  public revokeCoupon = async ({
+    couponId,
+    ownedOnBehalfOfCompanyId,
+  }: {
+    couponId: number;
+    ownedOnBehalfOfCompanyId?: number;
+  }): Promise<void> => {
     try {
-      await this.delete(subs(CouponsEndpoints.REVOKE_COUPON, { couponId }));
+      let url = subs(CouponsEndpoints.REVOKE_COUPON, { couponId });
+
+      if (ownedOnBehalfOfCompanyId) {
+        url += `?owned_on_behalf_of_company_id=${ownedOnBehalfOfCompanyId}`;
+      }
+      await this.delete(url);
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));

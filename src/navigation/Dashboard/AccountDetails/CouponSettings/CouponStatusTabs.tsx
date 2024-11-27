@@ -71,6 +71,7 @@ export default function CouponStatusTabs(props: CouponsSettingsRouteProps<'Root'
         // eslint-disable-next-line
         // @ts-ignore
         component={RevokedCouponsTab}
+        initialParams={props.route.params}
       />
     </TopTabs.Navigator>
   );

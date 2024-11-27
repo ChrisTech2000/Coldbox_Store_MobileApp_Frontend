@@ -47,10 +47,15 @@ function CouponsRoot(props: CouponsSettingsRouteProps<'Root'>) {
           });
 
           await Promise.allSettled([
-            mutate(getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList')),
+            mutate(
+              getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
+                ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
+              })
+            ),
             mutate(
               getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
                 revoked: 'included',
+                ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
               })
             ),
           ]);

@@ -312,7 +312,7 @@ function EditCrateWeightAndPricing(
             <View tw="mx-4">
               <Text>
                 {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
-                  name: `${farmer?.user.firstName ?? ''} ${farmer?.user.lastName ?? ''}`,
+                  name: `${farmer?.user?.firstName ?? ''} ${farmer?.user?.lastName ?? ''}`,
                 })}
               </Text>
               <Button

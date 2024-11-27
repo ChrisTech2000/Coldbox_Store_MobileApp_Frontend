@@ -156,7 +156,6 @@ export default function ManagementStack() {
     const translationPath = NAVIGATOR_HEADERS[routeName];
     const routeTitle = translationPath ? t(translationPath, { code }) : undefined;
 
-    if (routeName === 'CouponStack') console.log(props); // HERE
     return {
       ...props,
       headerShown: !!translationPath,
