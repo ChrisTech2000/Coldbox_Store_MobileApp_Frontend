@@ -39,7 +39,6 @@ export type CheckInStackRoutes = {
       };
   CrateWeightAndPricing: {
     companyCurrency: string;
-    currencySymbol: string;
     crates: Array<{
       weight: number;
       isSellable: boolean;

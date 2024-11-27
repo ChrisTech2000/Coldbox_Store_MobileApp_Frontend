@@ -1,4 +1,3 @@
-import { currencies } from 'currencies.json';
 import React, { useCallback, useMemo, useState } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
@@ -147,10 +146,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   const numberOfCrates = watch('numberOfCrates');
   const generalCrateWeight = watch('generalCrateWeight');
   const crates = watch('crates');
-
-  const currencySymbol = useMemo(() => {
-    return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
-  }, [company]);
 
   const totalPrice = useMemo(() => {
     const price = coolingUnit?.commonPricingType?.value ?? 0;
@@ -311,7 +306,6 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                   }));
                   navigation.navigate('CrateWeightAndPricing', {
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
-                    currencySymbol,
                     crates: contextualCrates,
                     sellingPrice: isNaN(sellingPrice) ? 0 : sellingPrice,
                     applyToAll: contextualCrates.every(
@@ -374,7 +368,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       <HideWithKeyboardView>
         <FloatingFooter
           dailyPriceLabel={dailyPriceLabel}
-          currencySymbol={currencySymbol}
+          currencyCode={company?.currency || 'NGN'}
           commonPrice={(coolingUnit?.commonPricingType?.value ?? 0).toFixed(2)}
           totalPrice={totalPrice}
           cancelFunc={(evt) => {

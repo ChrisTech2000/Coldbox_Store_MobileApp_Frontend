@@ -1,4 +1,3 @@
-import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
@@ -20,6 +19,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit, EPickUpMethod, EPricingType } from '#types/global';
+import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
 type OrderPickupMethodProps = {
   data: Array<{ unit: number; company: number }>;
@@ -171,10 +171,10 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
                             ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
                             : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                           {
-                            price: CurrencyStandardization.currencyCode({
-                              code: 'NGN', // TODO: get value from somewhere
-                              value: coolingUnit.commonPricingType?.value,
-                            }).getValueFormated(),
+                            price: formatCurrencyWithSymbol(
+                              'NGN', // TODO: get value from somewhere
+                              coolingUnit.commonPricingType?.value
+                            ),
                           }
                         )}
                         value={EPickUpMethod.KEEP_IN_STORAGE}
@@ -264,10 +264,7 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
           {version === EPickUpMethod.DELIVERY ? (
             <Text tw="mt-2 text-center text-gray-500">
               {t('Dashboard.ShoppingCart.deliveryInfo', {
-                value: CurrencyStandardization.currencyCode({
-                  code: 'NGN',
-                  value: cu?.commonPricingType?.value ?? 0,
-                }).getValueFormated(),
+                value: formatCurrencyWithSymbol('NGN', cu?.commonPricingType?.value ?? 0),
               })}
             </Text>
           ) : null}
