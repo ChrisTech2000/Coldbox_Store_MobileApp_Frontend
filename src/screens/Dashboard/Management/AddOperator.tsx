@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, FlatList } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Banner, Divider } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
@@ -13,7 +13,6 @@ import { Checkbox } from '#ui/components/Checkbox';
 import { Input } from '#ui/components/Input';
 import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
-import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
@@ -39,8 +38,6 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
   const { t, zodResolver } = useTranslationUtils();
   const { mutate } = useSWRConfig();
   const toast = InAppNotifications.useToast();
-
-  const [isModalVisible, toggleModalVisibility] = useToggle();
 
   const { data, isLoading } = useApiCall(
     'getCoolingUnits',
@@ -86,18 +83,19 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
     reValidateMode: 'onSubmit',
   });
 
-  console.log(errors);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [internalSelection, setInternalSelection] = useState<Array<number>>([]);
   const selectedCoolingUnits = watch('coolingUnits');
 
   const selectLabel = useMemo(() => {
-    const selectedOptions = options
+    if (!options.length || !selectedCoolingUnits.length) {
+      return t('Dashboard.Management.Operators.fields.selectCoolingUnit');
+    }
+    return options
       .filter((option) => selectedCoolingUnits.includes(option.id))
-      .map((option) => option.name);
-    return selectedOptions.length > 0
-      ? selectedOptions.join(', ')
-      : t('Dashboard.Management.Operators.fields.selectCoolingUnit');
-  }, [options, selectedCoolingUnits]);
+      .map((option) => option.name)
+      .join(', ');
+  }, [options, selectedCoolingUnits, t]);
 
   async function onSubmit(values: FormValues) {
     const userId = useAuthStore.getState().user?.id;
@@ -164,44 +162,19 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           name="phoneNumber"
         />
 
-        <View tw="space-y-4 mx-4 mt-2">
+        <View tw="space-y-4 mx-4 mt-2 pb-2.5">
           <Select
             variant="md"
-            label={selectLabel}
-            isModalOpen={isModalVisible}
-            onClick={() => {
-              setInternalSelection(selectedCoolingUnits);
-              toggleModalVisibility();
-            }}
+            isOpen={isModalVisible}
+            onOpenChange={setIsModalVisible}
+            onDismiss={() => setInternalSelection(selectedCoolingUnits)}
             error={!!errors.coolingUnits}
-            content={{
-              options: (
-                <React.Fragment>
-                  {options.map((option, optionIdx) => (
-                    <View
-                      key={`cooling-unit-item-${option.id}-#${optionIdx}`}
-                      tw="w-full flex flex-row items-center justify-between px-4 py-2"
-                    >
-                      <Text tw="text-base w-[70%]" numberOfLines={2}>
-                        {option.name}
-                      </Text>
-                      <Checkbox
-                        status={internalSelection.includes(option.id) ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                          setInternalSelection((prev) => {
-                            const clone = [...prev];
-                            const idx = clone.indexOf(option.id);
-                            if (idx === -1) clone.push(option.id);
-                            else clone.splice(idx, 1);
-                            return clone;
-                          });
-                        }}
-                      />
-                    </View>
-                  ))}
-                </React.Fragment>
-              ),
-              footer: (
+          >
+            <Select.Touchable label={selectLabel} />
+            <Select.Dialog
+              enableScroll
+              header={t('Dashboard.Management.Operators.fields.coolingUnits')}
+              FooterElement={
                 <View tw="flex flex-row items-center justify-end">
                   <Button
                     mode="text"
@@ -209,7 +182,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
                     onPress={(evt) => {
                       evt.stopPropagation();
                       setInternalSelection(selectedCoolingUnits);
-                      toggleModalVisibility();
+                      setIsModalVisible(false);
                     }}
                   >
                     {t('actions.cancel')}
@@ -220,19 +193,41 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
                     onPress={(evt) => {
                       evt.stopPropagation();
                       setValue('coolingUnits', internalSelection);
-                      toggleModalVisibility();
+                      setIsModalVisible(false);
                     }}
                   >
                     {t('actions.ok')}
                   </Button>
                 </View>
-              ),
-            }}
-          />
+              }
+            >
+              <FlatList
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                data={options}
+                keyExtractor={(item, itemIdx) => `cooling-unit-item-${item.id}-#${itemIdx}`}
+                renderItem={({ item }) => (
+                  <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                    <Text tw="text-base w-[70%]" numberOfLines={2}>
+                      {item.name}
+                    </Text>
+                    <Checkbox
+                      status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
+                      onPress={() => {
+                        setInternalSelection((prev) =>
+                          prev.includes(item.id)
+                            ? prev.filter((id) => id !== item.id)
+                            : [...prev, item.id]
+                        );
+                      }}
+                    />
+                  </View>
+                )}
+              />
+            </Select.Dialog>
+          </Select>
         </View>
-        <Divider
-          tw={cn('w-full bg-gray-700 mt-2 my-2', !!errors.coolingUnits && 'bg-red-700 h-0.5')}
-        />
+        <Divider tw={cn('w-full bg-gray-700', !!errors.coolingUnits && 'bg-red-700 h-0.5')} />
       </View>
 
       <Button

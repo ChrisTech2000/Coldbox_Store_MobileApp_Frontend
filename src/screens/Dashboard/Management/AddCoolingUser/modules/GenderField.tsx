@@ -27,7 +27,7 @@ export default function GenderField(props: { disabled?: boolean }) {
 
   return (
     <View tw="mt-5">
-      <View tw="px-4 pb-2.5">
+      <View tw="px-3 pb-2.5">
         <Select
           variant="md"
           isOpen={isModalVisible}
