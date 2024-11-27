@@ -92,7 +92,8 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         label: t('Dashboard.ProduceDetails.cropType'),
         value: produce.cropName,
       },
-      ...(guard('SET', 'MarketplaceEditListedCrates')
+      // TODO: find a better way to check if produce belongs to the user (might cause issues if user updates their number)
+      ...(guard('SET', 'MarketplaceEditListedCrates') || produce.ownerContact === user?.phone
         ? [
             {
               key: 'crateWeightLabel',
@@ -158,7 +159,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         }),
       },
     ],
-    [produce, pricing, currency, dailyPrice, guard]
+    [produce, pricing, currency, dailyPrice, guard, user]
   );
 
   const farmer = useMemo(

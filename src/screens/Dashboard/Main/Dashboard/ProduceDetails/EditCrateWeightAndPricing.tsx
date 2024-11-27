@@ -147,8 +147,11 @@ function EditCrateWeightAndPricing(
       const promises: Array<Promise<unknown>> = [];
 
       const operatorParams =
-        user?.role === ERoles.OPERATOR && params.farmerId
-          ? ({ operatorOnBehalfOfSellerFarmerId: params.farmerId } satisfies ListedCratesBaseParams)
+        user?.role === ERoles.OPERATOR
+          ? ({
+              ...(params.farmerId ? { operatorOnBehalfOfSellerFarmerId: params.farmerId } : {}),
+              // operatorOnBehalfOfSellerCompanyId: params.companyId,
+            } satisfies ListedCratesBaseParams)
           : {};
 
       if (cratesToList.length > 0) {
@@ -229,7 +232,10 @@ function EditCrateWeightAndPricing(
     try {
       const result = await MarketplaceService.getSellerListedCrates(
         user?.role === ERoles.OPERATOR
-          ? { operatorOnBehalfOfSellerFarmerId: params.farmerId }
+          ? {
+              ...(params.farmerId ? { operatorOnBehalfOfSellerFarmerId: params.farmerId } : {}),
+              // operatorOnBehalfOfSellerCompanyId: params.companyId,
+            }
           : undefined
       );
 

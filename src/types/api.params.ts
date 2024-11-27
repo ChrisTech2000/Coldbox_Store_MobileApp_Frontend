@@ -426,6 +426,7 @@ export interface UpdateListedCrateParams extends JsonObject {
 export interface ListedCratesBaseParams {
   operatorOnBehalfOfSellerFarmerId?: number;
   operatorOnBehalfOfSellerUserId?: number;
+  operatorOnBehalfOfSellerCompanyId?: number;
 }
 
 export interface GetAvailableListingParams extends JsonObject {
