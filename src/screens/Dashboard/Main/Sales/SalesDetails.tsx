@@ -1,5 +1,4 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -33,6 +32,7 @@ import { EPickUpMethod, EPricingType } from '#types/global';
 
 import colors from 'tailwindcss/colors';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 // TODO: this screen needs implementation
 function SalesDetails(props: SalesRouteProps<'SalesDetails'>) {
@@ -186,10 +186,10 @@ function SalesDetails(props: SalesRouteProps<'SalesDetails'>) {
                                   ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
                                   : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                                 {
-                                  price: CurrencyStandardization.currencyCode({
-                                    code: 'NGN', // TODO: get value from somewhere
-                                    value: coolingUnit?.commonPricingType?.value ?? 0,
-                                  }).getValueFormated(),
+                                  price: formatCurrencyWithSymbol(
+                                    'NGN', // TODO: get value from somewhere
+                                    coolingUnit?.commonPricingType?.value ?? 0
+                                  ),
                                 }
                               )
                             : ''}
@@ -234,10 +234,10 @@ function SalesDetails(props: SalesRouteProps<'SalesDetails'>) {
               <View tw="flex-row items-center space-x-1">
                 <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
                 <Text tw="text-base">
-                  {CurrencyStandardization.currencyCode({
-                    code: 'NGN', // TODO: get value from somewhere
-                    value: data.totalPaymentFeesAmount + data.totalColdtivateAmount,
-                  }).getValueFormated()}
+                  {formatCurrencyWithSymbol(
+                    'NGN', // TODO: get value from somewhere
+                    data.totalPaymentFeesAmount + data.totalColdtivateAmount
+                  )}
                 </Text>
               </View>
             </View>
@@ -245,10 +245,10 @@ function SalesDetails(props: SalesRouteProps<'SalesDetails'>) {
             <View tw="flex-row items-center justify-between">
               <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
               <Text tw="text-lg">
-                {CurrencyStandardization.currencyCode({
-                  code: 'NGN', // TODO: get value from somewhere
-                  value: data.totalAmount,
-                }).getValueFormated()}
+                {formatCurrencyWithSymbol(
+                  'NGN', // TODO: get value from somewhere
+                  data.totalAmount
+                )}
               </Text>
             </View>
           </View>
@@ -366,10 +366,11 @@ function ProduceCard(props: {
           {t('Dashboard.ProduceDetails.kilogram')}
         </Text>
         <Text tw="font-bold">
-          {CurrencyStandardization.currencyCode({
-            code: 'NGN', // TODO: get value from somewhere
-            value: props.producePricePerKg.toFixed(2),
-          }).getValueFormated()}{' '}
+          {formatCurrencyWithSymbol(
+            'NGN', // TODO: get value from somewhere
+            props.producePricePerKg.toFixed(2)
+          )}
+          &nbsp;
           {t('Dashboard.ShoppingCart.perKg')}
         </Text>
       </View>

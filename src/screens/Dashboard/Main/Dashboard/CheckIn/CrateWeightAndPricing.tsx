@@ -1,5 +1,4 @@
 import { useIsFocused } from '@react-navigation/native';
-import { currencies } from 'currencies.json';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
@@ -35,6 +34,7 @@ import type { Farmer } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import { InfoModal } from './CrateSetup/InfoModal';
+import { formatCurrencyWithSymbol } from './utils';
 
 type FormValues<T = string> = {
   applyToAll: boolean;
@@ -372,8 +372,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                   {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice')}
                 </Text>
                 <Sup>
-                  ({currencies.find((c) => c.symbol === params.currencySymbol)?.code}/
-                  {t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
+                  ({params.companyCurrency}/{t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
                 </Sup>
               </View>
 
@@ -406,13 +405,16 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                   'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.potentialSellingPrice'
                 )}
               </Text>
-              <TouchableOpacity onPress={() => setInfoVisible(true)}>
+              <TouchableOpacity
+                onPress={() => setInfoVisible(true)}
+                disabled={form.formState.isSubmitting}
+              >
                 <Icon name="information-outline" size={20} />
               </TouchableOpacity>
             </View>
 
             <Text tw="text-lg text-green-primary">
-              {params.currencySymbol} {potentialPrice.toFixed(2)}
+              {formatCurrencyWithSymbol(params.companyCurrency, potentialPrice.toFixed(2))}
             </Text>
           </View>
         ) : null}

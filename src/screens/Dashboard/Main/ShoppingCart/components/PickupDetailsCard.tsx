@@ -1,4 +1,3 @@
-import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
@@ -14,6 +13,8 @@ import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { EPickUpMethod, EPricingType, type CoolingUnit } from '#types/global';
+
+import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
 type PickupDetailsCardProps = {
   companyId: number;
@@ -66,10 +67,10 @@ export function PickupDetailsCard({
                       ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
                       : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                     {
-                      price: CurrencyStandardization.currencyCode({
-                        code: 'NGN', // TODO: get value from somewhere
-                        value: coolingUnit?.commonPricingType?.value ?? 0,
-                      }).getValueFormated(),
+                      price: formatCurrencyWithSymbol(
+                        'NGN', // TODO: get value from somewhere
+                        coolingUnit?.commonPricingType?.value ?? 0
+                      ),
                     }
                   )
                 : ''}
@@ -95,10 +96,7 @@ export function PickupDetailsCard({
         {pickupMethod === EPickUpMethod.DELIVERY ? (
           <Text tw="text-sm text-gray-500 mt-2">
             {t('Dashboard.ShoppingCart.deliveryInfo', {
-              value: CurrencyStandardization.currencyCode({
-                code: 'NGN',
-                value: coolingUnit?.commonPricingType?.value ?? 0,
-              }).getValueFormated(),
+              value: formatCurrencyWithSymbol('NGN', coolingUnit?.commonPricingType?.value ?? 0),
             })}
           </Text>
         ) : pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY ? (

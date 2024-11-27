@@ -1,5 +1,4 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import { CurrencyStandardization } from 'currency-format-utils';
 import isNil from 'lodash/isNil';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
@@ -29,6 +28,7 @@ import { type CartItem as CartItemType } from '#types/global';
 
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
 import CartItemInput from './CartItemInput';
+import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
 type CartItemProps = {
   item: CartItemType;
@@ -231,10 +231,7 @@ export function CartItem({ item }: CartItemProps) {
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
             <Text variant="TextMedium" tw="text-base">
-              {CurrencyStandardization.currencyCode({
-                code: company?.currency ?? 'NGN',
-                value: item.producePricePerKg,
-              }).getValueFormated()}
+              {formatCurrencyWithSymbol(company?.currency || 'NGN', item.producePricePerKg)}
               {t('Dashboard.ShoppingCart.perKg')}
             </Text>
           </View>

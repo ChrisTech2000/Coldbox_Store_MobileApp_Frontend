@@ -1,4 +1,3 @@
-import { CurrencyStandardization } from 'currency-format-utils';
 import isArray from 'lodash/isArray';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -34,6 +33,7 @@ import useCartStore from '#stores/shoppingCart';
 
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
 import CropsBottomSheet from './components/CropsBottomSheet';
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 type Status = 'payment-pending' | 'cancelled' | 'paid' | 'payment-expired';
 
@@ -190,10 +190,10 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                         {t('Dashboard.MyOrders.orderTotal')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
-                        {CurrencyStandardization.currencyCode({
-                          code: 'NGN', // TODO: get value from somewhere
-                          value: item.totalAmount,
-                        }).getValueFormated()}
+                        {formatCurrencyWithSymbol(
+                          'NGN', // TODO: get value from somewhere
+                          item.totalAmount
+                        )}
                       </Text>
                     </View>
 

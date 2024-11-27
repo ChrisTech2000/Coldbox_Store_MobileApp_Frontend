@@ -14,27 +14,30 @@ import { CoolingUnit, ECoolingUnitMetric, EPricingType } from '#types/global';
 
 import { CrateSetupModal } from './CrateSetupModal';
 import { SetupSchema } from '../CrateSetup';
+import { formatCurrencyWithSymbol } from '../utils';
 
 type CheckedInCardProps = {
   item: ProduceCrate;
   index: number;
-  currencySymbol: string;
+  currencyCode: string;
   coolingUnit: CoolingUnit;
   checkOutCode: string | null;
   totalCrates: number;
   setCrateIDs: (modalCrates: SetupSchema['crates'], item: ProduceCrate) => void;
   openOptionsModal: () => void;
+  disabled?: boolean;
 };
 
 export function CheckedInCard({
   item,
   index,
-  currencySymbol,
+  currencyCode,
   coolingUnit,
   checkOutCode,
   totalCrates,
   setCrateIDs,
   openOptionsModal,
+  disabled,
 }: CheckedInCardProps) {
   const { t } = useTranslationUtils();
 
@@ -65,7 +68,7 @@ export function CheckedInCard({
     <View tw="rounded-md border border-gray-300 mb-2">
       <View tw="flex flex-row-reverse justify-between">
         {!checkOutCode ? (
-          <TouchableOpacity tw="w-5 mr-2 mt-2" onPress={openOptionsModal}>
+          <TouchableOpacity tw="w-5 mr-2.5 mt-2.5" onPress={openOptionsModal} disabled={disabled}>
             <Icon source="dots-vertical" size={20} />
           </TouchableOpacity>
         ) : null}
@@ -84,14 +87,14 @@ export function CheckedInCard({
             <Text tw="text-base text-green-primary">
               {item.crop.name} ({item.crates.length})
             </Text>
-            <Text tw="text-sm">{item.additionalInfo}</Text>
+            {item.additionalInfo ? <Text tw="text-sm">{item.additionalInfo}</Text> : null}
 
             {item.price ? (
               <View tw="flex flex-row space-x-1 items-center">
                 <Icon source="cart" size={15} />
                 <Text>
-                  {currencySymbol}
-                  {pricePerKilo.toFixed(2)} / {t('Dashboard.ProduceDetails.kilogram')}
+                  {formatCurrencyWithSymbol(currencyCode, pricePerKilo.toFixed(2))}&nbsp;/&nbsp;
+                  {t('Dashboard.ProduceDetails.kilogram')}
                 </Text>
               </View>
             ) : null}
@@ -99,8 +102,7 @@ export function CheckedInCard({
             <View tw="flex flex-row items-center space-x-1">
               <ColdRoom width={14} height={14} tw="text-black" />
               <Text variant="TextMedium" tw="text-base">
-                {currencySymbol}
-                {getCratePrice(item.crates)}
+                {formatCurrencyWithSymbol(currencyCode, getCratePrice(item.crates))}
                 {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY
                   ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
                   : ''}
@@ -135,7 +137,10 @@ export function CheckedInCard({
                     </Text>
                     <Text tw="text-gray-400">
                       {crate.isSellable
-                        ? `${currencySymbol}${(pricePerKilo * crate.weight).toFixed(2)}`
+                        ? formatCurrencyWithSymbol(
+                            currencyCode,
+                            (pricePerKilo * crate.weight).toFixed(2)
+                          )
                         : t('actions.not-available')}
                     </Text>
                   </View>
