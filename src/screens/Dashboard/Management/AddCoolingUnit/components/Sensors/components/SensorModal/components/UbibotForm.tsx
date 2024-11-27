@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from '#ui/components/Button';
 import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
-import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
@@ -16,6 +15,8 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import SensorsService from '#services/SensorsService';
+
+import { ModalWorkaround } from './ModalWorkaround';
 
 type FormValues = {
   // contextual fields
@@ -29,7 +30,7 @@ type FormValues = {
   tempTemperatureField: string;
 };
 
-export default function UbibotForm() {
+export default function UbibotForm(props: { onDismiss: () => void }) {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
@@ -67,7 +68,7 @@ export default function UbibotForm() {
     }),
   });
 
-  const [isInternalModalVisible, toggleInternalModalVisibility] = useToggle(false);
+  const [isInternalModalVisible, setIsInternalModalVisible] = useState<boolean>(false);
 
   const temperatureField = form.watch('temperatureField');
 
@@ -130,7 +131,7 @@ export default function UbibotForm() {
     case 'check':
     default:
       return (
-        <React.Fragment>
+        <ModalWorkaround visible onDismiss={props.onDismiss}>
           <Text variant="TitleRegular" tw="px-6">
             {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
           </Text>
@@ -179,12 +180,12 @@ export default function UbibotForm() {
               )}
             </Button>
           </View>
-        </React.Fragment>
+        </ModalWorkaround>
       );
 
     case 'save':
       return (
-        <React.Fragment>
+        <ModalWorkaround useDefaultStyle={false} visible onDismiss={props.onDismiss}>
           <Text variant="TitleRegular" tw="px-6">
             {t('Dashboard.Management.AddCoolingUnit.fields.ubibot.sensorFieldTitle')}
           </Text>
@@ -198,54 +199,33 @@ export default function UbibotForm() {
               control={form.control}
               render={({ field: { onChange } }) => (
                 <View tw="mt-5">
-                  <View tw="pl-7 pr-4 pb-1.5">
+                  <View tw="px-6 pb-2">
                     <Select
                       variant="md"
-                      enableScroll={false}
-                      label={t('Dashboard.Management.AddCoolingUnit.fields.ubibot.field')}
-                      currentValue={temperatureField}
-                      isModalOpen={isInternalModalVisible}
-                      onClick={() => {
-                        toggleInternalModalVisibility();
+                      isOpen={isInternalModalVisible}
+                      onOpenChange={setIsInternalModalVisible}
+                      onDismiss={() => {
                         form.setValue(
                           'tempTemperatureField',
                           form.getValues('tempTemperatureField')
                         );
                       }}
-                      content={{
-                        header: t('Dashboard.Management.AddCoolingUnit.fields.ubibot.field'),
-                        options: (
-                          <FlatList
-                            showsVerticalScrollIndicator={false}
-                            nestedScrollEnabled
-                            data={form.watch('temperatureOptions')}
-                            keyExtractor={(temperatureOption, idx) =>
-                              `temperature-option-${temperatureOption}-#${idx}`
-                            }
-                            renderItem={({ item }) => (
-                              <TouchableOpacity
-                                tw="w-full flex flex-row items-center justify-between px-4 py-2"
-                                onPress={(evt) => {
-                                  evt.stopPropagation();
-                                  form.setValue('tempTemperatureField', item);
-                                }}
-                              >
-                                <Text tw="text-lg">{item}</Text>
-                                {form.watch('tempTemperatureField') === item ? (
-                                  <Icon name="check" color={paperTheme.colors.primary} size={20} />
-                                ) : null}
-                              </TouchableOpacity>
-                            )}
-                          />
-                        ),
-                        footer: (
+                    >
+                      <Select.Touchable
+                        label={t('Dashboard.Management.AddCoolingUnit.fields.ubibot.field')}
+                        displayValue={temperatureField}
+                      />
+                      <Select.Dialog
+                        enableScroll={false}
+                        header={t('Dashboard.Management.AddCoolingUnit.fields.ubibot.field')}
+                        FooterElement={
                           <View tw="flex flex-row items-center justify-end">
                             <Button
                               mode="text"
                               uppercase
                               onPress={(evt) => {
                                 evt.stopPropagation();
-                                toggleInternalModalVisibility();
+                                setIsInternalModalVisible(false);
                                 form.setValue(
                                   'tempTemperatureField',
                                   form.getValues('temperatureField')
@@ -259,7 +239,7 @@ export default function UbibotForm() {
                               uppercase
                               onPress={(evt) => {
                                 evt.stopPropagation();
-                                toggleInternalModalVisibility();
+                                setIsInternalModalVisible(false);
                                 onChange(form.getValues('tempTemperatureField'));
                                 form.clearErrors('temperatureField');
                               }}
@@ -267,9 +247,32 @@ export default function UbibotForm() {
                               {t('actions.ok')}
                             </Button>
                           </View>
-                        ),
-                      }}
-                    />
+                        }
+                      >
+                        <FlatList
+                          scrollEnabled={false}
+                          showsVerticalScrollIndicator={false}
+                          data={form.watch('temperatureOptions')}
+                          keyExtractor={(temperatureOption, idx) =>
+                            `temperature-option-${temperatureOption}-#${idx}`
+                          }
+                          renderItem={({ item }) => (
+                            <TouchableOpacity
+                              tw="w-full flex flex-row items-center justify-between px-4 py-2"
+                              onPress={(evt) => {
+                                evt.stopPropagation();
+                                form.setValue('tempTemperatureField', item);
+                              }}
+                            >
+                              <Text tw="text-lg">{item}</Text>
+                              {form.watch('tempTemperatureField') === item ? (
+                                <Icon name="check" color={paperTheme.colors.primary} size={20} />
+                              ) : null}
+                            </TouchableOpacity>
+                          )}
+                        />
+                      </Select.Dialog>
+                    </Select>
                   </View>
                   <Divider
                     tw={cn(
@@ -290,7 +293,7 @@ export default function UbibotForm() {
               )}
             </Button>
           </View>
-        </React.Fragment>
+        </ModalWorkaround>
       );
   }
 }
