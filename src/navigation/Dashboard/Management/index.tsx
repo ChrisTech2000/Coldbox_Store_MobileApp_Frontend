@@ -93,7 +93,7 @@ export type ManagementRoutes = {
     screen: keyof EditCoolingUserStackRoutes;
     params: EditCoolingUserStackRoutes[keyof EditCoolingUserStackRoutes];
   };
-  CouponStack: undefined;
+  CouponStack: { source: string } | undefined;
   PayoutSettings:
     | {
         isCompanyView?: boolean;
@@ -200,7 +200,11 @@ export default function ManagementStack() {
       <Stack.Screen name="AddRegisteredEmployee" component={AddRegisteredEmployee} />
       <Stack.Screen name="RegisteredEmployeeDetails" component={RegisteredEmployeeDetails} />
       <Stack.Screen name="MarketSurveyStack" component={MarketSurveyStack} />
-      <Stack.Screen name="CouponStack" component={CouponsSettingsStack} />
+      <Stack.Screen
+        name="CouponStack"
+        component={CouponsSettingsStack}
+        initialParams={{ source: 'Management' }}
+      />
       <Stack.Screen name="DeliveryContacts" component={DeliveryContacts} />
       <Stack.Screen
         name="PayoutSettings"

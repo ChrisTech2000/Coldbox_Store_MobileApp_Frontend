@@ -5,18 +5,45 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useApiCall } from '#services/hooks/useAPiCall';
+import { CouponStatusTabsRouteProps } from '#navigation/Dashboard/AccountDetails/CouponSettings/CouponStatusTabs';
 import CouponService from '#services/CouponService';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import { useManagementStore } from '#stores/management';
 
-function RevokedCouponsTab() {
-  const { data } = useApiCall(
+function RevokedCouponsTab(props: CouponStatusTabsRouteProps<'Revoked'>) {
+  const company = useManagementStore((store) => store.company);
+
+  // eslint-disable-next-line
+  // @ts-ignore
+  const isManagementStack = props?.route?.params?.source === 'Management';
+
+  const { data: coupons } = useApiCall(
     'getCouponList',
     CouponService.getCouponList,
-    { revoked: 'only' },
+    {
+      revoked: 'only',
+      ownedOnBehalfOfCompanyId: isManagementStack ? (company?.id as number) : undefined,
+    },
     {
       defaultData: { nodes: [] },
+      skip: isManagementStack,
     }
   );
+
+  const { data: companyCoupons } = useApiCall(
+    'getCompanyCouponList',
+    CouponService.getCouponList,
+    {
+      revoked: 'only',
+      ownedOnBehalfOfCompanyId: isManagementStack ? (company?.id as number) : undefined,
+    },
+    {
+      defaultData: { nodes: [] },
+      skip: !isManagementStack,
+    }
+  );
+
+  const data = isManagementStack ? companyCoupons : coupons;
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>

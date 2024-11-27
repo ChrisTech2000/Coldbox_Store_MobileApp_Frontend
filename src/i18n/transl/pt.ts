@@ -531,6 +531,7 @@ export default {
             sellingPrice: 'Preço de venda',
             potentialSellingPrice: 'Valor potencial de venda',
             info: 'A configuração de preço refere-se à venda do produto, não à taxa de armazenamento a frio.',
+            unavailableId: 'ID not set', // TODO
           },
           cratesError: 'Por favor, insira um número positivo de paletes',
           crateWeightError: 'Por favor, insira um peso positivo para a palete',
@@ -793,6 +794,7 @@ export default {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details', // TODO
         toasts: {
           warning:
             'Esta conta não pode ser eliminada porque o utilizador tem check-ins ativos na(s) unidade(s) de refrigeração {{names}}. Por favor, notifique o utilizador para vir à sala para recolher estes itens e concluir os check-outs antes de eliminar a conta!',
@@ -957,6 +959,7 @@ export default {
         },
       },
       Coupons: {
+        title: 'Discount coupons', // TODO
         emptyMessage: 'Nenhum cupom foi adicionado ainda',
         addCoupon: 'Adicionar Cupom',
         code: 'Código do Cupom',
@@ -1298,8 +1301,14 @@ export default {
         invalid: 'Valor inválido',
         minimumCartValue: 'O pedido deve ser de pelo menos ₦100.',
       },
+      method: 'Method:', // TODO
       deliveryInfo:
         'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
+      pickUpTodayInfo:
+        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
+      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+      orderOverviewSubtitle:
+        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
     },
     Analytics: {
       emptyState: 'Sem dados para exibir',

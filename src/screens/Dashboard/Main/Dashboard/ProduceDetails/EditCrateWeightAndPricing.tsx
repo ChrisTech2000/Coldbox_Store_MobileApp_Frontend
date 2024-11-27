@@ -1,4 +1,3 @@
-import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -35,6 +34,7 @@ import { ERoles, Farmer } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import RBAC from '#common/RBAC';
+import { formatCurrencyWithSymbol } from '../CheckIn/utils';
 
 type FormValues<T = string> = {
   applyToAll: boolean;
@@ -318,7 +318,7 @@ function EditCrateWeightAndPricing(
             <View tw="mx-4">
               <Text>
                 {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
-                  name: `${farmer?.user.firstName ?? ''} ${farmer?.user.lastName ?? ''}`,
+                  name: `${farmer?.user?.firstName ?? ''} ${farmer?.user?.lastName ?? ''}`,
                 })}
               </Text>
               <Button
@@ -542,8 +542,7 @@ function EditCrateWeightAndPricing(
             </View>
 
             <Text tw="text-lg text-green-primary">
-              {currencies.find((c) => c.name === params.companyCurrency)?.symbol ?? ''}{' '}
-              {potentialPrice.toFixed(2)}
+              {formatCurrencyWithSymbol(params.companyCurrency, potentialPrice.toFixed(2))}
             </Text>
           </View>
         ) : null}

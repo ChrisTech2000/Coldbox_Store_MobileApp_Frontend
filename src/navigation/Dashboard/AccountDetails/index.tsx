@@ -108,7 +108,6 @@ export default function AccountDetailsStack() {
       <Stack.Screen name="CoolingUsersSurvey" component={CoolingUsersSurvey} />
       <Stack.Screen name="CouponStack" component={CouponsSettingsStack} />
       <Stack.Screen name="PayoutSettings" component={PayoutSettings} />
-      {/* <Stack.Screen name="PaymentSettings" component={PaymentSettings} /> */}
     </Stack.Navigator>
   );
 }

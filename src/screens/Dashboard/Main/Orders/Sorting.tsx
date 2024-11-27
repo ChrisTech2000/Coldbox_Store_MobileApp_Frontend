@@ -8,14 +8,16 @@ import { create } from 'zustand';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
-
-import { useTranslationUtils } from '#i18n/utils';
-import { useAuthStore } from '#stores/auth';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
+import { useTranslationUtils } from '#i18n/utils';
+import { useAuthStore } from '#stores/auth';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+
 const DIALOG_MAX_WIDTH = Dimensions.get('window').width * 0.68;
-const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.31;
+const screenHeight = Dimensions.get('window').height;
+const DIALOG_MAX_HEIGHT = screenHeight * (screenHeight < SMALL_SCREEN_THRESHOLD ? 0.4 : 0.31);
 
 export enum ESortingOptions {
   MOST_RECENT = 'most_recent',

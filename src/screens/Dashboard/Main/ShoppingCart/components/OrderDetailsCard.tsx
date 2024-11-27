@@ -1,4 +1,3 @@
-import { CurrencyStandardization } from 'currency-format-utils';
 import React from 'react';
 import { View } from 'react-native';
 import { Divider, IconButton } from 'react-native-paper';
@@ -10,6 +9,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
 type OrderDetailsCardProps = {
   produceWeight: number;
@@ -39,10 +39,10 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
           <View tw="flex-row items-center justify-between h-8">
             <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.subtotal')}</Text>
             <Text tw="text-base">
-              {CurrencyStandardization.currencyCode({
-                code: 'NGN', // TODO: get value from somewhere
-                value: props.subtotal,
-              }).getValueFormated()}
+              {formatCurrencyWithSymbol(
+                'NGN', // TODO: get value from somewhere
+                props.subtotal
+              )}
             </Text>
           </View>
           {props.discount ? (
@@ -65,10 +65,10 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               <View tw="flex-row items-center space-x-1">
                 <Icon name="minus" size={14} color={paperTheme.colors.error} />
                 <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
-                  {CurrencyStandardization.currencyCode({
-                    code: 'NGN', // TODO: get value from somewhere
-                    value: props.discount ? props.discount.toFixed(2) : 0,
-                  }).getValueFormated()}
+                  {formatCurrencyWithSymbol(
+                    'NGN', // TODO: get value from somewhere
+                    props.discount ? props.discount.toFixed(2) : 0
+                  )}
                 </Text>
               </View>
             </View>
@@ -82,10 +82,10 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
             <View tw="flex-row items-center space-x-1">
               <Icon name="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">
-                {CurrencyStandardization.currencyCode({
-                  code: 'NGN', // TODO: get value from somewhere
-                  value: props.coolingFees,
-                }).getValueFormated()}
+                {formatCurrencyWithSymbol(
+                  'NGN', // TODO: get value from somewhere
+                  props.coolingFees
+                )}
               </Text>
             </View>
           </View>
@@ -97,10 +97,10 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               {props.totalLabel}
             </Text>
             <Text variant="TextMedium" tw="text-lg">
-              {CurrencyStandardization.currencyCode({
-                code: 'NGN', // TODO: get value from somewhere
-                value: props.total,
-              }).getValueFormated()}
+              {formatCurrencyWithSymbol(
+                'NGN', // TODO: get value from somewhere
+                props.total
+              )}
             </Text>
           </View>
         </View>

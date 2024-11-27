@@ -1,3 +1,7 @@
+import { CurrencyStandardization } from 'currency-format-utils';
+import moize from 'moize';
+import ms from 'ms';
+
 import type { ProduceCrate } from '#stores/checkIn';
 import type { CheckInResponse } from '#types/api.responses';
 
@@ -49,3 +53,12 @@ export function processMarketplaceCrateListing(
 
   return Array.from(listing.values());
 }
+
+export const formatCurrencyWithSymbol = moize(
+  (currencyCode: string, amountValue: string | number): string =>
+    CurrencyStandardization.currencyCode({
+      code: currencyCode,
+      value: amountValue,
+    }).getValueFormated(),
+  { maxAge: ms('4 seconds') }
+);
