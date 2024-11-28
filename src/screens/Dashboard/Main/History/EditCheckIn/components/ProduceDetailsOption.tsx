@@ -33,48 +33,41 @@ export function ProduceDetailsOption({ option, index, crops, control }: ProduceD
         </Text>
         {option.id === 'cropType' ? (
           <Controller
-            control={control}
-            render={({ field: { onChange, value } }) => {
-              return (
-                <Select
-                  variant="md"
-                  label={value}
-                  isModalOpen={isModalOpen}
-                  onClick={() => {
-                    setIsModalOpen(!isModalOpen);
-                  }}
-                  content={{
-                    header: t('Dashboard.History.editCheckIn.selectCropLabel'),
-                    options: (
-                      <RadioButton.Group
-                        value={value ?? ''}
-                        onValueChange={(value) => {
-                          const item = crops.find((crop) => crop.name === value);
-                          if (!item) return;
-                          onChange(item.name);
-                          setIsModalOpen(false);
-                        }}
-                      >
-                        <FlatList
-                          showsVerticalScrollIndicator={false}
-                          data={crops}
-                          keyExtractor={(item, idx) => `rb-${item.name}-${idx}-${index}`}
-                          renderItem={({ item }) => (
-                            <RadioButtonItem
-                              label={item.name}
-                              value={item.name}
-                              tw="flex flex-row-reverse ml-[-10]"
-                            />
-                          )}
-                          nestedScrollEnabled
-                        />
-                      </RadioButton.Group>
-                    ),
-                  }}
-                />
-              );
-            }}
             name={`produces.${index}.crop`}
+            control={control}
+            render={({ field }) => (
+              <Select variant="md" isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
+                <Select.Touchable label={field.value} />
+                <Select.Dialog
+                  enableScroll
+                  header={t('Dashboard.History.editCheckIn.selectCropLabel')}
+                >
+                  <RadioButton.Group
+                    value={field.value || ''}
+                    onValueChange={(value) => {
+                      const item = crops.find((crop) => crop.name === value);
+                      if (!item) return;
+                      field.onChange(item.name);
+                      setIsModalOpen(false);
+                    }}
+                  >
+                    <FlatList
+                      scrollEnabled={false}
+                      showsVerticalScrollIndicator={false}
+                      data={crops}
+                      keyExtractor={(item, idx) => `rb-${item.name}-${idx}-${index}`}
+                      renderItem={({ item }) => (
+                        <RadioButtonItem
+                          label={item.name}
+                          value={item.name}
+                          tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
+                        />
+                      )}
+                    />
+                  </RadioButton.Group>
+                </Select.Dialog>
+              </Select>
+            )}
           />
         ) : option.id === 'plannedDays' ? (
           <Controller
