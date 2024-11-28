@@ -47,7 +47,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
 
           <div class="section">
             <div class="column">
-              <div class="label">${t('Dashboard.History.pdfModal.coolingUserLabel')}</div>
+              <div class="label">${t('Dashboard.Marketplace.owner')}</div>
               <div class="value">${movement.owner}</div>
             </div>
             <div class="column">
@@ -128,7 +128,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
       <View tw="flex flex-row space-x-1">
         <View tw="w-1/3">
           <Text variant="TextBold" tw="text-base font-bold">
-            {t('Dashboard.History.pdfModal.coolingUserLabel')}
+            {t('Dashboard.Marketplace.owner')}
           </Text>
           <Text variant="TextMedium" numberOfLines={1}>
             {movement.owner}
