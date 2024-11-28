@@ -364,7 +364,6 @@ class MarketplaceService extends HttpClient {
     params?: ListedCratesBaseParams
   ): Promise<GetSellerListedCrates> => {
     try {
-      console.log(params);
       const { data } = await this.get<GetSellerListedCrates>(
         EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
         { params }
@@ -388,6 +387,7 @@ class MarketplaceService extends HttpClient {
           params: {
             operator_on_behalf_of_seller_farmer_id: rest.operatorOnBehalfOfSellerFarmerId,
             operator_on_behalf_of_seller_user_id: rest.operatorOnBehalfOfSellerUserId,
+            operator_on_behalf_of_seller_company_id: rest.operatorOnBehalfOfSellerCompanyId,
           },
         }
       );
