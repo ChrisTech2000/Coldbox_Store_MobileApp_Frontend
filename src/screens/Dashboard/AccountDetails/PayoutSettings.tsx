@@ -132,7 +132,7 @@ function PayoutSettings(
       try {
         if (farmer) {
           await MarketplaceService.addFirstPaystackAccount({
-            ownedByUserId: farmer.user.id,
+            ownedByUserId: farmer.id,
             accountType: mapEnum(t)[data.accountType],
             bankCode: data.bank,
             accountNumber: data.accountNumber,
@@ -183,15 +183,21 @@ function PayoutSettings(
 
   useEffect(() => {
     if (data?.length && availableBanks?.banks?.length) {
+      const accounts = data.filter((el) =>
+        props.route.params?.isCompanyView ? !!el.ownedOnBehalfOfCompany : !el.ownedOnBehalfOfCompany
+      );
+
+      if (!accounts.length) return;
+
       reset({
         country: t('Dashboard.AccountDetails.PayoutSettings.form.nigeria'),
-        accountName: data?.[data?.length - 1]?.accountName ?? '',
-        accountNumber: data?.[data?.length - 1]?.accountNumber ?? '',
+        accountName: accounts?.[accounts?.length - 1]?.accountName ?? '',
+        accountNumber: accounts?.[accounts?.length - 1]?.accountNumber ?? '',
         // eslint-disable-next-line
         // @ts-ignore
-        accountType: data?.[data?.length - 1]?.accountType,
+        accountType: accounts?.[accounts?.length - 1]?.accountType,
         bank: availableBanks?.banks?.find(
-          (b) => b.id.toString() === data?.[data?.length - 1]?.bankCode
+          (b) => b.id.toString() === accounts?.[accounts?.length - 1]?.bankCode
         )?.code,
       });
 
@@ -232,7 +238,7 @@ function PayoutSettings(
               ? t('Dashboard.AccountDetails.PayoutSettings.addTittleForCompany')
               : farmer
                 ? t('Dashboard.ProduceDetails.addBankAccountHeader', {
-                    name: `${farmer.user.firstName} ${farmer.user.lastName}`,
+                    name: `${farmer.firstName} ${farmer.lastName}`,
                   })
                 : t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
           </Text>
