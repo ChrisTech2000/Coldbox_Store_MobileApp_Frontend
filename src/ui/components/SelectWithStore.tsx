@@ -169,7 +169,7 @@ export default function SelectWithStore<T>(props: SelectItemProps<T>) {
                   <RadioButtonItem
                     label={rest.itemName(item)}
                     value={rest.itemName(item)}
-                    tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
+                    tw={cn('flex flex-row m-0 py-2 w-full', !rest.modalHeader ? 'px-8' : 'px-6')}
                   />
                 )}
               />

@@ -35,9 +35,9 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
 
   const farmerId = useMemo(() => {
     return farmers?.find(
-      (_farmer) => `${_farmer.user.firstName} ${_farmer.user.lastName}` === farmer
+      (_farmer) => `${_farmer.user.firstName} ${_farmer.user.lastName}` === owner
     )?.id;
-  }, [farmers]);
+  }, [farmers, owner]);
 
   const {
     data: surveys,

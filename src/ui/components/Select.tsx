@@ -174,8 +174,8 @@ Select.Dialog = function _SelectDialog(
         }}
         style={{ backgroundColor: 'white' }}
       >
-        <Dialog.Title>{header}</Dialog.Title>
-        <Container tw="px-0">{renderBody()}</Container>
+        {header ? <Dialog.Title>{header}</Dialog.Title> : null}
+        <Container tw={cn('px-0', !header && 'pt-0 mt-0 border-t-0')}>{renderBody()}</Container>
         {hasFooter ? <Dialog.Actions>{FooterElement}</Dialog.Actions> : null}
       </Dialog>
     </Portal>
