@@ -19,7 +19,7 @@ import type { TranslationLocales } from '#i18n/constants';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
-import type { EApiGender, ERoles, Farmer } from '#types/global';
+import type { EApiGender, ERoles, User } from '#types/global';
 
 import type { EditCoolingUserStackRoutes } from '../Management/EditCoolingUserStack';
 import CouponsSettingsStack from './CouponSettings';
@@ -49,7 +49,7 @@ export type AccountDetailsRoutes = {
   PayoutSettings:
     | {
         isCompanyView?: boolean;
-        farmer?: Farmer;
+        farmer?: User;
         recheckEligibility: () => void;
       }
     | undefined;

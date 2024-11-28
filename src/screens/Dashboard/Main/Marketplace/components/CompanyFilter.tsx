@@ -15,7 +15,6 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import type { Company } from '#types/global';
 import { Checkbox } from '#ui/components/Checkbox';
 import { Text } from '#ui/components/Text';
-import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 
 import MarketplaceFormManager, {
@@ -42,19 +41,16 @@ export default function CompanyFilters() {
     { defaultData: new Map<number, Company>() }
   );
 
-  const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
   const [internalSelection, setInternalSelection] =
     MarketplaceFormManager.useFieldState('companies');
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  const currentValue = useMemo(() => {
-    const names: Array<string> = [];
-    for (const companyId of internalSelection) {
-      if (names.length >= 2) break;
-      const company = data.get(companyId);
-      if (typeof company === 'undefined') continue;
-      names.push(company.name);
-    }
+  const displayValue = useMemo(() => {
+    const names = Array.from(internalSelection)
+      .slice(0, 2)
+      .map((id) => data.get(id)?.name)
+      .filter(Boolean);
     return names.length > 0 ? truncate(names.join(', '), { length: 24 }) : 'All';
   }, [internalSelection, data]);
 
@@ -68,6 +64,14 @@ export default function CompanyFilters() {
     [data, search]
   );
 
+  if (isLoading) {
+    return (
+      <View tw="h-[80%] pt-8">
+        <ActivityIndicator size="small" color="gray" />
+      </View>
+    );
+  }
+
   return (
     <React.Fragment>
       <Controller<FormValues>
@@ -75,71 +79,29 @@ export default function CompanyFilters() {
         control={control}
         render={({ field: { onChange } }) => (
           <View tw="mt-4">
-            <View tw="pr-0.5 pb-1.5">
+            <View tw="pb-2">
               <Select
                 variant="lg"
-                label="Company"
-                currentValue={currentValue}
-                isModalOpen={isVisible}
-                onClick={() => {
-                  setInternalSelection(selectedCompanies.map(({ value }) => value));
-                  toggleVisibility();
-                }}
-                useScrollView={false}
-                content={{
-                  header: 'Select companies',
-                  headerComponent: (
-                    <TextInput
-                      tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600 mb-2"
-                      label={t('actions.search')}
-                      value={search}
-                      onChangeText={(val) => setSearch(val)}
-                      left={<TextInput.Icon icon="magnify" />}
-                    />
-                  ),
-                  options: isLoading ? (
-                    <View tw="h-[80%] pt-8">
-                      <ActivityIndicator size="small" color="gray" />
+                isOpen={isModalVisible}
+                onOpenChange={setIsModalVisible}
+                onDismiss={() => setInternalSelection(selectedCompanies.map(({ value }) => value))}
+              >
+                <Select.Touchable label="Company" displayValue={displayValue} />
+                <Select.Dialog
+                  enableScroll
+                  header="Select companies"
+                  StickyHeaderElement={
+                    <View tw="px-4 py-3">
+                      <TextInput
+                        tw="bg-white rounded-sm h-12 border border-gray-600"
+                        label={t('actions.search')}
+                        value={search}
+                        onChangeText={(val) => setSearch(val)}
+                        left={<TextInput.Icon icon="magnify" />}
+                      />
                     </View>
-                  ) : (
-                    <FlashList
-                      showsHorizontalScrollIndicator={false}
-                      showsVerticalScrollIndicator={false}
-                      data={datums}
-                      extraData={internalSelection}
-                      keyExtractor={(item, itemIdx) =>
-                        `company-list-item-${item.id}-${item.name}-#${itemIdx}`
-                      }
-                      renderItem={({ item }) => (
-                        <View>
-                          <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
-                            <Text tw="text-base w-[70%]" numberOfLines={2}>
-                              {item.name}
-                            </Text>
-                            <Checkbox
-                              status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
-                              onPress={() => {
-                                setInternalSelection((prev) => {
-                                  const clone = [...prev];
-                                  const idx = clone.indexOf(item.id);
-                                  if (idx === -1) clone.push(item.id);
-                                  else clone.splice(idx, 1);
-                                  return clone;
-                                });
-                              }}
-                            />
-                          </View>
-                          <Divider />
-                        </View>
-                      )}
-                      estimatedItemSize={40}
-                      estimatedListSize={{
-                        height: deviceHeight,
-                        width: deviceWidth / 2,
-                      }}
-                    />
-                  ),
-                  footer: (
+                  }
+                  FooterElement={
                     <View
                       tw={
                         deviceHeight > SMALL_SCREEN_THRESHOLD
@@ -186,7 +148,7 @@ export default function CompanyFilters() {
                           onPress={(evt) => {
                             evt.stopPropagation();
                             setInternalSelection(selectedCompanies.map(({ value }) => value));
-                            toggleVisibility();
+                            setIsModalVisible(false);
                           }}
                         >
                           {t('actions.cancel')}
@@ -203,16 +165,50 @@ export default function CompanyFilters() {
                               datums.push({ label: company.name, value });
                             }
                             onChange(datums);
-                            toggleVisibility();
+                            setIsModalVisible(false);
                           }}
                         >
                           {t('actions.ok')}
                         </Button>
                       </View>
                     </View>
-                  ),
-                }}
-              />
+                  }
+                >
+                  <FlashList
+                    scrollEnabled={false}
+                    showsVerticalScrollIndicator={false}
+                    data={datums}
+                    extraData={internalSelection}
+                    keyExtractor={(item, itemIdx) =>
+                      `company-list-item-${item.id}-${item.name}-#${itemIdx}`
+                    }
+                    renderItem={({ item }) => (
+                      <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                        <Text tw="text-base w-[70%]" numberOfLines={2}>
+                          {item.name}
+                        </Text>
+                        <Checkbox
+                          status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
+                          onPress={() => {
+                            setInternalSelection((prev) => {
+                              const isSelected = prev.includes(item.id);
+                              return isSelected
+                                ? prev.filter((id) => id !== item.id)
+                                : [...prev, item.id];
+                            });
+                          }}
+                        />
+                      </View>
+                    )}
+                    ItemSeparatorComponent={Divider}
+                    estimatedItemSize={40}
+                    estimatedListSize={{
+                      height: deviceHeight,
+                      width: deviceWidth / 2,
+                    }}
+                  />
+                </Select.Dialog>
+              </Select>
             </View>
             <Divider tw={cn('w-full bg-gray-700', fieldError && 'bg-red-700 h-0.5')} />
           </View>

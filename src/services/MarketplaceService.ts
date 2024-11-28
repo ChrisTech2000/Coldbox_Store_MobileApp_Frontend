@@ -292,7 +292,12 @@ class MarketplaceService extends HttpClient {
     params: ListedCratesBaseParams & UpdateListedCrateParams
   ): Promise<UpdateListedCrateResponse> => {
     try {
-      const { operatorOnBehalfOfSellerFarmerId, operatorOnBehalfOfSellerUserId, ...body } = params;
+      const {
+        operatorOnBehalfOfSellerFarmerId,
+        operatorOnBehalfOfSellerUserId,
+        operatorOnBehalfOfSellerCompanyId,
+        ...body
+      } = params;
 
       const { data } = await this.post<UpdateListedCrateResponse>(
         EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
@@ -301,6 +306,7 @@ class MarketplaceService extends HttpClient {
           params: {
             operator_on_behalf_of_seller_farmer_id: operatorOnBehalfOfSellerFarmerId,
             operator_on_behalf_of_seller_user_id: operatorOnBehalfOfSellerUserId,
+            operator_on_behalf_of_seller_company_id: operatorOnBehalfOfSellerCompanyId,
           },
         }
       );
@@ -381,6 +387,7 @@ class MarketplaceService extends HttpClient {
           params: {
             operator_on_behalf_of_seller_farmer_id: rest.operatorOnBehalfOfSellerFarmerId,
             operator_on_behalf_of_seller_user_id: rest.operatorOnBehalfOfSellerUserId,
+            operator_on_behalf_of_seller_company_id: rest.operatorOnBehalfOfSellerCompanyId,
           },
         }
       );

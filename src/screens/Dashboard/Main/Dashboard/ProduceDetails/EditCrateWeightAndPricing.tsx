@@ -1,4 +1,3 @@
-import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -31,10 +30,11 @@ import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import type { ListedCratesBaseParams } from '#types/api.params';
-import { ERoles, Farmer } from '#types/global';
+import { ERoles, User } from '#types/global';
 
-import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import RBAC from '#common/RBAC';
+import { formatFloat } from '../../components/FarmerSurveyModal/schema';
+import { formatCurrencyWithSymbol } from '../CheckIn/utils';
 
 type FormValues<T = string> = {
   applyToAll: boolean;
@@ -54,6 +54,7 @@ function EditCrateWeightAndPricing(
   props: ProduceDetailsStackRouteProps<'EditCrateWeightAndPricing'>
 ) {
   const { params } = props.route;
+  const ownedByCompanyId = params.produce.ownedOnBehalfOfCompanyId;
 
   const user = useAuthStore((store) => store.user);
   const refreshData = useDashboardStore((store) => store.refreshData);
@@ -63,12 +64,12 @@ function EditCrateWeightAndPricing(
   const [isSettingUp, toggleIsSettingUp] = useToggle(true);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
-  const { data: farmer, isLoading: isLoadingFarmer } = useApiCall(
-    'getFarmerById',
-    ColdtivateService.getFarmerById,
-    params.farmerId,
+  const { data: owner, isLoading: isLoadingFarmer } = useApiCall(
+    'getUser',
+    ColdtivateService.getUser,
+    params.produce.ownedByUserId,
     {
-      skip: !params.farmerId,
+      skip: !params.produce.ownedByUserId,
     }
   );
 
@@ -80,11 +81,11 @@ function EditCrateWeightAndPricing(
     'checkMarketplaceEligibility',
     MarketplaceService.checkMarketplaceEligibility,
     {
-      userIds: farmer?.user?.id ? [farmer.user.id] : [user?.id as number],
-      companyIds: [params.companyId],
+      userIds: owner?.id ? [owner.id] : [user?.id as number],
+      companyIds: [params.companyId, ...(ownedByCompanyId ? [ownedByCompanyId] : [])],
     },
     {
-      skip: !params.companyId || (!farmer?.user?.id && !user?.id),
+      skip: !params.companyId || (!owner?.id && !user?.id),
     }
   );
 
@@ -147,8 +148,14 @@ function EditCrateWeightAndPricing(
       const promises: Array<Promise<unknown>> = [];
 
       const operatorParams =
-        user?.role === ERoles.OPERATOR && params.farmerId
-          ? ({ operatorOnBehalfOfSellerFarmerId: params.farmerId } satisfies ListedCratesBaseParams)
+        user?.role === ERoles.OPERATOR
+          ? ({
+              ...(_produce.ownedOnBehalfOfCompanyId
+                ? { operatorOnBehalfOfSellerCompanyId: _produce.ownedOnBehalfOfCompanyId }
+                : owner.role === ERoles.COOLING_USER
+                  ? { operatorOnBehalfOfSellerFarmerId: _produce.ownedByUserId }
+                  : { operatorOnBehalfOfSellerUserId: _produce.ownedByUserId }),
+            } satisfies ListedCratesBaseParams)
           : {};
 
       if (cratesToList.length > 0) {
@@ -227,9 +234,17 @@ function EditCrateWeightAndPricing(
 
   const debouncedInitialSetup = useDebouncedCallback(async (): Promise<void> => {
     try {
+      const ownerId = params.produce.ownedByUserId;
+      const companyOwnerId = params.produce.ownedOnBehalfOfCompanyId;
       const result = await MarketplaceService.getSellerListedCrates(
         user?.role === ERoles.OPERATOR
-          ? { operatorOnBehalfOfSellerFarmerId: params.farmerId }
+          ? {
+              ...(companyOwnerId
+                ? { operatorOnBehalfOfSellerCompanyId: companyOwnerId }
+                : owner.role === ERoles.COOLING_USER
+                  ? { operatorOnBehalfOfSellerFarmerId: ownerId }
+                  : { operatorOnBehalfOfSellerUserId: ownerId }),
+            }
           : undefined
       );
 
@@ -282,7 +297,9 @@ function EditCrateWeightAndPricing(
   );
 
   const companyEligible = eligibility.companies?.[params.companyId ?? ''];
-  const farmerEligible = eligibility.users?.[farmer?.user?.id ?? user?.id ?? ''];
+  const farmerEligible =
+    eligibility.users?.[owner?.id ?? user?.id ?? ''] ||
+    (ownedByCompanyId && eligibility.companies?.[ownedByCompanyId]);
 
   if (isSettingUp || isLoadingEligibility || isLoadingFarmer) {
     return (
@@ -312,14 +329,14 @@ function EditCrateWeightAndPricing(
             <View tw="mx-4">
               <Text>
                 {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
-                  name: `${farmer?.user?.firstName ?? ''} ${farmer?.user?.lastName ?? ''}`,
+                  name: `${params.produce.owner ?? ''}`,
                 })}
               </Text>
               <Button
                 tw="self-end mt-2"
                 onPress={() =>
                   props.navigation.navigate('AddFarmerBankAccount', {
-                    farmer: farmer as Farmer,
+                    farmer: owner as User,
                     recheckEligibility: refetch,
                   })
                 }
@@ -536,8 +553,7 @@ function EditCrateWeightAndPricing(
             </View>
 
             <Text tw="text-lg text-green-primary">
-              {currencies.find((c) => c.name === params.companyCurrency)?.symbol ?? ''}{' '}
-              {potentialPrice.toFixed(2)}
+              {formatCurrencyWithSymbol(params.companyCurrency, potentialPrice.toFixed(2))}
             </Text>
           </View>
         ) : null}

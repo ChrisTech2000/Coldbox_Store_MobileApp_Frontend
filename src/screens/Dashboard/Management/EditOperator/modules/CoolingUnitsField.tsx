@@ -1,95 +1,70 @@
 import React, { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { Divider } from 'react-native-paper';
+import { useController } from 'react-hook-form';
 
 import { Button } from '#ui/components/Button';
 import { Select } from '#ui/components/Select';
-
-import { useTranslationUtils } from '#i18n/utils';
 import { Checkbox } from '#ui/components/Checkbox';
 import { Text } from '#ui/components/Text';
-import { useToggle } from '#ui/hooks/useToggle';
+
+import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
 import FormManager from '../components/FormManager';
 
-type Props = {
+export default function CoolingUnitsField(props: {
   coolingUnits: Array<{ id: number; name: string }>;
-};
-
-export default function CoolingUnitsField(props: Props) {
+}) {
   const { coolingUnits } = props;
 
-  const {
-    watch,
-    setValue,
-    formState: { errors },
-  } = FormManager.useFormManager();
+  const { control } = FormManager.useFormManager();
 
   const { t } = useTranslationUtils();
-  const [isModalVisible, toggleModalVisibility] = useToggle();
 
-  const selectedCoolingUnits = watch('coolingUnits');
-  const [internalSelection, setInternalSelection] = useState<Array<number>>(selectedCoolingUnits);
+  const { field, fieldState } = useController({ name: 'coolingUnits', control });
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [internalSelection, setInternalSelection] = useState<Array<number>>(field.value);
 
   const selectLabel = useMemo(() => {
-    const selectedOptions = coolingUnits
-      .filter((option) => selectedCoolingUnits.includes(option.id))
-      .map((option) => option.name);
-    return selectedOptions.length > 0
-      ? selectedOptions.join(', ')
-      : t('Dashboard.Management.Operators.fields.coolingUnits');
-  }, [coolingUnits, selectedCoolingUnits]);
+    const defaultLabel = t('Dashboard.Management.Operators.fields.coolingUnits');
+    if (!field.value?.length) return defaultLabel;
+    return (
+      coolingUnits
+        .filter((unit) => field.value.includes(unit.id))
+        .map((unit) => unit.name)
+        .join(', ') || defaultLabel
+    );
+  }, [coolingUnits, field.value, t]);
+
+  const error = typeof fieldState.error !== 'undefined';
 
   return (
-    <View tw="mt-6">
-      <View tw="px-5">
+    <View tw="mt-5">
+      <View tw="px-3 pb-2">
         <Select
           variant="md"
-          label={t('Dashboard.Management.Operators.fields.coolingUnits')}
-          currentValue={selectLabel}
-          isModalOpen={isModalVisible}
-          onClick={() => {
-            setInternalSelection(selectedCoolingUnits);
-            toggleModalVisibility();
-          }}
-          content={{
-            header: t('Dashboard.Management.Operators.fields.coolingUnits'),
-            options: (
-              <React.Fragment>
-                {coolingUnits.map((option, optionIdx) => (
-                  <View
-                    key={`cooling-unit-item-${option.id}-#${optionIdx}`}
-                    tw="w-full flex flex-row items-center justify-between px-4 py-2"
-                  >
-                    <Text tw="text-base w-[70%]" numberOfLines={2}>
-                      {option.name}
-                    </Text>
-                    <Checkbox
-                      status={internalSelection.includes(option.id) ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                        setInternalSelection((prev) => {
-                          const clone = [...prev];
-                          const idx = clone.indexOf(option.id);
-                          if (idx === -1) clone.push(option.id);
-                          else clone.splice(idx, 1);
-                          return clone;
-                        });
-                      }}
-                    />
-                  </View>
-                ))}
-              </React.Fragment>
-            ),
-            footer: (
+          isOpen={isModalVisible}
+          onOpenChange={setIsModalVisible}
+          onDismiss={() => setInternalSelection(field.value)}
+        >
+          <Select.Touchable
+            label={t('Dashboard.Management.Operators.fields.coolingUnits')}
+            displayValue={selectLabel}
+          />
+          <Select.Dialog
+            enableScroll
+            header={t('Dashboard.Management.Operators.fields.coolingUnits')}
+            FooterElement={
               <View tw="flex flex-row items-center justify-end">
                 <Button
                   mode="text"
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    setInternalSelection(selectedCoolingUnits);
-                    toggleModalVisibility();
+                    setInternalSelection(field.value);
+                    setIsModalVisible(false);
                   }}
                 >
                   {t('actions.cancel')}
@@ -99,18 +74,42 @@ export default function CoolingUnitsField(props: Props) {
                   uppercase
                   onPress={(evt) => {
                     evt.stopPropagation();
-                    setValue('coolingUnits', internalSelection);
-                    toggleModalVisibility();
+                    field.onChange(internalSelection);
+                    setIsModalVisible(false);
                   }}
                 >
                   {t('actions.ok')}
                 </Button>
               </View>
-            ),
-          }}
-        />
+            }
+          >
+            <FlatList
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              data={coolingUnits}
+              keyExtractor={(item, itemIdx) => `cooling-unit-item-${item.id}-#${itemIdx}`}
+              renderItem={({ item }) => (
+                <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                  <Text tw="text-base w-[70%]" numberOfLines={2}>
+                    {item.name}
+                  </Text>
+                  <Checkbox
+                    status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setInternalSelection((prev) =>
+                        prev.includes(item.id)
+                          ? prev.filter((id) => id !== item.id)
+                          : [...prev, item.id]
+                      );
+                    }}
+                  />
+                </View>
+              )}
+            />
+          </Select.Dialog>
+        </Select>
       </View>
-      <Divider tw={cn('w-full bg-gray-700 mt-2 my-2', !!errors.gender && 'bg-red-700 h-0.5')} />
+      <Divider tw={cn('w-full bg-gray-700', error && 'bg-red-700 h-0.5')} />
     </View>
   );
 }

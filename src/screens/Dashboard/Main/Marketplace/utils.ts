@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { CurrencyStandardization } from 'currency-format-utils';
 
 import type { Company, User } from '#types/global';
 import type { GetAllCropsResponse, GetCoolingUnitResponse } from '#types/api.responses';
@@ -10,6 +9,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import ColdtivateService from '#services/ColdtivateService';
 
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
 export const DEFAULT_CURRENCY_CODE = 'NGN';
@@ -147,10 +147,6 @@ export function useMarketplaceListing() {
         const contextualCrop = cropsMapCopy.get(node.relCropId);
         const contextualUnit = unitsMapCopy.get(node.relCoolingUnitId);
         const company = companiesMapCopy.get(node.relCompanyId);
-        const currencyFormat = CurrencyStandardization.currencyCode({
-          code: node.currency,
-          value: node.producePricePerKg,
-        });
         const owner = node.ownedOnBehalfOfCompanyId
           ? ownerCompanies.find((c) => c.id === node.ownedOnBehalfOfCompanyId)
           : ownerUsers.find((u) => u?.id === node.ownedByUserId);
@@ -187,7 +183,7 @@ export function useMarketplaceListing() {
             image: contextualCrop?.image ?? '',
           },
           movementCode: node.relCheckInMovementCode,
-          currencyValue: currencyFormat.getValueFormated(),
+          currencyValue: formatCurrencyWithSymbol(node.currency, node.producePricePerKg),
         } satisfies AvailableListingDatum;
       });
     },

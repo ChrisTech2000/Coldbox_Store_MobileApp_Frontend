@@ -1,5 +1,4 @@
 import { useIsFocused } from '@react-navigation/native';
-import { CurrencyStandardization } from 'currency-format-utils';
 import isArray from 'lodash/isArray';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -31,6 +30,7 @@ import { useDashboardStore } from '#stores/dashboard';
 
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 function SalesRoot() {
   const { t } = useTranslationUtils();
@@ -169,13 +169,10 @@ function SalesRoot() {
                         {t('Dashboard.MyOrders.soldFor')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
-                        {CurrencyStandardization.currencyCode({
-                          code: 'NGN', // TODO: get value from somewhere
-                          value: item.items.reduce(
-                            (acc, current) => (acc += current.produceAmount),
-                            0
-                          ),
-                        }).getValueFormated()}
+                        {formatCurrencyWithSymbol(
+                          'NGN', // TODO: get value from somewhere
+                          item.items.reduce((acc, current) => (acc += current.produceAmount), 0)
+                        )}
                       </Text>
                     </View>
 
@@ -184,13 +181,10 @@ function SalesRoot() {
                         {t('Dashboard.MyOrders.coolingFees')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
-                        {CurrencyStandardization.currencyCode({
-                          code: 'NGN', // TODO: get value from somewhere
-                          value: item.items.reduce(
-                            (acc, current) => (acc += current.coolingFeesAmount),
-                            0
-                          ),
-                        }).getValueFormated()}
+                        {formatCurrencyWithSymbol(
+                          'NGN', // TODO: get value from somewhere
+                          item.items.reduce((acc, current) => (acc += current.coolingFeesAmount), 0)
+                        )}
                       </Text>
                     </View>
                   </View>

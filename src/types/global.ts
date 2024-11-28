@@ -90,6 +90,8 @@ export type DashboardProduce = {
   currentStorageDays: number;
   owner: string; // the cooling user's name
   ownerContact: string; // the cooling user's phone?
+  ownedOnBehalfOfCompanyId: number;
+  ownedByUserId: number;
   farmerId?: number;
   hasDigitalTwin: boolean;
   id: number;
@@ -546,6 +548,7 @@ export type BankAccount = {
   accountNumber: string;
   accountName: string;
   paystackSubaccountCode: string;
+  ownedOnBehalfOfCompany: number | null;
 };
 
 export type Bank = {

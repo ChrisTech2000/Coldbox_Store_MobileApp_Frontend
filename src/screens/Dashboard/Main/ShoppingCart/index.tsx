@@ -1,5 +1,4 @@
 import { useIsFocused } from '@react-navigation/native';
-import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useState } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
@@ -23,6 +22,7 @@ import { useManagementStore } from '#stores/management';
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 import { OwnershipModal } from './components/OwnershipModal';
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 export const CART_MINIMUM_VALUE = 100;
 
@@ -97,10 +97,10 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                 <View tw="flex-row items-center justify-between">
                   <Text tw="text-lg">{t('Dashboard.ShoppingCart.subtotal')}</Text>
                   <Text tw="text-lg">
-                    {CurrencyStandardization.currencyCode({
-                      code: 'NGN', // TODO: get from somewhere
-                      value: cartData.totalProduceAmount,
-                    }).getValueFormated()}
+                    {formatCurrencyWithSymbol(
+                      'NGN', // TODO: get from somewhere
+                      cartData.totalProduceAmount
+                    )}
                   </Text>
                 </View>
 

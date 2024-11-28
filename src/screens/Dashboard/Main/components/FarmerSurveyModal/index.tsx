@@ -179,6 +179,7 @@ export function FarmersSurveyModal({
                       setIsModalVisible={setIsCropModalVisible}
                       useSelectStore={useCropStore}
                       label={crop?.name ?? ''}
+                      modalHeader={t('Dashboard.Management.CompanyDetails.headings.commodity')}
                     />
                   </View>
                   {errors.crop && (

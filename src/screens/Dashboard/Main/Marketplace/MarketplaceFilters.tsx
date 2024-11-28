@@ -1,6 +1,5 @@
-import { CurrencyStandardization } from 'currency-format-utils';
 import cloneDeep from 'lodash/cloneDeep';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -26,6 +25,7 @@ import MarketplaceFormManager, { type FormValues } from './modules/MarketplaceFo
 
 import { type FilterItem, useMarketplaceFilters } from './store';
 import { DEFAULT_CURRENCY_CODE } from './utils';
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) {
   const { t } = useTranslationUtils();
@@ -37,16 +37,6 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
     const datum = countriesDict().getByValue(companyCountry || farmerCountry || '');
     return datum?.currency || DEFAULT_CURRENCY_CODE;
   }, [companyCountry, farmerCountry]);
-
-  const currencyFormatterFunc = useCallback(
-    (value: number) =>
-      CurrencyStandardization.currencyCode({
-        code: currencyCode,
-        value: value,
-        isCents: false,
-      }).getValueFormated(),
-    [currencyCode]
-  );
 
   return (
     <React.Fragment>
@@ -66,8 +56,8 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
                   : []
               );
               if (min > 0 || max > 0) {
-                const minLabel = `${currencyFormatterFunc(min)}/KG`;
-                const maxLabel = `${currencyFormatterFunc(max)}/KG`;
+                const minLabel = `${formatCurrencyWithSymbol(currencyCode, min)}/KG`;
+                const maxLabel = `${formatCurrencyWithSymbol(currencyCode, max)}/KG`;
                 filters.push({
                   key: 'priceRange',
                   label: [minLabel, maxLabel].join(' - '),
