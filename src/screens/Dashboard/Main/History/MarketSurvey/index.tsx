@@ -27,17 +27,17 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
   const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getFarmers',
     ColdtivateService.getFarmers,
-    {},
+    undefined,
     {
       defaultData: [],
     }
   );
 
-  const farmerId = useMemo(() => {
-    return farmers?.find(
-      (_farmer) => `${_farmer.user.firstName} ${_farmer.user.lastName}` === farmer
-    )?.id;
-  }, [farmers]);
+  const farmerId = useMemo(
+    () =>
+      farmers?.find((farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === owner)?.id,
+    [farmers, owner]
+  );
 
   const {
     data: surveys,
