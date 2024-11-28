@@ -152,7 +152,9 @@ function EditCrateWeightAndPricing(
           ? ({
               ...(_produce.ownedOnBehalfOfCompanyId
                 ? { operatorOnBehalfOfSellerCompanyId: _produce.ownedOnBehalfOfCompanyId }
-                : { operatorOnBehalfOfSellerFarmerId: _produce.ownedByUserId }),
+                : owner.role === ERoles.COOLING_USER
+                  ? { operatorOnBehalfOfSellerFarmerId: _produce.ownedByUserId }
+                  : { operatorOnBehalfOfSellerUserId: _produce.ownedByUserId }),
             } satisfies ListedCratesBaseParams)
           : {};
 
@@ -239,7 +241,9 @@ function EditCrateWeightAndPricing(
           ? {
               ...(companyOwnerId
                 ? { operatorOnBehalfOfSellerCompanyId: companyOwnerId }
-                : { operatorOnBehalfOfSellerFarmerId: ownerId }),
+                : owner.role === ERoles.COOLING_USER
+                  ? { operatorOnBehalfOfSellerFarmerId: ownerId }
+                  : { operatorOnBehalfOfSellerUserId: ownerId }),
             }
           : undefined
       );
