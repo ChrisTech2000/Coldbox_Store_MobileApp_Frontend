@@ -150,13 +150,7 @@ export function Movement({
   return (
     <View tw="w-full">
       <View tw="flex flex-row items-center justify-between my-2">
-        {movement.code.startsWith('MO-') ? (
-          <MaterialIcon name="cart-outline" size={25} color={colors.blue[400]} />
-        ) : isCheckIn ? (
-          <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />
-        ) : (
-          <CheckOut width={20} height={20} fill={colors.orange[400]} stroke={colors.orange[400]} />
-        )}
+        <_IconByMovementType movementType={movement.movementType} />
         <View tw="w-[50%] mx-2 h-full flex flex-col space-y-1">
           <View tw="flex flex-row items-center flex-wrap">
             <Text variant="TextBold" tw="text-base" numberOfLines={3}>
@@ -232,4 +226,19 @@ export function Movement({
       </Portal>
     </View>
   );
+}
+
+function _IconByMovementType(props: { movementType: EMovementType }) {
+  switch (props.movementType) {
+    case EMovementType.IN:
+      return <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />;
+    case EMovementType.OUT:
+      return (
+        <CheckOut width={20} height={20} fill={colors.orange[400]} stroke={colors.orange[400]} />
+      );
+    case EMovementType.MARKETPLACE:
+      return <MaterialIcon name="cart-outline" size={25} color={colors.blue[400]} />;
+    default:
+      return null;
+  }
 }

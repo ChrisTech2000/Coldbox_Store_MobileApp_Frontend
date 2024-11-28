@@ -18,15 +18,13 @@ import { useManagementStore } from '#stores/management';
 
 import { useSettingUpSurvey, type CommoditySurveyDatum, type Notification } from '../index';
 
-export default function NotificationItem({
-  item,
-  revalidate,
-  findNotificationById,
-}: {
+export default function NotificationItem(props: {
   item: Notification;
   revalidate: () => Promise<void>;
   findNotificationById: (notificationId: number) => Notification | undefined;
 }) {
+  const { item, revalidate, findNotificationById } = props;
+
   const toast = InAppNotifications.useToast();
   const { t } = useTranslationUtils();
 

@@ -689,6 +689,7 @@ export enum EUnitOfMeasurement {
 export enum EMovementType {
   OUT = 'out',
   IN = 'in',
+  MARKETPLACE = 'marketplace',
 }
 
 export enum ESellingLocation {
