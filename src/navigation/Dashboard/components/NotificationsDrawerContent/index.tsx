@@ -140,8 +140,9 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
               });
 
               await revalidate();
-            } catch (error) {
-              console.error(error);
+            } catch (exception) {
+              console.error(exception);
+              toast.show(t('actions.error', { type: 'md_danger' }));
             }
           }}
         />
