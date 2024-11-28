@@ -498,6 +498,7 @@ export default {
             sellingPrice: 'Listing selling price', // TODO
             potentialSellingPrice: 'Potential selling value', // TODO
             info: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
+            unavailableId: 'ID not set', // TODO
           },
           cratesError: 'Jọwọ fi kan rere nọmba crate',
           crateWeightError: 'Jọwọ fi iwuwo apoti rere sii',
@@ -720,7 +721,9 @@ export default {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details', // TODO
         toasts: {
+          noSurveys: 'No surveys have been completed yet.', // TODO
           warning:
             'Akanti yìí kò ṣe é parẹ́ nítorí pé oníṣe náà ní àwọn àyẹ̀wò tí ń ṣiṣẹ́ nínú ẹ̀ka ìtura {{names}}. Jọwọ fi to olumulo leti lati wa si yara lati wa gbe awọn nkan wọnyi jade ki o to le pa akanti naa rẹ!',
           confirmation:
@@ -861,6 +864,7 @@ export default {
         },
       },
       Coupons: {
+        title: 'Discount coupons', // TODO
         emptyMessage: 'Ko si awọn kuponu ti a ti ṣafikun sibẹsibẹ',
         addCoupon: 'Fi Kupọọnu kun',
         code: 'koodu kupọọnu',
@@ -1192,8 +1196,14 @@ export default {
         invalid: 'Invalid value', // TODO
         minimumCartValue: 'Order must be at least ₦100.', // TODO
       },
+      method: 'Method:', // TODO
       deliveryInfo:
         'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
+      pickUpTodayInfo:
+        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
+      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+      orderOverviewSubtitle:
+        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
     },
     Analytics: {
       emptyState: 'Ko si data lati ṣafihan',

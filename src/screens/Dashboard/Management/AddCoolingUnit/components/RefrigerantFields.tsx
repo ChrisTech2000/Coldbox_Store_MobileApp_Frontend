@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { Divider, RadioButton, TextInput } from 'react-native-paper';
 
@@ -7,7 +7,6 @@ import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Button } from '#ui/components/Button';
 
-import { useToggle } from '#ui/hooks/useToggle';
 import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
@@ -18,9 +17,9 @@ export default function RefrigerantFields() {
   const { control, watch, formState } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
 
-  const [isVisible, toggleVisibility] = useToggle(false);
-
   const selectedRefrigerantType = watch('refrigerantType');
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [internalSelection, setInternalSelection] = useState<string | null>(
     selectedRefrigerantType ?? null
   );
@@ -34,41 +33,28 @@ export default function RefrigerantFields() {
         control={control}
         render={({ field: { onChange } }) => (
           <View tw="mt-5">
-            <View tw="pl-4 pr-2 pb-1.5">
+            <View tw="px-4 pb-2">
               <Select
                 variant="md"
-                label={t('Dashboard.Management.AddCoolingUnit.fields.refrigerantType')}
-                currentValue={selectedRefrigerantType}
-                isModalOpen={isVisible}
-                onClick={() => {
-                  toggleVisibility();
-                  setInternalSelection(selectedRefrigerantType);
-                }}
-                content={{
-                  header: t('Dashboard.Management.AddCoolingUnit.fields.refrigerantType'),
-                  options: (
-                    <RadioButton.Group
-                      value={internalSelection ?? ''}
-                      onValueChange={(value) => setInternalSelection(value)}
-                    >
-                      {REFRIGERANTS.map((option, optionIdx) => (
-                        <RadioButtonItem
-                          key={`${option}-${optionIdx}`}
-                          label={option}
-                          value={option}
-                          tw="flex flex-row-reverse ml-[-10]"
-                        />
-                      ))}
-                    </RadioButton.Group>
-                  ),
-                  footer: (
+                isOpen={isModalVisible}
+                onOpenChange={setIsModalVisible}
+                onDismiss={() => setInternalSelection(selectedRefrigerantType)}
+              >
+                <Select.Touchable
+                  label={t('Dashboard.Management.AddCoolingUnit.fields.refrigerantType')}
+                  displayValue={selectedRefrigerantType}
+                />
+                <Select.Dialog
+                  enableScroll
+                  header={t('Dashboard.Management.AddCoolingUnit.fields.refrigerantType')}
+                  FooterElement={
                     <View tw="flex flex-row items-center justify-end">
                       <Button
                         mode="text"
                         uppercase
                         onPress={(evt) => {
                           evt.stopPropagation();
-                          toggleVisibility();
+                          setIsModalVisible(false);
                           setInternalSelection(selectedRefrigerantType);
                         }}
                       >
@@ -79,16 +65,35 @@ export default function RefrigerantFields() {
                         uppercase
                         onPress={(evt) => {
                           evt.stopPropagation();
-                          toggleVisibility();
+                          setIsModalVisible(false);
                           onChange(internalSelection);
                         }}
                       >
                         {t('actions.ok')}
                       </Button>
                     </View>
-                  ),
-                }}
-              />
+                  }
+                >
+                  <RadioButton.Group
+                    value={internalSelection ?? ''}
+                    onValueChange={(value) => setInternalSelection(value)}
+                  >
+                    <FlatList
+                      scrollEnabled={false}
+                      showsVerticalScrollIndicator={false}
+                      data={REFRIGERANTS}
+                      keyExtractor={(item, itemIdx) => `${item}-${itemIdx}`}
+                      renderItem={({ item }) => (
+                        <RadioButtonItem
+                          label={item}
+                          value={item}
+                          tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
+                        />
+                      )}
+                    />
+                  </RadioButton.Group>
+                </Select.Dialog>
+              </Select>
             </View>
             <Divider
               tw={cn('w-full bg-gray-700', !!errors.refrigerantType && 'bg-red-700 h-0.5')}

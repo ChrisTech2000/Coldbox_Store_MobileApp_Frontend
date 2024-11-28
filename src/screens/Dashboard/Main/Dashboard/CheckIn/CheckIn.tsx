@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { currencies } from 'currencies.json';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, ScrollView, TouchableOpacity, View } from 'react-native';
@@ -22,6 +21,7 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import type { CheckInResponse, CheckInWitCodeResponse } from '#types/api.responses';
 import { ECoolingUnitMetric, EDateCropped, EPricingType } from '#types/global';
+import { useToggle } from '#ui/hooks/useToggle';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -42,7 +42,7 @@ import { FarmerSurvey } from '../FarmerSurvey';
 import { SetupSchema } from './CrateSetup';
 import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CheckedInCard } from './components/CheckedInCard';
-import { processMarketplaceCrateListing } from './utils';
+import { formatCurrencyWithSymbol, processMarketplaceCrateListing } from './utils';
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
@@ -95,6 +95,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   const [isCodeModalOpen, setIsCodeModalOpen] = useState<boolean>(false);
   const [indexForActiveOptions, setIndexForActiveOptions] = useState<number>(-1);
+  const [isSubmitting, toggleIsSubmitting] = useToggle(false);
 
   const allCrates = useMemo(
     () => produces.flatMap((produce) => produce.crates),
@@ -127,10 +128,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       .toFixed(2);
   }, [produces, produces.length, coolingUnit, allHavePlannedDays, allCrates]);
 
-  const currencySymbol = useMemo(() => {
-    return currencies.find((c) => c.code === company?.currency)?.symbol ?? '';
-  }, [company]);
-
   const setCrateIDs = useCallback(
     (modalCrates: SetupSchema['crates'], item: ProduceCrate) => {
       const _produce = cloneDeep(item);
@@ -161,6 +158,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       });
       return;
     }
+
+    toggleIsSubmitting();
 
     let result: CheckInWitCodeResponse | CheckInResponse | undefined = undefined;
 
@@ -222,7 +221,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       });
     }
 
-    if (typeof result !== 'object') return;
+    if (typeof result !== 'object') return toggleIsSubmitting();
 
     if (guard('SET', 'MarketplaceListForSale')) {
       if ('movement' in result) {
@@ -257,6 +256,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     resetCheckInStore();
     rootNavigation.navigate('RootMainTabStack');
     refreshData.forEach((fn) => fn());
+    toggleIsSubmitting();
   }
 
   const navigateToCropSelection = useCallback(() => {
@@ -349,11 +349,12 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                   item={item}
                   index={index}
                   coolingUnit={coolingUnit}
-                  currencySymbol={currencySymbol}
+                  currencyCode={company?.currency || 'NGN'}
                   checkOutCode={checkOutCode}
                   totalCrates={allCrates.length}
                   openOptionsModal={() => setIndexForActiveOptions(index)}
                   setCrateIDs={setCrateIDs}
+                  disabled={isSubmitting}
                 />
                 {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) ? (
                   <FarmerSurvey
@@ -361,6 +362,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                     cropName={item.crop.name}
                     farmerId={user.id}
                     surveys={surveys}
+                    disabled={isSubmitting}
                   />
                 ) : null}
               </View>
@@ -372,22 +374,24 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         <View tw="space-y-2 mb-20">
           {!checkOutCode ? (
             <Button
-              tw="w-full border-2 border-green-primary"
+              tw={cn('w-full border-2', !isSubmitting && 'border-green-primary')}
               mode="outlined"
               onPress={navigateToCropSelection}
               icon="basket"
               contentStyle="flex flex-row-reverse items-center"
+              disabled={isSubmitting}
             >
               {t('Dashboard.CrateManagement.CheckIn.addCrates')}
             </Button>
           ) : null}
           {!produces || produces.length === 0 ? (
             <Button
-              tw="w-full border-2 border-green-primary"
+              tw={cn('w-full border-2', !isSubmitting && 'border-green-primary')}
               mode="outlined"
               onPress={() => setIsCodeModalOpen(true)}
               icon="ticket-confirmation-outline"
               contentStyle="flex flex-row-reverse items-center"
+              disabled={isSubmitting}
             >
               {t('Dashboard.CrateManagement.CheckIn.checkInWithCode')}
             </Button>
@@ -410,7 +414,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
       <View tw="w-full flex flex-row items-center justify-center space-x-1 py-1.5 px-4">
         <Button
-          tw="w-1/2 border-2 border-green-primary"
+          tw={cn('w-1/2 border-2', !isSubmitting && 'border-green-primary')}
           mode="outlined"
           onPress={() => {
             resetCheckInStore();
@@ -418,21 +422,23 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           }}
           icon="close-circle-outline"
           contentStyle="flex flex-row-reverse items-center"
-          labelStyle="text-green-primary"
+          labelStyle={cn(!isSubmitting && 'text-green-primary')}
+          disabled={isSubmitting}
         >
           {t('actions.cancel')}
         </Button>
         <Button
           onLayout={onCheckIn3Layout}
           tw={cn(
-            'w-1/2 border-2 border-green-primary',
-            !produces || (produces.length === 0 && 'border-2 border-gray-100')
+            'w-1/2 border-2',
+            !produces || (produces.length === 0 && 'border-2 border-gray-100'),
+            !(!produces || produces.length === 0 || isSubmitting) && 'border-green-primary'
           )}
           mode="contained"
           onPress={onSubmit}
           icon="check-circle-outline"
           contentStyle="flex flex-row-reverse items-center"
-          disabled={!produces || produces.length === 0}
+          disabled={!produces || produces.length === 0 || isSubmitting}
         >
           {t('actions.confirm')}
         </Button>
@@ -446,7 +452,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
               : t('Dashboard.CrateManagement.CheckIn.pricing')}
           </Text>
           <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
-            {`${currencySymbol}${total}`}
+            {formatCurrencyWithSymbol(company?.currency || 'NGN', total)}
             {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY && !allHavePlannedDays
               ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
               : ''}

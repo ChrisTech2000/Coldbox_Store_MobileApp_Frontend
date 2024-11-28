@@ -1,5 +1,4 @@
 import { useIsFocused } from '@react-navigation/native';
-import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
@@ -32,6 +31,7 @@ import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
 import { OwnershipModal } from './components/OwnershipModal';
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -187,10 +187,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                                 ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
                                 : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                               {
-                                price: CurrencyStandardization.currencyCode({
-                                  code: 'NGN', // TODO: get value from somewhere
-                                  value: coolingUnit?.commonPricingType?.value ?? 0,
-                                }).getValueFormated(),
+                                price: formatCurrencyWithSymbol(
+                                  'NGN', // TODO: get value from somewhere
+                                  coolingUnit?.commonPricingType?.value ?? 0
+                                ),
                               }
                             )
                           : ''}
@@ -234,10 +234,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             <View tw="flex-row items-center space-x-1">
               <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">
-                {CurrencyStandardization.currencyCode({
-                  code: 'NGN', // TODO: get value from somewhere
-                  value: cartData.totalPaymentFeesAmount + cartData.totalColdtivateAmount,
-                }).getValueFormated()}
+                {formatCurrencyWithSymbol(
+                  'NGN', // TODO: get value from somewhere
+                  cartData.totalPaymentFeesAmount + cartData.totalColdtivateAmount
+                )}
               </Text>
             </View>
           </View>
@@ -245,10 +245,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           <View tw="flex-row items-center justify-between">
             <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
             <Text tw="text-lg">
-              {CurrencyStandardization.currencyCode({
-                code: 'NGN', // TODO: get value from somewhere
-                value: cartData.totalAmount,
-              }).getValueFormated()}
+              {formatCurrencyWithSymbol(
+                'NGN', // TODO: get value from somewhere
+                cartData.totalAmount
+              )}
             </Text>
           </View>
           <Divider tw="bg-zinc-400 my-3" />

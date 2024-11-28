@@ -12,10 +12,11 @@ import RevokedCouponsTab from '#screens/Dashboard/AccountDetails/Coupons/Revoked
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
+import { CouponsSettingsRouteProps } from '.';
 
 export type CouponStatusTabsRoutes = {
-  Active: undefined;
-  Revoked: undefined;
+  Active: { source: string } | undefined;
+  Revoked: { source: string } | undefined;
 };
 
 export type CouponStatusTabsRoutePaths = keyof CouponStatusTabsRoutes;
@@ -34,7 +35,7 @@ const TAB_HEADERS: Record<CouponStatusTabsRoutePaths, TranslationPaths> = {
 
 const TopTabs = createMaterialTopTabNavigator<CouponStatusTabsRoutes>();
 
-export default function CouponStatusTabs() {
+export default function CouponStatusTabs(props: CouponsSettingsRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
 
   const screenOptions: ScreenOptions = useCallback(
@@ -58,8 +59,20 @@ export default function CouponStatusTabs() {
 
   return (
     <TopTabs.Navigator screenOptions={screenOptions}>
-      <TopTabs.Screen name="Active" component={ActiveCouponsTab} />
-      <TopTabs.Screen name="Revoked" component={RevokedCouponsTab} />
+      <TopTabs.Screen
+        name="Active"
+        // eslint-disable-next-line
+        // @ts-ignore
+        component={ActiveCouponsTab}
+        initialParams={props.route.params}
+      />
+      <TopTabs.Screen
+        name="Revoked"
+        // eslint-disable-next-line
+        // @ts-ignore
+        component={RevokedCouponsTab}
+        initialParams={props.route.params}
+      />
     </TopTabs.Navigator>
   );
 }

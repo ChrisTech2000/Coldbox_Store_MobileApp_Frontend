@@ -10,8 +10,6 @@ import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
-import ColdtivateService from '#services/ColdtivateService';
-import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
 
@@ -32,18 +30,6 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   const { user } = useAuthStore();
   const toast = InAppNotifications.useToast();
   const { guard } = RBAC.useRBAC();
-
-  const { data: farmers } = useApiCall(
-    'getOperatorFarmers',
-    ColdtivateService.getOperatorFarmers,
-    {
-      operator: user?.id as number,
-    },
-    {
-      skip: !user?.id,
-      defaultData: [],
-    }
-  );
 
   const crates = produce.checkedInCrates.length;
 
@@ -92,7 +78,8 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         label: t('Dashboard.ProduceDetails.cropType'),
         value: produce.cropName,
       },
-      ...(guard('SET', 'MarketplaceEditListedCrates')
+      // TODO: find a better way to check if produce belongs to the user (might cause issues if user updates their number)
+      ...(guard('SET', 'MarketplaceEditListedCrates') || produce.ownerContact === user?.phone
         ? [
             {
               key: 'crateWeightLabel',
@@ -158,15 +145,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         }),
       },
     ],
-    [produce, pricing, currency, dailyPrice, guard]
-  );
-
-  const farmer = useMemo(
-    () =>
-      farmers?.find(
-        (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === produce.owner
-      ),
-    [produce, farmers]
+    [produce, pricing, currency, dailyPrice, guard, user]
   );
 
   const amountOfListedCrates = useMemo(
@@ -294,12 +273,10 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                       ? {
                           onPress: (evt) => {
                             evt.stopPropagation();
-                            const farmerId = farmer?.id ?? produce.farmerId;
                             props.navigation.navigate('EditCrateWeightAndPricing', {
                               companyCurrency: currency,
                               produce,
                               coolingUnit,
-                              farmerId: farmerId!,
                               companyId: props.route.params.companyId,
                             });
                           },

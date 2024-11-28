@@ -1,11 +1,11 @@
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Dimensions, TouchableWithoutFeedback, View } from 'react-native';
-import { type NavigationProp, useNavigation } from '@react-navigation/native';
+import { Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -17,18 +17,17 @@ import { paperTheme } from '#ui/lib/theme';
 import RBAC from '#common/RBAC';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
-import type { MarketplaceRoutes } from 'navigation/Dashboard/Main/Marketplace/MarketplaceStack';
+import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/Marketplace/MarketplaceStack';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import type { GetAvailableListingParams } from '#types/api.params';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { cn } from '#ui/lib/cn';
 
 import FilterChip from './FilterChip';
 import MarketplaceLocationFilter from './LocationFilter';
 
 import { useMarketplaceQueryParams } from '../store';
-
-const DIALOG_MAX_WIDTH = Dimensions.get('window').width * 0.68;
-const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.31;
 
 type InternalSelectionState = Exclude<GetAvailableListingParams['sortBy'], undefined>;
 type BuyerInternalSelectionState = 'for-myself' | 'on-behalf';
@@ -43,6 +42,8 @@ const BUYER_OPTIONS_TRANSLATIONS: Record<BuyerInternalSelectionState, Translatio
   'for-myself': 'Dashboard.Marketplace.buyerSelection.forMyself',
   'on-behalf': 'Dashboard.Marketplace.buyerSelection.onBehalfOfCompany',
 };
+
+const DEVICE_HEIGHT = Dimensions.get('screen').height;
 
 export default function MarketplaceFiltersSection() {
   const { t } = useTranslationUtils();
@@ -153,14 +154,9 @@ export default function MarketplaceFiltersSection() {
         <Dialog
           visible={visibleModal !== undefined}
           onDismiss={resetState}
-          style={{
-            backgroundColor: 'white',
-            maxWidth: DIALOG_MAX_WIDTH,
-            maxHeight: DIALOG_MAX_HEIGHT,
-            alignSelf: 'center',
-          }}
+          style={{ backgroundColor: 'white' }}
         >
-          <Dialog.Content tw="mb-0 android:pb-1.5">
+          <Dialog.Content tw="android:pb-1.5 p-0">
             <RadioButton.Group
               value={visibleModal === 'buyer' ? buyerInternalSelection : internalSelection}
               onValueChange={(value) =>
@@ -184,15 +180,20 @@ export default function MarketplaceFiltersSection() {
                       : t(OPTIONS_TRANSLATIONS[option as unknown as InternalSelectionState])
                   }
                   value={option}
-                  tw="flex flex-row-reverse ml-[-10] w-full"
+                  tw="flex flex-row m-0 px-0 py-2 px-8 w-full"
                 />
               ))}
             </RadioButton.Group>
           </Dialog.Content>
-          <Dialog.Actions tw="mt-0 justify-around android:pt-1.5">
+          <Dialog.Actions
+            tw={cn(
+              'mt-4 space-x-2',
+              DEVICE_HEIGHT > SMALL_SCREEN_THRESHOLD
+                ? 'flex flex-row items-center justify-end'
+                : 'items-center'
+            )}
+          >
             <Button
-              tw="w-1/2"
-              mode="text"
               onPress={(evt) => {
                 evt.stopPropagation();
                 resetState();
@@ -201,8 +202,6 @@ export default function MarketplaceFiltersSection() {
               {t('actions.cancel')}
             </Button>
             <Button
-              tw="w-1/2"
-              mode="contained"
               onPress={async (evt) => {
                 evt.stopPropagation();
                 if (visibleModal === 'buyer') {
