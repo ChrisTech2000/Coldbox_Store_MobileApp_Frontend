@@ -29,11 +29,11 @@ export default function NotificationItem(props: {
   const { t } = useTranslationUtils();
 
   const managementCompany = useManagementStore(useShallow((store) => store.company));
-  const isSettingUpSurvey = useSettingUpSurvey(useShallow((store) => store.isLoading));
-  const toggleSettingUpSurveyStatus = useSettingUpSurvey((store) => store.toggle);
+  const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
+  const setIsSurveyLoading = useSettingUpSurvey((store) => store.toggle);
 
   async function updateStatusHandler(notificationId: number): Promise<void> {
-    toggleSettingUpSurveyStatus();
+    setIsSurveyLoading(true);
 
     if (!item.seen) {
       const result = await NotificationService.updateNotificationStatus(item.id);
@@ -41,7 +41,7 @@ export default function NotificationItem(props: {
     }
 
     const notification = findNotificationById(notificationId);
-    if (!notification) return toggleSettingUpSurveyStatus();
+    if (!notification) return setIsSurveyLoading(false);
 
     switch (notification.eventType) {
       case 'FARMER_SURVEY': {
@@ -50,7 +50,7 @@ export default function NotificationItem(props: {
           (farmer) =>
             `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
         );
-        if (!contextualFarmer) return toggleSettingUpSurveyStatus();
+        if (!contextualFarmer) return setIsSurveyLoading(false);
         await _handleFarmerSurvey(notification, contextualFarmer.id);
         break;
       }
@@ -61,7 +61,7 @@ export default function NotificationItem(props: {
           (farmer) =>
             `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
         );
-        if (!contextualFarmer) return toggleSettingUpSurveyStatus();
+        if (!contextualFarmer) return setIsSurveyLoading(false);
         await _handleMarketSurvey(notification, contextualFarmer.id);
         break;
       }
@@ -70,7 +70,7 @@ export default function NotificationItem(props: {
         break;
     }
 
-    toggleSettingUpSurveyStatus();
+    setIsSurveyLoading(false);
   }
 
   async function _handleFarmerSurvey(notification: Notification, farmerId: number) {
@@ -102,7 +102,7 @@ export default function NotificationItem(props: {
     }
 
     const contextualCrop = crops.find((crop) => crop.name === notification.crates.crop);
-    if (!contextualCrop) return toggleSettingUpSurveyStatus();
+    if (!contextualCrop) return setIsSurveyLoading(false);
 
     const contextualFarmerSurvey = surveys?.at(0);
     const datum = {
@@ -123,11 +123,11 @@ export default function NotificationItem(props: {
 
   async function _handleMarketSurvey(notification: Notification, farmerId: number) {
     const coolingUnits = await ColdtivateService.getCoolingUnits({});
+
     const contextualUnit = coolingUnits?.find(
       (unit) => unit.name === notification.crates.coolingUnit
     );
-
-    if (!contextualUnit) return toggleSettingUpSurveyStatus();
+    if (!contextualUnit) return setIsSurveyLoading(false);
 
     const movements = await ColdtivateService.getMovementsHistory({
       coolingUnit: contextualUnit.id,
@@ -137,8 +137,9 @@ export default function NotificationItem(props: {
     const movementDetails = movements.find(
       (movement) => movement.code === notification.movementCode
     );
-    if (!movementDetails || !movementDetails.marketSurveyDelay)
-      return toggleSettingUpSurveyStatus();
+    if (!movementDetails || !movementDetails.marketSurveyDelay) {
+      return setIsSurveyLoading(false);
+    }
 
     const movementCropsForSurvey = movementDetails.movementCrops
       .filter((crop) => !movementDetails.hasMarketSurvey.includes(crop.id))
@@ -172,10 +173,10 @@ export default function NotificationItem(props: {
           } catch (exception) {
             console.error(exception);
             toast.show(t('actions.error'), { type: 'md_danger' });
-            toggleSettingUpSurveyStatus(false);
+            setIsSurveyLoading(false);
           }
         }}
-        disabled={isSettingUpSurvey}
+        disabled={isSurveyLoading}
       >
         <Text
           variant={item.seen ? undefined : 'TextMedium'}

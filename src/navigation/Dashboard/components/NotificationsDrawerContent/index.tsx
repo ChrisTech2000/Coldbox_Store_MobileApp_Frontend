@@ -43,7 +43,8 @@ export const useSettingUpSurvey = create<{
   toggle: (value?: boolean) => void;
 }>((set) => ({
   isLoading: false,
-  toggle: (value) => set((state) => ({ isLoading: value ?? !state.isLoading })),
+  toggle: (value) =>
+    set((state) => ({ isLoading: typeof value !== 'undefined' ? value : !state.isLoading })),
 }));
 
 function NotificationsDrawerContent(props: { notifications: Notifications }) {
@@ -55,7 +56,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   const toast = InAppNotifications.useToast();
 
   const [modalDatums, setModalDatums] = useState<CommoditySurveyDatum | undefined>(undefined);
-  const isSettingUpSurvey = useSettingUpSurvey(useShallow((store) => store.isLoading));
+  const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
 
   const revalidate = useCallback(async () => {
     await mutate(getQueryKey('getNotifications', user));
@@ -76,7 +77,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     <View tw="flex-1 justify-start">
       <View tw="p-4 bg-zinc-100 border-b-0.5 border-zinc-500 flex flex-row items-center justify-between">
         <Text variant="TitleRegular">{t('Dashboard.Notifications.text.notifications')}</Text>
-        {isSettingUpSurvey ? (
+        {isSurveyLoading ? (
           <ActivityIndicator size={18} color={paperTheme.colors.backdrop} animating />
         ) : null}
       </View>
