@@ -9,7 +9,7 @@ import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
 import type { TranslationPaths } from '#i18n/index';
-import type { CoolingUnit, DashboardProduce, Farmer } from '#types/global';
+import type { CoolingUnit, DashboardProduce, User } from '#types/global';
 
 import ProduceDetails from '#screens/Dashboard/Main/Dashboard/ProduceDetails';
 import EditCrateWeightAndPricing from '#screens/Dashboard/Main/Dashboard/ProduceDetails/EditCrateWeightAndPricing';
@@ -32,7 +32,6 @@ export type ProduceDetailsStackRoutes = {
     companyCurrency: string;
     coolingUnit: CoolingUnit | null;
     produce: DashboardProduce;
-    farmerId: number;
     companyId: number;
   };
   AddFarmerBankAccount: AccountDetailsRoutes['PayoutSettings'];
@@ -66,7 +65,7 @@ export default function ProduceDetailsStack() {
     // eslint-disable-next-line react/prop-types
     const produce = (props.route.params as { produce: DashboardProduce })?.produce;
     // eslint-disable-next-line react/prop-types
-    const farmer = (props.route.params as { farmer: Farmer })?.farmer?.user;
+    const farmer = (props.route.params as { farmer: User })?.farmer;
 
     const translationPath = farmer
       ? 'navigation.management.AddUserBankAccount'

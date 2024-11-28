@@ -364,6 +364,7 @@ class MarketplaceService extends HttpClient {
     params?: ListedCratesBaseParams
   ): Promise<GetSellerListedCrates> => {
     try {
+      console.log(params);
       const { data } = await this.get<GetSellerListedCrates>(
         EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
         { params }
