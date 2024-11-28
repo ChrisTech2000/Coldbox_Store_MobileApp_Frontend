@@ -230,7 +230,6 @@ function _buildInitialValues(
   unit: GetCoolingUnitResponse,
   companyCrops: Array<number>
 ): FormStateBuilder {
-  console.log(unit);
   return {
     getFormValues: () => {
       const crops: FormValues['crops'] = [];

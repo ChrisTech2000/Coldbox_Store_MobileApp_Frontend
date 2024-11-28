@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { type GestureResponderEvent, View } from 'react-native';
+import { type GestureResponderEvent, View, FlatList } from 'react-native';
 import { Button, RadioButton } from 'react-native-paper';
 
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -42,27 +42,16 @@ export function SelectLanguage() {
   return (
     <View tw="mt-8">
       <Select
-        label={t(['languages.options', activeLanguage])}
-        isModalOpen={isModalOpen}
-        onClick={() => setIsModalOpen(!isModalOpen)}
-        content={{
-          header: t('languages.label'),
-          options: (
-            <RadioButton.Group
-              value={selectedLanguage}
-              onValueChange={(value) => setSelectedLanguage(value as TranslationLocales)}
-            >
-              {LANGUAGE_OPTIONS.map((option, optionIdx) => (
-                <RadioButtonItem
-                  key={`${option}-${optionIdx}`}
-                  label={t(['languages.options', option])}
-                  value={option}
-                  tw="flex flex-row-reverse ml-[-10]"
-                />
-              ))}
-            </RadioButton.Group>
-          ),
-          footer: (
+        variant="sm"
+        isOpen={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        onDismiss={() => setSelectedLanguage(activeLanguage)}
+      >
+        <Select.Touchable label={t(['languages.options', activeLanguage])} />
+        <Select.Dialog
+          enableScroll
+          header={t('languages.label')}
+          FooterElement={
             <View tw="flex flex-row items-center justify-end">
               <Button mode="text" uppercase onPress={cancelLanguageUpdate}>
                 {t('actions.cancel')}
@@ -71,9 +60,28 @@ export function SelectLanguage() {
                 {t('actions.ok')}
               </Button>
             </View>
-          ),
-        }}
-      />
+          }
+        >
+          <RadioButton.Group
+            value={selectedLanguage}
+            onValueChange={(value) => setSelectedLanguage(value as TranslationLocales)}
+          >
+            <FlatList
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              data={LANGUAGE_OPTIONS}
+              keyExtractor={(item, itemIdx) => `${item}-${itemIdx}`}
+              renderItem={({ item }) => (
+                <RadioButtonItem
+                  label={t(['languages.options', item])}
+                  value={item}
+                  tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
+                />
+              )}
+            />
+          </RadioButton.Group>
+        </Select.Dialog>
+      </Select>
     </View>
   );
 }

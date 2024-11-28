@@ -8,16 +8,15 @@ import { create } from 'zustand';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
+
+import { useAuthStore } from '#stores/auth';
+import { useTranslationUtils } from '#i18n/utils';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-
-import { useTranslationUtils } from '#i18n/utils';
-import { useAuthStore } from '#stores/auth';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { cn } from '#ui/lib/cn';
 
-const DIALOG_MAX_WIDTH = Dimensions.get('window').width * 0.68;
-const screenHeight = Dimensions.get('window').height;
-const DIALOG_MAX_HEIGHT = screenHeight * (screenHeight < SMALL_SCREEN_THRESHOLD ? 0.4 : 0.31);
+const DEVICE_HEIGHT = Dimensions.get('screen').height;
 
 export enum ESortingOptions {
   MOST_RECENT = 'most_recent',
@@ -94,15 +93,10 @@ export function SortingMenu(props: SortingMenuProps) {
             setInternalSelection(store.sorting);
             setIsModalVisible(false);
           }}
-          style={{
-            backgroundColor: 'white',
-            maxWidth: DIALOG_MAX_WIDTH,
-            maxHeight: DIALOG_MAX_HEIGHT,
-            alignSelf: 'center',
-          }}
+          style={{ backgroundColor: 'white' }}
         >
           <Dialog.Title>{t('Dashboard.SortMenu.title')}</Dialog.Title>
-          <Dialog.Content tw="mb-0 android:pb-1.5">
+          <Dialog.Content tw="android:pb-1.5 p-0">
             <RadioButton.Group
               value={internalSelection ?? ''}
               onValueChange={(value) => {
@@ -116,15 +110,20 @@ export function SortingMenu(props: SortingMenuProps) {
                   key={`${item.label}-${itemIdx}`}
                   label={item.label}
                   value={item.id}
-                  tw="flex flex-row-reverse ml-[-10] w-full"
+                  tw="flex flex-row m-0 px-0 py-2 px-8 w-full"
                 />
               ))}
             </RadioButton.Group>
           </Dialog.Content>
-          <Dialog.Actions tw="mt-0 justify-around android:pt-1.5">
+          <Dialog.Actions
+            tw={cn(
+              'mt-4 space-x-2',
+              DEVICE_HEIGHT > SMALL_SCREEN_THRESHOLD
+                ? 'flex flex-row items-center justify-end'
+                : 'items-center'
+            )}
+          >
             <Button
-              tw="w-1/2"
-              mode="text"
               onPress={(evt) => {
                 evt.stopPropagation();
                 setInternalSelection(store.sorting);
@@ -134,8 +133,6 @@ export function SortingMenu(props: SortingMenuProps) {
               {t('actions.cancel')}
             </Button>
             <Button
-              tw="w-1/2"
-              mode="contained"
               onPress={(evt) => {
                 evt.stopPropagation();
                 if (internalSelection) store.onSelect(internalSelection);

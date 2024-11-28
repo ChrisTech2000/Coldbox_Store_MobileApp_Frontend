@@ -15,7 +15,6 @@ import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { GetAllCropsResponse } from '#types/api.responses';
-import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 
 import MarketplaceFormManager, {
@@ -42,19 +41,16 @@ export default function CropTypeFilters() {
     { defaultData: new Map<number, GetAllCropsResponse>() }
   );
 
-  const [isVisible, toggleVisibility] = useToggle(false);
   const [search, setSearch] = useState<string>('');
   const [internalSelection, setInternalSelection] = MarketplaceFormManager.useFieldState('crops');
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  const currentValue = useMemo(() => {
-    const names: Array<string> = [];
-    for (const cropId of internalSelection) {
-      if (names.length >= 2) break;
-      const crop = data.get(cropId);
-      if (typeof crop === 'undefined') continue;
-      names.push(crop.name);
-    }
-    return names.length > 0 ? truncate(names.join(', '), { length: 20 }) : 'All';
+  const displayValue = useMemo(() => {
+    const cropNames = internalSelection
+      .slice(0, 2)
+      .map((cropId) => data.get(cropId)?.name)
+      .filter(Boolean);
+    return cropNames.length > 0 ? truncate(cropNames.join(', '), { length: 20 }) : 'All';
   }, [internalSelection, data]);
 
   const fieldError = !!formState.errors.crops;
@@ -74,65 +70,29 @@ export default function CropTypeFilters() {
         control={control}
         render={({ field: { onChange } }) => (
           <View tw="mt-4">
-            <View tw="pr-0.5 pb-1.5">
+            <View tw="pb-2">
               <Select
                 variant="lg"
-                label="Produce / Crop Type"
-                currentValue={currentValue}
-                isModalOpen={isVisible}
-                onClick={() => {
-                  setInternalSelection(selectedCrops.map(({ value }) => value));
-                  toggleVisibility();
-                }}
-                useScrollView={false}
-                content={{
-                  header: 'Select crops',
-                  headerComponent: (
-                    <TextInput
-                      tw="w-[85%] self-center bg-white rounded-sm my-2 h-12 border border-gray-600 mb-2"
-                      label={t('actions.search')}
-                      value={search}
-                      onChangeText={(val) => setSearch(val)}
-                      left={<TextInput.Icon icon="magnify" />}
-                    />
-                  ),
-                  options: (
-                    <FlashList
-                      showsHorizontalScrollIndicator={false}
-                      showsVerticalScrollIndicator={false}
-                      data={datums}
-                      extraData={internalSelection}
-                      keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
-                      renderItem={({ item }) => (
-                        <View>
-                          <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
-                            <Text tw="text-base w-[70%]" numberOfLines={2}>
-                              {item.name}
-                            </Text>
-                            <Checkbox
-                              status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
-                              onPress={() => {
-                                setInternalSelection((prev) => {
-                                  const clone = [...prev];
-                                  const idx = clone.indexOf(item.id);
-                                  if (idx === -1) clone.push(item.id);
-                                  else clone.splice(idx, 1);
-                                  return clone;
-                                });
-                              }}
-                            />
-                          </View>
-                          <Divider />
-                        </View>
-                      )}
-                      estimatedItemSize={40}
-                      estimatedListSize={{
-                        height: deviceHeight,
-                        width: deviceWidth / 2,
-                      }}
-                    />
-                  ),
-                  footer: (
+                isOpen={isModalVisible}
+                onOpenChange={setIsModalVisible}
+                onDismiss={() => setInternalSelection(selectedCrops.map(({ value }) => value))}
+              >
+                <Select.Touchable label="Produce / Crop Type" displayValue={displayValue} />
+                <Select.Dialog
+                  enableScroll
+                  header="Select crops"
+                  StickyHeaderElement={
+                    <View tw="px-4 py-3">
+                      <TextInput
+                        tw="bg-white rounded-sm h-12 border border-gray-600"
+                        label={t('actions.search')}
+                        value={search}
+                        onChangeText={(val) => setSearch(val)}
+                        left={<TextInput.Icon icon="magnify" />}
+                      />
+                    </View>
+                  }
+                  FooterElement={
                     <View
                       tw={
                         deviceHeight > SMALL_SCREEN_THRESHOLD
@@ -179,7 +139,7 @@ export default function CropTypeFilters() {
                           onPress={(evt) => {
                             evt.stopPropagation();
                             setInternalSelection(selectedCrops.map(({ value }) => value));
-                            toggleVisibility();
+                            setIsModalVisible(false);
                           }}
                         >
                           {t('actions.cancel')}
@@ -196,16 +156,47 @@ export default function CropTypeFilters() {
                               datums.push({ label: crop.name, value });
                             }
                             onChange(datums);
-                            toggleVisibility();
+                            setIsModalVisible(false);
                           }}
                         >
                           {t('actions.ok')}
                         </Button>
                       </View>
                     </View>
-                  ),
-                }}
-              />
+                  }
+                >
+                  <FlashList
+                    scrollEnabled={false}
+                    showsVerticalScrollIndicator={false}
+                    data={datums}
+                    extraData={internalSelection}
+                    keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
+                    renderItem={({ item }) => (
+                      <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                        <Text tw="text-base w-[70%]" numberOfLines={2}>
+                          {item.name}
+                        </Text>
+                        <Checkbox
+                          status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
+                          onPress={() => {
+                            setInternalSelection((prev) =>
+                              prev.includes(item.id)
+                                ? prev.filter((id) => id !== item.id)
+                                : [...prev, item.id]
+                            );
+                          }}
+                        />
+                      </View>
+                    )}
+                    ItemSeparatorComponent={Divider}
+                    estimatedItemSize={40}
+                    estimatedListSize={{
+                      height: deviceHeight,
+                      width: deviceWidth / 2,
+                    }}
+                  />
+                </Select.Dialog>
+              </Select>
             </View>
             <Divider tw={cn('w-full bg-gray-700', fieldError && 'bg-red-700 h-0.5')} />
           </View>

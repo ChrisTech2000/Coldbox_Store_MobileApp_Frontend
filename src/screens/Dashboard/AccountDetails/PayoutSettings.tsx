@@ -280,6 +280,7 @@ function PayoutSettings(
               modalHeader={t('Dashboard.AccountDetails.PayoutSettings.form.selectAccountType')}
               occupyFullWidth
               border
+              enableScroll={false}
             />
             {errors.accountType && (
               <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">

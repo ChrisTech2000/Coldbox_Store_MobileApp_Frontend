@@ -1,6 +1,6 @@
-import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState, type SetStateAction } from 'react';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Dimensions, FlatList, type GestureResponderEvent, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import { create } from 'zustand';
 
@@ -14,11 +14,11 @@ import { cn } from '#ui/lib/cn';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 
-type SelectStore<T> = {
+interface SelectStore<T> {
   selectedItems: T[];
   onSelect: (items: T[]) => void;
   reset: () => void;
-};
+}
 
 export const createMultipleSelectStore = <T,>() =>
   create<SelectStore<T>>((set) => ({
@@ -27,7 +27,7 @@ export const createMultipleSelectStore = <T,>() =>
     reset: () => set({ selectedItems: [] }),
   }));
 
-type SelectItemProps<T> = {
+interface SelectItemProps<T> {
   autoSelect?: boolean;
   autoSelectAll?: boolean;
   datums: Array<T>;
@@ -41,15 +41,25 @@ type SelectItemProps<T> = {
   useSelectStore: ReturnType<typeof createMultipleSelectStore<T>>;
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
   itemName: (item: T) => string;
-};
+  enableScroll?: boolean;
+}
 
 const screenHeight = Dimensions.get('window').height;
 
-export default function MultipleSelectWithStore<T>({
-  useSelectStore,
-  ...rest
-}: SelectItemProps<T>) {
+const EMPTY_ARRAY: never[] = [];
+
+export default function MultipleSelectWithStore<T>(props: SelectItemProps<T>) {
+  const {
+    useSelectStore,
+    datums = EMPTY_ARRAY,
+    label = '',
+    modalHeader = '',
+    enableScroll = true,
+    ...rest
+  } = props;
+
   const store = useSelectStore();
+  const { t } = useTranslationUtils();
 
   const [isModalVisible, setIsModalVisible] = useControlledState<boolean>(
     rest.isModalVisible,
@@ -58,38 +68,65 @@ export default function MultipleSelectWithStore<T>({
 
   const [internalSelection, setInternalSelection] = useState<T[]>(store.selectedItems);
 
-  const { t } = useTranslationUtils();
-
   const handleSelect = useCallback(
     (item: T) => {
       const itemKey = rest.itemName(item);
-      if (internalSelection.some((selectedItem) => rest.itemName(selectedItem) === itemKey)) {
-        setInternalSelection(
-          internalSelection.filter((selectedItem) => rest.itemName(selectedItem) !== itemKey)
-        );
-      } else {
-        setInternalSelection([...internalSelection, item]);
-      }
+      setInternalSelection((prev) =>
+        prev.some((selectedItem) => rest.itemName(selectedItem) === itemKey)
+          ? prev.filter((selectedItem) => rest.itemName(selectedItem) !== itemKey)
+          : [...prev, item]
+      );
     },
-    [rest.itemName, internalSelection]
+    [rest.itemName]
+  );
+
+  const handleModalClose = useCallback(() => {
+    setInternalSelection(store.selectedItems);
+    setIsModalVisible(false);
+  }, [store.selectedItems, setIsModalVisible]);
+
+  const handleSelectAll = useCallback(() => {
+    setInternalSelection(datums);
+  }, [datums]);
+
+  const handleSelectNone = useCallback(() => {
+    setInternalSelection(EMPTY_ARRAY);
+  }, []);
+
+  const handleCancel = useCallback(
+    (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+      setInternalSelection(store.selectedItems);
+      setIsModalVisible(false);
+    },
+    [store.selectedItems, setIsModalVisible]
+  );
+
+  const handleConfirm = useCallback(
+    (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+      store.onSelect(internalSelection);
+      setIsModalVisible(false);
+    },
+    [store, internalSelection, setIsModalVisible]
   );
 
   useEffect(() => {
     if (
       !store.selectedItems.length &&
       (rest.autoSelect || rest.autoSelectAll) &&
-      rest.datums.length > 0
+      datums.length > 0
     ) {
       if (rest.autoSelectAll) {
-        store.onSelect(rest.datums);
-        setInternalSelection(rest.datums);
+        store.onSelect(datums);
+        setInternalSelection(datums);
       } else {
-        const firstDatum = rest.datums[0];
+        const firstDatum = datums[0];
         store.onSelect([firstDatum]);
         setInternalSelection([firstDatum]);
       }
     }
-  }, [rest.datums, store.selectedItems]);
+  }, [datums, store.selectedItems]);
 
   useFocusEffect(
     useCallback(() => {
@@ -99,7 +136,7 @@ export default function MultipleSelectWithStore<T>({
     }, [store.selectedItems])
   );
 
-  if (!rest.datums.length && rest.emptyMessage) {
+  if (!datums.length && rest.emptyMessage) {
     return (
       <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
         <Text variant="TextMedium" tw="text-base">
@@ -110,116 +147,74 @@ export default function MultipleSelectWithStore<T>({
     );
   }
 
+  const isSmallScreen = screenHeight <= SMALL_SCREEN_THRESHOLD;
+
   return (
     <View tw={rest.occupyFullWidth ? 'w-full' : ''}>
       <View tw="px-2">
         <Select
           variant="md"
-          label={rest.label}
-          isModalOpen={isModalVisible}
-          onClick={() => {
-            setInternalSelection(store.selectedItems);
-            setIsModalVisible(!isModalVisible);
-          }}
-          content={{
-            header: rest.modalHeader ?? '',
-            options: (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                data={rest.datums}
-                keyExtractor={(item, index) => `${item}-${index}`}
-                renderItem={({ item }) => {
-                  return (
-                    <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
-                      <Text tw="text-base w-[70%]" numberOfLines={2}>
-                        {rest.itemName(item)}
-                      </Text>
-                      <Checkbox
-                        tw="flex flex-row-reverse ml-[-10]"
-                        status={
-                          internalSelection.some(
-                            (selectedItem) => rest.itemName(selectedItem) === rest.itemName(item)
-                          )
-                            ? 'checked'
-                            : 'unchecked'
-                        }
-                        onPress={() => handleSelect(item)}
-                      />
-                    </View>
-                  );
-                }}
-                nestedScrollEnabled
-              />
-            ),
-            footer: (
-              <View
-                tw={
-                  screenHeight > SMALL_SCREEN_THRESHOLD
-                    ? 'flex flex-row items-center justify-end'
-                    : 'items-center'
-                }
-              >
-                <View
-                  tw={cn(
-                    'flex flex-row items-center',
-                    screenHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2'
-                  )}
-                >
-                  <Button
-                    mode="text"
-                    uppercase
-                    onPress={(evt) => {
-                      evt.stopPropagation();
-                      setInternalSelection(rest.datums);
-                    }}
-                  >
+          isOpen={isModalVisible}
+          onOpenChange={setIsModalVisible}
+          onDismiss={handleModalClose}
+        >
+          <Select.Touchable label={label} />
+          <Select.Dialog
+            enableScroll={enableScroll}
+            header={modalHeader}
+            FooterElement={
+              <View tw={isSmallScreen ? 'items-center' : 'flex flex-row items-center justify-end'}>
+                <View tw={cn('flex flex-row items-center', isSmallScreen && 'space-x-2')}>
+                  <Button mode="text" uppercase onPress={handleSelectAll}>
                     {t('actions.all')}
                   </Button>
-                  <Button
-                    mode="text"
-                    uppercase
-                    onPress={(evt) => {
-                      evt.stopPropagation();
-                      setInternalSelection([]);
-                    }}
-                  >
+                  <Button mode="text" uppercase onPress={handleSelectNone}>
                     {t('actions.none')}
                   </Button>
                 </View>
-                <View
-                  tw={cn(
-                    'flex flex-row items-center',
-                    screenHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2'
-                  )}
-                >
-                  <Button
-                    mode="text"
-                    uppercase
-                    onPress={(evt) => {
-                      evt.stopPropagation();
-                      setInternalSelection(store.selectedItems);
-                      setIsModalVisible(!isModalVisible);
-                    }}
-                  >
+                <View tw={cn('flex flex-row items-center', isSmallScreen && 'space-x-2')}>
+                  <Button mode="text" uppercase onPress={handleCancel}>
                     {t('actions.cancel')}
                   </Button>
                   <Button
                     mode="text"
                     uppercase
                     disabled={rest.disableOnEmpty && !internalSelection.length}
-                    onPress={(evt) => {
-                      evt.stopPropagation();
-                      store.onSelect(internalSelection);
-                      setIsModalVisible(!isModalVisible);
-                    }}
+                    onPress={handleConfirm}
                   >
                     {t('actions.ok')}
                   </Button>
                 </View>
               </View>
-            ),
-          }}
-        />
+            }
+          >
+            <FlatList
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              data={datums}
+              keyExtractor={(item, index) => `${item}-${index}`}
+              renderItem={({ item }) => (
+                <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                  <Text tw="text-base w-[70%]" numberOfLines={2}>
+                    {rest.itemName(item)}
+                  </Text>
+                  <Checkbox
+                    tw="flex flex-row-reverse ml-[-10]"
+                    status={
+                      internalSelection.some(
+                        (selectedItem) => rest.itemName(selectedItem) === rest.itemName(item)
+                      )
+                        ? 'checked'
+                        : 'unchecked'
+                    }
+                    onPress={() => handleSelect(item)}
+                  />
+                </View>
+              )}
+              nestedScrollEnabled
+            />
+          </Select.Dialog>
+        </Select>
       </View>
       {rest.divider && <Divider tw="bg-gray-600 my-1" />}
     </View>
