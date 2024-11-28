@@ -22,11 +22,12 @@ type FarmerSurveyProps = {
   cropName: string;
   farmerId: number;
   surveys: GetFarmerSurveysResponse | undefined;
+  disabled?: boolean;
 };
 
 const screenHeight = Dimensions.get('window').height;
 
-export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurveyProps) {
+export function FarmerSurvey({ cropId, cropName, farmerId, surveys, disabled }: FarmerSurveyProps) {
   const { t } = useTranslationUtils();
 
   const { company } = useManagementStore();
@@ -50,7 +51,7 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurv
             quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
             quantitySold: values.weightDistribution.quantitySold,
             averageSeasonInMonths: null,
-            kgInUnit: values.unitaryWeight ?? defaultValues.unitaryWeight,
+            kgInUnit: values.unitaryWeight ?? (defaultValues.unitaryWeight as unknown as number),
             currency: company?.currency ?? '',
             reasonForLoss: values.reasonsForSpoilage,
             cropId: cropId ?? -1,
@@ -82,7 +83,11 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys }: FarmerSurv
         mode="contained"
         icon="arrow-right"
         contentStyle="flex flex-row-reverse"
-        onPress={() => setIsSurveyModalVisible(true)}
+        onPress={(evt) => {
+          evt.stopPropagation();
+          setIsSurveyModalVisible(true);
+        }}
+        disabled={disabled}
       >
         {t('actions.go')}
       </Button>

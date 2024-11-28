@@ -527,6 +527,7 @@ export default {
             sellingPrice: 'विक्रय मूल्य सूचीबद्ध करें',
             potentialSellingPrice: 'संभावित विक्रय मूल्य',
             info: 'मूल्य कॉन्फ़िगरेशन उत्पाद की बिक्री को संदर्भित करता है, ठंडे भंडारण शुल्क को नहीं।',
+            unavailableId: 'ID not set', // TODO
           },
           cratesError: 'कृपया एक सकारात्मक क्रेट संख्या डालें',
           crateWeightError: 'कृपया एक सकारात्मक क्रेट वजन डालें',
@@ -789,6 +790,7 @@ export default {
         },
       },
       EditCoolingUsers: {
+        accountDetails: 'Payout Details', // TODO
         toasts: {
           warning:
             'इस खाते को हटाया नहीं जा सकता क्योंकि प्रयोक्ता ने कूलिंग यूनिट(इकाइयों) {{names}} में सक्रिय चेक-इन किया है। कृपया उपयोगकर्ता को इन वस्तुओं को लेने के लिए कमरे में आने और खाता हटाने से पहले चेक-आउट पूरा करने के लिए सूचित करें!',
@@ -952,6 +954,7 @@ export default {
         },
       },
       Coupons: {
+        title: 'Discount coupons', // TODO
         emptyMessage: 'अभी तक कोई कूपन नहीं जोड़ा गया है',
         addCoupon: 'कूपन जोड़ें',
         code: 'कूपन कोड',
@@ -1291,8 +1294,14 @@ export default {
         invalid: 'अमान्य मूल्य',
         minimumCartValue: 'ऑर्डर कम से कम ₦100 होना चाहिए।',
       },
+      method: 'Method:', // TODO
       deliveryInfo:
         'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
+      pickUpTodayInfo:
+        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
+      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+      orderOverviewSubtitle:
+        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
     },
     Analytics: {
       emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',

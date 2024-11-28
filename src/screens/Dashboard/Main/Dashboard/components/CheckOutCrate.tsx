@@ -22,10 +22,10 @@ export function CheckoutCrate({ crate }: ProduceProps) {
   }, []);
 
   return (
-    <View tw="flex flex-row w-full self-center mr-2 h-24 mt-3">
+    <View tw="flex flex-row w-full self-center mr-2 mt-3">
       <View
         tw={cn(
-          'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400',
+          'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400 py-3',
           crate.remainingShelfLife <= 7 &&
             crate.remainingShelfLife > 2 &&
             'bg-yellow-400 border-yellow-400',
@@ -34,7 +34,7 @@ export function CheckoutCrate({ crate }: ProduceProps) {
             'bg-gray-300 border-gray-300'
         )}
       />
-      <View tw="flex flex-row items-center h-full w-full space-x-2 p-1 bg-white rounded-sm border border-l-0 border-gray-300">
+      <View tw="flex flex-row items-center h-full w-full space-x-2 px-1 py-3 bg-white rounded-sm border border-l-0 border-gray-300">
         <FastImage
           resizeMode="contain"
           tw="w-20 h-16 mr-1"

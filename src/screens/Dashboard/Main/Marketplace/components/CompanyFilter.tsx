@@ -34,7 +34,7 @@ export default function CompanyFilters() {
   const { data, isLoading } = useApiCall(
     'getMarketplaceCompanyFilterOptions',
     async () => {
-      const result = await ColdtivateService.getCompanies();
+      const result = await ColdtivateService.getCompanies({ isMarketplace: true });
       return new Map<number, Company>(result?.map((item) => [item.id, item]));
     },
     undefined,

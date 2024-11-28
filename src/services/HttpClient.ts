@@ -36,7 +36,6 @@ export default class HttpClient {
         };
       },
       onUnauthorized: () => {
-        // await useAuthStore.getState().renewSession();
         useAuthStore.getState().revokeSession();
       },
       ...options,

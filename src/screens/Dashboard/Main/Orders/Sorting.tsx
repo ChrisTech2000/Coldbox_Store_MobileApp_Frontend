@@ -9,8 +9,8 @@ import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 
-import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
+import { useTranslationUtils } from '#i18n/utils';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';

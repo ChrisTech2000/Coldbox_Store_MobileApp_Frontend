@@ -6,10 +6,11 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { formatCurrencyWithSymbol } from '../utils';
 
 export default function FloatingFooter(props: {
   dailyPriceLabel: string;
-  currencySymbol: string;
+  currencyCode: string;
   commonPrice: string;
   totalPrice: string;
   cancelFunc: ButtonProps['onPress'];
@@ -23,15 +24,13 @@ export default function FloatingFooter(props: {
         <View tw="flex flex-row items-center justify-between">
           <Text tw="text-lg">{props.dailyPriceLabel}</Text>
           <Text tw="text-lg text-green-primary">
-            {props.currencySymbol}
-            {props.commonPrice}
+            {formatCurrencyWithSymbol(props.currencyCode, props.commonPrice)}
           </Text>
         </View>
         <View tw="flex flex-row items-center justify-between">
           <Text tw="text-lg">{t('Dashboard.CrateManagement.CheckIn.Setup.totalPriceLabel')}</Text>
           <Text tw="text-lg text-green-primary">
-            {props.currencySymbol}
-            {props.totalPrice}
+            {formatCurrencyWithSymbol(props.currencyCode, props.totalPrice)}
           </Text>
         </View>
       </View>

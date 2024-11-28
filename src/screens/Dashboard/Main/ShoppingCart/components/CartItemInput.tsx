@@ -74,8 +74,12 @@ export default function CartItemInput(props: {
           tw="bg-white border rounded-sm h-12 text-center rounded-md"
           keyboardType="numeric"
           placeholder="0"
-          value={value}
+          value={`${value} kg`}
           editable={false}
+          onChangeText={(text) => {
+            const newValue = text.replace(' kg', '');
+            onChange(newValue);
+          }}
           left={
             <TextInput.Icon
               icon="minus"
