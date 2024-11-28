@@ -173,6 +173,8 @@ export default function NotificationItem({
             await updateStatusHandler(item.id);
           } catch (exception) {
             console.error(exception);
+            toast.show(t('actions.error'), { type: 'md_danger' });
+            toggleSettingUpSurveyStatus(false);
           }
         }}
         disabled={isSettingUpSurvey}

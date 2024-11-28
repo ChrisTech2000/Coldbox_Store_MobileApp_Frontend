@@ -38,10 +38,6 @@ export type CommoditySurveyDatum = {
   commoditySurveys: Array<FarmerSurvey & { cropName: string }>;
 };
 
-type Props = {
-  notifications: Notifications;
-};
-
 export const useSettingUpSurvey = create<{
   isLoading: boolean;
   toggle: (value?: boolean) => void;
@@ -50,7 +46,7 @@ export const useSettingUpSurvey = create<{
   toggle: (value) => set((state) => ({ isLoading: value ?? !state.isLoading })),
 }));
 
-function NotificationsDrawerContent(props: Props) {
+function NotificationsDrawerContent(props: { notifications: Notifications }) {
   const { notifications } = props;
 
   const user = useAuthStore(useShallow((store) => store.user));
