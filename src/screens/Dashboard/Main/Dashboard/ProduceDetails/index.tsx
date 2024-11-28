@@ -191,7 +191,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
             {user?.role !== ERoles.COOLING_USER ? (
               <View tw="space-y-3">
                 <View>
-                  <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.coolingUser')}</Text>
+                  <Text tw="text-gray-400">{t('Dashboard.Marketplace.owner')}</Text>
                   <Text>{produce.owner}</Text>
                 </View>
                 <View>
