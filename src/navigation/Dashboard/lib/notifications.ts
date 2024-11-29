@@ -64,8 +64,7 @@ function _buildFetcher(t: Translator) {
           break;
         }
         case 'ORDER_REQUIRES_MOVEMENT': {
-          const date = dateFmt(item.date, 'dd-MM-yyyy HH:mm');
-          console.log(date, item.specificId);
+          // TODO
           break;
         }
         default: {

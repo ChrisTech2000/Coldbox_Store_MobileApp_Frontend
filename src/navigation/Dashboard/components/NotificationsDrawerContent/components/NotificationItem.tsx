@@ -41,7 +41,7 @@ export default function NotificationItem(props: {
     }
 
     const notification = findNotificationById(notificationId);
-    if (!notification) return setIsSurveyLoading(false);
+    if (!notification?.crates?.farmer) return setIsSurveyLoading(false);
 
     switch (notification.eventType) {
       case 'FARMER_SURVEY': {
