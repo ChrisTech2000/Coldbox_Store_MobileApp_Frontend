@@ -64,7 +64,7 @@ function _buildFetcher(t: Translator) {
           break;
         }
         case 'ORDER_REQUIRES_MOVEMENT': {
-          // TODO
+          message = t('Dashboard.Notifications.orderRequiresMovement');
           break;
         }
         default: {

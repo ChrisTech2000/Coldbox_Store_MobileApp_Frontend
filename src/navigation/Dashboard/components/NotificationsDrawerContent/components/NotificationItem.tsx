@@ -66,6 +66,13 @@ export default function NotificationItem(props: {
         break;
       }
 
+      case 'ORDER_REQUIRES_MOVEMENT': {
+        // TODO
+        // const movementId = notification.specificId;
+        // (get movement from backend and open bottom sheet)
+        break;
+      }
+
       default:
         break;
     }

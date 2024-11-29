@@ -1481,6 +1481,8 @@ export default {
         "Veuillez informer l'utilisateur {{farmer}} que ses caisses de {{crop}} doivent être retirées dès que possible ! (date d'enregistrement : {{checkIn}}, ID de l'unité de refroidissement : {{unitId}}, ID d'enregistrement : {{movementCode}}).",
       checkIn: "L'opérateur {{farmer}} a modifié l'enregistrement {{movementCode}} le {{date}}.",
       surveyAlreadyFilled: "L'enquête a déjà été remplie",
+      orderRequiresMovement:
+        'Les produits doivent être redistribués entre les caisses. Cliquez pour plus de détails sur les articles à déplacer.', // TODO
     },
   },
   tutorial: {
