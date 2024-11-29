@@ -90,12 +90,11 @@ export default function NotificationItem(props: {
         }))
       ) || [];
 
-    const notificationCrop = notification.crates.crop.toLowerCase();
-    const isAlreadyInFilledIn = surveyList
+    const isAlreadyFilledIn = surveyList
       .map((item) => item.cropName.toLowerCase())
-      .includes(notificationCrop);
+      .includes(notification.crates.crop.toLowerCase());
 
-    if (isAlreadyInFilledIn) {
+    if (isAlreadyFilledIn) {
       toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
         type: 'md_danger',
       });
