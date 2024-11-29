@@ -82,7 +82,7 @@ export default function NotificationItem(props: {
     const crops = cropsResult.status === 'fulfilled' ? cropsResult.value : [];
     const surveys = surveysResult.status === 'fulfilled' ? surveysResult.value : [];
 
-    const list =
+    const surveyList =
       surveys?.flatMap((survey) =>
         survey.co.map((item) => ({
           ...item,
@@ -90,15 +90,16 @@ export default function NotificationItem(props: {
         }))
       ) || [];
 
-    if (
-      list
-        .flatMap((el) => el.cropName.toLowerCase())
-        .includes(notification.crates.crop.toLowerCase())
-    ) {
+    const notificationCrop = notification.crates.crop.toLowerCase();
+    const isAlreadyInFilledIn = surveyList
+      .map((item) => item.cropName.toLowerCase())
+      .includes(notificationCrop);
+
+    if (isAlreadyInFilledIn) {
       toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
         type: 'md_danger',
       });
-      return;
+      return setIsSurveyLoading(false);
     }
 
     const contextualCrop = crops.find((crop) => crop.name === notification.crates.crop);
@@ -106,12 +107,12 @@ export default function NotificationItem(props: {
 
     const contextualFarmerSurvey = surveys?.at(0);
     const datum = {
-      farmerSurveysLength: list.length + 1,
+      farmerSurveysLength: surveyList.length + 1,
       companyCurrency: managementCompany?.currency ?? 'NGN',
       crops,
       contextualCrop,
       farmerId,
-      commoditySurveys: list,
+      commoditySurveys: surveyList,
       userType: (contextualFarmerSurvey?.userType as EOccupation) ?? EOccupation.FARMER,
       experience: contextualFarmerSurvey?.experience ? EExperience.OLD : EExperience.NEW,
       experienceInMonths: contextualFarmerSurvey?.experienceDuration?.toString() ?? '1',
