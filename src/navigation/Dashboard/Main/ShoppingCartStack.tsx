@@ -22,7 +22,7 @@ export type ShoppingCartStackRoutes = {
   Root: undefined;
   OrderDetails: undefined;
   OrderOverview: { orderId: number };
-  PaystackPayment: { url: string; orderId: number };
+  PaystackPayment: { url: string; orderId: number; coolingUnitIds: number[] };
   IncompleteOrderOverview: { orderId: number };
 };
 

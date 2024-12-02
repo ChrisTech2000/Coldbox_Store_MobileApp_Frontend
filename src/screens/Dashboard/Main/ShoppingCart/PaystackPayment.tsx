@@ -1,32 +1,44 @@
+import ms from 'ms';
 import React from 'react';
 import { View } from 'react-native';
-import { WebView, WebViewNavigation } from 'react-native-webview';
 import { ActivityIndicator } from 'react-native-paper';
-import ms from 'ms';
+import { WebView, WebViewNavigation } from 'react-native-webview';
 
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { paperTheme } from '#ui/lib/theme';
 import { GenericError } from '#ui/components/GenericError';
-import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { paperTheme } from '#ui/lib/theme';
 import { waitFor } from '#ui/lib/waitFor';
+import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
-import useCartStore from '#stores/shoppingCart';
+import ColdtivateService from '#services/ColdtivateService';
+import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
+import useCartStore from '#stores/shoppingCart';
+import { ERoles } from '#types/global';
 
 const TRANSACTION_COMPLETED_URL = '/payment/callback';
 const TRANSACTION_CANCELLED_URL = '/payment/cancel';
 
 function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) {
   const fetchCart = useCartStore((store) => store.fetchCart);
-  const refreshData = useDashboardStore((store) => store.refreshData);
+  const [refreshData, farmerId] = useDashboardStore((store) => [store.refreshData, store.farmerId]);
+  const user = useAuthStore((store) => store.user);
 
   async function handleNavigationStateChange(navState: WebViewNavigation) {
     const { url } = navState;
 
     if (url.includes(TRANSACTION_COMPLETED_URL)) {
-      refreshData.forEach((fn) => fn());
       props.navigation.navigate('OrderOverview', { orderId: props.route.params.orderId });
+
+      if (user?.role === ERoles.COOLING_USER) {
+        await ColdtivateService.updateFarmer({
+          farmerId: farmerId!,
+          coolingUnitIds: props.route.params.coolingUnitIds,
+          updateCoolingUnits: true,
+        });
+      }
+      refreshData.forEach((fn) => fn());
     }
 
     if (url.includes(TRANSACTION_CANCELLED_URL)) {
