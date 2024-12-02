@@ -51,7 +51,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
           <View tw="space-y-1">
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
-                {t('Dashboard.History.pdfModal.coolingUserLabel')}:
+                {t('Dashboard.Marketplace.owner')}:
               </Text>
               &nbsp;
               {movement.owner}

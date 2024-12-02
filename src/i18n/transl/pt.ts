@@ -1477,6 +1477,8 @@ export default {
         'Por favor, notifique o usuário {{farmer}} que suas paletes de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
       checkIn: 'O operador {{farmer}} editou o check-in {{movementCode}} em {{date}}.',
       surveyAlreadyFilled: 'O questionário já foi preenchido',
+      orderRequiresMovement:
+        'Produtos precisam ser redistribuídos entre paletes. Clique para detalhes sobre quais itens mover.',
     },
   },
   tutorial: {

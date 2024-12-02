@@ -18,24 +18,22 @@ import { useManagementStore } from '#stores/management';
 
 import { useSettingUpSurvey, type CommoditySurveyDatum, type Notification } from '../index';
 
-export default function NotificationItem({
-  item,
-  revalidate,
-  findNotificationById,
-}: {
+export default function NotificationItem(props: {
   item: Notification;
   revalidate: () => Promise<void>;
   findNotificationById: (notificationId: number) => Notification | undefined;
 }) {
+  const { item, revalidate, findNotificationById } = props;
+
   const toast = InAppNotifications.useToast();
   const { t } = useTranslationUtils();
 
   const managementCompany = useManagementStore(useShallow((store) => store.company));
-  const isSettingUpSurvey = useSettingUpSurvey(useShallow((store) => store.isLoading));
-  const toggleSettingUpSurveyStatus = useSettingUpSurvey((store) => store.toggle);
+  const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
+  const setIsSurveyLoading = useSettingUpSurvey((store) => store.toggle);
 
   async function updateStatusHandler(notificationId: number): Promise<void> {
-    toggleSettingUpSurveyStatus();
+    setIsSurveyLoading(true);
 
     if (!item.seen) {
       const result = await NotificationService.updateNotificationStatus(item.id);
@@ -43,7 +41,7 @@ export default function NotificationItem({
     }
 
     const notification = findNotificationById(notificationId);
-    if (!notification) return toggleSettingUpSurveyStatus();
+    if (!notification?.crates?.farmer) return setIsSurveyLoading(false);
 
     switch (notification.eventType) {
       case 'FARMER_SURVEY': {
@@ -52,7 +50,7 @@ export default function NotificationItem({
           (farmer) =>
             `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
         );
-        if (!contextualFarmer) return toggleSettingUpSurveyStatus();
+        if (!contextualFarmer) return setIsSurveyLoading(false);
         await _handleFarmerSurvey(notification, contextualFarmer.id);
         break;
       }
@@ -63,8 +61,15 @@ export default function NotificationItem({
           (farmer) =>
             `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
         );
-        if (!contextualFarmer) return toggleSettingUpSurveyStatus();
+        if (!contextualFarmer) return setIsSurveyLoading(false);
         await _handleMarketSurvey(notification, contextualFarmer.id);
+        break;
+      }
+
+      case 'ORDER_REQUIRES_MOVEMENT': {
+        // TODO
+        // const movementId = notification.specificId;
+        // (get movement from backend and open bottom sheet)
         break;
       }
 
@@ -72,7 +77,7 @@ export default function NotificationItem({
         break;
     }
 
-    toggleSettingUpSurveyStatus();
+    setIsSurveyLoading(false);
   }
 
   async function _handleFarmerSurvey(notification: Notification, farmerId: number) {
@@ -84,7 +89,7 @@ export default function NotificationItem({
     const crops = cropsResult.status === 'fulfilled' ? cropsResult.value : [];
     const surveys = surveysResult.status === 'fulfilled' ? surveysResult.value : [];
 
-    const list =
+    const surveyList =
       surveys?.flatMap((survey) =>
         survey.co.map((item) => ({
           ...item,
@@ -92,28 +97,28 @@ export default function NotificationItem({
         }))
       ) || [];
 
-    if (
-      list
-        .flatMap((el) => el.cropName.toLowerCase())
-        .includes(notification.crates.crop.toLowerCase())
-    ) {
+    const isAlreadyFilledIn = surveyList
+      .map((item) => item.cropName.toLowerCase())
+      .includes(notification.crates.crop.toLowerCase());
+
+    if (isAlreadyFilledIn) {
       toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
         type: 'md_danger',
       });
-      return;
+      return setIsSurveyLoading(false);
     }
 
     const contextualCrop = crops.find((crop) => crop.name === notification.crates.crop);
-    if (!contextualCrop) return toggleSettingUpSurveyStatus();
+    if (!contextualCrop) return setIsSurveyLoading(false);
 
     const contextualFarmerSurvey = surveys?.at(0);
     const datum = {
-      farmerSurveysLength: list.length + 1,
+      farmerSurveysLength: surveyList.length + 1,
       companyCurrency: managementCompany?.currency ?? 'NGN',
       crops,
       contextualCrop,
       farmerId,
-      commoditySurveys: list,
+      commoditySurveys: surveyList,
       userType: (contextualFarmerSurvey?.userType as EOccupation) ?? EOccupation.FARMER,
       experience: contextualFarmerSurvey?.experience ? EExperience.OLD : EExperience.NEW,
       experienceInMonths: contextualFarmerSurvey?.experienceDuration?.toString() ?? '1',
@@ -125,11 +130,11 @@ export default function NotificationItem({
 
   async function _handleMarketSurvey(notification: Notification, farmerId: number) {
     const coolingUnits = await ColdtivateService.getCoolingUnits({});
+
     const contextualUnit = coolingUnits?.find(
       (unit) => unit.name === notification.crates.coolingUnit
     );
-
-    if (!contextualUnit) return toggleSettingUpSurveyStatus();
+    if (!contextualUnit) return setIsSurveyLoading(false);
 
     const movements = await ColdtivateService.getMovementsHistory({
       coolingUnit: contextualUnit.id,
@@ -139,8 +144,9 @@ export default function NotificationItem({
     const movementDetails = movements.find(
       (movement) => movement.code === notification.movementCode
     );
-    if (!movementDetails || !movementDetails.marketSurveyDelay)
-      return toggleSettingUpSurveyStatus();
+    if (!movementDetails || !movementDetails.marketSurveyDelay) {
+      return setIsSurveyLoading(false);
+    }
 
     const movementCropsForSurvey = movementDetails.movementCrops
       .filter((crop) => !movementDetails.hasMarketSurvey.includes(crop.id))
@@ -173,9 +179,11 @@ export default function NotificationItem({
             await updateStatusHandler(item.id);
           } catch (exception) {
             console.error(exception);
+            toast.show(t('actions.error'), { type: 'md_danger' });
+            setIsSurveyLoading(false);
           }
         }}
-        disabled={isSettingUpSurvey}
+        disabled={isSurveyLoading}
       >
         <Text
           variant={item.seen ? undefined : 'TextMedium'}
