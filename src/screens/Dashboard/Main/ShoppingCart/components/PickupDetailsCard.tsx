@@ -47,7 +47,7 @@ export function PickupDetailsCard({
       <View tw="flex flex-row items-center space-x-1 mt-1 mb-2 ml-1">
         <MaterialIcon name="location-pin" size={18} color={paperTheme.colors.primary} />
         {address ? (
-          <Text numberOfLines={1}>{address}</Text>
+          <Text>{address}</Text>
         ) : (
           <ActivityIndicator animating color={paperTheme.colors.primary} size={12} />
         )}
