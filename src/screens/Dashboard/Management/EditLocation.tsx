@@ -176,6 +176,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
                 onPress={toggleModalVisibility}
                 icon={isProcessing ? undefined : 'trash-can-outline'}
                 buttonColor={paperTheme.colors.error}
+                disabled={isProcessing || isSubmitting}
                 uppercase
               >
                 {isProcessing ? <ButtonLoader /> : t('actions.delete')}
@@ -185,6 +186,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
                 mode="contained"
                 onPress={handler}
                 icon={isSubmitting ? undefined : 'pencil'}
+                disabled={isProcessing || isSubmitting}
                 uppercase
               >
                 {isSubmitting ? <ButtonLoader /> : t('actions.save')}
@@ -204,8 +206,10 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
             <Text tw="text-base">{t('Dashboard.Management.Location.modal.message')}</Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={toggleModalVisibility}>{t('actions.cancel')}</Button>
-            <Button textColor={paperTheme.colors.error} onPress={onDelete}>
+            <Button onPress={toggleModalVisibility} disabled={isProcessing}>
+              {t('actions.cancel')}
+            </Button>
+            <Button textColor={paperTheme.colors.error} onPress={onDelete} disabled={isProcessing}>
               {t('actions.ok')}
             </Button>
           </Dialog.Actions>
