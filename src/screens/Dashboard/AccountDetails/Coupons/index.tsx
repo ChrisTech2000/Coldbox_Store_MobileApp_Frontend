@@ -41,7 +41,7 @@ function CouponsRoot(props: CouponsSettingsRouteProps<'Root'>) {
         modalRef={modalRef}
         onSubmit={async (values) => {
           await CouponService.createCoupon({
-            ownedOnBehalfOfCompany: isManagementStack ? company?.id : undefined,
+            ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
             code: values.code,
             discountPercentage: Math.min(values.percentage / 100, 1.0),
           });

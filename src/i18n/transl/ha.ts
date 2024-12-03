@@ -1393,6 +1393,8 @@ export default {
         'Da fatan za a sanar da mai amfani {{farmer}} cewa ya kamata a ɗauko akwatunansa na {{crop}} da wuri-wuri! (duba kwanan wata: {{checkIn}}, ID na naúrar sanyaya: {{unitId}}, duba ID: {{movementCode}}).',
       checkIn: 'Mai aiki {{farmer}} ya gyara rajistan shiga {{movementCode}} akan {{date}}.',
       surveyAlreadyFilled: 'An riga an cika bincike',
+      orderRequiresMovement:
+        'Ana buƙatar sake rarraba kayayyakin tsakanin akwatuna. Danna don samun cikakkun bayanai akan abubuwan da za su motsa.',
     },
   },
   tutorial: {

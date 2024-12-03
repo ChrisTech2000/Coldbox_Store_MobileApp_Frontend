@@ -398,7 +398,8 @@ export type GetNotificationsResponse = Array<{
     | 'TIME_TO_PICKUP'
     | 'MARKET_SURVEY'
     | 'FARMER_SURVEY'
-    | 'CHECKIN_EDITED';
+    | 'CHECKIN_EDITED'
+    | 'ORDER_REQUIRES_MOVEMENT';
   user: number;
 }>;
 

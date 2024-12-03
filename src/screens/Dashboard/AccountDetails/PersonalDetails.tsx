@@ -1,10 +1,13 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import Clipboard from '@react-native-clipboard/clipboard';
+import colors from 'tailwindcss/colors';
 import { useSWRConfig } from 'swr';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
+import { Touchable } from '#ui/components/Touchable';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -75,12 +78,19 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
               <GenderField />
               <ContactFields />
               <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
-                <View tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md mt-3">
+                <Touchable
+                  tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md mt-3"
+                  rippleColor={colors.zinc[300]}
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    Clipboard.setString(initialFormValues.userCode);
+                  }}
+                >
                   <Text variant="TitleSmall" tw="flex-shrink" numberOfLines={2}>
                     {t('Dashboard.AccountDetails.fields.userCode')}
                   </Text>
                   <Text variant="TitleSmall">{initialFormValues.userCode}</Text>
-                </View>
+                </Touchable>
               </RBAC.ProtectedResource>
             </View>
           </KeyboardAwareScrollView>

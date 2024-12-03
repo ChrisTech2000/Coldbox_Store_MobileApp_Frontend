@@ -132,7 +132,12 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                         (acc, curr) => (acc += curr.coolingFeesAmount),
                         0
                       )}
-                      total={item?.items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
+                      total={item?.items?.reduce(
+                        (acc, curr) =>
+                          (acc +=
+                            curr.produceAmount + curr.coolingFeesAmount - curr.discountAmount),
+                        0
+                      )} // TODO: fix in BE
                     />
                   </View>
                 );

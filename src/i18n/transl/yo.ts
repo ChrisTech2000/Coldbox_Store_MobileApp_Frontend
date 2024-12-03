@@ -1367,6 +1367,8 @@ export default {
         'Jọwọ fi to olumulo {{farmer}} leti pe o yẹ ki o gbe awọn apoti rẹ ti {{crop}} ni kete bi o ti ṣee! (ṣayẹwo ni ọjọ: {{checkIn}}, ID itutu agbaiye: {{unitId}}, ṣayẹwo ni ID: {{movementCode}}).',
       checkIn: 'Oniṣẹ {{farmer}} ti ṣatunkọ ibi-iwọle {{movementCode}} ni {{date}}.',
       surveyAlreadyFilled: 'Iwadi ti kun tẹlẹ',
+      orderRequiresMovement:
+        'Awọn ọja nilo lati tun pinpin laarin awọn apoti. Tẹ fun awọn alaye lori awọn nkan ti o yẹ ki o gbe.',
     },
   },
   tutorial: {

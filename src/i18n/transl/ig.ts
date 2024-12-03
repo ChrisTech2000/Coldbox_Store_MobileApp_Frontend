@@ -1374,6 +1374,8 @@ export default {
         'Biko mee ka onye ọrụ {{farmer}} mara na ekwesịrị iburu akpa ya nke {{crop}} ozugbo enwere ike! ( lelee ụbọchị: {{checkIn}}, NJ nkeji jụrụ oyi: {{unitId}}, lelee NJ: {{movementCode}}).',
       checkIn: 'Onye ọrụ {{ Farmer}} edezila ntinye nbanye {{movementCode}} na {{date}}.',
       surveyAlreadyFilled: 'Ejupụtalarị nyocha',
+      orderRequiresMovement:
+        "Mkpụrụ osisi na akwụkwọ nri kwesịrị ikesakwa ha n'etiti igbe. Pịa maka nkọwa banyere ihe ị ga-ebufe.",
     },
   },
   tutorial: {
