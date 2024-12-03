@@ -1,11 +1,12 @@
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Dimensions, TouchableWithoutFeedback, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -68,34 +69,58 @@ export default function MarketplaceFiltersSection() {
     setVisibleModal(undefined);
   }
 
+  const closeMarketplaceTooltipsHandler = useDebouncedCallback(() => {
+    emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
+  }, 740);
+
   return (
     <React.Fragment>
-      <TouchableWithoutFeedback
-        onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
-      >
-        <View tw="bg-zinc-100 py-4 space-y-1">
-          <View tw="flex-row items-center justify-between mx-4">
-            <MarketplaceLocationFilter />
+      <View tw="bg-zinc-100 py-4 space-y-1" onTouchStart={closeMarketplaceTooltipsHandler}>
+        <View tw="flex-row items-center justify-between mx-4">
+          <MarketplaceLocationFilter />
+
+          <Touchable
+            tw="flex-row items-center justify-center space-x-2.5 p-1.5"
+            rippleColor={colors.zinc[200]}
+            onPress={(evt) => {
+              evt.stopPropagation();
+              navigation.navigate('MarketplaceFilters');
+            }}
+          >
+            <MaterialCommunityIcon name="filter-variant" size={28} color={colors.zinc[600]} />
+            <Text tw="text-base">{t('Dashboard.Marketplace.Filters.label')}</Text>
+          </Touchable>
+        </View>
+
+        <FilterChip />
+
+        <View tw="space-y-1 px-4">
+          <View tw="flex-row items-center justify-between">
+            <Text variant="TextMedium" tw="text-lg">
+              {t('Dashboard.CoolingUnitsCratesInfo.crates')}
+            </Text>
 
             <Touchable
-              tw="flex-row items-center justify-center space-x-2.5 p-1.5"
+              tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
               rippleColor={colors.zinc[200]}
               onPress={(evt) => {
                 evt.stopPropagation();
-                navigation.navigate('MarketplaceFilters');
+                setVisibleModal('crates');
               }}
             >
-              <MaterialCommunityIcon name="filter-variant" size={28} color={colors.zinc[600]} />
-              <Text tw="text-base">{t('Dashboard.Marketplace.Filters.label')}</Text>
+              <Text tw="text-base text-green-primary">
+                {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+              </Text>
+              <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
             </Touchable>
           </View>
 
-          <FilterChip />
+          <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
+            <Divider tw="bg-gray-600" />
 
-          <View tw="space-y-1 px-4">
             <View tw="flex-row items-center justify-between">
               <Text variant="TextMedium" tw="text-lg">
-                {t('Dashboard.CoolingUnitsCratesInfo.crates')}
+                {t('Dashboard.Marketplace.buyerSelection.label')}
               </Text>
 
               <Touchable
@@ -103,52 +128,24 @@ export default function MarketplaceFiltersSection() {
                 rippleColor={colors.zinc[200]}
                 onPress={(evt) => {
                   evt.stopPropagation();
-                  setVisibleModal('crates');
+                  setVisibleModal('buyer');
                 }}
               >
                 <Text tw="text-base text-green-primary">
-                  {t(OPTIONS_TRANSLATIONS[sortBy as unknown as InternalSelectionState])}
+                  {t(
+                    BUYER_OPTIONS_TRANSLATIONS[
+                      cartData?.ownedOnBehalfOfCompanyId
+                        ? 'on-behalf'
+                        : ('for-myself' as BuyerInternalSelectionState)
+                    ]
+                  )}
                 </Text>
                 <MaterialIcon name="arrow-drop-down" size={26} color={paperTheme.colors.primary} />
               </Touchable>
             </View>
-
-            <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
-              <Divider tw="bg-gray-600" />
-
-              <View tw="flex-row items-center justify-between">
-                <Text variant="TextMedium" tw="text-lg">
-                  {t('Dashboard.Marketplace.buyerSelection.label')}
-                </Text>
-
-                <Touchable
-                  tw="flex-row items-center justify-center space-x-1 py-1.5 pl-2.5 pr-1"
-                  rippleColor={colors.zinc[200]}
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    setVisibleModal('buyer');
-                  }}
-                >
-                  <Text tw="text-base text-green-primary">
-                    {t(
-                      BUYER_OPTIONS_TRANSLATIONS[
-                        cartData?.ownedOnBehalfOfCompanyId
-                          ? 'on-behalf'
-                          : ('for-myself' as BuyerInternalSelectionState)
-                      ]
-                    )}
-                  </Text>
-                  <MaterialIcon
-                    name="arrow-drop-down"
-                    size={26}
-                    color={paperTheme.colors.primary}
-                  />
-                </Touchable>
-              </View>
-            </RBAC.ProtectedResource>
-          </View>
+          </RBAC.ProtectedResource>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
 
       <Portal>
         <Dialog
