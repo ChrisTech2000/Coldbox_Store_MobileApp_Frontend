@@ -13,6 +13,7 @@ import MultipleSelectWithStore, {
 } from '#ui/components/MultipleSelectWithStore';
 import { Text } from '#ui/components/Text';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { AIR_PROD_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
@@ -30,16 +31,20 @@ const useDateRangeStore = createDataRangeStore();
 
 export const downloadAnalysisStores = [useCoolingUnitStore, useDateRangeStore];
 
-export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: DownloadDataModalProps) {
+export function DownloadDataModal(props: DownloadDataModalProps) {
+  const { isOpen, dismiss, coolingUnits, mode } = props;
+
+  const toast = InAppNotifications.useToast();
   const { t } = useTranslationUtils();
   const { selectedItems: selectedUnits } = useCoolingUnitStore();
   const { startDate, endDate } = useDateRangeStore();
   const { company } = useManagementStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const downloadDataAsXlsx = useCallback(async () => {
-    if (!startDate || !endDate) return;
+    if (!startDate || !endDate) throw new Error();
 
     const _company = company?.id;
     const _mode = mode === 'usage' ? 'usage_analysis' : 'revenue_analysis';
@@ -48,9 +53,7 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
 
     const url = `${AIR_PROD_BASE_URL}company/${_company}/${_mode}?start_date=${_startDate}&end_date=${_endDate}&cooling_unit_ids=${selectedUnits.map((cu) => cu.id).join(',')}`;
 
-    Linking.openURL(url).catch((err) => {
-      console.error('Failed to open URL: ', err);
-    });
+    await Linking.openURL(url);
   }, [selectedUnits, startDate, endDate, company]);
 
   return (
@@ -96,9 +99,19 @@ export function DownloadDataModal({ isOpen, dismiss, coolingUnits, mode }: Downl
             icon="check-circle-outline"
             contentStyle="flex flex-row-reverse"
             tw="w-full mt-4"
-            onPress={() => {
-              downloadDataAsXlsx();
-              dismiss();
+            disabled={isProcessing}
+            onPress={async (evt) => {
+              evt.stopPropagation();
+              try {
+                setIsProcessing(true);
+                await downloadDataAsXlsx();
+                dismiss();
+              } catch (exception) {
+                console.error('Failed to open URL: ', exception);
+                toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+              } finally {
+                setIsProcessing(false);
+              }
             }}
           >
             {t('actions.done')}
