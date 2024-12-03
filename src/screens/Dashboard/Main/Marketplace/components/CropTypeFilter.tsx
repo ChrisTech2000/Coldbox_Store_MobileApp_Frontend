@@ -3,7 +3,7 @@ import truncate from 'lodash/truncate';
 import React, { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { Dimensions, View } from 'react-native';
-import { Divider, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -16,11 +16,13 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
 
 import MarketplaceFormManager, {
   FilterValue,
   type FormValues,
 } from '../modules/MarketplaceFormManager';
+import LoadingConditionalRenderer from '../modules/LoadingConditionalRenderer';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -31,7 +33,7 @@ export default function CropTypeFilters() {
   const { control, watch, formState } = MarketplaceFormManager.useForm();
   const selectedCrops = watch('crops');
 
-  const { data } = useApiCall(
+  const { data, isLoading } = useApiCall(
     'getMarketplaceCropFilterOptions',
     async () => {
       const result = await ColdtivateService.getAllCrops();
@@ -165,36 +167,50 @@ export default function CropTypeFilters() {
                     </View>
                   }
                 >
-                  <FlashList
-                    scrollEnabled={false}
-                    showsVerticalScrollIndicator={false}
-                    data={datums}
-                    extraData={internalSelection}
-                    keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
-                    renderItem={({ item }) => (
-                      <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
-                        <Text tw="text-base w-[70%]" numberOfLines={2}>
-                          {item.name}
-                        </Text>
-                        <Checkbox
-                          status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
-                          onPress={() => {
-                            setInternalSelection((prev) =>
-                              prev.includes(item.id)
-                                ? prev.filter((id) => id !== item.id)
-                                : [...prev, item.id]
-                            );
-                          }}
+                  <LoadingConditionalRenderer
+                    isLoading={isLoading}
+                    fallback={
+                      <View tw="h-96">
+                        <ActivityIndicator
+                          tw="pt-8"
+                          size={26}
+                          color={paperTheme.colors.backdrop}
+                          animating
                         />
                       </View>
-                    )}
-                    ItemSeparatorComponent={Divider}
-                    estimatedItemSize={40}
-                    estimatedListSize={{
-                      height: deviceHeight,
-                      width: deviceWidth / 2,
-                    }}
-                  />
+                    }
+                  >
+                    <FlashList
+                      scrollEnabled={false}
+                      showsVerticalScrollIndicator={false}
+                      data={datums}
+                      extraData={internalSelection}
+                      keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
+                      renderItem={({ item }) => (
+                        <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                          <Text tw="text-base w-[70%]" numberOfLines={2}>
+                            {item.name}
+                          </Text>
+                          <Checkbox
+                            status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
+                            onPress={() => {
+                              setInternalSelection((prev) =>
+                                prev.includes(item.id)
+                                  ? prev.filter((id) => id !== item.id)
+                                  : [...prev, item.id]
+                              );
+                            }}
+                          />
+                        </View>
+                      )}
+                      ItemSeparatorComponent={Divider}
+                      estimatedItemSize={40}
+                      estimatedListSize={{
+                        height: deviceHeight,
+                        width: deviceWidth / 2,
+                      }}
+                    />
+                  </LoadingConditionalRenderer>
                 </Select.Dialog>
               </Select>
             </View>

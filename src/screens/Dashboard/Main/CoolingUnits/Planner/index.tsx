@@ -73,7 +73,7 @@ function CoolingUnitsPlanner() {
       </GenericFilter>
 
       <ScrollView
-        contentContainerStyle="items-center pb-10"
+        contentContainerStyle="items-center"
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -86,30 +86,32 @@ function CoolingUnitsPlanner() {
           />
         }
       >
-        <Text
-          tw={cn('self-start mb-4', screenHeight > SMALL_SCREEN_THRESHOLD ? 'ml-4' : 'mx-2')}
-          variant="titleLarge"
-          numberOfLines={2}
-        >
-          {t('Dashboard.CoolingUnitsPlanner.occupancy')}
-        </Text>
+        <View tw="pb-16">
+          <Text
+            tw={cn('self-start mb-4', screenHeight > SMALL_SCREEN_THRESHOLD ? 'ml-4' : 'mx-2')}
+            variant="titleLarge"
+            numberOfLines={2}
+          >
+            {t('Dashboard.CoolingUnitsPlanner.occupancy')}
+          </Text>
 
-        <SemiCircleChart
-          maxCapacity={MAX_CAPACITY}
-          currentAmount={capacity[selectedColumn].amount}
-          currentDate={capacity[selectedColumn].timestamp}
-        />
+          <SemiCircleChart
+            maxCapacity={MAX_CAPACITY}
+            currentAmount={capacity[selectedColumn].amount}
+            currentDate={capacity[selectedColumn].timestamp}
+          />
 
-        <Text tw="self-start mb-5 mt-10 ml-4" variant="titleMedium">
-          {t('Dashboard.CoolingUnitsPlanner.week')}
-        </Text>
+          <Text tw="self-start mb-5 mt-10 ml-4" variant="titleMedium">
+            {t('Dashboard.CoolingUnitsPlanner.week')}
+          </Text>
 
-        <WeekBarChart
-          maxCapacity={MAX_CAPACITY}
-          datums={capacity}
-          selectedIndex={selectedColumn}
-          onSelect={setSelectedColumn}
-        />
+          <WeekBarChart
+            maxCapacity={MAX_CAPACITY}
+            datums={capacity}
+            selectedIndex={selectedColumn}
+            onSelect={setSelectedColumn}
+          />
+        </View>
       </ScrollView>
     </View>
   );

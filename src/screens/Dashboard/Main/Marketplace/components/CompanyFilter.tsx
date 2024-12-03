@@ -16,11 +16,13 @@ import type { Company } from '#types/global';
 import { Checkbox } from '#ui/components/Checkbox';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
 
 import MarketplaceFormManager, {
   type FilterValue,
   type FormValues,
 } from '../modules/MarketplaceFormManager';
+import LoadingConditionalRenderer from '../modules/LoadingConditionalRenderer';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -63,14 +65,6 @@ export default function CompanyFilters() {
       ),
     [data, search]
   );
-
-  if (isLoading) {
-    return (
-      <View tw="h-[80%] pt-8">
-        <ActivityIndicator size="small" color="gray" />
-      </View>
-    );
-  }
 
   return (
     <React.Fragment>
@@ -174,39 +168,53 @@ export default function CompanyFilters() {
                     </View>
                   }
                 >
-                  <FlashList
-                    scrollEnabled={false}
-                    showsVerticalScrollIndicator={false}
-                    data={datums}
-                    extraData={internalSelection}
-                    keyExtractor={(item, itemIdx) =>
-                      `company-list-item-${item.id}-${item.name}-#${itemIdx}`
-                    }
-                    renderItem={({ item }) => (
-                      <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
-                        <Text tw="text-base w-[70%]" numberOfLines={2}>
-                          {item.name}
-                        </Text>
-                        <Checkbox
-                          status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
-                          onPress={() => {
-                            setInternalSelection((prev) => {
-                              const isSelected = prev.includes(item.id);
-                              return isSelected
-                                ? prev.filter((id) => id !== item.id)
-                                : [...prev, item.id];
-                            });
-                          }}
+                  <LoadingConditionalRenderer
+                    isLoading={isLoading}
+                    fallback={
+                      <View tw="h-96">
+                        <ActivityIndicator
+                          tw="pt-8"
+                          size={26}
+                          color={paperTheme.colors.backdrop}
+                          animating
                         />
                       </View>
-                    )}
-                    ItemSeparatorComponent={Divider}
-                    estimatedItemSize={40}
-                    estimatedListSize={{
-                      height: deviceHeight,
-                      width: deviceWidth / 2,
-                    }}
-                  />
+                    }
+                  >
+                    <FlashList
+                      scrollEnabled={false}
+                      showsVerticalScrollIndicator={false}
+                      data={datums}
+                      extraData={internalSelection}
+                      keyExtractor={(item, itemIdx) =>
+                        `company-list-item-${item.id}-${item.name}-#${itemIdx}`
+                      }
+                      renderItem={({ item }) => (
+                        <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                          <Text tw="text-base w-[70%]" numberOfLines={2}>
+                            {item.name}
+                          </Text>
+                          <Checkbox
+                            status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
+                            onPress={() => {
+                              setInternalSelection((prev) => {
+                                const isSelected = prev.includes(item.id);
+                                return isSelected
+                                  ? prev.filter((id) => id !== item.id)
+                                  : [...prev, item.id];
+                              });
+                            }}
+                          />
+                        </View>
+                      )}
+                      ItemSeparatorComponent={Divider}
+                      estimatedItemSize={40}
+                      estimatedListSize={{
+                        height: deviceHeight,
+                        width: deviceWidth / 2,
+                      }}
+                    />
+                  </LoadingConditionalRenderer>
                 </Select.Dialog>
               </Select>
             </View>
