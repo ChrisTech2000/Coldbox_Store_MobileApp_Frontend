@@ -1118,6 +1118,7 @@ export default {
       clickHere: 'Cliquez ici',
     },
     History: {
+      cropsLabel: '{{crop}} and {{amount}} more', // TODO
       priceLabel: 'Prix',
       empty:
         "Les enregistrements d'entrée et de sortie apparaîtront sur le tableau de bord lorsque vous aurez effectué au moins un enregistrement d'entrée dans une chambre.",
@@ -1132,6 +1133,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'Télécharger le reçu PDF',
+          seeMovement: 'See movement', // TODO
         },
         checkOut: {
           seeDetails: 'Voir les détails',

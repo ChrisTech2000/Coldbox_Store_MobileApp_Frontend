@@ -1113,6 +1113,7 @@ export default {
       clickHere: 'Clique aqui',
     },
     History: {
+      cropsLabel: '{{crop}} e mais {{amount}}',
       priceLabel: 'Preço',
       empty:
         'Os check-ins e check-outs aparecerão no painel quando realizar pelo menos um check-in em qualquer sala.',
@@ -1127,6 +1128,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'Descarregar recibo PDF',
+          seeMovement: 'Ver movimento',
         },
         checkOut: {
           seeDetails: 'Ver detalhes',
