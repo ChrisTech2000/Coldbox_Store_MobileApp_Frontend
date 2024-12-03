@@ -31,6 +31,7 @@ function MarketplaceRoot() {
           <MarketplaceList />
         </View>
       </ScrollView>
+
       <_PortalsWrapper />
     </React.Fragment>
   );
