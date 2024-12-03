@@ -36,11 +36,9 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
       disabled={isLoading}
       onPress={async (evt): Promise<void> => {
         evt.stopPropagation();
-        if (typeof contextualFarmer === 'undefined') {
-          toast.show(t('actions.error'), { type: 'md_danger' });
-          return;
-        }
         try {
+          if (typeof contextualFarmer === 'undefined') throw new Error(); // safe guard
+
           const result = await execute(contextualFarmer);
           if (isEmpty(result)) throw new Error('empty farmer data response');
 

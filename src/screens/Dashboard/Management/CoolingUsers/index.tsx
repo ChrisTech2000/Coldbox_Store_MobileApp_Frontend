@@ -14,6 +14,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { CoolingUsersOverlay } from '#screens/Dashboard/Tutorial/CoolingUsersOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { AIR_PROD_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import type {
@@ -31,11 +32,12 @@ import FormModal from './components/FormModal';
 import Prompt from './components/Prompt';
 
 function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
+  const toast = InAppNotifications.useToast();
+  const { t } = useTranslationUtils();
   const user = useAuthStore(useShallow((store) => store.user));
   const company = useManagementStore(useShallow((store) => store.company));
 
   const [isDownloading, toggleDownloading] = useToggle(false);
-  const { t } = useTranslationUtils();
 
   useWalkthroughStep({
     number: EOperatorTutorialSteps.LIST_COOLING_USERS_STEP,
@@ -91,13 +93,15 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
               uppercase
               onPress={async (evt) => {
                 evt.stopPropagation();
-                if (!company) return;
-                toggleDownloading();
-                const url = [AIR_PROD_BASE_URL, 'company/', company.id, '/cusers'].join('');
                 try {
-                  await Linking.openURL(url);
+                  if (!company) throw new Error();
+                  toggleDownloading();
+                  await Linking.openURL(
+                    [AIR_PROD_BASE_URL, 'company/', company.id, '/cusers'].join('')
+                  );
                 } catch (exception) {
                   console.error(exception);
+                  toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
                 } finally {
                   toggleDownloading();
                 }

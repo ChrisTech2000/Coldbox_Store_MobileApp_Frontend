@@ -67,18 +67,18 @@ export default function DeleteAction(props: Props) {
   }
 
   async function onConfirm(): Promise<void> {
-    if (typeof contextualFarmer === 'undefined' || !company) return; // safe guard
     try {
+      if (typeof contextualFarmer === 'undefined' || !company) throw new Error(); // safe guard
       toggleProcessing();
       if (!contextualFarmer.userCode) await ColdtivateService.deleteUser(userId);
       else await ColdtivateService.removeCompany({ farmerId, companyId: company.id });
       await revalidateCache();
       resetPopup();
+      toggleProcessing();
       goBack();
     } catch (exception) {
       console.error(exception);
       toast.show(t('actions.error'), { type: 'md_danger' });
-    } finally {
       toggleProcessing();
     }
   }
@@ -122,8 +122,12 @@ export default function DeleteAction(props: Props) {
           <Dialog.Actions>
             {state.showActions ? (
               <React.Fragment>
-                <Button onPress={resetPopup}>{t('actions.cancel')}</Button>
-                <Button onPress={onConfirm}>{t('actions.confirm')}</Button>
+                <Button onPress={resetPopup} disabled={isProcessing}>
+                  {t('actions.cancel')}
+                </Button>
+                <Button onPress={onConfirm} disabled={isProcessing}>
+                  {t('actions.confirm')}
+                </Button>
               </React.Fragment>
             ) : (
               <Button onPress={resetPopup}>{t('actions.close')}</Button>
