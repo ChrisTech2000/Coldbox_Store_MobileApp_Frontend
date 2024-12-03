@@ -28,22 +28,34 @@ function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) 
   async function handleNavigationStateChange(navState: WebViewNavigation) {
     const { url } = navState;
 
-    if (url.includes(TRANSACTION_COMPLETED_URL)) {
-      props.navigation.navigate('OrderOverview', { orderId: props.route.params.orderId });
+    const { orderId, coolingUnitIds } = props.route.params || {};
 
-      if (user?.role === ERoles.COOLING_USER) {
-        await ColdtivateService.updateFarmer({
-          farmerId: farmerId!,
-          coolingUnitIds: props.route.params.coolingUnitIds,
-          updateCoolingUnits: true,
-        });
+    if (!orderId) return;
+
+    if (url.includes(TRANSACTION_COMPLETED_URL)) {
+      props.navigation.navigate('OrderOverview', { orderId });
+
+      const promises: Promise<unknown>[] = [];
+
+      if (user?.role === ERoles.COOLING_USER && coolingUnitIds?.length > 0) {
+        for (const id of coolingUnitIds) {
+          promises.push(
+            ColdtivateService.updateFarmer({
+              farmerId: farmerId!,
+              coolingUnitId: id,
+              updateCoolingUnits: true,
+            })
+          );
+        }
       }
+
+      await Promise.all(promises);
       refreshData.forEach((fn) => fn());
     }
 
     if (url.includes(TRANSACTION_CANCELLED_URL)) {
-      props.navigation.navigate('IncompleteOrderOverview', { orderId: props.route.params.orderId });
-      waitFor(ms('2 second')).then(fetchCart);
+      props.navigation.navigate('IncompleteOrderOverview', { orderId });
+      await waitFor(ms('2 second')).then(fetchCart);
     }
   }
 
