@@ -307,6 +307,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
             evt.stopPropagation();
             navigation.navigate('PasswordRecoveryRequest');
           }}
+          disabled={isSubmitting}
         >
           {t('Auth.ForgotPassword.heading')}
         </Button>
