@@ -4,6 +4,7 @@ import { Dialog, Portal } from 'react-native-paper';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { paperTheme } from '#ui/lib/theme';
@@ -11,11 +12,13 @@ import { paperTheme } from '#ui/lib/theme';
 export default function RevokeCouponModal(props: {
   visible: boolean;
   onChangeVisible: (v: SetStateAction<boolean>) => void;
-  onConfirm?: () => void;
+  onConfirm?: () => Promise<void>;
 }) {
+  const toast = InAppNotifications.useToast();
   const { t } = useTranslationUtils();
 
   const [visible, onChangeVisible] = useControlledState(props.visible, props.onChangeVisible);
+  const [isRevoking, setIsRevoking] = React.useState<boolean>(false);
 
   return (
     <Portal>
@@ -34,16 +37,26 @@ export default function RevokeCouponModal(props: {
               evt.stopPropagation();
               onChangeVisible(false);
             }}
+            disabled={isRevoking}
           >
             {t('actions.cancel')}
           </Button>
           <Button
             textColor={paperTheme.colors.error}
-            onPress={(evt) => {
+            onPress={async (evt) => {
               evt.stopPropagation();
-              props.onConfirm?.();
-              onChangeVisible(false);
+              try {
+                setIsRevoking(true);
+                await props.onConfirm?.();
+                onChangeVisible(false);
+              } catch (exception) {
+                console.error(exception);
+                toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+              } finally {
+                setIsRevoking(false);
+              }
             }}
+            disabled={isRevoking}
           >
             {t('actions.confirm')}
           </Button>

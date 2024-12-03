@@ -31,9 +31,10 @@ export default function DeleteAccountAction() {
 
   async function onDelete(evt: GestureResponderEvent): Promise<void> {
     evt.stopPropagation();
-    if (!user) return; // safe guard
-    toggleProcessing();
     try {
+      toggleProcessing();
+      if (!user) throw new Error(); // safe guard
+
       switch (user?.role) {
         case ERoles.EMPLOYEE: {
           const companyId = useManagementStore.getState().company?.id;
@@ -85,7 +86,7 @@ export default function DeleteAccountAction() {
         }
 
         default:
-          return; // safe guard
+          return toggleProcessing(); // safe guard
       }
 
       displayPopup(t('Dashboard.AccountDetails.popups.default'), true); // confirmation popup
@@ -98,10 +99,10 @@ export default function DeleteAccountAction() {
   }
 
   async function onConfirm(): Promise<void> {
-    if (!user) return; // safe guard
     try {
-      resetPopup();
       toggleProcessing();
+      if (!user) throw new Error(); // safe guard
+      resetPopup();
       await ColdtivateService.deleteUser(user.id);
       resetAllStores();
       mutate(() => true, undefined, false);
@@ -152,10 +153,10 @@ export default function DeleteAccountAction() {
           <Dialog.Actions>
             {state.showActions ? (
               <React.Fragment>
-                <Button mode="text" onPress={resetPopup}>
+                <Button mode="text" onPress={resetPopup} disabled={isProcessing}>
                   {t('actions.cancel')}
                 </Button>
-                <Button mode="text" onPress={onConfirm}>
+                <Button mode="text" onPress={onConfirm} disabled={isProcessing}>
                   {t('actions.confirm')}
                 </Button>
               </React.Fragment>
