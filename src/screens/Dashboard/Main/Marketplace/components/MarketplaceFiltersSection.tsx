@@ -71,7 +71,7 @@ export default function MarketplaceFiltersSection() {
 
   const closeMarketplaceTooltipsHandler = useDebouncedCallback(() => {
     emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
-  }, 740);
+  }, 340);
 
   return (
     <React.Fragment>

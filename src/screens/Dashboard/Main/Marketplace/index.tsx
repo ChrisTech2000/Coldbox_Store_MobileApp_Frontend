@@ -1,6 +1,7 @@
-import { useIsFocused } from '@react-navigation/native';
 import React from 'react';
 import { RefreshControl, View } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -18,13 +19,17 @@ import { useMarketplaceListing } from './utils';
 function MarketplaceRoot() {
   const { isValidating, refetch } = useMarketplaceListing();
 
+  const closeMarketplaceTooltipsHandler = useDebouncedCallback(() => {
+    emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
+  }, 340);
+
   return (
     <React.Fragment>
       <MarketplaceFiltersSection />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        onTouchStart={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
+        onTouchStart={closeMarketplaceTooltipsHandler}
         refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
       >
         <View tw="flex-1 mb-20">
