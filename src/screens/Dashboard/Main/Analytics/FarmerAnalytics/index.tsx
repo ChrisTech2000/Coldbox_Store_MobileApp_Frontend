@@ -121,14 +121,14 @@ export function FarmerAnalytics() {
   }, [activeTab]);
 
   const download = useCallback(async () => {
-    if (!data) return;
-    setIsCreatingPdf(true);
     try {
+      setIsCreatingPdf(true);
+      if (!data) throw new Error(); // safe guard
       await savePDF(getPdfContent(data, t), 'farmer');
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
-      setIsCreatingPdf(false);
       console.error(exception);
+      toast.show(t('actions.error'), { type: 'md_danger' });
     } finally {
       setIsCreatingPdf(false);
     }
@@ -159,143 +159,145 @@ export function FarmerAnalytics() {
   }
 
   return (
-    <View tw="absolute bottom-0 top-0 pb-1">
-      <ScrollView tw="mx-4 mt-4 space-y-4" showsVerticalScrollIndicator={false}>
-        {!configData ? (
-          <Configuration openModal={() => setIsModalOpen(true)} />
-        ) : (
-          <View tw="space-y-4">
-            <View tw="w-full flex flex-row justify-between items-center mb-4">
-              <TouchableOpacity
-                tw="flex flex-row items-center space-x-2 justify-start"
-                onPress={onBackToMain}
-              >
-                <Icon source="arrow-left-circle-outline" size={15} />
-                <Text variant="TextMedium" tw="text-base">
-                  {t(`Dashboard.Analytics.companyTab.goBackButton`)}
-                </Text>
-              </TouchableOpacity>
-              <View tw="flex flex-row space-x-1">
+    <React.Fragment>
+      <ScrollView tw="flex-1 px-4 pt-4 mb-20" showsVerticalScrollIndicator={false}>
+        <View tw="space-y-4 pb-8">
+          {!configData ? (
+            <Configuration openModal={() => setIsModalOpen(true)} />
+          ) : (
+            <View tw="space-y-4">
+              <View tw="w-full flex flex-row justify-between items-center mb-4">
+                <TouchableOpacity
+                  tw="flex flex-row items-center space-x-2 justify-start"
+                  onPress={onBackToMain}
+                >
+                  <Icon source="arrow-left-circle-outline" size={15} />
+                  <Text variant="TextMedium" tw="text-base">
+                    {t(`Dashboard.Analytics.companyTab.goBackButton`)}
+                  </Text>
+                </TouchableOpacity>
+                <View tw="flex flex-row space-x-1">
+                  <Button
+                    mode="contained"
+                    contentStyle="bg-gray-800 h-8"
+                    icon="cog"
+                    onPress={() => setIsModalOpen(true)}
+                    labelStyle="h-5"
+                  >
+                    {t('Dashboard.Analytics.tabsShared.configureButton')}
+                  </Button>
+                </View>
+              </View>
+
+              <InnerTabs
+                activeTab={activeTab}
+                onTabSelection={(tab: Tab) => setActiveTab(tab)}
+                compactMode
+                disabled={!coolingUnits?.length}
+              />
+
+              <View tw="items-center">
                 <Button
                   mode="contained"
-                  contentStyle="bg-gray-800 h-8"
-                  icon="cog"
-                  onPress={() => setIsModalOpen(true)}
-                  labelStyle="h-5"
+                  uppercase
+                  onPress={download}
+                  icon={isCreatingPdf ? '' : 'check-circle-outline'}
+                  contentStyle="flex flex-row-reverse"
+                  tw="w-[50%] mb-4"
+                  disabled={isLoading || isCreatingPdf}
                 >
-                  {t('Dashboard.Analytics.tabsShared.configureButton')}
+                  {isCreatingPdf ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    t('Dashboard.Analytics.downloadDataButton')
+                  )}
                 </Button>
+
+                <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
+                  <Text variant="TextMedium" tw="text-base">
+                    {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
+                    <Text variant="TextMedium" tw="text-base text-green-primary">
+                      {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
+                      {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
+                    </Text>
+                  </Text>
+                  <Text variant="TextMedium" tw="text-base">
+                    {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
+                    <Text variant="TextMedium" tw="text-base text-green-primary">
+                      {configData.coolingUnits?.map((unit) => unit.name).join(', ') ?? ''}
+                    </Text>
+                  </Text>
+                </View>
+
+                {activeTab === 'crates' ? <CratesTab /> : null}
+                {activeTab === 'impact' ? <ImpactTab /> : null}
               </View>
             </View>
+          )}
 
-            <InnerTabs
-              activeTab={activeTab}
-              onTabSelection={(tab: Tab) => setActiveTab(tab)}
-              compactMode
-              disabled={!coolingUnits?.length}
-            />
+          {!activeTab ? (
+            <View>
+              <View tw="bg-gray-200 rounded-lg py-2 items-center">
+                <Logo width={50} height={50} tw="mb-4" />
+                <View tw="flex flex-row flex-wrap items-center justify-center space-x-2 space-y-2">
+                  <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
+                    <Text variant="TextMedium" tw="text-base text-white">
+                      {t(`Dashboard.Analytics.farmersAnalytics.coolingUserName`)}
+                    </Text>
+                    <Text variant="TextBold" tw="text-base text-white">
+                      {user?.firstName} {user?.lastName}
+                    </Text>
+                  </View>
 
-            <View tw="items-center">
-              <Button
-                mode="contained"
-                uppercase
-                onPress={download}
-                icon={isCreatingPdf ? '' : 'check-circle-outline'}
-                contentStyle="flex flex-row-reverse"
-                tw="w-[50%] mb-4"
-                disabled={isLoading || isCreatingPdf}
-              >
-                {isCreatingPdf ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  t('Dashboard.Analytics.downloadDataButton')
-                )}
-              </Button>
+                  <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
+                    <Text variant="TextMedium" tw="text-base text-white">
+                      {t(`Dashboard.Analytics.farmersAnalytics.coolingUserType`)}
+                    </Text>
+                    <Text variant="TextBold" tw="text-base text-white">
+                      {user?.role}
+                    </Text>
+                  </View>
 
-              <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
-                <Text variant="TextMedium" tw="text-base">
-                  {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base text-green-primary">
-                    {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
-                    {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
-                  </Text>
-                </Text>
-                <Text variant="TextMedium" tw="text-base">
-                  {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
-                  <Text variant="TextMedium" tw="text-base text-green-primary">
-                    {configData.coolingUnits?.map((unit) => unit.name).join(', ') ?? ''}
-                  </Text>
-                </Text>
-              </View>
+                  <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
+                    <Text variant="TextMedium" tw="text-base text-white">
+                      {t(`Dashboard.Analytics.farmersAnalytics.avgStorageTime`)}
+                    </Text>
+                    <Text variant="TextBold" tw="text-base text-white">
+                      {farmerImpact?.avgStorageDays?.[0] ?? 0}{' '}
+                      {t(`Dashboard.Analytics.farmersAnalytics.days`)}
+                    </Text>
+                  </View>
 
-              {activeTab === 'crates' && <CratesTab />}
-              {activeTab === 'impact' && <ImpactTab />}
-            </View>
-          </View>
-        )}
-
-        {!activeTab && (
-          <View>
-            <View tw="bg-gray-200 rounded-lg py-2 items-center">
-              <Logo width={50} height={50} tw="mb-4" />
-              <View tw="flex flex-row flex-wrap items-center justify-center space-x-2 space-y-2">
-                <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-base text-white">
-                    {t(`Dashboard.Analytics.farmersAnalytics.coolingUserName`)}
-                  </Text>
-                  <Text variant="TextBold" tw="text-base text-white">
-                    {user?.firstName} {user?.lastName}
-                  </Text>
-                </View>
-
-                <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-base text-white">
-                    {t(`Dashboard.Analytics.farmersAnalytics.coolingUserType`)}
-                  </Text>
-                  <Text variant="TextBold" tw="text-base text-white">
-                    {user?.role}
-                  </Text>
-                </View>
-
-                <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-base text-white">
-                    {t(`Dashboard.Analytics.farmersAnalytics.avgStorageTime`)}
-                  </Text>
-                  <Text variant="TextBold" tw="text-base text-white">
-                    {farmerImpact?.avgStorageDays?.[0] ?? 0}{' '}
-                    {t(`Dashboard.Analytics.farmersAnalytics.days`)}
-                  </Text>
-                </View>
-
-                <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
-                  <Text variant="TextMedium" tw="text-base text-white">
-                    {t(`Dashboard.Analytics.farmersAnalytics.coldStorageCost`)}
-                  </Text>
-                  <Text variant="TextBold" tw="text-base text-white">
-                    {(farmerImpact?.totalStorageCost?.['0'] ?? 0).toFixed(2)}
-                  </Text>
+                  <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
+                    <Text variant="TextMedium" tw="text-base text-white">
+                      {t(`Dashboard.Analytics.farmersAnalytics.coldStorageCost`)}
+                    </Text>
+                    <Text variant="TextBold" tw="text-base text-white">
+                      {(farmerImpact?.totalStorageCost?.['0'] ?? 0).toFixed(2)}
+                    </Text>
+                  </View>
                 </View>
               </View>
+              <CommonFooter
+                tabs={
+                  <InnerTabs
+                    activeTab={activeTab}
+                    onTabSelection={(tab: Tab) => setActiveTab(tab)}
+                    disabled={!configData || !coolingUnits?.length}
+                  />
+                }
+              />
             </View>
-            <CommonFooter
-              tabs={
-                <InnerTabs
-                  activeTab={activeTab}
-                  onTabSelection={(tab: Tab) => setActiveTab(tab)}
-                  disabled={!configData || !coolingUnits?.length}
-                />
-              }
-            />
-          </View>
-        )}
-
-        <ConfigurationModal
-          isOpen={isModalOpen}
-          dismiss={() => setIsModalOpen(false)}
-          confirm={(config: ConfigData) => setConfigData(config)}
-          coolingUnits={coolingUnits ?? []}
-        />
+          ) : null}
+        </View>
       </ScrollView>
-    </View>
+
+      <ConfigurationModal
+        isOpen={isModalOpen}
+        dismiss={() => setIsModalOpen(false)}
+        confirm={(config: ConfigData) => setConfigData(config)}
+        coolingUnits={coolingUnits ?? []}
+      />
+    </React.Fragment>
   );
 }

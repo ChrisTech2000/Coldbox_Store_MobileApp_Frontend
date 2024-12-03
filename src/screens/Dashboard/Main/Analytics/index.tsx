@@ -19,5 +19,7 @@ export default withSafeArea(
   withErrorBoundary(AnalyticsBase, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );
