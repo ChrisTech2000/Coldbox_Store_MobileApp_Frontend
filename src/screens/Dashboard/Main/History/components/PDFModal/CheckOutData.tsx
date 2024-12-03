@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { DataTable, Divider } from 'react-native-paper';
 
@@ -15,12 +15,19 @@ type CheckOutDataProps = {
   dismissModal: () => void;
 };
 
-export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
+export function CheckOutData(props: CheckOutDataProps) {
+  const { movement, dismissModal } = props;
+
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
   const generatePDF = useCallback(async () => {
-    const html = `
+    setIsProcessing(false);
+
+    try {
+      const html = `
     <html>
       <head>
         <style>
@@ -108,20 +115,21 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
     </html>
   `;
 
-    const fileName = t('Dashboard.History.pdfModal.downloadName', { code: movement.code });
+      const fileName = t('Dashboard.History.pdfModal.downloadName', { code: movement.code });
 
-    try {
       await savePDF(html, fileName);
-      toast.show(t('Dashboard.History.pdfModal.successMessage'), {
-        type: 'md_success',
-      });
+
+      toast.show(t('Dashboard.History.pdfModal.successMessage'), { type: 'md_success' });
       dismissModal();
-    } catch {
+    } catch (exception) {
+      console.error(exception);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
+    } finally {
+      setIsProcessing(true);
     }
-  }, [t, toast, movement]);
+  }, [t, toast, movement, dismissModal]);
 
   return (
     <React.Fragment>
@@ -191,7 +199,7 @@ export function CheckOutData({ movement, dismissModal }: CheckOutDataProps) {
         </View>
       </ScrollView>
 
-      <Button tw="mt-4" mode="contained" onPress={generatePDF}>
+      <Button tw="mt-4" mode="contained" onPress={generatePDF} disabled={isProcessing}>
         {t('Dashboard.History.pdfModal.downloadButton')}
       </Button>
     </React.Fragment>

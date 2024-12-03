@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { DataTable } from 'react-native-paper';
 
@@ -19,18 +19,19 @@ type CheckInDataProps = {
   dismissModal: () => void;
 };
 
-export function CheckInData({
-  companyName,
-  coolingUnit,
-  currency,
-  movement,
-  dismissModal,
-}: CheckInDataProps) {
+export function CheckInData(props: CheckInDataProps) {
+  const { companyName, coolingUnit, currency, movement, dismissModal } = props;
+
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
   const generatePDF = useCallback(async () => {
-    const html = `
+    setIsProcessing(true);
+
+    try {
+      const html = `
       <html>
         <head>
           <style>
@@ -126,18 +127,19 @@ export function CheckInData({
       </html>
     `;
 
-    const fileName = t('Dashboard.History.pdfModal.downloadName', { code: movement.code });
+      const fileName = t('Dashboard.History.pdfModal.downloadName', { code: movement.code });
 
-    try {
       await savePDF(html, fileName);
-      toast.show(t('Dashboard.History.pdfModal.successMessage'), {
-        type: 'md_success',
-      });
+
+      toast.show(t('Dashboard.History.pdfModal.successMessage'), { type: 'md_success' });
       dismissModal();
-    } catch {
+    } catch (exception) {
+      console.error(exception);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
+    } finally {
+      setIsProcessing(false);
     }
   }, [t, toast, movement, coolingUnit, currency, companyName]);
 
@@ -256,7 +258,7 @@ export function CheckInData({
         </DataTable>
       </ScrollView>
 
-      <Button tw="mt-4" mode="contained" onPress={generatePDF}>
+      <Button tw="mt-4" mode="contained" onPress={generatePDF} disabled={isProcessing}>
         {t('Dashboard.History.pdfModal.downloadButton')}
       </Button>
     </React.Fragment>

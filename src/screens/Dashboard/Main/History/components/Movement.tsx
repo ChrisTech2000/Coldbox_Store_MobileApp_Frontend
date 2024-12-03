@@ -64,9 +64,7 @@ export function Movement({
     return movement.movementCrops.map((crop) => crop.name).join(', ');
   }, [movement]);
 
-  const isCheckIn = useMemo(() => {
-    return movement.movementType === EMovementType.IN;
-  }, [movement]);
+  const isCheckIn = movement.movementType === EMovementType.IN;
 
   const price = useMemo(() => {
     if (!isCheckIn)
@@ -151,6 +149,7 @@ export function Movement({
     <View tw="w-full">
       <View tw="flex flex-row items-center justify-between my-2">
         <_IconByMovementType movementType={movement.movementType} />
+
         <View tw="w-[50%] mx-2 h-full flex flex-col space-y-1">
           <View tw="flex flex-row items-center flex-wrap">
             <Text variant="TextBold" tw="text-base" numberOfLines={3}>
