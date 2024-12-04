@@ -79,7 +79,7 @@ export function Movement({
 
   const price = useMemo(() => {
     if (!isCheckIn)
-      return `${movement.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
+      return `${movement.totalPrice.toFixed(2)} ${company?.currency ?? selectedCompany?.currency}`;
 
     const price = coolingUnit?.commonPricingType?.value ?? 0;
     const suffix =
@@ -248,11 +248,7 @@ export function Movement({
           </View>
 
           <View tw="px-4 pb-4">
-            <MovementDiagram
-              movement={movement}
-              coolingUnit={coolingUnit as CoolingUnit}
-              //onClose={modalRef.current?.close}
-            />
+            <MovementDiagram movement={movement} coolingUnit={coolingUnit as CoolingUnit} />
           </View>
         </Modalize>
       </Portal>
