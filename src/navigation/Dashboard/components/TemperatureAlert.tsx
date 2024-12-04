@@ -195,6 +195,7 @@ export default function TemperatureAlert() {
                         evt?.stopPropagation();
                         await dismissHandler();
                       }}
+                      disabled={form.formState.isSubmitting}
                     >
                       {t('actions.confirm')}
                     </Button>
@@ -235,6 +236,7 @@ export default function TemperatureAlert() {
                         error={hasError}
                         tw="w-full bg-transparent mt-2"
                         dense
+                        disabled={form.formState.isSubmitting}
                       />
                     );
                   }}
@@ -245,7 +247,9 @@ export default function TemperatureAlert() {
                   mode="outlined"
                   icon="check-circle-outline"
                   disabled={
-                    !form.watch('temperature') || !!form.formState.errors.temperature?.message
+                    !form.watch('temperature') ||
+                    !!form.formState.errors.temperature?.message ||
+                    form.formState.isSubmitting
                   }
                   // eslint-disable-next-line
                   onPress={form.handleSubmit(onSubmit as any)}
@@ -259,6 +263,7 @@ export default function TemperatureAlert() {
                     evt?.stopPropagation();
                     await dismissHandler();
                   }}
+                  disabled={form.formState.isSubmitting}
                 >
                   {t('Dashboard.TemperatureAlert.continueWithoutUpdate')}
                 </Button>
