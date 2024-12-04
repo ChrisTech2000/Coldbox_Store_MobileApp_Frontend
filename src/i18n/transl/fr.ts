@@ -20,14 +20,10 @@ export default {
       ha: 'Haoussa',
     },
   },
-  gender: {
-    female: 'Femme',
-    male: 'Homme',
-    other: 'Autre',
-  },
+  gender: { female: 'Femme', male: 'Homme', other: 'Autre' },
   navigation: {
     error: {
-      errorMessage: "Oups... il semble que quelque chose s'est mal passé.",
+      errorMessage: "Oups... on dirait qu'il y a eu un problème.",
       tryAgainMessage: 'Veuillez réessayer plus tard.',
     },
     auth: {
@@ -60,7 +56,7 @@ export default {
       AddRegisteredEmployee: 'Ajouter un employé enregistré',
       RegisteredEmployeeDetails: "Détails de l'employé enregistré",
       DeliveryContacts: 'Contacts de livraison',
-      AddUserBankAccount: '{{user}} Bank Account', // TODO
+      AddUserBankAccount: 'Compte bancaire {{user}}',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -73,7 +69,7 @@ export default {
       CratesInfo: 'Informations sur les caisses',
       Dashboard: 'Tableau de bord',
       History: 'Historique',
-      MarketPrice: 'Prix des cultures', // TODO
+      MarketPrice: 'Prix des récoltes',
       CoolingUnits: 'Unités de refroidissement',
       Analytics: 'Analytique',
       CheckIn: 'Enregistrement',
@@ -92,9 +88,9 @@ export default {
       MarketplaceFilters: 'Filtres',
       MarketplaceAllTab: 'Tous',
       MarketplaceFavoritesTab: 'Favoris',
-      Orders: 'Commandes',
-      MyOrders: 'Mes Commandes',
-      MySales: 'My Sales', // TODO
+      Orders: 'Ordres',
+      MyOrders: 'Mes commandes',
+      MySales: 'Mes ventes',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Centre de connaissances',
       QuitTutorial: 'Quitter le tutoriel',
@@ -114,7 +110,7 @@ export default {
       CheckIn: 'Enregistrement',
       CropList: '{{cropType}}',
       CrateSetup: 'Enregistrement',
-      CrateWeightAndPricing: 'Poids et tarification des caisses',
+      CrateWeightAndPricing: 'Poids et prix des caisses',
     },
     about: {
       comsolAgreement: 'Contrat de Licence Runtime COMSOL 6.0',
@@ -127,9 +123,7 @@ export default {
       MarketSurvey: 'Enquête de marché pour {{farmer}}',
       BaseSurvey: 'Enquête sur les utilisateurs de refroidissement',
     },
-    analytics: {
-      methodology: 'Méthodologie',
-    },
+    analytics: { methodology: 'Méthodologie' },
   },
   actions: {
     error: 'Une erreur est survenue',
@@ -156,11 +150,11 @@ export default {
     'complete-later': 'Compléter plus tard',
     'update-success': 'Mis à jour avec succès',
     'save-changes': 'Enregistrer les modifications',
-    continue: 'Continuer',
     save: 'Enregistrer',
+    continue: 'Continuer',
     update: 'mise à jour',
-    clearAll: 'Clear all', // TODO
-    apply: 'Apply', // TODO
+    clearAll: 'Effacer tout',
+    apply: 'Appliquer',
   },
   components: {
     datePicker: {
@@ -173,12 +167,12 @@ export default {
   },
   Auth: {
     welcomePopup:
-      "Bienvenue sur Coldtivate ! Si vous êtes un agriculteur, un commerçant, ou si vous souhaitez acheter des produits stockés dans les chambres froides, veuillez vous inscrire en cliquant sur \"S'inscrire en tant qu'utilisateur de refroidissement ou consommateur\". Si vous travaillez pour une entreprise de refroidissement, veuillez contacter votre responsable pour vérifier si votre entreprise est enregistrée. Si elle l'est, votre responsable devrait vous envoyer une invitation par SMS pour vous inscrire en tant qu'employé enregistré ou opérateur. Sinon, vous pouvez inscrire l'entreprise et vous enregistrer en tant qu'employé enregistré. Veuillez consulter la section \"Infos sur l'app\" pour les FAQ.",
+      'Bienvenue chez Coldtivate ! Si vous êtes un agriculteur, un commerçant ou si vous êtes intéressé par l’achat de produits stockés dans les chambres froides, veuillez vous inscrire en cliquant sur « S’inscrire en tant qu’utilisateur ou consommateur de froid ». Si vous travaillez pour une entreprise de refroidissement, veuillez contacter votre responsable pour vérifier si votre entreprise est enregistrée. Si c’est le cas, votre responsable doit vous envoyer un SMS pour vous inviter à vous inscrire en tant qu’employé enregistré ou en tant qu’opérateur. Si ce n’est pas le cas, vous pouvez vous inscrire à l’entreprise et vous inscrire en tant qu’employé enregistré. Veuillez consulter la section « Infos sur l’application » pour les FAQ.',
     Root: {
       welcome: 'Bienvenue sur Coldtivate',
       signIn: 'Se connecter',
       signUpCompany: "S'inscrire comme entreprise",
-      signUpCoolingUser: "S'inscrire comme utilisateur de refroidissement ou consommateur",
+      signUpCoolingUser: "Inscrivez-vous en tant qu'utilisateur ou consommateur de climatisation",
       appInfo: "Informations sur l'application",
     },
     SignIn: {
@@ -187,7 +181,7 @@ export default {
         registeredEmployee: {
           label: 'Employé enregistré',
           description:
-            "Membre de l'équipe de gestion du fournisseur de chambre froide. Un employé enregistré peut enregistrer l'entreprise dans l'application et inviter d'autres employés à rejoindre. Les employés enregistrés peuvent se connecter avec un e-mail ou un numéro de téléphone.",
+            "Une partie de l'équipe de gestion du fournisseur de chambres froides. Un employé inscrit peut enregistrer l'entreprise dans l'application et inviter d'autres employés à se joindre. Les employés inscrits peuvent se connecter avec leur e-mail ou leur numéro de téléphone.",
         },
         operator: {
           label: 'Opérateur',
@@ -220,13 +214,9 @@ export default {
         },
         password: {
           placeholder: 'Mot de passe',
-          messages: {
-            required: 'Le mot de passe est requis',
-          },
+          messages: { required: 'Le mot de passe est requis' },
         },
-        actions: {
-          logIn: 'Se connecter',
-        },
+        actions: { logIn: 'Se connecter' },
       },
     },
     SignUp: {
@@ -282,14 +272,8 @@ export default {
         modal: {
           warning:
             'Si vous vous inscrivez sans téléphone, certaines fonctionnalités ne fonctionneront pas :',
-          reasons: {
-            1: 'Réinitialisation du compte',
-            2: 'Réception des reçus par SMS',
-          },
-          buttons: {
-            continue: 'Continuer quand même',
-            addPhone: 'Ajouter un téléphone',
-          },
+          reasons: { '1': 'Réinitialisation du compte', '2': 'Réception des reçus par SMS' },
+          buttons: { continue: 'Continuer quand même', addPhone: 'Ajouter un téléphone' },
         },
       },
       SignUpCoolingUser: {
@@ -298,7 +282,7 @@ export default {
       },
       toasts: {
         error:
-          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
+          'Assurez-vous que vos coordonnées sont exactes et réessayez. Notez qu’un seul numéro de téléphone et une seule adresse e-mail ne peuvent être utilisés que par un seul compte.',
       },
     },
     ForgotPassword: {
@@ -309,7 +293,7 @@ export default {
         'Pour réinitialiser votre mot de passe, veuillez entrer le numéro de téléphone avec son indicatif du pays, auquel le compte est connecté.',
       phoneInputLabel: 'Numéro de téléphone',
       resetButton: 'Réinitialiser',
-      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
+      requestLimitMessage: 'Limite de demande atteinte. Réessayez dans 2 heures.',
     },
     ResetPassword: {
       schema: {
@@ -356,7 +340,7 @@ export default {
     noLocationsAvailable:
       'Bienvenue sur Coldtivate. Commencez en ajoutant des lieux à votre application dans le panneau de gestion.',
     MarketPrice: {
-      emptyState: 'Les prix du marché ne sont pas disponibles dans votre pays', // TODO
+      emptyState: 'Les prix des recoltes ne sont pas disponibles dans votre pays',
       commodityLabel: 'Marchandise',
       commodityModalTitle: 'Sélectionnez une marchandise',
       Trend: {
@@ -477,6 +461,7 @@ export default {
       CheckIn: {
         emptyState: 'Aucune boîte ajoutée pour le moment',
         addCrates: 'Ajouter des caisses',
+        cratesAddedLabel: 'Cagettes ajoutées',
         checkInWithCode: 'Enregistrement avec code',
         estimatedCost: 'Coût estimé',
         pricing: 'Tarification',
@@ -488,7 +473,6 @@ export default {
         seeMore: 'Voir plus',
         seeLess: 'Voir moins',
         listed: 'Listé',
-        cratesAddedLabel: 'Cagettes ajoutées',
         WithCode: {
           modalTitle: "Créer un enregistrement à partir d'un retrait existant",
           modalDescription:
@@ -496,7 +480,7 @@ export default {
           codeLabel: 'Ajouter le code',
           codeErrorMessage: 'Le code est requis',
           failedMessage:
-            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
+            'Échec de l’enregistrement. Assurez-vous que votre code n’a pas déjà été utilisé ou contactez l’assistance.',
         },
         SelectCropType: {
           fruits: 'Fruits',
@@ -504,9 +488,7 @@ export default {
           rootVegetables: 'Légumes-racines',
           other: 'Autres articles',
         },
-        SelectCrop: {
-          additionalInfo: 'Informations supplémentaires',
-        },
+        SelectCrop: { additionalInfo: 'Informations supplémentaires' },
         Setup: {
           selectedCrop: 'Culture sélectionnée',
           changeCropButton: 'Cliquez ici pour changer la culture',
@@ -533,7 +515,7 @@ export default {
             sellingPrice: 'Prix de vente à la liste',
             potentialSellingPrice: 'Valeur potentielle de vente',
             info: 'La configuration du prix se réfère à la vente du produit, pas aux frais de stockage au frais.',
-            unavailableId: 'ID not set', // TODO
+            unavailableId: 'ID non défini',
           },
           cratesError: 'Veuillez saisir un nombre de caisses positif',
           crateWeightError: 'Veuillez saisir un poids de caisse positif',
@@ -562,9 +544,7 @@ export default {
       temperature: 'Température',
       lastUpdated: 'Dernière mise à jour le {{date}}',
       enterTemperature: 'Saisir la température',
-      toasts: {
-        confirmation: 'Température modifiée correctement',
-      },
+      toasts: { confirmation: 'Température modifiée correctement' },
     },
     CoolingUnitsCratesInfo: {
       commodity: 'Marchandise',
@@ -584,10 +564,7 @@ export default {
       usedMarker: 'Unité de refroidissement que vous avez déjà utilisée',
     },
     Company: {
-      SelectCompany: {
-        label: 'Entreprise : {{name}}',
-        header: 'Sélectionner une entreprise',
-      },
+      SelectCompany: { label: 'Entreprise : {{name}}', header: 'Sélectionner une entreprise' },
     },
     ProduceDetails: {
       seeDetails: 'Voir les détails',
@@ -611,22 +588,22 @@ export default {
       noDTMessage:
         "Un modèle de durée de conservation n'est pas disponible pour cette marchandise particulière.",
       checkOutButton: 'Retirer',
-      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      cratesListedForSale: '{{amount}} caisse(s) marquée(s) comme étant à vendre',
       preSaleErrorOperator:
-        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
+        'Quelque chose a mal tourné. Assurez-vous que l’utilisateur dispose d’un compte Paystack valide ou contactez l’assistance.',
       preSaleErrorUser:
-        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+        'Quelque chose a mal tourné. Assurez-vous d’avoir un compte Paystack valide ou contactez l’assistance.',
       operatorNoBankAccountWarning:
-        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+        '{{name}} n’a pas de coordonnées bancaires pour recevoir des paiements pour ses ventes. Veuillez ajouter leurs coordonnées bancaires au cas où ils les auraient partagées avec vous',
       farmerNoBankAccountWarning:
-        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+        'Vous n’avez pas de compte bancaire défini pour recevoir des paiements sur vos ventes. Veuillez ajouter vos coordonnées bancaires',
       operatorNoCompanyBankAccount:
-        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+        'Cette unité de refroidissement ne prend pas en charge les listes de places de marché. Veuillez contacter le directeur de l’entreprise pour gérer cette affaire.',
       employeeNoBankAccount:
-        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
-      addBankAccountButton: 'Add bank account details', // TODO
+        'Cette société n’a pas de compte bancaire de paiement configuré qui permet de recevoir des fonds pour les produits et les frais de refroidissement vendus sur le marché. Configurez-le pour permettre aux caisses de vos unités de refroidissement d’être répertoriées sur le marché.',
+      addBankAccountButton: 'Ajouter des coordonnées bancaires',
       addBankAccountHeader:
-        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+        'Vous configurez les coordonnées bancaires pour le compte de {{name}}. Veuillez insérer ces données avec soin, car vous ne pourrez pas les modifier par la suite.',
     },
     SearchFilter: {
       detailsMessage:
@@ -664,10 +641,7 @@ export default {
       },
       Location: {
         emptyState: "Aucun lieu ajouté pour l'instant. Cliquez sur le signe + pour en ajouter un.",
-        text: {
-          invited: 'Invité ({{amount}})',
-          registered: 'Enregistré ({{amount}})',
-        },
+        text: { invited: 'Invité ({{amount}})', registered: 'Enregistré ({{amount}})' },
         chips: {
           address: 'Adresse',
           coordinates: 'Coordonnées',
@@ -685,66 +659,47 @@ export default {
           streetNumber: 'Numéro de rue',
         },
         fieldErrorMessages: {
-          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
-          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+          latitude: 'Entrez un nombre entre -90 et 90 (par exemple, 34.0522)',
+          longitude: 'Entrez un nombre entre -180 et 180 (par exemple, -118.2437)',
         },
         modal: {
           message:
             'Cette opération supprimera toutes les unités de refroidissement associées à ce lieu. Voulez-vous continuer?',
         },
-        actions: {
-          currentLocation: 'Choisir le lieu actuel',
-        },
+        actions: { currentLocation: 'Choisir le lieu actuel' },
         toasts: {
           addLocationSuccess: 'Lieu ajouté avec succès',
           editLocationSuccess: 'Lieu modifié avec succès',
           removeLocationSuccess: 'Le lieu {{name}} a été supprimé avec succès.',
           failedToFetchLocation:
             "Impossible de récupérer l'emplacement. Veuillez vérifier l'adresse et réessayer.",
-          positionCancelled: 'Location request canceled.', // TODO
-          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
-          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
-          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
+          positionCancelled: 'Demande de localisation annulée.',
+          positionUnauthorized: 'Emplacement refusé. Veuillez accorder la permission de continuer.',
+          locationUnavailable: 'Localisation désactivée. Veuillez activer pour continuer.',
+          locationSubmissionError:
+            'Une erreur s’est produite. Veuillez vérifier votre position et réessaye',
         },
       },
       Operators: {
         banner:
           "Après avoir ajouté l'utilisateur, il recevra un SMS avec un lien d'invitation, où il pourra activer son compte.",
-        text: {
-          gender: 'Genre',
-          ma: 'Homme',
-          fe: 'Femme',
-          ot: 'Autre',
-        },
+        text: { gender: 'Genre', ma: 'Homme', fe: 'Femme', ot: 'Autre' },
         fields: {
           selectCoolingUnit: 'Sélectionner une unité de refroidissement',
           coolingUnits: 'Unité(s) de refroidissement',
         },
-        actions: {
-          invite: 'Inviter',
-          save: 'Enregistrer les modifications',
-        },
+        actions: { invite: 'Inviter', save: 'Enregistrer les modifications' },
       },
       AddOperator: {
         messages: {
           operator:
             "Pour rejoindre l'application Coldtivate en tant qu'Opérateur, rendez-vous sur : {{link}}",
         },
-        toasts: {
-          success: 'Opérateur invité avec succès',
-        },
+        toasts: { success: 'Opérateur invité avec succès' },
         phoneFormat: 'Assurez-vous que le numéro de téléphone saisi a un code pays.',
       },
-      EditOperator: {
-        toasts: {
-          success: 'Opérateur modifié avec succès',
-        },
-      },
-      AddCoolingUser: {
-        toasts: {
-          add: 'Ajouter un utilisateur de refroidissement',
-        },
-      },
+      EditOperator: { toasts: { success: 'Opérateur modifié avec succès' } },
+      AddCoolingUser: { toasts: { add: 'Ajouter un utilisateur de refroidissement' } },
       CompanyDetails: {
         labels: {
           name: 'Nom',
@@ -759,12 +714,10 @@ export default {
           commodity: 'Sélectionner une marchandise',
           currency: 'Sélectionner une devise',
         },
-        actions: {
-          save: 'Sauvegarder les modifications',
-        },
+        actions: { save: 'Sauvegarder les modifications' },
         toasts: {
           success: 'Modifié avec succès',
-          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
+          photoLibrary: "Autorisation refusée : veuillez activer l'accès à votre photothèque.",
         },
       },
       RegisteredEmployee: {
@@ -778,9 +731,7 @@ export default {
       AddRegisteredEmployee: {
         message:
           "Pour rejoindre l'application Coldtivate en tant qu'Employé enregistré, rendez-vous sur : {{link}}",
-        toasts: {
-          success: 'Employé enregistré invité avec succès',
-        },
+        toasts: { success: 'Employé enregistré invité avec succès' },
       },
       CoolingUsers: {
         modals: {
@@ -797,7 +748,7 @@ export default {
         },
       },
       EditCoolingUsers: {
-        accountDetails: 'Payout Details', // TODO
+        accountDetails: 'Détails du paiement',
         toasts: {
           warning:
             "Ce compte ne peut pas être supprimé car l'utilisateur a des check-ins actifs dans les unités de refroidissement {{names}}. Veuillez informer l'utilisateur de venir dans la pièce pour récupérer ces articles et compléter les check-outs avant de supprimer le compte !",
@@ -805,7 +756,7 @@ export default {
             "Êtes-vous sûr de vouloir supprimer cet utilisateur de votre liste d'utilisateurs de refroidissement? Cette opération supprimera cet utilisateur de refroidissement et ne pourra pas être annulée !",
           edit: 'Utilisateur de refroidissement modifié avec succès',
           noCoolingUnits: "Vous n'avez pas encore d'unités de refroidissement",
-          noSurveys: 'No surveys have been completed yet.', // TODO
+          noSurveys: 'Aucun sondage n’a encore été réalisé.',
           updateSuccess: 'Mise à jour réussie',
         },
         pdf: {
@@ -889,10 +840,7 @@ export default {
             sensorFieldDesc: 'Sélectionnez votre champ de capteur',
             field: 'Champ',
           },
-          figorr: {
-            apiKey: 'Clé API',
-            deviceTag: "Étiquette de l'appareil",
-          },
+          figorr: { apiKey: 'Clé API', deviceTag: "Étiquette de l'appareil" },
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: "C'est une salle de stockage située à la porte de la ferme",
@@ -900,17 +848,8 @@ export default {
           MOVABLE_UNIT: "C'est une unité mobile (par exemple, un camion réfrigéré)",
           OTHER: 'Autre',
         },
-        pricing: {
-          label: 'Type de prix',
-          PERIODICITY: 'Par jour',
-          FIXED: 'Fixe',
-          day: 'jour',
-        },
-        metricUnit: {
-          label: 'Unité',
-          KILOGRAMS: 'kg',
-          CRATES: 'Caisse',
-        },
+        pricing: { label: 'Type de prix', PERIODICITY: 'Par jour', FIXED: 'Fixe', day: 'jour' },
+        metricUnit: { label: 'Unité', KILOGRAMS: 'kg', CRATES: 'Caisse' },
         toasts: {
           addSuccess: 'Unité de refroidissement ajoutée avec succès',
           integrationError:
@@ -924,10 +863,7 @@ export default {
           askDelete:
             'Cette opération supprimera cette unité de refroidissement ainsi que son historique. Voulez-vous continuer?',
         },
-        buttons: {
-          viewExisting: "Voir l'existant",
-          editPricing: 'Modifier les prix',
-        },
+        buttons: { viewExisting: "Voir l'existant", editPricing: 'Modifier les prix' },
         toasts: {
           editSuccess: 'Unité de refroidissement modifiée avec succès',
           cantDelete:
@@ -953,9 +889,7 @@ export default {
         },
       },
       RevenueAnalysis: {
-        summary: {
-          total: 'Revenu total',
-        },
+        summary: { total: 'Revenu total' },
         paymentType: {
           label: 'Sélectionner les méthodes de paiement :',
           cash: 'Espèces',
@@ -964,7 +898,7 @@ export default {
         },
       },
       Coupons: {
-        title: 'Discount coupons', // TODO
+        title: 'Coupons de reduction',
         emptyMessage: "Aucun coupon n'a encore été ajouté",
         addCoupon: 'Ajouter un coupon',
         code: 'Code du coupon',
@@ -977,9 +911,9 @@ export default {
     },
     Marketplace: {
       buyerSelection: {
-        onBehalfOfCompany: 'Buy on behalf of company', // TODO
-        forMyself: 'Buy for myself', // TODO
-        label: 'Buyer', // TODO
+        onBehalfOfCompany: "Acheter au nom de l'entreprise",
+        forMyself: 'Acheter pour moi-même',
+        label: 'Acheteur',
       },
       sorting: {
         'price-asc': 'Prix croissant',
@@ -987,30 +921,26 @@ export default {
         'nearby-me': 'Près de moi',
       },
       distance: {
-        withing5Km: '1 to 5 KM away', // TODO
-        within10Km: '5 to 10 KM away', // TODO
-        within25Km: '10 to 25 KM away', // TODO
-        beyond25Km: 'More than 25 KM away', // TODO
+        withing5Km: 'À 1 à 5 KM',
+        within10Km: 'À 5 à 10 KM',
+        within25Km: 'De 10 à 25 KM',
+        beyond25Km: 'À plus de 25 KM',
       },
       priceConfig:
         'La configuration des prix concerne la vente de produits, pas les frais de stockage réfrigéré.',
       addToCart: {
-        buyFullCrate: 'Buy full crate', // TODO
         addToCartButton: 'Ajouter au panier et continuer vos achats',
+        buyFullCrate: 'Achetez une caisse complète',
         selectQuantity: 'Sélectionnez la quantité',
-        goToCart: 'Go to Cart Summary', // TODO
+        goToCart: 'Ajouter au panier et voir le résumé',
       },
       currentLocation: 'Localisation actuelle',
       filterError:
         'Une erreur est survenue. Veuillez vérifier les fautes de frappe et vous assurer que la ville saisie est située au Nigéria.',
-      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
-      owner: 'Owner', // TODO
+      standardCrateWeight: 'Le poids standard de la caisse est de {{value}} kg',
+      owner: 'Propriétaire',
       priceRange: 'Range Price / KG',
-      Filters: {
-        min: 'Min',
-        max: 'Max',
-        label: 'Filters',
-      },
+      Filters: { min: 'Min', max: 'Max', label: 'Filters' },
       maxDistance: 'Max Distance',
     },
     AccountDetails: {
@@ -1029,13 +959,11 @@ export default {
         location: 'Emplacement',
         userCode: "Code d'importation de l'utilisateur de refroidissement",
       },
-      toasts: {
-        success: 'Mise à jour réussie',
-      },
+      toasts: { success: 'Mise à jour réussie' },
       sections: {
         sellerSettings: 'Paramètres du vendeur',
+        companySellerSettings: 'Paramètres du vendeur (entreprise)',
         buyerSettings: "Paramètres de l'acheteur",
-        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'Détails',
       },
       ContactsSharing: {
@@ -1045,8 +973,8 @@ export default {
       PayoutSettings: {
         addTitle: 'Veuillez insérer les informations de votre compte bancaire',
         editTitle: 'Les informations de votre compte bancaire',
-        addTittleForCompany: "Please insert you company's bank account information", //TODO
-        editTitleForCompany: "Your company's bank account information", //TODO
+        addTittleForCompany: "Please insert you company's bank account information",
+        editTitleForCompany: "Your company's bank account information",
         form: {
           nameLabel: 'Nom du compte',
           namePlaceholder: 'Insérer le nom du compte',
@@ -1058,10 +986,7 @@ export default {
           bank: 'Banque',
           accountType: 'Type de compte',
           selectAccountType: 'Sélectionner le type de compte',
-          accountTypes: {
-            personal: 'Personnel',
-            business: 'Entreprise',
-          },
+          accountTypes: { personal: 'Personnel', business: 'Entreprise' },
           errors: {
             accountName: 'Le nom du compte est requis',
             account: 'Le numéro de compte est requis',
@@ -1118,7 +1043,7 @@ export default {
       clickHere: 'Cliquez ici',
     },
     History: {
-      cropsLabel: '{{crop}} and {{amount}} more', // TODO
+      cropsLabel: '{{crop}} et {{amount}} de plus',
       priceLabel: 'Prix',
       empty:
         "Les enregistrements d'entrée et de sortie apparaîtront sur le tableau de bord lorsque vous aurez effectué au moins un enregistrement d'entrée dans une chambre.",
@@ -1133,16 +1058,14 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'Télécharger le reçu PDF',
-          seeMovement: 'See movement', // TODO
+          seeMovement: 'Voir le mouvement',
         },
         checkOut: {
           seeDetails: 'Voir les détails',
           smsReceipt: 'Télécharger le reçu SMS',
           marketSurvey: "Remplir l'enquête de marché",
         },
-        checkIn: {
-          edit: "Modifier l'enregistrement d'entrée",
-        },
+        checkIn: { edit: "Modifier l'enregistrement d'entrée" },
       },
       detailsModal: {
         operatorNameLabel: "Nom de l'opérateur de sortie",
@@ -1239,20 +1162,16 @@ export default {
       },
     },
     MyOrders: {
-      coolingFees: 'Cooling fees', // TODO
-      soldFor: 'Sold for', // TODO
-      ownedBy: 'Owned by', // TODO
-      you: 'You', // TODO
-      sort: {
-        mostRecent: 'Le plus récent',
-        oldest: 'Le plus ancien',
-        date: 'Date',
-      },
+      coolingFees: 'Frais de refroidissement',
+      soldFor: 'Vendu pour',
+      ownedBy: 'Propriétaire',
+      you: 'Vous',
+      sort: { mostRecent: 'Le plus récent', oldest: 'Le plus ancien', date: 'Date' },
       status: {
-        'payment-pending': 'Payment Pending', // TODO
-        'payment-expired': 'Payment Expired', // TODO
-        cancelled: 'Cancelled', // TODO
-        paid: 'Paid', // TODO
+        'payment-pending': 'Paiement en attente',
+        'payment-expired': 'Paiement en attente',
+        cancelled: 'Annulé',
+        paid: 'Payé',
       },
       title: 'Aperçu des commandes',
       orderId: 'ID de commande',
@@ -1262,9 +1181,9 @@ export default {
       backToTopButton: 'Retour en haut',
     },
     ShoppingCart: {
-      ownership: 'Change cart ownership to {{name}}', // TODO
+      ownership: 'Changer la propriété du panier en {{name}}',
       changeOwnership:
-        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
+        'Remplacez la propriété du panier par {{name}}. Cela peut affecter le contenu de votre panier, y compris l’enlèvement éventuel de certaines caisses qui pourraient ne pas être disponibles après ce changement. Êtes-vous sûr de vouloir continuer ?',
       empty: 'Votre panier est vide',
       daysLeft: 'jours restants',
       weight: 'KG disponibles',
@@ -1277,7 +1196,7 @@ export default {
       discount: 'Remise',
       fees: 'Frais de service',
       marketFees: 'Frais de marché',
-      coolingFees: 'Cooling fee', // TODO
+      coolingFees: 'Frais de refroidissement',
       viewContacts: 'Voir le(s) contact(s)',
       contactsForDelivery: 'Contact(s) pour les informations de livraison',
       gotItButton: 'Compris!',
@@ -1298,24 +1217,26 @@ export default {
       redeemCoupon: 'Échanger le coupon',
       couponPlaceholder: 'Ex. 20OFF',
       discountsApplied: 'Remises appliquées',
+      method: 'Méthode:',
+      deliveryInfo:
+        'Notez que les frais de livraison dépendent du prestataire. Si la livraison est prévue pour demain, des frais de refroidissement de {{value}} seront également appliqués.',
+      pickUpTodayInfo:
+        'Assurez-vous de récupérer vos produits avant la fin de la journée pour éviter des frais de refroidissement supplémentaires.',
+      keepInStorageInfo:
+        'Les frais de refroidissement seront appliqués lors du prelevement de votre commande.',
+      orderOverviewSubtitle:
+        'Vous pouvez consulter ces informations sous l’onglet « Mes commandes » de l’écran « Marketplace ».',
       pickupModal: {
-        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
+        today:
+          'Veuillez récupérer votre commande chez {{company}}, situé à {{location}}, aujourd’hui.',
+        storage: 'Vos caisses sont maintenant stockées chez {{company}}, situé sur {{location}}.',
         delivery:
-          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+          'Veuillez contacter les numéros disponibles pour organiser la livraison. Vous pouvez voir la liste des options de livraison sous « Détails de la commande ».',
       },
       errors: {
         invalid: 'Valeur invalide',
         minimumCartValue: "La commande doit être d'au moins ₦100.",
       },
-      method: 'Method:', // TODO
-      deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
-      pickUpTodayInfo:
-        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
-      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
-      orderOverviewSubtitle:
-        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
     },
     Analytics: {
       emptyState: 'Aucune donnée à afficher',
@@ -1465,9 +1386,7 @@ export default {
       },
     },
     Notifications: {
-      text: {
-        notifications: 'Notifications',
-      },
+      text: { notifications: 'Notifications' },
       sensorError:
         "Le capteur pour la chambre froide {{unitName}} n'a pas envoyé de données au cours des 12 dernières heures. Veuillez entrer les données manuellement en attendant que le problème soit résolu.",
       survey:
@@ -1484,13 +1403,13 @@ export default {
       checkIn: "L'opérateur {{farmer}} a modifié l'enregistrement {{movementCode}} le {{date}}.",
       surveyAlreadyFilled: "L'enquête a déjà été remplie",
       orderRequiresMovement:
-        'Les produits doivent être redistribués entre les caisses. Cliquez pour plus de détails sur les articles à déplacer.', // TODO
+        'Les produits doivent être redistribués entre les caisses. Cliquez pour voir les détails des articles à déplacer.',
     },
   },
   tutorial: {
     welcome: 'Bienvenue sur Coldtivate! Ceci est un guide des fonctions.',
     farmerWelcome:
-      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
+      'Bienvenue chez Coldtivate ! Ce tutoriel vous aidera à comprendre comment utiliser l’application',
     quit: 'Quitter le tutoriel',
     congratulations:
       "Félicitations ! Vous avez terminé le tutoriel ! Retournez au tableau de bord pour commencer à utiliser l'application.",
@@ -1508,7 +1427,7 @@ export default {
       managementNavigation:
         'Dans le menu, vous pouvez naviguer vers "Gestion" et cliquer là pour ajouter ou modifier des utilisateurs de refroidissement. Allez-y et essayez.',
       operatorManagementNavigation:
-        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
+        'Dans le menu, vous pouvez accéder à « Gestion » et appuyer dessus pour ajouter ou modifier des utilisateurs de refroidissement',
       addCoolingUser:
         'Les utilisateurs de refroidissement qui ne se sont pas inscrits sur Coldtivate peuvent être ajoutés en insérant leurs coordonnées (nom, numéro de téléphone). Les utilisateurs de refroidissement déjà inscrits dans l\'application peuvent être ajoutés par code. Ils peuvent trouver leur code sur leur profil -> "Détails du compte" -> "Code d\'importation de l\'utilisateur de refroidissement".',
       navigateToCoolingUser: "Allez-y et cliquez sur l'onglet des utilisateurs de refroidissement",
@@ -1555,7 +1474,7 @@ export default {
       accountDetailsNavigation:
         'Dans le menu, vous pouvez naviguer vers "Détails du compte" et cliquer là pour voir/modifier un ensemble de configurations liées à votre compte. Allez-y et essayez.',
       coolingUserSurvey:
-        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
+        'La première fois que vous ouvrez l’application, vous êtes invité à répondre à un court sondage. Il est très important que vous remplissiez l’enquête pour que l’application vous fournisse des recommandations personnalisées. Si vous ne pouvez pas remplir l’enquête la première fois que vous vous connectez, vous pouvez accéder à l’enquête dans « Détails du compte » -> « Enquête sur le refroidissement des utilisateurs ». Merci d’avoir pris le temps de répondre au sondage !',
       coolingUserCode:
         'La première fois que vous arrivez dans une chambre froide pour stocker vos produits, l\'opérateur vous demandera de lui fournir votre code personnel, pour vous ajouter à la liste des utilisateurs de la chambre froide. Vous pouvez trouver ce code dans "Détails personnels" -> "Code d\'importation de l\'utilisateur de refroidissement".',
       knowledgeHub:
@@ -1576,14 +1495,14 @@ export default {
       farmerHistory:
         'Dans l\'onglet "Historique", vous pouvez voir un résumé de tous les enregistrements et départs que vous avez effectués dans chaque chambre. Si vous voyez un point rouge à côté d\'un départ, veuillez cliquer sur les trois points et "Remplir le questionnaire de marché". Ici, nous aimerions comprendre à quel prix vous avez vendu vos produits, et si quelque chose a été gâté. Nous utilisons ces informations pour améliorer les opérations à la chambre froide, donc il est important que vous complétiez le questionnaire !',
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
+        'Pour vérifier les unités de refroidissement près de chez vous, vous pouvez accéder aux boutons en bas des écrans, en cliquant sur l’onglet « Plus », « Unités de refroidissement » et en sélectionnant « Carte ». En cliquant sur chaque épingle sur la carte, vous pouvez voir le type d’unité et le prix du stockage.',
       farmersUnitsPlanner:
         'Dans l\'onglet "Unités de refroidissement", vous pouvez trouver la Carte, l\'occupation actuelle et future de la chambre (dans "Planificateur") et la température de la chambre (dans "Conditions de la chambre"). Ces écrans vous aident à surveiller à distance ce qui se passe dans les chambres froides, sans avoir à vous y rendre en personne pour vérifier !',
       marketPrice:
-        "Si vous voyez un onglet nommé \"Prix des cultures\", vous pouvez consulter les prix de différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu'une prévision des prix pour l'avenir. Pour le moment, cette option n'est disponible que pour certains pays.", // TODO
+        "Si vous voyez un onglet intitulé « Prix des cultures », vous pouvez consulter les prix de différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu'une prévision des prix pour l'avenir. Pour l'instant, cette option n'est disponible que pour certains pays .",
       farmerFinalStep:
         "Félicitations ! Vous avez terminé le tutoriel ! Si vous avez des questions concernant l'application, nous vous recommandons de consulter la FAQ, de demander à un opérateur de la chambre froide, ou de nous écrire à app@yourvcca.org.",
-      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
+      more: 'Si vous voyez un onglet nommé « Prix des cultures », vous pouvez vérifier les prix des différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu’une prévision des prix pour l’avenir. Pour l’instant, cette option n’est disponible que pour certains pays.',
     },
   },
 } satisfies Translations;
