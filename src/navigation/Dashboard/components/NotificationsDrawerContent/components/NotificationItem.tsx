@@ -163,7 +163,9 @@ export default function NotificationItem(props: {
   async function _handleOrderRequiresMovement(notification: Notification, farmerId: number) {
     const coolingUnits = await ColdtivateService.getCoolingUnits({});
 
-    const contextualUnit = coolingUnits?.find((unit) => unit.name === notification.coolingUnitName);
+    const contextualUnit = coolingUnits?.find(
+      (unit) => unit.name === notification.crates.coolingUnit
+    );
     if (!contextualUnit) return setIsSurveyLoading(false);
 
     const movements = await ColdtivateService.getMovementsHistory({
