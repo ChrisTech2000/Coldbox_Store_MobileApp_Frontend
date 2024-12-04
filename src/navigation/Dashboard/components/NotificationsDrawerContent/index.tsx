@@ -1,15 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { View, FlatList } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
+import { Modalize } from 'react-native-modalize';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
 
-import type { Crop, FarmerSurvey } from '#types/global';
-import type { GetAllCropsResponse } from '#types/api.responses';
+import type { CoolingUnit, Crop, FarmerSurvey } from '#types/global';
+import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
 import { useAuthStore } from '#stores/auth';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useTranslationUtils } from '#i18n/utils';
@@ -38,6 +40,11 @@ export type CommoditySurveyDatum = {
   commoditySurveys: Array<FarmerSurvey & { cropName: string }>;
 };
 
+export type OrderRequiresMovementDatum = {
+  movement: GetMovementsHistoryResponse[0];
+  coolingUnit: CoolingUnit;
+};
+
 export const useSettingUpSurvey = create<{
   isLoading: boolean;
   toggle: (value?: boolean) => void;
@@ -55,7 +62,13 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   const { mutate } = useSWRConfig();
   const toast = InAppNotifications.useToast();
 
-  const [modalDatums, setModalDatums] = useState<CommoditySurveyDatum | undefined>(undefined);
+  const [farmerSurveyDatums, setFarmerSurveyDatums] = useState<CommoditySurveyDatum | undefined>(
+    undefined
+  );
+  const [orderDatum, setOrderDatum] = useState<OrderRequiresMovementDatum | undefined>(undefined);
+
+  const modalRef = useRef<Modalize>(null);
+
   const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
 
   const revalidate = useCallback(async () => {
@@ -70,7 +83,15 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
 
   useAppEventListener<[CommoditySurveyDatum]>(
     'DISPATCH_NOTIFICATION_OPEN_COMMODITY_MODAL',
-    setModalDatums
+    setFarmerSurveyDatums
+  );
+
+  useAppEventListener<[OrderRequiresMovementDatum]>(
+    'DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL',
+    (value) => {
+      setOrderDatum(value);
+      modalRef.current?.open();
+    }
   );
 
   return (
@@ -96,28 +117,29 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
         nestedScrollEnabled
       />
 
-      {typeof modalDatums !== 'undefined' ? (
+      {typeof farmerSurveyDatums !== 'undefined' ? (
         <FarmersSurveyModal
           isModalVisible
-          companyCurrency={modalDatums.companyCurrency}
+          companyCurrency={farmerSurveyDatums.companyCurrency}
           cropSelectionAvailable={{
             title: t('Dashboard.History.survey.baseSurvey.newCommodity', {
-              index: modalDatums.farmerSurveysLength,
+              index: farmerSurveyDatums.farmerSurveysLength,
             }),
-            crops: modalDatums.crops,
+            crops: farmerSurveyDatums.crops,
           }}
-          onDismiss={() => setModalDatums(undefined)}
-          initialCropSelection={modalDatums.contextualCrop}
+          onDismiss={() => setFarmerSurveyDatums(undefined)}
+          initialCropSelection={farmerSurveyDatums.contextualCrop}
           onSubmit={async (values) => {
             try {
               await ColdtivateService.updateFarmerSurveys({
-                farmer: modalDatums.farmerId,
-                userType: modalDatums.userType,
-                experience: modalDatums.experience ? 'yes' : 'no',
-                experienceDuration: Number(modalDatums.experienceInMonths),
+                farmer: farmerSurveyDatums.farmerId,
+                userType: farmerSurveyDatums.userType,
+                experience: farmerSurveyDatums.experience ? 'yes' : 'no',
+                experienceDuration: Number(farmerSurveyDatums.experienceInMonths),
                 commodities: [
-                  ...modalDatums.commoditySurveys.filter(
-                    (commoditySurvey) => commoditySurvey.cropId !== modalDatums.contextualCrop.id
+                  ...farmerSurveyDatums.commoditySurveys.filter(
+                    (commoditySurvey) =>
+                      commoditySurvey.cropId !== farmerSurveyDatums.contextualCrop.id
                   ),
                   {
                     averagePrice: values.averagePrice,
@@ -128,14 +150,14 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                     quantitySold: values.weightDistribution.quantitySold,
                     averageSeasonInMonths: null,
                     kgInUnit: values.unitaryWeight as number,
-                    currency: modalDatums.companyCurrency,
+                    currency: farmerSurveyDatums.companyCurrency,
                     reasonForLoss: values.reasonsForSpoilage,
-                    cropId: modalDatums.contextualCrop.id,
+                    cropId: farmerSurveyDatums.contextualCrop.id,
                   },
                 ],
               });
 
-              setModalDatums(undefined);
+              setFarmerSurveyDatums(undefined);
               toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.updateSuccess'), {
                 type: 'md_success',
               });
@@ -147,6 +169,21 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
             }
           }}
         />
+      ) : typeof orderDatum !== 'undefined' ? (
+        <Modalize
+          ref={modalRef}
+          modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
+          adjustToContentHeight
+          withHandle={false}
+        >
+          <View tw="w-full items-center justify-center h-10">
+            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
+          </View>
+
+          <View tw="px-4 pb-4">
+            <MovementDiagram movement={orderDatum.movement} coolingUnit={orderDatum.coolingUnit} />
+          </View>
+        </Modalize>
       ) : null}
     </View>
   );
