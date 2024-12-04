@@ -1,10 +1,11 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { View, FlatList } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Portal } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
 import { Modalize } from 'react-native-modalize';
+import ms from 'ms';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -68,6 +69,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   const [orderDatum, setOrderDatum] = useState<OrderRequiresMovementDatum | undefined>(undefined);
 
   const modalRef = useRef<Modalize>(null);
+  const modalTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
 
@@ -93,6 +95,12 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       modalRef.current?.open();
     }
   );
+
+  useEffect(() => {
+    return () => {
+      if (modalTimeout.current) clearTimeout(modalTimeout.current);
+    };
+  }, []);
 
   return (
     <View tw="flex-1 justify-start">
@@ -169,21 +177,31 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
             }
           }}
         />
-      ) : typeof orderDatum !== 'undefined' ? (
-        <Modalize
-          ref={modalRef}
-          modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-          adjustToContentHeight
-          withHandle={false}
-        >
-          <View tw="w-full items-center justify-center h-10">
-            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-          </View>
+      ) : null}
 
-          <View tw="px-4 pb-4">
-            <MovementDiagram movement={orderDatum.movement} coolingUnit={orderDatum.coolingUnit} />
-          </View>
-        </Modalize>
+      {typeof orderDatum !== 'undefined' ? (
+        <Portal>
+          <Modalize
+            ref={modalRef}
+            modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
+            adjustToContentHeight
+            withHandle={false}
+            onClose={() => {
+              modalTimeout.current = setTimeout(() => setOrderDatum(undefined), ms('3 seconds'));
+            }}
+          >
+            <View tw="w-full items-center justify-center h-10">
+              <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
+            </View>
+
+            <View tw="px-4 pb-4">
+              <MovementDiagram
+                movement={orderDatum!.movement}
+                coolingUnit={orderDatum!.coolingUnit}
+              />
+            </View>
+          </Modalize>
+        </Portal>
       ) : null}
     </View>
   );

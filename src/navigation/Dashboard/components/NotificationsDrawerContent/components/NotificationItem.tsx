@@ -52,19 +52,20 @@ export default function NotificationItem(props: {
     const contextualFarmer = farmers?.find(
       (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
     );
-    if (!contextualFarmer) return setIsSurveyLoading(false);
 
     switch (notification.eventType) {
       case 'FARMER_SURVEY': {
+        if (!contextualFarmer) return setIsSurveyLoading(false);
         await _handleFarmerSurvey(notification, contextualFarmer.id);
         break;
       }
       case 'MARKET_SURVEY': {
+        if (!contextualFarmer) return setIsSurveyLoading(false);
         await _handleMarketSurvey(notification, contextualFarmer.id);
         break;
       }
       case 'ORDER_REQUIRES_MOVEMENT': {
-        _handleOrderRequiresMovement(notification, contextualFarmer.id);
+        await _handleOrderRequiresMovement(notification);
         break;
       }
       default:
@@ -160,7 +161,7 @@ export default function NotificationItem(props: {
     useRightDrawerStore.getState().toggle(false);
   }
 
-  async function _handleOrderRequiresMovement(notification: Notification, farmerId: number) {
+  async function _handleOrderRequiresMovement(notification: Notification) {
     const coolingUnits = await ColdtivateService.getCoolingUnits({});
 
     const contextualUnit = coolingUnits?.find(
@@ -170,7 +171,6 @@ export default function NotificationItem(props: {
 
     const movements = await ColdtivateService.getMovementsHistory({
       coolingUnit: contextualUnit.id,
-      farmerId,
     });
 
     const movementDetails = movements.find((movement) => movement.id === notification.specificId);
