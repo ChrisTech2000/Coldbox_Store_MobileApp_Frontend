@@ -1012,6 +1012,7 @@ export default {
       clickHere: 'tẹ ibi',
     },
     History: {
+      cropsLabel: '{{crop}} and {{amount}} more', // TODO
       priceLabel: 'Iye',
       empty:
         'Iwole ati Ijade yoo han ninu dasibodu nigbati o ba ṣe o kere ju iwole kan ni eyikeyi yara.',
@@ -1024,7 +1025,10 @@ export default {
         coolingUser: 'Orukọ olumulo itutu',
       },
       optionsMenu: {
-        common: { pdfReceipt: 'Ṣe igbasilẹ risiti pdf' },
+        common: {
+          pdfReceipt: 'Ṣe igbasilẹ risiti pdf',
+          seeMovement: 'See movement', // TODO
+        },
         checkOut: {
           seeDetails: 'Wo alaye',
           smsReceipt: 'Ṣe igbasilẹ risiti SMS',

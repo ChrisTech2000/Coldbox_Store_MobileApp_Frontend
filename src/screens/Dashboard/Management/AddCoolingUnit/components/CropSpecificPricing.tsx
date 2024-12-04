@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Dimensions, FlatList, Platform, View } from 'react-native';
+import { FlatList, Platform, View } from 'react-native';
 import { Divider, Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 import { useDebouncedCallback } from 'use-debounce';
@@ -21,7 +21,6 @@ type LocalFormValues<T = string> = { search: string; pricing: Record<string, T> 
 type PreprocessedLocalFormValues = LocalFormValues<number>;
 
 const ROOT_PRICING_PATH: RecursiveKeyOf<LocalFormValues> = 'pricing';
-const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
 export default function CropSpecificPricing() {
   const { watch, setValue } = FormManager.useFormManager();
@@ -106,7 +105,6 @@ export default function CropSpecificPricing() {
             localForm.reset(_buildInitialValues());
             toggleVisibility();
           }}
-          style={{ backgroundColor: 'white', maxHeight: DIALOG_MAX_HEIGHT }}
         >
           <View
             tw={cn(

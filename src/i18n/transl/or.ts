@@ -1106,6 +1106,7 @@ export default {
       clickHere: 'ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ',
     },
     History: {
+      cropsLabel: '{{crop}} and {{amount}} more', // TODO
       priceLabel: 'ମୂଲ୍ୟ',
       empty:
         'ଏହି ଡାଶବୋର୍ଡ୍ରେ ଚେକ୍-ଇନ୍ ଓ ଚେକ୍-ଆଉଟ୍ ସୂଚନା ପ୍ରଦର୍ଶିତ ହେବ, ଯେତେବେଳେ ଆପଣ କୌଣସି ରୁମରେ ଏକ ଚେକ୍-ଇନ୍ କରିବେ।',
@@ -1120,6 +1121,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'PDF ରସିଦ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ',
+          seeMovement: 'See movement', // TODO
         },
         checkOut: {
           seeDetails: 'ବିସ୍ତୃତ ସୂଚନା ଦେଖନ୍ତୁ',

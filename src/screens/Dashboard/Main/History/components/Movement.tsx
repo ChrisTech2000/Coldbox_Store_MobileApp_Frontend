@@ -1,18 +1,20 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { Dialog, Divider, Icon, Portal } from 'react-native-paper';
-import colors from 'tailwindcss/colors';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from 'tailwindcss/colors';
 
 import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
 
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import { useAuthStore } from '#stores/auth';
 import ColdtivateService from '#services/ColdtivateService';
-import { type ManagementCompany, useManagementStore } from '#stores/management';
+import { useAuthStore } from '#stores/auth';
+import { useManagementStore, type ManagementCompany } from '#stores/management';
 import { type GetMovementsHistoryResponse } from '#types/api.responses';
 import {
   ECoolingUnitMetric,
@@ -22,11 +24,11 @@ import {
   type Company,
   type CoolingUnit,
 } from '#types/global';
-import { cn } from '#ui/lib/cn';
 
 import { isWithinLast24Hours } from '../utils/dates';
 import { DetailsModal } from './DetailsModal';
 import { PDFModal } from './PDFModal';
+import { MovementDiagram } from './MovementDiagram';
 
 type Movement = GetMovementsHistoryResponse[number];
 
@@ -56,19 +58,26 @@ export function Movement({
   const company = useManagementStore((store) => store.company);
   const user = useAuthStore((store) => store.user);
 
+  const modalRef = useRef<Modalize>(null);
+
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
 
   const crops = useMemo(() => {
-    return movement.movementCrops.map((crop) => crop.name).join(', ');
+    const _crops = movement.movementCrops.map((crop) => crop.name);
+    if (_crops.length <= 2) return _crops.join(', ');
+    return t('Dashboard.History.cropsLabel', {
+      crop: _crops[0],
+      amount: _crops.length - 1,
+    });
   }, [movement]);
 
   const isCheckIn = movement.movementType === EMovementType.IN;
 
   const price = useMemo(() => {
     if (!isCheckIn)
-      return `${movement.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
+      return `${movement.totalPrice.toFixed(2)} ${company?.currency ?? selectedCompany?.currency}`;
 
     const price = coolingUnit?.commonPricingType?.value ?? 0;
     const suffix =
@@ -114,6 +123,13 @@ export function Movement({
         label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
         action: seePDFModal,
       },
+      {
+        label: t('Dashboard.History.optionsMenu.common.seeMovement'),
+        action: () => {
+          modalRef.current?.open();
+          setIsOptionsModalOpen(false);
+        },
+      },
       ...(isCheckIn && user?.role === ERoles.OPERATOR
         ? [
             {
@@ -143,38 +159,32 @@ export function Movement({
           ]
         : []),
     ];
-  }, [isCheckIn, movement, user, company, selectedCompany, price, t]);
+  }, [isCheckIn, movement, user, company, selectedCompany, price, t, modalRef]);
 
   return (
     <View tw="w-full">
-      <View tw="flex flex-row items-center justify-between my-2">
+      <View tw="w-full flex flex-row items-center justify-between my-2 space-x-1">
         <_IconByMovementType movementType={movement.movementType} />
 
-        <View tw="w-[50%] mx-2 h-full flex flex-col space-y-1">
-          <View tw="flex flex-row items-center flex-wrap">
-            <Text variant="TextBold" tw="text-base" numberOfLines={3}>
-              <Text tw="text-base font-bold">{movement.code}</Text> - {movement.cratesNumber} -{' '}
-              {crops}
-            </Text>
-          </View>
-          <Text variant="TextMedium" tw="text-base">
-            {dateFmt(movement.date.toString(), 'dd/MM/yyyy HH:mm a')}
+        <View tw="h-full w-[80%] space-y-1">
+          <Text tw="text-base" numberOfLines={3}>
+            {movement.code} - {movement.cratesNumber} - {crops}
           </Text>
-        </View>
 
-        <View tw="w-[35%] h-full flex flex-col justify-between space-y-1">
-          <View>
-            <Text variant="TextMedium" tw={cn('text-base', !isCheckIn && 'font-bold')}>
-              {t('Dashboard.History.priceLabel')}:
-            </Text>
-            <Text variant="TextMedium" tw={cn('text-base', !isCheckIn && 'font-bold')}>
-              {price}
-            </Text>
+          <View tw="flex flex-row justify-between space-x-1">
+            <View tw="w-[55%]">
+              <Text tw="text-base text-gray-400">
+                {dateFmt(movement.date.toString(), 'dd/MM/yyyy HH:mm a')}
+              </Text>
+              <Text tw="text-base text-gray-400">{movement.owner}</Text>
+            </View>
+            <View tw="w-[45%] items-end">
+              <Text tw="text-base">{price}</Text>
+              <Text tw="text-base">
+                {movement.cratesWeight} {t('Dashboard.ProduceDetails.kilogram')}
+              </Text>
+            </View>
           </View>
-
-          <Text variant="TextMedium" tw="text-base" numberOfLines={1}>
-            {movement.owner}
-          </Text>
         </View>
 
         <TouchableOpacity tw="w-5" onPress={() => setIsOptionsModalOpen(true)}>
@@ -222,6 +232,23 @@ export function Movement({
           movement={movement}
           dismiss={() => setIsDetailsModalOpen(false)}
         />
+        <Modalize
+          ref={modalRef}
+          modalStyle={{
+            borderTopLeftRadius: 32,
+            borderTopRightRadius: 32,
+          }}
+          adjustToContentHeight
+          withHandle={false}
+        >
+          <View tw="w-full items-center justify-center h-10">
+            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
+          </View>
+
+          <View tw="px-4 pb-4">
+            <MovementDiagram movement={movement} coolingUnit={coolingUnit as CoolingUnit} />
+          </View>
+        </Modalize>
       </Portal>
     </View>
   );
@@ -232,11 +259,9 @@ function _IconByMovementType(props: { movementType: EMovementType }) {
     case EMovementType.IN:
       return <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />;
     case EMovementType.OUT:
-      return (
-        <CheckOut width={20} height={20} fill={colors.orange[400]} stroke={colors.orange[400]} />
-      );
+      return <CheckOut width={20} height={20} fill={colors.red[700]} stroke={colors.red[700]} />;
     case EMovementType.MARKETPLACE:
-      return <MaterialIcon name="cart-outline" size={25} color={colors.blue[400]} />;
+      return <MaterialIcon name="cart-outline" size={25} color={colors.blue[500]} />;
     default:
       return null;
   }

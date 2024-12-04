@@ -1035,6 +1035,7 @@ export default {
       clickHere: 'Danna nan',
     },
     History: {
+      cropsLabel: '{{crop}} and {{amount}} more', // TODO
       priceLabel: 'Farashin',
       empty:
         'duba-shiga ko duba-fita za su bayyana a cikin dashboard lokacin da kuka yi aƙalla duba-shiga ɗaya a kowane ɗaki.',
@@ -1047,7 +1048,10 @@ export default {
         coolingUser: 'Sunan mai amfani da naurar sanyayawa',
       },
       optionsMenu: {
-        common: { pdfReceipt: 'Sauke takardar sheda pdf' },
+        common: {
+          pdfReceipt: 'Sauke takardar sheda pdf',
+          seeMovement: 'See movement', // TODO
+        },
         checkOut: {
           seeDetails: 'Duba cikakkun bayanai',
           smsReceipt: 'Sauke takardar sheda ta sako',
