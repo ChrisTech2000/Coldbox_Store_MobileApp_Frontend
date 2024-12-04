@@ -127,7 +127,10 @@ export function Movement({
       },
       {
         label: t('Dashboard.History.optionsMenu.common.seeMovement'),
-        action: () => modalRef.current?.open(),
+        action: () => {
+          modalRef.current?.open();
+          setIsOptionsModalOpen(false);
+        },
       },
       ...(isCheckIn && user?.role === ERoles.OPERATOR
         ? [
