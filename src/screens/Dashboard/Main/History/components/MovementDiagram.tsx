@@ -1,9 +1,10 @@
 import startCase from 'lodash/startCase';
 import React from 'react';
-import { FlatList, Platform, View } from 'react-native';
-import colors from 'tailwindcss/colors';
+import { Dimensions, FlatList, Platform, View } from 'react-native';
 import { Divider } from 'react-native-paper';
+import colors from 'tailwindcss/colors';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import type { GetMovementsHistoryResponse } from '#types/api.responses';
 import { type CoolingUnit, EMovementType } from '#types/global';
@@ -185,9 +186,12 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                           {crates.length > 1 ? (
                             <Divider
                               tw={cn(
-                                'absolute left-4 w-0.5 h-14 bg-gray-700',
+                                'absolute left-4 w-0.5 h-20 bg-gray-700',
                                 index > 0 &&
-                                  (Platform.OS === 'ios' ? 'h-20 bottom-[94%]' : 'bottom-[90%]')
+                                  (Platform.OS === 'ios' ||
+                                  Dimensions.get('window').height > SMALL_SCREEN_THRESHOLD
+                                    ? 'bottom-[94%]'
+                                    : 'bottom-[95%]')
                               )}
                             />
                           ) : null}
