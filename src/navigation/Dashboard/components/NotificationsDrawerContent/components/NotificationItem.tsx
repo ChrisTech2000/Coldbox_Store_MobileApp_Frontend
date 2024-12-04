@@ -16,7 +16,12 @@ import ColdtivateService from '#services/ColdtivateService';
 import NotificationService from '#services/NotificationService';
 import { useManagementStore } from '#stores/management';
 
-import { useSettingUpSurvey, type CommoditySurveyDatum, type Notification } from '../index';
+import {
+  useSettingUpSurvey,
+  type CommoditySurveyDatum,
+  type Notification,
+  OrderRequiresMovementDatum,
+} from '../index';
 
 export default function NotificationItem(props: {
   item: Notification;
@@ -43,36 +48,26 @@ export default function NotificationItem(props: {
     const notification = findNotificationById(notificationId);
     if (!notification?.crates?.farmer) return setIsSurveyLoading(false);
 
+    const farmers = await ColdtivateService.getFarmers();
+    const contextualFarmer = farmers?.find(
+      (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
+    );
+
     switch (notification.eventType) {
       case 'FARMER_SURVEY': {
-        const farmers = await ColdtivateService.getFarmers();
-        const contextualFarmer = farmers?.find(
-          (farmer) =>
-            `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
-        );
         if (!contextualFarmer) return setIsSurveyLoading(false);
         await _handleFarmerSurvey(notification, contextualFarmer.id);
         break;
       }
-
       case 'MARKET_SURVEY': {
-        const farmers = await ColdtivateService.getFarmers();
-        const contextualFarmer = farmers?.find(
-          (farmer) =>
-            `${farmer.user.firstName} ${farmer.user.lastName}` === notification.crates.farmer
-        );
         if (!contextualFarmer) return setIsSurveyLoading(false);
         await _handleMarketSurvey(notification, contextualFarmer.id);
         break;
       }
-
       case 'ORDER_REQUIRES_MOVEMENT': {
-        // TODO
-        // const movementId = notification.specificId;
-        // (get movement from backend and open bottom sheet)
+        await _handleOrderRequiresMovement(notification);
         break;
       }
-
       default:
         break;
     }
@@ -163,6 +158,30 @@ export default function NotificationItem(props: {
     } satisfies NotificationOpenSurveyEventDatums;
 
     emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY, datums);
+    useRightDrawerStore.getState().toggle(false);
+  }
+
+  async function _handleOrderRequiresMovement(notification: Notification) {
+    const coolingUnits = await ColdtivateService.getCoolingUnits({});
+
+    const contextualUnit = coolingUnits?.find(
+      (unit) => unit.name === notification.crates.coolingUnit
+    );
+    if (!contextualUnit) return setIsSurveyLoading(false);
+
+    const movements = await ColdtivateService.getMovementsHistory({
+      coolingUnit: contextualUnit.id,
+    });
+
+    const movementDetails = movements.find((movement) => movement.id === notification.specificId);
+    if (!movementDetails) return setIsSurveyLoading(false);
+
+    const datums = {
+      movement: movementDetails,
+      coolingUnit: contextualUnit,
+    } satisfies OrderRequiresMovementDatum;
+
+    emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL, datums);
     useRightDrawerStore.getState().toggle(false);
   }
 
