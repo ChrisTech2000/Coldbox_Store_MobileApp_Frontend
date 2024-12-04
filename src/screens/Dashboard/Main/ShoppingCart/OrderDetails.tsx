@@ -48,6 +48,14 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     evt.stopPropagation();
     setIsSubmitting(true);
     try {
+      const coolingUnitIds =
+        cartData?.items?.reduce((acc, current) => {
+          if (!acc.includes(current.relCoolingUnitId)) {
+            acc.push(current.relCoolingUnitId);
+          }
+          return acc;
+        }, [] as number[]) ?? [];
+
       const result = await MarketplaceService.checkoutWithPaystack();
 
       if (result.authorizationUrl) {
@@ -55,6 +63,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
         props.navigation.navigate('PaystackPayment', {
           url: result.authorizationUrl,
           orderId: result.orderId,
+          coolingUnitIds,
         });
       }
     } catch (e) {
