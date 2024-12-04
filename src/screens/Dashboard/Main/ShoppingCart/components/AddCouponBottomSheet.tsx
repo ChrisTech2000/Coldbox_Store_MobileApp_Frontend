@@ -34,16 +34,16 @@ export default function AddCouponBottomSheet() {
 
       if (result) {
         setCart(result.cart);
-        setIsSubmitting(false);
         modalRef.current?.close();
-        toast.show(t('actions.done'), {
-          type: 'md_success',
-        });
+        toast.show(t('actions.done'), { type: 'md_success' });
       }
     } catch (error) {
+      console.error(error);
       toast.show(t('navigation.error.errorMessage'), {
         type: 'md_danger',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   }, [value]);
 
@@ -70,7 +70,13 @@ export default function AddCouponBottomSheet() {
         </View>
 
         <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300 mb-4">
-          <Button mode="contained" tw="w-5/6" uppercase onPress={submit} disabled={!value}>
+          <Button
+            mode="contained"
+            tw="w-5/6"
+            uppercase
+            onPress={submit}
+            disabled={!value || isSubmitting}
+          >
             {isSubmitting ? (
               <ActivityIndicator size="small" color="white" />
             ) : (

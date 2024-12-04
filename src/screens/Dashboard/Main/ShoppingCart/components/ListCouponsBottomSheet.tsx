@@ -1,11 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  GestureResponderEvent,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Icon, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -34,16 +28,14 @@ export default function ListCouponsBottomSheet() {
 
       if (result) {
         await fetchCart();
-        setIsSubmitting(false);
         modalRef.current?.close();
-        toast.show(t('actions.done'), {
-          type: 'md_success',
-        });
+        toast.show(t('actions.done'), { type: 'md_success' });
       }
     } catch (error) {
-      toast.show(t('navigation.error.errorMessage'), {
-        type: 'md_danger',
-      });
+      console.error(error);
+      toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+    } finally {
+      setIsSubmitting(false);
     }
   }, []);
 
@@ -80,13 +72,13 @@ export default function ListCouponsBottomSheet() {
               <View tw="flex flex-row items-center justify-between p-4 border border-gray-300 rounded-lg mb-3">
                 <View tw="flex flex-row space-x-2">
                   <Text tw="text-base font-bold uppercase">{item.relCouponCode}</Text>
-                  {/* <Text tw="text-base text-gray-400 uppercase">oi</Text> */}
                 </View>
                 <TouchableOpacity
-                  onPress={(event: GestureResponderEvent) => {
-                    event.stopPropagation();
-                    onDeleteCoupon(item.relCouponCode ?? '');
+                  onPress={async (evt) => {
+                    evt.stopPropagation();
+                    await onDeleteCoupon(item.relCouponCode ?? '');
                   }}
+                  disabled={isSubmitting}
                 >
                   <Icon source="trash-can-outline" size={24} color={colors.red[700]} />
                 </TouchableOpacity>
@@ -96,7 +88,13 @@ export default function ListCouponsBottomSheet() {
         </View>
 
         <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300 mb-4">
-          <Button mode="contained" tw="w-5/6" uppercase onPress={() => modalRef.current?.close()}>
+          <Button
+            mode="contained"
+            tw="w-5/6"
+            uppercase
+            onPress={() => modalRef.current?.close()}
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <ActivityIndicator size="small" color="white" />
             ) : (

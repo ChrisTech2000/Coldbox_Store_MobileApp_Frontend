@@ -1,6 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import isNil from 'lodash/isNil';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -72,6 +72,8 @@ export function CartItem({ item }: CartItemProps) {
       skip: !item.ownedByUserId,
     }
   );
+
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const coolingUnit = useMemo(
     () => coolingUnits?.find((c) => c.id === item.relCoolingUnitId),
@@ -204,6 +206,7 @@ export function CartItem({ item }: CartItemProps) {
         <Touchable
           tw="flex-row items-center justify-center space-x-2.5 px-1.5 py-2 self-start mb-0.5"
           rippleColor={colors.zinc[200]}
+          disabled={isProcessing}
           onPress={async (evt) => {
             evt.stopPropagation();
             try {
@@ -244,6 +247,7 @@ export function CartItem({ item }: CartItemProps) {
               crateId={item.relCrateId}
               initialValue={item.orderedProduceWeight}
               availableWeight={item.crateAvailableWeight}
+              disabled={isProcessing}
             />
           </View>
           <IconButton
@@ -255,9 +259,18 @@ export function CartItem({ item }: CartItemProps) {
             containerColor={colors.white}
             onPress={async (evt) => {
               evt.stopPropagation();
-              await MarketplaceService.removeItemFromCart(item.relCrateId);
-              fetchCart();
+              try {
+                setIsProcessing(true);
+                await MarketplaceService.removeItemFromCart(item.relCrateId);
+                await fetchCart();
+              } catch (exception) {
+                console.error(exception);
+                toast.show(t('actions.error', { type: 'md_danger' }));
+              } finally {
+                setIsProcessing(false);
+              }
             }}
+            disabled={isProcessing}
           />
         </View>
       </View>

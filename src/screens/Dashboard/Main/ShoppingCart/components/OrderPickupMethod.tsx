@@ -83,17 +83,16 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
 
       if (result) {
         setCart(result.cart);
-        setIsSubmitting(false);
         modalRef.current?.close();
-        toast.show(t('actions.done'), {
-          type: 'md_success',
-        });
+        toast.show(t('actions.done'), { type: 'md_success' });
       }
     } catch (error) {
-      setIsSubmitting(false);
+      console.error(error);
       toast.show(t('navigation.error.errorMessage'), {
         type: 'md_danger',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   }, [selectedItems]);
 
@@ -200,7 +199,9 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
                 tw="w-5/6"
                 onPress={onConfirm}
                 disabled={
-                  !selectedItems || (coolingUnits && selectedItems.length < coolingUnits.length)
+                  !selectedItems ||
+                  (coolingUnits && selectedItems.length < coolingUnits.length) ||
+                  isSubmitting
                 }
               >
                 {isSubmitting ? (
