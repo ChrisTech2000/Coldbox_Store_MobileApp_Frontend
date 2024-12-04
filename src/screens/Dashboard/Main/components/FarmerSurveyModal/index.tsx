@@ -100,7 +100,7 @@ export function FarmersSurveyModal({
     handleSubmit,
     control,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FarmerSurveySchemaType>({
     resolver: zodResolver(() => FarmerSurveySchema(t)),
     // @ts-expect-error - data type coercion such as strings and integers
@@ -214,6 +214,7 @@ export function FarmersSurveyModal({
                         onBlur={onBlur}
                         keyboardType="decimal-pad"
                         error={!!errors.weightDistribution?.totalProducedWeekly?.message}
+                        disabled={isSubmitting}
                       />
                     )}
                     name="weightDistribution.totalProducedWeekly"
@@ -262,6 +263,7 @@ export function FarmersSurveyModal({
                               onChangeNumericKeyboard(!value ? 0 : Number(value) - 1, onChange)
                             }
                             tw="ml-2"
+                            disabled={isSubmitting}
                           >
                             <Icon source="minus" size={20} color={colors.green.primary} />
                           </TouchableOpacity>
@@ -272,12 +274,14 @@ export function FarmersSurveyModal({
                             onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
                             onBlur={onBlur}
                             error={!!errors.unitaryWeight?.message}
+                            disabled={isSubmitting}
                           />
                           <TouchableOpacity
                             onPress={() =>
                               Number(onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange))
                             }
                             tw="mr-2"
+                            disabled={isSubmitting}
                           >
                             <Icon source="plus" size={20} color={colors.green.primary} />
                           </TouchableOpacity>
@@ -310,6 +314,7 @@ export function FarmersSurveyModal({
                         value={value?.toString()}
                         onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
                         onBlur={onBlur}
+                        disabled={isSubmitting}
                       />
                     )}
                     name="weightDistribution.quantitySelfConsumed"
@@ -329,6 +334,7 @@ export function FarmersSurveyModal({
                         value={value?.toString()}
                         onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
                         onBlur={onBlur}
+                        disabled={isSubmitting}
                       />
                     )}
                     name="weightDistribution.quantitySold"
@@ -348,17 +354,18 @@ export function FarmersSurveyModal({
                         keyboardType="decimal-pad"
                         onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
                         onBlur={onBlur}
+                        disabled={isSubmitting}
                       />
                     )}
                     name="weightDistribution.quantityLost"
                   />
                 </View>
               </View>
-              {errors.weightDistribution?.quantitySelfConsumed && (
+              {errors.weightDistribution?.quantitySelfConsumed ? (
                 <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
                   {errors.weightDistribution.quantitySelfConsumed.message?.toString()}
                 </Text>
-              )}
+              ) : null}
 
               {/** SPOILAGE */}
               <Question
@@ -421,6 +428,7 @@ export function FarmersSurveyModal({
                         onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
                         onBlur={onBlur}
                         error={!!errors.averagePrice?.message}
+                        disabled={isSubmitting}
                       />
                     )}
                     name="averagePrice"
@@ -450,6 +458,7 @@ export function FarmersSurveyModal({
             contentStyle="flex flex-row-reverse"
             onPress={handleSubmit(submit)}
             tw="w-2/5"
+            disabled={isSubmitting}
           >
             {t('actions.confirm')}
           </Button>
