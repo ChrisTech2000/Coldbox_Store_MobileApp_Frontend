@@ -185,7 +185,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.pdfModal.checkIn.numberOfCratesLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.crateAmount}
+                    {crate.amount}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">

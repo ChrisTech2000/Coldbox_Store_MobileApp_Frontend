@@ -255,7 +255,7 @@ export type GetMovementsHistoryResponse = Array<{
     date: Date;
     name: string;
     code: string;
-    crateAmount: number;
+    amount: number;
     remainingShelfLife: number;
     plannedDays: number | null;
     currentStorageDays: number;

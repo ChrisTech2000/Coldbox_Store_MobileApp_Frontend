@@ -30,7 +30,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
 import type { CheckMarketplaceEligibilityResponse } from '#types/api.responses';
-import type { Farmer } from '#types/global';
+import type { User } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import { InfoModal } from './CrateSetup/InfoModal';
@@ -167,7 +167,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               tw="self-end mt-2"
               onPress={() =>
                 props.navigation.navigate('AddFarmerBankAccount', {
-                  farmer: user as Farmer,
+                  farmer: user?.user as User,
                   recheckEligibility: refetch,
                 })
               }
@@ -430,7 +430,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               !!form.formState.errors.price ||
               form.formState.isSubmitting ||
               !form.formState.isDirty ||
-              !form.getValues('price')
+              !Number(form.getValues('price'))
             }
           >
             {t('actions.save-changes')}

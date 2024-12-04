@@ -1107,6 +1107,7 @@ export default {
       clickHere: 'Click यहां',
     },
     History: {
+      cropsLabel: '{{crop}} and {{amount}} more', // TODO
       priceLabel: 'कीमत',
       empty:
         'किसी भी कक्ष में कम से कम एक चेक-इन करने पर चेक-इन और चेक-आउट डैशबोर्ड में दिखाई देंगे।',
@@ -1121,6 +1122,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'पीडीएफ रसीद डाउनलोड करें',
+          seeMovement: 'See movement', // TODO
         },
         checkOut: {
           seeDetails: 'विवरण देखें',

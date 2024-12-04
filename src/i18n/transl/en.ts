@@ -1101,6 +1101,7 @@ const en = {
       clickHere: 'Click here',
     },
     History: {
+      cropsLabel: '{{crop}} and {{amount}} more',
       priceLabel: 'Price',
       empty:
         'Check-ins and check-outs will appear in the dashboard when you do at least one check-in in any room.',
@@ -1115,6 +1116,7 @@ const en = {
       optionsMenu: {
         common: {
           pdfReceipt: 'Download PDF receipt',
+          seeMovement: 'See movement',
         },
         checkOut: {
           seeDetails: 'See details',

@@ -1101,6 +1101,7 @@ export default {
       clickHere: 'અહીં ક્લિક કરો',
     },
     History: {
+      cropsLabel: '{{crop}} and {{amount}} more', // TODO
       priceLabel: 'કિંમત',
       empty:
         'ડેશબોર્ડ પર ચેક-ઇન અને ચેક-આઉટ ત્યારે જ દેખાશે જ્યારે તમે કોઈપણ રૂમમાં ઓછામાં ઓછો એક ચેક-ઇન કરશો.',
@@ -1115,6 +1116,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'PDF રસીદ ડાઉનલોડ કરો',
+          seeMovement: 'See movement', // TODO
         },
         checkOut: {
           seeDetails: 'વિગતો જુઓ',

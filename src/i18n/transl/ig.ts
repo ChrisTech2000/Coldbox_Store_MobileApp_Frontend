@@ -1022,6 +1022,7 @@ export default {
       clickHere: 'pịa ebe a',
     },
     History: {
+      cropsLabel: '{{crop}} and {{amount}} more', // TODO
       priceLabel: 'Onu ahịa',
       empty:
         "Nbanye na nputa ga-apụta na dashboard mgbe ị mere opekata mpe otu nbanye n'ime ụlọ ọ bụla.",
@@ -1034,7 +1035,10 @@ export default {
         coolingUser: 'Aha njirimara',
       },
       optionsMenu: {
-        common: { pdfReceipt: 'Budata nnata pdf' },
+        common: {
+          pdfReceipt: 'Budata nnata pdf',
+          seeMovement: 'See movement', // TODO
+        },
         checkOut: {
           seeDetails: 'Hụ nkọwa',
           smsReceipt: 'Budata nnata SMS',
