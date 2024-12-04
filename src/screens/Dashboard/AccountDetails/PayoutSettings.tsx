@@ -367,6 +367,7 @@ function PayoutSettings(
           mode="outlined"
           onPress={() => props.navigation.goBack()}
           uppercase
+          disabled={isSubmitting}
         >
           {t('actions.cancel')}
         </Button>
@@ -376,7 +377,7 @@ function PayoutSettings(
           mode="contained"
           onPress={handleSubmit(onSubmit)}
           icon={isSubmitting ? undefined : 'check-circle-outline'}
-          disabled={hasPayoutMethods && !isDirty}
+          disabled={(hasPayoutMethods && !isDirty) || isSubmitting}
           uppercase
         >
           {isSubmitting ? (

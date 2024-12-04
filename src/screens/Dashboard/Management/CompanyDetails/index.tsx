@@ -127,6 +127,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
               icon="close-circle-outline"
               buttonColor={paperTheme.colors.error}
               uppercase
+              disabled={isSubmitting}
             >
               {t('actions.cancel')}
             </Button>
@@ -136,6 +137,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
               onPress={submitHandler}
               icon={isSubmitting ? undefined : 'plus-circle'}
               uppercase
+              disabled={isSubmitting}
             >
               {isSubmitting ? (
                 <ActivityIndicator size="small" color="white" />

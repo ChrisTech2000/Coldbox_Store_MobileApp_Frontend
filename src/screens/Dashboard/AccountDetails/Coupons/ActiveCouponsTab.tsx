@@ -9,7 +9,6 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import CouponService from '#services/CouponService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
@@ -21,7 +20,6 @@ import { CouponStatusTabsRouteProps } from 'navigation/Dashboard/AccountDetails/
 
 function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
   const { t } = useTranslationUtils();
-  const toast = InAppNotifications.useToast();
   const { mutate } = useSWRConfig();
   const company = useManagementStore((store) => store.company);
 
@@ -96,59 +94,47 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
         visible={isModalVisible}
         onChangeVisible={setIsModalVisible}
         onConfirm={async () => {
-          setIsModalVisible(false);
-          if (typeof selectedCoupon.current === 'number') {
-            try {
-              await CouponService.revokeCoupon({
-                couponId: selectedCoupon.current,
+          if (typeof selectedCoupon.current !== 'number') throw new Error(); // safe guard
+          await CouponService.revokeCoupon({
+            couponId: selectedCoupon.current,
+            ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
+          });
+          await Promise.allSettled([
+            mutate(
+              getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
                 ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
-              });
-
-              await Promise.allSettled([
-                mutate(
-                  getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
-                    ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
-                  })
-                ),
-                mutate(
-                  getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
-                    revoked: 'included',
-                    ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
-                  })
-                ),
-                mutate(
-                  getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
-                    revoked: 'only',
-                    ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
-                  })
-                ),
-              ]);
-            } catch (exception) {
-              console.error(exception);
-              toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
-            }
-          }
+              })
+            ),
+            mutate(
+              getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
+                revoked: 'included',
+                ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
+              })
+            ),
+            mutate(
+              getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
+                revoked: 'only',
+                ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
+              })
+            ),
+          ]);
         }}
       />
 
       <CouponModal
         modalRef={modalRef}
         onSubmit={async (values) => {
-          try {
-            await CouponService.createCoupon({
+          await CouponService.createCoupon({
+            ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
+            code: values.code,
+            discountPercentage: Math.min(values.percentage / 100, 1.0),
+          });
+          await mutate(
+            getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
               ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
-              code: values.code,
-              discountPercentage: Math.min(values.percentage / 100, 1.0),
-            });
-            await mutate(
-              getQueryKey(isManagementStack ? 'getCompanyCouponList' : 'getCouponList', {
-                ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
-              })
-            );
-            modalRef.current?.close();
-          } catch (exception) {
-            console.error(exception);
-          }
+            })
+          );
+          modalRef.current?.close();
         }}
       />
 

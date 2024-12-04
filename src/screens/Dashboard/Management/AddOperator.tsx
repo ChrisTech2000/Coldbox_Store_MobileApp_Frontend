@@ -235,6 +235,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
         tw="w-2/3 self-center"
         icon={isSubmitting ? undefined : 'account-arrow-down-outline'}
         onPress={handleSubmit(onSubmit)}
+        disabled={isSubmitting}
       >
         {isSubmitting ? (
           <ActivityIndicator animating size="small" color="white" />

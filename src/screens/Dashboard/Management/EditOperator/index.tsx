@@ -146,6 +146,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
                 onPress={() => navigation.goBack()}
                 icon="close-circle-outline"
                 buttonColor={paperTheme.colors.error}
+                disabled={isSubmitting}
                 uppercase
               >
                 {t('actions.cancel')}
@@ -155,6 +156,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
                 mode="contained"
                 onPress={submitHandler}
                 icon={isSubmitting ? undefined : 'check-circle-outline'}
+                disabled={isSubmitting}
                 uppercase
               >
                 {isSubmitting ? <ButtonLoader /> : t('Dashboard.Management.Operators.actions.save')}

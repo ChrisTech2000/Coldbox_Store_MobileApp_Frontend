@@ -80,17 +80,15 @@ export default function DeleteAction(props: Props) {
       );
 
       toggleModalVisibility();
+      toggleProcessing();
       navigation.goBack();
     } catch (exception) {
+      console.error(exception);
       toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.cantDelete'), {
         type: 'md_danger',
-        style: {
-          marginBottom: 50,
-        },
+        style: { marginBottom: 50 },
       });
       toggleModalVisibility();
-      console.error(exception);
-    } finally {
       toggleProcessing();
     }
   }
@@ -122,10 +120,10 @@ export default function DeleteAction(props: Props) {
             <Text tw="text-base">{t('Dashboard.Management.EditCoolingUnit.modal.askDelete')}</Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button mode="text" onPress={toggleModalVisibility}>
+            <Button mode="text" onPress={toggleModalVisibility} disabled={isProcessing}>
               {t('actions.cancel')}
             </Button>
-            <Button mode="text" onPress={onConfirm}>
+            <Button mode="text" onPress={onConfirm} disabled={isProcessing}>
               {t('actions.confirm')}
             </Button>
           </Dialog.Actions>

@@ -78,7 +78,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     return produces?.filter((produce) => produce.movementCode === movement.code) ?? [];
   }, [produces, movement]);
 
-  const { handleSubmit, control } = useForm<Schema>({
+  const { handleSubmit, control, formState } = useForm<Schema>({
     resolver: zodResolver(() => EditCheckInSchema()),
     defaultValues: {
       produces: matchingProduces.map((produce) => ({
@@ -213,7 +213,12 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         <Pagination data={matchingProduces} currentIndex={progress} />
       )}
 
-      <Button mode="contained" tw="w-[80%]" onPress={handleSubmit(onSubmit)}>
+      <Button
+        mode="contained"
+        tw="w-[80%]"
+        onPress={handleSubmit(onSubmit)}
+        disabled={formState.isSubmitting}
+      >
         {t('actions.save-changes')}
       </Button>
     </View>

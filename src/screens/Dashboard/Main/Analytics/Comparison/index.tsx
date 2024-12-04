@@ -210,21 +210,21 @@ export function ComparisonSection() {
                     </Text>
                   </Text>
                 </View>
-                {activeTab === 'users' && (
+                {activeTab === 'users' ? (
                   <UsersContent key="users-content-comparison-section" sorting={sorting} />
-                )}
-                {activeTab === 'crates' && (
+                ) : null}
+                {activeTab === 'crates' ? (
                   <CratesContent key="crates-content-comparison-section" sorting={sorting} />
-                )}
-                {activeTab === 'impact' && (
+                ) : null}
+                {activeTab === 'impact' ? (
                   <ImpactContent key="impact-content-comparison-section" sorting={sorting} />
-                )}
+                ) : null}
               </View>
             )}
           </View>
         )}
 
-        {!activeTab && (
+        {!activeTab ? (
           <CommonFooter
             tabs={
               <InnerTabs
@@ -234,7 +234,7 @@ export function ComparisonSection() {
               />
             }
           />
-        )}
+        ) : null}
 
         <ConfigurationModal
           isOpen={isModalOpen}

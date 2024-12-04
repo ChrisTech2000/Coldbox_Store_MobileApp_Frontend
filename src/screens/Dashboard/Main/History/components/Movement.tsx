@@ -73,9 +73,7 @@ export function Movement({
     });
   }, [movement]);
 
-  const isCheckIn = useMemo(() => {
-    return movement.movementType === EMovementType.IN;
-  }, [movement]);
+  const isCheckIn = movement.movementType === EMovementType.IN;
 
   const price = useMemo(() => {
     if (!isCheckIn)

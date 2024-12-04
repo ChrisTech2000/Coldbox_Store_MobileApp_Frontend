@@ -49,7 +49,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
     handleSubmit,
     control,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<BaseSurveySchemaType>({
     resolver: zodResolver(() => BaseSurveySchema(t)),
     defaultValues: {
@@ -174,11 +174,11 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
             )}
             name="occupation"
           />
-          {errors.occupation && (
+          {errors.occupation ? (
             <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
               {errors.occupation.message?.toString()}
             </Text>
-          )}
+          ) : null}
         </View>
 
         <View>
@@ -207,13 +207,13 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
             )}
             name="experience"
           />
-          {errors.experience && (
+          {errors.experience ? (
             <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
               {errors.experience.message?.toString()}
             </Text>
-          )}
+          ) : null}
 
-          {experience === EExperience.OLD && (
+          {experience === EExperience.OLD ? (
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => (
@@ -228,7 +228,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
               )}
               name="experienceInMonths"
             />
-          )}
+          ) : null}
         </View>
 
         <View tw="space-y-2 mb-2">
@@ -260,7 +260,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
                     <Icon source="chevron-right" size={20} />
                   </View>
                 </View>
-                {openFarmersSurveyModal === index && (
+                {openFarmersSurveyModal === index ? (
                   <FarmersSurveyModal
                     companyCurrency={companyCurrency}
                     cropName={survey.cropName}
@@ -280,7 +280,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
                       averagePrice: survey.averagePrice,
                     }}
                   />
-                )}
+                ) : null}
                 <Divider tw="bg-gray-400" />
               </TouchableOpacity>
             )}
@@ -294,6 +294,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
         uppercase
         tw="border-green-primary"
         onPress={() => setIsAddCommodityModalOpen(true)}
+        disabled={isSubmitting}
       >
         {t('Dashboard.History.survey.baseSurvey.addCommodityButton')}
       </Button>
@@ -322,6 +323,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
           uppercase
           tw="border-red-400"
           onPress={props.navigation.goBack}
+          disabled={isSubmitting}
         >
           {t('actions.cancel')}
         </Button>
@@ -331,6 +333,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
           contentStyle="flex flex-row-reverse"
           uppercase
           onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
         >
           {t('actions.confirm')}
         </Button>

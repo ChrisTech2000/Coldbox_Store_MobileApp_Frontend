@@ -96,7 +96,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
               tw="w-4/5 my-4"
               mode="contained"
               onPress={submitHandler}
-              disabled={!hasChanges}
+              disabled={!hasChanges || isSubmitting}
               uppercase
             >
               {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}

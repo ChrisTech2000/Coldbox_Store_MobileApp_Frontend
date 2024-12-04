@@ -129,16 +129,12 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         setIsSubmitting(true);
 
         await MarketplaceService.cancelOrder(props.route.params.orderId);
-        refetch();
-        setIsSubmitting(false);
-        toast.show(t('actions.update-success'), {
-          type: 'md_success',
-        });
+        await refetch();
+        toast.show(t('actions.update-success'), { type: 'md_success' });
       } catch (error) {
+        toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+      } finally {
         setIsSubmitting(false);
-        toast.show(t('navigation.error.errorMessage'), {
-          type: 'md_danger',
-        });
       }
     },
     [props.route.params.orderId]
@@ -224,12 +220,13 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               labelStyle="text-blue-400"
               rippleColor={colors.blue[50]}
               mode="outlined"
-              onPress={() =>
+              onPress={(evt) => {
+                evt.stopPropagation();
                 emitter.emit(APP_EVENTS.DISPATCH_PAYMENT_PENDING_BOTTOM_SHEET, {
                   onPay,
                   onCancel,
-                })
-              }
+                });
+              }}
               disabled={isSubmitting}
             >
               {isSubmitting ? (

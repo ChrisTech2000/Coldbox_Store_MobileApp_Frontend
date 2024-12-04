@@ -205,22 +205,22 @@ export function AggregatedSection() {
                   </Text>
                 </View>
 
-                {activeTab === 'crates' && <CratesContent />}
-                {activeTab === 'users' && <UsersContent />}
-                {activeTab === 'impact' && (
+                {activeTab === 'crates' ? <CratesContent /> : null}
+                {activeTab === 'users' ? <UsersContent /> : null}
+                {activeTab === 'impact' ? (
                   <ImpactContent
                     useStore={useAggregatedData}
                     type="aggregated"
                     occupancy={occupancy}
                     revenue={revenue}
                   />
-                )}
+                ) : null}
               </View>
             )}
           </View>
         )}
 
-        {!activeTab && (
+        {!activeTab ? (
           <CommonFooter
             tabs={
               <InnerTabs
@@ -230,7 +230,7 @@ export function AggregatedSection() {
               />
             }
           />
-        )}
+        ) : null}
 
         <ConfigurationModal
           isOpen={isModalOpen}

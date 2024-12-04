@@ -94,7 +94,8 @@ export function CompanySection() {
       const fileName = `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.company')}`;
       await savePDF(html, fileName);
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
-    } catch {
+    } catch (exception) {
+      console.error(exception);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
@@ -142,7 +143,7 @@ export function CompanySection() {
             onTabSelection={(tab: Tab) => setActiveTab(tab)}
             compactMode
           />
-          {activeTab && (
+          {activeTab ? (
             <Button
               mode="contained"
               uppercase
@@ -158,7 +159,7 @@ export function CompanySection() {
                 t('Dashboard.Analytics.downloadDataButton')
               )}
             </Button>
-          )}
+          ) : null}
           {!activeTab ? (
             <View tw="w-full">
               {loadingCoolingUnits || loadingImpactCompany || loadingImpactData ? (

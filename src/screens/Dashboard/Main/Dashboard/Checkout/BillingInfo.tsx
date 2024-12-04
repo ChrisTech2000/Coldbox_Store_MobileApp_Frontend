@@ -113,18 +113,12 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   }, [paymentMethod]);
 
   const checkout = useCallback(async () => {
-    if (!crates) {
-      toast.show(t('Dashboard.CrateManagement.operationError'), {
-        type: 'md_danger',
-      });
-      return;
-    }
-
-    const dInt = Number(discount);
-    if (isNaN(dInt)) return;
-
-    setIsSubmitting(true);
     try {
+      setIsSubmitting(true);
+
+      const dInt = Number(discount);
+      if (!crates || isNaN(dInt) || !coolingUnit?.id || !company?.id) throw new Error();
+
       await ColdtivateService.checkOut({
         crates: crates?.map((crate) => crate.id),
         discountAmount: dInt,
@@ -136,15 +130,12 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       });
 
       refreshData.forEach((fn) => fn());
-
-      toast.show(t('actions.update-success'), {
-        type: 'md_success',
-      });
+      toast.show(t('actions.update-success'), { type: 'md_success' });
 
       if (guard('VIEW', 'TemperatureAlertModal')) {
         const temperatureAlertDatum = {
-          coolingUnitId: coolingUnit!.id,
-          companyId: company!.id,
+          coolingUnitId: coolingUnit.id,
+          companyId: company.id,
           showCompleteInfo: true,
         } satisfies TemperatureAlertEvtDatum;
 
@@ -153,11 +144,12 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
       rootNavigation.navigate('RootMainTabStack');
       setIsSubmitting(false);
-    } catch (error) {
-      setIsSubmitting(true);
+    } catch (exception) {
+      console.error(exception);
       toast.show(t('Dashboard.CrateManagement.operationError'), {
         type: 'md_danger',
       });
+      setIsSubmitting(false);
     }
   }, [crates, discount, currency, paymentMethod, isPaid, refreshData, guard, coolingUnit?.id]);
 
@@ -237,7 +229,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
                 </View>
 
                 <Text variant="TextMedium" tw="text-lg pl-2">
-                  {(cratePrices[index] ?? 0).toLocaleString('en-US', {
+                  {(cratePrices?.[index] ?? 0).toLocaleString('en-US', {
                     style: 'currency',
                     currency: company?.currency,
                   })}
@@ -325,8 +317,9 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             label={paymentMethodLabel}
             modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
             postSelectionAction={(paymentMethod?: EPaymentMethod) => {
-              paymentMethod === EPaymentMethod.BANK_TRANSFER &&
+              if (paymentMethod === EPaymentMethod.BANK_TRANSFER) {
                 setIsBankTransferDetailsModalOpen(true);
+              }
             }}
           />
         </View>
@@ -349,6 +342,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             navigation.goBack();
           }}
           icon="arrow-left"
+          disabled={isSubmitting}
         >
           {t('actions.back')}
         </Button>
@@ -358,7 +352,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           onPress={checkout}
           contentStyle="flex flex-row-reverse items-center"
           icon="check-circle-outline"
-          disabled={!isPaid || !paymentMethod}
+          disabled={!isPaid || !paymentMethod || isSubmitting}
         >
           {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.ok')}
         </Button>

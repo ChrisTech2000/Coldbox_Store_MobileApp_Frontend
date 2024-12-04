@@ -63,7 +63,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
     handleSubmit,
     control,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<MarketSurveySchemaType>({
     resolver: zodResolver(() => MarketSurveySchema(t)),
     defaultValues: {
@@ -173,11 +173,11 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
         )}
         name="location"
       />
-      {errors.location && (
+      {errors.location ? (
         <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
           {errors.location.message?.toString()}
         </Text>
-      )}
+      ) : null}
 
       <Question question={t('Dashboard.History.survey.marketSurvey.priceQuestion')} />
       <View
@@ -219,10 +219,10 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
           label={startCase(measureUnit ?? '')}
         />
       </View>
-      {errors.price && (
+      {errors.price ? (
         <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">{errors.price.message?.toString()}</Text>
-      )}
-      {measureUnit !== EUnitOfMeasurement.KILOGRAMS && (
+      ) : null}
+      {measureUnit !== EUnitOfMeasurement.KILOGRAMS ? (
         <View tw="mb-4 flex flex-row items-end space-x-2">
           <Text variant="TextMedium" tw="text-base">
             {t('Dashboard.CrateManagement.FarmerSurvey.modal.unitWeight', {
@@ -262,7 +262,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
           />
           <Icon source="weight-kilogram" size={27} />
         </View>
-      )}
+      ) : null}
 
       <Question question={t('Dashboard.History.survey.marketSurvey.spoiledProducesQuestion')} />
       <View tw={cn('flex flex-row items-end space-x-2', !errors.spoiledProduceAmount && 'mb-4')}>
@@ -284,11 +284,11 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
           {measureUnit}
         </Text>
       </View>
-      {errors.spoiledProduceAmount && (
+      {errors.spoiledProduceAmount ? (
         <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
           {errors.spoiledProduceAmount.message?.toString()}
         </Text>
-      )}
+      ) : null}
 
       <Question question={t('Dashboard.History.survey.marketSurvey.spoilageReasonsQuestion')} />
       <View tw={cn('space-y-2', !errors.price && 'mb-4')}>
@@ -314,11 +314,11 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
               : t('Dashboard.CrateManagement.FarmerSurvey.modal.selectSpoilageReasonsPlaceholder')
           }
         />
-        {errors.reasonsForSpoilage && (
+        {errors.reasonsForSpoilage ? (
           <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
             {errors.reasonsForSpoilage.message?.toString()}
           </Text>
-        )}
+        ) : null}
       </View>
 
       <Button
@@ -327,6 +327,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
         icon="check-circle-outline"
         contentStyle="flex flex-row-reverse"
         onPress={handleSubmit(onSubmit)}
+        disabled={isSubmitting}
       >
         {t('actions.confirm')}
       </Button>

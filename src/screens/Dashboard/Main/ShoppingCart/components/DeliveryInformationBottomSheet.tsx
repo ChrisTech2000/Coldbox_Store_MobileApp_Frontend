@@ -176,7 +176,7 @@ function _Field(props: {
           <Text tw={cn('text-lg', mode === 'clipboard' || (mode === 'highlight' && 'font-bold'))}>
             {label}
           </Text>
-          {mode === 'highlight' && <Text tw="text-zinc-500">{smallText}</Text>}
+          {mode === 'highlight' ? <Text tw="text-zinc-500">{smallText}</Text> : null}
         </View>
       )}
       right={() => (
@@ -191,13 +191,13 @@ function _Field(props: {
           <Text tw={cn('text-lg', mode === 'highlight' ? 'font-bold' : 'text-zinc-500')}>
             {truncate(value, { length: 28 })}
           </Text>
-          {mode === 'clipboard' && (
+          {mode === 'clipboard' ? (
             <MaterialCommunityIcon
               name="content-copy"
               size={16}
               color={paperTheme.colors.primary}
             />
-          )}
+          ) : null}
         </Touchable>
       )}
     />

@@ -211,6 +211,7 @@ export default function ScreenContainer(props: Props) {
                 onPress={submitHandler}
                 icon={isSubmitting ? undefined : 'pencil'}
                 uppercase
+                disabled={isSubmitting}
               >
                 {isSubmitting ? (
                   <ActivityIndicator size="small" color="white" />

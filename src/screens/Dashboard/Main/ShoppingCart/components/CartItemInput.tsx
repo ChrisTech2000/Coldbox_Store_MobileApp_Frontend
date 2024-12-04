@@ -19,6 +19,7 @@ export default function CartItemInput(props: {
   crateId: number;
   initialValue: number;
   availableWeight: number;
+  disabled?: boolean;
 }) {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
@@ -80,10 +81,11 @@ export default function CartItemInput(props: {
             const newValue = text.replace(' kg', '');
             onChange(newValue);
           }}
+          disabled={props.disabled || form.formState.isSubmitting}
           left={
             <TextInput.Icon
               icon="minus"
-              disabled={Number(value) - 1 === 0}
+              disabled={Number(value) - 1 === 0 || props.disabled || form.formState.isSubmitting}
               color={paperTheme.colors.primary}
               onPress={(evt) => {
                 evt.stopPropagation();
@@ -102,7 +104,11 @@ export default function CartItemInput(props: {
           right={
             <TextInput.Icon
               icon="plus"
-              disabled={Number(value) + 1 > props.availableWeight}
+              disabled={
+                Number(value) + 1 > props.availableWeight ||
+                props.disabled ||
+                form.formState.isSubmitting
+              }
               color={paperTheme.colors.primary}
               onPress={(evt) => {
                 evt.stopPropagation();

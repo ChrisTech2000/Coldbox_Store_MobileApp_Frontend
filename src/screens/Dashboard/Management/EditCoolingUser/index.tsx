@@ -134,7 +134,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
                   farmerId: params.farmerId,
                 });
               }}
-              disabled={!data || hasError}
+              disabled={!data || hasError || isSubmitting}
               icon="newspaper"
               uppercase
             >
@@ -145,7 +145,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
               tw="w-full mb-4"
               mode="contained"
               onPress={submitHandler}
-              disabled={params.isUserWithoutPhone}
+              disabled={params.isUserWithoutPhone || isSubmitting}
               icon={isSubmitting ? undefined : 'check-circle-outline'}
               uppercase
             >

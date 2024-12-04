@@ -30,10 +30,12 @@ interface FormValues {
 }
 
 function DeliveryContacts() {
+  const toast = InAppNotifications.useToast();
   const { t } = useTranslationUtils();
   const company = useManagementStore((store) => store.company);
 
   const [contactToDelete, setContactToDelete] = useState<number | null>(null);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const { data, isLoading, refetch } = useApiCall(
     'listDeliveryContacts',
@@ -150,6 +152,7 @@ function DeliveryContacts() {
                 evt.stopPropagation();
                 setContactToDelete(null);
               }}
+              disabled={isProcessing}
             >
               {t('actions.cancel')}
             </Button>
@@ -157,13 +160,28 @@ function DeliveryContacts() {
               textColor={paperTheme.colors.error}
               onPress={async (evt) => {
                 evt.stopPropagation();
-                await MarketplaceService.deleteDeliveryContactId({
-                  contactId: contactToDelete as number,
-                  companyId: company!.id,
-                });
-                refetch();
-                setContactToDelete(null);
+                try {
+                  setIsProcessing(true);
+                  if (!contactToDelete || !company) throw new Error(); // safe guard
+
+                  await MarketplaceService.deleteDeliveryContactId({
+                    contactId: contactToDelete,
+                    companyId: company.id,
+                  });
+
+                  await refetch();
+                  setContactToDelete(null);
+                } catch (exception) {
+                  console.error(exception);
+                  toast.show(t('actions.error'), {
+                    type: 'md_danger',
+                    style: { marginBottom: 50 },
+                  });
+                } finally {
+                  setIsProcessing(false);
+                }
               }}
+              disabled={isProcessing}
             >
               {t('actions.confirm')}
             </Button>
@@ -342,7 +360,7 @@ function BottomSheet() {
             tw="w-[48%]"
             mode="contained"
             onPress={handleSubmit(onSubmit)}
-            disabled={!isDirty}
+            disabled={!isDirty || isSubmitting}
             uppercase
           >
             {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}

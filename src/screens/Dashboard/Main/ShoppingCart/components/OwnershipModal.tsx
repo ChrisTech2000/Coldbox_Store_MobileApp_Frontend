@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Dialog, Portal } from 'react-native-paper';
 
+import InAppNotifications from '#common/InAppNotifications';
 import useCartStore from '#stores/shoppingCart';
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
@@ -18,9 +19,13 @@ type OwnershipModalProps = {
 
 export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
+
   const [cartData, setCart] = useCartStore((store) => [store.cartData, store.setCart]);
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
+
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   return (
     <Portal>
@@ -35,19 +40,32 @@ export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
           </Text>
 
           <View tw="mt-5 flex flex-row items-center justify-between">
-            <Button mode="outlined" tw="border border-green-primary w-[48%]" onPress={close}>
+            <Button
+              mode="outlined"
+              tw="border border-green-primary w-[48%]"
+              onPress={close}
+              disabled={isProcessing}
+            >
               {t('actions.cancel')}
             </Button>
             <Button
               mode="contained"
               tw="border border-green-primary w-[48%]"
-              onPress={async () => {
-                const result = await MarketplaceService.toggleCartOwnership();
-                if (result.cart) {
-                  setCart(result.cart);
+              onPress={async (evt) => {
+                evt.stopPropagation();
+                try {
+                  setIsProcessing(true);
+                  const result = await MarketplaceService.toggleCartOwnership();
+                  if (result.cart) setCart(result.cart);
+                  setIsProcessing(false);
+                  close();
+                } catch (exception) {
+                  console.error(exception);
+                  toast.show(t('actions.error', { type: 'md_danger' }));
+                  setIsProcessing(false);
                 }
-                close();
               }}
+              disabled={isProcessing}
             >
               {t('actions.continue')}
             </Button>

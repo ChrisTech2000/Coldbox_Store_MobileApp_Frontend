@@ -143,6 +143,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
         tw="w-2/3 self-center mt-6"
         icon={isSubmitting ? undefined : 'account-arrow-down-outline'}
         onPress={handleSubmit(onSubmit)}
+        disabled={isSubmitting}
       >
         {isSubmitting ? (
           <ActivityIndicator animating size="small" color="white" />
