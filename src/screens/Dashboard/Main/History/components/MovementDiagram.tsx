@@ -25,7 +25,53 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
   const movementType = movement.movementType;
 
   if (movementType === EMovementType.IN) {
-    return <View></View>;
+    return (
+      <View tw="px-4 pb-4 pt-2.5 space-y-1">
+        <View tw="flex flex-row justify-between items-center mb-3">
+          <View tw="flex flex-row items-center space-x-1">
+            <Text tw="text-base">
+              {t('Dashboard.History.stringTemplates.movementType.checkIn')}
+            </Text>
+            <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />
+          </View>
+
+          <View tw="flex flex-row items-center space-x-3">
+            <Text tw="text-base">{t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit')}</Text>
+            <ColdRoom width={20} height={20} tw="text-black" />
+          </View>
+        </View>
+
+        <View tw="w-full flex flex-row items-center justify-between space-x-6">
+          <FlatList
+            data={movement.cratesCheckin}
+            keyExtractor={(item, index) => `crate-${item.name}-${index}`}
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => (
+              <View tw="flex flex-row justify-between mb-2">
+                <View>
+                  <Text tw="text-base">
+                    {startCase(
+                      t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
+                    )}{' '}
+                    {index + 1}
+                  </Text>
+                  <View tw="flex flex-row space-x-2 items-center">
+                    <Text tw="text-base">{movement.code}</Text>
+                    <Text tw="text-base text-green-500">
+                      +{item.weight}
+                      {t('Dashboard.ProduceDetails.kilogram')}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          />
+          <Divider tw="w-12 h-0.5 bg-gray-700" />
+          <Text tw="text-base">{coolingUnit.name}</Text>
+        </View>
+      </View>
+    );
   }
 
   if (movementType === EMovementType.OUT) {
@@ -54,7 +100,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
-              <View tw="flex flex-row justify-between self-end">
+              <View tw="flex flex-row justify-between self-end mb-2">
                 <View tw="items-end">
                   <Text tw="text-base">
                     {startCase(
