@@ -1,6 +1,6 @@
 import startCase from 'lodash/startCase';
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Platform, View } from 'react-native';
 import colors from 'tailwindcss/colors';
 import { Divider } from 'react-native-paper';
 
@@ -28,7 +28,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
     return (
       <View tw="px-4 pb-4 pt-2.5 space-y-1">
         <View tw="flex flex-row justify-between items-center mb-3">
-          <View tw="flex flex-row items-center space-x-1">
+          <View tw="flex flex-row items-center space-x-3">
             <Text tw="text-base">
               {t('Dashboard.History.stringTemplates.movementType.checkIn')}
             </Text>
@@ -48,7 +48,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
-              <View tw="flex flex-row justify-between mb-2">
+              <View tw="flex flex-row justify-between mb-4 w-full">
                 <View>
                   <Text tw="text-base">
                     {startCase(
@@ -56,7 +56,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                     )}{' '}
                     {index + 1}
                   </Text>
-                  <View tw="flex flex-row space-x-2 items-center">
+                  <View tw="flex flex-row space-x-2 items-center flex-wrap">
                     <Text tw="text-base">{movement.code}</Text>
                     <Text tw="text-base text-green-500">
                       +{item.weight}
@@ -67,8 +67,8 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
               </View>
             )}
           />
-          <Divider tw="w-12 h-0.5 bg-gray-700" />
-          <Text tw="text-base">{coolingUnit.name}</Text>
+          <Divider tw="w-[10%] h-0.5 bg-gray-700" />
+          <Text tw="text-base w-[40%] flex-wrap">{coolingUnit.name}</Text>
         </View>
       </View>
     );
@@ -92,8 +92,8 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
         </View>
 
         <View tw="w-full flex flex-row items-center justify-between space-x-6">
-          <Text tw="text-base">{coolingUnit.name}</Text>
-          <Divider tw="w-12 h-0.5 bg-gray-700" />
+          <Text tw="text-base w-[40%] flex-wrap">{coolingUnit.name}</Text>
+          <Divider tw="w-[10%] h-0.5 bg-gray-700" />
           <FlatList
             data={movement.cratesCheckin}
             keyExtractor={(item, index) => `crate-${item.name}-${index}`}
@@ -108,7 +108,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                     )}{' '}
                     {index + 1}
                   </Text>
-                  <View tw="flex flex-row space-x-2 items-center">
+                  <View tw="flex flex-row space-x-2 items-center flex-wrap justify-end">
                     <Text tw="text-base">{movement.code}</Text>
                     <Text tw="text-base text-red-700">
                       -{item.weight}
@@ -130,7 +130,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
     return (
       <View tw="px-4 pb-4 pt-2.5 space-y-1">
         <View tw="flex flex-row justify-between items-center mb-3">
-          <View tw="flex flex-row items-center space-x-1">
+          <View tw="flex flex-row items-center space-x-3">
             <Text tw="text-base">
               {t('Dashboard.History.stringTemplates.movementType.checkOut')}
             </Text>
@@ -159,7 +159,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
             return (
               <View tw="mb-4">
                 {crops.length > 1 ? (
-                  <Text variant="TextBold" tw="text-base mb-1">
+                  <Text variant="TextBold" tw="text-base font-bold mb-1">
                     {item}
                   </Text>
                 ) : null}
@@ -174,13 +174,11 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                             )}{' '}
                             {index + 1}
                           </Text>
-                          <View tw="flex flex-row space-x-1">
-                            <Text tw="text-base">{movement.code}</Text>
-                            <Text tw="text-base text-red-700">
-                              -{crate.weight}
-                              {t('Dashboard.ProduceDetails.kilogram')}
-                            </Text>
-                          </View>
+                          <Text tw="text-base">{movement.code}</Text>
+                          <Text tw="text-base text-red-700">
+                            -{crate.weight}
+                            {t('Dashboard.ProduceDetails.kilogram')}
+                          </Text>
                         </View>
                         <View tw="flex flex-row mt-9">
                           <Divider tw="absolute w-4 h-0.5 bg-gray-700" />
@@ -188,7 +186,8 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                             <Divider
                               tw={cn(
                                 'absolute left-4 w-0.5 h-14 bg-gray-700',
-                                index > 0 && 'bottom-[90%]'
+                                index > 0 &&
+                                  (Platform.OS === 'ios' ? 'h-20 bottom-[94%]' : 'bottom-[90%]')
                               )}
                             />
                           ) : null}
