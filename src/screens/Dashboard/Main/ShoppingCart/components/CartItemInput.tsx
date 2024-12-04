@@ -23,7 +23,7 @@ export default function CartItemInput(props: {
 }) {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
-  const fetchCart = useCartStore((store) => store.fetchCart);
+  const setCart = useCartStore((store) => store.setCart);
 
   const [internalValue, setInternalValue] = useState<number>(props.initialValue);
 
@@ -39,14 +39,14 @@ export default function CartItemInput(props: {
     () =>
       debounce(async (value: number) => {
         if (value && value !== internalValue) {
-          await MarketplaceService.addItemToCart({
+          const result = await MarketplaceService.addItemToCart({
             crateId: props.crateId,
             orderedProduceWeight: value,
             updateStrategy: 'replace',
           });
 
           setInternalValue(value);
-          fetchCart();
+          if (result) setCart(result);
         }
       }, 500),
     [props.crateId, internalValue]
