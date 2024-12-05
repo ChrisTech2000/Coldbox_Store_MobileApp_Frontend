@@ -3,8 +3,8 @@ import type { Localize, LocalizeFn } from 'date-fns';
 import { buildLocalizeFn } from '../utils';
 
 const eraValues = {
-  narrow: ['BC', 'AD'] as const,
-  abbreviated: ['BCE', 'CE'] as const,
+  narrow: ['SK', 'LK'] as const,
+  abbreviated: ['SK', 'LK'] as const,
   wide: ['Saju Kristi', 'Lehin Kristi'] as const,
 };
 
@@ -15,20 +15,20 @@ const quarterValues = {
 };
 
 const monthValues = {
-  narrow: ['S', 'È', 'Ẹ', 'Ì', 'Ẹ̀', 'Ò', 'A', 'Ò', 'O', 'Ọ̀', 'B', 'Ọ̀'] as const,
+  narrow: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] as const,
   abbreviated: [
-    'Sẹ́r',
-    'Èrèl',
-    'Ẹrẹ̀n',
-    'Ìgb',
-    'Ẹ̀bi',
-    'Òkú',
-    'Agẹ',
-    'Ògú',
-    'Owe',
-    'Ọ̀wà',
-    'Bél',
-    'Ọ̀pẹ',
+    'Ṣẹ́rẹ́',
+    'Èrèlè',
+    'Ẹrẹ̀nà',
+    'Ìgbé',
+    'Ẹ̀bibi',
+    'Òkúdu',
+    'Agẹmọ',
+    'Ògún',
+    'Owewe',
+    'Ọ̀wàrà',
+    'Bélú',
+    'Ọ̀pẹ̀',
   ] as const,
   wide: [
     'Oṣù Ṣẹ́rẹ́',
@@ -47,7 +47,7 @@ const monthValues = {
 };
 
 const dayValues = {
-  narrow: ['A', 'A', 'Ì', 'Ọ', 'Ọ', 'Ẹ', 'À'] as const,
+  narrow: ['1', '2', '3', '4', '5', '6', '7'] as const,
   short: ['Àìk', 'Ajé', 'Ìsẹ́', 'Ọjọ́', 'Ọjọ́', 'Ẹtì', 'Àbá'] as const,
   abbreviated: ['Àìkú', 'Ajé', 'Ìsẹ́gun', 'Ọjọ́rú', 'Ọjọ́bọ', 'Ẹtì', 'Àbámẹ́ta'] as const,
   wide: ['Ọjọ́ Àìkú', 'Ọjọ́ Ajé', 'Ọjọ́ Ìsẹ́gun', 'Ọjọ́rú', 'Ọjọ́bọ', 'Ọjọ́ Ẹtì', 'Ọjọ́ Àbámẹ́ta'] as const,
@@ -55,8 +55,8 @@ const dayValues = {
 
 const dayPeriodValues = {
   narrow: {
-    am: 'AM',
-    pm: 'PM',
+    am: 'àárọ̀',
+    pm: 'ọ̀sán',
     midnight: 'àárọ̀',
     noon: 'ọ̀sán',
     morning: 'àárọ̀',
@@ -65,31 +65,31 @@ const dayPeriodValues = {
     night: 'alẹ́',
   },
   abbreviated: {
-    am: 'AM',
-    pm: 'PM',
-    midnight: 'àárọ̀',
-    noon: 'ọ̀sán',
-    morning: 'àárọ̀',
-    afternoon: 'ọ̀sán',
-    evening: 'ìrọ̀lẹ́',
-    night: 'alẹ́',
+    am: 'Àárọ̀',
+    pm: 'Ọ̀sán',
+    midnight: 'Àárọ̀',
+    noon: 'Ọ̀sán',
+    morning: 'Àárọ̀',
+    afternoon: 'Ọ̀sán',
+    evening: 'Ìrọ̀lẹ́',
+    night: 'Alẹ́',
   },
   wide: {
     am: 'Àárọ̀',
     pm: 'Ọ̀sán',
-    midnight: 'àárọ̀',
-    noon: 'ọ̀sán',
-    morning: 'àárọ̀',
-    afternoon: 'ọ̀sán',
-    evening: 'ìrọ̀lẹ́',
-    night: 'alẹ́',
+    midnight: 'Àárọ̀',
+    noon: 'Ọ̀sán',
+    morning: 'Àárọ̀',
+    afternoon: 'Ọ̀sán',
+    evening: 'Ìrọ̀lẹ́',
+    night: 'Alẹ́',
   },
 };
 
 const formattingDayPeriodValues = {
   narrow: {
-    am: 'AM',
-    pm: 'PM',
+    am: 'àárọ̀',
+    pm: 'ọ̀sán',
     midnight: 'àárọ̀',
     noon: 'ọ̀sán',
     morning: 'àárọ̀',
@@ -98,30 +98,30 @@ const formattingDayPeriodValues = {
     night: 'alẹ́',
   },
   abbreviated: {
-    am: 'AM',
-    pm: 'PM',
-    midnight: 'àárọ̀',
-    noon: 'ọ̀sán',
-    morning: 'àárọ̀',
-    afternoon: 'ọ̀sán',
-    evening: 'ìrọ̀lẹ́',
-    night: 'alẹ́',
+    am: 'Àárọ̀',
+    pm: 'Ọ̀sán',
+    midnight: 'Àárọ̀',
+    noon: 'Ọ̀sán',
+    morning: 'Àárọ̀',
+    afternoon: 'Ọ̀sán',
+    evening: 'Ìrọ̀lẹ́',
+    night: 'Alẹ́',
   },
   wide: {
     am: 'Àárọ̀',
     pm: 'Ọ̀sán',
-    midnight: 'àárọ̀',
-    noon: 'ọ̀sán',
-    morning: 'àárọ̀',
-    afternoon: 'ọ̀sán',
-    evening: 'ìrọ̀lẹ́',
-    night: 'alẹ́',
+    midnight: 'Àárọ̀',
+    noon: 'Ọ̀sán',
+    morning: 'Àárọ̀',
+    afternoon: 'Ọ̀sán',
+    evening: 'Ìrọ̀lẹ́',
+    night: 'Alẹ́',
   },
 };
 
 const ordinalNumber: LocalizeFn<number> = (dirtyNumber) => {
   const number = Number(dirtyNumber);
-  return number.toString();
+  return number + 'k';
 };
 
 export const localize: Localize = {

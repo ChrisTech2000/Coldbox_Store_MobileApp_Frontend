@@ -7,12 +7,12 @@ const parseOrdinalNumberPattern = /\d+/i;
 
 const matchEraPatterns = {
   narrow: /^(t|a)/i,
-  abbreviated: /^(t\.?m\.?|a\.?m\.?)/i,
-  wide: /^(tupu myiri kristi|afọ myiri kristi)/i,
+  abbreviated: /^(t\.?k\.?|a\.?k\.?)/i,
+  wide: /^(tupu kraist|afọ kraist)/i,
 };
 const parseEraPatterns = {
   any: [/^t/i, /^a/i] as const,
-  wide: [/^tupu myiri kristi/i, /^afọ myiri kristi/i] as const,
+  wide: [/^tupu kraist/i, /^afọ kraist/i] as const,
 };
 
 const matchQuarterPatterns = {
@@ -62,13 +62,13 @@ const parseMonthPatterns = {
 
 const matchDayPatterns = {
   narrow: /^[mwtnfs]/i,
-  short: /^(Ụka|Mbọ|Tuz|Wen|Tọọ|Fra|Sat)/i,
-  abbreviated: /^(Ụka|Mbọ|Tuz|Wen|Tọọ|Fra|Sat)/i,
-  wide: /^(Mbọsị Ụka|Mbọsị Mbọ|Mbọsị Tuz|Mbọsị Wen|Mbọsị Tọọ|Mbọsị Fra|Mbọsị Sat)/i,
+  short: /^(Ụka|Mọn|Tiu|Wen|Tọọ|Fra|Sat)/i,
+  abbreviated: /^(Ụka|Mọn|Tiu|Wen|Tọọ|Fra|Sat)/i,
+  wide: /^(Mbọsị Ụka|Mọnde|Tiuzdee|Wenezdee|Tọọzdee|Fraịdee|Satọdee)/i,
 };
 const parseDayPatterns = {
   narrow: [/^ụ/i, /^m/i, /^t/i, /^w/i, /^t/i, /^f/i, /^s/i] as const,
-  any: [/^ụka/i, /^mbọ/i, /^tuz/i, /^wen/i, /^tọọ/i, /^fra/i, /^sat/i] as const,
+  any: [/^ụka/i, /^mọn/i, /^tiu/i, /^wen/i, /^tọọ/i, /^fra/i, /^sat/i] as const,
 };
 
 const matchDayPeriodPatterns = {

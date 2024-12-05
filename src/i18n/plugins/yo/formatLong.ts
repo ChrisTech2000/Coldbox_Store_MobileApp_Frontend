@@ -5,8 +5,8 @@ import { buildFormatLongFn } from '../utils';
 export const formatLong: FormatLong = {
   date: buildFormatLongFn({
     formats: {
-      full: 'EEEE, d MMMM y',
-      long: 'd MMMM y',
+      full: 'EEEE, d Oṣù MMMM y',
+      long: 'd Oṣù MMMM y',
       medium: 'd MMM y',
       short: 'dd/MM/y',
     },

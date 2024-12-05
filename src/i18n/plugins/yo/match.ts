@@ -7,82 +7,82 @@ const parseOrdinalNumberPattern = /\d+/i;
 
 const matchEraPatterns = {
   narrow: /^(s|l)/i,
-  abbreviated: /^(s\.?k\.?|l\.?k\.?)/i,
-  wide: /^(saju kristiani|lehin kristiani)/i,
+  abbreviated: /^(BCE|CE)/i,
+  wide: /^(Saju Kristi|Lehin Kristi)/i,
 };
 const parseEraPatterns = {
   any: [/^s/i, /^l/i] as const,
-  wide: [/^saju kristiani/i, /^lehin kristiani/i] as const,
+  wide: [/^saju kristi/i, /^lehin kristi/i] as const,
 };
 
 const matchQuarterPatterns = {
   narrow: /^[1234]/i,
-  abbreviated: /^i[1234]/i,
-  wide: /^idaji k[1234]/i,
+  abbreviated: /^K[1234]/i,
+  wide: /^Keji kini [1234]/i,
 };
 const parseQuarterPatterns = {
   any: [/1/i, /2/i, /3/i, /4/i] as const,
 };
 
 const matchMonthPatterns = {
-  narrow: /^[jfmagosnd]/i,
-  abbreviated: /^(she|ere|ern|igb|agy|oku|ije|ogu|owe|ope|ben|ose)/i,
-  wide: /^(osu shɛrɛ|osu erele|osu ɛrɛna|osu igbe|osu ɛbibi|osu okudu|osu agɛmo|osu ogunja|osu owara|osu ɔpɛ|osu belu|osu ɔpɛ keje)/i,
+  narrow: /^[JFMAJSOND]/i,
+  abbreviated: /^(Ṣẹ́r|Èrèl|Ẹrẹ̀n|Ìgb|Ẹ̀bi|Òkú|Agẹ|Ògú|Owe|Ọ̀pẹ|Bél|Ọ̀pẹ)/i,
+  wide: /^(Oṣù Ṣẹ́rẹ́|Oṣù Èrèlè|Oṣù Ẹrẹ̀nà|Oṣù Ìgbé|Oṣù Ẹ̀bibi|Oṣù Òkúdu|Oṣù Agẹmọ|Oṣù Ògún|Oṣù Owewe|Oṣù Ọ̀wàrà|Oṣù Bélú|Oṣù Ọ̀pẹ̀)/i,
 };
 const parseMonthPatterns = {
   narrow: [
-    /^s/i,
-    /^e/i,
-    /^ɛ/i,
-    /^i/i,
-    /^ɛ/i,
-    /^o/i,
-    /^a/i,
-    /^o/i,
-    /^o/i,
-    /^ɔ/i,
-    /^b/i,
-    /^ɔ/i,
+    /^Ṣ/i,
+    /^È/i,
+    /^Ẹ/i,
+    /^Ì/i,
+    /^Ẹ̀/i,
+    /^Ò/i,
+    /^A/i,
+    /^Ò/i,
+    /^O/i,
+    /^Ọ̀/i,
+    /^B/i,
+    /^Ọ̀p/i,
   ] as const,
   any: [
-    /^she/i,
-    /^ere/i,
-    /^ɛrɛ/i,
-    /^igb/i,
-    /^ɛbi/i,
-    /^oku/i,
-    /^agɛ/i,
-    /^ogu/i,
-    /^owa/i,
-    /^ɔpɛ$/i,
-    /^bel/i,
-    /^ɔpɛ k/i,
+    /^Ṣẹ́/i,
+    /^Èrè/i,
+    /^Ẹrẹ̀/i,
+    /^Ìgb/i,
+    /^Ẹ̀bi/i,
+    /^Òkú/i,
+    /^Agẹ/i,
+    /^Ògú/i,
+    /^Owe/i,
+    /^Ọ̀wà/i,
+    /^Bél/i,
+    /^Ọ̀pẹ/i,
   ] as const,
 };
 
 const matchDayPatterns = {
-  narrow: /^[abɛɔir]/i,
-  short: /^(ài|aj|ìs|ɔj|ɛt|àb|ab)/i,
-  abbreviated: /^(àìk|ajé|ìsɛ́|ɔjɔ́|ɛti|àbá|àbà)/i,
-  wide: /^(ɔjɔ́ àìkú|ɔjɔ́ ajé|ɔjɔ́ ìsɛ́gun|ɔjɔ́rú|ɔjɔ́ ɛtì|ɔjɔ́ àbámɛ́ta|ɔjɔ́ àbàmɛ́ta)/i,
+  narrow: /^[AMỊỌRE]/i,
+  short: /^(Àì|Aj|Ìs|Ọj|Ẹt|Àb|Àb)/i,
+  abbreviated: /^(Àìk|Ajé|Ìsẹ́|Ọjọ́|Ẹti|Àbá|Àbà)/i,
+  wide: /^(Ọjọ́ Àìkú|Ọjọ́ Ajé|Ọjọ́ Ìsẹ́gun|Ọjọ́rú|Ọjọ́ Ẹtì|Ọjọ́ Àbámẹ́ta|Ọjọ́ Àbàmẹ́ta)/i,
 };
 const parseDayPatterns = {
-  narrow: [/^à/i, /^a/i, /^ì/i, /^ɔ/i, /^ɛ/i, /^à/i, /^à/i] as const,
-  any: [/^àì/i, /^aj/i, /^ìs/i, /^ɔjɔ́r/i, /^ɛt/i, /^àbám/i, /^àbàm/i] as const,
+  narrow: [/^À/i, /^A/i, /^Ì/i, /^Ọ/i, /^Ẹ/i, /^À/i, /^À/i] as const,
+  any: [/^Àìk/i, /^Aj/i, /^Ìs/i, /^Ọjọ́r/i, /^Ẹt/i, /^Àbám/i, /^Àbàm/i] as const,
 };
 
 const matchDayPeriodPatterns = {
-  narrow: /^(àárɔ̀|ɔ̀sán|alɛ́|oru)/i,
-  any: /^(àárɔ̀|ɔ̀sán|alɛ́|oru)/i,
+  narrow: /^(àárọ̀|ọ̀sán|alẹ́|oru)/i,
+  any: /^(àárọ̀|ọ̀sán|alẹ́|oru)/i,
 };
 const parseDayPeriodPatterns = {
   any: {
     am: /^à/i,
-    pm: /^ɔ̀/i,
+    pm: /^ọ̀/i,
     midnight: /^o/i,
-    noon: /^ɔ̀s/i,
+    noon: /^ọ̀s/i,
     morning: /^àá/i,
-    afternoon: /^ɔ̀s/i,
+    afternoon: /^ọ̀s/i,
     evening: /^a/i,
     night: /^o/i,
   },

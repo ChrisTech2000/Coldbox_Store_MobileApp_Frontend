@@ -7,7 +7,7 @@ const parseOrdinalNumberPattern = /\d+/i;
 
 const matchEraPatterns = {
   narrow: /^(k|b)/i,
-  abbreviated: /^(k\.?m\.?|b\.?m\.?)/i,
+  abbreviated: /^(k\.?\.?m\.?|b\.?\.?m\.?)/i,
   wide: /^(kafin miladi|bayan miladi)/i,
 };
 const parseEraPatterns = {
@@ -18,7 +18,7 @@ const parseEraPatterns = {
 const matchQuarterPatterns = {
   narrow: /^[1234]/i,
   abbreviated: /^k[1234]/i,
-  wide: /^kwata na [1234]/i,
+  wide: /^kwata na [1234] na shekara/i,
 };
 const parseQuarterPatterns = {
   any: [/1/i, /2/i, /3/i, /4/i] as const,
@@ -26,8 +26,8 @@ const parseQuarterPatterns = {
 
 const matchMonthPatterns = {
   narrow: /^[jfmasond]/i,
-  abbreviated: /^(jan|fab|mar|afi|may|yun|yul|agu|sat|okt|nuw|dis)/i,
-  wide: /^(janairu|fabrairu|maris|afirilu|mayu|yuni|yuli|agusta|satumba|oktoba|nuwamba|disamba)/i,
+  abbreviated: /^(Jan|Fab|Mar|Afi|May|Yun|Yul|Agu|Sat|Okt|Nuw|Dis)/i,
+  wide: /^(Janairu|Fabrairu|Maris|Afirilu|Mayu|Yuni|Yuli|Agusta|Satumba|Oktoba|Nuwamba|Disamba)/i,
 };
 const parseMonthPatterns = {
   narrow: [
@@ -62,9 +62,9 @@ const parseMonthPatterns = {
 
 const matchDayPatterns = {
   narrow: /^[ltkarj]/i,
-  short: /^(lah|lit|tal|lar|alh|jum|asa)/i,
-  abbreviated: /^(lah|lit|tal|lar|alh|jum|asa)/i,
-  wide: /^(lahadi|litinin|talata|laraba|alhamis|jumma'a|asabar)/i,
+  short: /^(Lh|Li|Ta|Lr|Al|Ju|As)/i,
+  abbreviated: /^(Lah|Lit|Tal|Lar|Alh|Jum|Asa)/i,
+  wide: /^(Lahadi|Litinin|Talata|Laraba|Alhamis|Jumma'a|Asabar)/i,
 };
 const parseDayPatterns = {
   narrow: [/^l/i, /^l/i, /^t/i, /^l/i, /^a/i, /^j/i, /^a/i] as const,

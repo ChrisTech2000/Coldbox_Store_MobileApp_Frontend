@@ -2,7 +2,7 @@ import type { Match, Quarter } from 'date-fns';
 
 import { buildMatchFn, buildMatchPatternFn } from '../utils';
 
-const matchOrdinalNumberPattern = /^(\d+)/i;
+const matchOrdinalNumberPattern = /^(\d+)(ମ|ୟ|ଥ|ର୍ଥ)?/i;
 const parseOrdinalNumberPattern = /\d+/i;
 
 const matchEraPatterns = {

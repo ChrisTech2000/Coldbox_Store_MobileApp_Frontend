@@ -5,10 +5,10 @@ import { buildFormatLongFn } from '../utils';
 export const formatLong: FormatLong = {
   date: buildFormatLongFn({
     formats: {
-      full: 'EEEE d MMMM y',
-      long: 'd MMMM y',
-      medium: 'd MMM y',
-      short: 'd-M-yy',
+      full: 'EEEE MMMM d y',
+      long: 'MMMM d y',
+      medium: 'MMM d y',
+      short: 'M/d/yy',
     },
     defaultWidth: 'full',
   }),
