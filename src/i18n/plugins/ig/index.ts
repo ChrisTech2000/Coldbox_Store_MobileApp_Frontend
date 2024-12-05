@@ -7,7 +7,7 @@ import { localize } from './localize';
 import { match } from './match';
 
 export const ig: Locale = {
-  code: 'ig',
+  code: 'ig-NG',
   formatDistance: formatDistance,
   formatLong: formatLong,
   formatRelative: formatRelative,

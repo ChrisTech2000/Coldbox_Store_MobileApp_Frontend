@@ -7,7 +7,7 @@ import { localize } from './localize';
 import { match } from './match';
 
 export const ha: Locale = {
-  code: 'ha',
+  code: 'ha-NG',
   formatDistance: formatDistance,
   formatLong: formatLong,
   formatRelative: formatRelative,

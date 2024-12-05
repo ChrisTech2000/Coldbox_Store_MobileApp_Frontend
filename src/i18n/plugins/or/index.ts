@@ -7,7 +7,7 @@ import { localize } from './localize';
 import { match } from './match';
 
 export const or: Locale = {
-  code: 'or',
+  code: 'or-IN',
   formatDistance: formatDistance,
   formatLong: formatLong,
   formatRelative: formatRelative,
