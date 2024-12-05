@@ -2,19 +2,19 @@ import type { Localize, LocalizeFn } from 'date-fns';
 
 import { buildLocalizeFn } from '../utils';
 
-const eraValues = {
+const ERA_VALUES = {
   narrow: ['T.K', 'A.K'] as const,
   abbreviated: ['T.K.', 'A.K.'] as const,
   wide: ['Tupu Kristi', 'Afọ Kristi'] as const,
 };
 
-const quarterValues = {
+const QUARTER_VALUES = {
   narrow: ['1', '2', '3', '4'] as const,
   abbreviated: ['Ọ1', 'Ọ2', 'Ọ3', 'Ọ4'] as const,
   wide: ['Ọkara 1', 'Ọkara 2', 'Ọkara 3', 'Ọkara 4'] as const,
 };
 
-const monthValues = {
+const MONTH_VALUES = {
   narrow: ['J', 'F', 'M', 'E', 'M', 'J', 'J', 'Ọ', 'S', 'Ọ', 'N', 'D'] as const,
   abbreviated: [
     'Jen',
@@ -45,14 +45,14 @@ const monthValues = {
     'Disemba',
   ] as const,
 };
-const dayValues = {
+const DAY_VALUES = {
   narrow: ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const,
   short: ['Ụka', 'Mọn', 'Tuz', 'Wen', 'Tọọ', 'Fraị', 'Sat'] as const,
   abbreviated: ['Ụka', 'Mọn', 'Tuz', 'Wen', 'Tọọ', 'Fraị', 'Sat'] as const,
   wide: ['Mbọsị Ụka', 'Mọnde', 'Tuzdee', 'Wenezdee', 'Tọọzdee', 'Fraịdee', 'Satọdee'] as const,
 };
 
-const dayPeriodValues = {
+const DAY_PERIOD_VALUES = {
   narrow: {
     am: "N'ụtụtụ",
     pm: "N'anyasị",
@@ -85,7 +85,7 @@ const dayPeriodValues = {
   },
 };
 
-const formattingDayPeriodValues = {
+const FORMATTING_DAY_PERIOD_VALUES = {
   narrow: {
     am: "N'ụtụtụ",
     pm: "N'anyasị",
@@ -118,34 +118,34 @@ const formattingDayPeriodValues = {
   },
 };
 
-const ordinalNumber: LocalizeFn<number> = (dirtyNumber) => {
+const _ordinalNumber: LocalizeFn<number> = (dirtyNumber) => {
   const number = Number(dirtyNumber);
   return number.toString();
 };
 
 export const localize: Localize = {
-  ordinalNumber,
+  ordinalNumber: _ordinalNumber,
   era: buildLocalizeFn({
-    values: eraValues,
+    values: ERA_VALUES,
     defaultWidth: 'wide',
   }),
   quarter: buildLocalizeFn({
-    values: quarterValues,
+    values: QUARTER_VALUES,
     defaultWidth: 'wide',
     argumentCallback: (quarter) => quarter - 1,
   }),
   month: buildLocalizeFn({
-    values: monthValues,
+    values: MONTH_VALUES,
     defaultWidth: 'wide',
   }),
   day: buildLocalizeFn({
-    values: dayValues,
+    values: DAY_VALUES,
     defaultWidth: 'wide',
   }),
   dayPeriod: buildLocalizeFn({
-    values: dayPeriodValues,
+    values: DAY_PERIOD_VALUES,
     defaultWidth: 'wide',
-    formattingValues: formattingDayPeriodValues,
+    formattingValues: FORMATTING_DAY_PERIOD_VALUES,
     defaultFormattingWidth: 'wide',
   }),
 };

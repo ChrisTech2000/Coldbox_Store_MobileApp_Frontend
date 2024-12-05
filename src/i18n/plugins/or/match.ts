@@ -2,29 +2,29 @@ import type { Match, Quarter } from 'date-fns';
 
 import { buildMatchFn, buildMatchPatternFn } from '../utils';
 
-const matchOrdinalNumberPattern = /^(\d+)(ମ|ୟ|ଥ|ର୍ଥ)?/i;
-const parseOrdinalNumberPattern = /\d+/i;
+const MATCH_ORDINAL_NUMBER_PATTERN = /^(\d+)(ମ|ୟ|ଥ|ର୍ଥ)?/i;
+const PARSE_ORDINAL_NUMBER_PATTERN = /\d+/i;
 
-const matchEraPatterns = {
+const MATCH_ERA_PATTERNS = {
   narrow: /^(ଖ୍ରୀ\.ପୂ\.|ଖ୍ରୀ\.)/i,
   abbreviated: /^(ଖ୍ରୀ\.ପୂ\.|ଖ୍ରୀ\.)/i,
   wide: /^(ଖ୍ରୀଷ୍ଟପୂର୍ବ|ଖ୍ରୀଷ୍ଟାବ୍ଦ)/i,
 };
-const parseEraPatterns = {
+const PARSE_ERA_PATTERNS = {
   any: [/^ଖ୍ରୀ\.ପୂ/i, /^ଖ୍ରୀ/i] as const,
   wide: [/^ଖ୍ରୀଷ୍ଟପୂର୍ବ/i, /^ଖ୍ରୀଷ୍ଟାବ୍ଦ/i] as const,
 };
 
-const matchQuarterPatterns = {
+const MATCH_QUARTER_PATTERNS = {
   narrow: /^[1234]/i,
   abbreviated: /^Q[1234]/i,
   wide: /^[1234](ମ|ୟ|ଥ|ର୍ଥ) ତ୍ରୟମାସ/i,
 };
-const parseQuarterPatterns = {
+const PARSE_QUARTER_PARTTERNS = {
   any: [/1/i, /2/i, /3/i, /4/i] as const,
 };
 
-const matchMonthPatterns = {
+const MATCH_MONTH_PATTERNS = {
   narrow: /^[ଜଫମଏମଜଅସଅନଡ]/i,
   abbreviated: /^(ଜାନୁ|ଫେବୃ|ମାର୍ଚ୍ଚ|ଅପ୍ରେ|ମଇ|ଜୁନ|ଜୁଲା|ଅଗ|ସେପ୍ଟେ|ଅକ୍ଟୋ|ନଭେ|ଡିସେ)/i,
   wide: /^(ଜାନୁଆରୀ|ଫେବୃଆରୀ|ମାର୍ଚ୍ଚ|ଅପ୍ରେଲ|ମଇ|ଜୁନ|ଜୁଲାଇ|ଅଗଷ୍ଟ|ସେପ୍ଟେମ୍ବର|ଅକ୍ଟୋବର|ନଭେମ୍ବର|ଡିସେମ୍ବର)/i,
@@ -60,22 +60,22 @@ const parseMonthPatterns = {
   ] as const,
 };
 
-const matchDayPatterns = {
+const MATCH_DAY_PATTERNS = {
   narrow: /^[ରସମବଗଶ]/i,
   short: /^(ରବି|ସୋମ|ମଙ୍ଗଳ|ବୁଧ|ଗୁରୁ|ଶୁକ୍ର|ଶନି)/i,
   abbreviated: /^(ରବି|ସୋମ|ମଙ୍ଗଳ|ବୁଧ|ଗୁରୁ|ଶୁକ୍ର|ଶନି)/i,
   wide: /^(ରବିବାର|ସୋମବାର|ମଙ୍ଗଳବାର|ବୁଧବାର|ଗୁରୁବାର|ଶୁକ୍ରବାର|ଶନିବାର)/i,
 };
-const parseDayPatterns = {
+const PARSE_DAY_PATTERNS = {
   narrow: [/^ର/i, /^ସୋ/i, /^ମ/i, /^ବୁ/i, /^ଗୁ/i, /^ଶୁ/i, /^ଶ/i] as const,
   any: [/^ର/i, /^ସୋ/i, /^ମ/i, /^ବୁ/i, /^ଗୁ/i, /^ଶୁ/i, /^ଶ/i] as const,
 };
 
-const matchDayPeriodPatterns = {
+const MATCH_DAY_PERIOD_PATTERNS = {
   narrow: /^(ପୂ|ଅ|ମ|ସ|ସନ୍ଧ୍ୟା|ରାତି)/i,
   any: /^(ପୂର୍ବାହ୍ନ|ଅପରାହ୍ନ|ମଧ୍ୟାହ୍ନ|ସକାଳ|ସନ୍ଧ୍ୟା|ରାତି)/i,
 };
-const parseDayPeriodPatterns = {
+const PARSE_DAY_PERIOD_PATTERNS = {
   any: {
     am: /^ପୂ/i,
     pm: /^ଅ/i,
@@ -90,39 +90,39 @@ const parseDayPeriodPatterns = {
 
 export const match: Match = {
   ordinalNumber: buildMatchPatternFn({
-    matchPattern: matchOrdinalNumberPattern,
-    parsePattern: parseOrdinalNumberPattern,
+    matchPattern: MATCH_ORDINAL_NUMBER_PATTERN,
+    parsePattern: PARSE_ORDINAL_NUMBER_PATTERN,
     valueCallback: (value) => parseInt(value, 10),
   }),
   era: buildMatchFn({
-    matchPatterns: matchEraPatterns,
+    matchPatterns: MATCH_ERA_PATTERNS,
     defaultMatchWidth: 'wide',
-    parsePatterns: parseEraPatterns,
+    parsePatterns: PARSE_ERA_PATTERNS,
     defaultParseWidth: 'any',
   }),
   quarter: buildMatchFn({
-    matchPatterns: matchQuarterPatterns,
+    matchPatterns: MATCH_QUARTER_PATTERNS,
     defaultMatchWidth: 'wide',
-    parsePatterns: parseQuarterPatterns,
+    parsePatterns: PARSE_QUARTER_PARTTERNS,
     defaultParseWidth: 'any',
     valueCallback: (index) => (index + 1) as Quarter,
   }),
   month: buildMatchFn({
-    matchPatterns: matchMonthPatterns,
+    matchPatterns: MATCH_MONTH_PATTERNS,
     defaultMatchWidth: 'wide',
     parsePatterns: parseMonthPatterns,
     defaultParseWidth: 'any',
   }),
   day: buildMatchFn({
-    matchPatterns: matchDayPatterns,
+    matchPatterns: MATCH_DAY_PATTERNS,
     defaultMatchWidth: 'wide',
-    parsePatterns: parseDayPatterns,
+    parsePatterns: PARSE_DAY_PATTERNS,
     defaultParseWidth: 'any',
   }),
   dayPeriod: buildMatchFn({
-    matchPatterns: matchDayPeriodPatterns,
+    matchPatterns: MATCH_DAY_PERIOD_PATTERNS,
     defaultMatchWidth: 'any',
-    parsePatterns: parseDayPeriodPatterns,
+    parsePatterns: PARSE_DAY_PERIOD_PATTERNS,
     defaultParseWidth: 'any',
   }),
 };
