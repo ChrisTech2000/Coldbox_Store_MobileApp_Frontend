@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,6 +22,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -41,6 +42,7 @@ type FormValues<T = string> = {
   crates: Array<{
     id: number;
     weight: T;
+    tag: string | undefined;
     isSellable: boolean;
   }>;
   price: T;
@@ -101,6 +103,7 @@ function EditCrateWeightAndPricing(
             z.object({
               id: z.number(),
               weight: greaterThanEqual,
+              tag: z.string().optional(),
               isSellable: z.boolean(),
             })
           )
@@ -119,6 +122,7 @@ function EditCrateWeightAndPricing(
   const applyToAll = form.watch('applyToAll');
   const price = form.watch('price');
   const crates = form.watch('crates');
+  const areCrateTagsSet = crates.filter((crate) => !!crate.tag);
 
   const totalWeight = crates.reduce((acc, curr) => {
     if (!curr.isSellable) return acc;
@@ -251,6 +255,7 @@ function EditCrateWeightAndPricing(
       const initialCrates: FormValues['crates'] = params.produce.checkedInCrates.map((crate) => ({
         id: crate.id,
         weight: crate.weight.toString(),
+        tag: crate.tag,
         isSellable: false,
       }));
 
@@ -388,7 +393,7 @@ function EditCrateWeightAndPricing(
             data={crateFields.fields}
             keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
             scrollEnabled={false}
-            renderItem={({ index }) => {
+            renderItem={({ item, index }) => {
               const isDisabled = applyToAll && index > 0;
               return (
                 <View tw="flex-row items-center justify-between my-3">
@@ -398,8 +403,16 @@ function EditCrateWeightAndPricing(
                       size={30}
                       color={isDisabled ? colors.gray[400] : paperTheme.colors.onSurface}
                     />
-                    <Text tw={cn('text-base self-center', isDisabled && 'text-gray-400')}>
-                      #{index + 1}
+                    <Text
+                      tw={cn('text-sm self-center w-12 text-wrap', isDisabled && 'text-gray-400')}
+                    >
+                      #{' '}
+                      {areCrateTagsSet
+                        ? item.tag ||
+                          t(
+                            'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.unavailableId'
+                          )
+                        : index + 1}
                     </Text>
                   </View>
 
@@ -476,7 +489,7 @@ function EditCrateWeightAndPricing(
                     name={`crates.${index}.isSellable`}
                     render={({ field: { value, onChange } }) => (
                       <TouchableOpacity
-                        tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1"
+                        tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1 w-30"
                         onPress={() => {
                           if (!applyToAll) {
                             onChange(!value);
@@ -495,6 +508,7 @@ function EditCrateWeightAndPricing(
                         <Text
                           tw={cn(
                             'text-base',
+                            Dimensions.get('window').height <= SMALL_SCREEN_THRESHOLD && 'w-20',
                             (isDisabled || !farmerEligible || !companyEligible) && 'text-gray-300'
                           )}
                         >

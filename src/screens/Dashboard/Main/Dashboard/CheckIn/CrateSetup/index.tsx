@@ -303,6 +303,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                   const contextualCrates = crates.map((crate) => ({
                     weight: crate.weight,
                     isSellable: crate.isSellable ?? false,
+                    tag: crate.crateId,
                   }));
                   navigation.navigate('CrateWeightAndPricing', {
                     companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',

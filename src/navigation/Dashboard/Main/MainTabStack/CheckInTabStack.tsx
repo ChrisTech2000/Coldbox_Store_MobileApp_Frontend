@@ -42,6 +42,7 @@ export type CheckInStackRoutes = {
     crates: Array<{
       weight: number;
       isSellable: boolean;
+      tag: number | undefined;
     }>;
     sellingPrice: number;
     applyToAll: boolean;
@@ -82,7 +83,7 @@ export default function CheckInStack() {
     const type = (props.route.params as { type: ECropType })?.type;
     const cropType = mapCroppedType(type, t);
     // eslint-disable-next-line react/prop-types
-    const farmer = (props.route.params as { farmer: Farmer })?.farmer?.user;
+    const farmer = (props.route.params as { user: Farmer })?.user?.user;
 
     const translationPath = NAVIGATOR_HEADERS[routeName];
     const routeTitle = translationPath

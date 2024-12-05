@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { FlatList, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Divider, TextInput } from 'react-native-paper';
@@ -23,6 +23,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -41,6 +42,7 @@ type FormValues<T = string> = {
   crates: Array<{
     weight: T;
     isSellable: boolean;
+    tag: number | undefined;
   }>;
   price: T | undefined;
 };
@@ -103,6 +105,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
       crates: params.crates.map((crate) => ({
         weight: crate.weight.toString(),
         isSellable: crate.isSellable,
+        tag: crate.tag,
       })),
       price: params.sellingPrice.toString(),
     },
@@ -130,6 +133,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const applyToAll = form.watch('applyToAll');
   const price = form.watch('price');
   const crates = form.watch('crates');
+  const areTagsDefined = crates.filter((crate) => !!crate.tag).length > 0;
 
   const totalWeight = crates.reduce((acc, curr) => {
     if (!curr.isSellable) return acc;
@@ -216,7 +220,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             data={crateFields.fields}
             keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
             scrollEnabled={false}
-            renderItem={({ index }) => {
+            renderItem={({ item, index }) => {
               const isDisabled = applyToAll && index > 0;
               return (
                 <View tw="flex-row items-center my-3 justify-between">
@@ -226,8 +230,16 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                       size={30}
                       color={isDisabled ? colors.gray[400] : paperTheme.colors.onSurface}
                     />
-                    <Text tw={cn('text-base self-center', isDisabled && 'text-gray-400')}>
-                      #{index + 1}
+                    <Text
+                      tw={cn('text-sm self-center w-12 text-wrap', isDisabled && 'text-gray-400')}
+                    >
+                      #{' '}
+                      {areTagsDefined
+                        ? (item.tag ??
+                          t(
+                            'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.unavailableId'
+                          ))
+                        : index + 1}
                     </Text>
                   </View>
 
@@ -306,7 +318,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                       name={`crates.${index}.isSellable`}
                       render={({ field: { value, onChange } }) => (
                         <TouchableOpacity
-                          tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1"
+                          tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1 w-30"
                           onPress={() => {
                             if (!applyToAll) {
                               onChange(!value);
@@ -326,7 +338,8 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                           />
                           <Text
                             tw={cn(
-                              'text-base',
+                              'text-base text-wrap',
+                              Dimensions.get('window').height <= SMALL_SCREEN_THRESHOLD && 'w-20',
                               (isDisabled || !allowedToSetPricing) && 'text-gray-300'
                             )}
                           >
@@ -352,6 +365,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                   crateFields.append({
                     weight: '25',
                     isSellable: false,
+                    tag: undefined,
                   });
                   scrollViewRef.current?.scrollToEnd(true);
                 }}
