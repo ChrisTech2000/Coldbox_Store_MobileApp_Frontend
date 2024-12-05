@@ -64,7 +64,7 @@ export function PickupDetailsCard({
         )}
         {address ? (
           <TouchableOpacity onPress={() => copyToClipboard(address)}>
-            <Icon source="content-copy" size={15} />
+            <Icon source="content-copy" size={15} color={paperTheme.colors.primary} />
           </TouchableOpacity>
         ) : null}
       </View>
