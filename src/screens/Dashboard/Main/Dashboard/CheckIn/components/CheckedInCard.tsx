@@ -71,7 +71,9 @@ export function CheckedInCard({
           <TouchableOpacity tw="w-5 mr-2.5 mt-2.5" onPress={openOptionsModal} disabled={disabled}>
             <Icon source="dots-vertical" size={20} />
           </TouchableOpacity>
-        ) : null}
+        ) : (
+          <View></View>
+        )}
 
         <View tw="flex flex-row space-x-1 items-center px-1">
           <FastImage
