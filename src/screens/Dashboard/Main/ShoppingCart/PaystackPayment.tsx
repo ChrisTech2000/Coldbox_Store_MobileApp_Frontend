@@ -17,11 +17,14 @@ import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 import { ERoles } from '#types/global';
 
+import { useMarketplaceListing } from '../Marketplace/utils';
+
 const TRANSACTION_COMPLETED_URL = '/payment/callback';
 const TRANSACTION_CANCELLED_URL = '/payment/cancel';
 
 function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) {
   const fetchCart = useCartStore((store) => store.fetchCart);
+  const { refetch: refetchMarketplace } = useMarketplaceListing();
   const [refreshData, fetchGlobalInformation, farmerId] = useDashboardStore((store) => [
     store.refreshData,
     store.fetchGlobalInformation,
@@ -38,6 +41,7 @@ function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) 
 
     if (url.includes(TRANSACTION_COMPLETED_URL)) {
       props.navigation.navigate('OrderOverview', { orderId });
+      refetchMarketplace();
 
       const promises: Promise<unknown>[] = [];
 
