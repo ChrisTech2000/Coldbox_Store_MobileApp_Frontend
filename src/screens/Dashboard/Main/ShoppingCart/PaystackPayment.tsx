@@ -22,7 +22,11 @@ const TRANSACTION_CANCELLED_URL = '/payment/cancel';
 
 function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) {
   const fetchCart = useCartStore((store) => store.fetchCart);
-  const [refreshData, farmerId] = useDashboardStore((store) => [store.refreshData, store.farmerId]);
+  const [refreshData, fetchGlobalInformation, farmerId] = useDashboardStore((store) => [
+    store.refreshData,
+    store.fetchGlobalInformation,
+    store.farmerId,
+  ]);
   const user = useAuthStore((store) => store.user);
 
   async function handleNavigationStateChange(navState: WebViewNavigation) {
@@ -50,6 +54,7 @@ function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) 
       }
 
       await Promise.all(promises);
+      fetchGlobalInformation(user!.id);
       refreshData.forEach((fn) => fn());
     }
 

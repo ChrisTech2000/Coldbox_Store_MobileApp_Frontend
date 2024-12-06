@@ -11,6 +11,7 @@ import CheckOut from '#assets/icons/check-out.svg';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useAuthStore } from '#stores/auth';
@@ -27,8 +28,8 @@ import {
 
 import { isWithinLast24Hours } from '../utils/dates';
 import { DetailsModal } from './DetailsModal';
-import { PDFModal } from './PDFModal';
 import { MovementDiagram } from './MovementDiagram';
+import { PDFModal } from './PDFModal';
 
 type Movement = GetMovementsHistoryResponse[number];
 
@@ -57,6 +58,7 @@ export function Movement({
   const { t } = useTranslationUtils();
   const company = useManagementStore((store) => store.company);
   const user = useAuthStore((store) => store.user);
+  const toast = InAppNotifications.useToast();
 
   const modalRef = useRef<Modalize>(null);
 
@@ -149,7 +151,13 @@ export function Movement({
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-              action: () => ColdtivateService.sendCheckOutSmsReport(movement.id),
+              action: () => {
+                ColdtivateService.sendCheckOutSmsReport(movement.id);
+                setIsOptionsModalOpen(false);
+                toast.show(t('actions.done'), {
+                  type: 'md_success',
+                });
+              },
             },
             {
               label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
