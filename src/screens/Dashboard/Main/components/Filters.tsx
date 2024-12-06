@@ -52,7 +52,8 @@ export function Filters({
   const { t } = useTranslationUtils();
 
   const { company: _company } = useManagementStore();
-  const { farmerCompanies, farmerUnitsIds, setCoolingUnits } = useDashboardStore();
+  const { farmerCompanies, farmerUnitsIds, setCoolingUnits, addRefreshDataFn } =
+    useDashboardStore();
 
   const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } = useCoolingUnitStore();
   const { selectedItem: company } = useCompanyStore();
@@ -71,7 +72,11 @@ export function Filters({
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
 
-  const { data: coolingUnits, isLoading } = useApiCall(
+  const {
+    data: coolingUnits,
+    isLoading,
+    refetch,
+  } = useApiCall(
     'getCoolingUnits',
     ColdtivateService.getCoolingUnits,
     {
@@ -110,6 +115,8 @@ export function Filters({
       return onSelectCoolingUnit(selectedUnit);
     }
   }, [coolingUnits, coolingUnit]);
+
+  useEffect(() => addRefreshDataFn(refetch), [refetch]);
 
   return (
     <View tw="mt-2 px-4">
