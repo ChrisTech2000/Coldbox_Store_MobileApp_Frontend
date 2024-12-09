@@ -604,6 +604,8 @@ export default {
       addBankAccountButton: 'Ajouter des coordonnées bancaires',
       addBankAccountHeader:
         'Vous configurez les coordonnées bancaires pour le compte de {{name}}. Veuillez insérer ces données avec soin, car vous ne pourrez pas les modifier par la suite.',
+      userWithoutPhone:
+        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
     },
     SearchFilter: {
       detailsMessage:

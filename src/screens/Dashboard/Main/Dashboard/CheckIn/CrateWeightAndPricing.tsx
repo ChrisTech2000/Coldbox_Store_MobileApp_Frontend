@@ -23,6 +23,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
+import { USER_WITHOUT_PHONE } from '#constants/general';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
@@ -86,6 +87,8 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
 
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
+  const isUserWithoutPhone = user?.user.firstName === USER_WITHOUT_PHONE && !user.user.phone;
+
   const { data: eligibility, refetch } = useApiCall(
     'checkMarketplaceEligibility',
     MarketplaceService.checkMarketplaceEligibility,
@@ -94,7 +97,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
       companyIds: [company!.id],
     },
     {
-      skip: !user || !company,
+      skip: !user || !company || isUserWithoutPhone,
       defaultData: {} as CheckMarketplaceEligibilityResponse,
     }
   );
@@ -158,7 +161,9 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   return (
     <React.Fragment>
       <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
-        {!companyEligible ? (
+        {isUserWithoutPhone ? (
+          <Text tw="mx-4">{t('Dashboard.ProduceDetails.userWithoutPhone')}</Text>
+        ) : !companyEligible ? (
           <Text tw="mx-4">{t('Dashboard.ProduceDetails.operatorNoCompanyBankAccount')}</Text>
         ) : !farmerEligible ? (
           <View tw="mx-4">

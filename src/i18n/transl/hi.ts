@@ -620,6 +620,8 @@ export default {
       addBankAccountButton: 'Add bank account details', // TODO
       addBankAccountHeader:
         "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+      userWithoutPhone:
+        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
     },
     SearchFilter: {
       detailsMessage:
