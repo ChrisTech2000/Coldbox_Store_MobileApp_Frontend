@@ -7,7 +7,7 @@ import { dateFmt, type Translator, useTranslationUtils } from '#i18n/utils';
 import { ERoles, Farmer, type User } from '#types/global';
 import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
-import { type IApiQueryOptions, useApiCall } from '#services/hooks/useAPiCall';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAppEventListener } from '#ui/lib/emitter';
 import ColdtivateService from '#services/ColdtivateService';
 import type { CoolingUnit } from '#types/global';
@@ -157,7 +157,7 @@ export type ProcessedNotifications = Awaited<
   ReturnType<NotificationManager['processNotifications']>
 >;
 
-export function useNotifications(opts?: IApiQueryOptions<ProcessedNotifications>) {
+export function useNotifications() {
   const user = useAuthStore((store) => store.user);
   const { t } = useTranslationUtils();
 
@@ -188,12 +188,12 @@ export function useNotifications(opts?: IApiQueryOptions<ProcessedNotifications>
     manager.processNotifications,
     { farmers: farmers!, units: units! },
     {
-      ...opts,
       skip: !user?.id || isLoadingFarmers || isLoadingUnits,
       defaultData: {
         notifications: [],
         newNotificationsCount: 0,
       },
+      refreshInterval: ms('10 seconds'),
     }
   );
 }

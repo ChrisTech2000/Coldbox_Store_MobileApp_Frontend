@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { View, FlatList } from 'react-native';
 import { ActivityIndicator, Portal } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
-import { useSWRConfig } from 'swr';
 import { Modalize } from 'react-native-modalize';
 import ms from 'ms';
 
@@ -14,7 +13,7 @@ import { MovementDiagram } from '#screens/Dashboard/Main/History/components/Move
 import type { CoolingUnit, Crop, FarmerSurvey } from '#types/global';
 import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
 import { useAuthStore } from '#stores/auth';
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 
@@ -68,7 +67,6 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   const user = useAuthStore(useShallow((store) => store.user));
   const managementCompany = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
-  const { mutate } = useSWRConfig();
   const toast = InAppNotifications.useToast();
 
   const [farmerSurveyDatums, setFarmerSurveyDatums] = useState<CommoditySurveyDatum | undefined>(
@@ -80,10 +78,6 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   const modalTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
-
-  const revalidate = useCallback(async () => {
-    await mutate(getQueryKey('getNotifications', user));
-  }, [user]);
 
   const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
     skip: !user?.id,
@@ -127,8 +121,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
             item={item.datum}
             updateStatusHandler={async () => {
               if (!item.datum.seen) {
-                const result = await NotificationService.updateNotificationStatus(item.datum.id);
-                if (result?.id) await revalidate();
+                await NotificationService.updateNotificationStatus(item.datum.id);
               }
               switch (item.datum.eventType) {
                 case 'FARMER_SURVEY': {
@@ -196,8 +189,6 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
               toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.updateSuccess'), {
                 type: 'md_success',
               });
-
-              await revalidate();
             } catch (exception) {
               console.error(exception);
               toast.show(t('actions.error', { type: 'md_danger' }));
