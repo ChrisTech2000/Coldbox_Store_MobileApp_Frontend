@@ -1,12 +1,14 @@
 import { useMemo } from 'react';
+import moize from 'moize';
+import ms from 'ms';
 
-import type { Company, User } from '#types/global';
-import type { GetAllCropsResponse, GetCoolingUnitResponse } from '#types/api.responses';
+import type { Company, CoolingUnit, User } from '#types/global';
 import type { GetAvailableListingParams } from '#types/api.params';
-import { useMap } from '#ui/hooks/useMap';
+import type { GetAllCropsResponse } from '#types/api.responses';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import ColdtivateService from '#services/ColdtivateService';
+import { useMap } from '#ui/hooks/useMap';
 
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
@@ -49,9 +51,7 @@ export function useMarketplaceListing() {
   const queryParams = useMarketplaceQueryParams();
   const filters = useMarketplaceFilters((store) => store.filters);
 
-  const [companyMap, companyActions] = useMap<number, Company>();
-  const [coolingUnitMap, coolingUnitActions] = useMap<number, GetCoolingUnitResponse>();
-  const [cropsMap, cropsActions] = useMap<number, GetAllCropsResponse>();
+  const [userMap, userMapActions] = useMap<number, User>();
 
   const filtering = useMemo(
     () => ({
@@ -73,83 +73,74 @@ export function useMarketplaceListing() {
     [filters]
   );
 
+  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+    'getAllCrops',
+    ColdtivateService.getAllCrops,
+    undefined,
+    { defaultData: [] }
+  );
+
+  const { data: coolingUnits, isLoading: isLoadingCoolingUnits } = useApiCall(
+    'getCoolingUnits',
+    ColdtivateService.getCoolingUnits,
+    {},
+    {
+      defaultData: [],
+    }
+  );
+
+  const { data: companies, isLoading: isLoadingCompanies } = useApiCall(
+    'getCompanies',
+    ColdtivateService.getCompanies,
+    undefined,
+    {
+      defaultData: [],
+    }
+  );
+
   const { data: datums, ...rest } = useApiCall(
     'getMarketplaceAvailableListing',
     async (params: GetAvailableListingParams) => {
       const listing = await MarketplaceService.getAvailableListing(params);
 
-      // companies aggregation
-      const companyIds = new Set<number>(listing.nodes.map((node) => node.relCompanyId));
-      const companies = await Promise.all(
-        Array.from(companyIds)
-          .filter((companyId) => !companyMap.has(companyId))
-          .map(async (companyId) => await ColdtivateService.getCompanyById(companyId))
-      );
-
+      // companies (owners) aggregation
       const ownerCompaniesIds = new Set<number>(
         listing.nodes.map((node) => node.ownedOnBehalfOfCompanyId).filter(Boolean) as number[]
       );
-      const ownerCompanies = await Promise.all(
-        Array.from(ownerCompaniesIds)
-          .filter((companyId) => !companyMap.has(companyId))
-          .map(async (companyId) => await ColdtivateService.getCompanyById(companyId))
-      );
 
-      const ownerUserIds = new Set<number>(
+      const ownerCompanies: Array<Company> = [];
+      for (const companyId of ownerCompaniesIds) {
+        if (!companies) break; // safe guard
+        const item = _findCompanyById(companyId, companies);
+        if (!item) continue; // safe guard
+        ownerCompanies.push(item);
+      }
+
+      // users (owners) aggregation
+      const ownerUsersIds = new Set<number>(
         listing.nodes.map((node) => node.ownedByUserId).filter(Boolean) as number[]
       );
-      const _ownerUsers = await Promise.all(
-        Array.from(ownerUserIds).map(async (id) => await ColdtivateService.getUser(id))
-      );
-      const ownerUsers = _ownerUsers.flatMap((user) => user);
-      const companiesMapCopy = new Map(companyMap);
-      for (const company of companies) {
-        companiesMapCopy.set(company.id, company);
-      }
-      companyActions.setAll(companiesMapCopy);
 
-      // cooling units aggregation
-      const uniqueUnitReq = new Set<string>();
-      const units = await Promise.all(
-        listing.nodes
-          .map(async (node) => {
-            if (coolingUnitMap.has(node.relCoolingUnitId)) return null;
-            const key = [node.relCompanyId, node.relCoolingUnitId].join('::');
-            if (uniqueUnitReq.has(key)) return null;
-            uniqueUnitReq.add(key);
-            return await ColdtivateService.getCoolingUnit({
-              coolingUnitId: node.relCoolingUnitId,
-              companyId: node.relCompanyId,
-            });
-          })
-          .filter((item) => item !== null)
+      const ownerUsers = await Promise.all(
+        Array.from(ownerUsersIds)
+          .filter((id) => !userMap.has(id))
+          .map(async (id) => await ColdtivateService.getUser(id))
       );
 
-      const unitsMapCopy = new Map(coolingUnitMap);
-      for (const unit of units) {
-        if (unit === null) continue;
-        unitsMapCopy.set(unit.id, unit);
+      const userMapCopy = new Map(userMap);
+      for (const item of ownerUsers) {
+        userMapCopy.set(item.id, item);
       }
-      coolingUnitActions.setAll(unitsMapCopy);
-
-      // crops aggregation
-      const crops = await ColdtivateService.getAllCrops();
-      const cropsToAdd = crops.filter((crop) => !cropsMap.has(crop.id));
-
-      const cropsMapCopy = new Map(cropsMap);
-      for (const cropToAdd of cropsToAdd) {
-        cropsMapCopy.set(cropToAdd.id, cropToAdd);
-      }
-      cropsActions.setAll(cropsMapCopy);
+      userMapActions.setAll(userMapCopy);
 
       // marketplace listing datums
       return listing.nodes.map((node) => {
-        const contextualCrop = cropsMapCopy.get(node.relCropId);
-        const contextualUnit = unitsMapCopy.get(node.relCoolingUnitId);
-        const company = companiesMapCopy.get(node.relCompanyId);
+        const contextualCrop = _findCropById(node.relCropId, crops ?? []);
+        const contextualUnit = _findUnitById(node.relCoolingUnitId, coolingUnits ?? []);
+        const contextualCompany = _findCompanyById(node.relCompanyId, companies ?? []);
         const owner = node.ownedOnBehalfOfCompanyId
-          ? ownerCompanies.find((c) => c.id === node.ownedOnBehalfOfCompanyId)
-          : ownerUsers.find((u) => u?.id === node.ownedByUserId);
+          ? _findCompanyOwner(node.ownedOnBehalfOfCompanyId, ownerCompanies)
+          : _findUserOwner(node.ownedByUserId, userMapCopy);
 
         return {
           id: node.id,
@@ -169,7 +160,7 @@ export function useMarketplaceListing() {
           },
           company: {
             id: node.relCompanyId,
-            name: company?.name ?? '',
+            name: contextualCompany?.name ?? '',
             locationId: contextualUnit?.location ?? null,
           },
           coolingUnit: {
@@ -189,17 +180,26 @@ export function useMarketplaceListing() {
     },
     {
       page: 1,
-      itemsPerPage: 300,
+      itemsPerPage: 400,
       sortBy: queryParams.sortBy,
       location: queryParams.location,
       filterByMaxDistanceInKm: queryParams.filterByMaxDistanceInKm,
       filterByCoolingUnitsIds: Array.from(filtering.unitsToFilterIn),
     },
-    { skip: (queryParams?.location ?? []).length === 0, defaultData: [], errorRetryCount: 1 }
+    {
+      skip:
+        (queryParams?.location ?? []).length === 0 ||
+        isLoadingCrops ||
+        isLoadingCoolingUnits ||
+        isLoadingCompanies,
+      defaultData: [],
+      errorRetryCount: 1,
+    }
   );
 
   return {
     ...rest,
+    isLoading: isLoadingCrops || isLoadingCoolingUnits || isLoadingCompanies || rest.isLoading,
     data: useMemo(() => {
       const { companiesToFilterIn, cropsToFilterIn, priceRangeFilter } = filtering;
 
@@ -209,12 +209,98 @@ export function useMarketplaceListing() {
           !companiesToFilterIn.size || companiesToFilterIn.has(datum.company.id);
         const isInCropFilter = !cropsToFilterIn.size || cropsToFilterIn.has(datum.crop.id);
 
+        // check if price is within range filter, if filter exists
+        // returns true if:
+        // 1. no price filter is set, or
+        // 2. price is between min (index 0) and max (index 1) values
+        // FYK: 0 values are ignored as filter bounds
         const isInPriceRange =
           !priceRangeFilter ||
-          (datum.price >= priceRangeFilter[0] && datum.price <= priceRangeFilter[1]);
+          ((priceRangeFilter[0] === 0 || datum.price >= priceRangeFilter[0]) &&
+            (priceRangeFilter[1] === 0 || datum.price <= priceRangeFilter[1]));
 
         return isInCompanyFilter && isInCropFilter && isInPriceRange;
       });
     }, [datums, filtering]),
   };
+}
+
+///
+// internal util functions
+///
+
+const _findCompanyById = moize(
+  (companyId: number, companies: Array<Company>) => companies.find(({ id }) => id === companyId),
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([companyId, companies]) => {
+      const ids = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
+      return [[companyId, ids.join('.')].join('::')];
+    },
+  }
+);
+
+const _findCropById = moize(
+  (cropId: number, crops: Array<GetAllCropsResponse>) => crops.find(({ id }) => id === cropId),
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([cropId, crops]) => {
+      const ids = (crops as Array<GetAllCropsResponse>).map(({ id }) => id).sort((a, b) => a - b);
+      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
+    },
+  }
+);
+
+const _findUnitById = moize(
+  (unitId: number, units: Array<CoolingUnit>) => units.find(({ id }) => id === unitId),
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([cropId, crops]) => {
+      const ids = (crops as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
+      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
+    },
+  }
+);
+
+const _findCompanyOwner = moize(
+  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) => {
+    return ownedOnBehalfOfCompanyId
+      ? ownerCompanies.find((c: Company) => c.id === ownedOnBehalfOfCompanyId)
+      : undefined;
+  },
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([companyId, companies]) => {
+      const companyIds = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
+      return [_cacheKeyArtisan([companyId, companyIds.join('.')].join('::'))];
+    },
+  }
+);
+
+const _findUserOwner = moize(
+  (ownedByUserId: number | null, userMap: Map<number, User>) => {
+    return ownedByUserId ? userMap.get(ownedByUserId) : undefined;
+  },
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([userId, users]) => {
+      const userIds = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
+      return [_cacheKeyArtisan([userId, userIds.join('.')].join('::'))];
+    },
+  }
+);
+
+function _cacheKeyArtisan(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+  return hash.toString(36);
 }
