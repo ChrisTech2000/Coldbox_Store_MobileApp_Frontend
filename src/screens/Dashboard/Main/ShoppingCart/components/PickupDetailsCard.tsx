@@ -1,13 +1,15 @@
-import React, { useMemo } from 'react';
-import { View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import React, { useCallback, useMemo } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Icon } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import isEmpty from 'lodash/isEmpty';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import InAppNotifications from '#common/InAppNotifications';
 
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -30,6 +32,7 @@ export function PickupDetailsCard({
   pickupMethod,
 }: PickupDetailsCardProps) {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const { data: location } = useApiCall('getLocation', ColdtivateService.getLocation, {
     companyId,
@@ -41,6 +44,14 @@ export function PickupDetailsCard({
     return `${location.street ? location.street + ' ' : ''}${location.streetNumber ? location.streetNumber + ', ' : ''} ${location.city}${location.latitude ? ` (${location.latitude}, ${location.longitude})` : ''}`;
   }, [location]);
 
+  const copyToClipboard = useCallback(
+    (text: string) => {
+      Clipboard.setString(text);
+      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
+    },
+    [toast]
+  );
+
   return (
     <View tw="mb-4">
       <Text tw="text-base ml-1">{coolingUnit?.name ?? ''}</Text>
@@ -51,6 +62,11 @@ export function PickupDetailsCard({
         ) : (
           <ActivityIndicator animating color={paperTheme.colors.primary} size={12} />
         )}
+        {address ? (
+          <TouchableOpacity onPress={() => copyToClipboard(address)}>
+            <Icon source="content-copy" size={15} color={paperTheme.colors.primary} />
+          </TouchableOpacity>
+        ) : null}
       </View>
       <View tw="p-4 border border-gray-300 rounded-xl">
         <View tw="flex flex-row items-center justify-between">

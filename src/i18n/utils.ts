@@ -16,8 +16,13 @@ import { getTimeZone } from 'react-native-localize';
 import { z } from 'zod';
 
 import { mmkv } from '#stores/lib/storage';
+
 import { APP_LOCALES, type TranslationLocales } from './constants';
 import type { TranslationPaths } from './index';
+import { ha as hausaLocale } from './plugins/ha';
+import { ig as igboLocale } from './plugins/ig';
+import { or as oriyaLocale } from './plugins/or';
+import { yo as yorubaLocale } from './plugins/yo';
 
 ///
 // Storage Manager
@@ -85,6 +90,14 @@ function _derivedLocale(): Locale {
       return gujaratiLocale;
     case 'fr':
       return frenchLocale;
+    case 'ha':
+      return hausaLocale;
+    case 'ig':
+      return igboLocale;
+    case 'or':
+      return oriyaLocale;
+    case 'yo':
+      return yorubaLocale;
     default:
       return englishLocale;
   }
