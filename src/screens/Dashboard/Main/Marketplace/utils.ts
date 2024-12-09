@@ -1,7 +1,10 @@
 import { useMemo } from 'react';
+import moize from 'moize';
+import ms from 'ms';
 
-import type { Company, User } from '#types/global';
+import type { Company, CoolingUnit, User } from '#types/global';
 import type { GetAvailableListingParams } from '#types/api.params';
+import type { GetAllCropsResponse } from '#types/api.responses';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import ColdtivateService from '#services/ColdtivateService';
@@ -108,7 +111,7 @@ export function useMarketplaceListing() {
       const ownerCompanies: Array<Company> = [];
       for (const companyId of ownerCompaniesIds) {
         if (!companies) break; // safe guard
-        const item = companies.find((c) => c.id === companyId);
+        const item = _findCompanyById(companyId, companies);
         if (!item) continue; // safe guard
         ownerCompanies.push(item);
       }
@@ -132,16 +135,12 @@ export function useMarketplaceListing() {
 
       // marketplace listing datums
       return listing.nodes.map((node) => {
-        const contextualCrop = crops.find((crop) => crop.id === node.relCropId);
-        const contextualUnit = coolingUnits?.find(
-          (coolingUnit) => coolingUnit.id === node.relCoolingUnitId
-        );
-        const company = companies?.find((company) => company.id === node.relCompanyId);
+        const contextualCrop = _findCropById(node.relCropId, crops ?? []);
+        const contextualUnit = _findUnitById(node.relCoolingUnitId, coolingUnits ?? []);
+        const contextualCompany = _findCompanyById(node.relCompanyId, companies ?? []);
         const owner = node.ownedOnBehalfOfCompanyId
-          ? ownerCompanies.find((c) => c.id === node.ownedOnBehalfOfCompanyId)
-          : node.ownedByUserId
-            ? userMapCopy.get(node.ownedByUserId)
-            : undefined;
+          ? _findCompanyOwner(node.ownedOnBehalfOfCompanyId, ownerCompanies)
+          : _findUserOwner(node.ownedByUserId, userMapCopy);
 
         return {
           id: node.id,
@@ -161,7 +160,7 @@ export function useMarketplaceListing() {
           },
           company: {
             id: node.relCompanyId,
-            name: company?.name ?? '',
+            name: contextualCompany?.name ?? '',
             locationId: contextualUnit?.location ?? null,
           },
           coolingUnit: {
@@ -224,4 +223,84 @@ export function useMarketplaceListing() {
       });
     }, [datums, filtering]),
   };
+}
+
+///
+// internal util functions
+///
+
+const _findCompanyById = moize(
+  (companyId: number, companies: Array<Company>) => companies.find(({ id }) => id === companyId),
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([companyId, companies]) => {
+      const ids = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
+      return [[companyId, ids.join('.')].join('::')];
+    },
+  }
+);
+
+const _findCropById = moize(
+  (cropId: number, crops: Array<GetAllCropsResponse>) => crops.find(({ id }) => id === cropId),
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([cropId, crops]) => {
+      const ids = (crops as Array<GetAllCropsResponse>).map(({ id }) => id).sort((a, b) => a - b);
+      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
+    },
+  }
+);
+
+const _findUnitById = moize(
+  (unitId: number, units: Array<CoolingUnit>) => units.find(({ id }) => id === unitId),
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([cropId, crops]) => {
+      const ids = (crops as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
+      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
+    },
+  }
+);
+
+const _findCompanyOwner = moize(
+  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) => {
+    return ownedOnBehalfOfCompanyId
+      ? ownerCompanies.find((c: Company) => c.id === ownedOnBehalfOfCompanyId)
+      : undefined;
+  },
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([companyId, companies]) => {
+      const companyIds = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
+      return [_cacheKeyArtisan([companyId, companyIds.join('.')].join('::'))];
+    },
+  }
+);
+
+const _findUserOwner = moize(
+  (ownedByUserId: number | null, userMap: Map<number, User>) => {
+    return ownedByUserId ? userMap.get(ownedByUserId) : undefined;
+  },
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([userId, users]) => {
+      const userIds = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
+      return [_cacheKeyArtisan([userId, userIds.join('.')].join('::'))];
+    },
+  }
+);
+
+function _cacheKeyArtisan(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+  return hash.toString(36);
 }
