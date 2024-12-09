@@ -12,6 +12,7 @@ import { useMap } from '#ui/hooks/useMap';
 
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { stringToHash } from '#ui/lib/hash';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
 export const DEFAULT_CURRENCY_CODE = 'NGN';
@@ -248,7 +249,7 @@ const _findCropById = moize(
     isSerialized: true,
     serializer: ([cropId, crops]) => {
       const ids = (crops as Array<GetAllCropsResponse>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
+      return [stringToHash([cropId, ids.join('.')].join('::'))];
     },
   }
 );
@@ -260,7 +261,7 @@ const _findUnitById = moize(
     isSerialized: true,
     serializer: ([cropId, crops]) => {
       const ids = (crops as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
+      return [stringToHash([cropId, ids.join('.')].join('::'))];
     },
   }
 );
@@ -276,7 +277,7 @@ const _findCompanyOwner = moize(
     isSerialized: true,
     serializer: ([companyId, companies]) => {
       const companyIds = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([companyId, companyIds.join('.')].join('::'))];
+      return [stringToHash([companyId, companyIds.join('.')].join('::'))];
     },
   }
 );
@@ -290,17 +291,7 @@ const _findUserOwner = moize(
     isSerialized: true,
     serializer: ([userId, users]) => {
       const userIds = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([userId, userIds.join('.')].join('::'))];
+      return [stringToHash([userId, userIds.join('.')].join('::'))];
     },
   }
 );
-
-function _cacheKeyArtisan(str: string): string {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash;
-  }
-  return hash.toString(36);
-}
