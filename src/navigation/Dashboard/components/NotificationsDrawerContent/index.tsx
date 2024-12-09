@@ -14,7 +14,7 @@ import { MovementDiagram } from '#screens/Dashboard/Main/History/components/Move
 import type { CoolingUnit, Crop, FarmerSurvey } from '#types/global';
 import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
 import { useAuthStore } from '#stores/auth';
-import { getQueryKey } from '#services/hooks/useAPiCall';
+import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 
@@ -25,9 +25,16 @@ import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSur
 import ColdtivateService from '#services/ColdtivateService';
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 import InAppNotifications from '#common/InAppNotifications';
+import NotificationService from '#services/NotificationService';
+
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { useRightDrawerStore } from '#navigation/Dashboard';
+import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
+import { type ManagementCompany, useManagementStore } from '#stores/management';
 
 export type Notifications = ProcessedNotifications['notifications'];
-export type Notification = Notifications[0];
+type NotificationDatum = Notifications[0];
+export type Notification = NotificationDatum['datum'];
 
 export type CommoditySurveyDatum = {
   farmerSurveysLength: number;
@@ -59,6 +66,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   const { notifications } = props;
 
   const user = useAuthStore(useShallow((store) => store.user));
+  const managementCompany = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
   const toast = InAppNotifications.useToast();
@@ -77,11 +85,10 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     await mutate(getQueryKey('getNotifications', user));
   }, [user]);
 
-  const findNotificationById = useCallback(
-    (notificationId: number) =>
-      notifications.find((notification) => notification.id === notificationId),
-    [notifications]
-  );
+  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
+    skip: !user?.id,
+    defaultData: [],
+  });
 
   useAppEventListener<[CommoditySurveyDatum]>(
     'DISPATCH_NOTIFICATION_OPEN_COMMODITY_MODAL',
@@ -114,12 +121,32 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={notifications}
-        keyExtractor={(item) => `notification-#${item.id}`}
+        keyExtractor={(item) => `notification-#${item.datum.id}`}
         renderItem={({ item }) => (
           <NotificationItem
-            item={item}
-            revalidate={revalidate}
-            findNotificationById={findNotificationById}
+            item={item.datum}
+            updateStatusHandler={async () => {
+              if (!item.datum.seen) {
+                const result = await NotificationService.updateNotificationStatus(item.datum.id);
+                if (result?.id) await revalidate();
+              }
+              switch (item.datum.eventType) {
+                case 'FARMER_SURVEY': {
+                  await NotificationHandlers.farmerSurvey(item, managementCompany, crops);
+                  break;
+                }
+                case 'MARKET_SURVEY': {
+                  await NotificationHandlers.marketSurvey(item, managementCompany);
+                  break;
+                }
+                case 'ORDER_REQUIRES_MOVEMENT': {
+                  await NotificationHandlers.reallocate(item);
+                  break;
+                }
+                default:
+                  break;
+              }
+            }}
           />
         )}
         nestedScrollEnabled
@@ -205,6 +232,105 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       ) : null}
     </View>
   );
+}
+
+class NotificationHandlers {
+  static async farmerSurvey(
+    notification: NotificationDatum,
+    managementCompany: ManagementCompany,
+    crops: Array<GetAllCropsResponse>
+  ) {
+    const farmer = notification.ctx.farmer;
+    if (!farmer) throw new Error();
+
+    const surveys = await ColdtivateService.getFarmerSurveys({ farmerId: farmer.id });
+
+    const surveyList =
+      surveys?.flatMap((survey) =>
+        survey.co.map((item) => ({
+          ...item,
+          cropName: crops.find((crop) => crop.id === item.cropId)?.name ?? '',
+        }))
+      ) || [];
+
+    const isAlreadyFilledIn = surveyList
+      .map((item) => item.cropName.toLowerCase())
+      .includes(notification.datum.crates.crop.toLowerCase());
+
+    if (isAlreadyFilledIn) throw new Error('surveyAlreadyFilled');
+
+    const contextualCrop = crops.find((crop) => crop.name === notification.datum.crates.crop);
+    if (!contextualCrop) throw new Error();
+
+    const contextualFarmerSurvey = surveys?.at(0);
+    const datum = {
+      farmerSurveysLength: surveyList.length + 1,
+      companyCurrency: managementCompany?.currency ?? 'NGN',
+      crops,
+      contextualCrop,
+      farmerId: farmer.id,
+      commoditySurveys: surveyList,
+      userType: (contextualFarmerSurvey?.userType as EOccupation) ?? EOccupation.FARMER,
+      experience: contextualFarmerSurvey?.experience ? EExperience.OLD : EExperience.NEW,
+      experienceInMonths: contextualFarmerSurvey?.experienceDuration?.toString() ?? '1',
+    } satisfies CommoditySurveyDatum;
+
+    emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_COMMODITY_MODAL, datum);
+    useRightDrawerStore.getState().toggle(false);
+  }
+
+  static async marketSurvey(notification: NotificationDatum, managementCompany: ManagementCompany) {
+    const farmer = notification.ctx.farmer;
+    const coolingUnit = notification.ctx.coolingUnit;
+    if (!farmer || !coolingUnit) throw new Error();
+
+    const movements = await ColdtivateService.getMovementsHistory({
+      coolingUnit: coolingUnit.id,
+      farmerId: farmer.id,
+    });
+
+    const movementDetails = movements.find(
+      (movement) => movement.code === notification.datum.movementCode
+    );
+    if (!movementDetails || !movementDetails.marketSurveyDelay) throw new Error();
+
+    const movementCropsForSurvey = movementDetails.movementCrops
+      .filter((crop) => !movementDetails.hasMarketSurvey.includes(crop.id))
+      .map((crop) => ({ id: crop.id, name: crop.name }));
+
+    const datums = {
+      eventType: 'MARKET_SURVEY',
+      datums: {
+        checkoutId: movementDetails.checkoutId,
+        companyCurrency: managementCompany?.currency || 'NGN',
+        crops: movementCropsForSurvey,
+        owner: movementDetails.owner,
+      },
+    } satisfies NotificationOpenSurveyEventDatums;
+
+    emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY, datums);
+    useRightDrawerStore.getState().toggle(false);
+  }
+
+  static async reallocate(notification: NotificationDatum) {
+    const coolingUnit = notification.ctx.coolingUnit;
+    if (!coolingUnit) throw new Error();
+
+    const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
+
+    const movementDetails = movements.find(
+      (movement) => movement.id === notification.datum.specificId
+    );
+    if (!movementDetails) throw new Error();
+
+    const datums = {
+      movement: movementDetails,
+      coolingUnit,
+    } satisfies OrderRequiresMovementDatum;
+
+    emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL, datums);
+    useRightDrawerStore.getState().toggle(false);
+  }
 }
 
 export default withSafeArea(NotificationsDrawerContent, ['top', 'bottom'], true);

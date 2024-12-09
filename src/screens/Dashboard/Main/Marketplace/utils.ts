@@ -12,6 +12,7 @@ import { useMap } from '#ui/hooks/useMap';
 
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { stringToHash } from '#ui/lib/hash';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
 export const DEFAULT_CURRENCY_CODE = 'NGN';
@@ -248,7 +249,7 @@ const _findCropById = moize(
     isSerialized: true,
     serializer: ([cropId, crops]) => {
       const ids = (crops as Array<GetAllCropsResponse>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
+      return [stringToHash([cropId, ids.join('.')].join('::'))];
     },
   }
 );
@@ -258,25 +259,22 @@ const _findUnitById = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([cropId, crops]) => {
-      const ids = (crops as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
+    serializer: ([unitId, units]) => {
+      const ids = (units as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
+      return [stringToHash([unitId, ids.join('.')].join('::'))];
     },
   }
 );
 
 const _findCompanyOwner = moize(
-  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) => {
-    return ownedOnBehalfOfCompanyId
-      ? ownerCompanies.find((c: Company) => c.id === ownedOnBehalfOfCompanyId)
-      : undefined;
-  },
+  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) =>
+    ownerCompanies.find(({ id }) => id === ownedOnBehalfOfCompanyId),
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
     serializer: ([companyId, companies]) => {
-      const companyIds = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([companyId, companyIds.join('.')].join('::'))];
+      const ids = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
+      return [stringToHash([companyId, ids.join('.')].join('::'))];
     },
   }
 );
@@ -289,18 +287,8 @@ const _findUserOwner = moize(
     maxAge: ms('5 seconds'),
     isSerialized: true,
     serializer: ([userId, users]) => {
-      const userIds = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([userId, userIds.join('.')].join('::'))];
+      const ids = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
+      return [stringToHash([userId, ids.join('.')].join('::'))];
     },
   }
 );
-
-function _cacheKeyArtisan(str: string): string {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash;
-  }
-  return hash.toString(36);
-}
