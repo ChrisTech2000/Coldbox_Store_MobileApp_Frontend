@@ -158,7 +158,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getFarmers',
     ColdtivateService.getFarmers,
-    {},
+    undefined,
     {
       defaultData: [],
     }
