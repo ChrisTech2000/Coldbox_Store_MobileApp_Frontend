@@ -259,25 +259,22 @@ const _findUnitById = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([cropId, crops]) => {
-      const ids = (crops as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
-      return [stringToHash([cropId, ids.join('.')].join('::'))];
+    serializer: ([unitId, units]) => {
+      const ids = (units as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
+      return [stringToHash([unitId, ids.join('.')].join('::'))];
     },
   }
 );
 
 const _findCompanyOwner = moize(
-  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) => {
-    return ownedOnBehalfOfCompanyId
-      ? ownerCompanies.find((c: Company) => c.id === ownedOnBehalfOfCompanyId)
-      : undefined;
-  },
+  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) =>
+    ownerCompanies.find(({ id }) => id === ownedOnBehalfOfCompanyId),
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
     serializer: ([companyId, companies]) => {
-      const companyIds = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
-      return [stringToHash([companyId, companyIds.join('.')].join('::'))];
+      const ids = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
+      return [stringToHash([companyId, ids.join('.')].join('::'))];
     },
   }
 );
@@ -290,8 +287,8 @@ const _findUserOwner = moize(
     maxAge: ms('5 seconds'),
     isSerialized: true,
     serializer: ([userId, users]) => {
-      const userIds = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
-      return [stringToHash([userId, userIds.join('.')].join('::'))];
+      const ids = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
+      return [stringToHash([userId, ids.join('.')].join('::'))];
     },
   }
 );

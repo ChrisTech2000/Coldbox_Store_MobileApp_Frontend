@@ -130,8 +130,6 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                 const result = await NotificationService.updateNotificationStatus(item.datum.id);
                 if (result?.id) await revalidate();
               }
-              if (!item?.ctx.farmer) throw new Error();
-
               switch (item.datum.eventType) {
                 case 'FARMER_SURVEY': {
                   await NotificationHandlers.farmerSurvey(item, managementCompany, crops);

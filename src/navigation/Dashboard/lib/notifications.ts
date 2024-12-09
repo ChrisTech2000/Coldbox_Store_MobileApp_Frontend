@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
-import snakeCase from 'lodash/snakeCase';
+import moize from 'moize';
+import ms from 'ms';
 
 import { dateFmt, type Translator, useTranslationUtils } from '#i18n/utils';
 import { ERoles, Farmer, type User } from '#types/global';
@@ -10,6 +11,7 @@ import { type IApiQueryOptions, useApiCall } from '#services/hooks/useAPiCall';
 import { useAppEventListener } from '#ui/lib/emitter';
 import ColdtivateService from '#services/ColdtivateService';
 import type { CoolingUnit } from '#types/global';
+import { stringToHash } from '#ui/lib/hash';
 
 import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
 
@@ -32,11 +34,6 @@ class NotificationManager {
 
     const { notifications, newNotificationsCount } = await this._formatNotifications();
 
-    const _farmerKey = (user: User) => snakeCase(`${user.firstName} ${user.lastName}`);
-
-    const farmerMap = new Map(farmers.map((farmer) => [_farmerKey(farmer.user), farmer]));
-    const unitMap = new Map(units.map((unit) => [snakeCase(unit.name), unit]));
-
     return {
       newNotificationsCount,
       notifications: notifications.map((notification) => {
@@ -46,8 +43,8 @@ class NotificationManager {
         return {
           datum: notification,
           ctx: {
-            farmer: farmerName ? (farmerMap.get(snakeCase(farmerName)) ?? null) : null,
-            coolingUnit: unitName ? (unitMap.get(snakeCase(unitName)) ?? null) : null,
+            farmer: farmerName ? (this._findFarmerByName(farmerName, farmers) ?? null) : null,
+            coolingUnit: unitName ? (this._findUnitByName(unitName, units) ?? null) : null,
           },
         };
       }),
@@ -125,6 +122,31 @@ class NotificationManager {
 
     return { notifications, newNotificationsCount };
   };
+
+  private _findUnitByName = moize(
+    (unitName: string, units: Array<CoolingUnit>) => units.find(({ name }) => name === unitName),
+    {
+      maxAge: ms('5 seconds'),
+      isSerialized: true,
+      serializer: ([unitName, units]) => {
+        const ids = (units as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
+        return [stringToHash([unitName, ids.join('.')].join('::'))];
+      },
+    }
+  );
+
+  private _findFarmerByName = moize(
+    (farmerName: string, farmers: Array<Farmer>) =>
+      farmers.find((farmer) => farmerName === `${farmer.user.firstName} ${farmer.user.lastName}`),
+    {
+      maxAge: ms('5 seconds'),
+      isSerialized: true,
+      serializer: ([farmerName, farmers]) => {
+        const ids = (farmers as Array<Farmer>).map(({ id }) => id).sort((a, b) => a - b);
+        return [stringToHash([farmerName, ids.join('.')].join('::'))];
+      },
+    }
+  );
 }
 
 export type FormattedNotification = Awaited<
