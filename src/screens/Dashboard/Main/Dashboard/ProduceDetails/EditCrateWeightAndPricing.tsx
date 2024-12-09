@@ -22,6 +22,8 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
+import { USER_WITHOUT_PHONE } from '#constants/general';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
@@ -33,7 +35,6 @@ import { useDashboardStore } from '#stores/dashboard';
 import type { ListedCratesBaseParams } from '#types/api.params';
 import { ERoles, User } from '#types/global';
 
-import RBAC from '#common/RBAC';
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import { formatCurrencyWithSymbol } from '../CheckIn/utils';
 
@@ -75,6 +76,8 @@ function EditCrateWeightAndPricing(
     }
   );
 
+  const isUserWithoutPhone = owner.firstName === USER_WITHOUT_PHONE && !owner.phone;
+
   const {
     data: eligibility,
     isLoading: isLoadingEligibility,
@@ -87,7 +90,7 @@ function EditCrateWeightAndPricing(
       companyIds: [params.companyId, ...(ownedByCompanyId ? [ownedByCompanyId] : [])],
     },
     {
-      skip: !params.companyId || (!owner?.id && !user?.id),
+      skip: !params.companyId || (!owner?.id && !user?.id) || isUserWithoutPhone,
     }
   );
 
@@ -317,7 +320,9 @@ function EditCrateWeightAndPricing(
   return (
     <React.Fragment>
       <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
-        {!companyEligible ? (
+        {isUserWithoutPhone ? (
+          <Text tw="mx-4">{t('Dashboard.ProduceDetails.userWithoutPhone')}</Text>
+        ) : !companyEligible ? (
           <Text tw="mx-4">{t('Dashboard.ProduceDetails.operatorNoCompanyBankAccount')}</Text>
         ) : !farmerEligible ? (
           user?.role === ERoles.COOLING_USER ? (
