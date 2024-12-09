@@ -192,7 +192,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
       return (
         produce.currentStorageDays.toString().includes(lowerCaseSearch) ||
-        produce.owner.toLowerCase().includes(lowerCaseSearch) ||
+        produce.owner?.toLowerCase().includes(lowerCaseSearch) ||
         produce.cropName.toLowerCase().includes(lowerCaseSearch) ||
         produce.movementCode.toLowerCase().includes(lowerCaseSearch)
       );
