@@ -159,34 +159,48 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
 
             return (
               <View tw="mb-4">
-                {crops.length > 1 ? (
-                  <Text variant="TextBold" tw="text-base font-bold mb-1">
-                    {item}
-                  </Text>
-                ) : null}
+                <Text variant="TextBold" tw="text-base font-bold mb-2">
+                  {item}
+                </Text>
+
                 <View tw="flex flex-row items-center justify-between">
                   <View>
                     {crates.map((crate, index) => (
                       <View key={`${crate.name}—${index}-crate`} tw="flex flex-row space-x-4 mb-2">
                         <View>
                           <Text tw="text-base">
-                            {startCase(
-                              t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
-                            )}{' '}
-                            {index + 1}
+                            {crate.tag
+                              ? `${startCase(
+                                  t(
+                                    'Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates'
+                                  )
+                                )} ${crate.tag}`
+                              : ' '}
                           </Text>
-                          <Text tw="text-base">{movement.code}</Text>
+
+                          <Text tw="text-base">{'Previous Owner' /* TODO: fix*/}</Text>
+
                           <Text tw="text-base text-red-700">
                             -{crate.weight}
                             {t('Dashboard.ProduceDetails.kilogram')}
                           </Text>
                         </View>
                         <View tw="flex flex-row mt-9">
-                          <Divider tw="absolute w-4 h-0.5 bg-gray-700" />
+                          <Divider
+                            tw={cn(
+                              'absolute h-0.5 bg-gray-700',
+                              Dimensions.get('window').height <= SMALL_SCREEN_THRESHOLD
+                                ? 'w-4'
+                                : 'w-8'
+                            )}
+                          />
                           {crates.length > 1 ? (
                             <Divider
                               tw={cn(
-                                'absolute left-4 w-0.5 h-20 bg-gray-700',
+                                'absolute w-0.5 h-20 bg-gray-700',
+                                Dimensions.get('window').height > SMALL_SCREEN_THRESHOLD
+                                  ? 'left-8'
+                                  : 'left-4',
                                 index > 0 &&
                                   (Platform.OS === 'ios' ||
                                   Dimensions.get('window').height > SMALL_SCREEN_THRESHOLD
@@ -201,13 +215,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                   </View>
 
                   <View tw="self-center justify-center">
-                    <Text tw="text-base">
-                      {startCase(
-                        t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
-                      )}{' '}
-                      {crates.length + 1}
-                    </Text>
-                    <Text tw="text-base">{movement.code}</Text>
+                    <Text tw="text-base">{movement.owner}</Text>
                     <Text tw="text-base text-green-500">
                       +{totalWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}
