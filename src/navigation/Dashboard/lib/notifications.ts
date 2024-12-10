@@ -17,13 +17,13 @@ import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurv
 
 class NotificationManager {
   private readonly _t: Translator;
-  private readonly _userId: number;
+  private readonly _userId?: number;
   private readonly _userRole?: ERoles;
 
-  constructor(t: Translator, user: User) {
+  constructor(t: Translator, user: User | null) {
     this._t = t;
-    this._userId = user.id;
-    this._userRole = user.role;
+    this._userId = user?.id;
+    this._userRole = user?.role;
   }
 
   public processNotifications = async (args: {
@@ -52,6 +52,7 @@ class NotificationManager {
   };
 
   private _formatNotifications = async () => {
+    if (!this._userId) throw new Error();
     const result = await NotificationService.getNotifications(this._userId);
 
     let newNotificationsCount: number = 0;
@@ -161,7 +162,7 @@ export function useNotifications() {
   const user = useAuthStore((store) => store.user);
   const { t } = useTranslationUtils();
 
-  const manager = useMemo(() => new NotificationManager(t, user!), [t, user?.id]);
+  const manager = useMemo(() => new NotificationManager(t, user), [t, user]);
 
   const { data: farmers, isLoading: isLoadingFarmers } = useApiCall(
     'getFarmers',
