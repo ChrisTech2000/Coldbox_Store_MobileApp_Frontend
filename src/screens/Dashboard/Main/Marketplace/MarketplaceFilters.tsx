@@ -55,9 +55,11 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
                     }))
                   : []
               );
-              if (min > 0 || max > 0) {
-                const minLabel = `${formatCurrencyWithSymbol(currencyCode, min)}/KG`;
-                const maxLabel = `${formatCurrencyWithSymbol(currencyCode, max)}/KG`;
+              const minSafe = min || 0;
+              const maxSafe = max || 0;
+              if (minSafe > 0 || maxSafe > 0) {
+                const minLabel = `${formatCurrencyWithSymbol(currencyCode, minSafe)}/KG`;
+                const maxLabel = `${formatCurrencyWithSymbol(currencyCode, maxSafe)}/KG`;
                 filters.push({
                   key: 'priceRange',
                   label: [minLabel, maxLabel].join(' - '),
@@ -107,20 +109,20 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
   );
 }
 
-function _buildInitialValues(): FormValues<number> {
+function _buildInitialValues(): FormValues<undefined | number> {
   const deepCopy = cloneDeep(useMarketplaceFilters.getState().filters);
-  const defaultValues: FormValues<number> = {
+  const defaultValues: FormValues<undefined | number> = {
     companies: [],
     coolingUnits: [],
     crops: [],
-    min: 0,
-    max: 0,
+    min: undefined,
+    max: undefined,
   };
   if (deepCopy.length === 0) return defaultValues;
   for (const filter of deepCopy) {
     if (filter.key === 'priceRange') {
-      defaultValues.min = filter.value[0];
-      defaultValues.max = filter.value[1];
+      defaultValues.min = filter.value.at(0);
+      defaultValues.max = filter.value.at(1);
       continue;
     }
     defaultValues[filter.key].push({ label: filter.label, value: filter.value });

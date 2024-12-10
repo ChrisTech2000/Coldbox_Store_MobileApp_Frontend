@@ -15,8 +15,8 @@ export type FormValues<T = string> = {
 };
 
 type FormManagerProps = {
-  initialValues?: FormValues<number>;
-  onSubmit: (values: FormValues<number>) => void;
+  initialValues?: FormValues<undefined | number>;
+  onSubmit: (values: FormValues<undefined | number>) => void;
 };
 
 export default function MarketplaceFormManager(props: PropsWithChildren<FormManagerProps>) {
@@ -27,11 +27,14 @@ export default function MarketplaceFormManager(props: PropsWithChildren<FormMana
   const form = useForm<FormValues>({
     defaultValues: {
       ...initialValues,
-      min: initialValues?.min.toString() ?? '0',
-      max: initialValues?.max.toString() ?? '0',
+      min: typeof initialValues?.min === 'undefined' ? '' : initialValues.min.toString(),
+      max: typeof initialValues?.max === 'undefined' ? '' : initialValues.max.toString(),
     },
     resolver: zodResolver((z) => {
-      const greaterThanEqual = z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0));
+      const greaterThanEqual = z.preprocess(
+        (v) => (v === '' || v === null ? undefined : Number(v)),
+        z.coerce.number().gte(0).optional()
+      );
       const baseStruct = z.object({ label: z.string(), value: z.number() });
       return z.object({
         companies: z.array(baseStruct),

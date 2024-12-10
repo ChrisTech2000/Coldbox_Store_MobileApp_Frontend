@@ -212,13 +212,17 @@ export function useMarketplaceListing() {
 
         // check if price is within range filter, if filter exists
         // returns true if:
-        // 1. no price filter is set, or
-        // 2. price is between min (index 0) and max (index 1) values
-        // FYK: 0 values are ignored as filter bounds
+        // 1. no price filter is set (!priceRangeFilter), or
+        // 2. price is greater than or equal to min (index 0) if set and not 0
+        //    AND price is less than or equal to max (index 1) if set and not 0
         const isInPriceRange =
           !priceRangeFilter ||
-          ((priceRangeFilter[0] === 0 || datum.price >= priceRangeFilter[0]) &&
-            (priceRangeFilter[1] === 0 || datum.price <= priceRangeFilter[1]));
+          ((priceRangeFilter[0] === undefined ||
+            priceRangeFilter[0] === 0 ||
+            datum.price >= priceRangeFilter[0]) &&
+            (priceRangeFilter[1] === undefined ||
+              priceRangeFilter[1] === 0 ||
+              datum.price <= priceRangeFilter[1]));
 
         return isInCompanyFilter && isInCropFilter && isInPriceRange;
       });

@@ -13,7 +13,7 @@ export type FilterItem = {
     }
   | {
       key: 'priceRange';
-      value: [number, number];
+      value: [number | undefined, number | undefined];
     }
 );
 
