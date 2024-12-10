@@ -125,7 +125,7 @@ function EditCrateWeightAndPricing(
   const applyToAll = form.watch('applyToAll');
   const price = form.watch('price');
   const crates = form.watch('crates');
-  const areCrateTagsSet = crates.filter((crate) => !!crate.tag);
+  const areCrateTagsSet = crates.filter((crate) => !!crate.tag).length > 0;
 
   const totalWeight = crates.reduce((acc, curr) => {
     if (!curr.isSellable) return acc;
