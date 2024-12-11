@@ -976,7 +976,7 @@ export default {
           },
         },
         successMessage: 'Agbakwunyere akaụntụ ụlọ akụ nke ọma.',
-        errorMessage: 'Ọ nwere ihe adịghị mma. Biko nwaa ọzọ ma emechaa.',
+        errorMessage: 'Anyị enweghi ike ịnweta nkọwa akaụntụ ahụ. Biko lelee nọmba akaụntụ na aha banki maka njehie ọ bụla.',
       },
       PaymentSettings: {
         cards: 'Kaadị',

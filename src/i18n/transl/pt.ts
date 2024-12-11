@@ -1067,7 +1067,7 @@ export default {
           },
         },
         successMessage: 'Conta bancária adicionada com sucesso.',
-        errorMessage: 'Algo deu errado. Por favor, tente novamente mais tarde.',
+        errorMessage: 'Não conseguimos verificar os dados da conta. Por favor, verifique o número da conta e o nome do banco.',
       },
       PaymentSettings: {
         cards: 'Cartões',

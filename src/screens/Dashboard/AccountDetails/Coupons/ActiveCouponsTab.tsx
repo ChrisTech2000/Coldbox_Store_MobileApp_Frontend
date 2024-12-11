@@ -61,8 +61,8 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <View tw="w-full p-5 flex-row items-center justify-between border border-solid border-zinc-300 rounded-2xl my-2">
-                <View tw="flex-row items-center space-x-6">
-                  <View tw="min-w-[20%]">
+                <View tw="flex-1 flex-row items-center space-x-3">
+                  <View tw="min-w-[25%]">
                     <Text variant="TitleMedium" tw="text-lg">
                       {item.code}
                     </Text>
@@ -72,7 +72,6 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
                   </Text>
                 </View>
                 <Button
-                  tw="w-1/4"
                   mode="text"
                   textColor={paperTheme.colors.error}
                   uppercase
