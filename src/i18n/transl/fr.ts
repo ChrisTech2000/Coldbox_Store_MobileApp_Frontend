@@ -997,7 +997,8 @@ export default {
           },
         },
         successMessage: 'Compte bancaire ajouté avec succès.',
-        errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+        errorMessage:
+          "Impossible de vérifier les coordonnées du compte. Vérifiez le numéro de compte et la banque pour d'éventuelles erreurs.",
       },
       PaymentSettings: {
         cards: 'Cartes',

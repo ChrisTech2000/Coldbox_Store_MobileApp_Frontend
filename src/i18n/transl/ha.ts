@@ -989,7 +989,7 @@ export default {
           },
         },
         successMessage: 'An ƙara asusun banki cikin nasara.',
-        errorMessage: 'Wani abu ya faru. Da fatan za a sake gwadawa daga baya.',
+        errorMessage: 'Ba za mu iya tantance bayanan asusun ba. Da fatan za a duba lambar asusun da sunan banki don duk wani kuskure.',
       },
       PaymentSettings: {
         cards: 'Katuna',

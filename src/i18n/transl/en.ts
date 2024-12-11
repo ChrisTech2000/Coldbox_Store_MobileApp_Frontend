@@ -1055,7 +1055,8 @@ const en = {
           },
         },
         successMessage: 'Bank account added successfully.',
-        errorMessage: 'Something went wrong. Please try again later.',
+        errorMessage:
+          "We couldn't verify the account details. Please review the account number and bank name for any possible mistakes.",
       },
       PaymentSettings: {
         cards: 'Cards',

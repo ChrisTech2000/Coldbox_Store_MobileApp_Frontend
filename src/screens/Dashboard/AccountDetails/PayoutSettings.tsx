@@ -164,7 +164,7 @@ function PayoutSettings(
 
         props.navigation.goBack();
       } catch (error) {
-        toast.show(t('navigation.error.errorMessage'), {
+        toast.show(t('Dashboard.AccountDetails.PayoutSettings.errorMessage'), {
           type: 'md_danger',
           style: { marginBottom: 50 },
         });
@@ -185,30 +185,28 @@ function PayoutSettings(
     if (data?.length && availableBanks?.banks?.length) {
       const accounts = data.filter((el) =>
         props.route.params?.isCompanyView ? !!el.ownedOnBehalfOfCompany : !el.ownedOnBehalfOfCompany
-      );
+      ).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
       if (!accounts.length) return;
 
       reset({
         country: t('Dashboard.AccountDetails.PayoutSettings.form.nigeria'),
-        accountName: accounts?.[accounts?.length - 1]?.accountName ?? '',
-        accountNumber: accounts?.[accounts?.length - 1]?.accountNumber ?? '',
-        // eslint-disable-next-line
-        // @ts-ignore
-        accountType: accounts?.[accounts?.length - 1]?.accountType,
+        accountName: accounts?.[0]?.accountName ?? '',
+        accountNumber: accounts?.[0]?.accountNumber ?? '',
+        accountType: accounts?.[0]?.accountType.toString(),
         bank: availableBanks?.banks?.find(
-          (b) => b.id.toString() === accounts?.[accounts?.length - 1]?.bankCode
+          (b) => b.id.toString() === accounts?.[0]?.bankCode
         )?.code,
       });
 
       setBank(
         availableBanks?.banks?.find(
-          (b) => b.id.toString() === data?.[data?.length - 1]?.bankCode
+          (b) => b.id.toString() === accounts?.[0]?.bankCode
         ) ?? null
       );
-      setAccountType(data?.[data?.length - 1]?.accountType);
+      setAccountType(accounts?.[0]?.accountType);
     }
-  }, [data, availableBanks, t]);
+  }, [data, availableBanks]);
 
   if (isLoadingAvailableBanks || isLoadingBankAccounts) {
     return (
@@ -238,8 +236,8 @@ function PayoutSettings(
               ? t('Dashboard.AccountDetails.PayoutSettings.addTittleForCompany')
               : farmer
                 ? t('Dashboard.ProduceDetails.addBankAccountHeader', {
-                    name: `${farmer.firstName} ${farmer.lastName}`,
-                  })
+                  name: `${farmer.firstName} ${farmer.lastName}`,
+                })
                 : t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
           </Text>
         )}

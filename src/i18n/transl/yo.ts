@@ -966,7 +966,7 @@ export default {
           },
         },
         successMessage: 'A fi kun akọọlẹ banki ni aṣeyọri.',
-        errorMessage: 'Nkankan ti ko tọ. Jọwọ gbiyanju lẹẹkansi nigbamii.',
+        errorMessage: 'A ko le ṣe àyẹ̀wò alaye àkọọlẹ náà. Jọ̀wọ́ ṣàyẹ̀wò nọ́mbà àkọọlẹ àti orúkọ ilé-ìfowópamọ́ fún àwọn aṣiṣe tó lè wà.',
       },
       PaymentSettings: {
         cards: 'Awọn kaadi',
