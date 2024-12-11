@@ -127,7 +127,7 @@ export function CheckedInCard({
                   <View tw="flex flex-row justify-between w-full">
                     <Text>{t('Dashboard.CoolingUnitsCratesInfo.weight')}</Text>
                     <Text tw="text-gray-400">
-                      {crate.weight || ''}
+                      {crate.weight ?? ''}
                       {t('Dashboard.ProduceDetails.kilogram').toUpperCase()}
                     </Text>
                   </View>
