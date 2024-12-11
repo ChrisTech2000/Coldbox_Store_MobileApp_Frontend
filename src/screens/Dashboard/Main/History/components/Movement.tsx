@@ -30,6 +30,7 @@ import { isWithinLast24Hours } from '../utils/dates';
 import { DetailsModal } from './DetailsModal';
 import { MovementDiagram } from './MovementDiagram';
 import { PDFModal } from './PDFModal';
+import { MarketplaceDetailsModal } from './MarketplaceDetailsModal';
 
 type Movement = GetMovementsHistoryResponse[number];
 
@@ -65,6 +66,7 @@ export function Movement({
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
+  const [isMarketplaceDetailsModalOpen, setIsMarketplaceDetailsModalOpen] = useState<boolean>(false);
 
   const crops = useMemo(() => {
     const _crops = movement.movementCrops.map((crop) => crop.name);
@@ -76,6 +78,7 @@ export function Movement({
   }, [movement]);
 
   const isCheckIn = movement.movementType === EMovementType.IN;
+  const isCheckOut = movement.movementType === EMovementType.OUT;
 
   const price = useMemo(() => {
     if (!isCheckIn)
@@ -104,6 +107,11 @@ export function Movement({
     setIsOptionsModalOpen(false);
   }, []);
 
+  const seeMarketplaceDetailsModal = useCallback(() => {
+    setIsMarketplaceDetailsModalOpen(true);
+    setIsOptionsModalOpen(false);
+  }, []);
+
   const editCheckIn = useCallback(() => {
     navigateToCheckIn?.(movement, coolingUnit?.id);
     setIsOptionsModalOpen(false);
@@ -125,6 +133,18 @@ export function Movement({
         label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
         action: seePDFModal,
       },
+      ...(!isCheckIn ? [
+        {
+          label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
+          action: async () => {
+            await ColdtivateService.sendCheckOutSmsReport(movement.id);
+            setIsOptionsModalOpen(false);
+            toast.show(t('actions.done'), {
+              type: 'md_success',
+            });
+          },
+        },
+      ] : []),
       {
         label: t('Dashboard.History.optionsMenu.common.seeMovement'),
         action: () => {
@@ -134,40 +154,39 @@ export function Movement({
       },
       ...(isCheckIn && user?.role === ERoles.OPERATOR
         ? [
-            {
-              label: t('Dashboard.History.optionsMenu.checkIn.edit'),
-              action: editCheckIn,
-              disabled:
-                !isWithinLast24Hours(movement.date) ||
-                movementsWithCheckout.includes(movement.code),
-            },
-          ]
+          {
+            label: t('Dashboard.History.optionsMenu.checkIn.edit'),
+            action: editCheckIn,
+            disabled:
+              !isWithinLast24Hours(movement.date) ||
+              movementsWithCheckout.includes(movement.code),
+          },
+        ]
         : []),
-      ...(!isCheckIn
+
+      ...(isCheckOut
         ? [
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-              action: seeDetailsModal,
-            },
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-              action: () => {
-                ColdtivateService.sendCheckOutSmsReport(movement.id);
-                setIsOptionsModalOpen(false);
-                toast.show(t('actions.done'), {
-                  type: 'md_success',
-                });
-              },
-            },
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
-              action: fillMarketSurvey,
-              disabled: !movement.marketSurveyDelay,
-            },
-          ]
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+            action: seeDetailsModal,
+          },
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
+            action: fillMarketSurvey,
+            disabled: !movement.marketSurveyDelay,
+          },
+        ]
+        : []),
+      ...(!isCheckIn && !isCheckOut
+        ? [
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+            action: seeMarketplaceDetailsModal,
+          },
+        ]
         : []),
     ];
-  }, [isCheckIn, movement, user, company, selectedCompany, price, t, modalRef]);
+  }, [isCheckIn, isCheckOut, movement, user, company, selectedCompany, price, t, modalRef]);
 
   return (
     <View tw="w-full">
@@ -239,6 +258,11 @@ export function Movement({
           isOpen={isDetailsModalOpen}
           movement={movement}
           dismiss={() => setIsDetailsModalOpen(false)}
+        />
+        <MarketplaceDetailsModal
+          isOpen={isMarketplaceDetailsModalOpen}
+          movement={movement}
+          dismiss={() => setIsMarketplaceDetailsModalOpen(false)}
         />
         <Modalize
           ref={modalRef}

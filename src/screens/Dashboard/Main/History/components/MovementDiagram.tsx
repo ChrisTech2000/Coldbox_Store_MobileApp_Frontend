@@ -55,7 +55,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                     {startCase(
                       t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
                     )}{' '}
-                    {index + 1}
+                    {item.tag || index + 1}
                   </Text>
                   <View tw="flex flex-row space-x-2 items-center flex-wrap">
                     <Text tw="text-base">{movement.code}</Text>
@@ -107,7 +107,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                     {startCase(
                       t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
                     )}{' '}
-                    {index + 1}
+                    {item.tag || index + 1}
                   </Text>
                   <View tw="flex flex-row space-x-2 items-center flex-wrap justify-end">
                     <Text tw="text-base">{movement.code}</Text>
@@ -171,10 +171,10 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                           <Text tw="text-base">
                             {crate.tag
                               ? `${startCase(
-                                  t(
-                                    'Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates'
-                                  )
-                                )} ${crate.tag}`
+                                t(
+                                  'Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates'
+                                )
+                              )} ${crate.tag}`
                               : ' '}
                           </Text>
 
@@ -202,10 +202,10 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                                   ? 'left-8'
                                   : 'left-4',
                                 index > 0 &&
-                                  (Platform.OS === 'ios' ||
+                                (Platform.OS === 'ios' ||
                                   Dimensions.get('window').height > SMALL_SCREEN_THRESHOLD
-                                    ? 'bottom-[94%]'
-                                    : 'bottom-[95%]')
+                                  ? 'bottom-[94%]'
+                                  : 'bottom-[95%]')
                               )}
                             />
                           ) : null}

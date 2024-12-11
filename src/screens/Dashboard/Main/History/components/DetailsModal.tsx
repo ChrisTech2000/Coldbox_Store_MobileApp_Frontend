@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FlatList, ScrollView, View, Dimensions } from 'react-native';
 import { Dialog, Divider, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -27,6 +27,10 @@ type DetailsModalProps = {
   dismiss: () => void;
 };
 
+type GroupedCrates = {
+  [cropName: string]: GetMovementsHistoryResponse[number]['cratesCheckin'];
+}
+
 export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   const { t } = useTranslationUtils();
 
@@ -36,6 +40,25 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
     movement.id,
     { defaultData: [], skip: !isOpen }
   );
+
+  const groupedCrates = useMemo(() => {
+    const grouped: GroupedCrates = {};
+
+    movement.cratesCheckin.forEach(crate => {
+      const cropName = crate.name;
+  
+      if (!grouped[cropName]) {
+        grouped[cropName] = [];
+      }
+  
+      grouped[cropName].push(crate);
+    });
+  
+    return Object.entries(grouped).map(([cropName, crates]) => ({
+      cropName,
+      crates,
+    }));
+  }, [movement]);
 
   const paymentMethod = PAYMENT_METHOD_TRANSLATIONS?.[movement.paymentMethod];
 
@@ -152,16 +175,16 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
           <FlatList
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            data={movement.cratesCheckin}
-            keyExtractor={(item, index) => `${item.code}-${index}`}
-            renderItem={({ item: crate }) => (
+            data={groupedCrates}
+            keyExtractor={(item, index) => `${item.cropName}-${index}`}
+            renderItem={({ item }) => (
               <View tw="mb-8 space-y-2">
                 <View tw="flex flex-row items-center mr-8">
                   <Text variant="TextMedium" tw="text-lg text-gray-400 w-1/2">
                     {t('Dashboard.History.detailsModal.cropTypeLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.name}
+                    {item.cropName}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -169,7 +192,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.detailsModal.checkInCodeLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.code}
+                    {item.crates[0].code}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -177,7 +200,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.detailsModal.crateIdsLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.tag ?? ' '}
+                    {item.crates.map((crate) => crate.tag ?? '').filter(Boolean).join(', ')}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -185,7 +208,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.pdfModal.checkIn.numberOfCratesLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.amount}
+                    {item.crates.length}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -193,7 +216,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.stringTemplates.movementType.checkedIn')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.date ? dateFmt(crate.date.toString(), 'dd-MM-yyyy') : ''}
+                    {item.crates[0].date ? dateFmt(item.crates[0].date.toString(), 'dd-MM-yyyy') : ''}
                   </Text>
                 </View>
               </View>
