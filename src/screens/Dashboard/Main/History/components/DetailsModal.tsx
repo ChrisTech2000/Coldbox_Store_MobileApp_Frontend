@@ -29,7 +29,7 @@ type DetailsModalProps = {
 
 type GroupedCrates = {
   [cropName: string]: GetMovementsHistoryResponse[number]['cratesCheckin'];
-}
+};
 
 export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   const { t } = useTranslationUtils();
@@ -44,16 +44,16 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   const groupedCrates = useMemo(() => {
     const grouped: GroupedCrates = {};
 
-    movement.cratesCheckin.forEach(crate => {
+    movement.cratesCheckin.forEach((crate) => {
       const cropName = crate.name;
-  
+
       if (!grouped[cropName]) {
         grouped[cropName] = [];
       }
-  
+
       grouped[cropName].push(crate);
     });
-  
+
     return Object.entries(grouped).map(([cropName, crates]) => ({
       cropName,
       crates,
@@ -200,7 +200,10 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.detailsModal.crateIdsLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {item.crates.map((crate) => crate.tag ?? '').filter(Boolean).join(', ')}
+                    {item.crates
+                      .map((crate) => crate.tag ?? '')
+                      .filter(Boolean)
+                      .join(', ')}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -216,7 +219,9 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.stringTemplates.movementType.checkedIn')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {item.crates[0].date ? dateFmt(item.crates[0].date.toString(), 'dd-MM-yyyy') : ''}
+                    {item.crates[0].date
+                      ? dateFmt(item.crates[0].date.toString(), 'dd-MM-yyyy')
+                      : ''}
                   </Text>
                 </View>
               </View>

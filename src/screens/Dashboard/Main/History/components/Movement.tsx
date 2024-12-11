@@ -66,7 +66,8 @@ export function Movement({
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
-  const [isMarketplaceDetailsModalOpen, setIsMarketplaceDetailsModalOpen] = useState<boolean>(false);
+  const [isMarketplaceDetailsModalOpen, setIsMarketplaceDetailsModalOpen] =
+    useState<boolean>(false);
 
   const crops = useMemo(() => {
     const _crops = movement.movementCrops.map((crop) => crop.name);
@@ -133,18 +134,20 @@ export function Movement({
         label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
         action: seePDFModal,
       },
-      ...(!isCheckIn ? [
-        {
-          label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-          action: async () => {
-            await ColdtivateService.sendCheckOutSmsReport(movement.id);
-            setIsOptionsModalOpen(false);
-            toast.show(t('actions.done'), {
-              type: 'md_success',
-            });
-          },
-        },
-      ] : []),
+      ...(!isCheckIn
+        ? [
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
+              action: async () => {
+                await ColdtivateService.sendCheckOutSmsReport(movement.id);
+                setIsOptionsModalOpen(false);
+                toast.show(t('actions.done'), {
+                  type: 'md_success',
+                });
+              },
+            },
+          ]
+        : []),
       {
         label: t('Dashboard.History.optionsMenu.common.seeMovement'),
         action: () => {
@@ -154,36 +157,36 @@ export function Movement({
       },
       ...(isCheckIn && user?.role === ERoles.OPERATOR
         ? [
-          {
-            label: t('Dashboard.History.optionsMenu.checkIn.edit'),
-            action: editCheckIn,
-            disabled:
-              !isWithinLast24Hours(movement.date) ||
-              movementsWithCheckout.includes(movement.code),
-          },
-        ]
+            {
+              label: t('Dashboard.History.optionsMenu.checkIn.edit'),
+              action: editCheckIn,
+              disabled:
+                !isWithinLast24Hours(movement.date) ||
+                movementsWithCheckout.includes(movement.code),
+            },
+          ]
         : []),
 
       ...(isCheckOut
         ? [
-          {
-            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-            action: seeDetailsModal,
-          },
-          {
-            label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
-            action: fillMarketSurvey,
-            disabled: !movement.marketSurveyDelay,
-          },
-        ]
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+              action: seeDetailsModal,
+            },
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
+              action: fillMarketSurvey,
+              disabled: !movement.marketSurveyDelay,
+            },
+          ]
         : []),
       ...(!isCheckIn && !isCheckOut
         ? [
-          {
-            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-            action: seeMarketplaceDetailsModal,
-          },
-        ]
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+              action: seeMarketplaceDetailsModal,
+            },
+          ]
         : []),
     ];
   }, [isCheckIn, isCheckOut, movement, user, company, selectedCompany, price, t, modalRef]);

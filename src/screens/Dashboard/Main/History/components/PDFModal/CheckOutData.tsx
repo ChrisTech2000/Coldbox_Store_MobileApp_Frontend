@@ -77,16 +77,16 @@ export function CheckOutData(props: CheckOutDataProps) {
             </thead>
             <tbody>
               ${movement.cratesCheckin
-          .map(
-            (crate) => `
+                .map(
+                  (crate) => `
                 <tr>
                   <td>${crate.tag}</td>
                   <td>${crate.name}</td>
                   <td>${crate.weight}</td>
                 </tr>
               `
-          )
-          .join('')}
+                )
+                .join('')}
             </tbody>
           </table>
 
@@ -116,7 +116,7 @@ export function CheckOutData(props: CheckOutDataProps) {
   `;
 
       const unsanitizedCode = movement.code;
-      const code = unsanitizedCode.replace(/#/g, "");
+      const code = unsanitizedCode.replace(/#/g, '');
       const fileName = t('Dashboard.History.pdfModal.downloadName', { code });
 
       await savePDF(html, fileName);

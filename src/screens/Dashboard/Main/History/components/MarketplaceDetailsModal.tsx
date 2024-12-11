@@ -26,15 +26,13 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
       onDismiss={dismiss}
       style={{ backgroundColor: 'white', maxHeight: DIALOG_MAX_HEIGHT }}
     >
-      <Dialog.Title>{t('navigation.dashboard.Marketplace')} { }</Dialog.Title>
+      <Dialog.Title>
+        {t('navigation.dashboard.Marketplace')} {}
+      </Dialog.Title>
       <Dialog.ScrollArea tw="px-0">
         <ScrollView tw="px-6 py-2" showsVerticalScrollIndicator>
-          <Text tw="text-base font-bold">
-            {t('Dashboard.History.pdfModal.dateLabel')}:
-          </Text>
-          <Text tw="text-base">
-            {dateFmt(movement.date.toString(), 'dd-MM-yyyy hh:mm:ss')}
-          </Text>
+          <Text tw="text-base font-bold">{t('Dashboard.History.pdfModal.dateLabel')}:</Text>
+          <Text tw="text-base">{dateFmt(movement.date.toString(), 'dd-MM-yyyy hh:mm:ss')}</Text>
 
           <Divider tw="my-4 bg-gray-400" />
 
@@ -109,8 +107,9 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
               renderItem={({ item, index }) => (
                 <View tw="mb-8 space-y-2">
                   <Text tw="text-base">
-                    {startCase(t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates'))}
-                    {' '}
+                    {startCase(
+                      t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
+                    )}{' '}
                     {item.tag || index + 1}
                   </Text>
                   <View tw="flex flex-row items-center mr-8">
