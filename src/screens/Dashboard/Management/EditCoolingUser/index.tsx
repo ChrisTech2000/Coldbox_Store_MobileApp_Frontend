@@ -1,16 +1,19 @@
+import startCase from 'lodash/startCase';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Divider } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import type { TranslationLocales } from '#i18n/constants';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
@@ -18,7 +21,7 @@ import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Manag
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
-import { EApiGender, type Farmer } from '#types/global';
+import { EApiGender, EBankAccountType, User, type Farmer } from '#types/global';
 
 import FormManager, { type FormValues } from '../AddCoolingUser/components/FormManager';
 import ContactField from '../AddCoolingUser/modules/ContactField';
@@ -53,6 +56,14 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
       defaultData: undefined,
     }
   );
+
+  const payoutDetails = {
+    country: 'Nigeria',
+    accountType: 1,
+    accountName: 'My Account',
+    bank: 'My Bank',
+    accountNumber: '0123456789',
+  };
 
   if (isLoading) {
     return (
@@ -108,6 +119,9 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
           keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           showsVerticalScrollIndicator={false}
         >
+          <Text tw="text-base text-green-primary font-bold">
+            {t('Dashboard.History.pdfModal.coolingUserLabel')}
+          </Text>
           <View tw="w-full">
             <TextFields
               disabledFields={
@@ -122,7 +136,78 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
             <ContactField disabled />
             <LanguageField disabled={params.isUserWithoutPhone} />
           </View>
-          <View tw="mt-5">
+
+          <RBAC.ProtectedResource action="VIEW" subject="MarketplaceListing">
+            <Text tw="text-base text-green-primary font-bold mt-5">
+              {t('Dashboard.Management.EditCoolingUsers.accountDetails')}
+            </Text>
+            <View tw="w-full">
+              {!payoutDetails ? (
+                <View>
+                  <View tw="mx-4 mt-4">
+                    <Text>
+                      {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
+                        name: `${data.user.firstName ?? ''}`,
+                      })}
+                    </Text>
+                    <Button
+                      tw="self-end mt-2"
+                      onPress={() =>
+                        props.navigation.navigate('AddFarmerBankAccount', {
+                          farmer: data.user as User,
+                          recheckEligibility: () => null, // TODO: fix
+                        })
+                      }
+                    >
+                      {t('Dashboard.ProduceDetails.addBankAccountButton')}
+                    </Button>
+                  </View>
+                  <Divider tw="bg-gray-700" />
+                </View>
+              ) : (
+                <View tw="mt-4 space-y-2">
+                  <View tw="flex flex-row justify-between border-b border-gray-300">
+                    <Text tw="text-base mb-1.5 text-gray-600">
+                      {t('Dashboard.AccountDetails.PayoutSettings.form.countryLabel')}
+                    </Text>
+                    <Text tw="text-base mb-1.5">{payoutDetails.country}</Text>
+                  </View>
+
+                  <View tw="flex flex-row justify-between border-b border-gray-300">
+                    <Text tw="text-base mb-1.5 text-gray-600">
+                      {t('Dashboard.AccountDetails.PayoutSettings.form.accountType')}
+                    </Text>
+                    <Text tw="text-base mb-1.5">
+                      {startCase(EBankAccountType[payoutDetails.accountType].toLowerCase())}
+                    </Text>
+                  </View>
+
+                  <View tw="flex flex-row justify-between border-b border-gray-300">
+                    <Text tw="text-base mb-1.5 text-gray-600">
+                      {t('Dashboard.AccountDetails.PayoutSettings.form.nameLabel')}
+                    </Text>
+                    <Text tw="text-base mb-1.5">{payoutDetails.accountName}</Text>
+                  </View>
+
+                  <View tw="flex flex-row justify-between border-b border-gray-300">
+                    <Text tw="text-base mb-1.5 text-gray-600">
+                      {t('Dashboard.AccountDetails.PayoutSettings.form.accountNumberLabel')}
+                    </Text>
+                    <Text tw="text-base mb-1.5">{payoutDetails.accountNumber}</Text>
+                  </View>
+
+                  <View tw="flex flex-row justify-between border-b border-gray-300">
+                    <Text tw="text-base mb-1.5 text-gray-600">
+                      {t('Dashboard.AccountDetails.PayoutSettings.form.bank')}
+                    </Text>
+                    <Text tw="text-base mb-1.5">{payoutDetails.bank}</Text>
+                  </View>
+                </View>
+              )}
+            </View>
+          </RBAC.ProtectedResource>
+
+          <View tw="mt-8">
             <FarmerDashboardData farmerId={params.farmerId} />
 
             <Button
