@@ -34,7 +34,6 @@ type GroupedCrates = {
 export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   const { t } = useTranslationUtils();
 
-  console.log(isOpen);
   const { data } = useApiCall(
     'getMovementOperators',
     ColdtivateService.getMovementOperators,

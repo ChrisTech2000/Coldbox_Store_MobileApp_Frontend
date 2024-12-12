@@ -24,15 +24,17 @@ import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
+import { sortMovementCrops } from '#screens/Dashboard/Main/History/utils/sortMovements';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, ERoles } from '#types/global';
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
-import { sortMovements } from '../utils';
 import { DownloadDataModal } from '../components/DownloadDataModal';
+import { sortMovements } from '../utils';
+import { useAnalysis } from '../utils/useAnalysis';
 
 const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
 const useDateRangeStore = createDataRangeStore();
@@ -43,7 +45,6 @@ export const usageAnalysisStores = [useCoolingUnitStore, useDateRangeStore];
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-// TODO: Movements refactor
 function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { t } = useTranslationUtils();
 
@@ -74,19 +75,11 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     }
   );
 
-  const { data: usage, isLoading: usageDataLoading } = useApiCall(
-    'getUsageAnalysis',
-    ColdtivateService.getUsageAnalysis,
-    selectedUnits.map((unit) => unit.id) as number[],
-    {
-      skip: !selectedUnits || !selectedUnits.length,
-      defaultData: [],
-    }
-  );
+  const { usageData, isLoading } = useAnalysis(user!, coolingUnits ?? []);
 
   const sortedMovements = useMemo(() => {
-    return (usage ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
-  }, [usage, sorting]);
+    return (usageData ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
+  }, [usageData, sorting]);
 
   const filteredMovements = useMemo(() => {
     if ((!startDate || !endDate) && !search) return sortedMovements;
@@ -103,9 +96,9 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
       const matchesSearchTerm =
         !lowerCaseSearchString ||
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.owner.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.movementCrops.some((crop) =>
-          crop.name.toLowerCase().includes(lowerCaseSearchString)
+        movement.checkin.ownerName?.toLowerCase().includes(lowerCaseSearchString) ||
+        sortMovementCrops(movement).some((crop) =>
+          crop.toLowerCase().includes(lowerCaseSearchString)
         );
 
       return isWithinDateRange && matchesSearchTerm;
@@ -115,9 +108,9 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { totalCheckIns, totalCrates, totalUsers, totalWeight } = useMemo(() => {
     const { totalCrates, totalWeight, users } = filteredMovements
       .flatMap((movement) => ({
-        cratesNumber: movement.cratesNumber,
-        weight: movement.cratesWeight,
-        user: movement.owner,
+        cratesNumber: movement.checkin.crates.length,
+        weight: movement.checkin.crates.reduce((acc, crate) => (acc += crate.weight), 0),
+        user: movement.checkin.ownerName ?? '',
       }))
       .reduce(
         (acc, current) => {
@@ -140,8 +133,8 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   }, [filteredMovements]);
 
   const movementsWithCheckout = useMemo(() => {
-    return usage.map((movement) => movement.checkinCode ?? null).filter(Boolean);
-  }, [usage]);
+    return usageData.map((movement) => movement.code ?? null).filter(Boolean);
+  }, [usageData]);
 
   useEffect(() => {
     return () => {
@@ -196,7 +189,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
       </Button>
 
       <ScrollView tw="mx-2 mt-2 mb-1" showsVerticalScrollIndicator={false}>
-        {usageDataLoading || coolingUnitsLoading ? (
+        {isLoading || coolingUnitsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
           </View>
@@ -209,7 +202,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
                 key={`${movement.id}-${index}`}
                 movement={movement}
                 coolingUnit={
-                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
+                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit // TODO: MOVEMENTS REFACTOR
                 }
                 selectedCompany={company}
                 navigateToCheckIn={(movement, id) =>

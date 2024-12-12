@@ -9,6 +9,7 @@ import {
   ESortingOptions,
   SortingMenu,
 } from '#screens/Dashboard/Main/History/components/SortMenu';
+import { sortMovementCrops } from '#screens/Dashboard/Main/History/utils/sortMovements';
 
 import { Button } from '#ui/components/Button';
 import {
@@ -24,17 +25,18 @@ import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
+import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, EPaymentMethod, ERoles } from '#types/global';
-import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 
-import { sortMovements } from '../utils';
 import { DownloadDataModal } from '../components/DownloadDataModal';
+import { sortMovements } from '../utils';
+import { useAnalysis } from '../utils/useAnalysis';
 
-type PaymentOption = {
+export type PaymentOption = {
   label: string;
   value: EPaymentMethod;
 };
@@ -82,18 +84,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     }
   );
 
-  const { data: revenueData, isLoading: revenueDataLoading } = useApiCall(
-    'getRevenueAnalysis',
-    ColdtivateService.getRevenueAnalysis,
-    {
-      coolingUnits: selectedUnits?.map((unit) => unit.id) as number[],
-      paymentMethods: paymentMethods.flatMap((method) => method.value),
-    },
-    {
-      skip: !selectedUnits || !selectedUnits.length,
-      defaultData: [],
-    }
-  );
+  const { revenueData, isLoading } = useAnalysis(user!, coolingUnits ?? [], paymentMethods);
 
   const sortedMovements = useMemo(() => {
     return (revenueData ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
@@ -114,9 +105,9 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
       const matchesSearchTerm =
         !lowerCaseSearchString ||
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.owner.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.movementCrops.some((crop) =>
-          crop.name.toLowerCase().includes(lowerCaseSearchString)
+        movement.checkout.ownerName?.toLowerCase().includes(lowerCaseSearchString) ||
+        sortMovementCrops(movement).some((crop) =>
+          crop.toLowerCase().includes(lowerCaseSearchString)
         );
 
       return isWithinDateRange && matchesSearchTerm;
@@ -124,7 +115,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
   }, [sortedMovements, startDate, endDate, search]);
 
   const movementsWithCheckout = useMemo(() => {
-    return revenueData.map((movement) => movement.checkinCode ?? null).filter(Boolean);
+    return revenueData.map((movement) => movement.code ?? null).filter(Boolean);
   }, [revenueData]);
 
   useEffect(() => {
@@ -208,7 +199,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
       </Button>
 
       <ScrollView tw="mx-2 mt-2 mb-1" showsVerticalScrollIndicator={false}>
-        {revenueDataLoading || coolingUnitsLoading ? (
+        {isLoading || coolingUnitsLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
           </View>
@@ -221,18 +212,20 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
                 key={`${movement.id}-${index}`}
                 movement={movement}
                 coolingUnit={
-                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
+                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit // TODO: MOVEMENTS REFACTOR
                 }
                 selectedCompany={company}
                 navigateToMarketSurvey={() => {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.owner,
-                      crops: movement.movementCrops.filter(
-                        (crop) => !movement.hasMarketSurvey.includes(crop.id)
-                      ),
-                      checkoutId: movement.checkoutId as number,
+                      farmer: movement.checkout.ownerName,
+                      crops: movement.checkout.crates
+                        ?.flatMap((crate) => crate.crop)
+                        .filter(
+                          (crop) => crop && !movement.checkout.hasMarketSurvey?.includes(crop.id)
+                        ) as Array<{ id: number; name: string }>,
+                      checkoutId: movement.checkout.id as number,
                       companyCurrency: company?.currency,
                     },
                   });
@@ -261,7 +254,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         </Text>
         <Text variant="TextBold" tw="text-base font-bold">
           {(
-            revenueData.reduce((acc, current) => (acc += current.totalPrice), 0) ?? 0
+            revenueData.reduce((acc, current) => (acc += current.checkout.totalPrice), 0) ?? 0
           ).toLocaleString('en-US', {
             style: 'currency',
             currency: company?.currency,
