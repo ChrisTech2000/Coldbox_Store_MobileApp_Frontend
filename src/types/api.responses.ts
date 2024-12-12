@@ -2,14 +2,15 @@ import {
   Bank,
   CartItem,
   ECoolingUnitMetric,
-  EMovementType,
+  EInitiatedFor,
   EOrderStatus,
-  EPaymentMethod,
   EPaymentGateway,
+  EPaymentMethod,
   EPaymentThrough,
   EPickUpMethod,
   ERoles,
   ESellingLocation,
+  MovementCrate,
   type CommodityInfo,
   type CommodityTotal,
   type CommonPricingType,
@@ -234,38 +235,33 @@ export type UpdateFarmerSurveysResponse = Array<{
 
 export type GetMovementsHistoryResponse = Array<{
   id: number;
-  coolingUnitId: number;
   code: string;
   date: Date;
-  movementType: EMovementType;
-  owner: string;
-  farmer_id?: number;
-  cratesWeight: number;
-  movementCrops: Array<Pick<Crop, 'name' | 'id'>>;
-  checkoutId?: number;
-  hasMarketSurvey: Array<number>;
-  marketSurveyDelay: boolean;
-  calculatedPrice: number;
-  discount: number;
-  totalPrice: number;
-  checkinDate: Date;
-  cratesNumber: number;
-  checkinCode: string;
-  cratesCheckin: Array<{
-    date: Date;
-    name: string;
-    code: string;
-    amount: number;
-    remainingShelfLife: number;
-    plannedDays: number | null;
-    currentStorageDays: number;
-    tag: string;
-    weight: number;
-  }>;
-  paymentThrough: EPaymentThrough;
-  paymentGateway: EPaymentGateway;
-  paymentMethod: EPaymentMethod;
+  initiatedFor: EInitiatedFor;
+  order: Record<string, unknown>; // TODO: fix
   operator: string;
+  checkin: {
+    id: number;
+    ownedByUserId: number;
+    ownedOnBehalfOfCompanyId: number | null;
+    ownerName?: string;
+    crates: Array<MovementCrate>;
+  };
+  checkout: {
+    id: number;
+    ownedByUserId: number;
+    ownedOnBehalfOfCompanyId: number | null;
+    ownerName?: string;
+    paymentGateway: EPaymentGateway | null;
+    paymentMethod: EPaymentMethod;
+    paymentThrough: EPaymentThrough;
+    crates: Array<MovementCrate>;
+    hasMarketSurvey: Array<number>;
+    marketSurveyDelay: boolean;
+    calculatedPrice: number;
+    discount: number;
+    totalPrice: number;
+  };
 }>;
 
 export type GetInvitedOperatorsResponse = {

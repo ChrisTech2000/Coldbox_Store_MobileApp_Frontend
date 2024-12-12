@@ -7,13 +7,14 @@ import colors from 'tailwindcss/colors';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import type { GetMovementsHistoryResponse } from '#types/api.responses';
-import { type CoolingUnit, EMovementType } from '#types/global';
+import { type CoolingUnit, EInitiatedFor } from '#types/global';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
 import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
 import ColdRoom from '#assets/icons/coldroom.svg';
+import { sortMovementCrops } from '../utils/sortMovements';
 
 type MovementDiagramProps = {
   coolingUnit: CoolingUnit;
@@ -23,9 +24,9 @@ type MovementDiagramProps = {
 export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps) {
   const { t } = useTranslationUtils();
 
-  const movementType = movement.movementType;
+  const movementType = movement.initiatedFor;
 
-  if (movementType === EMovementType.IN) {
+  if (movementType === EInitiatedFor.CHECK_IN) {
     return (
       <View tw="px-4 pb-4 pt-2.5 space-y-1">
         <View tw="flex flex-row justify-between items-center mb-3">
@@ -44,8 +45,8 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
 
         <View tw="w-full flex flex-row items-center justify-between space-x-6">
           <FlatList
-            data={movement.cratesCheckin}
-            keyExtractor={(item, index) => `crate-${item.name}-${index}`}
+            data={movement.checkin.crates}
+            keyExtractor={(item, index) => `crate-${item.id}-${index}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
@@ -60,7 +61,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                   <View tw="flex flex-row space-x-2 items-center flex-wrap">
                     <Text tw="text-base">{movement.code}</Text>
                     <Text tw="text-base text-green-500">
-                      +{item.weight}
+                      +{item.initialWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}
                     </Text>
                   </View>
@@ -75,7 +76,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
     );
   }
 
-  if (movementType === EMovementType.OUT) {
+  if (movementType === EInitiatedFor.CHECK_OUT) {
     return (
       <View tw="px-4 pb-4 pt-2.5 space-y-1">
         <View tw="flex flex-row justify-between items-center mb-3">
@@ -96,8 +97,8 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
           <Text tw="text-base w-[40%] flex-wrap">{coolingUnit.name}</Text>
           <Divider tw="w-[10%] h-0.5 bg-gray-700" />
           <FlatList
-            data={movement.cratesCheckin}
-            keyExtractor={(item, index) => `crate-${item.name}-${index}`}
+            data={movement.checkout.crates}
+            keyExtractor={(item, index) => `crate-${item.id}-${index}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
@@ -112,7 +113,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                   <View tw="flex flex-row space-x-2 items-center flex-wrap justify-end">
                     <Text tw="text-base">{movement.code}</Text>
                     <Text tw="text-base text-red-700">
-                      -{item.weight}
+                      -{item.initialWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}
                     </Text>
                   </View>
@@ -125,8 +126,8 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
     );
   }
 
-  if (movementType === EMovementType.MARKETPLACE) {
-    const crops = movement.movementCrops.map((crop) => crop.name);
+  if (movementType === EInitiatedFor.MARKETPLACE_ORDER) {
+    const crops = sortMovementCrops(movement);
 
     return (
       <View tw="px-4 pb-4 pt-2.5 space-y-1">
@@ -152,8 +153,8 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
-            const crates = movement.cratesCheckin.filter(
-              (crate) => crate.name.toLowerCase() === item.toLowerCase()
+            const crates = movement.checkin.crates.filter(
+              (crate) => crate.crop?.name.toLowerCase() === item.toLowerCase()
             );
             const totalWeight = crates.reduce((acc, curr) => (acc += curr.weight), 0);
 
@@ -166,7 +167,10 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                 <View tw="flex flex-row items-center justify-between">
                   <View>
                     {crates.map((crate, index) => (
-                      <View key={`${crate.name}—${index}-crate`} tw="flex flex-row space-x-4 mb-2">
+                      <View
+                        key={`${crate.crop?.name}—${index}-crate`}
+                        tw="flex flex-row space-x-4 mb-2"
+                      >
                         <View>
                           <Text tw="text-base">
                             {crate.tag
@@ -178,7 +182,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                               : ' '}
                           </Text>
 
-                          <Text tw="text-base">{'Previous Owner' /* TODO: fix*/}</Text>
+                          <Text tw="text-base">{movement.checkout.ownerName}</Text>
 
                           <Text tw="text-base text-red-700">
                             -{crate.weight}
@@ -215,7 +219,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                   </View>
 
                   <View tw="self-center justify-center">
-                    <Text tw="text-base">{movement.owner}</Text>
+                    <Text tw="text-base">{movement.checkin.ownerName}</Text>
                     <Text tw="text-base text-green-500">
                       +{totalWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}

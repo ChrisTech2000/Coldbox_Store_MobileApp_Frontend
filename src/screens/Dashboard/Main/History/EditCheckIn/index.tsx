@@ -70,7 +70,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
   const farmer = useMemo(() => {
     return farmers?.find(
-      (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === movement.owner
+      (farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === movement.checkin.ownerName
     );
   }, [farmers]);
 
@@ -137,7 +137,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
           {t('Dashboard.History.editCheckIn.coolingUserLabel')}
         </Text>
         <Text variant="TextMedium" tw="text-green-primary">
-          {movement.owner}
+          {movement.checkin.ownerName}
         </Text>
 
         <Text variant="TextMedium" tw="text-gray-400 text-base mt-2">

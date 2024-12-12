@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, ScrollView, View } from 'react-native';
+import { Dimensions, ScrollView, View } from 'react-native';
 import { Dialog, Divider } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -7,7 +7,7 @@ import { Text } from '#ui/components/Text';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { startCase } from 'lodash';
+import { EInitiatedFor } from '#types/global';
 
 const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
@@ -19,6 +19,8 @@ type DetailsModalProps = {
 
 export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   const { t } = useTranslationUtils();
+
+  if (movement.initiatedFor !== EInitiatedFor.MARKETPLACE_ORDER) return null;
 
   return (
     <Dialog
@@ -46,107 +48,93 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
               </Text>
               &nbsp;
-              {movement.cratesNumber}
+              {movement.checkin.crates.length}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
               </Text>
               &nbsp;
-              {movement.cratesWeight}
+              {movement.checkin.crates.reduce((acc, curr) => (acc += curr.weight), 0)}
+              {t('Dashboard.ProduceDetails.kilogram')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.Analytics.farmersAnalytics.crops')}:
               </Text>
               &nbsp;
-              {movement.movementCrops.map((crop) => crop.name).join(', ')}
+              {Array.from(
+                new Set(movement.checkin.crates.map((crate) => crate.crop?.name ?? ''))
+              ).join(', ')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.paymentMethodLabel')}:
               </Text>
               &nbsp;
-              {movement.paymentGateway}
+              {movement.checkout.paymentGateway}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:
               </Text>
               &nbsp;
-              {movement.calculatedPrice?.toFixed(2)}
+              {movement.checkout.calculatedPrice?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.discountLabel')}:
               </Text>
               &nbsp;
-              {movement.discount?.toFixed(2)}
+              {movement.checkout.discount?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:
               </Text>
               &nbsp;
-              {movement.totalPrice?.toFixed(2)}
+              {movement.checkout.totalPrice?.toFixed(2)}
             </Text>
           </View>
 
           <Divider tw="my-4 bg-gray-400" />
 
-          <View tw="space-y-1 mb-2">
+          <View tw="space-y-1 pb-6">
             <Text tw="text-base font-bold">
               {t('Dashboard.History.stringTemplates.movementType.checkedIn')}:
             </Text>
 
-            <FlatList
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              data={movement.cratesCheckin}
-              keyExtractor={(item, index) => `${item.name}-${index}`}
-              renderItem={({ item, index }) => (
-                <View tw="mb-8 space-y-2">
-                  <Text tw="text-base">
-                    {startCase(
-                      t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
-                    )}{' '}
-                    {item.tag || index + 1}
-                  </Text>
-                  <View tw="flex flex-row items-center mr-8">
-                    <Text variant="TextMedium" tw="text-base text-gray-400 w-1/2">
-                      {t('Dashboard.History.detailsModal.cropTypeLabel')}:
-                    </Text>
-                    <Text variant="TextMedium" tw="text-base">
-                      {item.name}
-                    </Text>
-                  </View>
-                  <View tw="flex flex-row items-center mr-8">
-                    <Text variant="TextMedium" tw="text-base text-gray-400 w-1/2">
-                      {t('Dashboard.History.detailsModal.checkInCodeLabel')}:
-                    </Text>
-                    <Text variant="TextMedium" tw="text-base">
-                      {movement.checkinCode}
-                    </Text>
-                  </View>
-                  <View tw="flex flex-row items-center mr-8">
-                    <Text variant="TextMedium" tw="text-base text-gray-400 w-1/2">
-                      {t('Dashboard.History.pdfModal.weightLabel')}:
-                    </Text>
-                    <Text variant="TextMedium" tw="text-base">
-                      {item.weight}
-                    </Text>
-                  </View>
-                  <View tw="flex flex-row items-center mr-8">
-                    <Text variant="TextMedium" tw="text-base text-gray-400 w-1/2">
-                      {t('Dashboard.Marketplace.owner')}:
-                    </Text>
-                    <Text variant="TextMedium" tw="text-base">
-                      {movement.owner}
-                    </Text>
-                  </View>
-                </View>
-              )}
-            />
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
+                {t('Dashboard.History.detailsModal.checkInCodeLabel')}:
+              </Text>
+              &nbsp;
+              {movement.code}
+            </Text>
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
+                {t('Dashboard.History.detailsModal.cratesLabel')}:
+              </Text>
+              &nbsp;
+              {movement.checkin.crates.length}
+            </Text>
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
+                {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
+              </Text>
+              &nbsp;
+              {movement.checkin.crates.reduce((acc, curr) => (acc += curr.weight), 0)}
+              {t('Dashboard.ProduceDetails.kilogram')}
+            </Text>
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
+                {t('Dashboard.Analytics.farmersAnalytics.crops')}:
+              </Text>
+              &nbsp;
+              {Array.from(
+                new Set(movement.checkin.crates.map((crate) => crate.crop?.name ?? ''))
+              ).join(', ')}
+            </Text>
           </View>
         </ScrollView>
       </Dialog.ScrollArea>

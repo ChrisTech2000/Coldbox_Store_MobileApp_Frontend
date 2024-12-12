@@ -1,25 +1,24 @@
 import { FlashList } from '@shopify/flash-list';
+import isEmpty from 'lodash/isEmpty';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, Platform, ScrollView, View } from 'react-native';
+import { Dimensions, Platform, RefreshControl, ScrollView, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
-import ColdtivateService from '#services/ColdtivateService';
-import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useTutorialStore } from '#stores/tutorial';
-import { Company, CoolingUnit, ERoles } from '#types/global';
+import { Company, CoolingUnit, User } from '#types/global';
 
 import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { cn } from '#ui/lib/cn';
 
 import { HistoryOverlay } from '#screens/Dashboard/Tutorial/HistoryOverlay';
 import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
@@ -28,7 +27,8 @@ import { MOCKED_HISTORY_DATA } from '#screens/Dashboard/Tutorial/utils/mockedDat
 import { Filters } from '../components/Filters';
 import { Movement } from './components/Movement';
 import { createSortingStore, ESortingOptions, SortingMenu } from './components/SortMenu';
-import { sortMovements } from './utils/sortMovements';
+import { sortMovementCrops, sortMovements } from './utils/sortMovements';
+import { useMovementsHistory } from './utils/useMovementsData';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
@@ -64,21 +64,11 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   });
 
   const {
-    data: movements,
-    isLoading: areMovementsLoading,
-    refetch: refetchHistoryMovements,
-  } = useApiCall(
-    'getMovementsHistory',
-    ColdtivateService.getMovementsHistory,
-    {
-      ...(user?.role === ERoles.COOLING_USER ? { farmerId: farmerId as number } : {}),
-      coolingUnit: coolingUnit?.id as number,
-    },
-    {
-      skip: (user?.role === ERoles.COOLING_USER && !farmerId) || !coolingUnit?.id,
-      defaultData: [],
-    }
-  );
+    movements,
+    refetchHistoryMovements,
+    isLoading: isHistoryDataLoading,
+    isValidating,
+  } = useMovementsHistory(farmerId, user as User, coolingUnit);
 
   const sortedMovements = useMemo(() => {
     return (movements ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
@@ -91,17 +81,21 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
 
     return sortedMovements.filter((movement) => {
       const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-      const matchesFarmer = movement.owner.toLowerCase().includes(lowerCaseSearchString);
-      const matchesCrop = movement.movementCrops.some((crop) =>
-        crop.name.toLowerCase().includes(lowerCaseSearchString)
-      );
+      const matchesFarmer = movement.checkin.ownerName
+        ?.toLowerCase()
+        .includes(lowerCaseSearchString);
+
+      const crops = sortMovementCrops(movement);
+      const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(lowerCaseSearchString));
 
       return matchesCode || matchesFarmer || matchesCrop;
     });
   }, [sortedMovements, search]);
 
   const movementsWithCheckout = useMemo(() => {
-    return movements.map((movement) => movement.checkinCode ?? null).filter(Boolean);
+    return movements
+      .map((movement) => (isEmpty(movement.checkout) ? movement.code : ''))
+      .filter(Boolean);
   }, [movements]);
 
   useEffect(() => {
@@ -129,8 +123,14 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
       <ScrollView
         tw={cn('mx-4 mt-2', Platform.OS === 'ios' ? 'mb-28' : 'mb-20')}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isValidating}
+            onRefresh={async () => await refetchHistoryMovements()}
+          />
+        }
       >
-        {areCoolingUnitsLoading || areMovementsLoading ? (
+        {areCoolingUnitsLoading || isHistoryDataLoading ? (
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
           </View>
@@ -156,11 +156,13 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.owner, // TODO: this has been removed by the backend, we will need to review this later
-                      crops: movement.movementCrops.filter(
-                        (crop) => !movement.hasMarketSurvey.includes(crop.id)
-                      ),
-                      checkoutId: movement.checkoutId as number,
+                      farmer: movement.checkout.ownerName,
+                      crops: movement.checkout.crates
+                        ?.flatMap((crate) => crate.crop)
+                        .filter(
+                          (crop) => crop && !movement.checkout.hasMarketSurvey?.includes(crop.id)
+                        ) as Array<{ id: number; name: string }>,
+                      checkoutId: movement.checkout.id as number,
                       companyCurrency: company?.currency,
                     },
                   });

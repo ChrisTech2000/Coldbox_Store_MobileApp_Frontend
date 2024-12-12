@@ -129,7 +129,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                   break;
                 }
                 case 'MARKET_SURVEY': {
-                  await NotificationHandlers.marketSurvey(item, managementCompany);
+                  await NotificationHandlers.marketSurvey(item, managementCompany, crops);
                   break;
                 }
                 case 'ORDER_REQUIRES_MOVEMENT': {
@@ -270,7 +270,11 @@ class NotificationHandlers {
     useRightDrawerStore.getState().toggle(false);
   }
 
-  static async marketSurvey(notification: NotificationDatum, managementCompany: ManagementCompany) {
+  static async marketSurvey(
+    notification: NotificationDatum,
+    managementCompany: ManagementCompany,
+    crops: Array<GetAllCropsResponse>
+  ) {
     const farmer = notification.ctx.farmer;
     const coolingUnit = notification.ctx.coolingUnit;
     if (!farmer || !coolingUnit) throw new Error();
@@ -283,19 +287,23 @@ class NotificationHandlers {
     const movementDetails = movements.find(
       (movement) => movement.code === notification.datum.movementCode
     );
-    if (!movementDetails || !movementDetails.marketSurveyDelay) throw new Error();
+    if (!movementDetails || !movementDetails.checkout.marketSurveyDelay) throw new Error();
 
-    const movementCropsForSurvey = movementDetails.movementCrops
-      .filter((crop) => !movementDetails.hasMarketSurvey.includes(crop.id))
+    const owner = await ColdtivateService.getUser(movementDetails.checkout.ownedByUserId);
+    const movementCrops = movementDetails.checkout.crates.flatMap((crate) => crate.cropId);
+
+    const movementCropsForSurvey = crops
+      .filter((crop) => movementCrops.includes(crop.id))
+      .filter((crop) => !movementDetails.checkout.hasMarketSurvey.includes(crop.id))
       .map((crop) => ({ id: crop.id, name: crop.name }));
 
     const datums = {
       eventType: 'MARKET_SURVEY',
       datums: {
-        checkoutId: movementDetails.checkoutId,
+        checkoutId: movementDetails.checkout.id,
         companyCurrency: managementCompany?.currency || 'NGN',
         crops: movementCropsForSurvey,
-        owner: movementDetails.owner,
+        owner: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`,
       },
     } satisfies NotificationOpenSurveyEventDatums;
 

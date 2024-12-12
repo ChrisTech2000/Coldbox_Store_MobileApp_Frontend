@@ -3,7 +3,7 @@ import { Dialog } from 'react-native-paper';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { GetMovementsHistoryResponse } from '#types/api.responses';
-import { type CoolingUnit, EMovementType } from '#types/global';
+import { type CoolingUnit, EInitiatedFor } from '#types/global';
 
 import { CheckOutData } from './CheckOutData';
 import { CheckInData } from './CheckInData';
@@ -27,7 +27,7 @@ export function PDFModal({
 }: PDFModalProps) {
   const { t } = useTranslationUtils();
 
-  const isCheckIn = movement.movementType === EMovementType.IN;
+  const isCheckIn = movement.initiatedFor === EInitiatedFor.CHECK_IN;
 
   return (
     <Dialog visible={isOpen} onDismiss={dismiss} style={{ backgroundColor: 'white' }}>

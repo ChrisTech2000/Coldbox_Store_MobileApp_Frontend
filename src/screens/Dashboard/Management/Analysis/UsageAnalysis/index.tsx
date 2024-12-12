@@ -43,6 +43,7 @@ export const usageAnalysisStores = [useCoolingUnitStore, useDateRangeStore];
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
+// TODO: Movements refactor
 function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { t } = useTranslationUtils();
 

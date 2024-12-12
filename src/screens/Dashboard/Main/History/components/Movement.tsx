@@ -19,7 +19,7 @@ import { useManagementStore, type ManagementCompany } from '#stores/management';
 import { type GetMovementsHistoryResponse } from '#types/api.responses';
 import {
   ECoolingUnitMetric,
-  EMovementType,
+  EInitiatedFor,
   EPricingType,
   ERoles,
   type Company,
@@ -27,10 +27,11 @@ import {
 } from '#types/global';
 
 import { isWithinLast24Hours } from '../utils/dates';
+import { sortMovementCrops } from '../utils/sortMovements';
 import { DetailsModal } from './DetailsModal';
+import { MarketplaceDetailsModal } from './MarketplaceDetailsModal';
 import { MovementDiagram } from './MovementDiagram';
 import { PDFModal } from './PDFModal';
-import { MarketplaceDetailsModal } from './MarketplaceDetailsModal';
 
 type Movement = GetMovementsHistoryResponse[number];
 
@@ -42,7 +43,7 @@ type MovementProps = {
   navigateToCheckIn?: (movement: Movement, coolingUnitId?: number) => void;
   navigateToMarketSurvey?: (
     farmer: string,
-    crops: Movement['movementCrops'],
+    crops: Array<{ id: number; name: string }>,
     checkoutId?: number,
     companyCurrency?: string
   ) => void;
@@ -70,7 +71,7 @@ export function Movement({
     useState<boolean>(false);
 
   const crops = useMemo(() => {
-    const _crops = movement.movementCrops.map((crop) => crop.name);
+    const _crops = sortMovementCrops(movement);
     if (_crops.length <= 2) return _crops.join(', ');
     return t('Dashboard.History.cropsLabel', {
       crop: _crops[0],
@@ -78,12 +79,12 @@ export function Movement({
     });
   }, [movement]);
 
-  const isCheckIn = movement.movementType === EMovementType.IN;
-  const isCheckOut = movement.movementType === EMovementType.OUT;
+  const isCheckIn = movement.initiatedFor === EInitiatedFor.CHECK_IN;
+  const isCheckOut = movement.initiatedFor === EInitiatedFor.CHECK_OUT;
 
   const price = useMemo(() => {
-    if (!isCheckIn)
-      return `${movement.totalPrice.toFixed(2)} ${company?.currency ?? selectedCompany?.currency}`;
+    if (isCheckOut)
+      return `${movement.checkout.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
 
     const price = coolingUnit?.commonPricingType?.value ?? 0;
     const suffix =
@@ -92,11 +93,11 @@ export function Movement({
         : '';
 
     if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
-      return `${price * movement.cratesNumber} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+      return `${price * movement.checkin.crates.length} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
     }
 
-    return `${movement.cratesWeight * price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
-  }, [isCheckIn, movement, selectedCompany]);
+    return `${movement.checkin.crates.reduce((acc, curr) => (acc += curr.weight), 0) * price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+  }, [isCheckOut, movement, selectedCompany]);
 
   const seePDFModal = useCallback(() => {
     setIsPDFModalOpen(true);
@@ -120,9 +121,14 @@ export function Movement({
 
   const fillMarketSurvey = useCallback(() => {
     navigateToMarketSurvey?.(
-      movement.owner,
-      movement.movementCrops.filter((crop) => !movement.hasMarketSurvey.includes(crop.id)),
-      movement.checkoutId as number,
+      movement.checkout.ownerName ?? '',
+      movement.checkout.crates
+        ?.flatMap((crate) => crate.crop)
+        .filter((crop) => crop && !movement.checkout.hasMarketSurvey?.includes(crop.id)) as Array<{
+        id: number;
+        name: string;
+      }>,
+      movement.checkout.id as number,
       selectedCompany?.currency ?? company?.currency
     );
     setIsOptionsModalOpen(false);
@@ -176,7 +182,7 @@ export function Movement({
             {
               label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
               action: fillMarketSurvey,
-              disabled: !movement.marketSurveyDelay,
+              disabled: !movement.checkout.marketSurveyDelay,
             },
           ]
         : []),
@@ -194,11 +200,15 @@ export function Movement({
   return (
     <View tw="w-full">
       <View tw="w-full flex flex-row items-center justify-between my-2 space-x-1">
-        <_IconByMovementType movementType={movement.movementType} />
+        <_IconByMovementType movementType={movement.initiatedFor} />
 
         <View tw="h-full w-[80%] space-y-1">
           <Text tw="text-base" numberOfLines={3}>
-            {movement.code} - {movement.cratesNumber} - {crops}
+            {movement.code} -{' '}
+            {movement.initiatedFor === EInitiatedFor.CHECK_IN
+              ? movement.checkin.crates.length
+              : movement.checkout.crates.length}{' '}
+            - {crops}
           </Text>
 
           <View tw="flex flex-row justify-between space-x-1">
@@ -206,12 +216,22 @@ export function Movement({
               <Text tw="text-base text-gray-400">
                 {dateFmt(movement.date.toString(), 'dd/MM/yyyy HH:mm a')}
               </Text>
-              <Text tw="text-base text-gray-400">{movement.owner}</Text>
+              <Text tw="text-base text-gray-400">
+                {movement.initiatedFor === EInitiatedFor.CHECK_OUT
+                  ? movement.checkout.ownerName
+                  : movement.checkin.ownerName}
+              </Text>
             </View>
             <View tw="w-[45%] items-end">
               <Text tw="text-base">{price}</Text>
               <Text tw="text-base">
-                {movement.cratesWeight} {t('Dashboard.ProduceDetails.kilogram')}
+                {movement.initiatedFor === EInitiatedFor.CHECK_IN
+                  ? movement.checkin.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)
+                  : movement.checkout.crates.reduce(
+                      (acc, curr) => (acc += curr.initialWeight),
+                      0
+                    )}{' '}
+                {t('Dashboard.ProduceDetails.kilogram')}
               </Text>
             </View>
           </View>
@@ -289,13 +309,13 @@ export function Movement({
   );
 }
 
-function _IconByMovementType(props: { movementType: EMovementType }) {
+function _IconByMovementType(props: { movementType: EInitiatedFor }) {
   switch (props.movementType) {
-    case EMovementType.IN:
+    case EInitiatedFor.CHECK_IN:
       return <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />;
-    case EMovementType.OUT:
+    case EInitiatedFor.CHECK_OUT:
       return <CheckOut width={20} height={20} fill={colors.red[700]} stroke={colors.red[700]} />;
-    case EMovementType.MARKETPLACE:
+    case EInitiatedFor.MARKETPLACE_ORDER:
       return <MaterialIcon name="cart-outline" size={25} color={colors.blue[500]} />;
     default:
       return null;

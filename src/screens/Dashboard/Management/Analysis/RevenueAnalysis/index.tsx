@@ -49,6 +49,7 @@ export const revenueAnalysisStores = [useDateRangeStore, usePaymentType, useCool
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
+// TODO: Movements refactor
 function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
   const { t } = useTranslationUtils();
 
