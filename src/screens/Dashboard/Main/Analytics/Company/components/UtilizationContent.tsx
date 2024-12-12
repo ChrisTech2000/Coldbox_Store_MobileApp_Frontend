@@ -45,7 +45,7 @@ export function UtilizationContent() {
   return (
     <ScrollView
       tw="w-full mt-2"
-      contentContainerStyle="items-center"
+      contentContainerStyle="items-center pb-20"
       showsVerticalScrollIndicator={false}
     >
       <View tw="w-full bg-gray-200 px-2 py-1 items-center rounded-lg space-y-3 my-2">

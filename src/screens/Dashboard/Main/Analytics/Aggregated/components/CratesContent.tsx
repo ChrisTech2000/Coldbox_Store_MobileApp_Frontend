@@ -77,7 +77,7 @@ export function CratesContent() {
   return (
     <ScrollView
       tw="w-full mt-2"
-      contentContainerStyle="items-center"
+      contentContainerStyle="items-center pb-20"
       showsVerticalScrollIndicator={false}
     >
       <Section

@@ -5,6 +5,7 @@ import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { ScrollView } from '#ui/components/ScrollView';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useDashboardStore } from '#stores/dashboard';
@@ -209,7 +210,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
   );
 
   return (
-    <View tw="w-full my-2">
+    <ScrollView tw="w-full mt-2" contentContainerStyle="pb-24" showsVerticalScrollIndicator={false}>
       <SectionAccordion
         color="bg-gray-200"
         expanded={expanded === 'crates'}
@@ -327,7 +328,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
           />
         }
       />
-    </View>
+    </ScrollView>
   );
 }
 
