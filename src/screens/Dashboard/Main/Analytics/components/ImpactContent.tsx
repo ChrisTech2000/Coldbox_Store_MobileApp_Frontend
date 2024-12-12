@@ -104,7 +104,7 @@ export function ImpactContent<T extends Store>({
           </Text>
         </View>
       )}
-      <View tw="w-full">
+      <View tw="w-full pb-20">
         <ImpactSection
           title={t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
           from={
