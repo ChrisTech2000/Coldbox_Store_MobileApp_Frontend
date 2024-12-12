@@ -86,7 +86,7 @@ function CoolingUnitsPlanner() {
           />
         }
       >
-        <View tw="pb-16">
+        <View tw="pb-20">
           <Text
             tw={cn('self-start mb-4', screenHeight > SMALL_SCREEN_THRESHOLD ? 'ml-4' : 'mx-2')}
             variant="titleLarge"
