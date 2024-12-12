@@ -3,6 +3,8 @@ import useSupercluster from 'use-supercluster';
 import type { MapState } from '@rnmapbox/maps';
 import type { PointFeature } from 'supercluster';
 import type { BBox, GeoJsonProperties } from 'geojson';
+import moize from 'moize';
+import ms from 'ms';
 
 import type {
   GetAllCropsResponse,
@@ -10,6 +12,7 @@ import type {
   GetLocationResponse,
 } from '#types/api.responses';
 import type { Translator } from '#i18n/utils';
+import { stringToHash } from '#ui/lib/hash';
 
 export type MarkerCoolingUnitsInfo = {
   name: string;
@@ -91,12 +94,15 @@ export function processLocationMarkers(args: {
   return Array.from(markersMap.values());
 }
 
-function _getSingleCommodityCropName(
-  crops: Array<GetAllCropsResponse> = [],
-  cropId: number | undefined = undefined
-): string | undefined {
-  return crops.find((crop) => crop.id === cropId)?.name ?? '';
-}
+const _getSingleCommodityCropName = moize(
+  (crops: Array<GetAllCropsResponse>, cropId?: number) =>
+    crops.find(({ id }) => id === cropId)?.name ?? '',
+  {
+    maxAge: ms('7 seconds'),
+    isSerialized: true,
+    serializer: ([crops, cropId]) => [stringToHash([cropId, JSON.stringify(crops)].join(':::'))],
+  }
+);
 
 type PointProperties = {
   cluster: boolean;
