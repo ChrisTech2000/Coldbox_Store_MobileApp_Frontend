@@ -129,10 +129,9 @@ class NotificationManager {
     {
       maxAge: ms('5 seconds'),
       isSerialized: true,
-      serializer: ([unitName, units]) => {
-        const ids = (units as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
-        return [stringToHash([unitName, ids.join('.')].join('::'))];
-      },
+      serializer: ([unitName, units]) => [
+        stringToHash([unitName, JSON.stringify(units)].join(':::')),
+      ],
     }
   );
 
@@ -142,10 +141,9 @@ class NotificationManager {
     {
       maxAge: ms('5 seconds'),
       isSerialized: true,
-      serializer: ([farmerName, farmers]) => {
-        const ids = (farmers as Array<Farmer>).map(({ id }) => id).sort((a, b) => a - b);
-        return [stringToHash([farmerName, ids.join('.')].join('::'))];
-      },
+      serializer: ([farmerName, farmers]) => [
+        stringToHash([farmerName, JSON.stringify(farmers)].join(':::')),
+      ],
     }
   );
 }

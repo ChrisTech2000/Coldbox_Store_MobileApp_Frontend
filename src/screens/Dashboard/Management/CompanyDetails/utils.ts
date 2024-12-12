@@ -1,5 +1,7 @@
 import { getAllISOCodes } from 'iso-country-currency';
 import { currencies } from 'currencies.json';
+import moize from 'moize';
+import ms from 'ms';
 
 import type { Company } from '#types/global';
 
@@ -61,6 +63,8 @@ export function derivedSubjects(company: Company) {
   };
 }
 
+const CACHE_MAX_AGE = ms('20 seconds');
+
 type CountryDatum = { name: string; currencyCode: string; currency: string };
 
 export function countriesDict() {
@@ -76,19 +80,25 @@ export function countriesDict() {
 
   return {
     values: () => Array.from(dict.values()),
-    getISOByName: (value: string): string | undefined => {
-      for (const [countryISO, { name }] of dict) {
-        if (name === value) return countryISO;
-      }
-      return undefined;
-    },
+    getISOByName: moize(
+      (value: string): string | undefined => {
+        for (const [countryISO, { name }] of dict) {
+          if (name === value) return countryISO;
+        }
+        return undefined;
+      },
+      { maxAge: CACHE_MAX_AGE }
+    ),
     getNameByISO: (countryISO: string): string | undefined => dict.get(countryISO)?.name,
-    getByValue: (value: string) => {
-      for (const [iso, datum] of dict.entries()) {
-        if (iso === value || datum.name === value) return datum;
-      }
-      return undefined;
-    },
+    getByValue: moize(
+      (value: string) => {
+        for (const [iso, datum] of dict.entries()) {
+          if (iso === value || datum.name === value) return datum;
+        }
+        return undefined;
+      },
+      { maxAge: CACHE_MAX_AGE }
+    ),
   };
 }
 

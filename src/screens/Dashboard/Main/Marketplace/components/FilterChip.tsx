@@ -31,7 +31,7 @@ export default function FilterChip() {
     [filters]
   );
 
-  if (filters.length === 0) return;
+  if (filters.length === 0) return null;
 
   return (
     <View tw="py-4">
