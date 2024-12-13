@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { View } from 'react-native';
 import { DataTable, Icon } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { ScrollView } from '#ui/components/ScrollView';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
@@ -186,7 +186,7 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
   }, [impactData, sorting, configData]);
 
   return (
-    <View tw="w-full my-2">
+    <ScrollView tw="w-full mt-2" contentContainerStyle="pb-24" showsVerticalScrollIndicator={false}>
       <SectionAccordion
         color="bg-violet-100"
         expanded={expanded === 'occupancy'}
@@ -277,7 +277,7 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
           />
         }
       />
-    </View>
+    </ScrollView>
   );
 }
 

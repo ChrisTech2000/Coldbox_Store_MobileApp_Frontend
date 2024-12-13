@@ -103,7 +103,7 @@ const _SelectionIndicator = memo(function Component(props: { isSelected: boolean
   return (
     <View
       tw={cn(
-        'h-2 w-2 rounded-full self-center mt-3',
+        'h-2 w-2 rounded-full self-center',
         props.isSelected ? 'bg-green-primary' : 'bg-transparent'
       )}
     />

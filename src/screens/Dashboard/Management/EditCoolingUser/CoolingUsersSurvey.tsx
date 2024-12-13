@@ -134,7 +134,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
   }
 
   return (
-    <ScrollView tw="space-y-4 mx-4 pt-2 pb-8" showsVerticalScrollIndicator={false}>
+    <ScrollView tw="space-y-4 mx-4" showsVerticalScrollIndicator={false}>
       <SurveyFormManager
         initialValues={baseDatums}
         onSubmit={async (values): Promise<void> => {
@@ -156,7 +156,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
         }}
       >
         {({ submitHandler, isSubmitting }) => (
-          <React.Fragment>
+          <View tw="pt-2 pb-4">
             <OccupationField />
             <ExperienceField />
             <CommoditiesField
@@ -204,7 +204,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
                 </Button>
               </View>
             </View>
-          </React.Fragment>
+          </View>
         )}
       </SurveyFormManager>
     </ScrollView>
