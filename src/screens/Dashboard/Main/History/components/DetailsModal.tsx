@@ -61,7 +61,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   }, [movement]);
 
   if (movement.initiatedFor === EInitiatedFor.CHECK_IN) return null;
-  const paymentMethod = PAYMENT_METHOD_TRANSLATIONS[movement.checkout.paymentMethod];
+  const paymentMethod = PAYMENT_METHOD_TRANSLATIONS[movement.checkout?.paymentMethod];
 
   return (
     <Dialog
@@ -78,7 +78,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 {t('Dashboard.Marketplace.owner')}:
               </Text>
               &nbsp;
-              {movement.checkout.crates[0].ownerName}
+              {movement.checkout?.crates[0].ownerName}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
@@ -114,13 +114,13 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
               </Text>
               <Icon
                 source={
-                  !movement.checkout.hasMarketSurvey.length
+                  !movement.checkout?.hasMarketSurvey.length
                     ? 'close-circle-outline'
                     : 'check-circle-outline'
                 }
                 size={18}
                 color={
-                  !movement.checkout.hasMarketSurvey.length ? colors.red[400] : colors.green[400]
+                  !movement.checkout?.hasMarketSurvey.length ? colors.red[400] : colors.green[400]
                 }
               />
             </View>
@@ -132,14 +132,14 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout.crates.length}
+              {movement.checkout?.crates.length}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}
+              {movement.checkout?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
@@ -153,21 +153,21 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout.calculatedPrice?.toFixed(2)}
+              {movement.checkout?.calculatedPrice?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.discountLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout.discount?.toFixed(2)}
+              {movement.checkout?.discount?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:
               </Text>
               &nbsp;
-              {movement.checkout.totalPrice?.toFixed(2)}
+              {movement.checkout?.totalPrice?.toFixed(2)}
             </Text>
           </View>
 

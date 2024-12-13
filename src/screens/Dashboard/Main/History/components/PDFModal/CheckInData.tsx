@@ -72,7 +72,7 @@ export function CheckInData(props: CheckInDataProps) {
             <div class="section">
               <div class="column">
                 <div class="label">${t('Dashboard.Marketplace.owner')}</div>
-                <div class="value">${movement.checkin.ownerName}</div>
+                <div class="value">${movement.checkin?.ownerName}</div>
               </div>
               <div class="column">
                 <div class="label">${t('Dashboard.History.pdfModal.checkIn.operatorLabel')}</div>
@@ -94,7 +94,7 @@ export function CheckInData(props: CheckInDataProps) {
                 </tr>
               </thead>
               <tbody>
-                ${movement.checkin.crates
+                ${movement.checkin?.crates
                   .reduce(
                     (acc, curr) => {
                       if (!acc.find((crop) => crop?.id === curr.crop?.id)) {
@@ -105,7 +105,7 @@ export function CheckInData(props: CheckInDataProps) {
                     [] as Array<MovementCrate['crop']>
                   )
                   .map((crop) => {
-                    const crates = movement.checkin.crates.filter(
+                    const crates = movement.checkin?.crates.filter(
                       (crate) => crate.cropId === crop?.id
                     );
                     const totalWeight = crates.reduce(
@@ -128,9 +128,9 @@ export function CheckInData(props: CheckInDataProps) {
                   .join('')}
                 <tr class="total-row">
                   <td>${t('Dashboard.History.pdfModal.checkIn.totalLabel')}</td>
-                  <td>${movement.checkin.crates.length}</td>
-                  <td>${movement.checkin.crates.reduce((acc, current) => (acc += current.initialWeight), 0)}</td>
-                  <td>${((coolingUnit?.commonPricingType?.value ?? 0) * movement.checkin.crates.length).toFixed(2)}</td>
+                  <td>${movement.checkin?.crates.length}</td>
+                  <td>${movement.checkin?.crates.reduce((acc, current) => (acc += current.initialWeight), 0)}</td>
+                  <td>${((coolingUnit?.commonPricingType?.value ?? 0) * movement.checkin?.crates.length).toFixed(2)}</td>
                 </tr>
               </tbody>
             </table>
@@ -192,7 +192,7 @@ export function CheckInData(props: CheckInDataProps) {
             {t('Dashboard.Marketplace.owner')}
           </Text>
           <Text variant="TextMedium" numberOfLines={1}>
-            {movement.checkin.ownerName}
+            {movement.checkin?.ownerName}
           </Text>
         </View>
 
@@ -232,7 +232,7 @@ export function CheckInData(props: CheckInDataProps) {
             </DataTable.Title>
           </DataTable.Header>
 
-          {movement.checkin.crates
+          {movement.checkin?.crates
             .reduce(
               (acc, curr) => {
                 if (!acc.find((crop) => crop?.id === curr.crop?.id)) {
@@ -245,7 +245,7 @@ export function CheckInData(props: CheckInDataProps) {
             .map((crop, index) => {
               if (!crop) return;
 
-              const crates = movement.checkin.crates.filter((crate) => crate.cropId === crop.id);
+              const crates = movement.checkin?.crates.filter((crate) => crate.cropId === crop.id);
               return (
                 <DataTable.Row key={`${crop.name}-${index}`}>
                   <DataTable.Cell>{crop.name}</DataTable.Cell>
@@ -265,17 +265,17 @@ export function CheckInData(props: CheckInDataProps) {
               <Text tw="font-bold">{t('Dashboard.History.pdfModal.checkIn.totalLabel')}</Text>
             </DataTable.Cell>
             <DataTable.Cell numeric>
-              <Text tw="font-bold">{movement.checkin.crates.length}</Text>
+              <Text tw="font-bold">{movement.checkin?.crates.length}</Text>
             </DataTable.Cell>
             <DataTable.Cell numeric>
               <Text tw="font-bold">
-                {movement.checkin.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}
+                {movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}
               </Text>
             </DataTable.Cell>
             <DataTable.Cell numeric>
               <Text tw="font-bold">
                 {(
-                  (coolingUnit?.commonPricingType?.value ?? 0) * movement.checkin.crates.length
+                  (coolingUnit?.commonPricingType?.value ?? 0) * movement.checkin?.crates.length
                 ).toFixed(2)}
               </Text>
             </DataTable.Cell>

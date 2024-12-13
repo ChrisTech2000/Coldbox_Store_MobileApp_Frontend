@@ -55,7 +55,7 @@ export function CheckOutData(props: CheckOutDataProps) {
           <div class="section">
             <div class="column">
               <div class="label">${t('Dashboard.Marketplace.owner')}</div>
-              <div class="value">${movement.checkout.crates[0].ownerName}</div>
+              <div class="value">${movement.checkout?.crates[0].ownerName}</div>
             </div>
             <div class="column">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.checkOutLabel')}</div>
@@ -76,7 +76,7 @@ export function CheckOutData(props: CheckOutDataProps) {
               </tr>
             </thead>
             <tbody>
-              ${movement.checkout.crates
+              ${movement.checkout?.crates
                 .map(
                   (crate) => `
                 <tr>
@@ -93,19 +93,19 @@ export function CheckOutData(props: CheckOutDataProps) {
           <div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.weightLabel')}:&nbsp;</div>
-              <div class="value">${movement.checkout.crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0)}</div>
+              <div class="value">${movement.checkout?.crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0)}</div>
             </div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:&nbsp;</div>
-              <div class="value">${movement.checkout.totalPrice.toFixed(2)}</div>
+              <div class="value">${movement.checkout?.totalPrice.toFixed(2)}</div>
             </div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.discountLabel')}:&nbsp;</div>
-              <div class="value">${movement.checkout.discount.toFixed(2)}</div>
+              <div class="value">${movement.checkout?.discount.toFixed(2)}</div>
             </div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.totalPrice')}:&nbsp;</div>
-              <div class="value">${(movement.checkout.totalPrice - movement.checkout.discount).toFixed(2)}</div>
+              <div class="value">${(movement.checkout?.totalPrice - movement.checkout?.discount).toFixed(2)}</div>
             </div>
           </div>
 
@@ -140,7 +140,7 @@ export function CheckOutData(props: CheckOutDataProps) {
             {t('Dashboard.Marketplace.owner')}
           </Text>
           <Text variant="TextMedium" numberOfLines={1}>
-            {movement.checkout.crates[0].ownerName}
+            {movement.checkout?.crates[0].ownerName}
           </Text>
         </View>
 
@@ -171,7 +171,7 @@ export function CheckOutData(props: CheckOutDataProps) {
             <DataTable.Title>{t('Dashboard.History.pdfModal.weightLabel')}</DataTable.Title>
           </DataTable.Header>
 
-          {movement.checkout.crates.map((crate, index) => (
+          {movement.checkout?.crates.map((crate, index) => (
             <DataTable.Row key={`${crate.crop?.name ?? ''}-${index}`}>
               <DataTable.Cell>{crate.tag}</DataTable.Cell>
               <DataTable.Cell>{crate.crop?.name ?? ''}</DataTable.Cell>
@@ -183,22 +183,22 @@ export function CheckOutData(props: CheckOutDataProps) {
         <View tw="items-end space-y-2 pr-12 w-full">
           <Text>
             {t('Dashboard.History.pdfModal.weightLabel')}:{' '}
-            {movement.checkout.crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0)}
+            {movement.checkout?.crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0)}
           </Text>
           <Divider tw="w-[60%] bg-grey-300" />
           <Text variant="TextBold" tw="font-bold">
             {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:{' '}
-            {movement.checkout.calculatedPrice.toFixed(2)}
+            {movement.checkout?.calculatedPrice.toFixed(2)}
           </Text>
           <Divider tw="w-[60%] bg-grey-300" />
           <Text variant="TextBold" tw="font-bold">
             {t('Dashboard.History.pdfModal.checkOut.discountLabel')}:{' '}
-            {movement.checkout.discount.toFixed(2)}
+            {movement.checkout?.discount.toFixed(2)}
           </Text>
           <Divider tw="w-[60%] bg-grey-300" />
           <Text variant="TextBold" tw="font-bold">
             {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:{' '}
-            {movement.checkout.totalPrice.toFixed(2)}
+            {movement.checkout?.totalPrice.toFixed(2)}
           </Text>
         </View>
       </ScrollView>

@@ -16,7 +16,7 @@ const fetchUsers = async (movements: GetMovementsHistoryResponse) => {
     .filter(
       (movement) => movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId
     )
-    .map((movement) => movement.checkin.ownedByUserId);
+    .map((movement) => movement.checkin?.ownedByUserId);
 
   const checkOutUserIds = movements
     .flatMap((movement) => movement.checkout?.crates ?? [])
@@ -41,10 +41,10 @@ const processMovements = (
     ...(movement.checkin && {
       checkin: {
         ...movement.checkin,
-        ownerName: movement.checkin.ownedOnBehalfOfCompanyId
-          ? getCompanyOwnerName(movement.checkin.ownedOnBehalfOfCompanyId, companies ?? [])
-          : getUserOwnerName(movement.checkin.ownedByUserId, users ?? []),
-        crates: movement.checkin.crates.map((crate) => ({
+        ownerName: movement.checkin?.ownedOnBehalfOfCompanyId
+          ? getCompanyOwnerName(movement.checkin?.ownedOnBehalfOfCompanyId, companies ?? [])
+          : getUserOwnerName(movement.checkin?.ownedByUserId, users ?? []),
+        crates: movement.checkin?.crates.map((crate) => ({
           ...crate,
           crop: crops.find((crop) => crop.id === crate.cropId) || { id: crate.cropId, name: '' },
         })),
@@ -53,7 +53,7 @@ const processMovements = (
     ...(movement.checkout && {
       checkout: {
         ...movement.checkout,
-        crates: movement.checkout.crates.map((crate) => ({
+        crates: movement.checkout?.crates.map((crate) => ({
           ...crate,
           ownerName: crate.ownedOnBehalfOfCompanyId
             ? getCompanyOwnerName(crate.ownedOnBehalfOfCompanyId, companies ?? [])

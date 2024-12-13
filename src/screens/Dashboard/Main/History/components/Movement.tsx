@@ -84,7 +84,7 @@ export function Movement({
 
   const price = useMemo(() => {
     if (isCheckOut)
-      return `${movement.checkout.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
+      return `${movement.checkout?.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
 
     const price = coolingUnit?.commonPricingType?.value ?? 0;
     const suffix =
@@ -93,10 +93,13 @@ export function Movement({
         : '';
 
     if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
-      return `${price * movement.checkin.crates.length} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+      const _price = price * movement.checkin?.crates.length;
+      return `${isNaN(_price) ? 0 : price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
     }
 
-    return `${movement.checkin.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0) * price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+    const _price =
+      movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0) * price;
+    return `${isNaN(_price) ? 0 : _price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
   }, [isCheckOut, movement, selectedCompany]);
 
   const seePDFModal = useCallback(() => {
@@ -121,14 +124,14 @@ export function Movement({
 
   const fillMarketSurvey = useCallback(() => {
     navigateToMarketSurvey?.(
-      movement.checkout.crates[0].ownerName ?? '',
-      movement.checkout.crates
+      movement.checkout?.crates[0].ownerName ?? '',
+      movement.checkout?.crates
         ?.flatMap((crate) => crate.crop)
-        .filter((crop) => crop && !movement.checkout.hasMarketSurvey?.includes(crop.id)) as Array<{
+        .filter((crop) => crop && !movement.checkout?.hasMarketSurvey?.includes(crop.id)) as Array<{
         id: number;
         name: string;
       }>,
-      movement.checkout.id as number,
+      movement.checkout?.id as number,
       selectedCompany?.currency ?? company?.currency
     );
     setIsOptionsModalOpen(false);
@@ -182,7 +185,7 @@ export function Movement({
             {
               label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
               action: fillMarketSurvey,
-              disabled: !movement.checkout.marketSurveyDelay,
+              disabled: !movement.checkout?.marketSurveyDelay,
             },
           ]
         : []),
@@ -206,8 +209,8 @@ export function Movement({
           <Text tw="text-base" numberOfLines={3}>
             {movement.code} -{' '}
             {movement.initiatedFor === EInitiatedFor.CHECK_IN
-              ? movement.checkin.crates.length
-              : movement.checkout.crates.length}{' '}
+              ? movement.checkin?.crates.length
+              : movement.checkout?.crates.length}{' '}
             - {crops}
           </Text>
 
@@ -218,21 +221,21 @@ export function Movement({
               </Text>
               <Text tw="text-base text-gray-400">
                 {movement.initiatedFor === EInitiatedFor.CHECK_OUT
-                  ? movement.checkout.crates[0].ownerName
-                  : movement.checkin.ownerName}
+                  ? movement.checkout?.crates[0].ownerName
+                  : movement.checkin?.ownerName}
               </Text>
             </View>
             <View tw="w-[45%] items-end">
               <Text tw="text-base">{price}</Text>
               <Text tw="text-base">
                 {movement.initiatedFor === EInitiatedFor.CHECK_IN
-                  ? movement.checkin.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)
+                  ? movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)
                   : movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
-                    ? movement.checkout.crates.reduce(
+                    ? movement.checkout?.crates.reduce(
                         (acc, curr) => (acc += curr.affectedWeight ?? 0),
                         0
                       )
-                    : movement.checkout.crates.reduce(
+                    : movement.checkout?.crates.reduce(
                         (acc, curr) => (acc += curr.affectedWeight ?? 0),
                         0
                       )}{' '}

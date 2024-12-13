@@ -100,10 +100,10 @@ export function useMovementsHistory(
         processedMovement.checkin = {
           ...movement.checkin,
           ownerName: _getOwnerName(
-            movement.checkin.ownedOnBehalfOfCompanyId,
-            movement.checkin.ownedByUserId
+            movement.checkin?.ownedOnBehalfOfCompanyId,
+            movement.checkin?.ownedByUserId
           ),
-          crates: movement.checkin.crates.map((crate) => ({
+          crates: movement.checkin?.crates.map((crate) => ({
             ...crate,
             crop: getCropInfo(crate.cropId, crops ?? []),
           })),
@@ -113,7 +113,7 @@ export function useMovementsHistory(
       if (!isEmpty(movement.checkout)) {
         processedMovement.checkout = {
           ...movement.checkout,
-          crates: movement.checkout.crates.map((crate) => ({
+          crates: movement.checkout?.crates.map((crate) => ({
             ...crate,
             ownerName: _getOwnerName(crate.ownedOnBehalfOfCompanyId, crate.ownedByUserId),
             crop: getCropInfo(crate.cropId, crops ?? []),

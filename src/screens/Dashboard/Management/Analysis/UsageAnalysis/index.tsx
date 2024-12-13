@@ -96,7 +96,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
       const matchesSearchTerm =
         !lowerCaseSearchString ||
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.checkin.crates.some((crate) =>
+        movement.checkin?.crates.some((crate) =>
           crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
         ) ||
         sortMovementCrops(movement).some((crop) =>
@@ -110,9 +110,9 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { totalCheckIns, totalCrates, totalUsers, totalWeight } = useMemo(() => {
     const { totalCrates, totalWeight, users } = filteredMovements
       .flatMap((movement) => ({
-        cratesNumber: movement.checkin.crates.length,
-        weight: movement.checkin.crates.reduce((acc, crate) => (acc += crate.weight), 0),
-        user: movement.checkin.ownerName ?? '',
+        cratesNumber: movement.checkin?.crates.length,
+        weight: movement.checkin?.crates.reduce((acc, crate) => (acc += crate.weight), 0),
+        user: movement.checkin?.ownerName ?? '',
       }))
       .reduce(
         (acc, current) => {

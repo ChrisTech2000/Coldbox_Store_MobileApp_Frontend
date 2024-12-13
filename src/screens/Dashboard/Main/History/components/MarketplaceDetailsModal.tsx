@@ -48,7 +48,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.Marketplace.owner')}:
               </Text>
               &nbsp;
-              {Array.from(new Set(movement.checkout.crates.map((crate) => crate.ownerName))).join(
+              {Array.from(new Set(movement.checkout?.crates.map((crate) => crate.ownerName))).join(
                 ', '
               )}
             </Text>
@@ -57,14 +57,14 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
               </Text>
               &nbsp;
-              {movement.checkin.crates.length}
+              {movement.checkin?.crates.length}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
               </Text>
               &nbsp;
-              {movement.checkin.crates.reduce((acc, curr) => (acc += curr.weight), 0)}
+              {movement.checkin?.crates.reduce((acc, curr) => (acc += curr.weight), 0)}
               {t('Dashboard.ProduceDetails.kilogram')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
@@ -73,7 +73,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
               </Text>
               &nbsp;
               {Array.from(
-                new Set(movement.checkin.crates.map((crate) => crate.crop?.name ?? ''))
+                new Set(movement.checkin?.crates.map((crate) => crate.crop?.name ?? ''))
               ).join(', ')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
@@ -81,28 +81,28 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.History.detailsModal.paymentMethodLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout.paymentGateway}
+              {movement.checkout?.paymentGateway}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout.calculatedPrice?.toFixed(2)}
+              {movement.checkout?.calculatedPrice?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.discountLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout.discount?.toFixed(2)}
+              {movement.checkout?.discount?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:
               </Text>
               &nbsp;
-              {movement.checkout.totalPrice?.toFixed(2)}
+              {movement.checkout?.totalPrice?.toFixed(2)}
             </Text>
           </View>
 
@@ -118,7 +118,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.Marketplace.owner')}:
               </Text>
               &nbsp;
-              {movement.checkin.ownerName}
+              {movement.checkin?.ownerName}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
@@ -132,14 +132,14 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
               </Text>
               &nbsp;
-              {movement.checkin.crates.length}
+              {movement.checkin?.crates.length}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
               </Text>
               &nbsp;
-              {movement.checkin.crates.reduce((acc, curr) => (acc += curr.weight), 0)}
+              {movement.checkin?.crates.reduce((acc, curr) => (acc += curr.weight), 0)}
               {t('Dashboard.ProduceDetails.kilogram')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
@@ -148,7 +148,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
               </Text>
               &nbsp;
               {Array.from(
-                new Set(movement.checkin.crates.map((crate) => crate.crop?.name ?? ''))
+                new Set(movement.checkin?.crates.map((crate) => crate.crop?.name ?? ''))
               ).join(', ')}
             </Text>
           </View>

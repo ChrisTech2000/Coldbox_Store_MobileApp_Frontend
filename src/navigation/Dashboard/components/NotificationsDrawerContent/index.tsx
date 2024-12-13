@@ -110,9 +110,9 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     'DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL',
     async (value) => {
       const { companies, crops, movement } = value;
-      const checkInUserIds = value.movement.checkin.ownedByUserId;
+      const checkInUserIds = value.movement.checkin?.ownedByUserId;
 
-      const checkOutUserIds = value.movement.checkout.crates
+      const checkOutUserIds = value.movement.checkout?.crates
         .filter((crate) => crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId)
         .map((crate) => crate.ownedByUserId);
 
@@ -126,10 +126,10 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       if (!isEmpty(movement.checkin)) {
         movement.checkin = {
           ...movement.checkin,
-          ownerName: movement.checkin.ownedOnBehalfOfCompanyId
-            ? getCompanyOwnerName(movement.checkin.ownedOnBehalfOfCompanyId, companies ?? [])
-            : getUserOwnerName(movement.checkin.ownedByUserId, users ?? []),
-          crates: movement.checkin.crates.map((crate) => ({
+          ownerName: movement.checkin?.ownedOnBehalfOfCompanyId
+            ? getCompanyOwnerName(movement.checkin?.ownedOnBehalfOfCompanyId, companies ?? [])
+            : getUserOwnerName(movement.checkin?.ownedByUserId, users ?? []),
+          crates: movement.checkin?.crates.map((crate) => ({
             ...crate,
             crop: getCropInfo(crate.cropId, crops ?? []),
           })),
@@ -139,7 +139,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       if (!isEmpty(movement.checkout)) {
         movement.checkout = {
           ...movement.checkout,
-          crates: movement.checkout.crates.map((crate) => ({
+          crates: movement.checkout?.crates.map((crate) => ({
             ...crate,
             ownerName: crate.ownedOnBehalfOfCompanyId
               ? getCompanyOwnerName(crate.ownedOnBehalfOfCompanyId, companies ?? [])

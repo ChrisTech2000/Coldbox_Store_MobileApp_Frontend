@@ -47,7 +47,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
 
         <View tw="w-full flex flex-row items-center justify-between space-x-6">
           <FlatList
-            data={movement.checkin.crates}
+            data={movement.checkin?.crates}
             keyExtractor={(item, index) => `crate-${item.id}-${index}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
@@ -99,7 +99,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
           <Text tw="text-base w-[40%] flex-wrap">{coolingUnit.name}</Text>
           <Divider tw="w-[10%] h-0.5 bg-gray-700" />
           <FlatList
-            data={movement.checkout.crates}
+            data={movement.checkout?.crates}
             keyExtractor={(item, index) => `crate-${item.id}-${index}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
@@ -222,7 +222,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                   </View>
 
                   <View tw="self-center justify-center">
-                    <Text tw="text-base">{movement.checkin.ownerName}</Text>
+                    <Text tw="text-base">{movement.checkin?.ownerName}</Text>
                     <Text tw="text-base text-green-500">
                       +{totalWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}

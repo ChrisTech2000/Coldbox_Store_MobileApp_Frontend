@@ -82,7 +82,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
 
     return sortedMovements.filter((movement) => {
       const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-      const matchesFarmer = movement.checkin.ownerName
+      const matchesFarmer = movement.checkin?.ownerName
         ?.toLowerCase()
         .includes(lowerCaseSearchString);
 
@@ -159,17 +159,17 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.checkout.crates?.[0]?.ownerName,
-                      crops: movement.checkout.crates
+                      farmer: movement.checkout?.crates?.[0]?.ownerName,
+                      crops: movement.checkout?.crates
                         ?.flatMap((crate) => crate.crop)
                         .filter(
                           (crop) =>
                             crop &&
-                            !(movement.checkout.hasMarketSurvey as number[])?.includes(
+                            !(movement.checkout?.hasMarketSurvey as number[])?.includes(
                               crop.id as number
                             )
                         ) as Array<{ id: number; name: string }>,
-                      checkoutId: movement.checkout.id as number,
+                      checkoutId: movement.checkout?.id as number,
                       companyCurrency: company?.currency,
                     },
                   });
