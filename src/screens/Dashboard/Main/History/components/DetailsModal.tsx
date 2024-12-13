@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FlatList, ScrollView, View, Dimensions } from 'react-native';
 import { Dialog, Divider, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -10,7 +10,7 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { EPaymentMethod } from '#types/global';
+import { EInitiatedFor, EPaymentMethod, MovementCrate } from '#types/global';
 import type { TranslationPaths } from '#i18n/index';
 
 const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
@@ -27,6 +27,10 @@ type DetailsModalProps = {
   dismiss: () => void;
 };
 
+type GroupedCrates = {
+  [cropName: string]: Array<MovementCrate>;
+};
+
 export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   const { t } = useTranslationUtils();
 
@@ -37,7 +41,27 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
     { defaultData: [], skip: !isOpen }
   );
 
-  const paymentMethod = PAYMENT_METHOD_TRANSLATIONS?.[movement.paymentMethod];
+  const groupedCrates = useMemo(() => {
+    const grouped: GroupedCrates = {};
+
+    movement.checkout?.crates.forEach((crate) => {
+      const cropName = crate.crop?.name ?? '';
+
+      if (!grouped[cropName]) {
+        grouped[cropName] = [];
+      }
+
+      grouped[cropName].push(crate);
+    });
+
+    return Object.entries(grouped).map(([cropName, crates]) => ({
+      cropName,
+      crates,
+    }));
+  }, [movement]);
+
+  if (movement.initiatedFor === EInitiatedFor.CHECK_IN) return null;
+  const paymentMethod = PAYMENT_METHOD_TRANSLATIONS[movement.checkout?.paymentMethod];
 
   return (
     <Dialog
@@ -54,14 +78,14 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 {t('Dashboard.Marketplace.owner')}:
               </Text>
               &nbsp;
-              {movement.owner}
+              {movement.checkout?.crates[0].ownerName}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.operatorNameLabel')}:
               </Text>
               &nbsp;
-              {movement.operator}
+              {movement.operator ?? ''}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
@@ -90,10 +114,14 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
               </Text>
               <Icon
                 source={
-                  !movement.hasMarketSurvey.length ? 'close-circle-outline' : 'check-circle-outline'
+                  !movement.checkout?.hasMarketSurvey.length
+                    ? 'close-circle-outline'
+                    : 'check-circle-outline'
                 }
                 size={18}
-                color={!movement.hasMarketSurvey.length ? colors.red[400] : colors.green[400]}
+                color={
+                  !movement.checkout?.hasMarketSurvey.length ? colors.red[400] : colors.green[400]
+                }
               />
             </View>
           </View>
@@ -104,14 +132,14 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
               </Text>
               &nbsp;
-              {movement.cratesCheckin.length}
+              {movement.checkout?.crates.length}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
               </Text>
               &nbsp;
-              {movement.cratesWeight}
+              {movement.checkout?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
@@ -125,21 +153,21 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:
               </Text>
               &nbsp;
-              {movement.calculatedPrice?.toFixed(2)}
+              {movement.checkout?.calculatedPrice?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.discountLabel')}:
               </Text>
               &nbsp;
-              {movement.discount?.toFixed(2)}
+              {movement.checkout?.discount?.toFixed(2)}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">
                 {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:
               </Text>
               &nbsp;
-              {movement.totalPrice?.toFixed(2)}
+              {movement.checkout?.totalPrice?.toFixed(2)}
             </Text>
           </View>
 
@@ -152,16 +180,16 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
           <FlatList
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            data={movement.cratesCheckin}
-            keyExtractor={(item, index) => `${item.code}-${index}`}
-            renderItem={({ item: crate }) => (
+            data={groupedCrates}
+            keyExtractor={(item, index) => `${item.cropName}-${index}`}
+            renderItem={({ item }) => (
               <View tw="mb-8 space-y-2">
                 <View tw="flex flex-row items-center mr-8">
                   <Text variant="TextMedium" tw="text-lg text-gray-400 w-1/2">
                     {t('Dashboard.History.detailsModal.cropTypeLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.name}
+                    {item.cropName}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -169,7 +197,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.detailsModal.checkInCodeLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.code}
+                    {movement.code}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -177,7 +205,10 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.detailsModal.crateIdsLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.tag ?? ' '}
+                    {item.crates
+                      .map((crate) => crate.tag ?? '')
+                      .filter(Boolean)
+                      .join(', ')}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -185,7 +216,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.pdfModal.checkIn.numberOfCratesLabel')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.amount}
+                    {item.crates.length}
                   </Text>
                 </View>
                 <View tw="flex flex-row items-center mr-8">
@@ -193,7 +224,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                     {t('Dashboard.History.stringTemplates.movementType.checkedIn')}:
                   </Text>
                   <Text variant="TextMedium" tw="text-lg">
-                    {crate.date ? dateFmt(crate.date.toString(), 'dd-MM-yyyy') : ''}
+                    {movement.date ? dateFmt(movement.date.toString(), 'dd-MM-yyyy') : ''}
                   </Text>
                 </View>
               </View>

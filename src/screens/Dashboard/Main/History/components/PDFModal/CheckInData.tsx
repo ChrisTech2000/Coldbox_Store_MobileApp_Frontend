@@ -7,7 +7,7 @@ import { Text } from '#ui/components/Text';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { type CoolingUnit } from '#types/global';
+import { MovementCrate, type CoolingUnit } from '#types/global';
 import InAppNotifications from '#common/InAppNotifications';
 import { savePDF } from '#ui/lib/pdf';
 
@@ -72,7 +72,7 @@ export function CheckInData(props: CheckInDataProps) {
             <div class="section">
               <div class="column">
                 <div class="label">${t('Dashboard.Marketplace.owner')}</div>
-                <div class="value">${movement.owner}</div>
+                <div class="value">${movement.checkin?.ownerName}</div>
               </div>
               <div class="column">
                 <div class="label">${t('Dashboard.History.pdfModal.checkIn.operatorLabel')}</div>
@@ -94,19 +94,31 @@ export function CheckInData(props: CheckInDataProps) {
                 </tr>
               </thead>
               <tbody>
-                ${movement.movementCrops
+                ${movement.checkin?.crates
+                  .reduce(
+                    (acc, curr) => {
+                      if (!acc.find((crop) => crop?.id === curr.crop?.id)) {
+                        acc.push(curr.crop);
+                      }
+                      return acc;
+                    },
+                    [] as Array<MovementCrate['crop']>
+                  )
                   .map((crop) => {
-                    const crates = movement.cratesCheckin.filter(
-                      (crate) => crate.name === crop.name
+                    const crates = movement.checkin?.crates.filter(
+                      (crate) => crate.cropId === crop?.id
                     );
-                    const totalWeight = crates.reduce((acc, current) => (acc += current.weight), 0);
+                    const totalWeight = crates.reduce(
+                      (acc, current) => (acc += current.initialWeight),
+                      0
+                    );
                     const totalPrice = (
                       (coolingUnit?.commonPricingType?.value ?? 0) * crates.length
                     ).toFixed(2);
 
                     return `
                                 <tr>
-                                  <td>${crop.name}</td>
+                                  <td>${crop?.name ?? ''}</td>
                                   <td>${crates.length}</td>
                                   <td>${totalWeight}</td>
                                   <td>${totalPrice}</td>
@@ -116,9 +128,9 @@ export function CheckInData(props: CheckInDataProps) {
                   .join('')}
                 <tr class="total-row">
                   <td>${t('Dashboard.History.pdfModal.checkIn.totalLabel')}</td>
-                  <td>${movement.cratesCheckin.length}</td>
-                  <td>${movement.cratesWeight}</td>
-                  <td>${((coolingUnit?.commonPricingType?.value ?? 0) * movement.cratesCheckin.length).toFixed(2)}</td>
+                  <td>${movement.checkin?.crates.length}</td>
+                  <td>${movement.checkin?.crates.reduce((acc, current) => (acc += current.initialWeight), 0)}</td>
+                  <td>${((coolingUnit?.commonPricingType?.value ?? 0) * movement.checkin?.crates.length).toFixed(2)}</td>
                 </tr>
               </tbody>
             </table>
@@ -180,7 +192,7 @@ export function CheckInData(props: CheckInDataProps) {
             {t('Dashboard.Marketplace.owner')}
           </Text>
           <Text variant="TextMedium" numberOfLines={1}>
-            {movement.owner}
+            {movement.checkin?.ownerName}
           </Text>
         </View>
 
@@ -220,37 +232,50 @@ export function CheckInData(props: CheckInDataProps) {
             </DataTable.Title>
           </DataTable.Header>
 
-          {movement.movementCrops.map((crop, index) => {
-            const crates = movement.cratesCheckin.filter((crate) => crate.name === crop.name);
+          {movement.checkin?.crates
+            .reduce(
+              (acc, curr) => {
+                if (!acc.find((crop) => crop?.id === curr.crop?.id)) {
+                  acc.push(curr.crop);
+                }
+                return acc;
+              },
+              [] as Array<MovementCrate['crop']>
+            )
+            .map((crop, index) => {
+              if (!crop) return;
 
-            return (
-              <DataTable.Row key={`${crop.name}-${index}`}>
-                <DataTable.Cell>{crop.name}</DataTable.Cell>
-                <DataTable.Cell numeric>{crates.length}</DataTable.Cell>
-                <DataTable.Cell numeric>
-                  {crates.reduce((acc, current) => (acc += current.weight), 0)}
-                </DataTable.Cell>
-                <DataTable.Cell numeric>
-                  {((coolingUnit?.commonPricingType?.value ?? 0) * crates.length).toFixed(2)}
-                </DataTable.Cell>
-              </DataTable.Row>
-            );
-          })}
+              const crates = movement.checkin?.crates.filter((crate) => crate.cropId === crop.id);
+              return (
+                <DataTable.Row key={`${crop.name}-${index}`}>
+                  <DataTable.Cell>{crop.name}</DataTable.Cell>
+                  <DataTable.Cell numeric>{crates.length}</DataTable.Cell>
+                  <DataTable.Cell numeric>
+                    {crates.reduce((acc, current) => (acc += current.initialWeight), 0)}
+                  </DataTable.Cell>
+                  <DataTable.Cell numeric>
+                    {((coolingUnit?.commonPricingType?.value ?? 0) * crates.length).toFixed(2)}
+                  </DataTable.Cell>
+                </DataTable.Row>
+              );
+            })}
 
           <DataTable.Row tw="bg-gray-200">
             <DataTable.Cell>
               <Text tw="font-bold">{t('Dashboard.History.pdfModal.checkIn.totalLabel')}</Text>
             </DataTable.Cell>
             <DataTable.Cell numeric>
-              <Text tw="font-bold">{movement.cratesCheckin.length}</Text>
+              <Text tw="font-bold">{movement.checkin?.crates.length}</Text>
             </DataTable.Cell>
             <DataTable.Cell numeric>
-              <Text tw="font-bold">{movement.cratesWeight}</Text>
+              <Text tw="font-bold">
+                {movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}
+              </Text>
             </DataTable.Cell>
             <DataTable.Cell numeric>
               <Text tw="font-bold">
                 {(
-                  (coolingUnit?.commonPricingType?.value ?? 0) * movement.cratesCheckin.length
+                  (coolingUnit?.commonPricingType?.value ?? 0) * movement.checkin?.crates.length
                 ).toFixed(2)}
               </Text>
             </DataTable.Cell>

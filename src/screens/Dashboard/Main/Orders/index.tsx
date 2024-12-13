@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/native';
 import isArray from 'lodash/isArray';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -11,18 +12,17 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useIsFocused } from '@react-navigation/native';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { cn } from '#ui/lib/cn';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
@@ -31,9 +31,9 @@ import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 
-import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
-import CropsBottomSheet from './components/CropsBottomSheet';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import CropsBottomSheet from './components/CropsBottomSheet';
+import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
 
 type Status = 'payment-pending' | 'cancelled' | 'paid' | 'payment-expired';
 
