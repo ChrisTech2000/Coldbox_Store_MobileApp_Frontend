@@ -239,10 +239,9 @@ const _findCompanyById = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([companyId, companies]) => {
-      const ids = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
-      return [[companyId, ids.join('.')].join('::')];
-    },
+    serializer: ([companyId, companies]) => [
+      stringToHash([companyId, JSON.stringify(companies)].join(':::')),
+    ],
   }
 );
 
@@ -251,10 +250,7 @@ const _findCropById = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([cropId, crops]) => {
-      const ids = (crops as Array<GetAllCropsResponse>).map(({ id }) => id).sort((a, b) => a - b);
-      return [stringToHash([cropId, ids.join('.')].join('::'))];
-    },
+    serializer: ([cropId, crops]) => [stringToHash([cropId, JSON.stringify(crops)].join(':::'))],
   }
 );
 
@@ -263,10 +259,7 @@ const _findUnitById = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([unitId, units]) => {
-      const ids = (units as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
-      return [stringToHash([unitId, ids.join('.')].join('::'))];
-    },
+    serializer: ([unitId, units]) => [stringToHash([unitId, JSON.stringify(units)].join(':::'))],
   }
 );
 
@@ -276,10 +269,9 @@ const _findCompanyOwner = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([companyId, companies]) => {
-      const ids = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
-      return [stringToHash([companyId, ids.join('.')].join('::'))];
-    },
+    serializer: ([companyId, companies]) => [
+      stringToHash([companyId, JSON.stringify(companies)].join(':::')),
+    ],
   }
 );
 
@@ -290,9 +282,6 @@ const _findUserOwner = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([userId, users]) => {
-      const ids = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
-      return [stringToHash([userId, ids.join('.')].join('::'))];
-    },
+    serializer: ([userId, users]) => [stringToHash([userId, JSON.stringify(users)].join(':::'))],
   }
 );
