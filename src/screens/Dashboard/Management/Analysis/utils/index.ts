@@ -29,12 +29,12 @@ export function sortMovementOwners(movement: Movement): Array<string> {
   let owners: string[] = [];
 
   if (movement.initiatedFor !== EInitiatedFor.CHECK_OUT) {
-    owners = movement.checkin.crates.flatMap((crate) => crate.ownerName || []);
+    owners = movement.checkin?.crates?.flatMap((crate) => crate.ownerName || []);
   } else {
-    owners = movement.checkout.crates.flatMap((crate) => crate.ownerName || []);
+    owners = movement.checkout?.crates?.flatMap((crate) => crate.ownerName || []);
   }
 
-  const uniqueOwners = Array.from(new Set(owners));
+  const uniqueOwners = Array.from(new Set(owners ?? []));
 
   return uniqueOwners.sort((ownerA, ownerB) => {
     const nameA = ownerA.toLowerCase();
