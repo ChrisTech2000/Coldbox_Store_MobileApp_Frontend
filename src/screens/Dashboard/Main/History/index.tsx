@@ -10,6 +10,7 @@ import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTab
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useTutorialStore } from '#stores/tutorial';
+import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { Company, CoolingUnit, User } from '#types/global';
 
 import { GenericError } from '#ui/components/GenericError';
@@ -137,9 +138,11 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         ) : movements.length > 0 || isTutorialActive ? (
           <FlashList
             showsVerticalScrollIndicator={false}
-            // eslint-disable-next-line
-            // @ts-ignore
-            data={isTutorialActive ? MOCKED_HISTORY_DATA : filteredMovements}
+            data={
+              (isTutorialActive
+                ? MOCKED_HISTORY_DATA
+                : filteredMovements) as GetMovementsHistoryResponse
+            }
             renderItem={({ item: movement, index }) => (
               <Movement
                 key={`${movement.id}-${index}`}
@@ -161,7 +164,10 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                         ?.flatMap((crate) => crate.crop)
                         .filter(
                           (crop) =>
-                            crop && !movement.checkout.hasMarketSurvey?.includes(crop.id as number)
+                            crop &&
+                            !(movement.checkout.hasMarketSurvey as number[])?.includes(
+                              crop.id as number
+                            )
                         ) as Array<{ id: number; name: string }>,
                       checkoutId: movement.checkout.id as number,
                       companyCurrency: company?.currency,

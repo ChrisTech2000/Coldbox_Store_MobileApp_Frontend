@@ -17,7 +17,6 @@ import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { EApiGender, type Farmer } from '#types/global';
 
@@ -54,17 +53,6 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
       defaultData: undefined,
     }
   );
-
-  const { data: account } = useApiCall(
-    'getFarmerBankAccounts',
-    MarketplaceService.getFarmerBankAccounts,
-    data.user?.id,
-    {
-      skip: !data.user?.id,
-      defaultData: undefined,
-    }
-  );
-  console.log(account); // TODO: implement
 
   if (isLoading) {
     return (

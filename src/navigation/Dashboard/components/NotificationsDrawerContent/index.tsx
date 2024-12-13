@@ -289,7 +289,9 @@ class NotificationHandlers {
     );
     if (!movementDetails || !movementDetails.checkout.marketSurveyDelay) throw new Error();
 
-    const owner = await ColdtivateService.getUser(movementDetails.checkout.ownedByUserId);
+    const owner = await ColdtivateService.getUser(
+      movementDetails.checkout.crates[0].ownedByUserId as number
+    );
     const movementCrops = movementDetails.checkout.crates.flatMap((crate) => crate.cropId);
 
     const movementCropsForSurvey = crops

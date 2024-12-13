@@ -1,4 +1,5 @@
-import { EInitiatedFor } from '#types/global';
+import { GetMovementsHistoryResponse } from '#types/api.responses';
+import { EInitiatedFor, EPaymentGateway, EPaymentMethod, EPaymentThrough } from '#types/global';
 
 export const MOCKED_USER = {
   birthday: null,
@@ -578,10 +579,11 @@ export const MOCKED_HISTORY_DATA = [
   {
     id: 1004,
     code: 'MO-#64-CU-#75',
-    date: '2024-12-12T11:32:24.674639Z',
+    date: new Date('2024-12-12T11:32:24.674639Z'),
     initiatedFor: EInitiatedFor.MARKETPLACE_ORDER,
     order: {},
     operator: '',
+    coolingUnitId: 65,
     checkin: {
       id: 599,
       ownedByUserId: 286,
@@ -624,9 +626,9 @@ export const MOCKED_HISTORY_DATA = [
     },
     checkout: {
       id: 464,
-      paymentGateway: 'PAYTACK',
-      paymentMethod: 'CREDIT_CARD',
-      paymentThrough: 'COLDTIVATE',
+      paymentGateway: EPaymentGateway.PAYTACK,
+      paymentMethod: EPaymentMethod.CASH,
+      paymentThrough: EPaymentThrough.COLDTIVATE,
       crates: [
         {
           id: 9209,
@@ -677,10 +679,11 @@ export const MOCKED_HISTORY_DATA = [
   {
     id: 1005,
     code: 'F2XC56',
-    date: '2024-12-11T10:30:24.674639Z',
+    date: new Date('2024-12-11T10:30:24.674639Z'),
     initiatedFor: EInitiatedFor.CHECK_IN,
     order: {},
     operator: '',
+    coolingUnitId: 65,
     checkin: {
       id: 599,
       ownedByUserId: 286,
@@ -721,6 +724,6 @@ export const MOCKED_HISTORY_DATA = [
         },
       ],
     },
-    checkout: {},
+    checkout: {} as GetMovementsHistoryResponse[number]['checkout'],
   },
-];
+] satisfies GetMovementsHistoryResponse;
