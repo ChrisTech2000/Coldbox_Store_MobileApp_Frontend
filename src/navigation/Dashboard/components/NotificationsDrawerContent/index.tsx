@@ -1,33 +1,45 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { create } from 'zustand';
-import { View, FlatList } from 'react-native';
-import { ActivityIndicator, Portal } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
-import { useSWRConfig } from 'swr';
-import { Modalize } from 'react-native-modalize';
+import isEmpty from 'lodash/isEmpty';
 import ms from 'ms';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { ActivityIndicator, Portal } from 'react-native-paper';
+import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 
+import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
 
-import type { CoolingUnit, Crop, FarmerSurvey } from '#types/global';
-import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
-import { useAuthStore } from '#stores/auth';
-import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useTranslationUtils } from '#i18n/utils';
+import { useApiCall } from '#services/hooks/useAPiCall';
+import { useAuthStore } from '#stores/auth';
+import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
+import type { Company, CoolingUnit, Crop, FarmerSurvey } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 
-import { type ProcessedNotifications } from '../../lib/notifications';
-import { useAppEventListener } from '#ui/lib/emitter';
-import NotificationItem from './components/NotificationItem';
-import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
-import ColdtivateService from '#services/ColdtivateService';
-import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 import InAppNotifications from '#common/InAppNotifications';
+import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
+import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
+import ColdtivateService from '#services/ColdtivateService';
+import NotificationService from '#services/NotificationService';
+import { useAppEventListener } from '#ui/lib/emitter';
+import { type ProcessedNotifications } from '../../lib/notifications';
+import NotificationItem from './components/NotificationItem';
+
+import { useRightDrawerStore } from '#navigation/Dashboard';
+import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
+import {
+  getCompanyOwnerName,
+  getCropInfo,
+  getUserOwnerName,
+} from '#screens/Dashboard/Main/History/utils/useMovementsData';
+import { type ManagementCompany, useManagementStore } from '#stores/management';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 export type Notifications = ProcessedNotifications['notifications'];
-export type Notification = Notifications[0];
+type NotificationDatum = Notifications[0];
+export type Notification = NotificationDatum['datum'];
 
 export type CommoditySurveyDatum = {
   farmerSurveysLength: number;
@@ -44,6 +56,8 @@ export type CommoditySurveyDatum = {
 export type OrderRequiresMovementDatum = {
   movement: GetMovementsHistoryResponse[0];
   coolingUnit: CoolingUnit;
+  crops: GetAllCropsResponse[];
+  companies: Company[];
 };
 
 export const useSettingUpSurvey = create<{
@@ -59,8 +73,8 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   const { notifications } = props;
 
   const user = useAuthStore(useShallow((store) => store.user));
+  const managementCompany = useManagementStore(useShallow((store) => store.company));
   const { t } = useTranslationUtils();
-  const { mutate } = useSWRConfig();
   const toast = InAppNotifications.useToast();
 
   const [farmerSurveyDatums, setFarmerSurveyDatums] = useState<CommoditySurveyDatum | undefined>(
@@ -73,14 +87,18 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
 
   const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
 
-  const revalidate = useCallback(async () => {
-    await mutate(getQueryKey('getNotifications', user));
-  }, [user]);
+  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
+    skip: !user?.id,
+    defaultData: [],
+  });
 
-  const findNotificationById = useCallback(
-    (notificationId: number) =>
-      notifications.find((notification) => notification.id === notificationId),
-    [notifications]
+  const { data: companies } = useApiCall(
+    'getCompanies',
+    ColdtivateService.getCompanies,
+    undefined,
+    {
+      defaultData: [],
+    }
   );
 
   useAppEventListener<[CommoditySurveyDatum]>(
@@ -90,7 +108,46 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
 
   useAppEventListener<[OrderRequiresMovementDatum]>(
     'DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL',
-    (value) => {
+    async (value) => {
+      const { companies, crops, movement } = value;
+      const checkInUserIds = value.movement.checkin?.ownedByUserId;
+
+      const checkOutUserIds = value.movement.checkout?.crates
+        .filter((crate) => crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId)
+        .map((crate) => crate.ownedByUserId);
+
+      const uniqueUserIds = Array.from(new Set([...checkOutUserIds, checkInUserIds])).filter(
+        Boolean
+      );
+      const users = await Promise.all(
+        uniqueUserIds.map(async (id) => await ColdtivateService.getUser(id as number))
+      );
+
+      if (!isEmpty(movement.checkin)) {
+        movement.checkin = {
+          ...movement.checkin,
+          ownerName: movement.checkin?.ownedOnBehalfOfCompanyId
+            ? getCompanyOwnerName(movement.checkin?.ownedOnBehalfOfCompanyId, companies ?? [])
+            : getUserOwnerName(movement.checkin?.ownedByUserId, users ?? []),
+          crates: movement.checkin?.crates.map((crate) => ({
+            ...crate,
+            crop: getCropInfo(crate.cropId, crops ?? []),
+          })),
+        };
+      }
+
+      if (!isEmpty(movement.checkout)) {
+        movement.checkout = {
+          ...movement.checkout,
+          crates: movement.checkout?.crates.map((crate) => ({
+            ...crate,
+            ownerName: crate.ownedOnBehalfOfCompanyId
+              ? getCompanyOwnerName(crate.ownedOnBehalfOfCompanyId, companies ?? [])
+              : getUserOwnerName(crate.ownedByUserId, users ?? []),
+            crop: getCropInfo(crate.cropId, crops ?? []),
+          })),
+        };
+      }
       setOrderDatum(value);
       modalRef.current?.open();
     }
@@ -114,12 +171,31 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={notifications}
-        keyExtractor={(item) => `notification-#${item.id}`}
+        keyExtractor={(item) => `notification-#${item.datum.id}`}
         renderItem={({ item }) => (
           <NotificationItem
-            item={item}
-            revalidate={revalidate}
-            findNotificationById={findNotificationById}
+            item={item.datum}
+            updateStatusHandler={async () => {
+              if (!item.datum.seen) {
+                await NotificationService.updateNotificationStatus(item.datum.id);
+              }
+              switch (item.datum.eventType) {
+                case 'FARMER_SURVEY': {
+                  await NotificationHandlers.farmerSurvey(item, managementCompany, crops);
+                  break;
+                }
+                case 'MARKET_SURVEY': {
+                  await NotificationHandlers.marketSurvey(item, managementCompany, crops);
+                  break;
+                }
+                case 'ORDER_REQUIRES_MOVEMENT': {
+                  await NotificationHandlers.reallocate(item, crops, companies ?? []);
+                  break;
+                }
+                default:
+                  break;
+              }
+            }}
           />
         )}
         nestedScrollEnabled
@@ -169,8 +245,6 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
               toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.updateSuccess'), {
                 type: 'md_success',
               });
-
-              await revalidate();
             } catch (exception) {
               console.error(exception);
               toast.show(t('actions.error', { type: 'md_danger' }));
@@ -205,6 +279,121 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       ) : null}
     </View>
   );
+}
+
+class NotificationHandlers {
+  static async farmerSurvey(
+    notification: NotificationDatum,
+    managementCompany: ManagementCompany,
+    crops: Array<GetAllCropsResponse>
+  ) {
+    const farmer = notification.ctx.farmer;
+    if (!farmer) throw new Error();
+
+    const surveys = await ColdtivateService.getFarmerSurveys({ farmerId: farmer.id });
+
+    const surveyList =
+      surveys?.flatMap((survey) =>
+        survey.co.map((item) => ({
+          ...item,
+          cropName: crops.find((crop) => crop.id === item.cropId)?.name ?? '',
+        }))
+      ) || [];
+
+    const isAlreadyFilledIn = surveyList
+      .map((item) => item.cropName.toLowerCase())
+      .includes(notification.datum.crates.crop.toLowerCase());
+
+    if (isAlreadyFilledIn) throw new Error('surveyAlreadyFilled');
+
+    const contextualCrop = crops.find((crop) => crop.name === notification.datum.crates.crop);
+    if (!contextualCrop) throw new Error();
+
+    const contextualFarmerSurvey = surveys?.at(0);
+    const datum = {
+      farmerSurveysLength: surveyList.length + 1,
+      companyCurrency: managementCompany?.currency ?? 'NGN',
+      crops,
+      contextualCrop,
+      farmerId: farmer.id,
+      commoditySurveys: surveyList,
+      userType: (contextualFarmerSurvey?.userType as EOccupation) ?? EOccupation.FARMER,
+      experience: contextualFarmerSurvey?.experience ? EExperience.OLD : EExperience.NEW,
+      experienceInMonths: contextualFarmerSurvey?.experienceDuration?.toString() ?? '1',
+    } satisfies CommoditySurveyDatum;
+
+    emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_COMMODITY_MODAL, datum);
+    useRightDrawerStore.getState().toggle(false);
+  }
+
+  static async marketSurvey(
+    notification: NotificationDatum,
+    managementCompany: ManagementCompany,
+    crops: Array<GetAllCropsResponse>
+  ) {
+    const farmer = notification.ctx.farmer;
+    const coolingUnit = notification.ctx.coolingUnit;
+    if (!farmer || !coolingUnit) throw new Error();
+
+    const movements = await ColdtivateService.getMovementsHistory({
+      coolingUnit: coolingUnit.id,
+      farmerId: farmer.id,
+    });
+
+    const movementDetails = movements.find(
+      (movement) => movement.code === notification.datum.movementCode
+    );
+    if (!movementDetails || !movementDetails.checkout.marketSurveyDelay) throw new Error();
+
+    const owner = await ColdtivateService.getUser(
+      movementDetails.checkout.crates[0].ownedByUserId as number
+    );
+    const movementCrops = movementDetails.checkout.crates.flatMap((crate) => crate.cropId);
+
+    const movementCropsForSurvey = crops
+      .filter((crop) => movementCrops.includes(crop.id))
+      .filter((crop) => !movementDetails.checkout.hasMarketSurvey.includes(crop.id))
+      .map((crop) => ({ id: crop.id, name: crop.name }));
+
+    const datums = {
+      eventType: 'MARKET_SURVEY',
+      datums: {
+        checkoutId: movementDetails.checkout.id,
+        companyCurrency: managementCompany?.currency || 'NGN',
+        crops: movementCropsForSurvey,
+        owner: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`,
+      },
+    } satisfies NotificationOpenSurveyEventDatums;
+
+    emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY, datums);
+    useRightDrawerStore.getState().toggle(false);
+  }
+
+  static async reallocate(
+    notification: NotificationDatum,
+    crops: GetAllCropsResponse[],
+    companies: Company[]
+  ) {
+    const coolingUnit = notification.ctx.coolingUnit;
+    if (!coolingUnit) throw new Error();
+
+    const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
+
+    const movementDetails = movements.find(
+      (movement) => movement.id === notification.datum.specificId
+    );
+    if (!movementDetails) throw new Error();
+
+    const datums = {
+      movement: movementDetails,
+      coolingUnit,
+      crops,
+      companies,
+    } satisfies OrderRequiresMovementDatum;
+
+    emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL, datums);
+    useRightDrawerStore.getState().toggle(false);
+  }
 }
 
 export default withSafeArea(NotificationsDrawerContent, ['top', 'bottom'], true);

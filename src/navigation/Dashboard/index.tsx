@@ -1,5 +1,4 @@
 import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
-import ms from 'ms';
 import React, { useEffect } from 'react';
 import { Drawer } from 'react-native-drawer-layout';
 import { useWalkthrough } from 'react-native-interactive-walkthrough';
@@ -105,7 +104,7 @@ export const useRightDrawerStore = create<{
 export default function DashboardNavigator() {
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
-  const { data } = useNotifications({ refreshInterval: ms('10 seconds') });
+  const { data } = useNotifications();
 
   const isOpen = useRightDrawerStore((store) => store.isOpen);
   const toggle = useRightDrawerStore((store) => store.toggle);

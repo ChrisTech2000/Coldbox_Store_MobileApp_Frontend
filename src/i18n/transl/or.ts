@@ -620,6 +620,8 @@ export default {
       addBankAccountButton: 'Add bank account details', // TODO
       addBankAccountHeader:
         "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+      userWithoutPhone:
+        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -1058,7 +1060,7 @@ export default {
           },
         },
         successMessage: 'ବ୍ୟାଙ୍କ ଖାତା ସଫଳତାର ସହିତ ଯୋଡାଯାଇଛି।',
-        errorMessage: 'କିଛି ତ୍ରୁଟି ଘଟିଗଲା। ଦୟାକରି ପରେ ଚେଷ୍ଟା କରନ୍ତୁ।',
+        errorMessage: 'ଆମେ ଖାତା ବିବରଣୀ ସତ୍ୟାପିତ କରିପାରିବାନି। ଦୟାକରି ଖାତା ସଂଖ୍ୟା ଏବଂ ବ୍ୟାଙ୍କ ନାମକୁ କୌଣସି ସମ୍ଭାବ୍ୟ ତ୍ରୁଟି ପାଇଁ ପୁନଃ ଚେକ୍ କରନ୍ତୁ।',
       },
       PaymentSettings: {
         cards: 'କାର୍ଡସ୍',

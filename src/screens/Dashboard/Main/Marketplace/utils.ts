@@ -12,6 +12,7 @@ import { useMap } from '#ui/hooks/useMap';
 
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { stringToHash } from '#ui/lib/hash';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
 export const DEFAULT_CURRENCY_CODE = 'NGN';
@@ -211,13 +212,17 @@ export function useMarketplaceListing() {
 
         // check if price is within range filter, if filter exists
         // returns true if:
-        // 1. no price filter is set, or
-        // 2. price is between min (index 0) and max (index 1) values
-        // FYK: 0 values are ignored as filter bounds
+        // 1. no price filter is set (!priceRangeFilter), or
+        // 2. price is greater than or equal to min (index 0) if set and not 0
+        //    AND price is less than or equal to max (index 1) if set and not 0
         const isInPriceRange =
           !priceRangeFilter ||
-          ((priceRangeFilter[0] === 0 || datum.price >= priceRangeFilter[0]) &&
-            (priceRangeFilter[1] === 0 || datum.price <= priceRangeFilter[1]));
+          ((priceRangeFilter[0] === undefined ||
+            priceRangeFilter[0] === 0 ||
+            datum.price >= priceRangeFilter[0]) &&
+            (priceRangeFilter[1] === undefined ||
+              priceRangeFilter[1] === 0 ||
+              datum.price <= priceRangeFilter[1]));
 
         return isInCompanyFilter && isInCropFilter && isInPriceRange;
       });
@@ -234,10 +239,9 @@ const _findCompanyById = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([companyId, companies]) => {
-      const ids = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
-      return [[companyId, ids.join('.')].join('::')];
-    },
+    serializer: ([companyId, companies]) => [
+      stringToHash([companyId, JSON.stringify(companies)].join(':::')),
+    ],
   }
 );
 
@@ -246,10 +250,7 @@ const _findCropById = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([cropId, crops]) => {
-      const ids = (crops as Array<GetAllCropsResponse>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
-    },
+    serializer: ([cropId, crops]) => [stringToHash([cropId, JSON.stringify(crops)].join(':::'))],
   }
 );
 
@@ -258,26 +259,19 @@ const _findUnitById = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([cropId, crops]) => {
-      const ids = (crops as Array<CoolingUnit>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([cropId, ids.join('.')].join('::'))];
-    },
+    serializer: ([unitId, units]) => [stringToHash([unitId, JSON.stringify(units)].join(':::'))],
   }
 );
 
 const _findCompanyOwner = moize(
-  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) => {
-    return ownedOnBehalfOfCompanyId
-      ? ownerCompanies.find((c: Company) => c.id === ownedOnBehalfOfCompanyId)
-      : undefined;
-  },
+  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) =>
+    ownerCompanies.find(({ id }) => id === ownedOnBehalfOfCompanyId),
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([companyId, companies]) => {
-      const companyIds = (companies as Array<Company>).map(({ id }) => id).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([companyId, companyIds.join('.')].join('::'))];
-    },
+    serializer: ([companyId, companies]) => [
+      stringToHash([companyId, JSON.stringify(companies)].join(':::')),
+    ],
   }
 );
 
@@ -288,19 +282,6 @@ const _findUserOwner = moize(
   {
     maxAge: ms('5 seconds'),
     isSerialized: true,
-    serializer: ([userId, users]) => {
-      const userIds = Array.from((users as Map<number, User>).keys()).sort((a, b) => a - b);
-      return [_cacheKeyArtisan([userId, userIds.join('.')].join('::'))];
-    },
+    serializer: ([userId, users]) => [stringToHash([userId, JSON.stringify(users)].join(':::'))],
   }
 );
-
-function _cacheKeyArtisan(str: string): string {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash;
-  }
-  return hash.toString(36);
-}

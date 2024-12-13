@@ -482,6 +482,20 @@ class MarketplaceService extends HttpClient {
       throw customError;
     }
   };
+
+  public getFarmerBankAccounts = async (userId?: number): Promise<Array<BankAccount>> => {
+    try {
+      const { data } = await this.get<Array<BankAccount>>(
+        EMarketplaceEndpoints.FARMER_BANK_ACCOUNTS,
+        { params: { user_id: userId } }
+      );
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new MarketplaceService();

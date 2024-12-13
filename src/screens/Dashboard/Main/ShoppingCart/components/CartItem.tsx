@@ -1,4 +1,5 @@
 import Clipboard from '@react-native-clipboard/clipboard';
+import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
@@ -26,9 +27,9 @@ import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 import { type CartItem as CartItemType } from '#types/global';
 
+import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
 import CartItemInput from './CartItemInput';
-import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
 type CartItemProps = {
   item: CartItemType;
@@ -62,14 +63,13 @@ export function CartItem({ item }: CartItemProps) {
       skip: !item.ownedOnBehalfOfCompanyId,
     }
   );
-
   const { data: owner, isLoading: isLoadingOwner } = useApiCall(
     'getUser',
     ColdtivateService.getUser,
     item.ownedByUserId as number,
     {
       defaultData: undefined,
-      skip: !item.ownedByUserId,
+      skip: !item.ownedByUserId || !!item.ownedOnBehalfOfCompanyId,
     }
   );
 
@@ -173,7 +173,7 @@ export function CartItem({ item }: CartItemProps) {
               </Text>
               <Text variant="TextMedium" tw="text-sm text-gray-600">
                 {t('Dashboard.Marketplace.owner')}:{' '}
-                {owner
+                {!isEmpty(owner)
                   ? `${owner?.firstName ?? ''} ${owner?.lastName ?? ''}`
                   : (ownerCompany.name ?? '')}
               </Text>

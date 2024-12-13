@@ -16,6 +16,7 @@ import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/consta
 
 import InAppNotifications from '#common/InAppNotifications';
 import { AIR_PROD_BASE_URL } from '#constants/environment';
+import { USER_WITHOUT_PHONE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import type {
   ManagementRoutePaths,
@@ -136,7 +137,7 @@ function _propsFactory(
   datum: Farmer,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ) {
-  const isUserWithoutPhone = datum.user.firstName === 'User without a phone';
+  const isUserWithoutPhone = datum.user.firstName === USER_WITHOUT_PHONE && !datum.user.phone;
   const props = {} as ListItemProps;
   props.title = [datum.user.firstName, datum.user.lastName].join(' ');
   if (datum.userCode) {

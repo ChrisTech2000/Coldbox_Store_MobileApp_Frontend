@@ -618,6 +618,8 @@ const en = {
       addBankAccountButton: 'Add bank account details',
       addBankAccountHeader:
         "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.",
+      userWithoutPhone:
+        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone.',
     },
     SearchFilter: {
       detailsMessage:
@@ -1053,7 +1055,8 @@ const en = {
           },
         },
         successMessage: 'Bank account added successfully.',
-        errorMessage: 'Something went wrong. Please try again later.',
+        errorMessage:
+          "We couldn't verify the account details. Please review the account number and bank name for any possible mistakes.",
       },
       PaymentSettings: {
         cards: 'Cards',

@@ -21,6 +21,7 @@ import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constant
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 import { DEFAULT_COORDINATES } from '../../Marketplace/utils';
 import * as Map from './components/Map';
@@ -29,7 +30,9 @@ import { PIN_COLORS } from './constants';
 import { processLocationMarkers } from './utils';
 
 const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
-const screenHeight = Dimensions.get('window').height;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const MAP_HEIGHT =
+  SCREEN_HEIGHT > SMALL_SCREEN_THRESHOLD ? SCREEN_HEIGHT * 0.65 : SCREEN_HEIGHT * 0.55;
 
 function CoolingUnitsMaps() {
   const [isLoadingCoords, setLoadingCoords] = useState<boolean>(true);
@@ -109,7 +112,7 @@ function CoolingUnitsMaps() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <Map.Root coordinates={coordinates} style={{ width: '100%', height: screenHeight * 0.55 }}>
+      <Map.Root coordinates={coordinates} style={{ width: '100%', height: MAP_HEIGHT }}>
         <Map.Markers
           markers={markers}
           onSelect={(markerIdx) => {

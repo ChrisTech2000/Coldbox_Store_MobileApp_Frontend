@@ -97,7 +97,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
               additionalInfo: '',
               crates: group.map((crate) => ({
                 checkOut: null,
-                weight: crate.weight,
+                weight: crate.initialWeight,
                 tag: '',
                 coolingUnitId: coolingUnit.id,
                 plannedDays: plannedDays ? Number(plannedDays) : (crate.plannedDays ?? undefined),

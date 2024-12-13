@@ -114,6 +114,13 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
     CART_MINIMUM_VALUE;
 
+  const total =
+    cartData.totalColdtivateAmount +
+    cartData.totalCoolingFeesAmount +
+    cartData.totalPaymentFeesAmount +
+    cartData.totalProduceAmount -
+    cartData.totalDiscountAmount;
+
   return (
     <ScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
       <View tw="flex-1 pb-8 space-y-6">
@@ -260,7 +267,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             <Text tw="text-lg">
               {formatCurrencyWithSymbol(
                 'NGN', // TODO: get value from somewhere
-                cartData.totalAmount
+                total
               )}
             </Text>
           </View>
