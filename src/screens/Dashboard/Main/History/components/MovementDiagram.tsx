@@ -214,7 +214,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                     {crates.length > 1 ? (
                       <Divider
                         tw={cn(
-                          'absolute h-0.5 bg-gray-700 bottom-[50%]',
+                          'absolute h-0.5 bg-gray-700 bottom-[50.5%]',
                           windowHeight > SMALL_SCREEN_THRESHOLD ? 'w-8 left-44' : 'w-4 left-32'
                         )}
                       />
