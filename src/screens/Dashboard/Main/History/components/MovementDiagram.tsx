@@ -21,6 +21,8 @@ type MovementDiagramProps = {
   movement: GetMovementsHistoryResponse[number];
 };
 
+const windowHeight = Dimensions.get('window').height;
+
 export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps) {
   const { t } = useTranslationUtils();
 
@@ -153,14 +155,14 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
-            const crates = movement.checkin.crates.filter(
+            const crates = movement.checkout.crates.filter(
               (crate) => crate.crop?.name.toLowerCase() === item.toLowerCase()
             );
-            const totalWeight = crates.reduce((acc, curr) => (acc += curr.weight), 0);
+            const totalWeight = crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0);
 
             return (
               <View tw="mb-4">
-                <Text variant="TextBold" tw="text-base font-bold mb-2">
+                <Text variant="TextBold" tw="text-base font-bold">
                   {item}
                 </Text>
 
@@ -171,7 +173,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                         key={`${crate.crop?.name}—${index}-crate`}
                         tw="flex flex-row space-x-4 mb-2"
                       >
-                        <View>
+                        <View tw={windowHeight <= SMALL_SCREEN_THRESHOLD ? 'w-24' : 'w-32'}>
                           <Text tw="text-base">
                             {crate.tag
                               ? `${startCase(
@@ -182,10 +184,10 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                               : ' '}
                           </Text>
 
-                          <Text tw="text-base">{movement.checkout.ownerName}</Text>
+                          <Text tw="text-base">{crate.ownerName}</Text>
 
                           <Text tw="text-base text-red-700">
-                            -{crate.weight}
+                            -{crate.affectedWeight ?? 0}
                             {t('Dashboard.ProduceDetails.kilogram')}
                           </Text>
                         </View>
@@ -193,21 +195,16 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                           <Divider
                             tw={cn(
                               'absolute h-0.5 bg-gray-700',
-                              Dimensions.get('window').height <= SMALL_SCREEN_THRESHOLD
-                                ? 'w-4'
-                                : 'w-8'
+                              windowHeight <= SMALL_SCREEN_THRESHOLD ? 'w-4' : 'w-8'
                             )}
                           />
                           {crates.length > 1 ? (
                             <Divider
                               tw={cn(
                                 'absolute w-0.5 h-20 bg-gray-700',
-                                Dimensions.get('window').height > SMALL_SCREEN_THRESHOLD
-                                  ? 'left-8'
-                                  : 'left-4',
+                                windowHeight > SMALL_SCREEN_THRESHOLD ? 'left-8' : 'left-4',
                                 index > 0 &&
-                                  (Platform.OS === 'ios' ||
-                                  Dimensions.get('window').height > SMALL_SCREEN_THRESHOLD
+                                  (Platform.OS === 'ios' || windowHeight > SMALL_SCREEN_THRESHOLD
                                     ? 'bottom-[94%]'
                                     : 'bottom-[95%]')
                               )}
@@ -216,6 +213,14 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                         </View>
                       </View>
                     ))}
+                    {crates.length > 1 ? (
+                      <Divider
+                        tw={cn(
+                          'absolute h-0.5 bg-gray-700 bottom-[50%]',
+                          windowHeight > SMALL_SCREEN_THRESHOLD ? 'w-8 left-44' : 'w-4 left-32'
+                        )}
+                      />
+                    ) : null}
                   </View>
 
                   <View tw="self-center justify-center">

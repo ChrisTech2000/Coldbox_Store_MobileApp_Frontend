@@ -93,6 +93,7 @@ export type CheckOut = Array<{
   runDt: boolean;
   qualityDt: number;
   tag: string | null;
+  initialWeight: number;
 }>;
 
 export type GetCheckOutResponse = CheckOut | { message: string };
@@ -240,18 +241,16 @@ export type GetMovementsHistoryResponse = Array<{
   initiatedFor: EInitiatedFor;
   order: Record<string, unknown>; // TODO: fix
   operator: string;
+  coolingUnitId: number;
   checkin: {
     id: number;
+    crates: Array<MovementCrate>;
     ownedByUserId: number;
     ownedOnBehalfOfCompanyId: number | null;
     ownerName?: string;
-    crates: Array<MovementCrate>;
   };
   checkout: {
     id: number;
-    ownedByUserId: number;
-    ownedOnBehalfOfCompanyId: number | null;
-    ownerName?: string;
     paymentGateway: EPaymentGateway | null;
     paymentMethod: EPaymentMethod;
     paymentThrough: EPaymentThrough;

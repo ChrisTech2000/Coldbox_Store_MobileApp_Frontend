@@ -96,7 +96,7 @@ export function Movement({
       return `${price * movement.checkin.crates.length} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
     }
 
-    return `${movement.checkin.crates.reduce((acc, curr) => (acc += curr.weight), 0) * price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+    return `${movement.checkin.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0) * price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
   }, [isCheckOut, movement, selectedCompany]);
 
   const seePDFModal = useCallback(() => {
@@ -121,7 +121,7 @@ export function Movement({
 
   const fillMarketSurvey = useCallback(() => {
     navigateToMarketSurvey?.(
-      movement.checkout.ownerName ?? '',
+      movement.checkout.crates[0].ownerName ?? '',
       movement.checkout.crates
         ?.flatMap((crate) => crate.crop)
         .filter((crop) => crop && !movement.checkout.hasMarketSurvey?.includes(crop.id)) as Array<{
@@ -218,7 +218,7 @@ export function Movement({
               </Text>
               <Text tw="text-base text-gray-400">
                 {movement.initiatedFor === EInitiatedFor.CHECK_OUT
-                  ? movement.checkout.ownerName
+                  ? movement.checkout.crates[0].ownerName
                   : movement.checkin.ownerName}
               </Text>
             </View>
@@ -227,10 +227,15 @@ export function Movement({
               <Text tw="text-base">
                 {movement.initiatedFor === EInitiatedFor.CHECK_IN
                   ? movement.checkin.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)
-                  : movement.checkout.crates.reduce(
-                      (acc, curr) => (acc += curr.initialWeight),
-                      0
-                    )}{' '}
+                  : movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
+                    ? movement.checkout.crates.reduce(
+                        (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                        0
+                      )
+                    : movement.checkout.crates.reduce(
+                        (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                        0
+                      )}{' '}
                 {t('Dashboard.ProduceDetails.kilogram')}
               </Text>
             </View>

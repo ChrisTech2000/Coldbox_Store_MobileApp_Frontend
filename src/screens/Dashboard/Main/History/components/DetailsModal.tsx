@@ -78,7 +78,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 {t('Dashboard.Marketplace.owner')}:
               </Text>
               &nbsp;
-              {movement.checkout.ownerName}
+              {movement.checkout.crates[0].ownerName}
             </Text>
             <Text variant="TextBold" tw="font-bold text-lg">
               <Text variant="TextMedium" tw="text-lg">

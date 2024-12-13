@@ -581,6 +581,10 @@ export type MovementCrate = {
   tag: string;
   fullyCheckedOut: boolean;
   daysInStorage: number;
+  ownedByUserId?: number;
+  ownedOnBehalfOfCompanyId?: number | null;
+  ownerName?: string;
+  affectedWeight?: number;
 };
 
 //////////////////////// ENUMS

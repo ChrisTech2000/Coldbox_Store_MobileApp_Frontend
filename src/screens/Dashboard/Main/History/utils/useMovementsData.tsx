@@ -31,23 +31,22 @@ export function useMovementsHistory(
   const { data: users, isLoading: areUsersLoading } = useApiCall(
     'getMovementUsers',
     async () => {
-      const userIds = movements
+      const checkInUserIds = movements
         .filter((movement) => {
-          return (
-            (movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId) ||
-            (movement.checkout?.ownedByUserId && !movement.checkout?.ownedOnBehalfOfCompanyId)
-          );
+          return movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId;
         })
-        .flatMap((movement) => [
-          movement.checkin?.ownedByUserId,
-          ...(movement.checkout?.ownedByUserId ? [movement.checkout.ownedByUserId] : []),
-        ]);
+        .flatMap((movement) => [movement.checkin?.ownedByUserId]);
 
-      const uniqueUserIds = new Set(userIds);
+      const checkOutUserIds = movements
+        .flatMap((movements) => movements.checkout?.crates ?? [])
+        .filter((crate) => crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId)
+        .map((crate) => crate.ownedByUserId);
+
+      const uniqueUserIds = Array.from(new Set([...checkOutUserIds, ...checkInUserIds])).filter(
+        Boolean
+      );
       return await Promise.all(
-        Array.from(uniqueUserIds)
-          .filter(Boolean)
-          .map(async (id) => await ColdtivateService.getUser(id))
+        uniqueUserIds.map(async (id) => await ColdtivateService.getUser(id as number))
       );
     },
     undefined,
@@ -62,6 +61,9 @@ export function useMovementsHistory(
     ColdtivateService.getAllCrops,
     undefined,
     {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60 * 60 * 1000,
       skip: !user?.id,
       defaultData: [],
     }
@@ -110,20 +112,17 @@ export function useMovementsHistory(
           ? {
               checkout: {
                 ...movement.checkout,
-                ownerName: movement.checkout.ownedOnBehalfOfCompanyId
-                  ? companies?.find(
-                      (company) => company.id === movement.checkout.ownedOnBehalfOfCompanyId
-                    )?.name
-                  : (() => {
-                      const user = users.find(
-                        (user) => user.id === movement.checkout.ownedByUserId
-                      );
-                      return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
-                    })(),
-                crates: movement.checkout.crates.map((crate) => {
+                crates: movement.checkout?.crates.map((crate) => {
                   const crop = crops.find((c) => c.id === crate.cropId);
                   return {
                     ...crate,
+                    ownerName: crate.ownedOnBehalfOfCompanyId
+                      ? companies?.find((company) => company.id === crate.ownedOnBehalfOfCompanyId)
+                          ?.name
+                      : (() => {
+                          const user = users.find((user) => user.id === crate.ownedByUserId);
+                          return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
+                        })(),
                     crop: crop
                       ? { id: crate.cropId, name: crop.name }
                       : { id: crate.cropId, name: '' },

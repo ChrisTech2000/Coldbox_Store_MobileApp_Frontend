@@ -96,7 +96,9 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
       const matchesSearchTerm =
         !lowerCaseSearchString ||
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.checkin.ownerName?.toLowerCase().includes(lowerCaseSearchString) ||
+        movement.checkin.crates.some((crate) =>
+          crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
+        ) ||
         sortMovementCrops(movement).some((crop) =>
           crop.toLowerCase().includes(lowerCaseSearchString)
         );

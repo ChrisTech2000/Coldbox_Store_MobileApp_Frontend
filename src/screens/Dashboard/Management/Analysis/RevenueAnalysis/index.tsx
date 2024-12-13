@@ -105,7 +105,9 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
       const matchesSearchTerm =
         !lowerCaseSearchString ||
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.checkout.ownerName?.toLowerCase().includes(lowerCaseSearchString) ||
+        movement.checkout.crates.some((crate) =>
+          crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
+        ) ||
         sortMovementCrops(movement).some((crop) =>
           crop.toLowerCase().includes(lowerCaseSearchString)
         );
@@ -212,14 +214,14 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
                 key={`${movement.id}-${index}`}
                 movement={movement}
                 coolingUnit={
-                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit // TODO: MOVEMENTS REFACTOR
+                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
                 }
                 selectedCompany={company}
                 navigateToMarketSurvey={() => {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.checkout.ownerName,
+                      farmer: movement.checkout.crates[0].ownerName,
                       crops: movement.checkout.crates
                         ?.flatMap((crate) => crate.crop)
                         .filter(

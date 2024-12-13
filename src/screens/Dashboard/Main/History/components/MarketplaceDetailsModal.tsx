@@ -45,6 +45,15 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
 
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
+                {t('Dashboard.Marketplace.owner')}:
+              </Text>
+              &nbsp;
+              {Array.from(new Set(movement.checkout.crates.map((crate) => crate.ownerName))).join(
+                ', '
+              )}
+            </Text>
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
               </Text>
               &nbsp;
@@ -104,6 +113,13 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
               {t('Dashboard.History.stringTemplates.movementType.checkedIn')}:
             </Text>
 
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
+                {t('Dashboard.Marketplace.owner')}:
+              </Text>
+              &nbsp;
+              {movement.checkin.ownerName}
+            </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.checkInCodeLabel')}:

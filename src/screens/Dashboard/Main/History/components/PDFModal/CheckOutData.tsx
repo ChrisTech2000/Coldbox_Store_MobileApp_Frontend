@@ -55,7 +55,7 @@ export function CheckOutData(props: CheckOutDataProps) {
           <div class="section">
             <div class="column">
               <div class="label">${t('Dashboard.Marketplace.owner')}</div>
-              <div class="value">${movement.checkout.ownerName}</div>
+              <div class="value">${movement.checkout.crates[0].ownerName}</div>
             </div>
             <div class="column">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.checkOutLabel')}</div>
@@ -82,7 +82,7 @@ export function CheckOutData(props: CheckOutDataProps) {
                 <tr>
                   <td>${crate.tag}</td>
                   <td>${crate.crop?.name ?? ''}</td>
-                  <td>${crate.initialWeight}</td>
+                  <td>${crate.affectedWeight}</td>
                 </tr>
               `
                 )
@@ -93,7 +93,7 @@ export function CheckOutData(props: CheckOutDataProps) {
           <div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.weightLabel')}:&nbsp;</div>
-              <div class="value">${movement.checkout.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}</div>
+              <div class="value">${movement.checkout.crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0)}</div>
             </div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:&nbsp;</div>
@@ -140,7 +140,7 @@ export function CheckOutData(props: CheckOutDataProps) {
             {t('Dashboard.Marketplace.owner')}
           </Text>
           <Text variant="TextMedium" numberOfLines={1}>
-            {movement.checkout.ownerName}
+            {movement.checkout.crates[0].ownerName}
           </Text>
         </View>
 
@@ -175,7 +175,7 @@ export function CheckOutData(props: CheckOutDataProps) {
             <DataTable.Row key={`${crate.crop?.name ?? ''}-${index}`}>
               <DataTable.Cell>{crate.tag}</DataTable.Cell>
               <DataTable.Cell>{crate.crop?.name ?? ''}</DataTable.Cell>
-              <DataTable.Cell numeric>{crate.weight}</DataTable.Cell>
+              <DataTable.Cell numeric>{crate.affectedWeight ?? 0}</DataTable.Cell>
             </DataTable.Row>
           ))}
         </DataTable>
@@ -183,7 +183,7 @@ export function CheckOutData(props: CheckOutDataProps) {
         <View tw="items-end space-y-2 pr-12 w-full">
           <Text>
             {t('Dashboard.History.pdfModal.weightLabel')}:{' '}
-            {movement.checkout.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}
+            {movement.checkout.crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0)}
           </Text>
           <Divider tw="w-[60%] bg-grey-300" />
           <Text variant="TextBold" tw="font-bold">

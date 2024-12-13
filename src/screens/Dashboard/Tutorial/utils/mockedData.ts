@@ -627,9 +627,6 @@ export const MOCKED_HISTORY_DATA = [
       paymentGateway: 'PAYTACK',
       paymentMethod: 'CREDIT_CARD',
       paymentThrough: 'COLDTIVATE',
-      ownedByUserId: 281,
-      ownedOnBehalfOfCompanyId: 40,
-      ownerName: 'Johnny Ferguson',
       crates: [
         {
           id: 9209,
@@ -646,6 +643,9 @@ export const MOCKED_HISTORY_DATA = [
           tag: '',
           fullyCheckedOut: false,
           daysInStorage: 1,
+          ownedByUserId: 281,
+          ownedOnBehalfOfCompanyId: 40,
+          ownerName: 'Johnny Ferguson',
         },
         {
           id: 9206,
@@ -662,6 +662,9 @@ export const MOCKED_HISTORY_DATA = [
           tag: '',
           fullyCheckedOut: false,
           daysInStorage: 8,
+          ownedByUserId: 281,
+          ownedOnBehalfOfCompanyId: 40,
+          ownerName: 'Johnny Ferguson',
         },
       ],
       hasMarketSurvey: [],

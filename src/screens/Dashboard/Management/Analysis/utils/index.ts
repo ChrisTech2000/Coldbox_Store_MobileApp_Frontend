@@ -8,6 +8,8 @@ type Movement = GetMovementsHistoryResponse[number];
 export function sortMovements(a: Movement, b: Movement, sorting: ESortingOptions): number {
   const movementACrops = sortMovementCrops(a).join(', ');
   const movementBCrops = sortMovementCrops(b).join(', ');
+  const movementAOwners = sortMovementOwners(a).join(', ');
+  const movementBOwners = sortMovementOwners(b).join(', ');
 
   switch (sorting) {
     case ESortingOptions.CROP_TYPE:
@@ -17,16 +19,26 @@ export function sortMovements(a: Movement, b: Movement, sorting: ESortingOptions
     case ESortingOptions.MOVEMENT_DATE_REVERSE:
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     case ESortingOptions.COOLING_USER_NAME:
-      return (
-        a[a.initiatedFor === EInitiatedFor.CHECK_OUT ? 'checkout' : 'checkin']?.ownerName ?? ''
-      )
-        ?.toLowerCase()
-        .localeCompare(
-          (
-            b[a.initiatedFor === EInitiatedFor.CHECK_OUT ? 'checkout' : 'checkin']?.ownerName ?? ''
-          )?.toLowerCase()
-        );
+      return movementAOwners.toLowerCase().localeCompare(movementBOwners.toLowerCase());
     default:
       return 0;
   }
+}
+
+export function sortMovementOwners(movement: Movement): Array<string> {
+  let owners: string[] = [];
+
+  if (movement.initiatedFor !== EInitiatedFor.CHECK_OUT) {
+    owners = movement.checkin.crates.flatMap((crate) => crate.ownerName || []);
+  } else {
+    owners = movement.checkout.crates.flatMap((crate) => crate.ownerName || []);
+  }
+
+  const uniqueOwners = Array.from(new Set(owners));
+
+  return uniqueOwners.sort((ownerA, ownerB) => {
+    const nameA = ownerA.toLowerCase();
+    const nameB = ownerB.toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
 }

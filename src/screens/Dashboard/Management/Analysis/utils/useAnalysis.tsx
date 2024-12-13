@@ -21,7 +21,6 @@ export function useAnalysis(
       defaultData: [],
     }
   );
-
   const { data: revenue, isLoading: isRevenueDataLoading } = useApiCall(
     'getRevenueAnalysis',
     ColdtivateService.getRevenueAnalysis,
@@ -38,23 +37,27 @@ export function useAnalysis(
   const { data: users, isLoading: areUsersLoading } = useApiCall(
     'getUsageUsers',
     async () => {
-      const userIds = usage
+      const checkInUserIds = usage
         .filter((movement) => {
-          return (
-            (movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId) ||
-            (movement.checkout?.ownedByUserId && !movement.checkout?.ownedOnBehalfOfCompanyId)
-          );
+          return movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId;
         })
-        .flatMap((movement) => [
-          movement.checkin?.ownedByUserId,
-          ...(movement.checkout?.ownedByUserId ? [movement.checkout.ownedByUserId] : []),
+        .flatMap((movement) => [movement.checkin?.ownedByUserId]);
+
+      const checkOutUserIds = usage
+        .flatMap((movements) => movements.checkout.crates)
+        .filter((crate) => {
+          return crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId;
+        })
+        .flatMap((crate) => [
+          crate?.ownedByUserId,
+          ...(crate?.ownedByUserId ? [crate.ownedByUserId] : []),
         ]);
 
-      const uniqueUserIds = new Set(userIds);
+      const uniqueUserIds = Array.from(new Set([...checkOutUserIds, ...checkInUserIds])).filter(
+        Boolean
+      );
       return await Promise.all(
-        Array.from(uniqueUserIds)
-          .filter(Boolean)
-          .map(async (id) => await ColdtivateService.getUser(id))
+        uniqueUserIds.map(async (id) => await ColdtivateService.getUser(id as number))
       );
     },
     undefined,
@@ -67,23 +70,27 @@ export function useAnalysis(
   const { data: revUsers, isLoading: areRevUsersLoading } = useApiCall(
     'getRevenueUsers',
     async () => {
-      const userIds = revenue
+      const checkInUserIds = revenue
         .filter((movement) => {
-          return (
-            (movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId) ||
-            (movement.checkout?.ownedByUserId && !movement.checkout?.ownedOnBehalfOfCompanyId)
-          );
+          return movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId;
         })
-        .flatMap((movement) => [
-          movement.checkin?.ownedByUserId,
-          ...(movement.checkout?.ownedByUserId ? [movement.checkout.ownedByUserId] : []),
+        .flatMap((movement) => [movement.checkin?.ownedByUserId]);
+
+      const checkOutUserIds = revenue
+        .flatMap((movements) => movements.checkout.crates)
+        .filter((crate) => {
+          return crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId;
+        })
+        .flatMap((crate) => [
+          crate?.ownedByUserId,
+          ...(crate?.ownedByUserId ? [crate.ownedByUserId] : []),
         ]);
 
-      const uniqueUserIds = new Set(userIds);
+      const uniqueUserIds = Array.from(new Set([...checkInUserIds, ...checkOutUserIds])).filter(
+        Boolean
+      );
       return await Promise.all(
-        Array.from(uniqueUserIds)
-          .filter(Boolean)
-          .map(async (id) => await ColdtivateService.getUser(id))
+        uniqueUserIds.map(async (id) => await ColdtivateService.getUser(id as number))
       );
     },
     undefined,
@@ -146,20 +153,17 @@ export function useAnalysis(
           ? {
               checkout: {
                 ...movement.checkout,
-                ownerName: movement.checkout.ownedOnBehalfOfCompanyId
-                  ? companies?.find(
-                      (company) => company.id === movement.checkout.ownedOnBehalfOfCompanyId
-                    )?.name
-                  : (() => {
-                      const user = users.find(
-                        (user) => user.id === movement.checkout.ownedByUserId
-                      );
-                      return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
-                    })(),
                 crates: movement.checkout.crates.map((crate) => {
                   const crop = crops.find((c) => c.id === crate.cropId);
                   return {
                     ...crate,
+                    ownerName: crate.ownedOnBehalfOfCompanyId
+                      ? companies?.find((company) => company.id === crate.ownedOnBehalfOfCompanyId)
+                          ?.name
+                      : (() => {
+                          const user = users.find((user) => user.id === crate.ownedByUserId);
+                          return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
+                        })(),
                     crop: crop
                       ? { id: crate.cropId, name: crop.name }
                       : { id: crate.cropId, name: '' },
@@ -208,20 +212,17 @@ export function useAnalysis(
           ? {
               checkout: {
                 ...movement.checkout,
-                ownerName: movement.checkout.ownedOnBehalfOfCompanyId
-                  ? companies?.find(
-                      (company) => company.id === movement.checkout.ownedOnBehalfOfCompanyId
-                    )?.name
-                  : (() => {
-                      const user = revUsers.find(
-                        (user) => user.id === movement.checkout.ownedByUserId
-                      );
-                      return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
-                    })(),
                 crates: movement.checkout.crates.map((crate) => {
                   const crop = crops.find((c) => c.id === crate.cropId);
                   return {
                     ...crate,
+                    ownerName: crate.ownedOnBehalfOfCompanyId
+                      ? companies?.find((company) => company.id === crate.ownedOnBehalfOfCompanyId)
+                          ?.name
+                      : (() => {
+                          const user = revUsers.find((user) => user.id === crate.ownedByUserId);
+                          return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
+                        })(),
                     crop: crop
                       ? { id: crate.cropId, name: crop.name }
                       : { id: crate.cropId, name: '' },
