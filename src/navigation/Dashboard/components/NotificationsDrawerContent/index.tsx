@@ -18,7 +18,6 @@ import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/ap
 import type { Company, CoolingUnit, Crop, FarmerSurvey } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 
-
 import InAppNotifications from '#common/InAppNotifications';
 import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
@@ -30,7 +29,11 @@ import NotificationItem from './components/NotificationItem';
 
 import { useRightDrawerStore } from '#navigation/Dashboard';
 import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
-import { getCompanyOwnerName, getCropInfo, getUserOwnerName } from '#screens/Dashboard/Main/History/utils/useMovementsData';
+import {
+  getCompanyOwnerName,
+  getCropInfo,
+  getUserOwnerName,
+} from '#screens/Dashboard/Main/History/utils/useMovementsData';
 import { type ManagementCompany, useManagementStore } from '#stores/management';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
@@ -84,13 +87,10 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
 
   const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
 
-  const { data: crops } = useApiCall('getAllCrops',
-    ColdtivateService.getAllCrops,
-    undefined,
-    {
-      skip: !user?.id,
-      defaultData: [],
-    });
+  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
+    skip: !user?.id,
+    defaultData: [],
+  });
 
   const { data: companies } = useApiCall(
     'getCompanies',
@@ -369,7 +369,11 @@ class NotificationHandlers {
     useRightDrawerStore.getState().toggle(false);
   }
 
-  static async reallocate(notification: NotificationDatum, crops: GetAllCropsResponse[], companies: Company[]) {
+  static async reallocate(
+    notification: NotificationDatum,
+    crops: GetAllCropsResponse[],
+    companies: Company[]
+  ) {
     const coolingUnit = notification.ctx.coolingUnit;
     if (!coolingUnit) throw new Error();
 

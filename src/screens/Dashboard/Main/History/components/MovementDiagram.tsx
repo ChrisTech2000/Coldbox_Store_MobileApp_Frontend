@@ -130,7 +130,6 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
 
   if (movementType === EInitiatedFor.MARKETPLACE_ORDER) {
     const crops = sortMovementCrops(movement);
-    console.log(movement, "%%%%")
     return (
       <View tw="px-4 pb-4 pt-2.5 space-y-1">
         <View tw="flex flex-row justify-between items-center mb-3">
@@ -159,7 +158,6 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
               (crate) => crate.crop?.name.toLowerCase() === item.toLowerCase()
             );
             const totalWeight = crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0);
-            console.log(crates, "f");
             return (
               <View tw="mb-4">
                 <Text variant="TextBold" tw="text-base font-bold">
