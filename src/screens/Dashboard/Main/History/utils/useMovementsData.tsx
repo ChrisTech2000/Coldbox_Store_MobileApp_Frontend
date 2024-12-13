@@ -1,9 +1,13 @@
 import isEmpty from 'lodash/isEmpty';
 import { useMemo } from 'react';
+import moize from 'moize';
+import ms from 'ms';
 
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { ERoles, type CoolingUnit, type User } from '#types/global';
+import { ERoles, type CoolingUnit, type User, type Company } from '#types/global';
+import { stringToHash } from '#ui/lib/hash';
+import { GetAllCropsResponse } from 'types/api.responses';
 
 export function useMovementsHistory(
   farmerId: number | null,
@@ -81,57 +85,43 @@ export function useMovementsHistory(
   const updatedMovements = useMemo(() => {
     if (!companies?.length || !crops?.length || !movements?.length) return [];
 
+    function _getOwnerName(
+      onBehalfOfCompanyId: number | null | undefined,
+      ownedByUserId: number | null | undefined
+    ): string {
+      if (onBehalfOfCompanyId) return getCompanyOwnerName(onBehalfOfCompanyId, companies ?? []);
+      return getUserOwnerName(ownedByUserId, users ?? []);
+    }
+
     return movements.map((movement) => {
-      return {
-        ...movement,
-        ...(!isEmpty(movement.checkin)
-          ? {
-              checkin: {
-                ...movement.checkin,
-                ownerName: movement.checkin.ownedOnBehalfOfCompanyId
-                  ? companies?.find(
-                      (company) => company.id === movement.checkin.ownedOnBehalfOfCompanyId
-                    )?.name
-                  : (() => {
-                      const user = users.find((user) => user.id === movement.checkin.ownedByUserId);
-                      return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
-                    })(),
-                crates: movement.checkin.crates.map((crate) => {
-                  const crop = crops.find((c) => c.id === crate.cropId);
-                  return {
-                    ...crate,
-                    crop: crop
-                      ? { id: crate.cropId, name: crop.name }
-                      : { id: crate.cropId, name: '' },
-                  };
-                }),
-              },
-            }
-          : {}),
-        ...(!isEmpty(movement.checkout)
-          ? {
-              checkout: {
-                ...movement.checkout,
-                crates: movement.checkout?.crates.map((crate) => {
-                  const crop = crops.find((c) => c.id === crate.cropId);
-                  return {
-                    ...crate,
-                    ownerName: crate.ownedOnBehalfOfCompanyId
-                      ? companies?.find((company) => company.id === crate.ownedOnBehalfOfCompanyId)
-                          ?.name
-                      : (() => {
-                          const user = users.find((user) => user.id === crate.ownedByUserId);
-                          return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
-                        })(),
-                    crop: crop
-                      ? { id: crate.cropId, name: crop.name }
-                      : { id: crate.cropId, name: '' },
-                  };
-                }),
-              },
-            }
-          : {}),
-      };
+      const processedMovement = { ...movement };
+
+      if (!isEmpty(movement.checkin)) {
+        processedMovement.checkin = {
+          ...movement.checkin,
+          ownerName: _getOwnerName(
+            movement.checkin.ownedOnBehalfOfCompanyId,
+            movement.checkin.ownedByUserId
+          ),
+          crates: movement.checkin.crates.map((crate) => ({
+            ...crate,
+            crop: getCropInfo(crate.cropId, crops ?? []),
+          })),
+        };
+      }
+
+      if (!isEmpty(movement.checkout)) {
+        processedMovement.checkout = {
+          ...movement.checkout,
+          crates: movement.checkout.crates.map((crate) => ({
+            ...crate,
+            ownerName: _getOwnerName(crate.ownedOnBehalfOfCompanyId, crate.ownedByUserId),
+            crop: getCropInfo(crate.cropId, crops ?? []),
+          })),
+        };
+      }
+
+      return processedMovement;
     });
   }, [companies, crops, movements, users]);
 
@@ -143,3 +133,39 @@ export function useMovementsHistory(
     crops,
   };
 }
+
+export const getCompanyOwnerName = moize(
+  (companyId: number | null | undefined, companies: Array<Company>) =>
+    companies.find(({ id }) => id === companyId)?.name ?? '',
+  {
+    maxAge: ms('10 seconds'),
+    isSerialized: true,
+    serializer: ([companyId, companies]) => [
+      stringToHash([companyId, JSON.stringify(companies)].join(':::')),
+    ],
+  }
+);
+
+export const getUserOwnerName = moize(
+  (userId: number | null | undefined, users: Array<User>) => {
+    const user = users.find((u) => u.id === userId);
+    return user ? `${user.firstName ?? ''} ${user.lastName ?? ''}` : '';
+  },
+  {
+    maxAge: ms('10 seconds'),
+    isSerialized: true,
+    serializer: ([userId, users]) => [stringToHash([userId, JSON.stringify(users)].join(':::'))],
+  }
+);
+
+export const getCropInfo = moize(
+  (cropId: number, crops: Array<GetAllCropsResponse>) => {
+    const crop = crops.find((c) => c.id === cropId);
+    return crop ? { id: cropId, name: crop.name } : { id: cropId, name: '' };
+  },
+  {
+    maxAge: ms('10 seconds'),
+    isSerialized: true,
+    serializer: ([cropId, crops]) => [stringToHash([cropId, JSON.stringify(crops)].join(':::'))],
+  }
+);
