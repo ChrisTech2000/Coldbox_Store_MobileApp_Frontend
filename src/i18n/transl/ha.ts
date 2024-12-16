@@ -898,6 +898,9 @@ export default {
         revoke: 'Revoke', // TODO
         revokeMessage:
           'Shin kun tabbata kuna son soke wannan takardar kuɗi? Da zarar an soke, ba za a iya sake amfani da shi ba kuma ba za a ƙara samun rangwamen ba. Wannan aikin na dindindin ne kuma ba za a iya soke shi ba.',
+        messages: {
+          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+        },
       },
     },
     Marketplace: {
@@ -989,7 +992,8 @@ export default {
           },
         },
         successMessage: 'An ƙara asusun banki cikin nasara.',
-        errorMessage: 'Ba za mu iya tantance bayanan asusun ba. Da fatan za a duba lambar asusun da sunan banki don duk wani kuskure.',
+        errorMessage:
+          'Ba za mu iya tantance bayanan asusun ba. Da fatan za a duba lambar asusun da sunan banki don duk wani kuskure.',
       },
       PaymentSettings: {
         cards: 'Katuna',

@@ -909,6 +909,9 @@ export default {
         revoke: 'Révoquer',
         revokeMessage:
           'Êtes-vous sûr de vouloir révoquer ce coupon ? Une fois révoqué, il ne pourra plus être utilisé et la réduction ne sera plus disponible. Cette action est permanente et ne peut pas être annulée.',
+        messages: {
+          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+        },
       },
     },
     Marketplace: {

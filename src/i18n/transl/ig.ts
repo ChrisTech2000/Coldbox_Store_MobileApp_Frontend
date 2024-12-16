@@ -885,6 +885,9 @@ export default {
         revoke: 'Revoke', // TODO
         revokeMessage:
           "Ị ji n'aka na ịchọrọ ịkagbu akwụkwọ ikike a? Ozugbo a kagburu ya, enweghị ike iji ya ọzọ ma ego agaghịzi adị. Omume a na-adịgide adịgide na enweghị ike ịmegharị ya.",
+        messages: {
+          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+        },
       },
     },
     Marketplace: {
@@ -976,7 +979,8 @@ export default {
           },
         },
         successMessage: 'Agbakwunyere akaụntụ ụlọ akụ nke ọma.',
-        errorMessage: 'Anyị enweghi ike ịnweta nkọwa akaụntụ ahụ. Biko lelee nọmba akaụntụ na aha banki maka njehie ọ bụla.',
+        errorMessage:
+          'Anyị enweghi ike ịnweta nkọwa akaụntụ ahụ. Biko lelee nọmba akaụntụ na aha banki maka njehie ọ bụla.',
       },
       PaymentSettings: {
         cards: 'Kaadị',

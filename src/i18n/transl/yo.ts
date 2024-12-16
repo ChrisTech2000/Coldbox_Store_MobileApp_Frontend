@@ -875,6 +875,9 @@ export default {
         revoke: 'Revoke', // TODO
         revokeMessage:
           'Ṣe o da ọ loju pe o fẹ fagilee kupọọnu yii? Ni kete ti fagile, ko le ṣee lo lẹẹkansi ati pe ẹdinwo naa kii yoo wa mọ. Iṣe yii jẹ titilai ati pe ko le ṣe atunṣe.',
+        messages: {
+          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+        },
       },
     },
     Marketplace: {
@@ -966,7 +969,8 @@ export default {
           },
         },
         successMessage: 'A fi kun akọọlẹ banki ni aṣeyọri.',
-        errorMessage: 'A ko le ṣe àyẹ̀wò alaye àkọọlẹ náà. Jọ̀wọ́ ṣàyẹ̀wò nọ́mbà àkọọlẹ àti orúkọ ilé-ìfowópamọ́ fún àwọn aṣiṣe tó lè wà.',
+        errorMessage:
+          'A ko le ṣe àyẹ̀wò alaye àkọọlẹ náà. Jọ̀wọ́ ṣàyẹ̀wò nọ́mbà àkọọlẹ àti orúkọ ilé-ìfowópamọ́ fún àwọn aṣiṣe tó lè wà.',
       },
       PaymentSettings: {
         cards: 'Awọn kaadi',

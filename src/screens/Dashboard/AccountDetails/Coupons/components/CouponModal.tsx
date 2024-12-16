@@ -8,6 +8,7 @@ import ms from 'ms';
 import { Text } from '#ui/components/Text';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Button } from '#ui/components/Button';
+import { Input } from '#ui/components/Input';
 
 import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
@@ -35,9 +36,11 @@ export default function CouponModal(props: {
       percentage: datum?.percentage.toString() ?? '',
     },
     reValidateMode: 'onSubmit',
-    resolver: zodResolver((z) =>
+    resolver: zodResolver((z, t) =>
       z.object({
-        code: z.string(),
+        code: z
+          .string()
+          .regex(/^[a-z0-9]{1,25}$/i, t('Dashboard.Management.Coupons.messages.codeField')),
         percentage: z.preprocess(
           (v) => {
             const int = Number(v);
@@ -93,12 +96,12 @@ export default function CouponModal(props: {
               control={form.control}
               name="code"
               render={({ field: { value, onChange } }) => (
-                <TextInput
+                <Input
                   tw="bg-white border rounded-sm"
                   placeholder="E.g. 20OFF"
                   value={value}
                   onChangeText={onChange}
-                  error={!!form.formState.errors.code}
+                  error={form.formState.errors.code}
                   disabled={form.formState.isSubmitting}
                 />
               )}

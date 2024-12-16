@@ -69,7 +69,7 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
               <View tw="w-full p-5 flex-row items-center justify-between border border-solid border-zinc-300 rounded-2xl my-2">
                 <View tw="flex-1 flex-row items-center space-x-3">
                   <View tw={TEXT_STYLES}>
-                    <Text variant="TitleMedium" tw="text-lg" numberOfLines={2} ellipsizeMode="tail">
+                    <Text variant="TitleMedium" tw="text-lg">
                       {item.code}
                     </Text>
                   </View>
