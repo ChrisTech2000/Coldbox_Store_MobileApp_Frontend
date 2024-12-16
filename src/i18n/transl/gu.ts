@@ -959,6 +959,9 @@ export default {
         revoke: 'રદ કરો',
         revokeMessage:
           'શું તમે ખરેખર આ કૂપન રદ કરવા માંગો છો? એક વખત રદ કરવામાં આવે પછી, તે ફરીથી ઉપયોગમાં લેવામાં આવી શકાતું નથી અને છૂટનો લાભ ઉપલબ્ધ નહીં હોય. આ ક્રિયા કાયમી છે અને પાછા લેવામાં નહીં આવે.',
+        messages: {
+          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+        },
       },
     },
     Marketplace: {
@@ -1055,7 +1058,8 @@ export default {
           },
         },
         successMessage: 'બેંક એકાઉન્ટ સફળતાપૂર્વક ઉમેરાયું.',
-        errorMessage: 'ખાતાની વિગતોનું માન્યકરણ કરી શક્યાં નથી. કૃપા કરીને ખાતા નંબરની અને બેંકની વિગતો તપાસો.',
+        errorMessage:
+          'ખાતાની વિગતોનું માન્યકરણ કરી શક્યાં નથી. કૃપા કરીને ખાતા નંબરની અને બેંકની વિગતો તપાસો.',
       },
       PaymentSettings: {
         cards: 'કાર્ડ્સ',

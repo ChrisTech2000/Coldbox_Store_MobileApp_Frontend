@@ -959,6 +959,9 @@ const en = {
         revoke: 'Revoke',
         revokeMessage:
           'Are you sure you want to revoke this coupon? Once revoked, it cannot be used again and the discount will no longer be available. This action is permanent and cannot be undone.',
+        messages: {
+          codeField: 'Must be max 25 characters and contain only letters and numbers',
+        },
       },
     },
     Marketplace: {

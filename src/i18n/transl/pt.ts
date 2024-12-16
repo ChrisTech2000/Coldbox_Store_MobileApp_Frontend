@@ -970,6 +970,9 @@ export default {
         revoke: 'Revogar',
         revokeMessage:
           'Você tem certeza de que deseja revogar este cupom? Uma vez revogado, ele não poderá ser utilizado novamente e o desconto não estará mais disponível. Esta ação é permanente e não pode ser desfeita.',
+        messages: {
+          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+        },
       },
     },
     Marketplace: {
@@ -1067,7 +1070,8 @@ export default {
           },
         },
         successMessage: 'Conta bancária adicionada com sucesso.',
-        errorMessage: 'Não conseguimos verificar os dados da conta. Por favor, verifique o número da conta e o nome do banco.',
+        errorMessage:
+          'Não conseguimos verificar os dados da conta. Por favor, verifique o número da conta e o nome do banco.',
       },
       PaymentSettings: {
         cards: 'Cartões',
