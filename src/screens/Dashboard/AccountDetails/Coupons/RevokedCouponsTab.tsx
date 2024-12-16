@@ -57,7 +57,12 @@ function RevokedCouponsTab(props: CouponStatusTabsRouteProps<'Revoked'>) {
             <View tw="w-full p-5 flex-row items-center justify-between border border-solid border-zinc-300 rounded-2xl my-2">
               <View tw="flex-1 flex-row items-center space-x-3">
                 <View tw="min-w-[35%] max-w-[65%]">
-                  <Text variant="TitleMedium" tw="text-lg" numberOfLines={2} ellipsizeMode="tail">
+                  <Text
+                    variant="TitleMedium"
+                    tw="text-lg text-zinc-500"
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  >
                     {item.code}
                   </Text>
                 </View>
