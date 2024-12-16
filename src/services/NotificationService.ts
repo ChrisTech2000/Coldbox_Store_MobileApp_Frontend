@@ -16,9 +16,7 @@ class NotificationService extends HttpClient {
     try {
       const { data } = await this.get<GetNotificationsResponse>(
         ENotificationsEndpoints.GET_NOTIFICATIONS,
-        {
-          params: { userId },
-        }
+        { params: { userId } }
       );
       return data;
     } catch (exception) {

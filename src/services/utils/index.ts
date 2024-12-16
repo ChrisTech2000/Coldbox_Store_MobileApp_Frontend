@@ -1,5 +1,9 @@
 import camelCase from 'lodash/camelCase';
 import snakeCase from 'lodash/snakeCase';
+import isNil from 'lodash/isNil';
+import isEmpty from 'lodash/isEmpty';
+
+import type { RecursiveKeyOf } from '#types/miscellaneous';
 
 export type Json = string | number | boolean | null | JsonObject | JsonArray | unknown;
 export interface JsonObject {
@@ -49,4 +53,28 @@ export function subs(url: string, params: { [key: string]: string | number }): s
   return url.replace(/:([a-zA-Z0-9_]+)/g, (match, p1) => {
     return params[p1] !== undefined ? params[p1].toString() : match;
   });
+}
+
+// FYK: does not support deeply nested structs
+export function query<T extends object>(
+  baseURL: string,
+  datum: T,
+  preserveCase: Array<RecursiveKeyOf<T>> = []
+): string {
+  const skipSet = new Set<string>(preserveCase);
+  const parts: Array<string> = [];
+
+  for (const [key, value] of Object.entries(datum)) {
+    if (isNil(value) || isEmpty(value)) continue;
+
+    const encodedParam = encodeURIComponent(skipSet.has(key) ? key : snakeCase(key));
+
+    const encodedValue = Array.isArray(value)
+      ? value.map((v) => encodeURIComponent(String(v))).join(',')
+      : encodeURIComponent(String(value));
+
+    parts.push(`${encodedParam}=${encodedValue}`);
+  }
+
+  return parts.length ? baseURL + '?' + parts.join('&') : baseURL;
 }
