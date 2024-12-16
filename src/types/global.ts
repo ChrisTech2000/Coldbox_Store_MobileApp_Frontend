@@ -569,6 +569,24 @@ export type Bank = {
   updatedAt: string;
 };
 
+export type MovementCrate = {
+  id: number;
+  cropId: number;
+  crop?: { id: number; name: string };
+  remainingShelfLife: number;
+  plannedDays: number | null;
+  weight: number;
+  initialWeight: number;
+  amount: number;
+  tag: string;
+  fullyCheckedOut: boolean;
+  daysInStorage: number;
+  ownedByUserId?: number;
+  ownedOnBehalfOfCompanyId?: number | null;
+  ownerName?: string;
+  affectedWeight?: number;
+};
+
 //////////////////////// ENUMS
 export enum ECoolingUnitMetric {
   KILOGRAMS = 'KILOGRAMS',
@@ -689,10 +707,10 @@ export enum EUnitOfMeasurement {
   BASKETS = 'baskets',
 }
 
-export enum EMovementType {
-  OUT = 'out',
-  IN = 'in',
-  MARKETPLACE = 'marketplace',
+export enum EInitiatedFor {
+  CHECK_IN = 'ci',
+  CHECK_OUT = 'co',
+  MARKETPLACE_ORDER = 'mo',
 }
 
 export enum ESellingLocation {

@@ -7,6 +7,7 @@ import colors from 'tailwindcss/colors';
 import { useTranslationUtils } from '#i18n/utils';
 import { Text } from '#ui/components/Text';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { ScrollView } from '#ui/components/ScrollView';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
 import { useComparisonData } from '../store';
@@ -107,7 +108,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
   }, [coolingUnitData, sorting, configData]);
 
   return (
-    <View tw="w-full my-2">
+    <ScrollView tw="w-full mt-2" contentContainerStyle="pb-20" showsVerticalScrollIndicator={false}>
       <SectionAccordion
         color="bg-green-transparency"
         expanded={expanded === 'operators'}
@@ -161,7 +162,7 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
           />
         }
       />
-    </View>
+    </ScrollView>
   );
 }
 

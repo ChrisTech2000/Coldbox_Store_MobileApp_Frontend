@@ -123,4 +123,5 @@ export enum EMarketplaceEndpoints {
   GET_MY_SALES = 'marketplace/seller/orders/',
   GET_SALE = 'marketplace/seller/orders/:orderId/',
   CANCEL_ORDER = 'marketplace/buyer/orders/:order/cancel/',
+  FARMER_BANK_ACCOUNTS = '/marketplace/company/setup/users-paystack-bank-account/',
 }
