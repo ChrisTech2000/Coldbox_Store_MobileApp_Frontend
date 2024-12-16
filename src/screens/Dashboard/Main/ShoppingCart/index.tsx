@@ -99,7 +99,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                   <Text tw="text-lg">
                     {formatCurrencyWithSymbol(
                       'NGN', // TODO: get from somewhere
-                      cartData.totalProduceAmount
+                      cartData.items.reduce((acc, item) => (acc += item.produceAmount), 0)
                     )}
                   </Text>
                 </View>

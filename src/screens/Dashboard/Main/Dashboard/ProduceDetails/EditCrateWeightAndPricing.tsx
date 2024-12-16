@@ -106,7 +106,7 @@ function EditCrateWeightAndPricing(
             z.object({
               id: z.number(),
               weight: greaterThanEqual,
-              tag: z.string().optional(),
+              tag: z.string().nullable(),
               isSellable: z.boolean(),
             })
           )
