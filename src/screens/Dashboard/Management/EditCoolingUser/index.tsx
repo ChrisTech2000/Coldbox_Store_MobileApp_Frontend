@@ -1,6 +1,7 @@
+import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
@@ -14,12 +15,13 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { USER_WITHOUT_PHONE } from '#constants/general';
 import type { TranslationLocales } from '#i18n/constants';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
 import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { EApiGender, EBankAccountType, User, type Farmer } from '#types/global';
 
@@ -37,8 +39,6 @@ import { DataLoader } from './utils';
 export const STATIC_START_DATE = '2022-10-01';
 export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
 
-const screenHeight = Dimensions.get('window').height;
-
 function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const { params } = props.route;
 
@@ -47,25 +47,26 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const { mutate } = useSWRConfig();
   const toast = InAppNotifications.useToast();
 
-  const { data, isLoading, refetch, hasError } = useApiCall(
-    GET_FARMER_RECORD_SWR_KEY,
-    DataLoader.loadFarmerRecord,
-    params.farmerId,
+  const {
+    data: { farmer, payoutDetails },
+    isLoading,
+    refetch,
+    hasError,
+  } = useApiCall(GET_FARMER_RECORD_SWR_KEY, DataLoader.loadFarmerRecord, params.farmerId, {
+    skip: !params?.farmerId,
+    defaultData: undefined,
+  });
+
+  const { data: availableBanks, isLoading: isLoadingAvailableBanks } = useApiCall(
+    'getAvailableBanks',
+    MarketplaceService.getAvailableBanks,
+    {},
     {
-      skip: !params?.farmerId,
       defaultData: undefined,
     }
   );
 
-  const payoutDetails = {
-    country: 'Nigeria',
-    accountType: 1,
-    accountName: 'My Account',
-    bank: 'My Bank',
-    accountNumber: '0123456789',
-  };
-
-  if (isLoading) {
+  if (isLoading || isLoadingAvailableBanks) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -80,7 +81,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   async function onSubmit(values: FormValues): Promise<void> {
     try {
       const userDatum = await ColdtivateService.updateUser({
-        userId: data?.user?.id as number,
+        userId: farmer?.user?.id as number,
         firstName: values.firstName ?? '',
         lastName: values.lastName ?? '',
         phone: values.phone,
@@ -89,10 +90,10 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
         parentName: values.parentName ?? '',
       });
 
-      if (typeof userDatum !== 'undefined' && typeof data !== 'undefined') {
+      if (typeof userDatum !== 'undefined' && typeof farmer !== 'undefined') {
         await ColdtivateService.updateFarmer({
-          farmerId: data.id,
-          country: data.country,
+          farmerId: farmer.id,
+          country: farmer.country,
           parentName: values.parentName,
           updateUser: true,
         });
@@ -108,14 +109,13 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
     }
   }
 
+  const isUserWithoutPhone = farmer?.user.firstName === USER_WITHOUT_PHONE && !farmer.user.phone;
+
   return (
-    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(data)}>
+    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(farmer)}>
       {({ submitHandler, isSubmitting }) => (
         <KeyboardAwareScrollView
-          contentContainerStyle={cn(
-            'justify-between pt-6 pb-8 mx-4',
-            screenHeight > SMALL_SCREEN_THRESHOLD ? 'flex-1' : 'flex-col'
-          )}
+          contentContainerStyle={cn('justify-between pt-6 pb-8 mx-4 flex-col')}
           keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           showsVerticalScrollIndicator={false}
         >
@@ -138,73 +138,86 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
           </View>
 
           <RBAC.ProtectedResource action="VIEW" subject="MarketplaceListing">
-            <Text tw="text-base text-green-primary font-bold mt-5">
-              {t('Dashboard.Management.EditCoolingUsers.accountDetails')}
-            </Text>
-            <View tw="w-full">
-              {!payoutDetails ? (
-                <View>
-                  <View tw="mx-4 mt-4">
-                    <Text>
-                      {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
-                        name: `${data.user.firstName ?? ''}`,
-                      })}
-                    </Text>
-                    <Button
-                      tw="self-end mt-2"
-                      onPress={() =>
-                        props.navigation.navigate('AddFarmerBankAccount', {
-                          farmer: data.user as User,
-                          recheckEligibility: () => null, // TODO: fix
-                        })
-                      }
-                    >
-                      {t('Dashboard.ProduceDetails.addBankAccountButton')}
-                    </Button>
-                  </View>
-                  <Divider tw="bg-gray-700" />
+            {isUserWithoutPhone ? null : (
+              <View>
+                <Text tw="text-base text-green-primary font-bold mt-5">
+                  {t('Dashboard.Management.EditCoolingUsers.accountDetails')}
+                </Text>
+                <View tw="w-full">
+                  {isEmpty(payoutDetails) ? (
+                    <View>
+                      <View tw="mx-4 mt-4">
+                        <Text>
+                          {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
+                            name: `${farmer.user.firstName ?? ''}`,
+                          })}
+                        </Text>
+                        <Button
+                          tw="self-end mt-2"
+                          onPress={() =>
+                            props.navigation.navigate('AddFarmerBankAccount', {
+                              farmer: farmer.user as User,
+                              recheckEligibility: async () =>
+                                mutate(getQueryKey(GET_FARMER_RECORD_SWR_KEY, params.farmerId)),
+                            })
+                          }
+                        >
+                          {t('Dashboard.ProduceDetails.addBankAccountButton')}
+                        </Button>
+                      </View>
+                      <Divider tw="bg-gray-700" />
+                    </View>
+                  ) : (
+                    <View tw="mt-4 space-y-2">
+                      <View tw="flex flex-row justify-between border-b border-gray-300">
+                        <Text tw="text-base mb-1.5 text-gray-600">
+                          {t('Dashboard.AccountDetails.PayoutSettings.form.countryLabel')}
+                        </Text>
+                        <Text tw="text-base mb-1.5">
+                          {t('Dashboard.AccountDetails.PayoutSettings.form.nigeria')}
+                        </Text>
+                      </View>
+
+                      <View tw="flex flex-row justify-between border-b border-gray-300">
+                        <Text tw="text-base mb-1.5 text-gray-600">
+                          {t('Dashboard.AccountDetails.PayoutSettings.form.accountType')}
+                        </Text>
+                        <Text tw="text-base mb-1.5">
+                          {startCase(EBankAccountType[payoutDetails.accountType].toLowerCase())}
+                        </Text>
+                      </View>
+
+                      <View tw="flex flex-row justify-between border-b border-gray-300">
+                        <Text tw="text-base mb-1.5 text-gray-600">
+                          {t('Dashboard.AccountDetails.PayoutSettings.form.nameLabel')}
+                        </Text>
+                        <Text tw="text-base mb-1.5">{payoutDetails.accountName}</Text>
+                      </View>
+
+                      <View tw="flex flex-row justify-between border-b border-gray-300">
+                        <Text tw="text-base mb-1.5 text-gray-600">
+                          {t('Dashboard.AccountDetails.PayoutSettings.form.accountNumberLabel')}
+                        </Text>
+                        <Text tw="text-base mb-1.5">{payoutDetails.accountNumber}</Text>
+                      </View>
+
+                      <View tw="flex flex-row justify-between border-b border-gray-300">
+                        <Text tw="text-base mb-1.5 text-gray-600">
+                          {t('Dashboard.AccountDetails.PayoutSettings.form.bank')}
+                        </Text>
+                        <Text tw="text-base mb-1.5">
+                          {
+                            availableBanks?.banks?.find(
+                              (b) => b.id.toString() === payoutDetails.bankCode
+                            )?.name
+                          }
+                        </Text>
+                      </View>
+                    </View>
+                  )}
                 </View>
-              ) : (
-                <View tw="mt-4 space-y-2">
-                  <View tw="flex flex-row justify-between border-b border-gray-300">
-                    <Text tw="text-base mb-1.5 text-gray-600">
-                      {t('Dashboard.AccountDetails.PayoutSettings.form.countryLabel')}
-                    </Text>
-                    <Text tw="text-base mb-1.5">{payoutDetails.country}</Text>
-                  </View>
-
-                  <View tw="flex flex-row justify-between border-b border-gray-300">
-                    <Text tw="text-base mb-1.5 text-gray-600">
-                      {t('Dashboard.AccountDetails.PayoutSettings.form.accountType')}
-                    </Text>
-                    <Text tw="text-base mb-1.5">
-                      {startCase(EBankAccountType[payoutDetails.accountType].toLowerCase())}
-                    </Text>
-                  </View>
-
-                  <View tw="flex flex-row justify-between border-b border-gray-300">
-                    <Text tw="text-base mb-1.5 text-gray-600">
-                      {t('Dashboard.AccountDetails.PayoutSettings.form.nameLabel')}
-                    </Text>
-                    <Text tw="text-base mb-1.5">{payoutDetails.accountName}</Text>
-                  </View>
-
-                  <View tw="flex flex-row justify-between border-b border-gray-300">
-                    <Text tw="text-base mb-1.5 text-gray-600">
-                      {t('Dashboard.AccountDetails.PayoutSettings.form.accountNumberLabel')}
-                    </Text>
-                    <Text tw="text-base mb-1.5">{payoutDetails.accountNumber}</Text>
-                  </View>
-
-                  <View tw="flex flex-row justify-between border-b border-gray-300">
-                    <Text tw="text-base mb-1.5 text-gray-600">
-                      {t('Dashboard.AccountDetails.PayoutSettings.form.bank')}
-                    </Text>
-                    <Text tw="text-base mb-1.5">{payoutDetails.bank}</Text>
-                  </View>
-                </View>
-              )}
-            </View>
+              </View>
+            )}
           </RBAC.ProtectedResource>
 
           <View tw="mt-8">
@@ -219,7 +232,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
                   farmerId: params.farmerId,
                 });
               }}
-              disabled={!data || hasError || isSubmitting}
+              disabled={!farmer || hasError || isSubmitting}
               icon="newspaper"
               uppercase
             >
@@ -243,7 +256,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
 
             <DeleteAction
               farmerId={params.farmerId}
-              userId={data?.user?.id as number}
+              userId={farmer?.user?.id as number}
               isSubmitting={isSubmitting}
               goBack={props.navigation.goBack}
               revalidateCache={revalidateCUCache}
