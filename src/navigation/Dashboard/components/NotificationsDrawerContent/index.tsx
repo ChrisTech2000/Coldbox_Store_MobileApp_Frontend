@@ -1,11 +1,12 @@
 import isEmpty from 'lodash/isEmpty';
 import ms from 'ms';
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Portal } from 'react-native-paper';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
+import { FlashList } from '@shopify/flash-list';
 
 import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
 import { Text } from '#ui/components/Text';
@@ -15,7 +16,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
-import type { Company, CoolingUnit, Crop, FarmerSurvey } from '#types/global';
+import type { Company, CoolingUnit, Crop, FarmerSurvey, User } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -55,10 +56,14 @@ export type CommoditySurveyDatum = {
 
 export type OrderRequiresMovementDatum = {
   movement: GetMovementsHistoryResponse[0];
+  crops: Array<GetAllCropsResponse>;
+  companies: Array<Company>;
   coolingUnit: CoolingUnit;
-  crops: GetAllCropsResponse[];
-  companies: Company[];
+  users: Array<User>;
 };
+
+const DEVICE_WIDTH = Dimensions.get('window').width;
+const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 export const useSettingUpSurvey = create<{
   isLoading: boolean;
@@ -96,9 +101,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     'getCompanies',
     ColdtivateService.getCompanies,
     undefined,
-    {
-      defaultData: [],
-    }
+    { skip: !user?.id, defaultData: [] }
   );
 
   useAppEventListener<[CommoditySurveyDatum]>(
@@ -109,19 +112,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   useAppEventListener<[OrderRequiresMovementDatum]>(
     'DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL',
     async (value) => {
-      const { companies, crops, movement } = value;
-      const checkInUserIds = value.movement.checkin?.ownedByUserId;
-
-      const checkOutUserIds = value.movement.checkout?.crates
-        .filter((crate) => crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId)
-        .map((crate) => crate.ownedByUserId);
-
-      const uniqueUserIds = Array.from(new Set([...checkOutUserIds, checkInUserIds])).filter(
-        Boolean
-      );
-      const users = await Promise.all(
-        uniqueUserIds.map(async (id) => await ColdtivateService.getUser(id as number))
-      );
+      const { movement, crops, companies, users } = value;
 
       if (!isEmpty(movement.checkin)) {
         movement.checkin = {
@@ -148,6 +139,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
           })),
         };
       }
+
       setOrderDatum(value);
       modalRef.current?.open();
     }
@@ -168,7 +160,8 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
         ) : null}
       </View>
 
-      <FlatList
+      <FlashList
+        nestedScrollEnabled
         showsVerticalScrollIndicator={false}
         data={notifications}
         keyExtractor={(item) => `notification-#${item.datum.id}`}
@@ -198,7 +191,8 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
             }}
           />
         )}
-        nestedScrollEnabled
+        estimatedItemSize={40}
+        estimatedListSize={{ height: DEVICE_HEIGHT, width: DEVICE_WIDTH / 2 }}
       />
 
       {typeof farmerSurveyDatums !== 'undefined' ? (
@@ -300,10 +294,9 @@ class NotificationHandlers {
         }))
       ) || [];
 
-    const isAlreadyFilledIn = surveyList
-      .map((item) => item.cropName.toLowerCase())
-      .includes(notification.datum.crates.crop.toLowerCase());
-
+    const isAlreadyFilledIn = surveyList.some(
+      (item) => item.cropName.toLowerCase() === notification.datum.crates.crop.toLowerCase()
+    );
     if (isAlreadyFilledIn) throw new Error('surveyAlreadyFilled');
 
     const contextualCrop = crops.find((crop) => crop.name === notification.datum.crates.crop);
@@ -343,17 +336,27 @@ class NotificationHandlers {
     const movementDetails = movements.find(
       (movement) => movement.code === notification.datum.movementCode
     );
-    if (!movementDetails || !movementDetails.checkout.marketSurveyDelay) throw new Error();
+
+    const isValidMovement =
+      movementDetails &&
+      movementDetails.checkout.marketSurveyDelay &&
+      movementDetails.checkout?.crates?.[0]?.ownedByUserId;
+    if (!isValidMovement) throw new Error();
 
     const owner = await ColdtivateService.getUser(
-      movementDetails.checkout.crates[0].ownedByUserId as number
+      movementDetails.checkout.crates[0].ownedByUserId!
     );
-    const movementCrops = movementDetails.checkout.crates.flatMap((crate) => crate.cropId);
 
-    const movementCropsForSurvey = crops
-      .filter((crop) => movementCrops.includes(crop.id))
-      .filter((crop) => !movementDetails.checkout.hasMarketSurvey.includes(crop.id))
-      .map((crop) => ({ id: crop.id, name: crop.name }));
+    const movementCropsForSurvey = movementDetails.checkout.crates.reduce(
+      (acc, crate) => {
+        const datum = getCropInfo(crate.cropId, crops ?? []);
+        if (datum && !movementDetails.checkout.hasMarketSurvey.includes(crate.cropId)) {
+          acc.push(datum);
+        }
+        return acc;
+      },
+      [] as Array<{ id: number; name: string }>
+    );
 
     const datums = {
       eventType: 'MARKET_SURVEY',
@@ -371,8 +374,8 @@ class NotificationHandlers {
 
   static async reallocate(
     notification: NotificationDatum,
-    crops: GetAllCropsResponse[],
-    companies: Company[]
+    crops: Array<GetAllCropsResponse>,
+    companies: Array<Company>
   ) {
     const coolingUnit = notification.ctx.coolingUnit;
     if (!coolingUnit) throw new Error();
@@ -384,11 +387,27 @@ class NotificationHandlers {
     );
     if (!movementDetails) throw new Error();
 
+    const checkOutUserIds = (movementDetails.checkout?.crates || []).reduce((acc, crate) => {
+      if (crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId) {
+        acc.push(crate.ownedByUserId);
+      }
+      return acc;
+    }, [] as Array<number>);
+
+    const userIdsToLoad = new Set<number>(checkOutUserIds);
+    const checkInUserId = movementDetails.checkin?.ownedByUserId;
+    if (typeof checkInUserId !== 'undefined') userIdsToLoad.add(checkInUserId);
+
+    const users = await Promise.all(
+      Array.from(userIdsToLoad).map(async (id) => await ColdtivateService.getUser(id))
+    );
+
     const datums = {
       movement: movementDetails,
       coolingUnit,
       crops,
       companies,
+      users,
     } satisfies OrderRequiresMovementDatum;
 
     emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL, datums);

@@ -35,22 +35,22 @@ export function useMovementsHistory(
   const { data: users, isLoading: areUsersLoading } = useApiCall(
     'getMovementUsers',
     async () => {
-      const checkInUserIds = movements
-        .filter((movement) => {
-          return movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId;
-        })
-        .flatMap((movement) => [movement.checkin?.ownedByUserId]);
+      const uniqueUserIds = new Set<number>();
 
-      const checkOutUserIds = movements
-        .flatMap((movements) => movements.checkout?.crates ?? [])
-        .filter((crate) => crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId)
-        .map((crate) => crate.ownedByUserId);
+      for (const movement of movements) {
+        if (movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId) {
+          uniqueUserIds.add(movement.checkin.ownedByUserId);
+        }
 
-      const uniqueUserIds = Array.from(new Set([...checkOutUserIds, ...checkInUserIds])).filter(
-        Boolean
-      );
+        for (const crate of movement.checkout?.crates ?? []) {
+          if (crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId) {
+            uniqueUserIds.add(crate.ownedByUserId);
+          }
+        }
+      }
+
       return await Promise.all(
-        uniqueUserIds.map(async (id) => await ColdtivateService.getUser(id as number))
+        Array.from(uniqueUserIds).map(async (id) => await ColdtivateService.getUser(id))
       );
     },
     undefined,
