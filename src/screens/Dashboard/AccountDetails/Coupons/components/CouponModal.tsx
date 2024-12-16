@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Portal, TextInput } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
 import { Controller, useForm } from 'react-hook-form';
+import ms from 'ms';
 
 import { Text } from '#ui/components/Text';
 import { Sup } from '#ui/components/SuperscriptText';
@@ -15,6 +16,8 @@ type FormValues<T = string> = {
   code: string;
   percentage: T;
 };
+
+const TOAST_HARCODED_ID = '@CouponModal-submit-handler-exception-toast-#ID';
 
 export default function CouponModal(props: {
   modalRef: RefObject<Modalize>;
@@ -54,15 +57,18 @@ export default function CouponModal(props: {
     });
   }
 
-  async function onSubmit(values: FormValues<number>) {
+  async function onSubmit(values: FormValues<number>): Promise<void> {
     try {
       await props.onSubmit?.(values);
       _resetValues();
     } catch (exception) {
       console.error(exception);
+      if (toast.isOpen(TOAST_HARCODED_ID)) return;
       toast.show(t('navigation.error.errorMessage'), {
         type: 'md_danger',
         style: { marginBottom: 56 },
+        duration: ms('4 seconds'),
+        id: TOAST_HARCODED_ID,
       });
     }
   }
