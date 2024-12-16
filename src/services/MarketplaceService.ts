@@ -459,9 +459,9 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getFarmerBankAccounts = async (userId?: number): Promise<Array<BankAccount>> => {
+  public getFarmerBankAccounts = async (userId?: number): Promise<BankAccount> => {
     try {
-      const { data } = await this.get<Array<BankAccount>>(
+      const { data } = await this.get<BankAccount>(
         query(EMarketplaceEndpoints.FARMER_BANK_ACCOUNTS, { userId })
       );
       return data;

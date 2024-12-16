@@ -2,10 +2,11 @@ import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import camelCase from 'lodash/camelCase';
 
-import type { Top5Data, Farmer, FarmerData } from '#types/global';
+import type { Top5Data, Farmer, FarmerData, BankAccount } from '#types/global';
 import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useManagementStore } from '#stores/management';
+import MarketplaceService from '#services/MarketplaceService';
 
 import { html } from '#ui/lib/templating/internals';
 import {
@@ -41,14 +42,21 @@ type FarmerCoolingUnitStats = Omit<FarmerData, 'firstName' | 'lastName' | 'userT
   checkOutKgCrop: Array<string>;
 };
 type CropsLookupMap = Map<string, { cropId: number; name: string; imageURL: string }>;
-
+type ContextualFarmer = {
+  farmer: Farmer;
+  payoutDetails: BankAccount | null;
+};
 export class DataLoader {
   //
   // Public Methods
   //
-  public static async loadFarmerRecord(farmerId: number): Promise<Farmer> {
+  public static async loadFarmerRecord(farmerId: number): Promise<ContextualFarmer> {
     // load farmer record
     const farmer = await ColdtivateService.getFarmerById(farmerId);
+    const payoutDetails = await MarketplaceService.getFarmerBankAccounts(farmer?.user.id).catch(
+      () => null
+    );
+
     if (!farmer) throw new Error(CONSTRAINT_EXCEPTIONS.FARMER_NOT_FOUND);
 
     // load farmer companies and cooling units
@@ -56,7 +64,10 @@ export class DataLoader {
     const contextualFarmer = farmerResults?.at(0);
     if (!contextualFarmer) throw new Error(CONSTRAINT_EXCEPTIONS.FARMER_NOT_FOUND);
 
-    return contextualFarmer;
+    return {
+      farmer: contextualFarmer,
+      payoutDetails,
+    };
   }
 
   public static async aggregateFarmerData(farmer: Farmer) {

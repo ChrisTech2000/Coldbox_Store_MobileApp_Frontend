@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { useSWRConfig } from 'swr';
 
@@ -17,6 +17,12 @@ import { useManagementStore } from '#stores/management';
 import CouponModal from './components/CouponModal';
 import RevokeCouponModal from './components/RevokeCouponModal';
 import { CouponStatusTabsRouteProps } from 'navigation/Dashboard/AccountDetails/CouponSettings/CouponStatusTabs';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+
+const DEVICE_HEIGHT = Dimensions.get('window').height;
+
+const TEXT_STYLES =
+  DEVICE_HEIGHT > SMALL_SCREEN_THRESHOLD ? 'min-w-[35%] max-w-[65%]' : 'min-w-[35%] max-w-[45%]';
 
 function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
   const { t } = useTranslationUtils();
@@ -62,8 +68,8 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
             renderItem={({ item }) => (
               <View tw="w-full p-5 flex-row items-center justify-between border border-solid border-zinc-300 rounded-2xl my-2">
                 <View tw="flex-1 flex-row items-center space-x-3">
-                  <View tw="min-w-[25%]">
-                    <Text variant="TitleMedium" tw="text-lg">
+                  <View tw={TEXT_STYLES}>
+                    <Text variant="TitleMedium" tw="text-lg" numberOfLines={2} ellipsizeMode="tail">
                       {item.code}
                     </Text>
                   </View>
