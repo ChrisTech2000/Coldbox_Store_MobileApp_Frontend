@@ -7,7 +7,7 @@ import { Text } from '#ui/components/Text';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { EInitiatedFor } from '#types/global';
+import { EInitiatedFor, EPaymentGateway } from '#types/global';
 
 const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
@@ -81,7 +81,9 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.History.detailsModal.paymentMethodLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout?.paymentGateway}
+              {movement.checkout?.paymentGateway === EPaymentGateway.PAYTACK
+                ? 'PAYSTACK'
+                : movement.checkout?.paymentGateway}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
