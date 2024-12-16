@@ -30,7 +30,7 @@ import type {
 import type { BankAccount } from '#types/global';
 
 import HttpClient from './HttpClient';
-import { subs } from './utils';
+import { subs, query } from './utils';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 
 class MarketplaceService extends HttpClient {
@@ -122,8 +122,7 @@ class MarketplaceService extends HttpClient {
   public getUserBankAccounts = async (companyId?: number): Promise<Array<BankAccount>> => {
     try {
       const { data } = await this.get<Array<BankAccount>>(
-        EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS,
-        companyId ? { params: { company_id: companyId } } : undefined
+        query(EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS, { companyId })
       );
       return data;
     } catch (error) {
@@ -135,8 +134,9 @@ class MarketplaceService extends HttpClient {
 
   public getCompanyBankAccounts = async (companyId: number): Promise<Array<BankAccount>> => {
     try {
-      const url = `${EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS}?company_id=${companyId}`;
-      const { data } = await this.get<Array<BankAccount>>(url);
+      const { data } = await this.get<Array<BankAccount>>(
+        query(EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS, { companyId })
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -231,9 +231,7 @@ class MarketplaceService extends HttpClient {
     try {
       const { data } = await this.post<SetPickUpDetailsResponse>(
         EMarketplaceEndpoints.SET_PICKUP_DETAILS,
-        {
-          ...params,
-        }
+        { ...params }
       );
       return data;
     } catch (error) {
@@ -300,15 +298,12 @@ class MarketplaceService extends HttpClient {
       } = params;
 
       const { data } = await this.post<UpdateListedCrateResponse>(
-        EMarketplaceEndpoints.UPSERT_LISTED_CRATE,
-        body,
-        {
-          params: {
-            operator_on_behalf_of_seller_farmer_id: operatorOnBehalfOfSellerFarmerId,
-            operator_on_behalf_of_seller_user_id: operatorOnBehalfOfSellerUserId,
-            operator_on_behalf_of_seller_company_id: operatorOnBehalfOfSellerCompanyId,
-          },
-        }
+        query(EMarketplaceEndpoints.UPSERT_LISTED_CRATE, {
+          operatorOnBehalfOfSellerFarmerId,
+          operatorOnBehalfOfSellerUserId,
+          operatorOnBehalfOfSellerCompanyId,
+        }),
+        body
       );
       return data;
     } catch (error) {
@@ -323,17 +318,7 @@ class MarketplaceService extends HttpClient {
   ): Promise<GetAvailableListingResponse> => {
     try {
       const { data } = await this.get<GetAvailableListingResponse>(
-        EMarketplaceEndpoints.AVAILABLE_LISTING,
-        {
-          params: {
-            ...params,
-            location: params.location.join(','),
-            filterByCoolingUnitsIds:
-              !params?.filterByCoolingUnitsIds || params.filterByCoolingUnitsIds.length < 1
-                ? undefined
-                : params.filterByCoolingUnitsIds.join(','),
-          },
-        }
+        query(EMarketplaceEndpoints.AVAILABLE_LISTING, params)
       );
       return data;
     } catch (error) {
@@ -382,14 +367,7 @@ class MarketplaceService extends HttpClient {
     try {
       const { crateId, ...rest } = params;
       await this.delete(
-        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }),
-        {
-          params: {
-            operator_on_behalf_of_seller_farmer_id: rest.operatorOnBehalfOfSellerFarmerId,
-            operator_on_behalf_of_seller_user_id: rest.operatorOnBehalfOfSellerUserId,
-            operator_on_behalf_of_seller_company_id: rest.operatorOnBehalfOfSellerCompanyId,
-          },
-        }
+        query(subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }), rest)
       );
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -418,9 +396,7 @@ class MarketplaceService extends HttpClient {
     try {
       const { data } = await this.post<CheckMarketplaceEligibilityResponse>(
         EMarketplaceEndpoints.CHECK_MARKETPLACE_ELIGIBILITY,
-        {
-          ...params,
-        }
+        { ...params }
       );
       return data;
     } catch (error) {
@@ -485,9 +461,9 @@ class MarketplaceService extends HttpClient {
 
   public getFarmerBankAccounts = async (userId?: number): Promise<BankAccount> => {
     try {
-      const { data } = await this.get<BankAccount>(EMarketplaceEndpoints.FARMER_BANK_ACCOUNTS, {
-        params: { user_id: userId },
-      });
+      const { data } = await this.get<BankAccount>(
+        query(EMarketplaceEndpoints.FARMER_BANK_ACCOUNTS, { userId })
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
