@@ -6,10 +6,11 @@ import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
-import { useApiCache, useLazyApiCall } from '#services/hooks/useAPiCall';
+import { useApiCache, useApiCall, useLazyApiCall } from '#services/hooks/useAPiCall';
 import type { Farmer } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import { savePDF } from '#ui/lib/pdf';
+import ColdtivateService from '#services/ColdtivateService';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
 import { CONSTRAINT_EXCEPTIONS, DataLoader, getPdfContent } from '../utils';
@@ -22,10 +23,29 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
 
   const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
 
-  const { execute, isLoading } = useLazyApiCall(
+  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+    'getAllCrops',
+    ColdtivateService.getAllCrops,
+    undefined,
+    {
+      skip: typeof contextualFarmer === 'undefined',
+      defaultData: [],
+    }
+  );
+
+  const { data: companies, isLoading: isLoadingCompanies } = useApiCall(
+    'getCompanies',
+    ColdtivateService.getCompanies,
+    undefined,
+    { skip: typeof contextualFarmer === 'undefined', defaultData: [] }
+  );
+
+  const { execute, isLoading: isLoadingAnalytics } = useLazyApiCall(
     'getFarmerRelatedAnalytics',
     DataLoader.aggregateFarmerData
   );
+
+  const isLoading = isLoadingCrops || isLoadingCompanies || isLoadingAnalytics;
 
   return (
     <Button
@@ -39,7 +59,11 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
         try {
           if (typeof contextualFarmer === 'undefined') throw new Error(); // safe guard
 
-          const result = await execute(contextualFarmer);
+          const result = await execute({
+            farmer: contextualFarmer,
+            crops: crops ?? [],
+            companies: companies ?? [],
+          });
           if (isEmpty(result)) throw new Error('empty farmer data response');
 
           await savePDF(getPdfContent(result, t), 'farmer');
