@@ -49,7 +49,7 @@ export function FarmerAnalytics() {
     'getFarmerByUserId',
     ColdtivateService.getFarmerByUserId,
     user!.id,
-    { skip: !user?.id }
+    { skip: !user?.id, defaultData: [] }
   );
 
   const { data: crops, isLoading: isLoadingCrops } = useApiCall(
@@ -93,9 +93,9 @@ export function FarmerAnalytics() {
         if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
       }
     }, []),
-    { farmer: farmerResponse?.at(0) as Farmer, crops: crops ?? [], companies: companies ?? [] },
+    { farmer: farmerResponse?.[0] as Farmer, crops: crops ?? [], companies: companies ?? [] },
     {
-      skip: !farmerResponse || isLoadingCrops || isLoadingCompanies,
+      skip: !farmerResponse?.length || isLoadingCrops || isLoadingCompanies,
       defaultData: undefined,
       errorRetryCount: 0,
     }
@@ -124,20 +124,18 @@ export function FarmerAnalytics() {
   }, [data]);
 
   useEffect(() => {
-    if (data?.datums.farmerCoolingUnits) {
+    if (data?.datums?.farmerCoolingUnits) {
       setConfigData({
         coolingUnits: data.datums.farmerCoolingUnits,
         endDate: new Date(data.dateRange.end),
         startDate: new Date(data.dateRange.start),
       });
     }
-  }, [data?.datums.farmerCoolingUnits]);
+  }, [data?.datums?.farmerCoolingUnits]);
 
   useEffect(() => {
-    const datum = farmerResponse?.at(0);
-    if (typeof datum !== 'undefined') {
-      setFarmer(datum);
-    }
+    const datum = farmerResponse?.[0];
+    if (typeof datum !== 'undefined') setFarmer(datum);
   }, [farmerResponse]);
 
   if (isLoadingFarmers || isLoadingCrops || isLoadingCompanies || isLoading) {
@@ -183,7 +181,7 @@ export function FarmerAnalytics() {
                 activeTab={activeTab}
                 onTabSelection={(tab: Tab) => setActiveTab(tab)}
                 compactMode
-                disabled={!data?.datums.farmerCoolingUnits?.length}
+                disabled={!data?.datums?.farmerCoolingUnits?.length}
               />
 
               <View tw="items-center">
@@ -273,7 +271,7 @@ export function FarmerAnalytics() {
                   <InnerTabs
                     activeTab={activeTab}
                     onTabSelection={(tab: Tab) => setActiveTab(tab)}
-                    disabled={!configData || !data?.datums.farmerCoolingUnits?.length}
+                    disabled={!configData || !data?.datums?.farmerCoolingUnits?.length}
                   />
                 }
               />
@@ -286,7 +284,7 @@ export function FarmerAnalytics() {
         isOpen={isModalOpen}
         dismiss={() => setIsModalOpen(false)}
         confirm={(config: ConfigData) => setConfigData(config)}
-        coolingUnits={data?.datums.farmerCoolingUnits ?? []}
+        coolingUnits={data?.datums?.farmerCoolingUnits ?? []}
       />
     </React.Fragment>
   );
