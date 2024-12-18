@@ -17,7 +17,7 @@ import MarketplaceList from './modules/MarketplaceList';
 import { useMarketplaceListing } from './utils';
 
 function MarketplaceRoot() {
-  const { isValidating, refetch } = useMarketplaceListing();
+  const { isLoading, isValidating, refetch } = useMarketplaceListing();
 
   const closeMarketplaceTooltipsHandler = useDebouncedCallback(() => {
     emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
@@ -30,7 +30,9 @@ function MarketplaceRoot() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         onTouchStart={closeMarketplaceTooltipsHandler}
-        refreshControl={<RefreshControl refreshing={isValidating} onRefresh={refetch} />}
+        refreshControl={
+          <RefreshControl refreshing={isValidating || isLoading} onRefresh={refetch} />
+        }
       >
         <View tw="flex-1 mb-20">
           <MarketplaceList />
