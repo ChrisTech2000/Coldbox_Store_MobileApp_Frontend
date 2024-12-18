@@ -109,7 +109,6 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const allCoolingUnitsHavePickUpMethod = cartData.items?.every((item) =>
     cartData.pickupDetails.some((pickup) => pickup.coolingUnitId === item.relCoolingUnitId)
   );
-
   const orderDisabled =
     cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
     CART_MINIMUM_VALUE;

@@ -1180,6 +1180,9 @@ export default {
       contactsForDelivery: 'Contact(s) for delivery information', // TODO
       gotItButton: 'Got it!', // TODO
       pickupMethods: 'Pickup method', // TODO
+      selectPickupMethod: 'Select a pickup method', // TODO
+      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
+      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
       pickUpToday: 'Pickup today', // TODO
       keepInStorageDailyRate: 'Keep in storage ({{price}} / day)', // TODO
       keepInStorageFixedRate: 'Keep in storage ({{price}})', // TODO
