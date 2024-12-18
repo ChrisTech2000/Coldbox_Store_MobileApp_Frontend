@@ -178,13 +178,11 @@ function _NearbyMeSection(props: {
           const [distance, data] = distanceEntries[idx];
           const _distance = Number(distance);
 
-          if (idx === 0) {
-            items.push({
-              kind: 'sectionHeader',
-              sectionKey,
-              distance: _distance as NearbyMeListItem['distance'],
-            });
-          }
+          const sectionHeaderItem: NearbyMeListItem = {
+            kind: 'sectionHeader',
+            sectionKey,
+            distance: _distance as NearbyMeListItem['distance'],
+          };
 
           const rowItems = data.map(
             (item): NearbyMeListItem => ({
@@ -195,7 +193,7 @@ function _NearbyMeSection(props: {
             })
           );
 
-          items.push(...rowItems);
+          items.push(sectionHeaderItem, ...rowItems);
         }
 
         return items;
