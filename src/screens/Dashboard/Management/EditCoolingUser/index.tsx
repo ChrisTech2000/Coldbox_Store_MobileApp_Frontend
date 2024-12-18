@@ -36,7 +36,6 @@ import FarmerDashboardData from './components/FarmerDashboardData';
 
 import { DataLoader } from './utils';
 
-export const STATIC_START_DATE = '2022-10-01';
 export const GET_FARMER_RECORD_SWR_KEY = 'getFarmerRecord';
 
 function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
@@ -60,7 +59,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   const { data: availableBanks, isLoading: isLoadingAvailableBanks } = useApiCall(
     'getAvailableBanks',
     MarketplaceService.getAvailableBanks,
-    {},
+    undefined,
     {
       defaultData: undefined,
     }
