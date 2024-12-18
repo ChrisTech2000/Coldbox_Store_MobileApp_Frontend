@@ -37,6 +37,7 @@ import {
 } from '#screens/Dashboard/Main/History/utils/useMovementsData';
 import { type ManagementCompany, useManagementStore } from '#stores/management';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { useMap, type UseMap } from '#ui/hooks/useMap';
 
 export type Notifications = ProcessedNotifications['notifications'];
 type NotificationDatum = Notifications[0];
@@ -86,6 +87,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     undefined
   );
   const [orderDatum, setOrderDatum] = useState<OrderRequiresMovementDatum | undefined>(undefined);
+  const [usersMap, usersMapActions] = useMap<number, User>();
 
   const modalRef = useRef<Modalize>(null);
   const modalTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -164,6 +166,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
         nestedScrollEnabled
         showsVerticalScrollIndicator={false}
         data={notifications}
+        extraData={usersMap}
         keyExtractor={(item) => `notification-#${item.datum.id}`}
         renderItem={({ item }) => (
           <NotificationItem
@@ -182,7 +185,13 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                   break;
                 }
                 case 'ORDER_REQUIRES_MOVEMENT': {
-                  await NotificationHandlers.reallocate(item, crops, companies ?? []);
+                  const datums = await NotificationHandlers.reallocate(
+                    item,
+                    crops,
+                    companies ?? [],
+                    usersMap
+                  );
+                  usersMapActions.setAll(datums);
                   break;
                 }
                 default:
@@ -375,7 +384,8 @@ class NotificationHandlers {
   static async reallocate(
     notification: NotificationDatum,
     crops: Array<GetAllCropsResponse>,
-    companies: Array<Company>
+    companies: Array<Company>,
+    usersMap: UseMap<number, User>
   ) {
     const coolingUnit = notification.ctx.coolingUnit;
     if (!coolingUnit) throw new Error();
@@ -394,13 +404,28 @@ class NotificationHandlers {
       return acc;
     }, [] as Array<number>);
 
-    const userIdsToLoad = new Set<number>(checkOutUserIds);
-    const checkInUserId = movementDetails.checkin?.ownedByUserId;
-    if (typeof checkInUserId !== 'undefined') userIdsToLoad.add(checkInUserId);
-
-    const users = await Promise.all(
-      Array.from(userIdsToLoad).map(async (id) => await ColdtivateService.getUser(id))
+    const userIdsToLoad = Array.from(
+      new Set<number>([
+        ...checkOutUserIds,
+        ...(movementDetails.checkin?.ownedByUserId ? [movementDetails.checkin.ownedByUserId] : []),
+      ])
     );
+
+    const idsToFetch = userIdsToLoad.filter((id) => !usersMap.has(id));
+
+    const newUsers =
+      idsToFetch.length > 0
+        ? await Promise.all(idsToFetch.map(async (id) => await ColdtivateService.getUser(id)))
+        : [];
+
+    const newUsersMap = new Map(usersMap);
+    for (const user of newUsers) {
+      newUsersMap.set(user.id, user);
+    }
+
+    const users = userIdsToLoad
+      .map((id) => newUsersMap.get(id))
+      .filter((user): user is User => !!user);
 
     const datums = {
       movement: movementDetails,
@@ -412,6 +437,8 @@ class NotificationHandlers {
 
     emitter.emit(APP_EVENTS.DISPATCH_NOTIFICATION_ORDER_REQUIRES_MOVEMENT_MODAL, datums);
     useRightDrawerStore.getState().toggle(false);
+
+    return newUsersMap;
   }
 }
 
