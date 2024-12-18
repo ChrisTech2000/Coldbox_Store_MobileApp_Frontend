@@ -3,6 +3,9 @@ import { Dimensions, RefreshControl, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
+import cloneDeep from 'lodash/cloneDeep';
+import moize from 'moize';
+import ms from 'ms';
 
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -49,15 +52,26 @@ import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { sortProduces } from './utils/sortProduces';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { DashboardRoutes } from '#navigation/Dashboard';
+import type { DashboardRoutes } from '#navigation/Dashboard';
+import { stringToHash } from '#ui/lib/hash';
 
 export const useDashboardCoolingUnitStore = createSelectStore<CoolingUnit>();
 export const useDashboardCompanyStore = createSelectStore<Company>();
 
-const screenHeight = Dimensions.get('window').height;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+
+const _findFarmerById = moize(
+  (id: number | undefined, list: Array<Farmer>) => list.find((f) => f.id === id),
+  {
+    maxAge: ms('6 seconds'),
+    isSerialized: true,
+    serializer: ([id, list]) => [stringToHash([id, JSON.stringify(list)].join(':::'))],
+  }
+);
 
 function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const { navigation } = props;
+
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
   const { company } = useManagementStore();
@@ -159,45 +173,51 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     'getFarmers',
     ColdtivateService.getFarmers,
     undefined,
-    {
-      defaultData: [],
-    }
+    { defaultData: [] }
   );
-
-  const dashboardProduces = isTutorialOn
-    ? // eslint-disable-next-line
-      // @ts-ignore
-      (MOCKED_DASHBOARD_DATA as DashboardProduce[])
-    : user?.role === ERoles.COOLING_USER
-      ? farmerDashboardProduces
-      : operatorDashboardProduces;
 
   const [searchType, setSearchType] = useState<Search>('details');
   const [search, setSearch] = useState<string>('');
   const [areCoolingUnitsLoading, setAreCoolingUnitsLoading] = useState<boolean>(true);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
 
-  const sortedProduces = useMemo(() => {
-    return (dashboardProduces ?? []).slice().sort((a, b) => sortProduces(a, b, sorting));
-  }, [dashboardProduces, sorting]);
+  const dashboardProduces = useMemo(
+    () =>
+      isTutorialOn
+        ? // eslint-disable-next-line
+          // @ts-ignore
+          (MOCKED_DASHBOARD_DATA as DashboardProduce[])
+        : user?.role === ERoles.COOLING_USER
+          ? farmerDashboardProduces
+          : operatorDashboardProduces,
+    [isTutorialOn, user?.role, farmerDashboardProduces, operatorDashboardProduces]
+  );
 
   const filteredProduces = useMemo(() => {
-    if (!search) return sortedProduces;
-    const lowerCaseSearch = search.toLowerCase();
+    if (!dashboardProduces?.length) return [];
 
-    return sortedProduces.filter((produce) => {
-      if (searchType === 'id') {
-        return produce.checkedInCrates.some((crate) => crate.tag?.toString() === lowerCaseSearch);
-      }
+    const list = cloneDeep(dashboardProduces).sort((a, b) => sortProduces(a, b, sorting));
+    if (!search) return list;
+    const searchTerm = search.toLowerCase();
 
-      return (
-        produce.currentStorageDays.toString().includes(lowerCaseSearch) ||
-        produce.owner?.toLowerCase().includes(lowerCaseSearch) ||
-        produce.cropName.toLowerCase().includes(lowerCaseSearch) ||
-        produce.movementCode.toLowerCase().includes(lowerCaseSearch)
-      );
-    });
-  }, [sortedProduces, search, searchType]);
+    switch (searchType) {
+      case 'id':
+        return list.filter(({ checkedInCrates }) =>
+          checkedInCrates.some((crate) => crate.tag?.toString() === searchTerm)
+        );
+      case 'details':
+      default:
+        return list.filter((produce) => {
+          const searchableFields = [
+            produce.currentStorageDays.toString(),
+            produce.owner?.toLowerCase(),
+            produce.cropName.toLowerCase(),
+            produce.movementCode.toLowerCase(),
+          ].filter(Boolean);
+          return searchableFields.some((field) => field.includes(searchTerm));
+        });
+    }
+  }, [dashboardProduces, sorting, search, searchType]);
 
   useEffect(() => {
     if (user?.role === ERoles.COOLING_USER) addRefreshDataFn(refreshFarmerDashboardProduces);
@@ -229,7 +249,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   }, [isTutorialOn, isBankAccountModalAllowedToOpen, user, company]);
 
   const hideInTutorial =
-    isTutorialOn && user?.role === ERoles.COOLING_USER && screenHeight <= SMALL_SCREEN_THRESHOLD;
+    isTutorialOn && user?.role === ERoles.COOLING_USER && SCREEN_HEIGHT <= SMALL_SCREEN_THRESHOLD;
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0" style={{ paddingBottom: BOTTOM_NAV_HEIGHT }}>
@@ -286,7 +306,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
               }
               key={`${produce.id}-${index}`}
               produce={produce}
-              farmer={farmers?.find((f) => f.id === produce.farmerId) as Farmer}
+              farmer={_findFarmerById(produce.farmerId, farmers ?? []) as Farmer}
               onNavigate={() => {
                 navigation.navigate('ProduceDetailsStack', {
                   screen: 'Root',
@@ -320,7 +340,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
             </Dialog.Content>
             <Dialog.Actions>
               <Button
-                onPress={() => {
+                onPress={(evt) => {
+                  evt.stopPropagation();
                   rootNavigation.navigate('Management', {
                     screen: 'PayoutSettings',
                     params: { isCompanyView: true },
