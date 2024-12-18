@@ -114,7 +114,6 @@ export function useMarketplaceListing() {
     'getMarketplaceAvailableListing',
     async (params: GetAvailableListingParams) => {
       const listing = await MarketplaceService.getAvailableListing(params);
-
       // companies (owners) aggregation
       const ownerCompaniesIds = new Set<number>(
         listing.nodes.map((node) => node.ownedOnBehalfOfCompanyId).filter(Boolean) as number[]
@@ -162,7 +161,7 @@ export function useMarketplaceListing() {
           crateId: node.crateId,
           crateWeight: node.availableWeightInKg,
           shelfLife: node.relCrateRemainingShelfLife,
-          price: node.producePricePerKg,
+          price: node.totalPricePerKg,
           owner: {
             name: node.ownedOnBehalfOfCompanyId
               ? ((owner as Company)?.name ?? '')
@@ -188,7 +187,7 @@ export function useMarketplaceListing() {
             image: contextualCrop?.image ?? '',
           },
           movementCode: node.relCheckInMovementCode,
-          currencyValue: formatCurrencyWithSymbol(node.currency, node.producePricePerKg),
+          currencyValue: formatCurrencyWithSymbol(node.currency, node.totalPricePerKg),
         } satisfies AvailableListingDatum;
       });
     },

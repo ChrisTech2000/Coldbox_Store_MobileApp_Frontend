@@ -58,8 +58,8 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
   }, [data, allCoolingUnits]);
 
   const coolingUnitsWithoutPickupMethod = useMemo(() => {
-    if (!coolingUnits) return;
-    if (!cartData?.pickupDetails.length) return coolingUnits.length;
+    if (!coolingUnits || !cartData) return;
+    if (!cartData?.pickupDetails?.length) return coolingUnits.length;
     return coolingUnits.length - cartData.pickupDetails.length;
   }, [cartData, coolingUnits]);
 
