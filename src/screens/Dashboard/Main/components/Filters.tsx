@@ -1,8 +1,9 @@
-import React, { SetStateAction, useEffect, useMemo, useState } from 'react';
+import React, { type SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { TextInput } from 'react-native-paper';
 import { StoreApi, UseBoundStore } from 'zustand';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -38,16 +39,18 @@ type FilterProps = {
   setAreCoolingUnitsLoading: (value: SetStateAction<boolean>) => void;
 };
 
-export function Filters({
-  search,
-  searchType,
-  sortingMenu,
-  useCompanyStore,
-  useCoolingUnitStore,
-  onSearch,
-  onSearchTypeChange,
-  setAreCoolingUnitsLoading,
-}: FilterProps) {
+export function Filters(props: FilterProps) {
+  const {
+    search,
+    searchType,
+    sortingMenu,
+    useCompanyStore,
+    useCoolingUnitStore,
+    onSearch,
+    onSearchTypeChange,
+    setAreCoolingUnitsLoading,
+  } = props;
+
   const { user } = useAuthStore();
   const { t } = useTranslationUtils();
 
@@ -71,6 +74,13 @@ export function Filters({
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [isCompaniesModalOpen, setIsCompaniesModalOpen] = useState<boolean>(false);
+
+  const [internalSearch, setInternalSearch] = useState<string>(search);
+  const debouncedOnSearch = useDebouncedCallback((v: string) => onSearch(v), 280);
+  const onSearchChange = useCallback((value: string) => {
+    setInternalSearch(value);
+    debouncedOnSearch(value);
+  }, []);
 
   const {
     data: coolingUnits,
@@ -161,7 +171,11 @@ export function Filters({
           <Button
             tw={cn('w-[50%]', searchType === 'details' ? 'bg-gray-700' : 'bg-gray-400')}
             mode="contained"
-            onPress={() => onSearchTypeChange?.('details')}
+            onPress={(evt) => {
+              evt.stopPropagation();
+              onSearchTypeChange?.('details');
+              onSearchChange('');
+            }}
             labelStyle="text-wrap"
           >
             {t('Dashboard.SearchFilter.crateDetailsButton')}
@@ -169,7 +183,11 @@ export function Filters({
           <Button
             tw={cn('w-[50%]', searchType === 'id' ? 'bg-gray-700' : 'bg-gray-400')}
             mode="contained"
-            onPress={() => onSearchTypeChange?.('id')}
+            onPress={(evt) => {
+              evt.stopPropagation();
+              onSearchTypeChange?.('id');
+              onSearchChange('');
+            }}
           >
             {t('Dashboard.SearchFilter.crateIdButton')}
           </Button>
@@ -191,8 +209,8 @@ export function Filters({
             searchType === 'details' || !searchType ? 'w-[90%] mr-2' : 'w-full'
           )}
           label={`${t('Dashboard.SearchFilter.searchLabel')}...`}
-          onChangeText={(value) => onSearch(value)}
-          value={search}
+          value={internalSearch}
+          onChangeText={onSearchChange}
           left={<TextInput.Icon icon="magnify" />}
         />
         {(searchType === 'details' || !searchType) && sortingMenu && sortingMenu}
