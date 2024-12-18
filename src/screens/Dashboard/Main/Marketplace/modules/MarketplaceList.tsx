@@ -47,7 +47,10 @@ export default function MarketplaceList() {
     default:
       return (
         <FlashList
-          tw="px-4 pt-2"
+          contentContainerStyle={{
+            paddingHorizontal: 14,
+            paddingTop: 4,
+          }}
           data={data}
           keyExtractor={(item) => `section-list-item-#${item.id}`}
           showsVerticalScrollIndicator={false}
@@ -73,7 +76,7 @@ export default function MarketplaceList() {
             </MarketplaceItemWrapper>
           )}
           estimatedItemSize={40}
-          estimatedListSize={{ height: DEVICE_HEIGHT, width: DEVICE_WIDTH / 2 }}
+          estimatedListSize={{ height: DEVICE_HEIGHT, width: DEVICE_WIDTH }}
         />
       );
   }
