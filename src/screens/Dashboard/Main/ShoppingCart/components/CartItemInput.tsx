@@ -46,7 +46,7 @@ export default function CartItemInput(props: {
           });
 
           setInternalValue(value);
-          if (result) setCart(result);
+          if (result) setCart(result.cart);
         }
       }, 500),
     [props.crateId, internalValue]

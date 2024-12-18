@@ -109,7 +109,6 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const allCoolingUnitsHavePickUpMethod = cartData.items?.every((item) =>
     cartData.pickupDetails.some((pickup) => pickup.coolingUnitId === item.relCoolingUnitId)
   );
-
   const orderDisabled =
     cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
     CART_MINIMUM_VALUE;
@@ -139,12 +138,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                     (acc, curr) => (acc += curr.orderedProduceWeight),
                     0
                   )}
-                  subtotal={item?.items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
-                  discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
-                  coolingFees={item?.items?.reduce(
-                    (acc, curr) => (acc += curr.coolingFeesAmount),
+                  subtotal={item?.items?.reduce(
+                    (acc, curr) => (acc += curr.produceAmount + curr.coolingFeesAmount),
                     0
                   )}
+                  discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
                   total={item?.items?.reduce(
                     (acc, curr) =>
                       (acc += curr.produceAmount + curr.coolingFeesAmount - curr.discountAmount),
@@ -256,7 +254,20 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               <Text tw="text-base">
                 {formatCurrencyWithSymbol(
                   'NGN', // TODO: get value from somewhere
-                  cartData.totalPaymentFeesAmount + cartData.totalColdtivateAmount
+                  cartData.totalColdtivateAmount
+                )}
+              </Text>
+            </View>
+          </View>
+
+          <View tw="flex-row items-center justify-between h-8">
+            <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFees')}</Text>
+            <View tw="flex-row items-center space-x-1">
+              <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
+              <Text tw="text-base">
+                {formatCurrencyWithSymbol(
+                  'NGN', // TODO: get value from somewhere
+                  cartData.totalPaymentFeesAmount
                 )}
               </Text>
             </View>

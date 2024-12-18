@@ -34,7 +34,7 @@ export default function AddToCartModal() {
   const navigation = useNavigation<NavigationProp<DashboardMainRoutes>>();
 
   const modalRef = useRef<Modalize>(null);
-  const [cartData, fetchCart] = useCartStore((store) => [store.cartData, store.fetchCart]);
+  const [cartData, setCart] = useCartStore((store) => [store.cartData, store.setCart]);
 
   const [datum, setDatum] = useState<AvailableListingDatum | undefined>(undefined);
   const [buyFullCrate, setBuyFullCrate] = useState(false);
@@ -71,13 +71,13 @@ export default function AddToCartModal() {
 
       const crateAlreadyInCart = cartData?.items?.find((i) => i.relCrateId === datum.crateId);
 
-      await MarketplaceService.addItemToCart({
+      const result = await MarketplaceService.addItemToCart({
         crateId: datum.crateId,
         orderedProduceWeight: values.quantity,
         updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
       });
-      await fetchCart();
 
+      setCart(result.cart);
       resetState();
       modalRef.current?.close();
       if (redirect) {

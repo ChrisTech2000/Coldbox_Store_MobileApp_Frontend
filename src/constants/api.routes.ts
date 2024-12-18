@@ -25,6 +25,7 @@ export enum EUserEndpoints {
   UPDATE_FARMER = 'user/v1/farmers/:farmerId/',
   UPDATE_FARMER_SURVEYS = 'user/v1/farmer-survey/:farmerId/',
   UPDATE_USER = 'user/v1/users/:userId/',
+  GET_USERS = 'user/v1/users/',
 }
 
 export enum EStorageEndpoints {

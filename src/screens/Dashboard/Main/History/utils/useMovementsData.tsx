@@ -32,42 +32,11 @@ export function useMovementsHistory(
     }
   );
 
-  const { data: users, isLoading: areUsersLoading } = useApiCall(
-    'getMovementUsers',
-    async () => {
-      const uniqueUserIds = new Set<number>();
-
-      for (const movement of movements) {
-        if (movement.checkin?.ownedByUserId && !movement.checkin?.ownedOnBehalfOfCompanyId) {
-          uniqueUserIds.add(movement.checkin.ownedByUserId);
-        }
-
-        for (const crate of movement.checkout?.crates ?? []) {
-          if (crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId) {
-            uniqueUserIds.add(crate.ownedByUserId);
-          }
-        }
-      }
-
-      return await Promise.all(
-        Array.from(uniqueUserIds).map(async (id) => await ColdtivateService.getUser(id))
-      );
-    },
-    undefined,
-    {
-      defaultData: [],
-      skip: !movements?.length,
-    }
-  );
-
   const { data: crops, isLoading: areCropsLoading } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
     {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      dedupingInterval: 60 * 60 * 1000,
       skip: !user?.id,
       defaultData: [],
     }
@@ -81,6 +50,10 @@ export function useMovementsHistory(
       defaultData: [],
     }
   );
+
+  const { data: users } = useApiCall('getUsers', ColdtivateService.getUsers, undefined, {
+    defaultData: [],
+  });
 
   const updatedMovements = useMemo(() => {
     if (!companies?.length || !crops?.length || !movements?.length) return [];
@@ -126,7 +99,7 @@ export function useMovementsHistory(
   }, [companies, crops, movements, users]);
 
   return {
-    isLoading: areCropsLoading || areMovementsLoading || areCompaniesLoading || areUsersLoading,
+    isLoading: areCropsLoading || areMovementsLoading || areCompaniesLoading,
     refetchHistoryMovements,
     movements: updatedMovements,
     isValidating: isValidating,

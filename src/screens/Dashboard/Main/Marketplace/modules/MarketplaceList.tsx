@@ -1,12 +1,12 @@
+import camelCase from 'lodash/camelCase';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import React, { useEffect, useMemo } from 'react';
-import { FlatList, SectionList, View } from 'react-native';
+import { Dimensions, SectionList, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
-import camelCase from 'lodash/camelCase';
-import isEqual from 'lodash/isEqual';
-import isEmpty from 'lodash/isEmpty';
 
 import { Text } from '#ui/components/Text';
 
@@ -20,8 +20,12 @@ import type { TranslationPaths } from 'i18n/index';
 
 import MarketplaceItemWrapper from '../components/MarketplaceItem';
 
+import { FlashList } from '@shopify/flash-list';
 import { useMarketplaceQueryParams } from '../store';
 import { type AvailableListingDatum, DEFAULT_COORDINATES, useMarketplaceListing } from '../utils';
+
+const DEVICE_WIDTH = Dimensions.get('window').width;
+const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 export default function MarketplaceList() {
   const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
@@ -42,8 +46,11 @@ export default function MarketplaceList() {
 
     default:
       return (
-        <FlatList
-          tw="px-4 pt-2"
+        <FlashList
+          contentContainerStyle={{
+            paddingHorizontal: 14,
+            paddingTop: 4,
+          }}
           data={data}
           keyExtractor={(item) => `section-list-item-#${item.id}`}
           showsVerticalScrollIndicator={false}
@@ -68,6 +75,8 @@ export default function MarketplaceList() {
               />
             </MarketplaceItemWrapper>
           )}
+          estimatedItemSize={40}
+          estimatedListSize={{ height: DEVICE_HEIGHT, width: DEVICE_WIDTH }}
         />
       );
   }

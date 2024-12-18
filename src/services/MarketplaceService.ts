@@ -71,10 +71,10 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public removeItemFromCart = async (crateId: number): Promise<GetCartResponse> => {
+  public removeItemFromCart = async (crateId: number): Promise<{ cart: GetCartResponse }> => {
     try {
       const url = subs(EMarketplaceEndpoints.REMOVE_ITEM_FROM_CART, { crateId });
-      const { data } = await this.delete<GetCartResponse>(url);
+      const { data } = await this.delete<{ cart: GetCartResponse }>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -83,9 +83,14 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public addItemToCart = async (params: AddItemToCartParams): Promise<GetCartResponse> => {
+  public addItemToCart = async (
+    params: AddItemToCartParams
+  ): Promise<{ cart: GetCartResponse }> => {
     try {
-      const { data } = await this.post<GetCartResponse>(EMarketplaceEndpoints.ADD_ITEM, params);
+      const { data } = await this.post<{ cart: GetCartResponse }>(
+        EMarketplaceEndpoints.ADD_ITEM,
+        params
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

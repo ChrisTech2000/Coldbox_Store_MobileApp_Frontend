@@ -39,10 +39,7 @@ export function CartItem({ item }: CartItemProps) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
-  const [fetchCart, coolingUnits] = useCartStore((store) => [
-    store.fetchCart,
-    store.allCoolingUnits,
-  ]);
+  const [setCart, coolingUnits] = useCartStore((store) => [store.setCart, store.allCoolingUnits]);
   const crops = useDashboardStore((store) => store.allCrops);
 
   const { data: company, isLoading: isLoadingCompany } = useApiCall(
@@ -234,7 +231,10 @@ export function CartItem({ item }: CartItemProps) {
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
             <Text variant="TextMedium" tw="text-base">
-              {formatCurrencyWithSymbol(company?.currency || 'NGN', item.producePricePerKg)}
+              {formatCurrencyWithSymbol(
+                company?.currency || 'NGN',
+                item.producePricePerKg + item.coolingFeesAmount
+              )}
               {t('Dashboard.ShoppingCart.perKg')}
             </Text>
           </View>
@@ -261,8 +261,8 @@ export function CartItem({ item }: CartItemProps) {
               evt.stopPropagation();
               try {
                 setIsProcessing(true);
-                await MarketplaceService.removeItemFromCart(item.relCrateId);
-                await fetchCart();
+                const result = await MarketplaceService.removeItemFromCart(item.relCrateId);
+                setCart(result.cart);
               } catch (exception) {
                 console.error(exception);
                 toast.show(t('actions.error', { type: 'md_danger' }));

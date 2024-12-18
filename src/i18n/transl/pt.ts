@@ -1278,11 +1278,15 @@ export default {
       discount: 'Desconto',
       fees: 'Taxas de serviço',
       marketFees: 'Taxa de mercado',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'Ver contato(s)',
       contactsForDelivery: 'Contato(s) para informações de entrega',
       gotItButton: 'Entendi!',
       pickupMethods: 'Método de retirada',
+      selectPickupMethod: 'Select a pickup method', // TODO
+      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
+      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
       pickUpToday: 'Retirada hoje',
       keepInStorageDailyRate: 'Manter em armazenamento ({{price}} / dia)',
       keepInStorageFixedRate: 'Manter em armazenamento ({{price}})',

@@ -1270,11 +1270,15 @@ export default {
       discount: 'ଛୁଟ',
       fees: 'ସେବା ଶୁଳ୍କ',
       marketFees: 'ବଜାର ଶୁଳ୍କ',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'ସଂପର୍କ(ଗୁଡିକ) ଦେଖନ୍ତୁ',
       contactsForDelivery: 'ଡେଲିଭରୀ ସୂଚନା ପାଇଁ ସଂପର୍କ(ଗୁଡିକ)',
       gotItButton: 'ବୁଝିଗଲି!',
       pickupMethods: 'ପିକ୍‌ଅପ୍ ପଧ୍ଧତି',
+      selectPickupMethod: 'Select a pickup method', // TODO
+      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
+      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
       pickUpToday: 'ଆଜି ପିକ୍‌ଅପ୍',
       keepInStorageDailyRate: 'ସ୍ଥାନ ରେଖିବା ({{price}} / ଦିନ)',
       keepInStorageFixedRate: 'ସ୍ଥାନ ରେଖିବା ({{price}})',
