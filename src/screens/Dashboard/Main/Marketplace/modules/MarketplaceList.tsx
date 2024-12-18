@@ -31,22 +31,21 @@ const ESTIMATED_LIST_SIZE = {
 } as const;
 
 export default function MarketplaceList() {
+  const { data, isLoading } = useMarketplaceListing();
   const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
-
-  const { data, isLoading, isValidating, refetch } = useMarketplaceListing();
 
   if (isLoading) return null;
 
   switch (sortBy) {
     case 'nearby-me':
-      return <_NearbyMeSection listing={data} isValidating={isValidating} refetch={refetch} />;
+      return <_NearbyMeSection listing={data} />;
 
     default:
       return (
         <View tw="px-4 pt-2">
           <FlashList
             data={data}
-            keyExtractor={(item) => `section-list-item-#${item.id}`}
+            keyExtractor={(item) => `marketplace-list-item-#${item.id}`}
             showsVerticalScrollIndicator={false}
             scrollEnabled={false}
             renderItem={({ item }) => (
@@ -117,11 +116,7 @@ type NearbyMeListItem =
       datum: AvailableListingDatum;
     };
 
-function _NearbyMeSection(props: {
-  listing: Array<AvailableListingDatum>;
-  isValidating: boolean;
-  refetch: () => void;
-}) {
+function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
   const { listing } = props;
 
   const { t } = useTranslationUtils();
@@ -209,7 +204,9 @@ function _NearbyMeSection(props: {
         extraData={unitMap}
         scrollEnabled={false}
         showsVerticalScrollIndicator={false}
-        keyExtractor={(_, itemIdx) => `marketplace-nearby-list-item-#${itemIdx}`}
+        keyExtractor={(item, itemIdx) =>
+          `marketplace-list-item-${item.kind}-${item.distance}-#${itemIdx}`
+        }
         getItemType={(item) => item.kind}
         renderItem={({ item }) => {
           switch (item.kind) {
