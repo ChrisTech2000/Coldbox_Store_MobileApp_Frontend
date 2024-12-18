@@ -1202,11 +1202,15 @@ export default {
       discount: 'Remise',
       fees: 'Frais de service',
       marketFees: 'Frais de marché',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Frais de refroidissement',
       viewContacts: 'Voir le(s) contact(s)',
       contactsForDelivery: 'Contact(s) pour les informations de livraison',
       gotItButton: 'Compris!',
       pickupMethods: 'Méthode de ramassage',
+      selectPickupMethod: 'Select a pickup method', // TODO
+      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
+      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
       pickUpToday: "Ramassage aujourd'hui",
       keepInStorageDailyRate: 'Conserver en stockage ({{price}} / jour)',
       keepInStorageFixedRate: 'Conserver en stockage ({{price}})',

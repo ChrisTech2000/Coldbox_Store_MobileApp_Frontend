@@ -1265,11 +1265,15 @@ export default {
       discount: 'ડિસ્કાઉન્ટ',
       fees: 'સેવા ફી',
       marketFees: 'માર્કેટપ્લેસ ફી',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'સંપર્ક જુઓ',
       contactsForDelivery: 'ડિલિવરી માહિતી માટેના સંપર્ક',
       gotItButton: 'સમજાયું!',
       pickupMethods: 'પિકઅપ પદ્ધતિ',
+      selectPickupMethod: 'Select a pickup method', // TODO
+      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
+      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
       pickUpToday: 'આજે પિકઅપ કરો',
       keepInStorageDailyRate: 'સંગ્રહમાં રાખો ({{price}} / દિવસ)',
       keepInStorageFixedRate: 'સંગ્રહમાં રાખો ({{price}})',

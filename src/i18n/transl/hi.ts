@@ -1271,11 +1271,15 @@ export default {
       discount: 'छूट',
       fees: 'सेवा शुल्क',
       marketFees: 'मार्केटप्लेस शुल्क',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'संपर्क देखें',
       contactsForDelivery: 'डिलीवरी जानकारी के लिए संपर्क',
       gotItButton: 'समझ गया!',
       pickupMethods: 'पिकअप विधि',
+      selectPickupMethod: 'Select a pickup method', // TODO
+      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
+      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
       pickUpToday: 'आज पिकअप',
       keepInStorageDailyRate: 'संग्रह में रखें ({{price}} / दिन)',
       keepInStorageFixedRate: 'संग्रह में रखें ({{price}})',

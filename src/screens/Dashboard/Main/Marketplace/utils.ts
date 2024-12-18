@@ -1,18 +1,20 @@
-import { useMemo } from 'react';
+import isEmpty from 'lodash/isEmpty';
+import isNil from 'lodash/isNil';
 import moize from 'moize';
 import ms from 'ms';
+import { useMemo } from 'react';
 
-import type { Company, CoolingUnit, User } from '#types/global';
-import type { GetAvailableListingParams } from '#types/api.params';
-import type { GetAllCropsResponse } from '#types/api.responses';
+import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
-import ColdtivateService from '#services/ColdtivateService';
+import type { GetAvailableListingParams } from '#types/api.params';
+import type { GetAllCropsResponse } from '#types/api.responses';
+import type { Company, CoolingUnit, User } from '#types/global';
 import { useMap } from '#ui/hooks/useMap';
 
-import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
-import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { stringToHash } from '#ui/lib/hash';
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
 export const DEFAULT_CURRENCY_CODE = 'NGN';
@@ -99,11 +101,19 @@ export function useMarketplaceListing() {
     }
   );
 
+  const { data: users, isLoading: isLoadingUsers } = useApiCall(
+    'getUsers',
+    ColdtivateService.getUsers,
+    undefined,
+    {
+      defaultData: [],
+    }
+  );
+
   const { data: datums, ...rest } = useApiCall(
     'getMarketplaceAvailableListing',
     async (params: GetAvailableListingParams) => {
       const listing = await MarketplaceService.getAvailableListing(params);
-
       // companies (owners) aggregation
       const ownerCompaniesIds = new Set<number>(
         listing.nodes.map((node) => node.ownedOnBehalfOfCompanyId).filter(Boolean) as number[]
@@ -122,11 +132,13 @@ export function useMarketplaceListing() {
         listing.nodes.map((node) => node.ownedByUserId).filter(Boolean) as number[]
       );
 
-      const ownerUsers = await Promise.all(
-        Array.from(ownerUsersIds)
-          .filter((id) => !userMap.has(id))
-          .map(async (id) => await ColdtivateService.getUser(id))
-      );
+      const ownerUsers: Array<User> = [];
+      for (const userId of ownerUsersIds) {
+        if (!users) break; // safe guard
+        const item = _findUserById(userId, users);
+        if (!item) continue; // safe guard
+        ownerUsers.push(item);
+      }
 
       const userMapCopy = new Map(userMap);
       for (const item of ownerUsers) {
@@ -149,7 +161,7 @@ export function useMarketplaceListing() {
           crateId: node.crateId,
           crateWeight: node.availableWeightInKg,
           shelfLife: node.relCrateRemainingShelfLife,
-          price: node.producePricePerKg,
+          price: node.totalPricePerKg,
           owner: {
             name: node.ownedOnBehalfOfCompanyId
               ? ((owner as Company)?.name ?? '')
@@ -175,7 +187,7 @@ export function useMarketplaceListing() {
             image: contextualCrop?.image ?? '',
           },
           movementCode: node.relCheckInMovementCode,
-          currencyValue: formatCurrencyWithSymbol(node.currency, node.producePricePerKg),
+          currencyValue: formatCurrencyWithSymbol(node.currency, node.totalPricePerKg),
         } satisfies AvailableListingDatum;
       });
     },
@@ -192,7 +204,8 @@ export function useMarketplaceListing() {
         (queryParams?.location ?? []).length === 0 ||
         isLoadingCrops ||
         isLoadingCoolingUnits ||
-        isLoadingCompanies,
+        isLoadingCompanies ||
+        isLoadingUsers,
       defaultData: [],
       errorRetryCount: 1,
     }
@@ -203,6 +216,9 @@ export function useMarketplaceListing() {
     isLoading: isLoadingCrops || isLoadingCoolingUnits || isLoadingCompanies || rest.isLoading,
     data: useMemo(() => {
       const { companiesToFilterIn, cropsToFilterIn, priceRangeFilter } = filtering;
+
+      if (isEmpty(companiesToFilterIn) && isEmpty(cropsToFilterIn) && isNil(priceRangeFilter))
+        return datums;
 
       // apply filters to the remapped listings
       return datums.filter((datum) => {
@@ -242,6 +258,15 @@ const _findCompanyById = moize(
     serializer: ([companyId, companies]) => [
       stringToHash([companyId, JSON.stringify(companies)].join(':::')),
     ],
+  }
+);
+
+const _findUserById = moize(
+  (userId: number, users: Array<User>) => users.find(({ id }) => id === userId),
+  {
+    maxAge: ms('5 seconds'),
+    isSerialized: true,
+    serializer: ([userId, users]) => [stringToHash([userId, JSON.stringify(users)].join(':::'))],
   }
 );
 

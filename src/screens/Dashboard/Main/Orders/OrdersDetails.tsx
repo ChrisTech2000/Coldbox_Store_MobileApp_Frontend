@@ -161,6 +161,13 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
     );
   }
 
+  const total =
+    data.totalColdtivateAmount +
+    data.totalCoolingFeesAmount +
+    data.totalPaymentFeesAmount +
+    data.totalProduceAmount -
+    data.totalDiscountAmount;
+
   return (
     <View tw="flex-1 bg-white">
       {props.route.params.isTabsView ? (
@@ -197,12 +204,11 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                       (acc, curr) => (acc += curr.orderedProduceWeight),
                       0
                     )}
-                    subtotal={item?.items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
-                    discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
-                    coolingFees={item?.items?.reduce(
-                      (acc, curr) => (acc += curr.coolingFeesAmount),
+                    subtotal={item?.items?.reduce(
+                      (acc, curr) => (acc += curr.produceAmount + curr.coolingFeesAmount),
                       0
                     )}
+                    discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
                     total={item?.items?.reduce(
                       (acc, curr) =>
                         (acc += curr.produceAmount + curr.coolingFeesAmount - curr.discountAmount),
@@ -303,7 +309,20 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 <Text tw="text-base">
                   {CurrencyStandardization.currencyCode({
                     code: 'NGN', // TODO: get value from somewhere
-                    value: data.totalPaymentFeesAmount + data.totalColdtivateAmount,
+                    value: data.totalColdtivateAmount,
+                  }).getValueFormated()}
+                </Text>
+              </View>
+            </View>
+
+            <View tw="flex-row items-center justify-between h-8">
+              <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFees')}</Text>
+              <View tw="flex-row items-center space-x-1">
+                <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
+                <Text tw="text-base">
+                  {CurrencyStandardization.currencyCode({
+                    code: 'NGN', // TODO: get value from somewhere
+                    value: data.totalPaymentFeesAmount,
                   }).getValueFormated()}
                 </Text>
               </View>
@@ -314,7 +333,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               <Text tw="text-lg">
                 {CurrencyStandardization.currencyCode({
                   code: 'NGN', // TODO: get value from somewhere
-                  value: data.totalAmount,
+                  value: total,
                 }).getValueFormated()}
               </Text>
             </View>

@@ -4,8 +4,8 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
 import camelCase from 'lodash/camelCase';
-import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import { FlashList } from '@shopify/flash-list';
 
 import { Text } from '#ui/components/Text';

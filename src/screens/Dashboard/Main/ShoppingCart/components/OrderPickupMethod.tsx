@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { ActivityIndicator, Dialog, Divider, Icon, Portal, RadioButton } from 'react-native-paper';
+import { ActivityIndicator, Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { Button } from '#ui/components/Button';
@@ -42,7 +42,6 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
     store.allCoolingUnits,
     store.setCart,
   ]);
-  const colors = useTailwindColors();
   const modalRef = useRef<Modalize>(null);
   const toast = InAppNotifications.useToast();
 
@@ -57,6 +56,12 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
   const coolingUnits = useMemo(() => {
     return allCoolingUnits?.filter((cu) => data?.map((el) => el.unit).includes(cu?.id));
   }, [data, allCoolingUnits]);
+
+  const coolingUnitsWithoutPickupMethod = useMemo(() => {
+    if (!coolingUnits || !cartData) return;
+    if (!cartData?.pickupDetails?.length) return coolingUnits.length;
+    return coolingUnits.length - cartData.pickupDetails.length;
+  }, [cartData, coolingUnits]);
 
   const handleValueChange = useCallback((coolingUnitId: number, value: EPickUpMethod) => {
     setSelectedItems((prev) => {
@@ -102,23 +107,31 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
 
   return (
     <React.Fragment>
-      <View tw="flex flex-row items-center">
-        <TouchableOpacity
-          onPress={(evt) => {
-            evt.stopPropagation();
-            modalRef.current?.open();
-          }}
-          disabled={cartData?.pickupDetails && cartData.pickupDetails.length > 0}
-          tw="flex flex-row items-center"
-        >
-          <Text tw="text-base text-green-primary font-bold mr-1">
-            {t('Dashboard.ShoppingCart.pickupMethods')}*
+      <Text tw="text-base text-green-primary font-bold mr-1">
+        {t('Dashboard.ShoppingCart.pickupMethods')}*
+      </Text>
+      {coolingUnitsWithoutPickupMethod ? (
+        <View>
+          <Text tw="text-red-700">
+            {coolingUnitsWithoutPickupMethod === coolingUnits?.length
+              ? t('Dashboard.ShoppingCart.selectPickupMethodInfo')
+              : t('Dashboard.ShoppingCart.pickupMethodSelectionMissing', {
+                  amount: coolingUnitsWithoutPickupMethod,
+                })}
           </Text>
-          {!cartData?.pickupDetails || cartData.pickupDetails.length === 0 ? (
-            <Icon source="plus-circle-outline" size={17} color={colors.green.primary} />
-          ) : null}
-        </TouchableOpacity>
-      </View>
+          <Button
+            tw="w-5/6 self-center my-4"
+            mode="contained"
+            uppercase
+            onPress={(evt) => {
+              evt.stopPropagation();
+              modalRef.current?.open();
+            }}
+          >
+            {t('Dashboard.ShoppingCart.selectPickupMethod')}
+          </Button>
+        </View>
+      ) : null}
 
       <Portal>
         <Modalize

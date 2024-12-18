@@ -136,6 +136,13 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                 (i) => allUnits?.find((c) => c.id === i.relCoolingUnitId)?.name ?? ''
               );
 
+              const total =
+                item.totalColdtivateAmount +
+                item.totalCoolingFeesAmount +
+                item.totalPaymentFeesAmount +
+                item.totalProduceAmount -
+                item.totalDiscountAmount;
+
               return (
                 <Touchable
                   tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2"
@@ -192,7 +199,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           'NGN', // TODO: get value from somewhere
-                          item.totalAmount
+                          total
                         )}
                       </Text>
                     </View>
