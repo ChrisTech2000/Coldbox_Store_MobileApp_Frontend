@@ -1271,6 +1271,7 @@ export default {
       discount: 'छूट',
       fees: 'सेवा शुल्क',
       marketFees: 'मार्केटप्लेस शुल्क',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'संपर्क देखें',
       contactsForDelivery: 'डिलीवरी जानकारी के लिए संपर्क',

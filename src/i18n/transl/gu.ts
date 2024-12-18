@@ -1265,6 +1265,7 @@ export default {
       discount: 'ડિસ્કાઉન્ટ',
       fees: 'સેવા ફી',
       marketFees: 'માર્કેટપ્લેસ ફી',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'સંપર્ક જુઓ',
       contactsForDelivery: 'ડિલિવરી માહિતી માટેના સંપર્ક',

@@ -1270,6 +1270,7 @@ export default {
       discount: 'ଛୁଟ',
       fees: 'ସେବା ଶୁଳ୍କ',
       marketFees: 'ବଜାର ଶୁଳ୍କ',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'ସଂପର୍କ(ଗୁଡିକ) ଦେଖନ୍ତୁ',
       contactsForDelivery: 'ଡେଲିଭରୀ ସୂଚନା ପାଇଁ ସଂପର୍କ(ଗୁଡିକ)',

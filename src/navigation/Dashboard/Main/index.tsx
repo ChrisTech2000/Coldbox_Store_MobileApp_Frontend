@@ -111,6 +111,7 @@ export default function DashboardMainBottomTabs() {
 
       return {
         ...props,
+        lazy: true,
         headerShown: showHeader,
         tabBarStyle: { display: showBottomNav ? 'flex' : 'none' },
         tabBarLabel: typeof translationPath === 'string' ? t(translationPath) : undefined,

@@ -15,7 +15,6 @@ type OrderDetailsCardProps = {
   produceWeight: number;
   subtotal: number;
   discount: number;
-  coolingFees: number;
   total: number;
   heading: string;
   totalLabel: string;
@@ -36,59 +35,47 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               {t('Dashboard.ProduceDetails.kilogram').toUpperCase()}
             </Text>
           </View>
-          <View tw="flex-row items-center justify-between h-8">
-            <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.subtotal')}</Text>
-            <Text tw="text-base">
-              {formatCurrencyWithSymbol(
-                'NGN', // TODO: get value from somewhere
-                props.subtotal
-              )}
-            </Text>
-          </View>
-          {props.discount ? (
-            <View tw="flex-row items-center justify-between h-8">
-              <View tw="flex-row items-center space-x-1">
-                <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
-                <IconButton
-                  tw="p-0 m-0"
-                  icon="information-outline"
-                  size={17}
-                  iconColor={colors.gray[600]}
-                  containerColor={colors.transparent}
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL);
-                  }}
-                />
-              </View>
 
-              <View tw="flex-row items-center space-x-1">
-                <Icon name="minus" size={14} color={paperTheme.colors.error} />
-                <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
+          {props.discount ? (
+            <View>
+              <View tw="flex-row items-center justify-between h-8">
+                <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.subtotal')}</Text>
+                <Text tw="text-base">
                   {formatCurrencyWithSymbol(
                     'NGN', // TODO: get value from somewhere
-                    props.discount ? props.discount.toFixed(2) : 0
+                    props.subtotal
                   )}
                 </Text>
               </View>
+
+              <View tw="flex-row items-center justify-between h-8">
+                <View tw="flex-row items-center space-x-1">
+                  <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.discount')}</Text>
+                  <IconButton
+                    tw="p-0 m-0"
+                    icon="information-outline"
+                    size={17}
+                    iconColor={colors.gray[600]}
+                    containerColor={colors.transparent}
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      emitter.emit(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL);
+                    }}
+                  />
+                </View>
+
+                <View tw="flex-row items-center space-x-1">
+                  <Icon name="minus" size={14} color={paperTheme.colors.error} />
+                  <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
+                    {formatCurrencyWithSymbol(
+                      'NGN', // TODO: get value from somewhere
+                      props.discount ? props.discount.toFixed(2) : 0
+                    )}
+                  </Text>
+                </View>
+              </View>
             </View>
           ) : null}
-
-          <View tw="flex-row items-center justify-between h-8">
-            <View tw="flex-row items-center space-x-1">
-              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.coolingFees')}</Text>
-            </View>
-
-            <View tw="flex-row items-center space-x-1">
-              <Icon name="plus" size={16} color={paperTheme.colors.scrim} />
-              <Text tw="text-base">
-                {formatCurrencyWithSymbol(
-                  'NGN', // TODO: get value from somewhere
-                  props.coolingFees
-                )}
-              </Text>
-            </View>
-          </View>
 
           <Divider tw="bg-gray-400 my-0.5" />
 
@@ -105,45 +92,6 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
           </View>
         </View>
       </View>
-
-      {/* <Portal> // TODO: delete if current impl is accepted
-        <Modalize
-          ref={modalRef}
-          modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-          adjustToContentHeight
-          withHandle={false}
-        >
-          <View tw="w-full items-center justify-center h-10">
-            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-          </View>
-
-          <View tw="px-4 pb-4 pt-2.5 space-y-3.5">
-            <Text tw="text-2xl">{t('Dashboard.ShoppingCart.fees')}</Text>
-
-            <View>
-              <View tw="flex-row items-center justify-between py-3.5">
-                <Text tw="text-base">{t('Dashboard.ShoppingCart.marketFees')}</Text>
-                <Text tw="text-base text-zinc-500">
-                  {CurrencyStandardization.currencyCode({
-                    code: 'NGN', // TODO: get value from somewhere
-                    value: props.coolingFees,
-                  }).getValueFormated()}
-                </Text>
-              </View>
-              <Divider tw="bg-zinc-400" />
-              <View tw="flex-row items-center justify-between py-3.5">
-                <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFee')}</Text>
-                <Text tw="text-base text-zinc-500">
-                  {CurrencyStandardization.currencyCode({
-                    code: 'NGN', // TODO: get value from somewhere
-                    value: props.paymentFees,
-                  }).getValueFormated()}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </Modalize>
-      </Portal> */}
     </React.Fragment>
   );
 }

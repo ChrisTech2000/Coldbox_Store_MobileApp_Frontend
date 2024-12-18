@@ -1174,6 +1174,7 @@ export default {
       discount: 'Discount', // TODO
       fees: 'Service fees', // TODO
       marketFees: 'Marketplace fee', // TODO
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'View contact(s)', // TODO
       contactsForDelivery: 'Contact(s) for delivery information', // TODO

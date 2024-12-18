@@ -1202,6 +1202,7 @@ export default {
       discount: 'Remise',
       fees: 'Frais de service',
       marketFees: 'Frais de marché',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Frais de refroidissement',
       viewContacts: 'Voir le(s) contact(s)',
       contactsForDelivery: 'Contact(s) pour les informations de livraison',

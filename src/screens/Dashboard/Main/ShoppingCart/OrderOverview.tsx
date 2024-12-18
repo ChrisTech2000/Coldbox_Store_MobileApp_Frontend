@@ -88,6 +88,12 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     );
   }
 
+  const total =
+    data.totalColdtivateAmount +
+    data.totalPaymentFeesAmount +
+    data.totalProduceAmount -
+    data.totalDiscountAmount;
+
   return (
     <React.Fragment>
       <ScrollView tw="px-4 bg-white" showsVerticalScrollIndicator={false}>
@@ -128,14 +134,8 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                       )}
                       subtotal={item?.items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
                       discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
-                      coolingFees={item?.items?.reduce(
-                        (acc, curr) => (acc += curr.coolingFeesAmount),
-                        0
-                      )}
                       total={item?.items?.reduce(
-                        (acc, curr) =>
-                          (acc +=
-                            curr.produceAmount + curr.coolingFeesAmount - curr.discountAmount),
+                        (acc, curr) => (acc += curr.produceAmount - curr.discountAmount),
                         0
                       )} // TODO: fix in BE
                     />
@@ -230,7 +230,20 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 <Text tw="text-base">
                   {formatCurrencyWithSymbol(
                     'NGN', // TODO: get value from somewhere
-                    data.totalPaymentFeesAmount + data.totalColdtivateAmount
+                    data.totalColdtivateAmount
+                  )}
+                </Text>
+              </View>
+            </View>
+
+            <View tw="flex-row items-center justify-between h-8">
+              <Text tw="text-base">{t('Dashboard.ShoppingCart.paymentFees')}</Text>
+              <View tw="flex-row items-center space-x-1">
+                <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
+                <Text tw="text-base">
+                  {formatCurrencyWithSymbol(
+                    'NGN', // TODO: get value from somewhere
+                    data.totalPaymentFeesAmount
                   )}
                 </Text>
               </View>
@@ -241,7 +254,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               <Text tw="text-lg">
                 {formatCurrencyWithSymbol(
                   'NGN', // TODO: get value from somewhere
-                  data.totalAmount
+                  total
                 )}
               </Text>
             </View>
@@ -257,8 +270,8 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
           tw="w-10/12"
           onPress={(evt) => {
             evt.stopPropagation();
-            fetchCart();
             navigation.navigate('MarketplaceRoot');
+            fetchCart();
           }}
         >
           {t('Dashboard.ShoppingCart.gotItButton')}

@@ -1278,6 +1278,7 @@ export default {
       discount: 'Desconto',
       fees: 'Taxas de serviço',
       marketFees: 'Taxa de mercado',
+      paymentFees: 'Payment fee', // TODO
       coolingFees: 'Cooling fee', // TODO
       viewContacts: 'Ver contato(s)',
       contactsForDelivery: 'Contato(s) para informações de entrega',

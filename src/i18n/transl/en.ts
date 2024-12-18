@@ -1266,6 +1266,7 @@ const en = {
       discount: 'Discount',
       fees: 'Service fees',
       marketFees: 'Marketplace fee',
+      paymentFees: 'Payment fee',
       coolingFees: 'Cooling fee',
       viewContacts: 'View contact(s)',
       contactsForDelivery: 'Contact(s) for delivery information',

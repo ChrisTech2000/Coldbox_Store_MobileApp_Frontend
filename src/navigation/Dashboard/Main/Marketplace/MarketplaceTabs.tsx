@@ -49,6 +49,7 @@ export default function MarketplaceTabs() {
 
     return {
       ...props,
+      lazy: true,
       tabBarLabel: routeTitle,
       tabBarIndicatorStyle: {
         backgroundColor: paperTheme.colors.secondary,
