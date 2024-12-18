@@ -84,7 +84,7 @@ export function Movement({
 
   const price = useMemo(() => {
     if (isCheckOut)
-      return `${movement.checkout?.totalPrice} ${company?.currency ?? selectedCompany?.currency}`;
+      return `${movement.checkout?.totalPrice.toFixed(2)} ${company?.currency ?? selectedCompany?.currency}`;
 
     const price = coolingUnit?.commonPricingType?.value ?? 0;
     const suffix =

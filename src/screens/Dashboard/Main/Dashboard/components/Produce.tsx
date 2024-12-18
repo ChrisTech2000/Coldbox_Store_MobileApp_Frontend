@@ -37,7 +37,12 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
   }, []);
 
   const getPricing = useCallback((produce: DashboardProduce, currency: string) => {
-    return `${produce.cratesCombinedCost}${currencies.find((c) => c.code === currency)?.symbol ?? ''}${produce.checkedInCrates[0]?.pricing[0]?.pricingType === EPricingType.PERIODICITY ? ` / ${t('Dashboard.CrateManagement.CheckOut.day')}` : ''}`;
+    const isDailyRate =
+      produce.checkedInCrates[0]?.pricing[0]?.pricingType === EPricingType.PERIODICITY;
+    const price =
+      produce.checkedInCrates.length *
+      produce.checkedInCrates[0].pricing[0][isDailyRate ? 'dailyRate' : 'fixedRate'];
+    return `${price}${currencies.find((c) => c.code === currency)?.symbol ?? ''}${isDailyRate ? ` / ${t('Dashboard.CrateManagement.CheckOut.day')}` : ''}`;
   }, []);
 
   const copyToClipboard = useCallback(
