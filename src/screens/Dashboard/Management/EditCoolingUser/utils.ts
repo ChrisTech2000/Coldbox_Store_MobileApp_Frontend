@@ -2,7 +2,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import camelCase from 'lodash/camelCase';
 
-import type { Top5Data, Farmer, FarmerData, BankAccount } from '#types/global';
+import type { Top5Data, Farmer, FarmerData, BankAccount, Company } from '#types/global';
 import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useManagementStore } from '#stores/management';
@@ -21,7 +21,7 @@ import {
 import { dateFmt, type Translator } from '#i18n/utils';
 
 import { countriesDict } from '../CompanyDetails/utils';
-import { STATIC_START_DATE } from './index';
+import type { GetAllCropsResponse } from '#types/api.responses';
 
 export const CONSTRAINT_EXCEPTIONS = {
   FARMER_NOT_FOUND: 'farmer not found',
@@ -29,6 +29,8 @@ export const CONSTRAINT_EXCEPTIONS = {
   NO_CHECK_INS: 'farmer does not have any check-ins',
   NO_SURVEYS: 'farmer dit not fill-in any surveys',
 } as const;
+
+const STATIC_START_DATE = '2022-10-01';
 
 type FarmerRevenueImpactMetrics = Top5Data & { currency: string };
 type FarmerCoolingUnitStats = Omit<FarmerData, 'firstName' | 'lastName' | 'userType'> & {
@@ -46,6 +48,12 @@ type ContextualFarmer = {
   farmer: Farmer;
   payoutDetails: BankAccount | null;
 };
+export type AggregateFarmerDataArgs = {
+  farmer: Farmer;
+  companies: Array<Company>;
+  crops: Array<GetAllCropsResponse>;
+};
+
 export class DataLoader {
   //
   // Public Methods
@@ -53,27 +61,29 @@ export class DataLoader {
   public static async loadFarmerRecord(farmerId: number): Promise<ContextualFarmer> {
     // load farmer record
     const farmer = await ColdtivateService.getFarmerById(farmerId);
-    const payoutDetails = await MarketplaceService.getFarmerBankAccounts(farmer?.user.id).catch(
-      () => null
-    );
-
     if (!farmer) throw new Error(CONSTRAINT_EXCEPTIONS.FARMER_NOT_FOUND);
 
-    // load farmer companies and cooling units
-    const farmerResults = await ColdtivateService.getFarmerByUserId(farmer.user.id);
+    const [payoutDetailsResult, farmerResultsResult] = await Promise.allSettled([
+      MarketplaceService.getFarmerBankAccounts(farmer.user.id),
+      ColdtivateService.getFarmerByUserId(farmer.user.id),
+    ]);
+
+    const payoutDetails =
+      payoutDetailsResult.status === 'fulfilled' ? payoutDetailsResult.value : null;
+    const farmerResults =
+      farmerResultsResult.status === 'fulfilled' ? farmerResultsResult.value : null;
+
     const contextualFarmer = farmerResults?.at(0);
     if (!contextualFarmer) throw new Error(CONSTRAINT_EXCEPTIONS.FARMER_NOT_FOUND);
 
-    return {
-      farmer: contextualFarmer,
-      payoutDetails,
-    };
+    return { farmer: contextualFarmer, payoutDetails };
   }
 
-  public static async aggregateFarmerData(farmer: Farmer) {
-    const { farmerInfo, farmerCompanies, contextualCompanyId } =
-      await DataLoader._loadFarmerInfoAndCompanies(farmer);
+  public static async aggregateFarmerData(args: AggregateFarmerDataArgs) {
+    const { farmer, companies, crops } = args;
 
+    const { farmerInfo, farmerCompanies, contextualCompanyId } =
+      await DataLoader._loadFarmerInfoAndCompanies(farmer, companies);
     if (!(farmerCompanies.length >= 1) || !contextualCompanyId) {
       throw new Error(CONSTRAINT_EXCEPTIONS.NO_COMPANY_ASSIGNED);
     }
@@ -107,7 +117,7 @@ export class DataLoader {
     const sliceCopy = cloneDeep(farmerSlice[1]);
     sliceCopy.unitName = tempUnitName;
 
-    const builder = await DataLoader._commoditiesLookupBuilder();
+    const builder = await DataLoader._commoditiesLookupBuilder(crops);
 
     const farmerCoolingUnitsStats: Array<FarmerCoolingUnitStats> = [];
     for (const lossKey in impactSlice.top5FoodLossEvolution) {
@@ -161,6 +171,8 @@ export class DataLoader {
       datums: {
         currencyCode: countryCurrency?.currency ?? 'NGN',
         units: coolingUnitsNames.join(', '),
+        farmerCompanies,
+        farmerCoolingUnits,
       },
     };
   }
@@ -170,21 +182,12 @@ export class DataLoader {
   //
   // - data fetching
   //
-  private static async _loadFarmerInfoAndCompanies(farmer: Farmer) {
-    const [baseStatsResult, allCompaniesResult] = await Promise.allSettled([
-      // load farmer base stats
-      FarmerImpactService.getFarmerBaseImpact(farmer.id),
-      // load all companies
-      ColdtivateService.getCompanies(),
-    ]);
+  private static async _loadFarmerInfoAndCompanies(farmer: Farmer, companies: Array<Company>) {
+    // load farmer base stats
+    const farmerInfo = await FarmerImpactService.getFarmerBaseImpact(farmer.id);
 
-    // safe values
-    const farmerInfo = baseStatsResult.status === 'fulfilled' ? baseStatsResult.value : undefined;
-    const allCompanies =
-      allCompaniesResult.status === 'fulfilled' ? allCompaniesResult.value : undefined;
-
-    const farmerCompanies =
-      allCompanies?.filter((company) => farmer.companies.includes(company.id)) ?? [];
+    const companiesSet = new Set<number>(farmer.companies);
+    const farmerCompanies = companies.filter((company) => companiesSet.has(company.id));
 
     return {
       farmerInfo,
@@ -196,8 +199,8 @@ export class DataLoader {
   private static async _loadFarmerCoolingUnits(farmer: Farmer, companyId: number) {
     const allCoolingUnits = await ColdtivateService.getCoolingUnits({ company: companyId });
 
-    const farmerCoolingUnits =
-      allCoolingUnits?.filter((unit) => farmer.coolingUnits.includes(unit.id)) ?? [];
+    const unitsSet = new Set<number>(farmer.coolingUnits);
+    const farmerCoolingUnits = (allCoolingUnits ?? []).filter((unit) => unitsSet.has(unit.id));
 
     return { farmerCoolingUnits, contextualCoolingUnitId: farmerCoolingUnits.at(0)?.id };
   }
@@ -229,17 +232,17 @@ export class DataLoader {
   //
   // - data transformation
   //
-  private static async _commoditiesLookupBuilder() {
-    const allCrops = await ColdtivateService.getAllCrops();
-
-    const _cropsMap: CropsLookupMap = new Map();
-    for (const crop of allCrops) {
-      _cropsMap.set(camelCase(crop.name), {
-        cropId: crop.id,
-        name: crop.name,
-        imageURL: crop.image,
-      });
-    }
+  private static async _commoditiesLookupBuilder(crops: Array<GetAllCropsResponse>) {
+    const _cropsMap: CropsLookupMap = new Map(
+      crops.map((crop) => [
+        camelCase(crop.name),
+        {
+          cropId: crop.id,
+          name: crop.name,
+          imageURL: crop.image,
+        },
+      ])
+    );
 
     return {
       sort(set: Record<string, number>): Array<[string, number]> {
