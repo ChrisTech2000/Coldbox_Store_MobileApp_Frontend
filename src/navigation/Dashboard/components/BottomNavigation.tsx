@@ -257,7 +257,7 @@ const TabItemComponent = ({
   </View>
 );
 
-const TabItem = moize(TabItemComponent, { maxSize: 3 });
+const TabItem = moize.react(TabItemComponent, { maxSize: 3 });
 
 export default function BottomNavigationWrapper(props: BottomTabBarProps) {
   return <BottomNavigation {...props} />;

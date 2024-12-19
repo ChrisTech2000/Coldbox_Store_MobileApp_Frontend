@@ -102,7 +102,7 @@ export const useRightDrawerStore = create<{
   toggle: (value) => set((state) => ({ isOpen: value ?? !state.isOpen })),
 }));
 
-const MemoizedNotificationsDrawerContent = moize(NotificationsDrawerContent);
+const MemoizedNotificationsDrawerContent = moize.react(NotificationsDrawerContent);
 
 export default function DashboardNavigator() {
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
