@@ -72,11 +72,9 @@ export function OperatorActions({
   const { data, isLoading } = useApiCall(
     'getOperatorFarmers',
     ColdtivateService.getOperatorFarmers,
+    { operator: user?.id as number },
     {
-      operator: user?.id as number,
-    },
-    {
-      skip: !isModalOpen || !user?.id,
+      skip: !isModalOpen || !user?.id || !coolingUnit,
       defaultData: [],
     }
   );
@@ -152,12 +150,14 @@ export function OperatorActions({
     setIsCrateManagementOpen(false)
   );
 
-  const combinedUsers = [
-    ...filteredUsers,
-    ...(!isLoading && (!search || noPhoneUser?.user.firstName.includes(search))
-      ? [noPhoneUser]
-      : []),
-  ];
+  const combinedUsers = useMemo(() => {
+    const shouldShowNoPhoneUser =
+      !isLoading && (!search || noPhoneUser?.user.firstName.includes(search));
+
+    const noPhoneUserArray = shouldShowNoPhoneUser ? [noPhoneUser] : [];
+
+    return [...filteredUsers, ...noPhoneUserArray];
+  }, [filteredUsers, isLoading, search, noPhoneUser]);
 
   return (
     <View
@@ -168,10 +168,14 @@ export function OperatorActions({
         <TouchableOpacity
           tw={cn(
             'w-12 h-12 items-center justify-center rounded-xl',
-            isCrateManagementOpen ? 'bg-red-600' : 'bg-green-primary'
+            !coolingUnit ? 'bg-zinc-400' : isCrateManagementOpen ? 'bg-red-600' : 'bg-green-primary'
           )}
-          onPress={() => setIsCrateManagementOpen(!isCrateManagementOpen)}
+          onPress={(evt) => {
+            evt.stopPropagation();
+            setIsCrateManagementOpen((v) => !v);
+          }}
           onLayout={onLayout}
+          disabled={!coolingUnit}
         >
           {isCrateManagementOpen ? (
             <Icon source="close" size={25} color="white" />
