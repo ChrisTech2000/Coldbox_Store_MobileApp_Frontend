@@ -231,5 +231,5 @@ export default withSafeArea(
     onError: (error) => console.error('Error caught:', error),
   }),
   ['bottom'],
-  true,
+  true
 );

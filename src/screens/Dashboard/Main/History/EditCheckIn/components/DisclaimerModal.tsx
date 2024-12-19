@@ -17,9 +17,7 @@ export function DisclaimerModal({ isOpen, dismiss }: DisclaimerModalProps) {
     <Portal>
       <Dialog visible={isOpen} onDismiss={dismiss} style={{ backgroundColor: 'white' }}>
         <Dialog.Content>
-          <Text tw="text-base">
-          {t('Dashboard.History.editCheckIn.disclaimerMessage')}
-          </Text>
+          <Text tw="text-base">{t('Dashboard.History.editCheckIn.disclaimerMessage')}</Text>
         </Dialog.Content>
         <Dialog.Actions>
           <Button uppercase labelStyle="text-base" onPress={dismiss}>

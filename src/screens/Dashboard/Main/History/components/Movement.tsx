@@ -127,9 +127,9 @@ export function Movement({
       movement.checkout?.crates
         ?.flatMap((crate) => crate.crop)
         .filter((crop) => crop && !movement.checkout?.hasMarketSurvey?.includes(crop.id)) as Array<{
-          id: number;
-          name: string;
-        }>,
+        id: number;
+        name: string;
+      }>,
       movement.checkout?.id as number,
       selectedCompany?.currency ?? company?.currency
     );
@@ -144,17 +144,17 @@ export function Movement({
       },
       ...(!isCheckIn
         ? [
-          {
-            label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-            action: async () => {
-              await ColdtivateService.sendCheckOutSmsReport(movement.id);
-              setIsOptionsModalOpen(false);
-              toast.show(t('actions.done'), {
-                type: 'md_success',
-              });
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
+              action: async () => {
+                await ColdtivateService.sendCheckOutSmsReport(movement.id);
+                setIsOptionsModalOpen(false);
+                toast.show(t('actions.done'), {
+                  type: 'md_success',
+                });
+              },
             },
-          },
-        ]
+          ]
         : []),
       {
         label: t('Dashboard.History.optionsMenu.common.seeMovement'),
@@ -165,38 +165,53 @@ export function Movement({
       },
       ...(isCheckIn && user?.role === ERoles.OPERATOR
         ? [
-          {
-            label: t('Dashboard.History.optionsMenu.checkIn.edit'),
-            action: editCheckIn,
-            disabled:
-              !isWithinLast24Hours(movement.date),
-          },
-        ]
+            {
+              label: t('Dashboard.History.optionsMenu.checkIn.edit'),
+              action: editCheckIn,
+              disabled: !isWithinLast24Hours(movement.date),
+            },
+          ]
         : []),
 
       ...(isCheckOut
         ? [
-          {
-            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-            action: seeDetailsModal,
-          },
-          {
-            label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
-            action: fillMarketSurvey,
-            disabled: !movement.checkout?.marketSurveyDelay,
-          },
-        ]
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+              action: seeDetailsModal,
+            },
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
+              action: fillMarketSurvey,
+              disabled: !movement.checkout?.marketSurveyDelay,
+            },
+          ]
         : []),
       ...(!isCheckIn && !isCheckOut
         ? [
-          {
-            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-            action: seeMarketplaceDetailsModal,
-          },
-        ]
+            {
+              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+              action: seeMarketplaceDetailsModal,
+            },
+          ]
         : []),
     ];
-  }, [isCheckIn, isCheckOut, movement, user, company, selectedCompany, price, t, modalRef, seePDFModal, seeDetailsModal, fillMarketSurvey, editCheckIn, seeMarketplaceDetailsModal, toast]);
+  }, [
+    isCheckIn,
+    isCheckOut,
+    movement,
+    user,
+    company,
+    selectedCompany,
+    price,
+    t,
+    modalRef,
+    seePDFModal,
+    seeDetailsModal,
+    fillMarketSurvey,
+    editCheckIn,
+    seeMarketplaceDetailsModal,
+    toast,
+  ]);
 
   return (
     <View tw="w-full">
@@ -230,13 +245,13 @@ export function Movement({
                   ? movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)
                   : movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
                     ? movement.checkout?.crates.reduce(
-                      (acc, curr) => (acc += curr.affectedWeight ?? 0),
-                      0
-                    )
+                        (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                        0
+                      )
                     : movement.checkout?.crates.reduce(
-                      (acc, curr) => (acc += curr.affectedWeight ?? 0),
-                      0
-                    )}{' '}
+                        (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                        0
+                      )}{' '}
                 {t('Dashboard.ProduceDetails.kilogram')}
               </Text>
             </View>
@@ -267,7 +282,10 @@ export function Movement({
                     onPress={item.action}
                     disabled={item.disabled}
                   >
-                    <Text variant="TextMedium" tw={cn('text-base', item.disabled && 'text-gray-400')}>
+                    <Text
+                      variant="TextMedium"
+                      tw={cn('text-base', item.disabled && 'text-gray-400')}
+                    >
                       {item.label}
                     </Text>
                   </TouchableOpacity>
@@ -288,15 +306,13 @@ export function Movement({
             currency={company?.currency ?? ''}
           />
         ) : null}
-        {
-          isDetailsModalOpen ? (
-            <DetailsModal
-              isOpen={isDetailsModalOpen}
-              movement={movement}
-              dismiss={() => setIsDetailsModalOpen(false)}
-            />
-          ) : null
-        }
+        {isDetailsModalOpen ? (
+          <DetailsModal
+            isOpen={isDetailsModalOpen}
+            movement={movement}
+            dismiss={() => setIsDetailsModalOpen(false)}
+          />
+        ) : null}
 
         {isMarketplaceDetailsModalOpen ? (
           <MarketplaceDetailsModal
@@ -326,7 +342,7 @@ export function Movement({
       </Portal>
     </View>
   );
-};
+}
 
 const _IconByMovementType = moize.react({
   maxSize: 1,
@@ -343,4 +359,3 @@ const _IconByMovementType = moize.react({
       return null;
   }
 });
-

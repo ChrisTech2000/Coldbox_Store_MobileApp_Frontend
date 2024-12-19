@@ -109,10 +109,12 @@ export default function DashboardNavigator() {
 
   const { data } = useNotifications();
 
-  const { isOpen, toggle } = useRightDrawerStore(useShallow((store) => ({ 
-    isOpen: store.isOpen, 
-    toggle: store.toggle 
-  })));
+  const { isOpen, toggle } = useRightDrawerStore(
+    useShallow((store) => ({
+      isOpen: store.isOpen,
+      toggle: store.toggle,
+    }))
+  );
 
   const { isWalkthroughOn } = useWalkthrough();
   const [toggleTutorial, isTutorialActive] = useTutorialStore((store) => [

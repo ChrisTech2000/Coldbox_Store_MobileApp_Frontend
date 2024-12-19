@@ -102,7 +102,7 @@ function BottomNavBar(
     () => filterBottomNavItems(state, includeHistoryTab),
     [state, includeHistoryTab]
   );
-  
+
   const { onLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.MORE_STEP,
     OverlayComponent: MoreNavigationOverlay,

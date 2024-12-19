@@ -31,11 +31,11 @@ export function DTInfo({ produce }: DTInfoProps) {
         tw={cn(
           'w-full bg-green-300 rounded-lg h-3',
           produce.minimumRemainingShelfLife <= 7 &&
-          produce.minimumRemainingShelfLife > 2 &&
-          'bg-yellow-400',
+            produce.minimumRemainingShelfLife > 2 &&
+            'bg-yellow-400',
           produce.minimumRemainingShelfLife < 2 && 'bg-red-500',
           (!produce.minimumRemainingShelfLife || produce.minimumRemainingShelfLife === -1) &&
-          'bg-gray-300'
+            'bg-gray-300'
         )}
       />
 

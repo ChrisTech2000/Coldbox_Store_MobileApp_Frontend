@@ -75,7 +75,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const filteredAndSortedMovements = useMemo(() => {
     if (!movements) return [];
     const lowerCaseSearchString = search.toLowerCase();
-  
+
     return movements
       .slice()
       .sort((a, b) => sortMovements(a, b, sorting))
@@ -84,10 +84,12 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         const matchesFarmer = movement.checkin?.ownerName
           ?.toLowerCase()
           .includes(lowerCaseSearchString);
-  
+
         const crops = sortMovementCrops(movement);
-        const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(lowerCaseSearchString));
-  
+        const matchesCrop = crops.some((crop) =>
+          crop.toLowerCase().includes(lowerCaseSearchString)
+        );
+
         return matchesCode || matchesFarmer || matchesCrop;
       });
   }, [movements, sorting, search]);
@@ -113,7 +115,6 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         useCoolingUnitStore={useCoolingUnitStore}
         setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
       />
-
 
       {areCoolingUnitsLoading || isHistoryDataLoading ? (
         <View tw="h-full flex-1 mt-20 items-center justify-center">
