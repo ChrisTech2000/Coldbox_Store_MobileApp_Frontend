@@ -131,7 +131,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   }
 
   return (
-    <View tw="flex-1 items-center justify-center space-y-4 bg-white">
+    <View tw="h-full items-center justify-between space-y-4 bg-white">
       <View tw="my-2">
         <Text variant="TextMedium" tw="text-gray-400 text-base">
           {t('Dashboard.History.editCheckIn.coolingUserLabel')}
@@ -152,8 +152,8 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
       </View>
 
       <Carousel
-        width={deviceWidth}
-        height={deviceHeight * 0.7}
+        width={deviceWidth * 0.95}
+        height={deviceHeight}
         enabled={matchingProduces.length > 1}
         data={matchingProduces}
         onProgressChange={(_, absoluteProgress) => (progress.value = absoluteProgress)}
@@ -215,7 +215,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
       <Button
         mode="contained"
-        tw="w-[80%]"
+        tw="w-[80%] mb-2"
         onPress={handleSubmit(onSubmit)}
         disabled={formState.isSubmitting}
       >
@@ -229,5 +229,7 @@ export default withSafeArea(
   withErrorBoundary(EditCheckIn, {
     fallback: <GenericError />,
     onError: (error) => console.error('Error caught:', error),
-  })
+  }),
+  ['bottom'],
+  true
 );

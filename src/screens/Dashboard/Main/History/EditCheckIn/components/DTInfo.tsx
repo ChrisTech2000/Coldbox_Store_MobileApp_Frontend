@@ -52,18 +52,18 @@ export function DTInfo({ produce }: DTInfoProps) {
         >{`${produce.minimumRemainingShelfLife} ${t('Dashboard.ProduceDetails.days')}`}</Text>
       </View>
 
-      <View tw="flex flex-row items-center mt-4">
+      <View tw="flex flex-row items-center justify-center mt-4">
         <Text variant="TextMedium" tw="text-gray-400 mr-1" numberOfLines={2}>
           {t('Dashboard.History.editCheckIn.disclaimer')}
         </Text>
         <TouchableOpacity onPress={() => setIsDisclaimerModalOpen(true)}>
           <Icon source="information" size={15} />
         </TouchableOpacity>
-        <DisclaimerModal
-          isOpen={isDisclaimerModalOpen}
-          dismiss={() => setIsDisclaimerModalOpen(false)}
-        />
       </View>
+      <DisclaimerModal
+        isOpen={isDisclaimerModalOpen}
+        dismiss={() => setIsDisclaimerModalOpen(false)}
+      />
     </View>
   );
 }

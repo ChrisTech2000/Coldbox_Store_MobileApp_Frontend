@@ -1,4 +1,7 @@
 import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import moize from 'moize';
 import React, { useEffect } from 'react';
 import { Drawer } from 'react-native-drawer-layout';
 import { useWalkthrough } from 'react-native-interactive-walkthrough';
@@ -27,8 +30,6 @@ import KnowledgeHubStack from './KnowledgeHub';
 import { useNotificationOpenSurveyListener, useNotifications } from './lib/notifications';
 import DashboardMainBottomTabs, { DashboardMainRoutes } from './Main';
 import ManagementStack, { type ManagementRoutes } from './Management';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type DashboardRoutes = {
   Main:
@@ -101,13 +102,19 @@ export const useRightDrawerStore = create<{
   toggle: (value) => set((state) => ({ isOpen: value ?? !state.isOpen })),
 }));
 
+const MemoizedNotificationsDrawerContent = moize.react(NotificationsDrawerContent);
+
 export default function DashboardNavigator() {
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const { data } = useNotifications();
 
-  const isOpen = useRightDrawerStore((store) => store.isOpen);
-  const toggle = useRightDrawerStore((store) => store.toggle);
+  const { isOpen, toggle } = useRightDrawerStore(
+    useShallow((store) => ({
+      isOpen: store.isOpen,
+      toggle: store.toggle,
+    }))
+  );
 
   const { isWalkthroughOn } = useWalkthrough();
   const [toggleTutorial, isTutorialActive] = useTutorialStore((store) => [
@@ -133,7 +140,7 @@ export default function DashboardNavigator() {
         swipeEnabled={false}
         renderDrawerContent={() => (
           <React.Fragment>
-            <NotificationsDrawerContent notifications={data.notifications} />
+            <MemoizedNotificationsDrawerContent notifications={data.notifications} />
           </React.Fragment>
         )}
       >
