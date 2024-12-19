@@ -83,7 +83,7 @@ import type { WithRequired } from '#types/miscellaneous';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
-import { serialize, subs } from './utils';
+import { serialize, subs, query } from './utils';
 import { format } from 'date-fns';
 
 class ColdtivateService extends HttpClient {
@@ -94,15 +94,13 @@ class ColdtivateService extends HttpClient {
   ///////// DASHBOARD
   public getCompanies = async (params?: {
     isMarketplace: boolean;
-  }): Promise<Company[] | undefined> => {
+  }): Promise<Array<Company> | undefined> => {
     try {
-      let url = ECompanyEndpoints.GET_COMPANIES.toString();
-
-      if (params?.isMarketplace) {
-        url += `?marketplace_filter_scoped=true`;
-      }
-
-      const { data } = await this.get<Company[]>(url, {});
+      const { data } = await this.get<Array<Company>>(
+        query(ECompanyEndpoints.GET_COMPANIES, {
+          marketplaceFilterScoped: params?.isMarketplace,
+        })
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

@@ -1,17 +1,20 @@
 import { useIsFocused } from '@react-navigation/native';
-import isArray from 'lodash/isArray';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  FlatList,
-  GestureResponderEvent,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
+  Dimensions,
+  type GestureResponderEvent,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   RefreshControl,
   ScrollView as RNScrollView,
   View,
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FlashList } from '@shopify/flash-list';
+import isArray from 'lodash/isArray';
+import moize from 'moize';
+import ms from 'ms';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
@@ -30,12 +33,23 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
+import { stringToHash } from '#ui/lib/hash';
+import type { CartItem, CoolingUnit } from '#types/global';
+import type { GetAllCropsResponse } from '#types/api.responses';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CropsBottomSheet from './components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
 
 type Status = 'payment-pending' | 'cancelled' | 'paid' | 'payment-expired';
+
+const DEVICE_WIDTH = Dimensions.get('window').width;
+const DEVICE_HEIGHT = Dimensions.get('window').height;
+
+const ESTIMATED_LIST_SIZE = {
+  height: DEVICE_HEIGHT,
+  width: DEVICE_WIDTH - 32, // px-4 -> 16px * 2 (RNScrollView L&R)
+} as const;
 
 const COLORS: Record<Status, string> = {
   paid: 'border-green-600 text-green-600',
@@ -61,20 +75,19 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getOrders',
     MarketplaceService.getOrders,
-    {},
-    {
-      defaultData: undefined,
-    }
+    undefined,
+    { defaultData: undefined }
   );
 
   const sortedData = useMemo(() => {
     if (!data || !isArray(data)) return [];
-    return [...data].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return sorting === ESortingOptions.MOST_RECENT ? dateB - dateA : dateA - dateB;
-    });
+    const multiplier = sorting === ESortingOptions.MOST_RECENT ? -1 : 1;
+    return data
+      .map((item) => ({ ...item, timestamp: new Date(item.createdAt).getTime() }))
+      .sort((a, b) => multiplier * (a.timestamp - b.timestamp));
   }, [data, sorting]);
+
+  const cropsAndUnitsData = useMemo(() => ({ crops, allUnits }), [crops, allUnits]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;
@@ -104,7 +117,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   return (
     <View tw="flex-1">
       <RNScrollView
-        tw="px-4 pt-3 bg-white"
+        tw="px-4 p-4 bg-white"
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         ref={scrollRef}
@@ -113,7 +126,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
         }
       >
         <View tw="pb-32">
-          <View tw="flex-row items-center justify-between">
+          <View tw="flex-row items-center justify-between pb-3">
             <Text variant="TextMedium" tw="text-lg">
               {t('navigation.bottomTabs.History')}
             </Text>
@@ -123,17 +136,21 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
               setIsModalVisible={setIsSortingModalOpen}
             />
           </View>
-          <FlatList
+          <FlashList
+            estimatedItemSize={30}
+            estimatedListSize={ESTIMATED_LIST_SIZE}
             data={sortedData}
+            extraData={cropsAndUnitsData}
             keyExtractor={(item) => `orders-history-list-item-#${item.id}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => {
-              const _crops = item.items.map(
-                (i) => crops.find((c) => c.id === i.relCropId)?.name ?? ''
-              );
-              const _coolingUnits = item.items.map(
-                (i) => allUnits?.find((c) => c.id === i.relCoolingUnitId)?.name ?? ''
+            renderItem={({ item, extraData }) => {
+              const _extraData = extraData as typeof cropsAndUnitsData;
+
+              const { contextualCropNames, contextualUnitNames } = _getRowDatums(
+                item.items,
+                _extraData.crops,
+                _extraData?.allUnits
               );
 
               const total =
@@ -179,7 +196,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                         />
                       </Touchable>
                       <Text tw="text-base text-zinc-500 w-40" numberOfLines={1}>
-                        {[...new Set(_crops)].join(', ')}
+                        {contextualCropNames.join(', ')}
                       </Text>
                     </View>
 
@@ -188,7 +205,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                         {t('Dashboard.MyOrders.coolingUnit')}
                       </Text>
                       <Text tw="text-base text-zinc-500 w-40" numberOfLines={2}>
-                        {[...new Set(_coolingUnits)].join(', ')}
+                        {contextualUnitNames.join(', ')}
                       </Text>
                     </View>
 
@@ -247,6 +264,33 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
     </View>
   );
 }
+
+function _getRowDatums(
+  cartData: Array<CartItem>,
+  crops: Array<GetAllCropsResponse> = [],
+  units: Array<CoolingUnit> = []
+) {
+  const { cropNames, unitNames } = cartData.reduce(
+    (acc, elm) => {
+      acc.cropNames.add(_getNameById(elm.relCropId, crops));
+      acc.unitNames.add(_getNameById(elm.relCoolingUnitId, units));
+      return acc;
+    },
+    { cropNames: new Set<string>(), unitNames: new Set<string>() }
+  );
+
+  return { contextualCropNames: Array.from(cropNames), contextualUnitNames: Array.from(unitNames) };
+}
+
+const _getNameById = moize(
+  (id: number, list: Array<{ id: number; name: string }>) =>
+    list.find((item) => item.id === id)?.name ?? '',
+  {
+    maxAge: ms('6 seconds'),
+    isSerialized: true,
+    serializer: (args) => [stringToHash(JSON.stringify(args))],
+  }
+);
 
 function _PortalsWrapper() {
   const isFocused = useIsFocused();

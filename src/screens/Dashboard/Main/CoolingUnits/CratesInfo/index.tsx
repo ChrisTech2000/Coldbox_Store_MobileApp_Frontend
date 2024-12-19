@@ -1,10 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Dimensions, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, DataTable } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
 import { GenericError } from '#ui/components/GenericError';
-import SelectWithStore from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
@@ -15,13 +14,11 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { type CoolingUnit, ERoles } from '#types/global';
+import { ERoles } from '#types/global';
 
-import { useCoolingUnitStore } from '../components/GenericFilter';
+import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 
 function CoolingUnitsCratesInfo() {
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-
   const user = useAuthStore(useShallow((store) => store.user));
   const company = useManagementStore(useShallow((store) => store.company));
 
@@ -68,18 +65,9 @@ function CoolingUnitsCratesInfo() {
 
   return (
     <View tw="pt-5">
-      <SelectWithStore<CoolingUnit>
-        datums={data ?? []}
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-        itemName={(item) => item?.name}
-        useSelectStore={useCoolingUnitStore}
-        label={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.label', {
-          name: selectedCoolingUnit?.name ?? '',
-        })}
-        modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
-        divider
-      />
+      <GenericFilter>
+        <GenericFilter.CoolingUnits />
+      </GenericFilter>
 
       {!totalCrates || totalCrates === 0 ? (
         <View tw="mx-2 mt-4">
