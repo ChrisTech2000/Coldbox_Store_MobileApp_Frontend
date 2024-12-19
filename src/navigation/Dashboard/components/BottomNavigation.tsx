@@ -1,6 +1,6 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   FlatList,
   type GestureResponderEvent,
@@ -29,6 +29,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
 import type { DashboardMainRoutePaths } from '../Main';
+import moize from 'moize';
 
 type NavigationState = TabNavigationState<ParamListBase>;
 type NavigationRoutes = Array<DashboardMainRoutePaths>;
@@ -97,6 +98,11 @@ function BottomNavBar(
 
   const includeHistoryTab = !guard('VIEW', 'MarketplaceListing');
 
+  const navItems = useMemo(
+    () => filterBottomNavItems(state, includeHistoryTab),
+    [state, includeHistoryTab]
+  );
+  
   const { onLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.MORE_STEP,
     OverlayComponent: MoreNavigationOverlay,
@@ -109,7 +115,7 @@ function BottomNavBar(
           tw="flex-row items-center justify-evenly px-2 bg-white pt-0.5"
           style={{ paddingBottom: bottom, height: BOTTOM_NAV_HEIGHT }}
         >
-          {filterBottomNavItems(state, includeHistoryTab).map((route, idx) => (
+          {navItems.map((route, idx) => (
             <TabItem
               key={route.key}
               title={t(ROUTE_TITLE_META[route.name as DashboardMainRoutePaths])}
@@ -158,6 +164,11 @@ function BottomSheet({
 
   const excludeHistoryTab = !guard('VIEW', 'MarketplaceListing');
 
+  const sheetItems = useMemo(
+    () => filterBottomSheetItems(state, excludeHistoryTab),
+    [state, excludeHistoryTab]
+  );
+
   return (
     <Modalize
       ref={modalRef}
@@ -175,7 +186,7 @@ function BottomSheet({
 
       <View tw="px-4 pb-4">
         <FlatList
-          data={filterBottomSheetItems(state, excludeHistoryTab)}
+          data={sheetItems}
           keyExtractor={(item) => item.key}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
@@ -212,7 +223,7 @@ function BottomSheet({
   );
 }
 
-const TabItem = ({
+const TabItemComponent = ({
   title,
   isFocused,
   onPress,
@@ -245,6 +256,8 @@ const TabItem = ({
     </Text>
   </View>
 );
+
+const TabItem = moize(TabItemComponent, { maxSize: 3 });
 
 export default function BottomNavigationWrapper(props: BottomTabBarProps) {
   return <BottomNavigation {...props} />;

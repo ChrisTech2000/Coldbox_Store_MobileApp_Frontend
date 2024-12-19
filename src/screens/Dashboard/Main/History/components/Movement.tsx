@@ -1,3 +1,4 @@
+import moize from 'moize';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
@@ -37,7 +38,6 @@ type Movement = GetMovementsHistoryResponse[number];
 
 type MovementProps = {
   movement: Movement;
-  movementsWithCheckout: Array<string>;
   coolingUnit: CoolingUnit | null;
   selectedCompany: Company | ManagementCompany | null;
   navigateToCheckIn?: (movement: Movement, coolingUnitId?: number) => void;
@@ -52,7 +52,6 @@ type MovementProps = {
 export function Movement({
   movement,
   coolingUnit,
-  movementsWithCheckout,
   selectedCompany,
   navigateToCheckIn,
   navigateToMarketSurvey,
@@ -77,7 +76,7 @@ export function Movement({
       crop: _crops[0],
       amount: _crops.length - 1,
     });
-  }, [movement]);
+  }, [movement, t]);
 
   const isCheckIn = movement.initiatedFor === EInitiatedFor.CHECK_IN;
   const isCheckOut = movement.initiatedFor === EInitiatedFor.CHECK_OUT;
@@ -100,7 +99,7 @@ export function Movement({
     const _price =
       movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0) * price;
     return `${isNaN(_price) ? 0 : _price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
-  }, [isCheckOut, movement, selectedCompany]);
+  }, [isCheckOut, movement, selectedCompany, coolingUnit, company, t]);
 
   const seePDFModal = useCallback(() => {
     setIsPDFModalOpen(true);
@@ -120,7 +119,7 @@ export function Movement({
   const editCheckIn = useCallback(() => {
     navigateToCheckIn?.(movement, coolingUnit?.id);
     setIsOptionsModalOpen(false);
-  }, [navigateToCheckIn]);
+  }, [navigateToCheckIn, movement, coolingUnit]);
 
   const fillMarketSurvey = useCallback(() => {
     navigateToMarketSurvey?.(
@@ -128,14 +127,14 @@ export function Movement({
       movement.checkout?.crates
         ?.flatMap((crate) => crate.crop)
         .filter((crop) => crop && !movement.checkout?.hasMarketSurvey?.includes(crop.id)) as Array<{
-        id: number;
-        name: string;
-      }>,
+          id: number;
+          name: string;
+        }>,
       movement.checkout?.id as number,
       selectedCompany?.currency ?? company?.currency
     );
     setIsOptionsModalOpen(false);
-  }, [selectedCompany, company, navigateToMarketSurvey]);
+  }, [selectedCompany, company, navigateToMarketSurvey, movement]);
 
   const optionsMenu = useMemo(() => {
     return [
@@ -145,17 +144,17 @@ export function Movement({
       },
       ...(!isCheckIn
         ? [
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
-              action: async () => {
-                await ColdtivateService.sendCheckOutSmsReport(movement.id);
-                setIsOptionsModalOpen(false);
-                toast.show(t('actions.done'), {
-                  type: 'md_success',
-                });
-              },
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
+            action: async () => {
+              await ColdtivateService.sendCheckOutSmsReport(movement.id);
+              setIsOptionsModalOpen(false);
+              toast.show(t('actions.done'), {
+                type: 'md_success',
+              });
             },
-          ]
+          },
+        ]
         : []),
       {
         label: t('Dashboard.History.optionsMenu.common.seeMovement'),
@@ -166,39 +165,38 @@ export function Movement({
       },
       ...(isCheckIn && user?.role === ERoles.OPERATOR
         ? [
-            {
-              label: t('Dashboard.History.optionsMenu.checkIn.edit'),
-              action: editCheckIn,
-              disabled:
-                !isWithinLast24Hours(movement.date) ||
-                movementsWithCheckout.includes(movement.code),
-            },
-          ]
+          {
+            label: t('Dashboard.History.optionsMenu.checkIn.edit'),
+            action: editCheckIn,
+            disabled:
+              !isWithinLast24Hours(movement.date),
+          },
+        ]
         : []),
 
       ...(isCheckOut
         ? [
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-              action: seeDetailsModal,
-            },
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
-              action: fillMarketSurvey,
-              disabled: !movement.checkout?.marketSurveyDelay,
-            },
-          ]
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+            action: seeDetailsModal,
+          },
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.marketSurvey'),
+            action: fillMarketSurvey,
+            disabled: !movement.checkout?.marketSurveyDelay,
+          },
+        ]
         : []),
       ...(!isCheckIn && !isCheckOut
         ? [
-            {
-              label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
-              action: seeMarketplaceDetailsModal,
-            },
-          ]
+          {
+            label: t('Dashboard.History.optionsMenu.checkOut.seeDetails'),
+            action: seeMarketplaceDetailsModal,
+          },
+        ]
         : []),
     ];
-  }, [isCheckIn, isCheckOut, movement, user, company, selectedCompany, price, t, modalRef]);
+  }, [isCheckIn, isCheckOut, movement, user, company, selectedCompany, price, t, modalRef, seePDFModal, seeDetailsModal, fillMarketSurvey, editCheckIn, seeMarketplaceDetailsModal, toast]);
 
   return (
     <View tw="w-full">
@@ -232,13 +230,13 @@ export function Movement({
                   ? movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)
                   : movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
                     ? movement.checkout?.crates.reduce(
-                        (acc, curr) => (acc += curr.affectedWeight ?? 0),
-                        0
-                      )
+                      (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                      0
+                    )
                     : movement.checkout?.crates.reduce(
-                        (acc, curr) => (acc += curr.affectedWeight ?? 0),
-                        0
-                      )}{' '}
+                      (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                      0
+                    )}{' '}
                 {t('Dashboard.ProduceDetails.kilogram')}
               </Text>
             </View>
@@ -251,50 +249,63 @@ export function Movement({
       </View>
       <Divider tw="w-full bg-gray-400" />
       <Portal>
-        <Dialog
-          visible={isOptionsModalOpen}
-          onDismiss={() => setIsOptionsModalOpen(false)}
-          style={{ backgroundColor: 'white' }}
-        >
-          <Dialog.Content tw="px-0">
-            <FlatList
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              data={optionsMenu}
-              keyExtractor={(item, index) => `opt-${item.label}-#${index}`}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  tw="w-full py-2.5 px-6"
-                  onPress={item.action}
-                  disabled={item.disabled}
-                >
-                  <Text variant="TextMedium" tw={cn('text-base', item.disabled && 'text-gray-400')}>
-                    {item.label}
-                  </Text>
-                </TouchableOpacity>
-              )}
-              ItemSeparatorComponent={Divider}
+        {isOptionsModalOpen ? (
+          <Dialog
+            visible={isOptionsModalOpen}
+            onDismiss={() => setIsOptionsModalOpen(false)}
+            style={{ backgroundColor: 'white' }}
+          >
+            <Dialog.Content tw="px-0">
+              <FlatList
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                data={optionsMenu}
+                keyExtractor={(item, index) => `opt-${item.label}-#${index}`}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    tw="w-full py-2.5 px-6"
+                    onPress={item.action}
+                    disabled={item.disabled}
+                  >
+                    <Text variant="TextMedium" tw={cn('text-base', item.disabled && 'text-gray-400')}>
+                      {item.label}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                ItemSeparatorComponent={Divider}
+              />
+            </Dialog.Content>
+          </Dialog>
+        ) : null}
+
+        {isPDFModalOpen ? (
+          <PDFModal
+            isOpen={isPDFModalOpen}
+            dismiss={() => setIsPDFModalOpen(false)}
+            movement={movement}
+            companyName={selectedCompany?.name ?? company?.name ?? ''}
+            coolingUnit={coolingUnit}
+            currency={company?.currency ?? ''}
+          />
+        ) : null}
+        {
+          isDetailsModalOpen ? (
+            <DetailsModal
+              isOpen={isDetailsModalOpen}
+              movement={movement}
+              dismiss={() => setIsDetailsModalOpen(false)}
             />
-          </Dialog.Content>
-        </Dialog>
-        <PDFModal
-          isOpen={isPDFModalOpen}
-          dismiss={() => setIsPDFModalOpen(false)}
-          movement={movement}
-          companyName={selectedCompany?.name ?? company?.name ?? ''}
-          coolingUnit={coolingUnit}
-          currency={company?.currency ?? ''}
-        />
-        <DetailsModal
-          isOpen={isDetailsModalOpen}
-          movement={movement}
-          dismiss={() => setIsDetailsModalOpen(false)}
-        />
-        <MarketplaceDetailsModal
-          isOpen={isMarketplaceDetailsModalOpen}
-          movement={movement}
-          dismiss={() => setIsMarketplaceDetailsModalOpen(false)}
-        />
+          ) : null
+        }
+
+        {isMarketplaceDetailsModalOpen ? (
+          <MarketplaceDetailsModal
+            isOpen={isMarketplaceDetailsModalOpen}
+            movement={movement}
+            dismiss={() => setIsMarketplaceDetailsModalOpen(false)}
+          />
+        ) : null}
+
         <Modalize
           ref={modalRef}
           modalStyle={{
@@ -315,9 +326,12 @@ export function Movement({
       </Portal>
     </View>
   );
-}
+};
 
-function _IconByMovementType(props: { movementType: EInitiatedFor }) {
+const _IconByMovementType = moize.react({
+  maxSize: 1,
+  isDeepEqual: true,
+})((props: { movementType: EInitiatedFor }) => {
   switch (props.movementType) {
     case EInitiatedFor.CHECK_IN:
       return <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />;
@@ -328,4 +342,5 @@ function _IconByMovementType(props: { movementType: EInitiatedFor }) {
     default:
       return null;
   }
-}
+});
+

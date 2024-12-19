@@ -1,7 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
-import isEmpty from 'lodash/isEmpty';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, Platform, RefreshControl, ScrollView, View } from 'react-native';
+import { Dimensions, Platform, RefreshControl, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -16,7 +15,6 @@ import { Company, CoolingUnit, User } from '#types/global';
 import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -30,6 +28,7 @@ import { Movement } from './components/Movement';
 import { createSortingStore, ESortingOptions, SortingMenu } from './components/SortMenu';
 import { sortMovementCrops, sortMovements } from './utils/sortMovements';
 import { useMovementsHistory } from './utils/useMovementsData';
+import { useShallow } from 'zustand/react/shallow';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
@@ -46,10 +45,12 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const user = useAuthStore((store) => store.user);
   const [isTutorialActive] = useTutorialStore((store) => [store.isTutorialActive]);
   const sorting = useSortingStore((store) => store.sorting);
-  const { farmerId, addRefreshDataFn } = useDashboardStore((store) => ({
-    farmerId: store.farmerId,
-    addRefreshDataFn: store.addRefreshDataFn,
-  }));
+  const { farmerId, addRefreshDataFn } = useDashboardStore(
+    useShallow((store) => ({
+      farmerId: store.farmerId,
+      addRefreshDataFn: store.addRefreshDataFn,
+    }))
+  );
 
   const coolingUnit = useCoolingUnitStore((store) => store.selectedItem);
   const company = useCompanyStore((store) => store.selectedItem);
@@ -71,33 +72,25 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
     isValidating,
   } = useMovementsHistory(farmerId, user as User, coolingUnit);
 
-  const sortedMovements = useMemo(() => {
-    return (movements ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
-  }, [movements, sorting]);
-
-  const filteredMovements = useMemo(() => {
-    if (!search) return sortedMovements;
-
+  const filteredAndSortedMovements = useMemo(() => {
+    if (!movements) return [];
     const lowerCaseSearchString = search.toLowerCase();
-
-    return sortedMovements.filter((movement) => {
-      const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-      const matchesFarmer = movement.checkin?.ownerName
-        ?.toLowerCase()
-        .includes(lowerCaseSearchString);
-
-      const crops = sortMovementCrops(movement);
-      const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(lowerCaseSearchString));
-
-      return matchesCode || matchesFarmer || matchesCrop;
-    });
-  }, [sortedMovements, search]);
-
-  const movementsWithCheckout = useMemo(() => {
+  
     return movements
-      .map((movement) => (isEmpty(movement.checkout) ? movement.code : ''))
-      .filter(Boolean);
-  }, [movements]);
+      .slice()
+      .sort((a, b) => sortMovements(a, b, sorting))
+      .filter((movement) => {
+        const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
+        const matchesFarmer = movement.checkin?.ownerName
+          ?.toLowerCase()
+          .includes(lowerCaseSearchString);
+  
+        const crops = sortMovementCrops(movement);
+        const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(lowerCaseSearchString));
+  
+        return matchesCode || matchesFarmer || matchesCrop;
+      });
+  }, [movements, sorting, search]);
 
   useEffect(() => {
     addRefreshDataFn(refetchHistoryMovements);
@@ -121,76 +114,76 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         setAreCoolingUnitsLoading={(loading) => setAreCoolingUnitsLoading(loading)}
       />
 
-      <ScrollView
-        tw={cn('mx-4 mt-2', Platform.OS === 'ios' ? 'mb-28' : 'mb-20')}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={isValidating}
-            onRefresh={async () => await refetchHistoryMovements()}
-          />
-        }
-      >
-        {areCoolingUnitsLoading || isHistoryDataLoading ? (
-          <View tw="h-full flex-1 mt-24 items-center justify-center">
-            <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-          </View>
-        ) : movements.length > 0 || isTutorialActive ? (
-          <FlashList
-            showsVerticalScrollIndicator={false}
-            data={
-              (isTutorialActive
-                ? MOCKED_HISTORY_DATA
-                : filteredMovements) as GetMovementsHistoryResponse
-            }
-            renderItem={({ item: movement, index }) => (
-              <Movement
-                key={`${movement.id}-${index}`}
-                movement={movement}
-                coolingUnit={coolingUnit}
-                selectedCompany={company}
-                navigateToCheckIn={(movement, id) =>
-                  props.navigation.navigate('EditCheckIn', {
-                    movement,
-                    coolingUnitId: id,
-                  })
-                }
-                navigateToMarketSurvey={() => {
-                  props.navigation.navigate('MarketSurveyStack', {
-                    screen: 'MarketSurveyBase',
-                    params: {
-                      farmer: movement.checkout?.crates?.[0]?.ownerName,
-                      crops: movement.checkout?.crates
-                        ?.flatMap((crate) => crate.crop)
-                        .filter(
-                          (crop) =>
-                            crop &&
-                            !(movement.checkout?.hasMarketSurvey as number[])?.includes(
-                              crop.id as number
-                            )
-                        ) as Array<{ id: number; name: string }>,
-                      checkoutId: movement.checkout?.id as number,
-                      companyCurrency: company?.currency,
-                    },
-                  });
-                }}
-                movementsWithCheckout={movementsWithCheckout}
-              />
-            )}
-            estimatedItemSize={40}
-            estimatedListSize={{
-              height: deviceHeight,
-              width: deviceWidth,
-            }}
-          />
-        ) : (
-          <View tw="flex-1 items-center text-center mx-4 mt-4">
-            <Text variant="TextBold" tw="text-base text-green-primary text-center">
-              {t('Dashboard.History.empty')}
-            </Text>
-          </View>
-        )}
-      </ScrollView>
+
+      {areCoolingUnitsLoading || isHistoryDataLoading ? (
+        <View tw="h-full flex-1 mt-20 items-center justify-center">
+          <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+        </View>
+      ) : movements.length > 0 || isTutorialActive ? (
+        <FlashList
+          contentContainerStyle={{
+            paddingBottom: Platform.OS === 'ios' ? 120 : 100,
+            paddingTop: 10,
+            paddingHorizontal: 15,
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isValidating}
+              onRefresh={async () => await refetchHistoryMovements()}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          data={
+            (isTutorialActive
+              ? MOCKED_HISTORY_DATA
+              : filteredAndSortedMovements) as GetMovementsHistoryResponse
+          }
+          renderItem={({ item: movement, index }) => (
+            <Movement
+              key={`${movement.id}-${index}`}
+              movement={movement}
+              coolingUnit={coolingUnit}
+              selectedCompany={company}
+              navigateToCheckIn={(movement, id) =>
+                props.navigation.navigate('EditCheckIn', {
+                  movement,
+                  coolingUnitId: id,
+                })
+              }
+              navigateToMarketSurvey={() => {
+                props.navigation.navigate('MarketSurveyStack', {
+                  screen: 'MarketSurveyBase',
+                  params: {
+                    farmer: movement.checkout?.crates?.[0]?.ownerName,
+                    crops: movement.checkout?.crates
+                      ?.flatMap((crate) => crate.crop)
+                      .filter(
+                        (crop) =>
+                          crop &&
+                          !(movement.checkout?.hasMarketSurvey as number[])?.includes(
+                            crop.id as number
+                          )
+                      ) as Array<{ id: number; name: string }>,
+                    checkoutId: movement.checkout?.id as number,
+                    companyCurrency: company?.currency,
+                  },
+                });
+              }}
+            />
+          )}
+          estimatedItemSize={40}
+          estimatedListSize={{
+            height: deviceHeight,
+            width: deviceWidth,
+          }}
+        />
+      ) : (
+        <View tw="flex-1 items-center text-center mx-4 mt-4">
+          <Text variant="TextBold" tw="text-base text-green-primary text-center">
+            {t('Dashboard.History.empty')}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
