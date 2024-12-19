@@ -2,16 +2,19 @@ import { useIsFocused } from '@react-navigation/native';
 import isArray from 'lodash/isArray';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  FlatList,
-  GestureResponderEvent,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
+  Dimensions,
+  type GestureResponderEvent,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   RefreshControl,
   ScrollView as RNScrollView,
   View,
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FlashList } from '@shopify/flash-list';
+import moize from 'moize';
+import ms from 'ms';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
@@ -27,10 +30,19 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
+import { stringToHash } from '#ui/lib/hash';
 
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+
+const DEVICE_WIDTH = Dimensions.get('window').width;
+const DEVICE_HEIGHT = Dimensions.get('window').height;
+
+const ESTIMATED_LIST_SIZE = {
+  height: DEVICE_HEIGHT,
+  width: DEVICE_WIDTH - 32, // p-4 -> 16px * 2 (RNScrollView L&R)
+} as const;
 
 function SalesRoot() {
   const { t } = useTranslationUtils();
@@ -48,20 +60,19 @@ function SalesRoot() {
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getSales',
     MarketplaceService.getSales,
-    {},
-    {
-      defaultData: undefined,
-    }
+    undefined,
+    { defaultData: undefined }
   );
 
   const sortedData = useMemo(() => {
     if (!data || !isArray(data)) return [];
-    return [...data].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return sorting === ESortingOptions.MOST_RECENT ? dateB - dateA : dateA - dateB;
-    });
+    const multiplier = sorting === ESortingOptions.MOST_RECENT ? -1 : 1;
+    return data
+      .map((item) => ({ ...item, timestamp: new Date(item.createdAt).getTime() }))
+      .sort((a, b) => multiplier * (a.timestamp - b.timestamp));
   }, [data, sorting]);
+
+  const cropsExtraData = useMemo(() => ({ crops }), [crops]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;
@@ -91,7 +102,7 @@ function SalesRoot() {
   return (
     <View tw="flex-1">
       <RNScrollView
-        tw="px-4 pt-3 bg-white"
+        tw="p-4 bg-white"
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         ref={scrollRef}
@@ -100,7 +111,7 @@ function SalesRoot() {
         }
       >
         <View tw="pb-32">
-          <View tw="flex-row items-center justify-between">
+          <View tw="flex-row items-center justify-between pb-3">
             <Text variant="TextMedium" tw="text-lg">
               {t('navigation.bottomTabs.History')}
             </Text>
@@ -110,14 +121,21 @@ function SalesRoot() {
               setIsModalVisible={setIsSortingModalOpen}
             />
           </View>
-          <FlatList
+          <FlashList
+            estimatedItemSize={20}
+            estimatedListSize={ESTIMATED_LIST_SIZE}
             data={sortedData}
+            extraData={cropsExtraData}
             keyExtractor={(item) => `sales-history-list-item-#${item.id}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => {
-              const _crops = item.items.map(
-                (i) => crops.find((c) => c.id === i.relCropId)?.name ?? ''
+            renderItem={({ item, extraData }) => {
+              const _extraData = extraData as typeof cropsExtraData;
+
+              const contextualCropNames = Array.from(
+                new Set<string>(
+                  item.items.map((elm) => _getNameById(elm.relCropId, _extraData.crops))
+                )
               );
 
               return (
@@ -147,7 +165,7 @@ function SalesRoot() {
                         />
                       </Touchable>
                       <Text tw="text-base text-zinc-500 w-40" numberOfLines={1}>
-                        {[...new Set(_crops)].join(', ')}
+                        {contextualCropNames.join(', ')}
                       </Text>
                     </View>
 
@@ -208,6 +226,16 @@ function SalesRoot() {
     </View>
   );
 }
+
+const _getNameById = moize(
+  (id: number, list: Array<{ id: number; name: string }>) =>
+    list.find((item) => item.id === id)?.name ?? '',
+  {
+    maxAge: ms('6 seconds'),
+    isSerialized: true,
+    serializer: (args) => [stringToHash(JSON.stringify(args))],
+  }
+);
 
 function _PortalsWrapper() {
   const isFocused = useIsFocused();

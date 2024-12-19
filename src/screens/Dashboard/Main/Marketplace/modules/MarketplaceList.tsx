@@ -197,22 +197,26 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
     );
   }, [listing, isLocationDenied]);
 
+  const listExtraData = useMemo(() => ({ unitMap }), [unitMap]);
+
   return (
     <View tw="px-4 pt-2">
       <FlashList
         data={groupedData}
-        extraData={unitMap}
+        extraData={listExtraData}
         scrollEnabled={false}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, itemIdx) =>
           `marketplace-list-item-${item.kind}-${item.distance}-#${itemIdx}`
         }
         getItemType={(item) => item.kind}
-        renderItem={({ item }) => {
+        renderItem={({ item, extraData }) => {
+          const _extraData = extraData as typeof listExtraData;
+
           switch (item.kind) {
             case 'sectionHeader': {
               const { sectionKey, distance } = item;
-              const datum = unitMap.get(sectionKey);
+              const datum = _extraData.unitMap.get(sectionKey);
               if (typeof datum === 'undefined') return null;
               const translationPath = DISTANCE_BUCKETS_TRANSLATIONS?.[distance];
               return (
