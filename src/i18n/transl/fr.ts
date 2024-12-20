@@ -44,11 +44,12 @@ export default {
       EditLocation: "Modifier l'emplacement",
       CoolingUnits: 'Unités de refroidissement',
       DisabledCoolingUnitsDescription: 'Ajoutez au moins un emplacement',
-      CoolingUsers: 'Utilisateurs de refroidissement',
-      AddCoolingUser: 'Ajouter un utilisateur de refroidissement',
-      EditCoolingUser: "Modifier l'utilisateur de refroidissement",
-      AddCoolingUnit: 'Ajouter une unité de refroidissement',
-      EditCoolingUnit: "Modifier l'unité de refroidissement",
+      CoolingUsers: 'Utilisateurs de chambre froide',
+      AddCoolingUser:
+        'Dans le menu, vous pouvez accéder à « Gestion » et appuyer dessus pour ajouter ou modifier des utilisateurs de refroidissement',
+      EditCoolingUser: "Modifier l'Utilisateur de chambre froide",
+      AddCoolingUnit: 'Ajouter une unité de réfrigération',
+      EditCoolingUnit: "Modifier l'unité de réfrigération",
       Operators: 'Opérateurs',
       AddOperator: 'Ajouter un opérateur',
       EditOperator: "Modifier l'opérateur",
@@ -121,7 +122,7 @@ export default {
     history: {
       EditCheckIn: '{{code}}',
       MarketSurvey: 'Enquête de marché pour {{farmer}}',
-      BaseSurvey: 'Enquête sur les utilisateurs de refroidissement',
+      BaseSurvey: 'Enquête sur les Utilisateurs de chambre froide',
     },
     analytics: { methodology: 'Méthodologie' },
   },
@@ -189,7 +190,7 @@ export default {
             "Employé présent physiquement dans la chambre froide et gérant ses opérations de check-in et check-out. Les opérateurs peuvent être invités par des employés enregistrés à rejoindre l'entreprise. Les opérateurs peuvent se connecter avec un numéro de téléphone.",
         },
         coolingUser: {
-          label: 'Utilisateur de refroidissement',
+          label: 'Utilisateur de chambre froide',
           description:
             "L'utilisateur de chambre froide et le consommateur. Les agriculteurs, commerçants et détaillants qui ont accès à un smartphone peuvent se connecter ici. Les utilisateurs de chambres froides sans smartphone peuvent accéder aux informations de l'application en visitant une chambre froide et en interagissant avec l'opérateur. Les consommateurs peuvent se connecter ici pour finaliser leurs achats.",
         },
@@ -277,7 +278,7 @@ export default {
         },
       },
       SignUpCoolingUser: {
-        header: "S'inscrire comme utilisateur de refroidissement ou consommateur",
+        header: "S'inscrire comme Utilisateur de chambre froide ou consommateur",
         languageFieldName: 'langue',
       },
       toasts: {
@@ -329,14 +330,14 @@ export default {
       confirm: 'Confirmer la nouvelle température',
       continueWithoutUpdate: 'Continuer sans mise à jour',
       sensorHint:
-        "Impossible d'ajouter la température car un capteur est connecté à l'unité de refroidissement.",
+        "Impossible d'ajouter la température car un capteur est connecté à l'unité de réfrigération.",
       latestTemperature: 'La dernière température a été enregistrée le {{date}}.',
     },
     emptyGeneral: "Pour l'instant, aucune donnée disponible.",
     emptyCoolingUser:
       'Les articles en stockage apparaîtront dans le tableau de bord lorsque vous effectuerez au moins un enregistrement dans une pièce.',
     noCompanyAvailable: 'Aucune entreprise disponible',
-    noCoolingUnitAvailable: 'Aucune unité de refroidissement disponible',
+    noCoolingUnitAvailable: 'Aucune unité de réfrigération disponible',
     noLocationsAvailable:
       'Bienvenue sur Coldtivate. Commencez en ajoutant des lieux à votre application dans le panneau de gestion.',
     MarketPrice: {
@@ -367,15 +368,15 @@ export default {
       },
     },
     CrateManagement: {
-      userModalTitle: 'Sélectionnez un utilisateur de refroidissement',
+      userModalTitle: 'Sélectionnez un Utilisateur de chambre froide',
       addUserLink:
-        "Utilisateur de refroidissement non dans la liste? Ajoutez l'utilisateur depuis Gestion ➜ Utilisateurs de refroidissement ➜ +",
-      coolingUserLabel: 'Utilisateur de refroidissement',
-      selectCoolingUnitLabel: 'Sélectionnez une unité de refroidissement',
-      coolingUnitLabel: 'Unité de refroidissement',
-      noUnitWarning: 'Veuillez sélectionner une unité de refroidissement',
+        "Utilisateur de chambre froide non dans la liste? Ajoutez l'utilisateur depuis Gestion ➜ Utilisateurs de chambre froide ➜ +",
+      coolingUserLabel: 'Utilisateur de chambre froide',
+      selectCoolingUnitLabel: 'Sélectionnez une unité de réfrigération',
+      coolingUnitLabel: 'unité de réfrigération',
+      noUnitWarning: 'Veuillez sélectionner une unité de réfrigération',
       noCratesWarning:
-        "L'utilisateur de refroidissement sélectionné n'a aucun crate dans cette unité de refroidissement",
+        "L'Utilisateur de chambre froide sélectionné n'a aucun crate dans cette unité de réfrigération",
       operationError: 'Une erreur est survenue. Veuillez réessayer plus tard.',
       FarmerSurvey: {
         warningMessage: "Veuillez remplir l'enquête de base pour {{crop}} !",
@@ -532,10 +533,10 @@ export default {
     },
     CoolingUnitsPlanner: {
       SelectCoolingUnit: {
-        label: 'Unité de refroidissement : {{name}}',
-        header: 'Sélectionnez une unité de refroidissement',
+        label: 'unité de réfrigération : {{name}}',
+        header: 'Sélectionnez une unité de réfrigération',
       },
-      occupancy: "Occupation actuelle de l'unité de refroidissement",
+      occupancy: "Occupation actuelle de l'unité de réfrigération",
       week: 'Cette semaine',
       today: "Aujourd'hui",
     },
@@ -560,16 +561,18 @@ export default {
     CoolingUnitsMaps: {
       singleCommodity: 'Salle à produit unique : {{crop}}',
       multiCommodity: 'Salle multi-produits',
-      publicMaker: 'Unité de refroidissement publique',
-      usedMarker: 'Unité de refroidissement que vous avez déjà utilisée',
+      publicMaker: 'unité de réfrigération publique',
+      usedMarker: 'unité de réfrigération que vous avez déjà utilisée',
     },
     Company: {
       SelectCompany: { label: 'Entreprise : {{name}}', header: 'Sélectionner une entreprise' },
     },
     ProduceDetails: {
+      userWithoutPhone:
+        'Les caisses appartenant à ce compte ne peuvent pas être mises en vente car aucun compte bancaire ne peut être lié à un utilisateur sans téléphone.',
       seeDetails: 'Voir les détails',
       kilogram: 'kg',
-      coolingUser: 'Utilisateur de refroidissement',
+      coolingUser: 'Utilisateur de chambre froide',
       contact: 'Contact',
       contactCopied: 'Copié !',
       crates: 'caisses',
@@ -598,14 +601,12 @@ export default {
       farmerNoBankAccountWarning:
         'Vous n’avez pas de compte bancaire défini pour recevoir des paiements sur vos ventes. Veuillez ajouter vos coordonnées bancaires',
       operatorNoCompanyBankAccount:
-        'Cette unité de refroidissement ne prend pas en charge les listes de places de marché. Veuillez contacter le directeur de l’entreprise pour gérer cette affaire.',
+        'Cette unité de réfrigération ne prend pas en charge les listes de places de marché. Veuillez contacter le directeur de l’entreprise pour gérer cette affaire.',
       employeeNoBankAccount:
-        'Cette société n’a pas de compte bancaire de paiement configuré qui permet de recevoir des fonds pour les produits et les frais de refroidissement vendus sur le marché. Configurez-le pour permettre aux caisses de vos unités de refroidissement d’être répertoriées sur le marché.',
+        'Cette société n’a pas de compte bancaire de paiement configuré qui permet de recevoir des fonds pour les produits et les frais de conservation vendus sur le marché. Configurez-le pour permettre aux caisses de vos unités de refroidissement d’être répertoriées sur le marché.',
       addBankAccountButton: 'Ajouter des coordonnées bancaires',
       addBankAccountHeader:
         'Vous configurez les coordonnées bancaires pour le compte de {{name}}. Veuillez insérer ces données avec soin, car vous ne pourrez pas les modifier par la suite.',
-      userWithoutPhone:
-        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
     },
     SearchFilter: {
       detailsMessage:
@@ -622,7 +623,7 @@ export default {
         timeToPick: 'Temps de ramassage',
         checkInDate: 'Date de check-in (du premier au dernier)',
         checkInDateReverse: 'Date de check-in (du dernier au premier)',
-        coolingUser: "Nom de l'utilisateur de refroidissement",
+        coolingUser: "Nom de l'Utilisateur de chambre froide",
       },
     },
     Management: {
@@ -638,7 +639,7 @@ export default {
         emptyMessage: "Aucun contact n'a encore été ajouté",
         deleteContactMessage: 'Êtes-vous sûr de vouloir supprimer ce contact ?',
         noAvailableContacts:
-          "Il n'y a aucun contact disponible pour cette unité de refroidissement en particulier.",
+          "Il n'y a aucun contact disponible pour cette unité de réfrigération en particulier.",
         contactedAddedSuccessfully: 'Contact ajouté avec succès.',
       },
       Location: {
@@ -687,7 +688,7 @@ export default {
           "Après avoir ajouté l'utilisateur, il recevra un SMS avec un lien d'invitation, où il pourra activer son compte.",
         text: { gender: 'Genre', ma: 'Homme', fe: 'Femme', ot: 'Autre' },
         fields: {
-          selectCoolingUnit: 'Sélectionner une unité de refroidissement',
+          selectCoolingUnit: 'Sélectionner une unité de réfrigération',
           coolingUnits: 'Unité(s) de refroidissement',
         },
         actions: { invite: 'Inviter', save: 'Enregistrer les modifications' },
@@ -701,7 +702,7 @@ export default {
         phoneFormat: 'Assurez-vous que le numéro de téléphone saisi a un code pays.',
       },
       EditOperator: { toasts: { success: 'Opérateur modifié avec succès' } },
-      AddCoolingUser: { toasts: { add: 'Ajouter un utilisateur de refroidissement' } },
+      AddCoolingUser: { toasts: { add: 'Ajouter un Utilisateur de chambre froide' } },
       CompanyDetails: {
         labels: {
           name: 'Nom',
@@ -740,13 +741,13 @@ export default {
           selectMethod: "Comment souhaitez-vous ajouter l'utilisateur?",
           userCode: 'Entrez un code utilisateur',
           userCodeDesc:
-            "Vous pouvez trouver le code dans les détails de votre compte si vous êtes enregistré en tant qu'utilisateur de refroidissement.",
+            "Vous pouvez trouver le code dans les détails de votre compte si vous êtes enregistré en tant qu'Utilisateur de chambre froide.",
           addByCode: 'Ajouter un utilisateur par code',
           addWithDetails: 'Ajouter un utilisateur avec des détails',
         },
         toasts: {
-          notFound: "Aucun utilisateur de refroidissement avec ce code utilisateur n'a été trouvé.",
-          taken: "Cet utilisateur est déjà dans votre liste d'utilisateurs de refroidissement.",
+          notFound: "Aucun Utilisateur de chambre froide avec ce code utilisateur n'a été trouvé.",
+          taken: "Cet utilisateur est déjà dans votre liste d'Utilisateurs de chambre froide.",
         },
       },
       EditCoolingUsers: {
@@ -755,8 +756,8 @@ export default {
           warning:
             "Ce compte ne peut pas être supprimé car l'utilisateur a des check-ins actifs dans les unités de refroidissement {{names}}. Veuillez informer l'utilisateur de venir dans la pièce pour récupérer ces articles et compléter les check-outs avant de supprimer le compte !",
           confirmation:
-            "Êtes-vous sûr de vouloir supprimer cet utilisateur de votre liste d'utilisateurs de refroidissement? Cette opération supprimera cet utilisateur de refroidissement et ne pourra pas être annulée !",
-          edit: 'Utilisateur de refroidissement modifié avec succès',
+            "Êtes-vous sûr de vouloir supprimer cet utilisateur de votre liste d'Utilisateurs de chambre froide? Cette opération supprimera cet Utilisateur de chambre froide et ne pourra pas être annulée !",
+          edit: 'Utilisateur de chambre froide modifié avec succès',
           noCoolingUnits: "Vous n'avez pas encore d'unités de refroidissement",
           noSurveys: 'Aucun sondage n’a encore été réalisé.',
           updateSuccess: 'Mise à jour réussie',
@@ -764,7 +765,7 @@ export default {
         pdf: {
           dateRange: 'Plage de dates',
           selectedUnits: 'Unités de refroidissement sélectionnées',
-          coolingUnit: 'Unité de refroidissement',
+          coolingUnit: 'unité de réfrigération',
         },
         actions: {
           downloadFarmers: 'Télécharger les données du tableau de bord des agriculteurs',
@@ -773,19 +774,19 @@ export default {
       },
       CoolingUnit: {
         emptyState:
-          'Aucune unité de refroidissement ajoutée à cet emplacement. Cliquez sur le signe + pour en ajouter une.',
+          'Aucune unité de réfrigération ajoutée à cet emplacement. Cliquez sur le signe + pour en ajouter une.',
       },
       AddCoolingUnit: {
-        heading: "Propriétés de l'unité de refroidissement",
+        heading: "Propriétés de l'unité de réfrigération",
         fields: {
-          name: "ID de l'unité de refroidissement",
+          name: "ID de l'unité de réfrigération",
           location: 'Emplacement',
           coolingUnitType: "Comment décririez-vous l'unité?",
           metricUnit: 'Unité',
           price: 'Prix',
           capacityInMetricTons: 'Volume total vide',
           foodCapacityInMetricTons: 'Volume maximal de nourriture',
-          roomSizeHeading: "Taille de l'unité de refroidissement",
+          roomSizeHeading: "Taille de l'unité de réfrigération",
           length: 'Longueur',
           width: 'Largeur',
           height: 'Hauteur',
@@ -797,14 +798,14 @@ export default {
           editableCheckins: 'Rendre les enregistrements modifiables par les opérateurs',
           sensorAvailable: 'Capteur disponible',
           public:
-            'Souhaitez-vous rendre votre unité de refroidissement visible pour les utilisateurs potentiels (emplacement, type de salle, capacité et informations sur les prix)?',
+            'Souhaitez-vous rendre votre unité de réfrigération visible pour les utilisateurs potentiels (emplacement, type de salle, capacité et informations sur les prix)?',
           crops: 'Commodités',
           selectCrops: 'Sélectionner les commodités',
           refrigerantType: 'Type de réfrigérant utilisé',
           amountRefrigerant: 'Quantité de réfrigérant',
-          powerConsumptionInMt: "Consommation électrique de l'unité de refroidissement par MT",
+          powerConsumptionInMt: "Consommation électrique de l'unité de réfrigération par MT",
           dailyRoomWattage: 'Consommation en watt du local par jour',
-          powerSource: "Comment l'unité de refroidissement est-elle alimentée?",
+          powerSource: "Comment l'unité de réfrigération est-elle alimentée?",
           powerSourceDieselConsumptionKwh: 'Consommation de diesel du générateur par kWh',
           pvPanelType: 'Type de panneaux PV',
           pvPanelCount: 'Nombre de panneaux PV',
@@ -824,7 +825,7 @@ export default {
           batteryPeakEnergyStorage: "Stockage d'énergie au niveau de pointe d'une batterie",
           batteryType: 'Type de batteries',
           selectSensorType: 'Sélectionner un type de capteur',
-          addTempSensor: 'Ajouter un capteur de température à votre unité de refroidissement',
+          addTempSensor: 'Ajouter un capteur de température à votre unité de réfrigération',
           sensorDesc: {
             default:
               "Si vous ne l'avez pas en main, demandez ces informations à votre fournisseur de capteurs.",
@@ -853,7 +854,7 @@ export default {
         pricing: { label: 'Type de prix', PERIODICITY: 'Par jour', FIXED: 'Fixe', day: 'jour' },
         metricUnit: { label: 'Unité', KILOGRAMS: 'kg', CRATES: 'Caisse' },
         toasts: {
-          addSuccess: 'Unité de refroidissement ajoutée avec succès',
+          addSuccess: 'unité de réfrigération ajoutée avec succès',
           integrationError:
             'Impossible de se connecter au capteur. Validez vos données ou contactez votre fournisseur de capteurs.',
           integrationSuccess:
@@ -863,14 +864,14 @@ export default {
       EditCoolingUnit: {
         modal: {
           askDelete:
-            'Cette opération supprimera cette unité de refroidissement ainsi que son historique. Voulez-vous continuer?',
+            'Cette opération supprimera cette unité de réfrigération ainsi que son historique. Voulez-vous continuer?',
         },
         buttons: { viewExisting: "Voir l'existant", editPricing: 'Modifier les prix' },
         toasts: {
-          editSuccess: 'Unité de refroidissement modifiée avec succès',
+          editSuccess: 'unité de réfrigération modifiée avec succès',
           cantDelete:
-            'Cette unité de refroidissement ne peut pas être supprimée car elle a des enregistrements actifs.',
-          successDelete: "L'unité de refroidissement {{name}} a été supprimée avec succès.",
+            'Cette unité de réfrigération ne peut pas être supprimée car elle a des enregistrements actifs.',
+          successDelete: "L'unité de réfrigération {{name}} a été supprimée avec succès.",
         },
       },
       UsageAnalysis: {
@@ -880,7 +881,7 @@ export default {
         downloadDataButton: 'Télécharger les données',
         modal: {
           title: 'Configurer les paramètres',
-          coolingUnitSelection: "Sélectionner l'unité de refroidissement :",
+          coolingUnitSelection: "Sélectionner l'unité de réfrigération :",
         },
         summary: {
           totalCheckIns: "Nombre total d'enregistrements :",
@@ -910,7 +911,8 @@ export default {
         revokeMessage:
           'Êtes-vous sûr de vouloir révoquer ce coupon ? Une fois révoqué, il ne pourra plus être utilisé et la réduction ne sera plus disponible. Cette action est permanente et ne peut pas être annulée.',
         messages: {
-          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+          codeField:
+            'Le coupon doit comporter un maximum de 25 caractères et contenir uniquement des lettres et des chiffres.',
         },
       },
     },
@@ -926,10 +928,10 @@ export default {
         'nearby-me': 'Près de moi',
       },
       distance: {
-        withing5Km: 'À 1 à 5 KM',
-        within10Km: 'À 5 à 10 KM',
-        within25Km: 'De 10 à 25 KM',
-        beyond25Km: 'À plus de 25 KM',
+        withing5Km: 'À 1 à 5 km',
+        within10Km: 'À 5 à 10 km',
+        within25Km: 'De 10 à 25 km',
+        beyond25Km: 'À plus de 25 km',
       },
       priceConfig:
         'La configuration des prix concerne la vente de produits, pas les frais de stockage réfrigéré.',
@@ -954,7 +956,7 @@ export default {
         lastRegisteredEmployee:
           "Vous êtes le seul Employé enregistré de l'entreprise, cette action supprimera l'entreprise !",
         activeCheckInOP:
-          "Les unités de refroidissement {{names}} auxquelles vous êtes affecté ont des check-ins actifs et vous êtes le dernier opérateur dans celle-ci. Vous devez vérifier tous les produits ou demander à un Employé enregistré d'assigner un autre opérateur à cette unité de refroidissement avant de pouvoir supprimer votre compte !",
+          "Les unités de refroidissement {{names}} auxquelles vous êtes affecté ont des check-ins actifs et vous êtes le dernier opérateur dans celle-ci. Vous devez vérifier tous les produits ou demander à un Employé enregistré d'assigner un autre opérateur à cette unité de réfrigération avant de pouvoir supprimer votre compte !",
         activeCheckInRE:
           "Vous ne pouvez pas supprimer votre compte si vous êtes le dernier Employé enregistré et qu'il y a des check-ins actifs sur certaines unités de refroidissement, car cette action supprimerait votre entreprise. Veuillez vous assurer que tous les check-ins actifs dans les unités de refroidissement {{names}} sont effectués avant de tenter de supprimer votre compte.",
         activeCheckInCU:
@@ -962,7 +964,7 @@ export default {
       },
       fields: {
         location: 'Emplacement',
-        userCode: "Code d'importation de l'utilisateur de refroidissement",
+        userCode: "Code d'importation de l'Utilisateur de chambre froide",
       },
       toasts: { success: 'Mise à jour réussie' },
       sections: {
@@ -1000,8 +1002,7 @@ export default {
           },
         },
         successMessage: 'Compte bancaire ajouté avec succès.',
-        errorMessage:
-          "Impossible de vérifier les coordonnées du compte. Vérifiez le numéro de compte et la banque pour d'éventuelles erreurs.",
+        errorMessage: 'Une erreur est survenue. Veuillez réessayer plus tard.',
       },
       PaymentSettings: {
         cards: 'Cartes',
@@ -1059,7 +1060,7 @@ export default {
         movementDateReverse: 'Date de mouvement (du plus récent au plus ancien)',
         checkInFirst: "Enregistrement d'entrée en premier",
         checkOutFirst: 'Enregistrement de sortie en premier',
-        coolingUser: "Nom de l'utilisateur de refroidissement",
+        coolingUser: "Nom de l'Utilisateur de chambre froide",
       },
       optionsMenu: {
         common: {
@@ -1086,7 +1087,7 @@ export default {
         crateIdsLabel: 'IDs des caisses',
       },
       pdfModal: {
-        coolingUserLabel: 'Utilisateur de refroidissement',
+        coolingUserLabel: 'Utilisateur de chambre froide',
         dateLabel: 'Date',
         weightLabel: 'Poids (Kg)',
         downloadButton: 'Télécharger la facture',
@@ -1107,7 +1108,7 @@ export default {
           operatorLabel: 'Opérateur',
           codeLabel: "Code d'entrée",
           companyLabel: 'Entreprise',
-          coolingUnitLabel: 'Unité de refroidissement',
+          coolingUnitLabel: 'unité de réfrigération',
           priceLabel: 'Prix {{currency}} / Jour',
           cropLabel: 'Culture',
           numberOfCratesLabel: 'Nombre de caisses',
@@ -1116,7 +1117,7 @@ export default {
       },
       editCheckIn: {
         contactLabel: 'Contact',
-        coolingUserLabel: 'Utilisateur de refroidissement',
+        coolingUserLabel: 'Utilisateur de chambre froide',
         disclaimer: 'Avertissement : Le temps de collecte est un nombre estimé de jours.',
         disclaimerMessage:
           "Avertissement : Notez que le temps de collecte est un nombre estimé de jours. Cette estimation est basée sur des modèles calibrés pour l'espèce de fruit ou de légume et une simulation numérique. La qualité réelle du produit dépend également des conditions climatiques locales, des conditions de croissance, de la date de récolte et d'autres facteurs. Par conséquent, des écarts par rapport à notre estimation du temps de collecte peuvent se produire.",
@@ -1168,7 +1169,7 @@ export default {
       },
     },
     MyOrders: {
-      coolingFees: 'Frais de refroidissement',
+      coolingFees: 'frais de conservation',
       soldFor: 'Vendu pour',
       ownedBy: 'Propriétaire',
       you: 'Vous',
@@ -1182,7 +1183,7 @@ export default {
       title: 'Aperçu des commandes',
       orderId: 'ID de commande',
       cropType: 'Type de culture',
-      coolingUnit: 'Unité de refroidissement',
+      coolingUnit: 'unité de réfrigération',
       orderTotal: 'Total de la commande',
       backToTopButton: 'Retour en haut',
     },
@@ -1202,15 +1203,17 @@ export default {
       discount: 'Remise',
       fees: 'Frais de service',
       marketFees: 'Frais de marché',
-      paymentFees: 'Payment fee', // TODO
-      coolingFees: 'Frais de refroidissement',
+      paymentFees: 'Frais de paiement',
+      coolingFees: 'frais de conservation',
       viewContacts: 'Voir le(s) contact(s)',
       contactsForDelivery: 'Contact(s) pour les informations de livraison',
       gotItButton: 'Compris!',
       pickupMethods: 'Méthode de ramassage',
-      selectPickupMethod: 'Select a pickup method', // TODO
-      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
-      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
+      selectPickupMethod: 'Sélectionnez une méthode de ramassage',
+      selectPickupMethodInfo:
+        'Une sélection de méthode de ramassage est requise pour chaque unité de refroidissement.',
+      pickupMethodSelectionMissing:
+        'Sélection de méthode de ramassage manquante pour {{amount}} unités de refroidissement.',
       pickUpToday: "Ramassage aujourd'hui",
       keepInStorageDailyRate: 'Conserver en stockage ({{price}} / jour)',
       keepInStorageFixedRate: 'Conserver en stockage ({{price}})',
@@ -1229,11 +1232,11 @@ export default {
       discountsApplied: 'Remises appliquées',
       method: 'Méthode:',
       deliveryInfo:
-        'Notez que les frais de livraison dépendent du prestataire. Si la livraison est prévue pour demain, des frais de refroidissement de {{value}} seront également appliqués.',
+        'Notez que les frais de livraison dépendent du prestataire. Si la livraison est prévue pour demain, des frais de conservation de {{value}} seront également appliqués.',
       pickUpTodayInfo:
-        'Assurez-vous de récupérer vos produits avant la fin de la journée pour éviter des frais de refroidissement supplémentaires.',
+        'Assurez-vous de récupérer vos produits avant la fin de la journée pour éviter des frais de conservation supplémentaires.',
       keepInStorageInfo:
-        'Les frais de refroidissement seront appliqués lors du prelevement de votre commande.',
+        'Les frais de conservation seront appliqués lors du prelevement de votre commande.',
       orderOverviewSubtitle:
         'Vous pouvez consulter ces informations sous l’onglet « Mes commandes » de l’écran « Marketplace ».',
       pickupModal: {
@@ -1259,7 +1262,7 @@ export default {
       maleLabel: '👨🏽 Homme: {{amount}}',
       femaleLabel: '👩🏽 Femme: {{amount}}',
       otherLabel: 'Autre: {{amount}}',
-      usersTotal: "Nombre total d'utilisateurs de refroidissement = {{amount}}",
+      usersTotal: "Nombre total d'Utilisateurs de chambre froide = {{amount}}",
       operatorsTotal: "Nombre total d'opérateurs = {{amount}}",
       beneficiariesTotal: 'Nombre total de bénéficiaires indirects = {{amount}}',
       totalCratesLabel: '🧺 Total des caisses',
@@ -1269,8 +1272,8 @@ export default {
       checkedOutLabel: 'Désenregistré: {{amount}}',
       methodologyButton: 'Voir la méthodologie',
       farmersAnalytics: {
-        coolingUserName: "Nom de l'utilisateur de refroidissement",
-        coolingUserType: "Type d'utilisateur de refroidissement",
+        coolingUserName: "Nom de l'Utilisateur de chambre froide",
+        coolingUserType: "Type d'Utilisateur de chambre froide",
         avgStorageTime: 'Temps moyen de stockage',
         coldStorageCost: 'Coût du stockage à froid',
         days: 'jour(s)',
@@ -1299,7 +1302,7 @@ export default {
       companyTab: {
         usersTab: {
           employeesTotal: "Nombre total d'employés enregistrés = {{amount}}",
-          usersType: "Type d'utilisateurs de refroidissement",
+          usersType: "Type d'Utilisateurs de chambre froide",
           farmersLabel: '🧑🏽‍🌾 Agriculteurs: {{amount}}',
           tradersLabel: '👩🏽‍💼 Commerçants: {{amount}}',
         },
@@ -1309,7 +1312,7 @@ export default {
         },
         impactTab: {
           foodLossLabel: '🥗 Évolution de la perte de nourriture',
-          revenueLabel: '💰 Évolution des revenus des utilisateurs de refroidissement',
+          revenueLabel: '💰 Évolution des revenus des Utilisateurs de chambre froide',
           co2Label: '💨 Évolution des émissions de CO2e',
           surveysAmountLabel:
             "📊 Nombre d'enquêtes utilisées pour calculer l'évolution de la perte de nourriture et des revenus",
@@ -1330,7 +1333,7 @@ export default {
         coolingUnitsContent: '{{amount}} unités',
         capacityLabel: 'Capacité totale de refroidissement',
         capacityContent: '{{amount}} tonnes métriques',
-        coolingUnitTypeLabel: "Type d'unité de refroidissement",
+        coolingUnitTypeLabel: "Type d'unité de réfrigération",
         coolingUnitTypeMarket: '{{amount}} salle de marché',
         coolingUnitTypeFarmGate: '{{amount}} salle de ferme',
         coolingUnitTypeMovable: '{{amount}} salle mobile',
@@ -1346,14 +1349,14 @@ export default {
       },
       comparisonTab: {
         sortingLabel: 'Triage',
-        coolingUnit: 'Unité de refroidissement',
+        coolingUnit: 'unité de réfrigération',
         genderHeader: 'Homme | Femme | Autre',
         genderSecondaryHeader: 'Homme | Femme',
         total: 'Total',
         sortingMenuOptions: {
           descending: 'Ordre décroissant',
           ascending: 'Ordre croissant',
-          coolingUnitName: "Nom de l'unité de refroidissement",
+          coolingUnitName: "Nom de l'unité de réfrigération",
         },
         usersTab: {
           operators: 'Opérateurs',
@@ -1407,13 +1410,13 @@ export default {
       operatorSurvey:
         "Vous avez enregistré {{crop}} pour {{farmer}} mais vous n'avez pas complété l'enquête pour cette culture.",
       pickup:
-        "Vos caisses de {{crop}} doivent être retirées dès que possible ! (date d'enregistrement : {{checkIn}}, ID de l'unité de refroidissement : {{unitId}}, ID d'enregistrement : {{movementCode}}).",
+        "Vos caisses de {{crop}} doivent être retirées dès que possible ! (date d'enregistrement : {{checkIn}}, ID de l'unité de réfrigération : {{unitId}}, ID d'enregistrement : {{movementCode}}).",
       notifyCoolingUser:
-        "Veuillez informer l'utilisateur {{farmer}} que ses caisses de {{crop}} doivent être retirées dès que possible ! (date d'enregistrement : {{checkIn}}, ID de l'unité de refroidissement : {{unitId}}, ID d'enregistrement : {{movementCode}}).",
+        "Veuillez informer l'utilisateur {{farmer}} que ses caisses de {{crop}} doivent être retirées dès que possible ! (date d'enregistrement : {{checkIn}}, ID de l'unité de réfrigération : {{unitId}}, ID d'enregistrement : {{movementCode}}).",
       checkIn: "L'opérateur {{farmer}} a modifié l'enregistrement {{movementCode}} le {{date}}.",
       surveyAlreadyFilled: "L'enquête a déjà été remplie",
       orderRequiresMovement:
-        'Les produits doivent être redistribués entre les caisses. Cliquez pour voir les détails des articles à déplacer.',
+        'Les produits doivent être redistribués entre les caisses. Cliquez pour plus de détails sur les articles à déplacer.',
     },
   },
   tutorial: {
@@ -1435,20 +1438,20 @@ export default {
       repeatTutorial:
         'Si vous souhaitez revoir ce tutoriel, vous pouvez également le trouver dans le menu.',
       managementNavigation:
-        'Dans le menu, vous pouvez naviguer vers "Gestion" et cliquer là pour ajouter ou modifier des utilisateurs de refroidissement. Allez-y et essayez.',
+        'Dans le menu, vous pouvez naviguer vers "Gestion" et cliquer là pour ajouter ou modifier des Utilisateurs de chambre froide. Allez-y et essayez.',
       operatorManagementNavigation:
-        'Dans le menu, vous pouvez accéder à « Gestion » et appuyer dessus pour ajouter ou modifier des utilisateurs de refroidissement',
+        'Dans le menu, vous pouvez accéder à « Gestion » et appuyer dessus pour ajouter ou modifier des Utilisateurs de chambre froide',
       addCoolingUser:
-        'Les utilisateurs de refroidissement qui ne se sont pas inscrits sur Coldtivate peuvent être ajoutés en insérant leurs coordonnées (nom, numéro de téléphone). Les utilisateurs de refroidissement déjà inscrits dans l\'application peuvent être ajoutés par code. Ils peuvent trouver leur code sur leur profil -> "Détails du compte" -> "Code d\'importation de l\'utilisateur de refroidissement".',
-      navigateToCoolingUser: "Allez-y et cliquez sur l'onglet des utilisateurs de refroidissement",
+        'Les Utilisateurs de chambre froide qui ne se sont pas inscrits sur Coldtivate peuvent être ajoutés en insérant leurs coordonnées (nom, numéro de téléphone). Les Utilisateurs de chambre froide déjà inscrits dans l\'application peuvent être ajoutés par code. Ils peuvent trouver leur code sur leur profil -> "Détails du compte" -> "Code d\'importation de l\'Utilisateur de chambre froide".',
+      navigateToCoolingUser: "Allez-y et cliquez sur l'onglet des Utilisateurs de chambre froide",
       listCoolingUsers:
-        "Les utilisateurs de refroidissement ayant un smartphone sont identifiés par une icône de téléphone sur le côté droit des écrans. Les autres sont des utilisateurs de refroidissement avec un téléphone basique. Dans les deux cas, vous pouvez cliquer sur un nom pour accéder à leurs détails et au questionnaire de l'utilisateur de refroidissement.",
+        "Les Utilisateurs de chambre froide ayant un smartphone sont identifiés par une icône de téléphone sur le côté droit des écrans. Les autres sont des Utilisateurs de chambre froide avec un téléphone basique. Dans les deux cas, vous pouvez cliquer sur un nom pour accéder à leurs détails et au questionnaire de l'Utilisateur de chambre froide.",
       navigateToAddCoolingUser:
-        "En cliquant sur le signe '+' vous permet d'ajouter un nouvel utilisateur de refroidissement.",
+        "En cliquant sur le signe '+' vous permet d'ajouter un nouvel Utilisateur de chambre froide.",
       coolingUnitStep:
         'Vous pouvez naviguer entre les unités de refroidissement en cliquant sur le menu déroulant en haut.',
       initiateCheckIn1:
-        "Une fois que vous avez ajouté un utilisateur de refroidissement, vous pouvez effectuer un enregistrement pour cet utilisateur de refroidissement. Allez-y et cliquez sur le bouton d'activité.",
+        "Une fois que vous avez ajouté un Utilisateur de chambre froide, vous pouvez effectuer un enregistrement pour cet Utilisateur de chambre froide. Allez-y et cliquez sur le bouton d'activité.",
       initiateCheckIn2: "Maintenant, cliquez sur le bouton d'enregistrement (celui en vert).",
       checkIn1:
         'Pour compléter l\'enregistrement, vous devez cliquer sur "Ajouter des caisses" et suivre les instructions étape par étape. Cliquez sur "Continuer" pour voir à quoi ressemblerait le résultat.',
@@ -1458,13 +1461,13 @@ export default {
         'Si vous êtes satisfait, vous pouvez cliquer sur "Confirmer" et les nouvelles caisses seront ajoutées au tableau de bord.',
       history: 'En cliquant sur "Historique", vous pouvez voir tous les mouvements dans la pièce.',
       coolingUnits:
-        'Cliquez sur "Unités de refroidissement" pour voir la capacité d\'une unité de refroidissement dans les 7 jours suivants (onglet Planificateur) et la température de la pièce (onglet Conditions de la pièce).',
+        'Cliquez sur "Unités de refroidissement" pour voir la capacité d\'une unité de réfrigération dans les 7 jours suivants (onglet Planificateur) et la température de la pièce (onglet Conditions de la pièce).',
       roomConditions:
         ' Vous pouvez mettre à jour manuellement la température de la chambre de refroidissement dans "Conditions de la chambre" si vous n\'avez pas de capteur connecté à l\'application.',
       checkOut1:
         "Pour commencer un départ, cliquez sur le bouton d'activité, puis sur le bouton rouge. Suivez ensuite les instructions pour compléter le départ.",
       checkOut2:
-        "Vous pouvez choisir l'unité de refroidissement et les cultures que vous souhaitez retirer.",
+        "Vous pouvez choisir l'unité de réfrigération et les cultures que vous souhaitez retirer.",
       checkOut3:
         'Une fois que les articles sont payés, cliquez sur le bouton respectif et finalisez le départ.',
       navigateToLocations:
@@ -1472,13 +1475,13 @@ export default {
       locations:
         "Vous pouvez ajouter un emplacement en sélectionnant un nom et en ajoutant sa latitude et sa longitude, en partageant vos coordonnées GPS (si vous êtes à l'emplacement de la chambre froide), ou en tapant l'adresse.",
       navigateToCoolingUnits:
-        "Après qu'un emplacement ait été ajouté, vous pouvez ajouter une unité de refroidissement. Allez-y et cliquez sur l'onglet des unités de refroidissement.",
+        "Après qu'un emplacement ait été ajouté, vous pouvez ajouter une unité de réfrigération. Allez-y et cliquez sur l'onglet des unités de refroidissement.",
       addCoolingUnits:
-        "Une unité de refroidissement peut être ajoutée en complétant les détails ci-dessus. Si vous avez des capteurs de température dans l'unité de refroidissement et une API en place, vous pouvez saisir les informations d'identification et connecter automatiquement vos capteurs à l'application.",
+        "Une unité de réfrigération peut être ajoutée en complétant les détails ci-dessus. Si vous avez des capteurs de température dans l'unité de réfrigération et une API en place, vous pouvez saisir les informations d'identification et connecter automatiquement vos capteurs à l'application.",
       addEmployeesOperators:
         "Vous pouvez ajouter des employés et des opérateurs enregistrés via l'écran de gestion. Pour ajouter l'un ou l'autre rôle, vous aurez besoin de leur numéro de téléphone. Ils recevront un SMS avec un lien d'invitation. Un numéro de téléphone ne peut être utilisé que pour un seul utilisateur.",
       employeeCoolingUnitsStep:
-        'Une fois que vous avez sélectionné une unité de refroidissement, vous verrez un aperçu des : enregistrements dans l\'onglet "Tableau de bord", des mouvements dans l\'onglet "Historique", et du taux d\'utilisation planifié et de la température de la pièce dans l\'onglet "Unités de refroidissement".',
+        'Une fois que vous avez sélectionné une unité de réfrigération, vous verrez un aperçu des : enregistrements dans l\'onglet "Tableau de bord", des mouvements dans l\'onglet "Historique", et du taux d\'utilisation planifié et de la température de la pièce dans l\'onglet "Unités de refroidissement".',
       localizationPreferences:
         'Vous pouvez changer la langue de l\'application en sélectionnant "Préférences de localisation". Assurez-vous de cliquer sur le bouton "Enregistrer les modifications" pour que la langue soit changée !',
       accountDetailsNavigation:
@@ -1486,7 +1489,7 @@ export default {
       coolingUserSurvey:
         'La première fois que vous ouvrez l’application, vous êtes invité à répondre à un court sondage. Il est très important que vous remplissiez l’enquête pour que l’application vous fournisse des recommandations personnalisées. Si vous ne pouvez pas remplir l’enquête la première fois que vous vous connectez, vous pouvez accéder à l’enquête dans « Détails du compte » -> « Enquête sur le refroidissement des utilisateurs ». Merci d’avoir pris le temps de répondre au sondage !',
       coolingUserCode:
-        'La première fois que vous arrivez dans une chambre froide pour stocker vos produits, l\'opérateur vous demandera de lui fournir votre code personnel, pour vous ajouter à la liste des utilisateurs de la chambre froide. Vous pouvez trouver ce code dans "Détails personnels" -> "Code d\'importation de l\'utilisateur de refroidissement".',
+        'La première fois que vous arrivez dans une chambre froide pour stocker vos produits, l\'opérateur vous demandera de lui fournir votre code personnel, pour vous ajouter à la liste des utilisateurs de la chambre froide. Vous pouvez trouver ce code dans "Détails personnels" -> "Code d\'importation de l\'Utilisateur de chambre froide".',
       knowledgeHub:
         'Dans le menu, vous pouvez trouver le "Centre de connaissances", qui contient des conseils sur la durée pendant laquelle différentes cultures peuvent être stockées et leur température optimale. Consultez-le pour comprendre combien la chambre froide peut vous aider à préserver la qualité de différents fruits et légumes !',
       faq: "Dans le menu, vous pouvez également trouver les questions fréquemment posées (FAQ). Nous vous recommandons de les consulter pour en savoir plus sur l'application et les avantages de stocker vos produits dans les chambres froides.",
@@ -1499,7 +1502,7 @@ export default {
       dashboardStep4:
         'Si la couleur de la carte est jaune (2 à 5 jours restants) ou verte (plus de 5 jours), vous n\'avez pas besoin de vous inquiéter pour les caisses. Le nombre de jours est recalculé plusieurs fois par jour, alors assurez-vous de vérifier le "Tableau de bord" régulièrement pour voir comment la qualité de vos caisses dans la chambre évolue.',
       dashboardStep5:
-        'Si vous avez des caisses stockées dans plusieurs chambres, vous pouvez changer la chambre que vous visualisez en sélectionnant une entreprise et une unité de refroidissement dans le menu déroulant.',
+        'Si vous avez des caisses stockées dans plusieurs chambres, vous pouvez changer la chambre que vous visualisez en sélectionnant une entreprise et une unité de réfrigération dans le menu déroulant.',
       dashboardStep6:
         'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
