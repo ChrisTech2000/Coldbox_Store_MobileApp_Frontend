@@ -9,6 +9,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import colors from 'tailwindcss/colors';
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
@@ -16,6 +17,7 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -129,8 +131,15 @@ export default function MarketplaceLocationFilter() {
         if (exception instanceof Error) {
           const errorCode = 'code' in exception ? exception.code : 'DENIED';
           switch (errorCode) {
-            case 'UNAUTHORIZED':
+            case 'CANCELLED':
+            case 'UNAVAILABLE':
+            case 'TIMEOUT':
+            case 'UNAUTHORIZED': {
+              if (!isEmpty(currentLocation) && !isEqual(currentLocation, DEFAULT_COORDINATES)) {
+                return;
+              }
               return _setLocation(DEFAULT_COORDINATES);
+            }
             default:
               return;
           }
@@ -139,6 +148,7 @@ export default function MarketplaceLocationFilter() {
     }
 
     void _getInitialLocation();
+    return emitter.on(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_COORDINATES, _getInitialLocation);
   }, []);
 
   return (
