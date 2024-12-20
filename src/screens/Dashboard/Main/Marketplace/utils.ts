@@ -11,8 +11,8 @@ import type { GetAvailableListingParams } from '#types/api.params';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import type { Company, CoolingUnit, User } from '#types/global';
 import { useMap } from '#ui/hooks/useMap';
-
-import { stringToHash } from '#ui/lib/hash';
+import DataloaderService from '#services/DataloaderService';
+// import { stringToHash } from '#ui/lib/hash';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 
@@ -54,8 +54,6 @@ export function useMarketplaceListing() {
   const queryParams = useMarketplaceQueryParams();
   const filters = useMarketplaceFilters((store) => store.filters);
 
-  const [userMap, userMapActions] = useMap<number, User>();
-
   const filtering = useMemo(
     () => ({
       unitsToFilterIn: new Set<number>(
@@ -76,120 +74,61 @@ export function useMarketplaceListing() {
     [filters]
   );
 
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
-    'getAllCrops',
-    ColdtivateService.getAllCrops,
-    undefined,
-    { defaultData: [] }
-  );
-
-  const { data: coolingUnits, isLoading: isLoadingCoolingUnits } = useApiCall(
-    'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
-    {},
-    {
-      defaultData: [],
-    }
-  );
-
-  const { data: companies, isLoading: isLoadingCompanies } = useApiCall(
-    'getCompanies',
-    ColdtivateService.getCompanies,
-    undefined,
-    {
-      defaultData: [],
-    }
-  );
-
-  const { data: users, isLoading: isLoadingUsers } = useApiCall(
-    'getUsers',
-    ColdtivateService.getUsers,
-    undefined,
-    {
-      defaultData: [],
-    }
-  );
-
   const { data: datums, ...rest } = useApiCall(
     'getMarketplaceAvailableListing',
     async (params: GetAvailableListingParams) => {
       const listing = await MarketplaceService.getAvailableListing(params);
-      // companies (owners) aggregation
-      const ownerCompaniesIds = new Set<number>(
-        listing.nodes.map((node) => node.ownedOnBehalfOfCompanyId).filter(Boolean) as number[]
-      );
-
-      const ownerCompanies: Array<Company> = [];
-      for (const companyId of ownerCompaniesIds) {
-        if (!companies) break; // safe guard
-        const item = _findCompanyById(companyId, companies);
-        if (!item) continue; // safe guard
-        ownerCompanies.push(item);
-      }
-
-      // users (owners) aggregation
-      const ownerUsersIds = new Set<number>(
-        listing.nodes.map((node) => node.ownedByUserId).filter(Boolean) as number[]
-      );
-
-      const ownerUsers: Array<User> = [];
-      for (const userId of ownerUsersIds) {
-        if (!users) break; // safe guard
-        const item = _findUserById(userId, users);
-        if (!item) continue; // safe guard
-        ownerUsers.push(item);
-      }
-
-      const userMapCopy = new Map(userMap);
-      for (const item of ownerUsers) {
-        userMapCopy.set(item.id, item);
-      }
-      userMapActions.setAll(userMapCopy);
 
       // marketplace listing datums
-      return listing.nodes.map((node) => {
-        const contextualCrop = _findCropById(node.relCropId, crops ?? []);
-        const contextualUnit = _findUnitById(node.relCoolingUnitId, coolingUnits ?? []);
-        const contextualCompany = _findCompanyById(node.relCompanyId, companies ?? []);
-        const owner = node.ownedOnBehalfOfCompanyId
-          ? _findCompanyOwner(node.ownedOnBehalfOfCompanyId, ownerCompanies)
-          : _findUserOwner(node.ownedByUserId, userMapCopy);
+      return Promise.all(
+        listing.nodes.map(async (node) => {
+          const contextualCrop = await DataloaderService.crops.getById(node.relCropId);
+          const contextualUnit = await DataloaderService.coolingUnits.getById(
+            node.relCoolingUnitId
+          );
+          const contextualCompany = await DataloaderService.companies.getById(node.relCompanyId);
+          const owner = node.ownedOnBehalfOfCompanyId
+            ? await DataloaderService.companies.getById(node.ownedOnBehalfOfCompanyId)
+            : node.ownedByUserId
+              ? await DataloaderService.users.getById(node.ownedByUserId)
+              : null;
 
-        return {
-          id: node.id,
-          distance: node.distance,
-          crateId: node.crateId,
-          crateWeight: node.availableWeightInKg,
-          shelfLife: node.relCrateRemainingShelfLife,
-          price: node.totalPricePerKg,
-          owner: {
-            name: node.ownedOnBehalfOfCompanyId
-              ? ((owner as Company)?.name ?? '')
-              : node.ownedByUserId
-                ? `${(owner as User)?.firstName ?? ''} ${(owner as User)?.lastName ?? ''}`
-                : '',
-            contact: node.ownedOnBehalfOfCompanyId ? '' : ((owner as User)?.phone ?? ''),
-            isPhonePublic: !node.ownedOnBehalfOfCompanyId && !!(owner as User)?.isPhonePublic,
-          },
-          company: {
-            id: node.relCompanyId,
-            name: contextualCompany?.name ?? '',
-            locationId: contextualUnit?.location ?? null,
-          },
-          coolingUnit: {
-            id: contextualUnit?.id ?? 0,
-            name: contextualUnit?.name ?? '',
-            standardWeight: contextualUnit?.crateWeight ?? 0,
-          },
-          crop: {
-            id: contextualCrop?.id ?? 0,
-            name: contextualCrop?.name ?? '',
-            image: contextualCrop?.image ?? '',
-          },
-          movementCode: node.relCheckInMovementCode,
-          currencyValue: formatCurrencyWithSymbol(node.currency, node.totalPricePerKg),
-        } satisfies AvailableListingDatum;
-      });
+          return {
+            id: node.id,
+            distance: node.distance,
+            crateId: node.crateId,
+            crateWeight: node.availableWeightInKg,
+            shelfLife: node.relCrateRemainingShelfLife,
+            price: node.totalPricePerKg,
+            owner: {
+              name: node.ownedOnBehalfOfCompanyId
+                ? ((owner as Company)?.name ?? '')
+                : node.ownedByUserId
+                  ? `${(owner as User)?.firstName ?? ''} ${(owner as User)?.lastName ?? ''}`
+                  : '',
+              contact: node.ownedOnBehalfOfCompanyId ? '' : ((owner as User)?.phone ?? ''),
+              isPhonePublic: !node.ownedOnBehalfOfCompanyId && !!(owner as User)?.isPhonePublic,
+            },
+            company: {
+              id: node.relCompanyId,
+              name: contextualCompany?.name ?? '',
+              locationId: contextualUnit?.location ?? null,
+            },
+            coolingUnit: {
+              id: contextualUnit?.id ?? 0,
+              name: contextualUnit?.name ?? '',
+              standardWeight: contextualUnit?.crateWeight ?? 0,
+            },
+            crop: {
+              id: contextualCrop?.id ?? 0,
+              name: contextualCrop?.name ?? '',
+              image: contextualCrop?.image ?? '',
+            },
+            movementCode: node.relCheckInMovementCode,
+            currencyValue: formatCurrencyWithSymbol(node.currency, node.totalPricePerKg),
+          } satisfies AvailableListingDatum;
+        })
+      );
     },
     {
       page: 1,
@@ -200,12 +139,7 @@ export function useMarketplaceListing() {
       filterByCoolingUnitsIds: Array.from(filtering.unitsToFilterIn),
     },
     {
-      skip:
-        (queryParams?.location ?? []).length === 0 ||
-        isLoadingCrops ||
-        isLoadingCoolingUnits ||
-        isLoadingCompanies ||
-        isLoadingUsers,
+      skip: (queryParams?.location ?? []).length === 0,
       defaultData: [],
       errorRetryCount: 1,
     }
@@ -213,7 +147,6 @@ export function useMarketplaceListing() {
 
   return {
     ...rest,
-    isLoading: isLoadingCrops || isLoadingCoolingUnits || isLoadingCompanies || rest.isLoading,
     data: useMemo(() => {
       const { companiesToFilterIn, cropsToFilterIn, priceRangeFilter } = filtering;
 
@@ -245,68 +178,3 @@ export function useMarketplaceListing() {
     }, [datums, filtering]),
   };
 }
-
-///
-// internal util functions
-///
-
-const _findCompanyById = moize(
-  (companyId: number, companies: Array<Company>) => companies.find(({ id }) => id === companyId),
-  {
-    maxAge: ms('5 seconds'),
-    isSerialized: true,
-    serializer: ([companyId, companies]) => [
-      stringToHash([companyId, JSON.stringify(companies)].join(':::')),
-    ],
-  }
-);
-
-const _findUserById = moize(
-  (userId: number, users: Array<User>) => users.find(({ id }) => id === userId),
-  {
-    maxAge: ms('5 seconds'),
-    isSerialized: true,
-    serializer: ([userId, users]) => [stringToHash([userId, JSON.stringify(users)].join(':::'))],
-  }
-);
-
-const _findCropById = moize(
-  (cropId: number, crops: Array<GetAllCropsResponse>) => crops.find(({ id }) => id === cropId),
-  {
-    maxAge: ms('5 seconds'),
-    isSerialized: true,
-    serializer: ([cropId, crops]) => [stringToHash([cropId, JSON.stringify(crops)].join(':::'))],
-  }
-);
-
-const _findUnitById = moize(
-  (unitId: number, units: Array<CoolingUnit>) => units.find(({ id }) => id === unitId),
-  {
-    maxAge: ms('5 seconds'),
-    isSerialized: true,
-    serializer: ([unitId, units]) => [stringToHash([unitId, JSON.stringify(units)].join(':::'))],
-  }
-);
-
-const _findCompanyOwner = moize(
-  (ownedOnBehalfOfCompanyId: number | null, ownerCompanies: Array<Company>) =>
-    ownerCompanies.find(({ id }) => id === ownedOnBehalfOfCompanyId),
-  {
-    maxAge: ms('5 seconds'),
-    isSerialized: true,
-    serializer: ([companyId, companies]) => [
-      stringToHash([companyId, JSON.stringify(companies)].join(':::')),
-    ],
-  }
-);
-
-const _findUserOwner = moize(
-  (ownedByUserId: number | null, userMap: Map<number, User>) => {
-    return ownedByUserId ? userMap.get(ownedByUserId) : undefined;
-  },
-  {
-    maxAge: ms('5 seconds'),
-    isSerialized: true,
-    serializer: ([userId, users]) => [stringToHash([userId, JSON.stringify(users)].join(':::'))],
-  }
-);

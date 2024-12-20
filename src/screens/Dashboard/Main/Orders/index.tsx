@@ -290,8 +290,8 @@ const _getNameById = moize(
     list.find((item) => item.id === id)?.name ?? '',
   {
     maxAge: ms('6 seconds'),
-    isSerialized: true,
-    serializer: (args) => [stringToHash(JSON.stringify(args))],
+    // isSerialized: true,
+    // serializer: (args) => [stringToHash(JSON.stringify(args))],
   }
 );
 

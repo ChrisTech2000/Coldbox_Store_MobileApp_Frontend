@@ -12,7 +12,7 @@ import type {
   GetLocationResponse,
 } from '#types/api.responses';
 import type { Translator } from '#i18n/utils';
-import { stringToHash } from '#ui/lib/hash';
+// import { stringToHash } from '#ui/lib/hash';
 
 export type MarkerCoolingUnitsInfo = {
   name: string;
@@ -99,8 +99,8 @@ const _getSingleCommodityCropName = moize(
     crops.find(({ id }) => id === cropId)?.name ?? '',
   {
     maxAge: ms('7 seconds'),
-    isSerialized: true,
-    serializer: ([crops, cropId]) => [stringToHash([cropId, JSON.stringify(crops)].join(':::'))],
+    // isSerialized: true,
+    // serializer: ([crops, cropId]) => [stringToHash([cropId, JSON.stringify(crops)].join(':::'))],
   }
 );
 

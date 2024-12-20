@@ -1,19 +1,14 @@
 import { useMemo } from 'react';
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
-import moize from 'moize';
 import ms from 'ms';
-
 import { dateFmt, type Translator, useTranslationUtils } from '#i18n/utils';
-import { ERoles, Farmer, type User } from '#types/global';
+import { ERoles, type User } from '#types/global';
 import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAppEventListener } from '#ui/lib/emitter';
-import ColdtivateService from '#services/ColdtivateService';
-import type { CoolingUnit } from '#types/global';
-import { stringToHash } from '#ui/lib/hash';
-
 import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
+import DataloaderService from '#services/DataloaderService';
 
 class NotificationManager {
   private readonly _t: Translator;
@@ -26,28 +21,30 @@ class NotificationManager {
     this._userRole = user?.role;
   }
 
-  public processNotifications = async (args: {
-    farmers: Array<Farmer>;
-    units: Array<CoolingUnit>;
-  }) => {
-    const { farmers, units } = args;
-
+  public processNotifications = async () => {
     const { notifications, newNotificationsCount } = await this._formatNotifications();
 
     return {
       newNotificationsCount,
-      notifications: notifications.map((notification) => {
-        const crates = notification?.crates || {};
-        const farmerName = crates.farmer;
-        const unitName = crates.coolingUnit;
-        return {
-          datum: notification,
-          ctx: {
-            farmer: farmerName ? (this._findFarmerByName(farmerName, farmers) ?? null) : null,
-            coolingUnit: unitName ? (this._findUnitByName(unitName, units) ?? null) : null,
-          },
-        };
-      }),
+      notifications: await Promise.all(
+        notifications.map(async (notification) => {
+          const crates = notification?.crates || {};
+          return {
+            datum: notification,
+            ctx: {
+              farmer: crates.farmerId
+                ? ((await DataloaderService.farmers.getById(crates.farmerId)) ?? null)
+                : null,
+              user: crates.userId
+                ? ((await DataloaderService.users.getById(crates.userId)) ?? null)
+                : null,
+              coolingUnit: crates.coolingUnitId
+                ? ((await DataloaderService.coolingUnits.getById(crates.coolingUnitId)) ?? null)
+                : null,
+            },
+          };
+        })
+      ),
     };
   };
 
@@ -123,29 +120,6 @@ class NotificationManager {
 
     return { notifications, newNotificationsCount };
   };
-
-  private _findUnitByName = moize(
-    (unitName: string, units: Array<CoolingUnit>) => units.find(({ name }) => name === unitName),
-    {
-      maxAge: ms('5 seconds'),
-      isSerialized: true,
-      serializer: ([unitName, units]) => [
-        stringToHash([unitName, JSON.stringify(units)].join(':::')),
-      ],
-    }
-  );
-
-  private _findFarmerByName = moize(
-    (farmerName: string, farmers: Array<Farmer>) =>
-      farmers.find((farmer) => farmerName === `${farmer.user.firstName} ${farmer.user.lastName}`),
-    {
-      maxAge: ms('5 seconds'),
-      isSerialized: true,
-      serializer: ([farmerName, farmers]) => [
-        stringToHash([farmerName, JSON.stringify(farmers)].join(':::')),
-      ],
-    }
-  );
 }
 
 export type FormattedNotification = Awaited<
@@ -162,53 +136,14 @@ export function useNotifications() {
 
   const manager = useMemo(() => new NotificationManager(t, user), [t, user]);
 
-  const { data: farmers, isLoading: isLoadingFarmers } = useApiCall(
-    'getFarmers',
-    ColdtivateService.getFarmers,
-    undefined,
-    {
-      skip: !user?.id,
-      defaultData: [],
-    }
-  );
-
-  const stableFarmers = useMemo(() => farmers ?? [], [farmers]);
-
-  const { data: units, isLoading: isLoadingUnits } = useApiCall(
-    'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
-    {},
-    {
-      skip: !user?.id,
-      defaultData: [],
-    }
-  );
-
-  const stableUnits = useMemo(() => units ?? {}, [units]);
-
-  const { data, isLoading } = useApiCall(
-    'getNotifications',
-    manager.processNotifications,
-    { farmers: stableFarmers, units: stableUnits as CoolingUnit[] },
-    {
-      skip: !user?.id || isLoadingFarmers || isLoadingUnits,
-      defaultData: {
-        notifications: [],
-        newNotificationsCount: 0,
-      },
-      refreshInterval: ms('10 seconds'),
-    }
-  );
-
-  const notificationsData = useMemo(
-    () => ({
-      notifications: data.notifications || [],
-      newNotificationsCount: data.newNotificationsCount || 0,
-    }),
-    [data.notifications, data.newNotificationsCount]
-  );
-
-  return { data: notificationsData, isLoading };
+  return useApiCall('getNotifications', manager.processNotifications, undefined, {
+    skip: !user?.id,
+    defaultData: {
+      notifications: [],
+      newNotificationsCount: 0,
+    },
+    refreshInterval: ms('10 seconds'),
+  });
 }
 
 export type NotificationOpenSurveyEventDatums = {
