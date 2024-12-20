@@ -1,6 +1,6 @@
 import { type NavigationProp, DrawerActions, useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { type LayoutChangeEvent, View } from 'react-native';
 import { Appbar, Badge } from 'react-native-paper';
 
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
@@ -20,13 +20,15 @@ import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { OrdersRoutePaths } from '../Main/OrdersStack';
 import { useNotifications } from './notifications';
 
-function _buildLeftContent<Params extends Record<string, unknown>, Path extends string>(
-  dispatch: NavigationProp<Params, Path>['dispatch'],
-  goBackFunc?: () => void,
-  onLayout?: (event: unknown) => void
-) {
+function _HeaderLeftContent<Params extends Record<string, unknown>, Path extends string>(props: {
+  dispatch: NavigationProp<Params, Path>['dispatch'];
+  goBackFunc?: () => void;
+  onLayout?: (evt: LayoutChangeEvent) => void;
+}) {
+  const { dispatch, goBackFunc, onLayout } = props;
+
   if (typeof goBackFunc === 'function') {
-    return <Appbar.BackAction size={26} onPress={() => goBackFunc?.()} />;
+    return <Appbar.BackAction size={26} onPress={goBackFunc} />;
   }
 
   return (
@@ -39,49 +41,59 @@ function _buildLeftContent<Params extends Record<string, unknown>, Path extends 
   );
 }
 
-function _buildRightContent(
-  notificationCount: number,
-  cartItemsCount: number,
-  goToShoppingCart?: () => void
-) {
+function _NotificationBadge(props: { count: number }) {
+  const { count } = props;
+
+  const hasNotifications = !!count && count > 0;
+
+  return (
+    <View tw="relative">
+      <Appbar.Action
+        icon="bell-outline"
+        size={26}
+        onPress={() => useRightDrawerStore.getState().toggle()}
+        disabled={!hasNotifications}
+      />
+      <Badge visible={hasNotifications} tw="absolute top-1.5 right-1.5">
+        {count}
+      </Badge>
+    </View>
+  );
+}
+
+function _CartBadge(props: { count: number; onPress: () => void }) {
+  const { count, onPress } = props;
+  return (
+    <View tw="relative">
+      <Appbar.Action icon="cart-outline" size={27} onPress={onPress} />
+      <Badge visible={count > 0} tw="absolute top-1.5 right-1.5">
+        {count}
+      </Badge>
+    </View>
+  );
+}
+
+function _HeaderRightContent(props: {
+  notificationCount: number;
+  cartItemsCount: number;
+  goToShoppingCart?: () => void;
+}) {
+  const { notificationCount, cartItemsCount, goToShoppingCart } = props;
   return (
     <View tw="flex-row items-center space-x-1.5">
-      <View tw="relative">
-        <Appbar.Action
-          icon="bell-outline"
-          size={26}
-          onPress={() => useRightDrawerStore.getState().toggle()}
-        />
-        <Badge
-          visible={!!notificationCount && notificationCount > 0}
-          tw="absolute top-1.5 right-1.5"
-        >
-          {notificationCount}
-        </Badge>
-      </View>
+      <_NotificationBadge count={notificationCount} />
       {typeof goToShoppingCart === 'function' ? (
-        <View tw="relative">
-          <Appbar.Action icon="cart-outline" size={27} onPress={() => goToShoppingCart()} />
-          <Badge visible={cartItemsCount > 0} tw="absolute top-1.5 right-1.5">
-            {cartItemsCount}
-          </Badge>
-        </View>
+        <_CartBadge count={cartItemsCount} onPress={goToShoppingCart} />
       ) : null}
     </View>
   );
 }
 
-export type DashboardHeaderFactoryOptions = {
-  goBackFunc?: () => void;
-  showShoppingCart?: boolean;
-};
-
 export function useDashboardHeader() {
   const { dispatch, navigate } = useNavigation<NavigationProp<DashboardMainRoutes>>();
-  const cartData = useCartStore((store) => store.cartData);
 
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
-  const cartItemsCount = cartData?.items?.length ?? 0;
+  const cartItemsCount = useCartStore((store) => store.cartData)?.items?.length ?? 0;
 
   const { onLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.OPEN_DRAWER_STEP,
@@ -89,15 +101,18 @@ export function useDashboardHeader() {
   });
 
   return useCallback(
-    ({
-      goBackFunc,
-      showShoppingCart,
-    }: DashboardHeaderFactoryOptions = {}): NavigationHeaderProps => ({
-      leftContent: _buildLeftContent(dispatch, goBackFunc, onLayout),
-      rightContent: _buildRightContent(
-        newNotificationsCount,
-        cartItemsCount,
-        showShoppingCart ? () => navigate('ShoppingCart', { screen: 'Root' }) : undefined
+    (opts?: { goBackFunc?: () => void; showShoppingCart?: boolean }): NavigationHeaderProps => ({
+      leftContent: (
+        <_HeaderLeftContent dispatch={dispatch} goBackFunc={opts?.goBackFunc} onLayout={onLayout} />
+      ),
+      rightContent: (
+        <_HeaderRightContent
+          notificationCount={newNotificationsCount}
+          cartItemsCount={cartItemsCount}
+          goToShoppingCart={
+            opts?.showShoppingCart ? () => navigate('ShoppingCart', { screen: 'Root' }) : undefined
+          }
+        />
       ),
     }),
     [newNotificationsCount, cartItemsCount]
