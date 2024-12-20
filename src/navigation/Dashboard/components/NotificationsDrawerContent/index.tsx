@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import ms from 'ms';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Portal } from 'react-native-paper';
@@ -10,27 +10,24 @@ import { FlashList } from '@shopify/flash-list';
 import DataloaderService from '#services/DataloaderService';
 import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
 import { Text } from '#ui/components/Text';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
 import { type CoolingUnit, type Crop, type FarmerSurvey } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
-
-import InAppNotifications from '#common/InAppNotifications';
-import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
-import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
-import ColdtivateService from '#services/ColdtivateService';
-import NotificationService from '#services/NotificationService';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { type ProcessedNotifications } from '../../lib/notifications';
 import NotificationItem from './components/NotificationItem';
-
+import { useAppEventListener } from '#ui/lib/emitter';
 import { useRightDrawerStore } from '#navigation/Dashboard';
 import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
 import { resolveCropInfo, resolveOwnerName } from '#services/utils/resolvers';
 import { type ManagementCompany, useManagementStore } from '#stores/management';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
+import NotificationService from '#services/NotificationService';
+import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
+import ColdtivateService from '#services/ColdtivateService';
 
 export type Notifications = ProcessedNotifications['notifications'];
 type NotificationDatum = Notifications[0];
@@ -278,10 +275,8 @@ class NotificationHandlers {
     const coolingUnit = notification.ctx.coolingUnit;
     if (!farmer || !coolingUnit) throw new Error();
 
-    const movements = await ColdtivateService.getMovementsHistory({
-      coolingUnit: coolingUnit.id,
-      farmerId: farmer.id,
-    });
+    const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
+    if (!movements) throw new Error();
 
     const movementDetails = movements.find(
       (movement) => movement.code === notification.datum.movementCode
@@ -297,14 +292,16 @@ class NotificationHandlers {
       movementDetails.checkout.crates[0].ownedByUserId!
     );
 
-    const movementCropsForSurvey = Object.fromEntries(
+    const movementCropsForSurvey = (
       await Promise.all(
         movementDetails.checkout.crates.map(async (crate) => {
+          if (movementDetails.checkout.hasMarketSurvey.includes(crate.cropId)) return;
           const crop = await DataloaderService.crops.getById(crate.cropId);
-          return [`${crate.cropId}`, crop?.name ?? ''];
+          if (!crop) return;
+          return { id: crop.id, name: crop.name };
         })
       )
-    );
+    ).filter(Boolean) as Array<{ id: number; name: string }>;
 
     const datums = {
       eventType: 'MARKET_SURVEY',

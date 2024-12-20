@@ -279,7 +279,10 @@ function _getRowDatums(
     { cropNames: new Set<string>(), unitNames: new Set<string>() }
   );
 
-  return { contextualCropNames: Array.from(cropNames), contextualUnitNames: Array.from(unitNames) };
+  return {
+    contextualCropNames: Array.from(cropNames).filter(Boolean),
+    contextualUnitNames: Array.from(unitNames).filter(Boolean),
+  };
 }
 
 const _getNameById = moize(

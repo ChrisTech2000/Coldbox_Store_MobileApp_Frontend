@@ -1,16 +1,16 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, View } from 'react-native';
-import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React from 'react';
+import { Dimensions, View } from 'react-native';
+import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -18,29 +18,6 @@ export function MoreNavigationOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
-
-  const blinkAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    const startBlinking = () => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(blinkAnim, {
-            toValue: 0,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(blinkAnim, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    };
-
-    startBlinking();
-  }, [blinkAnim]);
 
   return (
     <View tw="h-full w-full absolute">

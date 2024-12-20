@@ -1,18 +1,12 @@
 import { useMemo } from 'react';
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
-import moize from 'moize';
 import ms from 'ms';
-
 import { dateFmt, type Translator, useTranslationUtils } from '#i18n/utils';
-import { ERoles, Farmer, type User } from '#types/global';
+import { ERoles, type User } from '#types/global';
 import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAppEventListener } from '#ui/lib/emitter';
-import ColdtivateService from '#services/ColdtivateService';
-import type { CoolingUnit } from '#types/global';
-import { stringToHash } from '#ui/lib/hash';
-
 import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
 import DataloaderService from '#services/DataloaderService';
 
