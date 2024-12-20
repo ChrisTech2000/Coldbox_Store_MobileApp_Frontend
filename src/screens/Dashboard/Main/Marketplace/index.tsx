@@ -23,6 +23,11 @@ function MarketplaceRoot() {
     emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
   }, 340);
 
+  const invalidateHandler = useDebouncedCallback(async () => {
+    emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_COORDINATES);
+    await refetch();
+  }, 340);
+
   return (
     <React.Fragment>
       <MarketplaceFiltersSection />
@@ -31,7 +36,7 @@ function MarketplaceRoot() {
         showsVerticalScrollIndicator={false}
         onTouchStart={closeMarketplaceTooltipsHandler}
         refreshControl={
-          <RefreshControl refreshing={isValidating || isLoading} onRefresh={refetch} />
+          <RefreshControl refreshing={isValidating || isLoading} onRefresh={invalidateHandler} />
         }
       >
         <View tw="flex-1 mb-20">
