@@ -172,6 +172,8 @@ export function useNotifications() {
     }
   );
 
+  const stableFarmers = useMemo(() => farmers ?? [], [farmers]);
+
   const { data: units, isLoading: isLoadingUnits } = useApiCall(
     'getCoolingUnits',
     ColdtivateService.getCoolingUnits,
@@ -182,10 +184,12 @@ export function useNotifications() {
     }
   );
 
-  return useApiCall(
+  const stableUnits = useMemo(() => units ?? {}, [units]);
+
+  const { data, isLoading } = useApiCall(
     'getNotifications',
     manager.processNotifications,
-    { farmers: farmers!, units: units! },
+    { farmers: stableFarmers, units: stableUnits as CoolingUnit[] },
     {
       skip: !user?.id || isLoadingFarmers || isLoadingUnits,
       defaultData: {
@@ -195,6 +199,16 @@ export function useNotifications() {
       refreshInterval: ms('10 seconds'),
     }
   );
+
+  const notificationsData = useMemo(
+    () => ({
+      notifications: data.notifications || [],
+      newNotificationsCount: data.newNotificationsCount || 0,
+    }),
+    [data.notifications, data.newNotificationsCount]
+  );
+
+  return { data: notificationsData, isLoading };
 }
 
 export type NotificationOpenSurveyEventDatums = {
