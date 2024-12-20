@@ -122,7 +122,7 @@ function SalesRoot() {
             />
           </View>
           <FlashList
-            estimatedItemSize={20}
+            estimatedItemSize={40}
             estimatedListSize={ESTIMATED_LIST_SIZE}
             data={sortedData}
             extraData={cropsExtraData}

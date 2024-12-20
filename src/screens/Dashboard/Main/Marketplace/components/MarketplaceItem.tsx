@@ -186,7 +186,7 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
   const [isTooltipShowing, setIsTooltipShowing] = useState<boolean>(false);
 
   useAppEventListener(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS, () => {
-    if (isTooltipShowing) setIsTooltipShowing(false);
+    setIsTooltipShowing(false);
   });
 
   return (

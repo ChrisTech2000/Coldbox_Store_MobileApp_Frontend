@@ -134,7 +134,12 @@ export default function MarketplaceStack() {
     <Stack.Navigator initialRouteName="MarketplaceRoot" screenOptions={screenOptions}>
       <Stack.Screen name="MarketplaceRoot" component={MarketplaceTabs} />
       <Stack.Screen name="MarketplaceFilters" component={MarketplaceFilters} />
-      <Stack.Screen name="PaystackPayment" component={PaystackPayment} />
+      <Stack.Screen
+        name="PaystackPayment"
+        // eslint-disable-next-line
+        // @ts-ignore
+        component={PaystackPayment}
+      />
       <Stack.Screen name="OrderOverview" component={OrderOverview} />
       <Stack.Screen
         name="IncompleteOrderOverview"
