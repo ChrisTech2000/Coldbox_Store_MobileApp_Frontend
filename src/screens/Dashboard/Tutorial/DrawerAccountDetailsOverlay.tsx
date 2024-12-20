@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Animated, Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
@@ -14,6 +14,7 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -23,32 +24,8 @@ export function DrawerAccountDetailsOverlay({ next, stop }: IOverlayComponentPro
   const colors = useTailwindColors();
   const navigation = useNavigation();
 
-  const blinkAnim = useRef(new Animated.Value(1)).current;
+  const blinkAnim = useBlinkAnimation();
 
-  useEffect(() => {
-    const startBlinking = () => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(blinkAnim, {
-            toValue: 0,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(blinkAnim, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    };
-
-    startBlinking();
-  }, [blinkAnim]);
-
-  /**
-     
-   */
   return (
     <View tw="h-full w-full absolute">
       <Touchable
