@@ -5,8 +5,8 @@ import { Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import colors from 'tailwindcss/colors';
-import { useShallow } from 'zustand/react/shallow';
 import { useDebouncedCallback } from 'use-debounce';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
@@ -16,13 +16,13 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 import RBAC from '#common/RBAC';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import type { MarketplaceRoutes } from '#navigation/Dashboard/Main/Marketplace/MarketplaceStack';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import type { GetAvailableListingParams } from '#types/api.params';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
 
 import FilterChip from './FilterChip';

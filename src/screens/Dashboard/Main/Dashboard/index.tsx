@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, RefreshControl, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
-import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import cloneDeep from 'lodash/cloneDeep';
 import moize from 'moize';
 import ms from 'ms';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Dimensions, RefreshControl, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -44,21 +43,28 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { BOTTOM_NAV_HEIGHT, withSafeArea } from '#ui/primitives/withSafeArea';
 
+import type { DashboardRoutes } from '#navigation/Dashboard';
+import { stringToHash } from '#ui/lib/hash';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { FlashList } from '@shopify/flash-list';
 import { Filters, type Search } from '../components/Filters';
 import { DashboardEmptyState } from './components/DashboardEmptyState';
 import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { sortProduces } from './utils/sortProduces';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { DashboardRoutes } from '#navigation/Dashboard';
-import { stringToHash } from '#ui/lib/hash';
 
 export const useDashboardCoolingUnitStore = createSelectStore<CoolingUnit>();
 export const useDashboardCompanyStore = createSelectStore<Company>();
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
+const ESTIMATED_LIST_SIZE = {
+  height: SCREEN_HEIGHT,
+  width: SCREEN_WIDTH,
+} as const;
 
 const _findFarmerById = moize(
   (id: number | undefined, list: Array<Farmer>) => list.find((f) => f.id === id),
@@ -66,6 +72,20 @@ const _findFarmerById = moize(
     maxAge: ms('6 seconds'),
     isSerialized: true,
     serializer: ([id, list]) => [stringToHash([id, JSON.stringify(list)].join(':::'))],
+  }
+);
+
+const _checkMarketplaceEligibilityMemoized = moize.promise(
+  async (companyId: number, userId: number) => {
+    const result = await MarketplaceService.checkMarketplaceEligibility({
+      companyIds: [companyId],
+      userIds: [userId],
+    });
+    return result;
+  },
+  {
+    maxAge: ms('5 seconds'),
+    updateExpire: true,
   }
 );
 
@@ -237,10 +257,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     const marketplaceUser = guard('VIEW', 'MarketplaceListing');
 
     if (user?.role === ERoles.EMPLOYEE && marketplaceUser && company) {
-      MarketplaceService.checkMarketplaceEligibility({
-        companyIds: [company.id],
-        userIds: [user.id],
-      }).then((result) => {
+      _checkMarketplaceEligibilityMemoized(company.id, user.id).then((result) => {
         if (!result.companies[company.id]) {
           setIsBankAccountModalOpen(true);
         }
@@ -282,8 +299,10 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       ) : !dashboardProduces?.length ? (
         <DashboardEmptyState />
       ) : (
-        <FlatList
+        <FlashList
           showsVerticalScrollIndicator={false}
+          estimatedItemSize={40}
+          estimatedListSize={ESTIMATED_LIST_SIZE}
           refreshControl={
             <RefreshControl
               refreshing={
