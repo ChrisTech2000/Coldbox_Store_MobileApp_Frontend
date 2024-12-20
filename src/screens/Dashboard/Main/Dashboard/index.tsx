@@ -53,7 +53,7 @@ import { sortProduces } from './utils/sortProduces';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { DashboardRoutes } from '#navigation/Dashboard';
-import { stringToHash } from '#ui/lib/hash';
+// import { stringToHash } from '#ui/lib/hash';
 
 export const useDashboardCoolingUnitStore = createSelectStore<CoolingUnit>();
 export const useDashboardCompanyStore = createSelectStore<Company>();
@@ -64,8 +64,8 @@ const _findFarmerById = moize(
   (id: number | undefined, list: Array<Farmer>) => list.find((f) => f.id === id),
   {
     maxAge: ms('6 seconds'),
-    isSerialized: true,
-    serializer: ([id, list]) => [stringToHash([id, JSON.stringify(list)].join(':::'))],
+    // isSerialized: true,
+    // serializer: ([id, list]) => [stringToHash([id, JSON.stringify(list)].join(':::'))],
   }
 );
 

@@ -380,9 +380,12 @@ export type GetNotificationsResponse = Array<{
   coolingUnitName: string | null;
   crates: {
     crop: string;
-    farmer: string;
     checkinDate: string;
+    userId: number;
+    farmerId: number;
+    farmer: string;
     coolingUnit: string;
+    coolingUnitId: number;
   };
   movementCode: string;
   seen: boolean;

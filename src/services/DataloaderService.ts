@@ -1,0 +1,67 @@
+// import Dataloader from 'dataloader';
+// import { LRUMap } from 'lru_map';
+import HttpClient from './HttpClient';
+import moize from 'moize';
+
+import ColdtivateService from './ColdtivateService';
+import type { Company, CoolingUnit, Farmer, User, Crop } from '#types/global';
+
+// const LRU_CACHE_MAX = 500;
+
+function EntireDatasetPreloader<K extends number, V extends {}>(
+  loadAllDatums: () => Promise<V[]>,
+  key: string = 'id'
+) {
+  const getK = (obj: V) => {
+    const objKey = key in obj ? key : 'id';
+    // @ts-ignore
+    return `${obj[objKey]}`;
+  };
+  const listLoader = moize.promise(loadAllDatums);
+  const dictLoader = moize.promise(async () => {
+    const arr = await listLoader();
+    return Object.fromEntries(arr.map((obj) => [getK(obj), obj])) as { [key: string]: V };
+  });
+
+  return {
+    getById: async (id: K) => {
+      const dict = await dictLoader();
+      return dict[`${id}`];
+    },
+    getByIds: async (ids: Array<K>) => {
+      const dict = await dictLoader();
+      return ids.map((id) => dict[`${id}`]);
+    },
+    getAll: () => listLoader(),
+    getAllAsMap: () => dictLoader(),
+    some: async (predicate: (value: V) => boolean) => (await listLoader()).some(predicate),
+    find: async (predicate: (value: V) => boolean) => (await listLoader()).find(predicate),
+  };
+}
+
+class DataloaderService extends HttpClient {
+  ///
+  // Getters
+  ///
+
+  // Dataloader based getters
+  readonly users = EntireDatasetPreloader(async () => ColdtivateService.getUsers());
+  readonly companies = EntireDatasetPreloader(async () => {
+    const companies = await ColdtivateService.getCompanies();
+    return companies ?? [];
+  });
+  readonly crops = EntireDatasetPreloader(async () => {
+    const crops = await ColdtivateService.getAllCrops();
+    return crops ?? [];
+  });
+  readonly coolingUnits = EntireDatasetPreloader(async () => {
+    const coolingUnits = await ColdtivateService.getCoolingUnits({});
+    return coolingUnits ?? [];
+  });
+  readonly farmers = EntireDatasetPreloader(async () => {
+    const farmers = await ColdtivateService.getFarmers();
+    return farmers ?? [];
+  });
+}
+
+export default new DataloaderService();

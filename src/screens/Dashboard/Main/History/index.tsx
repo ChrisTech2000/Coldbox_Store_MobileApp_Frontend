@@ -66,8 +66,8 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   });
 
   const {
-    movements,
-    refetchHistoryMovements,
+    data: movements,
+    refetch: refetchHistoryMovements,
     isLoading: isHistoryDataLoading,
     isValidating,
   } = useMovementsHistory(farmerId, user as User, coolingUnit);

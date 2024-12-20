@@ -30,7 +30,7 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
-import { stringToHash } from '#ui/lib/hash';
+// import { stringToHash } from '#ui/lib/hash';
 
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
@@ -232,8 +232,8 @@ const _getNameById = moize(
     list.find((item) => item.id === id)?.name ?? '',
   {
     maxAge: ms('6 seconds'),
-    isSerialized: true,
-    serializer: (args) => [stringToHash(JSON.stringify(args))],
+    // isSerialized: true,
+    // serializer: (args) => [stringToHash(JSON.stringify(args))],
   }
 );
 
