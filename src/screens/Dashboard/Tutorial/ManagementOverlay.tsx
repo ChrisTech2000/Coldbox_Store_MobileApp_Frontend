@@ -27,24 +27,26 @@ export function ManagementOverlay({ next, stop }: IOverlayComponentProps) {
   const blinkAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const startBlinking = () => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(blinkAnim, {
-            toValue: 0,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(blinkAnim, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    };
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(blinkAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(blinkAnim, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+      ])
+    );
 
-    startBlinking();
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
   }, [blinkAnim]);
 
   return (
