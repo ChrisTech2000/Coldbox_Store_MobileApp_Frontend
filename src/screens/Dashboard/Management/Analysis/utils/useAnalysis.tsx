@@ -1,15 +1,34 @@
 import { useMemo } from 'react';
+import moize from 'moize';
+import ms from 'ms';
 
-import {
-  getCompanyOwnerName,
-  getUserOwnerName,
-} from '#screens/Dashboard/Main/History/utils/useMovementsData';
 import ColdtivateService from '#services/ColdtivateService';
+import DataloaderService from '#services/DataloaderService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
 import { Company, type CoolingUnit, type User } from '#types/global';
 
 import { PaymentOption } from '../RevenueAnalysis';
+
+const getCompanyOwnerName = moize(
+  (companyId: number | null | undefined, companies: Array<Company>) =>
+    companies.find(({ id }) => id === companyId)?.name ?? '',
+  {
+    maxAge: ms('10 seconds'),
+    isSerialized: true,
+  }
+);
+
+const getUserOwnerName = moize(
+  (userId: number | null | undefined, users: Array<User>) => {
+    const user = users.find((u) => u.id === userId);
+    return user ? `${user.firstName ?? ''} ${user.lastName ?? ''}` : '';
+  },
+  {
+    maxAge: ms('10 seconds'),
+    isSerialized: true,
+  }
+);
 
 const fetchUsers = async (movements: GetMovementsHistoryResponse) => {
   const checkInUserIds = movements
@@ -23,11 +42,11 @@ const fetchUsers = async (movements: GetMovementsHistoryResponse) => {
     .filter((crate) => crate.ownedByUserId && !crate.ownedOnBehalfOfCompanyId)
     .map((crate) => crate.ownedByUserId);
 
-  const uniqueUserIds = Array.from(new Set([...checkInUserIds, ...checkOutUserIds])).filter(
-    Boolean
+  const uniqueUserIds = Array.from(
+    new Set([...checkInUserIds, ...(checkOutUserIds.filter(Boolean) as number[])])
   );
 
-  return Promise.all(uniqueUserIds.map((id) => ColdtivateService.getUser(id as number)));
+  return DataloaderService.users.getByIds(uniqueUserIds);
 };
 
 const processMovements = (
@@ -116,7 +135,7 @@ export function useAnalysis(
 
   const { data: crops, isLoading: areCropsLoading } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    DataloaderService.crops.getAll,
     undefined,
     {
       skip: isDataSkippable,
@@ -126,7 +145,7 @@ export function useAnalysis(
 
   const { data: companies, isLoading: areCompaniesLoading } = useApiCall(
     'getCompanies',
-    ColdtivateService.getCompanies,
+    DataloaderService.companies.getAll,
     undefined,
     {
       defaultData: [],

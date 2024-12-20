@@ -6,8 +6,6 @@ import ms from 'ms';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { ERoles, type CoolingUnit, type User, type Company } from '#types/global';
-import { GetAllCropsResponse } from 'types/api.responses';
-// import { stringToHash } from '#ui/lib/hash';
 import { resolveCropInfo, resolveOwnerName } from '#services/utils/resolvers';
 
 export function useMovementsHistory(
