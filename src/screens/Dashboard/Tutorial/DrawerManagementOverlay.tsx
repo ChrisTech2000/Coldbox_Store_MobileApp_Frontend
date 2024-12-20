@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Animated, Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { Icon } from 'react-native-paper';
@@ -17,6 +17,7 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 
 import { EEmployeeTutorialSteps } from './utils/constants';
+import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -27,30 +28,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const navigation = useNavigation();
 
-  const blinkAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(blinkAnim, {
-          toValue: 0,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(blinkAnim, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
-    animation.start();
-
-    return () => {
-      animation.stop();
-    };
-  }, [blinkAnim]);
+  const blinkAnim = useBlinkAnimation();
 
   return (
     <View tw="h-full w-full absolute">

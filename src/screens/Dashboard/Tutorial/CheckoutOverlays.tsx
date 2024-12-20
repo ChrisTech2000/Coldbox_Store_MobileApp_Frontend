@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Animated, Dimensions, Platform, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -18,6 +18,7 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 
 import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
+import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -33,30 +34,7 @@ export function OperatorActionsOverlay({ next, stop }: IOverlayComponentProps) {
   const colors = useTailwindColors();
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
-  const blinkAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(blinkAnim, {
-          toValue: 0,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(blinkAnim, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
-    animation.start();
-
-    return () => {
-      animation.stop();
-    };
-  }, [blinkAnim]);
+  const blinkAnim = useBlinkAnimation();
 
   return (
     <View tw="h-full w-full absolute">

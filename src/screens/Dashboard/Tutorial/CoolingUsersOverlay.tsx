@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useEffect, useRef } from 'react';
-import { Animated, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -14,32 +14,7 @@ export function CoolingUsersOverlay({ next, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
-
-  const blinkAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(blinkAnim, {
-          toValue: 0,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(blinkAnim, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
-    animation.start();
-
-    return () => {
-      animation.stop();
-    };
-  }, [blinkAnim]);
-
+  
   return (
     <View tw="h-full w-full absolute">
       <View
