@@ -54,7 +54,7 @@ export default function MarketplaceFormManager(props: PropsWithChildren<FormMana
   });
 
   useAppEventListener('DISPATCH_MARKETPLACE_FILTERS_FORM_RESET', (values: FormValues<number>) => {
-    form.reset({ ...values, min: values.min.toString(), max: values.max.toString() });
+    form.reset({ ...values, min: values.min?.toString(), max: values.max?.toString() });
   });
 
   return <FormProvider {...form}>{props.children}</FormProvider>;
