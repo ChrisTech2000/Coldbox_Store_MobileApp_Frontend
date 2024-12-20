@@ -1,20 +1,30 @@
+import { FlashList } from '@shopify/flash-list';
 import isEmpty from 'lodash/isEmpty';
 import ms from 'ms';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Portal } from 'react-native-paper';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
-import { FlashList } from '@shopify/flash-list';
 
-import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
-import { Text } from '#ui/components/Text';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
-
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
+import { useRightDrawerStore } from '#navigation/Dashboard';
+import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
+import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
+import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
+import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
+import {
+  getCompanyOwnerName,
+  getCropInfo,
+  getUserOwnerName,
+} from '#screens/Dashboard/Main/History/utils/useMovementsData';
+import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
+import { type ManagementCompany, useManagementStore } from '#stores/management';
 import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
 import {
   type Company,
@@ -23,27 +33,15 @@ import {
   type FarmerSurvey,
   type User,
 } from '#types/global';
+import { Text } from '#ui/components/Text';
+import { useMap, type UseMap } from '#ui/hooks/useMap';
+import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import InAppNotifications from '#common/InAppNotifications';
-import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
-import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
-import ColdtivateService from '#services/ColdtivateService';
-import NotificationService from '#services/NotificationService';
-import { useAppEventListener } from '#ui/lib/emitter';
 import { type ProcessedNotifications } from '../../lib/notifications';
 import NotificationItem from './components/NotificationItem';
-
-import { useRightDrawerStore } from '#navigation/Dashboard';
-import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
-import {
-  getCompanyOwnerName,
-  getCropInfo,
-  getUserOwnerName,
-} from '#screens/Dashboard/Main/History/utils/useMovementsData';
-import { type ManagementCompany, useManagementStore } from '#stores/management';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import { useMap, type UseMap } from '#ui/hooks/useMap';
+import { useMovementsByCoolingUnit } from './utils';
 
 export type Notifications = ProcessedNotifications['notifications'];
 type NotificationDatum = Notifications[0];
@@ -112,6 +110,18 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     { skip: !user?.id, defaultData: [] }
   );
 
+  const coolingUnitIds = useMemo(() => {
+    return Array.from(
+      new Set(
+        notifications
+          .map((notification) => notification.ctx.coolingUnit?.id)
+          .filter((id) => id !== undefined)
+      )
+    );
+  }, [notifications]);
+
+  const { movementsMap, loading: isLoadingMovements } = useMovementsByCoolingUnit(coolingUnitIds);
+
   useAppEventListener<[CommoditySurveyDatum]>(
     'DISPATCH_NOTIFICATION_OPEN_COMMODITY_MODAL',
     setFarmerSurveyDatums
@@ -163,7 +173,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     <View tw="flex-1 justify-start">
       <View tw="p-4 bg-zinc-100 border-b-0.5 border-zinc-500 flex flex-row items-center justify-between">
         <Text variant="TitleRegular">{t('Dashboard.Notifications.text.notifications')}</Text>
-        {isSurveyLoading ? (
+        {isSurveyLoading || isLoadingMovements ? (
           <ActivityIndicator size={18} color={paperTheme.colors.backdrop} animating />
         ) : null}
       </View>
@@ -172,7 +182,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
         nestedScrollEnabled
         showsVerticalScrollIndicator={false}
         data={notifications}
-        extraData={usersMap}
+        extraData={{ usersMap, movementsMap }}
         keyExtractor={(item) => `notification-#${item.datum.id}`}
         renderItem={({ item }) => (
           <NotificationItem
@@ -187,7 +197,12 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                   break;
                 }
                 case 'MARKET_SURVEY': {
-                  await NotificationHandlers.marketSurvey(item, managementCompany, crops);
+                  await NotificationHandlers.marketSurvey(
+                    item,
+                    managementCompany,
+                    crops,
+                    movementsMap
+                  );
                   break;
                 }
                 case 'ORDER_REQUIRES_MOVEMENT': {
@@ -195,7 +210,8 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                     item,
                     crops,
                     companies ?? [],
-                    usersMap
+                    usersMap,
+                    movementsMap
                   );
                   usersMapActions.setAll(datums);
                   break;
@@ -337,16 +353,15 @@ class NotificationHandlers {
   static async marketSurvey(
     notification: NotificationDatum,
     managementCompany: ManagementCompany,
-    crops: Array<GetAllCropsResponse>
+    crops: Array<GetAllCropsResponse>,
+    movementsMap: Map<number, GetMovementsHistoryResponse>
   ) {
     const farmer = notification.ctx.farmer;
     const coolingUnit = notification.ctx.coolingUnit;
     if (!farmer || !coolingUnit) throw new Error();
 
-    const movements = await ColdtivateService.getMovementsHistory({
-      coolingUnit: coolingUnit.id,
-      farmerId: farmer.id,
-    });
+    const movements = movementsMap.get(coolingUnit.id);
+    if (!movements) throw new Error();
 
     const movementDetails = movements.find(
       (movement) => movement.code === notification.datum.movementCode
@@ -391,12 +406,14 @@ class NotificationHandlers {
     notification: NotificationDatum,
     crops: Array<GetAllCropsResponse>,
     companies: Array<Company>,
-    usersMap: UseMap<number, User>
+    usersMap: UseMap<number, User>,
+    movementsMap: Map<number, GetMovementsHistoryResponse>
   ) {
     const coolingUnit = notification.ctx.coolingUnit;
     if (!coolingUnit) throw new Error();
 
-    const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
+    const movements = movementsMap.get(coolingUnit.id);
+    if (!movements) throw new Error();
 
     const movementDetails = movements.find(
       (movement) => movement.id === notification.datum.specificId
