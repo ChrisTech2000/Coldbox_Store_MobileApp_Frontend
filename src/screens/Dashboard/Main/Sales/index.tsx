@@ -136,7 +136,7 @@ function SalesRoot() {
                 new Set<string>(
                   item.items.map((elm) => _getNameById(elm.relCropId, _extraData.crops))
                 )
-              );
+              ).filter(Boolean);
 
               return (
                 <View tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2">
