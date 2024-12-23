@@ -1478,6 +1478,8 @@ export default {
       surveyAlreadyFilled: 'ସର୍ବେ ପୂର୍ଣ୍ଣ ହୋଇଛି',
       orderRequiresMovement:
         'କ୍ରେଟ୍ ମଧ୍ୟରେ ଉତ୍ପାଦ ପୁନଃ ବଣ୍ଟନ ହେବା ଆବଶ୍ୟକ। କେଉଁ ସାମଗ୍ରୀ ମୁଭ୍ କରିବାକୁ ହେବ ତାହାର ବିବରଣୀ ପାଇଁ କ୍ଲିକ୍ କରନ୍ତୁ।',
+      listingPriceUpdated:
+        '{{crop}} ଏଇ {{unitName}}ରେ ସଂରକ୍ଷିତ କ୍ରେଟଗୁଡ଼ିକର ତାଲିକା ମୂଲ୍ୟ ଅଦ୍ୟତନ ହୋଇଛି: {{priceTag}}',
     },
   },
   tutorial: {

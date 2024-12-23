@@ -1409,6 +1409,8 @@ export default {
       surveyAlreadyFilled: 'An riga an cika bincike',
       orderRequiresMovement:
         'Ana buƙatar sake rarraba kayayyakin tsakanin akwatuna. Danna don samun cikakkun bayanai akan abubuwan da za su motsa.',
+      listingPriceUpdated:
+        'An sabunta farashin jerin akwatuna masu ajiye {{crop}} a {{unitName}}: {{priceTag}}',
     },
   },
   tutorial: {

@@ -1473,6 +1473,8 @@ export default {
       surveyAlreadyFilled: 'સર્વે પહેલેથી જ ભરાયું છે',
       orderRequiresMovement:
         'ક્રેટ્સ વચ્ચે ઉત્પાદન ફરીથી વિતરણ કરવાની જરૂર છે. કયા આઇટમ્સ ખસેડવા તે માટેની વિગતો માટે ક્લિક કરો.',
+      listingPriceUpdated:
+        '{{unitName}} માં {{crop}} સંગ્રહિત કરતા ક્રેટ્સ માટેની સૂચિ કિંમતો અપડેટ કરવામાં આવી છે: {{priceTag}}',
     },
   },
   tutorial: {

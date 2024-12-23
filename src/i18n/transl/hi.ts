@@ -1483,6 +1483,8 @@ export default {
       surveyAlreadyFilled: 'सर्वेक्षण पहले ही भरा जा चुका है',
       orderRequiresMovement:
         'कार्गो को क्रेट्स के बीच पुनर्वितरित करने की आवश्यकता है। किन वस्तुओं को स्थानांतरित करना है, इसके विवरण के लिए क्लिक करें।',
+      listingPriceUpdated:
+        '{{crop}} की टोकरी का सूचीबद्ध मूल्य {{unitName}} में अपडेट किया गया है: {{priceTag}}',
     },
   },
   tutorial: {
