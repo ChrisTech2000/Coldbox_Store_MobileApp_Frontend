@@ -33,7 +33,6 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
-import { stringToHash } from '#ui/lib/hash';
 import type { CartItem, CoolingUnit } from '#types/global';
 import type { GetAllCropsResponse } from '#types/api.responses';
 

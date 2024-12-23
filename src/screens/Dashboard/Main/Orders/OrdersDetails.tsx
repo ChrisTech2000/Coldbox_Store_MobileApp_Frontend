@@ -111,6 +111,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
             orderId: props.route.params.orderId,
           });
         }
+
+        emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_LISTING);
       } catch (error) {
         setIsSubmitting(false);
         toast.show(t('navigation.error.errorMessage'), {
@@ -131,6 +133,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         await MarketplaceService.cancelOrder(props.route.params.orderId);
         await refetch();
         toast.show(t('actions.update-success'), { type: 'md_success' });
+
+        emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_LISTING);
       } catch (error) {
         toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
       } finally {
