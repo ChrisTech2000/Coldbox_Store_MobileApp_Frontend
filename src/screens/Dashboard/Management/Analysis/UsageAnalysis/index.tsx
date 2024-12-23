@@ -200,7 +200,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
                 key={`${movement.id}-${index}`}
                 movement={movement}
                 coolingUnit={
-                  selectedUnits?.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
+                  coolingUnits?.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
                 }
                 selectedCompany={company}
                 navigateToCheckIn={(movement, id) =>

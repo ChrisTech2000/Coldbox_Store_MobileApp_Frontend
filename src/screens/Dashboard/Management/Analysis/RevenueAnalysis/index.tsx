@@ -209,7 +209,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
                 key={`${movement.id}-${index}`}
                 movement={movement}
                 coolingUnit={
-                  selectedUnits?.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
+                  coolingUnits?.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
                 }
                 selectedCompany={company}
                 navigateToMarketSurvey={() => {
