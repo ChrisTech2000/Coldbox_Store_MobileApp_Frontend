@@ -47,7 +47,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
 
         <View tw="w-full flex flex-row items-center justify-between space-x-6">
           <FlatList
-            data={movement.checkin?.crates}
+            data={movement?.checkin?.crates}
             keyExtractor={(item, index) => `crate-${item.id}-${index}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
@@ -58,12 +58,12 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                     {startCase(
                       t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
                     )}{' '}
-                    {item.tag || index + 1}
+                    {item?.tag || index + 1}
                   </Text>
                   <View tw="flex flex-row space-x-2 items-center flex-wrap">
-                    <Text tw="text-base">{movement.code}</Text>
+                    <Text tw="text-base">{movement?.code}</Text>
                     <Text tw="text-base text-green-500">
-                      +{item.initialWeight}
+                      +{item?.initialWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}
                     </Text>
                   </View>
@@ -72,7 +72,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
             )}
           />
           <Divider tw="w-[10%] h-0.5 bg-gray-700" />
-          <Text tw="text-base w-[40%] flex-wrap">{coolingUnit.name}</Text>
+          <Text tw="text-base w-[40%] flex-wrap">{coolingUnit?.name}</Text>
         </View>
       </View>
     );
@@ -96,10 +96,10 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
         </View>
 
         <View tw="w-full flex flex-row items-center justify-between space-x-6">
-          <Text tw="text-base w-[40%] flex-wrap">{coolingUnit.name}</Text>
+          <Text tw="text-base w-[40%] flex-wrap">{coolingUnit?.name}</Text>
           <Divider tw="w-[10%] h-0.5 bg-gray-700" />
           <FlatList
-            data={movement.checkout?.crates}
+            data={movement?.checkout?.crates}
             keyExtractor={(item, index) => `crate-${item.id}-${index}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
@@ -110,12 +110,12 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                     {startCase(
                       t('Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates')
                     )}{' '}
-                    {item.tag || index + 1}
+                    {item?.tag || index + 1}
                   </Text>
                   <View tw="flex flex-row space-x-2 items-center flex-wrap justify-end">
-                    <Text tw="text-base">{movement.code}</Text>
+                    <Text tw="text-base">{movement?.code}</Text>
                     <Text tw="text-base text-red-700">
-                      -{item.initialWeight}
+                      -{item?.initialWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}
                     </Text>
                   </View>
@@ -154,10 +154,10 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
-            const crates = movement.checkout?.crates?.filter(
+            const crates = movement?.checkout?.crates?.filter(
               (crate) => crate.crop?.name.toLowerCase() === item.toLowerCase()
             );
-            const totalWeight = crates.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0);
+            const totalWeight = crates?.reduce((acc, curr) => (acc += curr.affectedWeight ?? 0), 0);
             return (
               <View tw="mb-4">
                 <Text variant="TextBold" tw="text-base font-bold">
@@ -173,19 +173,19 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                       >
                         <View tw={windowHeight <= SMALL_SCREEN_THRESHOLD ? 'w-24' : 'w-32'}>
                           <Text tw="text-base">
-                            {crate.tag
+                            {crate?.tag
                               ? `${startCase(
                                   t(
                                     'Dashboard.CrateManagement.FarmerSurvey.modal.unit.singular.crates'
                                   )
-                                )} ${crate.tag}`
+                                )} ${crate?.tag}`
                               : ' '}
                           </Text>
 
-                          <Text tw="text-base">{crate.ownerName}</Text>
+                          <Text tw="text-base">{crate?.ownerName}</Text>
 
                           <Text tw="text-base text-red-700">
-                            -{crate.affectedWeight ?? 0}
+                            -{crate?.affectedWeight ?? 0}
                             {t('Dashboard.ProduceDetails.kilogram')}
                           </Text>
                         </View>
@@ -222,7 +222,7 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                   </View>
 
                   <View tw="self-center justify-center">
-                    <Text tw="text-base">{movement.checkin?.ownerName}</Text>
+                    <Text tw="text-base">{movement?.checkin?.ownerName}</Text>
                     <Text tw="text-base text-green-500">
                       +{totalWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}

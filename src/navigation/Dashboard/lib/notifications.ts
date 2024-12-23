@@ -9,6 +9,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAppEventListener } from '#ui/lib/emitter';
 import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
 import DataloaderService from '#services/DataloaderService';
+import { formatCurrencyWithSymbol } from '#screens/Dashboard/Main/Dashboard/CheckIn/utils';
 
 class NotificationManager {
   private readonly _t: Translator;
@@ -105,6 +106,17 @@ class NotificationManager {
         }
         case 'ORDER_REQUIRES_MOVEMENT': {
           message = this._t('Dashboard.Notifications.orderRequiresMovement');
+          break;
+        }
+        case 'LISTING_PRICE_UPDATED': {
+          message = this._t('Dashboard.Notifications.listingPriceUpdated', {
+            crop: item.crates.crop,
+            unitName: item.crates.coolingUnit,
+            priceTag: formatCurrencyWithSymbol(
+              item.marketListing?.currency ?? 'NGN',
+              item.marketListing?.pricePerKg ?? 0
+            ),
+          });
           break;
         }
         default: {
