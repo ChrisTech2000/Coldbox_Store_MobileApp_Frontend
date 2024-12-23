@@ -5,7 +5,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
-import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -23,6 +23,10 @@ function MarketplaceRoot() {
     emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_COORDINATES);
     await refetch();
   }, 340);
+
+  useAppEventListener('DISPATCH_INVALIDATE_MAKETPLACE_LISTING', async () => {
+    await refetch();
+  });
 
   return (
     <React.Fragment>
