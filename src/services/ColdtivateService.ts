@@ -941,13 +941,8 @@ class ColdtivateService extends HttpClient {
     coolingUnits: number | number[]
   ): Promise<GetMovementsHistoryResponse> => {
     try {
-      const params = {
-        coolingUnits: typeof coolingUnits === 'number' ? coolingUnits : coolingUnits.join(','),
-      };
-
       const { data } = await this.get<GetMovementsHistoryResponse>(
-        EOperationEndpoints.GET_COOLING_UNIT_USAGE,
-        { params }
+        query(EOperationEndpoints.GET_COOLING_UNIT_USAGE, { coolingUnits })
       );
       return data;
     } catch (error) {
