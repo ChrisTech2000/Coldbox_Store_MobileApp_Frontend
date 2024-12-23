@@ -1383,6 +1383,8 @@ export default {
       surveyAlreadyFilled: 'Iwadi ti kun tẹlẹ',
       orderRequiresMovement:
         'Awọn ọja nilo lati tun pinpin laarin awọn apoti. Tẹ fun awọn alaye lori awọn nkan ti o yẹ ki o gbe.',
+      listingPriceUpdated:
+        'Awọn owo ṣiṣe lọja fun awọn apoti ipamọ {{crop}} ni {{unitName}} ti ṣe imudojuiwọn: {{priceTag}}',
     },
   },
   tutorial: {

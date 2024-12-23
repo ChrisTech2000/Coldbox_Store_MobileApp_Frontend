@@ -1476,6 +1476,8 @@ const en = {
       surveyAlreadyFilled: 'Survey has already been filled',
       orderRequiresMovement:
         'Produces need to be redistributed between crates. Click for details on which items to move.',
+      listingPriceUpdated:
+        'The listing prices for the crates storing {{crop}} at {{unitName}} have been updated: {{priceTag}}',
     },
   },
   tutorial: {

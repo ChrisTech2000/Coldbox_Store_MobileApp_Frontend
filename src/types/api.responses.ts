@@ -397,8 +397,10 @@ export type GetNotificationsResponse = Array<{
     | 'MARKET_SURVEY'
     | 'FARMER_SURVEY'
     | 'CHECKIN_EDITED'
-    | 'ORDER_REQUIRES_MOVEMENT';
+    | 'ORDER_REQUIRES_MOVEMENT'
+    | 'LISTING_PRICE_UPDATED';
   user: number;
+  marketListing: { currency: string; pricePerKg: number } | null;
 }>;
 
 export type VerifyFigorrSensorConnectivityResponse = Array<{

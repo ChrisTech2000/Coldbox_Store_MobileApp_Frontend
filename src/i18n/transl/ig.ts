@@ -1390,6 +1390,8 @@ export default {
       surveyAlreadyFilled: 'Ejupụtalarị nyocha',
       orderRequiresMovement:
         "Mkpụrụ osisi na akwụkwọ nri kwesịrị ikesakwa ha n'etiti igbe. Pịa maka nkọwa banyere ihe ị ga-ebufe.",
+      listingPriceUpdated:
+        'Ọnụahịa ndepụta maka crates nchekwa {{crop}} na {{unitName}} emelitere: {{priceTag}}',
     },
   },
   tutorial: {

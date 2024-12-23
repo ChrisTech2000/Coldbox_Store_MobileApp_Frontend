@@ -1491,6 +1491,8 @@ export default {
       surveyAlreadyFilled: 'O questionário já foi preenchido',
       orderRequiresMovement:
         'Produtos precisam ser redistribuídos entre paletes. Clique para detalhes sobre quais itens mover.',
+      listingPriceUpdated:
+        'Os preços de listagem para as paletes armazenando {{crop}} em {{unitName}} foram atualizados: {{priceTag}}',
     },
   },
   tutorial: {

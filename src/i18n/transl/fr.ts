@@ -1417,6 +1417,8 @@ export default {
       surveyAlreadyFilled: "L'enquête a déjà été remplie",
       orderRequiresMovement:
         'Les produits doivent être redistribués entre les caisses. Cliquez pour plus de détails sur les articles à déplacer.',
+      listingPriceUpdated:
+        'Les prix de vente pour les caisses stockant {{crop}} à {{unitName}} ont été mis à jour : {{priceTag}}',
     },
   },
   tutorial: {
