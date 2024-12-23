@@ -51,7 +51,7 @@ PODS:
     - MapboxMobileEvents (= 1.0.10)
     - Turf (= 2.8.0)
   - MapboxMobileEvents (1.0.10)
-  -MMKV (1.3.5):
+  - MMKV (1.3.5):
     - MMKVCore (~> 1.3.5)
   - MMKVCore (1.3.5)
   - RCT-Folly (2024.01.01.00):
