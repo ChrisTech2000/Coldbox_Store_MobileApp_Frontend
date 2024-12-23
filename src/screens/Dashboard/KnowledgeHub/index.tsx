@@ -10,14 +10,19 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import type { KnowledgeHubStackRouteProps } from '#navigation/Dashboard/KnowledgeHub';
 import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils } from '#i18n/utils';
 import { KNOWLEDGE_HUB_URL, YOUR_VCCA_PDF_LINK } from '#constants/environment';
 import { GenericError } from '#ui/components/GenericError';
+import { mmkv } from '#stores/lib/storage';
 
 import { countriesDict } from '../Management/CompanyDetails/utils';
 
+function _getLanguage() {
+  return mmkv.getString('i18n-locale');
+}
+
 function buildPath(path: string, countryCode?: string): string {
-  return [KNOWLEDGE_HUB_URL, LanguageStorage.read(), path.replace(/^\/+|\/+$/g, ''), countryCode]
+  return [KNOWLEDGE_HUB_URL, _getLanguage(), path.replace(/^\/+|\/+$/g, ''), countryCode]
     .filter(Boolean)
     .join('/');
 }
@@ -29,15 +34,31 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
   const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
 
+  const _language = _getLanguage();
+
   const countryCode = useMemo(() => {
     const activeUserCountry = companyCountry || farmerCountry || '';
+    if (!activeUserCountry) return undefined;
+
     const lookupMap = countriesDict();
-    const resolvedCountryName = lookupMap.getByValue(activeUserCountry)?.name;
-    const countryISOCode = lookupMap.getISOByName(resolvedCountryName || '');
-    const isEnglishLocale = LanguageStorage.read() === 'en';
-    const isCountrySupported = ['NG', 'IN'].includes(countryISOCode || '');
+
+    const countryDetails = lookupMap.getByValue(activeUserCountry);
+    if (!countryDetails?.name) {
+      console.warn(`Could not resolve country name for: ${activeUserCountry}`);
+      return undefined;
+    }
+
+    const countryISOCode = lookupMap.getISOByName(countryDetails.name);
+    if (!countryISOCode) {
+      console.warn(`Could not resolve ISO code for country: ${countryDetails.name}`);
+      return undefined;
+    }
+
+    const isEnglishLocale = _language === 'en';
+    const isCountrySupported = ['NG', 'IN'].includes(countryISOCode);
+
     return isEnglishLocale && isCountrySupported ? countryISOCode : undefined;
-  }, [companyCountry, farmerCountry]);
+  }, [companyCountry, farmerCountry, _language]);
 
   return (
     <View tw="flex-1 justify-start">
