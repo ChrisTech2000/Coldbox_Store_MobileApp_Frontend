@@ -115,10 +115,6 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     });
   }, [sortedMovements, startDate, endDate, search]);
 
-  const movementsWithCheckout = useMemo(() => {
-    return revenueData.map((movement) => movement.code ?? null).filter(Boolean);
-  }, [revenueData]);
-
   useEffect(() => {
     return () => {
       setEndDate(null);
@@ -213,7 +209,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
                 key={`${movement.id}-${index}`}
                 movement={movement}
                 coolingUnit={
-                  selectedUnits.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
+                  coolingUnits?.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
                 }
                 selectedCompany={company}
                 navigateToMarketSurvey={() => {
@@ -231,7 +227,6 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
                     },
                   });
                 }}
-                movementsWithCheckout={movementsWithCheckout}
               />
             )}
             estimatedItemSize={40}
