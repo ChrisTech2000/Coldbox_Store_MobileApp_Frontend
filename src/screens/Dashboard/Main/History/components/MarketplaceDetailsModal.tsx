@@ -57,14 +57,17 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
               </Text>
               &nbsp;
-              {movement.checkin?.crates.length}
+              {movement.checkout?.crates.length}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
               </Text>
               &nbsp;
-              {movement.checkin?.crates.reduce((acc, curr) => (acc += curr.weight), 0)}
+              {movement.checkout?.crates.reduce(
+                (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                0
+              )}
               {t('Dashboard.ProduceDetails.kilogram')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
@@ -73,7 +76,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
               </Text>
               &nbsp;
               {Array.from(
-                new Set(movement.checkin?.crates.map((crate) => crate.crop?.name ?? ''))
+                new Set(movement.checkout?.crates.map((crate) => crate.crop?.name ?? ''))
               ).join(', ')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
@@ -141,7 +144,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
               </Text>
               &nbsp;
-              {movement.checkin?.crates.reduce((acc, curr) => (acc += curr.weight), 0)}
+              {movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight ?? 0), 0)}
               {t('Dashboard.ProduceDetails.kilogram')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">

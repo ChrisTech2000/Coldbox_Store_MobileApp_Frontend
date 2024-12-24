@@ -80,6 +80,7 @@ export function Movement({
 
   const isCheckIn = movement.initiatedFor === EInitiatedFor.CHECK_IN;
   const isCheckOut = movement.initiatedFor === EInitiatedFor.CHECK_OUT;
+  const isMarketplaceOrder = movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER;
 
   const price = useMemo(() => {
     if (isCheckOut)
@@ -138,11 +139,11 @@ export function Movement({
 
   const optionsMenu = useMemo(() => {
     return [
-      {
+      !isMarketplaceOrder && {
         label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
         action: seePDFModal,
       },
-      ...(!isCheckIn
+      ...(!isCheckIn && !isMarketplaceOrder
         ? [
             {
               label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
@@ -194,10 +195,11 @@ export function Movement({
             },
           ]
         : []),
-    ];
+    ].filter(Boolean);
   }, [
     isCheckIn,
     isCheckOut,
+    isMarketplaceOrder,
     movement,
     user,
     company,
