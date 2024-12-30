@@ -466,6 +466,8 @@ export default {
           bankTransfer: 'બેંક ટ્રાન્સફર',
         },
         paid: 'ચુકવવામાં આવ્યું',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'અજેમ બોક્સ્સ ઉમેરવામાં નથી આવ્યા',

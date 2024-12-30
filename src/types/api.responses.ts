@@ -447,19 +447,21 @@ export interface GetCouponListResponse {
 }
 
 export interface GetCartResponse {
-  id: number;
-  items: Array<CartItem>;
-  totalAmount: number;
-  totalColdtivateAmount: number;
-  totalCoolingFeesAmount: number;
-  totalDiscountAmount: number;
-  totalPaymentFeesAmount: number;
-  totalProduceAmount: number;
-  ownedOnBehalfOfCompanyId: number | undefined;
-  pickupDetails: Array<{
-    coolingUnitId: number;
-    pickupMethod: EPickUpMethod;
-  }>;
+  cart: {
+    id: number;
+    items: Array<CartItem>;
+    totalAmount: number;
+    totalColdtivateAmount: number;
+    totalCoolingFeesAmount: number;
+    totalDiscountAmount: number;
+    totalPaymentFeesAmount: number;
+    totalProduceAmount: number;
+    ownedOnBehalfOfCompanyId: number | undefined;
+    pickupDetails: Array<{
+      coolingUnitId: number;
+      pickupMethod: EPickUpMethod;
+    }>;
+  };
 }
 
 export interface GetAllOrdersResponse extends GetCartResponse {

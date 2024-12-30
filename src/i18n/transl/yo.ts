@@ -440,6 +440,8 @@ export default {
           bankName: 'Bank Name', // TODO
         },
         paid: 'ti sanwo',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'Ko si awọn apoti ti a ṣafikun sibẹsibẹ',

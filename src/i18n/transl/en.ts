@@ -465,6 +465,8 @@ const en = {
           bankName: 'Bank Name',
         },
         paid: 'Paid',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.',
       },
       CheckIn: {
         emptyState: 'No boxes added yet',

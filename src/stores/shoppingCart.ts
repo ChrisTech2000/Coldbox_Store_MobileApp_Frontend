@@ -7,14 +7,14 @@ import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit } from '#types/global';
 
 interface CartStoreState {
-  cartData: GetCartResponse | undefined;
+  cartData: GetCartResponse['cart'] | undefined;
   allCoolingUnits: CoolingUnit[] | undefined;
   isLoading: boolean;
   error: Error | null;
 
   fetchCart: () => Promise<void>;
   fetchCoolingUnits: () => Promise<void>;
-  setCart: (cart: GetCartResponse | undefined) => void;
+  setCart: (cart: GetCartResponse['cart'] | undefined) => void;
   reset: () => void;
 }
 
@@ -28,7 +28,7 @@ const useCartStore = create<CartStoreState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const data = await MarketplaceService.getCart();
-      set({ cartData: data, isLoading: false });
+      set({ cartData: data.cart, isLoading: false });
     } catch (err) {
       set({ error: err as Error, isLoading: false });
     }
@@ -44,7 +44,7 @@ const useCartStore = create<CartStoreState>((set) => ({
     }
   },
 
-  setCart: (cartData: GetCartResponse | undefined) => set({ cartData }),
+  setCart: (cartData: GetCartResponse['cart'] | undefined) => set({ cartData }),
   reset: () =>
     set({ cartData: undefined, allCoolingUnits: undefined, isLoading: false, error: null }),
 }));

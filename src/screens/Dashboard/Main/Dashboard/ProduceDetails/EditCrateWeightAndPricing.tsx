@@ -32,7 +32,6 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
-import useCartStore from '#stores/shoppingCart';
 import type { ListedCratesBaseParams } from '#types/api.params';
 import { ERoles, User } from '#types/global';
 
@@ -64,7 +63,6 @@ function EditCrateWeightAndPricing(
   const user = useAuthStore((store) => store.user);
   const refreshData = useDashboardStore((store) => store.refreshData);
   const { refetch: refetchMarketplace } = useMarketplaceListing();
-  const fetchCart = useCartStore((store) => store.fetchCart);
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
@@ -225,7 +223,6 @@ function EditCrateWeightAndPricing(
 
         refreshData.forEach((fn) => fn());
         refetchMarketplace();
-        fetchCart();
         props.navigation.navigate('Root', {
           produce: _produce,
           currency: params.companyCurrency,

@@ -467,6 +467,8 @@ export default {
           bankName: 'ବ୍ୟାଙ୍କର ନାମ',
         },
         paid: 'ପେଇଡ୍',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ବକ୍ସ ଯୋଡାଯାଇନି',

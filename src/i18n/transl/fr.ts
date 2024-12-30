@@ -458,6 +458,8 @@ export default {
           bankName: 'Nom de la banque',
         },
         paid: 'Payé',
+        lockedWithinPendingOrders:
+          'Les caisses bloquées dans des commandes en attente ne peuvent pas être validées.',
       },
       CheckIn: {
         emptyState: 'Aucune boîte ajoutée pour le moment',

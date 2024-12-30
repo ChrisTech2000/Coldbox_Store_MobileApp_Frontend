@@ -471,6 +471,8 @@ export default {
           bankName: 'Nome do Banco',
         },
         paid: 'Pago',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'Nenhuma caixa adicionada ainda',

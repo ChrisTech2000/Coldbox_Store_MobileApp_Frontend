@@ -22,6 +22,7 @@ export default function CheckoutButtonRedirect(props: {
     <Button
       mode="contained"
       uppercase
+      disabled={crates.every((crate) => crate.lockedWithinPendingOrders)}
       tw="w-[85%]"
       onPress={(evt) => {
         evt.stopPropagation();

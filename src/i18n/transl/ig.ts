@@ -445,6 +445,8 @@ export default {
           bankName: 'Bank Name', // TODO
         },
         paid: 'Akwụ ụgw',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'Ọnweghị igbe agbakwunyere',

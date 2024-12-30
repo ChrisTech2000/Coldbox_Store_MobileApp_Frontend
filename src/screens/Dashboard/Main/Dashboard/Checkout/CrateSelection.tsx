@@ -56,11 +56,16 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
       farmer: user?.id as number,
     },
     {
+      defaultData: [],
       skip: !user?.id || !coolingUnit?.id || !!_crates?.length,
     }
   );
 
   const crates = useMemo(() => _crates ?? data, [_crates, data]);
+  const allSelectableCrates = useMemo(
+    () => crates?.filter((crate) => !crate.lockedWithinPendingOrders),
+    [crates]
+  );
 
   const onPress = useCallback(
     (crate: Crate) => {
@@ -76,13 +81,13 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   );
 
   const onSelectAll = useCallback(() => {
-    if (selectedCrates.length === crates?.length) {
+    if (selectedCrates.length === allSelectableCrates?.length) {
       setSelectedCrates([]);
       return;
     }
 
-    setSelectedCrates(crates ?? []);
-  }, [crates, selectedCrates]);
+    setSelectedCrates(allSelectableCrates ?? []);
+  }, [allSelectableCrates, selectedCrates]);
 
   const onNext = useCallback(
     (evt: GestureResponderEvent) => {
@@ -98,9 +103,9 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   );
 
   useEffect(() => {
-    if (_crates) setSelectedCrates(_crates);
+    if (_crates && allSelectableCrates) setSelectedCrates(allSelectableCrates);
     if (_coolingUnit) onSelectCoolingUnit(_coolingUnit);
-  }, [_crates, _coolingUnit]);
+  }, [_crates, _coolingUnit, allSelectableCrates]);
 
   if (isLoading) {
     return (
@@ -169,7 +174,9 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
               onPress={onSelectAll}
               label=""
               value=""
-              status={selectedCrates.length === crates.length ? 'checked' : 'unchecked'}
+              status={
+                selectedCrates.length === allSelectableCrates?.length ? 'checked' : 'unchecked'
+              }
             />
           </TouchableOpacity>
 
@@ -178,22 +185,32 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
             data={crates ?? []}
             extraData={selectedCrates.length}
             renderItem={({ item: crate, index }) => (
-              <TouchableOpacity
-                key={`${crate.id}-${index}`}
-                tw="flex flex-row items-center"
-                onPress={() => onPress(crate)}
-              >
-                <CheckoutCrate crate={crate} />
-                <View tw="absolute right-[-2]">
-                  <RadioButtonItem
-                    rippleColor="white"
-                    onPress={() => onPress(crate)}
-                    label=""
-                    value={crate.id.toString()}
-                    status={selectedCrates.includes(crate) ? 'checked' : 'unchecked'}
-                  />
-                </View>
-              </TouchableOpacity>
+              <View key={`${crate.id}-${index}`}>
+                <TouchableOpacity
+                  tw="flex flex-row items-center"
+                  onPress={() => onPress(crate)}
+                  disabled={crate.lockedWithinPendingOrders}
+                >
+                  <CheckoutCrate crate={crate} />
+                  <View tw="absolute right-[-2]">
+                    <RadioButtonItem
+                      disabled={crate.lockedWithinPendingOrders}
+                      rippleColor="white"
+                      onPress={() => onPress(crate)}
+                      label=""
+                      value={crate.id.toString()}
+                      status={selectedCrates.includes(crate) ? 'checked' : 'unchecked'}
+                    />
+                  </View>
+                </TouchableOpacity>
+                {crate.lockedWithinPendingOrders ? (
+                  <Text
+                    variant="TextMedium"
+                    tw="ml-0.5"
+                    numberOfLines={2}
+                  >{`${t('Dashboard.CrateManagement.CheckOut.lockedWithinPendingOrders')}`}</Text>
+                ) : null}
+              </View>
             )}
           />
         </>

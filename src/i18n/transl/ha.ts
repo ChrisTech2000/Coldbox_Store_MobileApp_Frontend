@@ -450,6 +450,8 @@ export default {
           bankName: 'Bank Name', // TODO
         },
         paid: 'An biya',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'Har yanzu ba a saka akwatuna ba',
