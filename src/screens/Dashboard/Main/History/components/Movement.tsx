@@ -139,10 +139,14 @@ export function Movement({
 
   const optionsMenu = useMemo(() => {
     return [
-      !isMarketplaceOrder && {
-        label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
-        action: seePDFModal,
-      },
+      ...(!isMarketplaceOrder
+        ? [
+            {
+              label: t('Dashboard.History.optionsMenu.common.pdfReceipt'),
+              action: seePDFModal,
+            },
+          ]
+        : []),
       ...(!isCheckIn && !isMarketplaceOrder
         ? [
             {
@@ -195,7 +199,7 @@ export function Movement({
             },
           ]
         : []),
-    ].filter(Boolean);
+    ];
   }, [
     isCheckIn,
     isCheckOut,

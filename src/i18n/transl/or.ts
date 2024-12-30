@@ -467,6 +467,8 @@ export default {
           bankName: 'ବ୍ୟାଙ୍କର ନାମ',
         },
         paid: 'ପେଇଡ୍',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ବକ୍ସ ଯୋଡାଯାଇନି',
@@ -605,10 +607,8 @@ export default {
       noDTMessage: 'ଏହି ବିଶେଷ ସାମଗ୍ରୀ ପାଇଁ ସେଲ୍ଫ-ଲାଇଫ୍ ମୋଡେଲ୍ ଉପଲବ୍ଧ ନୁହେଁ।',
       checkOutButton: 'ଚେକ୍-ଆଉଟ୍',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
-      preSaleErrorOperator:
-        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
-      preSaleErrorUser:
-        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      preSaleError:
+        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
       operatorNoBankAccountWarning:
         "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
       farmerNoBankAccountWarning:

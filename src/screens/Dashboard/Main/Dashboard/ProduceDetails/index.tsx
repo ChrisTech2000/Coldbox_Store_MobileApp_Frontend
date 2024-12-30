@@ -298,6 +298,11 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
             owner={produce.owner}
             crates={produce.checkedInCrates}
           />
+          {produce.checkedInCrates.every((crate) => crate.lockedWithinPendingOrders) ? (
+            <Text tw="mt-1">
+              {t('Dashboard.CrateManagement.CheckOut.lockedWithinPendingOrders')}
+            </Text>
+          ) : null}
         </View>
       </RBAC.ProtectedResource>
     </React.Fragment>

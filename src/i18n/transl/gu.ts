@@ -466,6 +466,8 @@ export default {
           bankTransfer: 'બેંક ટ્રાન્સફર',
         },
         paid: 'ચુકવવામાં આવ્યું',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'અજેમ બોક્સ્સ ઉમેરવામાં નથી આવ્યા',
@@ -604,10 +606,8 @@ export default {
       noDTMessage: 'આ ખાસ માલ માટે Shelf-life મોડલ ઉપલબ્ધ નથી.',
       checkOutButton: 'ચેક આઉટ',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
-      preSaleErrorOperator:
-        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
-      preSaleErrorUser:
-        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      preSaleError:
+        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
       operatorNoBankAccountWarning:
         "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
       farmerNoBankAccountWarning:

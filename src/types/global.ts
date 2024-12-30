@@ -75,6 +75,7 @@ export type Crate = {
   qualityDt: boolean;
   tag: string;
   listedInTheMarketplace?: boolean;
+  lockedWithinPendingOrders: boolean;
 };
 
 export type DashboardProduce = {

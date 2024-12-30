@@ -40,7 +40,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
 
-  const [cartData, coolingUnits] = useCartStore((store) => [store.cartData, store.allCoolingUnits]);
+  const [cartData, coolingUnits, setCart] = useCartStore((store) => [
+    store.cartData,
+    store.allCoolingUnits,
+    store.setCart,
+  ]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -56,6 +60,8 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           return acc;
         }, [] as number[]) ?? [];
 
+      const recomputedCart = await MarketplaceService.recomputeCart();
+      setCart(recomputedCart.cart);
       const result = await MarketplaceService.checkoutWithPaystack();
 
       if (result.authorizationUrl) {
