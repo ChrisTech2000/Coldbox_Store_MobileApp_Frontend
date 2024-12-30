@@ -1,19 +1,17 @@
-// import Dataloader from 'dataloader';
-// import { LRUMap } from 'lru_map';
-import HttpClient from './HttpClient';
 import moize from 'moize';
+import HttpClient from './HttpClient';
 
 import ColdtivateService from './ColdtivateService';
-import type { Company, CoolingUnit, Farmer, User, Crop } from '#types/global';
 
-// const LRU_CACHE_MAX = 500;
-
-function EntireDatasetPreloader<K extends number, V extends {}>(
+// eslint-disable-next-line
+// @ts-ignore
+function EntireDatasetPreloader<K extends number, V extends NonNullable<unknown>>(
   loadAllDatums: () => Promise<V[]>,
   key: string = 'id'
 ) {
   const getK = (obj: V) => {
     const objKey = key in obj ? key : 'id';
+    // eslint-disable-next-line
     // @ts-ignore
     return `${obj[objKey]}`;
   };

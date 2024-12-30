@@ -15,6 +15,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import useCartStore from '#stores/shoppingCart';
 import { EPaymentMethod, EPaymentThrough, EPricingType } from '#types/global';
 
 import { CheckOut2ScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
@@ -29,6 +30,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { useMarketplaceListing } from '../../Marketplace/utils';
 import { BankTransferModal } from './BankTransferDetailsModal';
 
 export const usePaymentTypeStore = createSelectStore<EPaymentMethod>();
@@ -42,6 +44,8 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const { guard } = RBAC.useRBAC();
 
   const company = useManagementStore((store) => store.company);
+  const { refetch: refetchMarketplace } = useMarketplaceListing();
+  const fetchCart = useCartStore((store) => store.fetchCart);
   const [paymentMethod, resetPaymentStore] = usePaymentTypeStore((store) => [
     store.selectedItem,
     store.reset,
@@ -130,6 +134,8 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       });
 
       refreshData.forEach((fn) => fn());
+      refetchMarketplace();
+      fetchCart();
       toast.show(t('actions.update-success'), { type: 'md_success' });
 
       if (guard('VIEW', 'TemperatureAlertModal')) {
