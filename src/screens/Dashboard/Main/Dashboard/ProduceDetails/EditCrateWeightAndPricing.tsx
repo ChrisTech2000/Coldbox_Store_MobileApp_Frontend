@@ -36,6 +36,7 @@ import type { ListedCratesBaseParams } from '#types/api.params';
 import { ERoles, User } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
+import { useMarketplaceListing } from '../../Marketplace/utils';
 import { formatCurrencyWithSymbol } from '../CheckIn/utils';
 
 type FormValues<T = string> = {
@@ -61,6 +62,7 @@ function EditCrateWeightAndPricing(
 
   const user = useAuthStore((store) => store.user);
   const refreshData = useDashboardStore((store) => store.refreshData);
+  const { refetch: refetchMarketplace } = useMarketplaceListing();
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
@@ -220,6 +222,7 @@ function EditCrateWeightAndPricing(
         });
 
         refreshData.forEach((fn) => fn());
+        refetchMarketplace();
         props.navigation.navigate('Root', {
           produce: _produce,
           currency: params.companyCurrency,
@@ -227,12 +230,7 @@ function EditCrateWeightAndPricing(
           companyId: params.companyId,
         });
       } else {
-        toast.show(
-          user?.role === ERoles.OPERATOR
-            ? t('Dashboard.ProduceDetails.preSaleErrorOperator')
-            : t('Dashboard.ProduceDetails.preSaleErrorUser'),
-          { type: 'md_danger' }
-        );
+        toast.show(t('Dashboard.ProduceDetails.preSaleError'), { type: 'md_danger' });
       }
     } catch (exception) {
       console.error(exception);

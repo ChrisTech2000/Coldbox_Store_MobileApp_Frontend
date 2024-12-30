@@ -440,6 +440,8 @@ export default {
           bankName: 'Bank Name', // TODO
         },
         paid: 'ti sanwo',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.', // TODO
       },
       CheckIn: {
         emptyState: 'Ko si awọn apoti ti a ṣafikun sibẹsibẹ',
@@ -566,10 +568,8 @@ export default {
       noDTMessage: 'Awoṣe Shelf-life kan ko si fun ọja pataki yii.',
       checkOutButton: 'jade',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
-      preSaleErrorOperator:
-        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
-      preSaleErrorUser:
-        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      preSaleError:
+        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
       operatorNoBankAccountWarning:
         "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
       farmerNoBankAccountWarning:
