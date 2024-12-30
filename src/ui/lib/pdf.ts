@@ -1,12 +1,12 @@
-import { Platform } from 'react-native';
-import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {
   DocumentDirectoryPath,
   ExternalStorageDirectoryPath,
   unlink,
   writeFile,
 } from '@dr.pogodin/react-native-fs';
+import { Platform } from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import Share from 'react-native-share';
 
 const IS_ANDROID = Platform.OS === 'android';
@@ -27,7 +27,8 @@ export async function savePDF(html: string, fileName: string): Promise<void> {
     throw new Error('Failed to convert HTML to PDF');
   }
 
-  const filePath = `${BASE_PATH}/${fileName.toLowerCase()}.pdf`;
+  const timestamp = new Date().getTime();
+  const filePath = `${BASE_PATH}/${fileName.toLowerCase()}_${timestamp}.pdf`;
   await writeFile(filePath, result.base64, 'base64');
 
   async function _deleteTempFile(): Promise<void> {
