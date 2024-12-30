@@ -592,10 +592,8 @@ export default {
         "Un modèle de durée de conservation n'est pas disponible pour cette marchandise particulière.",
       checkOutButton: 'Retirer',
       cratesListedForSale: '{{amount}} caisse(s) marquée(s) comme étant à vendre',
-      preSaleErrorOperator:
-        'Quelque chose a mal tourné. Assurez-vous que l’utilisateur dispose d’un compte Paystack valide ou contactez l’assistance.',
-      preSaleErrorUser:
-        'Quelque chose a mal tourné. Assurez-vous d’avoir un compte Paystack valide ou contactez l’assistance.',
+      preSaleError:
+        "Veuillez noter : Vous ne pouvez pas modifier le statut de l'annonce des caisses avec des commandes en attente. Si cela ne semble pas s'appliquer, veuillez contacter le support pour assistance.",
       operatorNoBankAccountWarning:
         '{{name}} n’a pas de coordonnées bancaires pour recevoir des paiements pour ses ventes. Veuillez ajouter leurs coordonnées bancaires au cas où ils les auraient partagées avec vous',
       farmerNoBankAccountWarning:

@@ -609,10 +609,8 @@ export default {
       noDTMessage: 'Um modelo de validade não está disponível para este produto específico.',
       checkOutButton: 'Check-out',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
-      preSaleErrorOperator:
-        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.', // TODO
-      preSaleErrorUser:
-        'Something went wrong. Please make sure you have a valid Paystack account or contact support.', // TODO
+      preSaleError:
+        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
       operatorNoBankAccountWarning:
         "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
       farmerNoBankAccountWarning:

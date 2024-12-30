@@ -59,7 +59,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
       defaultData: undefined,
     }
   );
-
+  console.log(props.route.params.orderId);
   const { data: crops, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
