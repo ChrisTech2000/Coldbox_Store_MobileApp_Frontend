@@ -24,7 +24,7 @@ export function CheckOutData(props: CheckOutDataProps) {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const generatePDF = useCallback(async () => {
-    setIsProcessing(false);
+    setIsProcessing(true);
 
     try {
       const html = `
@@ -128,7 +128,7 @@ export function CheckOutData(props: CheckOutDataProps) {
         type: 'md_danger',
       });
     } finally {
-      setIsProcessing(true);
+      setIsProcessing(false);
     }
   }, [t, toast, movement, dismissModal]);
 
@@ -163,7 +163,7 @@ export function CheckOutData(props: CheckOutDataProps) {
         </View>
       </View>
 
-      <ScrollView tw="max-h-[80%]" showsVerticalScrollIndicator={false}>
+      <ScrollView tw="max-h-72" showsVerticalScrollIndicator={false}>
         <DataTable>
           <DataTable.Header tw="bg-gray-200">
             <DataTable.Title>{t('Dashboard.History.pdfModal.checkOut.idLabel')}</DataTable.Title>

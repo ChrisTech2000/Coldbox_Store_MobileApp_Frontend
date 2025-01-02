@@ -292,13 +292,11 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       </ScrollView>
 
       <RBAC.ProtectedResource action="VIEW" subject="OperatorActions">
-        <View tw="absolute left-0 bottom-0 bg-white border-t border-zinc-300 w-full h-20 items-center justify-center">
-          <CheckoutButtonRedirect
-            coolingUnit={coolingUnit}
-            owner={produce.owner}
-            crates={produce.checkedInCrates}
-          />
-        </View>
+        <CheckoutButtonRedirect
+          coolingUnit={coolingUnit}
+          owner={produce.owner}
+          crates={produce.checkedInCrates}
+        />
       </RBAC.ProtectedResource>
     </React.Fragment>
   );

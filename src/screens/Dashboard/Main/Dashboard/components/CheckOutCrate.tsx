@@ -22,7 +22,12 @@ export function CheckoutCrate({ crate }: ProduceProps) {
   }, []);
 
   return (
-    <View tw="flex flex-row w-full self-center mr-2 mt-3">
+    <View
+      tw={cn(
+        'flex flex-row w-full self-center mr-2 mt-3',
+        crate.lockedWithinPendingOrders && 'opacity-60'
+      )}
+    >
       <View
         tw={cn(
           'bg-green-400 w-2 rounded-l-sm border-y-4 border-green-400 py-3',

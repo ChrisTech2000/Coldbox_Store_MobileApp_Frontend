@@ -1,12 +1,9 @@
 import isEmpty from 'lodash/isEmpty';
-import { useMemo } from 'react';
-import moize from 'moize';
-import ms from 'ms';
 
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { ERoles, type CoolingUnit, type User, type Company } from '#types/global';
 import { resolveCropInfo, resolveOwnerName } from '#services/utils/resolvers';
+import { ERoles, type CoolingUnit, type User } from '#types/global';
 
 export function useMovementsHistory(
   farmerId: number | null,

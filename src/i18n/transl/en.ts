@@ -465,6 +465,8 @@ const en = {
           bankName: 'Bank Name',
         },
         paid: 'Paid',
+        lockedWithinPendingOrders:
+          'Crates that are locked in pending orders cannot be checked out.',
       },
       CheckIn: {
         emptyState: 'No boxes added yet',
@@ -603,10 +605,8 @@ const en = {
       noDTMessage: 'A Shelf-life model is not available for this particular commodity.',
       checkOutButton: 'Check out',
       cratesListedForSale: '{{amount}} crate(s) marked as listed for sale',
-      preSaleErrorOperator:
-        'Something went wrong. Please make sure the user has a valid Paystack account or contact support.',
-      preSaleErrorUser:
-        'Something went wrong. Please make sure you have a valid Paystack account or contact support.',
+      preSaleError:
+        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.",
       operatorNoBankAccountWarning:
         "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.",
       farmerNoBankAccountWarning:

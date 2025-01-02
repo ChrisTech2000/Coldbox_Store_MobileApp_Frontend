@@ -45,6 +45,17 @@ class MarketplaceService extends HttpClient {
     }
   };
 
+  public recomputeCart = async (): Promise<GetCartResponse> => {
+    try {
+      const { data } = await this.post<GetCartResponse>(EMarketplaceEndpoints.GET_CART, {});
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public checkoutWithPaystack = async (): Promise<CheckoutWithPaystackResponse> => {
     try {
       const { data } = await this.post<CheckoutWithPaystackResponse>(
@@ -71,10 +82,10 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public removeItemFromCart = async (crateId: number): Promise<{ cart: GetCartResponse }> => {
+  public removeItemFromCart = async (crateId: number): Promise<GetCartResponse> => {
     try {
       const url = subs(EMarketplaceEndpoints.REMOVE_ITEM_FROM_CART, { crateId });
-      const { data } = await this.delete<{ cart: GetCartResponse }>(url);
+      const { data } = await this.delete<GetCartResponse>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -83,14 +94,9 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public addItemToCart = async (
-    params: AddItemToCartParams
-  ): Promise<{ cart: GetCartResponse }> => {
+  public addItemToCart = async (params: AddItemToCartParams): Promise<GetCartResponse> => {
     try {
-      const { data } = await this.post<{ cart: GetCartResponse }>(
-        EMarketplaceEndpoints.ADD_ITEM,
-        params
-      );
+      const { data } = await this.post<GetCartResponse>(EMarketplaceEndpoints.ADD_ITEM, params);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
