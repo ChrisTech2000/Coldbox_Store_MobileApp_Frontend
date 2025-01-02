@@ -93,7 +93,7 @@ export function useMarketplaceListing() {
             crateId: node.crateId,
             crateWeight: node.availableWeightInKg,
             shelfLife: node.relCrateRemainingShelfLife,
-            price: node.totalPricePerKg,
+            price: node.producePricePerKg,
             owner: {
               name: node.ownedOnBehalfOfCompanyId
                 ? ((owner as Company)?.name ?? '')
@@ -119,7 +119,7 @@ export function useMarketplaceListing() {
               image: contextualCrop?.image ?? '',
             },
             movementCode: node.relCheckInMovementCode,
-            currencyValue: formatCurrencyWithSymbol(node.currency, node.totalPricePerKg),
+            currencyValue: formatCurrencyWithSymbol(node.currency, node.producePricePerKg),
           } satisfies AvailableListingDatum;
         })
       );

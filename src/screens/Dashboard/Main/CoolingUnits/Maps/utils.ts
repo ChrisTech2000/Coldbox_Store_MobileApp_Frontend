@@ -12,7 +12,6 @@ import type {
   GetLocationResponse,
 } from '#types/api.responses';
 import type { Translator } from '#i18n/utils';
-// import { stringToHash } from '#ui/lib/hash';
 
 export type MarkerCoolingUnitsInfo = {
   name: string;
