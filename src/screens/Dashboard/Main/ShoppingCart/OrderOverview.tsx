@@ -42,18 +42,14 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     'getOrder',
     MarketplaceService.getOrder,
     props.route.params.orderId,
-    {
-      defaultData: undefined,
-    }
+    { defaultData: undefined }
   );
 
   const { data: crops, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
-    {
-      defaultData: [],
-    }
+    { defaultData: [] }
   );
 
   const orderDataByCoolingUnit = useMemo(() => {
@@ -62,13 +58,13 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     const groupedData = data.items.reduce(
       (acc, item) => {
         const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
-
         if (!coolingUnit) return acc;
 
-        if (!acc[coolingUnit.name]) {
-          acc[coolingUnit.name] = [];
+        if (!acc[coolingUnit.id]) {
+          acc[coolingUnit.id] = [];
         }
-        acc[coolingUnit.name].push(item);
+
+        acc[coolingUnit.id].push(item);
         return acc;
       },
       {} as Record<string, typeof data.items>
@@ -87,13 +83,6 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
       </View>
     );
   }
-
-  const total =
-    data.totalColdtivateAmount +
-    data.totalCoolingFeesAmount +
-    data.totalPaymentFeesAmount +
-    data.totalProduceAmount -
-    data.totalDiscountAmount;
 
   return (
     <React.Fragment>
@@ -123,27 +112,19 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => {
+              renderItem={({ item: { coolingUnit, items } }) => {
                 return (
                   <View tw="mb-4">
                     <OrderDetailsCard
-                      heading={item.coolingUnit}
+                      heading={coolingUnit}
                       totalLabel={t('Dashboard.ShoppingCart.total')}
-                      produceWeight={item?.items?.reduce(
+                      produceWeight={items?.reduce(
                         (acc, curr) => (acc += curr.orderedProduceWeight),
                         0
                       )}
-                      subtotal={item?.items?.reduce(
-                        (acc, curr) => (acc += curr.produceAmount + curr.coolingFeesAmount),
-                        0
-                      )}
-                      discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
-                      total={item?.items?.reduce(
-                        (acc, curr) =>
-                          (acc +=
-                            curr.produceAmount + curr.coolingFeesAmount - curr.discountAmount),
-                        0
-                      )} // TODO: fix in BE
+                      subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
+                      discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
+                      total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
                     />
                   </View>
                 );
@@ -260,7 +241,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               <Text tw="text-lg">
                 {formatCurrencyWithSymbol(
                   'NGN', // TODO: get value from somewhere
-                  total
+                  data.totalAmount
                 )}
               </Text>
             </View>
