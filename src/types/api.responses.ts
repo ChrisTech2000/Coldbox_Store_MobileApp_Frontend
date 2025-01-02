@@ -446,25 +446,27 @@ export interface GetCouponListResponse {
   nodes: Array<CreateCouponResponse>;
 }
 
+type CartDatumGetCartResponse = {
+  id: number;
+  items: Array<CartItem>;
+  totalAmount: number;
+  totalColdtivateAmount: number;
+  totalCoolingFeesAmount: number;
+  totalDiscountAmount: number;
+  totalPaymentFeesAmount: number;
+  totalProduceAmount: number;
+  ownedOnBehalfOfCompanyId: number | undefined;
+  pickupDetails: Array<{
+    coolingUnitId: number;
+    pickupMethod: EPickUpMethod;
+  }>;
+};
+
 export interface GetCartResponse {
-  cart: {
-    id: number;
-    items: Array<CartItem>;
-    totalAmount: number;
-    totalColdtivateAmount: number;
-    totalCoolingFeesAmount: number;
-    totalDiscountAmount: number;
-    totalPaymentFeesAmount: number;
-    totalProduceAmount: number;
-    ownedOnBehalfOfCompanyId: number | undefined;
-    pickupDetails: Array<{
-      coolingUnitId: number;
-      pickupMethod: EPickUpMethod;
-    }>;
-  };
+  cart: CartDatumGetCartResponse;
 }
 
-export interface GetAllOrdersResponse extends GetCartResponse {
+export interface GetAllOrdersResponse extends CartDatumGetCartResponse {
   createdAt: string;
   status: EOrderStatus;
 }
@@ -489,7 +491,6 @@ export interface GetAvailableListingResponse {
     relCoolingUnitId: number;
     relCrateRemainingShelfLife: number;
     relCropId: number;
-    totalPricePerKg: number;
     weightLockedInPaymentPendingOrdersInKg: number;
     ownedByUserId: number | null;
     ownedOnBehalfOfCompanyId: number | null;
@@ -550,7 +551,6 @@ export interface SellerListedCratesResponse {
   relCoolingUnitId: number;
   relCrateRemainingShelfLife: number;
   relCropId: number;
-  totalPricePerKg: number;
   weightLockedInPaymentPendingOrdersInKg: number;
 }
 

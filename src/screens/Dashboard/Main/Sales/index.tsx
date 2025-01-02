@@ -30,7 +30,6 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
-// import { stringToHash } from '#ui/lib/hash';
 
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
@@ -189,7 +188,7 @@ function SalesRoot() {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           'NGN', // TODO: get value from somewhere
-                          item.items.reduce((acc, current) => (acc += current.produceAmount), 0)
+                          item.totalAmount
                         )}
                       </Text>
                     </View>
@@ -201,7 +200,7 @@ function SalesRoot() {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           'NGN', // TODO: get value from somewhere
-                          item.items.reduce((acc, current) => (acc += current.coolingFeesAmount), 0)
+                          item.totalCoolingFeesAmount
                         )}
                       </Text>
                     </View>
