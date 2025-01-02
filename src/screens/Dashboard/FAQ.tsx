@@ -43,18 +43,16 @@ function FAQ() {
 
       <List.AccordionGroup>
         <FlatList
+          nestedScrollEnabled
           showsVerticalScrollIndicator={false}
           data={faq}
           keyExtractor={(item, itemIdx) => `faq-${item.id}-#${itemIdx}`}
           renderItem={({ item }) => (
-            <React.Fragment>
-              <List.Accordion title={item.title} id={item.id}>
-                <Text tw="text-wrap mx-8 mt-2 mb-8">{item.text}</Text>
-              </List.Accordion>
-              <Divider />
-            </React.Fragment>
+            <List.Accordion title={item.title} id={item.id} titleNumberOfLines={4}>
+              <Text tw="text-wrap mx-8 mt-2 mb-8">{item.text}</Text>
+            </List.Accordion>
           )}
-          nestedScrollEnabled
+          ItemSeparatorComponent={Divider}
         />
       </List.AccordionGroup>
     </View>
