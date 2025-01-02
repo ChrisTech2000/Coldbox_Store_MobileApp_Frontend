@@ -64,6 +64,7 @@ function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) 
 
     if (url.includes(TRANSACTION_CANCELLED_URL)) {
       props.navigation.navigate('IncompleteOrderOverview', { orderId });
+      refreshData.forEach((fn) => fn());
       await waitFor(ms('2 second')).then(fetchCart);
     }
   }
