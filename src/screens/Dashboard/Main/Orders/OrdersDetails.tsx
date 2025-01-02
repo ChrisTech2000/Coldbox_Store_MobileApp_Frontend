@@ -171,7 +171,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
 
   const total =
     data.totalColdtivateAmount +
-    data.totalCoolingFeesAmount +
     data.totalPaymentFeesAmount +
     data.totalProduceAmount -
     data.totalDiscountAmount;
@@ -213,13 +212,12 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                       0
                     )}
                     subtotal={item?.items?.reduce(
-                      (acc, curr) => (acc += curr.produceAmount + curr.coolingFeesAmount),
+                      (acc, curr) => (acc += curr.producePricePerKg),
                       0
                     )}
                     discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
                     total={item?.items?.reduce(
-                      (acc, curr) =>
-                        (acc += curr.produceAmount + curr.coolingFeesAmount - curr.discountAmount),
+                      (acc, curr) => (acc += curr.producePricePerKg - curr.discountAmount),
                       0
                     )} // TODO: fix in BE
                   />

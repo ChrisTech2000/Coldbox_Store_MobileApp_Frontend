@@ -489,7 +489,6 @@ export interface GetAvailableListingResponse {
     relCoolingUnitId: number;
     relCrateRemainingShelfLife: number;
     relCropId: number;
-    totalPricePerKg: number;
     weightLockedInPaymentPendingOrdersInKg: number;
     ownedByUserId: number | null;
     ownedOnBehalfOfCompanyId: number | null;
@@ -550,7 +549,6 @@ export interface SellerListedCratesResponse {
   relCoolingUnitId: number;
   relCrateRemainingShelfLife: number;
   relCropId: number;
-  totalPricePerKg: number;
   weightLockedInPaymentPendingOrdersInKg: number;
 }
 

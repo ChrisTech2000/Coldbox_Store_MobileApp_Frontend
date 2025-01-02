@@ -121,7 +121,6 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
   const total =
     cartData.totalColdtivateAmount +
-    cartData.totalCoolingFeesAmount +
     cartData.totalPaymentFeesAmount +
     cartData.totalProduceAmount -
     cartData.totalDiscountAmount;
@@ -144,14 +143,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                     (acc, curr) => (acc += curr.orderedProduceWeight),
                     0
                   )}
-                  subtotal={item?.items?.reduce(
-                    (acc, curr) => (acc += curr.produceAmount + curr.coolingFeesAmount),
-                    0
-                  )}
+                  subtotal={item?.items?.reduce((acc, curr) => (acc += curr.producePricePerKg), 0)}
                   discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
                   total={item?.items?.reduce(
-                    (acc, curr) =>
-                      (acc += curr.produceAmount + curr.coolingFeesAmount - curr.discountAmount),
+                    (acc, curr) => (acc += curr.producePricePerKg - curr.discountAmount),
                     0
                   )} // TODO: fix in BE
                 />

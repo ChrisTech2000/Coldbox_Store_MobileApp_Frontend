@@ -231,10 +231,7 @@ export function CartItem({ item }: CartItemProps) {
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
             <Text variant="TextMedium" tw="text-base">
-              {formatCurrencyWithSymbol(
-                company?.currency || 'NGN',
-                item.producePricePerKg + item.coolingFeesAmount
-              )}
+              {formatCurrencyWithSymbol(company?.currency || 'NGN', item.producePricePerKg)}
               {t('Dashboard.ShoppingCart.perKg')}
             </Text>
           </View>

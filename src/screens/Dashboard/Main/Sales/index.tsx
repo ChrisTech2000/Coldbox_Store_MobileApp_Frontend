@@ -189,7 +189,7 @@ function SalesRoot() {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           'NGN', // TODO: get value from somewhere
-                          item.items.reduce((acc, current) => (acc += current.produceAmount), 0)
+                          item.items.reduce((acc, current) => (acc += current.producePricePerKg), 0)
                         )}
                       </Text>
                     </View>

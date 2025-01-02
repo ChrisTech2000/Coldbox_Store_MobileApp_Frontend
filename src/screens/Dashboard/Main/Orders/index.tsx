@@ -154,7 +154,6 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
 
               const total =
                 item.totalColdtivateAmount +
-                item.totalCoolingFeesAmount +
                 item.totalPaymentFeesAmount +
                 item.totalProduceAmount -
                 item.totalDiscountAmount;
