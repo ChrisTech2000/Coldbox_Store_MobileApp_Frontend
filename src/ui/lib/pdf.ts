@@ -10,11 +10,32 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import Share from 'react-native-share';
 
+import { dateFmt } from '#i18n/utils';
+
 const IS_ANDROID = Platform.OS === 'android';
 const IS_ANDROID_PERMISSION_REQUIRED = Number(Platform.Version) < 33;
 
 const BASE_PATH = IS_ANDROID ? `${ExternalStorageDirectoryPath}/Download` : DocumentDirectoryPath;
-const RETRY_COUNT = 100; // prevent infinite loop
+
+/**
+ * Note on Android MediaStore Caching:
+ *
+ * Android's MediaStore keeps a cache of file metadata that can persist
+ * even after files are deleted. This creates two issues:
+ *
+ * 1. The cache may not update immediately when files are deleted
+ *    through Android File Manager
+ *
+ * 2. This can lead to "file already exists" errors when saving new
+ *    files with the same name as previously deleted ones
+ *
+ * The cache will only refresh after the app is fully terminated and
+ * restarted.
+ */
+function _buildPDFFilePath(fileName: string) {
+  const creationDate = dateFmt(new Date().toISOString(), 'dMyy_kms');
+  return `${BASE_PATH}/${fileName.toLowerCase()}-${creationDate}.pdf`;
+}
 
 export async function savePDF(html: string, fileName: string): Promise<void> {
   if (IS_ANDROID && IS_ANDROID_PERMISSION_REQUIRED) {
@@ -27,18 +48,7 @@ export async function savePDF(html: string, fileName: string): Promise<void> {
   const result = await RNHTMLtoPDF.convert({ html, base64: true });
   if (!result.base64) throw new Error('Failed to convert HTML to PDF');
 
-  let filePath = `${BASE_PATH}/${fileName.toLowerCase()}.pdf`;
-
-  let fileExists = await exists(filePath);
-  let retryCount = 0;
-  while (fileExists && retryCount < RETRY_COUNT) {
-    retryCount++;
-    filePath = `${BASE_PATH}/${fileName.toLowerCase()}(${retryCount}).pdf`;
-    fileExists = await exists(filePath);
-  }
-
-  if (retryCount >= RETRY_COUNT) throw new Error('Unable to create unique file path');
-
+  const filePath = _buildPDFFilePath(fileName);
   await writeFile(filePath, result.base64, 'base64');
 
   async function _deleteTempFile(): Promise<void> {
