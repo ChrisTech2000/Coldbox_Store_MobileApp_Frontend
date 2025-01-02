@@ -1,6 +1,6 @@
 {
   "name": "coldtivate",
-  "version": "7.3.14",
+  "version": "7.3.15",
   "private": true,
   "scripts": {
     "prepare": "husky",
