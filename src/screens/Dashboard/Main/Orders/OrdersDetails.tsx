@@ -40,6 +40,7 @@ import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryI
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
 import { PickupDetailsCard } from '../ShoppingCart/components/PickupDetailsCard';
 import PaymentPendingBottomSheet from './components/PaymentPendingBottomSheet';
+import { useDashboardStore } from '#stores/dashboard';
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
@@ -47,6 +48,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const scrollRef = useRef<ScrollView>(null);
   const coolingUnits = useCartStore((store) => store.allCoolingUnits);
   const colors = useTailwindColors();
+  const refreshDataFunctions = useDashboardStore((store) => store.refreshData);
 
   const [showButton, setShowButton] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -113,6 +115,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         }
 
         emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_LISTING);
+        refreshDataFunctions.forEach((fn) => fn());
       } catch (error) {
         setIsSubmitting(false);
         toast.show(t('navigation.error.errorMessage'), {
@@ -120,7 +123,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         });
       }
     },
-    [props.route.params.orderId]
+    [props.route.params.orderId, refreshDataFunctions]
   );
 
   const onCancel = useCallback(
@@ -135,13 +138,14 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         toast.show(t('actions.update-success'), { type: 'md_success' });
 
         emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_LISTING);
+        refreshDataFunctions.forEach((fn) => fn());
       } catch (error) {
         toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
       } finally {
         setIsSubmitting(false);
       }
     },
-    [props.route.params.orderId]
+    [props.route.params.orderId, refreshDataFunctions]
   );
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider } from 'react-native-paper';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
@@ -48,7 +49,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     fullScreen: true,
   });
 
-  const { data, isLoading } = useApiCall(
+  const { data, isLoading, refetch } = useApiCall(
     'getFarmerCrates',
     ColdtivateService.getFarmerCrates,
     {
@@ -59,6 +60,15 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
       defaultData: [],
       skip: !user?.id || !coolingUnit?.id || !!_crates?.length,
     }
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!data) return;
+      refetch().catch((error) => {
+        console.error('Error refetching crates:', error);
+      });
+    }, [data, refetch])
   );
 
   const crates = useMemo(() => _crates ?? data, [_crates, data]);
