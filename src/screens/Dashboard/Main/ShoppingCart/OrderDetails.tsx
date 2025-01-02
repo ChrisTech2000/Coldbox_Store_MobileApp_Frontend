@@ -86,13 +86,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     const groupedData = cartData.items.reduce(
       (acc, item) => {
         const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
-
         if (!coolingUnit) return acc;
 
-        if (!acc[coolingUnit.name]) {
-          acc[coolingUnit.name] = [];
+        if (!acc[coolingUnit.id]) {
+          acc[coolingUnit.id] = [];
         }
-        acc[coolingUnit.name].push(item);
+        acc[coolingUnit.id].push(item);
         return acc;
       },
       {} as Record<string, typeof cartData.items>
@@ -119,12 +118,6 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
     CART_MINIMUM_VALUE;
 
-  const total =
-    cartData.totalColdtivateAmount +
-    cartData.totalPaymentFeesAmount +
-    cartData.totalProduceAmount -
-    cartData.totalDiscountAmount;
-
   return (
     <ScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
       <View tw="flex-1 pb-8 space-y-6">
@@ -133,22 +126,19 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => {
+          renderItem={({ item: { coolingUnit, items } }) => {
             return (
               <View tw="mb-4">
                 <OrderDetailsCard
-                  heading={item.coolingUnit}
+                  heading={coolingUnit}
                   totalLabel={t('Dashboard.ShoppingCart.total')}
-                  produceWeight={item?.items?.reduce(
+                  produceWeight={items?.reduce(
                     (acc, curr) => (acc += curr.orderedProduceWeight),
                     0
                   )}
-                  subtotal={item?.items?.reduce((acc, curr) => (acc += curr.producePricePerKg), 0)}
-                  discount={item?.items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
-                  total={item?.items?.reduce(
-                    (acc, curr) => (acc += curr.producePricePerKg - curr.discountAmount),
-                    0
-                  )} // TODO: fix in BE
+                  subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
+                  discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
+                  total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
                 />
               </View>
             );
@@ -276,12 +266,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
           <View tw="flex-row items-center justify-between">
             <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
-            <Text tw="text-lg">
-              {formatCurrencyWithSymbol(
-                'NGN', // TODO: get value from somewhere
-                total
-              )}
-            </Text>
+            <Text tw="text-lg">{formatCurrencyWithSymbol('NGN', cartData.totalAmount)}</Text>
           </View>
           <Divider tw="bg-zinc-400 my-3" />
           <Button

@@ -152,12 +152,6 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                 _extraData?.allUnits
               );
 
-              const total =
-                item.totalColdtivateAmount +
-                item.totalPaymentFeesAmount +
-                item.totalProduceAmount -
-                item.totalDiscountAmount;
-
               return (
                 <Touchable
                   tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2"
@@ -214,7 +208,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           'NGN', // TODO: get value from somewhere
-                          total
+                          item.totalAmount
                         )}
                       </Text>
                     </View>
@@ -286,11 +280,7 @@ function _getRowDatums(
 const _getNameById = moize(
   (id: number, list: Array<{ id: number; name: string }>) =>
     list.find((item) => item.id === id)?.name ?? '',
-  {
-    maxAge: ms('6 seconds'),
-    // isSerialized: true,
-    // serializer: (args) => [stringToHash(JSON.stringify(args))],
-  }
+  { maxAge: ms('6 seconds') }
 );
 
 function _PortalsWrapper() {
