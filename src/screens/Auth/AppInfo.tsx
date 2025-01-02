@@ -1,31 +1,52 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
-import { Divider, List } from 'react-native-paper';
+import { Divider, List, TextInput } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { useTranslationUtils } from '#i18n/utils';
+import { mmkv } from '#stores/lib/storage';
+
 import { FAQ_CONTENT } from '#constants/faq';
 import { APP_LOCALES, TranslationLocales } from '#i18n/constants';
-import { mmkv } from '#stores/lib/storage';
 import { ERoles } from '#types/global';
 
 function AppInfo() {
+  const { t } = useTranslationUtils();
+
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
   const language = mmkv.getString('i18n-locale');
-  const faq = useMemo(
-    () =>
-      FAQ_CONTENT[(language ?? APP_LOCALES.ENGLISH) as TranslationLocales].filter((faq) =>
-        faq.role.includes(ERoles.AUTH)
-      ),
-    [language]
-  );
+
+  const datums = useMemo(() => {
+    const currentLanguage = language ?? APP_LOCALES.ENGLISH;
+    const _searchTerm = searchTerm.toLowerCase().trim();
+
+    return FAQ_CONTENT[currentLanguage as TranslationLocales].filter((faqItem) => {
+      if (!faqItem.role.includes(ERoles.AUTH)) return false;
+      return (
+        faqItem.title.toLowerCase().includes(_searchTerm) ||
+        faqItem.text.toLowerCase().includes(_searchTerm)
+      );
+    });
+  }, [language, searchTerm]);
 
   return (
-    <View tw="w-full h-full space-y-4">
+    <View tw="w-full h-full">
+      <TextInput
+        tw="m-4 bg-transparent"
+        label={t('actions.search')}
+        mode="flat"
+        value={searchTerm}
+        onChangeText={(value) => setSearchTerm(value)}
+        left={<TextInput.Icon icon="magnify" />}
+      />
+
       <List.AccordionGroup>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={faq}
+          data={datums}
           keyExtractor={(item, itemIdx) => `faq-${item.id}-#${itemIdx}`}
           renderItem={({ item }) => (
             <React.Fragment>
