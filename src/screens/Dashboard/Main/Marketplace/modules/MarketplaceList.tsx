@@ -3,7 +3,6 @@ import { Dimensions, View } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
-import camelCase from 'lodash/camelCase';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { FlashList } from '@shopify/flash-list';
@@ -106,12 +105,12 @@ type UnitMapValue = Pick<AvailableListingDatum, 'company' | 'coolingUnit'>;
 type NearbyMeListItem =
   | {
       kind: 'sectionHeader';
-      sectionKey: string;
+      sectionKey: number;
       distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
     }
   | {
       kind: 'row';
-      sectionKey: string;
+      sectionKey: number;
       distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
       datum: AvailableListingDatum;
     };
@@ -123,18 +122,17 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
   const coordinates = useMarketplaceQueryParams((store) => store.location);
   const isLocationDenied = isEmpty(coordinates) || isEqual(coordinates, DEFAULT_COORDINATES);
 
-  const [unitMap, unitMapActions] = useMap<string, UnitMapValue>();
+  const [unitMap, unitMapActions] = useMap<number, UnitMapValue>();
 
   useEffect(() => {
-    const currentKeySet = new Set<string>(unitMap.keys());
-    const nextEntries = new Map<string, UnitMapValue>();
+    const currentKeySet = new Set<number>(unitMap.keys());
+    const nextEntries = new Map<number, UnitMapValue>();
     let hasChanges = false;
 
     for (const { coolingUnit, company } of listing) {
-      const key = camelCase(coolingUnit.name);
-      if (!currentKeySet.has(key)) {
+      if (!currentKeySet.has(coolingUnit.id)) {
         hasChanges = true;
-        nextEntries.set(key, { company, coolingUnit });
+        nextEntries.set(coolingUnit.id, { company, coolingUnit });
       }
     }
 
@@ -145,9 +143,9 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
 
   const groupedData: Array<NearbyMeListItem> = useMemo(() => {
     const dataByDistance = listing.reduce<
-      Record<string, Record<GroupedDatum['distance'], Array<AvailableListingDatum>>>
+      Record<number, Record<GroupedDatum['distance'], Array<AvailableListingDatum>>>
     >((acc, datum) => {
-      const key = camelCase(datum.coolingUnit.name);
+      const key = datum.coolingUnit.id;
       const distanceBucket = isLocationDenied
         ? DISTANCE_BUCKETS.DEFAULT
         : datum.distance <= 5
@@ -166,8 +164,9 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
     }, {});
 
     return Object.entries(dataByDistance).reduce<Array<NearbyMeListItem>>(
-      (items, [sectionKey, distances]) => {
+      (items, [key, distances]) => {
         const distanceEntries = Object.entries(distances);
+        const sectionKey = Number(key);
 
         for (let idx = 0; idx < distanceEntries.length; idx++) {
           const [distance, data] = distanceEntries[idx];
