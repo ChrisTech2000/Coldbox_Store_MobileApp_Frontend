@@ -215,7 +215,7 @@ export function CheckInData(props: CheckInDataProps) {
         </View>
       </View>
 
-      <ScrollView tw="max-h-[70%]" showsVerticalScrollIndicator={false}>
+      <ScrollView tw="max-h-72" showsVerticalScrollIndicator={false}>
         <DataTable>
           <DataTable.Header tw="bg-gray-200 space-x-1">
             <DataTable.Title numberOfLines={2}>

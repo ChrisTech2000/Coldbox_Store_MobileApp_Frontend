@@ -163,7 +163,7 @@ export function CheckOutData(props: CheckOutDataProps) {
         </View>
       </View>
 
-      <ScrollView tw="max-h-[80%]" showsVerticalScrollIndicator={false}>
+      <ScrollView tw="max-h-72" showsVerticalScrollIndicator={false}>
         <DataTable>
           <DataTable.Header tw="bg-gray-200">
             <DataTable.Title>{t('Dashboard.History.pdfModal.checkOut.idLabel')}</DataTable.Title>
