@@ -446,7 +446,7 @@ export interface GetCouponListResponse {
   nodes: Array<CreateCouponResponse>;
 }
 
-type CartDatumGetCartResponse = {
+export type CartDatumGetCartResponse = {
   id: number;
   items: Array<CartItem>;
   totalAmount: number;
@@ -522,7 +522,7 @@ export interface GetAvailableBanksResponse {
 
 export interface ApplyCouponResponse {
   message: string;
-  cart: GetCartResponse;
+  cart: CartDatumGetCartResponse;
 }
 
 export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
