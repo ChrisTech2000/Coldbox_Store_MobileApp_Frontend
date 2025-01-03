@@ -562,3 +562,8 @@ export interface CheckMarketplaceEligibilityResponse {
   companies: Record<string, boolean>;
   users: Record<string, boolean>;
 }
+
+export interface ToggleCartOwnershipResponse {
+  cart: CartDatumGetCartResponse;
+  message: string;
+}

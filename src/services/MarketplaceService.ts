@@ -25,6 +25,7 @@ import type {
   GetSellerListedCrates,
   SellerListedCratesResponse,
   SetPickUpDetailsResponse,
+  ToggleCartOwnershipResponse,
   UpdateListedCrateResponse,
 } from '#types/api.responses';
 import type { BankAccount } from '#types/global';
@@ -387,9 +388,9 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public toggleCartOwnership = async (): Promise<{ cart: GetCartResponse; message: string }> => {
+  public toggleCartOwnership = async (): Promise<ToggleCartOwnershipResponse> => {
     try {
-      const { data } = await this.post<{ cart: GetCartResponse; message: string }>(
+      const { data } = await this.post<ToggleCartOwnershipResponse>(
         EMarketplaceEndpoints.TOGGLE_OWNERSHIP,
         {}
       );
