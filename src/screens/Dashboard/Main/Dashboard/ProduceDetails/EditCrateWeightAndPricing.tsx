@@ -99,15 +99,18 @@ function EditCrateWeightAndPricing(
   const form = useForm<FormValues>({
     defaultValues: { applyToAll: false, crates: [], price: '0' },
     resolver: zodResolver((z) => {
-      const greaterThanEqual = z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0));
+      const coerseNumber = z.coerce.number().gte(0);
       return z.object({
         applyToAll: z.boolean(),
-        price: z.string(),
+        price: z
+          .string()
+          .transform((v) => v.replaceAll(',', '.'))
+          .pipe(coerseNumber),
         crates: z
           .array(
             z.object({
               id: z.number(),
-              weight: greaterThanEqual,
+              weight: z.preprocess((v) => (v ? Number(v) : 0), coerseNumber),
               tag: z.string().nullable(),
               isSellable: z.boolean(),
             })
@@ -142,11 +145,10 @@ function EditCrateWeightAndPricing(
   async function onSubmit(values: FormValues<number>): Promise<void> {
     try {
       const _produce = cloneDeep(params.produce);
-      const { previous, crates, price } = values;
+      const { previous, crates, price: currentPrice } = values;
 
       const cratesToList: Array<number> = [];
       const cratesToDelist: Array<number> = [];
-      const currentPrice = Number(price);
 
       for (const crate of crates) {
         const wasSellable = previous.sellableCrates.includes(crate.id);
@@ -297,7 +299,7 @@ function EditCrateWeightAndPricing(
 
   const hasChanges = _isDirty(
     crates,
-    Number(price),
+    Number(formatFloat(price ?? '0')),
     form.getValues('previous.price'),
     form.getValues('previous.sellableCrates')
   );
