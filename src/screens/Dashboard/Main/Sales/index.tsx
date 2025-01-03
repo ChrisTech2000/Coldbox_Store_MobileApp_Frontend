@@ -188,7 +188,7 @@ function SalesRoot() {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           'NGN', // TODO: get value from somewhere
-                          item.totalAmount
+                          typeof item.totalAmount !== 'undefined' ? item.totalAmount : 0
                         )}
                       </Text>
                     </View>
@@ -200,7 +200,9 @@ function SalesRoot() {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           'NGN', // TODO: get value from somewhere
-                          item.totalCoolingFeesAmount
+                          typeof item.totalCoolingFeesAmount !== 'undefined'
+                            ? item.totalCoolingFeesAmount
+                            : 0
                         )}
                       </Text>
                     </View>

@@ -76,6 +76,11 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     }));
   }, [data, coolingUnits]);
 
+  const unitsMap = useMemo(
+    () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
+    [coolingUnits]
+  );
+
   if (isLoading || isLoadingCrops || !data.items?.length) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
@@ -113,10 +118,12 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               renderItem={({ item: { coolingUnit, items } }) => {
+                const heading = unitsMap.get(Number(coolingUnit))?.name ?? '';
+
                 return (
                   <View tw="mb-4">
                     <OrderDetailsCard
-                      heading={coolingUnit}
+                      heading={heading}
                       totalLabel={t('Dashboard.ShoppingCart.total')}
                       produceWeight={items?.reduce(
                         (acc, curr) => (acc += curr.orderedProduceWeight),
@@ -143,9 +150,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                   scrollEnabled={false}
                   showsVerticalScrollIndicator={false}
                   renderItem={({ item }) => {
-                    const coolingUnit = coolingUnits?.find(
-                      (cu) => cu.id === item.coolingUnitId
-                    ) as CoolingUnit;
+                    const coolingUnit = unitsMap.get(item.coolingUnitId) as CoolingUnit;
 
                     return (
                       <PickupDetailsCard
