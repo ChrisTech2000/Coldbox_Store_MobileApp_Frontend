@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialIcons';
@@ -17,8 +17,8 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
-import { GetCartResponse } from '#types/api.responses';
-import { CoolingUnit, EPickUpMethod, EPricingType } from '#types/global';
+import type { CartDatumGetCartResponse } from '#types/api.responses';
+import { type CoolingUnit, EPickUpMethod, EPricingType } from '#types/global';
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
 type OrderPickupMethodProps = {
@@ -35,6 +35,8 @@ type PickupModalModalProps = {
 
 type PickUpMethod = 'delivery' | 'today' | 'storage';
 
+const MODAL_MAX_HEIGHT = Dimensions.get('window').height * 0.68;
+
 export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
   const { t } = useTranslationUtils();
   const [cartData, allCoolingUnits, setCart] = useCartStore((store) => [
@@ -45,9 +47,9 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
   const modalRef = useRef<Modalize>(null);
   const toast = InAppNotifications.useToast();
 
-  const [selectedItems, setSelectedItems] = useState<GetCartResponse['pickupDetails'] | undefined>(
-    cartData?.pickupDetails
-  );
+  const [selectedItems, setSelectedItems] = useState<
+    CartDatumGetCartResponse['pickupDetails'] | undefined
+  >(cartData?.pickupDetails);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [activePickupModal, setActivePickupModal] = useState<
     [CoolingUnit, PickUpMethod] | undefined
@@ -136,14 +138,17 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
       <Portal>
         <Modalize
           ref={modalRef}
-          modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-          adjustToContentHeight={coolingUnits && coolingUnits?.length < 2}
+          modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32, overflow: 'hidden' }}
+          {...(coolingUnits && coolingUnits?.length < 2
+            ? { adjustToContentHeight: true }
+            : { modalHeight: MODAL_MAX_HEIGHT })}
           withHandle={false}
           avoidKeyboardLikeIOS
         >
           <View tw="w-full items-center justify-center h-10">
             <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
           </View>
+
           <View tw="flex-1">
             <FlatList
               data={coolingUnits}
