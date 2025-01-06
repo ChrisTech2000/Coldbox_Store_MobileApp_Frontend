@@ -18,6 +18,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -30,7 +31,6 @@ import { type CartItem as CartItemType } from '#types/global';
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
 import CartItemInput from './CartItemInput';
-import { DEFAULT_CURRENCY_CODE } from '../../Marketplace/utils';
 
 type CartItemProps = {
   item: CartItemType;

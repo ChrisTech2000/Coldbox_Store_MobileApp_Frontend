@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useCallback } from 'react';
 import type { RouteProp } from '@react-navigation/native';
 import {
@@ -36,7 +37,7 @@ type ScreenOptions = (props: {
   navigation: NativeStackNavigationProp<ShoppingCartStackRoutes, ShoppingCartStackRoutePaths>;
 }) => NativeStackNavigationOptions;
 
-const navParams = {
+const MARKETPLACE_ROOT_REDIRECT = {
   screen: 'Marketplace',
   params: { screen: 'MarketplaceRoot' },
 };
@@ -49,41 +50,41 @@ export default function ShoppingCartStack() {
 
   const screenOptions: ScreenOptions = useCallback(
     (props) => {
-      // eslint-disable-next-line react/prop-types
-      const routeName = props.route.name;
+      const { name: routeName, params } = props.route;
+      const { navigation } = props;
+      const navigationHandlers: Partial<
+        Record<keyof ShoppingCartStackRoutes | 'default', () => void>
+      > = {
+        IncompleteOrderOverview: navigation.popToTop,
+        OrderDetails: navigation.goBack,
+        default: () => {
+          navigation.navigate(
+            // eslint-disable-next-line
+            // @ts-ignore
+            'Marketplace',
+            MARKETPLACE_ROOT_REDIRECT
+          );
+        },
+      };
       return {
         ...props,
-        headerShown: routeName !== 'OrderOverview' && routeName !== 'PaystackPayment',
-        header: (headerProps) => (
-          <NavigatorHeader
-            {...headerProps}
-            routeTitle={
-              routeName === 'IncompleteOrderOverview'
-                ? t('navigation.dashboard.OrderDetails', {
-                    // eslint-disable-next-line react/prop-types
-                    orderCode: `#${props.route?.params?.orderId}`,
-                  })
-                : t('navigation.dashboard.ShoppingCart')
-            }
-            // eslint-disable-next-line react/prop-types
-            {...dashboardHeaderFactory({
-              showShoppingCart: true,
-              goBackFunc:
-                routeName === 'IncompleteOrderOverview'
-                  ? // eslint-disable-next-line react/prop-types
-                    () => props.navigation.popToTop()
-                  : () => {
-                      // eslint-disable-next-line react/prop-types
-                      props.navigation.navigate(
-                        // eslint-disable-next-line
-                        // @ts-ignore
-                        'Marketplace',
-                        navParams
-                      );
-                    },
-            })}
-          />
-        ),
+        headerShown: !['OrderOverview', 'PaystackPayment'].includes(routeName),
+        header: (headerProps) => {
+          const isIncompleteOrder = routeName === 'IncompleteOrderOverview';
+          const routeTitle = isIncompleteOrder
+            ? t('navigation.dashboard.OrderDetails', { orderCode: `#${params?.orderId}` })
+            : t('navigation.dashboard.ShoppingCart');
+          return (
+            <NavigatorHeader
+              {...headerProps}
+              routeTitle={routeTitle}
+              {...dashboardHeaderFactory({
+                showShoppingCart: true,
+                goBackFunc: navigationHandlers[routeName] || navigationHandlers.default,
+              })}
+            />
+          );
+        },
       };
     },
     [dashboardHeaderFactory]

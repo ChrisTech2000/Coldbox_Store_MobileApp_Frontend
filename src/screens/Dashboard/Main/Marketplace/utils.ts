@@ -11,7 +11,6 @@ import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
-export const DEFAULT_CURRENCY_CODE = 'NGN';
 
 export type AvailableListingDatum = {
   id: number;

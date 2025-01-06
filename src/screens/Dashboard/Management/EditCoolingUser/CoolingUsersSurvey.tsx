@@ -10,6 +10,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -52,7 +53,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
-  const companyCurrency: string = company?.currency ?? 'NGN';
+  const companyCurrency: string = company?.currency ?? DEFAULT_CURRENCY_CODE;
 
   const { data, isLoading, refetch } = useApiCall(SWR_CACHE_KEY, _dataFetcher, params.farmerId, {
     skip: !params.farmerId,

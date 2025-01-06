@@ -35,11 +35,11 @@ import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 import type { CartItem, CoolingUnit } from '#types/global';
 import type { GetAllCropsResponse } from '#types/api.responses';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CropsBottomSheet from './components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
-import { DEFAULT_CURRENCY_CODE } from '../Marketplace/utils';
 
 type Status = 'payment-pending' | 'cancelled' | 'paid' | 'payment-expired';
 

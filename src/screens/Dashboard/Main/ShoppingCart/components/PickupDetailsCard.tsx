@@ -1,16 +1,17 @@
+import Clipboard from '@react-native-clipboard/clipboard';
+import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import isEmpty from 'lodash/isEmpty';
-import Clipboard from '@react-native-clipboard/clipboard';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
-import InAppNotifications from '#common/InAppNotifications';
 
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -84,7 +85,7 @@ export function PickupDetailsCard({
                       : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                     {
                       price: formatCurrencyWithSymbol(
-                        'NGN', // TODO: get value from somewhere
+                        DEFAULT_CURRENCY_CODE,
                         coolingUnit?.commonPricingType?.value ?? 0
                       ),
                     }
@@ -112,7 +113,10 @@ export function PickupDetailsCard({
         {pickupMethod === EPickUpMethod.DELIVERY ? (
           <Text tw="text-sm text-gray-500 mt-2">
             {t('Dashboard.ShoppingCart.deliveryInfo', {
-              value: formatCurrencyWithSymbol('NGN', coolingUnit?.commonPricingType?.value ?? 0),
+              value: formatCurrencyWithSymbol(
+                DEFAULT_CURRENCY_CODE,
+                coolingUnit?.commonPricingType?.value ?? 0
+              ),
             })}
           </Text>
         ) : pickupMethod === EPickUpMethod.PICK_UP_SAME_DAY ? (

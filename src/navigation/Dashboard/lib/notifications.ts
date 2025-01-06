@@ -10,7 +10,7 @@ import { useAppEventListener } from '#ui/lib/emitter';
 import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
 import DataloaderService from '#services/DataloaderService';
 import { formatCurrencyWithSymbol } from '#screens/Dashboard/Main/Dashboard/CheckIn/utils';
-import { DEFAULT_CURRENCY_CODE } from '#screens/Dashboard/Main/Marketplace/utils';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 
 class NotificationManager {
   private readonly _t: Translator;

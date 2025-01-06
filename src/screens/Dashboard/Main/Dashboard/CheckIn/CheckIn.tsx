@@ -9,6 +9,7 @@ import colors from 'tailwindcss/colors';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
@@ -21,11 +22,11 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import type { CheckInResponse, CheckInWitCodeResponse } from '#types/api.responses';
 import { ECoolingUnitMetric, EDateCropped, EPricingType } from '#types/global';
-import { useToggle } from '#ui/hooks/useToggle';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
+import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
@@ -349,7 +350,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                   item={item}
                   index={index}
                   coolingUnit={coolingUnit}
-                  currencyCode={company?.currency || 'NGN'}
+                  currencyCode={company?.currency || DEFAULT_CURRENCY_CODE}
                   checkOutCode={checkOutCode}
                   totalCrates={allCrates.length}
                   openOptionsModal={() => setIndexForActiveOptions(index)}
@@ -452,7 +453,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
               : t('Dashboard.CrateManagement.CheckIn.pricing')}
           </Text>
           <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
-            {formatCurrencyWithSymbol(company?.currency || 'NGN', total)}
+            {formatCurrencyWithSymbol(company?.currency || DEFAULT_CURRENCY_CODE, total)}
             {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY && !allHavePlannedDays
               ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
               : ''}

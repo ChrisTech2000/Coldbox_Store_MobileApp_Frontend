@@ -1,20 +1,19 @@
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
 import { Controller } from 'react-hook-form';
+import { View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
-import { Text } from '#ui/components/Text';
-import { Sup } from '#ui/components/SuperscriptText';
 import { Input } from '#ui/components/Input';
+import { Sup } from '#ui/components/SuperscriptText';
+import { Text } from '#ui/components/Text';
 
 import MarketplaceFormManager from '../modules/MarketplaceFormManager';
 
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
-import { useManagementStore } from '#stores/management';
-import { useDashboardStore } from '#stores/dashboard';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
-
-import { DEFAULT_CURRENCY_CODE } from '../utils';
+import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 
 export default function RangePrice() {
   const { control } = MarketplaceFormManager.useForm();

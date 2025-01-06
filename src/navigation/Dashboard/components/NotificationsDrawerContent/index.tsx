@@ -9,6 +9,7 @@ import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
 import InAppNotifications from '#common/InAppNotifications';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { useRightDrawerStore } from '#navigation/Dashboard';
 import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
@@ -223,10 +224,21 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
   );
 }
 
+export const NOTIFICATION_EXCEPTIONS = {
+  FARMER_REQUIRED: 'Farmer information is required',
+  SURVEY_FILLED_IN: 'Survey already filled',
+  CROP_LIST_REQUIRED: 'Crop list information is required',
+  MARKEY_SURVEY_INCOMPLETE: 'Must provide both a Farmer and Cooling Unit to process market survey',
+  INVALID_HISTORY_MOVEMENT: 'Invalid history movement',
+  HISTORY_MOVEMENT_NOT_FOUND: 'No movement history found for the cooling unit',
+  UNIT_REQUIRED: 'Cooling Unit information is required',
+  MOVEMENT_NOT_FOUND: 'Movement details not found for cooling unit',
+} as const;
+
 class NotificationHandlers {
   static async farmerSurvey(notification: NotificationDatum, managementCompany: ManagementCompany) {
     const farmer = notification.ctx.farmer;
-    if (!farmer) throw new Error();
+    if (!farmer) throw new Error(NOTIFICATION_EXCEPTIONS.FARMER_REQUIRED);
 
     const surveys = await ColdtivateService.getFarmerSurveys({ farmerId: farmer.id });
 
@@ -247,17 +259,17 @@ class NotificationHandlers {
     const isAlreadyFilledIn = surveyList.some(
       (item) => item.cropName.toLowerCase() === notification.datum.crates.crop.toLowerCase()
     );
-    if (isAlreadyFilledIn) throw new Error('surveyAlreadyFilled');
+    if (isAlreadyFilledIn) throw new Error(NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN);
 
     const contextualCrop = await DataloaderService.crops.find(
       (crop) => crop.name === notification.datum.crates.crop
     );
-    if (!contextualCrop) throw new Error();
+    if (!contextualCrop) throw new Error(NOTIFICATION_EXCEPTIONS.CROP_LIST_REQUIRED);
 
     const contextualFarmerSurvey = surveys?.at(0);
     const datum = {
       farmerSurveysLength: surveyList.length + 1,
-      companyCurrency: managementCompany?.currency ?? 'NGN',
+      companyCurrency: managementCompany?.currency ?? DEFAULT_CURRENCY_CODE,
       crops: await DataloaderService.crops.getAll(),
       contextualCrop,
       farmerId: farmer.id,
@@ -274,10 +286,10 @@ class NotificationHandlers {
   static async marketSurvey(notification: NotificationDatum, managementCompany: ManagementCompany) {
     const farmer = notification.ctx.farmer;
     const coolingUnit = notification.ctx.coolingUnit;
-    if (!farmer || !coolingUnit) throw new Error();
+    if (!farmer || !coolingUnit) throw new Error(NOTIFICATION_EXCEPTIONS.MARKEY_SURVEY_INCOMPLETE);
 
     const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
-    if (!movements) throw new Error();
+    if (!movements) throw new Error(NOTIFICATION_EXCEPTIONS.HISTORY_MOVEMENT_NOT_FOUND);
 
     const movementDetails = movements.find(
       (movement) => movement.code === notification.datum.movementCode
@@ -287,7 +299,7 @@ class NotificationHandlers {
       movementDetails &&
       movementDetails.checkout.marketSurveyDelay &&
       movementDetails.checkout?.crates?.[0]?.ownedByUserId;
-    if (!isValidMovement) throw new Error();
+    if (!isValidMovement) throw new Error(NOTIFICATION_EXCEPTIONS.INVALID_HISTORY_MOVEMENT);
 
     const owner = await ColdtivateService.getUser(
       movementDetails.checkout.crates[0].ownedByUserId!
@@ -308,7 +320,7 @@ class NotificationHandlers {
       eventType: 'MARKET_SURVEY',
       datums: {
         checkoutId: movementDetails.checkout.id,
-        companyCurrency: managementCompany?.currency ?? 'NGN',
+        companyCurrency: managementCompany?.currency ?? DEFAULT_CURRENCY_CODE,
         crops: movementCropsForSurvey,
         owner: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`,
       },
@@ -320,10 +332,11 @@ class NotificationHandlers {
 
   static async orderReallocate(notification: NotificationDatum) {
     const coolingUnit = notification.ctx.coolingUnit;
-    if (!coolingUnit) throw new Error();
+    if (!coolingUnit) throw new Error(NOTIFICATION_EXCEPTIONS.UNIT_REQUIRED);
+
     const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
     const movement = movements.find((movement) => movement.id === notification.datum.specificId);
-    if (!movement) throw new Error();
+    if (!movement) throw new Error(NOTIFICATION_EXCEPTIONS.MOVEMENT_NOT_FOUND);
 
     if (!isEmpty(movement.checkin)) {
       movement.checkin = {
