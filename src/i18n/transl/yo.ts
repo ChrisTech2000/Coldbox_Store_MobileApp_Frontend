@@ -1159,6 +1159,7 @@ export default {
       backToTopButton: 'Back to the top', // TODO
     },
     ShoppingCart: {
+      cartUpdatedMessage: 'Àwọn nkan kan ni a ti yọ kúrò nínú rírà rẹ nítorí wọn kò sí mọ́ láti rà.',
       ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO

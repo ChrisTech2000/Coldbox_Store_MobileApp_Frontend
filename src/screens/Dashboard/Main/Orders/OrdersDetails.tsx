@@ -262,7 +262,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                       coolingUnit={coolingUnit}
                       orderId={props.route.params.orderId}
                       companyId={
-                        order.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
+                        order.items.find((item) => item.relCoolingUnitId === coolingUnit?.id)
                           ?.relCompanyId as number
                       }
                       pickupMethod={item.pickupMethod}

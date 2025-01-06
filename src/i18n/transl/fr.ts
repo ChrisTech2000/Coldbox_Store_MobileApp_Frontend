@@ -1188,6 +1188,8 @@ export default {
       backToTopButton: 'Retour en haut',
     },
     ShoppingCart: {
+      cartUpdatedMessage:
+        "Certains produits ont été retirés de votre panier car ils ne sont plus disponibles à l'achat.",
       ownership: 'Changer la propriété du panier en {{name}}',
       changeOwnership:
         'Remplacez la propriété du panier par {{name}}. Cela peut affecter le contenu de votre panier, y compris l’enlèvement éventuel de certaines caisses qui pourraient ne pas être disponibles après ce changement. Êtes-vous sûr de vouloir continuer ?',

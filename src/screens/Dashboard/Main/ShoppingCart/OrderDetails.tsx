@@ -41,45 +41,47 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
 
-  const [cartData, coolingUnits, setCart] = useCartStore((store) => [
+  const [cartData, coolingUnits, recomputeCart] = useCartStore((store) => [
     store.cartData,
     store.allCoolingUnits,
-    store.setCart,
+    store.recomputeCart,
   ]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const onPay = useCallback(async (evt: GestureResponderEvent) => {
-    evt.stopPropagation();
-    setIsSubmitting(true);
-    try {
-      const coolingUnitIds =
-        cartData?.items?.reduce((acc, current) => {
-          if (!acc.includes(current.relCoolingUnitId)) {
-            acc.push(current.relCoolingUnitId);
-          }
-          return acc;
-        }, [] as number[]) ?? [];
+  const onPay = useCallback(
+    async (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+      setIsSubmitting(true);
+      try {
+        const coolingUnitIds =
+          cartData?.items?.reduce((acc, current) => {
+            if (!acc.includes(current.relCoolingUnitId)) {
+              acc.push(current.relCoolingUnitId);
+            }
+            return acc;
+          }, [] as number[]) ?? [];
 
-      const recomputedCart = await MarketplaceService.recomputeCart();
-      setCart(recomputedCart.cart);
-      const result = await MarketplaceService.checkoutWithPaystack();
+        recomputeCart(toast, t);
+        const result = await MarketplaceService.checkoutWithPaystack();
 
-      if (result.authorizationUrl) {
+        if (result.authorizationUrl) {
+          setIsSubmitting(false);
+          props.navigation.navigate('PaystackPayment', {
+            url: result.authorizationUrl,
+            orderId: result.orderId,
+            coolingUnitIds,
+          });
+        }
+      } catch (e) {
         setIsSubmitting(false);
-        props.navigation.navigate('PaystackPayment', {
-          url: result.authorizationUrl,
-          orderId: result.orderId,
-          coolingUnitIds,
+        toast.show(t('navigation.error.errorMessage'), {
+          type: 'md_danger',
         });
       }
-    } catch (e) {
-      setIsSubmitting(false);
-      toast.show(t('navigation.error.errorMessage'), {
-        type: 'md_danger',
-      });
-    }
-  }, []);
+    },
+    [t]
+  );
 
   const cartDataByCoolingUnit = useMemo(() => {
     if (!cartData?.items) return [];
