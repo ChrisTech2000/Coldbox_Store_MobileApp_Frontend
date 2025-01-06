@@ -41,6 +41,7 @@ import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
 import { PickupDetailsCard } from '../ShoppingCart/components/PickupDetailsCard';
 import PaymentPendingBottomSheet from './components/PaymentPendingBottomSheet';
 import { useDashboardStore } from '#stores/dashboard';
+import { DEFAULT_CURRENCY_CODE } from '../Marketplace/utils';
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
@@ -53,14 +54,13 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const [showButton, setShowButton] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const { data, isLoading, refetch } = useApiCall(
-    'getOrder',
-    MarketplaceService.getOrder,
-    props.route.params.orderId,
-    {
-      defaultData: undefined,
-    }
-  );
+  const {
+    data: order,
+    isLoading,
+    refetch,
+  } = useApiCall('getOrder', MarketplaceService.getOrder, props.route.params.orderId, {
+    defaultData: undefined,
+  });
 
   const { data: crops, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
@@ -72,9 +72,9 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   );
 
   const orderDataByCoolingUnit = useMemo(() => {
-    if (!data?.items) return [];
+    if (!order?.items) return [];
 
-    const groupedData = data.items.reduce(
+    const groupedData = order.items.reduce(
       (acc, item) => {
         const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
         if (!coolingUnit) return acc;
@@ -85,14 +85,14 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         acc[coolingUnit.id].push(item);
         return acc;
       },
-      {} as Record<string, typeof data.items>
+      {} as Record<string, typeof order.items>
     );
 
     return Object.entries(groupedData).map(([coolingUnit, items]) => ({
       coolingUnit,
       items,
     }));
-  }, [data, coolingUnits]);
+  }, [order, coolingUnits]);
 
   const onPay = useCallback(
     async (evt: GestureResponderEvent) => {
@@ -204,6 +204,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                       (acc, curr) => (acc += curr.orderedProduceWeight),
                       0
                     )}
+                    currency={order?.currency ?? DEFAULT_CURRENCY_CODE}
                     subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
                     discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
                     total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
@@ -213,7 +214,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
             }}
           />
 
-          {data.status === EOrderStatus.PAYMENT_PENDING ? (
+          {order.status === EOrderStatus.PAYMENT_PENDING ? (
             <Button
               tw="w-full self-center my-4 border-blue-400 rounded-lg"
               labelStyle="text-blue-400"
@@ -241,9 +242,9 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               {t('Dashboard.ShoppingCart.pickupMethods')}
             </Text>
 
-            {data.pickupDetails?.length ? (
+            {order.pickupDetails?.length ? (
               <FlatList
-                data={data.pickupDetails}
+                data={order.pickupDetails}
                 keyExtractor={(item, index) => `cooling-unit-${item.coolingUnitId}-dm-${index}`}
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
@@ -257,7 +258,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                       coolingUnit={coolingUnit}
                       orderId={props.route.params.orderId}
                       companyId={
-                        data.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
+                        order.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
                           ?.relCompanyId as number
                       }
                       pickupMethod={item.pickupMethod}
@@ -273,7 +274,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               {t('Dashboard.ShoppingCart.produce')}
             </Text>
             <FlatList
-              data={data.items}
+              data={order.items}
               keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
@@ -282,10 +283,11 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 return (
                   <ProduceCard
                     crop={{ name: crop?.name ?? '', image: crop?.image ?? '' }}
+                    currency={order.currency ?? DEFAULT_CURRENCY_CODE}
                     producePricePerKg={item.producePricePerKg}
                     weight={item.orderedProduceWeight}
-                    ownedByUserId={!data.ownedOnBehalfOfCompanyId ? item.ownedByUserId : null}
-                    ownedOnBehalfOfCompanyId={data.ownedOnBehalfOfCompanyId ?? null}
+                    ownedByUserId={!order.ownedOnBehalfOfCompanyId ? item.ownedByUserId : null}
+                    ownedOnBehalfOfCompanyId={order.ownedOnBehalfOfCompanyId ?? null}
                   />
                 );
               }}
@@ -301,8 +303,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
                 <Text tw="text-base">
                   {CurrencyStandardization.currencyCode({
-                    code: 'NGN', // TODO: get value from somewhere
-                    value: data.totalColdtivateAmount,
+                    code: order.currency ?? DEFAULT_CURRENCY_CODE,
+                    value: order.totalColdtivateAmount,
                   }).getValueFormated()}
                 </Text>
               </View>
@@ -314,8 +316,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
                 <Text tw="text-base">
                   {CurrencyStandardization.currencyCode({
-                    code: 'NGN', // TODO: get value from somewhere
-                    value: data.totalPaymentFeesAmount,
+                    code: order.currency ?? DEFAULT_CURRENCY_CODE,
+                    value: order.totalPaymentFeesAmount,
                   }).getValueFormated()}
                 </Text>
               </View>
@@ -325,8 +327,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
               <Text tw="text-lg">
                 {CurrencyStandardization.currencyCode({
-                  code: 'NGN', // TODO: get value from somewhere
-                  value: data.totalAmount,
+                  code: order.currency ?? DEFAULT_CURRENCY_CODE,
+                  value: order.totalAmount,
                 }).getValueFormated()}
               </Text>
             </View>
@@ -362,6 +364,7 @@ function _PortalsWrapper() {
 function ProduceCard(props: {
   ownedOnBehalfOfCompanyId: number | null;
   ownedByUserId: number | null;
+  currency: string;
   crop: { name: string; image: string };
   weight: number;
   producePricePerKg: number;
@@ -457,7 +460,7 @@ function ProduceCard(props: {
         </Text>
         <Text tw="font-bold">
           {CurrencyStandardization.currencyCode({
-            code: 'NGN', // TODO: get value from somewhere
+            code: props.currency ?? DEFAULT_CURRENCY_CODE,
             value: props.producePricePerKg.toFixed(2),
           }).getValueFormated()}{' '}
           {t('Dashboard.ShoppingCart.perKg')}

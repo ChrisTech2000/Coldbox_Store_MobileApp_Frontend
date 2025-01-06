@@ -30,6 +30,7 @@ import { type CartItem as CartItemType } from '#types/global';
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
 import CartItemInput from './CartItemInput';
+import { DEFAULT_CURRENCY_CODE } from '../../Marketplace/utils';
 
 type CartItemProps = {
   item: CartItemType;
@@ -231,7 +232,10 @@ export function CartItem({ item }: CartItemProps) {
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
             <Text variant="TextMedium" tw="text-base">
-              {formatCurrencyWithSymbol(company?.currency || 'NGN', item.producePricePerKg)}
+              {formatCurrencyWithSymbol(
+                company?.currency ?? DEFAULT_CURRENCY_CODE,
+                item.producePricePerKg
+              )}
               {t('Dashboard.ShoppingCart.perKg')}
             </Text>
           </View>

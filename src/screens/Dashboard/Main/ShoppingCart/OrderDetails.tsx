@@ -32,6 +32,7 @@ import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
 import { OwnershipModal } from './components/OwnershipModal';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { DEFAULT_CURRENCY_CODE } from '#screens/Dashboard/Main/Marketplace/utils';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -136,6 +137,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                     (acc, curr) => (acc += curr.orderedProduceWeight),
                     0
                   )}
+                  currency={cartData?.currency ?? DEFAULT_CURRENCY_CODE}
                   subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
                   discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
                   total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
@@ -197,7 +199,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                                 : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                               {
                                 price: formatCurrencyWithSymbol(
-                                  'NGN', // TODO: get value from somewhere
+                                  'NGN', // TODO: get value from the company?
                                   coolingUnit?.commonPricingType?.value ?? 0
                                 ),
                               }
@@ -244,7 +246,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">
                 {formatCurrencyWithSymbol(
-                  'NGN', // TODO: get value from somewhere
+                  cartData.currency ?? DEFAULT_CURRENCY_CODE,
                   cartData.totalColdtivateAmount
                 )}
               </Text>
@@ -257,7 +259,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">
                 {formatCurrencyWithSymbol(
-                  'NGN', // TODO: get value from somewhere
+                  cartData.currency ?? DEFAULT_CURRENCY_CODE,
                   cartData.totalPaymentFeesAmount
                 )}
               </Text>
@@ -266,7 +268,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
           <View tw="flex-row items-center justify-between">
             <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
-            <Text tw="text-lg">{formatCurrencyWithSymbol('NGN', cartData.totalAmount)}</Text>
+            <Text tw="text-lg">
+              {formatCurrencyWithSymbol(
+                cartData.currency ?? DEFAULT_CURRENCY_CODE,
+                cartData.totalAmount
+              )}
+            </Text>
           </View>
           <Divider tw="bg-zinc-400 my-3" />
           <Button

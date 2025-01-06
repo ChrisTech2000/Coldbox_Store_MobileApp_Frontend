@@ -39,6 +39,7 @@ import type { GetAllCropsResponse } from '#types/api.responses';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CropsBottomSheet from './components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
+import { DEFAULT_CURRENCY_CODE } from '../Marketplace/utils';
 
 type Status = 'payment-pending' | 'cancelled' | 'paid' | 'payment-expired';
 
@@ -140,14 +141,14 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
             estimatedListSize={ESTIMATED_LIST_SIZE}
             data={sortedData}
             extraData={cropsAndUnitsData}
-            keyExtractor={(item) => `orders-history-list-item-#${item.id}`}
+            keyExtractor={(order) => `orders-history-list-item-#${order.id}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, extraData }) => {
+            renderItem={({ item: order, extraData }) => {
               const _extraData = extraData as typeof cropsAndUnitsData;
 
               const { contextualCropNames, contextualUnitNames } = _getRowDatums(
-                item.items,
+                order.items,
                 _extraData.crops,
                 _extraData?.allUnits
               );
@@ -158,7 +159,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                   onPress={(evt) => {
                     evt.stopPropagation();
                     props.navigation.navigate('OrdersDetails', {
-                      orderId: item.id,
+                      orderId: order.id,
                       isTabsView: true,
                     });
                   }}
@@ -169,14 +170,14 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                         {t('Dashboard.MyOrders.sort.date')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
-                        {dateFmt(item.createdAt, 'dd/MM/yyyy')}
+                        {dateFmt(order.createdAt, 'dd/MM/yyyy')}
                       </Text>
                     </View>
 
                     <View tw="flex-row items-center">
                       <Touchable
                         tw="flex flex-row w-[50%] items-center space-x-1"
-                        onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CROPS_BOTTOM_SHEET, item)}
+                        onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CROPS_BOTTOM_SHEET, order)}
                       >
                         <Text variant="TextMedium" tw="text-base">
                           {t('Dashboard.MyOrders.cropType')}
@@ -207,8 +208,8 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                       </Text>
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
-                          'NGN', // TODO: get value from somewhere
-                          item.totalAmount
+                          order.currency ?? DEFAULT_CURRENCY_CODE,
+                          order.totalAmount
                         )}
                       </Text>
                     </View>
@@ -218,7 +219,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                         {t('Dashboard.MyOrders.ownedBy')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
-                        {item.ownedOnBehalfOfCompanyId
+                        {order.ownedOnBehalfOfCompanyId
                           ? t('Dashboard.Analytics.company')
                           : t('Dashboard.MyOrders.you')}
                       </Text>
@@ -227,11 +228,11 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                     <View
                       tw={cn(
                         'self-end px-1 py-0.5 border rounded-lg',
-                        COLORS[item.status as Status]
+                        COLORS[order.status as Status]
                       )}
                     >
-                      <Text tw={COLORS[item.status as Status]}>
-                        {t(`Dashboard.MyOrders.status.${item.status as Status}`)}
+                      <Text tw={COLORS[order.status as Status]}>
+                        {t(`Dashboard.MyOrders.status.${order.status as Status}`)}
                       </Text>
                     </View>
                   </View>

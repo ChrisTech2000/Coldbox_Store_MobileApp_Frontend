@@ -308,7 +308,7 @@ class NotificationHandlers {
       eventType: 'MARKET_SURVEY',
       datums: {
         checkoutId: movementDetails.checkout.id,
-        companyCurrency: managementCompany?.currency || 'NGN',
+        companyCurrency: managementCompany?.currency ?? 'NGN',
         crops: movementCropsForSurvey,
         owner: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`,
       },
