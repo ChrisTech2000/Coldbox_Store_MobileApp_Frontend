@@ -1250,6 +1250,8 @@ export default {
       backToTopButton: 'માટે પરત જાઓ',
     },
     ShoppingCart: {
+      cartUpdatedMessage:
+        'કેટલાક ઉત્પાદનો તમારા કાર્ટમાંથી દૂર કરવામાં આવ્યા છે કારણ કે તેઓ હવે ખરીદ માટે ઉપલબ્ધ નથી.',
       ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO

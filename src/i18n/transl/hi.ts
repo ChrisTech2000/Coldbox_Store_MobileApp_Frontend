@@ -1256,6 +1256,8 @@ export default {
       backToTopButton: 'ऊपर वापस जाएं',
     },
     ShoppingCart: {
+      cartUpdatedMessage:
+        'कुछ उत्पादों को आपके कार्ट से हटा दिया गया है क्योंकि वे अब खरीद के लिए उपलब्ध नहीं हैं।',
       ownership: 'Change cart ownership to {{name}}', // TODO
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO

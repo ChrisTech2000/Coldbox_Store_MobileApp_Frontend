@@ -1251,6 +1251,8 @@ const en = {
       backToTopButton: 'Back to the top',
     },
     ShoppingCart: {
+      cartUpdatedMessage:
+        'Some products have been removed from your cart because they are no longer available for purchase.',
       ownership: 'Change cart ownership to {{name}}',
       changeOwnership:
         'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?',
