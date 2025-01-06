@@ -113,15 +113,19 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
       price: params.sellingPrice.toString(),
     },
     resolver: zodResolver((z) => {
-      const greaterThanEqual = z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0));
+      const coerseNumber = z.coerce.number().gte(0);
       return z.object({
         applyToAll: z.boolean(),
-        price: z.string().optional(),
+        price: z
+          .string()
+          .transform((v) => v.replaceAll(',', '.'))
+          .pipe(coerseNumber)
+          .optional(),
         crates: z
           .array(
             z.object({
               id: z.number().optional(),
-              weight: greaterThanEqual,
+              weight: z.preprocess((v) => (v ? Number(v) : 0), coerseNumber),
               isSellable: z.boolean(),
             })
           )
@@ -449,7 +453,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               !!form.formState.errors.price ||
               form.formState.isSubmitting ||
               !form.formState.isDirty ||
-              !Number(form.getValues('price'))
+              !parsedPrice
             }
           >
             {t('actions.save-changes')}
