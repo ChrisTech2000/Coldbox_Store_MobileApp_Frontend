@@ -48,11 +48,13 @@ function FAQ() {
           data={faq}
           keyExtractor={(item, itemIdx) => `faq-${item.id}-#${itemIdx}`}
           renderItem={({ item }) => (
-            <List.Accordion title={item.title} id={item.id} titleNumberOfLines={4}>
-              <Text tw="text-wrap mx-8 mt-2 mb-8">{item.text}</Text>
-            </List.Accordion>
+            <React.Fragment>
+              <List.Accordion title={item.title} id={item.id} titleNumberOfLines={4}>
+                <Text tw="text-wrap mx-8 mt-2 mb-8">{item.text}</Text>
+              </List.Accordion>
+              <Divider tw="w-full bg-gray-700 my-[1.5px]" />
+            </React.Fragment>
           )}
-          ItemSeparatorComponent={Divider}
         />
       </List.AccordionGroup>
     </View>
