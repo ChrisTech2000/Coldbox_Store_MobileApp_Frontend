@@ -8,7 +8,7 @@ import { cn } from '#ui/lib/cn';
 import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 
-import { useSettingUpSurvey, type Notification } from '../index';
+import { useSettingUpSurvey, type Notification, NOTIFICATION_EXCEPTIONS } from '../index';
 
 export default function NotificationItem(props: {
   item: Notification;
@@ -38,7 +38,7 @@ export default function NotificationItem(props: {
             console.error(exception);
             let toastId: string | undefined = undefined;
             if (exception instanceof Error) {
-              if (exception.message === 'surveyAlreadyFilled') {
+              if (exception.message === NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN) {
                 toastId = toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
                   type: 'md_danger',
                 });
