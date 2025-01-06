@@ -1,10 +1,27 @@
 import { useEffect } from 'react';
+import { ToastOptions } from 'react-native-toast-notifications';
 import { create } from 'zustand';
 
+import { CustomToastOptions } from '#common/InAppNotifications';
 import ColdtivateService from '#services/ColdtivateService';
 import MarketplaceService from '#services/MarketplaceService';
 import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit } from '#types/global';
+import { Translator } from '#i18n/utils';
+
+export const CART_MISMATCH_ERROR = 'Cart mismatch error';
+
+type Toast = {
+  show: (message: string | JSX.Element, opts?: CustomToastOptions) => string;
+  update: (
+    id: string,
+    message: string | JSX.Element,
+    toastOptions?: ToastOptions | undefined
+  ) => void;
+  hide: (id: string) => void;
+  hideAll: () => void;
+  isOpen: (id: string) => boolean;
+};
 
 interface CartStoreState {
   cartData: GetCartResponse['cart'] | undefined;
@@ -13,12 +30,13 @@ interface CartStoreState {
   error: Error | null;
 
   fetchCart: () => Promise<void>;
+  recomputeCart: (toast: Toast, t: Translator) => Promise<void>;
   fetchCoolingUnits: () => Promise<void>;
   setCart: (cart: GetCartResponse['cart'] | undefined) => void;
   reset: () => void;
 }
 
-const useCartStore = create<CartStoreState>((set) => ({
+const useCartStore = create<CartStoreState>((set, get) => ({
   cartData: undefined,
   allCoolingUnits: undefined,
   isLoading: false,
@@ -31,6 +49,19 @@ const useCartStore = create<CartStoreState>((set) => ({
       set({ cartData: data.cart, isLoading: false });
     } catch (err) {
       set({ error: err as Error, isLoading: false });
+    }
+  },
+
+  recomputeCart: async (toast: Toast, t: Translator) => {
+    set({ isLoading: true, error: null });
+    const data = await MarketplaceService.recomputeCart();
+    const previousCart = get().cartData;
+    set({ cartData: data.cart, isLoading: false });
+
+    if (previousCart && previousCart.items.length > data.cart.items.length) {
+      toast.show(t('Dashboard.ShoppingCart.cartUpdatedMessage'), {
+        type: 'md_danger',
+      });
     }
   },
 

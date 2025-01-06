@@ -11,7 +11,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 export type ToastType = 'md_success' | 'md_danger' | 'md_default';
 
-type CustomToastOptions = {
+export type CustomToastOptions = {
   type?: ToastType;
 } & ToastOptions;
 

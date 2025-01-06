@@ -32,6 +32,7 @@ import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
 import { OwnershipModal } from './components/OwnershipModal';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -40,45 +41,47 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
 
-  const [cartData, coolingUnits, setCart] = useCartStore((store) => [
+  const [cartData, coolingUnits, recomputeCart] = useCartStore((store) => [
     store.cartData,
     store.allCoolingUnits,
-    store.setCart,
+    store.recomputeCart,
   ]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const onPay = useCallback(async (evt: GestureResponderEvent) => {
-    evt.stopPropagation();
-    setIsSubmitting(true);
-    try {
-      const coolingUnitIds =
-        cartData?.items?.reduce((acc, current) => {
-          if (!acc.includes(current.relCoolingUnitId)) {
-            acc.push(current.relCoolingUnitId);
-          }
-          return acc;
-        }, [] as number[]) ?? [];
+  const onPay = useCallback(
+    async (evt: GestureResponderEvent) => {
+      evt.stopPropagation();
+      setIsSubmitting(true);
+      try {
+        const coolingUnitIds =
+          cartData?.items?.reduce((acc, current) => {
+            if (!acc.includes(current.relCoolingUnitId)) {
+              acc.push(current.relCoolingUnitId);
+            }
+            return acc;
+          }, [] as number[]) ?? [];
 
-      const recomputedCart = await MarketplaceService.recomputeCart();
-      setCart(recomputedCart.cart);
-      const result = await MarketplaceService.checkoutWithPaystack();
+        recomputeCart(toast, t);
+        const result = await MarketplaceService.checkoutWithPaystack();
 
-      if (result.authorizationUrl) {
+        if (result.authorizationUrl) {
+          setIsSubmitting(false);
+          props.navigation.navigate('PaystackPayment', {
+            url: result.authorizationUrl,
+            orderId: result.orderId,
+            coolingUnitIds,
+          });
+        }
+      } catch (e) {
         setIsSubmitting(false);
-        props.navigation.navigate('PaystackPayment', {
-          url: result.authorizationUrl,
-          orderId: result.orderId,
-          coolingUnitIds,
+        toast.show(t('navigation.error.errorMessage'), {
+          type: 'md_danger',
         });
       }
-    } catch (e) {
-      setIsSubmitting(false);
-      toast.show(t('navigation.error.errorMessage'), {
-        type: 'md_danger',
-      });
-    }
-  }, []);
+    },
+    [t]
+  );
 
   const cartDataByCoolingUnit = useMemo(() => {
     if (!cartData?.items) return [];
@@ -102,6 +105,11 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
       items,
     }));
   }, [cartData, coolingUnits]);
+
+  const unitsMap = useMemo(
+    () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
+    [coolingUnits]
+  );
 
   if (!cartData) {
     return (
@@ -127,15 +135,18 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item: { coolingUnit, items } }) => {
+            const heading = unitsMap.get(Number(coolingUnit))?.name ?? '';
+
             return (
               <View tw="mb-4">
                 <OrderDetailsCard
-                  heading={coolingUnit}
+                  heading={heading}
                   totalLabel={t('Dashboard.ShoppingCart.total')}
                   produceWeight={items?.reduce(
                     (acc, curr) => (acc += curr.orderedProduceWeight),
                     0
                   )}
+                  currency={cartData?.currency ?? DEFAULT_CURRENCY_CODE}
                   subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
                   discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
                   total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
@@ -174,7 +185,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {
-                const coolingUnit = coolingUnits?.find((cu) => cu.id === item.coolingUnitId);
+                const coolingUnit = unitsMap.get(item.coolingUnitId);
 
                 return (
                   <View tw="mb-4">
@@ -197,7 +208,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                                 : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                               {
                                 price: formatCurrencyWithSymbol(
-                                  'NGN', // TODO: get value from somewhere
+                                  DEFAULT_CURRENCY_CODE,
                                   coolingUnit?.commonPricingType?.value ?? 0
                                 ),
                               }
@@ -244,7 +255,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">
                 {formatCurrencyWithSymbol(
-                  'NGN', // TODO: get value from somewhere
+                  cartData.currency ?? DEFAULT_CURRENCY_CODE,
                   cartData.totalColdtivateAmount
                 )}
               </Text>
@@ -257,7 +268,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
               <Text tw="text-base">
                 {formatCurrencyWithSymbol(
-                  'NGN', // TODO: get value from somewhere
+                  cartData.currency ?? DEFAULT_CURRENCY_CODE,
                   cartData.totalPaymentFeesAmount
                 )}
               </Text>
@@ -266,7 +277,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
 
           <View tw="flex-row items-center justify-between">
             <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
-            <Text tw="text-lg">{formatCurrencyWithSymbol('NGN', cartData.totalAmount)}</Text>
+            <Text tw="text-lg">
+              {formatCurrencyWithSymbol(
+                cartData.currency ?? DEFAULT_CURRENCY_CODE,
+                cartData.totalAmount
+              )}
+            </Text>
           </View>
           <Divider tw="bg-zinc-400 my-3" />
           <Button

@@ -12,26 +12,29 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
-import useCartStore from '#stores/shoppingCart';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
+import useCartStore from '#stores/shoppingCart';
 
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 import { OwnershipModal } from './components/OwnershipModal';
-import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 export const CART_MINIMUM_VALUE = 100;
 
 function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
-  const { fetchCart, cartData, isLoading } = useCartStore((store) => ({
-    fetchCart: store.fetchCart,
+  const { recomputeCart, cartData, isLoading } = useCartStore((store) => ({
+    recomputeCart: store.recomputeCart,
     cartData: store.cartData,
     isLoading: store.isLoading,
   }));
@@ -67,7 +70,10 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
         tw="h-full px-4 pt-3 bg-white"
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={async () => await fetchCart()} />
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={async () => await recomputeCart(toast, t)}
+          />
         }
       >
         <View tw="flex-1 pb-8">
@@ -97,10 +103,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                 <View tw="flex-row items-center justify-between">
                   <Text tw="text-lg">{t('Dashboard.ShoppingCart.subtotal')}</Text>
                   <Text tw="text-lg">
-                    {formatCurrencyWithSymbol(
-                      'NGN', // TODO: get from somewhere
-                      cartData.totalProduceAmount
-                    )}
+                    {formatCurrencyWithSymbol(DEFAULT_CURRENCY_CODE, cartData.totalProduceAmount)}
                   </Text>
                 </View>
 

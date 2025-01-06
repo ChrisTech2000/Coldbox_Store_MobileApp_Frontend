@@ -15,6 +15,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { API_BASE_URL } from '#constants/environment';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -38,7 +39,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     store.allCoolingUnits,
   ]);
 
-  const { data, isLoading } = useApiCall(
+  const { data: order, isLoading } = useApiCall(
     'getOrder',
     MarketplaceService.getOrder,
     props.route.params.orderId,
@@ -53,9 +54,9 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   );
 
   const orderDataByCoolingUnit = useMemo(() => {
-    if (!data?.items) return [];
+    if (!order?.items) return [];
 
-    const groupedData = data.items.reduce(
+    const groupedData = order.items.reduce(
       (acc, item) => {
         const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
         if (!coolingUnit) return acc;
@@ -67,16 +68,21 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
         acc[coolingUnit.id].push(item);
         return acc;
       },
-      {} as Record<string, typeof data.items>
+      {} as Record<string, typeof order.items>
     );
 
     return Object.entries(groupedData).map(([coolingUnit, items]) => ({
       coolingUnit,
       items,
     }));
-  }, [data, coolingUnits]);
+  }, [order, coolingUnits]);
 
-  if (isLoading || isLoadingCrops || !data.items?.length) {
+  const unitsMap = useMemo(
+    () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
+    [coolingUnits]
+  );
+
+  if (isLoading || isLoadingCrops || !order.items?.length) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -113,15 +119,18 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               renderItem={({ item: { coolingUnit, items } }) => {
+                const heading = unitsMap.get(Number(coolingUnit))?.name ?? '';
+
                 return (
                   <View tw="mb-4">
                     <OrderDetailsCard
-                      heading={coolingUnit}
+                      heading={heading}
                       totalLabel={t('Dashboard.ShoppingCart.total')}
                       produceWeight={items?.reduce(
                         (acc, curr) => (acc += curr.orderedProduceWeight),
                         0
                       )}
+                      currency={order?.currency ?? DEFAULT_CURRENCY_CODE}
                       subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
                       discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
                       total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
@@ -136,23 +145,21 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 {t('Dashboard.ShoppingCart.pickupMethods')}
               </Text>
 
-              {data.pickupDetails?.length ? (
+              {order.pickupDetails?.length ? (
                 <FlatList
-                  data={data.pickupDetails}
+                  data={order.pickupDetails}
                   keyExtractor={(item, index) => `cooling-unit-${item.coolingUnitId}-dm-${index}`}
                   scrollEnabled={false}
                   showsVerticalScrollIndicator={false}
                   renderItem={({ item }) => {
-                    const coolingUnit = coolingUnits?.find(
-                      (cu) => cu.id === item.coolingUnitId
-                    ) as CoolingUnit;
+                    const coolingUnit = unitsMap.get(item.coolingUnitId) as CoolingUnit;
 
                     return (
                       <PickupDetailsCard
                         coolingUnit={coolingUnit}
                         orderId={props.route.params.orderId}
                         companyId={
-                          data.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
+                          order.items.find((item) => item.relCoolingUnitId === coolingUnit.id)
                             ?.relCompanyId as number
                         }
                         pickupMethod={item.pickupMethod}
@@ -168,7 +175,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 {t('Dashboard.ShoppingCart.produce')}
               </Text>
               <FlatList
-                data={data.items}
+                data={order.items}
                 keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
@@ -195,7 +202,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                         </Text>
                         <Text tw="font-bold">
                           {formatCurrencyWithSymbol(
-                            'NGN', // TODO: get value from somewhere
+                            order.currency ?? DEFAULT_CURRENCY_CODE,
                             item.producePricePerKg.toFixed(2)
                           )}
                           {t('Dashboard.ShoppingCart.perKg')}
@@ -216,8 +223,8 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
                 <Text tw="text-base">
                   {formatCurrencyWithSymbol(
-                    'NGN', // TODO: get value from somewhere
-                    data.totalColdtivateAmount
+                    order.currency ?? DEFAULT_CURRENCY_CODE,
+                    order.totalColdtivateAmount
                   )}
                 </Text>
               </View>
@@ -229,8 +236,8 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 <Icon source="plus" size={16} color={paperTheme.colors.scrim} />
                 <Text tw="text-base">
                   {formatCurrencyWithSymbol(
-                    'NGN', // TODO: get value from somewhere
-                    data.totalPaymentFeesAmount
+                    order.currency ?? DEFAULT_CURRENCY_CODE,
+                    order.totalPaymentFeesAmount
                   )}
                 </Text>
               </View>
@@ -240,8 +247,8 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               <Text tw="text-lg">{t('Dashboard.ShoppingCart.totalToPay')}</Text>
               <Text tw="text-lg">
                 {formatCurrencyWithSymbol(
-                  'NGN', // TODO: get value from somewhere
-                  data.totalAmount
+                  order.currency ?? DEFAULT_CURRENCY_CODE,
+                  order.totalAmount
                 )}
               </Text>
             </View>

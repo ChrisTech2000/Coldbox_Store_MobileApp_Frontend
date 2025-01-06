@@ -446,7 +446,7 @@ export interface GetCouponListResponse {
   nodes: Array<CreateCouponResponse>;
 }
 
-type CartDatumGetCartResponse = {
+export type CartDatumGetCartResponse = {
   id: number;
   items: Array<CartItem>;
   totalAmount: number;
@@ -460,6 +460,7 @@ type CartDatumGetCartResponse = {
     coolingUnitId: number;
     pickupMethod: EPickUpMethod;
   }>;
+  currency: string;
 };
 
 export interface GetCartResponse {
@@ -522,7 +523,7 @@ export interface GetAvailableBanksResponse {
 
 export interface ApplyCouponResponse {
   message: string;
-  cart: GetCartResponse;
+  cart: CartDatumGetCartResponse;
 }
 
 export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
@@ -561,4 +562,9 @@ export interface GetSellerListedCrates {
 export interface CheckMarketplaceEligibilityResponse {
   companies: Record<string, boolean>;
   users: Record<string, boolean>;
+}
+
+export interface ToggleCartOwnershipResponse {
+  cart: CartDatumGetCartResponse;
+  message: string;
 }

@@ -11,6 +11,7 @@ import { cn } from '#ui/lib/cn';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useCheckInStore } from '#stores/checkIn';
@@ -306,7 +307,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                     tag: crate.crateId,
                   }));
                   navigation.navigate('CrateWeightAndPricing', {
-                    companyCurrency: company?.currency?.toUpperCase() ?? 'NGN',
+                    companyCurrency: company?.currency?.toUpperCase() ?? DEFAULT_CURRENCY_CODE,
                     crates: contextualCrates,
                     sellingPrice: isNaN(sellingPrice) ? 0 : sellingPrice,
                     applyToAll: contextualCrates.every(
@@ -369,7 +370,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       <HideWithKeyboardView>
         <FloatingFooter
           dailyPriceLabel={dailyPriceLabel}
-          currencyCode={company?.currency || 'NGN'}
+          currencyCode={company?.currency || DEFAULT_CURRENCY_CODE}
           commonPrice={(coolingUnit?.commonPricingType?.value ?? 0).toFixed(2)}
           totalPrice={totalPrice}
           cancelFunc={(evt) => {

@@ -1,5 +1,8 @@
 import { useIsFocused } from '@react-navigation/native';
+import { FlashList } from '@shopify/flash-list';
 import isArray from 'lodash/isArray';
+import moize from 'moize';
+import ms from 'ms';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Dimensions,
@@ -12,9 +15,6 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FlashList } from '@shopify/flash-list';
-import moize from 'moize';
-import ms from 'ms';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
@@ -26,14 +26,15 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
 
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
-import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -187,8 +188,8 @@ function SalesRoot() {
                       </Text>
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
-                          'NGN', // TODO: get value from somewhere
-                          item.totalAmount
+                          DEFAULT_CURRENCY_CODE,
+                          typeof item.totalAmount !== 'undefined' ? item.totalAmount : 0
                         )}
                       </Text>
                     </View>
@@ -199,8 +200,10 @@ function SalesRoot() {
                       </Text>
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
-                          'NGN', // TODO: get value from somewhere
-                          item.totalCoolingFeesAmount
+                          DEFAULT_CURRENCY_CODE,
+                          typeof item.totalCoolingFeesAmount !== 'undefined'
+                            ? item.totalCoolingFeesAmount
+                            : 0
                         )}
                       </Text>
                     </View>
