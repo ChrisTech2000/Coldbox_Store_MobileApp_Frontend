@@ -4,26 +4,28 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ActivityIndicator, Checkbox, Portal, Text, TextInput, Dialog } from 'react-native-paper';
+import { ActivityIndicator, Checkbox, Dialog, Portal, Text, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import type { AuthRouteProps } from '#navigation/Auth';
-import type { SignUpAsCompanyResponse } from '#types/api.responses';
 import Danger from '#assets/icons/danger.svg';
+import InAppNotifications from '#common/InAppNotifications';
 import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import type { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
+import type { SignUpAsCompanyResponse } from '#types/api.responses';
 import { MAP_APP_GENDER_TO_API } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import InAppNotifications from '#common/InAppNotifications';
 
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import phoneNumberCodes from '#constants/phoneNumberCodes';
 import { currenciesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
+
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { GENDERS, SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
 import { customCountrySort } from './utils';
-import phoneNumberCodes from '#constants/phoneNumberCodes';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -102,7 +104,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         company: {
           name,
           country,
-          currency: currenciesDict().getCodeByName(currency) ?? 'NGN',
+          currency: currenciesDict().getCodeByName(currency) ?? DEFAULT_CURRENCY_CODE,
           language: LanguageStorage.read(),
           crop: [],
         },

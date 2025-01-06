@@ -460,6 +460,7 @@ export type CartDatumGetCartResponse = {
     coolingUnitId: number;
     pickupMethod: EPickUpMethod;
   }>;
+  currency: string;
 };
 
 export interface GetCartResponse {

@@ -1,5 +1,7 @@
 import { currencies } from 'currencies.json';
+import startCase from 'lodash/startCase';
 
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { dateFmt, Translator } from '#i18n/utils';
 import { ManagementCompany } from '#stores/management';
 import {
@@ -24,7 +26,6 @@ import {
 
 import { getMetricValue } from '.';
 import { ConfigData } from '../components/Configuration';
-import startCase from 'lodash/startCase';
 
 ///////////////////// UTILS
 function getValue(
@@ -135,7 +136,7 @@ function generateGeneralHtmlContent(
         value:
           companyData?.compRevenue?.[0]?.toLocaleString('en-US', {
             style: 'currency',
-            currency: companyData?.currency?.[0] ?? 'NGN',
+            currency: companyData?.currency?.[0] ?? DEFAULT_CURRENCY_CODE,
           }) ?? '',
       },
       {

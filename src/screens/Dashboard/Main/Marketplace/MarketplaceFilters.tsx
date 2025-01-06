@@ -11,6 +11,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { MarketplaceRouteProps } from '#navigation/Dashboard/Main/Marketplace/MarketplaceStack';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
@@ -23,9 +24,8 @@ import CropTypeFilters from './components/CropTypeFilter';
 import RangePrice from './components/RangePrice';
 import MarketplaceFormManager, { type FormValues } from './modules/MarketplaceFormManager';
 
-import { type FilterItem, useMarketplaceFilters } from './store';
-import { DEFAULT_CURRENCY_CODE } from './utils';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { type FilterItem, useMarketplaceFilters } from './store';
 
 function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) {
   const { t } = useTranslationUtils();

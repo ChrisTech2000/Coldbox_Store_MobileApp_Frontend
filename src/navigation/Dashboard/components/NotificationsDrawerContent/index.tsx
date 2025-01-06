@@ -9,6 +9,7 @@ import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
 import InAppNotifications from '#common/InAppNotifications';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { useRightDrawerStore } from '#navigation/Dashboard';
 import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
@@ -268,7 +269,7 @@ class NotificationHandlers {
     const contextualFarmerSurvey = surveys?.at(0);
     const datum = {
       farmerSurveysLength: surveyList.length + 1,
-      companyCurrency: managementCompany?.currency ?? 'NGN',
+      companyCurrency: managementCompany?.currency ?? DEFAULT_CURRENCY_CODE,
       crops: await DataloaderService.crops.getAll(),
       contextualCrop,
       farmerId: farmer.id,
@@ -319,7 +320,7 @@ class NotificationHandlers {
       eventType: 'MARKET_SURVEY',
       datums: {
         checkoutId: movementDetails.checkout.id,
-        companyCurrency: managementCompany?.currency || 'NGN',
+        companyCurrency: managementCompany?.currency ?? DEFAULT_CURRENCY_CODE,
         crops: movementCropsForSurvey,
         owner: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`,
       },

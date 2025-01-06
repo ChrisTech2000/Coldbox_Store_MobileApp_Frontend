@@ -13,16 +13,17 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
-import useCartStore from '#stores/shoppingCart';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
+import useCartStore from '#stores/shoppingCart';
 
+import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 import { OwnershipModal } from './components/OwnershipModal';
-import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
 export const CART_MINIMUM_VALUE = 100;
 
@@ -97,10 +98,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                 <View tw="flex-row items-center justify-between">
                   <Text tw="text-lg">{t('Dashboard.ShoppingCart.subtotal')}</Text>
                   <Text tw="text-lg">
-                    {formatCurrencyWithSymbol(
-                      'NGN', // TODO: get from somewhere
-                      cartData.totalProduceAmount
-                    )}
+                    {formatCurrencyWithSymbol(DEFAULT_CURRENCY_CODE, cartData.totalProduceAmount)}
                   </Text>
                 </View>
 

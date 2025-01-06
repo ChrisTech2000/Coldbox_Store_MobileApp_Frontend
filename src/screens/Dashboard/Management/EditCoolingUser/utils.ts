@@ -1,12 +1,15 @@
+import camelCase from 'lodash/camelCase';
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
-import camelCase from 'lodash/camelCase';
 
-import type { Top5Data, Farmer, FarmerData, BankAccount, Company } from '#types/global';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { dateFmt, type Translator } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import FarmerImpactService from '#services/FarmerImpactService';
-import { useManagementStore } from '#stores/management';
 import MarketplaceService from '#services/MarketplaceService';
+import { useManagementStore } from '#stores/management';
+import type { GetAllCropsResponse } from '#types/api.responses';
+import type { BankAccount, Company, Farmer, FarmerData, Top5Data } from '#types/global';
 
 import { html } from '#ui/lib/templating/internals';
 import {
@@ -18,10 +21,8 @@ import {
   SurveyStatsPercentage,
   Table,
 } from '#ui/lib/templating/partials';
-import { dateFmt, type Translator } from '#i18n/utils';
 
 import { countriesDict } from '../CompanyDetails/utils';
-import type { GetAllCropsResponse } from '#types/api.responses';
 
 export const CONSTRAINT_EXCEPTIONS = {
   FARMER_NOT_FOUND: 'farmer not found',
@@ -110,7 +111,7 @@ export class DataLoader {
       losses.push(cloneDeep(impactSlice.top5FoodLossEvolution[key]));
       // --
       const revenue = cloneDeep(impactSlice.top5RevenueEvolution[key]);
-      set(revenue, 'currency', countryCurrency?.currency ?? 'NGN');
+      set(revenue, 'currency', countryCurrency?.currency ?? DEFAULT_CURRENCY_CODE);
       revenues.push(revenue as FarmerRevenueImpactMetrics);
     }
 
@@ -169,7 +170,7 @@ export class DataLoader {
         revenues,
       },
       datums: {
-        currencyCode: countryCurrency?.currency ?? 'NGN',
+        currencyCode: countryCurrency?.currency ?? DEFAULT_CURRENCY_CODE,
         units: coolingUnitsNames.join(', '),
         farmerCompanies,
         farmerCoolingUnits,

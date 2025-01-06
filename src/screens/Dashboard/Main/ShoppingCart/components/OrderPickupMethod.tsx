@@ -12,6 +12,7 @@ import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -19,6 +20,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import type { CartDatumGetCartResponse } from '#types/api.responses';
 import { type CoolingUnit, EPickUpMethod, EPricingType } from '#types/global';
+
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
 type OrderPickupMethodProps = {
@@ -189,7 +191,7 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
                             : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
                           {
                             price: formatCurrencyWithSymbol(
-                              'NGN', // TODO: get value from somewhere
+                              DEFAULT_CURRENCY_CODE,
                               coolingUnit.commonPricingType?.value
                             ),
                           }
@@ -283,7 +285,10 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
           {version === EPickUpMethod.DELIVERY ? (
             <Text tw="mt-2 text-center text-gray-500">
               {t('Dashboard.ShoppingCart.deliveryInfo', {
-                value: formatCurrencyWithSymbol('NGN', cu?.commonPricingType?.value ?? 0),
+                value: formatCurrencyWithSymbol(
+                  DEFAULT_CURRENCY_CODE,
+                  cu?.commonPricingType?.value ?? 0
+                ),
               })}
             </Text>
           ) : null}

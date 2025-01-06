@@ -18,6 +18,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -231,7 +232,10 @@ export function CartItem({ item }: CartItemProps) {
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
             <Text variant="TextMedium" tw="text-base">
-              {formatCurrencyWithSymbol(company?.currency || 'NGN', item.producePricePerKg)}
+              {formatCurrencyWithSymbol(
+                company?.currency ?? DEFAULT_CURRENCY_CODE,
+                item.producePricePerKg
+              )}
               {t('Dashboard.ShoppingCart.perKg')}
             </Text>
           </View>

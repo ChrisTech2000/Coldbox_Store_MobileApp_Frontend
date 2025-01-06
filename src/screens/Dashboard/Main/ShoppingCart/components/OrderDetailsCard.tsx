@@ -12,6 +12,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
 type OrderDetailsCardProps = {
+  currency: string;
   produceWeight: number;
   subtotal: number;
   discount: number;
@@ -41,10 +42,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               <View tw="flex-row items-center justify-between h-8">
                 <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.subtotal')}</Text>
                 <Text tw="text-base">
-                  {formatCurrencyWithSymbol(
-                    'NGN', // TODO: get value from somewhere
-                    props.subtotal
-                  )}
+                  {formatCurrencyWithSymbol(props.currency, props.subtotal)}
                 </Text>
               </View>
 
@@ -68,7 +66,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
                   <Icon name="minus" size={14} color={paperTheme.colors.error} />
                   <Text tw="text-base" style={{ color: paperTheme.colors.error }}>
                     {formatCurrencyWithSymbol(
-                      'NGN', // TODO: get value from somewhere
+                      props.currency,
                       props.discount ? props.discount.toFixed(2) : 0
                     )}
                   </Text>
@@ -84,10 +82,7 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
               {props.totalLabel}
             </Text>
             <Text variant="TextMedium" tw="text-lg">
-              {formatCurrencyWithSymbol(
-                'NGN', // TODO: get value from somewhere
-                props.total
-              )}
+              {formatCurrencyWithSymbol(props.currency, props.total)}
             </Text>
           </View>
         </View>
