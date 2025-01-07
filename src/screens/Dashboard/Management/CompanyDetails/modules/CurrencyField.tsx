@@ -4,7 +4,7 @@ import { useController } from 'react-hook-form';
 import { Divider, List, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 
-import { Select } from '#ui/components/Select';
+import { Select, VIRTUAL_LIST_SIZE_WIDTH } from '#ui/components/Select';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
@@ -79,7 +79,7 @@ export default function CurrencyField() {
             estimatedItemSize={40}
             estimatedListSize={{
               height: deviceHeight,
-              width: deviceWidth / 2,
+              width: deviceWidth - VIRTUAL_LIST_SIZE_WIDTH,
             }}
           />
         </Select.Dialog>

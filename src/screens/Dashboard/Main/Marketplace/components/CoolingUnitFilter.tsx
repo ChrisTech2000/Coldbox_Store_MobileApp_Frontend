@@ -5,7 +5,7 @@ import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import truncate from 'lodash/truncate';
 
-import { Select } from '#ui/components/Select';
+import { Select, VIRTUAL_LIST_SIZE_WIDTH } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -212,7 +212,7 @@ export default function CoolingUnitFilters() {
                       estimatedItemSize={40}
                       estimatedListSize={{
                         height: deviceHeight,
-                        width: deviceWidth / 2,
+                        width: deviceWidth - VIRTUAL_LIST_SIZE_WIDTH,
                       }}
                     />
                   </LoadingConditionalRenderer>
