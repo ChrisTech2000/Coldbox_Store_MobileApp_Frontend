@@ -31,6 +31,7 @@ import { type CartItem as CartItemType } from '#types/global';
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
 import CartItemInput from './CartItemInput';
+import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
 
 type CartItemProps = {
   item: CartItemType;
@@ -167,7 +168,7 @@ export function CartItem({ item }: CartItemProps) {
 
             <View tw="my-1.5">
               <Text variant="TextMedium" tw="text-xl">
-                {crop?.name}
+                {crop?.name ?? DEFAULT_CROP_VALUES.name}
               </Text>
               <Text variant="TextMedium" tw="text-sm text-gray-600">
                 {t('Dashboard.Marketplace.owner')}:{' '}
@@ -198,7 +199,7 @@ export function CartItem({ item }: CartItemProps) {
           <FastImage
             tw="w-20 h-16 mr-1"
             resizeMode="contain"
-            source={{ uri: `${API_BASE_URL}media/${crop?.image}` }}
+            source={{ uri: `${API_BASE_URL}media/${crop?.image ?? DEFAULT_CROP_VALUES.imageUri}` }}
           />
         </View>
         <Touchable

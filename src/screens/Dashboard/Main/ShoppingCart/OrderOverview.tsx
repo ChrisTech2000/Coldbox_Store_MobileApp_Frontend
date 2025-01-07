@@ -29,6 +29,7 @@ import OrderDetailsCard from './components/OrderDetailsCard';
 import { PickupDetailsCard } from './components/PickupDetailsCard';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 
 function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
@@ -185,13 +186,17 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                     <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
                       <View tw="flex-row items-start justify-between">
                         <View tw="flex-col items-start">
-                          <Text tw="text-lg font-bold">{crop?.name}</Text>
+                          <Text tw="text-lg font-bold">
+                            {crop?.name ?? DEFAULT_CROP_VALUES.name}
+                          </Text>
                           <Text tw="text-zinc-500">{item.relCheckInMovementCode}</Text>
                         </View>
                         <FastImage
                           tw="w-24 h-20"
                           resizeMode="contain"
-                          source={{ uri: `${API_BASE_URL}media/${crop?.image}` }}
+                          source={{
+                            uri: `${API_BASE_URL}media/${crop?.image ?? DEFAULT_CROP_VALUES.imageUri}`,
+                          }}
                         />
                       </View>
                       <Divider tw="bg-gray-400 my-2" />

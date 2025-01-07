@@ -42,6 +42,7 @@ import { PickupDetailsCard } from '../ShoppingCart/components/PickupDetailsCard'
 import PaymentPendingBottomSheet from './components/PaymentPendingBottomSheet';
 import { useDashboardStore } from '#stores/dashboard';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
@@ -286,7 +287,10 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 const crop = crops?.find((c) => c.id === item.relCropId);
                 return (
                   <ProduceCard
-                    crop={{ name: crop?.name ?? '', image: crop?.image ?? '' }}
+                    crop={{
+                      name: crop?.name ?? DEFAULT_CROP_VALUES.name,
+                      image: crop?.image ?? DEFAULT_CROP_VALUES.imageUri,
+                    }}
                     currency={order.currency ?? DEFAULT_CURRENCY_CODE}
                     producePricePerKg={item.producePricePerKg}
                     weight={item.orderedProduceWeight}
@@ -409,7 +413,7 @@ function ProduceCard(props: {
     <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
       <View tw="flex-row items-start justify-between">
         <View tw="flex-col items-start">
-          <Text tw="text-lg font-bold">{props.crop.name}</Text>
+          <Text tw="text-lg font-bold">{props.crop?.name ?? DEFAULT_CROP_VALUES.name}</Text>
           <Text tw="text-zinc-500">
             {t('Dashboard.Marketplace.owner')}:{' '}
             {owner?.[0]
@@ -453,7 +457,9 @@ function ProduceCard(props: {
         <FastImage
           tw="w-24 h-20"
           resizeMode="contain"
-          source={{ uri: `${API_BASE_URL}media/${props.crop.image}` }}
+          source={{
+            uri: `${API_BASE_URL}media/${props.crop?.image ?? DEFAULT_CROP_VALUES.imageUri}`,
+          }}
         />
       </View>
       <Divider tw="bg-gray-400 my-2" />
