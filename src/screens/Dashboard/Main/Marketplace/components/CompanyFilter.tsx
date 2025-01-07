@@ -211,7 +211,7 @@ export default function CompanyFilters() {
                       estimatedItemSize={40}
                       estimatedListSize={{
                         height: deviceHeight,
-                        width: deviceWidth / 2,
+                        width: deviceWidth - 52,
                       }}
                     />
                   </LoadingConditionalRenderer>
