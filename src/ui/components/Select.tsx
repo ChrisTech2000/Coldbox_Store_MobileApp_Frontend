@@ -7,6 +7,9 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { cn } from '#ui/lib/cn';
 
+// Dialog default (FlashList) width list size
+export const VIRTUAL_LIST_SIZE_WIDTH = 52;
+
 type Variant = 'sm' | 'md' | 'lg';
 const DEFAULT_VARIANT: Variant = 'sm';
 

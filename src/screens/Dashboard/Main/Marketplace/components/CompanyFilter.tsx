@@ -6,7 +6,7 @@ import { Dimensions, View } from 'react-native';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
-import { Select } from '#ui/components/Select';
+import { Select, VIRTUAL_LIST_SIZE_WIDTH } from '#ui/components/Select';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
@@ -211,7 +211,7 @@ export default function CompanyFilters() {
                       estimatedItemSize={40}
                       estimatedListSize={{
                         height: deviceHeight,
-                        width: deviceWidth - 52,
+                        width: deviceWidth - VIRTUAL_LIST_SIZE_WIDTH,
                       }}
                     />
                   </LoadingConditionalRenderer>
