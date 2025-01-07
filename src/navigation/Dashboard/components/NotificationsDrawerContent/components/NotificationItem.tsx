@@ -1,69 +1,307 @@
-import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { Divider } from 'react-native-paper';
+import React, { useState } from 'react';
+import { type GestureResponderEvent, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Divider } from 'react-native-paper';
+import isEmpty from 'lodash/isEmpty';
+import { create } from 'zustand';
 
 import { Text } from '#ui/components/Text';
+
+import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
+import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
+import InAppNotifications from '#common/InAppNotifications';
+import ColdtivateService from '#services/ColdtivateService';
+import DataloaderService from '#services/DataloaderService';
+import NotificationService from '#services/NotificationService';
+import { useManagementStore } from '#stores/management';
+import { useRightDrawerStore } from '#navigation/Dashboard';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { resolveCropInfo, resolveOwnerName } from '#services/utils/resolvers';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
 
-import InAppNotifications from '#common/InAppNotifications';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import type { Notifications, CommoditySurveyDatum, OrderRequiresMovementDatum } from '../index';
 
-import { useSettingUpSurvey, type Notification, NOTIFICATION_EXCEPTIONS } from '../index';
+type Notification = Notifications[0]['datum'];
 
-export default function NotificationItem(props: {
+const NOTIFICATION_EXCEPTIONS = {
+  FARMER_REQUIRED: 'Farmer information is required',
+  SURVEY_FILLED_IN: 'Survey already filled',
+  CROP_LIST_REQUIRED: 'Crop list information is required',
+  MARKEY_SURVEY_INCOMPLETE: 'Must provide both a Farmer and Cooling Unit to process market survey',
+  INVALID_HISTORY_MOVEMENT: 'Invalid history movement',
+  HISTORY_MOVEMENT_NOT_FOUND: 'No movement history found for the cooling unit',
+  UNIT_REQUIRED: 'Cooling Unit information is required',
+  MOVEMENT_NOT_FOUND: 'Movement details not found for cooling unit',
+} as const;
+
+const useSettingUpSurvey = create<{
+  isLoading: boolean;
+  toggle: (value?: boolean) => void;
+}>((set) => ({
+  isLoading: false,
+  toggle: (value) =>
+    set((state) => ({ isLoading: typeof value !== 'undefined' ? value : !state.isLoading })),
+}));
+
+/**
+ *
+ * Base Notification component
+ *
+ */
+export function NotificationBase(props: {
   item: Notification;
-  updateStatusHandler: () => Promise<void>;
+  updateStatusHandler?: () => Promise<void>;
 }) {
   const { item, updateStatusHandler } = props;
 
-  const toast = InAppNotifications.useToast();
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
-  const isSurveyLoading = useSettingUpSurvey((store) => store.isLoading);
-  const setIsSurveyLoading = useSettingUpSurvey((store) => store.toggle);
+  const [isSurveyLoading, setIsSurveyLoading] = useSettingUpSurvey((store) => [
+    store.isLoading,
+    store.toggle,
+  ]);
+
+  const [_isLoading, _setIsLoading] = useState<boolean>(false);
+
+  async function onPressHandler(evt: GestureResponderEvent): Promise<void> {
+    evt.stopPropagation();
+    try {
+      setIsSurveyLoading(true);
+      _setIsLoading(true);
+      if (!item.seen) {
+        await NotificationService.updateNotificationStatus(item.id);
+      }
+      await updateStatusHandler?.();
+    } catch (exception) {
+      console.error(exception);
+      let toastId: string | undefined;
+      if (exception instanceof Error) {
+        if (exception.message === NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN) {
+          toastId = toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
+            type: 'md_danger',
+          });
+        }
+      }
+      if (!toastId) toast.show(t('actions.error'), { type: 'md_danger' });
+    } finally {
+      setIsSurveyLoading(false);
+      _setIsLoading(false);
+    }
+  }
+
+  const getTextVariant = (v: boolean) => (v ? undefined : 'TextMedium');
+  const getTextColor = (v: boolean) => cn(v ? 'text-zinc-600' : 'text-black');
+
+  const isDisabled = item.seen || isSurveyLoading;
 
   return (
-    <React.Fragment>
-      <View tw="px-2 pt-2.5">
+    <View tw="p-0 mx-0 my-0.5 relative">
+      {_isLoading ? (
+        <View tw="absolute flex items-center justify-center z-10 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <ActivityIndicator size="small" color={paperTheme.colors.backdrop} animating />
+        </View>
+      ) : null}
+
+      <View tw={cn('px-2 pt-2', _isLoading && 'opacity-25')}>
         <Text tw="text-zinc-400">{dateFmt(item.date, 'dd-MM-yyyy HH:mm')}</Text>
       </View>
+
       <TouchableOpacity
-        tw="p-2"
-        onPress={async (evt) => {
-          evt.stopPropagation();
-          try {
-            setIsSurveyLoading(true);
-            await updateStatusHandler();
-          } catch (exception) {
-            console.error(exception);
-            let toastId: string | undefined = undefined;
-            if (exception instanceof Error) {
-              if (exception.message === NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN) {
-                toastId = toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
-                  type: 'md_danger',
-                });
-              }
-            }
-            if (!toastId) toast.show(t('actions.error'), { type: 'md_danger' });
-          } finally {
-            setIsSurveyLoading(false);
-          }
-        }}
-        disabled={isSurveyLoading}
+        tw={cn('p-2', _isLoading && 'opacity-25')}
+        onPress={onPressHandler}
+        disabled={isDisabled}
       >
-        <Text
-          variant={item.seen ? undefined : 'TextMedium'}
-          tw={cn(item.seen ? 'text-zinc-600' : 'text-black')}
-        >
+        <Text variant={getTextVariant(isDisabled)} tw={getTextColor(isDisabled)}>
           {item.message}
-          {item.link ? (
-            <Text variant={item.seen ? undefined : 'TextMedium'} tw="text-blue-500">
+          {item.link && (
+            <Text variant={getTextVariant(isDisabled)} tw="text-blue-500">
               &nbsp;{item.link}
             </Text>
-          ) : null}
+          )}
         </Text>
       </TouchableOpacity>
-      <Divider tw="w-full bg-zinc-500 mt-1.5" />
-    </React.Fragment>
+
+      <Divider tw={cn('w-full bg-zinc-600 mt-1.5', _isLoading && 'opacity-25')} />
+    </View>
   );
+}
+
+/**
+ *
+ * Farmer Survey notification component and logic
+ *
+ */
+export function FarmerSurveyNotification(props: {
+  notification: Notifications[0];
+  onSelect: (datum: CommoditySurveyDatum) => void;
+}) {
+  const { notification, onSelect } = props;
+
+  const company = useManagementStore((store) => store.company);
+
+  async function updateStatusHandler(): Promise<void> {
+    const farmer = notification.ctx.farmer;
+    if (!farmer) throw new Error(NOTIFICATION_EXCEPTIONS.FARMER_REQUIRED);
+
+    const surveys = await ColdtivateService.getFarmerSurveys({ farmerId: farmer.id });
+
+    const surveyList = surveys
+      ? await Promise.all(
+          surveys.flatMap((survey) =>
+            survey.co.map(async (item) => {
+              const crop = await DataloaderService.crops.getById(item.cropId);
+              return {
+                ...item,
+                cropName: crop?.name ?? '',
+              };
+            })
+          )
+        )
+      : [];
+
+    const isAlreadyFilledIn = surveyList.some(
+      (item) => item.cropName.toLowerCase() === notification.datum.crates.crop.toLowerCase()
+    );
+    if (isAlreadyFilledIn) throw new Error(NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN);
+
+    const contextualCrop = await DataloaderService.crops.find(
+      (crop) => crop.name === notification.datum.crates.crop
+    );
+    if (!contextualCrop) throw new Error(NOTIFICATION_EXCEPTIONS.CROP_LIST_REQUIRED);
+
+    const contextualFarmerSurvey = surveys?.at(0);
+
+    onSelect({
+      farmerSurveysLength: surveyList.length + 1,
+      companyCurrency: company?.currency ?? DEFAULT_CURRENCY_CODE,
+      crops: await DataloaderService.crops.getAll(),
+      contextualCrop,
+      farmerId: farmer.id,
+      commoditySurveys: surveyList,
+      userType: (contextualFarmerSurvey?.userType as EOccupation) ?? EOccupation.FARMER,
+      experience: contextualFarmerSurvey?.experience ? EExperience.OLD : EExperience.NEW,
+      experienceInMonths: contextualFarmerSurvey?.experienceDuration?.toString() ?? '1',
+    });
+    useRightDrawerStore.getState().toggle(false);
+  }
+
+  return <NotificationBase item={notification.datum} updateStatusHandler={updateStatusHandler} />;
+}
+
+/**
+ *
+ * Market Survey notification component and logic
+ *
+ */
+export function MarketSurveyNotification(props: {
+  notification: Notifications[0];
+  onSelect: (datum: NotificationOpenSurveyEventDatums) => void;
+}) {
+  const { notification, onSelect } = props;
+
+  const company = useManagementStore((store) => store.company);
+
+  async function updateStatusHandler(): Promise<void> {
+    const farmer = notification.ctx.farmer;
+    const coolingUnit = notification.ctx.coolingUnit;
+    if (!farmer || !coolingUnit) throw new Error(NOTIFICATION_EXCEPTIONS.MARKEY_SURVEY_INCOMPLETE);
+
+    const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
+    if (!movements) throw new Error(NOTIFICATION_EXCEPTIONS.HISTORY_MOVEMENT_NOT_FOUND);
+
+    const movementDetails = movements.find(
+      (movement) => movement.code === notification.datum.movementCode
+    );
+
+    const isValidMovement =
+      movementDetails &&
+      movementDetails.checkout.marketSurveyDelay &&
+      movementDetails.checkout?.crates?.[0]?.ownedByUserId;
+    if (!isValidMovement) throw new Error(NOTIFICATION_EXCEPTIONS.INVALID_HISTORY_MOVEMENT);
+
+    const owner = await ColdtivateService.getUser(
+      movementDetails.checkout.crates[0].ownedByUserId!
+    );
+
+    const movementCropsForSurvey = (
+      await Promise.all(
+        movementDetails.checkout.crates.map(async (crate) => {
+          if (movementDetails.checkout.hasMarketSurvey.includes(crate.cropId)) return;
+          const crop = await DataloaderService.crops.getById(crate.cropId);
+          if (!crop) return;
+          return { id: crop.id, name: crop.name };
+        })
+      )
+    ).filter(Boolean) as Array<{ id: number; name: string }>;
+
+    onSelect({
+      eventType: 'MARKET_SURVEY',
+      datums: {
+        checkoutId: movementDetails.checkout.id,
+        companyCurrency: company?.currency ?? DEFAULT_CURRENCY_CODE,
+        crops: movementCropsForSurvey,
+        owner: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`,
+      },
+    });
+    useRightDrawerStore.getState().toggle(false);
+  }
+
+  return <NotificationBase item={notification.datum} updateStatusHandler={updateStatusHandler} />;
+}
+
+/**
+ *
+ * Order Requires Movement notification component and logic
+ *
+ */
+export function OrderRequiresMovementNotification(props: {
+  notification: Notifications[0];
+  onSelect: (datum: OrderRequiresMovementDatum) => void;
+}) {
+  const { notification, onSelect } = props;
+
+  async function updateStatusHandler(): Promise<void> {
+    const coolingUnit = notification.ctx.coolingUnit;
+    if (!coolingUnit) throw new Error(NOTIFICATION_EXCEPTIONS.UNIT_REQUIRED);
+
+    const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
+    const movement = movements.find((movement) => movement.id === notification.datum.specificId);
+    if (!movement) throw new Error(NOTIFICATION_EXCEPTIONS.MOVEMENT_NOT_FOUND);
+
+    if (!isEmpty(movement.checkin)) {
+      movement.checkin = {
+        ...movement.checkin,
+        ownerName: await resolveOwnerName(
+          movement.checkin?.ownedByUserId,
+          movement.checkin?.ownedOnBehalfOfCompanyId
+        ),
+        crates: await Promise.all(
+          movement.checkin?.crates.map(async (crate) => ({
+            ...crate,
+            crop: await resolveCropInfo(crate.cropId),
+          }))
+        ),
+      };
+    }
+
+    if (!isEmpty(movement.checkout)) {
+      movement.checkout = {
+        ...movement.checkout,
+        crates: await Promise.all(
+          movement.checkout?.crates.map(async (crate) => ({
+            ...crate,
+            ownerName: await resolveOwnerName(crate.ownedByUserId, crate.ownedOnBehalfOfCompanyId),
+            crop: await resolveCropInfo(crate.cropId),
+          }))
+        ),
+      };
+    }
+
+    onSelect({ movement, coolingUnit });
+    useRightDrawerStore.getState().toggle(false);
+  }
+
+  return <NotificationBase item={notification.datum} updateStatusHandler={updateStatusHandler} />;
 }
