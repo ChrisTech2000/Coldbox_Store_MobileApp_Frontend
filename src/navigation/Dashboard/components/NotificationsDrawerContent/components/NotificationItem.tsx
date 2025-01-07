@@ -65,7 +65,7 @@ export function NotificationBase(props: {
 
   const [_isLoading, _setIsLoading] = useState<boolean>(false);
 
-  async function handlePress(evt: GestureResponderEvent): Promise<void> {
+  async function onPressHandler(evt: GestureResponderEvent): Promise<void> {
     evt.stopPropagation();
     try {
       setIsSurveyLoading(true);
@@ -74,15 +74,17 @@ export function NotificationBase(props: {
         await NotificationService.updateNotificationStatus(item.id);
       }
       await updateStatusHandler?.();
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error && error.message === NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN) {
-        toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
-          type: 'md_danger',
-        });
-      } else {
-        toast.show(t('actions.error'), { type: 'md_danger' });
+    } catch (exception) {
+      console.error(exception);
+      let toastId: string | undefined;
+      if (exception instanceof Error) {
+        if (exception.message === NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN) {
+          toastId = toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
+            type: 'md_danger',
+          });
+        }
       }
+      if (!toastId) toast.show(t('actions.error'), { type: 'md_danger' });
     } finally {
       setIsSurveyLoading(false);
       _setIsLoading(false);
@@ -108,7 +110,7 @@ export function NotificationBase(props: {
 
       <TouchableOpacity
         tw={cn('p-2', _isLoading && 'opacity-25')}
-        onPress={handlePress}
+        onPress={onPressHandler}
         disabled={isDisabled}
       >
         <Text variant={getTextVariant(isDisabled)} tw={getTextColor(isDisabled)}>
