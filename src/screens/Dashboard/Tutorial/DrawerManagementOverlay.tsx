@@ -36,7 +36,9 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
         tw={cn(
           'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
           screenHeight <= SMALL_SCREEN_THRESHOLD
-            ? 'top-[22%]'
+            ? user?.role === ERoles.OPERATOR
+              ? 'top-[22%]'
+              : 'top-[25%]'
             : Platform.OS === 'ios'
               ? 'top-[20%]'
               : 'top-[18%]'
@@ -57,7 +59,9 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
           {
             top:
               screenHeight <= SMALL_SCREEN_THRESHOLD
-                ? '23%'
+                ? user?.role === ERoles.OPERATOR
+                  ? '23%'
+                  : '25%'
                 : Platform.OS === 'ios'
                   ? '23%'
                   : '20%',

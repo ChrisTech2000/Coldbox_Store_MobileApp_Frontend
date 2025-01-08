@@ -44,14 +44,15 @@ export default function ScreenContainer(props: Props) {
 
   const toast = InAppNotifications.useToast();
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_COOLING_UNIT_STEP,
     OverlayComponent: AddCoolingUnitOverlay,
+    fullScreen: true,
   });
 
   if (isLoading) {
     return (
-      <View tw="flex-1 items-center justify-center" onLayout={onLayout}>
+      <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
@@ -139,7 +140,6 @@ export default function ScreenContainer(props: Props) {
 
   return (
     <KeyboardAwareScrollView
-      onLayout={onLayout}
       tw="h-full"
       contentContainerStyle="pt-5 pb-8"
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}

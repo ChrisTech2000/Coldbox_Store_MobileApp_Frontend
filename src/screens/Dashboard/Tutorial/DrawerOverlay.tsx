@@ -60,7 +60,7 @@ export function DrawerOverlay({ next, stop, step: { mask } }: IOverlayComponentP
         style={[
           {
             top: mask.y + mask.height + 10,
-            left: mask.x + 10,
+            left: mask.x / 2,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
