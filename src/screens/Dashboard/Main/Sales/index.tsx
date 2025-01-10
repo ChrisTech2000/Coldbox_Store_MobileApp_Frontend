@@ -138,6 +138,7 @@ function SalesRoot() {
                 )
               ).filter(Boolean);
 
+              console.log(item);
               return (
                 <View tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2">
                   <View tw="w-[90%] space-y-2">
@@ -189,7 +190,7 @@ function SalesRoot() {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           DEFAULT_CURRENCY_CODE,
-                          typeof item.totalAmount !== 'undefined' ? item.totalAmount : 0
+                          item.items.reduce((acc, current) => (acc += current.produceAmount), 0)
                         )}
                       </Text>
                     </View>
@@ -201,9 +202,7 @@ function SalesRoot() {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           DEFAULT_CURRENCY_CODE,
-                          typeof item.totalCoolingFeesAmount !== 'undefined'
-                            ? item.totalCoolingFeesAmount
-                            : 0
+                          item.items.reduce((acc, current) => (acc += current.coolingFeesAmount), 0)
                         )}
                       </Text>
                     </View>
@@ -234,8 +233,6 @@ const _getNameById = moize(
     list.find((item) => item.id === id)?.name ?? '',
   {
     maxAge: ms('6 seconds'),
-    // isSerialized: true,
-    // serializer: (args) => [stringToHash(JSON.stringify(args))],
   }
 );
 
