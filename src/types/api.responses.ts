@@ -471,6 +471,34 @@ export interface GetAllOrdersResponse extends CartDatumGetCartResponse {
   createdAt: string;
   status: EOrderStatus;
 }
+export type GetAllSalesResponse = Array<{
+  createdAt: string;
+  currency: string;
+  id: number;
+  items: [
+    {
+      coolingFeesAmount: number;
+      couponId: string | null;
+      crateAvailableWeight: number;
+      discountAmount: number;
+      marketListedCrateId: number;
+      orderedEntireCrate: boolean;
+      orderedProduceWeight: number;
+      produceAmount: number;
+      producePricePerKg: number;
+      relCheckinMovementCode: string;
+      relCompanyId: number;
+      relCoolingUnitId: number;
+      relCrateId: number;
+      relCrateRemainingShelfLife: number;
+      relCropId: number;
+      totalAmount: number;
+    },
+  ];
+  paymentPaidAt: string;
+  timestamp: number;
+}>;
+
 export interface CheckoutWithPaystackResponse {
   orderId: number;
   authorizationUrl: string;
