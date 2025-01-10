@@ -74,6 +74,16 @@ export default function MarketplaceLocationFilter() {
   async function onSubmit(values: FormValues<number>): Promise<void> {
     const countryCode = _getContextualCountry(company?.country || farmerCountry || '');
     if (!countryCode) return;
+    if (!values.cityName) {
+      useMarketplaceQueryParams.getState().setParams({
+        location: [0, 0],
+        filterByMaxDistanceInKm: 0,
+      });
+      previousValues.current = form.getValues();
+      modalRef.current?.close();
+      return;
+    }
+
     try {
       const result = await new Geocoder().getCoordsFromLocation({
         cityName: values.cityName,
@@ -119,7 +129,7 @@ export default function MarketplaceLocationFilter() {
           latitude: nextValue[0],
           longitude: nextValue[1],
         });
-        const address = geocoder.buildAdressFromDatum({
+        const address = geocoder.buildAddressFromDatum({
           city: location.city,
           state: location.state,
         });
