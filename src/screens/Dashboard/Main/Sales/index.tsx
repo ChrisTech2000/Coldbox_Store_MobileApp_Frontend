@@ -138,7 +138,6 @@ function SalesRoot() {
                 )
               ).filter(Boolean);
 
-              console.log(item);
               return (
                 <View tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2">
                   <View tw="w-[90%] space-y-2">
