@@ -60,7 +60,7 @@ export default function MarketplaceLocationFilter() {
     defaultValues: DEFAULT_FORM_VALUES,
     resolver: zodResolver((z) =>
       z.object({
-        cityName: z.string(),
+        cityName: z.string().optional(),
         distance: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gte(0)),
       })
     ),
@@ -73,15 +73,22 @@ export default function MarketplaceLocationFilter() {
 
   async function onSubmit(values: FormValues<number>): Promise<void> {
     const countryCode = _getContextualCountry(company?.country || farmerCountry || '');
-    if (!countryCode) return;
-    if (!values.cityName) {
-      useMarketplaceQueryParams.getState().setParams({
-        location: [0, 0],
-        filterByMaxDistanceInKm: 0,
-      });
+    if (!countryCode) {
+      toast.show(t('actions.error'), { type: 'md_danger' });
+      return;
+    }
+
+    function _onComplete() {
       previousValues.current = form.getValues();
       modalRef.current?.close();
-      return;
+    }
+
+    if (!values.cityName) {
+      useMarketplaceQueryParams.getState().setParams({
+        location: DEFAULT_COORDINATES,
+        filterByMaxDistanceInKm: values.distance,
+      });
+      return _onComplete();
     }
 
     try {
@@ -93,8 +100,7 @@ export default function MarketplaceLocationFilter() {
         location: [result.latitude, result.longitude],
         filterByMaxDistanceInKm: values.distance,
       });
-      previousValues.current = form.getValues();
-      modalRef.current?.close();
+      return _onComplete();
     } catch (exception) {
       console.error(exception);
       toast.show(t('Dashboard.Marketplace.filterError'), {
