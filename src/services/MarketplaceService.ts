@@ -18,6 +18,7 @@ import type {
   CheckMarketplaceEligibilityResponse,
   CheckoutWithPaystackResponse,
   GetAllOrdersResponse,
+  GetAllSalesResponse,
   GetAvailableBanksResponse,
   GetAvailableListingResponse,
   GetCartResponse,
@@ -434,11 +435,9 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getSales = async (): Promise<Array<GetAllOrdersResponse>> => {
+  public getSales = async (): Promise<GetAllSalesResponse> => {
     try {
-      const { data } = await this.get<Array<GetAllOrdersResponse>>(
-        EMarketplaceEndpoints.GET_MY_SALES
-      );
+      const { data } = await this.get<GetAllSalesResponse>(EMarketplaceEndpoints.GET_MY_SALES);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

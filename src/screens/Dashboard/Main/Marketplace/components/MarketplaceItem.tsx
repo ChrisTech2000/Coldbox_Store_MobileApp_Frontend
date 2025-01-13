@@ -73,8 +73,8 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
           : 'text-green-400';
 
   return (
-    <View tw="w-full flex-row items-start justify-between">
-      <View tw="flex-col">
+    <View tw="w-[95%] flex-row items-start justify-between">
+      <View tw="flex-col w-2/3">
         {props.shelfLife !== null ? (
           <View tw="flex-row items-center space-x-2">
             <MaterialCommunityIcon name="timer-outline" size={23} color={iconColor} />
@@ -193,8 +193,8 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
     <React.Fragment>
       <Divider tw="bg-gray-400 my-0.5" />
 
-      <View tw="flex-row items-center py-1 justify-between">
-        <View tw={cn('flex-row items-center justify-between pr-2', hasAction ? 'w-3/4' : 'w-full')}>
+      <View tw="flex-row items-center py-1 justify-between w-[98%]">
+        <View tw={cn('flex-row items-center justify-between pr-2', hasAction ? 'w-2/3' : 'w-full')}>
           <View tw="flex flex-row items-center space-x-1">
             <Text variant="TextMedium" tw="text-sm">
               {props.crateWeight}
@@ -223,7 +223,7 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
           <React.Fragment>
             <View tw="w-[1px] bg-zinc-300 h-2/3" />
             <Touchable
-              tw="flex-row items-center justify-center space-x-1.5 py-1.5 px-3 w-auto"
+              tw="flex-row items-center justify-center space-x-1 py-1.5 px-2 w-auto"
               rippleColor={colors.zinc[200]}
               onPress={(evt) => {
                 evt.stopPropagation();
