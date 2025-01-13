@@ -1,4 +1,5 @@
 import moize from 'moize';
+
 import HttpClient from './HttpClient';
 
 import ColdtivateService from './ColdtivateService';
@@ -34,6 +35,10 @@ function EntireDatasetPreloader<K extends number, V extends NonNullable<unknown>
     getAllAsMap: () => dictLoader(),
     some: async (predicate: (value: V) => boolean) => (await listLoader()).some(predicate),
     find: async (predicate: (value: V) => boolean) => (await listLoader()).find(predicate),
+    clearCache: (): void => {
+      listLoader.clear();
+      dictLoader.clear();
+    },
   };
 }
 
@@ -43,7 +48,7 @@ class DataloaderService extends HttpClient {
   ///
 
   // Dataloader based getters
-  readonly users = EntireDatasetPreloader(async () => ColdtivateService.getUsers());
+  readonly users = EntireDatasetPreloader(async () => await ColdtivateService.getUsers());
   readonly companies = EntireDatasetPreloader(async () => {
     const companies = await ColdtivateService.getCompanies();
     return companies ?? [];
@@ -60,6 +65,14 @@ class DataloaderService extends HttpClient {
     const farmers = await ColdtivateService.getFarmers();
     return farmers ?? [];
   });
+
+  public clearAllCaches(): void {
+    this.users.clearCache();
+    this.companies.clearCache();
+    this.crops.clearCache();
+    this.coolingUnits.clearCache();
+    this.farmers.clearCache();
+  }
 }
 
 export default new DataloaderService();
