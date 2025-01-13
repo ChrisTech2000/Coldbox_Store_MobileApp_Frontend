@@ -17,6 +17,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import { resetAllStores } from '#navigation/Dashboard/components/DrawerContent/resetStoresUtil';
 import InAppNotifications from '#common/InAppNotifications';
+import DataloaderService from '#services/DataloaderService';
 
 import { usePopup } from './utils';
 
@@ -107,6 +108,7 @@ export default function DeleteAccountAction() {
       resetAllStores();
       mutate(() => true, undefined, false);
       useAuthStore.getState().revokeSession();
+      DataloaderService.clearAllCaches();
     } catch (exception) {
       console.error(exception);
       toast.show(t('actions.error'), { type: 'md_danger' });

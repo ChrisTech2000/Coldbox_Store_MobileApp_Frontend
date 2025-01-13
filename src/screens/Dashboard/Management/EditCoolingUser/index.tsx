@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
@@ -65,6 +65,34 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
     }
   );
 
+  const payoutDetailsData = useMemo(() => {
+    if (!payoutDetails) return [];
+    return [
+      {
+        label: t('Dashboard.AccountDetails.PayoutSettings.form.countryLabel'),
+        value: t('Dashboard.AccountDetails.PayoutSettings.form.nigeria'),
+      },
+      {
+        label: t('Dashboard.AccountDetails.PayoutSettings.form.accountType'),
+        value: startCase(EBankAccountType[payoutDetails.accountType]?.toLowerCase() || ''),
+      },
+      {
+        label: t('Dashboard.AccountDetails.PayoutSettings.form.nameLabel'),
+        value: payoutDetails.accountName,
+      },
+      {
+        label: t('Dashboard.AccountDetails.PayoutSettings.form.accountNumberLabel'),
+        value: payoutDetails.accountNumber,
+      },
+      {
+        label: t('Dashboard.AccountDetails.PayoutSettings.form.bank'),
+        value:
+          availableBanks?.banks?.find((b) => b.id.toString() === payoutDetails.bankCode)?.name ||
+          '',
+      },
+    ];
+  }, [payoutDetails]);
+
   if (isLoading || isLoadingAvailableBanks) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -108,7 +136,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
     }
   }
 
-  const isUserWithoutPhone = farmer?.user.firstName === USER_WITHOUT_PHONE && !farmer.user.phone;
+  const isUserWithoutPhone = farmer?.user.firstName === USER_WITHOUT_PHONE && !farmer?.user.phone;
 
   return (
     <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(farmer)}>
@@ -148,14 +176,14 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
                       <View tw="mx-4 mt-4">
                         <Text>
                           {t('Dashboard.ProduceDetails.operatorNoBankAccountWarning', {
-                            name: `${farmer.user.firstName ?? ''}`,
+                            name: `${farmer?.user.firstName ?? ''}`,
                           })}
                         </Text>
                         <Button
                           tw="self-end mt-2"
                           onPress={() =>
                             props.navigation.navigate('AddFarmerBankAccount', {
-                              farmer: farmer.user as User,
+                              farmer: farmer?.user as User,
                               recheckEligibility: async () =>
                                 mutate(getQueryKey(GET_FARMER_RECORD_SWR_KEY, params.farmerId)),
                             })
@@ -168,50 +196,15 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
                     </View>
                   ) : (
                     <View tw="mt-4 space-y-2">
-                      <View tw="flex flex-row justify-between border-b border-gray-300">
-                        <Text tw="text-base mb-1.5 text-gray-600">
-                          {t('Dashboard.AccountDetails.PayoutSettings.form.countryLabel')}
-                        </Text>
-                        <Text tw="text-base mb-1.5">
-                          {t('Dashboard.AccountDetails.PayoutSettings.form.nigeria')}
-                        </Text>
-                      </View>
-
-                      <View tw="flex flex-row justify-between border-b border-gray-300">
-                        <Text tw="text-base mb-1.5 text-gray-600">
-                          {t('Dashboard.AccountDetails.PayoutSettings.form.accountType')}
-                        </Text>
-                        <Text tw="text-base mb-1.5">
-                          {startCase(EBankAccountType[payoutDetails.accountType].toLowerCase())}
-                        </Text>
-                      </View>
-
-                      <View tw="flex flex-row justify-between border-b border-gray-300">
-                        <Text tw="text-base mb-1.5 text-gray-600">
-                          {t('Dashboard.AccountDetails.PayoutSettings.form.nameLabel')}
-                        </Text>
-                        <Text tw="text-base mb-1.5">{payoutDetails.accountName}</Text>
-                      </View>
-
-                      <View tw="flex flex-row justify-between border-b border-gray-300">
-                        <Text tw="text-base mb-1.5 text-gray-600">
-                          {t('Dashboard.AccountDetails.PayoutSettings.form.accountNumberLabel')}
-                        </Text>
-                        <Text tw="text-base mb-1.5">{payoutDetails.accountNumber}</Text>
-                      </View>
-
-                      <View tw="flex flex-row justify-between border-b border-gray-300">
-                        <Text tw="text-base mb-1.5 text-gray-600">
-                          {t('Dashboard.AccountDetails.PayoutSettings.form.bank')}
-                        </Text>
-                        <Text tw="text-base mb-1.5">
-                          {
-                            availableBanks?.banks?.find(
-                              (b) => b.id.toString() === payoutDetails.bankCode
-                            )?.name
-                          }
-                        </Text>
-                      </View>
+                      {payoutDetailsData.map((item, index) => (
+                        <View
+                          key={`payout-details-${index}`}
+                          tw="flex flex-row justify-between border-b border-gray-300"
+                        >
+                          <Text tw="text-base mb-1.5 text-gray-600">{item.label}</Text>
+                          <Text tw="text-base mb-1.5">{item.value}</Text>
+                        </View>
+                      ))}
                     </View>
                   )}
                 </View>
@@ -267,15 +260,15 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
   );
 }
 
-function _buildInitialValues(datum?: Farmer) {
-  const values = {} as FormValues;
-  values.parentName = datum?.parentName ?? '';
-  values.firstName = datum?.user?.firstName ?? '';
-  values.lastName = datum?.user?.lastName ?? '';
-  values.gender = datum?.user?.gender ?? EApiGender.OTHER;
-  values.phone = datum?.user?.phone ?? '';
-  values.language = (datum?.user?.language as TranslationLocales) ?? LanguageStorage.read();
-  return values;
+function _buildInitialValues(datum?: Farmer): FormValues {
+  return {
+    parentName: datum?.parentName ?? '',
+    firstName: datum?.user?.firstName ?? '',
+    lastName: datum?.user?.lastName ?? '',
+    gender: datum?.user?.gender ?? EApiGender.OTHER,
+    phone: datum?.user?.phone ?? '',
+    language: (datum?.user?.language as TranslationLocales) ?? LanguageStorage.read(),
+  };
 }
 
 export default withSafeArea(EditCoolingUser, ['bottom'], true);

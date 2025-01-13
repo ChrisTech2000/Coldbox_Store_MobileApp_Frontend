@@ -7,7 +7,7 @@ import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
-import { Select } from '#ui/components/Select';
+import { Select, VIRTUAL_LIST_SIZE_WIDTH } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -207,7 +207,7 @@ export default function CropTypeFilters() {
                       estimatedItemSize={40}
                       estimatedListSize={{
                         height: deviceHeight,
-                        width: deviceWidth / 2,
+                        width: deviceWidth - VIRTUAL_LIST_SIZE_WIDTH,
                       }}
                     />
                   </LoadingConditionalRenderer>

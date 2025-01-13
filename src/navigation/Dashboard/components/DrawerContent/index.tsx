@@ -31,6 +31,7 @@ import { useTranslationUtils, type Translator } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
+import DataloaderService from '#services/DataloaderService';
 
 import type { DashboardRoutes } from '../../index';
 import { resetAllStores } from './resetStoresUtil';
@@ -109,6 +110,7 @@ export default function DrawerContent(props: Props) {
     resetAllStores();
     mutate(() => true, undefined, false);
     useAuthStore.getState().revokeSession();
+    DataloaderService.clearAllCaches();
   }, []);
 
   return (

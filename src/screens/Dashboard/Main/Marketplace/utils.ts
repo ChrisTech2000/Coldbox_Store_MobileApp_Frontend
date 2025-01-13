@@ -12,6 +12,11 @@ import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
 
+export const DEFAULT_CROP_VALUES = {
+  name: 'Other',
+  imageUri: 'crop_images/other_b3HuBUE.png',
+} as const;
+
 export type AvailableListingDatum = {
   id: number;
   movementCode: string;
@@ -114,8 +119,8 @@ export function useMarketplaceListing() {
             },
             crop: {
               id: contextualCrop?.id ?? 0,
-              name: contextualCrop?.name ?? '',
-              image: contextualCrop?.image ?? '',
+              name: contextualCrop?.name ?? DEFAULT_CROP_VALUES.name,
+              image: contextualCrop?.image ?? DEFAULT_CROP_VALUES.imageUri,
             },
             movementCode: node.relCheckInMovementCode,
             currencyValue: formatCurrencyWithSymbol(node.currency, node.producePricePerKg),
