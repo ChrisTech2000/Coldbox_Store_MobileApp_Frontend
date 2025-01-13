@@ -33,7 +33,7 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
                 ? 'top-[27%]'
                 : 'top-[25%]'
             : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-[42%]'
+              ? 'top-[41.25%]'
               : 'top-[32%]'
         )}
       >
@@ -49,7 +49,7 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
               ? 'top-[40%]'
               : 'top-1/3'
             : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-1/2'
+              ? 'top-[49.25%]'
               : 'top-[40%]'
         )}
         style={[

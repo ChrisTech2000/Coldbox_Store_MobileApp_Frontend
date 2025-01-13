@@ -33,7 +33,7 @@ export function ManagementCoolingUnitsOverlay({ next, stop }: IOverlayComponentP
         <Touchable
           tw={cn(
             'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-40' : 'top-64'
+            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-44' : 'top-64'
           )}
           onPress={() => {
             // eslint-disable-next-line
