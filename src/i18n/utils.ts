@@ -12,12 +12,12 @@ import moize from 'moize';
 import ms from 'ms';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getTimeZone } from 'react-native-localize';
+import { getLocales, getTimeZone } from 'react-native-localize';
 import { z } from 'zod';
 
 import { mmkv } from '#stores/lib/storage';
 
-import { APP_LOCALES, type TranslationLocales } from './constants';
+import { APP_LOCALES, DEFAULT_APP_LOCALE, type TranslationLocales } from './constants';
 import type { TranslationPaths } from './index';
 import { ha as hausaLocale } from './plugins/ha';
 import { ig as igboLocale } from './plugins/ig';
@@ -28,17 +28,44 @@ import { yo as yorubaLocale } from './plugins/yo';
 // Storage Manager
 ///
 
-const _memoizedRead = moize(() => mmkv.getString('i18n-locale'), { maxAge: ms('4 seconds') });
+export class LanguageManager {
+  private static readonly _KEY = 'i18n-locale';
+  private static readonly _locales = new Set<string>(Object.values(APP_LOCALES));
 
-export class LanguageStorage {
-  static persist(value: string) {
-    mmkv.set('i18n-locale', value);
+  public static persist(language: string): void {
+    mmkv.set(LanguageManager._KEY, language);
   }
 
-  static read() {
-    const value = _memoizedRead() ?? APP_LOCALES.ENGLISH;
-    return value as TranslationLocales;
+  public static read(useCache = true): TranslationLocales {
+    const storedValue = useCache
+      ? LanguageManager._getCachedValue()
+      : LanguageManager._getPersistedValue();
+    const languageToUse = storedValue || LanguageManager._derivedSystemLocale();
+    return LanguageManager.safeValue(languageToUse);
   }
+
+  public static safeValue(locale?: string): TranslationLocales {
+    if (locale && LanguageManager._locales.has(locale)) {
+      return locale as TranslationLocales;
+    }
+    return DEFAULT_APP_LOCALE;
+  }
+
+  private static _getPersistedValue(): string | undefined {
+    return mmkv.getString(LanguageManager._KEY);
+  }
+
+  private static _getCachedValue = moize(LanguageManager._getPersistedValue, {
+    maxAge: ms('3 seconds'),
+  });
+
+  private static _derivedSystemLocale = moize(
+    () => {
+      const devicePrimaryLocale = getLocales().at(0);
+      return devicePrimaryLocale?.languageCode;
+    },
+    { maxAge: ms('3 seconds') }
+  );
 }
 
 ///
@@ -60,7 +87,8 @@ export function useTranslationUtils() {
 
   const _fireMutation = useCallback(async (locale: TranslationLocales) => {
     try {
-      await i18n.changeLanguage(locale);
+      const language = LanguageManager.safeValue(locale);
+      await i18n.changeLanguage(language);
     } catch {
       // silent error
     }
@@ -81,7 +109,7 @@ export function useTranslationUtils() {
 ///
 
 function _derivedLocale(): Locale {
-  switch (LanguageStorage.read()) {
+  switch (LanguageManager.read()) {
     case 'hi':
       return hindiLocale;
     case 'pt':

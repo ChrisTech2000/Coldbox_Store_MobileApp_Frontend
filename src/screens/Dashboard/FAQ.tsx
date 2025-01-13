@@ -8,17 +8,17 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { FAQ_CONTENT } from '#constants/faq';
 import { APP_LOCALES, TranslationLocales } from '#i18n/constants';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
-import { mmkv } from '#stores/lib/storage';
 import { ERoles } from '#types/global';
 
 function FAQ() {
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
-  const language = mmkv.getString('i18n-locale');
 
   const [search, setSearch] = useState<string>('');
+
+  const language = LanguageManager.read(false);
 
   const faq = useMemo(() => {
     const searchTerm = search.toLowerCase();

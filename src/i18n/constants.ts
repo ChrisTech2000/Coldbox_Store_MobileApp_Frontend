@@ -13,3 +13,5 @@ export const APP_LOCALES = {
 } as const;
 
 export type TranslationLocales = ValueOf<typeof APP_LOCALES>;
+
+export const DEFAULT_APP_LOCALE = APP_LOCALES.ENGLISH;

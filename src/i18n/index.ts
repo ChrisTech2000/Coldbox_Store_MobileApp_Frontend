@@ -4,7 +4,7 @@ import { I18nManager } from 'react-native';
 import { getLocales } from 'react-native-localize';
 
 import type { RecursiveKeyOf } from '#types/miscellaneous';
-import { APP_LOCALES } from './constants';
+import { APP_LOCALES, DEFAULT_APP_LOCALE } from './constants';
 import englishTranslations, { type Translations } from './transl/en';
 import frenchTranslations from './transl/fr';
 import gujaratiTranslations from './transl/gu';
@@ -15,19 +15,17 @@ import hausaTranslations from './transl/ha';
 import igboTranslations from './transl/ig';
 import yorubaTranslations from './transl/yo';
 
-import { LanguageStorage } from './utils';
+import { LanguageManager } from './utils';
 
 export type TranslationPaths = RecursiveKeyOf<Translations>;
 
-const systemLocale = getLocales().at(0);
-
-export const isRTL = systemLocale?.isRTL ?? false;
+export const isRTL = getLocales().at(0)?.isRTL ?? false;
 
 I18nManager.allowRTL(isRTL);
 I18nManager.forceRTL(isRTL);
 
 function _optionsFactory() {
-  const initialLanguage = LanguageStorage.read();
+  const initialLanguage = LanguageManager.read();
   return {
     resources: {
       [APP_LOCALES.ENGLISH]: {
@@ -59,7 +57,7 @@ function _optionsFactory() {
       },
     },
     lng: initialLanguage,
-    fallbackLng: APP_LOCALES.ENGLISH,
+    fallbackLng: DEFAULT_APP_LOCALE,
     react: {
       useSuspense: false,
     },
@@ -72,6 +70,6 @@ function _optionsFactory() {
 }
 
 i18n.use(initReactI18next).init(_optionsFactory());
-i18n.on('languageChanged', LanguageStorage.persist);
+i18n.on('languageChanged', LanguageManager.persist);
 
 export default i18n;
