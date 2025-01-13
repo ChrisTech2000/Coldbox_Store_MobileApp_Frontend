@@ -579,7 +579,9 @@ export const MOCKED_HISTORY_DATA = [
   {
     id: 1004,
     code: 'MO-#64-CU-#75',
-    date: new Date('2024-12-12T11:32:24.674639Z'),
+    // eslint-disable-next-line
+    // @ts-ignore
+    date: '2024-12-12T11:32:24.674639Z',
     initiatedFor: EInitiatedFor.MARKETPLACE_ORDER,
     order: {},
     operator: '',
@@ -679,7 +681,9 @@ export const MOCKED_HISTORY_DATA = [
   {
     id: 1005,
     code: 'F2XC56',
-    date: new Date('2024-12-11T10:30:24.674639Z'),
+    // eslint-disable-next-line
+    // @ts-ignore
+    date: '2024-12-11T10:30:24.674639Z',
     initiatedFor: EInitiatedFor.CHECK_IN,
     order: {},
     operator: '',

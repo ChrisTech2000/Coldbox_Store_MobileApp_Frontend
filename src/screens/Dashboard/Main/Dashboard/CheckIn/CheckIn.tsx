@@ -69,9 +69,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     fullScreen: true,
   });
 
-  const { onLayout: onCheckIn2Layout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_2,
     OverlayComponent: CheckIn2ScreenOverlay,
+    fullScreen: true,
   });
 
   const { onLayout: onCheckIn3Layout } = useWalkthroughStep({
@@ -339,7 +340,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           ) : null}
 
           <FlatList
-            onLayout={onCheckIn2Layout}
             showsVerticalScrollIndicator={false}
             data={produces}
             extraData={surveys}

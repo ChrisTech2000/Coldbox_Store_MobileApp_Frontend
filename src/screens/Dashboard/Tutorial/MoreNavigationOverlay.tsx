@@ -24,7 +24,7 @@ export function MoreNavigationOverlay({ next, stop }: IOverlayComponentProps) {
       <View
         tw={cn(
           'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-80' : 'top-[65%]'
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-72' : 'top-[65%]'
         )}
         style={[
           {
