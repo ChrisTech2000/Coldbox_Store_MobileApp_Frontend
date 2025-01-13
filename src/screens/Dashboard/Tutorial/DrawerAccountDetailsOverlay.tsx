@@ -34,7 +34,7 @@ export function DrawerAccountDetailsOverlay({ next, stop }: IOverlayComponentPro
           Platform.OS === 'ios'
             ? 'top-[15.5%]'
             : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-[15.5%]'
+              ? 'top-[16.5%]'
               : 'top-[12.5%]'
         )}
         onPress={() => {
@@ -57,7 +57,7 @@ export function DrawerAccountDetailsOverlay({ next, stop }: IOverlayComponentPro
                   ? '16%'
                   : '17%'
                 : screenHeight <= SMALL_SCREEN_THRESHOLD
-                  ? '16%'
+                  ? '17%'
                   : '13.5%',
             left: '50%',
             opacity: blinkAnim,
