@@ -11,7 +11,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
 import type { TranslationLocales } from '#i18n/constants';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { EApiGender, ERoles } from '#types/global';
@@ -46,7 +46,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
       kind: user?.role ?? ERoles.COOLING_USER,
       firstName: user?.firstName ?? '',
       lastName: user?.lastName ?? '',
-      language: (user?.language as TranslationLocales) ?? LanguageStorage.read(),
+      language: (user?.language as TranslationLocales) ?? LanguageManager.read(),
       phone: user?.phone ?? '',
       email: user?.email ?? '',
       gender: user?.gender ?? EApiGender.OTHER,

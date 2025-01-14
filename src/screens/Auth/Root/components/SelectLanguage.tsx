@@ -6,15 +6,14 @@ import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Select } from '#ui/components/Select';
 
 import { APP_LOCALES, type TranslationLocales } from '#i18n/constants';
-import { useTranslationUtils } from '#i18n/utils';
-import { mmkv } from '#stores/lib/storage';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 
 const LANGUAGE_OPTIONS = Object.values(APP_LOCALES) as Array<TranslationLocales>;
 
 export function SelectLanguage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeLanguage, setActiveLanguage] = useState<TranslationLocales>(
-    (mmkv.getString('i18n-locale') ?? APP_LOCALES.ENGLISH) as TranslationLocales
+    LanguageManager.read(false)
   );
   const [selectedLanguage, setSelectedLanguage] = useState<TranslationLocales>(activeLanguage);
 

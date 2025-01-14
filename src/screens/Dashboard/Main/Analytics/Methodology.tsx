@@ -9,7 +9,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { METHODOLOGY_CONTENT } from '#constants/methodology';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 
 function Methodology() {
@@ -20,7 +20,7 @@ function Methodology() {
 
   const methodologyContent = useMemo(() => {
     const searchTerm = search.toLowerCase();
-    return METHODOLOGY_CONTENT[LanguageStorage.read()].filter(
+    return METHODOLOGY_CONTENT[LanguageManager.read()].filter(
       (entry) =>
         entry.title.toLowerCase().includes(searchTerm) ||
         entry.text.toLowerCase().includes(searchTerm)

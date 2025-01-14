@@ -9,7 +9,7 @@ import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
 import Logo from '#assets/images/coldtivate_logo.svg';
 import InAppNotifications from '#common/InAppNotifications';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
 import { useAuthStore } from '#stores/auth';
@@ -111,7 +111,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
         userType: MAP_ROLES[data.activeProfile],
         password: data.password,
         username: data.user,
-        language: LanguageStorage.read(),
+        language: LanguageManager.read(),
       });
 
       if (result) {

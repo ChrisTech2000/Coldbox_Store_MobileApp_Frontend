@@ -62,7 +62,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             return acc;
           }, [] as number[]) ?? [];
 
-        recomputeCart(toast, t);
+        await recomputeCart(toast, t);
         const result = await MarketplaceService.checkoutWithPaystack();
 
         if (result.authorizationUrl) {

@@ -5,8 +5,7 @@ import { Divider, List, TextInput } from 'react-native-paper';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useTranslationUtils } from '#i18n/utils';
-import { mmkv } from '#stores/lib/storage';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 
 import { FAQ_CONTENT } from '#constants/faq';
 import { APP_LOCALES, TranslationLocales } from '#i18n/constants';
@@ -17,7 +16,7 @@ function AppInfo() {
 
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const language = mmkv.getString('i18n-locale');
+  const language = LanguageManager.read(false);
 
   const datums = useMemo(() => {
     const currentLanguage = language ?? APP_LOCALES.ENGLISH;

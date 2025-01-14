@@ -9,7 +9,7 @@ import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView'
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { TranslationLocales } from '#i18n/constants';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import AuthService from '#services/AuthService';
 import ColdtivateService from '#services/ColdtivateService';
@@ -158,7 +158,7 @@ function _buildInitialValues(contextualFarmer?: Farmer) {
   values.gender = contextualFarmer?.user?.gender ?? EApiGender.OTHER;
   values.phone = contextualFarmer?.user?.phone ?? '';
   values.language =
-    (contextualFarmer?.user?.language as TranslationLocales) ?? LanguageStorage.read();
+    (contextualFarmer?.user?.language as TranslationLocales) ?? LanguageManager.read();
   return values;
 }
 

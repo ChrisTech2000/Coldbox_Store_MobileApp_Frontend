@@ -17,7 +17,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { USER_WITHOUT_PHONE } from '#constants/general';
 import type { TranslationLocales } from '#i18n/constants';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
@@ -267,7 +267,7 @@ function _buildInitialValues(datum?: Farmer): FormValues {
     lastName: datum?.user?.lastName ?? '',
     gender: datum?.user?.gender ?? EApiGender.OTHER,
     phone: datum?.user?.phone ?? '',
-    language: (datum?.user?.language as TranslationLocales) ?? LanguageStorage.read(),
+    language: (datum?.user?.language as TranslationLocales) ?? LanguageManager.read(),
   };
 }
 
