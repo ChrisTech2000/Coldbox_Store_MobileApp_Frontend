@@ -24,7 +24,7 @@ export function DrawerKnowledgeHubOverlay({ next, stop }: IOverlayComponentProps
           screenHeight <= SMALL_SCREEN_THRESHOLD
             ? 'top-[25%] w-[65%]'
             : Platform.OS === 'ios'
-              ? 'top-[20%]'
+              ? 'top-[21%] h-[7%]'
               : 'top-[18.5%]'
         )}
       >

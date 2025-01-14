@@ -30,11 +30,13 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
             ? screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-[33%]'
               : Platform.OS === 'ios'
-                ? 'top-[27%]'
+                ? 'top-[28%]'
                 : 'top-[25%]'
             : screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-[41.25%]'
-              : 'top-[32%]'
+              : Platform.OS === 'ios'
+                ? 'top-[35%]'
+                : 'top-[32%]'
         )}
       >
         <Icon source="card-multiple-outline" size={20} />
@@ -47,10 +49,14 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
           user?.role === ERoles.COOLING_USER
             ? screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-[41.5%]'
-              : 'top-1/3'
+              : Platform.OS === 'ios'
+                ? 'top-[35%]'
+                : 'top-1/3'
             : screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-[49.25%]'
-              : 'top-[40%]'
+              : Platform.OS === 'ios'
+                ? 'top-[42%]'
+                : 'top-[40%]'
         )}
         style={[
           {

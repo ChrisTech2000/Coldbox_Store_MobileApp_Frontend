@@ -40,7 +40,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
               ? 'top-[23%]'
               : 'top-[23%]'
             : Platform.OS === 'ios'
-              ? 'top-[20%]'
+              ? 'top-[21%]'
               : 'top-[18%]'
         )}
         onPress={() => {
@@ -81,7 +81,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
           screenHeight <= SMALL_SCREEN_THRESHOLD
             ? 'top-[30.5%]'
             : Platform.OS === 'ios'
-              ? 'top-[28%]'
+              ? 'top-[29%]'
               : 'top-[26%]'
         )}
         style={[

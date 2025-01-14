@@ -40,7 +40,7 @@ export function OperatorActionsOverlay({
       <TouchableOpacity
         tw={cn(
           'absolute right-3 w-[15%] h-[8%]',
-          Platform.OS === 'ios' ? 'bottom-28' : 'bottom-20'
+          Platform.OS === 'ios' ? 'bottom-32' : 'bottom-20'
         )}
         onPress={() => {
           onPressMask?.();
@@ -69,7 +69,11 @@ export function OperatorActionsOverlay({
       <View
         tw={cn(
           'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-60' : 'top-[65%]'
+          screenHeight <= SMALL_SCREEN_THRESHOLD
+            ? 'top-60'
+            : Platform.OS === 'ios'
+              ? 'top-[60%]'
+              : 'top-[65%]'
         )}
         style={[
           {
@@ -112,7 +116,7 @@ export function CheckInButtonOverlay({ next, stop }: IOverlayComponentProps) {
       <TouchableOpacity
         tw={cn(
           'absolute right-1/4 w-[20%] h-[9%]',
-          Platform.OS === 'ios' ? 'bottom-28' : 'bottom-20'
+          Platform.OS === 'ios' ? 'bottom-28 right-[26%]' : 'bottom-20'
         )}
         onPress={() => {
           navigation.navigate('CheckInStack', {

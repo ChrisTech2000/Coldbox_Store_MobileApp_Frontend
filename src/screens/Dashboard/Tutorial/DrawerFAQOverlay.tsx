@@ -30,7 +30,7 @@ export function DrawerFAQOverlay({ next, stop }: IOverlayComponentProps) {
                 ? 'top-[44%]'
                 : 'top-[40%]'
             : Platform.OS === 'ios'
-              ? 'top-[32%]'
+              ? 'top-[34.5%] h-[6%]'
               : 'top-[30%]'
         )}
       >
@@ -40,8 +40,12 @@ export function DrawerFAQOverlay({ next, stop }: IOverlayComponentProps) {
 
       <View
         tw={cn(
-          'absolute left-3 top-[45%] w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-[55%]' : 'top-[45%]'
+          'absolute left-3 w-[90%] h-auto bg-white p-3 rounded-md z-30',
+          screenHeight <= SMALL_SCREEN_THRESHOLD
+            ? 'top-[55%]'
+            : Platform.OS === 'ios'
+              ? 'top-[42%]'
+              : 'top-[45%]'
         )}
         style={[
           {
