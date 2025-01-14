@@ -25,7 +25,7 @@ export function CoolingUserSurveyOverlay({ next, stop }: IOverlayComponentProps)
       <View>
         <View
           tw={cn(
-            'absolute w-full h-14 bg-white',
+            'absolute w-full h-auto bg-white',
             screenHeight <= SMALL_SCREEN_THRESHOLD
               ? Platform.OS === 'ios'
                 ? 'top-64'

@@ -9,7 +9,7 @@ import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { SMALL_SCREEN_THRESHOLD, SUPER_SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -22,11 +22,13 @@ export function DrawerFAQOverlay({ next, stop }: IOverlayComponentProps) {
     <View tw="h-full w-full absolute">
       <View
         tw={cn(
-          'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
+          'bg-white absolute left-3 w-[60%] h-[8%] p-3 rounded-md flex flex-row items-center space-x-2',
           screenHeight <= SMALL_SCREEN_THRESHOLD
             ? Platform.OS === 'ios'
               ? 'top-[42%]'
-              : 'top-[40%]'
+              : screenHeight <= SUPER_SMALL_SCREEN_THRESHOLD
+                ? 'top-[44%]'
+                : 'top-[40%]'
             : Platform.OS === 'ios'
               ? 'top-[32%]'
               : 'top-[30%]'
