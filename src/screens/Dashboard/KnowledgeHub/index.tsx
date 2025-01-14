@@ -10,16 +10,13 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import type { KnowledgeHubStackRouteProps } from '#navigation/Dashboard/KnowledgeHub';
 import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { KNOWLEDGE_HUB_URL, YOUR_VCCA_PDF_LINK } from '#constants/environment';
 import { GenericError } from '#ui/components/GenericError';
-import { mmkv } from '#stores/lib/storage';
 
 import { countriesDict } from '../Management/CompanyDetails/utils';
 
-function _getLanguage() {
-  return mmkv.getString('i18n-locale');
-}
+const _getLanguage = () => LanguageManager.read(false);
 
 function buildPath(path: string, countryCode?: string): string {
   return [KNOWLEDGE_HUB_URL, _getLanguage(), path.replace(/^\/+|\/+$/g, ''), countryCode]

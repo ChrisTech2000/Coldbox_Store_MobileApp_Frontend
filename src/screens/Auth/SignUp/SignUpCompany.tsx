@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Danger from '#assets/icons/danger.svg';
 import InAppNotifications from '#common/InAppNotifications';
-import { LanguageStorage, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
 import type { SignUpAsCompanyResponse } from '#types/api.responses';
@@ -105,7 +105,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
           name,
           country,
           currency: currenciesDict().getCodeByName(currency) ?? DEFAULT_CURRENCY_CODE,
-          language: LanguageStorage.read(),
+          language: LanguageManager.read(),
           crop: [],
         },
       });
