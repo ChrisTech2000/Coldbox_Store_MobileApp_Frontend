@@ -29,7 +29,7 @@ export default function CoordinatesForm() {
               mode="flat"
               dense
               value={value}
-              keyboardType="numeric"
+              keyboardType="numbers-and-punctuation"
               onChangeText={onChange}
               onBlur={onBlur}
               error={latitudeError}
