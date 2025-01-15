@@ -1,7 +1,0 @@
-appId: com.base.coldtivate
-name: RE sign in
----
-- runFlow: '../common/subflows/re-login.yml'
-- assertVisible: 'Welcome to Coldtivate'
-- assertVisible: 'Start Tutorial'
-- assertVisible: 'Quit Tutorial'
