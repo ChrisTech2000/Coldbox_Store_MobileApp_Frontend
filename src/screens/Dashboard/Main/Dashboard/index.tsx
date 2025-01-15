@@ -295,10 +295,9 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>
-      ) : !dashboardProduces?.length ? (
-        <DashboardEmptyState />
       ) : (
         <FlashList
+          ListEmptyComponent={<DashboardEmptyState />}
           showsVerticalScrollIndicator={false}
           estimatedItemSize={40}
           estimatedListSize={ESTIMATED_LIST_SIZE}

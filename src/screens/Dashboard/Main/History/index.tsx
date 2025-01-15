@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, Platform, RefreshControl, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
@@ -12,9 +13,9 @@ import { useTutorialStore } from '#stores/tutorial';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { Company, CoolingUnit, User } from '#types/global';
 
+import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { GenericError } from '#ui/components/GenericError';
 import { createSelectStore } from '#ui/components/SelectWithStore';
-import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -28,7 +29,6 @@ import { Movement } from './components/Movement';
 import { createSortingStore, ESortingOptions, SortingMenu } from './components/SortMenu';
 import { sortMovementCrops, sortMovements } from './utils/sortMovements';
 import { useMovementsHistory } from './utils/useMovementsData';
-import { useShallow } from 'zustand/react/shallow';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
@@ -120,8 +120,9 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
         <View tw="h-full flex-1 mt-20 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>
-      ) : movements.length > 0 || isTutorialActive ? (
+      ) : (
         <FlashList
+          ListEmptyComponent={<GenericEmptyState message={t('Dashboard.History.empty')} />}
           contentContainerStyle={{
             paddingBottom: Platform.OS === 'ios' ? 120 : 100,
             paddingTop: 10,
@@ -178,12 +179,6 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
             width: deviceWidth,
           }}
         />
-      ) : (
-        <View tw="flex-1 items-center text-center mx-4 mt-4">
-          <Text variant="TextBold" tw="text-base text-green-primary text-center">
-            {t('Dashboard.History.empty')}
-          </Text>
-        </View>
       )}
     </View>
   );
