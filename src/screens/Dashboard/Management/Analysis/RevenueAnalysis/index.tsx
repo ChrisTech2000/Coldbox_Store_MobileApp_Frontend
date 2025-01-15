@@ -16,6 +16,7 @@ import {
   createDataRangeStore,
   DateRangePickerWithStore,
 } from '#ui/components/DateRangePickerWithStore';
+import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { Input } from '#ui/components/Input';
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
@@ -200,8 +201,11 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
           </View>
-        ) : filteredMovements.length > 0 ? (
+        ) : (
           <FlashList
+            ListEmptyComponent={
+              <GenericEmptyState message={t('Dashboard.Management.UsageAnalysis.empty')} />
+            }
             showsVerticalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
@@ -235,12 +239,6 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
               width: deviceWidth,
             }}
           />
-        ) : (
-          <View tw="flex-1 items-center text-center mx-4 mt-4">
-            <Text variant="TextBold" tw="text-base text-green-primary text-center">
-              {t('Dashboard.Management.UsageAnalysis.empty')}
-            </Text>
-          </View>
         )}
       </ScrollView>
 

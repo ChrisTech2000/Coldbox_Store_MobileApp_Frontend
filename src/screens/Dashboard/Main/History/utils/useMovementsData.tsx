@@ -58,7 +58,10 @@ export function useMovementsHistory(
         })
       );
     },
-    undefined,
+    {
+      ...(user?.role === ERoles.COOLING_USER ? { farmerId } : {}),
+      coolingUnitId: coolingUnit?.id,
+    },
     {
       skip: (user?.role === ERoles.COOLING_USER && !farmerId) || !coolingUnit?.id,
       defaultData: [],

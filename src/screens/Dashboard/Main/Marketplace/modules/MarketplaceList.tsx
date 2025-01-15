@@ -1,20 +1,21 @@
+import { FlashList } from '@shopify/flash-list';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import React, { useEffect, useMemo } from 'react';
 import { Dimensions, View } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
-import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
-import { FlashList } from '@shopify/flash-list';
 
 import { Text } from '#ui/components/Text';
 
 import { API_BASE_URL } from '#constants/environment';
+import type { TranslationPaths } from '#i18n/index';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ValueOf } from '#types/miscellaneous';
+import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { useMap } from '#ui/hooks/useMap';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import type { TranslationPaths } from 'i18n/index';
 
 import MarketplaceItemWrapper from '../components/MarketplaceItem';
 
@@ -32,7 +33,7 @@ const ESTIMATED_LIST_SIZE = {
 export default function MarketplaceList() {
   const { data, isLoading } = useMarketplaceListing();
   const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
-
+  console.log(data);
   if (isLoading) return null;
 
   switch (sortBy) {
@@ -44,6 +45,7 @@ export default function MarketplaceList() {
         <View tw="px-4 pt-2">
           <FlashList
             data={data}
+            ListEmptyComponent={<GenericEmptyState />}
             keyExtractor={(item) => `marketplace-list-item-#${item.id}`}
             showsVerticalScrollIndicator={false}
             scrollEnabled={false}
@@ -201,6 +203,7 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
   return (
     <View tw="px-4 pt-2">
       <FlashList
+        ListEmptyComponent={<GenericEmptyState />}
         data={groupedData}
         extraData={listExtraData}
         scrollEnabled={false}

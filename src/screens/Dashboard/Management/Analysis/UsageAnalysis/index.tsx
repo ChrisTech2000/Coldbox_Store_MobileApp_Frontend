@@ -31,6 +31,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, ERoles } from '#types/global';
+import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 
 import { DownloadDataModal } from '../components/DownloadDataModal';
 import { sortMovements } from '../utils';
@@ -191,8 +192,11 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
           <View tw="h-full flex-1 mt-24 items-center justify-center">
             <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
           </View>
-        ) : filteredMovements.length > 0 ? (
+        ) : (
           <FlashList
+            ListEmptyComponent={
+              <GenericEmptyState message={t('Dashboard.Management.UsageAnalysis.empty')} />
+            }
             showsVerticalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
@@ -217,12 +221,6 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
               width: deviceWidth,
             }}
           />
-        ) : (
-          <View tw="flex-1 items-center text-center mx-4 mt-4">
-            <Text variant="TextBold" tw="text-base text-green-primary text-center">
-              {t('Dashboard.Management.UsageAnalysis.empty')}
-            </Text>
-          </View>
         )}
       </ScrollView>
 

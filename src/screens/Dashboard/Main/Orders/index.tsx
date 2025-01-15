@@ -16,6 +16,7 @@ import {
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
@@ -138,6 +139,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
             />
           </View>
           <FlashList
+            ListEmptyComponent={<GenericEmptyState />}
             estimatedItemSize={30}
             estimatedListSize={ESTIMATED_LIST_SIZE}
             data={sortedData}
