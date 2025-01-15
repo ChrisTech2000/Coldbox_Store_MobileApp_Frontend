@@ -118,7 +118,7 @@ export const SignUpAsCoolingUserSchema = (t: Translator) =>
       .string()
       .min(1, { message: t('Auth.SignUp.schema.phoneError') })
       .default('')
-      .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+      .refine((value) => !value || validator.isMobilePhone(value, 'any', { strictMode: false }), {
         message: t('Auth.SignUp.schema.invalidPhoneError'),
       }),
     language: z
@@ -180,12 +180,9 @@ export const SignUpAsCompanySchema = (t: Translator) =>
       .default(''),
     phone: z
       .string()
-      .refine(
-        (value) => !value || validator.isMobilePhone(value, undefined, { strictMode: true }),
-        {
-          message: t('Auth.SignUp.schema.invalidPhoneError'),
-        }
-      )
+      .refine((value) => !value || validator.isMobilePhone(value, 'any', { strictMode: false }), {
+        message: t('Auth.SignUp.schema.invalidPhoneError'),
+      })
       .optional(),
     gender: z.enum([EAppGender.FEMALE, EAppGender.MALE, EAppGender.OTHER], {
       required_error: t('Auth.SignUp.schema.genderError'),

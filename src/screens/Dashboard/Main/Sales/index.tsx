@@ -33,6 +33,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
 
@@ -229,7 +230,7 @@ function SalesRoot() {
 
 const _getNameById = moize(
   (id: number, list: Array<{ id: number; name: string }>) =>
-    list.find((item) => item.id === id)?.name ?? '',
+    list.find((item) => item.id === id)?.name ?? DEFAULT_CROP_VALUES.name,
   {
     maxAge: ms('6 seconds'),
   }

@@ -10,6 +10,7 @@ import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { useTranslationUtils } from '#i18n/utils';
 import { useDashboardStore } from '#stores/dashboard';
 import { GetAllOrdersResponse } from '#types/api.responses';
+import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
 
 export default function CropsBottomSheet() {
   const { t } = useTranslationUtils();
@@ -44,7 +45,8 @@ export default function CropsBottomSheet() {
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
-              const crop = crops.find((c) => c.id === item.relCropId)?.name ?? '';
+              const crop =
+                crops.find((c) => c.id === item.relCropId)?.name ?? DEFAULT_CROP_VALUES.name;
               return (
                 <View tw=" py-2">
                   <View tw="flex flex-row justify-between w-full">

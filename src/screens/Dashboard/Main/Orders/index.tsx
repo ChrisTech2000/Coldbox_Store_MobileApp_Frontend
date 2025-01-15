@@ -1,4 +1,8 @@
 import { useIsFocused } from '@react-navigation/native';
+import { FlashList } from '@shopify/flash-list';
+import isArray from 'lodash/isArray';
+import moize from 'moize';
+import ms from 'ms';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Dimensions,
@@ -11,10 +15,6 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FlashList } from '@shopify/flash-list';
-import isArray from 'lodash/isArray';
-import moize from 'moize';
-import ms from 'ms';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
@@ -27,17 +27,18 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
-import type { CartItem, CoolingUnit } from '#types/global';
 import type { GetAllCropsResponse } from '#types/api.responses';
-import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import type { CartItem, CoolingUnit } from '#types/global';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
+import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 import CropsBottomSheet from './components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
 
@@ -265,6 +266,7 @@ function _getRowDatums(
 ) {
   const { cropNames, unitNames } = cartData.reduce(
     (acc, elm) => {
+      console.log(elm.relCropId);
       acc.cropNames.add(_getNameById(elm.relCropId, crops));
       acc.unitNames.add(_getNameById(elm.relCoolingUnitId, units));
       return acc;
@@ -280,7 +282,7 @@ function _getRowDatums(
 
 const _getNameById = moize(
   (id: number, list: Array<{ id: number; name: string }>) =>
-    list.find((item) => item.id === id)?.name ?? '',
+    list.find((item) => item.id === id)?.name ?? DEFAULT_CROP_VALUES.name,
   { maxAge: ms('6 seconds') }
 );
 
