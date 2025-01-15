@@ -33,7 +33,6 @@ const ESTIMATED_LIST_SIZE = {
 export default function MarketplaceList() {
   const { data, isLoading } = useMarketplaceListing();
   const sortBy = useMarketplaceQueryParams(useShallow((store) => store.sortBy));
-  console.log(data);
   if (isLoading) return null;
 
   switch (sortBy) {

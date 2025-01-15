@@ -268,7 +268,6 @@ function _getRowDatums(
 ) {
   const { cropNames, unitNames } = cartData.reduce(
     (acc, elm) => {
-      console.log(elm.relCropId);
       acc.cropNames.add(_getNameById(elm.relCropId, crops));
       acc.unitNames.add(_getNameById(elm.relCoolingUnitId, units));
       return acc;
