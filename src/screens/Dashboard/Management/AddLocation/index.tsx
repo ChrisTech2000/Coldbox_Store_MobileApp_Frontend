@@ -38,9 +38,10 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { mutate } = useSWRConfig();
   const company = useManagementStore(useShallow((store) => store.company));
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_LOCATION_STEP,
     OverlayComponent: AddLocationOverlay,
+    fullScreen: true,
   });
 
   async function onSubmit(values: PreprocessedFormValues) {
@@ -108,7 +109,6 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
     <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
       {(handler, isSubmitting) => (
         <KeyboardAwareScrollView
-          onLayout={onLayout}
           tw="pt-5 mx-4"
           keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           showsVerticalScrollIndicator={false}

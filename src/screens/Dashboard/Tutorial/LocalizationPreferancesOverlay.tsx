@@ -41,7 +41,7 @@ export function LocalizationPreferencesOverlay({ next, stop }: IOverlayComponent
 
         <View
           tw={cn(
-            'absolute left-8 w-[80%] h-auto bg-white p-3 rounded-md z-40',
+            'absolute left-4 w-[90%] h-auto bg-white p-3 rounded-md z-40',
             screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-72' : 'top-80'
           )}
           style={[
