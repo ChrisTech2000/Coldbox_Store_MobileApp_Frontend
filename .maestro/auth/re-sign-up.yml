@@ -1,0 +1,57 @@
+appId: com.base.coldtivate
+name: RE sign up
+---
+- tapOn: 'SIGN UP AS COMPANY'
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+- inputText: 'E2E COMPANY'
+- 'hideKeyboard'
+- tapOn: 'Country'
+- tapOn:
+    text: 'Nigeria'
+    index: 1
+- assertVisible: '₦ - Nigerian Naira'
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+- inputText: 'e2e_first_employee@gmail.com'
+- 'hideKeyboard'
+- tapOn:
+    id: 'text-input-flat'
+    index: 2
+- inputText: 'First'
+- 'hideKeyboard'
+- 'scroll'
+- tapOn:
+    id: 'text-input-flat'
+    index: 3
+- inputText: 'Employee'
+- 'hideKeyboard'
+- tapOn: 'Gender'
+- tapOn:
+    text: 'Other'
+    index: 1
+- tapOn: 'OK'
+- tapOn:
+    id: 'text-input-flat'
+    index: 4
+- inputText: '8033709184'
+- 'hideKeyboard'
+- tapOn:
+    id: 'text-input-flat'
+    index: 5
+- inputText: 'e2ePass1'
+- 'hideKeyboard'
+- tapOn:
+    id: 'text-input-flat'
+    index: 6
+- inputText: 'e2ePass1'
+- 'hideKeyboard'
+- tapOn:
+    point: '8%,89%'
+- tapOn:
+    id: 'button'
+- assertVisible: 'Sign In'
+- assertVisible: 'LOG IN'
+- tapOn: 'Forgot Password'
