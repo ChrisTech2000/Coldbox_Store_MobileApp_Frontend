@@ -171,7 +171,13 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                         key={`${crate.crop?.name}—${index}-crate`}
                         tw="flex flex-row space-x-4 mb-2"
                       >
-                        <View tw={windowHeight <= SMALL_SCREEN_THRESHOLD ? 'w-24' : 'w-32'}>
+                        <View
+                          tw={
+                            windowHeight <= SMALL_SCREEN_THRESHOLD && Platform.OS === 'ios'
+                              ? 'w-24'
+                              : 'w-32'
+                          }
+                        >
                           <Text tw="text-base">
                             {crate?.tag
                               ? `${startCase(
@@ -193,18 +199,19 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                           <Divider
                             tw={cn(
                               'absolute h-0.5 bg-gray-700',
-                              windowHeight <= SMALL_SCREEN_THRESHOLD ? 'w-4' : 'w-8'
+                              windowHeight <= SMALL_SCREEN_THRESHOLD && Platform.OS === 'ios'
+                                ? 'w-4'
+                                : 'w-8'
                             )}
                           />
                           {crates.length > 1 ? (
                             <Divider
                               tw={cn(
                                 'absolute w-0.5 h-20 bg-gray-700',
-                                windowHeight > SMALL_SCREEN_THRESHOLD ? 'left-8' : 'left-4',
-                                index > 0 &&
-                                  (Platform.OS === 'ios' || windowHeight > SMALL_SCREEN_THRESHOLD
-                                    ? 'bottom-[94%]'
-                                    : 'bottom-[95%]')
+                                windowHeight <= SMALL_SCREEN_THRESHOLD && Platform.OS === 'ios'
+                                  ? 'left-4'
+                                  : 'left-8',
+                                index > 0 && 'bottom-[94%]'
                               )}
                             />
                           ) : null}
@@ -215,7 +222,9 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                       <Divider
                         tw={cn(
                           'absolute h-0.5 bg-gray-700 bottom-[50.5%]',
-                          windowHeight > SMALL_SCREEN_THRESHOLD ? 'w-8 left-44' : 'w-4 left-32'
+                          windowHeight <= SMALL_SCREEN_THRESHOLD && Platform.OS === 'ios'
+                            ? 'w-4 left-32'
+                            : 'w-8 left-44'
                         )}
                       />
                     ) : null}

@@ -81,7 +81,11 @@ export function OperatorActionsOverlay({ next, stop }: IOverlayComponentProps) {
       <View
         tw={cn(
           'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-[27%]' : 'top-2/3'
+          screenHeight <= SMALL_SCREEN_THRESHOLD
+            ? 'top-[27%]'
+            : Platform.OS === 'ios'
+              ? 'top-[60%]'
+              : 'top-2/3'
         )}
         style={{
           shadowColor: '#000',

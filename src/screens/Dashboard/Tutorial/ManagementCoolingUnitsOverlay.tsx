@@ -28,12 +28,12 @@ export function ManagementCoolingUnitsOverlay({ next, stop }: IOverlayComponentP
   const blinkAnim = useBlinkAnimation();
 
   return (
-    <View tw="h-full w-full absolute bg-red-300s">
+    <View tw="h-full w-full absolute">
       <View>
         <Touchable
           tw={cn(
             'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-56' : 'top-64'
+            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-44' : 'top-64'
           )}
           onPress={() => {
             // eslint-disable-next-line
@@ -70,7 +70,7 @@ export function ManagementCoolingUnitsOverlay({ next, stop }: IOverlayComponentP
         <View
           tw={cn(
             'absolute left-8 w-[80%] h-auto bg-white p-3 rounded-md z-40',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-72' : 'top-80'
+            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-60' : 'top-80'
           )}
           style={[
             {

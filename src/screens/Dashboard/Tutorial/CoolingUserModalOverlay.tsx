@@ -24,8 +24,10 @@ export function CoolingUsersModalOverlay({ next, stop }: IOverlayComponentProps)
     <View tw="h-full w-full absolute">
       <View
         tw={cn(
-          'absolute left-2 w-[95%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-3' : 'bottom-32'
+          'absolute h-auto bg-white py-3 rounded-md z-30',
+          screenHeight <= SMALL_SCREEN_THRESHOLD
+            ? 'bottom-1 px-2 w-[98%] left-1'
+            : 'bottom-32 px-3 w-[95%] left-3'
         )}
         style={[
           {

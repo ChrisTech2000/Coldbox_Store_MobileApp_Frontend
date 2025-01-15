@@ -20,11 +20,11 @@ export function DrawerKnowledgeHubOverlay({ next, stop }: IOverlayComponentProps
     <View tw="h-full w-full absolute">
       <View
         tw={cn(
-          'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
+          'bg-white absolute left-3 w-[60%] h-[8%] p-3 rounded-md flex flex-row items-center space-x-2',
           screenHeight <= SMALL_SCREEN_THRESHOLD
-            ? 'top-[24%]'
+            ? 'top-[25%] w-[65%]'
             : Platform.OS === 'ios'
-              ? 'top-[20%]'
+              ? 'top-[21%] h-[7%]'
               : 'top-[18.5%]'
         )}
       >

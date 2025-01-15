@@ -49,8 +49,8 @@ export function ManagementEmployeesOperatorsOverlay({ goTo, stop }: IOverlayComp
 
         <View
           tw={cn(
-            'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-40 items-center',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-16' : 'top-24'
+            'absolute left-2 w-[95%] h-auto bg-white p-3 rounded-md z-40 items-center',
+            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-10' : 'top-24'
           )}
           style={[
             {

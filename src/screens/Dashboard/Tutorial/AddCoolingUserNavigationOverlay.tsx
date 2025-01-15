@@ -25,7 +25,7 @@ export function AddCoolingUserNavigationOverLay({ next, stop }: IOverlayComponen
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
-  
+
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
@@ -44,7 +44,7 @@ export function AddCoolingUserNavigationOverLay({ next, stop }: IOverlayComponen
               opacity: blinkAnim,
             },
           ]}
-          tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-9 left-4' : 'top-10 left-5'}
+          tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-9 left-4' : 'top-8 left-5'}
         >
           <MaterialIcon
             name="touch-app"

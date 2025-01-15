@@ -25,7 +25,7 @@ export function CoolingUserSurveyOverlay({ next, stop }: IOverlayComponentProps)
       <View>
         <View
           tw={cn(
-            'absolute w-full h-14 bg-white',
+            'absolute w-full h-auto bg-white',
             screenHeight <= SMALL_SCREEN_THRESHOLD
               ? Platform.OS === 'ios'
                 ? 'top-64'
@@ -45,7 +45,7 @@ export function CoolingUserSurveyOverlay({ next, stop }: IOverlayComponentProps)
 
         <View
           tw={cn(
-            'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-40',
+            'absolute left-2 w-[95%] h-auto bg-white p-3 rounded-md z-40',
             screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-80' : 'top-96'
           )}
           style={[
@@ -57,7 +57,7 @@ export function CoolingUserSurveyOverlay({ next, stop }: IOverlayComponentProps)
             },
           ]}
         >
-          <Text tw="text-base">{t('tutorial.steps.coolingUserSurvey')}</Text>
+          <Text tw="text-sm">{t('tutorial.steps.coolingUserSurvey')}</Text>
 
           <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
             <Button
