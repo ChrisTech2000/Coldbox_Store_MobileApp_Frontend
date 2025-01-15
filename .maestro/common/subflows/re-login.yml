@@ -1,0 +1,18 @@
+appId: com.base.coldtivate
+tags:
+  - subflow
+---
+- tapOn: 'SIGN IN'
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+- inputText: '+2348033709184'
+- 'hideKeyboard'
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+- inputText: 'e2ePass1'
+- 'hideKeyboard'
+- tapOn:
+    id: 'button'
+    index: 0

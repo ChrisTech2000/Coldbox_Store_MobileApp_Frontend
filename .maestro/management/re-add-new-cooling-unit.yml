@@ -1,0 +1,68 @@
+appId: com.base.coldtivate
+name: RE add new cooling unit
+---
+- runFlow: '../common/subflows/re-login.yml'
+- tapOn:
+    id: 'icon-button'
+    index: 0
+- assertVisible: 'Management'
+- tapOn: 'Management'
+- assertVisible: 'Details'
+- assertVisible: 'Cooling Units'
+- tapOn: 'Cooling Units'
+- assertVisible: 'Cooling Units'
+- assertVisible: 'E2E NEW LOCATION'
+- assertVisible: "No cooling units added in this location. Click on the + sign to\
+    \ add one."
+- tapOn:
+    id: 'icon-button'
+    index: 0
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+- inputText: 'E2E NEW COOLING UNIT'
+- 'hideKeyboard'
+- tapOn: 'Location*'
+- tapOn:
+    text: 'E2E NEW LOCATION'
+    index: 1
+- tapOn: 'OK'
+- tapOn: 'What describes the cooling unit best?*'
+- tapOn:
+    text: 'It is a storage room placed at a market'
+    index: 1
+- tapOn: 'OK'
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+- inputText: 350
+- 'hideKeyboard'
+- tapOn:
+    id: 'text-input-flat'
+    index: 2
+- inputText: 1
+- 'hideKeyboard'
+- tapOn:
+    id: 'text-input-flat'
+    index: 3
+- inputText: 1
+- 'hideKeyboard'
+- scrollUntilVisible:
+    element:
+      text: 'Max number of crates*'
+    centerElement: true
+    direction: 'DOWN'
+    visibilityPercentage: 30
+    speed: 30
+- tapOn:
+    id: 'text-input-flat'
+    index: 6
+- inputText: 40
+- 'hideKeyboard'
+- 'scroll'
+- tapOn:
+    text: 'Add'
+    retryTapIfNoChange: false
+- assertVisible: 'Cooling Units'
+- tapOn: 'Back'
+- assertVisible: 'Management'

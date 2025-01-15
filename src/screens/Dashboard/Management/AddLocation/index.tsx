@@ -47,42 +47,42 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   async function onSubmit(values: PreprocessedFormValues) {
     const { _step, ...rest } = values;
 
-    const geocoder = new Geocoder();
-    let datums: Partial<PreprocessedFormValues> = {};
-
-    switch (_step) {
-      case 'geolocation':
-      case 'coordinates': {
-        try {
-          const address = await geocoder.getAddressFromCoords({
-            latitude: rest.latitude,
-            longitude: rest.longitude,
-          });
-          datums = merge(rest, address);
-        } catch (exception) {
-          console.error(exception);
-          return;
-        }
-        break;
-      }
-      case 'address': {
-        try {
-          const coordinates = await geocoder.getCoordsFromAddress(rest);
-          datums = merge(rest, coordinates);
-        } catch (exception) {
-          toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
-            type: 'md_danger',
-          });
-          console.error(exception);
-          return;
-        }
-        break;
-      }
-      default:
-        break;
-    }
-
     try {
+      const geocoder = new Geocoder();
+      let datums: Partial<PreprocessedFormValues> = {};
+
+      switch (_step) {
+        case 'geolocation':
+        case 'coordinates': {
+          try {
+            const address = await geocoder.getAddressFromCoords({
+              latitude: rest.latitude,
+              longitude: rest.longitude,
+            });
+            datums = merge(rest, address);
+          } catch (exception) {
+            console.error(exception);
+            return;
+          }
+          break;
+        }
+        case 'address': {
+          try {
+            const coordinates = await geocoder.getCoordsFromAddress(rest);
+            datums = merge(rest, coordinates);
+          } catch (exception) {
+            toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
+              type: 'md_danger',
+            });
+            console.error(exception);
+            return;
+          }
+          break;
+        }
+        default:
+          break;
+      }
+
       await ColdtivateService.addLocation(datums);
 
       toast.show(t('Dashboard.Management.Location.toasts.addLocationSuccess'), {

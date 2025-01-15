@@ -144,15 +144,22 @@ export default function DrawerContent(props: Props) {
               active={focusedRoute === routeName}
               onPress={(evt) => {
                 evt.stopPropagation();
-                if (routeName === 'Tutorial') {
-                  start();
-                  toggleTutorial(true);
-                  if (user?.role === ERoles.OPERATOR)
-                    emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
-                  props.navigation.navigate('Dashboard');
-                  return;
+                switch (routeName) {
+                  case 'AccountDetails':
+                    return props.navigation.navigate('AccountDetails', { screen: 'Root' });
+                  case 'Management':
+                    return props.navigation.navigate('Management', { screen: 'Root' });
+                  case 'Tutorial': {
+                    start();
+                    toggleTutorial(true);
+                    if (user?.role === ERoles.OPERATOR) {
+                      emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
+                    }
+                    return props.navigation.navigate('Dashboard', { screen: 'RootMainTabStack' });
+                  }
+                  default:
+                    return props.navigation.navigate(routeName);
                 }
-                props.navigation.navigate(routeName);
               }}
               icon={datums.iconName}
             />
