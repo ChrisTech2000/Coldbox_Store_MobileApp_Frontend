@@ -41,11 +41,8 @@ function _HeaderLeftContent<Params extends Record<string, unknown>, Path extends
   );
 }
 
-function _NotificationBadge(props: { count: number }) {
-  const { count } = props;
-
-  const hasNotifications = !!count && count > 0;
-
+function _NotificationBadge(props: { hasNotifications: boolean; newNotificationsCount: number }) {
+  const { hasNotifications, newNotificationsCount } = props;
   return (
     <View tw="relative">
       <Appbar.Action
@@ -54,8 +51,11 @@ function _NotificationBadge(props: { count: number }) {
         onPress={() => useRightDrawerStore.getState().toggle()}
         disabled={!hasNotifications}
       />
-      <Badge visible={hasNotifications} tw="absolute top-1.5 right-1.5">
-        {count}
+      <Badge
+        visible={!!newNotificationsCount && newNotificationsCount > 0}
+        tw="absolute top-1.5 right-1.5"
+      >
+        {newNotificationsCount}
       </Badge>
     </View>
   );
@@ -74,14 +74,18 @@ function _CartBadge(props: { count: number; onPress: () => void }) {
 }
 
 function _HeaderRightContent(props: {
-  notificationCount: number;
+  hasNotifications: boolean;
+  newNotificationsCount: number;
   cartItemsCount: number;
   goToShoppingCart?: () => void;
 }) {
-  const { notificationCount, cartItemsCount, goToShoppingCart } = props;
+  const { hasNotifications, newNotificationsCount, cartItemsCount, goToShoppingCart } = props;
   return (
     <View tw="flex-row items-center space-x-1.5">
-      <_NotificationBadge count={notificationCount} />
+      <_NotificationBadge
+        hasNotifications={hasNotifications}
+        newNotificationsCount={newNotificationsCount}
+      />
       {typeof goToShoppingCart === 'function' ? (
         <_CartBadge count={cartItemsCount} onPress={goToShoppingCart} />
       ) : null}
@@ -92,6 +96,7 @@ function _HeaderRightContent(props: {
 export function useDashboardHeader() {
   const { dispatch, navigate } = useNavigation<NavigationProp<DashboardMainRoutes>>();
 
+  const notificationsCount = useNotifications().data.notifications.length;
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
   const cartItemsCount = useCartStore((store) => store.cartData)?.items?.length ?? 0;
 
@@ -107,7 +112,8 @@ export function useDashboardHeader() {
       ),
       rightContent: (
         <_HeaderRightContent
-          notificationCount={newNotificationsCount}
+          hasNotifications={!!notificationsCount && notificationsCount > 0}
+          newNotificationsCount={newNotificationsCount}
           cartItemsCount={cartItemsCount}
           goToShoppingCart={
             opts?.showShoppingCart ? () => navigate('ShoppingCart', { screen: 'Root' }) : undefined
@@ -115,7 +121,7 @@ export function useDashboardHeader() {
         />
       ),
     }),
-    [newNotificationsCount, cartItemsCount]
+    [notificationsCount, newNotificationsCount, cartItemsCount]
   );
 }
 
