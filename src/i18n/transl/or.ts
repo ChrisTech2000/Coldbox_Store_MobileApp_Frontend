@@ -994,8 +994,12 @@ export default {
         goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'ବର୍ତ୍ତମାନ ଅବସ୍ଥାନ',
-      filterError:
-        'କିଛି ଭୁଲ ହେବାରୁ ବିକଳ୍ପ ଗଡ଼ିଛି। ଦୟାକରି ଟାଇପୋରେ ତାଲିକା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଦିଆଯାଇଥିବା ସହର ନାଇଜେରିଆରେ ଅବସ୍ଥିତ।',
+      invalidFormatWarning: 'ସତର୍କତା: ସହରର ନାମର ଆକୃତି ଅବୈଧ। ପରିଣାମ ଠିକ୍ ନ ହୋଇପାରେ।',
+      unresolvedCityFormatWarning:
+        'ସତର୍କତା: ଉଲ୍ଲେଖିତ ସହରକୁ ଠିକ୍ ଭାବରେ ଚିହ୍ନଟ କରାଯାଇପାରିଲା ନାହିଁ। ପରିଣାମ ଠିକ୍ ନ ହୋଇପାରେ।',
+      lowConfidenceWarning:
+        'ସତର୍କତା: ସହରକୁ ନିଶ୍ଚିତତାର ସହିତ ଚିହ୍ନଟ କରାଯାଇପାରିଲା ନାହିଁ। ପରିଣାମ ଠିକ୍ ନ ହୋଇପାରେ।',
+      filterGeneralWarning: 'ସତର୍କତା: ଭୂଲୋକଚିତ୍ରଣ ଦିନିକି ବିପରୀତ କିଛି ଘଟିଛି। ପରିଣାମ ଠିକ୍ ନ ହୋଇପାରେ।',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
       priceRange: 'Range Price / KG',

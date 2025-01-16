@@ -928,8 +928,14 @@ export default {
         goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Current location', // TODO
-      filterError:
-        'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.', // TODO
+      invalidFormatWarning:
+        'Gargadi: Tsarin sunan garin bai dace ba. Sakamakon na iya zama ba daidai ba.',
+      unresolvedCityFormatWarning:
+        'Gargadi: Ba a iya gano garin da aka bayar daidai ba. Sakamakon na iya zama ba daidai ba.',
+      lowConfidenceWarning:
+        'Gargadi: Ba a iya tantance garin da tabbaci ba. Sakamakon na iya zama ba daidai ba.',
+      filterGeneralWarning:
+        'Gargadi: Wani matsala ta faru yayin tantance wurin. Sakamakon na iya zama ba daidai ba.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
       priceRange: 'Range Price / KG',

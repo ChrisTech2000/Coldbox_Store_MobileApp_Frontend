@@ -995,8 +995,14 @@ export default {
         goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'वर्तमान स्थान',
-      filterError:
-        'कुछ गलत हो गया। कृपया टाइपो की जांच करें और सुनिश्चित करें कि दर्ज किया गया शहर नाइजीरिया में है।',
+      invalidFormatWarning:
+        'चेतावनी: शहर के नाम का स्वरूप अमान्य है। परिणाम सटीक नहीं हो सकते हैं।',
+      unresolvedCityFormatWarning:
+        'चेतावनी: निर्दिष्ट शहर को सही ढंग से पहचाना नहीं जा सका। परिणाम सटीक नहीं हो सकते हैं।',
+      lowConfidenceWarning:
+        'चेतावनी: शहर को विश्वासपूर्वक पहचाना नहीं जा सका। परिणाम सटीक नहीं हो सकते हैं।',
+      filterGeneralWarning:
+        'चेतावनी: स्थान पहचानने के दौरान कोई समस्या हुई। परिणाम सटीक नहीं हो सकते हैं।',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
       priceRange: 'Range Price / KG',
