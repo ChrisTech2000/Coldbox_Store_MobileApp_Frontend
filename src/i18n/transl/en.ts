@@ -167,6 +167,8 @@ const en = {
       placeholder: 'dd/mm/yyyy',
       startDateSelection: 'Select start date:',
       endDateSelection: 'Select end date:',
+      startDateError: "Start date can't be later than end date.",
+      endDateError: "End date can't be earlier than start date.",
     },
   },
   Auth: {

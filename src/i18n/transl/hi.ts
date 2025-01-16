@@ -169,6 +169,8 @@ export default {
       placeholder: 'dd/mm/yyyy',
       startDateSelection: 'प्रारंभ तिथि चुनें:',
       endDateSelection: 'समाप्ति तिथि चुनें:',
+      startDateError: 'प्रारंभ तिथि अंतिम तिथि से बाद की नहीं हो सकती।',
+      endDateError: 'अंतिम तिथि प्रारंभ तिथि से पहले की नहीं हो सकती।',
     },
   },
   Auth: {

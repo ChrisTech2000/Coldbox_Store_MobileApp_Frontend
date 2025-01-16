@@ -163,6 +163,8 @@ export default {
       placeholder: 'dd/mm/yy',
       startDateSelection: 'Zaɓi ranar farawa:',
       endDateSelection: 'Zaɓi ranar ƙarshe:',
+      startDateError: 'Ranar farawa ba za ta iya zama bayan ranar ƙarshe ba.',
+      endDateError: 'Ranar ƙarshe ba za ta iya kasancewa kafin ranar farawa ba.',
     },
   },
   Auth: {

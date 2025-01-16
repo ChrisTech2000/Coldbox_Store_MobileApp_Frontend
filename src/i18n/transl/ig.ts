@@ -163,6 +163,8 @@ export default {
       placeholder: 'ụbọchị /Onwa/afọ',
       startDateSelection: 'Họrọ ụbọchị mmalite:',
       endDateSelection: 'Họrọ ụbọchị ngwụcha:',
+      startDateError: 'Ụbọchị mmalite enweghị ike ịbụ mgbe ọ bụla karịa ụbọchị ngwụcha.',
+      endDateError: 'Ụbọchị ngwụcha enweghị ike ịbụ tupu ụbọchị mmalite.',
     },
   },
   Auth: {
