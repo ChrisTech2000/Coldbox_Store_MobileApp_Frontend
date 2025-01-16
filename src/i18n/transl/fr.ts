@@ -1430,7 +1430,7 @@ export default {
     quit: 'Quitter le tutoriel',
     congratulations:
       "Félicitations ! Vous avez terminé le tutoriel ! Retournez au tableau de bord pour commencer à utiliser l'application.",
-    prev: 'Précédent',
+    prev: 'Étape précédente',
     next: 'Suivant',
     start: 'Démarrer le tutoriel',
     final:

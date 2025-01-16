@@ -1421,7 +1421,7 @@ export default {
       'Barka da zuwa Coldtivate! Wannan koyaswar zata taimaka muku fahimtar yadda ake amfani da app.',
     quit: 'Bar koyarwa',
     congratulations: 'Taya murna! Kun gama koyawa! Koma kan dashboard don fara amfani da app.',
-    prev: 'Prev',
+    prev: 'Mataki na baya',
     next: 'Na gaba',
     start: 'Start Tutorial', // TODO
     final:

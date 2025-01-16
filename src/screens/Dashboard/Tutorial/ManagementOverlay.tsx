@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Animated, Dimensions, View } from 'react-native';
@@ -16,10 +16,11 @@ import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 import { useBlinkAnimation } from './utils/useAnimation';
+import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementOverlay({ next, stop }: IOverlayComponentProps) {
+export function ManagementOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -82,18 +83,32 @@ export function ManagementOverlay({ next, stop }: IOverlayComponentProps) {
           ]}
         >
           <Text tw="text-base">{t('tutorial.steps.navigateToCoolingUser')}</Text>
-          <Button
-            mode="text"
-            onPress={() => {
-              stop();
-              toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
-            }}
-            labelStyle="text-green-primary"
-            tw="mt-4"
-          >
-            {t('tutorial.quit')}
-          </Button>
+
+          <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+            <Button
+              icon="arrow-left"
+              mode="text"
+              onPress={() => {
+                rootNavigation.goBack();
+                rootNavigation.dispatch(DrawerActions.openDrawer());
+                goTo(EOperatorTutorialSteps.GO_TO_MANAGEMENT_STEP);
+              }}
+              labelStyle="text-green-primary"
+            >
+              {t('tutorial.prev')}
+            </Button>
+            <Button
+              mode="text"
+              onPress={() => {
+                stop();
+                toggleTutorial(false);
+                rootNavigation.navigate('Dashboard');
+              }}
+              labelStyle="text-red-700"
+            >
+              {t('tutorial.quit')}
+            </Button>
+          </View>
         </View>
       </View>
     </View>

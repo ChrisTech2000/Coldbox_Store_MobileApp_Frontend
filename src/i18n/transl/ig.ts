@@ -1402,7 +1402,7 @@ export default {
       'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
     quit: 'Kwụsị nkuzi',
     congratulations: 'Ekele! Ị gụchara nkuzi ahụ! Laghachi na dashboard ka ịmalite iji ngwa ahụ.',
-    prev: 'Nke gara aga',
+    prev: 'Nzọụkwụ gara aga',
     next: 'Osote',
     start: 'Start Tutorial', // TODO
     final:

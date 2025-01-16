@@ -1504,7 +1504,7 @@ export default {
     quit: 'Sair do tutorial',
     congratulations:
       'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar a aplicação.',
-    prev: 'Anterior',
+    prev: 'Etapa anterior',
     next: 'Próximo',
     start: 'Iniciar tutorial',
     final: 'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar a aplicação.',
