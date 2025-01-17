@@ -52,8 +52,9 @@ const useSettingUpSurvey = create<{
 export function NotificationBase(props: {
   item: Notification;
   updateStatusHandler?: () => Promise<void>;
+  isDisableAllowed?: boolean;
 }) {
-  const { item, updateStatusHandler } = props;
+  const { item, updateStatusHandler, isDisableAllowed } = props;
 
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
@@ -94,7 +95,8 @@ export function NotificationBase(props: {
   const getTextVariant = (v: boolean) => (v ? undefined : 'TextMedium');
   const getTextColor = (v: boolean) => cn(v ? 'text-zinc-600' : 'text-black');
 
-  const isDisabled = item.seen || isSurveyLoading;
+  const isTapDisabled = (isDisableAllowed ?? true) ? item.seen || isSurveyLoading : false;
+  const isTextDisabled = item.seen || isSurveyLoading;
 
   return (
     <View tw="p-0 mx-0 my-0.5 relative">
@@ -111,12 +113,12 @@ export function NotificationBase(props: {
       <TouchableOpacity
         tw={cn('p-2', _isLoading && 'opacity-25')}
         onPress={onPressHandler}
-        disabled={isDisabled}
+        disabled={isTapDisabled}
       >
-        <Text variant={getTextVariant(isDisabled)} tw={getTextColor(isDisabled)}>
+        <Text variant={getTextVariant(isTextDisabled)} tw={getTextColor(isTextDisabled)}>
           {item.message}
           {item.link && (
-            <Text variant={getTextVariant(isDisabled)} tw="text-blue-500">
+            <Text variant={getTextVariant(isTextDisabled)} tw="text-blue-500">
               &nbsp;{item.link}
             </Text>
           )}
@@ -303,5 +305,11 @@ export function OrderRequiresMovementNotification(props: {
     useRightDrawerStore.getState().toggle(false);
   }
 
-  return <NotificationBase item={notification.datum} updateStatusHandler={updateStatusHandler} />;
+  return (
+    <NotificationBase
+      item={notification.datum}
+      updateStatusHandler={updateStatusHandler}
+      isDisableAllowed={false}
+    />
+  );
 }
