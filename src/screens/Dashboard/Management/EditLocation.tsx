@@ -71,16 +71,11 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       switch (_step) {
         case 'geolocation':
         case 'coordinates': {
-          try {
-            const address = await geocoder.getAddressFromCoords({
-              latitude: rest.latitude,
-              longitude: rest.longitude,
-            });
-            datums = merge(rest, address);
-          } catch (exception) {
-            console.error(exception);
-            return;
-          }
+          const address = await geocoder.getAddressFromCoords({
+            latitude: rest.latitude,
+            longitude: rest.longitude,
+          });
+          datums = merge(rest, address);
           break;
         }
         case 'address': {
@@ -88,10 +83,10 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
             const coordinates = await geocoder.getCoordsFromAddress(rest);
             datums = merge(rest, coordinates);
           } catch (exception) {
+            console.error(exception);
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
               type: 'md_danger',
             });
-            console.error(exception);
             return;
           }
           break;
