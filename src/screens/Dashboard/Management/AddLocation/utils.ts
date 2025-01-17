@@ -11,6 +11,13 @@ export function getCountryFullName(companyCountry?: string): string | undefined 
   return document?.countryName;
 }
 
+export enum EGeolocationError {
+  INVALID_FORMAT = 'Invalid city format',
+  LOW_CONFIDENCE = 'Low confidence or invalid type',
+  UNRESOLVED_CITY = 'City could not be resolved',
+  GENERAL_ERROR = 'Error during geocoding',
+}
+
 export class Geocoder {
   private _client: GeocodeService;
 
@@ -68,21 +75,48 @@ export class Geocoder {
   };
 
   public getCoordsFromLocation = async (datums: { cityName: string; countryCode: string }) => {
-    const result = await this._client
-      .forwardGeocode({
-        query: datums.cityName,
-        countries: [datums.countryCode],
-        limit: 1,
-      })
-      .send();
+    try {
+      if (!/^[a-zA-Z\s]+$/.test(datums.cityName)) {
+        throw new Error(EGeolocationError.INVALID_FORMAT);
+      }
 
-    const location = result?.body?.features?.[0]?.center;
-    if (!location || location.length !== 2) {
-      throw new Error('No results found or invalid location format');
+      const result = await this._client
+        .forwardGeocode({
+          query: datums.cityName,
+          countries: [datums.countryCode],
+          limit: 1,
+        })
+        .send();
+
+      const location = result?.body?.features?.[0]?.center;
+      if (location && location.length === 2) {
+        const [longitude, latitude] = location;
+        return { longitude, latitude };
+      }
+
+      const globalResult = await this._client
+        .forwardGeocode({
+          query: datums.cityName,
+          limit: 1,
+        })
+        .send();
+
+      const globalFeature = globalResult?.body?.features?.[0];
+      if (globalFeature?.relevance < 0.8 || !globalFeature?.place_type.includes('place')) {
+        throw new Error(EGeolocationError.LOW_CONFIDENCE);
+      }
+
+      if (globalFeature?.center?.length === 2) {
+        const [longitude, latitude] = globalFeature.center;
+        return { longitude, latitude };
+      }
+
+      throw new Error(EGeolocationError.UNRESOLVED_CITY);
+    } catch (error) {
+      console.log(error);
+      const message = (error as Error).message ?? '';
+      throw new Error(message);
     }
-
-    const [longitude, latitude] = location;
-    return { longitude, latitude };
   };
 
   ///

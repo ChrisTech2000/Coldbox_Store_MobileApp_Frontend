@@ -164,6 +164,8 @@ export default {
       placeholder: 'jj/mm/aaaa',
       startDateSelection: 'Sélectionner la date de début:',
       endDateSelection: 'Sélectionner la date de fin:',
+      startDateError: 'La date de début ne peut pas être postérieure à la date de fin.',
+      endDateError: 'La date de fin ne peut pas être antérieure à la date de début.',
     },
   },
   Auth: {
@@ -942,8 +944,14 @@ export default {
         goToCart: 'Ajouter au panier et voir le résumé',
       },
       currentLocation: 'Localisation actuelle',
-      filterError:
-        'Une erreur est survenue. Veuillez vérifier les fautes de frappe et vous assurer que la ville saisie est située au Nigéria.',
+      invalidFormatWarning:
+        'Avertissement : Le format du nom de la ville est invalide. Les résultats peuvent être inexacts.',
+      unresolvedCityFormatWarning:
+        'Avertissement : La ville spécifiée n’a pas pu être résolue avec précision. Les résultats peuvent être inexacts.',
+      lowConfidenceWarning:
+        'Avertissement : La ville n’a pas pu être identifiée avec certitude. Les résultats peuvent être inexacts.',
+      filterGeneralWarning:
+        'Avertissement : Un problème est survenu lors de la géolocalisation. Les résultats peuvent être inexacts.',
       standardCrateWeight: 'Le poids standard de la caisse est de {{value}} kg',
       owner: 'Propriétaire',
       priceRange: 'Range Price / KG',

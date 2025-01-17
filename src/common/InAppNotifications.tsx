@@ -2,14 +2,15 @@ import React, { useCallback, useMemo, type PropsWithChildren } from 'react';
 import { View } from 'react-native';
 import { ToastProvider, useToast } from 'react-native-toast-notifications';
 import type {
-  ToastProps,
   ToastOptions,
+  ToastProps,
 } from 'react-native-toast-notifications/lib/typescript/toast';
+import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
-export type ToastType = 'md_success' | 'md_danger' | 'md_default';
+export type ToastType = 'md_success' | 'md_danger' | 'md_default' | 'md_warning';
 
 export type CustomToastOptions = {
   type?: ToastType;
@@ -55,6 +56,15 @@ function _toastClosure(type: ToastType) {
             textColor={paperTheme.colors.onErrorContainer}
           />
         );
+      case 'md_warning':
+        return (
+          <_ToastContent
+            style={style}
+            message={message}
+            backgroundColor={colors.yellow[100]}
+            textColor={colors.yellow[800]}
+          />
+        );
       case 'md_default':
       default:
         return (
@@ -75,6 +85,7 @@ export default function InAppNotifications({ children }: PropsWithChildren) {
       md_default: _toastClosure('md_default'),
       md_success: _toastClosure('md_success'),
       md_danger: _toastClosure('md_danger'),
+      md_warning: _toastClosure('md_warning'),
     }),
     []
   );

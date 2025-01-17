@@ -169,6 +169,8 @@ export default {
       placeholder: 'dd/mm/aaaa',
       startDateSelection: 'Selecione data de início:',
       endDateSelection: 'Selecione data de fim:',
+      startDateError: 'A data de início não pode ser posterior à data de fim.',
+      endDateError: 'A data de fim não pode ser anterior à data de início.',
     },
   },
   Auth: {
@@ -1001,8 +1003,14 @@ export default {
         goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Localização atual',
-      filterError:
-        'Algo deu errado. Verifique se há erros de digitação e certifique-se de que a cidade inserida está localizada na Nigéria.',
+      invalidFormatWarning:
+        'Aviso: O formato do nome da cidade é inválido. Os resultados podem não ser precisos.',
+      unresolvedCityFormatWarning:
+        'Aviso: Não foi possível identificar a cidade especificada com precisão. Os resultados podem não ser precisos.',
+      lowConfidenceWarning:
+        'Aviso: Não foi possível identificar a cidade com confiança. Os resultados podem não ser precisos.',
+      filterGeneralWarning:
+        'Aviso: Ocorreu um problema durante a geolocalização. Os resultados podem não ser precisos.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
       priceRange: 'Range Price / KG',

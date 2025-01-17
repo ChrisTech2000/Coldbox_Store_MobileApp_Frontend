@@ -167,6 +167,8 @@ const en = {
       placeholder: 'dd/mm/yyyy',
       startDateSelection: 'Select start date:',
       endDateSelection: 'Select end date:',
+      startDateError: "Start date can't be later than end date.",
+      endDateError: "End date can't be earlier than start date.",
     },
   },
   Auth: {
@@ -989,8 +991,14 @@ const en = {
         goToCart: 'Add to Cart and view summary',
       },
       currentLocation: 'Current location',
-      filterError:
-        'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.',
+      invalidFormatWarning:
+        'Warning: The city name format is invalid. Results may not be accurate.',
+      unresolvedCityFormatWarning:
+        'Warning: The specified city could not be resolved accurately. Results may not be accurate.',
+      lowConfidenceWarning:
+        'Warning: The city could not be confidently identified. Results may not be accurate.',
+      filterGeneralWarning:
+        'Warning: An issue occurred during geolocation. Results may not be accurate.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg',
       owner: 'Owner',
       priceRange: 'Range Price / KG',
