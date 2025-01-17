@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -32,17 +32,16 @@ type Props = {
 
 export default function ScreenContainer(props: Props) {
   const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
+  const toast = InAppNotifications.useToast();
 
-  const initialFormValues = useRef<FormValues>(
-    _buildInitialValues(Object.keys(companyCrops).map((key) => parseInt(key)))
-  );
   const navigation = useNavigation();
 
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
-  const toast = InAppNotifications.useToast();
+  const initialFormValues = useRef<FormValues | undefined>(undefined);
+  useFocusEffect(() => (initialFormValues.current = undefined));
 
   useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_COOLING_UNIT_STEP,
@@ -55,6 +54,12 @@ export default function ScreenContainer(props: Props) {
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
+    );
+  }
+
+  if (!initialFormValues.current) {
+    initialFormValues.current = _buildInitialValues(
+      Object.keys(companyCrops).map((key) => parseInt(key))
     );
   }
 
@@ -169,7 +174,7 @@ export default function ScreenContainer(props: Props) {
   );
 }
 
-function _buildInitialValues(crops: number[]) {
+function _buildInitialValues(crops: Array<number>) {
   return {
     name: '',
     location: null,

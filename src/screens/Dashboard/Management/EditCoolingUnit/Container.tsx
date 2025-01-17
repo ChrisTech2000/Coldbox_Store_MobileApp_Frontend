@@ -1,6 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
-import isEmpty from 'lodash/isEmpty';
-import React, { useEffect, useState } from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import React, { useRef } from 'react';
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
@@ -46,18 +45,16 @@ type Props = {
 export default function ScreenContainer(props: Props) {
   const { coolingUnitId, companyId } = props;
 
-  const navigation = useNavigation();
-
-  const [formValuesBuilder, setFormValuesBuilder] = useState<FormStateBuilder | undefined>(
-    undefined
-  );
-
   const { isLoading, companyCrops } = DataAggregator.useDataAggregator();
+  const toast = InAppNotifications.useToast();
   const user = useAuthStore(useShallow((store) => store.user));
   const { t } = useTranslationUtils();
   const { mutate } = useSWRConfig();
 
-  const toast = InAppNotifications.useToast();
+  const navigation = useNavigation();
+
+  const initialFormValues = useRef<FormStateBuilder | undefined>(undefined);
+  useFocusEffect(() => (initialFormValues.current = undefined));
 
   const {
     data: unit,
@@ -76,18 +73,7 @@ export default function ScreenContainer(props: Props) {
     }
   );
 
-  useEffect(() => {
-    if (!isEmpty(unit)) {
-      setFormValuesBuilder(
-        _buildInitialValues(
-          unit,
-          Object.keys(companyCrops).map((cropId) => parseInt(cropId))
-        )
-      );
-    }
-  }, [unit]);
-
-  if (isLoading || isUnitLoading || !formValuesBuilder) {
+  if (isLoading || isUnitLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -95,8 +81,15 @@ export default function ScreenContainer(props: Props) {
     );
   }
 
+  if (!initialFormValues.current) {
+    initialFormValues.current = _buildInitialValues(
+      unit,
+      Object.keys(companyCrops).map((cropId) => parseInt(cropId))
+    );
+  }
+
   async function onSubmit(values: PreprocessedFormValues): Promise<void> {
-    if (typeof formValuesBuilder === 'undefined') return;
+    if (typeof initialFormValues.current === 'undefined') return;
 
     try {
       await ColdtivateService.editCoolingUnit(
@@ -151,7 +144,7 @@ export default function ScreenContainer(props: Props) {
           roomWidth: values.roomWidth,
           coolingUnitType: values.coolingUnitType ?? '',
           editableCheckins: values.editableCheckins,
-          ...formValuesBuilder.getExtraValues(),
+          ...initialFormValues.current.getExtraValues(),
         },
         coolingUnitId
       );
@@ -189,7 +182,7 @@ export default function ScreenContainer(props: Props) {
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
       showsVerticalScrollIndicator={false}
     >
-      <FormManager onSubmit={onSubmit} initialValues={formValuesBuilder.getFormValues()}>
+      <FormManager onSubmit={onSubmit} initialValues={initialFormValues.current.getFormValues()}>
         {({ submitHandler, isSubmitting }) => (
           <React.Fragment>
             <View tw="flex-row items-center space-x-3 mb-3 mx-3.5 w-[85%]">
