@@ -989,8 +989,13 @@ export default {
         goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'વર્તમાન સ્થાન',
-      filterError:
-        'કંઈક ખોટું થયું. કૃપા કરીને ટાઈપો તપાસો અને ખાતરી કરો કે દાખલ કરેલ શહેર નાઈજેરિયામાં આવેલું છે.',
+      invalidFormatWarning: 'ચેતવણી: શહેરના નામનો સ્વરૂપ અમાન્ય છે. પરિણામો સચોટ ન હોઈ શકે.',
+      unresolvedCityFormatWarning:
+        'ચેતવણી: નિર્દિષ્ટ શહેરને ચોક્કસપણે શોધી શકાયું નથી. પરિણામો સચોટ ન હોઈ શકે.',
+      lowConfidenceWarning:
+        'ચેતવણી: શહેરને વિશ્વસનીય રીતે ઓળખી શકાયું નથી. પરિણામો સચોટ ન હોઈ શકે.',
+      filterGeneralWarning:
+        'ચેતવણી: ભૂમિસ્થાન શ્રેણી દરમિયાન કંઈક ખોટું થયું. પરિણામો સચોટ ન હોઈ શકે.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
       priceRange: 'Range Price / KG',

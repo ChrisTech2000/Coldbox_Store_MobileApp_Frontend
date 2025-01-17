@@ -1,3 +1,5 @@
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import ms from 'ms';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -8,23 +10,21 @@ import { Button, Portal, TextInput } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import colors from 'tailwindcss/colors';
-import isEqual from 'lodash/isEqual';
-import isEmpty from 'lodash/isEmpty';
 
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
-import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { useTranslationUtils } from '#i18n/utils';
-import { Geocoder } from '#screens/Dashboard/Management/AddLocation/utils';
+import { Translator, useTranslationUtils } from '#i18n/utils';
+import { EGeolocationError, Geocoder } from '#screens/Dashboard/Management/AddLocation/utils';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
-import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import { useMarketplaceQueryParams } from '../store';
 import { DEFAULT_COORDINATES } from '../utils';
@@ -102,10 +102,14 @@ export default function MarketplaceLocationFilter() {
       });
       return _onComplete();
     } catch (exception) {
-      console.error(exception);
-      toast.show(t('Dashboard.Marketplace.filterError'), {
-        type: 'md_danger',
+      const message = _getToastMessage((exception as Error)?.message ?? '', t);
+      toast.show(message, { type: 'md_warning' });
+
+      useMarketplaceQueryParams.getState().setParams({
+        location: DEFAULT_COORDINATES,
+        filterByMaxDistanceInKm: values.distance,
       });
+      return _onComplete();
     }
   }
 
@@ -300,4 +304,18 @@ export default function MarketplaceLocationFilter() {
       </Portal>
     </React.Fragment>
   );
+}
+
+function _getToastMessage(message: string, t: Translator) {
+  switch (message) {
+    case EGeolocationError.INVALID_FORMAT:
+      return t('Dashboard.Marketplace.invalidFormatWarning');
+    case EGeolocationError.UNRESOLVED_CITY:
+      return t('Dashboard.Marketplace.unresolvedCityFormatWarning');
+    case EGeolocationError.LOW_CONFIDENCE:
+      return t('Dashboard.Marketplace.lowConfidenceWarning');
+    case EGeolocationError.GENERAL_ERROR:
+    default:
+      return t('Dashboard.Marketplace.filterGeneralWarning');
+  }
 }

@@ -915,8 +915,14 @@ export default {
         goToCart: 'Go to Cart Summary', // TODO
       },
       currentLocation: 'Current location', // TODO
-      filterError:
-        'Something went wrong. Please check for typos and make sure the entered city is located in Nigeria.', // TODO
+      invalidFormatWarning:
+        'Ịdọ aka ná ntị: Usoro aha obodo ezighi ezi. Nsonaazụ nwere ike ọ gaghị ịdị kpọmkwem.',
+      unresolvedCityFormatWarning:
+        'Ịdọ aka ná ntị: E meghị ka a mata obodo akọwapụtara nke ọma. Nsonaazụ nwere ike ọ gaghị ịdị kpọmkwem.',
+      lowConfidenceWarning:
+        'Ịdọ aka ná ntị: E nweghị ike ịchọpụta obodo a nke ọma. Nsonaazụ nwere ike ọ gaghị ịdị kpọmkwem.',
+      filterGeneralWarning:
+        'Ịdọ aka ná ntị: Ihe ụfọdụ mere n’oge ịchọpụta ebe. Nsonaazụ nwere ike ọ gaghị ịdị kpọmkwem.',
       standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
       owner: 'Owner', // TODO
       priceRange: 'Range Price / KG',
