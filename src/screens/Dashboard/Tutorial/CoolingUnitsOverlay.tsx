@@ -50,19 +50,21 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
               : t('tutorial.steps.farmersUnitsPlanner')}
         </Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
+            icon="arrow-left"
             mode="text"
             onPress={() => {
-              stop();
-              toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
+              rootNavigation.navigate('History');
+              goTo(ECommonTutorialSteps.HISTORY_STEP);
             }}
             labelStyle="text-green-primary"
           >
-            {t('tutorial.quit')}
+            {t('tutorial.prev')}
           </Button>
+
           <Button
+            icon="arrow-right"
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.OPERATOR) {
@@ -76,10 +78,22 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
                 goTo(ECommonTutorialSteps.FINAL_STEP);
               }
             }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
           >
             {t('actions.continue')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
           </Button>
         </View>
       </View>
@@ -87,7 +101,7 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
   );
 }
 
-export function RoomConditionsOverlay({ next, stop }: IOverlayComponentProps) {
+export function RoomConditionsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
@@ -110,28 +124,45 @@ export function RoomConditionsOverlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.roomConditions')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
+            icon="arrow-left"
             mode="text"
             onPress={() => {
-              stop();
-              toggleTutorial(false);
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('CoolingUnits', { screen: 'Planner' });
+              goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
             }}
             labelStyle="text-green-primary"
           >
-            {t('tutorial.quit')}
+            {t('tutorial.prev')}
           </Button>
+
           <Button
+            icon="arrow-right"
             mode="text"
             onPress={() => {
               rootNavigation.navigate('RootMainTabStack');
               emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
               next();
             }}
-            labelStyle="text-white"
-            tw="bg-green-primary"
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
           >
             {t('actions.continue')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('RootMainTabStack');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
           </Button>
         </View>
       </View>

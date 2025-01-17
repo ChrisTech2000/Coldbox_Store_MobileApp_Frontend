@@ -17,7 +17,9 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
+import { EOperatorTutorialSteps } from './utils/constants';
 import { MOCKED_CHECK_IN_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
 import { useBlinkAnimation } from './utils/useAnimation';
 
@@ -26,6 +28,7 @@ const screenHeight = Dimensions.get('window').height;
 export function OperatorActionsOverlay({
   next,
   stop,
+  goTo,
   step: { onPressMask },
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
@@ -85,24 +88,35 @@ export function OperatorActionsOverlay({
         ]}
       >
         <Text tw="text-base">{t('tutorial.steps.initiateCheckIn1')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            stop();
-            toggleTutorial(false);
-            rootNavigation.navigate('Dashboard');
-          }}
-          labelStyle="text-green-primary"
-          tw="mt-4"
-        >
-          {t('tutorial.quit')}
-        </Button>
+        <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              goTo(EOperatorTutorialSteps.COOLING_UNIT_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
       </View>
     </View>
   );
 }
 
-export function CheckInButtonOverlay({ next, stop }: IOverlayComponentProps) {
+export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -124,8 +138,8 @@ export function CheckInButtonOverlay({ next, stop }: IOverlayComponentProps) {
             // eslint-disable-next-line
             // @ts-ignore
             params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
-          }),
-            next();
+          });
+          next();
         }}
       >
         <Animated.View
@@ -159,23 +173,36 @@ export function CheckInButtonOverlay({ next, stop }: IOverlayComponentProps) {
         ]}
       >
         <Text tw="text-base">{t('tutorial.steps.initiateCheckIn2')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            stop();
-            toggleTutorial(false);
-            rootNavigation.navigate('Dashboard');
-          }}
-          labelStyle="text-green-primary"
-        >
-          {t('tutorial.quit')}
-        </Button>
+        <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
+              goTo(EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_1);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
       </View>
     </View>
   );
 }
 
-export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
+export function CheckIn1ScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const setProduces = useCheckInStore((store) => store.setProduces);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
@@ -199,19 +226,22 @@ export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.checkIn1')}</Text>
 
-        <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
+            icon="arrow-left"
             mode="text"
             onPress={() => {
-              stop();
-              toggleTutorial(false);
               rootNavigation.navigate('RootMainTabStack');
+              emitter.emit(APP_EVENTS.DISPATCH_OPEN_OPERATOR_ACTIONS);
+              goTo(EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_2);
             }}
             labelStyle="text-green-primary"
           >
-            {t('tutorial.quit')}
+            {t('tutorial.prev')}
           </Button>
+
           <Button
+            icon="arrow-right"
             mode="text"
             onPress={() => {
               // eslint-disable-next-line
@@ -219,10 +249,22 @@ export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
               setProduces(MOCKED_CHECK_IN_DATA);
               next();
             }}
-            labelStyle="text-white"
-            tw="bg-green-primary"
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
           >
             {t('actions.continue')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('RootMainTabStack');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
           </Button>
         </View>
       </View>
@@ -230,10 +272,11 @@ export function CheckIn1ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
+export function CheckIn2ScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const setProduces = useCheckInStore((store) => store.setProduces);
 
   return (
     <View tw="h-full w-full absolute">
@@ -253,7 +296,29 @@ export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.checkIn2')}</Text>
 
-        <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              setProduces([]);
+              goTo(EOperatorTutorialSteps.CHECK_IN_STEP_1);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={next}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
@@ -261,12 +326,9 @@ export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
               toggleTutorial(false);
               rootNavigation.navigate('RootMainTabStack');
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button mode="text" onPress={next} labelStyle="text-white" tw="bg-green-primary">
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
@@ -274,7 +336,7 @@ export function CheckIn2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function CheckIn3ScreenOverlay({ next, stop }: IOverlayComponentProps) {
+export function CheckIn3ScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const resetCheckInStore = useCheckInStore((store) => store.resetCheckInStore);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
@@ -329,18 +391,31 @@ export function CheckIn3ScreenOverlay({ next, stop }: IOverlayComponentProps) {
         ]}
       >
         <Text tw="text-base">{t('tutorial.steps.checkIn3')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            stop();
-            toggleTutorial(false);
-            rootNavigation.navigate('RootMainTabStack');
-          }}
-          labelStyle="text-green-primary"
-          tw="mt-2"
-        >
-          {t('tutorial.quit')}
-        </Button>
+
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              goTo(EOperatorTutorialSteps.CHECK_IN_STEP_2);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('RootMainTabStack');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
       </View>
     </View>
   );

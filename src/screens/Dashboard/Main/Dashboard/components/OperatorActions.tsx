@@ -150,6 +150,10 @@ export function OperatorActions({
     setIsCrateManagementOpen(false)
   );
 
+  useAppEventListener(APP_EVENTS.DISPATCH_OPEN_OPERATOR_ACTIONS, () =>
+    setIsCrateManagementOpen(true)
+  );
+
   const combinedUsers = useMemo(() => {
     const shouldShowNoPhoneUser =
       !isLoading && (!search || noPhoneUser?.user.firstName.includes(search));

@@ -6,21 +6,19 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { DashboardRoutes } from '#navigation/Dashboard';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
-import { EFarmerTutorialSteps } from './utils/constants';
+import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
 
 export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
-  const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -41,30 +39,45 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
             : t('tutorial.steps.history')}
         </Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              goTo(ECommonTutorialSteps.MORE_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={() => {
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('CoolingUnits', { screen: 'Planner' });
+              user?.role === ERoles.COOLING_USER
+                ? goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP)
+                : next();
+            }}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
+              rootNavigation.navigate('Main');
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="text"
-            onPress={() => {
-              bottomTabNavigation.navigate('Main', { screen: 'CoolingUnits' });
-              user?.role === ERoles.COOLING_USER
-                ? goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP)
-                : next();
-            }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
