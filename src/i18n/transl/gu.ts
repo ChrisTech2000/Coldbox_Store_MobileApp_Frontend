@@ -169,6 +169,8 @@ export default {
       placeholder: 'ડ્ડ/મ્મ/yyyy',
       startDateSelection: 'આરંભ તારીખ પસંદ કરો:',
       endDateSelection: 'અંતિમ તારીખ પસંદ કરો:',
+      startDateError: 'શરૂઆતની તારીખ અંતિમ તારીખથી પછીની ન હોઈ શકે.',
+      endDateError: 'અંતિમ તારીખ શરૂ日の તારીખથી પહેલા ન હોઈ શકે.',
     },
   },
   Auth: {

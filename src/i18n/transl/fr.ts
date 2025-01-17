@@ -164,6 +164,8 @@ export default {
       placeholder: 'jj/mm/aaaa',
       startDateSelection: 'Sélectionner la date de début:',
       endDateSelection: 'Sélectionner la date de fin:',
+      startDateError: 'La date de début ne peut pas être postérieure à la date de fin.',
+      endDateError: 'La date de fin ne peut pas être antérieure à la date de début.',
     },
   },
   Auth: {

@@ -169,6 +169,8 @@ export default {
       placeholder: 'ଡ୍ଡ/ମ୍ମ/yyyy',
       startDateSelection: 'ଆରମ୍ଭ ତାରିଖ ଚୟନ କରନ୍ତୁ:',
       endDateSelection: 'ଅନ୍ତିମ ତାରିଖ ଚୟନ କରନ୍ତୁ:',
+      startDateError: 'ଆରମ୍ଭ ତାରିଖ ଶେଷ ତାରିଖଠାରୁ ପରେ ହୋଇପାରିବ ନାହିଁ।',
+      endDateError: 'ଶେଷ ତାରିଖ ଆରମ୍ଭ ତାରିଖଠାରୁ ପୂର୍ବରୁ ହୋଇପାରିବ ନାହିଁ।',
     },
   },
   Auth: {

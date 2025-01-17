@@ -163,6 +163,8 @@ export default {
       placeholder: 'Ọjọ́/Oṣù/Ọdún',
       startDateSelection: 'Yan ọjọ ibẹrẹ:',
       endDateSelection: 'Yan ọjọ ipari:',
+      startDateError: 'Ọjọ ibẹrẹ ko le pẹ ju ọjọ ipari lọ.',
+      endDateError: 'Ọjọ ipari ko le ṣaaju ọjọ ibẹrẹ.',
     },
   },
   Auth: {

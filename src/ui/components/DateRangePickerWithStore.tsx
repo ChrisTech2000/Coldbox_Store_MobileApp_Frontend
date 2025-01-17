@@ -5,6 +5,7 @@ import { Icon } from 'react-native-paper';
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import InAppNotifications from '#common/InAppNotifications';
 
 import { cn } from '../lib/cn';
 import { Text } from './Text';
@@ -44,35 +45,69 @@ export const DateRangePickerWithStore = ({
   initialStartDate,
 }: DateRangePickerWithStoreProps) => {
   const { t } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const { startDate, endDate, setStartDate, setEndDate } = useDateRangeStore();
 
   const [isStartDateCalendarOpen, setIsStartDateCalendarOpen] = useState<boolean>(false);
   const [isEndDateCalendarOpen, setIsEndDateCalendarOpen] = useState<boolean>(false);
 
-  const onStartDateChange = useCallback((date: Date) => {
-    setIsStartDateCalendarOpen(false);
-    const start = new Date(date);
-    start.setHours(0, 0, 0, 0);
-    setStartDate(start);
-  }, []);
+  const validateDateRange = useCallback(
+    (selectedDate: Date, isStartDate: boolean) => {
+      if (isStartDate && endDate && selectedDate > endDate) {
+        toast.show(t('components.datePicker.startDateError'), { type: 'md_danger' });
+        return false;
+      }
+      if (!isStartDate && startDate && selectedDate < startDate) {
+        toast.show(t('components.datePicker.endDateError'), { type: 'md_danger' });
+        return false;
+      }
+      return true;
+    },
+    [startDate, endDate, t]
+  );
 
-  const onEndDateChange = useCallback((date: Date) => {
-    setIsEndDateCalendarOpen(false);
-    const end = new Date(date);
-    end.setHours(23, 59, 59, 999);
-    setEndDate(end);
-  }, []);
+  const onStartDateChange = useCallback(
+    (date: Date) => {
+      const start = new Date(date);
+      start.setHours(0, 0, 0, 0);
+
+      if (!validateDateRange(start, true)) {
+        setIsStartDateCalendarOpen(false);
+        return;
+      }
+
+      setIsStartDateCalendarOpen(false);
+      setStartDate(start);
+    },
+    [validateDateRange, setStartDate]
+  );
+
+  const onEndDateChange = useCallback(
+    (date: Date) => {
+      const end = new Date(date);
+      end.setHours(23, 59, 59, 999);
+
+      if (!validateDateRange(end, false)) {
+        setIsEndDateCalendarOpen(false);
+        return;
+      }
+
+      setIsEndDateCalendarOpen(false);
+      setEndDate(end);
+    },
+    [validateDateRange, setEndDate]
+  );
 
   const onClearEndDateChange = useCallback(() => {
     setIsEndDateCalendarOpen(false);
     setEndDate(null);
-  }, []);
+  }, [setEndDate]);
 
   const onClearStartDateChange = useCallback(() => {
     setIsStartDateCalendarOpen(false);
     setStartDate(null);
-  }, []);
+  }, [setStartDate]);
 
   useEffect(() => {
     if (initialStartDate) {
@@ -86,7 +121,7 @@ export const DateRangePickerWithStore = ({
       end.setHours(23, 59, 59, 999);
       setEndDate(end);
     }
-  }, []);
+  }, [initialStartDate, initialEndDate, setStartDate, setEndDate]);
 
   return (
     <View tw="flex flex-row flex-wrap items-center">
@@ -116,7 +151,6 @@ export const DateRangePickerWithStore = ({
         mode="date"
         open={isStartDateCalendarOpen}
         modal
-        maximumDate={endDate ?? undefined}
         onConfirm={onStartDateChange}
         onCancel={onClearStartDateChange}
         cancelText={t('components.datePicker.clearButtonLabel')}
@@ -152,7 +186,6 @@ export const DateRangePickerWithStore = ({
         mode="date"
         open={isEndDateCalendarOpen}
         modal
-        minimumDate={startDate ?? undefined}
         onConfirm={onEndDateChange}
         onCancel={onClearEndDateChange}
         cancelText={t('components.datePicker.clearButtonLabel')}
