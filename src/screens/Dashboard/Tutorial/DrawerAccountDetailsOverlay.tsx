@@ -15,10 +15,11 @@ import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 import { useBlinkAnimation } from './utils/useAnimation';
+import { ECommonTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerAccountDetailsOverlay({ next, stop }: IOverlayComponentProps) {
+export function DrawerAccountDetailsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -83,16 +84,27 @@ export function DrawerAccountDetailsOverlay({ next, stop }: IOverlayComponentPro
         ]}
       >
         <Text tw="text-base">{t('tutorial.steps.accountDetailsNavigation')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            stop();
-            toggleTutorial(false);
-          }}
-          labelStyle="text-green-primary"
-        >
-          {t('tutorial.quit')}
-        </Button>
+
+        <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => goTo(ECommonTutorialSteps.REPEAT_TUTORIAL_STEP)}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
       </View>
     </View>
   );

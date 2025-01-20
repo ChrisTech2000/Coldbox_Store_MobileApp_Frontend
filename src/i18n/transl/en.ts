@@ -1497,7 +1497,7 @@ const en = {
     quit: 'Quit Tutorial',
     congratulations:
       'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.',
-    prev: 'Prev',
+    prev: 'Previous step',
     next: 'Next',
     start: 'Start Tutorial',
     final:

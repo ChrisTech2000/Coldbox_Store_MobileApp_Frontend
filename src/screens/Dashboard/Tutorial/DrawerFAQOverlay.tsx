@@ -10,10 +10,11 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { SMALL_SCREEN_THRESHOLD, SUPER_SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { EFarmerTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerFAQOverlay({ next, stop }: IOverlayComponentProps) {
+export function DrawerFAQOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const navigation = useNavigation();
@@ -58,18 +59,20 @@ export function DrawerFAQOverlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.faq')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
+            icon="arrow-left"
             mode="text"
             onPress={() => {
-              stop();
-              toggleTutorial(false);
+              goTo(EFarmerTutorialSteps.GO_TO_KNOWLEDGE_HUB_STEP);
             }}
             labelStyle="text-green-primary"
           >
-            {t('tutorial.quit')}
+            {t('tutorial.prev')}
           </Button>
+
           <Button
+            icon="arrow-right"
             mode="text"
             onPress={() => {
               navigation.dispatch(DrawerActions.closeDrawer());
@@ -78,10 +81,21 @@ export function DrawerFAQOverlay({ next, stop }: IOverlayComponentProps) {
               navigation.navigate('Dashboard');
               next();
             }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
           >
             {t('actions.continue')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
           </Button>
         </View>
       </View>

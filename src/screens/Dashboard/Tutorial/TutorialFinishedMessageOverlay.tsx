@@ -15,9 +15,23 @@ import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
+import {
+  EEmployeeTutorialSteps,
+  EFarmerTutorialSteps,
+  EOperatorTutorialSteps,
+} from './utils/constants';
+import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
+
+const MOCKED_PARAMS = {
+  user: MOCKED_USER,
+  crates: MOCKED_CHECK_OUT_DATA,
+  coolingUnit: MOCKED_COOLING_UNIT,
+};
+
 export const TutorialFinishedMessageOverlay = ({
   isWalkthroughOn,
   stop,
+  goTo,
 }: IOverlayComponentProps) => {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
@@ -41,18 +55,54 @@ export const TutorialFinishedMessageOverlay = ({
               </Text>
             ))}
 
-          <Button
-            mode="contained-tonal"
-            onPress={() => {
-              stop();
-              toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
-            }}
-            labelStyle="text-white"
-            tw="bg-green-primary border border-green-primary mt-3"
-          >
-            {t('tutorial.backToDashboard')}
-          </Button>
+          <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+            <Button
+              icon="arrow-left"
+              mode="text"
+              onPress={() => {
+                if (user?.role === ERoles.OPERATOR) {
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  rootNavigation.navigate('Main', {
+                    screen: 'Dashboard',
+                    params: {
+                      screen: 'CheckOutStack',
+                      params: {
+                        screen: 'BillingInfo',
+                        params: {
+                          ...MOCKED_PARAMS,
+                          user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
+                        },
+                      },
+                    },
+                  });
+
+                  goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_3);
+                } else if (user?.role === ERoles.EMPLOYEE) {
+                  goTo(EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP);
+                } else {
+                  rootNavigation.navigate('MarketPrice');
+                  goTo(EFarmerTutorialSteps.MARKET_PRICE);
+                }
+              }}
+              labelStyle="text-green-primary"
+            >
+              {t('tutorial.prev')}
+            </Button>
+
+            <Button
+              mode="contained-tonal"
+              onPress={() => {
+                stop();
+                toggleTutorial(false);
+                rootNavigation.navigate('Dashboard');
+              }}
+              labelStyle="text-white"
+              tw="bg-green-primary border border-green-primary mt-3"
+            >
+              {t('tutorial.backToDashboard')}
+            </Button>
+          </View>
         </View>
       </View>
     </Modal>

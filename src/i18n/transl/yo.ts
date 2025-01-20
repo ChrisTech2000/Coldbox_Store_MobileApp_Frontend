@@ -1402,7 +1402,7 @@ export default {
     quit: 'jade kuro ninu idanilẹkọ',
     congratulations:
       'Idanilẹkọ! O ti pari ikẹkọ naa! Pada si dasibodu lati bẹrẹ lilo ohun elo naa.',
-    prev: 'Iṣaaju',
+    prev: 'Igbesẹ ti tẹlẹ',
     next: 'Itele',
     start: 'Start Tutorial', // TODO
     final:

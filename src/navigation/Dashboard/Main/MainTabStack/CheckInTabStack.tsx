@@ -21,7 +21,7 @@ import { Translator, useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { ECropType, type CoolingUnit, type Crop, type Farmer } from '#types/global';
-import { AccountDetailsRoutes } from 'navigation/Dashboard/AccountDetails';
+import { AccountDetailsRoutes } from '#navigation/Dashboard/AccountDetails';
 import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 
 export type CheckInStackRoutes = {

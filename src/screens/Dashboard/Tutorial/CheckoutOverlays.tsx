@@ -16,9 +16,11 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
 import { useBlinkAnimation } from './utils/useAnimation';
+import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -28,7 +30,7 @@ const MOCKED_PARAMS = {
   coolingUnit: MOCKED_COOLING_UNIT,
 };
 
-export function OperatorActionsOverlay({ next, stop }: IOverlayComponentProps) {
+export function OperatorActionsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -95,23 +97,38 @@ export function OperatorActionsOverlay({ next, stop }: IOverlayComponentProps) {
         }}
       >
         <Text tw="text-base">{t('tutorial.steps.checkOut1')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            stop();
-            toggleTutorial(false);
-            rootNavigation.navigate('Dashboard');
-          }}
-          labelStyle="text-green-primary"
-        >
-          {t('tutorial.quit')}
-        </Button>
+
+        <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
+              rootNavigation.navigate('CoolingUnits', { screen: 'RoomConditions' });
+              goTo(EOperatorTutorialSteps.ROOM_CONDITIONS_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
       </View>
     </View>
   );
 }
 
-export function CheckOutScreenOverlay({ next, stop }: IOverlayComponentProps) {
+export function CheckOutScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -135,19 +152,23 @@ export function CheckOutScreenOverlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.checkOut2')}</Text>
 
-        <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
+            icon="arrow-left"
             mode="text"
             onPress={() => {
-              stop();
-              toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('RootMainTabStack');
+              goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_1);
             }}
             labelStyle="text-green-primary"
           >
-            {t('tutorial.quit')}
+            {t('tutorial.prev')}
           </Button>
+
           <Button
+            icon="arrow-right"
             mode="text"
             onPress={() => {
               navigation.navigate(
@@ -161,10 +182,22 @@ export function CheckOutScreenOverlay({ next, stop }: IOverlayComponentProps) {
               );
               next();
             }}
-            labelStyle="text-white"
-            tw="bg-green-primary"
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
           >
             {t('actions.continue')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
           </Button>
         </View>
       </View>
@@ -172,7 +205,7 @@ export function CheckOutScreenOverlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function CheckOut2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
+export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
@@ -192,7 +225,43 @@ export function CheckOut2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.checkOut3')}</Text>
 
-        <View tw="flex flex-row space-x-2 items-center justify-center mt-2">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'CheckOutStack',
+                  params: {
+                    screen: 'CrateSelection',
+                    params: MOCKED_PARAMS,
+                  },
+                },
+              });
+              goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_2);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={() => {
+              rootNavigation.navigate('RootMainTabStack');
+              next();
+            }}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
@@ -200,20 +269,9 @@ export function CheckOut2ScreenOverlay({ next, stop }: IOverlayComponentProps) {
               toggleTutorial(false);
               rootNavigation.navigate('RootMainTabStack');
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="text"
-            onPress={() => {
-              rootNavigation.navigate('RootMainTabStack');
-              next();
-            }}
-            labelStyle="text-white"
-            tw="bg-green-primary"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>

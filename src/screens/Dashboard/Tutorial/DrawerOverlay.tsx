@@ -1,3 +1,4 @@
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Animated, Dimensions, Platform, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
@@ -10,12 +11,13 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+
+import { ECommonTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerOverlay({ next, stop, step: { mask } }: IOverlayComponentProps) {
+export function DrawerOverlay({ next, stop, goTo, step: { mask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -69,16 +71,27 @@ export function DrawerOverlay({ next, stop, step: { mask } }: IOverlayComponentP
         ]}
       >
         <Text tw="text-base">{t('tutorial.steps.openDrawer')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            stop();
-            toggleTutorial(false);
-          }}
-          labelStyle="text-green-primary"
-        >
-          {t('tutorial.quit')}
-        </Button>
+
+        <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => goTo(ECommonTutorialSteps.INITIAL_STEP)}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
       </View>
     </View>
   );

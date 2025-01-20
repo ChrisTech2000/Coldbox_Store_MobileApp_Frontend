@@ -2,8 +2,8 @@ import React, { type SetStateAction, useCallback, useEffect, useMemo, useState }
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { TextInput } from 'react-native-paper';
-import { StoreApi, UseBoundStore } from 'zustand';
 import { useDebouncedCallback } from 'use-debounce';
+import { StoreApi, UseBoundStore } from 'zustand';
 
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -16,8 +16,8 @@ import { Company, CoolingUnit, ERoles } from '#types/global';
 import { CoolingUnitOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitOverlay';
 import { Dashboard5Overlay } from '#screens/Dashboard/Tutorial/FarmerDashboardOverlay';
 import {
+  ECommonTutorialSteps,
   EFarmerTutorialSteps,
-  EOperatorTutorialSteps,
 } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Button } from '#ui/components/Button';
@@ -62,7 +62,7 @@ export function Filters(props: FilterProps) {
   const { selectedItem: company } = useCompanyStore();
 
   const { onLayout } = useWalkthroughStep({
-    number: EOperatorTutorialSteps.COOLING_UNIT_STEP,
+    number: ECommonTutorialSteps.COOLING_UNIT_STEP,
     OverlayComponent: CoolingUnitOverlay,
   });
 
