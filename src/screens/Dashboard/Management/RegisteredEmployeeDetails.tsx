@@ -9,10 +9,9 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
-import type { TranslationPaths } from '#i18n/index';
 import { paperTheme } from '#ui/lib/theme';
 
 function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmployeeDetails'>) {

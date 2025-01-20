@@ -11,8 +11,7 @@ import { Appbar } from 'react-native-paper';
 import KnowledgeHub from '#screens/Dashboard/KnowledgeHub';
 import KnowledgeHubDetails from '#screens/Dashboard/KnowledgeHub/Details';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
 export type KnowledgeHubStackRoutes = {

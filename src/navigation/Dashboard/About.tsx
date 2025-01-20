@@ -14,8 +14,7 @@ import UserAgreement from '#screens/Dashboard/About/UserAgreement';
 import Privacy from '#screens/Dashboard/About/Privacy';
 import ComsolAbout from '#screens/Dashboard/About/ComsolAbout';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
 export type AboutStackRoutes = {

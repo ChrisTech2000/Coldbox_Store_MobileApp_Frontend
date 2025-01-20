@@ -6,8 +6,7 @@ import {
 import type { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { RouteProp } from '@react-navigation/native';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 
 import MarketPriceTrend from '#screens/Dashboard/Main/MarketPrice/Trend';

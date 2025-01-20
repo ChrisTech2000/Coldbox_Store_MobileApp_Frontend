@@ -16,8 +16,7 @@ import PersonalDetails from '#screens/Dashboard/AccountDetails/PersonalDetails';
 import CoolingUsersSurvey from '#screens/Dashboard/Management/EditCoolingUser/CoolingUsersSurvey';
 
 import type { TranslationLocales } from '#i18n/constants';
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import type { EApiGender, ERoles, User } from '#types/global';
 

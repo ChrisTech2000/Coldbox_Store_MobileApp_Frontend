@@ -9,8 +9,7 @@ import React, { useCallback } from 'react';
 
 import MarketplaceRoot from '#screens/Dashboard/Main/Marketplace';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 
 import OrdersStack from '../OrdersStack';

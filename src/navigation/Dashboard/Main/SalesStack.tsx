@@ -9,7 +9,7 @@ import React, { useCallback } from 'react';
 
 import SalesRoot from '#screens/Dashboard/Main/Sales';
 
-import type { TranslationPaths } from '#i18n/index';
+import type { TranslationPaths } from '#i18n/utils';
 import { useDashboardHeader } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
 
 export type SalesRoutes = {

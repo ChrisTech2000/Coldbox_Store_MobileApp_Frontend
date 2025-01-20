@@ -10,8 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
 
 import RBAC from '#common/RBAC';
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 
 import NavigatorHeader from '../../components/NavigatorHeader';

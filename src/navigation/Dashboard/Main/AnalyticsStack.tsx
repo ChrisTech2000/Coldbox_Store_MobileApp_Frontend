@@ -11,8 +11,7 @@ import { Appbar } from 'react-native-paper';
 import AnalyticsBase from '#screens/Dashboard/Main/Analytics';
 import Methodology from '#screens/Dashboard/Main/Analytics/Methodology';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
 

@@ -27,7 +27,7 @@ import { ig as igboLocale } from './plugins/ig';
 import { or as oriyaLocale } from './plugins/or';
 import { yo as yorubaLocale } from './plugins/yo';
 
-type TranslationPaths = RecursiveKeyOf<Translations>;
+export type TranslationPaths = RecursiveKeyOf<Translations>;
 
 ///
 // Storage Manager

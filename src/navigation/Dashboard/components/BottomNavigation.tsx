@@ -20,8 +20,7 @@ import { Touchable } from '#ui/components/Touchable';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 import RBAC from '#common/RBAC';
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { MoreNavigationOverlay } from '#screens/Dashboard/Tutorial/MoreNavigationOverlay';
 import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import { cn } from '#ui/lib/cn';

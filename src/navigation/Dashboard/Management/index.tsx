@@ -32,8 +32,7 @@ import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredE
 import { AddCoolingUserNavigationOverLay } from '#screens/Dashboard/Tutorial/AddCoolingUserNavigationOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 

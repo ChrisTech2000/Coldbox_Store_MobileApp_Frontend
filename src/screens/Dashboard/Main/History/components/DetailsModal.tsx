@@ -6,12 +6,11 @@ import colors from 'tailwindcss/colors';
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
 
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { dateFmt, useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EInitiatedFor, EPaymentMethod, MovementCrate } from '#types/global';
-import type { TranslationPaths } from '#i18n/index';
 
 const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 

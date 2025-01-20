@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow';
 import InAppNotifications, { type ToastType } from './InAppNotifications';
 import { useAuthStore } from '#stores/auth';
 
-type BinaryToastTypes = Exclude<ToastType, 'md_default'>;
+type BinaryToastTypes = Exclude<ToastType, 'md_default' | 'md_warning'>;
 
 const TOAST_MESSAGE = {
   md_success: 'Online',

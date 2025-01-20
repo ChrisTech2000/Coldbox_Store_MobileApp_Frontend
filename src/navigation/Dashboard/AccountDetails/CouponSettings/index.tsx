@@ -10,8 +10,7 @@ import { Appbar } from 'react-native-paper';
 
 import Coupons from '#screens/Dashboard/AccountDetails/Coupons';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import CouponService from '#services/CouponService';

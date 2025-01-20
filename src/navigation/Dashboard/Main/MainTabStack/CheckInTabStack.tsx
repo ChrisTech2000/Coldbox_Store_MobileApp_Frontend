@@ -16,8 +16,7 @@ import CrateWeightAndPricing, {
   resetCrateWeightPricingBridge,
 } from '#screens/Dashboard/Main/Dashboard/CheckIn/CrateWeightAndPricing';
 
-import { TranslationPaths } from '#i18n/index';
-import { Translator, useTranslationUtils } from '#i18n/utils';
+import { type Translator, type TranslationPaths, useTranslationUtils } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { ECropType, type CoolingUnit, type Crop, type Farmer } from '#types/global';

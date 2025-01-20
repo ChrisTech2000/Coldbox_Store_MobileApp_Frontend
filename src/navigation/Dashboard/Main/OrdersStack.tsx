@@ -10,7 +10,7 @@ import React, { useCallback } from 'react';
 import OrdersRoot from '#screens/Dashboard/Main/Orders';
 import OrdersDetails from '#screens/Dashboard/Main/Orders/OrdersDetails';
 
-import type { TranslationPaths } from '#i18n/index';
+import type { TranslationPaths } from '#i18n/utils';
 import { useDashboardHeader } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
 
 export type OrdersRoutes = {

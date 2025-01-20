@@ -12,8 +12,7 @@ import MarketSurveyBase from '#screens/Dashboard/Main/History/MarketSurvey';
 import BaseSurvey from '#screens/Dashboard/Main/History/MarketSurvey/BaseSurvey';
 import MarketSurvey from '#screens/Dashboard/Main/History/MarketSurvey/MarketSurvey';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 
 import { useDashboardHeader, type DashboardHeaderFactory } from '../../lib/dashboardHeaderFactory';

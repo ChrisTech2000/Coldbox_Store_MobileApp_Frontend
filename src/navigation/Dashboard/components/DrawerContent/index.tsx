@@ -26,8 +26,7 @@ import { Image } from '#ui/components/Image';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import RBAC from '#common/RBAC';
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils, type Translator } from '#i18n/utils';
+import { useTranslationUtils, type Translator, type TranslationPaths } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
