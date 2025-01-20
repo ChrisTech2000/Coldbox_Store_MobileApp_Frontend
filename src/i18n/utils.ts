@@ -40,6 +40,12 @@ export class LanguageManager {
   private static readonly _locales = new Set<string>(Object.values(APP_LOCALES));
   private static readonly _rtlLocales = new Set<string>([]); // TODO -> assign languages that use RTL text direction from APP_LOCALES
 
+  public static initializeLanguage(): TranslationLocales {
+    const language = LanguageManager.read();
+    LanguageManager._setLayoutDirection(language);
+    return language;
+  }
+
   public static onLanguageChange(language: string): void {
     const validatedLanguage = LanguageManager.safeValue(language);
     mmkv.set(LanguageManager._KEY, validatedLanguage);
@@ -52,9 +58,7 @@ export class LanguageManager {
       ? LanguageManager._getCachedValue()
       : LanguageManager._getPersistedValue();
     const preferredLanguage = storedLanguage || LanguageManager._derivedSystemLocale();
-    const validatedLanguage = LanguageManager.safeValue(preferredLanguage);
-    LanguageManager._setLayoutDirection(validatedLanguage);
-    return validatedLanguage;
+    return LanguageManager.safeValue(preferredLanguage);
   }
 
   public static safeValue(locale?: string): TranslationLocales {
@@ -99,17 +103,14 @@ export class LanguageManager {
     { maxAge: ms('3 seconds') }
   );
 
-  private static _setLayoutDirection = moize(
-    (locale: string): void => {
-      const isRTL = this._rtlLocales.has(locale);
-      if (I18nManager.isRTL !== isRTL) {
-        I18nManager.allowRTL(isRTL);
-        I18nManager.forceRTL(isRTL);
-        RNRestart.restart();
-      }
-    },
-    { maxAge: ms('3 seconds') }
-  );
+  private static _setLayoutDirection(locale: string): void {
+    const isRTL = this._rtlLocales.has(locale);
+    if (I18nManager.isRTL !== isRTL) {
+      I18nManager.allowRTL(isRTL);
+      I18nManager.forceRTL(isRTL);
+      RNRestart.restart();
+    }
+  }
 }
 
 ///

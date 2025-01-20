@@ -15,7 +15,7 @@ import yorubaTranslations from './transl/yo';
 import { LanguageManager } from './utils';
 
 export default async function initI18n(): Promise<TranslationLocales> {
-  const initialLanguage = LanguageManager.read();
+  const initialLanguage = LanguageManager.initializeLanguage();
 
   i18n.use(initReactI18next);
 
