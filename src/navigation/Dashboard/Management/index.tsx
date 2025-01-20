@@ -226,6 +226,17 @@ function _rightContentFactory(
   });
 
   switch (routeName) {
+    case 'Root':
+      return {
+        leftContent: (
+          <Appbar.BackAction
+            size={22}
+            // eslint-disable-next-line
+            // @ts-ignore
+            onPress={() => navigation.navigate('Dashboard')}
+          />
+        ),
+      };
     case 'Locations':
       return {
         rightContent: (
