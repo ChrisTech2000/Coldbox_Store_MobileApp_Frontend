@@ -32,18 +32,19 @@ type TranslationPaths = RecursiveKeyOf<Translations>;
 ///
 // Storage Manager
 ///
+
 let _currentDateFnsLocale: Locale;
 
 export class LanguageManager {
   private static readonly _KEY = 'i18n-locale';
   private static readonly _locales = new Set<string>(Object.values(APP_LOCALES));
-  private static readonly _rtlLocales = new Set<string>([APP_LOCALES.PORTUGUESE]); // TODO -> add RTL language codes from APP_LOCALES
+  private static readonly _rtlLocales = new Set<string>([]); // TODO -> assign languages that use RTL text direction from APP_LOCALES
 
-  public static persist(language: string): void {
+  public static onLanguageChange(language: string): void {
     const validatedLanguage = LanguageManager.safeValue(language);
-    LanguageManager.loadDateFnsLocale(validatedLanguage);
     mmkv.set(LanguageManager._KEY, validatedLanguage);
     LanguageManager._setLayoutDirection(validatedLanguage);
+    LanguageManager.setDateFnsLocale(validatedLanguage);
   }
 
   public static read(useCache = true): TranslationLocales {
@@ -67,7 +68,7 @@ export class LanguageManager {
     return this._rtlLocales.has(LanguageManager.read());
   }
 
-  public static loadDateFnsLocale(locale: TranslationLocales) {
+  public static setDateFnsLocale(locale: TranslationLocales): void {
     const _localeMap: Record<TranslationLocales, Locale> = {
       hi: hindiLocale,
       pt: portugueseLocale,

@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     initI18n().then((initialLanguage) => {
-      LanguageManager.loadDateFnsLocale(initialLanguage);
+      LanguageManager.setDateFnsLocale(initialLanguage);
       setIsI18nReady(true);
     });
   }, []);

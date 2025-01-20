@@ -61,7 +61,7 @@ export default async function initI18n(): Promise<TranslationLocales> {
     compatibilityJSON: 'v3',
   } satisfies InitOptions);
 
-  i18n.on('languageChanged', LanguageManager.persist);
+  i18n.on('languageChanged', LanguageManager.onLanguageChange);
 
   return initialLanguage;
 }
