@@ -19,7 +19,7 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
-import { EOperatorTutorialSteps } from './utils/constants';
+import { ECommonTutorialSteps, EOperatorTutorialSteps } from './utils/constants';
 import { MOCKED_CHECK_IN_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
 import { useBlinkAnimation } from './utils/useAnimation';
 
@@ -93,7 +93,7 @@ export function OperatorActionsOverlay({
             icon="arrow-left"
             mode="text"
             onPress={() => {
-              goTo(EOperatorTutorialSteps.COOLING_UNIT_STEP);
+              goTo(ECommonTutorialSteps.COOLING_UNIT_STEP);
             }}
             labelStyle="text-green-primary"
           >

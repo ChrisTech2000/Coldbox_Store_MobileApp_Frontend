@@ -55,8 +55,14 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
             icon="arrow-left"
             mode="text"
             onPress={() => {
-              rootNavigation.navigate('History');
-              goTo(ECommonTutorialSteps.HISTORY_STEP);
+              if (user?.role === ERoles.OPERATOR) {
+                rootNavigation.navigate('History');
+                goTo(ECommonTutorialSteps.HISTORY_STEP);
+              } else if (user?.role === ERoles.EMPLOYEE) {
+                goTo(ECommonTutorialSteps.COOLING_UNIT_STEP);
+              } else {
+                // TODO:
+              }
             }}
             labelStyle="text-green-primary"
           >

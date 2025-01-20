@@ -46,9 +46,16 @@ export function CoolingUnitOverlay({ next, goTo, stop }: IOverlayComponentProps)
             icon="arrow-left"
             mode="text"
             onPress={() => {
-              rootNavigation.navigate('Management', { screen: 'CoolingUsers' });
-              emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true);
-              goTo(EOperatorTutorialSteps.COOLING_USER_MODAL_STEP);
+              if (user?.role === ERoles.OPERATOR) {
+                rootNavigation.navigate('Management', { screen: 'CoolingUsers' });
+                emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true);
+                goTo(EOperatorTutorialSteps.COOLING_USER_MODAL_STEP);
+              } else if (user?.role === ERoles.EMPLOYEE) {
+                rootNavigation.navigate('Management', { screen: 'Root' });
+                goTo(EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP);
+              } else {
+                // TODO:
+              }
             }}
             labelStyle="text-green-primary"
           >

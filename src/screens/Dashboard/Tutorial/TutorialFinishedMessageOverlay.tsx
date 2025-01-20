@@ -15,7 +15,7 @@ import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
-import { EOperatorTutorialSteps } from './utils/constants';
+import { EEmployeeTutorialSteps, EOperatorTutorialSteps } from './utils/constants';
 import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
 
 const MOCKED_PARAMS = {
@@ -56,23 +56,29 @@ export const TutorialFinishedMessageOverlay = ({
               icon="arrow-left"
               mode="text"
               onPress={() => {
-                // eslint-disable-next-line
-                // @ts-ignore
-                rootNavigation.navigate('Main', {
-                  screen: 'Dashboard',
-                  params: {
-                    screen: 'CheckOutStack',
+                if (user?.role === ERoles.OPERATOR) {
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  rootNavigation.navigate('Main', {
+                    screen: 'Dashboard',
                     params: {
-                      screen: 'BillingInfo',
+                      screen: 'CheckOutStack',
                       params: {
-                        ...MOCKED_PARAMS,
-                        user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
+                        screen: 'BillingInfo',
+                        params: {
+                          ...MOCKED_PARAMS,
+                          user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
+                        },
                       },
                     },
-                  },
-                });
+                  });
 
-                goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_3);
+                  goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_3);
+                } else if (user?.role === ERoles.EMPLOYEE) {
+                  goTo(EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP);
+                } else {
+                  // TODO:
+                }
               }}
               labelStyle="text-green-primary"
             >

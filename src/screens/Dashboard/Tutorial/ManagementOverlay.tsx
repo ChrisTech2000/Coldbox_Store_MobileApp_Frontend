@@ -15,8 +15,8 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+import { ECommonTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
-import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -91,7 +91,7 @@ export function ManagementOverlay({ next, goTo, stop }: IOverlayComponentProps) 
               onPress={() => {
                 rootNavigation.goBack();
                 rootNavigation.dispatch(DrawerActions.openDrawer());
-                goTo(EOperatorTutorialSteps.GO_TO_MANAGEMENT_STEP);
+                goTo(ECommonTutorialSteps.GO_TO_MANAGEMENT_STEP);
               }}
               labelStyle="text-green-primary"
             >

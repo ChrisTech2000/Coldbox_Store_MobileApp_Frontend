@@ -11,10 +11,11 @@ import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { EEmployeeTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function AddLocationOverlay({ next, stop }: IOverlayComponentProps) {
+export function AddLocationOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -37,7 +38,32 @@ export function AddLocationOverlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.locations')}</Text>
 
-        <View tw="flex flex-row space-x-2 items-center justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              rootNavigation.goBack();
+              goTo(EEmployeeTutorialSteps.LOCATIONS_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={() => {
+              rootNavigation.goBack();
+              next();
+            }}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
@@ -45,20 +71,9 @@ export function AddLocationOverlay({ next, stop }: IOverlayComponentProps) {
               toggleTutorial(false);
               rootNavigation.navigate('Dashboard');
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="contained"
-            onPress={() => {
-              rootNavigation.goBack();
-              next();
-            }}
-            labelStyle="text-white"
-            tw="bg-green-primary"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
