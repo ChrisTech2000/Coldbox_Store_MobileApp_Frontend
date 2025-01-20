@@ -32,11 +32,6 @@ import DeleteAction from './components/DeleteAction';
 
 const width = (Dimensions.get('window').width - 42) / 2;
 
-type FormStateBuilder = {
-  getFormValues: () => FormValues;
-  getExtraValues: () => { pricingId: number };
-};
-
 type Props = {
   coolingUnitId: number;
   companyId: number | undefined;
@@ -53,7 +48,7 @@ export default function ScreenContainer(props: Props) {
 
   const navigation = useNavigation();
 
-  const initialFormValues = useRef<FormStateBuilder | undefined>(undefined);
+  const initialFormValues = useRef<FormValues | undefined>(undefined);
   useFocusEffect(() => (initialFormValues.current = undefined));
 
   const {
@@ -89,8 +84,6 @@ export default function ScreenContainer(props: Props) {
   }
 
   async function onSubmit(values: PreprocessedFormValues): Promise<void> {
-    if (typeof initialFormValues.current === 'undefined') return;
-
     try {
       await ColdtivateService.editCoolingUnit(
         {
@@ -144,7 +137,7 @@ export default function ScreenContainer(props: Props) {
           roomWidth: values.roomWidth,
           coolingUnitType: values.coolingUnitType ?? '',
           editableCheckins: values.editableCheckins,
-          ...initialFormValues.current.getExtraValues(),
+          pricingId: unit.commonPricingType?.pricingId,
         },
         coolingUnitId
       );
@@ -182,7 +175,7 @@ export default function ScreenContainer(props: Props) {
       keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
       showsVerticalScrollIndicator={false}
     >
-      <FormManager onSubmit={onSubmit} initialValues={initialFormValues.current.getFormValues()}>
+      <FormManager onSubmit={onSubmit} initialValues={initialFormValues.current}>
         {({ submitHandler, isSubmitting }) => (
           <React.Fragment>
             <View tw="flex-row items-center space-x-3 mb-3 mx-3.5 w-[85%]">
@@ -223,81 +216,73 @@ export default function ScreenContainer(props: Props) {
 function _buildInitialValues(
   unit: GetCoolingUnitResponse,
   companyCrops: Array<number>
-): FormStateBuilder {
+): FormValues {
+  const crops: FormValues['crops'] = [];
+  for (const crop of unit.crops) {
+    if (crop.active && companyCrops.includes(crop.cropId)) {
+      crops.push(crop.cropId);
+    }
+    continue;
+  }
+
+  const powerOptions = unit.powerOptions.at(0);
+  const commonPrice = unit.commonPricingType?.value?.toString() ?? '';
+
+  const cropSpecificPricing = CropPricingManager.init({
+    unitCrops: unit.crops.filter((unitCrop) => crops.includes(unitCrop.cropId)),
+    commonPrice,
+  });
+
   return {
-    getFormValues: () => {
-      const crops: FormValues['crops'] = [];
-      for (const crop of unit.crops) {
-        if (crop.active && companyCrops.includes(crop.cropId)) {
-          crops.push(crop.cropId);
-        }
-        continue;
-      }
-
-      const powerOptions = unit.powerOptions.at(0);
-      const commonPrice = unit.commonPricingType?.value?.toString() ?? '';
-
-      const cropSpecificPricing = CropPricingManager.init({
-        unitCrops: unit.crops.filter((unitCrop) => crops.includes(unitCrop.cropId)),
-        commonPrice,
-      });
-
-      return {
-        name: unit.name ?? '',
-        location: unit.location ?? null,
-        coolingUnitType: (unit?.coolingUnitType as FormValues['coolingUnitType']) ?? null,
-        priceType:
-          (unit.commonPricingType?.type as FormValues['priceType']) ?? PRICING_TYPE.PER_DAY,
-        metricUnit:
-          (unit.commonPricingType?.metric as FormValues['metricUnit']) ?? METRIC_UNITS.CRATES,
-        price: commonPrice,
-        capacityInMetricTons: unit.capacityInMetricTons?.toString() ?? '',
-        foodCapacityInMetricTons: unit.foodCapacityInMetricTons?.toString() ?? '',
-        roomLength: unit.roomLength?.toString() ?? '',
-        roomWidth: unit.roomWidth?.toString() ?? '',
-        roomHeight: unit.roomHeight?.toString() ?? '',
-        roomWeight: unit.roomWeight?.toString() ?? '',
-        roomInsulator: powerOptions?.roomInsulator?.toString() ?? '',
-        capacityInNumberCrates: unit.capacityInNumberCrates?.toString() ?? '',
-        crateWeight: unit.crateWeight?.toString() ?? '25',
-        crateLength: unit.crateLength?.toString() ?? '',
-        crateWidth: unit.crateWidth?.toString() ?? '',
-        crateHeight: unit.crateHeight?.toString() ?? '',
-        editableCheckins: unit.editableCheckins ?? true,
-        sensor: unit.sensor ?? false,
-        sensorData: undefined,
-        public: unit.public ?? false,
-        operators: unit.operators ?? [],
-        crops,
-        cropSpecificPricing,
-        refrigerantType: powerOptions?.refrigerantType ?? '',
-        amountRefrigerant: powerOptions?.amountRefrigerant?.toString() ?? '',
-        powerConsumptionInMt: powerOptions?.powerConsumptionInMt?.toString() ?? '',
-        dailyRoomWattage: powerOptions?.dailyRoomWattage?.toString() ?? '',
-        powerSource: powerOptions?.powerSource ?? null,
-        electricityStorageSystem:
-          (powerOptions?.electricityStorageSystem as FormValues['electricityStorageSystem']) ??
-          null,
-        powerSourceDieselConsumptionKwh:
-          powerOptions?.powerSourceDieselConsumptionKwh?.toString() ?? '',
-        pvPanelCount: powerOptions?.pvPanelCount?.toString() ?? '',
-        pvPanelType: (powerOptions?.pvPanelType as FormValues['pvPanelType']) ?? null,
-        pvPanelSize: powerOptions?.pvPanelSize?.toString() ?? '',
-        pvPanelWeight: powerOptions?.pvPanelWeight?.toString() ?? '',
-        pvPanelMaxPower: powerOptions?.pvPanelMaxPower?.toString() ?? '',
-        powerSourceDieselPercent: powerOptions?.powerSourceDieselPercent?.toString() ?? '',
-        powerSourceGridPercent: powerOptions?.powerSourceGridPercent?.toString() ?? '',
-        powerSourcePvPercent: powerOptions?.powerSourcePvPercent?.toString() ?? '',
-        powerSourceBiomassPercent: powerOptions?.powerSourceBiomassPercent?.toString() ?? '',
-        batteryType: (powerOptions?.batteryType as FormValues['batteryType']) ?? null,
-        batteryCount: powerOptions?.batteryCount?.toString() ?? '',
-        batteryWeight: powerOptions?.batteryWeight?.toString() ?? '',
-        batteryCapacity: powerOptions?.batteryCapacity?.toString() ?? '',
-        batteryMaxCurrent: powerOptions?.batteryMaxCurrent?.toString() ?? '',
-        batteryPeakEnergyStorage: powerOptions?.batteryPeakEnergyStorage?.toString() ?? '',
-        thermalStorageMethod: powerOptions?.thermalStorageMethod ?? null,
-      };
-    },
-    getExtraValues: () => ({ pricingId: unit.commonPricingType?.pricingId }),
+    name: unit.name ?? '',
+    location: unit.location ?? null,
+    coolingUnitType: (unit?.coolingUnitType as FormValues['coolingUnitType']) ?? null,
+    priceType: (unit.commonPricingType?.type as FormValues['priceType']) ?? PRICING_TYPE.PER_DAY,
+    metricUnit: (unit.commonPricingType?.metric as FormValues['metricUnit']) ?? METRIC_UNITS.CRATES,
+    price: commonPrice,
+    capacityInMetricTons: unit.capacityInMetricTons?.toString() ?? '',
+    foodCapacityInMetricTons: unit.foodCapacityInMetricTons?.toString() ?? '',
+    roomLength: unit.roomLength?.toString() ?? '',
+    roomWidth: unit.roomWidth?.toString() ?? '',
+    roomHeight: unit.roomHeight?.toString() ?? '',
+    roomWeight: unit.roomWeight?.toString() ?? '',
+    roomInsulator: powerOptions?.roomInsulator?.toString() ?? '',
+    capacityInNumberCrates: unit.capacityInNumberCrates?.toString() ?? '',
+    crateWeight: unit.crateWeight?.toString() ?? '25',
+    crateLength: unit.crateLength?.toString() ?? '',
+    crateWidth: unit.crateWidth?.toString() ?? '',
+    crateHeight: unit.crateHeight?.toString() ?? '',
+    editableCheckins: unit.editableCheckins ?? true,
+    sensor: unit.sensor ?? false,
+    sensorData: undefined,
+    public: unit.public ?? false,
+    operators: unit.operators ?? [],
+    crops,
+    cropSpecificPricing,
+    refrigerantType: powerOptions?.refrigerantType ?? '',
+    amountRefrigerant: powerOptions?.amountRefrigerant?.toString() ?? '',
+    powerConsumptionInMt: powerOptions?.powerConsumptionInMt?.toString() ?? '',
+    dailyRoomWattage: powerOptions?.dailyRoomWattage?.toString() ?? '',
+    powerSource: powerOptions?.powerSource ?? null,
+    electricityStorageSystem:
+      (powerOptions?.electricityStorageSystem as FormValues['electricityStorageSystem']) ?? null,
+    powerSourceDieselConsumptionKwh:
+      powerOptions?.powerSourceDieselConsumptionKwh?.toString() ?? '',
+    pvPanelCount: powerOptions?.pvPanelCount?.toString() ?? '',
+    pvPanelType: (powerOptions?.pvPanelType as FormValues['pvPanelType']) ?? null,
+    pvPanelSize: powerOptions?.pvPanelSize?.toString() ?? '',
+    pvPanelWeight: powerOptions?.pvPanelWeight?.toString() ?? '',
+    pvPanelMaxPower: powerOptions?.pvPanelMaxPower?.toString() ?? '',
+    powerSourceDieselPercent: powerOptions?.powerSourceDieselPercent?.toString() ?? '',
+    powerSourceGridPercent: powerOptions?.powerSourceGridPercent?.toString() ?? '',
+    powerSourcePvPercent: powerOptions?.powerSourcePvPercent?.toString() ?? '',
+    powerSourceBiomassPercent: powerOptions?.powerSourceBiomassPercent?.toString() ?? '',
+    batteryType: (powerOptions?.batteryType as FormValues['batteryType']) ?? null,
+    batteryCount: powerOptions?.batteryCount?.toString() ?? '',
+    batteryWeight: powerOptions?.batteryWeight?.toString() ?? '',
+    batteryCapacity: powerOptions?.batteryCapacity?.toString() ?? '',
+    batteryMaxCurrent: powerOptions?.batteryMaxCurrent?.toString() ?? '',
+    batteryPeakEnergyStorage: powerOptions?.batteryPeakEnergyStorage?.toString() ?? '',
+    thermalStorageMethod: powerOptions?.thermalStorageMethod ?? null,
   };
 }
