@@ -61,7 +61,8 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
               } else if (user?.role === ERoles.EMPLOYEE) {
                 goTo(ECommonTutorialSteps.COOLING_UNIT_STEP);
               } else {
-                // TODO:
+                navigation.navigate('Maps');
+                goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP);
               }
             }}
             labelStyle="text-green-primary"

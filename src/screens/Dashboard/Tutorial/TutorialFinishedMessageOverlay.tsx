@@ -15,7 +15,11 @@ import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
-import { EEmployeeTutorialSteps, EOperatorTutorialSteps } from './utils/constants';
+import {
+  EEmployeeTutorialSteps,
+  EFarmerTutorialSteps,
+  EOperatorTutorialSteps,
+} from './utils/constants';
 import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
 
 const MOCKED_PARAMS = {
@@ -77,7 +81,8 @@ export const TutorialFinishedMessageOverlay = ({
                 } else if (user?.role === ERoles.EMPLOYEE) {
                   goTo(EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP);
                 } else {
-                  // TODO:
+                  rootNavigation.navigate('MarketPrice');
+                  goTo(EFarmerTutorialSteps.MARKET_PRICE);
                 }
               }}
               labelStyle="text-green-primary"

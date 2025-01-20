@@ -7,13 +7,15 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { useAuthStore } from '#stores/auth';
 import { useCheckInStore } from '#stores/checkIn';
 import { useTutorialStore } from '#stores/tutorial';
+import { ERoles } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
-import { EOperatorTutorialSteps } from './utils/constants';
+import { EFarmerTutorialSteps, EOperatorTutorialSteps } from './utils/constants';
 import { MOCKED_CHECK_IN_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
 
 const screenHeight = Dimensions.get('window').height;
@@ -23,6 +25,7 @@ export function MoreNavigationOverlay({ next, goTo, stop }: IOverlayComponentPro
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const setProduces = useCheckInStore((store) => store.setProduces);
+  const user = useAuthStore((store) => store.user);
 
   return (
     <View tw="h-full w-full absolute">
@@ -47,19 +50,23 @@ export function MoreNavigationOverlay({ next, goTo, stop }: IOverlayComponentPro
             icon="arrow-left"
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              setProduces(MOCKED_CHECK_IN_DATA);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('CheckInStack', {
-                screen: 'CheckIn',
+              if (user?.role === ERoles.OPERATOR) {
                 // eslint-disable-next-line
                 // @ts-ignore
-                params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
-              });
+                setProduces(MOCKED_CHECK_IN_DATA);
+                // eslint-disable-next-line
+                // @ts-ignore
+                rootNavigation.navigate('CheckInStack', {
+                  screen: 'CheckIn',
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
+                });
 
-              goTo(EOperatorTutorialSteps.CHECK_IN_STEP_3);
+                goTo(EOperatorTutorialSteps.CHECK_IN_STEP_3);
+              } else if (user?.role === ERoles.COOLING_USER) {
+                goTo(EFarmerTutorialSteps.DASHBOARD_STEP_6);
+              }
             }}
             labelStyle="text-green-primary"
           >

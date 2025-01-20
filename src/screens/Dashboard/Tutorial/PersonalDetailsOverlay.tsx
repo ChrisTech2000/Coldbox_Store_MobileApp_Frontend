@@ -12,10 +12,11 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { EFarmerTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function PersonalDetailsOverlay({ next, stop }: IOverlayComponentProps) {
+export function PersonalDetailsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -59,7 +60,28 @@ export function PersonalDetailsOverlay({ next, stop }: IOverlayComponentProps) {
         >
           <Text tw="text-base">{t('tutorial.steps.coolingUserCode')}</Text>
 
-          <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+          <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+            <Button
+              icon="arrow-left"
+              mode="text"
+              onPress={() => {
+                goTo(EFarmerTutorialSteps.GO_TO_LOCALIZATION_PREFERENCES_STEP);
+              }}
+              labelStyle="text-green-primary"
+            >
+              {t('tutorial.prev')}
+            </Button>
+
+            <Button
+              icon="arrow-right"
+              mode="text"
+              onPress={next}
+              labelStyle="text-green-primary"
+              contentStyle="flex flex-row-reverse"
+            >
+              {t('actions.continue')}
+            </Button>
+
             <Button
               mode="text"
               onPress={() => {
@@ -67,17 +89,9 @@ export function PersonalDetailsOverlay({ next, stop }: IOverlayComponentProps) {
                 toggleTutorial(false);
                 rootNavigation.navigate('Dashboard');
               }}
-              labelStyle="text-green-primary"
+              labelStyle="text-red-700"
             >
               {t('tutorial.quit')}
-            </Button>
-            <Button
-              mode="text"
-              onPress={next}
-              tw="bg-green-primary border-green-primary"
-              labelStyle="text-white"
-            >
-              {t('actions.continue')}
             </Button>
           </View>
         </View>

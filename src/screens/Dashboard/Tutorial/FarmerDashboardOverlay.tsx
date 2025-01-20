@@ -1,3 +1,5 @@
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
@@ -6,20 +8,21 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import { useRightDrawerStore } from '#navigation/Dashboard';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 
-import { ECommonTutorialSteps } from './utils/constants';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function Dashboard1Overlay({ next, stop }: IOverlayComponentProps) {
+export function Dashboard1Overlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -36,26 +39,38 @@ export function Dashboard1Overlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.dashboardStep1')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              rootNavigation.dispatch(DrawerActions.openDrawer());
+              goTo(EFarmerTutorialSteps.GO_TO_FAQ_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={next}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
               stop();
               toggleTutorial(false);
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="text"
-            onPress={() => {
-              next();
-            }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
@@ -63,7 +78,7 @@ export function Dashboard1Overlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function Dashboard2Overlay({ next, stop }: IOverlayComponentProps) {
+export function Dashboard2Overlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -85,26 +100,37 @@ export function Dashboard2Overlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.dashboardStep2')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              goTo(EFarmerTutorialSteps.DASHBOARD_STEP_1);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={next}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
               stop();
               toggleTutorial(false);
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="text"
-            onPress={() => {
-              next();
-            }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
@@ -112,7 +138,7 @@ export function Dashboard2Overlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function Dashboard3Overlay({ next, stop }: IOverlayComponentProps) {
+export function Dashboard3Overlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -134,26 +160,37 @@ export function Dashboard3Overlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.dashboardStep3')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              goTo(EFarmerTutorialSteps.DASHBOARD_STEP_2);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={next}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
               stop();
               toggleTutorial(false);
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="text"
-            onPress={() => {
-              next();
-            }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
@@ -161,7 +198,7 @@ export function Dashboard3Overlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function Dashboard4Overlay({ next, stop }: IOverlayComponentProps) {
+export function Dashboard4Overlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -180,26 +217,37 @@ export function Dashboard4Overlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.dashboardStep4')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              goTo(EFarmerTutorialSteps.DASHBOARD_STEP_3);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={next}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
               stop();
               toggleTutorial(false);
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="text"
-            onPress={() => {
-              next();
-            }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
@@ -207,7 +255,7 @@ export function Dashboard4Overlay({ next, stop }: IOverlayComponentProps) {
   );
 }
 
-export function Dashboard5Overlay({ next, stop }: IOverlayComponentProps) {
+export function Dashboard5Overlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
@@ -226,24 +274,37 @@ export function Dashboard5Overlay({ next, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.dashboardStep5')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              goTo(EFarmerTutorialSteps.DASHBOARD_STEP_4);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={next}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
               stop();
               toggleTutorial(false);
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="text"
-            onPress={next}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
@@ -289,18 +350,23 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.dashboardStep6')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
+            icon="arrow-left"
             mode="text"
             onPress={() => {
-              stop();
-              toggleTutorial(false);
+              if (isOpen) {
+                toggle();
+              }
+              goTo(EFarmerTutorialSteps.DASHBOARD_STEP_5);
             }}
             labelStyle="text-green-primary"
           >
-            {t('tutorial.quit')}
+            {t('tutorial.prev')}
           </Button>
+
           <Button
+            icon="arrow-right"
             mode="text"
             onPress={() => {
               if (isOpen) {
@@ -309,10 +375,21 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
               navigation.dispatch(DrawerActions.closeDrawer());
               goTo(ECommonTutorialSteps.MORE_STEP);
             }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
           >
             {t('actions.continue')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
           </Button>
         </View>
       </View>

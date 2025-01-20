@@ -44,6 +44,9 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
             icon="arrow-left"
             mode="text"
             onPress={() => {
+              if (user?.role === ERoles.COOLING_USER) {
+                rootNavigation.navigate('Main', { screen: 'Dashboard' });
+              }
               goTo(ECommonTutorialSteps.MORE_STEP);
             }}
             labelStyle="text-green-primary"
@@ -55,12 +58,17 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
             icon="arrow-right"
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('CoolingUnits', { screen: 'Planner' });
-              user?.role === ERoles.COOLING_USER
-                ? goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP)
-                : next();
+              if (user?.role === ERoles.COOLING_USER) {
+                // eslint-disable-next-line
+                // @ts-ignore
+                rootNavigation.navigate('CoolingUnits', { screen: 'Maps' });
+                goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP);
+              } else {
+                // eslint-disable-next-line
+                // @ts-ignore
+                rootNavigation.navigate('CoolingUnits', { screen: 'Planner' });
+                next();
+              }
             }}
             labelStyle="text-green-primary"
             contentStyle="flex flex-row-reverse"
