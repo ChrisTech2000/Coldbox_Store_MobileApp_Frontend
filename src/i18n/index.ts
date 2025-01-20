@@ -1,7 +1,10 @@
+import { useEffect, useState } from 'react';
 import i18n, { type InitOptions } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import { APP_LOCALES, DEFAULT_APP_LOCALE, type TranslationLocales } from './constants';
+import { ENVIRONMENT } from '#constants/environment';
+
+import { APP_LOCALES, DEFAULT_APP_LOCALE } from './constants';
 import englishTranslations from './transl/en';
 import frenchTranslations from './transl/fr';
 import gujaratiTranslations from './transl/gu';
@@ -14,10 +17,12 @@ import yorubaTranslations from './transl/yo';
 
 import { LanguageManager } from './utils';
 
-export default async function initI18n(): Promise<TranslationLocales> {
+async function _initializeI18nConfiguration(): Promise<void> {
   const initialLanguage = LanguageManager.initializeLanguage();
 
-  i18n.use(initReactI18next);
+  if (!i18n.isInitialized) {
+    i18n.use(initReactI18next);
+  }
 
   await i18n.init({
     resources: {
@@ -57,11 +62,25 @@ export default async function initI18n(): Promise<TranslationLocales> {
     interpolation: {
       escapeValue: false,
     },
-    debug: false,
+    debug: typeof ENVIRONMENT === 'string' && ENVIRONMENT === 'development',
     compatibilityJSON: 'v3',
   } satisfies InitOptions);
 
   i18n.on('languageChanged', LanguageManager.onLanguageChange);
 
-  return initialLanguage;
+  LanguageManager.setDateFnsLocale(initialLanguage);
+}
+
+export function useI18n(): boolean {
+  const [isReady, setIsReady] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function bootstrap(): Promise<void> {
+      await _initializeI18nConfiguration();
+      setIsReady(true);
+    }
+    void bootstrap();
+  }, []);
+
+  return isReady;
 }

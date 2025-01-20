@@ -1,6 +1,6 @@
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StatusBar } from 'react-native';
 import BootSplash from 'react-native-bootsplash';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -23,9 +23,7 @@ import { useAuthManager } from './stores/auth';
 import { useGlobalInformation } from './stores/dashboard';
 import { useCartInformation } from './stores/shoppingCart';
 import { navigatorTheme, paperTheme } from './ui/lib/theme';
-
-import initI18n from './i18n';
-import { LanguageManager } from './i18n/utils';
+import { useI18n } from './i18n';
 
 if (typeof ENVIRONMENT === 'string' && ENVIRONMENT !== 'development') {
   Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
@@ -34,18 +32,11 @@ if (typeof ENVIRONMENT === 'string' && ENVIRONMENT !== 'development') {
 enableExperimentalLayoutAnimation();
 
 function App() {
+  const isI18nReady = useI18n();
+
   const isAuthenticated = useAuthManager();
   useGlobalInformation(isAuthenticated);
   useCartInformation(isAuthenticated);
-
-  const [isI18nReady, setIsI18nReady] = React.useState<boolean>(false);
-
-  useEffect(() => {
-    initI18n().then((initialLanguage) => {
-      LanguageManager.setDateFnsLocale(initialLanguage);
-      setIsI18nReady(true);
-    });
-  }, []);
 
   if (!isI18nReady) return null;
 
