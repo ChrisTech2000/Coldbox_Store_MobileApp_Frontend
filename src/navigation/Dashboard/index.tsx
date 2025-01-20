@@ -11,7 +11,7 @@ import { useShallow } from 'zustand/react/shallow';
 import FAQ from '#screens/Dashboard/FAQ';
 
 import RBAC from '#common/RBAC';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
@@ -136,7 +136,7 @@ export default function DashboardNavigator() {
         open={isOpen}
         onOpen={() => toggle(true)}
         onClose={() => toggle(false)}
-        drawerPosition="right"
+        drawerPosition={LanguageManager.isRTL ? 'left' : 'right'}
         swipeEnabled={false}
         renderDrawerContent={() => (
           <React.Fragment>

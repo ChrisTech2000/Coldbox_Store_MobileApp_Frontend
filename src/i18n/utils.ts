@@ -11,37 +11,49 @@ import type { TOptions } from 'i18next';
 import moize from 'moize';
 import ms from 'ms';
 import { useCallback, useMemo } from 'react';
+import { I18nManager } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { getLocales, getTimeZone } from 'react-native-localize';
 import { z } from 'zod';
+import RNRestart from 'react-native-restart';
 
+import type { RecursiveKeyOf } from '#types/miscellaneous';
 import { mmkv } from '#stores/lib/storage';
 
+import type { Translations } from './transl/en';
 import { APP_LOCALES, DEFAULT_APP_LOCALE, type TranslationLocales } from './constants';
-import type { TranslationPaths } from './index';
 import { ha as hausaLocale } from './plugins/ha';
 import { ig as igboLocale } from './plugins/ig';
 import { or as oriyaLocale } from './plugins/or';
 import { yo as yorubaLocale } from './plugins/yo';
 
+type TranslationPaths = RecursiveKeyOf<Translations>;
+
 ///
 // Storage Manager
 ///
+let _currentDateFnsLocale: Locale;
 
 export class LanguageManager {
   private static readonly _KEY = 'i18n-locale';
   private static readonly _locales = new Set<string>(Object.values(APP_LOCALES));
+  private static readonly _rtlLocales = new Set<string>([APP_LOCALES.PORTUGUESE]); // TODO -> add RTL language codes from APP_LOCALES
 
   public static persist(language: string): void {
-    mmkv.set(LanguageManager._KEY, language);
+    const validatedLanguage = LanguageManager.safeValue(language);
+    LanguageManager.loadDateFnsLocale(validatedLanguage);
+    mmkv.set(LanguageManager._KEY, validatedLanguage);
+    LanguageManager._setLayoutDirection(validatedLanguage);
   }
 
   public static read(useCache = true): TranslationLocales {
-    const storedValue = useCache
+    const storedLanguage = useCache
       ? LanguageManager._getCachedValue()
       : LanguageManager._getPersistedValue();
-    const languageToUse = storedValue || LanguageManager._derivedSystemLocale();
-    return LanguageManager.safeValue(languageToUse);
+    const preferredLanguage = storedLanguage || LanguageManager._derivedSystemLocale();
+    const validatedLanguage = LanguageManager.safeValue(preferredLanguage);
+    LanguageManager._setLayoutDirection(validatedLanguage);
+    return validatedLanguage;
   }
 
   public static safeValue(locale?: string): TranslationLocales {
@@ -49,6 +61,25 @@ export class LanguageManager {
       return locale as TranslationLocales;
     }
     return DEFAULT_APP_LOCALE;
+  }
+
+  public static get isRTL(): boolean {
+    return this._rtlLocales.has(LanguageManager.read());
+  }
+
+  public static loadDateFnsLocale(locale: TranslationLocales) {
+    const _localeMap: Record<TranslationLocales, Locale> = {
+      hi: hindiLocale,
+      pt: portugueseLocale,
+      gu: gujaratiLocale,
+      fr: frenchLocale,
+      ha: hausaLocale,
+      ig: igboLocale,
+      or: oriyaLocale,
+      yo: yorubaLocale,
+      en: englishLocale,
+    };
+    _currentDateFnsLocale = _localeMap[locale];
   }
 
   private static _getPersistedValue(): string | undefined {
@@ -63,6 +94,18 @@ export class LanguageManager {
     () => {
       const devicePrimaryLocale = getLocales().at(0);
       return devicePrimaryLocale?.languageCode;
+    },
+    { maxAge: ms('3 seconds') }
+  );
+
+  private static _setLayoutDirection = moize(
+    (locale: string): void => {
+      const isRTL = this._rtlLocales.has(locale);
+      if (I18nManager.isRTL !== isRTL) {
+        I18nManager.allowRTL(isRTL);
+        I18nManager.forceRTL(isRTL);
+        RNRestart.restart();
+      }
     },
     { maxAge: ms('3 seconds') }
   );
@@ -87,8 +130,7 @@ export function useTranslationUtils() {
 
   const _fireMutation = useCallback(async (locale: TranslationLocales) => {
     try {
-      const language = LanguageManager.safeValue(locale);
-      await i18n.changeLanguage(language);
+      await i18n.changeLanguage(locale);
     } catch {
       // silent error
     }
@@ -108,34 +150,11 @@ export function useTranslationUtils() {
 // Date Format Related
 ///
 
-function _derivedLocale(): Locale {
-  switch (LanguageManager.read()) {
-    case 'hi':
-      return hindiLocale;
-    case 'pt':
-      return portugueseLocale;
-    case 'gu':
-      return gujaratiLocale;
-    case 'fr':
-      return frenchLocale;
-    case 'ha':
-      return hausaLocale;
-    case 'ig':
-      return igboLocale;
-    case 'or':
-      return oriyaLocale;
-    case 'yo':
-      return yorubaLocale;
-    default:
-      return englishLocale;
-  }
-}
-
 type Options = Parameters<typeof formatInTimeZone>[3];
 
 export function dateFmt(timestamp: string, dateFormat?: string, opts?: Options): string {
   return formatInTimeZone(parseISO(timestamp), getTimeZone(), dateFormat ?? 'dd/MM/yyyy', {
     ...opts,
-    locale: _derivedLocale(),
+    locale: _currentDateFnsLocale,
   });
 }

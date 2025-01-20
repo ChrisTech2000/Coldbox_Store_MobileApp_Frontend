@@ -5,7 +5,7 @@ import { Appbar } from 'react-native-paper';
 
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import type { TranslationPaths } from '#i18n/index';
-import type { Translator } from '#i18n/utils';
+import { LanguageManager, Translator } from '#i18n/utils';
 
 import type { DashboardRoutes, DashboardRoutePaths } from '../index';
 
@@ -34,7 +34,7 @@ export default function DashboardScreenOptions(
   return {
     ...props,
     headerShown: typeof routeTitle !== 'undefined',
-    drawerPosition: 'left',
+    drawerPosition: LanguageManager.isRTL ? 'right' : 'left',
     header: (headerProps) => (
       <NavigatorHeader
         {...headerProps}

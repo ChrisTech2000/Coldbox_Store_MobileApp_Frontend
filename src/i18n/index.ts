@@ -1,11 +1,8 @@
 import i18n, { type InitOptions } from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { I18nManager } from 'react-native';
-import { getLocales } from 'react-native-localize';
 
-import type { RecursiveKeyOf } from '#types/miscellaneous';
-import { APP_LOCALES, DEFAULT_APP_LOCALE } from './constants';
-import englishTranslations, { type Translations } from './transl/en';
+import { APP_LOCALES, DEFAULT_APP_LOCALE, type TranslationLocales } from './constants';
+import englishTranslations from './transl/en';
 import frenchTranslations from './transl/fr';
 import gujaratiTranslations from './transl/gu';
 import hindiTranslations from './transl/hi';
@@ -17,16 +14,12 @@ import yorubaTranslations from './transl/yo';
 
 import { LanguageManager } from './utils';
 
-export type TranslationPaths = RecursiveKeyOf<Translations>;
-
-export const isRTL = getLocales().at(0)?.isRTL ?? false;
-
-I18nManager.allowRTL(isRTL);
-I18nManager.forceRTL(isRTL);
-
-function _optionsFactory() {
+export default async function initI18n(): Promise<TranslationLocales> {
   const initialLanguage = LanguageManager.read();
-  return {
+
+  i18n.use(initReactI18next);
+
+  await i18n.init({
     resources: {
       [APP_LOCALES.ENGLISH]: {
         translation: englishTranslations,
@@ -66,10 +59,9 @@ function _optionsFactory() {
     },
     debug: false,
     compatibilityJSON: 'v3',
-  } satisfies InitOptions;
+  } satisfies InitOptions);
+
+  i18n.on('languageChanged', LanguageManager.persist);
+
+  return initialLanguage;
 }
-
-i18n.use(initReactI18next).init(_optionsFactory());
-i18n.on('languageChanged', LanguageManager.persist);
-
-export default i18n;
