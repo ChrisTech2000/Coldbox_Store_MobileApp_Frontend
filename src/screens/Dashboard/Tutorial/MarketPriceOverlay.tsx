@@ -32,7 +32,32 @@ export function MarketPriceOverlay({ goTo, stop }: IOverlayComponentProps) {
       >
         <Text tw="text-base">{t('tutorial.steps.marketPrice')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              rootNavigation.navigate('CoolingUnits', { screen: 'Planner' });
+              goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={() => {
+              rootNavigation.navigate('Dashboard');
+              goTo(ECommonTutorialSteps.FINAL_STEP);
+            }}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
@@ -40,20 +65,9 @@ export function MarketPriceOverlay({ goTo, stop }: IOverlayComponentProps) {
               toggleTutorial(false);
               rootNavigation.navigate('Dashboard');
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="text"
-            onPress={() => {
-              rootNavigation.navigate('Dashboard');
-              goTo(ECommonTutorialSteps.FINAL_STEP);
-            }}
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>

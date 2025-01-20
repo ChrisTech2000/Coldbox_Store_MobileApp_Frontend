@@ -8,22 +8,24 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { DashboardRoutes } from '#navigation/Dashboard';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+
+import { EEmployeeTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementCoolingUnitsOverlay({ next, stop }: IOverlayComponentProps) {
+export function ManagementCoolingUnitsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
 
@@ -51,14 +53,7 @@ export function ManagementCoolingUnitsOverlay({ next, stop }: IOverlayComponentP
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
           />
 
-          <Animated.View
-            style={[
-              {
-                opacity: blinkAnim,
-              },
-            ]}
-            tw="-top-2/3 -right-2/3"
-          >
+          <Animated.View style={[{ opacity: blinkAnim }]} tw="-top-2/3 -right-2/3">
             <MaterialIcon
               name="touch-app"
               size={screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 40}
@@ -82,18 +77,31 @@ export function ManagementCoolingUnitsOverlay({ next, stop }: IOverlayComponentP
           ]}
         >
           <Text tw="text-base">{t('tutorial.steps.navigateToCoolingUnits')}</Text>
-          <Button
-            mode="text"
-            onPress={() => {
-              stop();
-              toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
-            }}
-            labelStyle="text-green-primary"
-            tw="mt-2"
-          >
-            {t('tutorial.quit')}
-          </Button>
+
+          <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+            <Button
+              icon="arrow-left"
+              mode="text"
+              onPress={() => {
+                rootNavigation.navigate('Management', { screen: 'AddLocation' });
+                goTo(EEmployeeTutorialSteps.ADD_LOCATION_STEP);
+              }}
+              labelStyle="text-green-primary"
+            >
+              {t('tutorial.prev')}
+            </Button>
+            <Button
+              mode="text"
+              onPress={() => {
+                stop();
+                toggleTutorial(false);
+                rootNavigation.navigate('Main', { screen: 'Dashboard' });
+              }}
+              labelStyle="text-red-700"
+            >
+              {t('tutorial.quit')}
+            </Button>
+          </View>
         </View>
       </View>
     </View>

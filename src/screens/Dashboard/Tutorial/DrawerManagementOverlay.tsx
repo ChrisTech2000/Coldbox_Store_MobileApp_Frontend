@@ -16,7 +16,7 @@ import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 
-import { EEmployeeTutorialSteps } from './utils/constants';
+import { ECommonTutorialSteps, EEmployeeTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
@@ -98,17 +98,27 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
             ? t('tutorial.steps.managementNavigation')
             : t('tutorial.steps.operatorManagementNavigation')}
         </Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            stop();
-            toggleTutorial(false);
-          }}
-          labelStyle="text-green-primary"
-          tw="mt-4"
-        >
-          {t('tutorial.quit')}
-        </Button>
+
+        <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => goTo(ECommonTutorialSteps.REPEAT_TUTORIAL_STEP)}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
       </View>
     </View>
   );

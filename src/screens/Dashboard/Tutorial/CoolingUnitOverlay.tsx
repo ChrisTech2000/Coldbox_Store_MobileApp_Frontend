@@ -1,25 +1,30 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
-import { ERoles } from '#types/global';
 import { useTutorialStore } from '#stores/tutorial';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { ERoles } from '#types/global';
 
-import { ECommonTutorialSteps, EEmployeeTutorialSteps } from './utils/constants';
+import {
+  ECommonTutorialSteps,
+  EEmployeeTutorialSteps,
+  EOperatorTutorialSteps,
+} from './utils/constants';
+import { DashboardRoutes } from 'navigation/Dashboard';
 
 export function CoolingUnitOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -36,19 +41,29 @@ export function CoolingUnitOverlay({ next, goTo, stop }: IOverlayComponentProps)
       >
         <Text tw="text-base">{t('tutorial.steps.coolingUnitStep')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
+            icon="arrow-left"
             mode="text"
             onPress={() => {
-              stop();
-              toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
+              if (user?.role === ERoles.OPERATOR) {
+                rootNavigation.navigate('Management', { screen: 'CoolingUsers' });
+                emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true);
+                goTo(EOperatorTutorialSteps.COOLING_USER_MODAL_STEP);
+              } else if (user?.role === ERoles.EMPLOYEE) {
+                rootNavigation.navigate('Management', { screen: 'Root' });
+                goTo(EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP);
+              } else {
+                // TODO:
+              }
             }}
             labelStyle="text-green-primary"
           >
-            {t('tutorial.quit')}
+            {t('tutorial.prev')}
           </Button>
+
           <Button
+            icon="arrow-right"
             mode="text"
             onPress={
               user?.role === ERoles.OPERATOR
@@ -59,13 +74,25 @@ export function CoolingUnitOverlay({ next, goTo, stop }: IOverlayComponentProps)
                     }
                   : () => {
                       goTo(ECommonTutorialSteps.COOLING_UNITS_STEP);
-                      rootNavigation.navigate('CoolingUnits');
+                      rootNavigation.navigate('Main', { screen: 'CoolingUnits' });
                     }
             }
-            tw="bg-green-primary border-green-primary"
-            labelStyle="text-white"
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
           >
             {t('actions.continue')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('Main');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
           </Button>
         </View>
       </View>

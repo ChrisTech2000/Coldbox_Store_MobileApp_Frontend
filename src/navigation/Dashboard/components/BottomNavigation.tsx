@@ -102,9 +102,10 @@ function BottomNavBar(
     [state, includeHistoryTab]
   );
 
-  const { onLayout } = useWalkthroughStep({
+  useWalkthroughStep({
     number: ECommonTutorialSteps.MORE_STEP,
     OverlayComponent: MoreNavigationOverlay,
+    fullScreen: true,
   });
 
   return (
@@ -127,7 +128,7 @@ function BottomNavBar(
               isFocused={state.index === idx}
             />
           ))}
-          <View onLayout={onLayout}>
+          <View>
             <TabItem
               title="More"
               onPress={(evt: GestureResponderEvent) => {

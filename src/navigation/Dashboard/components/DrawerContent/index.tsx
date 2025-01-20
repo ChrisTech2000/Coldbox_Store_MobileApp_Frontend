@@ -19,18 +19,18 @@ import { RepeatTutorialOverlay } from '#screens/Dashboard/Tutorial/RepeatTutoria
 import {
   ECommonTutorialSteps,
   EFarmerTutorialSteps,
-  EOperatorTutorialSteps,
 } from '#screens/Dashboard/Tutorial/utils/constants';
 
 import { Image } from '#ui/components/Image';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import RBAC from '#common/RBAC';
+
 import { useTranslationUtils, type Translator, type TranslationPaths } from '#i18n/utils';
+import DataloaderService from '#services/DataloaderService';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
-import DataloaderService from '#services/DataloaderService';
 
 import type { DashboardRoutes } from '../../index';
 import { resetAllStores } from './resetStoresUtil';
@@ -82,7 +82,7 @@ export default function DrawerContent(props: Props) {
   });
 
   useWalkthroughStep({
-    number: EOperatorTutorialSteps.GO_TO_MANAGEMENT_STEP,
+    number: ECommonTutorialSteps.GO_TO_MANAGEMENT_STEP,
     OverlayComponent: DrawerManagementOverlay,
     fullScreen: true,
   });

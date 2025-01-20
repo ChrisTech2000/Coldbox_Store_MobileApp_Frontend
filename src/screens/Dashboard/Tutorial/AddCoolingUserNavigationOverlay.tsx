@@ -15,10 +15,11 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { useBlinkAnimation } from './utils/useAnimation';
+import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function AddCoolingUserNavigationOverLay({ next, stop }: IOverlayComponentProps) {
+export function AddCoolingUserNavigationOverLay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -69,18 +70,30 @@ export function AddCoolingUserNavigationOverLay({ next, stop }: IOverlayComponen
         ]}
       >
         <Text tw="text-base">{t('tutorial.steps.navigateToAddCoolingUser')}</Text>
-        <Button
-          mode="text"
-          onPress={() => {
-            stop();
-            toggleTutorial(false);
-            rootNavigation.navigate('Dashboard');
-          }}
-          labelStyle="text-green-primary"
-          tw="mt-2"
-        >
-          {t('tutorial.quit')}
-        </Button>
+
+        <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              goTo(EOperatorTutorialSteps.LIST_COOLING_USERS_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('Dashboard');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
       </View>
     </View>
   );

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
@@ -13,9 +13,11 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
+import { EFarmerTutorialSteps } from './utils/constants';
+
 const screenHeight = Dimensions.get('window').height;
 
-export function LocalizationPreferencesOverlay({ next, stop }: IOverlayComponentProps) {
+export function LocalizationPreferencesOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -55,7 +57,30 @@ export function LocalizationPreferencesOverlay({ next, stop }: IOverlayComponent
         >
           <Text tw="text-base">{t('tutorial.steps.localizationPreferences')}</Text>
 
-          <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+          <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+            <Button
+              icon="arrow-left"
+              mode="text"
+              onPress={() => {
+                rootNavigation.navigate('Dashboard');
+                rootNavigation.dispatch(DrawerActions.openDrawer());
+                goTo(EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP);
+              }}
+              labelStyle="text-green-primary"
+            >
+              {t('tutorial.prev')}
+            </Button>
+
+            <Button
+              icon="arrow-right"
+              mode="text"
+              onPress={next}
+              labelStyle="text-green-primary"
+              contentStyle="flex flex-row-reverse"
+            >
+              {t('actions.continue')}
+            </Button>
+
             <Button
               mode="text"
               onPress={() => {
@@ -63,17 +88,9 @@ export function LocalizationPreferencesOverlay({ next, stop }: IOverlayComponent
                 toggleTutorial(false);
                 rootNavigation.navigate('Dashboard');
               }}
-              labelStyle="text-green-primary"
+              labelStyle="text-red-700"
             >
               {t('tutorial.quit')}
-            </Button>
-            <Button
-              mode="text"
-              onPress={next}
-              labelStyle="text-white"
-              tw="bg-green-primary border-green-primary"
-            >
-              {t('actions.continue')}
             </Button>
           </View>
         </View>

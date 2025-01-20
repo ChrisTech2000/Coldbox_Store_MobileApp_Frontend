@@ -12,7 +12,8 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 
-import { EFarmerTutorialSteps } from './utils/constants';
+import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -20,6 +21,7 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const navigation = useNavigation();
 
   return (
     <View tw="h-full w-full absolute">
@@ -69,28 +71,42 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
       >
         <Text tw="text-base">{t('tutorial.steps.repeatTutorial')}</Text>
 
-        <View tw="flex flex-row items-center space-x-2 justify-center mt-4">
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon="arrow-left"
+            mode="text"
+            onPress={() => {
+              navigation.dispatch(DrawerActions.closeDrawer());
+              goTo(ECommonTutorialSteps.OPEN_DRAWER_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon="arrow-right"
+            mode="text"
+            onPress={
+              user?.role === ERoles.COOLING_USER
+                ? () => goTo(EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP)
+                : next
+            }
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
           <Button
             mode="text"
             onPress={() => {
               stop();
               toggleTutorial(false);
             }}
-            labelStyle="text-green-primary"
+            labelStyle="text-red-700"
           >
             {t('tutorial.quit')}
-          </Button>
-          <Button
-            mode="contained"
-            onPress={
-              user?.role === ERoles.COOLING_USER
-                ? () => goTo(EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP)
-                : next
-            }
-            labelStyle="text-white"
-            tw="bg-green-primary border-green-primary"
-          >
-            {t('actions.continue')}
           </Button>
         </View>
       </View>
