@@ -8,8 +8,7 @@ import {
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { AccountDetailsRoutes } from '#navigation/Dashboard/AccountDetails';
 import type { CoolingUnit, DashboardProduce, User } from '#types/global';
 

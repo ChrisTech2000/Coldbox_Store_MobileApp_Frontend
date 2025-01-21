@@ -11,8 +11,7 @@ import CoolingUnitsRoomConditions from '#screens/Dashboard/Main/CoolingUnits/Roo
 import CoolingUnitsCratesInfo from '#screens/Dashboard/Main/CoolingUnits/CratesInfo';
 import CoolingUnitsCratesMaps from '#screens/Dashboard/Main/CoolingUnits/Maps';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 import RBAC from '#common/RBAC';
 

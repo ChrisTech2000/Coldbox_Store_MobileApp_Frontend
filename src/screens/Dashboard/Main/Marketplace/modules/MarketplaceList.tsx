@@ -10,8 +10,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { Text } from '#ui/components/Text';
 
 import { API_BASE_URL } from '#constants/environment';
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import type { ValueOf } from '#types/miscellaneous';
 import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { useMap } from '#ui/hooks/useMap';

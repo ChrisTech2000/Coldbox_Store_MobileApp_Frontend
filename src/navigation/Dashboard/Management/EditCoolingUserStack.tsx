@@ -12,8 +12,7 @@ import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 import EditCoolingUser from '#screens/Dashboard/Management/EditCoolingUser';
 import CoolingUsersSurvey from '#screens/Dashboard/Management/EditCoolingUser/CoolingUsersSurvey';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
 
 import { AccountDetailsRoutes } from '../AccountDetails';

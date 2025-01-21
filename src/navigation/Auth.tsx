@@ -22,7 +22,7 @@ import UserAgreement from '#screens/Dashboard/About/UserAgreement';
 import PrivacyPolicy from '#screens/Dashboard/About/Privacy';
 import ComsolTerms from '#screens/Dashboard/About/ComsolAgreement';
 
-import type { TranslationPaths } from '#i18n/index';
+import type { TranslationPaths } from '#i18n/utils';
 import { useTranslationUtils } from '#i18n/utils';
 
 import NavigatorHeader from './components/NavigatorHeader';

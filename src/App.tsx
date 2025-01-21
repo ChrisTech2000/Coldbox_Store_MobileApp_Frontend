@@ -23,8 +23,7 @@ import { useAuthManager } from './stores/auth';
 import { useGlobalInformation } from './stores/dashboard';
 import { useCartInformation } from './stores/shoppingCart';
 import { navigatorTheme, paperTheme } from './ui/lib/theme';
-
-import './i18n';
+import { useI18n } from './i18n';
 
 if (typeof ENVIRONMENT === 'string' && ENVIRONMENT !== 'development') {
   Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
@@ -33,9 +32,13 @@ if (typeof ENVIRONMENT === 'string' && ENVIRONMENT !== 'development') {
 enableExperimentalLayoutAnimation();
 
 function App() {
+  const isI18nReady = useI18n();
+
   const isAuthenticated = useAuthManager();
   useGlobalInformation(isAuthenticated);
   useCartInformation(isAuthenticated);
+
+  if (!isI18nReady) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

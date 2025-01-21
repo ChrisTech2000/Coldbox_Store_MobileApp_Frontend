@@ -11,8 +11,7 @@ import { Appbar } from 'react-native-paper';
 import History from '#screens/Dashboard/Main/History';
 import EditCheckIn from '#screens/Dashboard/Main/History/EditCheckIn';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
 import type { GetMovementsHistoryResponse } from '#types/api.responses';

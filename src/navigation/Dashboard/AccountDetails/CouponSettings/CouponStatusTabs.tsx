@@ -9,8 +9,7 @@ import type { RouteProp } from '@react-navigation/native';
 import ActiveCouponsTab from '#screens/Dashboard/AccountDetails/Coupons/ActiveCouponsTab';
 import RevokedCouponsTab from '#screens/Dashboard/AccountDetails/Coupons/RevokedCouponsTab';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 import { CouponsSettingsRouteProps } from '.';
 

@@ -1,11 +1,11 @@
+import { useEffect, useState } from 'react';
 import i18n, { type InitOptions } from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { I18nManager } from 'react-native';
-import { getLocales } from 'react-native-localize';
 
-import type { RecursiveKeyOf } from '#types/miscellaneous';
+import { ENVIRONMENT } from '#constants/environment';
+
 import { APP_LOCALES, DEFAULT_APP_LOCALE } from './constants';
-import englishTranslations, { type Translations } from './transl/en';
+import englishTranslations from './transl/en';
 import frenchTranslations from './transl/fr';
 import gujaratiTranslations from './transl/gu';
 import hindiTranslations from './transl/hi';
@@ -17,16 +17,14 @@ import yorubaTranslations from './transl/yo';
 
 import { LanguageManager } from './utils';
 
-export type TranslationPaths = RecursiveKeyOf<Translations>;
+async function _initializeI18nConfiguration(): Promise<void> {
+  const initialLanguage = LanguageManager.initializeLanguage();
 
-export const isRTL = getLocales().at(0)?.isRTL ?? false;
+  if (!i18n.isInitialized) {
+    i18n.use(initReactI18next);
+  }
 
-I18nManager.allowRTL(isRTL);
-I18nManager.forceRTL(isRTL);
-
-function _optionsFactory() {
-  const initialLanguage = LanguageManager.read();
-  return {
+  await i18n.init({
     resources: {
       [APP_LOCALES.ENGLISH]: {
         translation: englishTranslations,
@@ -64,12 +62,25 @@ function _optionsFactory() {
     interpolation: {
       escapeValue: false,
     },
-    debug: false,
+    debug: typeof ENVIRONMENT === 'string' && ENVIRONMENT === 'development',
     compatibilityJSON: 'v3',
-  } satisfies InitOptions;
+  } satisfies InitOptions);
+
+  i18n.on('languageChanged', LanguageManager.onLanguageChange);
+
+  LanguageManager.setDateFnsLocale(initialLanguage);
 }
 
-i18n.use(initReactI18next).init(_optionsFactory());
-i18n.on('languageChanged', LanguageManager.persist);
+export function useI18n(): boolean {
+  const [isReady, setIsReady] = useState<boolean>(false);
 
-export default i18n;
+  useEffect(() => {
+    async function bootstrap(): Promise<void> {
+      await _initializeI18nConfiguration();
+      setIsReady(true);
+    }
+    void bootstrap();
+  }, []);
+
+  return isReady;
+}

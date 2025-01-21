@@ -18,8 +18,7 @@ import PaystackPayment from '#screens/Dashboard/Main/ShoppingCart/PaystackPaymen
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader, {
   type NavigationHeaderProps,
 } from '#navigation/components/NavigatorHeader';

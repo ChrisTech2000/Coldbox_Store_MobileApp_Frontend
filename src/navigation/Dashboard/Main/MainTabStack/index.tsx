@@ -13,8 +13,7 @@ import DashboardMain from '#screens/Dashboard/Main/Dashboard';
 import { Dashboard6Overlay } from '#screens/Dashboard/Tutorial/FarmerDashboardOverlay';
 import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
-import type { TranslationPaths } from '#i18n/index';
-import { useTranslationUtils, type Translator } from '#i18n/utils';
+import { useTranslationUtils, type Translator, type TranslationPaths } from '#i18n/utils';
 import {
   useDashboardHeader,
   type DashboardHeaderFactory,
