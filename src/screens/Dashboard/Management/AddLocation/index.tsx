@@ -86,7 +86,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
       });
 
       await mutate(getQueryKey('getLocations', company?.id));
-      navigation.goBack();
+      navigation.navigate('Locations');
     } catch (exception) {
       toast.show(t('Dashboard.Management.Location.toasts.locationSubmissionError'), {
         type: 'md_danger',

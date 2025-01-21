@@ -236,6 +236,12 @@ function _rightContentFactory(
           />
         ),
       };
+    case 'AddLocation':
+      return {
+        leftContent: (
+          <Appbar.BackAction size={22} onPress={() => navigation.navigate('Locations')} />
+        ),
+      };
     case 'Locations':
       return {
         rightContent: (
@@ -245,6 +251,7 @@ function _rightContentFactory(
             onPress={() => navigation.navigate('AddLocation')}
           />
         ),
+        leftContent: <Appbar.BackAction size={22} onPress={() => navigation.navigate('Root')} />,
       };
     case 'CoolingUnits':
       return {

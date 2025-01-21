@@ -97,7 +97,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         user: {
           firstName,
           lastName,
-          phone,
+          ...(phone ? { phone } : {}),
           email,
           password,
           gender: MAP_APP_GENDER_TO_API[gender],
