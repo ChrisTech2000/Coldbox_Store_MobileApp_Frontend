@@ -1,7 +1,8 @@
 import camelCase from 'lodash/camelCase';
-import snakeCase from 'lodash/snakeCase';
+import isBoolean from 'lodash/isBoolean';
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
+import snakeCase from 'lodash/snakeCase';
 
 import type { RecursiveKeyOf } from '#types/miscellaneous';
 
@@ -65,7 +66,8 @@ export function query<T extends object>(
   const parts: Array<string> = [];
 
   for (const [key, value] of Object.entries(datum)) {
-    if (isNil(value) || (!Number.isFinite(value) && isEmpty(value))) continue;
+    if (!isBoolean(value) && (isNil(value) || (!Number.isFinite(value) && isEmpty(value))))
+      continue;
 
     const encodedParam = encodeURIComponent(skipSet.has(key) ? key : snakeCase(key));
 

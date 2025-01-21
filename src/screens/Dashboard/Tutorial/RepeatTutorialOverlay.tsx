@@ -1,7 +1,6 @@
 import React from 'react';
 import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import { Icon } from 'react-native-paper';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
@@ -25,26 +24,6 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
 
   return (
     <View tw="h-full w-full absolute">
-      <View
-        tw={cn(
-          'bg-white absolute left-3 w-[60%] h-auto p-3 rounded-md flex flex-row items-center space-x-2',
-          user?.role === ERoles.COOLING_USER
-            ? screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-[33%]'
-              : Platform.OS === 'ios'
-                ? 'top-[28%]'
-                : 'top-[25%]'
-            : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-[41.25%]'
-              : Platform.OS === 'ios'
-                ? 'top-[35%]'
-                : 'top-[32%]'
-        )}
-      >
-        <Icon source="card-multiple-outline" size={20} />
-        <Text tw="text-base">{t('navigation.dashboard.Tutorial')}</Text>
-      </View>
-
       <View
         tw={cn(
           'absolute left-3 w-[90%] h-auto bg-white p-3 rounded-md z-30',

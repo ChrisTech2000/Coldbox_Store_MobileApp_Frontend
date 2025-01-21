@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Animated, Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import { Icon } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -34,7 +33,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
     <View tw="h-full w-full absolute">
       <Touchable
         tw={cn(
-          'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
+          'absolute left-3 w-[50%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
           screenHeight <= SMALL_SCREEN_THRESHOLD
             ? user?.role === ERoles.OPERATOR
               ? 'top-[23%]'
@@ -49,10 +48,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
           navigation.navigate('Management', { screen: 'Root' });
           user?.role === ERoles.OPERATOR ? next() : goTo(EEmployeeTutorialSteps.LOCATIONS_STEP);
         }}
-      >
-        <Icon source="account-supervisor-outline" size={25} />
-        <Text tw="text-base">{t('navigation.dashboard.Management')}</Text>
-      </Touchable>
+      />
 
       <Animated.View
         style={[
@@ -63,7 +59,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
                 : Platform.OS === 'ios'
                   ? '23%'
                   : '20%',
-            left: '50%',
+            left: '40%',
             opacity: blinkAnim,
           },
         ]}

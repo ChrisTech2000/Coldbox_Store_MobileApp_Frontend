@@ -1,22 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { Dimensions, Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import { Icon } from 'react-native-paper';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
+import { DashboardRoutes } from '#navigation/Dashboard';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 
 import { EFarmerTutorialSteps } from './utils/constants';
-
-import { DashboardRoutes } from '#navigation/Dashboard';
-
-const screenHeight = Dimensions.get('window').height;
 
 export function DrawerKnowledgeHubOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
@@ -25,19 +19,6 @@ export function DrawerKnowledgeHubOverlay({ next, goTo, stop }: IOverlayComponen
 
   return (
     <View tw="h-full w-full absolute">
-      <View
-        tw={cn(
-          'bg-white absolute left-3 w-[60%] h-[8%] p-3 rounded-md flex flex-row items-center space-x-2',
-          screenHeight <= SMALL_SCREEN_THRESHOLD
-            ? 'top-[25%] w-[65%]'
-            : Platform.OS === 'ios'
-              ? 'top-[21%] h-[7%]'
-              : 'top-[18.5%]'
-        )}
-      >
-        <Icon source="information-outline" size={25} />
-        <Text tw="text-base">{t('navigation.dashboard.KnowledgeHub')}</Text>
-      </View>
       <View
         tw="absolute left-3 top-1/3 w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={[
