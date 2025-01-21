@@ -23,6 +23,7 @@ import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { CART_MINIMUM_VALUE } from '.';
 import AddCouponBottomSheet from './components/AddCouponBottomSheet';
@@ -73,11 +74,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
             coolingUnitIds,
           });
         }
-      } catch (e) {
+      } catch (exception) {
         setIsSubmitting(false);
         toast.show(t('navigation.error.errorMessage'), {
           type: 'md_danger',
         });
+        reportCrash(exception as Error);
       }
     },
     [t]

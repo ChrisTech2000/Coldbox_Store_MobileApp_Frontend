@@ -11,6 +11,7 @@ import type { Farmer } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import { savePDF } from '#ui/lib/pdf';
 import ColdtivateService from '#services/ColdtivateService';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
 import { CONSTRAINT_EXCEPTIONS, DataLoader, getPdfContent } from '../utils';
@@ -88,6 +89,7 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
             }
           }
           if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
+          reportCrash(exception as Error);
         }
       }}
     >

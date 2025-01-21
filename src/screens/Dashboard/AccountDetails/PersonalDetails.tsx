@@ -18,6 +18,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useAuthStore } from '#stores/auth';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import reportCrash from '#ui/lib/reportCrash';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import NameFields from './modules/NameFields';
@@ -60,7 +61,7 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
 
       props.navigation.goBack();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }, []);
 

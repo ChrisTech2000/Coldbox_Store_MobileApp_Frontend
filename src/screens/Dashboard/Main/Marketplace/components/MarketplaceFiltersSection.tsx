@@ -14,6 +14,7 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -202,9 +203,11 @@ export default function MarketplaceFiltersSection() {
               onPress={async (evt) => {
                 evt.stopPropagation();
                 if (visibleModal === 'buyer') {
-                  const result = await MarketplaceService.toggleCartOwnership();
-                  if (result.cart) {
-                    setCart(result.cart);
+                  try {
+                    const result = await MarketplaceService.toggleCartOwnership();
+                    if (result.cart) setCart(result.cart);
+                  } catch (exception) {
+                    reportCrash(exception as Error);
                   }
                 } else {
                   useMarketplaceQueryParams.getState().setParams({ sortBy: internalSelection });

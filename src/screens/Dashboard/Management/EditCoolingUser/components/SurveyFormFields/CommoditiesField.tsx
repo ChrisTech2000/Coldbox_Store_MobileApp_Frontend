@@ -7,6 +7,7 @@ import { Text } from '#ui/components/Text';
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import type {
   CommoditySurveyPatcher,
@@ -67,7 +68,7 @@ export default function CommoditiesField(props: Props) {
         const result = await commodityPatcher(contextualCropId)(values);
         if (result) onDismissHandler();
       } catch (exception) {
-        console.error(exception);
+        reportCrash(exception as Error);
       }
     },
     [selectedSurvey?.cropId, commodityPatcher, onDismissHandler]

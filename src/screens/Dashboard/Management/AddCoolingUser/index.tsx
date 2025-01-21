@@ -18,6 +18,7 @@ import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { EApiGender, type Farmer } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import FormManager, { type FormValues } from './components/FormManager';
@@ -102,8 +103,8 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
         params: { farmerId: result!.id, redirectTo: 'CoolingUsers' },
       });
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger', style: { marginBottom: 55 } });
+      reportCrash(exception as Error);
     }
   }
 

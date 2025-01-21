@@ -15,6 +15,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import RBAC from '#common/RBAC';
+import reportCrash from '#ui/lib/reportCrash';
 
 function ContactsSharing() {
   const { t } = useTranslationUtils();
@@ -108,7 +109,7 @@ function _Field(props: {
         toggleValue();
         await props.onChange(value);
       } catch (exception) {
-        console.error(exception);
+        reportCrash(exception as Error);
         toast.show(t('actions.error'), { type: 'md_danger' });
         toggleValue();
       } finally {

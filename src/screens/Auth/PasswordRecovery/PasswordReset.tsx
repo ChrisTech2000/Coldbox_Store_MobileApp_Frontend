@@ -10,6 +10,7 @@ import AuthService from '#services/AuthService';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 type PasswordResetSchema = {
   password: string;
@@ -69,7 +70,7 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
 
       navigation.navigate('SignIn');
     } catch (err) {
-      console.error(err);
+      reportCrash(err as Error);
     }
   }, []);
 

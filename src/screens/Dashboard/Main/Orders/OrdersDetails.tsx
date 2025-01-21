@@ -34,6 +34,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { CoolingUnit, EOrderStatus } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 import colors from 'tailwindcss/colors';
 import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryInformationBottomSheet';
@@ -126,6 +127,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         toast.show(t('navigation.error.errorMessage'), {
           type: 'md_danger',
         });
+        reportCrash(error as Error);
       }
     },
     [props.route.params.orderId, refreshDataFunctions]
@@ -146,6 +148,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         refreshDataFunctions.forEach((fn) => fn());
       } catch (error) {
         toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+        reportCrash(error as Error);
       } finally {
         setIsSubmitting(false);
       }

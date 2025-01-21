@@ -8,6 +8,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit } from '#types/global';
 import { Translator } from '#i18n/utils';
+import reportCrash from '#ui/lib/reportCrash';
 
 export const CART_MISMATCH_ERROR = 'Cart mismatch error';
 
@@ -49,6 +50,7 @@ const useCartStore = create<CartStoreState>((set, get) => ({
       set({ cartData: data.cart, isLoading: false });
     } catch (err) {
       set({ error: err as Error, isLoading: false });
+      reportCrash(err as Error);
     }
   },
 
@@ -72,6 +74,7 @@ const useCartStore = create<CartStoreState>((set, get) => ({
       set({ allCoolingUnits: coolingUnits, isLoading: false });
     } catch (err) {
       set({ error: err as Error, isLoading: false });
+      reportCrash(err as Error);
     }
   },
 

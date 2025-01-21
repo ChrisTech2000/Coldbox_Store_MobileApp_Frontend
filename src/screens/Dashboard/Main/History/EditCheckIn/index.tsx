@@ -14,6 +14,7 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -116,7 +117,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         props.navigation.navigate('RootHistoryTabStack');
       } catch (error) {
         toast.show(t('Dashboard.History.editCheckIn.errorMessage'), { type: 'md_danger' });
-        console.log(error);
+        reportCrash(error as Error);
       }
     },
     [toast, t, matchingProduces, farmer, refreshData, crops]

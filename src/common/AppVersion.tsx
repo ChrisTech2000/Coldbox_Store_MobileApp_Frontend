@@ -10,6 +10,7 @@ import AuthService from '#services/AuthService';
 import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 import { ENVIRONMENT } from '#constants/environment';
+import reportCrash from '#ui/lib/reportCrash';
 
 const IS_DEV_ENV = typeof ENVIRONMENT === 'string' && ENVIRONMENT === 'development';
 
@@ -38,7 +39,7 @@ function useAppVersionCheck(cb: (needsUpdate: boolean) => void) {
     try {
       void checkVersion();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }, []);
 }
@@ -92,7 +93,7 @@ export default function AppVersionModal() {
                 }
                 await Linking.openURL('https://apps.apple.com/sg/app/coldtivate/id1613730873');
               } catch (exception) {
-                console.error(exception);
+                reportCrash(exception as Error);
               }
             }}
           >

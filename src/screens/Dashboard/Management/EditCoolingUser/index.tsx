@@ -12,6 +12,7 @@ import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -132,7 +133,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
       props.navigation.goBack();
     } catch (exception) {
       toast.show(t('actions.error'), { type: 'md_danger' });
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 

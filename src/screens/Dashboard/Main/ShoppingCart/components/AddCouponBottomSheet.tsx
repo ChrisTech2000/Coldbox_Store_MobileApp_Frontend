@@ -12,6 +12,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
+import reportCrash from '#ui/lib/reportCrash';
 
 export default function AddCouponBottomSheet() {
   const { t } = useTranslationUtils();
@@ -38,10 +39,10 @@ export default function AddCouponBottomSheet() {
         toast.show(t('actions.done'), { type: 'md_success' });
       }
     } catch (error) {
-      console.error(error);
       toast.show(t('navigation.error.errorMessage'), {
         type: 'md_danger',
       });
+      reportCrash(error as Error);
     } finally {
       setIsSubmitting(false);
     }

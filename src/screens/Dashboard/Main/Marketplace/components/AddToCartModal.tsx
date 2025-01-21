@@ -18,6 +18,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { cn } from '#ui/lib/cn';
+import reportCrash from '#ui/lib/reportCrash';
 
 import type { AvailableListingDatum } from '../utils';
 import type { DashboardMainRoutes } from '#navigation/Dashboard/Main';
@@ -71,17 +72,21 @@ export default function AddToCartModal() {
 
       const crateAlreadyInCart = cartData?.items?.find((i) => i.relCrateId === datum.crateId);
 
-      const result = await MarketplaceService.addItemToCart({
-        crateId: datum.crateId,
-        orderedProduceWeight: values.quantity,
-        updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
-      });
+      try {
+        const result = await MarketplaceService.addItemToCart({
+          crateId: datum.crateId,
+          orderedProduceWeight: values.quantity,
+          updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
+        });
 
-      setCart(result.cart);
-      resetState();
-      modalRef.current?.close();
-      if (redirect) {
-        navigation.navigate('ShoppingCart', { screen: 'Root' });
+        setCart(result.cart);
+        resetState();
+        modalRef.current?.close();
+        if (redirect) {
+          navigation.navigate('ShoppingCart', { screen: 'Root' });
+        }
+      } catch (exception) {
+        reportCrash(exception as Error);
       }
     };
   }

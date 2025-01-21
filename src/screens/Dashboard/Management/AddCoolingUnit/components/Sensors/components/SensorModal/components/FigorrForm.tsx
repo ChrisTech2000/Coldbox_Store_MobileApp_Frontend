@@ -7,6 +7,7 @@ import { Button } from '#ui/components/Button';
 import { useUnmount } from '#ui/hooks/useUnmount';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -66,10 +67,10 @@ export default function FigorrForm() {
 
       emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
         type: 'md_danger',
       });
+      reportCrash(exception as Error);
     }
   }
 

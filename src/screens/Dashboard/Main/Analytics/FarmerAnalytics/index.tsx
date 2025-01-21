@@ -9,6 +9,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { savePDF } from '#ui/lib/pdf';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
@@ -91,6 +92,7 @@ export function FarmerAnalytics() {
           }
         }
         if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
+        reportCrash(exception as Error);
       }
     }, []),
     { farmer: farmerResponse?.[0] as Farmer, crops: crops ?? [], companies: companies ?? [] },
@@ -116,8 +118,8 @@ export function FarmerAnalytics() {
       await savePDF(getPdfContent(data, t), 'farmer');
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
-      console.error(exception);
       toast.show(t('actions.error'), { type: 'md_danger' });
+      reportCrash(exception as Error);
     } finally {
       setIsCreatingPdf(false);
     }

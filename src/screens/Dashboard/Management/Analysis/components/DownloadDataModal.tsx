@@ -18,6 +18,7 @@ import { AIR_PROD_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { CoolingUnit } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 type DownloadDataModalProps = {
   coolingUnits?: Array<CoolingUnit>;
@@ -107,8 +108,8 @@ export function DownloadDataModal(props: DownloadDataModalProps) {
                 await downloadDataAsXlsx();
                 dismiss();
               } catch (exception) {
-                console.error('Failed to open URL: ', exception);
                 toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                reportCrash(exception as Error);
               } finally {
                 setIsProcessing(false);
               }

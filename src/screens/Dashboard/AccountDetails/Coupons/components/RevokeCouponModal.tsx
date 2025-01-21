@@ -8,6 +8,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 export default function RevokeCouponModal(props: {
   visible: boolean;
@@ -50,8 +51,8 @@ export default function RevokeCouponModal(props: {
                 await props.onConfirm?.();
                 onChangeVisible(false);
               } catch (exception) {
-                console.error(exception);
                 toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                reportCrash(exception as Error);
               } finally {
                 setIsRevoking(false);
               }

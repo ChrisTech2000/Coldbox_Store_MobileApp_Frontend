@@ -10,6 +10,7 @@ import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -96,10 +97,10 @@ export default function UbibotForm(props: { onDismiss: () => void }) {
             tempTemperatureField: '',
           }));
         } catch (exception) {
-          console.error(exception);
           toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
             type: 'md_danger',
           });
+          reportCrash(exception as Error);
         }
         return;
       }

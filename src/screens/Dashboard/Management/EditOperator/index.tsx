@@ -15,6 +15,7 @@ import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 import { EApiGender } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import FormManager, { type FormValues } from './components/FormManager';
@@ -83,7 +84,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
       ]);
       navigation.goBack();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 

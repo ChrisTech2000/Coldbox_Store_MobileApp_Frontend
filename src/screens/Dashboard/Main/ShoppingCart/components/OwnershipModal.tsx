@@ -8,6 +8,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import MarketplaceService from '#services/MarketplaceService';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
@@ -60,9 +61,9 @@ export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
                   setIsProcessing(false);
                   close();
                 } catch (exception) {
-                  console.error(exception);
                   toast.show(t('actions.error', { type: 'md_danger' }));
                   setIsProcessing(false);
+                  reportCrash(exception as Error);
                 }
               }}
               disabled={isProcessing}

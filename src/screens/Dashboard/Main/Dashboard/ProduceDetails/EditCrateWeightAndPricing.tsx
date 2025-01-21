@@ -20,6 +20,7 @@ import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -235,7 +236,7 @@ function EditCrateWeightAndPricing(
         toast.show(t('Dashboard.ProduceDetails.preSaleError'), { type: 'md_danger' });
       }
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 
@@ -287,7 +288,7 @@ function EditCrateWeightAndPricing(
         },
       });
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     } finally {
       toggleIsSettingUp();
     }

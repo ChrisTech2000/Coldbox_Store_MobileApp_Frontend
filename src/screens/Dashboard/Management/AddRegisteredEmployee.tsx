@@ -12,6 +12,7 @@ import { Button } from '#ui/components/Button';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useTranslationUtils } from '#i18n/utils';
@@ -86,7 +87,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
       navigation.goBack();
     } catch (exception) {
       toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger' });
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 

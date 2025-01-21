@@ -4,6 +4,7 @@ import camelCase from 'lodash/camelCase';
 
 import { DEEP_LINK_DOMAIN } from '#constants/environment';
 import { subs } from '#services/utils';
+import reportCrash from '#ui/lib/reportCrash';
 
 const BASE_DEEP_LINK_URL_SCHEMA = 'coldtivate://app';
 const DEEP_LINK_URL = `https://${DEEP_LINK_DOMAIN}`;
@@ -21,7 +22,7 @@ export default {
       if (!url) return null;
       return DeepLinkProcessor.processDeepLink(url);
     } catch (exception) {
-      console.warn('Error processing deep link:', exception);
+      reportCrash(exception as Error);
       return null;
     }
   },
@@ -30,7 +31,7 @@ export default {
       try {
         listener(DeepLinkProcessor.processDeepLink(url));
       } catch (exception) {
-        console.warn('Error processing deep link:', exception);
+        reportCrash(exception as Error);
       }
     });
     return () => {

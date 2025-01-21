@@ -17,6 +17,7 @@ import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { cn } from '#ui/lib/cn';
+import reportCrash from '#ui/lib/reportCrash';
 
 type LocalState<T = string> = {
   coolingUnitId: number | undefined;
@@ -91,8 +92,8 @@ export default function TemperatureAlert() {
 
       await dismissHandler();
     } catch (exception) {
-      console.error(exception);
       toast.show(t('actions.error'), { type: 'md_danger' });
+      reportCrash(exception as Error);
     }
   }
 
@@ -117,8 +118,8 @@ export default function TemperatureAlert() {
             .sort((a, b) => b.percentage - a.percentage),
         });
       } catch (exception) {
-        console.error(exception);
         toast.show(t('actions.error'), { type: 'md_danger' });
+        reportCrash(exception as Error);
       }
     }
   );

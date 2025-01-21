@@ -12,6 +12,7 @@ import { Input } from '#ui/components/Input';
 
 import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
+import reportCrash from '#ui/lib/reportCrash';
 
 type FormValues<T = string> = {
   code: string;
@@ -65,7 +66,7 @@ export default function CouponModal(props: {
       await props.onSubmit?.(values);
       _resetValues();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
       if (toast.isOpen(TOAST_HARCODED_ID)) return;
       toast.show(t('navigation.error.errorMessage'), {
         type: 'md_danger',

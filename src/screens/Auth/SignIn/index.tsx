@@ -19,6 +19,7 @@ import { ERoles, MAP_ROLES } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { AccountCard } from './components/AccountCard';
 
@@ -139,6 +140,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
       }
     } catch (exception) {
       toast.show(t('Auth.SignIn.accounts.toasts.login'), { type: 'md_danger' });
+      reportCrash(exception as Error);
     }
   }, []);
 

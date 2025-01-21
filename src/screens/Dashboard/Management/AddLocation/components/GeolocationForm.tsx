@@ -11,6 +11,7 @@ import { Input } from '#ui/components/Input';
 import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
 import { useToggle } from '#ui/hooks/useToggle';
+import reportCrash from '#ui/lib/reportCrash';
 
 import FormManager from '../components/FormManager';
 
@@ -50,6 +51,8 @@ export default function GeoLocationForm() {
         toast.show(t('Dashboard.Management.Location.toasts.locationUnavailable'), {
           type: 'md_danger',
         });
+      } else {
+        reportCrash(exception as Error);
       }
     } finally {
       toggleLoading();

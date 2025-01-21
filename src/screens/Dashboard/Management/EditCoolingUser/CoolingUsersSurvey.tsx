@@ -16,6 +16,7 @@ import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Manag
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 import type { FarmerSurveySchemaType } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
@@ -152,7 +153,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
               redirect();
             }
           } catch (exception) {
-            console.error(exception);
+            reportCrash(exception as Error);
           }
         }}
       >

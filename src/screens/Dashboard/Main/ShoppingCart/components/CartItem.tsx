@@ -27,6 +27,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 import { type CartItem as CartItemType } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
@@ -211,7 +212,7 @@ export function CartItem({ item }: CartItemProps) {
             try {
               await openCompanyDetailsModal();
             } catch (exception) {
-              console.error(exception);
+              reportCrash(exception as Error);
             }
           }}
         >
@@ -266,8 +267,8 @@ export function CartItem({ item }: CartItemProps) {
                 const result = await MarketplaceService.removeItemFromCart(item.relCrateId);
                 setCart(result.cart);
               } catch (exception) {
-                console.error(exception);
                 toast.show(t('actions.error', { type: 'md_danger' }));
+                reportCrash(exception as Error);
               } finally {
                 setIsProcessing(false);
               }

@@ -19,6 +19,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import FormFields from './components/FormFields';
@@ -139,7 +140,7 @@ export default function ScreenContainer(props: Props) {
 
       navigation.goBack();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 

@@ -23,6 +23,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type Bank, EBankAccountType, ERoles } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 interface FormValues {
   accountName: string;
@@ -168,6 +169,7 @@ function PayoutSettings(
           type: 'md_danger',
           style: { marginBottom: 50 },
         });
+        reportCrash(error as Error);
       }
     },
     [user, company, farmer]
@@ -183,9 +185,13 @@ function PayoutSettings(
 
   useEffect(() => {
     if (data?.length && availableBanks?.banks?.length) {
-      const accounts = data.filter((el) =>
-        props.route.params?.isCompanyView ? !!el.ownedOnBehalfOfCompany : !el.ownedOnBehalfOfCompany
-      ).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      const accounts = data
+        .filter((el) =>
+          props.route.params?.isCompanyView
+            ? !!el.ownedOnBehalfOfCompany
+            : !el.ownedOnBehalfOfCompany
+        )
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
       if (!accounts.length) return;
 
@@ -194,15 +200,11 @@ function PayoutSettings(
         accountName: accounts?.[0]?.accountName ?? '',
         accountNumber: accounts?.[0]?.accountNumber ?? '',
         accountType: accounts?.[0]?.accountType.toString(),
-        bank: availableBanks?.banks?.find(
-          (b) => b.id.toString() === accounts?.[0]?.bankCode
-        )?.code,
+        bank: availableBanks?.banks?.find((b) => b.id.toString() === accounts?.[0]?.bankCode)?.code,
       });
 
       setBank(
-        availableBanks?.banks?.find(
-          (b) => b.id.toString() === accounts?.[0]?.bankCode
-        ) ?? null
+        availableBanks?.banks?.find((b) => b.id.toString() === accounts?.[0]?.bankCode) ?? null
       );
       setAccountType(accounts?.[0]?.accountType);
     }
@@ -236,8 +238,8 @@ function PayoutSettings(
               ? t('Dashboard.AccountDetails.PayoutSettings.addTittleForCompany')
               : farmer
                 ? t('Dashboard.ProduceDetails.addBankAccountHeader', {
-                  name: `${farmer.firstName} ${farmer.lastName}`,
-                })
+                    name: `${farmer.firstName} ${farmer.lastName}`,
+                  })
                 : t('Dashboard.AccountDetails.PayoutSettings.addTitle')}
           </Text>
         )}

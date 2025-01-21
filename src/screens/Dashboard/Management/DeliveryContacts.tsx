@@ -15,6 +15,7 @@ import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -172,11 +173,11 @@ function DeliveryContacts() {
                   await refetch();
                   setContactToDelete(null);
                 } catch (exception) {
-                  console.error(exception);
                   toast.show(t('actions.error'), {
                     type: 'md_danger',
                     style: { marginBottom: 50 },
                   });
+                  reportCrash(exception as Error);
                 } finally {
                   setIsProcessing(false);
                 }
@@ -265,6 +266,7 @@ function BottomSheet() {
           type: 'md_danger',
           style: { marginBottom: 50 },
         });
+        reportCrash(error as Error);
       }
     },
     [user]

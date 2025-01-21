@@ -18,6 +18,7 @@ import { useAuthStore } from '#stores/auth';
 import type { GetCoolingUnitResponse } from '#types/api.responses';
 import { ERoles } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import FormFields from '../AddCoolingUnit/components/FormFields';
 import { METRIC_UNITS, PRICING_TYPE } from '../AddCoolingUnit/constants';
@@ -164,7 +165,7 @@ export default function ScreenContainer(props: Props) {
 
       navigation.goBack();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 
