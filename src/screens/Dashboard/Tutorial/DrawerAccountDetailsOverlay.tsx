@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Animated, Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import { Icon } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -14,8 +13,9 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
-import { useBlinkAnimation } from './utils/useAnimation';
+
 import { ECommonTutorialSteps } from './utils/constants';
+import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -31,7 +31,7 @@ export function DrawerAccountDetailsOverlay({ next, goTo, stop }: IOverlayCompon
     <View tw="h-full w-full absolute">
       <Touchable
         tw={cn(
-          'bg-white absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
+          'absolute left-3 w-[50%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
           Platform.OS === 'ios'
             ? 'top-[15.5%]'
             : screenHeight <= SMALL_SCREEN_THRESHOLD
@@ -44,10 +44,7 @@ export function DrawerAccountDetailsOverlay({ next, goTo, stop }: IOverlayCompon
           navigation.navigate('AccountDetails');
           next();
         }}
-      >
-        <Icon source="account-supervisor-outline" size={25} />
-        <Text tw="text-base">{t('navigation.dashboard.AccountDetails')}</Text>
-      </Touchable>
+      />
 
       <Animated.View
         style={[
@@ -60,7 +57,7 @@ export function DrawerAccountDetailsOverlay({ next, goTo, stop }: IOverlayCompon
                 : screenHeight <= SMALL_SCREEN_THRESHOLD
                   ? '17%'
                   : '13.5%',
-            left: '50%',
+            left: '40%',
             opacity: blinkAnim,
           },
         ]}
