@@ -112,7 +112,14 @@ export function AggregatedSection() {
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
-      reportCrash(exception as Error);
+      reportCrash(exception as Error, {
+        extras: {
+          errorContext: 'PDF Generation',
+          coolingUnitDataPresent: !!coolingUnitData,
+          hasCoolingUnits: !!coolingUnits?.length,
+          impactDataPresent: !!impactData,
+        },
+      });
     } finally {
       setIsCreatingPdf(false);
     }

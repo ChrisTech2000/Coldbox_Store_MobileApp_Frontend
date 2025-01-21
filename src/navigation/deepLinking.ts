@@ -17,12 +17,19 @@ const DEEP_LINK_PATHS = {
 export default {
   prefixes: [BASE_DEEP_LINK_URL_SCHEMA, DEEP_LINK_URL],
   async getInitialURL(): Promise<string | null> {
+    let initialURL: string | null = null;
     try {
-      const url = await Linking.getInitialURL();
-      if (!url) return null;
-      return DeepLinkProcessor.processDeepLink(url);
+      initialURL = await Linking.getInitialURL();
+      if (!initialURL) return null;
+      return DeepLinkProcessor.processDeepLink(initialURL);
     } catch (exception) {
-      reportCrash(exception as Error);
+      reportCrash(exception as Error, {
+        extras: {
+          context: 'DeepLinkInitialURL',
+          url: initialURL ?? 'null',
+          timestamp: new Date().toISOString(),
+        },
+      });
       return null;
     }
   },
@@ -31,7 +38,13 @@ export default {
       try {
         listener(DeepLinkProcessor.processDeepLink(url));
       } catch (exception) {
-        reportCrash(exception as Error);
+        reportCrash(exception as Error, {
+          extras: {
+            context: 'DeepLinkSubscribe',
+            url: url ?? 'null',
+            timestamp: new Date().toISOString(),
+          },
+        });
       }
     });
     return () => {

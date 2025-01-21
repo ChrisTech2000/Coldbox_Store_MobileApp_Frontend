@@ -119,7 +119,13 @@ export function FarmerAnalytics() {
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
       toast.show(t('actions.error'), { type: 'md_danger' });
-      reportCrash(exception as Error);
+      reportCrash(exception as Error, {
+        extras: {
+          errorContext: 'PDF Generation',
+          impactDataPresent: !!data?.stats.aggregatedImpactData,
+          coolingUnitDataPresent: !!data?.datums.farmerCoolingUnits.length,
+        },
+      });
     } finally {
       setIsCreatingPdf(false);
     }

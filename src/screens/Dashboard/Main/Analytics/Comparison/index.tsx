@@ -112,7 +112,14 @@ export function ComparisonSection() {
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
-      reportCrash(exception as Error);
+      reportCrash(exception as Error, {
+        extras: {
+          errorContext: 'PDF Generation',
+          impactDataPresent: !!updatedImpactData,
+          coolingUnitDataPresent: !!coolingUnitData,
+          hasImpactData: !!impactData,
+        },
+      });
     } finally {
       setIsCreatingPdf(false);
     }

@@ -89,7 +89,13 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
             }
           }
           if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
-          reportCrash(exception as Error);
+          reportCrash(exception as Error, {
+            extras: {
+              hasFarmerDatums: !!contextualFarmer,
+              hasCrops: !isEmpty(crops),
+              hasCompanies: !isEmpty(companies),
+            },
+          });
         }
       }}
     >

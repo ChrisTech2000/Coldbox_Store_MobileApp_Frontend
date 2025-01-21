@@ -99,7 +99,14 @@ export function CompanySection() {
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
       });
-      reportCrash(exception as Error);
+      reportCrash(exception as Error, {
+        extras: {
+          hasCoolingUnits: !!coolingUnits?.length,
+          hasImpactCompany: !!impactCompany,
+          hasImpactData: !!impactData,
+          errorContext: 'PDF Generation',
+        },
+      });
     } finally {
       setIsCreatingPdf(false);
     }

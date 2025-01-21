@@ -9,6 +9,7 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import InAppNotifications from '#common/InAppNotifications';
 import { savePDF } from '#ui/lib/pdf';
+import reportCrash from '#ui/lib/reportCrash';
 
 type CheckOutDataProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -123,9 +124,14 @@ export function CheckOutData(props: CheckOutDataProps) {
       toast.show(t('Dashboard.History.pdfModal.successMessage'), { type: 'md_success' });
       dismissModal();
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
+      });
+      reportCrash(exception as Error, {
+        extras: {
+          errorContext: 'PDF Generation',
+          hasMovementCheckOut: !!movement.checkout.crates.length,
+        },
       });
     } finally {
       setIsProcessing(false);
