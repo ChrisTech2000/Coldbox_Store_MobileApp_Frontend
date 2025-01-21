@@ -17,6 +17,7 @@ import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -116,7 +117,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
       navigation.goBack();
     } catch (exception) {
       toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger' });
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 

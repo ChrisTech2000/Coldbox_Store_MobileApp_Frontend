@@ -28,6 +28,7 @@ import { Text } from '#ui/components/Text';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { useMarketplaceListing } from '../../Marketplace/utils';
 import { BankTransferModal } from './BankTransferDetailsModal';
@@ -148,10 +149,10 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       rootNavigation.navigate('RootMainTabStack');
       setIsSubmitting(false);
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.CrateManagement.operationError'), {
         type: 'md_danger',
       });
+      reportCrash(exception as Error);
       setIsSubmitting(false);
     }
   }, [crates, discount, currency, paymentMethod, isPaid, refreshData, guard, coolingUnit?.id]);

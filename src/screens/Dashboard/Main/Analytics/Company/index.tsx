@@ -8,6 +8,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { savePDF } from '#ui/lib/pdf';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
@@ -95,9 +96,16 @@ export function CompanySection() {
       await savePDF(html, fileName);
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
+      });
+      reportCrash(exception as Error, {
+        extras: {
+          hasCoolingUnits: !!coolingUnits?.length,
+          hasImpactCompany: !!impactCompany,
+          hasImpactData: !!impactData,
+          errorContext: 'PDF Generation',
+        },
       });
     } finally {
       setIsCreatingPdf(false);

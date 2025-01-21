@@ -7,6 +7,7 @@ import ms from 'ms';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
 import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
@@ -180,8 +181,8 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                 type: 'md_success',
               });
             } catch (exception) {
-              console.error(exception);
               toast.show(t('actions.error', { type: 'md_danger' }));
+              reportCrash(exception as Error);
             }
           }}
         />

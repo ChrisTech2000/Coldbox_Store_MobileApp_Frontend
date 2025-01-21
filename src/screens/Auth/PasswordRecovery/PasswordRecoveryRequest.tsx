@@ -10,6 +10,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
 import InAppNotifications from '#common/InAppNotifications';
+import reportCrash from '#ui/lib/reportCrash';
 
 type PasswordRecoverySchema = { phone: string };
 
@@ -46,7 +47,7 @@ function PasswordRecoveryRequest() {
         });
       } catch (exception) {
         toast.show(t('Auth.ForgotPassword.requestLimitMessage'), { type: 'md_danger' });
-        console.error(exception);
+        reportCrash(exception as Error);
       }
     },
     [toast]

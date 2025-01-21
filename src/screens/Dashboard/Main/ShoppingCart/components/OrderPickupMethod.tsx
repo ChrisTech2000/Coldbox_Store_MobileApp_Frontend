@@ -10,6 +10,7 @@ import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
@@ -96,10 +97,10 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
         toast.show(t('actions.done'), { type: 'md_success' });
       }
     } catch (error) {
-      console.error(error);
       toast.show(t('navigation.error.errorMessage'), {
         type: 'md_danger',
       });
+      reportCrash(error as Error);
     } finally {
       setIsSubmitting(false);
     }

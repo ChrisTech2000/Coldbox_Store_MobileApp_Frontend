@@ -12,6 +12,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import SensorsService from '#services/SensorsService';
+import reportCrash from '#ui/lib/reportCrash';
 
 type FormValues = {
   username: string;
@@ -64,10 +65,10 @@ export default function EcozenForm() {
 
       emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
         type: 'md_danger',
       });
+      reportCrash(exception as Error);
     }
   }
 

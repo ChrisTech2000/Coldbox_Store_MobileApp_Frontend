@@ -19,6 +19,7 @@ import { resolveCropInfo, resolveOwnerName } from '#services/utils/resolvers';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import reportCrash from '#ui/lib/reportCrash';
 
 import type { Notifications, CommoditySurveyDatum, OrderRequiresMovementDatum } from '../index';
 
@@ -76,7 +77,6 @@ export function NotificationBase(props: {
       }
       await updateStatusHandler?.();
     } catch (exception) {
-      console.error(exception);
       let toastId: string | undefined;
       if (exception instanceof Error) {
         if (exception.message === NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN) {
@@ -86,6 +86,12 @@ export function NotificationBase(props: {
         }
       }
       if (!toastId) toast.show(t('actions.error'), { type: 'md_danger' });
+      reportCrash(exception as Error, {
+        extras: {
+          notificationKind: item.eventType,
+          hasCrates: !!item.crates,
+        },
+      });
     } finally {
       setIsSurveyLoading(false);
       _setIsLoading(false);

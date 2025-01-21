@@ -16,6 +16,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { ERoles } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import FormManager from '../../AddCoolingUnit/contexts/FormManager';
 import InAppNotifications from '#common/InAppNotifications';
@@ -83,11 +84,11 @@ export default function DeleteAction(props: Props) {
       toggleProcessing();
       navigation.goBack();
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.cantDelete'), {
         type: 'md_danger',
         style: { marginBottom: 50 },
       });
+      reportCrash(exception as Error);
       toggleModalVisibility();
       toggleProcessing();
     }

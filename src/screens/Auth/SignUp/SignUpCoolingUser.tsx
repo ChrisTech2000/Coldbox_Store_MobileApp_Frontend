@@ -28,6 +28,7 @@ import {
 } from './schemas';
 import { customCountrySort } from './utils';
 import phoneNumberCodes from '#constants/phoneNumberCodes';
+import reportCrash from '#ui/lib/reportCrash';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -88,8 +89,8 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         },
       });
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger', style: { marginBottom: 55 } });
+      reportCrash(exception as Error);
     }
 
     if (result) {

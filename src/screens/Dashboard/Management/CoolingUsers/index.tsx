@@ -10,6 +10,7 @@ import { Button } from '#ui/components/Button';
 import { useToggle } from '#ui/hooks/useToggle';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { CoolingUsersOverlay } from '#screens/Dashboard/Tutorial/CoolingUsersOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
@@ -101,8 +102,8 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
                     [AIR_PROD_BASE_URL, 'company/', company.id, '/cusers'].join('')
                   );
                 } catch (exception) {
-                  console.error(exception);
                   toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                  reportCrash(exception as Error);
                 } finally {
                   toggleDownloading();
                 }

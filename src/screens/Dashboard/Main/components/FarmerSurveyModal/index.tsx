@@ -24,6 +24,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementCompany } from '#stores/management';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { type Crop, EUnitOfMeasurement } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { defaultValues as _defaultValues, FarmerSurveySchema, formatFloat } from './schema';
@@ -132,7 +133,11 @@ export function FarmersSurveyModal({
       quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
     };
     onSelectSpoilageReasons([]);
-    onSubmit(values);
+    try {
+      onSubmit(values);
+    } catch (exception) {
+      reportCrash(exception as Error);
+    }
   }, []);
 
   useEffect(() => {

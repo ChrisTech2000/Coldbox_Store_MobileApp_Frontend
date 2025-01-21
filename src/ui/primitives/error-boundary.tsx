@@ -6,6 +6,8 @@ import React, {
   type PropsWithChildren,
 } from 'react';
 
+import reportCrash from '#ui/lib/reportCrash';
+
 export type FallbackOptions<T> = {
   error: unknown;
   tryAgain: () => void;
@@ -34,12 +36,16 @@ export class ErrorBoundary<T> extends Component<PropsWithChildren<Props<T>>, Sta
   }
 
   componentDidCatch() {
-    this.props.onError?.(this.state.error);
+    const _exception = this.state.error;
+    if (_exception instanceof Error || typeof _exception === 'string') {
+      reportCrash(_exception, { severity: 'fatal' });
+    }
+    this.props.onError?.(_exception);
   }
 
-  reset = () => {
+  reset() {
     this.setState({ error: null });
-  };
+  }
 
   render() {
     const { fallback, fallbackRender, children, childProps } = this.props;

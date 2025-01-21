@@ -4,6 +4,7 @@ import camelCase from 'lodash/camelCase';
 
 import { DEEP_LINK_DOMAIN } from '#constants/environment';
 import { subs } from '#services/utils';
+import reportCrash from '#ui/lib/reportCrash';
 
 const BASE_DEEP_LINK_URL_SCHEMA = 'coldtivate://app';
 const DEEP_LINK_URL = `https://${DEEP_LINK_DOMAIN}`;
@@ -16,12 +17,19 @@ const DEEP_LINK_PATHS = {
 export default {
   prefixes: [BASE_DEEP_LINK_URL_SCHEMA, DEEP_LINK_URL],
   async getInitialURL(): Promise<string | null> {
+    let initialURL: string | null = null;
     try {
-      const url = await Linking.getInitialURL();
-      if (!url) return null;
-      return DeepLinkProcessor.processDeepLink(url);
+      initialURL = await Linking.getInitialURL();
+      if (!initialURL) return null;
+      return DeepLinkProcessor.processDeepLink(initialURL);
     } catch (exception) {
-      console.warn('Error processing deep link:', exception);
+      reportCrash(exception as Error, {
+        extras: {
+          context: 'DeepLinkInitialURL',
+          url: initialURL ?? 'null',
+          timestamp: new Date().toISOString(),
+        },
+      });
       return null;
     }
   },
@@ -30,7 +38,13 @@ export default {
       try {
         listener(DeepLinkProcessor.processDeepLink(url));
       } catch (exception) {
-        console.warn('Error processing deep link:', exception);
+        reportCrash(exception as Error, {
+          extras: {
+            context: 'DeepLinkSubscribe',
+            url: url ?? 'null',
+            timestamp: new Date().toISOString(),
+          },
+        });
       }
     });
     return () => {

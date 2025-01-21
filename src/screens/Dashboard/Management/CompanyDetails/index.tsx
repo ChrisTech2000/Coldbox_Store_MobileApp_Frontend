@@ -14,6 +14,7 @@ import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
+import reportCrash from '#ui/lib/reportCrash';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import LogoField from './modules/LogoField';
@@ -78,7 +79,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
       await mutate(getQueryKey('getCompanyById', company.id));
       navigation.goBack();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 

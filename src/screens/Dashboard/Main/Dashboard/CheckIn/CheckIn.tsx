@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, GestureResponderEvent, ScrollView, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Dialog, Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -31,6 +31,7 @@ import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import {
   CheckIn1ScreenOverlay,
@@ -151,9 +152,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     [produces, produces.length]
   );
 
-  async function onSubmit(evt: GestureResponderEvent): Promise<void> {
-    evt.stopPropagation();
-
+  async function onSubmit(): Promise<void> {
     if (!produces || !produces.length) {
       toast.show(t('Dashboard.CrateManagement.CheckIn.emptyMessage'), {
         type: 'md_danger',
@@ -436,7 +435,14 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             !(!produces || produces.length === 0 || isSubmitting) && 'border-green-primary'
           )}
           mode="contained"
-          onPress={onSubmit}
+          onPress={async (evt) => {
+            evt.stopPropagation();
+            try {
+              await onSubmit();
+            } catch (exception) {
+              reportCrash(exception as Error);
+            }
+          }}
           icon="check-circle-outline"
           contentStyle="flex flex-row-reverse items-center"
           disabled={!produces || produces.length === 0 || isSubmitting}

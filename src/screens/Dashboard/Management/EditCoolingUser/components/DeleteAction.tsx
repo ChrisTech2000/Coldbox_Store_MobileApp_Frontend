@@ -16,6 +16,7 @@ import { useToggle } from '#ui/hooks/useToggle';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import InAppNotifications from '#common/InAppNotifications';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
 
@@ -59,8 +60,8 @@ export default function DeleteAction(props: Props) {
 
       displayPopup(t('Dashboard.Management.EditCoolingUsers.toasts.confirmation'), true); // confirmation popup
     } catch (exception) {
-      console.error(exception);
       toast.show(t('actions.error'), { type: 'md_danger' });
+      reportCrash(exception as Error);
     } finally {
       toggleProcessing();
     }
@@ -77,8 +78,8 @@ export default function DeleteAction(props: Props) {
       toggleProcessing();
       goBack();
     } catch (exception) {
-      console.error(exception);
       toast.show(t('actions.error'), { type: 'md_danger' });
+      reportCrash(exception as Error);
       toggleProcessing();
     }
   }

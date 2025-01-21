@@ -16,6 +16,7 @@ import { Touchable } from '#ui/components/Touchable';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -161,7 +162,11 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
       rippleColor={colors.zinc[200]}
       onPress={async (evt) => {
         evt.stopPropagation();
-        onPressHandler();
+        try {
+          await onPressHandler();
+        } catch (exception) {
+          reportCrash(exception as Error);
+        }
       }}
     >
       <MaterialCommunityIcon

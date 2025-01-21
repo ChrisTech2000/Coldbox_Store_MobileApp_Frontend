@@ -16,6 +16,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useAppEventListener } from '#ui/lib/emitter';
 import ColdtivateService from '#services/ColdtivateService';
 import InAppNotifications from '#common/InAppNotifications';
+import reportCrash from '#ui/lib/reportCrash';
 
 type FormValues = {
   code: string;
@@ -74,7 +75,7 @@ export default function FormModal(props: Props) {
         userId: coolingUser.user.id,
       });
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 

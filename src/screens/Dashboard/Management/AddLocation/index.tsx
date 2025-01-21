@@ -8,6 +8,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -87,10 +88,10 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
       await mutate(getQueryKey('getLocations', company?.id));
       navigation.goBack();
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.Management.Location.toasts.locationSubmissionError'), {
         type: 'md_danger',
       });
+      reportCrash(exception as Error);
     }
   }
 

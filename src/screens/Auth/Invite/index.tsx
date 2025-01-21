@@ -13,6 +13,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { ERoles } from '#types/global';
 import AuthService from '#services/AuthService';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import FormManager, { type FormValues, buildInitialValues } from './components/FormManager';
 import FormFields from './components/FormFields';
@@ -35,7 +36,7 @@ function Invite(props: AuthRouteProps<'Invite'>) {
           if (!result) return;
           props.navigation.navigate('SignIn', { accountProfile: EAccountProfile.OPERATOR });
         } catch (exception) {
-          console.error(exception);
+          reportCrash(exception as Error);
         }
         break;
       }
@@ -45,7 +46,7 @@ function Invite(props: AuthRouteProps<'Invite'>) {
           if (!result) return;
           props.navigation.navigate('SignIn', { accountProfile: EAccountProfile.EMPLOYEE });
         } catch (exception) {
-          console.error(exception);
+          reportCrash(exception as Error);
         }
         break;
       }

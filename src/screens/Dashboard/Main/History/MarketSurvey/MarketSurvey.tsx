@@ -21,6 +21,7 @@ import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 
@@ -98,23 +99,27 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
 
   const onSubmit: SubmitHandler<MarketSurveySchemaType> = useCallback(
     async (values) => {
-      const result = await ColdtivateService.addMarketSurvey({
-        crop: crop?.id as number,
-        checkout: checkoutId as number,
-        sellingPlace: values.location,
-        ...(values.location === ESellingLocation.BOTH ? { market: null } : { localMarket: null }),
-        price: Number(formatFloat(values.price)),
-        reasonForLoss: values.reasonsForSpoilage,
-        sellingUnit: MAP_APP_UNIT_OF_MEASUREMENT_TO_API[values.unitOfMeasurement],
-        sellingDate: null,
-        kgInUnit: values.unitaryWeight,
-        loss: Number(formatFloat(values.spoiledProduceAmount)),
-        currency: companyCurrency ?? '',
-      });
+      try {
+        const result = await ColdtivateService.addMarketSurvey({
+          crop: crop?.id as number,
+          checkout: checkoutId as number,
+          sellingPlace: values.location,
+          ...(values.location === ESellingLocation.BOTH ? { market: null } : { localMarket: null }),
+          price: Number(formatFloat(values.price)),
+          reasonForLoss: values.reasonsForSpoilage,
+          sellingUnit: MAP_APP_UNIT_OF_MEASUREMENT_TO_API[values.unitOfMeasurement],
+          sellingDate: null,
+          kgInUnit: values.unitaryWeight,
+          loss: Number(formatFloat(values.spoiledProduceAmount)),
+          currency: companyCurrency ?? '',
+        });
 
-      if (result) {
-        refreshData.forEach((fn) => fn());
-        rootNavigation.navigate('RootHistoryTabStack');
+        if (result) {
+          refreshData.forEach((fn) => fn());
+          rootNavigation.navigate('RootHistoryTabStack');
+        }
+      } catch (exception) {
+        reportCrash(exception as Error);
       }
     },
     [crop, checkoutId, companyCurrency]

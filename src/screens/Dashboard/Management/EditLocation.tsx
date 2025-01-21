@@ -10,6 +10,7 @@ import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -83,10 +84,10 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
             const coordinates = await geocoder.getCoordsFromAddress(rest);
             datums = merge(rest, coordinates);
           } catch (exception) {
-            console.error(exception);
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
               type: 'md_danger',
             });
+            reportCrash(exception as Error);
             return;
           }
           break;
@@ -107,10 +108,10 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       ]);
       navigation.goBack();
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.Management.Location.toasts.locationSubmissionError'), {
         type: 'md_danger',
       });
+      reportCrash(exception as Error);
     }
   }
 
@@ -129,7 +130,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
       cache.delete(getQueryKey('getLocation', { locationId, companyId }));
       navigation.goBack();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     } finally {
       toggleProcessing();
     }

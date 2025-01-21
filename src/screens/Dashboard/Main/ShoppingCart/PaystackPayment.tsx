@@ -16,6 +16,7 @@ import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 import { ERoles } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { useMarketplaceListing } from '../Marketplace/utils';
 
@@ -57,7 +58,12 @@ function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) 
         }
       }
 
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch (exception) {
+        reportCrash(exception as Error);
+      }
+
       fetchGlobalInformation(user!.id);
       refreshData.forEach((fn) => fn());
     }

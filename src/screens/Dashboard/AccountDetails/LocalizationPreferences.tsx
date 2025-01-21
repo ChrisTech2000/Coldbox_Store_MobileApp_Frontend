@@ -15,6 +15,7 @@ import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import reportCrash from '#ui/lib/reportCrash';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import LocationField from './modules/Location';
@@ -69,7 +70,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
 
       props.navigation.goBack();
     } catch (exception) {
-      console.error(exception);
+      reportCrash(exception as Error);
     }
   }
 

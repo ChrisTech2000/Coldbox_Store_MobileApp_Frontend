@@ -15,6 +15,7 @@ import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import InAppNotifications from '#common/InAppNotifications';
 import type { Crop } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 type CheckInWithCodeModalProps = {
   isModalOpen: boolean;
@@ -115,6 +116,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
         toast.show(t('Dashboard.CrateManagement.CheckIn.WithCode.failedMessage'), {
           type: 'md_danger',
         });
+        reportCrash(error as Error);
       }
     },
     [coolingUnit, plannedDays]

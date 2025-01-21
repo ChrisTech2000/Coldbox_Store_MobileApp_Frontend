@@ -18,6 +18,7 @@ import { Touchable } from '#ui/components/Touchable';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { Translator, useTranslationUtils } from '#i18n/utils';
@@ -147,7 +148,6 @@ export default function MarketplaceLocationFilter() {
         form.setValue('cityName', address);
         previousValues.current = { cityName: address, distance: form.getValues('distance') };
       } catch (exception) {
-        console.error(exception);
         if (exception instanceof Error) {
           const errorCode = 'code' in exception ? exception.code : 'DENIED';
           switch (errorCode) {
@@ -160,8 +160,10 @@ export default function MarketplaceLocationFilter() {
               }
               return _setLocation(DEFAULT_COORDINATES);
             }
-            default:
+            default: {
+              reportCrash(exception as Error);
               return;
+            }
           }
         }
       }

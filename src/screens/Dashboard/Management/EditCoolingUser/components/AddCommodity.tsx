@@ -5,6 +5,7 @@ import { Button } from '#ui/components/Button';
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import type { GetAllCropsResponse } from '#types/api.responses';
+import reportCrash from '#ui/lib/reportCrash';
 
 import type { CommoditySurveyPatcher } from '../CoolingUsersSurvey';
 import {
@@ -44,7 +45,7 @@ export default function AddCommodity(props: Props) {
         const result = await commodityPatcher(contextualCropId)(values);
         if (result) toggleVisibility();
       } catch (exception) {
-        console.error(exception);
+        reportCrash(exception as Error);
       }
     },
     [commodityPatcher, toggleVisibility]

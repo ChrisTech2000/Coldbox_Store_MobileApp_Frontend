@@ -10,6 +10,7 @@ import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { MovementCrate, type CoolingUnit } from '#types/global';
 import InAppNotifications from '#common/InAppNotifications';
 import { savePDF } from '#ui/lib/pdf';
+import reportCrash from '#ui/lib/reportCrash';
 
 type CheckInDataProps = {
   companyName: string;
@@ -146,9 +147,15 @@ export function CheckInData(props: CheckInDataProps) {
       toast.show(t('Dashboard.History.pdfModal.successMessage'), { type: 'md_success' });
       dismissModal();
     } catch (exception) {
-      console.error(exception);
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
         type: 'md_danger',
+      });
+      reportCrash(exception as Error, {
+        extras: {
+          errorContext: 'PDF Generation',
+          hasMovementCheckIn: !!movement.checkin.crates.length,
+          coolingUnitDataPresent: !!coolingUnit,
+        },
       });
     } finally {
       setIsProcessing(false);

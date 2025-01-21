@@ -5,6 +5,7 @@ import { useShallow } from 'zustand/react/shallow';
 import ColdtivateService from '#services/ColdtivateService';
 import { GetAllCropsResponse } from '#types/api.responses';
 import { type Company, type CoolingUnit, type Farmer } from '#types/global';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { useAuthStore } from './auth';
 
@@ -76,8 +77,8 @@ export const useDashboardStore = create<State & Actions>((set) => ({
         allCrops: crops ?? null,
       });
     } catch (err) {
-      console.error('Error fetching data:', err);
       set({ farmerId: null, farmerCompanies: null });
+      reportCrash(err as Error);
     }
   },
 

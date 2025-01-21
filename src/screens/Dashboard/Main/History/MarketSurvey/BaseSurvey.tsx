@@ -15,6 +15,7 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRoutes } from '#navigation/Dashboard/Main/HistoryTabStack';
@@ -72,18 +73,22 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
 
   const onSubmit: SubmitHandler<BaseSurveySchemaType> = useCallback(
     async (values) => {
-      const result = await ColdtivateService.updateFarmerSurveys({
-        farmer: farmerId as number,
-        userType: values.occupation,
-        experience: values.experience === EExperience.OLD ? 'yes' : 'no',
-        experienceDuration: Number(values.experienceInMonths ?? 0),
-        commodities: [...farmerSurveys],
-      });
+      try {
+        const result = await ColdtivateService.updateFarmerSurveys({
+          farmer: farmerId as number,
+          userType: values.occupation,
+          experience: values.experience === EExperience.OLD ? 'yes' : 'no',
+          experienceDuration: Number(values.experienceInMonths ?? 0),
+          commodities: [...farmerSurveys],
+        });
 
-      if (result) {
-        rootNavigation.navigate('RootHistoryTabStack');
-        resetMarketSurveyStore();
-        refetchSurveys?.();
+        if (result) {
+          rootNavigation.navigate('RootHistoryTabStack');
+          resetMarketSurveyStore();
+          refetchSurveys?.();
+        }
+      } catch (exception) {
+        reportCrash(exception as Error);
       }
     },
     [farmerId, farmerSurveys, refetchSurveys]

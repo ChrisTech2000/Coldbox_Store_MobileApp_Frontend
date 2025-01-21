@@ -10,6 +10,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
+import reportCrash from '#ui/lib/reportCrash';
 
 type FormValues<T = string> = {
   quantity: T;
@@ -55,7 +56,11 @@ export default function CartItemInput(props: {
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
       if (name === 'quantity' && value.quantity) {
-        debouncedSubmit(Number.parseInt(value.quantity));
+        try {
+          debouncedSubmit(Number.parseInt(value.quantity));
+        } catch (exception) {
+          reportCrash(exception as Error);
+        }
       }
     });
     return () => subscription.unsubscribe();

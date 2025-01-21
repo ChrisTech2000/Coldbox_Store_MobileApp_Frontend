@@ -18,6 +18,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { resetAllStores } from '#navigation/Dashboard/components/DrawerContent/resetStoresUtil';
 import InAppNotifications from '#common/InAppNotifications';
 import DataloaderService from '#services/DataloaderService';
+import reportCrash from '#ui/lib/reportCrash';
 
 import { usePopup } from './utils';
 
@@ -92,8 +93,8 @@ export default function DeleteAccountAction() {
 
       displayPopup(t('Dashboard.AccountDetails.popups.default'), true); // confirmation popup
     } catch (exception) {
-      console.error(exception);
       toast.show(t('actions.error'), { type: 'md_danger' });
+      reportCrash(exception as Error);
     } finally {
       toggleProcessing();
     }
@@ -110,8 +111,8 @@ export default function DeleteAccountAction() {
       useAuthStore.getState().revokeSession();
       DataloaderService.clearAllCaches();
     } catch (exception) {
-      console.error(exception);
       toast.show(t('actions.error'), { type: 'md_danger' });
+      reportCrash(exception as Error);
     } finally {
       toggleProcessing();
     }
