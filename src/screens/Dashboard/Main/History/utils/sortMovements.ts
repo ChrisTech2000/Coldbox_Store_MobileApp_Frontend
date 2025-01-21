@@ -2,6 +2,7 @@ import { EInitiatedFor } from '#types/global';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 
 import { ESortingOptions } from '../components/SortMenu';
+import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
 
 type Movement = GetMovementsHistoryResponse[number];
 
@@ -58,5 +59,5 @@ export function sortMovementCrops(movement: Movement): Array<string> {
 
 function _getCropNames(data: Movement['checkin'] | Movement['checkout']): Array<string> {
   if (!data?.crates) return [];
-  return data.crates.flatMap((crate) => crate.crop?.name || []);
+  return data.crates.flatMap((crate) => crate.crop?.name || DEFAULT_CROP_VALUES.name);
 }
