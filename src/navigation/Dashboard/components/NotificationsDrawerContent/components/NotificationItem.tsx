@@ -86,7 +86,12 @@ export function NotificationBase(props: {
         }
       }
       if (!toastId) toast.show(t('actions.error'), { type: 'md_danger' });
-      reportCrash(exception as Error);
+      reportCrash(exception as Error, {
+        extras: {
+          notificationKind: item.eventType,
+          hasCrates: !!item.crates,
+        },
+      });
     } finally {
       setIsSurveyLoading(false);
       _setIsLoading(false);
