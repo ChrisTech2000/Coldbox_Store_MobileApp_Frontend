@@ -5,7 +5,7 @@ import { Dimensions, LayoutChangeEvent } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Drawer } from 'react-native-paper';
 
-import { TranslationPaths, Translator } from '#i18n/utils';
+import type { TranslationPaths, Translator } from '#i18n/utils';
 import { DrawerAccountDetailsOverlay } from '#screens/Dashboard/Tutorial/DrawerAccountDetailsOverlay';
 import { DrawerFAQOverlay } from '#screens/Dashboard/Tutorial/DrawerFAQOverlay';
 import { DrawerKnowledgeHubOverlay } from '#screens/Dashboard/Tutorial/DrawerKnowledgeHubOverlay';

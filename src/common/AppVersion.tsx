@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Linking, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { Dialog, Portal } from 'react-native-paper';
 import { getBuildNumber } from 'react-native-device-info';
 
@@ -11,6 +11,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 import { ENVIRONMENT } from '#constants/environment';
 import reportCrash from '#ui/lib/reportCrash';
+import { launchBrowserUrl } from '#ui/lib/launchBrowserUrl';
 
 const IS_DEV_ENV = typeof ENVIRONMENT === 'string' && ENVIRONMENT === 'development';
 
@@ -83,15 +84,19 @@ export default function AppVersionModal() {
         <Dialog.Actions>
           <Button
             onPress={async (evt) => {
+              evt.stopPropagation();
+
+              const APP_STORE_URLS = {
+                android:
+                  'https://play.google.com/store/apps/details?id=com.base.coldtivate&hl=en&gl=US&pli=1',
+                ios: 'https://apps.apple.com/sg/app/coldtivate/id1613730873',
+              };
+
+              const storeUrl =
+                Platform.OS === 'android' ? APP_STORE_URLS.android : APP_STORE_URLS.ios;
+
               try {
-                evt.stopPropagation();
-                if (Platform.OS === 'android') {
-                  await Linking.openURL(
-                    'https://play.google.com/store/apps/details?id=com.base.coldtivate&hl=en&gl=US&pli=1'
-                  );
-                  return;
-                }
-                await Linking.openURL('https://apps.apple.com/sg/app/coldtivate/id1613730873');
+                await launchBrowserUrl(storeUrl);
               } catch (exception) {
                 reportCrash(exception as Error);
               }
