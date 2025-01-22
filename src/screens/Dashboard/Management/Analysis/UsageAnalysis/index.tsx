@@ -43,8 +43,10 @@ const useSortingStore = createSortingStore();
 
 export const usageAnalysisStores = [useCoolingUnitStore, useDateRangeStore];
 
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
+const ESTIMATED_LIST_SIZE = {
+  width: Dimensions.get('window').width - 48,
+  height: Dimensions.get('window').height * 0.7,
+};
 
 function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { t } = useTranslationUtils();
@@ -216,10 +218,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
               />
             )}
             estimatedItemSize={40}
-            estimatedListSize={{
-              height: deviceHeight,
-              width: deviceWidth,
-            }}
+            estimatedListSize={ESTIMATED_LIST_SIZE}
           />
         )}
       </ScrollView>
