@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
-import React, { useCallback, useState } from 'react';
-import { Linking, View } from 'react-native';
+import React, { useState, type Dispatch, type SetStateAction } from 'react';
+import { View } from 'react-native';
 import { Dialog, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -17,14 +17,17 @@ import InAppNotifications from '#common/InAppNotifications';
 import { AIR_PROD_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
-import { CoolingUnit } from '#types/global';
+import { useControlledState } from '#ui/hooks/useControlledState';
+import { useToggle } from '#ui/hooks/useToggle';
+import type { CoolingUnit } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
+import { downloadAndSaveFile } from '#ui/lib/pdf';
 
 type DownloadDataModalProps = {
   coolingUnits?: Array<CoolingUnit>;
   mode?: 'usage' | 'revenue';
   isOpen: boolean;
-  dismiss: () => void;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 const useCoolingUnitStore = createMultipleSelectStore<CoolingUnit>();
@@ -33,7 +36,7 @@ const useDateRangeStore = createDataRangeStore();
 export const downloadAnalysisStores = [useCoolingUnitStore, useDateRangeStore];
 
 export function DownloadDataModal(props: DownloadDataModalProps) {
-  const { isOpen, dismiss, coolingUnits, mode } = props;
+  const { isOpen, setIsOpen, coolingUnits, mode } = props;
 
   const toast = InAppNotifications.useToast();
   const { t } = useTranslationUtils();
@@ -41,25 +44,18 @@ export function DownloadDataModal(props: DownloadDataModalProps) {
   const { startDate, endDate } = useDateRangeStore();
   const { company } = useManagementStore();
 
+  const [isModalOpen, setIsModalOpen] = useControlledState<boolean>(isOpen, setIsOpen);
+  const [isProcessing, toggleIsProcessing] = useToggle(false);
+
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-
-  const downloadDataAsXlsx = useCallback(async () => {
-    if (!startDate || !endDate) throw new Error();
-
-    const _company = company?.id;
-    const _mode = mode === 'usage' ? 'usage_analysis' : 'revenue_analysis';
-    const _startDate = format(new Date(startDate), 'yyyy-MM-dd');
-    const _endDate = format(new Date(endDate), 'yyyy-MM-dd');
-
-    const url = `${AIR_PROD_BASE_URL}company/${_company}/${_mode}?start_date=${_startDate}&end_date=${_endDate}&cooling_unit_ids=${selectedUnits.map((cu) => cu.id).join(',')}`;
-
-    await Linking.openURL(url);
-  }, [selectedUnits, startDate, endDate, company]);
 
   return (
     <Portal>
-      <Dialog visible={isOpen} onDismiss={dismiss} style={{ backgroundColor: 'white' }}>
+      <Dialog
+        visible={isModalOpen}
+        onDismiss={() => setIsModalOpen(false)}
+        style={{ backgroundColor: 'white' }}
+      >
         <Dialog.Title>{t('Dashboard.Management.UsageAnalysis.modal.title')}</Dialog.Title>
         <Dialog.Content>
           <View tw="space-y-2">
@@ -104,14 +100,21 @@ export function DownloadDataModal(props: DownloadDataModalProps) {
             onPress={async (evt) => {
               evt.stopPropagation();
               try {
-                setIsProcessing(true);
-                await downloadDataAsXlsx();
-                dismiss();
+                toggleIsProcessing();
+                if (!startDate || !endDate) throw new Error();
+                const _company = company?.id;
+                const _mode = mode === 'usage' ? 'usage_analysis' : 'revenue_analysis';
+                const _startDate = format(new Date(startDate), 'yyyy-MM-dd');
+                const _endDate = format(new Date(endDate), 'yyyy-MM-dd');
+                const url = `${AIR_PROD_BASE_URL}company/${_company}/${_mode}?start_date=${_startDate}&end_date=${_endDate}&cooling_unit_ids=${selectedUnits.map((cu) => cu.id).join(',')}`;
+                await downloadAndSaveFile(url, `revenue_analysis_comp_id_${_company}`, 'xlsx');
+                setIsModalOpen(false);
+                toast.show(`${t('actions.done')}!`, { type: 'md_success' });
               } catch (exception) {
                 toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
                 reportCrash(exception as Error);
               } finally {
-                setIsProcessing(false);
+                toggleIsProcessing();
               }
             }}
           >
