@@ -110,18 +110,18 @@ export const DateRangePickerWithStore = ({
   }, [setStartDate]);
 
   useEffect(() => {
-    if (initialStartDate) {
+    if (initialStartDate && !startDate) {
       const start = new Date(initialStartDate);
       start.setHours(0, 0, 0, 0);
       setStartDate(start);
     }
 
-    if (initialEndDate) {
+    if (initialEndDate && !endDate) {
       const end = new Date(initialEndDate);
       end.setHours(23, 59, 59, 999);
       setEndDate(end);
     }
-  }, [initialStartDate, initialEndDate, setStartDate, setEndDate]);
+  }, [initialStartDate, initialEndDate]);
 
   return (
     <View tw="flex flex-row flex-wrap items-center">

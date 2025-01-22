@@ -1,18 +1,23 @@
 import React, { useMemo } from 'react';
-import { View, Linking } from 'react-native';
+import { View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
+import { downloadAndSaveFile } from '#ui/lib/pdf';
+import reportCrash from '#ui/lib/reportCrash';
 
+import { useToggle } from '#ui/hooks/useToggle';
+import InAppNotifications from '#common/InAppNotifications';
 import type { KnowledgeHubStackRouteProps } from '#navigation/Dashboard/KnowledgeHub';
 import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { KNOWLEDGE_HUB_URL, YOUR_VCCA_PDF_LINK } from '#constants/environment';
 import { GenericError } from '#ui/components/GenericError';
+import { cn } from '#ui/lib/cn';
 
 import { countriesDict } from '../Management/CompanyDetails/utils';
 
@@ -30,6 +35,9 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
   const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+  const toast = InAppNotifications.useToast();
+
+  const [isDownloading, toggleDownloading] = useToggle(false);
 
   const _language = _getLanguage();
 
@@ -134,10 +142,24 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
         <Text tw="text-zinc-500 text-sm">
           {t('Dashboard.KnowledgeHub.source')}
           <Text
-            tw="text-blue-500 text-sm"
+            tw={cn('text-blue-500 text-sm', isDownloading && 'text-zinc-500 line-through')}
+            disabled={isDownloading}
             onPress={async (evt) => {
               evt.stopPropagation();
-              await Linking.openURL(YOUR_VCCA_PDF_LINK as string);
+              try {
+                toggleDownloading();
+                await downloadAndSaveFile(
+                  YOUR_VCCA_PDF_LINK,
+                  'operators_manual_by_your_vcca',
+                  'pdf'
+                );
+                toast.show(`${t('actions.done')}!`, { type: 'md_success' });
+              } catch (exception) {
+                toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                reportCrash(exception as Error);
+              } finally {
+                toggleDownloading();
+              }
             }}
           >
             &nbsp;{t('Dashboard.KnowledgeHub.clickHere')}

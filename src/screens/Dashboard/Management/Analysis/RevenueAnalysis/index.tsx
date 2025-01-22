@@ -192,7 +192,14 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         />
       </View>
 
-      <Button mode="contained" uppercase onPress={() => setIsPDFModalOpen(true)}>
+      <Button
+        mode="contained"
+        uppercase
+        onPress={(evt) => {
+          evt.stopPropagation();
+          setIsPDFModalOpen(true);
+        }}
+      >
         {t('Dashboard.Management.UsageAnalysis.downloadDataButton')}
       </Button>
 
@@ -258,7 +265,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
       <DownloadDataModal
         isOpen={isPDFModalOpen}
-        dismiss={() => setIsPDFModalOpen(false)}
+        setIsOpen={setIsPDFModalOpen}
         coolingUnits={coolingUnits}
         mode="revenue"
       />

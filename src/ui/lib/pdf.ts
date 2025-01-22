@@ -4,6 +4,7 @@ import {
   unlink,
   writeFile,
   exists,
+  downloadFile,
 } from '@dr.pogodin/react-native-fs';
 import { Platform } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
@@ -16,6 +17,8 @@ const IS_ANDROID = Platform.OS === 'android';
 const IS_ANDROID_PERMISSION_REQUIRED = Number(Platform.Version) < 33;
 
 const BASE_PATH = IS_ANDROID ? `${ExternalStorageDirectoryPath}/Download` : DocumentDirectoryPath;
+
+type FileExtensions = 'pdf' | 'doc' | 'docx' | 'xls' | 'xlsx' | 'txt' | 'csv';
 
 /**
  * Note on Android MediaStore Caching:
@@ -32,9 +35,9 @@ const BASE_PATH = IS_ANDROID ? `${ExternalStorageDirectoryPath}/Download` : Docu
  * The cache will only refresh after the app is fully terminated and
  * restarted.
  */
-function _buildPDFFilePath(fileName: string) {
+function _buildFilePath(fileName: string, extension: FileExtensions) {
   const creationDate = dateFmt(new Date().toISOString(), 'dMyy_kms');
-  return `${BASE_PATH}/${fileName.toLowerCase()}-${creationDate}.pdf`;
+  return `${BASE_PATH}/${fileName.toLowerCase()}-${creationDate}.${extension}`;
 }
 
 export async function savePDF(html: string, fileName: string): Promise<void> {
@@ -48,7 +51,7 @@ export async function savePDF(html: string, fileName: string): Promise<void> {
   const result = await RNHTMLtoPDF.convert({ html, base64: true });
   if (!result.base64) throw new Error('Failed to convert HTML to PDF');
 
-  const filePath = _buildPDFFilePath(fileName);
+  const filePath = _buildFilePath(fileName, 'pdf');
   await writeFile(filePath, result.base64, 'base64');
 
   async function _deleteTempFile(): Promise<void> {
@@ -61,6 +64,51 @@ export async function savePDF(html: string, fileName: string): Promise<void> {
       await Share.open({
         url: `file://${filePath}`,
         type: 'application/pdf',
+      });
+      await _deleteTempFile();
+    } catch (exception) {
+      if (exception instanceof Error) {
+        if (exception.message === 'User did not share') {
+          return await _deleteTempFile();
+        }
+      }
+      throw exception; // let it bubble up
+    }
+  }
+}
+
+export async function downloadAndSaveFile(
+  url: string,
+  fileName: string,
+  extension: FileExtensions
+): Promise<void> {
+  if (IS_ANDROID && IS_ANDROID_PERMISSION_REQUIRED) {
+    const outcome = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
+    if (outcome !== RESULTS.GRANTED) {
+      throw new Error('Permission to write to external storage was denied');
+    }
+  }
+
+  const filePath = _buildFilePath(fileName, extension);
+
+  const { promise } = downloadFile({
+    fromUrl: url,
+    toFile: filePath,
+  });
+
+  const result = await promise;
+  if (result.statusCode !== 200) throw new Error('Failed to download file');
+
+  async function _deleteTempFile(): Promise<void> {
+    const fileStillExists = await exists(filePath);
+    if (fileStillExists) await unlink(filePath);
+  }
+
+  if (!IS_ANDROID) {
+    try {
+      await Share.open({
+        url: `file://${filePath}`,
+        type: `application/${extension}`,
       });
       await _deleteTempFile();
     } catch (exception) {

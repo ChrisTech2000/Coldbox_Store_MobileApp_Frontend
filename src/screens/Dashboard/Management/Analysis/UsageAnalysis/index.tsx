@@ -264,7 +264,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
 
       <DownloadDataModal
         isOpen={isPDFModalOpen}
-        dismiss={() => setIsPDFModalOpen(false)}
+        setIsOpen={setIsPDFModalOpen}
         coolingUnits={coolingUnits}
         mode="usage"
       />
