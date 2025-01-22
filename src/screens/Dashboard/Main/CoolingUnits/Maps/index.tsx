@@ -1,7 +1,6 @@
 import ms from 'ms';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { type StyleProp, type ViewStyle, Dimensions, View } from 'react-native';
 import GetLocation from 'react-native-get-location';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
@@ -21,7 +20,6 @@ import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constant
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 import { DEFAULT_COORDINATES } from '../../Marketplace/utils';
 import * as Map from './components/Map';
@@ -29,10 +27,10 @@ import PointAnnotationModal from './components/PointAnnotationModal';
 import { PIN_COLORS } from './constants';
 import { processLocationMarkers } from './utils';
 
-const SWR_CACHE_KEY = 'getCoolingUnitsLocationMarkers';
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const MAP_HEIGHT =
-  SCREEN_HEIGHT > SMALL_SCREEN_THRESHOLD ? SCREEN_HEIGHT * 0.65 : SCREEN_HEIGHT * 0.55;
+const MAP_ROOT_STYLES = {
+  width: '100%',
+  height: Dimensions.get('window').height * 0.52,
+} satisfies StyleProp<ViewStyle>;
 
 function CoolingUnitsMaps() {
   const [isLoadingCoords, setLoadingCoords] = useState<boolean>(true);
@@ -47,10 +45,7 @@ function CoolingUnitsMaps() {
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
-    {
-      skip: !farmerId,
-      defaultData: [],
-    }
+    { skip: !farmerId, defaultData: [] }
   );
 
   useWalkthroughStep({
@@ -60,7 +55,7 @@ function CoolingUnitsMaps() {
   });
 
   const { data: markers, isLoading: isLoadingMarkers } = useApiCall(
-    SWR_CACHE_KEY,
+    'getCoolingUnitsLocationMarkers',
     async () => {
       const [locations, coolingUnits] = await Promise.allSettled([
         ColdtivateService.getPublicAndVisitedLocations(farmerId!),
@@ -75,10 +70,7 @@ function CoolingUnitsMaps() {
       });
     },
     undefined,
-    {
-      skip: !farmerId || isLoadingCrops,
-      defaultData: [],
-    }
+    { skip: !farmerId || isLoadingCrops, defaultData: [] }
   );
 
   useEffect(() => {
@@ -111,8 +103,8 @@ function CoolingUnitsMaps() {
   if (typeof coordinates === 'undefined') return null;
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Map.Root coordinates={coordinates} style={{ width: '100%', height: MAP_HEIGHT }}>
+    <View tw="flex-1">
+      <Map.Root coordinates={coordinates} style={MAP_ROOT_STYLES}>
         <Map.Markers
           markers={markers}
           onSelect={(markerIdx) => {
@@ -133,7 +125,7 @@ function CoolingUnitsMaps() {
           <Text>{t('Dashboard.CoolingUnitsMaps.usedMarker')}</Text>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
