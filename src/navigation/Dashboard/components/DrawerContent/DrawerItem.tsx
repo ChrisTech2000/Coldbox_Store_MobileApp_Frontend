@@ -1,12 +1,11 @@
 import { useDrawerStatus } from '@react-navigation/drawer';
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types';
-import { TranslationPaths } from 'i18n';
 import React from 'react';
 import { Dimensions, LayoutChangeEvent } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Drawer } from 'react-native-paper';
 
-import { Translator } from '#i18n/utils';
+import { TranslationPaths, Translator } from '#i18n/utils';
 import { DrawerAccountDetailsOverlay } from '#screens/Dashboard/Tutorial/DrawerAccountDetailsOverlay';
 import { DrawerFAQOverlay } from '#screens/Dashboard/Tutorial/DrawerFAQOverlay';
 import { DrawerKnowledgeHubOverlay } from '#screens/Dashboard/Tutorial/DrawerKnowledgeHubOverlay';
