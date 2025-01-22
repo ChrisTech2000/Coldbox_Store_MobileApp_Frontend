@@ -18,7 +18,17 @@ const IS_ANDROID_PERMISSION_REQUIRED = Number(Platform.Version) < 33;
 
 const BASE_PATH = IS_ANDROID ? `${ExternalStorageDirectoryPath}/Download` : DocumentDirectoryPath;
 
-type FileExtensions = 'pdf' | 'doc' | 'docx' | 'xls' | 'xlsx' | 'txt' | 'csv';
+const MIME_TYPES = {
+  pdf: 'application/pdf',
+  doc: 'application/msword',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  xls: 'application/vnd.ms-excel',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  txt: 'text/plain',
+  csv: 'text/csv',
+} as const;
+
+type FileExtensions = keyof typeof MIME_TYPES;
 
 /**
  * Note on Android MediaStore Caching:
@@ -63,7 +73,7 @@ export async function savePDF(html: string, fileName: string): Promise<void> {
     try {
       await Share.open({
         url: `file://${filePath}`,
-        type: 'application/pdf',
+        type: MIME_TYPES.pdf,
       });
       await _deleteTempFile();
     } catch (exception) {
@@ -108,7 +118,7 @@ export async function downloadAndSaveFile(
     try {
       await Share.open({
         url: `file://${filePath}`,
-        type: `application/${extension}`,
+        type: MIME_TYPES[extension],
       });
       await _deleteTempFile();
     } catch (exception) {
