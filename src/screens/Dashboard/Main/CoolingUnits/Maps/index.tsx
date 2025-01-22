@@ -1,6 +1,6 @@
 import ms from 'ms';
 import React, { useEffect, useState } from 'react';
-import { type StyleProp, type ViewStyle, Dimensions, View } from 'react-native';
+import { type StyleProp, type ViewStyle, Dimensions, View, Platform } from 'react-native';
 import GetLocation from 'react-native-get-location';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
@@ -27,9 +27,12 @@ import PointAnnotationModal from './components/PointAnnotationModal';
 import { PIN_COLORS } from './constants';
 import { processLocationMarkers } from './utils';
 
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const MAP_HEIGHT_RATIO = { android: 0.63, ios: 0.52 } as Record<typeof Platform.OS, number>;
+
 const MAP_ROOT_STYLES = {
   width: '100%',
-  height: Dimensions.get('window').height * 0.52,
+  height: SCREEN_HEIGHT * MAP_HEIGHT_RATIO[Platform.OS],
 } satisfies StyleProp<ViewStyle>;
 
 function CoolingUnitsMaps() {
