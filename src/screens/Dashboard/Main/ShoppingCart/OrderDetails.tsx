@@ -125,7 +125,10 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     cartData.pickupDetails.some((pickup) => pickup.coolingUnitId === item.relCoolingUnitId)
   );
   const orderDisabled =
-    cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
+    cartData.totalProduceAmount -
+      cartData.totalDiscountAmount +
+      cartData.totalPaymentFeesAmount +
+      cartData.totalColdtivateAmount <
     CART_MINIMUM_VALUE;
 
   return (
