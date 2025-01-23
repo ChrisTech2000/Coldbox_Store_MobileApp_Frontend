@@ -1,7 +1,23 @@
 import { useFont as useFontLoader } from '@shopify/react-native-skia';
 
 import Roboto from '#assets/fonts/Roboto-Regular.ttf';
+import NotoSansDevanagari from '#assets/fonts/NotoSansDevanagari-VariableFont.ttf';
+import NotoSansOriya from '#assets/fonts/NotoSansOriya-VariableFont.ttf';
+import NotoSansGujarati from '#assets/fonts/NotoSansGujarati-VariableFont.ttf';
+
+// TODO: download and import "Noto Sans Arabic" font to support Arabic language text rendering (RTL related)
+
+import { LanguageManager } from '#i18n/utils';
 
 export default function useSkiaFont(fontSize?: number) {
-  return useFontLoader(Roboto, fontSize);
+  switch (LanguageManager.read(false)) {
+    case 'hi':
+      return useFontLoader(NotoSansDevanagari, fontSize);
+    case 'or':
+      return useFontLoader(NotoSansOriya, fontSize);
+    case 'gu':
+      return useFontLoader(NotoSansGujarati, fontSize);
+    default:
+      return useFontLoader(Roboto, fontSize);
+  }
 }

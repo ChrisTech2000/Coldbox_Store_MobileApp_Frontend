@@ -6,16 +6,24 @@
       "sha1": "f74556f7efc1d37e4b4c959f79b130a4cb0bf638"
     },
     {
+      "path": "src/assets/images/mastercard.svg",
+      "sha1": "2ad5d019a4ce6f219d34299322436f335471673f"
+    },
+    {
       "path": "src/assets/images/root_hero.svg",
       "sha1": "904c213ad1552b1a97bcee2784d9f6e79c5795c3"
     },
     {
+      "path": "src/assets/images/visa.svg",
+      "sha1": "f587ecc3094bceb8deb9bba68f0e1f25029e136b"
+    },
+    {
       "path": "src/assets/icons/check-in.svg",
-      "sha1": "9ecd92aa99182cf85619149897289435eeb10b14"
+      "sha1": "1c9bf63649c92d8a26912f6176e8032c945887f5"
     },
     {
       "path": "src/assets/icons/check-out.svg",
-      "sha1": "d468d89efa3ed9e62314bf50c953e182b221b5d7"
+      "sha1": "3e9416b4b68e2233fc695e633f64d22d954c8a4c"
     },
     {
       "path": "src/assets/icons/coldroom.svg",
@@ -44,6 +52,18 @@
     {
       "path": "src/assets/icons/operator.svg",
       "sha1": "3caaa2bd3439db8e56f5536f83851d0e591376a2"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansDevanagari-VariableFont.ttf",
+      "sha1": "49e1a2b0af8f60e601fbb3c3bbbf28d280f391df"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansGujarati-VariableFont.ttf",
+      "sha1": "cd692d17eaf47da95eb1c87c30d27136e7e34bdf"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansOriya-VariableFont.ttf",
+      "sha1": "d5a0a67f70a9338d3120ae16d540c7195de89ee4"
     },
     {
       "path": "src/assets/fonts/Roboto-Bold.ttf",
