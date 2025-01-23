@@ -85,6 +85,9 @@
 		<string>Roboto-Bold.ttf</string>
 		<string>Roboto-Medium.ttf</string>
 		<string>Roboto-Regular.ttf</string>
+		<string>NotoSansDevanagari-VariableFont.ttf</string>
+		<string>NotoSansGujarati-VariableFont.ttf</string>
+		<string>NotoSansOriya-VariableFont.ttf</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
