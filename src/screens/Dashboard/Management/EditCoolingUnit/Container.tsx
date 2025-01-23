@@ -1,4 +1,5 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import isEmpty from 'lodash/isEmpty';
 import React, { useRef } from 'react';
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
@@ -17,8 +18,8 @@ import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import type { GetCoolingUnitResponse } from '#types/api.responses';
 import { ERoles } from '#types/global';
-import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
+import { paperTheme } from '#ui/lib/theme';
 
 import FormFields from '../AddCoolingUnit/components/FormFields';
 import { METRIC_UNITS, PRICING_TYPE } from '../AddCoolingUnit/constants';
@@ -27,7 +28,6 @@ import FormManager, {
   type FormValues,
   type PreprocessedFormValues,
 } from '../AddCoolingUnit/contexts/FormManager';
-
 import { CropPricingManager } from '../AddCoolingUnit/utils';
 import DeleteAction from './components/DeleteAction';
 
@@ -69,7 +69,7 @@ export default function ScreenContainer(props: Props) {
     }
   );
 
-  if (isLoading || isUnitLoading) {
+  if (isLoading || isUnitLoading || isEmpty(unit)) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -219,6 +219,7 @@ function _buildInitialValues(
   companyCrops: Array<number>
 ): FormValues {
   const crops: FormValues['crops'] = [];
+
   for (const crop of unit.crops) {
     if (crop.active && companyCrops.includes(crop.cropId)) {
       crops.push(crop.cropId);
