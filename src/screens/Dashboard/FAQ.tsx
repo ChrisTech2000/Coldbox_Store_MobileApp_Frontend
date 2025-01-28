@@ -18,7 +18,7 @@ function FAQ() {
 
   const [search, setSearch] = useState<string>('');
 
-  const language = LanguageManager.read(false);
+  const language = LanguageManager.read();
 
   const faq = useMemo(() => {
     const searchTerm = search.toLowerCase();

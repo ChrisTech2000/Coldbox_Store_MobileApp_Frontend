@@ -49,7 +49,7 @@ export function DownloadDataModal(props: DownloadDataModalProps) {
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
 
-  const language = LanguageManager.read(false);
+  const language = LanguageManager.read();
 
   return (
     <Portal>

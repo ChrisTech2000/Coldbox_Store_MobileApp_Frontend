@@ -16,6 +16,8 @@ import { useDashboardStore } from '#stores/dashboard';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import reportCrash from '#ui/lib/reportCrash';
+import { waitFor } from '#ui/lib/waitFor';
+import { useToggle } from '#ui/hooks/useToggle';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import LocationField from './modules/Location';
@@ -25,58 +27,49 @@ import LanguageField from './modules/LanguageField';
 function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPreferences'>) {
   const { userId, farmerId, ...initialFormValues } = props.route.params;
 
-  const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
+  const { t, mutate: changeLanguage } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
   const { mutate } = useSWRConfig();
 
   const setUser = useAuthStore((store) => store.setUser);
   const patchFarmer = useDashboardStore((store) => store.patchFarmer);
 
+  const [isProcessing, toggleProcessing] = useToggle(false);
+
   async function onSubmit(values: FormValues) {
-    try {
-      const userDatum = await ColdtivateService.updateUser({
-        userId,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        phone: values.phone,
-        email: values.email,
-        gender: values.gender,
-        language: values.language,
+    const userDatum = await ColdtivateService.updateUser({
+      userId,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      phone: values.phone,
+      email: values.email,
+      gender: values.gender,
+      language: values.language,
+    });
+
+    setUser({ ...userDatum, role: values.kind });
+
+    if (guard('VIEW', 'FarmerFields')) {
+      const farmerDatum = await ColdtivateService.updateFarmer({
+        farmerId,
+        country: values.country,
+        parentName: values.parentName,
+        updateUser: true,
       });
 
-      setUser({ ...userDatum, role: values.kind });
+      await mutate(getQueryKey('getFarmerByUserId', userId)); // revalidation
 
-      if (guard('VIEW', 'FarmerFields')) {
-        const farmerDatum = await ColdtivateService.updateFarmer({
-          farmerId,
-          country: values.country,
-          parentName: values.parentName,
-          updateUser: true,
-        });
-
-        await mutate(getQueryKey('getFarmerByUserId', userId)); // revalidation
-
-        patchFarmer({
-          farmerCountry: farmerDatum.country,
-          farmerParentName: farmerDatum.parentName,
-        });
-      }
-
-      toast.show(t('Dashboard.AccountDetails.toasts.success'), {
-        type: 'md_success',
-        style: { marginBottom: 50 },
+      patchFarmer({
+        farmerCountry: farmerDatum.country,
+        farmerParentName: farmerDatum.parentName,
       });
-
-      props.navigation.goBack();
-    } catch (exception) {
-      reportCrash(exception as Error);
     }
   }
 
   return (
     <FormManager onSubmit={onSubmit} initialValues={{ ...initialFormValues, location: '' }}>
-      {({ submitHandler, isSubmitting, hasChanges }) => (
+      {({ submitHandler, hasChanges, selectedLanguage }) => (
         <React.Fragment>
           <KeyboardAwareScrollView
             tw="flex-1"
@@ -96,11 +89,32 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
             <Button
               tw="w-4/5 my-4"
               mode="contained"
-              onPress={submitHandler}
-              disabled={!hasChanges || isSubmitting}
+              onPress={async (evt) => {
+                evt.stopPropagation();
+                toggleProcessing();
+                submitHandler()
+                  .then(async () => {
+                    await waitFor(800);
+                    await changeLanguage(selectedLanguage);
+                    toast.show(t('Dashboard.AccountDetails.toasts.success'), {
+                      type: 'md_success',
+                      style: { marginBottom: 50 },
+                    });
+                    props.navigation.goBack();
+                  })
+                  .catch((exception) => {
+                    reportCrash(exception as Error);
+                    toast.show(t('actions.error'), {
+                      type: 'md_danger',
+                      style: { marginBottom: 55 },
+                    });
+                  })
+                  .finally(toggleProcessing);
+              }}
+              disabled={!hasChanges || isProcessing}
               uppercase
             >
-              {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
+              {isProcessing ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
             </Button>
           </View>
         </React.Fragment>

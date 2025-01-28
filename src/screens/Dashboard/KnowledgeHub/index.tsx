@@ -21,7 +21,7 @@ import { cn } from '#ui/lib/cn';
 
 import { countriesDict } from '../Management/CompanyDetails/utils';
 
-const _getLanguage = () => LanguageManager.read(false);
+const _getLanguage = () => LanguageManager.read();
 
 function buildPath(path: string, countryCode?: string): string {
   return [KNOWLEDGE_HUB_URL, _getLanguage(), path.replace(/^\/+|\/+$/g, ''), countryCode]

@@ -7,6 +7,7 @@ import validator from 'validator';
 import type { DetailsSectionParams } from '#navigation/Dashboard/AccountDetails';
 import { EApiGender, ERoles } from '#types/global';
 import { useTranslationUtils } from '#i18n/utils';
+import type { TranslationLocales } from '#i18n/constants';
 
 export type FormValues = {
   location: string;
@@ -16,6 +17,7 @@ type CallbackProps = {
   submitHandler: (evt?: React.BaseSyntheticEvent) => Promise<void>;
   isSubmitting: boolean;
   hasChanges: boolean;
+  selectedLanguage: TranslationLocales;
 };
 
 type FormManagerProps = {
@@ -94,6 +96,7 @@ export default function FormManager(props: FormManagerProps) {
     submitHandler: form.handleSubmit(props.onSubmit),
     isSubmitting: form.formState.isSubmitting,
     hasChanges: !isEqual(initialValues, form.watch()),
+    selectedLanguage: form.watch('language'),
   } satisfies CallbackProps;
 
   return <FormProvider {...form}>{props.children(callbackProps)}</FormProvider>;

@@ -144,7 +144,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     };
   }, []);
 
-  const language = LanguageManager.read(false);
+  const language = LanguageManager.read();
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">

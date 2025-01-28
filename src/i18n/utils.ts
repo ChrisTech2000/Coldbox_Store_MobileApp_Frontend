@@ -49,14 +49,13 @@ export class LanguageManager {
   public static onLanguageChange(language: string): void {
     const validatedLanguage = LanguageManager.safeValue(language);
     mmkv.set(LanguageManager._KEY, validatedLanguage);
+    LanguageManager._getPersistedValue.clear();
     LanguageManager._setLayoutDirection(validatedLanguage);
     LanguageManager.setDateFnsLocale(validatedLanguage);
   }
 
-  public static read(useCache = true): TranslationLocales {
-    const storedLanguage = useCache
-      ? LanguageManager._getCachedValue()
-      : LanguageManager._getPersistedValue();
+  public static read(): TranslationLocales {
+    const storedLanguage = LanguageManager._getPersistedValue();
     const preferredLanguage = storedLanguage || LanguageManager._derivedSystemLocale();
     return LanguageManager.safeValue(preferredLanguage);
   }
@@ -87,21 +86,13 @@ export class LanguageManager {
     _currentDateFnsLocale = _localeMap[locale];
   }
 
-  private static _getPersistedValue(): string | undefined {
-    return mmkv.getString(LanguageManager._KEY);
-  }
-
-  private static _getCachedValue = moize(LanguageManager._getPersistedValue, {
+  private static _getPersistedValue = moize(() => mmkv.getString(LanguageManager._KEY), {
     maxAge: ms('3 seconds'),
   });
 
-  private static _derivedSystemLocale = moize(
-    () => {
-      const devicePrimaryLocale = getLocales().at(0);
-      return devicePrimaryLocale?.languageCode;
-    },
-    { maxAge: ms('3 seconds') }
-  );
+  private static _derivedSystemLocale = moize(() => getLocales().at(0)?.languageCode, {
+    maxAge: ms('3 seconds'),
+  });
 
   private static _setLayoutDirection(locale: string): void {
     const isRTL = this._rtlLocales.has(locale);
