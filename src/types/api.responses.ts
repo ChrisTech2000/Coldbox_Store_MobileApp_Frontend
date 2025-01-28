@@ -313,12 +313,12 @@ export interface GetCoolingUnitResponse {
     coolingUnitId: number;
     pricingId: number;
     active: boolean;
-    pricing: Array<{
+    pricing: {
       id: number;
       pricingType: string;
       fixedRate: number;
       dailyRate: number;
-    }>;
+    };
   }>;
   roomHeight: number;
   roomLength: number;
