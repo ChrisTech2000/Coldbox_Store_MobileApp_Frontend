@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 
+import { ScrollView } from '#ui/components/ScrollView';
 import { GenericError } from '#ui/components/GenericError';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
@@ -82,9 +82,13 @@ function MarketPriceTrend() {
   }
 
   return (
-    <View tw="absolute bottom-0 top-0 pb-1">
-      <ScrollView tw="h-full m-4 space-y-2" showsVerticalScrollIndicator={false}>
-        <Text variant="TextBold" tw="text-lg font-bold mb-4">
+    <View tw="flex-1">
+      <ScrollView
+        tw="mx-2 my-2 space-y-2"
+        contentContainerStyle="mb-20"
+        showsVerticalScrollIndicator={false}
+      >
+        <Text variant="TextBold" tw="text-base font-bold mb-3 px-1">
           {t('Dashboard.MarketPrice.Trend.title')}
         </Text>
 
@@ -98,7 +102,7 @@ function MarketPriceTrend() {
           modalHeader={t('Dashboard.MarketPrice.commodityModalTitle')}
           occupyFullWidth
         />
-        <Divider tw="w-full bg-gray-500 mb-4" />
+        <Divider tw="w-full bg-gray-500 mb-3" />
         <SelectWithStore<PredictionState>
           datums={predictionParams.availableStates ?? []}
           isModalVisible={isStatesModalOpen}
@@ -111,7 +115,11 @@ function MarketPriceTrend() {
         />
         <Divider tw="w-full bg-gray-500" />
 
-        {commodity && state && <TrendChart commodity={commodity} state={state} country={country} />}
+        {commodity && state ? (
+          <View tw="mt-2">
+            <TrendChart commodity={commodity} state={state} country={country} />
+          </View>
+        ) : null}
       </ScrollView>
     </View>
   );
