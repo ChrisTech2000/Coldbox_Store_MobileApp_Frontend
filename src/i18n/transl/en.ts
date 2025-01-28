@@ -162,6 +162,7 @@ const en = {
   },
   components: {
     datePicker: {
+      heading: 'Select a date', // TODO
       clearButtonLabel: 'Clear',
       confirmButtonLabel: 'Confirm',
       placeholder: 'dd/mm/yyyy',

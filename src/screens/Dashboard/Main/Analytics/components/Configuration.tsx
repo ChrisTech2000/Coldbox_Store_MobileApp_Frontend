@@ -12,7 +12,7 @@ import MultipleSelectWithStore, {
 } from '#ui/components/MultipleSelectWithStore';
 import { Text } from '#ui/components/Text';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CoolingUnit } from '#types/global';
 
 export type ConfigData = {
@@ -43,6 +43,8 @@ export function ConfigurationModal({
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
 
+  const language = LanguageManager.read(false);
+
   return (
     <Portal>
       <Dialog visible={isOpen} onDismiss={dismiss} style={{ backgroundColor: 'white' }}>
@@ -50,6 +52,7 @@ export function ConfigurationModal({
         <Dialog.Content tw="space-y-3">
           <View>
             <DateRangePickerWithStore
+              locale={language}
               useDateRangeStore={useAnalyticsDateRangeStore}
               variant="contained"
               initialEndDate={new Date()}

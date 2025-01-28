@@ -158,6 +158,7 @@ export default {
   },
   components: {
     datePicker: {
+      heading: 'Select a date', // TODO
       clearButtonLabel: 'Ko o',
       confirmButtonLabel: 'fi o n te lu',
       placeholder: 'Ọjọ́/Oṣù/Ọdún',

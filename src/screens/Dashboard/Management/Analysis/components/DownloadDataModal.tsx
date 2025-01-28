@@ -15,7 +15,7 @@ import { Text } from '#ui/components/Text';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { AIR_PROD_BASE_URL } from '#constants/environment';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useManagementStore } from '#stores/management';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useToggle } from '#ui/hooks/useToggle';
@@ -49,6 +49,8 @@ export function DownloadDataModal(props: DownloadDataModalProps) {
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
 
+  const language = LanguageManager.read(false);
+
   return (
     <Portal>
       <Dialog
@@ -61,6 +63,7 @@ export function DownloadDataModal(props: DownloadDataModalProps) {
           <View tw="space-y-2">
             <View>
               <DateRangePickerWithStore
+                locale={language}
                 useDateRangeStore={useDateRangeStore}
                 variant="contained"
                 initialEndDate={new Date()}

@@ -164,6 +164,7 @@ export default {
   },
   components: {
     datePicker: {
+      heading: 'Select a date', // TODO
       clearButtonLabel: 'Limpar',
       confirmButtonLabel: 'Confirmar',
       placeholder: 'dd/mm/aaaa',
