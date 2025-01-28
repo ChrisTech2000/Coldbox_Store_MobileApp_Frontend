@@ -67,8 +67,6 @@ async function _initializeI18nConfiguration(): Promise<void> {
   } satisfies InitOptions);
 
   i18n.on('languageChanged', LanguageManager.onLanguageChange);
-
-  LanguageManager.setDateFnsLocale(initialLanguage);
 }
 
 export function useI18n(): boolean {

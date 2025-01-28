@@ -43,6 +43,7 @@ export class LanguageManager {
   public static initializeLanguage(): TranslationLocales {
     const language = LanguageManager.read();
     LanguageManager._setLayoutDirection(language);
+    LanguageManager._setDateFnsLocale(language);
     return language;
   }
 
@@ -51,7 +52,7 @@ export class LanguageManager {
     mmkv.set(LanguageManager._KEY, validatedLanguage);
     LanguageManager._getPersistedValue.clear();
     LanguageManager._setLayoutDirection(validatedLanguage);
-    LanguageManager.setDateFnsLocale(validatedLanguage);
+    LanguageManager._setDateFnsLocale(validatedLanguage);
   }
 
   public static read(): TranslationLocales {
@@ -71,7 +72,7 @@ export class LanguageManager {
     return this._rtlLocales.has(LanguageManager.read());
   }
 
-  public static setDateFnsLocale(locale: TranslationLocales): void {
+  private static _setDateFnsLocale(locale: TranslationLocales): void {
     const _localeMap: Record<TranslationLocales, Locale> = {
       hi: hindiLocale,
       pt: portugueseLocale,
