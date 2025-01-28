@@ -18,6 +18,8 @@ import { ERoles } from '#types/global';
 
 import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
 function CoolingUnitsCratesInfo() {
   const user = useAuthStore(useShallow((store) => store.user));
   const company = useManagementStore(useShallow((store) => store.company));
@@ -64,7 +66,7 @@ function CoolingUnitsCratesInfo() {
   }
 
   return (
-    <View tw="pt-5">
+    <View tw="flex-1 pt-5">
       <GenericFilter>
         <GenericFilter.CoolingUnits />
       </GenericFilter>
@@ -78,10 +80,11 @@ function CoolingUnitsCratesInfo() {
       ) : (
         <DataTable style={styles.dataTable}>
           <FlatList
+            stickyHeaderIndices={[0]}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled
             ListHeaderComponent={
-              <DataTable.Header tw="space-x-1">
+              <DataTable.Header tw="space-x-1 bg-zinc-50">
                 <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.commodity')}</DataTable.Title>
                 <DataTable.Title>
                   {t('Dashboard.CoolingUnitsCratesInfo.percentage')}
@@ -97,11 +100,21 @@ function CoolingUnitsCratesInfo() {
             keyExtractor={(item) => `data-table-row-${item.commodity}`}
             renderItem={({ item }) => (
               <DataTable.Row tw="space-x-1">
-                <DataTable.Cell>{item.commodity}</DataTable.Cell>
-                <DataTable.Cell>{item.percentage}%</DataTable.Cell>
-                <DataTable.Cell>{item.combinedWeight}kg</DataTable.Cell>
-                <DataTable.Cell>{item.cratesNumber}</DataTable.Cell>
-                <DataTable.Cell>{item.optimalStorageTemperature}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Text>{item.commodity}</Text>
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  <Text>{item.percentage}%</Text>
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  <Text>{item.combinedWeight}kg</Text>
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  <Text>{item.cratesNumber}</Text>
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  <Text>{item.optimalStorageTemperature}</Text>
+                </DataTable.Cell>
               </DataTable.Row>
             )}
             refreshControl={
@@ -116,9 +129,11 @@ function CoolingUnitsCratesInfo() {
 
 const styles = StyleSheet.create({
   dataTable: {
-    marginTop: 20, // equivalent to "mt-5"
-    width: Dimensions.get('window').width,
-    paddingBottom: 40, // equivalent to "pb-10"
+    marginTop: 10,
+    width: SCREEN_WIDTH,
+    paddingBottom: 40,
+    paddingHorizontal: 0,
+    marginHorizontal: 0,
   },
 });
 
