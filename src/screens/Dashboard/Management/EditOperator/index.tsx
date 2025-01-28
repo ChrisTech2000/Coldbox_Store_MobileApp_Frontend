@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -31,9 +32,10 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   const { mutate } = useSWRConfig();
   const company = useManagementStore(useShallow((store) => store.company));
   const toast = InAppNotifications.useToast();
+  const { t } = useTranslationUtils();
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
-  const { t } = useTranslationUtils();
+  useFocusEffect(() => (formInitialValues.current = undefined));
 
   const { data: operator, isLoading: isLoadingOperator } = useApiCall(
     'getOperatorByUserId',
@@ -88,21 +90,19 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
     }
   }
 
-  useEffect(() => {
-    const currentValues = {
-      gender: contextualOperator?.user.gender ?? EApiGender.OTHER,
-      coolingUnits: contextualOperator?.coolingUnits ?? [],
-    };
-
-    formInitialValues.current = currentValues;
-  }, [contextualOperator]);
-
   if (isLoadingOperator || isLoadingCoolingUnits) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
+  }
+
+  if (!formInitialValues.current) {
+    formInitialValues.current = {
+      gender: contextualOperator?.user.gender ?? EApiGender.OTHER,
+      coolingUnits: contextualOperator?.coolingUnits ?? [],
+    };
   }
 
   return (
