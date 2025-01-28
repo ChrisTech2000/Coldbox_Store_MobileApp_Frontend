@@ -25,7 +25,7 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -125,6 +125,8 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     };
   }, []);
 
+  const language = LanguageManager.read(false);
+
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">
       <MultipleSelectWithStore<CoolingUnit>
@@ -175,7 +177,11 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         <Text variant="TextMedium" tw="text-base mr-2">
           {t('Dashboard.Management.UsageAnalysis.dateSelectionLabel')}
         </Text>
-        <DateRangePickerWithStore useDateRangeStore={useDateRangeStore} separator />
+        <DateRangePickerWithStore
+          locale={language}
+          useDateRangeStore={useDateRangeStore}
+          separator
+        />
       </View>
 
       <View tw="flex flex-row items-center justify-between">

@@ -4,8 +4,9 @@ import DatePicker from 'react-native-date-picker';
 import { Icon } from 'react-native-paper';
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
-import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
+import type { TranslationLocales } from '#i18n/constants';
 
 import { cn } from '../lib/cn';
 import { Text } from './Text';
@@ -34,6 +35,7 @@ type DateRangePickerWithStoreProps = {
   showSelectionTitle?: boolean;
   useDateRangeStore: UseBoundStore<StoreApi<DateRangeStoreType>>;
   variant?: 'text' | 'contained';
+  locale: TranslationLocales;
 };
 
 export const DateRangePickerWithStore = ({
@@ -43,6 +45,7 @@ export const DateRangePickerWithStore = ({
   variant = 'text',
   initialEndDate,
   initialStartDate,
+  locale,
 }: DateRangePickerWithStoreProps) => {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
@@ -124,7 +127,6 @@ export const DateRangePickerWithStore = ({
   }, [initialStartDate, initialEndDate]);
 
   const defaultDate = useMemo(() => new Date(), []);
-  const language = LanguageManager.read(false);
 
   return (
     <View tw="flex flex-row flex-wrap items-center">
@@ -150,7 +152,7 @@ export const DateRangePickerWithStore = ({
         </TouchableOpacity>
       </View>
       <DatePicker
-        locale={language}
+        locale={locale}
         title={t('components.datePicker.heading')}
         date={startDate ?? defaultDate}
         mode="date"
@@ -187,7 +189,7 @@ export const DateRangePickerWithStore = ({
       </View>
 
       <DatePicker
-        locale={language}
+        locale={locale}
         title={t('components.datePicker.heading')}
         date={endDate ?? defaultDate}
         mode="date"
