@@ -158,6 +158,7 @@ export default {
   },
   components: {
     datePicker: {
+      heading: 'Select a date', // TODO
       clearButtonLabel: 'Share',
       confirmButtonLabel: 'Tabbatar',
       placeholder: 'dd/mm/yy',

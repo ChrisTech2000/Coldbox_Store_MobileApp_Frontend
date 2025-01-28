@@ -158,6 +158,7 @@ export default {
   },
   components: {
     datePicker: {
+      heading: 'Select a date', // TODO
       clearButtonLabel: 'مسح',
       confirmButtonLabel: 'تأكيد',
       placeholder: 'يوم/شهر/سنة',

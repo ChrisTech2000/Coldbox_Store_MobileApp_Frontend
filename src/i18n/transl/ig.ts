@@ -158,6 +158,7 @@ export default {
   },
   components: {
     datePicker: {
+      heading: 'Select a date', // TODO
       clearButtonLabel: 'Kpochapụ',
       confirmButtonLabel: 'Gosi',
       placeholder: 'ụbọchị /Onwa/afọ',

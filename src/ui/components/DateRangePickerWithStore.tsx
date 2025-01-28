@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Icon } from 'react-native-paper';
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
 
 import { cn } from '../lib/cn';
@@ -123,6 +123,9 @@ export const DateRangePickerWithStore = ({
     }
   }, [initialStartDate, initialEndDate]);
 
+  const defaultDate = useMemo(() => new Date(), []);
+  const language = LanguageManager.read(false);
+
   return (
     <View tw="flex flex-row flex-wrap items-center">
       <View tw={variant === 'contained' ? 'mr-6' : ''}>
@@ -147,7 +150,9 @@ export const DateRangePickerWithStore = ({
         </TouchableOpacity>
       </View>
       <DatePicker
-        date={startDate ?? new Date()}
+        locale={language}
+        title={t('components.datePicker.heading')}
+        date={startDate ?? defaultDate}
         mode="date"
         open={isStartDateCalendarOpen}
         modal
@@ -182,7 +187,9 @@ export const DateRangePickerWithStore = ({
       </View>
 
       <DatePicker
-        date={endDate ?? new Date()}
+        locale={language}
+        title={t('components.datePicker.heading')}
+        date={endDate ?? defaultDate}
         mode="date"
         open={isEndDateCalendarOpen}
         modal

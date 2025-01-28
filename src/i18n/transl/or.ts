@@ -164,6 +164,7 @@ export default {
   },
   components: {
     datePicker: {
+      heading: 'Select a date', // TODO
       clearButtonLabel: 'ସଫା କରନ୍ତୁ',
       confirmButtonLabel: 'ନିଶ୍ଚିତ କରନ୍ତୁ',
       placeholder: 'ଡ୍ଡ/ମ୍ମ/yyyy',
