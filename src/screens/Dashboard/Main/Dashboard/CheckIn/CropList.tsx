@@ -18,8 +18,13 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
+const DEVICE_WIDTH = Dimensions.get('window').width;
+const DEVICE_HEIGHT = Dimensions.get('window').height;
+
+const ESTIMATED_LIST_SIZE = {
+  height: DEVICE_HEIGHT,
+  width: DEVICE_WIDTH,
+} as const;
 
 function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
   const { type } = route.params;
@@ -108,10 +113,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
           </React.Fragment>
         )}
         estimatedItemSize={40}
-        estimatedListSize={{
-          height: deviceHeight,
-          width: deviceWidth / 2,
-        }}
+        estimatedListSize={ESTIMATED_LIST_SIZE}
         nestedScrollEnabled
       />
     </React.Fragment>
@@ -120,7 +122,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
 
 const styles = StyleSheet.create({
   list: {
-    paddingHorizontal: 12, // equivalent to px-3
+    paddingHorizontal: 12,
   },
 });
 
