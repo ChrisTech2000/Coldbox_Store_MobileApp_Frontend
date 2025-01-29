@@ -52,8 +52,8 @@ export default function CropTypeFilters() {
       .slice(0, 2)
       .map((cropId) => data.get(cropId)?.name)
       .filter(Boolean);
-    return cropNames.length > 0 ? truncate(cropNames.join(', '), { length: 20 }) : 'All';
-  }, [internalSelection, data]);
+    return cropNames.length > 0 ? truncate(cropNames.join(', '), { length: 20 }) : t('actions.all');
+  }, [internalSelection, data, t]);
 
   const fieldError = !!formState.errors.crops;
 

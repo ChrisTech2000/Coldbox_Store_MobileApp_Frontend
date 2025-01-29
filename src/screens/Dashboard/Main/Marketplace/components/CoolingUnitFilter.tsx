@@ -53,8 +53,10 @@ export default function CoolingUnitFilters() {
       .slice(0, 2)
       .map((unitId) => data.get(unitId)?.name)
       .filter(Boolean);
-    return selectedUnits.length > 0 ? truncate(selectedUnits.join(', '), { length: 24 }) : 'All';
-  }, [internalSelection, data]);
+    return selectedUnits.length > 0
+      ? truncate(selectedUnits.join(', '), { length: 24 })
+      : t('actions.all');
+  }, [internalSelection, data, t]);
 
   const fieldError = !!formState.errors.coolingUnits;
 

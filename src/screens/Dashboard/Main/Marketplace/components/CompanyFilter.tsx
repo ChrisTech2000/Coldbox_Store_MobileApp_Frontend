@@ -53,8 +53,8 @@ export default function CompanyFilters() {
       .slice(0, 2)
       .map((id) => data.get(id)?.name)
       .filter(Boolean);
-    return names.length > 0 ? truncate(names.join(', '), { length: 24 }) : 'All';
-  }, [internalSelection, data]);
+    return names.length > 0 ? truncate(names.join(', '), { length: 24 }) : t('actions.all');
+  }, [internalSelection, data, t]);
 
   const fieldError = !!formState.errors.companies;
 
