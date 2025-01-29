@@ -16,7 +16,7 @@ function AppInfo() {
 
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const language = LanguageManager.read(false);
+  const language = LanguageManager.read();
 
   const datums = useMemo(() => {
     const currentLanguage = language ?? APP_LOCALES.ENGLISH;

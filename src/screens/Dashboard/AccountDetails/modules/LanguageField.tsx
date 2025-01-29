@@ -17,7 +17,7 @@ const LANGUAGES_LIST = Object.values(APP_LOCALES);
 
 export default function LanguageField() {
   const { control } = FormManager.useFormManager();
-  const { t, mutate: changeLanguage } = useTranslationUtils();
+  const { t } = useTranslationUtils();
 
   const { field } = useController({ name: 'language', control });
 
@@ -59,7 +59,6 @@ export default function LanguageField() {
                   onPress={async (evt) => {
                     evt.stopPropagation();
                     field.onChange(internalSelection);
-                    await changeLanguage(internalSelection);
                     setIsModalVisible(false);
                   }}
                 >

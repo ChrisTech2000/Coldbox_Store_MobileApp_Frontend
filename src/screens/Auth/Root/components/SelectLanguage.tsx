@@ -12,9 +12,7 @@ const LANGUAGE_OPTIONS = Object.values(APP_LOCALES) as Array<TranslationLocales>
 
 export function SelectLanguage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [activeLanguage, setActiveLanguage] = useState<TranslationLocales>(
-    LanguageManager.read(false)
-  );
+  const [activeLanguage, setActiveLanguage] = useState<TranslationLocales>(LanguageManager.read());
   const [selectedLanguage, setSelectedLanguage] = useState<TranslationLocales>(activeLanguage);
 
   const { mutate, t } = useTranslationUtils();

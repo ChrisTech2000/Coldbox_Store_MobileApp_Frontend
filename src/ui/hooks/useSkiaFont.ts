@@ -10,7 +10,7 @@ import NotoSansGujarati from '#assets/fonts/NotoSansGujarati-VariableFont.ttf';
 import { LanguageManager } from '#i18n/utils';
 
 export default function useSkiaFont(fontSize?: number) {
-  switch (LanguageManager.read(false)) {
+  switch (LanguageManager.read()) {
     case 'hi':
       return useFontLoader(NotoSansDevanagari, fontSize);
     case 'or':
