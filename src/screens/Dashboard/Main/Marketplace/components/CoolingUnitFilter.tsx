@@ -53,8 +53,10 @@ export default function CoolingUnitFilters() {
       .slice(0, 2)
       .map((unitId) => data.get(unitId)?.name)
       .filter(Boolean);
-    return selectedUnits.length > 0 ? truncate(selectedUnits.join(', '), { length: 24 }) : 'All';
-  }, [internalSelection, data]);
+    return selectedUnits.length > 0
+      ? truncate(selectedUnits.join(', '), { length: 24 })
+      : t('actions.all');
+  }, [internalSelection, data, t]);
 
   const fieldError = !!formState.errors.coolingUnits;
 
@@ -82,10 +84,13 @@ export default function CoolingUnitFilters() {
                   setInternalSelection(selectedCoolingUnits.map(({ value }) => value))
                 }
               >
-                <Select.Touchable label="Cooling unit" displayValue={displayValue} />
+                <Select.Touchable
+                  label={t('Dashboard.Marketplace.Filters.coolingUnitLabel')}
+                  displayValue={displayValue}
+                />
                 <Select.Dialog
                   enableScroll
-                  header="Select cooling units"
+                  header={t('Dashboard.Marketplace.Filters.coolingUnitHeading')}
                   StickyHeaderElement={
                     <View tw="px-4 py-3">
                       <TextInput

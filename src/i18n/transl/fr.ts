@@ -956,7 +956,17 @@ export default {
       standardCrateWeight: 'Le poids standard de la caisse est de {{value}} kg',
       owner: 'Propriétaire',
       priceRange: 'Range Price / KG',
-      Filters: { min: 'Min', max: 'Max', label: 'Filters' },
+      Filters: {
+        min: 'Min',
+        max: 'Max',
+        label: 'Filters',
+        coolingUnitLabel: 'Cooling unit', // TODO
+        coolingUnitHeading: 'Select cooling units', // TODO
+        cropTypeLabel: 'Produce / Crop Type', // TODO
+        cropTypeHeading: 'Select crops', // TODO
+        companyLabel: 'Company', // TODO
+        companyHeading: 'Select companies', // TODO
+      },
       maxDistance: 'Max Distance',
     },
     AccountDetails: {

@@ -946,6 +946,12 @@ export default {
         min: 'Min',
         max: 'Max',
         label: 'Filters',
+        coolingUnitLabel: 'Cooling unit', // TODO
+        coolingUnitHeading: 'Select cooling units', // TODO
+        cropTypeLabel: 'Produce / Crop Type', // TODO
+        cropTypeHeading: 'Select crops', // TODO
+        companyLabel: 'Company', // TODO
+        companyHeading: 'Select companies', // TODO
       },
       maxDistance: 'Max Distance',
     },

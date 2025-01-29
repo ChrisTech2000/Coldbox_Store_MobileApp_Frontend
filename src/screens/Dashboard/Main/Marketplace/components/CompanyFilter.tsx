@@ -53,8 +53,8 @@ export default function CompanyFilters() {
       .slice(0, 2)
       .map((id) => data.get(id)?.name)
       .filter(Boolean);
-    return names.length > 0 ? truncate(names.join(', '), { length: 24 }) : 'All';
-  }, [internalSelection, data]);
+    return names.length > 0 ? truncate(names.join(', '), { length: 24 }) : t('actions.all');
+  }, [internalSelection, data, t]);
 
   const fieldError = !!formState.errors.companies;
 
@@ -80,10 +80,13 @@ export default function CompanyFilters() {
                 onOpenChange={setIsModalVisible}
                 onDismiss={() => setInternalSelection(selectedCompanies.map(({ value }) => value))}
               >
-                <Select.Touchable label="Company" displayValue={displayValue} />
+                <Select.Touchable
+                  label={t('Dashboard.Marketplace.Filters.companyLabel')}
+                  displayValue={displayValue}
+                />
                 <Select.Dialog
                   enableScroll
-                  header="Select companies"
+                  header={t('Dashboard.Marketplace.Filters.companyHeading')}
                   StickyHeaderElement={
                     <View tw="px-4 py-3">
                       <TextInput

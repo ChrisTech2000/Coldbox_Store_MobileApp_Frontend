@@ -898,7 +898,17 @@ export default {
       standardCrateWeight: 'الوزن القياسي للصندوق هو {{value}} كجم',
       owner: 'مالك',
       priceRange: 'النطاق السعر / كجم',
-      Filters: { min: 'الحد الأدنى', max: 'الأعلى', label: 'المرشحات' },
+      Filters: {
+        min: 'الحد الأدنى',
+        max: 'الأعلى',
+        label: 'المرشحات',
+        coolingUnitLabel: 'Cooling unit', // TODO
+        coolingUnitHeading: 'Select cooling units', // TODO
+        cropTypeLabel: 'Produce / Crop Type', // TODO
+        cropTypeHeading: 'Select crops', // TODO
+        companyLabel: 'Company', // TODO
+        companyHeading: 'Select companies', // TODO
+      },
       maxDistance: 'المسافة القصوى',
     },
     AccountDetails: {
