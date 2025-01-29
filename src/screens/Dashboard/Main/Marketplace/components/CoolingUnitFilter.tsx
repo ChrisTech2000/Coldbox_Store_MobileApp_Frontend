@@ -82,10 +82,13 @@ export default function CoolingUnitFilters() {
                   setInternalSelection(selectedCoolingUnits.map(({ value }) => value))
                 }
               >
-                <Select.Touchable label="Cooling unit" displayValue={displayValue} />
+                <Select.Touchable
+                  label={t('Dashboard.Marketplace.Filters.coolingUnitLabel')}
+                  displayValue={displayValue}
+                />
                 <Select.Dialog
                   enableScroll
-                  header="Select cooling units"
+                  header={t('Dashboard.Marketplace.Filters.coolingUnitHeading')}
                   StickyHeaderElement={
                     <View tw="px-4 py-3">
                       <TextInput

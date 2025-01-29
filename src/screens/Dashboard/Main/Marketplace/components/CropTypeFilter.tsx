@@ -79,10 +79,13 @@ export default function CropTypeFilters() {
                 onOpenChange={setIsModalVisible}
                 onDismiss={() => setInternalSelection(selectedCrops.map(({ value }) => value))}
               >
-                <Select.Touchable label="Produce / Crop Type" displayValue={displayValue} />
+                <Select.Touchable
+                  label={t('Dashboard.Marketplace.Filters.cropTypeLabel')}
+                  displayValue={displayValue}
+                />
                 <Select.Dialog
                   enableScroll
-                  header="Select crops"
+                  header={t('Dashboard.Marketplace.Filters.cropTypeHeading')}
                   StickyHeaderElement={
                     <View tw="px-4 py-3">
                       <TextInput

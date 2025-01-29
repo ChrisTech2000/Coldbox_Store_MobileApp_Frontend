@@ -80,10 +80,13 @@ export default function CompanyFilters() {
                 onOpenChange={setIsModalVisible}
                 onDismiss={() => setInternalSelection(selectedCompanies.map(({ value }) => value))}
               >
-                <Select.Touchable label="Company" displayValue={displayValue} />
+                <Select.Touchable
+                  label={t('Dashboard.Marketplace.Filters.companyLabel')}
+                  displayValue={displayValue}
+                />
                 <Select.Dialog
                   enableScroll
-                  header="Select companies"
+                  header={t('Dashboard.Marketplace.Filters.companyHeading')}
                   StickyHeaderElement={
                     <View tw="px-4 py-3">
                       <TextInput
