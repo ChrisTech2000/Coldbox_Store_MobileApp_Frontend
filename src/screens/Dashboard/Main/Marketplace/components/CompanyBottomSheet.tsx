@@ -55,14 +55,20 @@ export default function CompanyBottomSheet() {
             {datum?.name}
           </Text>
           <View tw="mt-3">
-            <_CompanyField label="Location name" value={datum?.locationName ?? ''} />
-            <Divider tw="bg-zinc-400" />
-
-            <_CompanyField label="Address" value={datum?.address ?? ''} />
+            <_CompanyField
+              label={t('Dashboard.Management.AddCoolingUnit.fields.location')}
+              value={datum?.locationName ?? ''}
+            />
             <Divider tw="bg-zinc-400" />
 
             <_CompanyField
-              label="Coordinates"
+              label={t('Dashboard.Management.Location.chips.address')}
+              value={datum?.address ?? ''}
+            />
+            <Divider tw="bg-zinc-400" />
+
+            <_CompanyField
+              label={t('Dashboard.Management.Location.chips.coordinates')}
               value={datum !== null ? _formatCoords(datum.latitude, datum.longitude) : ''}
             />
           </View>
