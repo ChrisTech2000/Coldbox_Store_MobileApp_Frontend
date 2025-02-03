@@ -162,6 +162,13 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const allowedToSetPricing =
     guard('SET', 'MarketplaceListForSale') && companyEligible && farmerEligible;
 
+  const isSubmitDisabled: boolean =
+    !!form.formState.errors.crates ||
+    !!form.formState.errors.price ||
+    form.formState.isSubmitting ||
+    !form.formState.isDirty ||
+    (allowedToSetPricing && !parsedPrice);
+
   return (
     <React.Fragment>
       <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
@@ -204,12 +211,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               render={({ field: { value, onChange } }) => (
                 <TouchableOpacity
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
+                  disabled={!allowedToSetPricing}
                   onPress={() => {
-                    if (allowedToSetPricing) {
-                      const isSellable = form.getValues('crates.0.isSellable');
-                      for (let i = 0; i < crateFields.fields.length; i++) {
-                        form.setValue(`crates.${i}.isSellable`, isSellable);
-                      }
+                    const isSellable = form.getValues('crates.0.isSellable');
+                    for (let i = 0; i < crateFields.fields.length; i++) {
+                      form.setValue(`crates.${i}.isSellable`, isSellable);
                     }
                     onChange(!value);
                   }}
@@ -332,10 +338,8 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                             if (!applyToAll) {
                               onChange(!value);
                             } else {
-                              if (allowedToSetPricing) {
-                                for (let i = 0; i < crateFields.fields.length; i++) {
-                                  form.setValue(`crates.${i}.isSellable`, !value);
-                                }
+                              for (let i = 0; i < crateFields.fields.length; i++) {
+                                form.setValue(`crates.${i}.isSellable`, !value);
                               }
                             }
                           }}
@@ -448,13 +452,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             uppercase
             // eslint-disable-next-line
             onPress={form.handleSubmit(onSubmit as any)}
-            disabled={
-              !!form.formState.errors.crates ||
-              !!form.formState.errors.price ||
-              form.formState.isSubmitting ||
-              !form.formState.isDirty ||
-              !parsedPrice
-            }
+            disabled={isSubmitDisabled}
           >
             {t('actions.save-changes')}
           </Button>
