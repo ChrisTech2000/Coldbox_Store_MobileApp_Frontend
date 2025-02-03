@@ -20,7 +20,7 @@ function MarketplaceRoot() {
   const { isLoading, isValidating, refetch } = useMarketplaceListing();
 
   const invalidateHandler = useDebouncedCallback(async () => {
-    emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_COORDINATES);
+    emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MARKETPLACE_COORDINATES);
     await refetch();
   }, 340);
 
