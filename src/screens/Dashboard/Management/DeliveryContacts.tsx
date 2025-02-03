@@ -48,7 +48,7 @@ function DeliveryContacts() {
     }
   );
 
-  useAppEventListener('DISPATCH_RELOAD_DELIVERY_CONTACTS', refetch);
+  useAppEventListener(APP_EVENTS.DISPATCH_RELOAD_DELIVERY_CONTACTS, refetch);
 
   if (isLoading) {
     return (
@@ -128,7 +128,7 @@ function DeliveryContacts() {
         <Button
           tw="w-full"
           mode="contained"
-          onPress={() => emitter.emit('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', null)}
+          onPress={() => emitter.emit(APP_EVENTS.DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET, null)}
           icon="plus-circle-outline"
           uppercase
         >
@@ -240,7 +240,7 @@ function BottomSheet() {
     ),
   });
 
-  useAppEventListener('DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET', () => {
+  useAppEventListener(APP_EVENTS.DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET, () => {
     modalRef.current?.open();
   });
 

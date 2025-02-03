@@ -24,7 +24,7 @@ function MarketplaceRoot() {
     await refetch();
   }, 340);
 
-  useAppEventListener('DISPATCH_INVALIDATE_MAKETPLACE_LISTING', async () => {
+  useAppEventListener(APP_EVENTS.DISPATCH_INVALIDATE_MARKETPLACE_LISTING, async () => {
     await refetch();
   });
 

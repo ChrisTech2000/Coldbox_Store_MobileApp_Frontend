@@ -6,7 +6,7 @@ import { ActivityIndicator, Portal } from 'react-native-paper';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -24,7 +24,7 @@ export default function AddCouponBottomSheet() {
 
   const modalRef = useRef<Modalize>(null);
 
-  useAppEventListener('DISPATCH_ADD_COUPON_IN_CART_MODAL', () => {
+  useAppEventListener(APP_EVENTS.DISPATCH_ADD_COUPON_IN_CART_MODAL, () => {
     modalRef.current?.open();
   });
 

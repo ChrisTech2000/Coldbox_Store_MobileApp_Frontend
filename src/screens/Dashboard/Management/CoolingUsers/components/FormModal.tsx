@@ -13,7 +13,7 @@ import { RNModal } from '#ui/primitives/RNModal';
 import type { ManagementRoutePaths, ManagementRoutes } from '#navigation/Dashboard/Management';
 import { useToggle } from '#ui/hooks/useToggle';
 import { useTranslationUtils } from '#i18n/utils';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import ColdtivateService from '#services/ColdtivateService';
 import InAppNotifications from '#common/InAppNotifications';
 import reportCrash from '#ui/lib/reportCrash';
@@ -38,7 +38,7 @@ export default function FormModal(props: Props) {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
-  useAppEventListener<[boolean]>('DISPATCH_CU_FORM_MODAL', setModalVisibility);
+  useAppEventListener<[boolean]>(APP_EVENTS.DISPATCH_CU_FORM_MODAL, setModalVisibility);
 
   const form = useForm({
     defaultValues: DEFAULT_VALUES,
