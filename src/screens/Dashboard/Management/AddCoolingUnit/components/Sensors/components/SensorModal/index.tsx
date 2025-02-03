@@ -10,6 +10,7 @@ import { ModalWorkaround } from './components/ModalWorkaround';
 import EcozenForm from './components/EcozenForm';
 import UbibotForm from './components/UbibotForm';
 import FigorrForm from './components/FigorrForm';
+import VictronForm from './components/VictronForm';
 
 export default function SensorModal() {
   const { t } = useTranslationUtils();
@@ -50,6 +51,18 @@ export default function SensorModal() {
             {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
           </Text>
           <FigorrForm />
+        </ModalWorkaround>
+      );
+    case 'victron':
+      return (
+        <ModalWorkaround visible={isVisible} onDismiss={onDismiss}>
+          <Text variant="TitleRegular" tw="px-6">
+            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
+          </Text>
+          <Text tw="px-6 mt-2">
+            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
+          </Text>
+          <VictronForm />
         </ModalWorkaround>
       );
     case 'ubibot':

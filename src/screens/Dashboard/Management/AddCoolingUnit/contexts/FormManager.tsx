@@ -18,10 +18,7 @@ import type { VerifyFigorrSensorConnectivityResponse } from '#types/api.response
 
 export type SensorDatum =
   | {
-      machineID: string;
-      username: string;
-      password: string;
-      type: 'ecozen';
+      // TODO: fill
     }
   | {
       machineID: string;
@@ -38,6 +35,12 @@ export type SensorDatum =
       channelId: string;
       field: string;
       type: 'ubibot';
+    }
+  | {
+      machineID: string;
+      username: string;
+      password: string;
+      type: 'ecozen';
     };
 
 export type FormValues<T = string> = {

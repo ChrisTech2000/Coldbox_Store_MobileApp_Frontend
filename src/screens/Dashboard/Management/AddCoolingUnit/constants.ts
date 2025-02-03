@@ -82,6 +82,6 @@ export const BATTERY_TYPES = {
 
 export type BatteryTypes = keyof typeof BATTERY_TYPES;
 
-export const SENSOR_TYPES = ['ecozen', 'ubibot', 'figorr'] as const;
+export const SENSOR_TYPES = ['ecozen', 'ubibot', 'figorr', 'victron'] as const;
 
 export type SensorTypes = (typeof SENSOR_TYPES)[number];

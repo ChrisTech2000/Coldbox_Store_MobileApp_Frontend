@@ -391,6 +391,12 @@ export type VerifyFigorrSensorConnectivityParams = {
   deviceTag: string;
 };
 
+export type VerifyVictronSensorConnectivityParams = {
+  username: string;
+  password: string;
+  machineID: string;
+};
+
 export interface GetPredictionParams extends JsonObject {
   country: 'IN' | 'NG';
   cropId: number;

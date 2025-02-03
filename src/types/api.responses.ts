@@ -434,6 +434,10 @@ export type VerifyUbibotSensorConnectivityResponse = {
   data: Array<string>;
 };
 
+export type VerifyVictronSensorConnectivityResponse = {
+  // TODO: fill in
+};
+
 export interface CreateCouponResponse {
   id: number;
   code: string;

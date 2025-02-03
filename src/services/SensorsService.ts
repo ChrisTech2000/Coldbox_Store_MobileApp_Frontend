@@ -4,11 +4,13 @@ import type {
   VerifyEcozenSensorConnectivityParams,
   VerifyFigorrSensorConnectivityParams,
   VerifyUbibotSensorConnectivityParams,
+  VerifyVictronSensorConnectivityParams,
 } from '#types/api.params';
 import { ESensorEndpoints } from '#constants/api.routes';
 import type {
   VerifyFigorrSensorConnectivityResponse,
   VerifyUbibotSensorConnectivityResponse,
+  VerifyVictronSensorConnectivityResponse,
 } from '#types/api.responses';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
@@ -78,6 +80,29 @@ class SensorsService extends HttpClient {
           ignoreUnauthorized: true,
         },
         ['apiKey', 'deviceTag']
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public verifyVictronSensorConnectivity = async (
+    params: VerifyVictronSensorConnectivityParams
+  ) => {
+    try {
+      const { data } = await this.post<VerifyVictronSensorConnectivityResponse>(
+        ESensorEndpoints.VICTRON_CHECK,
+        params,
+        {
+          // eslint-disable-next-line
+          // @ts-ignore
+          ignoreUnauthorized: true,
+        },
+        [] // TODO: Add unserializable fields, if they exist
       );
       return data;
     } catch (error) {
