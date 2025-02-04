@@ -1,5 +1,4 @@
 import React from 'react';
-import { Divider } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
@@ -17,7 +16,7 @@ export default function CrateDimensionsFields() {
 
   return (
     <React.Fragment>
-      <Text tw="mx-4 mt-4 mb-1 text-base">
+      <Text tw="mx-4 mt-4 mb-2 text-base">
         {t('Dashboard.Management.AddCoolingUnit.fields.crateSizeHeading')}
       </Text>
       <Controller
@@ -33,7 +32,6 @@ export default function CrateDimensionsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateLength}
-            underlineColor="transparent"
             suffix="cm"
           />
         )}
@@ -52,7 +50,6 @@ export default function CrateDimensionsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateWidth}
-            underlineColor="transparent"
             suffix="cm"
           />
         )}
@@ -71,12 +68,10 @@ export default function CrateDimensionsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateHeight}
-            underlineColor="transparent"
             suffix="cm"
           />
         )}
       />
-      <Divider tw="w-full bg-gray-700 mt-4" />
     </React.Fragment>
   );
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Divider } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
@@ -33,7 +32,6 @@ export default function HybridFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceDieselPercent}
-            underlineColor="transparent"
             suffix="%"
           />
         )}
@@ -51,7 +49,6 @@ export default function HybridFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceGridPercent}
-            underlineColor="transparent"
             suffix="%"
           />
         )}
@@ -69,7 +66,6 @@ export default function HybridFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourcePvPercent}
-            underlineColor="transparent"
             suffix="%"
           />
         )}
@@ -87,12 +83,10 @@ export default function HybridFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceBiomassPercent}
-            underlineColor="transparent"
             suffix="%"
           />
         )}
       />
-      <Divider tw="w-full bg-gray-700 mt-4" />
     </React.Fragment>
   );
 }

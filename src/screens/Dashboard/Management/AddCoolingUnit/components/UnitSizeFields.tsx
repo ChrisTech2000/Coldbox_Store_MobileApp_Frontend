@@ -1,5 +1,4 @@
 import React from 'react';
-import { Divider } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
@@ -17,7 +16,7 @@ export default function UnitSizeFields() {
 
   return (
     <React.Fragment>
-      <Text tw="mx-4 mt-4 mb-1 text-base">
+      <Text tw="mx-4 mt-4 mb-2 text-base">
         {t('Dashboard.Management.AddCoolingUnit.fields.roomSizeHeading')}
       </Text>
       <Controller
@@ -33,7 +32,6 @@ export default function UnitSizeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomLength}
-            underlineColor="transparent"
             suffix="m"
           />
         )}
@@ -51,7 +49,6 @@ export default function UnitSizeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomWidth}
-            underlineColor="transparent"
             suffix="m"
           />
         )}
@@ -69,7 +66,6 @@ export default function UnitSizeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomHeight}
-            underlineColor="transparent"
             suffix="m"
           />
         )}
@@ -87,12 +83,10 @@ export default function UnitSizeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomWeight}
-            underlineColor="transparent"
             suffix="kg"
           />
         )}
       />
-      <Divider tw="w-full bg-gray-700 mt-4" />
     </React.Fragment>
   );
 }
