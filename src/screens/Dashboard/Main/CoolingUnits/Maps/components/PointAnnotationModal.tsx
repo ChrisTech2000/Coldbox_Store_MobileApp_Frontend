@@ -7,7 +7,7 @@ import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 
 import type { MarkerDatum } from '../utils';
 
@@ -25,10 +25,13 @@ export default function PointAnnotationModal(props: Props) {
   const [isVisible, toggleVisibility, setModalVisibility] = useToggle(false);
   const [marker, setMarker] = useState<MarkerDatum | undefined>(undefined);
 
-  useAppEventListener<[boolean, number]>('DISPATCH_MAPS_TAB_MODAL', (status, markerDatumIdx) => {
-    setModalVisibility(status);
-    setMarker(markers.at(markerDatumIdx));
-  });
+  useAppEventListener<[boolean, number]>(
+    APP_EVENTS.DISPATCH_MAPS_TAB_MODAL,
+    (status, markerDatumIdx) => {
+      setModalVisibility(status);
+      setMarker(markers.at(markerDatumIdx));
+    }
+  );
 
   const safeValue = marker?.coolingUnitsInfo ?? [];
   const isScrollable = safeValue.length >= 2;

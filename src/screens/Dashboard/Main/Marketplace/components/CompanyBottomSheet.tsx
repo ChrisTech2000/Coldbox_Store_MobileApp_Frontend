@@ -12,7 +12,7 @@ import { Touchable } from '#ui/components/Touchable';
 import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 export type CompanyBottomSheetDatum = {
@@ -30,7 +30,7 @@ export default function CompanyBottomSheet() {
   const modalRef = useRef<Modalize>(null);
 
   useAppEventListener<[CompanyBottomSheetDatum]>(
-    'DISPATCH_MARKETPLACE_COMPANY_MODAL',
+    APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL,
     (company) => {
       setDatum(company);
       modalRef.current?.open();

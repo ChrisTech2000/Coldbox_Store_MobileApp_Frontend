@@ -120,7 +120,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
           });
         }
 
-        emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_LISTING);
+        emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MARKETPLACE_LISTING);
         refreshDataFunctions.forEach((fn) => fn());
       } catch (error) {
         setIsSubmitting(false);
@@ -144,7 +144,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         await refetch();
         toast.show(t('actions.update-success'), { type: 'md_success' });
 
-        emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_LISTING);
+        emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MARKETPLACE_LISTING);
         refreshDataFunctions.forEach((fn) => fn());
       } catch (error) {
         toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });

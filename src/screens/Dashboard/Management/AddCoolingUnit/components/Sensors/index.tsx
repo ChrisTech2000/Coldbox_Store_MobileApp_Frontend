@@ -15,7 +15,7 @@ export default function Sensors(props: PropsWithChildren) {
   const { watch, setValue } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
 
-  useAppEventListener<[SensorDatum]>('DISPATCH_SENSOR_DATUMS', (sensorData) => {
+  useAppEventListener<[SensorDatum]>(APP_EVENTS.DISPATCH_SENSOR_DATUMS, (sensorData) => {
     setValue('sensor', true);
     setValue('sensorData', sensorData);
     emitter.emit(APP_EVENTS.DISPATCH_SENSOR_MODAL, false, undefined);

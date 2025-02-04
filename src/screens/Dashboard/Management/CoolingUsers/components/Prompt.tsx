@@ -37,7 +37,7 @@ export default function Prompt(props: Props) {
     },
   });
 
-  useAppEventListener<[boolean]>('DISPATCH_CU_PROMPT', setModalVisibility);
+  useAppEventListener<[boolean]>(APP_EVENTS.DISPATCH_CU_PROMPT, setModalVisibility);
 
   useUnmount(() => {
     if (timeoutRef.current) {

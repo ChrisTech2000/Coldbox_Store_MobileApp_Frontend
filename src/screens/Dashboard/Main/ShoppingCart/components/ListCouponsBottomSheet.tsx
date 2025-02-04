@@ -6,7 +6,7 @@ import colors from 'tailwindcss/colors';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -40,7 +40,7 @@ export default function ListCouponsBottomSheet() {
     }
   }, []);
 
-  useAppEventListener('DISPATCH_LIST_COUPONS_IN_CART_MODAL', () => {
+  useAppEventListener(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL, () => {
     modalRef.current?.open();
   });
 

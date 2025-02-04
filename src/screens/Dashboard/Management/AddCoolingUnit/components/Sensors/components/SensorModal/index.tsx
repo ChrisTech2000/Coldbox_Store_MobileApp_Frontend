@@ -3,7 +3,7 @@ import React from 'react';
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import type { SensorTypes } from '#screens/Dashboard/Management/AddCoolingUnit/constants';
 
 import { ModalWorkaround } from './components/ModalWorkaround';
@@ -18,10 +18,13 @@ export default function SensorModal() {
   const [isVisible, setModalVisibility] = React.useState<boolean>(false);
   const [selectedSensor, setSelectedSensor] = React.useState<SensorTypes | undefined>(undefined);
 
-  useAppEventListener<[boolean, SensorTypes]>('DISPATCH_SENSOR_MODAL', (status, sensorType) => {
-    setModalVisibility(status);
-    setSelectedSensor(sensorType);
-  });
+  useAppEventListener<[boolean, SensorTypes]>(
+    APP_EVENTS.DISPATCH_SENSOR_MODAL,
+    (status, sensorType) => {
+      setModalVisibility(status);
+      setSelectedSensor(sensorType);
+    }
+  );
 
   const onDismiss = React.useCallback(() => {
     setModalVisibility(false);

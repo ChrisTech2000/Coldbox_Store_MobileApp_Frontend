@@ -9,7 +9,7 @@ import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -41,7 +41,7 @@ export default function AddToCartModal() {
   const [buyFullCrate, setBuyFullCrate] = useState(false);
 
   useAppEventListener<[AvailableListingDatum]>(
-    'DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL',
+    APP_EVENTS.DISPATCH_MARKETPLACE_ADD_TO_CART_MODAL,
     (datum) => {
       setDatum(datum);
       modalRef.current?.open();

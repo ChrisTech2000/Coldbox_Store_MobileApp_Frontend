@@ -170,7 +170,7 @@ export default function MarketplaceLocationFilter() {
     }
 
     void _getInitialLocation();
-    return emitter.on(APP_EVENTS.DISPATCH_INVALIDATE_MAKETPLACE_COORDINATES, _getInitialLocation);
+    return emitter.on(APP_EVENTS.DISPATCH_INVALIDATE_MARKETPLACE_COORDINATES, _getInitialLocation);
   }, []);
 
   return (
