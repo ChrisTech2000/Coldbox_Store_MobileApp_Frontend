@@ -53,7 +53,6 @@ export function SuffixTextInput(
       <TextInput
         {...rest}
         tw="w-full bg-transparent mt-1"
-        label={<Text tw="text-base">{rest.label}</Text>}
         value={_value}
         onChangeText={_setValue}
         onFocus={(evt) => {
