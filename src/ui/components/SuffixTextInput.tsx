@@ -28,7 +28,8 @@ export function SuffixTextInput(
   const showSuffix =
     typeof rest.label === 'string' &&
     rest.label.length > 0 &&
-    (rest.label.length <= 40 ? true : SCREEN_WIDTH > SCREEN_WIDTH_THRESHOLD);
+    (suffix?.length || 0) <= 3 &&
+    (rest.label.length <= 43 ? true : SCREEN_WIDTH > SCREEN_WIDTH_THRESHOLD);
 
   React.useEffect(() => {
     const nextPos = isFocused || !!_value ? SUFFIX_MARGIN_Y.FOCUSED : SUFFIX_MARGIN_Y.UNFOCUSED;
