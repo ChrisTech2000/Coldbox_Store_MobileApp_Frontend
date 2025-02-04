@@ -6,7 +6,7 @@ import { ERoles, type User } from '#types/global';
 import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import { useAppEventListener } from '#ui/lib/emitter';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurveyStack';
 import DataloaderService from '#services/DataloaderService';
 import { formatCurrencyWithSymbol } from '#screens/Dashboard/Main/Dashboard/CheckIn/utils';
@@ -169,7 +169,7 @@ export function useNotificationOpenSurveyListener() {
   const navigation = useNavigation<NavigationProp<any>>();
 
   useAppEventListener<[NotificationOpenSurveyEventDatums]>(
-    'DISPATCH_NOTIFICATION_OPEN_SURVEY',
+    APP_EVENTS.DISPATCH_NOTIFICATION_OPEN_SURVEY,
     ({ eventType, datums }) => {
       switch (eventType) {
         case 'MARKET_SURVEY':

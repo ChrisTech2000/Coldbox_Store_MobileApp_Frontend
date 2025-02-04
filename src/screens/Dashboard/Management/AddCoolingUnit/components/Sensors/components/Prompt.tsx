@@ -17,7 +17,7 @@ export default function Prompt() {
   const [isVisible, toggleVisibility, setModalVisibility] = useToggle(false);
   const { t } = useTranslationUtils();
 
-  useAppEventListener<[boolean]>('DISPATCH_SENSOR_PROMPT', setModalVisibility);
+  useAppEventListener<[boolean]>(APP_EVENTS.DISPATCH_SENSOR_PROMPT, setModalVisibility);
 
   useUnmount(() => {
     if (timeoutRef.current) {
