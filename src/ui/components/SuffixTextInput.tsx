@@ -14,6 +14,8 @@ const SUFFIX_MARGIN_Y = {
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_WIDTH_THRESHOLD = 400 as const;
 
+const IS_WIDER_SCREEN = SCREEN_WIDTH > SCREEN_WIDTH_THRESHOLD;
+
 export function SuffixTextInput(
   props: { suffix?: string } & Omit<TextInputProps, 'onChange' | 'left' | 'right'>
 ): React.ReactElement {
@@ -25,11 +27,14 @@ export function SuffixTextInput(
   const bottomAnim = React.useRef<Animated.Value>(new Animated.Value(SUFFIX_MARGIN_Y.UNFOCUSED));
   const prevPosition = React.useRef<number>(SUFFIX_MARGIN_Y.UNFOCUSED);
 
+  const safeLabelValue = typeof rest.label === 'string' ? rest.label : '';
+  const safeSuffixValue = typeof suffix === 'string' ? suffix : '';
+
   const showSuffix =
-    typeof rest.label === 'string' &&
-    rest.label.length > 0 &&
-    (suffix?.length || 0) <= 3 &&
-    (rest.label.length <= 43 ? true : SCREEN_WIDTH > SCREEN_WIDTH_THRESHOLD);
+    (safeLabelValue.length > 43 && safeSuffixValue.length < 3) ||
+    (safeLabelValue.length < 44 && safeSuffixValue.length > 3)
+      ? IS_WIDER_SCREEN
+      : true;
 
   React.useEffect(() => {
     const nextPos = isFocused || !!_value ? SUFFIX_MARGIN_Y.FOCUSED : SUFFIX_MARGIN_Y.UNFOCUSED;
@@ -54,6 +59,7 @@ export function SuffixTextInput(
       <TextInput
         {...rest}
         tw="w-full bg-transparent mt-1"
+        label={safeLabelValue}
         value={_value}
         onChangeText={_setValue}
         onFocus={(evt) => {
@@ -74,7 +80,7 @@ export function SuffixTextInput(
             bottom: bottomAnim.current,
           }}
         >
-          <Text tw="text-base">{suffix}</Text>
+          <Text tw="text-base">{safeSuffixValue}</Text>
         </Animated.View>
       ) : null}
     </View>
