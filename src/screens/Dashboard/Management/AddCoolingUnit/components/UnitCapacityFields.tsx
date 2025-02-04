@@ -2,6 +2,8 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
+
 import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../contexts/FormManager';
@@ -18,8 +20,7 @@ export default function UnitCapacityFields() {
         name="roomInsulator"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.roomInsulator')}
             mode="flat"
             dense
@@ -28,7 +29,7 @@ export default function UnitCapacityFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomInsulator}
-            right={<TextInput.Affix text="kg" />}
+            suffix="kg"
           />
         )}
       />
@@ -53,8 +54,7 @@ export default function UnitCapacityFields() {
         name="crateWeight"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={`${t('Dashboard.Management.AddCoolingUnit.fields.crateWeight')}*`}
             mode="flat"
             dense
@@ -63,7 +63,7 @@ export default function UnitCapacityFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateWeight}
-            right={<TextInput.Affix text="kg" />}
+            suffix="kg"
           />
         )}
       />

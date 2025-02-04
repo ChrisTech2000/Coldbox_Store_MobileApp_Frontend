@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
+
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
 
 import { useTranslationUtils } from '#i18n/utils';
 
@@ -9,8 +10,6 @@ import DataAggregator from '../contexts/DataAggregator';
 
 import { currenciesDict } from '../../CompanyDetails/utils';
 
-const currencies = currenciesDict();
-
 export default function PriceField() {
   const { control, formState, watch } = FormManager.useFormManager();
   const { companyCurrency } = DataAggregator.useDataAggregator();
@@ -18,13 +17,15 @@ export default function PriceField() {
 
   const selectedPriceType = watch('priceType');
 
-  const currencySymbol = companyCurrency ? currencies.getSymbolByCode(companyCurrency) : undefined;
+  const currencySymbol = React.useMemo(
+    () => (companyCurrency ? currenciesDict().getSymbolByCode(companyCurrency) : undefined),
+    [companyCurrency]
+  );
+
   const textInputAffix =
     selectedPriceType === 'PERIODICITY'
       ? `${currencySymbol}/${t('Dashboard.Management.AddCoolingUnit.pricing.day')}`
       : currencySymbol;
-
-  const errors = formState.errors;
 
   return (
     <React.Fragment>
@@ -32,8 +33,7 @@ export default function PriceField() {
         name="price"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={`${t('Dashboard.Management.AddCoolingUnit.fields.price')}*`}
             mode="flat"
             dense
@@ -41,8 +41,8 @@ export default function PriceField() {
             keyboardType="numeric"
             onChangeText={onChange}
             onBlur={onBlur}
-            error={!!errors.price}
-            right={<TextInput.Affix text={textInputAffix} />}
+            error={!!formState.errors.price}
+            suffix={textInputAffix}
           />
         )}
       />

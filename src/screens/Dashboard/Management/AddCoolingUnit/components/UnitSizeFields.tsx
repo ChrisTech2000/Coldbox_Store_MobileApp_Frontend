@@ -1,8 +1,9 @@
 import React from 'react';
-import { Divider, TextInput } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
 
 import { useTranslationUtils } from '#i18n/utils';
 
@@ -23,8 +24,7 @@ export default function UnitSizeFields() {
         name="roomLength"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.length')}
             mode="flat"
             dense
@@ -33,8 +33,8 @@ export default function UnitSizeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomLength}
-            right={<TextInput.Affix text="m" />}
             underlineColor="transparent"
+            suffix="m"
           />
         )}
       />
@@ -42,8 +42,7 @@ export default function UnitSizeFields() {
         name="roomWidth"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.width')}
             mode="flat"
             dense
@@ -52,8 +51,8 @@ export default function UnitSizeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomWidth}
-            right={<TextInput.Affix text="m" />}
             underlineColor="transparent"
+            suffix="m"
           />
         )}
       />
@@ -61,8 +60,7 @@ export default function UnitSizeFields() {
         name="roomHeight"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.height')}
             mode="flat"
             dense
@@ -71,8 +69,8 @@ export default function UnitSizeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomHeight}
-            right={<TextInput.Affix text="m" />}
             underlineColor="transparent"
+            suffix="m"
           />
         )}
       />
@@ -80,8 +78,7 @@ export default function UnitSizeFields() {
         name="roomWeight"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.weight')}
             mode="flat"
             dense
@@ -90,8 +87,8 @@ export default function UnitSizeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.roomWeight}
-            right={<TextInput.Affix text="kg" />}
             underlineColor="transparent"
+            suffix="kg"
           />
         )}
       />

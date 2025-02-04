@@ -1,8 +1,9 @@
 import React from 'react';
-import { Divider, TextInput } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
 
 import { useTranslationUtils } from '#i18n/utils';
 
@@ -23,8 +24,7 @@ export default function CrateDimensionsFields() {
         name="crateLength"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.length')}
             mode="flat"
             dense
@@ -33,8 +33,8 @@ export default function CrateDimensionsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateLength}
-            right={<TextInput.Affix text="cm" />}
             underlineColor="transparent"
+            suffix="cm"
           />
         )}
       />
@@ -42,7 +42,7 @@ export default function CrateDimensionsFields() {
         name="crateWidth"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
+          <SuffixTextInput
             tw="w-full bg-transparent mt-1"
             label={t('Dashboard.Management.AddCoolingUnit.fields.width')}
             mode="flat"
@@ -52,8 +52,8 @@ export default function CrateDimensionsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateWidth}
-            right={<TextInput.Affix text="cm" />}
             underlineColor="transparent"
+            suffix="cm"
           />
         )}
       />
@@ -61,7 +61,7 @@ export default function CrateDimensionsFields() {
         name="crateHeight"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
+          <SuffixTextInput
             tw="w-full bg-transparent mt-1"
             label={t('Dashboard.Management.AddCoolingUnit.fields.height')}
             mode="flat"
@@ -71,8 +71,8 @@ export default function CrateDimensionsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.crateHeight}
-            right={<TextInput.Affix text="cm" />}
             underlineColor="transparent"
+            suffix="cm"
           />
         )}
       />

@@ -2,6 +2,8 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
+
 import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../../../../contexts/FormManager';
@@ -37,8 +39,7 @@ export default function BatteryFields() {
         name="batteryWeight"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryWeight')}
             mode="flat"
             dense
@@ -47,7 +48,7 @@ export default function BatteryFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryWeight}
-            right={<TextInput.Affix text="kg" />}
+            suffix="kg"
           />
         )}
       />
@@ -55,8 +56,7 @@ export default function BatteryFields() {
         name="batteryCapacity"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryCapacity')}
             mode="flat"
             dense
@@ -65,7 +65,7 @@ export default function BatteryFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryCapacity}
-            right={<TextInput.Affix text="Ah" />}
+            suffix="Ah"
           />
         )}
       />
@@ -73,8 +73,7 @@ export default function BatteryFields() {
         name="batteryMaxCurrent"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryMaxCurrent')}
             mode="flat"
             dense
@@ -83,7 +82,7 @@ export default function BatteryFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryMaxCurrent}
-            right={<TextInput.Affix text="A" />}
+            suffix="A"
           />
         )}
       />
@@ -91,8 +90,7 @@ export default function BatteryFields() {
         name="batteryPeakEnergyStorage"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.batteryPeakEnergyStorage')}
             mode="flat"
             dense
@@ -101,7 +99,7 @@ export default function BatteryFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.batteryPeakEnergyStorage}
-            right={<TextInput.Affix text="kWh" />}
+            suffix="kWh"
           />
         )}
       />
