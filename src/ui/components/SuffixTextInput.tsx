@@ -50,9 +50,9 @@ export function SuffixTextInput(
 
   const renderRightContent = React.useCallback(() => {
     if (showSuffix) return <View />;
-    if (isFocused) return <TextInput.Affix text={suffix} />;
+    if (isFocused) return <TextInput.Affix text={safeSuffixValue} />;
     return undefined;
-  }, [showSuffix, isFocused, suffix]);
+  }, [showSuffix, isFocused, safeSuffixValue]);
 
   return (
     <View tw="relative flex-row items-center w-full">
