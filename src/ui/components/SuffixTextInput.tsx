@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Animated } from 'react-native';
+import { View, Animated, Dimensions } from 'react-native';
 import { TextInput, type TextInputProps } from 'react-native-paper';
 
 import { Text } from './Text';
@@ -10,6 +10,9 @@ const SUFFIX_MARGIN_Y = {
   FOCUSED: 6, // bottom-1.5
   UNFOCUSED: 12, // bottom-3
 } as const;
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_WIDTH_THRESHOLD = 400 as const;
 
 export function SuffixTextInput(
   props: { suffix?: string } & Omit<TextInputProps, 'onChange' | 'left' | 'right'>
@@ -22,24 +25,35 @@ export function SuffixTextInput(
   const bottomAnim = React.useRef<Animated.Value>(new Animated.Value(SUFFIX_MARGIN_Y.UNFOCUSED));
   const prevPosition = React.useRef<number>(SUFFIX_MARGIN_Y.UNFOCUSED);
 
+  const showSuffix =
+    typeof rest.label === 'string' &&
+    rest.label.length > 0 &&
+    (rest.label.length <= 40 ? true : SCREEN_WIDTH > SCREEN_WIDTH_THRESHOLD);
+
   React.useEffect(() => {
-    const nextPosition =
-      isFocused || !!_value ? SUFFIX_MARGIN_Y.FOCUSED : SUFFIX_MARGIN_Y.UNFOCUSED;
-    if (prevPosition.current !== nextPosition) {
+    const nextPos = isFocused || !!_value ? SUFFIX_MARGIN_Y.FOCUSED : SUFFIX_MARGIN_Y.UNFOCUSED;
+    if (showSuffix && prevPosition.current !== nextPos) {
       Animated.timing(bottomAnim.current, {
-        toValue: nextPosition,
+        toValue: nextPos,
         duration: 200,
         useNativeDriver: false,
       }).start();
-      prevPosition.current = nextPosition;
+      prevPosition.current = nextPos;
     }
-  }, [isFocused, _value]);
+  }, [isFocused, _value, showSuffix]);
+
+  const renderRightContent = React.useCallback(() => {
+    if (showSuffix) return <View />;
+    if (isFocused) return <TextInput.Affix text={suffix} />;
+    return undefined;
+  }, [showSuffix, isFocused, suffix]);
 
   return (
     <View tw="relative flex-row items-center w-full">
       <TextInput
         {...rest}
         tw="w-full bg-transparent mt-1"
+        label={<Text tw="text-base">{rest.label}</Text>}
         value={_value}
         onChangeText={_setValue}
         onFocus={(evt) => {
@@ -50,9 +64,9 @@ export function SuffixTextInput(
           setIsFocused(false);
           onBlur?.(evt);
         }}
-        right={<View />} /* empty View to maintain space for suffix */
+        right={renderRightContent()}
       />
-      {typeof suffix !== 'undefined' ? (
+      {showSuffix ? (
         <Animated.View
           style={{
             position: 'absolute',
