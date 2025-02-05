@@ -2,6 +2,8 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
+
 import { useTranslationUtils } from '#i18n/utils';
 
 import FormManager from '../../../../contexts/FormManager';
@@ -37,8 +39,7 @@ export default function PvPanelsFields() {
         name="pvPanelSize"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelSize')}
             mode="flat"
             dense
@@ -47,7 +48,7 @@ export default function PvPanelsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.pvPanelSize}
-            right={<TextInput.Affix text="m2" />}
+            suffix="m2"
           />
         )}
       />
@@ -55,8 +56,7 @@ export default function PvPanelsFields() {
         name="pvPanelWeight"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelWeight')}
             mode="flat"
             dense
@@ -65,7 +65,7 @@ export default function PvPanelsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.pvPanelWeight}
-            right={<TextInput.Affix text="kg" />}
+            suffix="kg"
           />
         )}
       />
@@ -73,8 +73,7 @@ export default function PvPanelsFields() {
         name="pvPanelMaxPower"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.pvPanelMaxPower')}
             mode="flat"
             dense
@@ -83,7 +82,7 @@ export default function PvPanelsFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.pvPanelMaxPower}
-            right={<TextInput.Affix text="W" />}
+            suffix="W"
           />
         )}
       />

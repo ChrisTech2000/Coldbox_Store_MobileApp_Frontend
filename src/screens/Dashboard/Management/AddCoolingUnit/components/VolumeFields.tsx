@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
+
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
 
 import { useTranslationUtils } from '#i18n/utils';
 
@@ -18,8 +19,7 @@ export default function VolumeFields() {
         name="capacityInMetricTons"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={`${t('Dashboard.Management.AddCoolingUnit.fields.capacityInMetricTons')}*`}
             mode="flat"
             dense
@@ -28,7 +28,7 @@ export default function VolumeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.capacityInMetricTons}
-            right={<TextInput.Affix text="MT" />}
+            suffix="MT"
           />
         )}
       />
@@ -37,8 +37,7 @@ export default function VolumeFields() {
         name="foodCapacityInMetricTons"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={`${t('Dashboard.Management.AddCoolingUnit.fields.foodCapacityInMetricTons')}*`}
             mode="flat"
             dense
@@ -47,7 +46,7 @@ export default function VolumeFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.foodCapacityInMetricTons}
-            right={<TextInput.Affix text="MT" />}
+            suffix="MT"
           />
         )}
       />

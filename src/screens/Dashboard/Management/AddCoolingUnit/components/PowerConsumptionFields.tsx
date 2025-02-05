@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
+
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
 
 import { useTranslationUtils } from '#i18n/utils';
 
@@ -18,8 +19,7 @@ export default function PowerConsumptionFields() {
         name="powerConsumptionInMt"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerConsumptionInMt')}
             mode="flat"
             dense
@@ -28,7 +28,7 @@ export default function PowerConsumptionFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerConsumptionInMt}
-            right={<TextInput.Affix text="kW/MT" />}
+            suffix="kW/MT"
           />
         )}
       />
@@ -36,8 +36,7 @@ export default function PowerConsumptionFields() {
         name="dailyRoomWattage"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.dailyRoomWattage')}
             mode="flat"
             dense
@@ -46,7 +45,7 @@ export default function PowerConsumptionFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.dailyRoomWattage}
-            right={<TextInput.Affix text="kWh/day" />}
+            suffix="kWh/day"
           />
         )}
       />
