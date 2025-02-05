@@ -167,6 +167,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
       const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
       const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
         const sortedData = sortAndMapData(coolingUnitData?.[dataKey]?.[i] ?? {});
+
         return {
           coolingUnitName: coolingUnitData?.unitName?.[i] ?? '',
           column1: (

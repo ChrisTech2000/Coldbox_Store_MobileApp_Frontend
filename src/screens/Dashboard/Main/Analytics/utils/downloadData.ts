@@ -24,7 +24,7 @@ import {
   UtilizationSection,
 } from '#ui/lib/templating/partials';
 
-import { getMetricValue } from '.';
+import { getMetricName, getMetricValue } from '.';
 import { ConfigData } from '../components/Configuration';
 
 ///////////////////// UTILS
@@ -60,6 +60,7 @@ export function generatePDFContent(
     mode === 'company'
       ? generateGeneralHtmlContent(t, company, companyData as CompanyData, coolingUnits)
       : '',
+    mode === 'aggregated' ? generateConfigSection(t, configData!) : '',
     mode !== 'comparison' ? generateUsersHtmlContent(t, companyData, mode) : '',
     mode === 'company' ? generateUtilizationHtmlContent(t, companyData as CompanyData) : '',
     mode === 'aggregated' ? generateCratesHtmlContent(t, companyData as CoolingUnitImpact) : '',
@@ -474,6 +475,24 @@ function generateCratesHtmlContent(
   });
 }
 
+///////////////////// CONFIG DATA
+function generateConfigSection(t: Translator, configData: ConfigData) {
+  if (!configData) return '';
+
+  return DetailsContainer({
+    datums: [
+      {
+        label: t('Dashboard.Management.EditCoolingUsers.pdf.dateRange'),
+        value: `${dateFmt(configData.startDate.toISOString(), 'MMMM dd, yyyy')} - ${dateFmt(configData.endDate.toISOString(), 'MMMM dd, yyyy')}`,
+      },
+      {
+        label: t('Dashboard.Management.EditCoolingUsers.pdf.selectedUnits'),
+        value: configData.coolingUnits.map((unit) => unit.name).join(', '),
+      },
+    ],
+  });
+}
+
 ///////////////////// COMPARISON TAB
 function generateComparisonHtmlContent(
   t: Translator,
@@ -482,25 +501,13 @@ function generateComparisonHtmlContent(
   configData: ConfigData,
   currency: string
 ) {
-  if (!configData) return '';
+  if (!configData || !cuData) return '';
 
   const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
 
   return ScrollView({
     divs: [
-      DetailsContainer({
-        datums: [
-          {
-            label: t('Dashboard.Management.EditCoolingUsers.pdf.dateRange'),
-            value: `${dateFmt(configData.startDate.toISOString(), 'MMMM dd, yyyy')} - ${dateFmt(configData.endDate.toISOString(), 'MMMM dd, yyyy')}`,
-          },
-          {
-            label: t('Dashboard.Management.EditCoolingUsers.pdf.selectedUnits'),
-            value: configData.coolingUnits.map((unit) => unit.name).join(', '),
-          },
-        ],
-      }),
-
+      generateConfigSection(t, configData),
       Section({ label: t('Dashboard.Analytics.comparisonTab.usersTab.operators') }),
       Table({
         columns: {
@@ -515,19 +522,23 @@ function generateComparisonHtmlContent(
           },
           total: t('Dashboard.Analytics.comparisonTab.total'),
         },
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          const female = cuData?.roomOpFem?.[i] ?? 0;
-          const male = cuData?.roomOpMa?.[i] ?? 0;
-          const other = cuData?.roomOpOt?.[i] ?? 0;
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              const female = cuData?.roomOpFem?.[i] ?? 0;
+              const male = cuData?.roomOpMa?.[i] ?? 0;
+              const other = cuData?.roomOpOt?.[i] ?? 0;
+              const total = cuData?.roomOp?.[i] ?? 0;
 
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            male,
-            female,
-            other,
-            total: female + male + other,
-          };
-        }),
+              return {
+                unit: cuData.unitName?.[i] ?? '',
+                male,
+                female,
+                other,
+                total,
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({ label: t('Dashboard.Analytics.comparisonTab.usersTab.activeUsers') }),
@@ -544,19 +555,23 @@ function generateComparisonHtmlContent(
           },
           total: t('Dashboard.Analytics.comparisonTab.total'),
         },
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          const female = cuData?.roomActiveMa?.[i] ?? 0;
-          const male = cuData?.roomActiveFem?.[i] ?? 0;
-          const other = cuData?.roomActiveOt?.[i] ?? 0;
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              const male = cuData?.roomActiveMa?.[i] ?? 0;
+              const female = cuData?.roomActiveFem?.[i] ?? 0;
+              const other = cuData?.roomActiveOt?.[i] ?? 0;
+              const total = cuData?.roomActiveUsers?.[i] ?? 0;
 
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            male,
-            female,
-            other,
-            total: female + male + other,
-          };
-        }),
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                male,
+                female,
+                other,
+                total,
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({ label: t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries') }),
@@ -572,17 +587,20 @@ function generateComparisonHtmlContent(
           },
           total: t('Dashboard.Analytics.comparisonTab.total'),
         },
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          const female = Math.floor(cuData?.roomBeneficiariesFem?.[i] ?? 0);
-          const male = Math.floor(cuData?.roomBeneficiariesMa?.[i] ?? 0);
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              const female = Math.floor(cuData?.roomBeneficiariesFem?.[i] ?? 0);
+              const male = Math.floor(cuData?.roomBeneficiariesMa?.[i] ?? 0);
 
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            male,
-            female,
-            total: female + male,
-          };
-        }),
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                male,
+                female,
+                total: female + male,
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({ label: t('Dashboard.Analytics.totalCratesLabel'), kind: 'aggregated' }),
@@ -598,17 +616,20 @@ function generateComparisonHtmlContent(
           },
           total: t('Dashboard.Analytics.comparisonTab.total'),
         },
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          const checkIn = cuData?.roomCratesIn?.[i] ?? 0;
-          const checkOut = cuData?.roomCratesOut?.[i] ?? 0;
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              const checkIn = cuData?.roomCratesIn?.[i] ?? 0;
+              const checkOut = cuData?.roomCratesOut?.[i] ?? 0;
 
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            checkIn,
-            checkOut,
-            total: checkIn + checkOut,
-          };
-        }),
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                checkIn,
+                checkOut,
+                total: checkIn + checkOut,
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({ label: t('Dashboard.Analytics.totalQuantityLabel'), kind: 'aggregated' }),
@@ -624,17 +645,20 @@ function generateComparisonHtmlContent(
           },
           total: t('Dashboard.Analytics.comparisonTab.total'),
         },
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          const checkIn = cuData?.roomKgIn?.[i] ?? 0;
-          const checkOut = cuData?.roomKgOut?.[i] ?? 0;
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              const checkIn = cuData?.roomKgIn?.[i] ?? 0;
+              const checkOut = cuData?.roomKgOut?.[i] ?? 0;
 
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            checkIn,
-            checkOut,
-            total: checkIn + checkOut,
-          };
-        }),
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                checkIn,
+                checkOut,
+                total: checkIn + checkOut,
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({ label: t('Dashboard.Analytics.totalOperations'), kind: 'aggregated' }),
@@ -650,17 +674,20 @@ function generateComparisonHtmlContent(
           },
           total: t('Dashboard.Analytics.comparisonTab.total'),
         },
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          const checkIn = cuData?.roomOpsIn?.[i] ?? 0;
-          const checkOut = cuData?.roomOpsOut?.[i] ?? 0;
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              const checkIn = cuData?.roomOpsIn?.[i] ?? 0;
+              const checkOut = cuData?.roomOpsOut?.[i] ?? 0;
 
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            checkIn,
-            checkOut,
-            total: checkIn + checkOut,
-          };
-        }),
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                checkIn,
+                checkOut,
+                total: checkIn + checkOut,
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({
@@ -675,15 +702,18 @@ function generateComparisonHtmlContent(
         },
         // eslint-disable-next-line
         // @ts-ignore
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            crates: Object.values(cuData?.checkInCratesCrop?.[i] ?? {})?.map((item) => item),
-            distribution: Object.keys(cuData?.checkInCratesCrop?.[i] ?? {})?.map((item) =>
-              startCase(item)
-            ),
-          };
-        }),
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                crates: Object.values(cuData?.checkInCratesCrop?.[i] ?? {})?.map((item) => item),
+                distribution: Object.keys(cuData?.checkInCratesCrop?.[i] ?? {})?.map((item) =>
+                  startCase(item)
+                ),
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({
@@ -698,15 +728,17 @@ function generateComparisonHtmlContent(
         },
         // eslint-disable-next-line
         // @ts-ignore
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            crates: Object.values(cuData?.checkOutCratesCrop?.[i] ?? {})?.map((item) => item),
-            distribution: Object.keys(cuData?.checkOutCratesCrop?.[i] ?? {})?.map((item) =>
-              startCase(item)
-            ),
-          };
-        }),
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                crates: Object.values(cuData?.checkOutCratesCrop?.[i] ?? {})?.map((item) => item),
+                distribution: Object.keys(cuData?.checkOutCratesCrop?.[i] ?? {})?.map((item) =>
+                  startCase(item)
+                ),
+              };
+            }),
       }),
 
       Section({
@@ -721,15 +753,18 @@ function generateComparisonHtmlContent(
         },
         // eslint-disable-next-line
         // @ts-ignore
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            crates: Object.values(cuData?.checkInKgCrop?.[i] ?? {})?.map((item) => item),
-            distribution: Object.keys(cuData?.checkInKgCrop?.[i] ?? {})?.map((item) =>
-              startCase(item)
-            ),
-          };
-        }),
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                crates: Object.values(cuData?.checkInKgCrop?.[i] ?? {})?.map((item) => item),
+                distribution: Object.keys(cuData?.checkInKgCrop?.[i] ?? {})?.map((item) =>
+                  startCase(item)
+                ),
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({
@@ -744,15 +779,18 @@ function generateComparisonHtmlContent(
         },
         // eslint-disable-next-line
         // @ts-ignore
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            crates: Object.values(cuData?.checkOutKgCrop?.[i] ?? {})?.map((item) => item),
-            distribution: Object.keys(cuData?.checkOutKgCrop?.[i] ?? {})?.map((item) =>
-              startCase(item)
-            ),
-          };
-        }),
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                crates: Object.values(cuData?.checkOutKgCrop?.[i] ?? {})?.map((item) => item),
+                distribution: Object.keys(cuData?.checkOutKgCrop?.[i] ?? {})?.map((item) =>
+                  startCase(item)
+                ),
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({
@@ -767,13 +805,18 @@ function generateComparisonHtmlContent(
         },
         // eslint-disable-next-line
         // @ts-ignore
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            crates: Object.values(cuData?.co2Crops?.[i] ?? {})?.map((item) => item.toFixed(2)),
-            distribution: Object.keys(cuData?.co2Crops?.[i] ?? {})?.map((item) => startCase(item)),
-          };
-        }),
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                crates: Object.values(cuData?.co2Crops?.[i] ?? {})?.map((item) => item.toFixed(2)),
+                distribution: Object.keys(cuData?.co2Crops?.[i] ?? {})?.map((item) =>
+                  startCase(item)
+                ),
+              };
+            }),
+        total: Object.values(cuData?.unitName ?? {}).length ?? 0,
       }),
 
       Section({
@@ -785,12 +828,15 @@ function generateComparisonHtmlContent(
           unit: t('Dashboard.Management.EditCoolingUsers.pdf.coolingUnit'),
           data: t('Dashboard.Analytics.comparisonTab.impactTab.occupancy'),
         },
-        rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
-          return {
-            unit: cuData?.unitName?.[i] ?? '',
-            data: `${(cuData?.averageRoomOccupancy?.[i] ?? 0).toFixed(2)}%`,
-          };
-        }),
+        rows: !cuData.unitName?.[0]
+          ? [{ unit: t('Dashboard.Analytics.emptyState') }]
+          : Array.from({ length: coolingUnitsLength }, (_, i) => {
+              return {
+                unit: cuData?.unitName?.[i] ?? '',
+                data: `${(cuData?.averageRoomOccupancy?.[i] ?? 0).toFixed(2)}%`,
+              };
+            }),
+        total: configData?.coolingUnits.length ?? 0,
       }),
 
       Section({
@@ -810,11 +856,12 @@ function generateComparisonHtmlContent(
             getMetricValue(data?.impactMetrics?.[0]?.avgMonthlyPercFoodlossEvolution, i) || 0;
 
           return {
-            unit: cuData?.unitName?.[i] ?? '',
+            unit: getMetricName(data?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
             change: `${sum.toFixed(2)}%`,
             levels: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
           };
         }),
+        total: configData?.coolingUnits.length ?? 0,
       }),
 
       Section({
@@ -836,11 +883,12 @@ function generateComparisonHtmlContent(
             0;
 
           return {
-            unit: cuData?.unitName?.[i] ?? '',
+            unit: getMetricName(data?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
             change: `${sum.toFixed(2)}%`,
-            levels: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
+            levels: `${from.toFixed(2)} to ${to.toFixed(2)}`,
           };
         }),
+        total: configData?.coolingUnits.length ?? 0,
       }),
 
       Section({
@@ -854,10 +902,11 @@ function generateComparisonHtmlContent(
         },
         rows: Array.from({ length: coolingUnitsLength }, (_, i) => {
           return {
-            unit: cuData?.unitName?.[i] ?? '',
+            unit: getMetricName(data?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
             data: `${currency}${(cuData?.roomRevenue?.[i] ?? 0).toFixed(2)}`,
           };
         }),
+        total: configData?.coolingUnits.length ?? 0,
       }),
 
       Section({
@@ -876,11 +925,12 @@ function generateComparisonHtmlContent(
           const sum = ((to - from) / (from || 1)) * 100;
 
           return {
-            unit: cuData?.unitName?.[i] ?? '',
+            unit: getMetricName(data?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
             change: `${sum.toFixed(2)}%`,
-            levels: `${from.toFixed(2)}% to ${to.toFixed(2)}%`,
+            levels: `${from.toFixed(2)} to ${to.toFixed(2)}`,
           };
         }),
+        total: configData?.coolingUnits.length ?? 0,
       }),
 
       Section({
@@ -899,11 +949,12 @@ function generateComparisonHtmlContent(
               getMetricValue(data?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom, i)) *
             100;
           return {
-            unit: cuData?.unitName?.[i] ?? '',
+            unit: getMetricName(data?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth, i) ?? 0,
             percentage: `${Number.isNaN(percentage) ? 0 : percentage.toFixed(2)}%`,
             impact: `${getMetricValue(data?.impactMetrics?.[0]?.numPostHarvestSurveys, i) ?? 0} / ${getMetricValue(data?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom, i) ?? 0}`,
           };
         }),
+        total: configData?.coolingUnits.length ?? 0,
       }),
     ],
   });
