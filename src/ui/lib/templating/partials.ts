@@ -5,8 +5,8 @@ import { template } from './internals';
 //
 
 export const DetailsContainer = template<{ datums: Array<{ label: string; value: string }> }>`
-<div class="w-full bg-teal-50 px-4 py-0.5 tracking-wide my-2 rounded-md">
-  ${(p) => p.datums.map((datum) => `<p class="text-zinc-900">${datum.label}: <span class="text-teal-600">${datum.value}.</span></p>`).join('')}
+<div class="w-full px-4 py-0.5 tracking-wide my-2 rounded-md" style="background-color: #f0fdfa;">
+  ${(p) => p.datums.map((datum) => `<p class="text-gray-900">${datum.label}: <span style="color: #14b8a6;">${datum.value}.</span></p>`).join('')}
 </div>
 `;
 
@@ -18,7 +18,7 @@ export const PillCard = template<{
   label: string;
   value: number | string | Array<string | number>;
 }>`
-<div class="bg-violet-950 text-white h-auto flex flex-col items-center justify-center rounded-md px-4">
+<div class="text-white h-auto flex flex-col items-center justify-center rounded-md px-4" style="background-color: #2e1065;">
   <p class="text-sm m-0 p-0">${(p) => p.label}</p>
   ${(p) =>
     Array.isArray(p.value)
@@ -30,7 +30,7 @@ export const PillCard = template<{
 export const PillContainer = template<{
   datums: Array<{ label: string; value: number | string | Array<string | number> }>;
 }>`
-<div class="bg-zinc-100 rounded-md flex flex-row items-center justify-center space-x-2 space-y-1 flex-wrap my-2 p-2">
+<div class="bg-gray-100 rounded-md flex flex-row items-center justify-center space-x-2 space-y-1 flex-wrap my-2 p-2">
   ${(p) => p.datums.map((datum) => PillCard(datum)).join('')}
 </div>
 `;
@@ -40,7 +40,7 @@ export const PillContainer = template<{
 //
 
 export const Section = template<{ label: string; kind?: 'default' | 'impact' | 'aggregated' }>`
-<div class="${(p) => (p.kind === 'impact' ? 'bg-purple-50' : p.kind === 'aggregated' ? 'bg-gray-200' : 'bg-teal-50')} h-14 flex items-center px-4 my-2 rounded-md w-full">
+<div style="${(p) => (!p.kind ? 'background-color: #f0fdfa;' : '')}" class="${(p) => (p.kind === 'impact' ? 'bg-purple-50' : p.kind === 'aggregated' ? 'bg-gray-200' : '')} h-14 flex items-center px-4 my-2 rounded-md w-full">
   <p>${(p) => p.label}</p>
 </div>
 `;
@@ -49,7 +49,7 @@ export const UsersSection = template<{
   title: string;
   data: { male: string; female: string; other?: string };
 }>`
-<div class="w-full bg-green-200 p-2 rounded-md flex flex-col items-center my-2">
+<div class="w-full p-2 rounded-md flex flex-col items-center my-2" style="background-color: #f0fdfa;">
     <div class="text-lg mb-2">
       ${(p) => p.title}
     </div>
@@ -121,7 +121,7 @@ function _unGroupColumns(columns: TableColumns): Record<string, string> {
 }
 
 const TableHead = template<{ columns: TableColumns }>`
-<thead class="w-full text-center bg-zinc-700">
+<thead class="w-full text-center bg-gray-700">
   <tr>
     ${({ columns }) => {
       let hasSubHeaders = false;
@@ -189,7 +189,7 @@ const TableRow = template<{ values: Array<number | string> | Array<Array<number 
             .join('')}
         </div>
       `
-          : value
+          : (value ?? '')
       }
     </td>
   `
@@ -201,6 +201,7 @@ const TableRow = template<{ values: Array<number | string> | Array<Array<number 
 export const Table = template<{
   columns: TableColumns;
   rows: Array<Record<string, number | string>>;
+  total: number;
 }>`
 <div class="w-full overflow-x-auto my-2">
   <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm border-collapse">
@@ -217,7 +218,7 @@ export const Table = template<{
     </tbody>
   </table>
   <div class="px-4 py-3">
-    <small class="text-gray-500">${(p) => p.rows.length.toString()} total</small>
+    <small class="text-gray-500">${(p) => p.total?.toString() ?? 0} total</small>
   </div>
 </div>
 `;

@@ -21,7 +21,7 @@ export function CommonFooter({ tabs }: CommonFooterProps) {
       {tabs}
       <Button
         mode="contained"
-        tw="mt-2"
+        tw="mt-2 mb-16"
         contentStyle="bg-gray-300"
         labelStyle="text-black text-base"
         onPress={() => navigation.navigate('Methodology')}

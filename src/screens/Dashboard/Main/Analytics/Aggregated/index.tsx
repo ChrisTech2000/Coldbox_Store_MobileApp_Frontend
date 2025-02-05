@@ -101,7 +101,8 @@ export function AggregatedSection() {
       company,
       coolingUnitData,
       updatedImpactData,
-      'aggregated'
+      'aggregated',
+      configData
     );
     const fileName = `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.aggregated')}`;
 
@@ -123,7 +124,7 @@ export function AggregatedSection() {
     } finally {
       setIsCreatingPdf(false);
     }
-  }, [t, toast, coolingUnits, coolingUnitData, updatedImpactData, company]);
+  }, [t, toast, coolingUnits, coolingUnitData, updatedImpactData, company, configData]);
 
   useEffect(() => {
     if (impactData) {
