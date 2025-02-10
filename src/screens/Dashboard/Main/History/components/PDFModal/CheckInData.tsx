@@ -4,13 +4,14 @@ import { DataTable } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { MovementCrate, type CoolingUnit } from '#types/global';
-import InAppNotifications from '#common/InAppNotifications';
 import { savePDF } from '#ui/lib/pdf';
 import reportCrash from '#ui/lib/reportCrash';
+
+import InAppNotifications from '#common/InAppNotifications';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { DEFAULT_CROP_VALUES } from '#screens/Dashboard/Main/Marketplace/utils';
+import { GetMovementsHistoryResponse } from '#types/api.responses';
+import { MovementCrate, type CoolingUnit } from '#types/global';
 
 type CheckInDataProps = {
   companyName: string;
@@ -250,12 +251,10 @@ export function CheckInData(props: CheckInDataProps) {
               [] as Array<MovementCrate['crop']>
             )
             .map((crop, index) => {
-              if (!crop) return;
-
-              const crates = movement.checkin?.crates.filter((crate) => crate.cropId === crop.id);
+              const crates = movement.checkin?.crates.filter((crate) => crate.cropId === crop?.id);
               return (
-                <DataTable.Row key={`${crop.name}-${index}`}>
-                  <DataTable.Cell>{crop.name}</DataTable.Cell>
+                <DataTable.Row key={`${crop?.name || DEFAULT_CROP_VALUES.name}-${index}`}>
+                  <DataTable.Cell>{crop?.name || DEFAULT_CROP_VALUES.name}</DataTable.Cell>
                   <DataTable.Cell numeric>{crates.length}</DataTable.Cell>
                   <DataTable.Cell numeric>
                     {crates.reduce((acc, current) => (acc += current.initialWeight), 0)}

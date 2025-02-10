@@ -4,12 +4,13 @@ import { DataTable, Divider } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import { GetMovementsHistoryResponse } from '#types/api.responses';
-import InAppNotifications from '#common/InAppNotifications';
 import { savePDF } from '#ui/lib/pdf';
 import reportCrash from '#ui/lib/reportCrash';
+
+import InAppNotifications from '#common/InAppNotifications';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { DEFAULT_CROP_VALUES } from '#screens/Dashboard/Main/Marketplace/utils';
+import { GetMovementsHistoryResponse } from '#types/api.responses';
 
 type CheckOutDataProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -180,7 +181,7 @@ export function CheckOutData(props: CheckOutDataProps) {
           {movement.checkout?.crates.map((crate, index) => (
             <DataTable.Row key={`${crate.crop?.name ?? ''}-${index}`}>
               <DataTable.Cell>{crate.tag}</DataTable.Cell>
-              <DataTable.Cell>{crate.crop?.name ?? ''}</DataTable.Cell>
+              <DataTable.Cell>{crate.crop?.name ?? DEFAULT_CROP_VALUES.name}</DataTable.Cell>
               <DataTable.Cell numeric>{crate.affectedWeight ?? 0}</DataTable.Cell>
             </DataTable.Row>
           ))}
