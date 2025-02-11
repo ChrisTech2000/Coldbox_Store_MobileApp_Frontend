@@ -21,6 +21,7 @@ export type CompanyBottomSheetDatum = {
   address: string;
   latitude: number;
   longitude: number;
+  coolingUnit: string;
 };
 
 export default function CompanyBottomSheet() {
@@ -53,6 +54,9 @@ export default function CompanyBottomSheet() {
         <View tw="px-4 pb-4 pt-2.5">
           <Text variant="TextMedium" tw="text-2xl">
             {datum?.name}
+          </Text>
+          <Text variant="TextMedium" tw="text-xl">
+            {datum?.coolingUnit}
           </Text>
           <View tw="mt-3">
             <_CompanyField

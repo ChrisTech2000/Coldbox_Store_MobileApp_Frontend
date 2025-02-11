@@ -116,7 +116,11 @@ export default function AddToCartModal() {
                   owner={datum.owner}
                   cropImageUri={`${API_BASE_URL}media/${datum.crop.image}`}
                 />
-                <MarketplaceItemWrapper.CompanyAction company={datum.company} readOnly />
+                <MarketplaceItemWrapper.CompanyAction
+                  company={datum.company}
+                  coolingUnit={datum.coolingUnit.name}
+                  readOnly
+                />
                 <MarketplaceItemWrapper.BuyAction
                   crateWeight={datum.crateWeight}
                   currencyValue={datum.currencyValue}
