@@ -96,6 +96,7 @@ export function CartItem({ item }: CartItemProps) {
     const datum = {
       name: result.company.name,
       locationName: result.name,
+      coolingUnit: coolingUnit?.name ?? '',
       address: [
         result.streetNumber,
         result.street,

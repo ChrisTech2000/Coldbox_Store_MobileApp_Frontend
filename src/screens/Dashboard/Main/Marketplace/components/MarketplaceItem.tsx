@@ -122,6 +122,7 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
   company: { name: string; id: number; locationId: number | null };
   readOnly?: boolean;
   truncate?: boolean;
+  coolingUnit?: string;
 }) {
   const onPressHandler = useDebouncedCallback(async () => {
     if (!props.company.locationId) return;
@@ -133,6 +134,7 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
     const datum = {
       name: result.company.name,
       locationName: result.name,
+      coolingUnit: props.coolingUnit ?? '',
       address: [
         result.streetNumber,
         result.street,

@@ -56,7 +56,10 @@ export default function MarketplaceList() {
                   cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
                   owner={item.owner}
                 />
-                <MarketplaceItemWrapper.CompanyAction company={item.company} />
+                <MarketplaceItemWrapper.CompanyAction
+                  company={item.company}
+                  coolingUnit={item.coolingUnit.name}
+                />
                 <MarketplaceItemWrapper.BuyAction
                   currencyValue={item.currencyValue}
                   crateWeight={item.crateWeight}
@@ -227,7 +230,11 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
                     </Text>
                   </View>
                   <View tw="flex-row items-end justify-between">
-                    <MarketplaceItemWrapper.CompanyAction company={datum.company} truncate />
+                    <MarketplaceItemWrapper.CompanyAction
+                      company={datum.company}
+                      coolingUnit={datum.coolingUnit.name}
+                      truncate
+                    />
                     {typeof translationPath !== 'undefined' ? (
                       <View tw="flex-row items-center space-x-2 mb-1.5">
                         <MaterialCommunityIcon
