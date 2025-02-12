@@ -352,6 +352,8 @@ const en = {
     noCoolingUnitAvailable: 'No cooling unit available',
     noLocationsAvailable:
       'Welcome to Coldtivate. Get started by adding locations to your app in the management panel.',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!',
     MarketPrice: {
       emptyState: 'Crop Prices are not available in your country',
       commodityLabel: 'Commodity',

@@ -334,6 +334,8 @@ export default {
     noCoolingUnitAvailable: 'Babu naúrar sanyaya da akwai',
     noLocationsAvailable:
       'Barka da zuwa Coldtivate. Fara ta hanyar ƙara wurare zuwa manhajar ku a cikin kwamitin gudanarwa.',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Babu farashin kasuwa a cikin ƙasar ku',
       commodityLabel: 'Kaya',
