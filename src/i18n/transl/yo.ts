@@ -327,6 +327,8 @@ export default {
     noCoolingUnitAvailable: 'Ko si ẹrọ itutu agbaiye',
     noLocationsAvailable:
       'Kaabo si Coldtivate. Bẹrẹ nipa fifi agbe gbe re kun app rẹ ni ibi iṣakoso.',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Awọn idiyele ọja ko si ni orilẹ ede rẹ',
       commodityLabel: 'oja',

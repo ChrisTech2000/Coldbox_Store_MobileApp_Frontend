@@ -354,6 +354,8 @@ export default {
     noCoolingUnitAvailable: 'कोई कूलिंग यूनिट उपलब्ध नहीं है',
     noLocationsAvailable:
       'Coldtivate में आपका स्वागत है। प्रबंधन पैनल में अपने ऐप में स्थान जोड़कर शुरुआत करें।',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'आपके देश में बाजार मूल्य उपलब्ध नहीं हैं', // TODO
       commodityLabel: 'वस्तु',

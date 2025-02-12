@@ -353,6 +353,8 @@ export default {
     noCoolingUnitAvailable: 'କୋଣସି କୁଲିଙ୍ଗ୍ ଇନିଟ୍ ଉପଲବ୍ଧ ନାହିଁ',
     noLocationsAvailable:
       'କୋଲ୍ଡଟିଭେଟ୍‌ରେ ସ୍ବାଗତ। ପରିଚାଳନା ପ୍ୟାନେଲରେ ସ୍ଥାନଗୁଡିକୁ ଯୋଡି ଆରମ୍ଭ କରନ୍ତୁ।',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'ଆପଣଙ୍କ ଦେଶରେ ବଜାର ମୂଲ୍ୟ ଉପଲବ୍ଧ ନାହିଁ', // TODO
       commodityLabel: 'ବସ୍ତୁ',
