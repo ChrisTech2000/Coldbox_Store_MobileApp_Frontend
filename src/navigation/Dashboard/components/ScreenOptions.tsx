@@ -7,6 +7,7 @@ import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import { LanguageManager, type Translator, type TranslationPaths } from '#i18n/utils';
 
 import type { DashboardRoutes, DashboardRoutePaths } from '../index';
+import { goBackWithDrawer } from 'navigation/utils/navigationUtils.ts';
 
 type Props = {
   route: RouteProp<DashboardRoutes, DashboardRoutePaths>;
@@ -38,7 +39,14 @@ export default function DashboardScreenOptions(
       <NavigatorHeader
         {...headerProps}
         routeTitle={routeTitle}
-        leftContent={<Appbar.BackAction onPress={props.navigation.goBack} size={22} />}
+        leftContent={
+          <Appbar.BackAction
+            onPress={() => {
+              goBackWithDrawer(props.navigation, true);
+            }}
+            size={22}
+          />
+        }
       />
     ),
   };
