@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
+
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
 
 import { useTranslationUtils } from '#i18n/utils';
 
@@ -18,8 +19,7 @@ export default function DieselConsumptionField() {
         name="powerSourceDieselConsumptionKwh"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceDieselConsumptionKwh')}
             mode="flat"
             dense
@@ -28,7 +28,7 @@ export default function DieselConsumptionField() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceDieselConsumptionKwh}
-            right={<TextInput.Affix text="L/kWh" />}
+            suffix="L/kWh"
           />
         )}
       />

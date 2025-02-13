@@ -324,6 +324,8 @@ export default {
       latestTemperature: 'تم تسجيل أحدث درجة حرارة في {{date}}.',
     },
     emptyGeneral: 'في الوقت الحالي، لا توجد بيانات متاحة.',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     emptyCoolingUser:
       'ستظهر العناصر المخزنة في لوحة المعلومات عندما تقوم بإجراء تسجيل وصول واحد على الأقل في أي غرفة.',
     noCompanyAvailable: 'لا توجد شركة متاحة',

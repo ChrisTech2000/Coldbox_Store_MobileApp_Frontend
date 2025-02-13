@@ -343,6 +343,8 @@ export default {
     noCoolingUnitAvailable: 'Aucune unité de réfrigération disponible',
     noLocationsAvailable:
       'Bienvenue sur Coldtivate. Commencez en ajoutant des lieux à votre application dans le panneau de gestion.',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Les prix des recoltes ne sont pas disponibles dans votre pays',
       commodityLabel: 'Marchandise',

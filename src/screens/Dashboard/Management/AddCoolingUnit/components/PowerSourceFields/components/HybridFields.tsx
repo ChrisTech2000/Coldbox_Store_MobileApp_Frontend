@@ -1,8 +1,8 @@
 import React from 'react';
-import { Divider, TextInput } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
 
 import { useTranslationUtils } from '#i18n/utils';
 
@@ -23,8 +23,7 @@ export default function HybridFields() {
         name="powerSourceDieselPercent"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceDieselPercent')}
             mode="flat"
             dense
@@ -33,8 +32,7 @@ export default function HybridFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceDieselPercent}
-            right={<TextInput.Affix text="%" />}
-            underlineColor="transparent"
+            suffix="%"
           />
         )}
       />
@@ -42,8 +40,7 @@ export default function HybridFields() {
         name="powerSourceGridPercent"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceGridPercent')}
             mode="flat"
             dense
@@ -52,8 +49,7 @@ export default function HybridFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceGridPercent}
-            right={<TextInput.Affix text="%" />}
-            underlineColor="transparent"
+            suffix="%"
           />
         )}
       />
@@ -61,8 +57,7 @@ export default function HybridFields() {
         name="powerSourcePvPercent"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourcePvPercent')}
             mode="flat"
             dense
@@ -71,8 +66,7 @@ export default function HybridFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourcePvPercent}
-            right={<TextInput.Affix text="%" />}
-            underlineColor="transparent"
+            suffix="%"
           />
         )}
       />
@@ -80,8 +74,7 @@ export default function HybridFields() {
         name="powerSourceBiomassPercent"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.powerSourceBiomassPercent')}
             mode="flat"
             dense
@@ -90,12 +83,10 @@ export default function HybridFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.powerSourceBiomassPercent}
-            right={<TextInput.Affix text="%" />}
-            underlineColor="transparent"
+            suffix="%"
           />
         )}
       />
-      <Divider tw="w-full bg-gray-700 mt-4" />
     </React.Fragment>
   );
 }

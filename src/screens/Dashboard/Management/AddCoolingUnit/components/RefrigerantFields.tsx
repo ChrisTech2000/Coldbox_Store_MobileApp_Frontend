@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, FlatList } from 'react-native';
 import { Controller } from 'react-hook-form';
-import { Divider, RadioButton, TextInput } from 'react-native-paper';
+import { Divider, RadioButton } from 'react-native-paper';
 
 import { Select } from '#ui/components/Select';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Button } from '#ui/components/Button';
+import { SuffixTextInput } from '#ui/components/SuffixTextInput';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
@@ -106,8 +107,7 @@ export default function RefrigerantFields() {
         name="amountRefrigerant"
         control={control}
         render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-1"
+          <SuffixTextInput
             label={t('Dashboard.Management.AddCoolingUnit.fields.amountRefrigerant')}
             mode="flat"
             dense
@@ -116,7 +116,7 @@ export default function RefrigerantFields() {
             onChangeText={onChange}
             onBlur={onBlur}
             error={!!errors.amountRefrigerant}
-            right={<TextInput.Affix text="kg" />}
+            suffix="kg"
           />
         )}
       />

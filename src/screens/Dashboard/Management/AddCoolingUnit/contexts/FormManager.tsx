@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { useIsFocused } from '@react-navigation/native';
 
 import type { ValueOf } from '#types/miscellaneous';
 import { useTranslationUtils } from '#i18n/utils';
@@ -135,26 +136,36 @@ export default function FormManager(props: FormManagerProps) {
       );
 
       const baseSchema = z.object({
-        name: z.string().min(1),
-        location: z.number().int().gt(0).positive(),
-        coolingUnitType: z.string().min(1),
-        priceType: z.string().min(1),
-        metricUnit: z.string().min(1),
-        price: greaterThan,
-        capacityInMetricTons: greaterThan,
-        foodCapacityInMetricTons: greaterThan,
-        roomLength: greaterThanEqual.optional(),
-        roomWidth: greaterThanEqual.optional(),
-        roomHeight: greaterThanEqual.optional(),
-        roomWeight: greaterThanEqual.optional(),
-        roomInsulator: greaterThanEqual.optional(),
-        capacityInNumberCrates: greaterThan,
-        crateWeight: greaterThan,
-        crateLength: greaterThanEqual.optional(),
-        crateWidth: greaterThanEqual.optional(),
-        crateHeight: greaterThanEqual.optional(),
-        editableCheckins: z.boolean(),
-        sensor: z.boolean(),
+        name: z.string().min(1).default(''),
+        location: z
+          .number()
+          .int()
+          .gt(0)
+          .positive()
+          .nullable()
+          .refine((val) => val !== null),
+        coolingUnitType: z
+          .string()
+          .min(1)
+          .nullable()
+          .refine((val) => val !== null),
+        priceType: z.string().min(1).default(PRICING_TYPE.PER_DAY),
+        metricUnit: z.string().min(1).default(METRIC_UNITS.CRATES),
+        price: greaterThan.default(0),
+        capacityInMetricTons: greaterThan.default(0),
+        foodCapacityInMetricTons: greaterThan.default(0),
+        roomLength: greaterThanEqual.optional().default(0),
+        roomWidth: greaterThanEqual.optional().default(0),
+        roomHeight: greaterThanEqual.optional().default(0),
+        roomWeight: greaterThanEqual.optional().default(0),
+        roomInsulator: greaterThanEqual.optional().default(0),
+        capacityInNumberCrates: greaterThan.default(0),
+        crateWeight: greaterThan.default(0),
+        crateLength: greaterThanEqual.optional().default(0),
+        crateWidth: greaterThanEqual.optional().default(0),
+        crateHeight: greaterThanEqual.optional().default(0),
+        editableCheckins: z.boolean().default(true),
+        sensor: z.boolean().default(false),
         sensorData: z
           .union([
             z.object({
@@ -197,51 +208,56 @@ export default function FormManager(props: FormManagerProps) {
             }),
           ])
           .optional(),
-        public: z.boolean(),
-        operators: z.array(z.number()),
-        crops: z.array(z.number()),
-        cropSpecificPricing: z.array(
-          z.object({
-            id: z.number().positive(),
-            pricingType: z.string().min(1),
-            dailyRate: z.coerce.number(),
-            fixedRate: z.coerce.number(),
-          })
-        ),
-        refrigerantType: z.string().optional(),
-        amountRefrigerant: greaterThanEqual.optional(),
-        powerConsumptionInMt: greaterThanEqual.optional(),
-        dailyRoomWattage: greaterThanEqual.optional(),
-        powerSource: z.union([
-          z.literal('generator'),
-          z.literal('pvpanels'),
-          z.literal('hybrid'),
-          z.literal('biomass'),
-          z.literal('grid'),
-          z.literal(null),
-        ]),
-        electricityStorageSystem: z.union([
-          z.literal('battery'),
-          z.literal('thermal storage'),
-          z.literal('hybrid'),
-          z.literal('none'),
-          z.literal(null),
-        ]),
+        public: z.boolean().default(false),
+        operators: z.array(z.number()).default([]),
+        crops: z.array(z.number()).default([]),
+        cropSpecificPricing: z
+          .array(
+            z.object({
+              id: z.number().positive(),
+              pricingType: z.string().min(1),
+              dailyRate: z.coerce.number(),
+              fixedRate: z.coerce.number(),
+            })
+          )
+          .default([]),
+        refrigerantType: z.string().optional().default('other'),
+        amountRefrigerant: greaterThanEqual.optional().default(0),
+        powerConsumptionInMt: greaterThanEqual.optional().default(0),
+        dailyRoomWattage: greaterThanEqual.optional().default(0),
+        powerSource: z
+          .union([
+            z.literal('generator'),
+            z.literal('pvpanels'),
+            z.literal('hybrid'),
+            z.literal('biomass'),
+            z.literal('grid'),
+            z.literal(null),
+          ])
+          .default(null),
+        electricityStorageSystem: z
+          .union([
+            z.literal('battery'),
+            z.literal('thermal storage'),
+            z.literal('hybrid'),
+            z.literal('none'),
+            z.literal(null),
+          ])
+          .default(null),
       });
 
       const baseGeneratorPowerSource = z.object({
-        powerSourceDieselConsumptionKwh: z.preprocess(
-          (v) => (v ? Number(v) : 0),
-          z.coerce.number().positive()
-        ),
+        powerSourceDieselConsumptionKwh: z
+          .preprocess((v) => (v ? Number(v) : 0), z.coerce.number().positive())
+          .default(0),
       });
 
       const basePvPanelsPowerSource = z.object({
-        pvPanelCount: greaterThanEqual.optional(),
-        pvPanelType: z.string().nullable(),
-        pvPanelSize: greaterThanEqual.optional(),
-        pvPanelWeight: greaterThanEqual.optional(),
-        pvPanelMaxPower: greaterThanEqual.optional(),
+        pvPanelCount: greaterThanEqual.optional().default(0),
+        pvPanelType: z.string().nullable().default(null),
+        pvPanelSize: greaterThanEqual.optional().default(0),
+        pvPanelWeight: greaterThanEqual.optional().default(0),
+        pvPanelMaxPower: greaterThanEqual.optional().default(0),
       });
 
       const generatorPowerSource = baseGeneratorPowerSource.extend({
@@ -254,10 +270,10 @@ export default function FormManager(props: FormManagerProps) {
 
       const hybridPowerSource = baseGeneratorPowerSource.merge(basePvPanelsPowerSource).extend({
         powerSource: z.literal('hybrid'),
-        powerSourceDieselPercent: greaterThanEqual.optional(),
-        powerSourceGridPercent: greaterThanEqual.optional(),
-        powerSourcePvPercent: greaterThanEqual.optional(),
-        powerSourceBiomassPercent: greaterThanEqual.optional(),
+        powerSourceDieselPercent: greaterThanEqual.optional().default(0),
+        powerSourceGridPercent: greaterThanEqual.optional().default(0),
+        powerSourcePvPercent: greaterThanEqual.optional().default(0),
+        powerSourceBiomassPercent: greaterThanEqual.optional().default(0),
       });
 
       const powerSourceConditions = z.discriminatedUnion('powerSource', [
@@ -272,16 +288,16 @@ export default function FormManager(props: FormManagerProps) {
       const schemaWithPowerSource = z.intersection(baseSchema, powerSourceConditions);
 
       const baseBatteryStorage = z.object({
-        batteryType: z.string().nullable(),
-        batteryCount: greaterThanEqual.optional(),
-        batteryWeight: greaterThanEqual.optional(),
-        batteryCapacity: greaterThanEqual.optional(),
-        batteryMaxCurrent: greaterThanEqual.optional(),
-        batteryPeakEnergyStorage: greaterThanEqual.optional(),
+        batteryType: z.string().nullable().default(null),
+        batteryCount: greaterThanEqual.optional().default(0),
+        batteryWeight: greaterThanEqual.optional().default(0),
+        batteryCapacity: greaterThanEqual.optional().default(0),
+        batteryMaxCurrent: greaterThanEqual.optional().default(0),
+        batteryPeakEnergyStorage: greaterThanEqual.optional().default(0),
       });
 
       const baseThermalStorage = z.object({
-        thermalStorageMethod: z.string().nullable(),
+        thermalStorageMethod: z.string().nullable().default(null),
       });
 
       const electricityBatteryStorage = baseBatteryStorage.extend({
@@ -308,9 +324,12 @@ export default function FormManager(props: FormManagerProps) {
     }),
   });
 
+  const isFocused = useIsFocused();
   useEffect(() => {
-    form.reset(initialValues);
-  }, [initialValues]);
+    if (!isFocused) {
+      form.reset(initialValues);
+    }
+  }, [isFocused]);
 
   const callbackProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

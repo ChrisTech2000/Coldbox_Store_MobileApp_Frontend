@@ -331,6 +331,8 @@ export default {
     noCoolingUnitAvailable: 'Enweghị otu nju oyi dị',
     noLocationsAvailable:
       'Nnọọ na Coldtivate. Bido site na ịgbakwunye ebe ino na app gi nke di na panel njikwa gi.',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Ọnụ ahịa ahịa adịghị na obodo gị',
       commodityLabel: 'Ngwaahịa',

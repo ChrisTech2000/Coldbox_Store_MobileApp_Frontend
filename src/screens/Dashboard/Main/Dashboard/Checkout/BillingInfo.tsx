@@ -96,9 +96,22 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     const price = coolingUnit?.commonPricingType?.value;
 
     return (
-      crates?.map((crate) =>
-        type === EPricingType.PERIODICITY ? (price ?? 0) * crate.currentStorageDays : price
-      ) ?? []
+      crates?.map((crate) => {
+        const isMarketplaceOrder = crate.movementCode.startsWith('MO-#');
+        const checkinDate = new Date(crate.checkinDate);
+        const today = new Date();
+
+        checkinDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
+        if (isMarketplaceOrder && checkinDate.getTime() === today.getTime()) {
+          return 0;
+        }
+
+        return type === EPricingType.PERIODICITY
+          ? (price ?? 0) * crate.currentStorageDays
+          : (price ?? 0);
+      }) ?? []
     );
   }, [coolingUnit, crates]);
 

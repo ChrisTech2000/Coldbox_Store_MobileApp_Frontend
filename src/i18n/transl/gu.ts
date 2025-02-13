@@ -354,6 +354,8 @@ export default {
     noCoolingUnitAvailable: 'કોઈ કૂલિંગ યુનિટ ઉપલબ્ધ નથી',
     noLocationsAvailable:
       'કોલ્ડટિવેટમાં આપનું સ્વાગત છે. મેનેજમેન્ટ પેનલમાં સ્થાન ઉમેરવાથી શરૂ કરો.',
+    coolingUserNavigateToMarketplace:
+      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી', // TODO
       commodityLabel: 'વસ্তু',
