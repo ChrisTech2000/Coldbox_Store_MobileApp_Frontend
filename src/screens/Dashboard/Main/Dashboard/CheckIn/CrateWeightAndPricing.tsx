@@ -113,19 +113,19 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
       price: params.sellingPrice.toString(),
     },
     resolver: zodResolver((z) => {
-      const coerseNumber = z.coerce.number().gte(0);
+      const coerseNumber = z.coerce.number();
       return z.object({
         applyToAll: z.boolean(),
         price: z
           .string()
           .transform((v) => v.replaceAll(',', '.'))
-          .pipe(coerseNumber)
+          .pipe(coerseNumber.gte(0))
           .optional(),
         crates: z
           .array(
             z.object({
               id: z.number().optional(),
-              weight: z.preprocess((v) => (v ? Number(v) : 0), coerseNumber),
+              weight: z.preprocess((v) => (v ? Number(v) : 0), coerseNumber.gt(0)),
               isSellable: z.boolean(),
             })
           )
@@ -162,12 +162,24 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const allowedToSetPricing =
     guard('SET', 'MarketplaceListForSale') && companyEligible && farmerEligible;
 
-  const isSubmitDisabled: boolean =
-    !!form.formState.errors.crates ||
-    !!form.formState.errors.price ||
-    form.formState.isSubmitting ||
-    !form.formState.isDirty ||
-    (allowedToSetPricing && !parsedPrice);
+  // check if any crates are marked for sale
+  const hasAnyCrateForSale = applyToAll || crates.some((crate) => crate.isSellable);
+
+  // check if any crates marked for sale have weight validation errors
+  const hasWeightErrors =
+    Array.isArray(form.formState?.errors?.crates) &&
+    form.formState.errors.crates.some((crate) => !!crate?.weight?.message);
+
+  // determine if submit button should be disabled
+  const isSubmitDisabled = hasAnyCrateForSale
+    ? hasWeightErrors // allow button to be active even with errors due to revalidation mode being "onSubmit"
+      ? false
+      : !!form.formState.errors.crates ||
+        !!form.formState.errors.price ||
+        form.formState.isSubmitting ||
+        !form.formState.isDirty ||
+        (allowedToSetPricing && !parsedPrice)
+    : false;
 
   return (
     <React.Fragment>
@@ -233,10 +245,12 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
           <FlatList
             tw="py-3"
             data={crateFields.fields}
+            extraData={form.formState.errors.crates}
             keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
             scrollEnabled={false}
             renderItem={({ item, index }) => {
               const isDisabled = applyToAll && index > 0;
+              const fieldError = form?.formState?.errors?.crates?.[index];
               return (
                 <View tw="flex-row items-center my-3 justify-between">
                   <View tw="flex-col self-end px-3 self-center mt-5">
@@ -274,7 +288,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                         <Input
                           tw={cn(
                             'bg-white border rounded-sm h-14 text-center',
-                            isDisabled && 'border-gray-400'
+                            fieldError?.weight?.message
+                              ? 'border-red-500'
+                              : isDisabled
+                                ? 'border-gray-400'
+                                : undefined
                           )}
                           keyboardType="numeric"
                           value={value}
