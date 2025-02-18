@@ -163,23 +163,16 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     guard('SET', 'MarketplaceListForSale') && companyEligible && farmerEligible;
 
   // check if any crates are marked for sale
-  const hasAnyCrateForSale = applyToAll || crates.some((crate) => crate.isSellable);
-
-  // check if any crates marked for sale have weight validation errors
-  const hasWeightErrors =
-    Array.isArray(form.formState?.errors?.crates) &&
-    form.formState.errors.crates.some((crate) => !!crate?.weight?.message);
+  const hasAnyCrateForSale = crates.some((crate) => crate.isSellable);
 
   // determine if submit button should be disabled
-  const isSubmitDisabled = hasAnyCrateForSale
-    ? hasWeightErrors // allow button to be active even with errors due to revalidation mode being "onSubmit"
-      ? false
-      : !!form.formState.errors.crates ||
-        !!form.formState.errors.price ||
-        form.formState.isSubmitting ||
-        !form.formState.isDirty ||
-        (allowedToSetPricing && !parsedPrice)
-    : false;
+  const isSubmitDisabled =
+    hasAnyCrateForSale &&
+    (!!form.formState.errors.crates ||
+      !!form.formState.errors.price ||
+      form.formState.isSubmitting ||
+      !form.formState.isDirty ||
+      (allowedToSetPricing && !parsedPrice));
 
   return (
     <React.Fragment>
@@ -245,12 +238,10 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
           <FlatList
             tw="py-3"
             data={crateFields.fields}
-            extraData={form.formState.errors.crates}
             keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
             scrollEnabled={false}
             renderItem={({ item, index }) => {
               const isDisabled = applyToAll && index > 0;
-              const fieldError = form?.formState?.errors?.crates?.[index];
               return (
                 <View tw="flex-row items-center my-3 justify-between">
                   <View tw="flex-col self-end px-3 self-center mt-5">
@@ -288,11 +279,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                         <Input
                           tw={cn(
                             'bg-white border rounded-sm h-14 text-center',
-                            fieldError?.weight?.message
-                              ? 'border-red-500'
-                              : isDisabled
-                                ? 'border-gray-400'
-                                : undefined
+                            isDisabled ? 'border-gray-400' : undefined
                           )}
                           keyboardType="numeric"
                           value={value}
@@ -310,7 +297,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                             <TextInput.Icon
                               icon="minus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled || value === '0'}
+                              disabled={isDisabled || value === '1'}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
