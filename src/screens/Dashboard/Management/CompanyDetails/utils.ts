@@ -65,7 +65,7 @@ export function derivedSubjects(company: Company) {
 
 const CACHE_MAX_AGE = ms('20 seconds');
 
-type CountryDatum = { name: string; currencyCode: string; currency: string };
+type CountryDatum = { name: string; currencyCode: string; currency: string; ISO: string };
 
 export function countriesDict() {
   const dict = new Map<string, CountryDatum>();
@@ -75,6 +75,7 @@ export function countriesDict() {
       name: entry.countryName,
       currencyCode: entry.symbol,
       currency: entry.currency,
+      ISO: entry.iso,
     });
   }
 

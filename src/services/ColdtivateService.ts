@@ -992,17 +992,16 @@ class ColdtivateService extends HttpClient {
 
   public getPrediction = async (params: GetPredictionParams): Promise<PredictionData> => {
     try {
-      const { country, cropId, stateId } = params;
-      const { data } = await this.post<PredictionData>(
+      const { country, cropId, stateId, marketId } = params;
+      const endpoint =
         country === 'IN'
           ? EPredictionEndpoints.GET_PREDICTION_IN
-          : EPredictionEndpoints.GET_PREDICTION_NG,
-        {
-          cropId,
-          stateId,
-        },
+          : EPredictionEndpoints.GET_PREDICTION_NG;
+      const { data } = await this.post<PredictionData>(
+        endpoint,
+        { stateId, cropId, marketId },
         undefined,
-        ['stateId', 'cropId']
+        ['stateId', 'cropId', 'marketId']
       );
       return data;
     } catch (error) {

@@ -394,7 +394,8 @@ export type VerifyFigorrSensorConnectivityParams = {
 export interface GetPredictionParams extends JsonObject {
   country: 'IN' | 'NG';
   cropId: number;
-  stateId: number;
+  stateId?: number;
+  marketId?: number;
 }
 
 export type GetPredictionTableParams = {
