@@ -101,7 +101,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
                 weight: crate.initialWeight,
                 tag: '',
                 coolingUnitId: coolingUnit.id,
-                plannedDays: plannedDays ? Number(plannedDays) : (crate.plannedDays ?? undefined),
+                plannedDays: plannedDays ? Number(plannedDays) : undefined,
               })),
               price: undefined,
               initialGrade: null,
