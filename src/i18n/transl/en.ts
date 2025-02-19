@@ -379,6 +379,12 @@ const en = {
           column3: 'Price in {{currency}}/Kg',
           emptyState: 'No value available',
         },
+        'location-placeholder': 'State / District / Market',
+        'market-district-state': 'Market / District / State',
+        'district-label': 'Select a district',
+        'district-placeholder': 'District',
+        'market-label': 'Select a market',
+        'market-placeholder': 'Market',
       },
     },
     CrateManagement: {

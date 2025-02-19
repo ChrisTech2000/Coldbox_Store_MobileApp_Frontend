@@ -361,6 +361,12 @@ export default {
           column3: 'Farashin a {{currency}}/KG',
           emptyState: 'Babu darajar samuwa',
         },
+        'location-placeholder': 'Jiha / Gundumar / Kasuwa',
+        'market-district-state': 'Kasuwar / Gundumar / Jiha',
+        'district-label': 'Zaɓi gunduma',
+        'district-placeholder': 'Gundumar',
+        'market-label': 'Zaɓi kasuwa',
+        'market-placeholder': 'Kasuwa',
       },
     },
     CrateManagement: {

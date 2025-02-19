@@ -96,7 +96,7 @@ Select.Touchable = function SelectTouchable(props: {
           'flex flex-row items-center space-x-0.75',
           variant !== DEFAULT_VARIANT && 'justify-between',
           minifyLabel && displayValue && 'flex flex-col items-start',
-          variant === 'lg' && 'px-4' // TODO -> review this
+          variant === 'lg' && minifyLabel ? 'px-2' : variant === 'lg' ? 'px-4' : undefined // TODO -> review this
         )}
       >
         <Text
@@ -120,8 +120,12 @@ Select.Touchable = function SelectTouchable(props: {
           </Text>
         ) : null}
         <Icon
-          name={variant !== 'lg' ? 'arrow-drop-down' : 'keyboard-arrow-down'}
-          size={variant !== 'lg' ? 20 : 30}
+          name={
+            variant !== 'lg' || (variant === 'lg' && minifyLabel)
+              ? 'arrow-drop-down'
+              : 'keyboard-arrow-down'
+          }
+          size={variant !== 'lg' || (variant === 'lg' && minifyLabel) ? 20 : 30}
           style={{
             color: arrowColor,
             ...(isOpen && { transform: [{ rotate: '180deg' }] }),

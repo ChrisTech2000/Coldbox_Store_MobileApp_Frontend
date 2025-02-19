@@ -358,6 +358,12 @@ export default {
           column3: 'Ọnụ ahịa na {{currency}}/KG',
           emptyState: 'Ọnweghị uru dị',
         },
+        'location-placeholder': 'Steeti / Mpaghara / Ahịa',
+        'market-district-state': 'Ahịa / Mpaghara / Steeti',
+        'district-label': 'Họrọ mpaghara',
+        'district-placeholder': 'Mpaghara',
+        'market-label': 'Họrọ ahịa',
+        'market-placeholder': 'Ahịa',
       },
     },
     CrateManagement: {

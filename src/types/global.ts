@@ -489,10 +489,16 @@ export type PredictionState = {
   name: string;
 };
 
-export type PredictionParams = {
-  availableCrops: PredictionCrop[];
-  availableStates: PredictionState[];
+export type PredictionMarket = {
+  id: number;
+  name: string;
 };
+
+export type AvailableMarketsDatum = Record<string, Record<string, Array<PredictionMarket>>>;
+
+export type PredictionParams =
+  | { availableCrops: Array<PredictionCrop>; availableStates: Array<PredictionState> }
+  | { availableCrops: Array<PredictionCrop>; availableMarkets: AvailableMarketsDatum };
 
 export type PastValue = {
   date: string;
@@ -511,7 +517,8 @@ export type PredictionData = {
 };
 
 export type PredictionTableData = Array<{
-  state: string;
+  state?: string;
+  market?: string;
   date: string;
   price: number | null;
 }>;

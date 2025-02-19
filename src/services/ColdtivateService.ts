@@ -992,17 +992,16 @@ class ColdtivateService extends HttpClient {
 
   public getPrediction = async (params: GetPredictionParams): Promise<PredictionData> => {
     try {
-      const { country, cropId, stateId } = params;
-      const { data } = await this.post<PredictionData>(
+      const { country, cropId, stateId, marketId } = params;
+      const endpoint =
         country === 'IN'
           ? EPredictionEndpoints.GET_PREDICTION_IN
-          : EPredictionEndpoints.GET_PREDICTION_NG,
-        {
-          cropId,
-          stateId,
-        },
+          : EPredictionEndpoints.GET_PREDICTION_NG;
+      const { data } = await this.post<PredictionData>(
+        endpoint,
+        { stateId, cropId, marketId },
         undefined,
-        ['stateId', 'cropId']
+        ['stateId', 'cropId', 'marketId']
       );
       return data;
     } catch (error) {
@@ -1016,7 +1015,7 @@ class ColdtivateService extends HttpClient {
     params: GetPredictionTableParams
   ): Promise<PredictionTableData> => {
     try {
-      const { country, cropId, statesIds, days } = params;
+      const { country, cropId, statesIds, days, marketsIds } = params;
       const formattedDates = days.map((date) => format(new Date(date), 'yyyy-MM-dd'));
 
       const { data } = await this.post<PredictionTableData>(
@@ -1025,11 +1024,12 @@ class ColdtivateService extends HttpClient {
           : EPredictionEndpoints.GET_PREDICTION_TABLE_NG,
         {
           cropId,
-          statesIds: statesIds.map((id) => id.toString()),
+          statesIds: statesIds?.map((id) => id.toString()),
+          marketsIds: marketsIds?.map((id) => id.toString()),
           days: formattedDates,
         },
         undefined,
-        ['statesIds', 'cropId']
+        ['statesIds', 'cropId', 'marketsIds']
       );
       return data;
     } catch (error) {
