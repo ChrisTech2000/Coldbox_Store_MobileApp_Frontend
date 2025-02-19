@@ -517,7 +517,8 @@ export type PredictionData = {
 };
 
 export type PredictionTableData = Array<{
-  state: string;
+  state?: string;
+  market?: string;
   date: string;
   price: number | null;
 }>;

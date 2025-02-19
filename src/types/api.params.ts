@@ -402,7 +402,8 @@ export type GetPredictionTableParams = {
   country: 'IN' | 'NG';
   cropId: number;
   days: Date[];
-  statesIds: number[];
+  statesIds?: number[];
+  marketsIds?: Array<number>;
 };
 
 export interface CreateCouponParams extends JsonObject {

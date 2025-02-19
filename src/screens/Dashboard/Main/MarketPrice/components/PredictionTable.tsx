@@ -13,7 +13,12 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import type { PredictionCrop, PredictionState, PredictionTableData } from '#types/global';
+import type {
+  PredictionCrop,
+  PredictionMarket,
+  PredictionState,
+  PredictionTableData,
+} from '#types/global';
 import { cn } from '#ui/lib/cn';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
@@ -27,8 +32,9 @@ type Direction = 'ascending' | 'descending';
 
 type PredictionTableProps = {
   commodity: PredictionCrop;
-  states: Array<PredictionState>;
+  states?: Array<PredictionState>;
   dates: Array<TimeFrameDatum>;
+  markets?: Array<PredictionMarket>;
 };
 
 type TableHeaderProps = {
@@ -43,7 +49,7 @@ const deviceHeight = Dimensions.get('window').height;
 
 const ITEMS_PER_PAGE = 10;
 
-export function PredictionTable({ commodity, states, dates }: PredictionTableProps) {
+export function PredictionTable({ commodity, states, dates, markets }: PredictionTableProps) {
   const { t } = useTranslationUtils();
 
   const countryISO = useContextualCountryISO();
@@ -59,9 +65,10 @@ export function PredictionTable({ commodity, states, dates }: PredictionTablePro
     ColdtivateService.getPredictionTable,
     {
       cropId: commodity.id,
-      statesIds: states.map(({ id }) => id),
+      statesIds: states?.map(({ id }) => id),
       days: dates.map(({ date }) => date),
       country: countryISO as QueryCountry,
+      marketsIds: markets?.map(({ id }) => id),
     }
   );
 
@@ -92,7 +99,11 @@ export function PredictionTable({ commodity, states, dates }: PredictionTablePro
           );
         break;
       case 'state':
-        data = predictionData.slice().sort((a, b) => compare(a.state, b.state));
+        data = predictionData.slice().sort((a, b) => {
+          const datumA = a.state || a.market || '';
+          const datumB = b.state || b.market || '';
+          return compare(datumA, datumB);
+        });
         break;
       case 'price':
         data = predictionData
@@ -190,8 +201,10 @@ export function PredictionTable({ commodity, states, dates }: PredictionTablePro
             data={paginatedData}
             keyExtractor={(item, index) => `${item.date}-#${index}-${item.price}`}
             renderItem={({ item }) => (
-              <DataTable.Row tw="bg-white">
-                <DataTable.Cell tw="px-1">{item.state}</DataTable.Cell>
+              <DataTable.Row tw="bg-white py-1.5">
+                <DataTable.Cell tw="px-1">
+                  <Text>{item.state || item.market || ''}</Text>
+                </DataTable.Cell>
                 <DataTable.Cell tw="px-1">{item.date}</DataTable.Cell>
                 <DataTable.Cell numeric tw="px-1">
                   {item.price ?? t('Dashboard.MarketPrice.Ranking.table.emptyState')}

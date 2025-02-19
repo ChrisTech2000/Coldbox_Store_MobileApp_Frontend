@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Dimensions } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
+import { useDebouncedCallback } from 'use-debounce';
 import startCase from 'lodash/startCase';
 import camelCase from 'lodash/camelCase';
 
@@ -80,13 +81,18 @@ export default function PriceRankingMarketFilters(props: {
     };
   }, [datums]);
 
-  const [filteringState, dispatch] = React.useReducer(_reducer, {
-    selectedState: Object.keys(filterOptions.stateOptions),
-    selectedDistrict: Object.values(filterOptions.disctrictOptions).flat(),
-    selectedMarkets: Object.values(filterOptions.marketOptions)
-      .flat()
-      .map((market) => market.id),
-  } satisfies State);
+  const initialFilteringState = React.useRef<State | null>(null);
+  if (!initialFilteringState.current) {
+    initialFilteringState.current = {
+      selectedState: Object.keys(filterOptions.stateOptions),
+      selectedDistrict: Object.values(filterOptions.disctrictOptions).flat(),
+      selectedMarkets: Object.values(filterOptions.marketOptions)
+        .flat()
+        .map((market) => market.id),
+    };
+  }
+
+  const [filteringState, dispatch] = React.useReducer(_reducer, initialFilteringState.current);
 
   const [isStateModalVisible, setIsStateModalVisible] = React.useState<boolean>(false);
   const stateFilterOptions = React.useMemo(
@@ -167,6 +173,7 @@ export default function PriceRankingMarketFilters(props: {
         options={districtFilterOptions}
         selection={filteringState.selectedDistrict}
         onSelect={(newSelection) => dispatch({ type: 'SET_DISTRICT', payload: newSelection })}
+        disabled={!filteringState.selectedState.length}
       />
       <_LocationFilterSelect
         label={marketLabel}
@@ -179,10 +186,11 @@ export default function PriceRankingMarketFilters(props: {
           dispatch({ type: 'SET_MARKETS', payload: newSelection });
           onMarketSelect(
             marketFilterOptions
-              .filter((item) => filteringState.selectedMarkets.includes(item.identifier))
+              .filter((item) => newSelection.includes(item.identifier))
               .map((item) => ({ id: item.identifier, name: item.content }))
           );
         }}
+        disabled={!filteringState.selectedDistrict.length}
       />
     </React.Fragment>
   );
@@ -203,12 +211,19 @@ function _LocationFilterSelect<S = string>(props: {
   options: Array<OptionDatum<S>>;
   isVisible: boolean;
   setIsVisible: (value: boolean) => void;
+  disabled?: boolean;
 }) {
   const { t } = useTranslationUtils();
 
   const [isVisible, setIsVisible] = useControlledState(props.isVisible, props.setIsVisible);
 
   const [internalSelection, setInternalSelection] = React.useState<Array<S>>(props.selection);
+
+  const syncSelectionWithProps = useDebouncedCallback(
+    () => setInternalSelection(props.selection),
+    180
+  );
+  React.useEffect(syncSelectionWithProps, [props.selection]);
 
   return (
     <React.Fragment>
@@ -218,6 +233,7 @@ function _LocationFilterSelect<S = string>(props: {
           isOpen={isVisible}
           onOpenChange={setIsVisible}
           onDismiss={() => setInternalSelection(props.selection)}
+          disabled={props.disabled}
         >
           <Select.Touchable label={props.label} minifyLabel />
           <Select.Dialog

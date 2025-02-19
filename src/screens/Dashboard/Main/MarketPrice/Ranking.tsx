@@ -82,8 +82,6 @@ function MarketPriceRanking() {
     );
   }
 
-  console.log(selectedMarkets);
-
   return (
     <View tw="absolute bottom-0 top-0 pb-1 w-full">
       <ScrollView tw="h-full m-4 space-y-2" showsVerticalScrollIndicator={false}>
@@ -197,7 +195,13 @@ function MarketPriceRanking() {
                 dates={selectedTimeframe}
               />
             }
-            fallback={null}
+            fallback={
+              <PredictionTable
+                commodity={commodity}
+                dates={selectedTimeframe}
+                markets={selectedMarkets}
+              />
+            }
           />
         ) : null}
       </ScrollView>

@@ -1015,7 +1015,7 @@ class ColdtivateService extends HttpClient {
     params: GetPredictionTableParams
   ): Promise<PredictionTableData> => {
     try {
-      const { country, cropId, statesIds, days } = params;
+      const { country, cropId, statesIds, days, marketsIds } = params;
       const formattedDates = days.map((date) => format(new Date(date), 'yyyy-MM-dd'));
 
       const { data } = await this.post<PredictionTableData>(
@@ -1024,11 +1024,12 @@ class ColdtivateService extends HttpClient {
           : EPredictionEndpoints.GET_PREDICTION_TABLE_NG,
         {
           cropId,
-          statesIds: statesIds.map((id) => id.toString()),
+          statesIds: statesIds?.map((id) => id.toString()),
+          marketsIds: marketsIds?.map((id) => id.toString()),
           days: formattedDates,
         },
         undefined,
-        ['statesIds', 'cropId']
+        ['statesIds', 'cropId', 'marketsIds']
       );
       return data;
     } catch (error) {
