@@ -15,16 +15,12 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { PredictionCrop, PredictionState, PredictionTableData } from '#types/global';
 import { cn } from '#ui/lib/cn';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
-import { Month } from '../Ranking';
-import type { AllowedCountry } from '../store';
-import { MAP_ALLOWED_COUNTRY, QueryCountry } from '../Trend';
+import type { TimeFrameDatum } from '../Ranking';
+import { QueryCountry } from '../Trend';
 import { changePage, compareAsc, compareDesc, parseDateString } from '../utils';
-
-enum ECurrency {
-  NG = '₦',
-  IN = 'Rs',
-}
+import { DEFAULT_COUNTRY_DATUM, useContextualCountryISO } from './PredictionMarketSelect';
 
 type Sorting = 'state' | 'date' | 'price';
 type Direction = 'ascending' | 'descending';
@@ -32,8 +28,7 @@ type Direction = 'ascending' | 'descending';
 type PredictionTableProps = {
   commodity: PredictionCrop;
   states: Array<PredictionState>;
-  country: AllowedCountry;
-  dates: Month[];
+  dates: Array<TimeFrameDatum>;
 };
 
 type TableHeaderProps = {
@@ -48,9 +43,16 @@ const deviceHeight = Dimensions.get('window').height;
 
 const ITEMS_PER_PAGE = 10;
 
-export function PredictionTable({ commodity, states, country, dates }: PredictionTableProps) {
+export function PredictionTable({ commodity, states, dates }: PredictionTableProps) {
   const { t } = useTranslationUtils();
-  const mappedCountry = MAP_ALLOWED_COUNTRY[country ?? ('' as AllowedCountry)] as QueryCountry;
+
+  const countryISO = useContextualCountryISO();
+
+  const currency = useMemo(
+    () =>
+      countriesDict().getByValue(countryISO)?.currencyCode || DEFAULT_COUNTRY_DATUM.CURRENCY_CODE,
+    [countryISO]
+  );
 
   const { data: predictionData, isLoading: loadingPredictionData } = useApiCall(
     'getPredictionTable',
@@ -59,7 +61,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
       cropId: commodity.id,
       statesIds: states.map(({ id }) => id),
       days: dates.map(({ date }) => date),
-      country: mappedCountry,
+      country: countryISO as QueryCountry,
     }
   );
 
@@ -171,14 +173,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
               isSortingActive={sortingType.sorting === 'date'}
             />
             <Header
-              title={t('Dashboard.MarketPrice.Ranking.table.column3', {
-                currency:
-                  mappedCountry === 'IN'
-                    ? ECurrency.IN
-                    : mappedCountry === 'NG'
-                      ? ECurrency.NG
-                      : '$',
-              })}
+              title={t('Dashboard.MarketPrice.Ranking.table.column3', { currency })}
               onSort={(direction) =>
                 setSortingType({
                   sorting: 'price',
