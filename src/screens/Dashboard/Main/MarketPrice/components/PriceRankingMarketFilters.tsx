@@ -244,7 +244,7 @@ function _LocationFilterSelect<S = string>(props: {
 
   return (
     <React.Fragment>
-      <View tw="pt-1 pb-2.5">
+      <View tw="pt-2.5 pb-2.5">
         <Select
           variant="lg"
           isOpen={isVisible}

@@ -142,7 +142,7 @@ export function PredictionTable({ commodity, states, dates, markets }: Predictio
 
   if (loadingPredictionData) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center mt-10">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );

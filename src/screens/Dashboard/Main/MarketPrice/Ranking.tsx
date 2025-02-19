@@ -14,6 +14,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import type { PredictionCrop, PredictionMarket, PredictionState } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 import { PredictionTable } from './components/PredictionTable';
 import { usePriceTrendsStore } from './store';
@@ -104,7 +105,7 @@ function MarketPriceRanking() {
           modalHeader={t('Dashboard.MarketPrice.commodityModalTitle')}
           occupyFullWidth
         />
-        <Divider tw="w-full bg-gray-500 mb-4" />
+        <Divider tw={cn('w-full bg-gray-600', !filterByLocation && 'mb-2.5')} />
 
         {filterByLocation && predictionParams ? (
           <CountryBasedContentSwitch
@@ -127,7 +128,7 @@ function MarketPriceRanking() {
                   occupyFullWidth
                   autoSelectAll
                 />
-                <Divider tw="w-full bg-gray-500 mb-4" />
+                <Divider tw="w-full bg-gray-600 mb-4" />
               </React.Fragment>
             }
             fallback={
@@ -158,11 +159,11 @@ function MarketPriceRanking() {
                 modalHeader={t('Dashboard.MarketPrice.Ranking.monthModalTitle')}
                 occupyFullWidth
               />
-              <Divider tw="w-full bg-gray-500 mb-4" />
+              <Divider tw="w-full bg-gray-600 mt-2.5" />
             </React.Fragment>
           }
           fallback={
-            <React.Fragment>
+            <View tw={cn(filterByLocation && 'mt-1.5')}>
               <MultipleSelectWithStore<TimeFrameDatum>
                 datums={days}
                 isModalVisible={isDatesModalOpen}
@@ -177,8 +178,8 @@ function MarketPriceRanking() {
                 modalHeader="Select the days"
                 occupyFullWidth
               />
-              <Divider tw="w-full bg-gray-500 mt-2.5" />
-            </React.Fragment>
+              <Divider tw="w-full bg-gray-600 mt-2.5" />
+            </View>
           }
         />
 
