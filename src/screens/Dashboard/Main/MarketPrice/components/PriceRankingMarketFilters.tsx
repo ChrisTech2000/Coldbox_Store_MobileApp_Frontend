@@ -81,6 +81,7 @@ export default function PriceRankingMarketFilters(props: {
     };
   }, [datums]);
 
+  const syncInitialSelection = useDebouncedCallback(onMarketSelect, 1_000);
   const initialFilteringState = React.useRef<State | null>(null);
   if (!initialFilteringState.current) {
     initialFilteringState.current = {
@@ -90,6 +91,7 @@ export default function PriceRankingMarketFilters(props: {
         .flat()
         .map((market) => market.id),
     };
+    syncInitialSelection(Object.values(filterOptions.marketOptions).flat());
   }
 
   const [filteringState, dispatch] = React.useReducer(_reducer, initialFilteringState.current);
@@ -163,7 +165,7 @@ export default function PriceRankingMarketFilters(props: {
         setIsVisible={setIsStateModalVisible}
         options={stateFilterOptions}
         selection={filteringState.selectedState}
-        onSelect={(newSelection) => dispatch({ type: 'SET_STATE', payload: newSelection })}
+        onConfirm={(newSelection) => dispatch({ type: 'SET_STATE', payload: newSelection })}
       />
       <_LocationFilterSelect
         label={districtLabel}
@@ -172,7 +174,7 @@ export default function PriceRankingMarketFilters(props: {
         setIsVisible={setIsDistrictModalVisible}
         options={districtFilterOptions}
         selection={filteringState.selectedDistrict}
-        onSelect={(newSelection) => dispatch({ type: 'SET_DISTRICT', payload: newSelection })}
+        onConfirm={(newSelection) => dispatch({ type: 'SET_DISTRICT', payload: newSelection })}
         disabled={!filteringState.selectedState.length}
       />
       <_LocationFilterSelect
@@ -182,7 +184,7 @@ export default function PriceRankingMarketFilters(props: {
         setIsVisible={setIsMarketModalVisible}
         options={marketFilterOptions}
         selection={filteringState.selectedMarkets}
-        onSelect={(newSelection) => {
+        onConfirm={(newSelection) => {
           dispatch({ type: 'SET_MARKETS', payload: newSelection });
           onMarketSelect(
             marketFilterOptions
@@ -207,7 +209,7 @@ function _LocationFilterSelect<S = string>(props: {
   label: string;
   heading: string;
   selection: Array<S>;
-  onSelect: (newSelection: Array<S>) => void;
+  onConfirm: (newSelection: Array<S>) => void;
   options: Array<OptionDatum<S>>;
   isVisible: boolean;
   setIsVisible: (value: boolean) => void;
@@ -297,7 +299,7 @@ function _LocationFilterSelect<S = string>(props: {
                     onPress={(evt) => {
                       evt.stopPropagation();
                       setIsVisible(false);
-                      props.onSelect(internalSelection);
+                      props.onConfirm(internalSelection);
                     }}
                   >
                     {t('actions.ok')}
