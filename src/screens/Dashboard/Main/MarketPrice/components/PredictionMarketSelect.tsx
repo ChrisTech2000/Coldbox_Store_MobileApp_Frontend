@@ -180,6 +180,7 @@ export default function PredictionSelect(props: {
             }
           >
             <_StepConditional
+              searchTerm={search}
               stepOptions={stepOptions}
               onStepChange={() => setSearch('')}
               onLastStep={(final) => {
@@ -199,11 +200,12 @@ export default function PredictionSelect(props: {
 }
 
 function _StepConditional(props: {
+  searchTerm: string;
   stepOptions: OptionsStructure;
   onStepChange: () => void;
   onLastStep: (steps: StepperState['steps']) => void;
 }) {
-  const { stepOptions, onStepChange, onLastStep } = props;
+  const { searchTerm, stepOptions, onStepChange, onLastStep } = props;
   const store = usePredictionStepperStore();
 
   const handleItemPress = useCallback(
@@ -221,24 +223,32 @@ function _StepConditional(props: {
   );
 
   switch (store.currentStep) {
-    case 0:
+    case 0: {
+      const derivedOptions = stepOptions[0];
+      const filteredOptions = derivedOptions.filter((state) =>
+        state.toLowerCase().includes(searchTerm.toLowerCase())
+      );
       return (
         <FlashList
           {...DEFAULT_LIST_PROPS}
-          data={stepOptions[0]}
+          data={filteredOptions}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
             <List.Item title={item} tw="px-2 py-2 m-0" onPress={handleItemPress(item)} />
           )}
         />
       );
+    }
     case 1: {
       const derivedState = store.steps[0].name;
       const derivedOptions = stepOptions[1][camelCase(derivedState)];
+      const filteredOptions = derivedOptions.filter((district) =>
+        district.toLowerCase().includes(searchTerm.toLowerCase())
+      );
       return (
         <FlashList
           {...DEFAULT_LIST_PROPS}
-          data={derivedOptions}
+          data={filteredOptions}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
             <List.Item title={item} tw="px-2 py-2 m-0" onPress={handleItemPress(item)} />
@@ -249,10 +259,13 @@ function _StepConditional(props: {
     case 2: {
       const derivedDistrict = store.steps[1].name;
       const derivedOptions = stepOptions[2][camelCase(derivedDistrict)];
+      const filteredOptions = derivedOptions.filter((market) =>
+        market.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
       return (
         <FlashList
           {...DEFAULT_LIST_PROPS}
-          data={derivedOptions}
+          data={filteredOptions}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <List.Item title={item.name} tw="px-2 py-2 m-0" onPress={handleItemPress(item, true)} />
