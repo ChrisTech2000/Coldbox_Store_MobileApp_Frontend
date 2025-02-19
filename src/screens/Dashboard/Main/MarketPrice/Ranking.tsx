@@ -18,7 +18,9 @@ import type { PredictionCrop, PredictionMarket, PredictionState } from '#types/g
 import { PredictionTable } from './components/PredictionTable';
 import { usePriceTrendsStore } from './store';
 import { CountryBasedContentSwitch } from './components/PredictionMarketSelect';
-import PriceRankingMarketFilters from './components/PriceRankingMarketFilters';
+import PriceRankingMarketFilters, {
+  getMarketsGroupedByDistrict,
+} from './components/PriceRankingMarketFilters';
 
 export type TimeFrameDatum = {
   id: number;
@@ -199,7 +201,13 @@ function MarketPriceRanking() {
               <PredictionTable
                 commodity={commodity}
                 dates={selectedTimeframe}
-                markets={selectedMarkets}
+                markets={
+                  selectedMarkets.length > 0
+                    ? selectedMarkets
+                    : 'availableMarkets' in predictionParams
+                      ? getMarketsGroupedByDistrict(predictionParams.availableMarkets).defaultList()
+                      : []
+                }
               />
             }
           />

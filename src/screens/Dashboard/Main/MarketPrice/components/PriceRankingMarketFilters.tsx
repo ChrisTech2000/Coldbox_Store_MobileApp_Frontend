@@ -55,6 +55,21 @@ function _reducer(state: State, action: Action): State {
 
 const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } = Dimensions.get('window');
 
+export function getMarketsGroupedByDistrict(datums: AvailableMarketsDatum) {
+  const filters = (): Record<string, Array<PredictionMarket>> => {
+    const states = Object.keys(datums);
+    const districtsByState = states.flatMap((state) =>
+      Object.entries(datums[state]).map(([district, markets]) => [camelCase(district), markets])
+    );
+    return Object.fromEntries(districtsByState);
+  };
+  const filtersCache = filters();
+  return {
+    filters: () => filtersCache,
+    defaultList: () => Object.values(filtersCache).flat(),
+  };
+}
+
 export default function PriceRankingMarketFilters(props: {
   datums: AvailableMarketsDatum;
   onMarketSelect: (markets: Array<PredictionMarket>) => void;
@@ -73,11 +88,7 @@ export default function PriceRankingMarketFilters(props: {
           Object.keys(datums[state]).map((district) => startCase(district)),
         ])
       ) satisfies Record<string, Array<string>>,
-      marketOptions: Object.fromEntries(
-        states.flatMap((state) =>
-          Object.entries(datums[state]).map(([district, markets]) => [camelCase(district), markets])
-        )
-      ) satisfies Record<string, Array<PredictionMarket>>,
+      marketOptions: getMarketsGroupedByDistrict(datums).filters(),
     };
   }, [datums]);
 
@@ -91,7 +102,7 @@ export default function PriceRankingMarketFilters(props: {
         .flat()
         .map((market) => market.id),
     };
-    syncInitialSelection(Object.values(filteringDatums.marketOptions).flat());
+    syncInitialSelection(getMarketsGroupedByDistrict(datums).defaultList());
   }
 
   const [filteringState, dispatch] = React.useReducer(_reducer, initialFilteringState.current);
