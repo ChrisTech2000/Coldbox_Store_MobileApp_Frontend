@@ -357,6 +357,12 @@ export default {
           column3: 'السعر بالعملة {{currency}}/كجم',
           emptyState: 'لا توجد قيمة متاحة',
         },
+        'location-placeholder': 'State / District / Market', // TODO
+        'market-district-state': 'Market / District / State', // TODO
+        'district-label': 'Select a district', // TODO
+        'district-placeholder': 'District', // TODO
+        'market-label': 'Select a market', // TODO
+        'market-placeholder': 'Market', // TODO
       },
     },
     CrateManagement: {

@@ -381,6 +381,12 @@ export default {
           column3: 'દામ {{currency}}/કિલોગ્રામ',
           emptyState: 'કોઈ મૂલ્ય ઉપલબ્ધ નથી',
         },
+        'location-placeholder': 'રાજ્ય / જિલ્લો / બજાર',
+        'market-district-state': 'બજાર /જિલ્લો /રાજ્ય',
+        'district-label': 'જિલ્લાને પસંદ કરો',
+        'district-placeholder': 'જીલ્લો',
+        'market-label': 'બજારને પસંદ કરો',
+        'market-placeholder': 'બજાર',
       },
     },
     CrateManagement: {

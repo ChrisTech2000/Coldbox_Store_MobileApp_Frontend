@@ -354,6 +354,12 @@ export default {
           column3: 'Iye owo ni {{currency}}/KG',
           emptyState: 'Ko si iye to wa',
         },
+        'location-placeholder': 'Ipinle / Agbegbe / Oja',
+        'market-district-state': 'Oja / Agbegbe / Ipinle',
+        'district-label': 'Yan Agbegbe kan',
+        'district-placeholder': 'Agbegbe',
+        'market-label': 'Yan Oja kan',
+        'market-placeholder': 'Oja',
       },
     },
     CrateManagement: {

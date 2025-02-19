@@ -76,6 +76,8 @@ export default function PriceRankingMarketFilters(props: {
 }) {
   const { datums, onMarketSelect } = props;
 
+  const { t } = useTranslationUtils();
+
   const filteringDatums = React.useMemo(() => {
     const states = Object.keys(datums);
     return {
@@ -122,8 +124,8 @@ export default function PriceRankingMarketFilters(props: {
   const stateLabel = React.useMemo(
     () =>
       filteringState.selectedState.map((id) => filteringDatums.stateOptions[id]).join(', ') ||
-      'State',
-    [filteringState.selectedState, filteringDatums.stateOptions]
+      t('Dashboard.MarketPrice.Trend.stateLabel'),
+    [filteringState.selectedState, filteringDatums.stateOptions, t]
   );
 
   const [isDistrictModalVisible, setIsDistrictModalVisible] = React.useState<boolean>(false);
@@ -141,8 +143,10 @@ export default function PriceRankingMarketFilters(props: {
     return derivedOptions;
   }, [filteringState.selectedState, filteringDatums.disctrictOptions]);
   const districtLabel = React.useMemo(
-    () => filteringState.selectedDistrict.join(', ') || 'District',
-    [filteringState.selectedDistrict]
+    () =>
+      filteringState.selectedDistrict.join(', ') ||
+      t('Dashboard.MarketPrice.Ranking.district-placeholder'),
+    [filteringState.selectedDistrict, t]
   );
 
   const [isMarketModalVisible, setIsMarketModalVisible] = React.useState<boolean>(false);
@@ -163,15 +167,15 @@ export default function PriceRankingMarketFilters(props: {
     () =>
       filteringState.selectedMarkets
         .map((id) => marketFilterOptions.find((item) => item.identifier === id)?.content)
-        .join(', ') || 'Market',
-    [filteringState.selectedMarkets, marketFilterOptions]
+        .join(', ') || t('Dashboard.MarketPrice.Ranking.market-placeholder'),
+    [filteringState.selectedMarkets, marketFilterOptions, t]
   );
 
   return (
     <React.Fragment>
       <_LocationFilterSelect
         label={stateLabel}
-        heading="Select a state"
+        heading={t('Dashboard.MarketPrice.Trend.stateModalTitle')}
         isVisible={isStateModalVisible}
         setIsVisible={setIsStateModalVisible}
         options={stateFilterOptions}
@@ -180,7 +184,7 @@ export default function PriceRankingMarketFilters(props: {
       />
       <_LocationFilterSelect
         label={districtLabel}
-        heading="Select a district"
+        heading={t('Dashboard.MarketPrice.Ranking.district-label')}
         isVisible={isDistrictModalVisible}
         setIsVisible={setIsDistrictModalVisible}
         options={districtFilterOptions}
@@ -190,7 +194,7 @@ export default function PriceRankingMarketFilters(props: {
       />
       <_LocationFilterSelect
         label={marketLabel}
-        heading="Select a market"
+        heading={t('Dashboard.MarketPrice.Ranking.market-label')}
         isVisible={isMarketModalVisible}
         setIsVisible={setIsMarketModalVisible}
         options={marketFilterOptions}

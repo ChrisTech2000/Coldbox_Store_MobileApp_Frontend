@@ -164,7 +164,11 @@ export function PredictionTable({ commodity, states, dates, markets }: Predictio
         <SkiaShadow blur={6} dx={2} dy={8} color={colors.zinc[300]} borderRadius={10}>
           <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 py-2">
             <Header
-              title={t('Dashboard.MarketPrice.Ranking.table.column1')}
+              title={
+                states?.length
+                  ? t('Dashboard.MarketPrice.Ranking.table.column1')
+                  : t('Dashboard.MarketPrice.Ranking.market-district-state')
+              }
               onSort={(direction) =>
                 setSortingType({
                   sorting: 'state',

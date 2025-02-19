@@ -380,6 +380,12 @@ export default {
           column3: 'ମୂଲ୍ୟ {{currency}}/କିଲୋଗ୍ରାମ୍',
           emptyState: 'କୋଣସି ମୂଲ୍ୟ ଉପଲବ୍ଧ ନାହିଁ',
         },
+        'location-placeholder': 'ରାଜ୍ୟ / ଜିଲ୍ଲା / ବଜାର |',
+        'market-district-state': 'ବଜାର / ଜିଲ୍ଲା / ରାଜ୍ୟ |',
+        'district-label': 'ଏକ ଜିଲ୍ଲା ଚୟନ କରନ୍ତୁ |',
+        'district-placeholder': 'ଜିଲ୍ଲା',
+        'market-label': 'ଏକ ବଜାର ଚୟନ କରନ୍ତୁ |',
+        'market-placeholder': 'ବଜାର',
       },
     },
     CrateManagement: {

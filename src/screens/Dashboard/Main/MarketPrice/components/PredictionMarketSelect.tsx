@@ -9,7 +9,7 @@ import { create } from 'zustand';
 import { Select, VIRTUAL_LIST_SIZE_WIDTH } from '#ui/components/Select';
 
 import type { AvailableMarketsDatum, PredictionMarket } from '#types/global';
-import { useTranslationUtils } from '#i18n/utils';
+import { type TranslationPaths, useTranslationUtils } from '#i18n/utils';
 import { useControlledState } from '#ui/hooks/useControlledState';
 import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
@@ -64,10 +64,10 @@ const usePredictionStepperStore = create<StepperState & StepperActions>((set, ge
   resetStepper: (steps) => set({ ...INITIAL_STATE, steps: steps ?? INITIAL_STATE.steps }),
 }));
 
-const STEP_HEADER: Record<StepperIdx, string> = {
-  0: 'Select a State',
-  1: 'Select a district',
-  2: 'Select a market',
+const STEP_HEADER: Record<StepperIdx, TranslationPaths> = {
+  0: 'Dashboard.MarketPrice.Trend.stateModalTitle',
+  1: 'Dashboard.MarketPrice.Ranking.district-label',
+  2: 'Dashboard.MarketPrice.Ranking.market-label',
 };
 
 type OptionsStructure = {
@@ -147,8 +147,8 @@ export default function PredictionSelect(props: {
         ? Object.values(_selectedSteps)
             .map((step) => step.name)
             .join(' / ')
-        : 'State / District / Market',
-    [_selectedSteps]
+        : t('Dashboard.MarketPrice.Ranking.location-placeholder'),
+    [_selectedSteps, t]
   );
 
   return (
@@ -166,7 +166,7 @@ export default function PredictionSelect(props: {
           <Select.Touchable label={label} minifyLabel />
           <Select.Dialog
             enableScroll
-            header={STEP_HEADER[store.currentStep]}
+            header={t(STEP_HEADER[store.currentStep])}
             StickyHeaderElement={
               <View tw="px-6 py-3">
                 <TextInput

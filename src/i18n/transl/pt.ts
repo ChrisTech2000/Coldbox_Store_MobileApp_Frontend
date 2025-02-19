@@ -383,6 +383,12 @@ export default {
           column3: 'Preço em {{currency}}/Kg',
           emptyState: 'Nenhum valor disponível',
         },
+        'location-placeholder': 'Estado / Distrito / Mercado',
+        'market-district-state': 'Mercado / Distrito / Estado',
+        'district-label': 'Selecione um distrito',
+        'district-placeholder': 'Distrito',
+        'market-label': 'Selecione um mercado',
+        'market-placeholder': 'Mercado',
       },
     },
     CrateManagement: {
