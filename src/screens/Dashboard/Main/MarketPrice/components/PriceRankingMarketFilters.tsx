@@ -61,7 +61,7 @@ export default function PriceRankingMarketFilters(props: {
 }) {
   const { datums, onMarketSelect } = props;
 
-  const filterOptions = React.useMemo(() => {
+  const filteringDatums = React.useMemo(() => {
     const states = Object.keys(datums);
     return {
       stateOptions: Object.fromEntries(
@@ -85,13 +85,13 @@ export default function PriceRankingMarketFilters(props: {
   const initialFilteringState = React.useRef<State | null>(null);
   if (!initialFilteringState.current) {
     initialFilteringState.current = {
-      selectedState: Object.keys(filterOptions.stateOptions),
-      selectedDistrict: Object.values(filterOptions.disctrictOptions).flat(),
-      selectedMarkets: Object.values(filterOptions.marketOptions)
+      selectedState: Object.keys(filteringDatums.stateOptions),
+      selectedDistrict: Object.values(filteringDatums.disctrictOptions).flat(),
+      selectedMarkets: Object.values(filteringDatums.marketOptions)
         .flat()
         .map((market) => market.id),
     };
-    syncInitialSelection(Object.values(filterOptions.marketOptions).flat());
+    syncInitialSelection(Object.values(filteringDatums.marketOptions).flat());
   }
 
   const [filteringState, dispatch] = React.useReducer(_reducer, initialFilteringState.current);
@@ -99,27 +99,27 @@ export default function PriceRankingMarketFilters(props: {
   const [isStateModalVisible, setIsStateModalVisible] = React.useState<boolean>(false);
   const stateFilterOptions = React.useMemo(
     () =>
-      Object.entries(filterOptions.stateOptions).map(
+      Object.entries(filteringDatums.stateOptions).map(
         ([state, heading]) =>
           ({
             identifier: state,
             content: heading,
           }) satisfies OptionDatum
       ),
-    [filterOptions.stateOptions]
+    [filteringDatums.stateOptions]
   );
   const stateLabel = React.useMemo(
     () =>
-      filteringState.selectedState.map((id) => filterOptions.stateOptions[id]).join(', ') ||
+      filteringState.selectedState.map((id) => filteringDatums.stateOptions[id]).join(', ') ||
       'State',
-    [filteringState.selectedState, filterOptions.stateOptions]
+    [filteringState.selectedState, filteringDatums.stateOptions]
   );
 
   const [isDistrictModalVisible, setIsDistrictModalVisible] = React.useState<boolean>(false);
   const districtFilterOptions = React.useMemo(() => {
     const derivedOptions: Array<OptionDatum<string>> = [];
     for (const selectedState of filteringState.selectedState) {
-      const districts = filterOptions.disctrictOptions[selectedState] || [];
+      const districts = filteringDatums.disctrictOptions[selectedState] || [];
       for (const district of districts) {
         derivedOptions.push({
           identifier: district,
@@ -128,7 +128,7 @@ export default function PriceRankingMarketFilters(props: {
       }
     }
     return derivedOptions;
-  }, [filteringState.selectedState, filterOptions.disctrictOptions]);
+  }, [filteringState.selectedState, filteringDatums.disctrictOptions]);
   const districtLabel = React.useMemo(
     () => filteringState.selectedDistrict.join(', ') || 'District',
     [filteringState.selectedDistrict]
@@ -138,7 +138,7 @@ export default function PriceRankingMarketFilters(props: {
   const marketFilterOptions = React.useMemo(() => {
     const derivedOptions: Array<OptionDatum<number>> = [];
     for (const selectedDistrict of filteringState.selectedDistrict) {
-      const markets = filterOptions.marketOptions[camelCase(selectedDistrict)] || [];
+      const markets = filteringDatums.marketOptions[camelCase(selectedDistrict)] || [];
       for (const market of markets) {
         derivedOptions.push({
           identifier: market.id,
@@ -147,7 +147,7 @@ export default function PriceRankingMarketFilters(props: {
       }
     }
     return derivedOptions;
-  }, [filteringState.selectedDistrict, filterOptions.marketOptions]);
+  }, [filteringState.selectedDistrict, filteringDatums.marketOptions]);
   const marketLabel = React.useMemo(
     () =>
       filteringState.selectedMarkets
