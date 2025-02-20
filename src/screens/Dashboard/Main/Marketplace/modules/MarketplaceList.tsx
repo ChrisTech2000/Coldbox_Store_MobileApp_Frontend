@@ -97,6 +97,14 @@ const DISTANCE_BUCKETS_TRANSLATIONS: Record<
   [DISTANCE_BUCKETS.BEYOND_25_KM]: 'Dashboard.Marketplace.distance.beyond25Km',
 };
 
+const NEAR_ME_LIST_ORDER = [
+  DISTANCE_BUCKETS.DEFAULT,
+  DISTANCE_BUCKETS.WITHIN_5_KM,
+  DISTANCE_BUCKETS.WITHIN_10_KM,
+  DISTANCE_BUCKETS.WITHIN_25_KM,
+  DISTANCE_BUCKETS.BEYOND_25_KM,
+] as const;
+
 type GroupedDatum = {
   sectionKey: string;
   distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
@@ -166,37 +174,34 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
       return acc;
     }, {});
 
-    return Object.entries(dataByDistance).reduce<Array<NearbyMeListItem>>(
-      (items, [key, distances]) => {
-        const distanceEntries = Object.entries(distances);
-        const sectionKey = Number(key);
+    return NEAR_ME_LIST_ORDER.reduce<Array<NearbyMeListItem>>((items, currentDistance) => {
+      for (const [key, distances] of Object.entries(dataByDistance)) {
+        const data = distances?.[currentDistance];
 
-        for (let idx = 0; idx < distanceEntries.length; idx++) {
-          const [distance, data] = distanceEntries[idx];
-          const _distance = Number(distance);
+        if (data?.length) {
+          const sectionKey = Number(key);
 
           const sectionHeaderItem: NearbyMeListItem = {
             kind: 'sectionHeader',
             sectionKey,
-            distance: _distance as NearbyMeListItem['distance'],
+            distance: currentDistance,
           };
 
           const rowItems = data.map(
             (item): NearbyMeListItem => ({
               kind: 'row',
               sectionKey,
-              distance: _distance as NearbyMeListItem['distance'],
+              distance: currentDistance,
               datum: item,
             })
           );
 
           items.push(sectionHeaderItem, ...rowItems);
         }
+      }
 
-        return items;
-      },
-      []
-    );
+      return items;
+    }, []);
   }, [listing, isLocationDenied]);
 
   const listExtraData = useMemo(() => ({ unitMap }), [unitMap]);

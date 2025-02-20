@@ -188,7 +188,9 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                               : ' '}
                           </Text>
 
-                          <Text tw="text-base">{crate?.ownerName}</Text>
+                          <Text tw="text-base w-40" numberOfLines={2}>
+                            {crate?.ownerName}
+                          </Text>
 
                           <Text tw="text-base text-red-700">
                             -{crate?.affectedWeight ?? 0}
@@ -231,7 +233,9 @@ export function MovementDiagram({ coolingUnit, movement }: MovementDiagramProps)
                   </View>
 
                   <View tw="self-center justify-center">
-                    <Text tw="text-base">{movement?.checkin?.ownerName}</Text>
+                    <Text tw="text-base w-40" numberOfLines={2}>
+                      {movement?.checkin?.ownerName}
+                    </Text>
                     <Text tw="text-base text-green-500">
                       +{totalWeight}
                       {t('Dashboard.ProduceDetails.kilogram')}
