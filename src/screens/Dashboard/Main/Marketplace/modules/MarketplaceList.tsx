@@ -184,14 +184,14 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
           const sectionHeaderItem: NearbyMeListItem = {
             kind: 'sectionHeader',
             sectionKey,
-            distance: currentDistance as NearbyMeListItem['distance'],
+            distance: currentDistance,
           };
 
           const rowItems = data.map(
             (item): NearbyMeListItem => ({
               kind: 'row',
               sectionKey,
-              distance: currentDistance as NearbyMeListItem['distance'],
+              distance: currentDistance,
               datum: item,
             })
           );
