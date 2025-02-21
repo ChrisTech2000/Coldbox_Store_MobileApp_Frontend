@@ -13,7 +13,7 @@ import KnowledgeHubDetails from '#screens/Dashboard/KnowledgeHub/Details';
 
 import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
-import { goBackWithDrawer } from 'navigation/utils/navigationUtils.ts';
+import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 
 export type KnowledgeHubStackRoutes = {
   Root: undefined;
@@ -52,8 +52,8 @@ export default function KnowledgeHubStack() {
           routeTitle={routeTitle}
           leftContent={
             <Appbar.BackAction
-              // eslint-disable-next-line react/prop-types
               onPress={() => {
+                // eslint-disable-next-line react/prop-types
                 goBackWithDrawer(props.navigation);
               }}
               size={22}

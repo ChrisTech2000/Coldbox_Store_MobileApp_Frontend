@@ -7,7 +7,7 @@ import NavigatorHeader from '#navigation/components/NavigatorHeader';
 import { LanguageManager, type Translator, type TranslationPaths } from '#i18n/utils';
 
 import type { DashboardRoutes, DashboardRoutePaths } from '../index';
-import { goBackWithDrawer } from 'navigation/utils/navigationUtils.ts';
+import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 
 type Props = {
   route: RouteProp<DashboardRoutes, DashboardRoutePaths>;

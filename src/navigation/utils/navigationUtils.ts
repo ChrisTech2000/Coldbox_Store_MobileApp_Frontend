@@ -12,8 +12,6 @@ import { DrawerActions, NavigationProp } from '@react-navigation/native';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function goBackWithDrawer(navigation: NavigationProp<any>, forceToggle?: boolean) {
   // Check if the active index is 0 (the current route is at the bottom of the stack)
-  console.log('ENTERS');
-  console.log(navigation.getState());
   const returnToDrawer = navigation.getState().index === 0 || forceToggle;
   // Go back from the current screen
   navigation.goBack();

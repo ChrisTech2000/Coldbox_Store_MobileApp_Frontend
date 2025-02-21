@@ -43,7 +43,7 @@ import MarketSurveyStack, {
   MarketSurveyStackRoutes,
 } from '../Main/HistoryTabStack/MarketSurveyStack';
 import EditCoolingUserStack, { type EditCoolingUserStackRoutes } from './EditCoolingUserStack';
-import { goBackWithDrawer } from 'navigation/utils/navigationUtils.ts';
+import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 
 export type ManagementRoutes = {
   Root: undefined;
