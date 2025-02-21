@@ -17,7 +17,7 @@ import RBAC from '#common/RBAC';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
-import { useAuthStore } from 'stores/auth.ts';
+import { useAuthStore } from '#stores/auth.ts';
 
 type ProduceProps = {
   currency: string;
