@@ -165,11 +165,15 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
     const contactName = user?.role === ERoles.COOLING_USER ? produce.operatorName : produce.owner;
     const contactPhone =
       user?.role === ERoles.COOLING_USER ? produce.operatorContact : produce.ownerContact;
+    const roleLabel =
+      user?.role === ERoles.COOLING_USER
+        ? t('Auth.SignIn.accounts.operator.label')
+        : t('Dashboard.Marketplace.owner');
 
     return (
       <View tw="space-y-3">
         <View>
-          <Text tw="text-gray-400">{t('Dashboard.Marketplace.owner')}</Text>
+          <Text tw="text-gray-400">{roleLabel}</Text>
           <Text>{contactName}</Text>
         </View>
         <View>
