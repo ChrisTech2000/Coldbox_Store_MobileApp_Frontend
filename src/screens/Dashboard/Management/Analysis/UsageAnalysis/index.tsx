@@ -54,7 +54,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { user } = useAuthStore();
   const { company } = useManagementStore();
   const { selectedItems: selectedUnits } = useCoolingUnitStore();
-  const { startDate, endDate, setEndDate, setStartDate } = useDateRangeStore();
+  const { startDate, endDate, reset } = useDateRangeStore();
   const { sorting } = useSortingStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
@@ -78,37 +78,34 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     }
   );
 
-  const { usageData, isLoading } = useAnalysis(user!, coolingUnits ?? []);
+  const { usageData, isLoading } = useAnalysis(user!, selectedUnits ?? []);
 
   const sortedMovements = useMemo(() => {
     return (usageData ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
   }, [usageData, sorting]);
 
-  const filteredMovements = useMemo(() => {
-    if ((!startDate || !endDate) && !search) return sortedMovements;
-
-    const start = startDate ?? null;
-    const end = endDate ?? null;
-    const lowerCaseSearchString = search?.toLowerCase() ?? null;
-
+  const dateFilteredMovements = useMemo(() => {
+    if (!startDate || !endDate) return sortedMovements;
     return sortedMovements.filter((movement) => {
       const movementDate = new Date(movement.date);
+      return (!startDate || movementDate >= startDate) && (!endDate || movementDate <= endDate);
+    });
+  }, [sortedMovements, startDate, endDate]);
 
-      const isWithinDateRange = (!start || movementDate >= start) && (!end || movementDate <= end);
-
-      const matchesSearchTerm =
-        !lowerCaseSearchString ||
+  const filteredMovements = useMemo(() => {
+    if (!search) return dateFilteredMovements;
+    const lowerCaseSearchString = search.toLowerCase();
+    return dateFilteredMovements.filter(
+      (movement) =>
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
         movement.checkin?.crates.some((crate) =>
           crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
         ) ||
         sortMovementCrops(movement).some((crop) =>
           crop.toLowerCase().includes(lowerCaseSearchString)
-        );
-
-      return isWithinDateRange && matchesSearchTerm;
-    });
-  }, [sortedMovements, startDate, endDate, search]);
+        )
+    );
+  }, [dateFilteredMovements, search]);
 
   const { totalCheckIns, totalCrates, totalUsers, totalWeight } = useMemo(() => {
     const { totalCrates, totalWeight, users } = filteredMovements
@@ -137,12 +134,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     };
   }, [filteredMovements]);
 
-  useEffect(() => {
-    return () => {
-      setEndDate(null);
-      setStartDate(null);
-    };
-  }, []);
+  useEffect(() => reset, []);
 
   const language = LanguageManager.read();
 
