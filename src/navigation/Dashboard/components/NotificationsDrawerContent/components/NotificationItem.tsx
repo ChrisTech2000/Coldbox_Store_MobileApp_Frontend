@@ -244,7 +244,6 @@ export function MarketSurveyNotification(props: {
     const areAllCropsInSurvey = movementCropsForSurvey.every((crop) =>
       movementDetails.checkout.hasMarketSurvey.includes(crop.id)
     );
-    console.log(areAllCropsInSurvey, '#');
 
     if (areAllCropsInSurvey) throw new Error(NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN);
 
