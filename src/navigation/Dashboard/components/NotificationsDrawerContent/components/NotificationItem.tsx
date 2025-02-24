@@ -227,15 +227,8 @@ export function MarketSurveyNotification(props: {
       (movement) => movement.code === notification.datum.movementCode
     );
 
-    const isValidMovement =
-      movementDetails &&
-      movementDetails.checkout.marketSurveyDelay &&
-      movementDetails.checkout?.crates?.[0]?.ownedByUserId;
+    const isValidMovement = movementDetails && movementDetails.checkout?.crates?.[0]?.ownedByUserId;
     if (!isValidMovement) throw new Error(NOTIFICATION_EXCEPTIONS.INVALID_HISTORY_MOVEMENT);
-
-    const owner = await ColdtivateService.getUser(
-      movementDetails.checkout.crates[0].ownedByUserId!
-    );
 
     const movementCropsForSurvey = (
       await Promise.all(
@@ -248,6 +241,16 @@ export function MarketSurveyNotification(props: {
       )
     ).filter(Boolean) as Array<{ id: number; name: string }>;
 
+    const areAllCropsInSurvey = movementCropsForSurvey.every((crop) =>
+      movementDetails.checkout.hasMarketSurvey.includes(crop.id)
+    );
+
+    if (areAllCropsInSurvey) throw new Error(NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN);
+
+    const owner = await ColdtivateService.getUser(
+      movementDetails.checkout.crates[0].ownedByUserId!
+    );
+
     onSelect({
       eventType: 'MARKET_SURVEY',
       datums: {
@@ -255,6 +258,7 @@ export function MarketSurveyNotification(props: {
         companyCurrency: company?.currency ?? DEFAULT_CURRENCY_CODE,
         crops: movementCropsForSurvey,
         owner: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`,
+        ownerId: owner.id,
       },
     });
     useRightDrawerStore.getState().toggle(false);

@@ -53,11 +53,13 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
     formState: { errors, isSubmitting },
   } = useForm<BaseSurveySchemaType>({
     resolver: zodResolver(() => BaseSurveySchema(t)),
-    defaultValues: {
-      occupation: surveys[0].userType as EOccupation,
-      experience: surveys[0].experience ? EExperience.OLD : EExperience.NEW,
-      experienceInMonths: surveys[0].experienceDuration.toString(),
-    },
+    defaultValues: surveys[0]
+      ? {
+          occupation: surveys[0].userType as EOccupation,
+          experience: surveys[0].experience ? EExperience.OLD : EExperience.NEW,
+          experienceInMonths: surveys[0].experienceDuration.toString(),
+        }
+      : {},
   });
 
   const experience = watch('experience');
@@ -109,9 +111,9 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
 
         const result = await ColdtivateService.updateFarmerSurveys({
           farmer: farmerId as number,
-          userType: surveys[0].userType,
-          experience: !!surveys[0].experience,
-          experienceDuration: surveys[0].experienceDuration,
+          userType: surveys[0]?.userType ?? '',
+          experience: !!surveys[0]?.experience,
+          experienceDuration: surveys[0]?.experienceDuration ?? 0,
           commodities: [
             ...(surveys ?? [])
               .flatMap((survey) => survey.co)
@@ -139,7 +141,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
         }
       };
     },
-    [surveys, farmerSurveys, companyCurrency, openFarmersSurveyModal, refetchSurveys]
+    [surveys, farmerSurveys, companyCurrency, openFarmersSurveyModal, refetchSurveys, farmerId]
   );
 
   if (isCropsLoading) {

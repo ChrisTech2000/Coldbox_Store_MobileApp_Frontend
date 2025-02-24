@@ -18,8 +18,10 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 
+import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
+
 function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>) {
-  const { crops, owner, companyCurrency, checkoutId } = props.route.params;
+  const { crops, ownerId, owner, companyCurrency, checkoutId } = props.route.params;
 
   const { t } = useTranslationUtils();
   const { setSurveys, setFarmerId, setRefetchSurveys, setCheckoutId } = useMarketSurveyStore();
@@ -34,9 +36,8 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
   );
 
   const farmerId = useMemo(
-    () =>
-      farmers?.find((farmer) => `${farmer.user.firstName} ${farmer.user.lastName}` === owner)?.id,
-    [farmers, owner]
+    () => farmers?.find((farmer) => farmer.user.id === ownerId)?.id,
+    [farmers, ownerId]
   );
 
   const {
@@ -77,12 +78,12 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
   }, [surveys, crops]);
 
   useEffect(() => {
-    if (surveys?.length) {
+    if (surveys) {
       setSurveys(surveys);
-      setFarmerId(surveys[0].farmer as number);
+      setFarmerId(farmerId as number);
       setRefetchSurveys(refetch);
     }
-  }, [surveys, refetch]);
+  }, [surveys, farmerId, refetch]);
 
   useEffect(() => {
     if (checkoutId) {
@@ -103,7 +104,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={cropsWithSurveyStatus}
-        keyExtractor={(item, index) => `crop-${item.name}-#${index}`}
+        keyExtractor={(item, index) => `crop-${item.name || DEFAULT_CROP_VALUES.name}-#${index}`}
         renderItem={({ item }) => (
           <View tw="flex space-y-2 w-full my-2">
             <TouchableOpacity
@@ -112,13 +113,14 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
                 props.navigation.navigate('MarketSurvey', {
                   cropId: item.id,
                   companyCurrency,
-                  farmer: owner,
+                  ownerId: farmerId!,
+                  owner,
                 })
               }
               disabled={!item.hasSurvey}
             >
               <Text variant="TextMedium" tw={cn('text-lg', !item.hasSurvey && 'text-gray-400')}>
-                {item.name}
+                {item.name || DEFAULT_CROP_VALUES.name}
               </Text>
               <Icon
                 source="chevron-right"
@@ -127,7 +129,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
               />
             </TouchableOpacity>
             <Divider tw="w-full bg-gray-400" />
-            {!item.hasSurvey && (
+            {!item.hasSurvey ? (
               <View>
                 <TouchableOpacity
                   tw="flex flex-row space-y-2 space-x-4 items-center w-full my-1 h-6"
@@ -135,12 +137,14 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
                 >
                   <Danger tw="w-7 h-7" />
                   <Text variant="TextMedium" tw="">
-                    {t('Dashboard.History.survey.fillMessage', { crop: item.name })}
+                    {t('Dashboard.History.survey.fillMessage', {
+                      crop: item.name || DEFAULT_CROP_VALUES.name,
+                    })}
                   </Text>
                 </TouchableOpacity>
                 <Divider tw="w-full bg-gray-400 mt-1" />
               </View>
-            )}
+            ) : null}
           </View>
         )}
         nestedScrollEnabled

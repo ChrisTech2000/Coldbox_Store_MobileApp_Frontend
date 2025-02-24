@@ -21,6 +21,7 @@ export type MarketSurveyStackRoutes = {
   MarketSurveyBase: {
     checkoutId?: number;
     crops: Array<{ id: number; name: string }>;
+    ownerId: number;
     owner: string;
     companyCurrency?: string;
   };
@@ -30,7 +31,8 @@ export type MarketSurveyStackRoutes = {
   MarketSurvey: {
     cropId: number;
     companyCurrency?: string;
-    farmer: string;
+    ownerId: number;
+    owner: string;
   };
 };
 
@@ -63,7 +65,7 @@ export default function MarketSurveyStack() {
       const routeName = props.route.name;
 
       // eslint-disable-next-line react/prop-types
-      const farmer = (props.route.params as { farmer: string })?.farmer;
+      const farmer = (props.route.params as { owner: string })?.owner;
 
       const translationPath = NAVIGATOR_HEADERS[routeName];
       const routeTitle = translationPath ? t(translationPath, { farmer }) : undefined;

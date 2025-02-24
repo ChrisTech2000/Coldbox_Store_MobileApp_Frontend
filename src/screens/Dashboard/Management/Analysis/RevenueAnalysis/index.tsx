@@ -235,7 +235,8 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
                   props.navigation.navigate('MarketSurveyStack', {
                     screen: 'MarketSurveyBase',
                     params: {
-                      farmer: movement.checkout?.crates[0].ownerName,
+                      ownerId: movement.checkout?.crates[0].ownedByUserId,
+                      owner: movement.checkout?.crates[0].ownerName,
                       crops: movement.checkout?.crates
                         ?.flatMap((crate) => crate.crop)
                         .filter(
