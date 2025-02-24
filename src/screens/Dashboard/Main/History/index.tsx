@@ -156,7 +156,8 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
                 props.navigation.navigate('MarketSurveyStack', {
                   screen: 'MarketSurveyBase',
                   params: {
-                    farmer: movement.checkout?.crates?.[0]?.ownerName,
+                    ownerId: movement.checkout?.crates?.[0]?.ownedByUserId as number,
+                    owner: movement.checkout?.crates?.[0]?.ownerName as string,
                     crops: movement.checkout?.crates
                       ?.flatMap((crate) => crate.crop)
                       .filter(

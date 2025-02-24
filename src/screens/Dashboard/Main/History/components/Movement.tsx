@@ -41,12 +41,7 @@ type MovementProps = {
   coolingUnit: CoolingUnit | null;
   selectedCompany: Company | ManagementCompany | null;
   navigateToCheckIn?: (movement: Movement, coolingUnitId?: number) => void;
-  navigateToMarketSurvey?: (
-    farmer: string,
-    crops: Array<{ id: number; name: string }>,
-    checkoutId?: number,
-    companyCurrency?: string
-  ) => void;
+  navigateToMarketSurvey?: () => void;
 };
 
 export function Movement({
@@ -123,19 +118,9 @@ export function Movement({
   }, [navigateToCheckIn, movement, coolingUnit]);
 
   const fillMarketSurvey = useCallback(() => {
-    navigateToMarketSurvey?.(
-      movement.checkout?.crates[0].ownerName ?? '',
-      movement.checkout?.crates
-        ?.flatMap((crate) => crate.crop)
-        .filter((crop) => crop && !movement.checkout?.hasMarketSurvey?.includes(crop.id)) as Array<{
-        id: number;
-        name: string;
-      }>,
-      movement.checkout?.id as number,
-      selectedCompany?.currency ?? company?.currency
-    );
+    navigateToMarketSurvey?.();
     setIsOptionsModalOpen(false);
-  }, [selectedCompany, company, navigateToMarketSurvey, movement]);
+  }, [navigateToMarketSurvey]);
 
   const optionsMenu = useMemo(() => {
     return [
