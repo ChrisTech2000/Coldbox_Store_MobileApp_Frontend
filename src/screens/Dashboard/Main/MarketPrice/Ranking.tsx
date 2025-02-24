@@ -128,7 +128,12 @@ function MarketPriceRanking() {
                   occupyFullWidth
                   autoSelectAll
                 />
-                <Divider tw="w-full bg-gray-600 mb-4" />
+                <Divider
+                  tw={cn(
+                    'w-full bg-gray-600',
+                    'availableMarkets' in predictionParams ? 'mb-4' : 'mt-2.5'
+                  )}
+                />
               </React.Fragment>
             }
             fallback={
