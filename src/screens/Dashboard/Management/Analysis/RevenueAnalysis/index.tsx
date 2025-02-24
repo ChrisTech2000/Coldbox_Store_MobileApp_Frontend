@@ -1,6 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, RefreshControl, ScrollView, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 
 import { Movement } from '#screens/Dashboard/Main/History/components/Movement';
@@ -86,7 +86,11 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     }
   );
 
-  const { revenueData, isLoading } = useAnalysis(user!, selectedUnits ?? [], paymentMethods);
+  const { revenueData, isLoading, isValidatingRevenue, refetchRevenue } = useAnalysis(
+    user!,
+    selectedUnits ?? [],
+    paymentMethods
+  );
 
   const sortedMovements = useMemo(() => {
     if (!revenueData) return [];
@@ -209,6 +213,12 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
           </View>
         ) : (
           <FlashList
+            refreshControl={
+              <RefreshControl
+                refreshing={isValidatingRevenue}
+                onRefresh={async () => await refetchRevenue()}
+              />
+            }
             ListEmptyComponent={
               <GenericEmptyState message={t('Dashboard.Management.UsageAnalysis.empty')} />
             }
@@ -218,6 +228,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
               <Movement
                 key={`${movement.id}-${index}`}
                 movement={movement}
+                movements={[]}
                 coolingUnit={
                   coolingUnits?.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
                 }

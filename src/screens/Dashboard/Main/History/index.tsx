@@ -144,6 +144,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
             <Movement
               key={`${movement.id}-${index}`}
               movement={movement}
+              movements={movements}
               coolingUnit={coolingUnit}
               selectedCompany={company}
               navigateToCheckIn={(movement, id) =>
