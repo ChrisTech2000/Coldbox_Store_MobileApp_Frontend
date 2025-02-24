@@ -60,7 +60,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
   const { user } = useAuthStore();
   const { company } = useManagementStore();
   const { selectedItems: selectedUnits } = useCoolingUnitStore();
-  const { startDate, endDate, setEndDate, setStartDate } = useDateRangeStore();
+  const { startDate, endDate, reset } = useDateRangeStore();
   const { selectedItems: paymentMethods } = usePaymentType();
   const { sorting } = useSortingStore();
 
@@ -86,44 +86,35 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     }
   );
 
-  const { revenueData, isLoading } = useAnalysis(user!, coolingUnits ?? [], paymentMethods);
+  const { revenueData, isLoading } = useAnalysis(user!, selectedUnits ?? [], paymentMethods);
 
   const sortedMovements = useMemo(() => {
-    return (revenueData ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
+    if (!revenueData) return [];
+    return revenueData.slice().sort((a, b) => sortMovements(a, b, sorting));
   }, [revenueData, sorting]);
 
-  const filteredMovements = useMemo(() => {
-    if ((!startDate || !endDate) && !search) return sortedMovements;
-
-    const start = startDate ?? null;
-    const end = endDate ?? null;
-    const lowerCaseSearchString = search?.toLowerCase() ?? null;
-
+  const dateFilteredMovements = useMemo(() => {
+    if (!startDate || !endDate) return sortedMovements;
     return sortedMovements.filter((movement) => {
-      const movementDate = new Date(movement.date);
-
-      const isWithinDateRange = (!start || movementDate >= start) && (!end || movementDate <= end);
-
-      const matchesSearchTerm =
-        !lowerCaseSearchString ||
-        movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.checkout?.crates.some((crate) =>
-          crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
-        ) ||
-        sortMovementCrops(movement).some((crop) =>
-          crop.toLowerCase().includes(lowerCaseSearchString)
-        );
-
-      return isWithinDateRange && matchesSearchTerm;
+      const date = new Date(movement.date);
+      return (!startDate || date >= startDate) && (!endDate || date <= endDate);
     });
-  }, [sortedMovements, startDate, endDate, search]);
+  }, [sortedMovements, startDate, endDate]);
 
-  useEffect(() => {
-    return () => {
-      setEndDate(null);
-      setStartDate(null);
-    };
-  }, []);
+  const filteredMovements = useMemo(() => {
+    if (!search) return dateFilteredMovements;
+    const lowerSearch = search.toLowerCase();
+    return dateFilteredMovements.filter(
+      (movement) =>
+        movement.code.toLowerCase().includes(lowerSearch) ||
+        movement.checkout?.crates.some((crate) =>
+          crate.ownerName?.toLowerCase().includes(lowerSearch)
+        ) ||
+        sortMovementCrops(movement).some((crop) => crop.toLowerCase().includes(lowerSearch))
+    );
+  }, [dateFilteredMovements, search]);
+
+  useEffect(() => reset, []);
 
   const language = LanguageManager.read();
 
