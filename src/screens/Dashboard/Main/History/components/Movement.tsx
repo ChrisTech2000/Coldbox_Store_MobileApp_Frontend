@@ -38,14 +38,36 @@ type Movement = GetMovementsHistoryResponse[number];
 
 type MovementProps = {
   movement: Movement;
+  movements: Movement[];
   coolingUnit: CoolingUnit | null;
   selectedCompany: Company | ManagementCompany | null;
   navigateToCheckIn?: (movement: Movement, coolingUnitId?: number) => void;
   navigateToMarketSurvey?: () => void;
 };
 
+function canEditCheckIn(movement: Movement, allMovements: Movement[]): boolean {
+  if (!movement?.checkin || !allMovements.length || !isWithinLast24Hours(movement.date))
+    return false;
+
+  const checkInDate = new Date(movement.date);
+  const checkInCrateIds = movement.checkin.crates.map((crate) => crate.id);
+
+  return !allMovements.some((movement) => {
+    if (movement.initiatedFor !== EInitiatedFor.CHECK_OUT || !movement.checkout) return false;
+
+    const checkoutDate = new Date(movement.date);
+    const checkoutCrateIds = movement.checkout.crates.map((crate) => crate.id);
+
+    return (
+      checkoutDate > checkInDate &&
+      checkoutCrateIds.some((crateId) => checkInCrateIds.includes(crateId))
+    );
+  });
+}
+
 export function Movement({
   movement,
+  movements,
   coolingUnit,
   selectedCompany,
   navigateToCheckIn,
@@ -89,7 +111,7 @@ export function Movement({
 
     if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
       const _price = price * movement.checkin?.crates.length;
-      return `${isNaN(_price) ? 0 : price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+      return `${isNaN(_price) ? 0 : _price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
     }
 
     const _price =
@@ -158,7 +180,7 @@ export function Movement({
             {
               label: t('Dashboard.History.optionsMenu.checkIn.edit'),
               action: editCheckIn,
-              disabled: !isWithinLast24Hours(movement.date),
+              disabled: !canEditCheckIn(movement, movements),
             },
           ]
         : []),
@@ -190,10 +212,8 @@ export function Movement({
     isCheckOut,
     isMarketplaceOrder,
     movement,
+    movements,
     user,
-    company,
-    selectedCompany,
-    price,
     t,
     modalRef,
     seePDFModal,
