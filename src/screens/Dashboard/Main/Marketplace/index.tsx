@@ -1,11 +1,12 @@
 import React from 'react';
-import { RefreshControl, View } from 'react-native';
+import { ActivityIndicator, RefreshControl, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
+import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -31,21 +32,38 @@ function MarketplaceRoot() {
   return (
     <React.Fragment>
       <MarketplaceFiltersSection />
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        onTouchStart={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
-        refreshControl={
-          <RefreshControl refreshing={isValidating || isLoading} onRefresh={invalidateHandler} />
-        }
-      >
-        <View tw="flex-1 mb-20">
-          <MarketplaceList />
-        </View>
-      </ScrollView>
-
+      <_Container
+        isLoading={isLoading}
+        refreshing={isValidating}
+        onRefresh={async () => await invalidateHandler()}
+      />
       <_PortalsWrapper />
     </React.Fragment>
+  );
+}
+
+function _Container(props: {
+  isLoading: boolean;
+  refreshing: boolean;
+  onRefresh: () => Promise<void>;
+}) {
+  if (props.isLoading) {
+    return (
+      <View tw="mt-16 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
+  return (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      onTouchStart={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
+      refreshControl={<RefreshControl refreshing={props.refreshing} onRefresh={props.onRefresh} />}
+    >
+      <View tw="flex-1 mb-20">
+        <MarketplaceList />
+      </View>
+    </ScrollView>
   );
 }
 
