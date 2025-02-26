@@ -268,7 +268,7 @@ export function CartItem({ item }: CartItemProps) {
                 const result = await MarketplaceService.removeItemFromCart(item.relCrateId);
                 setCart(result.cart);
               } catch (exception) {
-                toast.show(t('actions.error', { type: 'md_danger' }));
+                toast.show(t('navigation.error.serverErrorMessage', { type: 'md_danger' }));
                 reportCrash(exception as Error);
               } finally {
                 setIsProcessing(false);

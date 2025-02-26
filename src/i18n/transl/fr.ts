@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: "Oups... on dirait qu'il y a eu un problème.",
       tryAgainMessage: 'Veuillez réessayer plus tard.',
+      serverErrorMessage:
+        "Oups! Il semble qu'une erreur se soit produite de notre côté. Veuillez réessayer plus tard ou contacter le support.",
     },
     auth: {
       SignIn: 'Connexion',

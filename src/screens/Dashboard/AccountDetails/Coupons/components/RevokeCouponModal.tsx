@@ -51,7 +51,7 @@ export default function RevokeCouponModal(props: {
                 await props.onConfirm?.();
                 onChangeVisible(false);
               } catch (exception) {
-                toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
                 reportCrash(exception as Error);
               } finally {
                 setIsRevoking(false);

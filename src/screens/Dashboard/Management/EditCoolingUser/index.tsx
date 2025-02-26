@@ -132,7 +132,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
       await Promise.all([refetch(), revalidateCUCache()]);
       props.navigation.goBack();
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error);
     }
   }

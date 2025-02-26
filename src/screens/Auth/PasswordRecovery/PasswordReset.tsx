@@ -3,14 +3,16 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 
-import type { AuthRouteProps } from '#navigation/Auth';
+import InAppNotifications from '#common/InAppNotifications';
 import { passwordRegex, stripSpacesRegex } from '#constants/schemas';
 import { useTranslationUtils } from '#i18n/utils';
+import type { AuthRouteProps } from '#navigation/Auth';
 import AuthService from '#services/AuthService';
+
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 type PasswordResetSchema = {
   password: string;
@@ -21,6 +23,7 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
   const { navigation, route } = props;
 
   const { t, zodResolver } = useTranslationUtils();
+  const toast = InAppNotifications.useToast();
 
   const [hidePass, setHidePass] = useState<boolean>(true);
   const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
@@ -70,6 +73,7 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
 
       navigation.navigate('SignIn');
     } catch (err) {
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(err as Error);
     }
   }, []);

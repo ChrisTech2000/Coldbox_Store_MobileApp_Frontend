@@ -29,6 +29,8 @@ export default {
     error: {
       errorMessage: 'Ops... parece que algo correu mal.',
       tryAgainMessage: 'Por favor, tente novamente mais tarde.',
+      serverErrorMessage:
+        'Ops! Parece que algo correu mal do nosso lado. Por favor, tente novamente mais tarde ou contacte o suporte.',
     },
     auth: {
       SignIn: 'Entrar',

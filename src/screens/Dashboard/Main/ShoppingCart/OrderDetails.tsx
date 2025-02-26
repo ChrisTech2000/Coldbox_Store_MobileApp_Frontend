@@ -76,7 +76,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
         }
       } catch (exception) {
         setIsSubmitting(false);
-        toast.show(t('navigation.error.errorMessage'), {
+        toast.show(t('navigation.error.serverErrorMessage'), {
           type: 'md_danger',
         });
         reportCrash(exception as Error);

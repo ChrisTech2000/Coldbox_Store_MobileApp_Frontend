@@ -97,7 +97,7 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
         toast.show(t('actions.done'), { type: 'md_success' });
       }
     } catch (error) {
-      toast.show(t('navigation.error.errorMessage'), {
+      toast.show(t('navigation.error.serverErrorMessage'), {
         type: 'md_danger',
       });
       reportCrash(error as Error);

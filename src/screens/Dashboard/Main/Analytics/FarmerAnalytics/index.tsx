@@ -91,7 +91,8 @@ export function FarmerAnalytics() {
               break;
           }
         }
-        if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
+        if (typeof toastId === 'undefined')
+          toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
         reportCrash(exception as Error);
       }
     }, []),
@@ -118,7 +119,7 @@ export function FarmerAnalytics() {
       await savePDF(getPdfContent(data, t), 'farmer');
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error, {
         extras: {
           errorContext: 'PDF Generation',

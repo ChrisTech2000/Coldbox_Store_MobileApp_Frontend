@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: 'Kash...kamar wani abu yayi kuskure.',
       tryAgainMessage: 'Da fatan za a sake gwadawa daga baya.',
+      serverErrorMessage:
+        'Oops! Da alama wani kuskure ya faru a bangarenmu. Don Allah a sake gwadawa daga baya ko a tuntuɓi tallafi.',
     },
     auth: {
       SignIn: 'Shiga',

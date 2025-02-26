@@ -1,25 +1,26 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Dimensions, type GestureResponderEvent } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useShallow } from 'zustand/react/shallow';
 import { useSWRConfig } from 'swr';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
+import reportCrash from '#ui/lib/reportCrash';
+import { paperTheme } from '#ui/lib/theme';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import { useAuthStore } from '#stores/auth';
-import { useToggle } from '#ui/hooks/useToggle';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
+import { CustomError } from '#services/utils/ErrorUtil';
+import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
-import { paperTheme } from '#ui/lib/theme';
-import reportCrash from '#ui/lib/reportCrash';
+import { useToggle } from '#ui/hooks/useToggle';
 
 import FormManager from '../../AddCoolingUnit/contexts/FormManager';
-import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('window').width - 42) / 2;
 
@@ -84,10 +85,18 @@ export default function DeleteAction(props: Props) {
       toggleProcessing();
       navigation.goBack();
     } catch (exception) {
-      toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.cantDelete'), {
-        type: 'md_danger',
-        style: { marginBottom: 50 },
-      });
+      if (exception instanceof CustomError && exception.originalError.status >= 500) {
+        toast.show(t('navigation.error.serverErrorMessage'), {
+          type: 'md_danger',
+          style: { marginBottom: 50 },
+        });
+      } else {
+        toast.show(t('Dashboard.Management.EditCoolingUnit.toasts.cantDelete'), {
+          type: 'md_danger',
+          style: { marginBottom: 50 },
+        });
+      }
+
       reportCrash(exception as Error);
       toggleModalVisibility();
       toggleProcessing();

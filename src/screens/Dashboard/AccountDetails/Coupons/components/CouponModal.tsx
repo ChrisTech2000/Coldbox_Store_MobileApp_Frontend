@@ -68,7 +68,7 @@ export default function CouponModal(props: {
     } catch (exception) {
       reportCrash(exception as Error);
       if (toast.isOpen(TOAST_HARCODED_ID)) return;
-      toast.show(t('navigation.error.errorMessage'), {
+      toast.show(t('navigation.error.serverErrorMessage'), {
         type: 'md_danger',
         style: { marginBottom: 56 },
         duration: ms('4 seconds'),

@@ -74,7 +74,7 @@ export default function MarketplaceLocationFilter() {
   async function onSubmit(values: FormValues<number>): Promise<void> {
     const countryCode = _getContextualCountry(company?.country || farmerCountry || '');
     if (!countryCode) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       return;
     }
 
@@ -102,6 +102,8 @@ export default function MarketplaceLocationFilter() {
       });
       return _onComplete();
     } catch (exception) {
+      // eslint-disable-next-line
+      // @ts-ignore
       if (exception instanceof CustomError<EGeolocationError>) {
         const message = _getToastMessage(exception.type, t);
         toast.show(message, { type: 'md_warning' });
