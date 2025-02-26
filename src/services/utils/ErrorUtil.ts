@@ -66,9 +66,7 @@ export class CustomError<T = CustomErrorType, E = unknown> extends Error {
     if (originalError) {
       const errorStack = this._getErrorStack(originalError);
       if (errorStack) {
-        this.stack = this.stack
-          ? `${this.stack}\nCaused by: ${errorStack}`
-          : `${this.name}: ${this.message}\nCaused by: ${errorStack}`;
+        this.stack += `\nCaused by: ${errorStack}`;
       }
     }
   }
