@@ -1,6 +1,7 @@
 import React from 'react';
-import { ActivityIndicator, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native-paper';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { GenericError } from '#ui/components/GenericError';
