@@ -1,7 +1,5 @@
-import ms from 'ms';
 import React, { useEffect, useState } from 'react';
 import { type StyleProp, type ViewStyle, Dimensions, View, Platform } from 'react-native';
-import GetLocation from 'react-native-get-location';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -20,6 +18,7 @@ import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constant
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
+import { LocationGeocoder } from '#services/LocationGeocoder';
 
 import { DEFAULT_COORDINATES } from '../../Marketplace/utils';
 import * as Map from './components/Map';
@@ -80,14 +79,10 @@ function CoolingUnitsMaps() {
     async function _getCoordinates() {
       try {
         if (!isLoadingCoords) setLoadingCoords(true);
-        const result = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: ms('6 seconds'),
-        });
+        const result = await LocationGeocoder.getCurrentLocation();
         setCoordinates([result.longitude, result.latitude]);
-      } catch (exception) {
+      } catch {
         setCoordinates(DEFAULT_COORDINATES);
-        console.error(exception);
       } finally {
         setLoadingCoords(false);
       }

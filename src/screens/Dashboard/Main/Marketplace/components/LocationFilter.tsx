@@ -1,10 +1,8 @@
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import ms from 'ms';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import GetLocation from 'react-native-get-location';
 import { Modalize } from 'react-native-modalize';
 import { Button, Portal, TextInput } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,10 +20,11 @@ import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { Translator, useTranslationUtils } from '#i18n/utils';
-import { EGeolocationError, Geocoder } from '#screens/Dashboard/Management/AddLocation/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import { LocationGeocoder } from '#services/LocationGeocoder';
+import { CustomError, EGeolocationError } from '#services/utils/ErrorUtil';
 
 import { useMarketplaceQueryParams } from '../store';
 import { DEFAULT_COORDINATES } from '../utils';
@@ -93,7 +92,7 @@ export default function MarketplaceLocationFilter() {
     }
 
     try {
-      const result = await new Geocoder().getCoordsFromLocation({
+      const result = await LocationGeocoder.getCoordsFromLocation({
         cityName: values.cityName,
         countryCode: countryCode,
       });
@@ -103,8 +102,10 @@ export default function MarketplaceLocationFilter() {
       });
       return _onComplete();
     } catch (exception) {
-      const message = _getToastMessage((exception as Error)?.message ?? '', t);
-      toast.show(message, { type: 'md_warning' });
+      if (exception instanceof CustomError<EGeolocationError>) {
+        const message = _getToastMessage(exception.type, t);
+        toast.show(message, { type: 'md_warning' });
+      }
 
       useMarketplaceQueryParams.getState().setParams({
         location: DEFAULT_COORDINATES,
@@ -125,22 +126,18 @@ export default function MarketplaceLocationFilter() {
       }
 
       try {
-        const result = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: ms('6 seconds'),
-        });
+        const result = await LocationGeocoder.getCurrentLocation();
 
         const nextValue: [number, number] = [result.latitude, result.longitude];
         if (JSON.stringify(nextValue) === JSON.stringify(currentLocation)) return;
 
         _setLocation(nextValue);
-        const geocoder = new Geocoder();
 
-        const location = await geocoder.getAddressFromCoords({
+        const location = await LocationGeocoder.getAddressFromCoords({
           latitude: nextValue[0],
           longitude: nextValue[1],
         });
-        const address = geocoder.buildAddressFromDatum({
+        const address = LocationGeocoder.buildAddressFromDatum({
           city: location.city,
           state: location.state,
         });
@@ -148,23 +145,20 @@ export default function MarketplaceLocationFilter() {
         form.setValue('cityName', address);
         previousValues.current = { cityName: address, distance: form.getValues('distance') };
       } catch (exception) {
-        if (exception instanceof Error) {
-          const errorCode = 'code' in exception ? exception.code : 'DENIED';
-          switch (errorCode) {
-            case 'CANCELLED':
-            case 'UNAVAILABLE':
-            case 'TIMEOUT':
-            case 'UNAUTHORIZED': {
-              if (!isEmpty(currentLocation) && !isEqual(currentLocation, DEFAULT_COORDINATES)) {
-                return;
-              }
-              return _setLocation(DEFAULT_COORDINATES);
-            }
-            default: {
-              reportCrash(exception as Error);
-              return;
-            }
+        if (exception instanceof CustomError) {
+          const isLocationPermissionDenied =
+            exception.type === EGeolocationError.LocationPermission;
+
+          const isLocationDisabledBySystem = exception.type === EGeolocationError.GeneralError;
+
+          if (isLocationPermissionDenied || isLocationDisabledBySystem) {
+            // if we already have valid coordinates, keep using those
+            if (!isEmpty(currentLocation) && !isEqual(currentLocation, DEFAULT_COORDINATES)) return;
+            // otherwise fallback to default coordinates
+            return _setLocation(DEFAULT_COORDINATES);
           }
+
+          reportCrash(exception as Error);
         }
       }
     }
@@ -308,15 +302,15 @@ export default function MarketplaceLocationFilter() {
   );
 }
 
-function _getToastMessage(message: string, t: Translator) {
-  switch (message) {
-    case EGeolocationError.INVALID_FORMAT:
+function _getToastMessage(type: EGeolocationError, t: Translator): string {
+  switch (type) {
+    case EGeolocationError.InvalidFormat:
       return t('Dashboard.Marketplace.invalidFormatWarning');
-    case EGeolocationError.UNRESOLVED_CITY:
+    case EGeolocationError.UnresolvedCity:
       return t('Dashboard.Marketplace.unresolvedCityFormatWarning');
-    case EGeolocationError.LOW_CONFIDENCE:
+    case EGeolocationError.LowConfidence:
       return t('Dashboard.Marketplace.lowConfidenceWarning');
-    case EGeolocationError.GENERAL_ERROR:
+    case EGeolocationError.GeneralError:
     default:
       return t('Dashboard.Marketplace.filterGeneralWarning');
   }
