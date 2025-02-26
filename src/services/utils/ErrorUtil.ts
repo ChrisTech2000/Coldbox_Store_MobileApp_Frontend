@@ -130,15 +130,17 @@ export default {
         `Request failed with status: ${status}`,
         error
       );
-    } else if (error.request) {
+    }
+
+    if (error.request) {
       return new CustomError(
         CustomErrorType.NetworkError,
         'A network error occurred. Please check your internet connection.',
         error
       );
-    } else {
-      return new CustomError(CustomErrorType.UnknownError, 'An unknown error occurred.', error);
     }
+
+    return new CustomError(CustomErrorType.UnknownError, 'An unknown error occurred.', error);
   },
   handleLocationGeocodingError: (
     error: unknown
