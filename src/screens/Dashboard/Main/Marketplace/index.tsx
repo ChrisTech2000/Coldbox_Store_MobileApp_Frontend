@@ -51,7 +51,7 @@ function _Container(props: {
   if (props.isLoading) {
     return (
       <View tw="mt-16 items-center justify-center">
-        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="small" />
       </View>
     );
   }
