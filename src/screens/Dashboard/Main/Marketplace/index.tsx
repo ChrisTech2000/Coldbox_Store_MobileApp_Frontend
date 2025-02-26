@@ -33,38 +33,25 @@ function MarketplaceRoot() {
   return (
     <React.Fragment>
       <MarketplaceFiltersSection />
-      <_Container
-        isLoading={isLoading}
-        refreshing={isValidating}
-        onRefresh={async () => await invalidateHandler()}
-      />
+      {isLoading ? (
+        <View tw="mt-16 items-center justify-center">
+          <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+        </View>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          onTouchStart={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
+          refreshControl={
+            <RefreshControl refreshing={isValidating} onRefresh={invalidateHandler} />
+          }
+        >
+          <View tw="flex-1 mb-20">
+            <MarketplaceList />
+          </View>
+        </ScrollView>
+      )}
       <_PortalsWrapper />
     </React.Fragment>
-  );
-}
-
-function _Container(props: {
-  isLoading: boolean;
-  refreshing: boolean;
-  onRefresh: () => Promise<void>;
-}) {
-  if (props.isLoading) {
-    return (
-      <View tw="mt-16 items-center justify-center">
-        <ActivityIndicator animating color={paperTheme.colors.primary} size="small" />
-      </View>
-    );
-  }
-  return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      onTouchStart={() => emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS)}
-      refreshControl={<RefreshControl refreshing={props.refreshing} onRefresh={props.onRefresh} />}
-    >
-      <View tw="flex-1 mb-20">
-        <MarketplaceList />
-      </View>
-    </ScrollView>
   );
 }
 
