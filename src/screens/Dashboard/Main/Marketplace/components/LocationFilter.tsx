@@ -105,13 +105,13 @@ export default function MarketplaceLocationFilter() {
       if (exception instanceof CustomError<EGeolocationError>) {
         const message = _getToastMessage(exception.type, t);
         toast.show(message, { type: 'md_warning' });
-
-        useMarketplaceQueryParams.getState().setParams({
-          location: DEFAULT_COORDINATES,
-          filterByMaxDistanceInKm: values.distance,
-        });
-        return _onComplete();
       }
+
+      useMarketplaceQueryParams.getState().setParams({
+        location: DEFAULT_COORDINATES,
+        filterByMaxDistanceInKm: values.distance,
+      });
+      return _onComplete();
     }
   }
 
