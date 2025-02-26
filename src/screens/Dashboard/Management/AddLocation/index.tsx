@@ -18,6 +18,7 @@ import { EEmployeeTutorialSteps } from '#screens/Dashboard/Tutorial/utils/consta
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
+import { LocationGeocoder } from '#services/LocationGeocoder';
 
 import FormManager, {
   DEFAULT_VALUES,
@@ -27,7 +28,7 @@ import FormManager, {
 import LocationNameModule from './modules/LocationNameModule';
 import StepFactory from './modules/StepFactory';
 import StepModule from './modules/StepModule';
-import { Geocoder, getCountryFullName } from './utils';
+import { getCountryFullName } from './utils';
 
 function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { navigation } = props;
@@ -49,13 +50,12 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
     const { _step, ...rest } = values;
 
     try {
-      const geocoder = new Geocoder();
       let datums: Partial<PreprocessedFormValues> = {};
 
       switch (_step) {
         case 'geolocation':
         case 'coordinates': {
-          const address = await geocoder.getAddressFromCoords({
+          const address = await LocationGeocoder.getAddressFromCoords({
             latitude: rest.latitude,
             longitude: rest.longitude,
           });
@@ -64,10 +64,9 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
         }
         case 'address': {
           try {
-            const coordinates = await geocoder.getCoordsFromAddress(rest);
+            const coordinates = await LocationGeocoder.getCoordsFromAddress(rest);
             datums = merge(rest, coordinates);
-          } catch (exception) {
-            console.error(exception);
+          } catch {
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
               type: 'md_danger',
             });

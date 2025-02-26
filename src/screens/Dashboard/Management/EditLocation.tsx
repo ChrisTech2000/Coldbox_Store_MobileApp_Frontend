@@ -17,6 +17,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { LocationGeocoder } from '#services/LocationGeocoder';
 
 import FormManager, {
   DEFAULT_VALUES,
@@ -26,7 +27,7 @@ import FormManager, {
 import LocationNameModule from './AddLocation/modules/LocationNameModule';
 import StepFactory from './AddLocation/modules/StepFactory';
 import StepModule from './AddLocation/modules/StepModule';
-import { Geocoder, getCountryFullName } from './AddLocation/utils';
+import { getCountryFullName } from './AddLocation/utils';
 
 const width = (Dimensions.get('window').width - 42) / 2;
 
@@ -66,13 +67,12 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     const { _step, ...rest } = values;
 
     try {
-      const geocoder = new Geocoder();
       let datums: Partial<PreprocessedFormValues> = {};
 
       switch (_step) {
         case 'geolocation':
         case 'coordinates': {
-          const address = await geocoder.getAddressFromCoords({
+          const address = await LocationGeocoder.getAddressFromCoords({
             latitude: rest.latitude,
             longitude: rest.longitude,
           });
@@ -81,7 +81,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
         }
         case 'address': {
           try {
-            const coordinates = await geocoder.getCoordsFromAddress(rest);
+            const coordinates = await LocationGeocoder.getCoordsFromAddress(rest);
             datums = merge(rest, coordinates);
           } catch (exception) {
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
