@@ -149,7 +149,9 @@ export default function MarketplaceLocationFilter() {
           const isLocationPermissionDenied =
             exception.type === EGeolocationError.LocationPermission;
 
-          if (isLocationPermissionDenied) {
+          const isLocationDisabledBySystem = exception.type === EGeolocationError.GeneralError;
+
+          if (isLocationPermissionDenied || isLocationDisabledBySystem) {
             // if we already have valid coordinates, keep using those
             if (!isEmpty(currentLocation) && !isEqual(currentLocation, DEFAULT_COORDINATES)) return;
             // otherwise fallback to default coordinates
