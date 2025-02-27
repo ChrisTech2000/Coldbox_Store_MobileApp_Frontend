@@ -173,7 +173,7 @@ function DeliveryContacts() {
                   await refetch();
                   setContactToDelete(null);
                 } catch (exception) {
-                  toast.show(t('actions.error'), {
+                  toast.show(t('navigation.error.serverErrorMessage'), {
                     type: 'md_danger',
                     style: { marginBottom: 50 },
                   });
@@ -262,7 +262,7 @@ function BottomSheet() {
           emitter.emit(APP_EVENTS.DISPATCH_RELOAD_DELIVERY_CONTACTS);
         }
       } catch (error) {
-        toast.show(t('navigation.error.errorMessage'), {
+        toast.show(t('navigation.error.serverErrorMessage'), {
           type: 'md_danger',
           style: { marginBottom: 50 },
         });

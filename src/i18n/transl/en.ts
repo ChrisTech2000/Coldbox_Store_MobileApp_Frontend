@@ -27,6 +27,8 @@ const en = {
     error: {
       errorMessage: 'Oops... looks like something went wrong.',
       tryAgainMessage: 'Please try again later.',
+      serverErrorMessage:
+        'Oops! Looks like something went wrong on our side. Please try again later or contact support.',
     },
     auth: {
       SignIn: 'Log in',
@@ -130,7 +132,7 @@ const en = {
     },
   },
   actions: {
-    error: 'An error occured',
+    error: 'An error occurred',
     cancel: 'Cancel',
     confirm: 'Confirm',
     import: 'Import',

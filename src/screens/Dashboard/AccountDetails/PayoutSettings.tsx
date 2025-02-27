@@ -9,6 +9,7 @@ import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView'
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import reportCrash from '#ui/lib/reportCrash';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -20,10 +21,10 @@ import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import { CustomError } from '#services/utils/ErrorUtil';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type Bank, EBankAccountType, ERoles } from '#types/global';
-import reportCrash from '#ui/lib/reportCrash';
 
 interface FormValues {
   accountName: string;
@@ -118,6 +119,7 @@ function PayoutSettings(
     ),
   });
 
+  console.log(isDirty, '#####');
   const [isBanksModalOpen, setIsBanksModalOpen] = useState<boolean>(false);
   const [isAccountTypeOpen, setIsAccountTypeOpen] = useState<boolean>(false);
 
@@ -165,10 +167,17 @@ function PayoutSettings(
 
         props.navigation.goBack();
       } catch (error) {
-        toast.show(t('Dashboard.AccountDetails.PayoutSettings.errorMessage'), {
-          type: 'md_danger',
-          style: { marginBottom: 50 },
-        });
+        if (error instanceof CustomError && error.originalError.response.status >= 500) {
+          toast.show(t('navigation.error.serverErrorMessage'), {
+            type: 'md_danger',
+            style: { marginBottom: 50 },
+          });
+        } else {
+          toast.show(t('Dashboard.AccountDetails.PayoutSettings.errorMessage'), {
+            type: 'md_danger',
+            style: { marginBottom: 50 },
+          });
+        }
         reportCrash(error as Error);
       }
     },
@@ -176,11 +185,12 @@ function PayoutSettings(
   );
 
   useEffect(() => {
-    if (bank) setValue('bank', `${bank.id}`);
+    if (bank) setValue('bank', `${bank.id}`, { shouldDirty: true });
   }, [bank]);
 
   useEffect(() => {
-    if (accountType) setValue('accountType', mapBankAccountTypes(t)[accountType]);
+    if (accountType)
+      setValue('accountType', mapBankAccountTypes(t)[accountType], { shouldDirty: true });
   }, [accountType, t]);
 
   useEffect(() => {

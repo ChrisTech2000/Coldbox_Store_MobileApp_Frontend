@@ -106,7 +106,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
                   );
                   toast.show(`${t('actions.done')}!`, { type: 'md_success' });
                 } catch (exception) {
-                  toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                  toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
                   reportCrash(exception as Error);
                 } finally {
                   toggleDownloading();

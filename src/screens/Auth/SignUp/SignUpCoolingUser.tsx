@@ -5,15 +5,18 @@ import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Checkbox, Text, TextInput } from 'react-native-paper';
 
-import type { AuthRouteProps } from '#navigation/Auth';
-import type { SignUpAsCoolingUserResponse } from '#types/api.responses';
-import { useTranslationUtils } from '#i18n/utils';
-import AuthService from '#services/AuthService';
-import { MAP_APP_GENDER_TO_API } from '#types/global';
 import InAppNotifications from '#common/InAppNotifications';
+import phoneNumberCodes from '#constants/phoneNumberCodes';
+import { useTranslationUtils } from '#i18n/utils';
+import type { AuthRouteProps } from '#navigation/Auth';
+import AuthService from '#services/AuthService';
+import { CustomError } from '#services/utils/ErrorUtil';
+import type { SignUpAsCoolingUserResponse } from '#types/api.responses';
+import { MAP_APP_GENDER_TO_API } from '#types/global';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
+import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { EAccountProfile } from '../SignIn';
@@ -27,8 +30,6 @@ import {
   SignUpCoolingUserSchemaType,
 } from './schemas';
 import { customCountrySort } from './utils';
-import phoneNumberCodes from '#constants/phoneNumberCodes';
-import reportCrash from '#ui/lib/reportCrash';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -89,7 +90,14 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         },
       });
     } catch (exception) {
-      toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger', style: { marginBottom: 55 } });
+      if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
+        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+      } else {
+        toast.show(t('Auth.SignUp.toasts.error'), {
+          type: 'md_danger',
+          style: { marginBottom: 55 },
+        });
+      }
       reportCrash(exception as Error);
     }
 

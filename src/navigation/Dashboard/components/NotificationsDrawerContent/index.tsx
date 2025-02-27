@@ -181,7 +181,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                 type: 'md_success',
               });
             } catch (exception) {
-              toast.show(t('actions.error', { type: 'md_danger' }));
+              toast.show(t('navigation.error.serverErrorMessage', { type: 'md_danger' }));
               reportCrash(exception as Error);
             }
           }}

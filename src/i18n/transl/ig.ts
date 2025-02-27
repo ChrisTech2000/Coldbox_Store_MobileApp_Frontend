@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: ' ọ dị ka ihe a agaghị nke ọma.',
       tryAgainMessage: 'Biko mekwa ya ọzọ ma emechaa.',
+      serverErrorMessage:
+        'Oopsy! Ọ dị ka ihe mere n’akụkụ anyị. Biko nwalee ọzọ n’oge ọzọ ma ọ bụ kpọtụrụ nkwado.',
     },
     auth: {
       SignIn: "Banye n'ime",
