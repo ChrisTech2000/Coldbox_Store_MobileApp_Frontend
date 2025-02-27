@@ -75,9 +75,9 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.Analytics.farmersAnalytics.crops')}:
               </Text>
               &nbsp;
-              {Array.from(
-                new Set(movement.checkout?.crates.map((crate) => crate.crop?.name ?? ''))
-              ).join(', ')}
+              {Array.from(new Set(movement.checkout?.crates.map((crate) => crate.crop?.name)))
+                .filter(Boolean)
+                .join(', ')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
@@ -152,9 +152,9 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.Analytics.farmersAnalytics.crops')}:
               </Text>
               &nbsp;
-              {Array.from(
-                new Set(movement.checkin?.crates.map((crate) => crate.crop?.name ?? ''))
-              ).join(', ')}
+              {Array.from(new Set(movement.checkin?.crates.map((crate) => crate.crop?.name ?? '')))
+                .filter(Boolean)
+                .join(', ')}
             </Text>
           </View>
         </ScrollView>
