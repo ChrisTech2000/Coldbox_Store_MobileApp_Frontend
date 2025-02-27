@@ -30,7 +30,7 @@ export function generateData(produce: DashboardProduce, t: Translator) {
     {
       id: 'crateIds',
       label: t('Dashboard.ProduceDetails.crateIds'),
-      value: produce.checkedInCrates.map((crate) => crate.id).join(', '),
+      value: produce.checkedInCrates.map((crate) => crate.tag).join(', '),
     },
     {
       id: 'weight',

@@ -106,30 +106,28 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   );
 
   const allHavePlannedDays = useMemo(() => {
-    return produces.flatMap((produce) => produce.crates).every((crate) => !!crate.plannedDays);
+    return produces.every((produce) => produce.crates.every((crate) => !!crate.plannedDays));
   }, [produces, produces.length]);
 
   const total = useMemo(() => {
-    const price = coolingUnit.commonPricingType?.value;
+    if (!coolingUnit.commonPricingType) return '0.00';
 
-    if (!allHavePlannedDays || coolingUnit.commonPricingType?.type === EPricingType.FIXED) {
-      if (coolingUnit.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
-        return allCrates.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
-      }
-      return (price * allCrates.length).toFixed(2);
+    const { value: price, metric, type } = coolingUnit.commonPricingType;
+
+    if (!allHavePlannedDays || type === EPricingType.FIXED) {
+      return metric === ECoolingUnitMetric.KILOGRAMS
+        ? allCrates.reduce((acc, crate) => acc + crate.weight * price, 0).toFixed(2)
+        : (price * allCrates.length).toFixed(2);
     }
 
     return allCrates
-      .reduce((acc, current) => {
-        if (coolingUnit.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
-          acc += (current.plannedDays ?? 1) * price * current.weight;
-        } else {
-          acc += (current.plannedDays ?? 1) * price;
-        }
+      .reduce((acc, crate) => {
+        const days = crate.plannedDays ?? 1;
+        acc += metric === ECoolingUnitMetric.KILOGRAMS ? days * price * crate.weight : days * price;
         return acc;
       }, 0)
       .toFixed(2);
-  }, [produces, produces.length, coolingUnit, allHavePlannedDays, allCrates]);
+  }, [produces, coolingUnit, allHavePlannedDays, allCrates]);
 
   const setCrateIDs = useCallback(
     (modalCrates: SetupSchema['crates'], item: ProduceCrate) => {
@@ -137,7 +135,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
       const updatedCrates = _produce.crates.map((crate, index) => ({
         ...crate,
-        tag: modalCrates[index].crateId?.toString() ?? '',
+        tag: modalCrates[index].tag?.toString() ?? '',
       }));
 
       _produce.crates = updatedCrates;
@@ -151,114 +149,6 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     },
     [produces, produces.length]
   );
-
-  async function onSubmit(): Promise<void> {
-    if (!produces || !produces.length) {
-      toast.show(t('Dashboard.CrateManagement.CheckIn.emptyMessage'), {
-        type: 'md_danger',
-      });
-      return;
-    }
-
-    toggleIsSubmitting();
-
-    let result: CheckInWitCodeResponse | CheckInResponse | undefined = undefined;
-
-    if (typeof checkOutCode === 'string') {
-      result = await ColdtivateService.checkInWithCode({
-        params: {
-          code: checkOutCode,
-          farmer: user.id,
-          coolingUnitId: coolingUnit?.id as number,
-          days: produces[0].crates[0].plannedDays,
-          tags: produces
-            .flatMap((produce) => produce.crates)
-            .map((crate) => crate.tag)
-            .filter((tag) => typeof tag === 'string'),
-        },
-      });
-    } else {
-      result = await ColdtivateService.checkIn({
-        farmerId: user.id,
-        id: undefined,
-        produces: cloneDeep(produces).map((produce) => {
-          delete produce.price;
-          let harvestDate: number | null = null;
-          switch (produce.harvestDate) {
-            case EDateCropped.TODAY:
-              harvestDate = produce.crop.harvestedToday;
-              break;
-            case EDateCropped.YESTERDAY:
-              harvestDate = produce.crop.harvestedYesterday;
-              break;
-            case EDateCropped.DAY_BEFORE:
-              harvestDate = produce.crop.harvestedDayBeforeYesterday;
-              break;
-            case EDateCropped.EVEN_BEFORE:
-              harvestDate = produce.crop.harvestedBefore;
-              break;
-            default:
-              break;
-          }
-
-          return {
-            ...produce,
-            crop: { id: produce.crop.id },
-            harvestDate: (harvestDate ?? produce.harvestDate) as number,
-            crates: produce.crates.map((crate) => {
-              const crateShallow = { ...crate };
-              delete crateShallow.isSellable;
-              if (crateShallow.checkOut === null) delete crateShallow.checkOut;
-              return crateShallow;
-            }),
-          };
-        }),
-      });
-
-      await ColdtivateService.updateFarmer({
-        farmerId: user.id,
-        coolingUnitId: coolingUnit.id,
-        updateCoolingUnits: true,
-      });
-    }
-
-    if (typeof result !== 'object') return toggleIsSubmitting();
-
-    if (guard('SET', 'MarketplaceListForSale')) {
-      if ('movement' in result) {
-        const processedCrateListing = processMarketplaceCrateListing(produces, result.produces);
-        await Promise.allSettled(
-          processedCrateListing.map(
-            async ({ crateIds, pricePerKg }) =>
-              await MarketplaceService.upsertListedCrate({
-                crateIds,
-                producePricePerKg: pricePerKg,
-                operatorOnBehalfOfSellerFarmerId: user.id,
-              })
-          )
-        );
-      }
-    }
-
-    toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), {
-      type: 'md_success',
-    });
-
-    if (guard('VIEW', 'TemperatureAlertModal')) {
-      const temperatureAlertDatum = {
-        coolingUnitId: coolingUnit.id,
-        companyId: company!.id,
-        showCompleteInfo: true,
-      } satisfies TemperatureAlertEvtDatum;
-
-      emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, temperatureAlertDatum);
-    }
-
-    resetCheckInStore();
-    rootNavigation.navigate('RootMainTabStack');
-    refreshData.forEach((fn) => fn());
-    toggleIsSubmitting();
-  }
 
   const navigateToCropSelection = useCallback(() => {
     const now = new Date();
@@ -290,6 +180,112 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     if (coolingUnit) setCoolingUnit(coolingUnit);
     if (user) setUser(user);
   }, [coolingUnit, user, checkOutCode]);
+
+  async function handleCheckIn() {
+    return ColdtivateService.checkIn({
+      farmerId: user.id,
+      id: undefined,
+      produces: cloneDeep(produces).map((produce) => {
+        delete produce.price;
+        return {
+          ...produce,
+          crop: { id: produce.crop.id },
+          harvestDate: (resolveHarvestDate(produce) ?? produce.harvestDate) as number,
+          crates: produce.crates.map((crate) => {
+            const crateShallow = { ...crate };
+            delete crateShallow.isSellable;
+            if (crateShallow.checkOut === null) delete crateShallow.checkOut;
+            return crateShallow;
+          }),
+        };
+      }),
+    });
+  }
+
+  function resolveHarvestDate(produce: (typeof produces)[number]) {
+    switch (produce.harvestDate) {
+      case EDateCropped.TODAY:
+        return produce.crop.harvestedToday;
+      case EDateCropped.YESTERDAY:
+        return produce.crop.harvestedYesterday;
+      case EDateCropped.DAY_BEFORE:
+        return produce.crop.harvestedDayBeforeYesterday;
+      case EDateCropped.EVEN_BEFORE:
+        return produce.crop.harvestedBefore;
+      default:
+        return produce.harvestDate;
+    }
+  }
+
+  async function onSubmit(): Promise<void> {
+    if (!produces.length) {
+      toast.show(t('Dashboard.CrateManagement.CheckIn.emptyMessage'), { type: 'md_danger' });
+      return;
+    }
+
+    toggleIsSubmitting();
+
+    try {
+      let result: CheckInWitCodeResponse | CheckInResponse | undefined;
+
+      if (typeof checkOutCode === 'string') {
+        result = await ColdtivateService.checkInWithCode({
+          params: {
+            code: checkOutCode,
+            farmer: user.id,
+            coolingUnitId: coolingUnit?.id as number,
+            days: produces[0].crates[0].plannedDays,
+            tags: produces
+              .flatMap((p) => p.crates)
+              .map((c) => c.tag)
+              .filter(Boolean),
+          },
+        });
+      } else {
+        result = await handleCheckIn();
+
+        await ColdtivateService.updateFarmer({
+          farmerId: user.id,
+          coolingUnitId: coolingUnit.id,
+          updateCoolingUnits: true,
+        });
+      }
+
+      if (!result) return;
+
+      if (guard('SET', 'MarketplaceListForSale') && 'movement' in result) {
+        const processedCrateListing = processMarketplaceCrateListing(produces, result.produces);
+        await Promise.allSettled(
+          processedCrateListing.map(({ crateIds, pricePerKg }) =>
+            MarketplaceService.upsertListedCrate({
+              crateIds,
+              producePricePerKg: pricePerKg,
+              operatorOnBehalfOfSellerFarmerId: user.id,
+            })
+          )
+        );
+      }
+
+      toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), { type: 'md_success' });
+
+      if (guard('VIEW', 'TemperatureAlertModal')) {
+        emitter.emit(APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT, {
+          coolingUnitId: coolingUnit.id,
+          companyId: company!.id,
+          showCompleteInfo: true,
+        });
+      }
+
+      resetCheckInStore();
+      rootNavigation.navigate('RootMainTabStack');
+      refreshData.forEach((fn) => fn());
+    } catch (error) {
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+      reportCrash(error as Error);
+    } finally {
+      toggleIsSubmitting();
+    }
+  }
 
   return (
     <View tw="flex-1">

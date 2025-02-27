@@ -74,7 +74,7 @@ export function ProduceDetailsOption({ option, index, crops, control }: ProduceD
             control={control}
             render={({ field: { onChange, value } }) => (
               <Input
-                tw="w-24 items-end text-base bg-transparent rounded-sm h-12 truncate"
+                tw="w-24 items-end text-base bg-transparent rounded-sm h-8 truncate"
                 onChangeText={onChange}
                 keyboardType="number-pad"
                 value={value}

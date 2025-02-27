@@ -119,7 +119,7 @@ export function CheckedInCard({
             <View key={`crate-card-${index}`} tw="px-4 space-y-2 my-2 w-full">
               <Divider tw="bg-gray-500 w-full" />
               <View tw="w-full space-y-1 my-1 flex flex-row">
-                <View tw="w-[60%] justify-start items-start space-y-2">
+                <View tw="w-[70%] justify-start items-start space-y-2">
                   <View tw="flex flex-row justify-between w-full">
                     <Text>{t('Dashboard.History.pdfModal.checkOut.idLabel')}</Text>
                     <Text tw="text-gray-400">{crate.tag || ''}</Text>
@@ -148,7 +148,7 @@ export function CheckedInCard({
                   </View>
                 </View>
                 {crate.isSellable ? (
-                  <View tw="w-[40%] items-end justify-center">
+                  <View tw="w-[30%] items-end justify-center">
                     <View tw="items-center">
                       <Icon source="cart-outline" size={20} />
                       <Text tw="text-xs text-gray-500">
@@ -184,7 +184,7 @@ export function CheckedInCard({
           <CrateSetupModal
             setValue={(modalCrates) => setCrateIDs(modalCrates, item)}
             crates={item.crates.map((crate) => ({
-              crateId: Number(crate.tag),
+              tag: crate.tag,
               weight: crate.weight,
               isSellable: crate.isSellable,
             }))}
