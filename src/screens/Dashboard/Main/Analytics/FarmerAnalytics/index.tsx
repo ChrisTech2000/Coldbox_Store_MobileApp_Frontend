@@ -8,7 +8,7 @@ import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
-import { savePDF } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -115,7 +115,7 @@ export function FarmerAnalytics() {
     try {
       setIsCreatingPdf(true);
       if (!data) throw new Error(); // safe guard
-      await savePDF(getPdfContent(data, t), 'farmer');
+      await FileUtility.createPdfFromHtml(getPdfContent(data, t), 'farmer');
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
       toast.show(t('actions.error'), { type: 'md_danger' });

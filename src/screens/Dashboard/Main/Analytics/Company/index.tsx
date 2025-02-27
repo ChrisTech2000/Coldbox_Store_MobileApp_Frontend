@@ -7,7 +7,7 @@ import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
-import { savePDF } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -93,7 +93,7 @@ export function CompanySection() {
         'company'
       );
       const fileName = `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.company')}`;
-      await savePDF(html, fileName);
+      await FileUtility.createPdfFromHtml(html, fileName);
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {

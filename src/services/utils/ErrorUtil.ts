@@ -46,6 +46,24 @@ const GEOLOCATION_ERROR_MESSAGES: Record<EGeolocationError, string> = {
 };
 
 //
+// PDF GENERATION ERRORS
+//
+
+export enum PdfErrorType {
+  PermissionsError = 'PermissionsError',
+  ConvertionError = 'ConvertionError',
+  DownloadError = 'DownloadError',
+  GeneralError = 'GeneralError',
+}
+
+const PDF_ERROR_MESSAGES: Record<PdfErrorType, string> = {
+  [PdfErrorType.PermissionsError]: 'Storage permission denied',
+  [PdfErrorType.ConvertionError]: 'PDF generation failed',
+  [PdfErrorType.DownloadError]: 'Download failed',
+  [PdfErrorType.GeneralError]: 'Internal error occurred',
+};
+
+//
 // IMPLEMENTATION
 //
 
@@ -108,24 +126,24 @@ export class CustomError<T = CustomErrorType, E = unknown> extends Error {
 //
 
 export default {
-  handleAxiosError: (error: AxiosError<unknown>): CustomError<CustomErrorType> => {
+  handleAxiosError: (error: AxiosError<unknown>) => {
     if (error.response) {
       const status = error.response.status;
 
       if (STATUS_CODE_ERROR_MAP[status]) {
         const [type, message] = STATUS_CODE_ERROR_MAP[status];
-        return new CustomError(type, message, error);
+        return new CustomError<CustomErrorType, AxiosError>(type, message, error);
       }
 
       if (status >= 500) {
-        return new CustomError(
+        return new CustomError<CustomErrorType, AxiosError>(
           CustomErrorType.ServerError,
           'A server error occurred. Please try again later.',
           error
         );
       }
 
-      return new CustomError(
+      return new CustomError<CustomErrorType, AxiosError>(
         CustomErrorType.RequestFailed,
         `Request failed with status: ${status}`,
         error
@@ -133,20 +151,22 @@ export default {
     }
 
     if (error.request) {
-      return new CustomError(
+      return new CustomError<CustomErrorType, AxiosError>(
         CustomErrorType.NetworkError,
         'A network error occurred. Please check your internet connection.',
         error
       );
     }
 
-    return new CustomError(CustomErrorType.UnknownError, 'An unknown error occurred.', error);
+    return new CustomError<CustomErrorType, unknown>(
+      CustomErrorType.UnknownError,
+      'An unknown error occurred.',
+      error
+    );
   },
-  handleLocationGeocodingError: (
-    error: unknown
-  ): CustomError<EGeolocationError, LocationError | Error | unknown> => {
+  handleLocationGeocodingError: (error: unknown) => {
     if (error instanceof LocationError) {
-      return new CustomError(
+      return new CustomError<EGeolocationError, LocationError>(
         EGeolocationError.LocationPermission,
         GEOLOCATION_ERROR_MESSAGES[EGeolocationError.LocationPermission],
         error
@@ -160,14 +180,31 @@ export default {
         ? errorMessage
         : EGeolocationError.GeneralError;
 
-      const message = GEOLOCATION_ERROR_MESSAGES?.[type] || 'Unknown geocoding error';
-      return new CustomError(type, message, error);
+      return new CustomError<EGeolocationError, Error>(
+        type,
+        GEOLOCATION_ERROR_MESSAGES[type],
+        error
+      );
     }
 
-    return new CustomError(
+    return new CustomError<EGeolocationError, unknown>(
       EGeolocationError.GeneralError,
       GEOLOCATION_ERROR_MESSAGES[EGeolocationError.GeneralError],
       error
     );
+  },
+  handlePdfErrors: (error: unknown) => {
+    let type: PdfErrorType = PdfErrorType.GeneralError;
+    let message: string = PDF_ERROR_MESSAGES[PdfErrorType.GeneralError];
+
+    if (error instanceof Error) {
+      const errorMessage = error.message as PdfErrorType;
+      type = Object.values(PdfErrorType).includes(errorMessage)
+        ? errorMessage
+        : PdfErrorType.GeneralError;
+      message = PDF_ERROR_MESSAGES[type];
+    }
+
+    return new CustomError<PdfErrorType, Error | unknown>(type, message, error);
   },
 };
