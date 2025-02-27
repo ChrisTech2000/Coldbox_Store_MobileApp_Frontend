@@ -16,6 +16,7 @@ import ComsolAbout from '#screens/Dashboard/About/ComsolAbout';
 
 import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
+import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 
 export type AboutStackRoutes = {
   Root: undefined;
@@ -64,8 +65,10 @@ export default function AboutStack() {
           routeTitle={routeTitle}
           leftContent={
             <Appbar.BackAction
-              // eslint-disable-next-line react/prop-types
-              onPress={props.navigation.goBack}
+              onPress={() => {
+                // eslint-disable-next-line react/prop-types
+                goBackWithDrawer(props.navigation);
+              }}
               size={22}
             />
           }
