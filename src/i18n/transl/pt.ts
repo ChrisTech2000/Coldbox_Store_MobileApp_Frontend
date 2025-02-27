@@ -472,10 +472,10 @@ export default {
         discount: 'Desconto',
         priceWithDiscount: 'Preço total',
         paymentType: {
-          label: 'ପେମେଣ୍ଟ ପ୍ରକାର',
-          cash: 'ନଗଦ',
-          creditCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ',
-          bankTransfer: 'ବ୍ୟାଙ୍କ ହାନ୍ତା',
+          label: 'Tipo de pagamento',
+          cash: 'Numerário',
+          creditCard: 'Cartão de Crédito',
+          bankTransfer: 'Transferência Bancária',
         },
         bankTransfer: {
           title: 'Detalhes do Recebedor',
