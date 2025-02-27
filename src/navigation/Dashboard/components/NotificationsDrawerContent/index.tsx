@@ -11,6 +11,7 @@ import reportCrash from '#ui/lib/reportCrash';
 
 import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
 import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
+import { formatFloat } from '#screens/Dashboard/Main/components/FarmerSurveyModal/schema';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
@@ -161,14 +162,20 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                       commoditySurvey.cropId !== farmerSurveyDatums.contextualCrop.id
                   ),
                   {
-                    averagePrice: values.averagePrice,
+                    averagePrice: Number(formatFloat(values.averagePrice)),
                     unit: values.unitOfMeasurement,
-                    quantityTotal: values.weightDistribution.totalProducedWeekly,
-                    quantityBelowMarketPrice: values.weightDistribution.quantityLost,
-                    quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
-                    quantitySold: values.weightDistribution.quantitySold,
+                    quantityTotal: Number(
+                      formatFloat(values.weightDistribution.totalProducedWeekly)
+                    ),
+                    quantityBelowMarketPrice: Number(
+                      formatFloat(values.weightDistribution.quantityLost)
+                    ),
+                    quantitySelfConsumed: Number(
+                      formatFloat(values.weightDistribution.quantitySelfConsumed)
+                    ),
+                    quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
                     averageSeasonInMonths: null,
-                    kgInUnit: values.unitaryWeight as number,
+                    kgInUnit: Number(formatFloat(values.unitaryWeight as string)),
                     currency: farmerSurveyDatums.companyCurrency,
                     reasonForLoss: values.reasonsForSpoilage,
                     cropId: farmerSurveyDatums.contextualCrop.id,
