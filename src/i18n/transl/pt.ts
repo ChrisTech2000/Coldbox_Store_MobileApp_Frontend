@@ -478,7 +478,7 @@ export default {
           bankTransfer: 'Transferência Bancária',
         },
         bankTransfer: {
-          title: 'Detalhes do Recebedor',
+          title: 'Detalhes do Destinatário',
           accountName: 'Nome da Conta',
           accountNumber: 'Número da Conta',
           bankName: 'Nome do Banco',
