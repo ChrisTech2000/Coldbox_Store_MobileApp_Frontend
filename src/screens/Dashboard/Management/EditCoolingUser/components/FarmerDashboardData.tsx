@@ -9,7 +9,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useApiCache, useApiCall, useLazyApiCall } from '#services/hooks/useAPiCall';
 import type { Farmer } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
-import { savePDF } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 import ColdtivateService from '#services/ColdtivateService';
 import reportCrash from '#ui/lib/reportCrash';
 
@@ -67,7 +67,7 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
           });
           if (isEmpty(result)) throw new Error('empty farmer data response');
 
-          await savePDF(getPdfContent(result, t), 'farmer');
+          await FileUtility.createPdfFromHtml(getPdfContent(result, t), 'farmer');
           toast.show(`${t('actions.done')}!`, { type: 'md_success' });
         } catch (exception) {
           let toastId: string | undefined;

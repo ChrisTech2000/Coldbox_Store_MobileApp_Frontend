@@ -6,7 +6,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
-import { downloadAndSaveFile } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import { useToggle } from '#ui/hooks/useToggle';
@@ -148,7 +148,7 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
               evt.stopPropagation();
               try {
                 toggleDownloading();
-                await downloadAndSaveFile(
+                await FileUtility.downloadFile(
                   YOUR_VCCA_PDF_LINK,
                   'operators_manual_by_your_vcca',
                   'pdf'

@@ -21,7 +21,7 @@ import { useControlledState } from '#ui/hooks/useControlledState';
 import { useToggle } from '#ui/hooks/useToggle';
 import type { CoolingUnit } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
-import { downloadAndSaveFile } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 
 type DownloadDataModalProps = {
   coolingUnits?: Array<CoolingUnit>;
@@ -110,7 +110,7 @@ export function DownloadDataModal(props: DownloadDataModalProps) {
                 const _startDate = format(new Date(startDate), 'yyyy-MM-dd');
                 const _endDate = format(new Date(endDate), 'yyyy-MM-dd');
                 const url = `${AIR_PROD_BASE_URL}company/${_company}/${_mode}?start_date=${_startDate}&end_date=${_endDate}&cooling_unit_ids=${selectedUnits.map((cu) => cu.id).join(',')}`;
-                await downloadAndSaveFile(url, `revenue_analysis_comp_id_${_company}`, 'xlsx');
+                await FileUtility.downloadFile(url, `revenue_analysis_comp_id_${_company}`, 'xlsx');
                 setIsModalOpen(false);
                 toast.show(`${t('actions.done')}!`, { type: 'md_success' });
               } catch (exception) {
