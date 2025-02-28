@@ -17,6 +17,7 @@ export type FormValues = {
 };
 
 export type PreprocessedFormValues = {
+  point: string;
   latitude: number;
   longitude: number;
 } & Omit<FormValues, 'latitude' | 'longitude'>;

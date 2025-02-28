@@ -48,6 +48,7 @@ export default function MarketplaceItemWrapper(
 MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
   shelfLife: number | null;
   cropName: string;
+  produceInfo: string;
   movementCode: string;
   cropImageUri: string;
   owner: { name: string; contact: string; isPhonePublic: boolean };
@@ -89,6 +90,11 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
           <Text variant="TextMedium" tw="text-lg">
             {props.cropName}
           </Text>
+          {props.produceInfo?.trim() ? (
+            <Text variant="TextMedium" tw="text-gray-700">
+              {props.produceInfo}
+            </Text>
+          ) : null}
           {props.owner.name.trim() ? (
             <Text variant="TextMedium" tw="text-sm text-gray-600">
               {t('Dashboard.Marketplace.owner')}: {props.owner.name}

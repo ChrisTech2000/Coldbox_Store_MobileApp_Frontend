@@ -4,11 +4,12 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
+import { Point } from 'wkx';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -59,14 +60,29 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
             latitude: rest.latitude,
             longitude: rest.longitude,
           });
+
           datums = merge(rest, address);
+          datums.point = new Point(
+            rest.longitude,
+            rest.latitude,
+            undefined,
+            undefined,
+            4326
+          ).toEwkt();
           break;
         }
         case 'address': {
           try {
             const coordinates = await LocationGeocoder.getCoordsFromAddress(rest);
-            datums = merge(rest, coordinates);
-          } catch {
+            datums.point = new Point(
+              coordinates.longitude,
+              coordinates.latitude,
+              undefined,
+              undefined,
+              4326
+            ).toEwkt();
+          } catch (exception) {
+            console.error(exception);
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
               type: 'md_danger',
             });
