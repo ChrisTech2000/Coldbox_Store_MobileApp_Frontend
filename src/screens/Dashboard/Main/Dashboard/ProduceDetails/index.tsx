@@ -157,6 +157,38 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
     [produce]
   );
 
+  const renderContactDetails = () => {
+    if (user?.role === ERoles.COOLING_USER && !produce.operatorContact && !produce.operatorName) {
+      return null;
+    }
+
+    const contactName = user?.role === ERoles.COOLING_USER ? produce.operatorName : produce.owner;
+    const contactPhone =
+      user?.role === ERoles.COOLING_USER ? produce.operatorContact : produce.ownerContact;
+    const roleLabel =
+      user?.role === ERoles.COOLING_USER
+        ? t('Auth.SignIn.accounts.operator.label')
+        : t('Dashboard.Marketplace.owner');
+
+    return (
+      <View tw="space-y-3">
+        <View>
+          <Text tw="text-gray-400">{roleLabel}</Text>
+          <Text>{contactName}</Text>
+        </View>
+        <View>
+          <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.contact')}</Text>
+          <View tw="flex flex-row items-center space-x-2">
+            <Text>{contactPhone}</Text>
+            <TouchableOpacity onPress={() => copyToClipboard(contactPhone)}>
+              <Icon source="content-copy" size={20} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -167,23 +199,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
               tw="w-32 h-32"
               source={{ uri: `${API_BASE_URL}media/${produce.cropImage}` }}
             />
-            {user?.role !== ERoles.COOLING_USER ? (
-              <View tw="space-y-3">
-                <View>
-                  <Text tw="text-gray-400">{t('Dashboard.Marketplace.owner')}</Text>
-                  <Text>{produce.owner}</Text>
-                </View>
-                <View>
-                  <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.contact')}</Text>
-                  <View tw="flex flex-row items-center space-x-2">
-                    <Text>{produce.ownerContact}</Text>
-                    <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
-                      <Icon source="content-copy" size={20} />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            ) : null}
+            {renderContactDetails()}
           </View>
 
           {produce.runDt && produce.qualityDt !== -1 ? (

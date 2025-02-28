@@ -11,12 +11,13 @@ import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
-import { type DashboardProduce, EPricingType, type Farmer } from '#types/global';
+import { type DashboardProduce, EPricingType, ERoles, type Farmer } from '#types/global';
 
 import RBAC from '#common/RBAC';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+import { useAuthStore } from '#stores/auth.ts';
 
 type ProduceProps = {
   currency: string;
@@ -27,10 +28,11 @@ type ProduceProps = {
   onLayout?: (event: any) => void;
 };
 
-export function Produce({ currency, produce, onNavigate, onLayout, farmer }: ProduceProps) {
+export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProps) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const colors = useTailwindColors();
+  const { user } = useAuthStore();
 
   const generateDaysString = useCallback((days: number) => {
     return `${days} ${days > 1 ? t('Dashboard.CrateManagement.CheckOut.days') : t('Dashboard.CrateManagement.CheckOut.day')}`;
@@ -61,6 +63,15 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
       ),
     [produce]
   );
+
+  const contactName =
+    user?.role === ERoles.COOLING_USER && produce.operatorName
+      ? produce.operatorName
+      : produce.owner;
+  const contactPhone =
+    user?.role === ERoles.COOLING_USER && produce.operatorContact
+      ? produce.operatorContact
+      : produce.ownerContact;
 
   return (
     <View tw="flex flex-row w-[90%] mr-2 self-center mt-3" onLayout={onLayout}>
@@ -163,16 +174,16 @@ export function Produce({ currency, produce, onNavigate, onLayout, farmer }: Pro
           <View tw="flex flex-row items-center space-x-1">
             <Icon source="account-outline" size={20} color={colors.gray[400]} />
             <Text variant="TextMedium" tw="text-gray-400">
-              {produce.owner} {!!farmer?.parentName && `(#${farmer.parentName})`}
+              {contactName}
             </Text>
           </View>
 
           <View tw="flex flex-row items-center space-x-1">
             <Icon source="cellphone" size={20} color={colors.gray[400]} />
             <Text variant="TextMedium" tw="text-gray-400">
-              {produce.ownerContact}
+              {contactPhone}
             </Text>
-            <TouchableOpacity onPress={() => copyToClipboard(produce.ownerContact)}>
+            <TouchableOpacity onPress={() => copyToClipboard(contactPhone)}>
               <Icon source="content-copy" size={15} color={colors.green.primary} />
             </TouchableOpacity>
           </View>

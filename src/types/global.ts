@@ -101,6 +101,8 @@ export type DashboardProduce = {
   plannedDays: number;
   qualityDt: number;
   runDt: boolean;
+  operatorContact: string;
+  operatorName: string;
 };
 
 export type CoolingUnitCrop = {
