@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Platform, View, useWindowDimensions } from 'react-native';
-import { Portal } from 'react-native-paper';
-import { Modalize } from 'react-native-modalize';
 import { FlashList } from '@shopify/flash-list';
 import ms from 'ms';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
 import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
@@ -72,8 +71,8 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     undefined
   );
   const [orderDatum, setOrderDatum] = useState<OrderRequiresMovementDatum | undefined>(undefined);
+  const [modalRef] = BottomSheet.useBottomSheet();
 
-  const modalRef = useRef<Modalize>(null);
   const modalTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const windowDimensions = useWindowDimensions();
@@ -189,28 +188,19 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       ) : null}
 
       {typeof orderDatum !== 'undefined' ? (
-        <Portal>
-          <Modalize
-            ref={modalRef}
-            modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-            adjustToContentHeight
-            withHandle={false}
-            onClose={() => {
-              modalTimeout.current = setTimeout(() => setOrderDatum(undefined), ms('3 seconds'));
-            }}
-          >
-            <View tw="w-full items-center justify-center h-10">
-              <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-            </View>
-
-            <View tw="px-4 pb-4">
-              <MovementDiagram
-                movement={orderDatum!.movement}
-                coolingUnit={orderDatum!.coolingUnit}
-              />
-            </View>
-          </Modalize>
-        </Portal>
+        <BottomSheet.Root
+          ref={modalRef}
+          onClose={() => {
+            modalTimeout.current = setTimeout(() => setOrderDatum(undefined), ms('3 seconds'));
+          }}
+        >
+          <BottomSheet.Content>
+            <MovementDiagram
+              movement={orderDatum!.movement}
+              coolingUnit={orderDatum!.coolingUnit}
+            />
+          </BottomSheet.Content>
+        </BottomSheet.Root>
       ) : null}
     </View>
   );
