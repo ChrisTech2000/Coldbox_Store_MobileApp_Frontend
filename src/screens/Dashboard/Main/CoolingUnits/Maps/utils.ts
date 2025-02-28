@@ -1,17 +1,18 @@
-import { useMemo } from 'react';
-import useSupercluster from 'use-supercluster';
 import type { MapState } from '@rnmapbox/maps';
-import type { PointFeature } from 'supercluster';
 import type { BBox, GeoJsonProperties } from 'geojson';
 import moize from 'moize';
 import ms from 'ms';
+import { useMemo } from 'react';
+import type { PointFeature } from 'supercluster';
+import useSupercluster from 'use-supercluster';
 
+import type { Translator } from '#i18n/utils';
+import { parsePoint } from '#screens/Dashboard/Management/utils';
 import type {
   GetAllCropsResponse,
   GetCoolingUnitResponse,
   GetLocationResponse,
 } from '#types/api.responses';
-import type { Translator } from '#i18n/utils';
 
 export type MarkerCoolingUnitsInfo = {
   name: string;
@@ -46,15 +47,17 @@ export function processLocationMarkers(args: {
   const markersMap = new Map<number, MarkerDatum>();
 
   for (const location of locations) {
-    if (location.latitude === null || location.longitude === null) continue;
+    const point = parsePoint(location.point);
+
+    if (point.latitude === null || point.longitude === null) continue;
     const title = `${location.company.name}: ${location.name}`;
 
     const unitsScopedToLocation = coolingUnits.filter((unit) => unit.location === location.id);
 
     markersMap.set(location.id, {
       title,
-      latitude: location.latitude,
-      longitude: location.longitude,
+      latitude: point.latitude,
+      longitude: point.longitude,
       hasBeenUsedByFarmer: farmerLocationsIds.has(location.id),
       coolingUnitsInfo: [],
     });

@@ -3,18 +3,19 @@ import { Dimensions, FlatList, View } from 'react-native';
 import { ActivityIndicator, Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialIcons';
 
+import * as BottomSheet from '#ui/components/BottomSheet';
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
-import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
-import * as BottomSheet from '#ui/components/BottomSheet';
+import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
+import { parsePoint } from '#screens/Dashboard/Management/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
@@ -252,6 +253,12 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
     }
   );
 
+  const location = useMemo(() => {
+    if (!data.point) return '';
+    const point = parsePoint(data.point);
+    return `${data.street ? data.street + ' ' : ''}${data.streetNumber ? data.streetNumber + ', ' : ''} ${data.city}${point.latitude ? ` (${point.latitude}, ${point.longitude})` : ''}`;
+  }, [data]);
+
   return (
     <Portal>
       <Dialog visible={isVisible} onDismiss={close} style={{ backgroundColor: 'white' }}>
@@ -267,7 +274,7 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
             <Text tw="text-base text-center mt-4">
               {t(`Dashboard.ShoppingCart.pickupModal.${version}`, {
                 company: cu?.name,
-                location: `${data.street ? data.street + ' ' : ''}${data.streetNumber ? data.streetNumber + ', ' : ''} ${data.city}${data.latitude ? ` (${data.latitude}, ${data.longitude})` : ''}`,
+                location,
               })}
             </Text>
           )}
