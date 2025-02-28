@@ -8,7 +8,7 @@ import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
-import { savePDF } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -91,7 +91,8 @@ export function FarmerAnalytics() {
               break;
           }
         }
-        if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
+        if (typeof toastId === 'undefined')
+          toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
         reportCrash(exception as Error);
       }
     }, []),
@@ -115,10 +116,10 @@ export function FarmerAnalytics() {
     try {
       setIsCreatingPdf(true);
       if (!data) throw new Error(); // safe guard
-      await savePDF(getPdfContent(data, t), 'farmer');
+      await FileUtility.createPdfFromHtml(getPdfContent(data, t), 'farmer');
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error, {
         extras: {
           errorContext: 'PDF Generation',

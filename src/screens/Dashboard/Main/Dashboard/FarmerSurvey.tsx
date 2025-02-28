@@ -15,7 +15,7 @@ import { useManagementStore } from '#stores/management';
 import { GetFarmerSurveysResponse } from '#types/api.responses';
 
 import { FarmersSurveyModal, FarmerSurveySchemaType } from '../components/FarmerSurveyModal';
-import { defaultValues } from '../components/FarmerSurveyModal/schema';
+import { defaultValues, formatFloat } from '../components/FarmerSurveyModal/schema';
 
 type FarmerSurveyProps = {
   cropId: number | undefined;
@@ -44,14 +44,16 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys, disabled }: 
         commodities: [
           ...(surveys?.flatMap((survey) => survey.co) ?? []),
           {
-            averagePrice: values.averagePrice,
+            averagePrice: Number(formatFloat(values.averagePrice)),
             unit: values.unitOfMeasurement,
-            quantityTotal: values.weightDistribution.totalProducedWeekly,
-            quantityBelowMarketPrice: values.weightDistribution.quantityLost,
-            quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
-            quantitySold: values.weightDistribution.quantitySold,
+            quantityTotal: Number(formatFloat(values.weightDistribution.totalProducedWeekly)),
+            quantityBelowMarketPrice: Number(formatFloat(values.weightDistribution.quantityLost)),
+            quantitySelfConsumed: Number(
+              formatFloat(values.weightDistribution.quantitySelfConsumed)
+            ),
+            quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
             averageSeasonInMonths: null,
-            kgInUnit: values.unitaryWeight ?? (defaultValues.unitaryWeight as unknown as number),
+            kgInUnit: Number(formatFloat(values.unitaryWeight ?? defaultValues.unitaryWeight)),
             currency: company?.currency ?? '',
             reasonForLoss: values.reasonsForSpoilage,
             cropId: cropId ?? -1,

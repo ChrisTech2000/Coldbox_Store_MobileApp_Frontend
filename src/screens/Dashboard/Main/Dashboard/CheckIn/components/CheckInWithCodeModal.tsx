@@ -4,18 +4,20 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { Portal } from 'react-native-paper';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
+import { CustomError } from '#services/utils/ErrorUtil';
 import { useCheckInStore } from '#stores/checkIn';
 import { CheckOut } from '#types/api.responses';
+import type { Crop } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
-import { RNModal } from '#ui/primitives/RNModal';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
-import InAppNotifications from '#common/InAppNotifications';
-import type { Crop } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
+import { RNModal } from '#ui/primitives/RNModal';
 
 type CheckInWithCodeModalProps = {
   isModalOpen: boolean;
@@ -101,7 +103,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
                 weight: crate.initialWeight,
                 tag: '',
                 coolingUnitId: coolingUnit.id,
-                plannedDays: plannedDays ? Number(plannedDays) : (crate.plannedDays ?? undefined),
+                plannedDays: plannedDays ? Number(plannedDays) : undefined,
               })),
               price: undefined,
               initialGrade: null,
@@ -113,9 +115,15 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
           setCheckOutCode(values.code);
         }
       } catch (error) {
-        toast.show(t('Dashboard.CrateManagement.CheckIn.WithCode.failedMessage'), {
-          type: 'md_danger',
-        });
+        if (error instanceof CustomError && error.originalError.response?.status >= 500) {
+          toast.show(t('navigation.error.serverErrorMessage'), {
+            type: 'md_danger',
+          });
+        } else {
+          toast.show(t('Dashboard.CrateManagement.CheckIn.WithCode.failedMessage'), {
+            type: 'md_danger',
+          });
+        }
         reportCrash(error as Error);
       }
     },

@@ -92,7 +92,7 @@ export default function TemperatureAlert() {
 
       await dismissHandler();
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error);
     }
   }
@@ -118,7 +118,7 @@ export default function TemperatureAlert() {
             .sort((a, b) => b.percentage - a.percentage),
         });
       } catch (exception) {
-        toast.show(t('actions.error'), { type: 'md_danger' });
+        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
         reportCrash(exception as Error);
       }
     }

@@ -147,7 +147,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
         emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MARKETPLACE_LISTING);
         refreshDataFunctions.forEach((fn) => fn());
       } catch (error) {
-        toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
         reportCrash(error as Error);
       } finally {
         setIsSubmitting(false);

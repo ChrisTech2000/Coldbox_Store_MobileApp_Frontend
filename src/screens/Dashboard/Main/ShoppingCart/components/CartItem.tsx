@@ -21,6 +21,7 @@ import { API_BASE_URL } from '#constants/environment';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
+import { parsePoint } from '#screens/Dashboard/Management/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
@@ -31,8 +32,8 @@ import reportCrash from '#ui/lib/reportCrash';
 
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
-import CartItemInput from './CartItemInput';
 import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
+import CartItemInput from './CartItemInput';
 
 type CartItemProps = {
   item: CartItemType;
@@ -93,6 +94,8 @@ export function CartItem({ item }: CartItemProps) {
       locationId: unit.location,
     });
 
+    const point = parsePoint(result.point);
+
     const datum = {
       name: result.company.name,
       locationName: result.name,
@@ -107,8 +110,8 @@ export function CartItem({ item }: CartItemProps) {
       ]
         .filter(Boolean)
         .join(', '),
-      latitude: result.latitude,
-      longitude: result.longitude,
+      latitude: point.latitude,
+      longitude: point.longitude,
     } satisfies CompanyBottomSheetDatum;
 
     emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, datum);
@@ -268,7 +271,7 @@ export function CartItem({ item }: CartItemProps) {
                 const result = await MarketplaceService.removeItemFromCart(item.relCrateId);
                 setCart(result.cart);
               } catch (exception) {
-                toast.show(t('actions.error', { type: 'md_danger' }));
+                toast.show(t('navigation.error.serverErrorMessage', { type: 'md_danger' }));
                 reportCrash(exception as Error);
               } finally {
                 setIsProcessing(false);

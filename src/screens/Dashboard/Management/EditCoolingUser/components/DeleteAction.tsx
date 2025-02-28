@@ -60,7 +60,7 @@ export default function DeleteAction(props: Props) {
 
       displayPopup(t('Dashboard.Management.EditCoolingUsers.toasts.confirmation'), true); // confirmation popup
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error);
     } finally {
       toggleProcessing();
@@ -78,7 +78,7 @@ export default function DeleteAction(props: Props) {
       toggleProcessing();
       goBack();
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error);
       toggleProcessing();
     }

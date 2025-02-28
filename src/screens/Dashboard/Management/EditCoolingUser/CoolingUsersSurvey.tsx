@@ -20,6 +20,7 @@ import reportCrash from '#ui/lib/reportCrash';
 
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 import type { FarmerSurveySchemaType } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
+import { formatFloat } from '#screens/Dashboard/Main/components/FarmerSurveyModal/schema';
 
 import AddCommodity from './components/AddCommodity';
 import CommoditiesField from './components/SurveyFormFields/CommoditiesField';
@@ -84,14 +85,18 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
                 (commoditySurvey) => commoditySurvey.cropId !== contextualCropId
               ),
               {
-                averagePrice: values.averagePrice,
+                averagePrice: Number(formatFloat(values.averagePrice)),
                 unit: values.unitOfMeasurement,
-                quantityTotal: values.weightDistribution.totalProducedWeekly,
-                quantityBelowMarketPrice: values.weightDistribution.quantityLost,
-                quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
-                quantitySold: values.weightDistribution.quantitySold,
+                quantityTotal: Number(formatFloat(values.weightDistribution.totalProducedWeekly)),
+                quantityBelowMarketPrice: Number(
+                  formatFloat(values.weightDistribution.quantityLost)
+                ),
+                quantitySelfConsumed: Number(
+                  formatFloat(values.weightDistribution.quantitySelfConsumed)
+                ),
+                quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
                 averageSeasonInMonths: null,
-                kgInUnit: values.unitaryWeight as number, // :shrug:
+                kgInUnit: Number(formatFloat(values.unitaryWeight as string)), // :shrug:
                 currency: companyCurrency,
                 reasonForLoss: values.reasonsForSpoilage,
                 cropId: contextualCropId,

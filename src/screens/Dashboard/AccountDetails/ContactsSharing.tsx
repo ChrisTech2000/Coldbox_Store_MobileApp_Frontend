@@ -110,7 +110,7 @@ function _Field(props: {
         await props.onChange(value);
       } catch (exception) {
         reportCrash(exception as Error);
-        toast.show(t('actions.error'), { type: 'md_danger' });
+        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
         toggleValue();
       } finally {
         toggleIsProcessing();

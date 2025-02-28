@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: 'Kash...kamar wani abu yayi kuskure.',
       tryAgainMessage: 'Da fatan za a sake gwadawa daga baya.',
+      serverErrorMessage:
+        'Oops! Da alama wani kuskure ya faru a bangarenmu. Don Allah a sake gwadawa daga baya ko a tuntuɓi tallafi.',
     },
     auth: {
       SignIn: 'Shiga',
@@ -361,6 +363,12 @@ export default {
           column3: 'Farashin a {{currency}}/KG',
           emptyState: 'Babu darajar samuwa',
         },
+        'location-placeholder': 'Jiha / Gundumar / Kasuwa',
+        'market-district-state': 'Kasuwar / Gundumar / Jiha',
+        'district-label': 'Zaɓi gunduma',
+        'district-placeholder': 'Gundumar',
+        'market-label': 'Zaɓi kasuwa',
+        'market-placeholder': 'Kasuwa',
       },
     },
     CrateManagement: {

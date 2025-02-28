@@ -17,6 +17,7 @@ export type FormValues = {
 };
 
 export type PreprocessedFormValues = {
+  point: string;
   latitude: number;
   longitude: number;
 } & Omit<FormValues, 'latitude' | 'longitude'>;
@@ -57,8 +58,14 @@ export default function FormManager(props: FormManagerProps) {
       });
 
       const coordsSchema = z.object({
-        latitude: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().min(-90).max(90)),
-        longitude: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().min(-180).max(180)),
+        latitude: z.preprocess(
+          (v) => (!v ? 0 : Number(String(v).replace(',', '.'))),
+          z.coerce.number().min(-90).max(90)
+        ),
+        longitude: z.preprocess(
+          (v) => (!v ? 0 : Number(String(v).replace(',', '.'))),
+          z.coerce.number().min(-180).max(180)
+        ),
       });
 
       const coordinatesSchema = coordsSchema.extend({ _step: z.literal('coordinates') });
@@ -72,8 +79,11 @@ export default function FormManager(props: FormManagerProps) {
         zipCode: z.string().optional(),
         street: z.string().optional(),
         streetNumber: z.preprocess(
-          (val) => (val === '' ? undefined : val),
-          z.string().regex(/^\d+$/).optional() // must contain only numers
+          (val) => (val === '' ? undefined : String(val).replace(',', '.')),
+          z
+            .string()
+            .regex(/^\d+(\.\d+)?$/)
+            .optional()
         ),
       });
 

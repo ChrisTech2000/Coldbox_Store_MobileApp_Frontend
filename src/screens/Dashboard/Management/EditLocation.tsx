@@ -4,20 +4,23 @@ import { Dimensions, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
+import { Point } from 'wkx';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
+import reportCrash from '#ui/lib/reportCrash';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { LocationGeocoder } from '#services/LocationGeocoder';
 
+import { parsePoint } from './utils';
 import FormManager, {
   DEFAULT_VALUES,
   type FormValues,
@@ -26,7 +29,7 @@ import FormManager, {
 import LocationNameModule from './AddLocation/modules/LocationNameModule';
 import StepFactory from './AddLocation/modules/StepFactory';
 import StepModule from './AddLocation/modules/StepModule';
-import { Geocoder, getCountryFullName } from './AddLocation/utils';
+import { getCountryFullName } from './AddLocation/utils';
 
 const width = (Dimensions.get('window').width - 42) / 2;
 
@@ -66,23 +69,35 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     const { _step, ...rest } = values;
 
     try {
-      const geocoder = new Geocoder();
       let datums: Partial<PreprocessedFormValues> = {};
 
       switch (_step) {
         case 'geolocation':
         case 'coordinates': {
-          const address = await geocoder.getAddressFromCoords({
+          const address = await LocationGeocoder.getAddressFromCoords({
             latitude: rest.latitude,
             longitude: rest.longitude,
           });
           datums = merge(rest, address);
+          datums.point = new Point(
+            rest.longitude,
+            rest.latitude,
+            undefined,
+            undefined,
+            4326
+          ).toEwkt();
           break;
         }
         case 'address': {
           try {
-            const coordinates = await geocoder.getCoordsFromAddress(rest);
-            datums = merge(rest, coordinates);
+            const coordinates = await LocationGeocoder.getCoordsFromAddress(rest);
+            datums.point = new Point(
+              coordinates.longitude,
+              coordinates.latitude,
+              undefined,
+              undefined,
+              4326
+            ).toEwkt();
           } catch (exception) {
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
               type: 'md_danger',
@@ -141,9 +156,10 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     values.name = data.name;
     values.country = getCountryFullName(data.company?.country) ?? ''; // TODO: we don't get the country we submitted, just the company country
 
+    const point = parsePoint(data.point);
     values._step = 'coordinates';
-    values.latitude = data.latitude?.toString();
-    values.longitude = data.longitude?.toString();
+    values.latitude = point.latitude?.toString();
+    values.longitude = point.longitude?.toString();
     values.city = data.city ?? '';
     values.state = data.state ?? '';
     values.zipCode = data.zipCode ?? '';

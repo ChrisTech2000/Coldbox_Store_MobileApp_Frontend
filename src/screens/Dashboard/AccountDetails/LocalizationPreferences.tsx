@@ -104,7 +104,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
                   })
                   .catch((exception) => {
                     reportCrash(exception as Error);
-                    toast.show(t('actions.error'), {
+                    toast.show(t('navigation.error.serverErrorMessage'), {
                       type: 'md_danger',
                       style: { marginBottom: 55 },
                     });

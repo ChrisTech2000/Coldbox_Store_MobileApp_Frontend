@@ -1,7 +1,6 @@
 import moize from 'moize';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
 import { Dialog, Divider, Icon, Portal } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
@@ -11,6 +10,7 @@ import CheckOut from '#assets/icons/check-out.svg';
 
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
@@ -38,19 +38,36 @@ type Movement = GetMovementsHistoryResponse[number];
 
 type MovementProps = {
   movement: Movement;
+  movements: Movement[];
   coolingUnit: CoolingUnit | null;
   selectedCompany: Company | ManagementCompany | null;
   navigateToCheckIn?: (movement: Movement, coolingUnitId?: number) => void;
-  navigateToMarketSurvey?: (
-    farmer: string,
-    crops: Array<{ id: number; name: string }>,
-    checkoutId?: number,
-    companyCurrency?: string
-  ) => void;
+  navigateToMarketSurvey?: () => void;
 };
+
+function canEditCheckIn(movement: Movement, allMovements: Movement[]): boolean {
+  if (!movement?.checkin || !allMovements.length || !isWithinLast24Hours(movement.date))
+    return false;
+
+  const checkInDate = new Date(movement.date);
+  const checkInCrateIds = movement.checkin.crates.map((crate) => crate.id);
+
+  return !allMovements.some((movement) => {
+    if (movement.initiatedFor !== EInitiatedFor.CHECK_OUT || !movement.checkout) return false;
+
+    const checkoutDate = new Date(movement.date);
+    const checkoutCrateIds = movement.checkout.crates.map((crate) => crate.id);
+
+    return (
+      checkoutDate > checkInDate &&
+      checkoutCrateIds.some((crateId) => checkInCrateIds.includes(crateId))
+    );
+  });
+}
 
 export function Movement({
   movement,
+  movements,
   coolingUnit,
   selectedCompany,
   navigateToCheckIn,
@@ -61,13 +78,13 @@ export function Movement({
   const user = useAuthStore((store) => store.user);
   const toast = InAppNotifications.useToast();
 
-  const modalRef = useRef<Modalize>(null);
-
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
   const [isMarketplaceDetailsModalOpen, setIsMarketplaceDetailsModalOpen] =
     useState<boolean>(false);
+
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
   const crops = useMemo(() => {
     const _crops = sortMovementCrops(movement);
@@ -94,7 +111,7 @@ export function Movement({
 
     if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
       const _price = price * movement.checkin?.crates.length;
-      return `${isNaN(_price) ? 0 : price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+      return `${isNaN(_price) ? 0 : _price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
     }
 
     const _price =
@@ -123,19 +140,9 @@ export function Movement({
   }, [navigateToCheckIn, movement, coolingUnit]);
 
   const fillMarketSurvey = useCallback(() => {
-    navigateToMarketSurvey?.(
-      movement.checkout?.crates[0].ownerName ?? '',
-      movement.checkout?.crates
-        ?.flatMap((crate) => crate.crop)
-        .filter((crop) => crop && !movement.checkout?.hasMarketSurvey?.includes(crop.id)) as Array<{
-        id: number;
-        name: string;
-      }>,
-      movement.checkout?.id as number,
-      selectedCompany?.currency ?? company?.currency
-    );
+    navigateToMarketSurvey?.();
     setIsOptionsModalOpen(false);
-  }, [selectedCompany, company, navigateToMarketSurvey, movement]);
+  }, [navigateToMarketSurvey]);
 
   const optionsMenu = useMemo(() => {
     return [
@@ -164,7 +171,7 @@ export function Movement({
       {
         label: t('Dashboard.History.optionsMenu.common.seeMovement'),
         action: () => {
-          modalRef.current?.open();
+          modalActions.open();
           setIsOptionsModalOpen(false);
         },
       },
@@ -173,7 +180,7 @@ export function Movement({
             {
               label: t('Dashboard.History.optionsMenu.checkIn.edit'),
               action: editCheckIn,
-              disabled: !isWithinLast24Hours(movement.date),
+              disabled: !canEditCheckIn(movement, movements),
             },
           ]
         : []),
@@ -205,12 +212,10 @@ export function Movement({
     isCheckOut,
     isMarketplaceOrder,
     movement,
+    movements,
     user,
-    company,
-    selectedCompany,
-    price,
     t,
-    modalRef,
+    modalActions,
     seePDFModal,
     seeDetailsModal,
     fillMarketSurvey,
@@ -328,23 +333,11 @@ export function Movement({
           />
         ) : null}
 
-        <Modalize
-          ref={modalRef}
-          modalStyle={{
-            borderTopLeftRadius: 32,
-            borderTopRightRadius: 32,
-          }}
-          adjustToContentHeight
-          withHandle={false}
-        >
-          <View tw="w-full items-center justify-center h-10">
-            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-          </View>
-
-          <View tw="px-4 pb-4">
+        <BottomSheet.Root ref={modalRef}>
+          <BottomSheet.Content>
             <MovementDiagram movement={movement} coolingUnit={coolingUnit as CoolingUnit} />
-          </View>
-        </Modalize>
+          </BottomSheet.Content>
+        </BottomSheet.Root>
       </Portal>
     </View>
   );

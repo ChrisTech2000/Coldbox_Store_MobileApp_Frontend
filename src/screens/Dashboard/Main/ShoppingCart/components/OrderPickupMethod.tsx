@@ -1,20 +1,21 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialIcons';
 
+import * as BottomSheet from '#ui/components/BottomSheet';
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
-import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
+import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
+import { parsePoint } from '#screens/Dashboard/Management/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
@@ -47,7 +48,6 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
     store.allCoolingUnits,
     store.setCart,
   ]);
-  const modalRef = useRef<Modalize>(null);
   const toast = InAppNotifications.useToast();
 
   const [selectedItems, setSelectedItems] = useState<
@@ -57,6 +57,8 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
   const [activePickupModal, setActivePickupModal] = useState<
     [CoolingUnit, PickUpMethod] | undefined
   >();
+
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
   const coolingUnits = useMemo(() => {
     return allCoolingUnits?.filter((cu) => data?.map((el) => el.unit).includes(cu?.id));
@@ -83,7 +85,7 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
   }, []);
 
   const onConfirm = useCallback(async () => {
-    if (!selectedItems) return modalRef.current?.close();
+    if (!selectedItems) return modalActions.close();
 
     try {
       setIsSubmitting(true);
@@ -93,22 +95,20 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
 
       if (result) {
         setCart(result.cart);
-        modalRef.current?.close();
+        modalActions.close();
         toast.show(t('actions.done'), { type: 'md_success' });
       }
     } catch (error) {
-      toast.show(t('navigation.error.errorMessage'), {
+      toast.show(t('navigation.error.serverErrorMessage'), {
         type: 'md_danger',
       });
       reportCrash(error as Error);
     } finally {
       setIsSubmitting(false);
     }
-  }, [selectedItems]);
+  }, [selectedItems, modalActions]);
 
-  useAppEventListener(APP_EVENTS.DISPATCH_PICK_UP_METHODS_SELECTION, () =>
-    modalRef.current?.open()
-  );
+  useAppEventListener(APP_EVENTS.DISPATCH_PICK_UP_METHODS_SELECTION, modalActions.open);
 
   return (
     <React.Fragment>
@@ -130,7 +130,7 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
             uppercase
             onPress={(evt) => {
               evt.stopPropagation();
-              modalRef.current?.open();
+              modalActions.open();
             }}
           >
             {t('Dashboard.ShoppingCart.selectPickupMethod')}
@@ -138,103 +138,92 @@ export default function OrderPickupMethod({ data }: OrderPickupMethodProps) {
         </View>
       ) : null}
 
-      <Portal>
-        <Modalize
-          ref={modalRef}
-          modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32, overflow: 'hidden' }}
-          {...(coolingUnits && coolingUnits?.length < 2
-            ? { adjustToContentHeight: true }
-            : { modalHeight: MODAL_MAX_HEIGHT })}
-          withHandle={false}
-          avoidKeyboardLikeIOS
-        >
-          <View tw="w-full items-center justify-center h-10">
-            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-          </View>
-
-          <View tw="flex-1">
-            <FlatList
-              data={coolingUnits}
-              keyExtractor={(item, index) => `${item}-${index}`}
-              scrollEnabled={true}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item: coolingUnit }) => (
-                <View tw="px-4 py-2 mb-4">
-                  <Text tw="text-base mb-2">{coolingUnit.name}</Text>
-                  <View tw="flex-col border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
-                    <RadioButton.Group
-                      value={
-                        selectedItems?.find((item) => item.coolingUnitId === coolingUnit.id)
-                          ?.pickupMethod ?? ''
-                      }
-                      onValueChange={(value) => {
-                        handleValueChange(coolingUnit.id, value as EPickUpMethod);
-                        setActivePickupModal([
-                          coolingUnit,
-                          value === EPickUpMethod.PICK_UP_SAME_DAY
-                            ? 'today'
-                            : value === EPickUpMethod.KEEP_IN_STORAGE
-                              ? 'storage'
-                              : 'delivery',
-                        ]);
-                      }}
-                    >
+      <BottomSheet.Root
+        avoidKeyboardLikeIOS
+        ref={modalRef}
+        modalStyle={{ overflow: 'hidden' }}
+        {...(coolingUnits && coolingUnits?.length >= 2
+          ? { adjustToContentHeight: false, modalHeight: MODAL_MAX_HEIGHT }
+          : {})}
+      >
+        <BottomSheet.Content>
+          <FlatList
+            data={coolingUnits}
+            keyExtractor={(item, index) => `${item}-${index}`}
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View tw="my-2" />}
+            renderItem={({ item: coolingUnit }) => (
+              <View tw="px-4 py-2">
+                <Text tw="text-base mb-2">{coolingUnit.name}</Text>
+                <View tw="flex-col border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
+                  <RadioButton.Group
+                    value={
+                      selectedItems?.find((item) => item.coolingUnitId === coolingUnit.id)
+                        ?.pickupMethod ?? ''
+                    }
+                    onValueChange={(value) => {
+                      handleValueChange(coolingUnit.id, value as EPickUpMethod);
+                      setActivePickupModal([
+                        coolingUnit,
+                        value === EPickUpMethod.PICK_UP_SAME_DAY
+                          ? 'today'
+                          : value === EPickUpMethod.KEEP_IN_STORAGE
+                            ? 'storage'
+                            : 'delivery',
+                      ]);
+                    }}
+                  >
+                    <RadioButtonItem
+                      label={t('Dashboard.ShoppingCart.pickUpToday')}
+                      value={EPickUpMethod.PICK_UP_SAME_DAY}
+                      tw="flex flex-row-reverse ml-[-10] w-full"
+                    />
+                    <Divider tw="bg-zinc-400" />
+                    <RadioButtonItem
+                      label={t(
+                        coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY
+                          ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
+                          : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
+                        {
+                          price: formatCurrencyWithSymbol(
+                            DEFAULT_CURRENCY_CODE,
+                            coolingUnit.commonPricingType?.value
+                          ),
+                        }
+                      )}
+                      value={EPickUpMethod.KEEP_IN_STORAGE}
+                      tw="flex flex-row-reverse ml-[-10] w-full"
+                    />
+                    <Divider tw="bg-zinc-400" />
+                    <View tw="flex-row items-center justify-between">
                       <RadioButtonItem
-                        label={t('Dashboard.ShoppingCart.pickUpToday')}
-                        value={EPickUpMethod.PICK_UP_SAME_DAY}
+                        label={t('Dashboard.ShoppingCart.delivery')}
+                        value={EPickUpMethod.DELIVERY}
                         tw="flex flex-row-reverse ml-[-10] w-full"
                       />
-                      <Divider tw="bg-zinc-400" />
-                      <RadioButtonItem
-                        label={t(
-                          coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY
-                            ? 'Dashboard.ShoppingCart.keepInStorageDailyRate'
-                            : 'Dashboard.ShoppingCart.keepInStorageFixedRate',
-                          {
-                            price: formatCurrencyWithSymbol(
-                              DEFAULT_CURRENCY_CODE,
-                              coolingUnit.commonPricingType?.value
-                            ),
-                          }
-                        )}
-                        value={EPickUpMethod.KEEP_IN_STORAGE}
-                        tw="flex flex-row-reverse ml-[-10] w-full"
-                      />
-                      <Divider tw="bg-zinc-400" />
-                      <View tw="flex-row items-center justify-between">
-                        <RadioButtonItem
-                          label={t('Dashboard.ShoppingCart.delivery')}
-                          value={EPickUpMethod.DELIVERY}
-                          tw="flex flex-row-reverse ml-[-10] w-full"
-                        />
-                      </View>
-                    </RadioButton.Group>
-                  </View>
+                    </View>
+                  </RadioButton.Group>
                 </View>
-              )}
-            />
-
-            <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300 mb-4">
-              <Button
-                mode="contained"
-                tw="w-5/6"
-                onPress={onConfirm}
-                disabled={
-                  !selectedItems ||
-                  (coolingUnits && selectedItems.length < coolingUnits.length) ||
-                  isSubmitting
-                }
-              >
-                {isSubmitting ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  t('actions.confirm')
-                )}
-              </Button>
-            </View>
-          </View>
-        </Modalize>
-      </Portal>
+              </View>
+            )}
+          />
+        </BottomSheet.Content>
+        <BottomSheet.Footer>
+          <Button
+            mode="contained"
+            tw="w-5/6"
+            onPress={onConfirm}
+            disabled={
+              !selectedItems ||
+              (coolingUnits && selectedItems.length < coolingUnits.length) ||
+              isSubmitting
+            }
+          >
+            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.confirm')}
+          </Button>
+        </BottomSheet.Footer>
+      </BottomSheet.Root>
 
       <PickupModalModal
         isVisible={!!activePickupModal}
@@ -264,6 +253,12 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
     }
   );
 
+  const location = useMemo(() => {
+    if (!data.point) return '';
+    const point = parsePoint(data.point);
+    return `${data.street ? data.street + ' ' : ''}${data.streetNumber ? data.streetNumber + ', ' : ''} ${data.city}${point.latitude ? ` (${point.latitude}, ${point.longitude})` : ''}`;
+  }, [data]);
+
   return (
     <Portal>
       <Dialog visible={isVisible} onDismiss={close} style={{ backgroundColor: 'white' }}>
@@ -279,7 +274,7 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
             <Text tw="text-base text-center mt-4">
               {t(`Dashboard.ShoppingCart.pickupModal.${version}`, {
                 company: cu?.name,
-                location: `${data.street ? data.street + ' ' : ''}${data.streetNumber ? data.streetNumber + ', ' : ''} ${data.city}${data.latitude ? ` (${data.latitude}, ${data.longitude})` : ''}`,
+                location,
               })}
             </Text>
           )}

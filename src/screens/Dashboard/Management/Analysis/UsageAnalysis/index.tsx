@@ -1,6 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, RefreshControl, ScrollView, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 
 import { Movement } from '#screens/Dashboard/Main/History/components/Movement';
@@ -15,6 +15,7 @@ import {
   createDataRangeStore,
   DateRangePickerWithStore,
 } from '#ui/components/DateRangePickerWithStore';
+import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { Input } from '#ui/components/Input';
 import MultipleSelectWithStore, {
   createMultipleSelectStore,
@@ -31,7 +32,6 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, ERoles } from '#types/global';
-import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 
 import { DownloadDataModal } from '../components/DownloadDataModal';
 import { sortMovements } from '../utils';
@@ -54,7 +54,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const { user } = useAuthStore();
   const { company } = useManagementStore();
   const { selectedItems: selectedUnits } = useCoolingUnitStore();
-  const { startDate, endDate, setEndDate, setStartDate } = useDateRangeStore();
+  const { startDate, endDate, reset } = useDateRangeStore();
   const { sorting } = useSortingStore();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
@@ -78,37 +78,37 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     }
   );
 
-  const { usageData, isLoading } = useAnalysis(user!, coolingUnits ?? []);
+  const { usageData, isLoading, isValidatingUsage, refetchUsage } = useAnalysis(
+    user!,
+    selectedUnits ?? []
+  );
 
   const sortedMovements = useMemo(() => {
     return (usageData ?? []).slice().sort((a, b) => sortMovements(a, b, sorting));
   }, [usageData, sorting]);
 
-  const filteredMovements = useMemo(() => {
-    if ((!startDate || !endDate) && !search) return sortedMovements;
-
-    const start = startDate ?? null;
-    const end = endDate ?? null;
-    const lowerCaseSearchString = search?.toLowerCase() ?? null;
-
+  const dateFilteredMovements = useMemo(() => {
+    if (!startDate || !endDate) return sortedMovements;
     return sortedMovements.filter((movement) => {
       const movementDate = new Date(movement.date);
+      return (!startDate || movementDate >= startDate) && (!endDate || movementDate <= endDate);
+    });
+  }, [sortedMovements, startDate, endDate]);
 
-      const isWithinDateRange = (!start || movementDate >= start) && (!end || movementDate <= end);
-
-      const matchesSearchTerm =
-        !lowerCaseSearchString ||
+  const filteredMovements = useMemo(() => {
+    if (!search) return dateFilteredMovements;
+    const lowerCaseSearchString = search.toLowerCase();
+    return dateFilteredMovements.filter(
+      (movement) =>
         movement.code.toLowerCase().includes(lowerCaseSearchString) ||
         movement.checkin?.crates.some((crate) =>
           crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
         ) ||
         sortMovementCrops(movement).some((crop) =>
           crop.toLowerCase().includes(lowerCaseSearchString)
-        );
-
-      return isWithinDateRange && matchesSearchTerm;
-    });
-  }, [sortedMovements, startDate, endDate, search]);
+        )
+    );
+  }, [dateFilteredMovements, search]);
 
   const { totalCheckIns, totalCrates, totalUsers, totalWeight } = useMemo(() => {
     const { totalCrates, totalWeight, users } = filteredMovements
@@ -137,12 +137,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     };
   }, [filteredMovements]);
 
-  useEffect(() => {
-    return () => {
-      setEndDate(null);
-      setStartDate(null);
-    };
-  }, []);
+  useEffect(() => reset, []);
 
   const language = LanguageManager.read();
 
@@ -202,6 +197,12 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
           </View>
         ) : (
           <FlashList
+            refreshControl={
+              <RefreshControl
+                refreshing={isValidatingUsage}
+                onRefresh={async () => await refetchUsage()}
+              />
+            }
             ListEmptyComponent={
               <GenericEmptyState message={t('Dashboard.Management.UsageAnalysis.empty')} />
             }
@@ -211,6 +212,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
               <Movement
                 key={`${movement.id}-${index}`}
                 movement={movement}
+                movements={[]}
                 coolingUnit={
                   coolingUnits?.find((unit) => unit.id === movement.coolingUnitId) as CoolingUnit
                 }

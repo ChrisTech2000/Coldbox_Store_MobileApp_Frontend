@@ -1,12 +1,9 @@
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import ms from 'ms';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import GetLocation from 'react-native-get-location';
-import { Modalize } from 'react-native-modalize';
-import { Button, Portal, TextInput } from 'react-native-paper';
+import { Button, TextInput } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import colors from 'tailwindcss/colors';
@@ -19,13 +16,15 @@ import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { Translator, useTranslationUtils } from '#i18n/utils';
-import { EGeolocationError, Geocoder } from '#screens/Dashboard/Management/AddLocation/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import { LocationGeocoder } from '#services/LocationGeocoder';
+import { CustomError, EGeolocationError } from '#services/utils/ErrorUtil';
 
 import { useMarketplaceQueryParams } from '../store';
 import { DEFAULT_COORDINATES } from '../utils';
@@ -55,7 +54,7 @@ export default function MarketplaceLocationFilter() {
   const toast = InAppNotifications.useToast();
   const farmerCountry = useDashboardStore((store) => store.farmerCountry);
 
-  const modalRef = useRef<Modalize>(null);
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
   const form = useForm<FormValues>({
     defaultValues: DEFAULT_FORM_VALUES,
@@ -75,13 +74,13 @@ export default function MarketplaceLocationFilter() {
   async function onSubmit(values: FormValues<number>): Promise<void> {
     const countryCode = _getContextualCountry(company?.country || farmerCountry || '');
     if (!countryCode) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       return;
     }
 
     function _onComplete() {
       previousValues.current = form.getValues();
-      modalRef.current?.close();
+      modalActions.close();
     }
 
     if (!values.cityName) {
@@ -93,7 +92,7 @@ export default function MarketplaceLocationFilter() {
     }
 
     try {
-      const result = await new Geocoder().getCoordsFromLocation({
+      const result = await LocationGeocoder.getCoordsFromLocation({
         cityName: values.cityName,
         countryCode: countryCode,
       });
@@ -103,8 +102,12 @@ export default function MarketplaceLocationFilter() {
       });
       return _onComplete();
     } catch (exception) {
-      const message = _getToastMessage((exception as Error)?.message ?? '', t);
-      toast.show(message, { type: 'md_warning' });
+      // eslint-disable-next-line
+      // @ts-ignore
+      if (exception instanceof CustomError<EGeolocationError>) {
+        const message = _getToastMessage(exception.type, t);
+        toast.show(message, { type: 'md_warning' });
+      }
 
       useMarketplaceQueryParams.getState().setParams({
         location: DEFAULT_COORDINATES,
@@ -125,22 +128,18 @@ export default function MarketplaceLocationFilter() {
       }
 
       try {
-        const result = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: ms('6 seconds'),
-        });
+        const result = await LocationGeocoder.getCurrentLocation();
 
         const nextValue: [number, number] = [result.latitude, result.longitude];
         if (JSON.stringify(nextValue) === JSON.stringify(currentLocation)) return;
 
         _setLocation(nextValue);
-        const geocoder = new Geocoder();
 
-        const location = await geocoder.getAddressFromCoords({
+        const location = await LocationGeocoder.getAddressFromCoords({
           latitude: nextValue[0],
           longitude: nextValue[1],
         });
-        const address = geocoder.buildAddressFromDatum({
+        const address = LocationGeocoder.buildAddressFromDatum({
           city: location.city,
           state: location.state,
         });
@@ -148,23 +147,20 @@ export default function MarketplaceLocationFilter() {
         form.setValue('cityName', address);
         previousValues.current = { cityName: address, distance: form.getValues('distance') };
       } catch (exception) {
-        if (exception instanceof Error) {
-          const errorCode = 'code' in exception ? exception.code : 'DENIED';
-          switch (errorCode) {
-            case 'CANCELLED':
-            case 'UNAVAILABLE':
-            case 'TIMEOUT':
-            case 'UNAUTHORIZED': {
-              if (!isEmpty(currentLocation) && !isEqual(currentLocation, DEFAULT_COORDINATES)) {
-                return;
-              }
-              return _setLocation(DEFAULT_COORDINATES);
-            }
-            default: {
-              reportCrash(exception as Error);
-              return;
-            }
+        if (exception instanceof CustomError) {
+          const isLocationPermissionDenied =
+            exception.type === EGeolocationError.LocationPermission;
+
+          const isLocationDisabledBySystem = exception.type === EGeolocationError.GeneralError;
+
+          if (isLocationPermissionDenied || isLocationDisabledBySystem) {
+            // if we already have valid coordinates, keep using those
+            if (!isEmpty(currentLocation) && !isEqual(currentLocation, DEFAULT_COORDINATES)) return;
+            // otherwise fallback to default coordinates
+            return _setLocation(DEFAULT_COORDINATES);
           }
+
+          reportCrash(exception as Error);
         }
       }
     }
@@ -184,7 +180,7 @@ export default function MarketplaceLocationFilter() {
         onPress={(evt) => {
           evt.stopPropagation();
           previousValues.current = form.getValues();
-          modalRef.current?.open();
+          modalActions.open();
         }}
       >
         <MaterialCommunityIcon name="map-marker-outline" size={28} color={colors.zinc[600]} />
@@ -196,127 +192,117 @@ export default function MarketplaceLocationFilter() {
         <MaterialIcon name="arrow-drop-down" size={26} color={colors.zinc[600]} />
       </Touchable>
 
-      <Portal>
-        <Modalize
-          ref={modalRef}
-          modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-          adjustToContentHeight
-          withHandle={false}
-          onClose={() => {
-            if (!isEqual(previousValues.current, form.getValues())) {
+      <BottomSheet.Root
+        ref={modalRef}
+        onClose={() => {
+          if (!isEqual(previousValues.current, form.getValues())) {
+            form.reset(previousValues.current);
+          }
+        }}
+      >
+        <BottomSheet.Content tw="pt-2.5 space-y-4">
+          <View tw="space-y-2">
+            <Text tw="text-base">{t('Dashboard.Marketplace.currentLocation')}</Text>
+            <Controller
+              control={form.control}
+              name="cityName"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  tw="bg-white border rounded-sm h-14 rounded-md"
+                  placeholder="City name"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              )}
+            />
+          </View>
+          <View tw="space-y-2">
+            <View tw="flex-row items-center">
+              <Text tw="text-base">{t('Dashboard.Marketplace.maxDistance')}</Text>
+              <Sup>(KM)</Sup>
+            </View>
+            <Controller
+              control={form.control}
+              name="distance"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  tw="bg-white border rounded-sm h-14 text-center rounded-md"
+                  keyboardType="numeric"
+                  defaultValue="0"
+                  editable={false}
+                  value={value}
+                  onChangeText={onChange}
+                  left={
+                    <TextInput.Icon
+                      icon="minus"
+                      color={paperTheme.colors.primary}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        const int = Number(value);
+                        if (isNaN(int)) return; // safe value
+                        const finalValue = (int > 0 ? int - 1 : 0).toString();
+                        onChange(finalValue);
+                      }}
+                      disabled={form.watch('distance') === '0'}
+                    />
+                  }
+                  right={
+                    <TextInput.Icon
+                      icon="plus"
+                      color={paperTheme.colors.primary}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        const int = Number(value);
+                        if (isNaN(int)) return; // safe value
+                        const finalValue = (int + 1).toString();
+                        onChange(finalValue);
+                      }}
+                    />
+                  }
+                />
+              )}
+            />
+          </View>
+        </BottomSheet.Content>
+        <BottomSheet.Footer>
+          <Button
+            tw="w-2/5"
+            mode="outlined"
+            uppercase
+            onPress={(evt) => {
+              evt.stopPropagation();
               form.reset(previousValues.current);
-            }
-          }}
-        >
-          <View tw="w-full items-center justify-center h-10">
-            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-          </View>
-
-          <View tw="px-4 pb-4 pt-2.5 space-y-4">
-            <View tw="space-y-2">
-              <Text tw="text-base">{t('Dashboard.Marketplace.currentLocation')}</Text>
-              <Controller
-                control={form.control}
-                name="cityName"
-                render={({ field: { value, onChange } }) => (
-                  <Input
-                    tw="bg-white border rounded-sm h-14 rounded-md"
-                    placeholder="City name"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                )}
-              />
-            </View>
-            <View tw="space-y-2">
-              <View tw="flex-row items-center">
-                <Text tw="text-base">{t('Dashboard.Marketplace.maxDistance')}</Text>
-                <Sup>(KM)</Sup>
-              </View>
-              <Controller
-                control={form.control}
-                name="distance"
-                render={({ field: { value, onChange } }) => (
-                  <Input
-                    tw="bg-white border rounded-sm h-14 text-center rounded-md"
-                    keyboardType="numeric"
-                    defaultValue="0"
-                    editable={false}
-                    value={value}
-                    onChangeText={onChange}
-                    left={
-                      <TextInput.Icon
-                        icon="minus"
-                        color={paperTheme.colors.primary}
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          const int = Number(value);
-                          if (isNaN(int)) return; // safe value
-                          const finalValue = (int > 0 ? int - 1 : 0).toString();
-                          onChange(finalValue);
-                        }}
-                        disabled={form.watch('distance') === '0'}
-                      />
-                    }
-                    right={
-                      <TextInput.Icon
-                        icon="plus"
-                        color={paperTheme.colors.primary}
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          const int = Number(value);
-                          if (isNaN(int)) return; // safe value
-                          const finalValue = (int + 1).toString();
-                          onChange(finalValue);
-                        }}
-                      />
-                    }
-                  />
-                )}
-              />
-            </View>
-          </View>
-
-          <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
-            <Button
-              tw="w-2/5"
-              mode="outlined"
-              uppercase
-              onPress={(evt) => {
-                evt.stopPropagation();
-                form.reset(previousValues.current);
-                modalRef.current?.close();
-              }}
-              disabled={form.formState.isSubmitting}
-            >
-              {t('actions.cancel')}
-            </Button>
-            <Button
-              tw="w-2/5"
-              mode="contained"
-              uppercase
-              // eslint-disable-next-line
-              onPress={form.handleSubmit(onSubmit as any)}
-              disabled={form.formState.isSubmitting}
-            >
-              {t('actions.apply')}
-            </Button>
-          </View>
-        </Modalize>
-      </Portal>
+              modalActions.close();
+            }}
+            disabled={form.formState.isSubmitting}
+          >
+            {t('actions.cancel')}
+          </Button>
+          <Button
+            tw="w-2/5"
+            mode="contained"
+            uppercase
+            // eslint-disable-next-line
+            onPress={form.handleSubmit(onSubmit as any)}
+            disabled={form.formState.isSubmitting}
+          >
+            {t('actions.apply')}
+          </Button>
+        </BottomSheet.Footer>
+      </BottomSheet.Root>
     </React.Fragment>
   );
 }
 
-function _getToastMessage(message: string, t: Translator) {
-  switch (message) {
-    case EGeolocationError.INVALID_FORMAT:
+function _getToastMessage(type: EGeolocationError, t: Translator): string {
+  switch (type) {
+    case EGeolocationError.InvalidFormat:
       return t('Dashboard.Marketplace.invalidFormatWarning');
-    case EGeolocationError.UNRESOLVED_CITY:
+    case EGeolocationError.UnresolvedCity:
       return t('Dashboard.Marketplace.unresolvedCityFormatWarning');
-    case EGeolocationError.LOW_CONFIDENCE:
+    case EGeolocationError.LowConfidence:
       return t('Dashboard.Marketplace.lowConfidenceWarning');
-    case EGeolocationError.GENERAL_ERROR:
+    case EGeolocationError.GeneralError:
     default:
       return t('Dashboard.Marketplace.filterGeneralWarning');
   }

@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { FlatList, ScrollView, View, Dimensions } from 'react-native';
+import { Dimensions, FlatList, ScrollView, View } from 'react-native';
 import { Dialog, Divider, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
+import { Text } from '#ui/components/Text';
 
 import { dateFmt, useTranslationUtils, type TranslationPaths } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
@@ -70,45 +70,45 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
     >
       <Dialog.Title>{t('Dashboard.History.stringTemplates.movementType.checkOut')}</Dialog.Title>
       <Dialog.ScrollArea tw="px-0">
-        <ScrollView tw="px-6 py-2" showsVerticalScrollIndicator>
+        <ScrollView tw="px-4 py-2" showsVerticalScrollIndicator>
           <View tw="space-y-1">
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.Marketplace.owner')}:
               </Text>
               &nbsp;
               {movement.checkout?.crates[0].ownerName}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.operatorNameLabel')}:
               </Text>
               &nbsp;
               {movement.operator ?? ''}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.operatorNumberLabel')}:
               </Text>
               &nbsp;
               {data[0]?.user.phone ?? ''}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.checkOutLabel')}:
               </Text>
               &nbsp;
               {movement.code}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.checkOutDateLabel')}:
               </Text>
               &nbsp;
               {dateFmt(movement.date.toString(), 'dd-MM-yyyy')}
             </Text>
             <View tw="flex flex-row space-x-2 items-center">
-              <Text variant="TextMedium" tw="text-lg">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.marketSurveyLabel')}:
               </Text>
               <Icon
@@ -126,43 +126,43 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
           </View>
 
           <View tw="space-y-1 mt-4">
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.cratesLabel')}:
               </Text>
               &nbsp;
               {movement.checkout?.crates.length}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.combinedWeightLabel')}:
               </Text>
               &nbsp;
               {movement.checkout?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.detailsModal.paymentMethodLabel')}:
               </Text>
               &nbsp;
               {paymentMethod ? t(paymentMethod) : ''}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:
               </Text>
               &nbsp;
               {movement.checkout?.calculatedPrice?.toFixed(2)}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.discountLabel')}:
               </Text>
               &nbsp;
               {movement.checkout?.discount?.toFixed(2)}
             </Text>
-            <Text variant="TextBold" tw="font-bold text-lg">
-              <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextBold" tw="font-bold text-base">
+              <Text variant="TextMedium" tw="text-base">
                 {t('Dashboard.History.pdfModal.checkOut.totalPrice')}:
               </Text>
               &nbsp;
@@ -172,7 +172,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
 
           <Divider tw="my-2 bg-gray-400" />
 
-          <Text variant="TextBold" tw="text-lg font-bold mb-2">
+          <Text variant="TextBold" tw="text-base font-bold mb-2">
             {t('Dashboard.History.detailsModal.cratesLabel')}:
           </Text>
 
@@ -183,49 +183,47 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
             keyExtractor={(item, index) => `${item.cropName}-${index}`}
             renderItem={({ item }) => (
               <View tw="mb-8 space-y-2">
-                <View tw="flex flex-row items-center mr-8">
-                  <Text variant="TextMedium" tw="text-lg text-gray-400 w-1/2">
-                    {t('Dashboard.History.detailsModal.cropTypeLabel')}:
-                  </Text>
-                  <Text variant="TextMedium" tw="text-lg">
+                <Text variant="TextMedium" tw="flex flex-row text-base text-gray-400">
+                  {t('Dashboard.History.detailsModal.cropTypeLabel')}:
+                  <Text variant="TextMedium" tw="text-base">
+                    {' '}
                     {item.cropName}
                   </Text>
-                </View>
-                <View tw="flex flex-row items-center mr-8">
-                  <Text variant="TextMedium" tw="text-lg text-gray-400 w-1/2">
-                    {t('Dashboard.History.detailsModal.checkInCodeLabel')}:
-                  </Text>
-                  <Text variant="TextMedium" tw="text-lg">
+                </Text>
+
+                <Text variant="TextMedium" tw="flex flex-row text-base text-gray-400">
+                  {t('Dashboard.History.detailsModal.checkInCodeLabel')}:
+                  <Text variant="TextMedium" tw="text-base">
+                    {' '}
                     {movement.code}
                   </Text>
-                </View>
-                <View tw="flex flex-row items-center mr-8">
-                  <Text variant="TextMedium" tw="text-lg text-gray-400 w-1/2">
-                    {t('Dashboard.History.detailsModal.crateIdsLabel')}:
-                  </Text>
-                  <Text variant="TextMedium" tw="text-lg">
+                </Text>
+
+                <Text variant="TextMedium" tw="flex flex-row items-center text-base text-gray-400">
+                  {t('Dashboard.History.detailsModal.crateIdsLabel')}:
+                  <Text variant="TextMedium" tw="text-base">
                     {item.crates
                       .map((crate) => crate.tag ?? '')
                       .filter(Boolean)
                       .join(', ')}
                   </Text>
-                </View>
-                <View tw="flex flex-row items-center mr-8">
-                  <Text variant="TextMedium" tw="text-lg text-gray-400 w-1/2">
-                    {t('Dashboard.History.pdfModal.checkIn.numberOfCratesLabel')}:
-                  </Text>
-                  <Text variant="TextMedium" tw="text-lg">
+                </Text>
+
+                <Text variant="TextMedium" tw="flex flex-row items-center text-base text-gray-400">
+                  {t('Dashboard.History.pdfModal.checkIn.numberOfCratesLabel')}:
+                  <Text variant="TextMedium" tw="text-base">
+                    {' '}
                     {item.crates.length}
                   </Text>
-                </View>
-                <View tw="flex flex-row items-center mr-8">
-                  <Text variant="TextMedium" tw="text-lg text-gray-400 w-1/2">
-                    {t('Dashboard.History.stringTemplates.movementType.checkedIn')}:
-                  </Text>
-                  <Text variant="TextMedium" tw="text-lg">
+                </Text>
+
+                <Text variant="TextMedium" tw="flex flex-row items-center text-base text-gray-400">
+                  {t('Dashboard.History.stringTemplates.movementType.checkedIn')}:
+                  <Text variant="TextMedium" tw="text-base">
+                    {' '}
                     {movement.date ? dateFmt(movement.date.toString(), 'dd-MM-yyyy') : ''}
                   </Text>
-                </View>
+                </Text>
               </View>
             )}
           />

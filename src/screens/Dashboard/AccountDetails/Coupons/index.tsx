@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSWRConfig } from 'swr';
 
@@ -8,6 +7,7 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { CouponsSettingsRouteProps } from '#navigation/Dashboard/AccountDetails/CouponSettings';
@@ -22,7 +22,7 @@ function CouponsRoot(props: CouponsSettingsRouteProps<'Root'>) {
   const { mutate } = useSWRConfig();
   const company = useManagementStore((store) => store.company);
 
-  const modalRef = useRef<Modalize>(null);
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
   const isManagementStack = props.route.params?.source === 'Management';
 
@@ -38,7 +38,8 @@ function CouponsRoot(props: CouponsSettingsRouteProps<'Root'>) {
       </View>
 
       <CouponModal
-        modalRef={modalRef}
+        ref={modalRef}
+        {...modalActions}
         onSubmit={async (values) => {
           await CouponService.createCoupon({
             ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
@@ -60,7 +61,7 @@ function CouponsRoot(props: CouponsSettingsRouteProps<'Root'>) {
             ),
           ]);
 
-          modalRef.current?.close();
+          modalActions.close();
         }}
       />
 
@@ -70,7 +71,7 @@ function CouponsRoot(props: CouponsSettingsRouteProps<'Root'>) {
         uppercase
         onPress={(evt) => {
           evt.stopPropagation();
-          modalRef.current?.open();
+          modalActions.open();
         }}
       >
         {t('Dashboard.Management.Coupons.addCoupon')}

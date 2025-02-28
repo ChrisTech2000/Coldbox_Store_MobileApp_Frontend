@@ -43,7 +43,7 @@ type FormValues<T = string> = {
   crates: Array<{
     weight: T;
     isSellable: boolean;
-    tag: number | undefined;
+    tag: string | undefined;
   }>;
   price: T | undefined;
 };
@@ -113,19 +113,19 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
       price: params.sellingPrice.toString(),
     },
     resolver: zodResolver((z) => {
-      const coerseNumber = z.coerce.number().gte(0);
+      const coerseNumber = z.coerce.number();
       return z.object({
         applyToAll: z.boolean(),
         price: z
           .string()
           .transform((v) => v.replaceAll(',', '.'))
-          .pipe(coerseNumber)
+          .pipe(coerseNumber.gte(0))
           .optional(),
         crates: z
           .array(
             z.object({
               id: z.number().optional(),
-              weight: z.preprocess((v) => (v ? Number(v) : 0), coerseNumber),
+              weight: z.preprocess((v) => (v ? Number(v) : 0), coerseNumber.gt(0)),
               isSellable: z.boolean(),
             })
           )
@@ -162,12 +162,17 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const allowedToSetPricing =
     guard('SET', 'MarketplaceListForSale') && companyEligible && farmerEligible;
 
-  const isSubmitDisabled: boolean =
-    !!form.formState.errors.crates ||
-    !!form.formState.errors.price ||
-    form.formState.isSubmitting ||
-    !form.formState.isDirty ||
-    (allowedToSetPricing && !parsedPrice);
+  // check if any crates are marked for sale
+  const hasAnyCrateForSale = crates.some((crate) => crate.isSellable);
+
+  // determine if submit button should be disabled
+  const isSubmitDisabled =
+    hasAnyCrateForSale &&
+    (!!form.formState.errors.crates ||
+      !!form.formState.errors.price ||
+      form.formState.isSubmitting ||
+      !form.formState.isDirty ||
+      (allowedToSetPricing && !parsedPrice));
 
   return (
     <React.Fragment>
@@ -274,7 +279,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                         <Input
                           tw={cn(
                             'bg-white border rounded-sm h-14 text-center',
-                            isDisabled && 'border-gray-400'
+                            isDisabled ? 'border-gray-400' : undefined
                           )}
                           keyboardType="numeric"
                           value={value}
@@ -292,7 +297,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                             <TextInput.Icon
                               icon="minus"
                               color={paperTheme.colors.primary}
-                              disabled={isDisabled || value === '0'}
+                              disabled={isDisabled || value === '1'}
                               onPress={(evt) => {
                                 evt.stopPropagation();
                                 const int = Number(value);
@@ -368,23 +373,25 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               );
             }}
             ListFooterComponent={
-              <Button
-                tw="w-2/6 my-3"
-                mode="text"
-                disabled={applyToAll}
-                uppercase
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  crateFields.append({
-                    weight: '25',
-                    isSellable: false,
-                    tag: undefined,
-                  });
-                  scrollViewRef.current?.scrollToEnd(true);
-                }}
-              >
-                {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.addMore')}
-              </Button>
+              <View tw="w-full flex-row justify-start">
+                <Button
+                  tw="my-3"
+                  mode="text"
+                  disabled={applyToAll}
+                  uppercase
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    crateFields.append({
+                      weight: '25',
+                      isSellable: false,
+                      tag: undefined,
+                    });
+                    scrollViewRef.current?.scrollToEnd(true);
+                  }}
+                >
+                  {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.addMore')}
+                </Button>
+              </View>
             }
           />
         </View>

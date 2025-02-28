@@ -29,6 +29,8 @@ export default {
     error: {
       errorMessage: 'अरे... लगता है कुछ गलत हो गया है।',
       tryAgainMessage: 'कृपया बाद में फिर से प्रयास करें।',
+      serverErrorMessage:
+        'उफ़! लगता है हमारी तरफ़ से कुछ गड़बड़ हो गई है। कृपया बाद में पुनः प्रयास करें या सहायता से संपर्क करें।',
     },
     auth: {
       SignIn: 'लॉगिन',
@@ -381,6 +383,13 @@ export default {
           column3: 'कीमत {{currency}}/किलोग्राम में',
           emptyState: 'कोई मूल्य उपलब्ध नहीं है',
         },
+        'location-placeholder': 'राज / जिला / बाजार',
+        'market-district-state': 'बाजार / जिला / राज्य',
+        'district-label': 'एक जिले का चयन करें',
+        'district-placeholder': 'ज़िला',
+        'market-label': 'एक बाजार का चयन करें',
+        'market-placeholder':
+          'मूल्य पूर्वानुमान प्राप्त करने के लिए एक वस्तु और एक राज्य का चयन करें',
       },
     },
     CrateManagement: {

@@ -5,12 +5,13 @@ import { ActivityIndicator, Text, TextInput } from 'react-native-paper';
 import validator from 'validator';
 
 import { Button } from '#ui/components/Button';
+import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import AuthService from '#services/AuthService';
-import InAppNotifications from '#common/InAppNotifications';
-import reportCrash from '#ui/lib/reportCrash';
+import { CustomError } from '#services/utils/ErrorUtil';
 
 type PasswordRecoverySchema = { phone: string };
 
@@ -46,7 +47,12 @@ function PasswordRecoveryRequest() {
           type: 'md_success',
         });
       } catch (exception) {
-        toast.show(t('Auth.ForgotPassword.requestLimitMessage'), { type: 'md_danger' });
+        if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
+          toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+        } else {
+          toast.show(t('Auth.ForgotPassword.requestLimitMessage'), { type: 'md_danger' });
+        }
+
         reportCrash(exception as Error);
       }
     },

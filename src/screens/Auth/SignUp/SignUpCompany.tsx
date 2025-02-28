@@ -16,17 +16,18 @@ import type { SignUpAsCompanyResponse } from '#types/api.responses';
 import { MAP_APP_GENDER_TO_API } from '#types/global';
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
+import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import phoneNumberCodes from '#constants/phoneNumberCodes';
 import { currenciesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
+import { CustomError } from '#services/utils/ErrorUtil';
 
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { GENDERS, SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
 import { customCountrySort } from './utils';
-import reportCrash from '#ui/lib/reportCrash';
 
 const allCountries = getAllISOCodes();
 const allCountryNames = allCountries.map((code) => code.countryName);
@@ -111,7 +112,14 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         },
       });
     } catch (exception) {
-      toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger', style: { marginBottom: 55 } });
+      if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
+        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+      } else {
+        toast.show(t('Auth.SignUp.toasts.error'), {
+          type: 'md_danger',
+          style: { marginBottom: 55 },
+        });
+      }
       reportCrash(exception as Error);
     }
 

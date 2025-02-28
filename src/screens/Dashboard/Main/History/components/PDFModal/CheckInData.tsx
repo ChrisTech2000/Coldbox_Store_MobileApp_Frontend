@@ -4,7 +4,7 @@ import { DataTable } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { savePDF } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -143,7 +143,7 @@ export function CheckInData(props: CheckInDataProps) {
 
       const fileName = t('Dashboard.History.pdfModal.downloadName', { code: movement.code });
 
-      await savePDF(html, fileName);
+      await FileUtility.createPdfFromHtml(html, fileName);
 
       toast.show(t('Dashboard.History.pdfModal.successMessage'), { type: 'md_success' });
       dismissModal();

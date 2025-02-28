@@ -43,6 +43,7 @@ import MarketSurveyStack, {
   MarketSurveyStackRoutes,
 } from '../Main/HistoryTabStack/MarketSurveyStack';
 import EditCoolingUserStack, { type EditCoolingUserStackRoutes } from './EditCoolingUserStack';
+import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 
 export type ManagementRoutes = {
   Root: undefined;
@@ -230,9 +231,9 @@ function _rightContentFactory(
         leftContent: (
           <Appbar.BackAction
             size={22}
-            // eslint-disable-next-line
-            // @ts-ignore
-            onPress={() => navigation.navigate('Dashboard')}
+            onPress={() => {
+              goBackWithDrawer(navigation);
+            }}
           />
         ),
       };

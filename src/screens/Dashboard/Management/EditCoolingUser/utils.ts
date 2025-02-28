@@ -356,6 +356,7 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
           checkIn: cool.roomCratesIn?.[index] ?? 0,
           checkOut: cool.roomCratesOut?.[index] ?? 0,
         })) ?? [],
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     Section({ label: t('Dashboard.Analytics.totalQuantityLabel') }),
     Table({
@@ -375,6 +376,7 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
           checkIn: cool.roomKgIn?.[index] ?? 0,
           checkOut: cool.roomKgOut?.[index] ?? 0,
         })) ?? [],
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     Section({ label: t('Dashboard.Analytics.totalOperations') }),
     Table({
@@ -394,6 +396,7 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
           checkIn: cool.roomOpsIn?.[index] ?? 0,
           checkOut: cool.roomOpsOut?.[index] ?? 0,
         })) ?? [],
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInCropDistribution') }),
     Table({
@@ -489,6 +492,7 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         change: item.avgMonthlyPercFoodlossEvolution ?? 0,
         loss: `${(item.avgBaselinePercLossMonth ?? 0).toFixed(2)}% to ${(item.avgMonthlyPercLoss ?? 0).toFixed(2)}%`,
       })),
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     ImpactEvolution({
       title: t('Dashboard.Analytics.farmersAnalytics.revenueEvolution'),
@@ -511,6 +515,7 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         change: item.avgMonthlyPercRevenueIncreaseEvolution ?? 0,
         revenue: `${data.datums.currencyCode} ${(item.avgBaselineFarmerRevenueMonth ?? 0).toFixed(2)} to ${data.datums.currencyCode} ${(item.avgMonthlyFarmerRevenue ?? 0).toFixed(2)}`,
       })),
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     SurveyStatsPercentage({
       title: t('Dashboard.Analytics.farmersAnalytics.baselineSurveyLabel'),

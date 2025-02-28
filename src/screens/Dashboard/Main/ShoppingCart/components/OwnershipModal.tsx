@@ -61,7 +61,7 @@ export function OwnershipModal({ isVisible, close }: OwnershipModalProps) {
                   setIsProcessing(false);
                   close();
                 } catch (exception) {
-                  toast.show(t('actions.error', { type: 'md_danger' }));
+                  toast.show(t('navigation.error.serverErrorMessage', { type: 'md_danger' }));
                   setIsProcessing(false);
                   reportCrash(exception as Error);
                 }

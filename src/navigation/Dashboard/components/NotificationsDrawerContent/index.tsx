@@ -1,16 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Platform, View, useWindowDimensions } from 'react-native';
-import { Portal } from 'react-native-paper';
-import { Modalize } from 'react-native-modalize';
 import { FlashList } from '@shopify/flash-list';
 import ms from 'ms';
 
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import { FarmersSurveyModal } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
 import { MovementDiagram } from '#screens/Dashboard/Main/History/components/MovementDiagram';
+import { formatFloat } from '#screens/Dashboard/Main/components/FarmerSurveyModal/schema';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
@@ -72,8 +72,8 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
     undefined
   );
   const [orderDatum, setOrderDatum] = useState<OrderRequiresMovementDatum | undefined>(undefined);
+  const [modalRef] = BottomSheet.useBottomSheet();
 
-  const modalRef = useRef<Modalize>(null);
   const modalTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const windowDimensions = useWindowDimensions();
@@ -161,14 +161,20 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                       commoditySurvey.cropId !== farmerSurveyDatums.contextualCrop.id
                   ),
                   {
-                    averagePrice: values.averagePrice,
+                    averagePrice: Number(formatFloat(values.averagePrice)),
                     unit: values.unitOfMeasurement,
-                    quantityTotal: values.weightDistribution.totalProducedWeekly,
-                    quantityBelowMarketPrice: values.weightDistribution.quantityLost,
-                    quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
-                    quantitySold: values.weightDistribution.quantitySold,
+                    quantityTotal: Number(
+                      formatFloat(values.weightDistribution.totalProducedWeekly)
+                    ),
+                    quantityBelowMarketPrice: Number(
+                      formatFloat(values.weightDistribution.quantityLost)
+                    ),
+                    quantitySelfConsumed: Number(
+                      formatFloat(values.weightDistribution.quantitySelfConsumed)
+                    ),
+                    quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
                     averageSeasonInMonths: null,
-                    kgInUnit: values.unitaryWeight as number,
+                    kgInUnit: Number(formatFloat(values.unitaryWeight as string)),
                     currency: farmerSurveyDatums.companyCurrency,
                     reasonForLoss: values.reasonsForSpoilage,
                     cropId: farmerSurveyDatums.contextualCrop.id,
@@ -181,7 +187,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
                 type: 'md_success',
               });
             } catch (exception) {
-              toast.show(t('actions.error', { type: 'md_danger' }));
+              toast.show(t('navigation.error.serverErrorMessage', { type: 'md_danger' }));
               reportCrash(exception as Error);
             }
           }}
@@ -189,28 +195,19 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
       ) : null}
 
       {typeof orderDatum !== 'undefined' ? (
-        <Portal>
-          <Modalize
-            ref={modalRef}
-            modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-            adjustToContentHeight
-            withHandle={false}
-            onClose={() => {
-              modalTimeout.current = setTimeout(() => setOrderDatum(undefined), ms('3 seconds'));
-            }}
-          >
-            <View tw="w-full items-center justify-center h-10">
-              <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-            </View>
-
-            <View tw="px-4 pb-4">
-              <MovementDiagram
-                movement={orderDatum!.movement}
-                coolingUnit={orderDatum!.coolingUnit}
-              />
-            </View>
-          </Modalize>
-        </Portal>
+        <BottomSheet.Root
+          ref={modalRef}
+          onClose={() => {
+            modalTimeout.current = setTimeout(() => setOrderDatum(undefined), ms('3 seconds'));
+          }}
+        >
+          <BottomSheet.Content>
+            <MovementDiagram
+              movement={orderDatum!.movement}
+              coolingUnit={orderDatum!.coolingUnit}
+            />
+          </BottomSheet.Content>
+        </BottomSheet.Root>
       ) : null}
     </View>
   );

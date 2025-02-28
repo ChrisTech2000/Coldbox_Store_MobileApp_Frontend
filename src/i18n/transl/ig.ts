@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: ' ọ dị ka ihe a agaghị nke ọma.',
       tryAgainMessage: 'Biko mekwa ya ọzọ ma emechaa.',
+      serverErrorMessage:
+        'Oopsy! Ọ dị ka ihe mere n’akụkụ anyị. Biko nwalee ọzọ n’oge ọzọ ma ọ bụ kpọtụrụ nkwado.',
     },
     auth: {
       SignIn: "Banye n'ime",
@@ -358,6 +360,12 @@ export default {
           column3: 'Ọnụ ahịa na {{currency}}/KG',
           emptyState: 'Ọnweghị uru dị',
         },
+        'location-placeholder': 'Steeti / Mpaghara / Ahịa',
+        'market-district-state': 'Ahịa / Mpaghara / Steeti',
+        'district-label': 'Họrọ mpaghara',
+        'district-placeholder': 'Mpaghara',
+        'market-label': 'Họrọ ahịa',
+        'market-placeholder': 'Ahịa',
       },
     },
     CrateManagement: {

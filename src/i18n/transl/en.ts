@@ -27,6 +27,8 @@ const en = {
     error: {
       errorMessage: 'Oops... looks like something went wrong.',
       tryAgainMessage: 'Please try again later.',
+      serverErrorMessage:
+        'Oops! Looks like something went wrong on our side. Please try again later or contact support.',
     },
     auth: {
       SignIn: 'Log in',
@@ -130,7 +132,7 @@ const en = {
     },
   },
   actions: {
-    error: 'An error occured',
+    error: 'An error occurred',
     cancel: 'Cancel',
     confirm: 'Confirm',
     import: 'Import',
@@ -379,6 +381,12 @@ const en = {
           column3: 'Price in {{currency}}/Kg',
           emptyState: 'No value available',
         },
+        'location-placeholder': 'State / District / Market',
+        'market-district-state': 'Market / District / State',
+        'district-label': 'Select a district',
+        'district-placeholder': 'District',
+        'market-label': 'Select a market',
+        'market-placeholder': 'Market',
       },
     },
     CrateManagement: {

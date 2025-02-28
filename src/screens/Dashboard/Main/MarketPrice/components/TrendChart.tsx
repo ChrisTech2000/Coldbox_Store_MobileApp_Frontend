@@ -16,11 +16,17 @@ import {
   useSharedValue,
 } from 'react-native-reanimated';
 import { CartesianChart, Line, Scatter, useChartPressState } from 'victory-native';
+import colors from 'tailwindcss/colors';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import type { PredictionCrop, PredictionData, PredictionState } from '#types/global';
+import type {
+  PredictionCrop,
+  PredictionData,
+  PredictionMarket,
+  PredictionState,
+} from '#types/global';
 
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
@@ -29,40 +35,43 @@ import { useToggle } from '#ui/hooks/useToggle';
 import useSkiaFont from '#ui/hooks/useSkiaFont';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
-import colors from 'tailwindcss/colors';
-import { AllowedCountry } from '../store';
-import { MAP_ALLOWED_COUNTRY, QueryCountry } from '../Trend';
+import { DEFAULT_COUNTRY_DATUM, useContextualCountryISO } from './PredictionMarketSelect';
+import type { QueryCountry } from '../Trend';
 
 type TrendChartProps = {
   commodity: PredictionCrop | null;
   state: PredictionState | null;
-  country: AllowedCountry;
+  market: PredictionMarket | null;
 };
 
 type ChartProps = {
-  currency: ECurrency;
+  currency: string;
   predictionData: PredictionData;
 };
 
-enum ECurrency {
-  NG = '₦',
-  IN = 'Rs',
-}
-
-export function TrendChart({ commodity, state, country }: TrendChartProps) {
+export function TrendChart({ commodity, state, market }: TrendChartProps) {
   const { t } = useTranslationUtils();
-  const mappedCountry = MAP_ALLOWED_COUNTRY[country ?? ('' as AllowedCountry)] as QueryCountry;
+
+  const countryISO = useContextualCountryISO();
 
   const { data: predictionData, isLoading: loadingPredictionData } = useApiCall(
     'getPrediction',
     ColdtivateService.getPrediction,
     {
+      country: countryISO as QueryCountry,
       cropId: commodity?.id as number,
       stateId: state?.id as number,
-      country: mappedCountry,
+      marketId: market?.id as number,
     },
-    { skip: !commodity || !state }
+    { skip: !commodity || (!state && !market) }
+  );
+
+  const currency = useMemo(
+    () =>
+      countriesDict().getByValue(countryISO)?.currencyCode || DEFAULT_COUNTRY_DATUM.CURRENCY_CODE,
+    [countryISO]
   );
 
   if (loadingPredictionData) {
@@ -83,7 +92,7 @@ export function TrendChart({ commodity, state, country }: TrendChartProps) {
     );
   }
 
-  return <Chart predictionData={predictionData} currency={ECurrency[mappedCountry]} />;
+  return <Chart predictionData={predictionData} currency={currency} />;
 }
 
 const TOOLTIP_GAP = 34;

@@ -29,55 +29,43 @@ const deviceHeight = Dimensions.get('window').height;
 export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }: CrateModalProps) {
   const { t } = useTranslationUtils();
 
-  const [initialId, setInitialId] = useState<number | undefined>(undefined);
-  const [modalCrates, setModalCrates] = useState<SetupSchema['crates']>(crates);
+  const [editedCrates, setEditedCrates] = useState<SetupSchema['crates']>([]);
+  const [initialId, setInitialId] = useState<string | undefined>(undefined);
 
-  const onChangeNumericKeyboard = useCallback(
-    (newVal: string | number, index: number) => {
-      const value = Number(newVal);
-
-      if (!isNaN(value)) {
-        const crates = cloneDeep(modalCrates);
-        crates[index].crateId = value;
-        setModalCrates(crates);
-      }
-    },
-    [modalCrates]
-  );
-
-  const onChangeInitialVal = useCallback((newVal: string) => {
-    const value = Number(newVal);
-
-    if (!value) return setInitialId(undefined);
-    if (!isNaN(Number(value))) setInitialId(Number(newVal));
+  const onChange = useCallback((newVal: string, index: number) => {
+    setEditedCrates((prev) => {
+      const newCrates = [...prev];
+      newCrates[index].tag = newVal;
+      return newCrates;
+    });
   }, []);
 
   const onSerialize = useCallback(() => {
     if (!initialId) return;
 
     let id = initialId;
-    const newCrates = cloneDeep(modalCrates).map((crate) => {
-      crate.crateId = id;
-      id++;
+    const newCrates = cloneDeep(editedCrates).map((crate) => {
+      crate.tag = id;
+      id = (Number(id) + 1).toString();
       return crate;
     });
 
-    setModalCrates(newCrates);
+    setEditedCrates(newCrates);
   }, [initialId, crates]);
 
   const saveChanges = useCallback(() => {
-    setValue(modalCrates);
+    setValue(editedCrates);
     closeModal();
-  }, [modalCrates]);
+  }, [editedCrates]);
 
   const dismissModal = useCallback(() => {
-    setModalCrates(crates);
+    setEditedCrates(crates);
     setInitialId(undefined);
     closeModal();
   }, [crates]);
 
   useEffect(() => {
-    setModalCrates(crates);
+    setEditedCrates(cloneDeep(crates));
   }, [crates]);
 
   return (
@@ -91,8 +79,8 @@ export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }:
             <FlashList
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
-              data={modalCrates}
-              extraData={crates}
+              data={editedCrates}
+              extraData={editedCrates}
               renderItem={({ index }) => (
                 <View
                   key={`crate-#${index}`}
@@ -107,8 +95,8 @@ export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }:
                   <View tw="flex flex-row items-center justify-between">
                     <Input
                       tw="bg-white border rounded-sm h-10 w-[80%]"
-                      onChangeText={(newVal) => onChangeNumericKeyboard(newVal, index)}
-                      value={modalCrates[index].crateId?.toString()}
+                      onChangeText={(newVal) => onChange(newVal, index)}
+                      value={editedCrates[index].tag?.toString() ?? ''}
                       keyboardType="numeric"
                     />
                   </View>
@@ -122,6 +110,7 @@ export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }:
             />
           </ScrollView>
 
+          {/* Serialization Section */}
           <View tw="w-full px-6 mb-1.5 space-y-1.5">
             <Text variant="TextMedium" tw="text-base my-1">
               {t('Dashboard.CrateManagement.CheckIn.Setup.modals.selectInitialId')}
@@ -129,8 +118,8 @@ export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }:
             <View tw="flex flex-row justify-between">
               <Input
                 tw="bg-white border rounded-sm h-10 w-[50%]"
-                onChangeText={onChangeInitialVal}
-                value={initialId?.toString() ?? ''}
+                onChangeText={(val) => setInitialId(val)}
+                value={initialId ?? ''}
                 keyboardType="numeric"
               />
               <Button mode="text" uppercase labelStyle="text-base" onPress={onSerialize}>
