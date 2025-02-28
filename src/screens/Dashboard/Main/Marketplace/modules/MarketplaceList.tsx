@@ -52,6 +52,7 @@ export default function MarketplaceList() {
                 <MarketplaceItemWrapper.Body
                   shelfLife={item.shelfLife}
                   cropName={item.crop.name}
+                  produceInfo={item.produceInfo}
                   movementCode={item.movementCode}
                   cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
                   owner={item.owner}
@@ -261,6 +262,7 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
                   <MarketplaceItemWrapper.Body
                     shelfLife={datum.shelfLife}
                     cropName={datum.crop.name}
+                    produceInfo={datum.produceInfo}
                     movementCode={datum.movementCode}
                     cropImageUri={`${API_BASE_URL}media/${datum.crop.image}`}
                     owner={datum.owner}

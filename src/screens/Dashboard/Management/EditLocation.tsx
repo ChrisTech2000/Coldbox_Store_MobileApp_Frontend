@@ -4,13 +4,14 @@ import { Dimensions, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
+import { Geometry, Point } from 'wkx';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
+import reportCrash from '#ui/lib/reportCrash';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -30,6 +31,16 @@ import StepModule from './AddLocation/modules/StepModule';
 import { getCountryFullName } from './AddLocation/utils';
 
 const width = (Dimensions.get('window').width - 42) / 2;
+
+function parsePoint(postgisPoint: string) {
+  const wktString = postgisPoint.split(';')[1];
+  const point = Geometry.parse(wktString);
+  // eslint-disable-next-line
+  // @ts-ignore
+  const { x: longitude, y: latitude } = point;
+
+  return { latitude, longitude };
+}
 
 const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
 
@@ -77,12 +88,25 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
             longitude: rest.longitude,
           });
           datums = merge(rest, address);
+          datums.point = new Point(
+            rest.longitude,
+            rest.latitude,
+            undefined,
+            undefined,
+            4326
+          ).toEwkt();
           break;
         }
         case 'address': {
           try {
             const coordinates = await LocationGeocoder.getCoordsFromAddress(rest);
-            datums = merge(rest, coordinates);
+            datums.point = new Point(
+              coordinates.longitude,
+              coordinates.latitude,
+              undefined,
+              undefined,
+              4326
+            ).toEwkt();
           } catch (exception) {
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
               type: 'md_danger',
@@ -141,9 +165,10 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     values.name = data.name;
     values.country = getCountryFullName(data.company?.country) ?? ''; // TODO: we don't get the country we submitted, just the company country
 
+    const point = parsePoint(data.point);
     values._step = 'coordinates';
-    values.latitude = data.latitude?.toString();
-    values.longitude = data.longitude?.toString();
+    values.latitude = point.latitude?.toString();
+    values.longitude = point.longitude?.toString();
     values.city = data.city ?? '';
     values.state = data.state ?? '';
     values.zipCode = data.zipCode ?? '';
