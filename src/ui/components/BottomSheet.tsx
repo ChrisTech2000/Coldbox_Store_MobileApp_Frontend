@@ -24,22 +24,30 @@ const Slot = ({ isLoading, children }: PropsWithChildren<{ isLoading: boolean }>
 };
 
 type RootProps = {
-  adjustToContentHeight?: boolean;
-  onClose?: () => void;
-  modalStyle?: TStyle;
+  // whether to use a Portal for rendering the bottom sheet
   usePortal?: boolean;
-  modalHeight?: number;
+  // show loading spinner instead of content
   isLoading?: boolean;
-} & Pick<ModalizeProps, 'modalStyle' | 'modalHeight' | 'avoidKeyboardLikeIOS'>;
+  // custom styles for the modal
+  modalStyle?: ModalizeProps['modalStyle'];
+  // fixed height of the modal
+  modalHeight?: ModalizeProps['modalHeight'];
+  // match iOS keyboard behavior on Android
+  avoidKeyboardLikeIOS?: ModalizeProps['avoidKeyboardLikeIOS'];
+  // callback fired when modal closes
+  onClose?: ModalizeProps['onClose'];
+  // allow modal to adjust height based on content
+  adjustToContentHeight?: ModalizeProps['adjustToContentHeight'];
+} & PropsWithChildren;
 
-const Root = forwardRef<Modalize, PropsWithChildren<RootProps>>(function BottomSheet(props, ref) {
+const Root = forwardRef<Modalize, RootProps>(function BottomSheet(props, ref) {
   const {
     adjustToContentHeight = true,
     onClose,
     modalStyle,
     usePortal = true,
-    children,
     isLoading = false,
+    children,
     ...rest
   } = props;
 
