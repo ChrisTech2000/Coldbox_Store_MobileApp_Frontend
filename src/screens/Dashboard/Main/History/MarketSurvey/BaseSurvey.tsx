@@ -27,6 +27,7 @@ import { useMarketSurveyStore } from '#stores/marketSurvey';
 import { FarmersSurveyModal, FarmerSurveySchemaType } from '../../components/FarmerSurveyModal';
 import { BaseSurveySchema, EExperience, EOccupation, type BaseSurveySchemaType } from './schema';
 import { sanitizeString } from './utils';
+import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 
 function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
   const { companyCurrency } = props.route.params;
@@ -119,14 +120,16 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
               .flatMap((survey) => survey.co)
               .filter((survey) => survey.cropId !== cropId),
             {
-              averagePrice: values.averagePrice,
+              averagePrice: Number(formatFloat(values.averagePrice)),
               unit: values.unitOfMeasurement,
-              quantityTotal: values.weightDistribution.totalProducedWeekly,
-              quantityBelowMarketPrice: values.weightDistribution.quantityLost,
-              quantitySelfConsumed: values.weightDistribution.quantitySelfConsumed,
-              quantitySold: values.weightDistribution.quantitySold,
+              quantityTotal: Number(formatFloat(values.weightDistribution.totalProducedWeekly)),
+              quantityBelowMarketPrice: Number(formatFloat(values.weightDistribution.quantityLost)),
+              quantitySelfConsumed: Number(
+                formatFloat(values.weightDistribution.quantitySelfConsumed)
+              ),
+              quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
               averageSeasonInMonths: null,
-              kgInUnit: values.unitaryWeight as number,
+              kgInUnit: Number(formatFloat(values.unitaryWeight as string)),
               currency: companyCurrency ?? '',
               reasonForLoss: values.reasonsForSpoilage,
               cropId,
@@ -276,15 +279,15 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
                     onSubmit={onSubmitSurveyWrapper()}
                     defaultValues={{
                       weightDistribution: {
-                        totalProducedWeekly: survey.quantityTotal,
-                        quantitySelfConsumed: survey.quantitySelfConsumed,
-                        quantitySold: survey.quantitySold,
-                        quantityLost: survey.quantityBelowMarketPrice,
+                        totalProducedWeekly: survey.quantityTotal.toString(),
+                        quantitySelfConsumed: survey.quantitySelfConsumed.toString(),
+                        quantitySold: survey.quantitySold.toString(),
+                        quantityLost: survey.quantityBelowMarketPrice.toString(),
                       },
                       unitOfMeasurement: survey.unit,
-                      unitaryWeight: survey.kgInUnit,
+                      unitaryWeight: survey.kgInUnit.toString(),
                       reasonsForSpoilage: sanitizeString(survey.reasonForLoss as string),
-                      averagePrice: survey.averagePrice,
+                      averagePrice: survey.averagePrice.toString(),
                     }}
                   />
                 ) : null}

@@ -119,7 +119,6 @@ function PayoutSettings(
     ),
   });
 
-  console.log(isDirty, '#####');
   const [isBanksModalOpen, setIsBanksModalOpen] = useState<boolean>(false);
   const [isAccountTypeOpen, setIsAccountTypeOpen] = useState<boolean>(false);
 
