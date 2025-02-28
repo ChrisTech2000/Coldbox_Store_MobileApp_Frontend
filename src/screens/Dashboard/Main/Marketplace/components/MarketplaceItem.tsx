@@ -15,12 +15,13 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
-import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
+import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
+import { parsePoint } from '#screens/Dashboard/Management/utils';
 import ColdtivateService from '#services/ColdtivateService';
 
 import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
@@ -137,6 +138,8 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
       locationId: props.company.locationId,
     });
 
+    const point = parsePoint(result.point);
+
     const datum = {
       name: result.company.name,
       locationName: result.name,
@@ -151,8 +154,8 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
       ]
         .filter(Boolean)
         .join(', '),
-      latitude: result.latitude,
-      longitude: result.longitude,
+      latitude: point.latitude,
+      longitude: point.longitude,
     } satisfies CompanyBottomSheetDatum;
 
     emitter.emit(APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL, datum);

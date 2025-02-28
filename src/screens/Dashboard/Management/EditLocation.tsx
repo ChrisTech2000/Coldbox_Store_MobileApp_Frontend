@@ -4,7 +4,7 @@ import { Dimensions, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
-import { Geometry, Point } from 'wkx';
+import { Point } from 'wkx';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -20,6 +20,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { LocationGeocoder } from '#services/LocationGeocoder';
 
+import { parsePoint } from './utils';
 import FormManager, {
   DEFAULT_VALUES,
   type FormValues,
@@ -31,16 +32,6 @@ import StepModule from './AddLocation/modules/StepModule';
 import { getCountryFullName } from './AddLocation/utils';
 
 const width = (Dimensions.get('window').width - 42) / 2;
-
-function parsePoint(postgisPoint: string) {
-  const wktString = postgisPoint.split(';')[1];
-  const point = Geometry.parse(wktString);
-  // eslint-disable-next-line
-  // @ts-ignore
-  const { x: longitude, y: latitude } = point;
-
-  return { latitude, longitude };
-}
 
 const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
 
