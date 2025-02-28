@@ -1,7 +1,6 @@
 import moize from 'moize';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
 import { Dialog, Divider, Icon, Portal } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
@@ -11,6 +10,7 @@ import CheckOut from '#assets/icons/check-out.svg';
 
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
@@ -78,13 +78,13 @@ export function Movement({
   const user = useAuthStore((store) => store.user);
   const toast = InAppNotifications.useToast();
 
-  const modalRef = useRef<Modalize>(null);
-
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState<boolean>(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState<boolean>(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
   const [isMarketplaceDetailsModalOpen, setIsMarketplaceDetailsModalOpen] =
     useState<boolean>(false);
+
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
   const crops = useMemo(() => {
     const _crops = sortMovementCrops(movement);
@@ -171,7 +171,7 @@ export function Movement({
       {
         label: t('Dashboard.History.optionsMenu.common.seeMovement'),
         action: () => {
-          modalRef.current?.open();
+          modalActions.open();
           setIsOptionsModalOpen(false);
         },
       },
@@ -215,7 +215,7 @@ export function Movement({
     movements,
     user,
     t,
-    modalRef,
+    modalActions,
     seePDFModal,
     seeDetailsModal,
     fillMarketSurvey,
@@ -333,23 +333,11 @@ export function Movement({
           />
         ) : null}
 
-        <Modalize
-          ref={modalRef}
-          modalStyle={{
-            borderTopLeftRadius: 32,
-            borderTopRightRadius: 32,
-          }}
-          adjustToContentHeight
-          withHandle={false}
-        >
-          <View tw="w-full items-center justify-center h-10">
-            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-          </View>
-
-          <View tw="px-4 pb-4">
+        <BottomSheet.Root ref={modalRef}>
+          <BottomSheet.Content>
             <MovementDiagram movement={movement} coolingUnit={coolingUnit as CoolingUnit} />
-          </View>
-        </Modalize>
+          </BottomSheet.Content>
+        </BottomSheet.Root>
       </Portal>
     </View>
   );

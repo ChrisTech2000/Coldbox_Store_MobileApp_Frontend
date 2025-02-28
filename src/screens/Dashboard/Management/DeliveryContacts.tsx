@@ -1,8 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Dialog, Divider, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import validator from 'validator';
@@ -16,6 +15,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import * as BottomSheetUI from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -208,7 +208,7 @@ function BottomSheet() {
   const user = useAuthStore((store) => store.user);
   const toast = InAppNotifications.useToast();
 
-  const modalRef = useRef<Modalize>(null);
+  const [modalRef, modalActions] = BottomSheetUI.useBottomSheet();
 
   const {
     control,
@@ -240,9 +240,7 @@ function BottomSheet() {
     ),
   });
 
-  useAppEventListener(APP_EVENTS.DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET, () => {
-    modalRef.current?.open();
-  });
+  useAppEventListener(APP_EVENTS.DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET, modalActions.open);
 
   const onSubmit = useCallback(
     async (data: FormValues) => {
@@ -258,7 +256,7 @@ function BottomSheet() {
             type: 'md_success',
             style: { marginBottom: 50 },
           });
-          modalRef.current?.close();
+          modalActions.close();
           emitter.emit(APP_EVENTS.DISPATCH_RELOAD_DELIVERY_CONTACTS);
         }
       } catch (error) {
@@ -269,106 +267,94 @@ function BottomSheet() {
         reportCrash(error as Error);
       }
     },
-    [user]
+    [user, modalActions]
   );
 
   if (!isFocused) return null;
 
   return (
-    <Portal>
-      <Modalize
-        ref={modalRef}
-        modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-        adjustToContentHeight
-        withHandle={false}
-      >
-        <View tw="w-full items-center justify-center h-10">
-          <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-        </View>
-
-        <View tw="mt-4 space-y-3 mb-5">
-          <Controller
-            control={control}
-            name="deliveryCompanyName"
-            render={({ field: { value, onChange, onBlur } }) => (
-              <TextInput
-                tw="w-full bg-transparent mt-1"
-                label={t('Dashboard.Management.Delivery.companyName')}
-                mode="flat"
-                placeholder={t('Dashboard.Management.Delivery.companyNamePlaceholder')}
-                dense
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={!!errors.deliveryCompanyName}
-              />
-            )}
-          />
-          {errors.deliveryCompanyName && (
-            <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-              {errors.deliveryCompanyName.message?.toString()}
-            </Text>
+    <BottomSheetUI.Root ref={modalRef}>
+      <BottomSheetUI.Content tw="mt-4 space-y-3">
+        <Controller
+          control={control}
+          name="deliveryCompanyName"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <TextInput
+              tw="w-full bg-transparent mt-1"
+              label={t('Dashboard.Management.Delivery.companyName')}
+              mode="flat"
+              placeholder={t('Dashboard.Management.Delivery.companyNamePlaceholder')}
+              dense
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              error={!!errors.deliveryCompanyName}
+            />
           )}
+        />
+        {errors.deliveryCompanyName ? (
+          <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+            {errors.deliveryCompanyName.message?.toString()}
+          </Text>
+        ) : null}
 
-          <Controller
-            control={control}
-            name="contactName"
-            render={({ field: { value, onChange, onBlur } }) => (
-              <TextInput
-                tw="w-full bg-transparent mt-1"
-                label={t('Dashboard.Management.Delivery.contactName')}
-                mode="flat"
-                placeholder={t('Dashboard.Management.Delivery.contactNamePlaceholder')}
-                dense
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={!!errors.contactName}
-              />
-            )}
-          />
-          {errors.contactName && (
-            <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-              {errors.contactName.message?.toString()}
-            </Text>
+        <Controller
+          control={control}
+          name="contactName"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <TextInput
+              tw="w-full bg-transparent mt-1"
+              label={t('Dashboard.Management.Delivery.contactName')}
+              mode="flat"
+              placeholder={t('Dashboard.Management.Delivery.contactNamePlaceholder')}
+              dense
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              error={!!errors.contactName}
+            />
           )}
+        />
+        {errors.contactName ? (
+          <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+            {errors.contactName.message?.toString()}
+          </Text>
+        ) : null}
 
-          <Controller
-            control={control}
-            name="phoneNumber"
-            render={({ field: { value, onChange, onBlur } }) => (
-              <TextInput
-                tw="w-full bg-transparent mt-1"
-                label={t('Dashboard.Management.Delivery.phoneNumber')}
-                mode="flat"
-                placeholder={t('Dashboard.Management.Delivery.phoneNumberPlaceholder')}
-                dense
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={!!errors.phoneNumber}
-              />
-            )}
-          />
-          {errors.phoneNumber && (
-            <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
-              {errors.phoneNumber.message?.toString()}
-            </Text>
+        <Controller
+          control={control}
+          name="phoneNumber"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <TextInput
+              tw="w-full bg-transparent mt-1"
+              label={t('Dashboard.Management.Delivery.phoneNumber')}
+              mode="flat"
+              placeholder={t('Dashboard.Management.Delivery.phoneNumberPlaceholder')}
+              dense
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              error={!!errors.phoneNumber}
+            />
           )}
-        </View>
-
-        <View tw="pb-10 items-center">
-          <Button
-            tw="w-[48%]"
-            mode="contained"
-            onPress={handleSubmit(onSubmit)}
-            disabled={!isDirty || isSubmitting}
-            uppercase
-          >
-            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
-          </Button>
-        </View>
-      </Modalize>
-    </Portal>
+        />
+        {errors.phoneNumber ? (
+          <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
+            {errors.phoneNumber.message?.toString()}
+          </Text>
+        ) : null}
+      </BottomSheetUI.Content>
+      <BottomSheetUI.Footer>
+        <Button
+          tw="w-5/6"
+          mode="contained"
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isDirty || isSubmitting}
+          uppercase
+        >
+          {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
+        </Button>
+      </BottomSheetUI.Footer>
+    </BottomSheetUI.Root>
   );
 }

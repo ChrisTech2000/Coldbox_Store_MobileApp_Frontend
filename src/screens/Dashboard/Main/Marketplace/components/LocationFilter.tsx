@@ -3,8 +3,7 @@ import isEqual from 'lodash/isEqual';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
-import { Button, Portal, TextInput } from 'react-native-paper';
+import { Button, TextInput } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import colors from 'tailwindcss/colors';
@@ -17,6 +16,7 @@ import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { Translator, useTranslationUtils } from '#i18n/utils';
@@ -54,7 +54,7 @@ export default function MarketplaceLocationFilter() {
   const toast = InAppNotifications.useToast();
   const farmerCountry = useDashboardStore((store) => store.farmerCountry);
 
-  const modalRef = useRef<Modalize>(null);
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
   const form = useForm<FormValues>({
     defaultValues: DEFAULT_FORM_VALUES,
@@ -80,7 +80,7 @@ export default function MarketplaceLocationFilter() {
 
     function _onComplete() {
       previousValues.current = form.getValues();
-      modalRef.current?.close();
+      modalActions.close();
     }
 
     if (!values.cityName) {
@@ -180,7 +180,7 @@ export default function MarketplaceLocationFilter() {
         onPress={(evt) => {
           evt.stopPropagation();
           previousValues.current = form.getValues();
-          modalRef.current?.open();
+          modalActions.open();
         }}
       >
         <MaterialCommunityIcon name="map-marker-outline" size={28} color={colors.zinc[600]} />
@@ -192,114 +192,104 @@ export default function MarketplaceLocationFilter() {
         <MaterialIcon name="arrow-drop-down" size={26} color={colors.zinc[600]} />
       </Touchable>
 
-      <Portal>
-        <Modalize
-          ref={modalRef}
-          modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-          adjustToContentHeight
-          withHandle={false}
-          onClose={() => {
-            if (!isEqual(previousValues.current, form.getValues())) {
+      <BottomSheet.Root
+        ref={modalRef}
+        onClose={() => {
+          if (!isEqual(previousValues.current, form.getValues())) {
+            form.reset(previousValues.current);
+          }
+        }}
+      >
+        <BottomSheet.Content tw="pt-2.5 space-y-4">
+          <View tw="space-y-2">
+            <Text tw="text-base">{t('Dashboard.Marketplace.currentLocation')}</Text>
+            <Controller
+              control={form.control}
+              name="cityName"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  tw="bg-white border rounded-sm h-14 rounded-md"
+                  placeholder="City name"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              )}
+            />
+          </View>
+          <View tw="space-y-2">
+            <View tw="flex-row items-center">
+              <Text tw="text-base">{t('Dashboard.Marketplace.maxDistance')}</Text>
+              <Sup>(KM)</Sup>
+            </View>
+            <Controller
+              control={form.control}
+              name="distance"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  tw="bg-white border rounded-sm h-14 text-center rounded-md"
+                  keyboardType="numeric"
+                  defaultValue="0"
+                  editable={false}
+                  value={value}
+                  onChangeText={onChange}
+                  left={
+                    <TextInput.Icon
+                      icon="minus"
+                      color={paperTheme.colors.primary}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        const int = Number(value);
+                        if (isNaN(int)) return; // safe value
+                        const finalValue = (int > 0 ? int - 1 : 0).toString();
+                        onChange(finalValue);
+                      }}
+                      disabled={form.watch('distance') === '0'}
+                    />
+                  }
+                  right={
+                    <TextInput.Icon
+                      icon="plus"
+                      color={paperTheme.colors.primary}
+                      onPress={(evt) => {
+                        evt.stopPropagation();
+                        const int = Number(value);
+                        if (isNaN(int)) return; // safe value
+                        const finalValue = (int + 1).toString();
+                        onChange(finalValue);
+                      }}
+                    />
+                  }
+                />
+              )}
+            />
+          </View>
+        </BottomSheet.Content>
+        <BottomSheet.Footer>
+          <Button
+            tw="w-2/5"
+            mode="outlined"
+            uppercase
+            onPress={(evt) => {
+              evt.stopPropagation();
               form.reset(previousValues.current);
-            }
-          }}
-        >
-          <View tw="w-full items-center justify-center h-10">
-            <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-          </View>
-
-          <View tw="px-4 pb-4 pt-2.5 space-y-4">
-            <View tw="space-y-2">
-              <Text tw="text-base">{t('Dashboard.Marketplace.currentLocation')}</Text>
-              <Controller
-                control={form.control}
-                name="cityName"
-                render={({ field: { value, onChange } }) => (
-                  <Input
-                    tw="bg-white border rounded-sm h-14 rounded-md"
-                    placeholder="City name"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                )}
-              />
-            </View>
-            <View tw="space-y-2">
-              <View tw="flex-row items-center">
-                <Text tw="text-base">{t('Dashboard.Marketplace.maxDistance')}</Text>
-                <Sup>(KM)</Sup>
-              </View>
-              <Controller
-                control={form.control}
-                name="distance"
-                render={({ field: { value, onChange } }) => (
-                  <Input
-                    tw="bg-white border rounded-sm h-14 text-center rounded-md"
-                    keyboardType="numeric"
-                    defaultValue="0"
-                    editable={false}
-                    value={value}
-                    onChangeText={onChange}
-                    left={
-                      <TextInput.Icon
-                        icon="minus"
-                        color={paperTheme.colors.primary}
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          const int = Number(value);
-                          if (isNaN(int)) return; // safe value
-                          const finalValue = (int > 0 ? int - 1 : 0).toString();
-                          onChange(finalValue);
-                        }}
-                        disabled={form.watch('distance') === '0'}
-                      />
-                    }
-                    right={
-                      <TextInput.Icon
-                        icon="plus"
-                        color={paperTheme.colors.primary}
-                        onPress={(evt) => {
-                          evt.stopPropagation();
-                          const int = Number(value);
-                          if (isNaN(int)) return; // safe value
-                          const finalValue = (int + 1).toString();
-                          onChange(finalValue);
-                        }}
-                      />
-                    }
-                  />
-                )}
-              />
-            </View>
-          </View>
-
-          <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
-            <Button
-              tw="w-2/5"
-              mode="outlined"
-              uppercase
-              onPress={(evt) => {
-                evt.stopPropagation();
-                form.reset(previousValues.current);
-                modalRef.current?.close();
-              }}
-              disabled={form.formState.isSubmitting}
-            >
-              {t('actions.cancel')}
-            </Button>
-            <Button
-              tw="w-2/5"
-              mode="contained"
-              uppercase
-              // eslint-disable-next-line
-              onPress={form.handleSubmit(onSubmit as any)}
-              disabled={form.formState.isSubmitting}
-            >
-              {t('actions.apply')}
-            </Button>
-          </View>
-        </Modalize>
-      </Portal>
+              modalActions.close();
+            }}
+            disabled={form.formState.isSubmitting}
+          >
+            {t('actions.cancel')}
+          </Button>
+          <Button
+            tw="w-2/5"
+            mode="contained"
+            uppercase
+            // eslint-disable-next-line
+            onPress={form.handleSubmit(onSubmit as any)}
+            disabled={form.formState.isSubmitting}
+          >
+            {t('actions.apply')}
+          </Button>
+        </BottomSheet.Footer>
+      </BottomSheet.Root>
     </React.Fragment>
   );
 }

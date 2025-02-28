@@ -1,12 +1,12 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
 import { Icon, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -19,53 +19,49 @@ export default function ListCouponsBottomSheet() {
   const toast = InAppNotifications.useToast();
   const [cartData, fetchCart] = useCartStore((store) => [store.cartData, store.fetchCart]);
 
-  const modalRef = useRef<Modalize>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const onDeleteCoupon = useCallback(async (code: string) => {
-    try {
-      setIsSubmitting(true);
-      const result = await MarketplaceService.clearCoupon(code);
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
+  useAppEventListener(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL, modalActions.open);
 
-      if (result) {
-        await fetchCart();
-        modalRef.current?.close();
-        toast.show(t('actions.done'), { type: 'md_success' });
+  const onDeleteCoupon = useCallback(
+    async (code: string) => {
+      try {
+        setIsSubmitting(true);
+        const result = await MarketplaceService.clearCoupon(code);
+
+        if (result) {
+          await fetchCart();
+          modalActions.close();
+          toast.show(t('actions.done'), { type: 'md_success' });
+        }
+      } catch (error) {
+        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+        reportCrash(error as Error);
+      } finally {
+        setIsSubmitting(false);
       }
-    } catch (error) {
-      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
-      reportCrash(error as Error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, []);
+    },
+    [modalActions]
+  );
 
-  useAppEventListener(APP_EVENTS.DISPATCH_LIST_COUPONS_IN_CART_MODAL, () => {
-    modalRef.current?.open();
-  });
+  const filteredItems = useMemo(
+    () =>
+      cartData?.items?.filter(
+        (item, index, self) =>
+          item.relCouponCode &&
+          index === self.findIndex((i) => i.relCouponCode === item.relCouponCode)
+      ) ?? [],
+    [cartData?.items]
+  );
 
   return (
     <Portal>
-      <Modalize
-        ref={modalRef}
-        modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-        adjustToContentHeight
-        withHandle={false}
-      >
-        <View tw="w-full items-center justify-center h-10">
-          <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-        </View>
-
-        <View tw="px-4 pb-4 pt-2.5 space-y-3.5">
+      <BottomSheet.Root ref={modalRef}>
+        <BottomSheet.Content tw="pt-2.5 space-y-3.5">
           <Text tw="text-xl">{t('Dashboard.ShoppingCart.discountsApplied')}</Text>
           <FlatList
-            data={
-              cartData?.items?.filter(
-                (item, index, self) =>
-                  item.relCouponCode &&
-                  index === self.findIndex((i) => i.relCouponCode === item.relCouponCode)
-              ) ?? []
-            }
+            data={filteredItems}
             keyExtractor={(item) => item.relCouponCode ?? ''}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
@@ -86,14 +82,16 @@ export default function ListCouponsBottomSheet() {
               </View>
             )}
           />
-        </View>
-
-        <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300 mb-4">
+        </BottomSheet.Content>
+        <BottomSheet.Footer>
           <Button
             mode="contained"
             tw="w-5/6"
             uppercase
-            onPress={() => modalRef.current?.close()}
+            onPress={(evt) => {
+              evt.stopPropagation();
+              modalActions.close();
+            }}
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -102,8 +100,8 @@ export default function ListCouponsBottomSheet() {
               t('Dashboard.ShoppingCart.gotItButton')
             )}
           </Button>
-        </View>
-      </Modalize>
+        </BottomSheet.Footer>
+      </BottomSheet.Root>
     </Portal>
   );
 }

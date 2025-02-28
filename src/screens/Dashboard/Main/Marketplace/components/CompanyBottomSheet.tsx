@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Divider, List, Portal } from 'react-native-paper';
-import { Modalize } from 'react-native-modalize';
+import { Divider, List } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Clipboard from '@react-native-clipboard/clipboard';
 import colors from 'tailwindcss/colors';
@@ -10,6 +9,7 @@ import truncate from 'lodash/truncate';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { Button } from '#ui/components/Button';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
@@ -28,71 +28,58 @@ export default function CompanyBottomSheet() {
   const { t } = useTranslationUtils();
 
   const [datum, setDatum] = useState<CompanyBottomSheetDatum | null>(null);
-  const modalRef = useRef<Modalize>(null);
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
   useAppEventListener<[CompanyBottomSheetDatum]>(
     APP_EVENTS.DISPATCH_MARKETPLACE_COMPANY_MODAL,
     (company) => {
       setDatum(company);
-      modalRef.current?.open();
+      modalActions.open();
     }
   );
 
   return (
-    <Portal>
-      <Modalize
-        ref={modalRef}
-        modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-        adjustToContentHeight
-        withHandle={false}
-        onClosed={() => setDatum(null)}
-      >
-        <View tw="w-full items-center justify-center h-10">
-          <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
+    <BottomSheet.Root ref={modalRef} onClose={() => setDatum(null)}>
+      <BottomSheet.Content tw="pt-2.5">
+        <Text variant="TextMedium" tw="text-2xl">
+          {datum?.name}
+        </Text>
+        <Text variant="TextMedium" tw="text-xl">
+          {datum?.coolingUnit}
+        </Text>
+        <View tw="mt-3">
+          <_CompanyField
+            label={t('Dashboard.Management.AddCoolingUnit.fields.location')}
+            value={datum?.locationName ?? ''}
+          />
+          <Divider tw="bg-zinc-400" />
+
+          <_CompanyField
+            label={t('Dashboard.Management.Location.chips.address')}
+            value={datum?.address ?? ''}
+          />
+          <Divider tw="bg-zinc-400" />
+
+          <_CompanyField
+            label={t('Dashboard.Management.Location.chips.coordinates')}
+            value={datum !== null ? _formatCoords(datum.latitude, datum.longitude) : ''}
+          />
         </View>
-
-        <View tw="px-4 pb-4 pt-2.5">
-          <Text variant="TextMedium" tw="text-2xl">
-            {datum?.name}
-          </Text>
-          <Text variant="TextMedium" tw="text-xl">
-            {datum?.coolingUnit}
-          </Text>
-          <View tw="mt-3">
-            <_CompanyField
-              label={t('Dashboard.Management.AddCoolingUnit.fields.location')}
-              value={datum?.locationName ?? ''}
-            />
-            <Divider tw="bg-zinc-400" />
-
-            <_CompanyField
-              label={t('Dashboard.Management.Location.chips.address')}
-              value={datum?.address ?? ''}
-            />
-            <Divider tw="bg-zinc-400" />
-
-            <_CompanyField
-              label={t('Dashboard.Management.Location.chips.coordinates')}
-              value={datum !== null ? _formatCoords(datum.latitude, datum.longitude) : ''}
-            />
-          </View>
-        </View>
-
-        <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
-          <Button
-            mode="outlined"
-            tw="w-5/6"
-            uppercase
-            onPress={(evt) => {
-              evt.stopPropagation();
-              modalRef.current?.close();
-            }}
-          >
-            {t('Dashboard.ShoppingCart.gotItButton')}
-          </Button>
-        </View>
-      </Modalize>
-    </Portal>
+      </BottomSheet.Content>
+      <BottomSheet.Footer>
+        <Button
+          mode="outlined"
+          tw="w-5/6"
+          uppercase
+          onPress={(evt) => {
+            evt.stopPropagation();
+            modalActions.close();
+          }}
+        >
+          {t('Dashboard.ShoppingCart.gotItButton')}
+        </Button>
+      </BottomSheet.Footer>
+    </BottomSheet.Root>
   );
 }
 

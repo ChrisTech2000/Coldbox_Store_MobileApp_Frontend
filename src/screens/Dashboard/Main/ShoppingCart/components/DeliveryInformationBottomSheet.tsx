@@ -1,9 +1,8 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import truncate from 'lodash/truncate';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FlatList, View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
-import { ActivityIndicator, List, Portal } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
@@ -13,6 +12,7 @@ import { Touchable } from '#ui/components/Touchable';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
+import * as BottomSheet from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -29,8 +29,7 @@ export default function DeliveryInformationBottomSheet() {
 
   const [datum, setDatum] = useState<DeliveryInformationDatum>();
   const [isVisible, setIsVisible] = useState<boolean>(false);
-
-  const modalRef = useRef<Modalize>(null);
+  const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
   const {
     data: cartDeliveryContacts,
@@ -71,81 +70,59 @@ export default function DeliveryInformationBottomSheet() {
       if (datum.orderId) refetchOrderContacts();
       else refetchCartContacts();
 
-      modalRef.current?.open();
+      modalActions.open();
     }
   );
 
   return (
-    <Portal>
-      <Modalize
-        ref={modalRef}
-        modalStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 32 }}
-        adjustToContentHeight
-        withHandle={false}
-      >
-        <View tw="w-full items-center justify-center h-10">
-          <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-        </View>
-
-        {isLoadingCartContacts || isLoadingOrderContacts ? (
-          <View tw="flex-1 items-center justify-center">
-            <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-          </View>
-        ) : (
-          <View>
-            <View tw="px-4 pb-4 pt-2.5 space-y-3.5">
-              <Text tw="text-2xl mb-1.5">{t('Dashboard.ShoppingCart.contactsForDelivery')}</Text>
-              <FlatList
-                data={data?.filter((item) => item.coolingUnitId === datum?.coolingUnitId) ?? []}
-                keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
-                scrollEnabled={false}
-                ListEmptyComponent={
-                  <View tw="py-4 px-0">
-                    <Text tw="text-lg">
-                      {t('Dashboard.Management.Delivery.noAvailableContacts')}
-                    </Text>
-                  </View>
-                }
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
-                    <_Field
-                      label={t('Dashboard.Management.Delivery.companyName')}
-                      value={item.deliveryCompanyName}
-                      mode="text"
-                    />
-                    <_Field
-                      label={t('Dashboard.ShoppingCart.contactName')}
-                      value={item.contactName}
-                      mode="text"
-                    />
-                    <_Field
-                      label={t('Dashboard.ShoppingCart.phoneNumber')}
-                      value={item.phone}
-                      mode="clipboard"
-                    />
-                  </View>
-                )}
+    <BottomSheet.Root ref={modalRef} isLoading={isLoadingCartContacts || isLoadingOrderContacts}>
+      <BottomSheet.Content tw="pt-2.5 space-y-3.5">
+        <Text tw="text-2xl mb-1.5">{t('Dashboard.ShoppingCart.contactsForDelivery')}</Text>
+        <FlatList
+          data={data?.filter((item) => item.coolingUnitId === datum?.coolingUnitId) ?? []}
+          keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
+          scrollEnabled={false}
+          ListEmptyComponent={
+            <View tw="py-4 px-0">
+              <Text tw="text-lg">{t('Dashboard.Management.Delivery.noAvailableContacts')}</Text>
+            </View>
+          }
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
+              <_Field
+                label={t('Dashboard.Management.Delivery.companyName')}
+                value={item.deliveryCompanyName}
+                mode="text"
+              />
+              <_Field
+                label={t('Dashboard.ShoppingCart.contactName')}
+                value={item.contactName}
+                mode="text"
+              />
+              <_Field
+                label={t('Dashboard.ShoppingCart.phoneNumber')}
+                value={item.phone}
+                mode="clipboard"
               />
             </View>
-
-            <View tw="flex flex-row w-full justify-evenly py-5 border-t border-solid border-zinc-300">
-              <Button
-                mode="outlined"
-                tw="w-5/6"
-                uppercase
-                onPress={() => {
-                  setIsVisible(false);
-                  modalRef.current?.close();
-                }}
-              >
-                {t('Dashboard.ShoppingCart.gotItButton')}
-              </Button>
-            </View>
-          </View>
-        )}
-      </Modalize>
-    </Portal>
+          )}
+        />
+      </BottomSheet.Content>
+      <BottomSheet.Footer>
+        <Button
+          mode="outlined"
+          tw="w-5/6"
+          uppercase
+          onPress={() => {
+            setIsVisible(false);
+            modalActions.close();
+          }}
+        >
+          {t('Dashboard.ShoppingCart.gotItButton')}
+        </Button>
+      </BottomSheet.Footer>
+    </BottomSheet.Root>
   );
 }
 
