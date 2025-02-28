@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
 import { useSWRConfig } from 'swr';
 
 import { Button } from '#ui/components/Button';
@@ -8,6 +7,7 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { useBottomSheet } from '#ui/components/BottomSheet';
 
 import { useTranslationUtils } from '#i18n/utils';
 import CouponService from '#services/CouponService';
@@ -29,8 +29,8 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
   const { mutate } = useSWRConfig();
   const company = useManagementStore((store) => store.company);
 
-  const modalRef = useRef<Modalize>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [modalRef, modalActions] = useBottomSheet();
 
   // eslint-disable-next-line
   // @ts-ignore
@@ -127,7 +127,8 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
       />
 
       <CouponModal
-        modalRef={modalRef}
+        ref={modalRef}
+        {...modalActions}
         onSubmit={async (values) => {
           await CouponService.createCoupon({
             ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
@@ -139,7 +140,7 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
               ownedOnBehalfOfCompanyId: isManagementStack ? company?.id : undefined,
             })
           );
-          modalRef.current?.close();
+          modalActions.close();
         }}
       />
 
@@ -150,7 +151,7 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
           uppercase
           onPress={(evt) => {
             evt.stopPropagation();
-            modalRef.current?.open();
+            modalActions.open();
           }}
         >
           {t('Dashboard.Management.Coupons.addCoupon')}
