@@ -11,7 +11,7 @@ import { cn } from '#ui/lib/cn';
 export type BottomSheetBaseProps = ReturnType<typeof useModalize>;
 
 const Wrapper = ({ usePortal, children }: PropsWithChildren<{ usePortal: boolean }>) => {
-  return usePortal ? <Portal>{children}</Portal> : <>{children}</>;
+  return usePortal ? <Portal>{children}</Portal> : <React.Fragment>{children}</React.Fragment>;
 };
 
 const Slot = ({ isLoading, children }: PropsWithChildren<{ isLoading: boolean }>) => {
