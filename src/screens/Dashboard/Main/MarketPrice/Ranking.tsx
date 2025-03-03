@@ -78,6 +78,13 @@ function MarketPriceRanking() {
     []
   );
 
+  const isInvalidSelection = _useIsInvalidSelection({
+    commodity,
+    selectedTimeframe,
+    markets: selectedMarkets,
+    states,
+  });
+
   if (!allowedCountry) {
     return (
       <View tw="flex-1 items-center justify-center mx-10 mt-3">
@@ -191,7 +198,7 @@ function MarketPriceRanking() {
           }
         />
 
-        {_isInvalid({ commodity, selectedTimeframe, markets: selectedMarkets, states }) ? (
+        {isInvalidSelection ? (
           <View tw="py-3">
             <Text tw="text-base">{t('Dashboard.MarketPrice.Ranking.select-warning')}</Text>
           </View>
@@ -230,7 +237,7 @@ function MarketPriceRanking() {
   );
 }
 
-function _isInvalid(obj: {
+function _useIsInvalidSelection(obj: {
   commodity: PredictionCrop | null;
   selectedTimeframe: Array<TimeFrameDatum>;
   states: Array<PredictionState>;

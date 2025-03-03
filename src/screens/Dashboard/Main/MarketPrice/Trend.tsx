@@ -57,6 +57,8 @@ function MarketPriceTrend() {
     fullScreen: true,
   });
 
+  const isInvalidSelection = _useIsInvalidSelection({ commodity, state, market: selectedMarket });
+
   if (loadingPredictionParams || loadingFarmer) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -128,7 +130,7 @@ function MarketPriceTrend() {
           }
         />
 
-        {_isInvalid({ commodity, state, market: selectedMarket }) ? (
+        {isInvalidSelection ? (
           <View tw="py-3">
             <Text tw="text-base">{t('Dashboard.MarketPrice.Ranking.select-warning')}</Text>
           </View>
@@ -142,7 +144,7 @@ function MarketPriceTrend() {
   );
 }
 
-function _isInvalid(obj: {
+function _useIsInvalidSelection(obj: {
   commodity: PredictionCrop | null;
   state: PredictionState | null;
   market: PredictionMarket | null;
