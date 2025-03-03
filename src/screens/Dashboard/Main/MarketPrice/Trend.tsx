@@ -36,8 +36,6 @@ function MarketPriceTrend() {
   const { selectedItem: commodity } = useTrendCommodityStore();
   const { selectedItem: state } = useTrendStateStore();
 
-  const countryISO = useContextualCountryISO();
-
   const [isCommoditiesModalOpen, setIsCommoditiesModalOpen] = useState<boolean>(false);
   const [isStatesModalOpen, setIsStatesModalOpen] = useState<boolean>(false);
   const [selectedMarket, setSelectedMarket] = useState<PredictionMarket | null>(null);
@@ -49,7 +47,7 @@ function MarketPriceTrend() {
       setPredictionParams(predictionParams);
       return predictionParams;
     },
-    countryISO as QueryCountry,
+    allowedCountry as QueryCountry,
     { skip: !allowedCountry }
   );
 
@@ -69,8 +67,8 @@ function MarketPriceTrend() {
 
   if (!allowedCountry) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10">
-        <Text variant="TitleMedium" tw="text-center text-green-primary">
+      <View tw="flex-1 items-center justify-center mx-10 mt-3">
+        <Text variant="TitleMedium" tw="text-base text-center text-green-primary">
           {t('Dashboard.MarketPrice.emptyState')}
         </Text>
       </View>
@@ -130,7 +128,11 @@ function MarketPriceTrend() {
           }
         />
 
-        {commodity && (state || selectedMarket) ? (
+        {_isInvalid({ commodity, state, market: selectedMarket }) ? (
+          <View tw="py-3">
+            <Text tw="text-base">{t('Dashboard.MarketPrice.Ranking.select-warning')}</Text>
+          </View>
+        ) : commodity && (state || selectedMarket) ? (
           <View tw="mt-2">
             <TrendChart commodity={commodity} state={state} market={selectedMarket} />
           </View>
@@ -138,6 +140,23 @@ function MarketPriceTrend() {
       </ScrollView>
     </View>
   );
+}
+
+function _isInvalid(obj: {
+  commodity: PredictionCrop | null;
+  state: PredictionState | null;
+  market: PredictionMarket | null;
+}): boolean {
+  const { commodity, state, market } = obj;
+
+  const contextualCountry = useContextualCountryISO();
+  const isIndian = contextualCountry === 'IN';
+
+  const hasNoCommodity = !commodity;
+  const hasNoMarket = !market;
+  const hasNoState = !state;
+
+  return hasNoCommodity || (isIndian ? hasNoMarket : hasNoState);
 }
 
 export default withSafeArea(

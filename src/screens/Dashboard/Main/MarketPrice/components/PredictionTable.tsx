@@ -150,10 +150,8 @@ export function PredictionTable({ commodity, states, dates, markets }: Predictio
 
   if (!predictionData || !predictionData?.length) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10">
-        <Text variant="TitleMedium" tw="text-center text-green-primary">
-          {t('Dashboard.MarketPrice.emptyState')}
-        </Text>
+      <View tw="flex-1 items-center justify-center mx-10 mt-3">
+        <Text tw="text-base text-center">{t('Dashboard.MarketPrice.no-data-found')}</Text>
       </View>
     );
   }

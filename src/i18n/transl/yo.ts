@@ -333,6 +333,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Awọn idiyele ọja ko si ni orilẹ ede rẹ',
+      'no-data-found': 'Ko si akosile ti a rii fun akojọpọ ọja ati eru yii',
       commodityLabel: 'oja',
       commodityModalTitle: 'Yan oja kan',
       Trend: {
@@ -362,6 +363,7 @@ export default {
         'district-placeholder': 'Agbegbe',
         'market-label': 'Yan Oja kan',
         'market-placeholder': 'Oja',
+        'select-warning': 'Jọwọ ṣe yiyan fun aaye kọọkan',
       },
     },
     CrateManagement: {

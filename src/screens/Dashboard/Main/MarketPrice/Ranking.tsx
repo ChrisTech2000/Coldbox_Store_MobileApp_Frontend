@@ -18,7 +18,10 @@ import { cn } from '#ui/lib/cn';
 
 import { PredictionTable } from './components/PredictionTable';
 import { usePriceTrendsStore } from './store';
-import { CountryBasedContentSwitch } from './components/PredictionMarketSelect';
+import {
+  CountryBasedContentSwitch,
+  useContextualCountryISO,
+} from './components/PredictionMarketSelect';
 import PriceRankingMarketFilters, {
   getMarketsGroupedByDistrict,
 } from './components/PriceRankingMarketFilters';
@@ -77,8 +80,8 @@ function MarketPriceRanking() {
 
   if (!allowedCountry) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10">
-        <Text variant="TitleMedium" tw="text-center text-green-primary">
+      <View tw="flex-1 items-center justify-center mx-10 mt-3">
+        <Text variant="TitleMedium" tw="text-base text-center text-green-primary">
           {t('Dashboard.MarketPrice.emptyState')}
         </Text>
       </View>
@@ -188,7 +191,11 @@ function MarketPriceRanking() {
           }
         />
 
-        {predictionParams && commodity && selectedTimeframe.length > 0 ? (
+        {_isInvalid({ commodity, selectedTimeframe, markets: selectedMarkets, states }) ? (
+          <View tw="py-3">
+            <Text tw="text-base">{t('Dashboard.MarketPrice.Ranking.select-warning')}</Text>
+          </View>
+        ) : predictionParams && commodity && selectedTimeframe.length > 0 ? (
           <CountryBasedContentSwitch
             standard={
               <PredictionTable
@@ -221,6 +228,25 @@ function MarketPriceRanking() {
       </ScrollView>
     </View>
   );
+}
+
+function _isInvalid(obj: {
+  commodity: PredictionCrop | null;
+  selectedTimeframe: Array<TimeFrameDatum>;
+  states: Array<PredictionState>;
+  markets: Array<PredictionMarket>;
+}): boolean {
+  const { commodity, selectedTimeframe, states, markets } = obj;
+
+  const contextualCountry = useContextualCountryISO();
+  const isIndian = contextualCountry === 'IN';
+
+  const hasNoCommodity = !commodity;
+  const hasNoTimeframe = !selectedTimeframe.length;
+  const hasNoMarkets = !markets?.length;
+  const hasNoStates = !states?.length;
+
+  return hasNoCommodity || hasNoTimeframe || (isIndian ? hasNoMarkets : hasNoStates);
 }
 
 export default withSafeArea(

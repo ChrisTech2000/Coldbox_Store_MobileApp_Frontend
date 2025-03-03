@@ -340,6 +340,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Babu farashin kasuwa a cikin ƙasar ku',
+      'no-data-found': 'આ બજાર અને કોમોડિટી સંયોજન માટે કોઈ ડેટા મળ્યો નથી',
       commodityLabel: 'Kaya',
       commodityModalTitle: 'Zaɓi kaya.',
       Trend: {
@@ -369,6 +370,7 @@ export default {
         'district-placeholder': 'Gundumar',
         'market-label': 'Zaɓi kasuwa',
         'market-placeholder': 'Kasuwa',
+        'select-warning': 'કૃપા કરીને દરેક ક્ષેત્ર માટે પસંદગી કરો',
       },
     },
     CrateManagement: {
