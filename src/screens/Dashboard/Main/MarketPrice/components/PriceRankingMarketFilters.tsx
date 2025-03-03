@@ -217,7 +217,7 @@ type OptionDatum<T = string> = { identifier: T; content: string };
 
 const ESTIMATED_LIST_SIZE = {
   height: DEVICE_HEIGHT,
-  width: DEVICE_WIDTH - 40,
+  width: DEVICE_WIDTH - 52,
 };
 
 function _LocationFilterSelect<S = string>(props: {

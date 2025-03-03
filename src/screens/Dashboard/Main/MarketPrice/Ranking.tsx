@@ -78,11 +78,31 @@ function MarketPriceRanking() {
     []
   );
 
+  const stateDatums = useMemo(
+    (): Array<PredictionState> =>
+      states.length > 0 && filterByLocation
+        ? states
+        : predictionParams && 'availableStates' in predictionParams
+          ? predictionParams.availableStates
+          : [],
+    [states, filterByLocation, predictionParams]
+  );
+
+  const marketDatums = useMemo(
+    (): Array<PredictionMarket> =>
+      selectedMarkets.length > 0 && filterByLocation
+        ? selectedMarkets
+        : predictionParams && 'availableMarkets' in predictionParams
+          ? getMarketsGroupedByDistrict(predictionParams.availableMarkets).defaultList()
+          : [],
+    [selectedMarkets, filterByLocation, predictionParams]
+  );
+
   const isInvalidSelection = _useIsInvalidSelection({
     commodity,
     selectedTimeframe,
-    markets: selectedMarkets,
-    states,
+    markets: marketDatums,
+    states: stateDatums,
   });
 
   if (!allowedCountry) {
@@ -206,28 +226,16 @@ function MarketPriceRanking() {
           <CountryBasedContentSwitch
             standard={
               <PredictionTable
-                states={
-                  states.length > 0
-                    ? states
-                    : 'availableStates' in predictionParams
-                      ? predictionParams.availableStates
-                      : []
-                }
+                states={stateDatums}
                 commodity={commodity}
                 dates={selectedTimeframe}
               />
             }
             fallback={
               <PredictionTable
+                markets={marketDatums}
                 commodity={commodity}
                 dates={selectedTimeframe}
-                markets={
-                  selectedMarkets.length > 0
-                    ? selectedMarkets
-                    : 'availableMarkets' in predictionParams
-                      ? getMarketsGroupedByDistrict(predictionParams.availableMarkets).defaultList()
-                      : []
-                }
               />
             }
           />
