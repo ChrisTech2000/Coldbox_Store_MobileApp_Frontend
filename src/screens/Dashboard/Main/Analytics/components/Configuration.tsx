@@ -77,7 +77,7 @@ export function ConfigurationModal({
               modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
               divider
               disableOnEmpty
-              autoSelect
+              autoSelectAll
               occupyFullWidth
             />
           </View>

@@ -159,7 +159,7 @@ export function FarmerAnalytics() {
           selectedCoolingUnit.some((selected) => selected.id === unit.id)
         );
         overrideSelectedCoolingUnit(
-          commonCoolingUnits.length > 0 ? commonCoolingUnits : [data.datums.farmerCoolingUnits[0]]
+          commonCoolingUnits.length > 0 ? commonCoolingUnits : data.datums.farmerCoolingUnits
         );
       }
     }
