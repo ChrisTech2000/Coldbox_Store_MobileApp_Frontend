@@ -88,7 +88,8 @@ export function ConfigurationModal({
             icon="check-circle-outline"
             contentStyle="flex flex-row-reverse"
             tw="w-full"
-            onPress={() => {
+            onPress={(evt) => {
+              evt.stopPropagation();
               if (startDate && endDate && selectedUnits.length) {
                 confirm({
                   startDate,
