@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import GetLocation, { LocationError } from 'react-native-get-location';
 import { ActivityIndicator } from 'react-native-paper';
+import type { LocationError, LocationErrorCode } from 'react-native-get-location/dist';
 import colors from 'tailwindcss/colors';
-import ms from 'ms';
 
 import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
@@ -12,6 +11,8 @@ import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
 import { useToggle } from '#ui/hooks/useToggle';
 import reportCrash from '#ui/lib/reportCrash';
+import { LocationGeocoder } from '#services/LocationGeocoder';
+import { CustomError, type EGeolocationError } from '#services/utils/ErrorUtil';
 
 import FormManager from '../components/FormManager';
 
@@ -28,10 +29,7 @@ export default function GeoLocationForm() {
   async function getCoordinates() {
     toggleLoading();
     try {
-      const result = await GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: ms('6 seconds'),
-      });
+      const result = await LocationGeocoder.getCurrentLocation();
       const newCoordinates = {
         latitude: result.latitude.toString(),
         longitude: result.longitude.toString(),
@@ -39,21 +37,22 @@ export default function GeoLocationForm() {
       form.reset((prev) => ({ ...prev, ...newCoordinates }));
       setCoordinates(newCoordinates);
     } catch (exception) {
-      if (exception instanceof LocationError) {
-        const _map: Record<string, string> = {
+      if (exception instanceof CustomError) {
+        const geolocationError = exception as CustomError<EGeolocationError, LocationError>;
+        const locationErrorCode = geolocationError.originalError?.code;
+
+        const errorMessageMap = {
           CANCELLED: t('Dashboard.Management.Location.toasts.positionCancelled'),
           UNAUTHORIZED: t('Dashboard.Management.Location.toasts.positionUnauthorized'),
-        };
-        const message =
-          _map?.[exception.code] ?? t('Dashboard.Management.Location.toasts.locationUnavailable');
-        toast.show(message, { type: 'md_danger' });
-      } else if (exception instanceof Error && exception.message === 'Location not available') {
-        toast.show(t('Dashboard.Management.Location.toasts.locationUnavailable'), {
-          type: 'md_danger',
-        });
-      } else {
-        reportCrash(exception as Error);
+          UNAVAILABLE: t('Dashboard.Management.Location.toasts.locationUnavailable'),
+        } as Record<LocationErrorCode, string>;
+
+        const errorMessage = errorMessageMap?.[locationErrorCode!] ?? errorMessageMap.UNAVAILABLE;
+        toast.show(errorMessage, { type: 'md_danger' });
+        return;
       }
+
+      reportCrash(exception as Error);
     } finally {
       toggleLoading();
     }

@@ -90,7 +90,12 @@ export function useAnalysis(
 ) {
   const isDataSkippable = !selectedUnits?.length || !user?.id;
 
-  const { data: usage, isLoading: isUsageDataLoading } = useApiCall(
+  const {
+    data: usage,
+    isLoading: isUsageDataLoading,
+    isValidating: isValidatingUsage,
+    refetch: refetchUsage,
+  } = useApiCall(
     'getUsageAnalysis',
     ColdtivateService.getUsageAnalysis,
     selectedUnits.map((unit) => unit.id),
@@ -100,7 +105,12 @@ export function useAnalysis(
     }
   );
 
-  const { data: revenue, isLoading: isRevenueDataLoading } = useApiCall(
+  const {
+    data: revenue,
+    isLoading: isRevenueDataLoading,
+    isValidating: isValidatingRevenue,
+    refetch: refetchRevenue,
+  } = useApiCall(
     'getRevenueAnalysis',
     ColdtivateService.getRevenueAnalysis,
     {
@@ -170,8 +180,12 @@ export function useAnalysis(
       areRevUsersLoading ||
       areCropsLoading ||
       areCompaniesLoading,
+    isValidatingRevenue,
+    isValidatingUsage,
     usageData,
     revenueData,
     crops,
+    refetchRevenue,
+    refetchUsage,
   };
 }

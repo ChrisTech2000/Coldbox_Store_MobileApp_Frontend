@@ -10,6 +10,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import { useManagementStore } from '#stores/management';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import type { BankAccount, Company, Farmer, FarmerData, Top5Data } from '#types/global';
+import { useDashboardCompanyStore } from '#screens/Dashboard/Main/Dashboard';
 
 import { html } from '#ui/lib/templating/internals';
 import {
@@ -89,11 +90,11 @@ export class DataLoader {
       throw new Error(CONSTRAINT_EXCEPTIONS.NO_COMPANY_ASSIGNED);
     }
 
-    const { farmerCoolingUnits, contextualCoolingUnitId } =
-      await DataLoader._loadFarmerCoolingUnits(farmer, contextualCompanyId);
-    if (!(farmerCoolingUnits.length >= 1) || !contextualCoolingUnitId) {
-      throw new Error(CONSTRAINT_EXCEPTIONS.NO_CHECK_INS);
-    }
+    const farmerCoolingUnits = await DataLoader._loadFarmerCoolingUnits(
+      farmer,
+      contextualCompanyId
+    );
+    if (!(farmerCoolingUnits.length >= 1)) throw new Error(CONSTRAINT_EXCEPTIONS.NO_CHECK_INS);
 
     const { farmerSlice, impactSlice } = await DataLoader._loadFarmerAnalytics(farmer);
     if (!farmerSlice || !impactSlice) throw new Error(CONSTRAINT_EXCEPTIONS.NO_SURVEYS);
@@ -193,7 +194,10 @@ export class DataLoader {
     return {
       farmerInfo,
       farmerCompanies,
-      contextualCompanyId: useManagementStore.getState().company?.id || farmerCompanies.at(0)?.id,
+      contextualCompanyId:
+        useManagementStore.getState().company?.id ||
+        useDashboardCompanyStore.getState()?.selectedItem?.id ||
+        farmerCompanies.at(0)?.id,
     };
   }
 
@@ -201,9 +205,7 @@ export class DataLoader {
     const allCoolingUnits = await ColdtivateService.getCoolingUnits({ company: companyId });
 
     const unitsSet = new Set<number>(farmer.coolingUnits);
-    const farmerCoolingUnits = (allCoolingUnits ?? []).filter((unit) => unitsSet.has(unit.id));
-
-    return { farmerCoolingUnits, contextualCoolingUnitId: farmerCoolingUnits.at(0)?.id };
+    return (allCoolingUnits ?? []).filter((unit) => unitsSet.has(unit.id));
   }
 
   private static async _loadFarmerAnalytics(farmer: Farmer) {
@@ -299,6 +301,36 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
             (data.stats.surveys.numOfFilledPostcheckoutSurveys ?? 0),
         });
 
+  function getRecordValue<T = string | number>(
+    value: Record<string, T> | undefined,
+    idx: number,
+    defaultValue: T
+  ): T {
+    if (!value) return defaultValue;
+    if (typeof value === 'string') return value as T;
+    return (value[idx] ?? defaultValue) as T;
+  }
+
+  function getTupleValue(
+    value: Record<string, string | number> | Array<[string, string | number]> | undefined,
+    idx: number,
+    cb: (v: [string, string | number]) => string | number
+  ): Array<string | number> {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.map(cb);
+    return value?.[idx] ? [value[idx]] : [];
+  }
+
+  function getListValue(
+    value: Record<string, string> | Array<string> | undefined,
+    idx: number,
+    cb: (v: string) => string
+  ): Array<string> {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.map(cb);
+    return value?.[idx] ? [value[idx]] : [];
+  }
+
   return html(
     DetailsContainer({
       datums: [
@@ -352,10 +384,11 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
       },
       rows:
         data?.stats?.cools?.map((cool, index) => ({
-          unit: cool.unitName?.[index] ?? '',
-          checkIn: cool.roomCratesIn?.[index] ?? 0,
-          checkOut: cool.roomCratesOut?.[index] ?? 0,
+          unit: getRecordValue(cool.unitName, index, ''),
+          checkIn: getRecordValue(cool.roomCratesIn, index, 0),
+          checkOut: getRecordValue(cool.roomCratesOut, index, 0),
         })) ?? [],
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     Section({ label: t('Dashboard.Analytics.totalQuantityLabel') }),
     Table({
@@ -371,10 +404,11 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
       },
       rows:
         data?.stats?.cools?.map((cool, index) => ({
-          unit: cool.unitName?.[index] ?? '',
-          checkIn: cool.roomKgIn?.[index] ?? 0,
-          checkOut: cool.roomKgOut?.[index] ?? 0,
+          unit: getRecordValue(cool.unitName, index, ''),
+          checkIn: getRecordValue(cool.roomKgIn, index, 0),
+          checkOut: getRecordValue(cool.roomKgOut, index, 0),
         })) ?? [],
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     Section({ label: t('Dashboard.Analytics.totalOperations') }),
     Table({
@@ -390,10 +424,11 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
       },
       rows:
         data?.stats?.cools?.map((cool, index) => ({
-          unit: cool.unitName?.[index] ?? '',
-          checkIn: cool.roomOpsIn?.[index] ?? 0,
-          checkOut: cool.roomOpsOut?.[index] ?? 0,
+          unit: getRecordValue(cool.unitName, index, ''),
+          checkIn: getRecordValue(cool.roomOpsIn, index, 0),
+          checkOut: getRecordValue(cool.roomOpsOut, index, 0),
         })) ?? [],
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInCropDistribution') }),
     Table({
@@ -405,9 +440,9 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
       // eslint-disable-next-line
       // @ts-ignore
       rows: data?.stats.cools?.map((cool, index) => ({
-        unit: cool.unitName?.[index] ?? '',
-        crates: cool.checkInCratesCrop.map((item) => item[1]),
-        crop: cool.checkInCratesCrop.map((item) => item[0]),
+        unit: getRecordValue(cool.unitName, index, ''),
+        crates: getTupleValue(cool.checkInCratesCrop, index, (item) => item[1]),
+        crop: getTupleValue(cool.checkInCratesCrop, index, (item) => item[0]),
       })),
     }),
     Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution') }),
@@ -420,9 +455,9 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
       // eslint-disable-next-line
       // @ts-ignore
       rows: data?.stats.cools?.map((cool, index) => ({
-        unit: cool.unitName?.[index] ?? '',
-        crates: cool.checkOutCratesCrop.map((item) => item[1]),
-        crop: cool.checkOutCratesCrop.map((item) => item[0]),
+        unit: getRecordValue(cool.unitName, index, ''),
+        crates: getListValue(cool.checkOutCratesCrop, index, (item) => item[1]),
+        crop: getListValue(cool.checkOutCratesCrop, index, (item) => item[0]),
       })),
     }),
     Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution') }),
@@ -435,9 +470,9 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
       // eslint-disable-next-line
       // @ts-ignore
       rows: data?.stats.cools?.map((cool, index) => ({
-        unit: cool.unitName?.[index] ?? '',
-        weight: cool.checkInKgCrop.map((item) => item[1]),
-        crop: cool.checkInKgCrop.map((item) => item[0]),
+        unit: getRecordValue(cool.unitName, index, ''),
+        weight: getTupleValue(cool.checkInKgCrop, index, (item) => item[1]),
+        crop: getTupleValue(cool.checkInKgCrop, index, (item) => item[0]),
       })),
     }),
     Section({ label: t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutKgDistribution') }),
@@ -450,9 +485,9 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
       // eslint-disable-next-line
       // @ts-ignore
       rows: data?.stats.cools?.map((cool, index) => ({
-        unit: cool.unitName?.[index] ?? '',
-        weight: cool.checkOutKgCrop.map((item) => item[1]),
-        crop: cool.checkOutKgCrop.map((item) => item[0]),
+        unit: getRecordValue(cool.unitName, index, ''),
+        weight: getListValue(cool.checkOutKgCrop, index, (item) => item[1]),
+        crop: getListValue(cool.checkOutKgCrop, index, (item) => item[0]),
       })),
     }),
     SurveyStatsCounter({
@@ -489,6 +524,7 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         change: item.avgMonthlyPercFoodlossEvolution ?? 0,
         loss: `${(item.avgBaselinePercLossMonth ?? 0).toFixed(2)}% to ${(item.avgMonthlyPercLoss ?? 0).toFixed(2)}%`,
       })),
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     ImpactEvolution({
       title: t('Dashboard.Analytics.farmersAnalytics.revenueEvolution'),
@@ -511,6 +547,7 @@ export function getPdfContent(data: AggregatedFarmerData, t: Translator): string
         change: item.avgMonthlyPercRevenueIncreaseEvolution ?? 0,
         revenue: `${data.datums.currencyCode} ${(item.avgBaselineFarmerRevenueMonth ?? 0).toFixed(2)} to ${data.datums.currencyCode} ${(item.avgMonthlyFarmerRevenue ?? 0).toFixed(2)}`,
       })),
+      total: Object.values(data?.stats?.cools ?? {}).length ?? 0,
     }),
     SurveyStatsPercentage({
       title: t('Dashboard.Analytics.farmersAnalytics.baselineSurveyLabel'),

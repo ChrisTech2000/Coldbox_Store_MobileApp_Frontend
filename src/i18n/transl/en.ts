@@ -27,6 +27,8 @@ const en = {
     error: {
       errorMessage: 'Oops... looks like something went wrong.',
       tryAgainMessage: 'Please try again later.',
+      serverErrorMessage:
+        'Oops! Looks like something went wrong on our side. Please try again later or contact support.',
     },
     auth: {
       SignIn: 'Log in',
@@ -130,7 +132,7 @@ const en = {
     },
   },
   actions: {
-    error: 'An error occured',
+    error: 'An error occurred',
     cancel: 'Cancel',
     confirm: 'Confirm',
     import: 'Import',
@@ -356,6 +358,7 @@ const en = {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!',
     MarketPrice: {
       emptyState: 'Crop Prices are not available in your country',
+      'no-data-found': 'No data found for this market and commodity combination',
       commodityLabel: 'Commodity',
       commodityModalTitle: 'Select a commodity',
       Trend: {
@@ -379,6 +382,13 @@ const en = {
           column3: 'Price in {{currency}}/Kg',
           emptyState: 'No value available',
         },
+        'location-placeholder': 'State / District / Market',
+        'market-district-state': 'Market / District / State',
+        'district-label': 'Select a district',
+        'district-placeholder': 'District',
+        'market-label': 'Select a market',
+        'market-placeholder': 'Market',
+        'select-warning': 'Please make a selection for each field',
       },
     },
     CrateManagement: {
@@ -1175,9 +1185,9 @@ const en = {
           checkOutLabel: 'Check out code',
           idLabel: 'ID',
           itemLabel: 'Item',
-          calculatedPriceLabel: 'Calculated price',
+          calculatedPriceLabel: 'Calculated cooling fee',
           discountLabel: 'Discount',
-          totalPrice: 'Total price',
+          totalPrice: 'Total cooling fee',
         },
         checkIn: {
           title: 'Check-in receipt',

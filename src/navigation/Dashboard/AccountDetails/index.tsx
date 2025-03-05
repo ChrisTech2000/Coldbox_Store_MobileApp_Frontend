@@ -22,6 +22,7 @@ import type { EApiGender, ERoles, User } from '#types/global';
 
 import type { EditCoolingUserStackRoutes } from '../Management/EditCoolingUserStack';
 import CouponsSettingsStack from './CouponSettings';
+import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 
 export type DetailsSectionParams = {
   kind: ERoles;
@@ -91,8 +92,15 @@ export default function AccountDetailsStack() {
         <NavigatorHeader
           {...headerProps}
           routeTitle={t(translationPath!)}
-          // eslint-disable-next-line react/prop-types
-          leftContent={<Appbar.BackAction onPress={props.navigation.goBack} size={22} />}
+          leftContent={
+            <Appbar.BackAction
+              onPress={() => {
+                // eslint-disable-next-line react/prop-types
+                goBackWithDrawer(props.navigation);
+              }}
+              size={22}
+            />
+          }
         />
       ),
     };

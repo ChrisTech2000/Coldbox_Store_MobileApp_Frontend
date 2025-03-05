@@ -93,7 +93,7 @@ export default function DeleteAccountAction() {
 
       displayPopup(t('Dashboard.AccountDetails.popups.default'), true); // confirmation popup
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error);
     } finally {
       toggleProcessing();
@@ -111,7 +111,7 @@ export default function DeleteAccountAction() {
       useAuthStore.getState().revokeSession();
       DataloaderService.clearAllCaches();
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error);
     } finally {
       toggleProcessing();

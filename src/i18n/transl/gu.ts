@@ -29,6 +29,8 @@ export default {
     error: {
       errorMessage: 'અરે... કંઈક ખોટું થયું હોય તેવું લાગે છે.',
       tryAgainMessage: 'કૃપા કરીને થોડી વાર પછી ફરી પ્રયાસ કરો.',
+      serverErrorMessage:
+        'અરે! લાગે છે કે અમારી તરફથી કંઈક ખોટું થયું છે. કૃપા કરીને થોડી વાર પછી ફરી પ્રયાસ કરો અથવા સપોર્ટનો સંપર્ક કરો.',
     },
     auth: {
       SignIn: 'લૉગ ઇન કરો',
@@ -357,7 +359,8 @@ export default {
     coolingUserNavigateToMarketplace:
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
-      emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી', // TODO
+      emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી',
+      'no-data-found': 'આ બજાર અને કોમોડિટી સંયોજન માટે કોઈ ડેટા મળ્યો નથી',
       commodityLabel: 'વસ্তু',
       commodityModalTitle: 'એક વસ્તુ પસંદ કરો',
       Trend: {
@@ -381,6 +384,13 @@ export default {
           column3: 'દામ {{currency}}/કિલોગ્રામ',
           emptyState: 'કોઈ મૂલ્ય ઉપલબ્ધ નથી',
         },
+        'location-placeholder': 'રાજ્ય / જિલ્લો / બજાર',
+        'market-district-state': 'બજાર /જિલ્લો /રાજ્ય',
+        'district-label': 'જિલ્લાને પસંદ કરો',
+        'district-placeholder': 'જીલ્લો',
+        'market-label': 'બજારને પસંદ કરો',
+        'market-placeholder': 'બજાર',
+        'select-warning': 'કૃપા કરીને દરેક ક્ષેત્ર માટે પસંદગી કરો',
       },
     },
     CrateManagement: {

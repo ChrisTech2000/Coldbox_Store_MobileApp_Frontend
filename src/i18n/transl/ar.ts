@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: 'عفواً... يبدو أن هناك خطأ ما.',
       tryAgainMessage: 'يرجى المحاولة مرة أخرى لاحقًا.',
+      serverErrorMessage:
+        'عذرًا! يبدو أن هناك خطأ ما في نظامنا. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالدعم.',
     },
     auth: {
       SignIn: 'تسجيل الدخول',
@@ -334,6 +336,7 @@ export default {
       'مرحبًا بك في Coldtivate. ابدأ بإضافة المواقع إلى تطبيقك في لوحة الإدارة.',
     MarketPrice: {
       emptyState: 'أسعار المحاصيل غير متوفرة في بلدك',
+      'no-data-found': 'No data found for this market and commodity combination', // TODO
       commodityLabel: 'سلعة',
       commodityModalTitle: 'حدد سلعة',
       Trend: {
@@ -357,6 +360,13 @@ export default {
           column3: 'السعر بالعملة {{currency}}/كجم',
           emptyState: 'لا توجد قيمة متاحة',
         },
+        'location-placeholder': 'State / District / Market', // TODO
+        'market-district-state': 'Market / District / State', // TODO
+        'district-label': 'Select a district', // TODO
+        'district-placeholder': 'District', // TODO
+        'market-label': 'Select a market', // TODO
+        'market-placeholder': 'Market', // TODO
+        'select-warning': 'Please make a selection for each field', // TODO
       },
     },
     CrateManagement: {

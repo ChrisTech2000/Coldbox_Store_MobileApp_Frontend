@@ -66,9 +66,11 @@ export function NotificationBase(props: {
   ]);
 
   const [_isLoading, _setIsLoading] = useState<boolean>(false);
+  const [_notificationDisabled, _setNotificationDisabled] = useState<boolean>(false);
 
   async function onPressHandler(evt: GestureResponderEvent): Promise<void> {
     evt.stopPropagation();
+    if (isSurveyLoading) return; // safe guard
     try {
       setIsSurveyLoading(true);
       _setIsLoading(true);
@@ -83,6 +85,7 @@ export function NotificationBase(props: {
           toastId = toast.show(t('Dashboard.Notifications.surveyAlreadyFilled'), {
             type: 'md_danger',
           });
+          _setNotificationDisabled(true);
         }
       }
       if (!toastId) toast.show(t('actions.error'), { type: 'md_danger' });
@@ -101,13 +104,14 @@ export function NotificationBase(props: {
   const getTextVariant = (v: boolean) => (v ? undefined : 'TextMedium');
   const getTextColor = (v: boolean) => cn(v ? 'text-zinc-600' : 'text-black');
 
-  const isTapDisabled = (isDisableAllowed ?? true) ? item.seen || isSurveyLoading : false;
+  const isTapDisabled =
+    isSurveyLoading || ((isDisableAllowed ?? true) ? _notificationDisabled : false);
   const isTextDisabled = item.seen || isSurveyLoading;
 
   return (
     <View tw="p-0 mx-0 my-0.5 relative">
       {_isLoading ? (
-        <View tw="absolute flex items-center justify-center z-10 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <View tw="absolute flex items-center justify-center z-10 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 -mt-2.5">
           <ActivityIndicator size="small" color={paperTheme.colors.backdrop} animating />
         </View>
       ) : null}
@@ -223,15 +227,8 @@ export function MarketSurveyNotification(props: {
       (movement) => movement.code === notification.datum.movementCode
     );
 
-    const isValidMovement =
-      movementDetails &&
-      movementDetails.checkout.marketSurveyDelay &&
-      movementDetails.checkout?.crates?.[0]?.ownedByUserId;
+    const isValidMovement = movementDetails && movementDetails.checkout?.crates?.[0]?.ownedByUserId;
     if (!isValidMovement) throw new Error(NOTIFICATION_EXCEPTIONS.INVALID_HISTORY_MOVEMENT);
-
-    const owner = await ColdtivateService.getUser(
-      movementDetails.checkout.crates[0].ownedByUserId!
-    );
 
     const movementCropsForSurvey = (
       await Promise.all(
@@ -244,6 +241,16 @@ export function MarketSurveyNotification(props: {
       )
     ).filter(Boolean) as Array<{ id: number; name: string }>;
 
+    const areAllCropsInSurvey = movementCropsForSurvey.every((crop) =>
+      movementDetails.checkout.hasMarketSurvey.includes(crop.id)
+    );
+
+    if (areAllCropsInSurvey) throw new Error(NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN);
+
+    const owner = await ColdtivateService.getUser(
+      movementDetails.checkout.crates[0].ownedByUserId!
+    );
+
     onSelect({
       eventType: 'MARKET_SURVEY',
       datums: {
@@ -251,6 +258,7 @@ export function MarketSurveyNotification(props: {
         companyCurrency: company?.currency ?? DEFAULT_CURRENCY_CODE,
         crops: movementCropsForSurvey,
         owner: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`,
+        ownerId: owner.id,
       },
     });
     useRightDrawerStore.getState().toggle(false);

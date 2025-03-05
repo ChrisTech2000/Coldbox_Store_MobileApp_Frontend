@@ -7,7 +7,7 @@ import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
-import { savePDF } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -106,7 +106,7 @@ export function ComparisonSection() {
     const fileName = `${t('Dashboard.Analytics.companyTab.downloadFileName')}-${t('Dashboard.Analytics.comparison')}`;
 
     try {
-      await savePDF(html, fileName);
+      await FileUtility.createPdfFromHtml(html, fileName);
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
       toast.show(t('Dashboard.History.pdfModal.errorMessage'), {
@@ -144,7 +144,7 @@ export function ComparisonSection() {
 
   return (
     <ScrollView tw="mt-8 h-full w-full" showsVerticalScrollIndicator={false}>
-      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-20' : 'mb-12'}>
+      <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-24' : 'mb-12'}>
         {!configData ? (
           <Configuration openModal={() => setIsModalOpen(true)} />
         ) : (

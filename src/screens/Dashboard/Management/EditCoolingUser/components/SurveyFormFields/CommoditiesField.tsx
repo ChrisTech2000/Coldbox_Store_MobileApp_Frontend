@@ -41,15 +41,15 @@ export default function CommoditiesField(props: Props) {
       selectedSurvey
         ? {
             weightDistribution: {
-              totalProducedWeekly: selectedSurvey!.quantityTotal,
-              quantitySelfConsumed: selectedSurvey!.quantitySelfConsumed,
-              quantitySold: selectedSurvey!.quantitySold,
-              quantityLost: selectedSurvey!.quantityBelowMarketPrice,
+              totalProducedWeekly: selectedSurvey!.quantityTotal.toString(),
+              quantitySelfConsumed: selectedSurvey!.quantitySelfConsumed.toString(),
+              quantitySold: selectedSurvey!.quantitySold.toString(),
+              quantityLost: selectedSurvey!.quantityBelowMarketPrice.toString(),
             },
             unitOfMeasurement: selectedSurvey!.unit,
-            unitaryWeight: selectedSurvey!.kgInUnit,
+            unitaryWeight: selectedSurvey!.kgInUnit.toString(),
             reasonsForSpoilage: sanitizeString(selectedSurvey?.reasonForLoss as string),
-            averagePrice: selectedSurvey!.averagePrice,
+            averagePrice: selectedSurvey!.averagePrice.toString(),
           }
         : undefined,
     [selectedSurvey?.id]

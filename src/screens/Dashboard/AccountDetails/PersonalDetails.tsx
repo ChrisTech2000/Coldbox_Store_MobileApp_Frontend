@@ -79,19 +79,21 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
               <GenderField />
               <ContactFields />
               <RBAC.ProtectedResource action="VIEW" subject="FarmerFields">
-                <Touchable
-                  tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md mt-3"
-                  rippleColor={colors.zinc[300]}
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    Clipboard.setString(initialFormValues.userCode);
-                  }}
-                >
-                  <Text variant="TitleSmall" tw="flex-shrink" numberOfLines={2}>
-                    {t('Dashboard.AccountDetails.fields.userCode')}
-                  </Text>
-                  <Text variant="TitleSmall">{initialFormValues.userCode}</Text>
-                </Touchable>
+                {!!initialFormValues.userCode && (
+                  <Touchable
+                    tw="w-full bg-zinc-200 flex-row items-center justify-between space-x-2 p-3 rounded-md mt-3"
+                    rippleColor={colors.zinc[300]}
+                    onPress={(evt) => {
+                      evt.stopPropagation();
+                      Clipboard.setString(initialFormValues.userCode);
+                    }}
+                  >
+                    <Text variant="TitleSmall" tw="flex-shrink" numberOfLines={2}>
+                      {t('Dashboard.AccountDetails.fields.userCode')}
+                    </Text>
+                    <Text variant="TitleSmall">{initialFormValues.userCode}</Text>
+                  </Touchable>
+                )}
               </RBAC.ProtectedResource>
             </View>
           </KeyboardAwareScrollView>

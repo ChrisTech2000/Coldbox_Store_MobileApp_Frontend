@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: "Oups... on dirait qu'il y a eu un problème.",
       tryAgainMessage: 'Veuillez réessayer plus tard.',
+      serverErrorMessage:
+        "Oups! Il semble qu'une erreur se soit produite de notre côté. Veuillez réessayer plus tard ou contacter le support.",
     },
     auth: {
       SignIn: 'Connexion',
@@ -347,6 +349,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Les prix des recoltes ne sont pas disponibles dans votre pays',
+      'no-data-found': 'Aucune donnée trouvée pour cette combinaison de marché et de produits',
       commodityLabel: 'Marchandise',
       commodityModalTitle: 'Sélectionnez une marchandise',
       Trend: {
@@ -370,6 +373,13 @@ export default {
           column3: 'Prix en {{currency}}/Kg',
           emptyState: 'Aucune valeur disponible',
         },
+        'location-placeholder': 'État / District / Marché',
+        'market-district-state': 'Marché / Quartier / Etat',
+        'district-label': 'Sélectionnez un quartier',
+        'district-placeholder': 'Quartier',
+        'market-label': 'Sélectionnez un marché',
+        'market-placeholder': 'Marché',
+        'select-warning': 'Veuillez faire une sélection pour chaque champ',
       },
     },
     CrateManagement: {

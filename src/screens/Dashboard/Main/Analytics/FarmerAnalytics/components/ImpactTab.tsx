@@ -191,7 +191,7 @@ export function ImpactTab() {
                       params: {
                         screen: 'MarketSurveyBase',
                         params: {
-                          farmer: farmer?.user.firstName ?? '',
+                          owner: farmer?.user.firstName ?? '',
                           crops: surveys.idsNotFilled.map((crop) => {
                             const fullCrop = crops.find((c) => c.id.toString() === crop);
 
@@ -433,7 +433,7 @@ export function ImpactTab() {
               params: {
                 screen: 'MarketSurveyBase',
                 params: {
-                  farmer: farmer?.user.firstName ?? '',
+                  owner: farmer?.user.firstName ?? '',
                   crops: surveys.idsNotFilled.map((crop) => {
                     const fullCrop = crops.find((c) => c.id.toString() === crop);
 

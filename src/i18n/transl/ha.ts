@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: 'Kash...kamar wani abu yayi kuskure.',
       tryAgainMessage: 'Da fatan za a sake gwadawa daga baya.',
+      serverErrorMessage:
+        'Oops! Da alama wani kuskure ya faru a bangarenmu. Don Allah a sake gwadawa daga baya ko a tuntuɓi tallafi.',
     },
     auth: {
       SignIn: 'Shiga',
@@ -338,6 +340,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Babu farashin kasuwa a cikin ƙasar ku',
+      'no-data-found': 'આ બજાર અને કોમોડિટી સંયોજન માટે કોઈ ડેટા મળ્યો નથી',
       commodityLabel: 'Kaya',
       commodityModalTitle: 'Zaɓi kaya.',
       Trend: {
@@ -361,6 +364,13 @@ export default {
           column3: 'Farashin a {{currency}}/KG',
           emptyState: 'Babu darajar samuwa',
         },
+        'location-placeholder': 'Jiha / Gundumar / Kasuwa',
+        'market-district-state': 'Kasuwar / Gundumar / Jiha',
+        'district-label': 'Zaɓi gunduma',
+        'district-placeholder': 'Gundumar',
+        'market-label': 'Zaɓi kasuwa',
+        'market-placeholder': 'Kasuwa',
+        'select-warning': 'કૃપા કરીને દરેક ક્ષેત્ર માટે પસંદગી કરો',
       },
     },
     CrateManagement: {

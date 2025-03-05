@@ -8,7 +8,7 @@ import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
-import { savePDF } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
@@ -25,12 +25,18 @@ import {
   type AggregateFarmerDataArgs,
 } from '#screens/Dashboard/Management/EditCoolingUser/utils';
 
-import { ConfigData, Configuration, ConfigurationModal } from '../components/Configuration';
+import {
+  ConfigData,
+  Configuration,
+  ConfigurationModal,
+  useAnalyticsConfigCoolingUnitStore,
+} from '../components/Configuration';
 import { CommonFooter } from '../components/Footer';
 import { CratesTab } from './components/CratesTab';
 import { ImpactTab } from './components/ImpactTab';
 import { InnerTabs, Tab } from './components/InnerTabs';
 import { useFarmerAnalyticsData } from './store';
+import { useDashboardCompanyStore } from '../../Dashboard';
 
 export function FarmerAnalytics() {
   const { t } = useTranslationUtils();
@@ -41,6 +47,10 @@ export function FarmerAnalytics() {
     setConfigData: store.setConfigData,
     setFarmer: store.setFarmer,
   }));
+
+  const dashboardSelectedCompany = useDashboardCompanyStore((s) => s.selectedItem?.id);
+  const { onSelect: overrideSelectedCoolingUnit, selectedItems: selectedCoolingUnit } =
+    useAnalyticsConfigCoolingUnitStore();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
@@ -68,7 +78,7 @@ export function FarmerAnalytics() {
   );
 
   const { data, isLoading } = useApiCall(
-    'getFarmerRelatedEntities',
+    'getFarmerAnalyticsAggregatedDatums',
     useCallback(async (datums: AggregateFarmerDataArgs) => {
       try {
         return await DataLoader.aggregateFarmerData(datums);
@@ -91,11 +101,17 @@ export function FarmerAnalytics() {
               break;
           }
         }
-        if (typeof toastId === 'undefined') toast.show(t('actions.error'), { type: 'md_danger' });
+        if (typeof toastId === 'undefined')
+          toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
         reportCrash(exception as Error);
       }
     }, []),
-    { farmer: farmerResponse?.[0] as Farmer, crops: crops ?? [], companies: companies ?? [] },
+    {
+      farmer: farmerResponse?.[0] as Farmer,
+      crops: crops ?? [],
+      companies: companies ?? [],
+      dashboardSelectedCompany, // FYK: included for re-run trigger only, not used directly
+    },
     {
       skip: !farmerResponse?.length || isLoadingCrops || isLoadingCompanies,
       defaultData: undefined,
@@ -115,10 +131,10 @@ export function FarmerAnalytics() {
     try {
       setIsCreatingPdf(true);
       if (!data) throw new Error(); // safe guard
-      await savePDF(getPdfContent(data, t), 'farmer');
+      await FileUtility.createPdfFromHtml(getPdfContent(data, t), 'farmer');
       toast.show(`${t('actions.done')}!`, { type: 'md_success' });
     } catch (exception) {
-      toast.show(t('actions.error'), { type: 'md_danger' });
+      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
       reportCrash(exception as Error, {
         extras: {
           errorContext: 'PDF Generation',
@@ -138,6 +154,14 @@ export function FarmerAnalytics() {
         endDate: new Date(data.dateRange.end),
         startDate: new Date(data.dateRange.start),
       });
+      if (selectedCoolingUnit.length > 0) {
+        const commonCoolingUnits = data.datums.farmerCoolingUnits.filter((unit) =>
+          selectedCoolingUnit.some((selected) => selected.id === unit.id)
+        );
+        overrideSelectedCoolingUnit(
+          commonCoolingUnits.length > 0 ? commonCoolingUnits : data.datums.farmerCoolingUnits
+        );
+      }
     }
   }, [data?.datums?.farmerCoolingUnits]);
 

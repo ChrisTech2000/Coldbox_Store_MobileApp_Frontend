@@ -8,6 +8,7 @@ import Employee from '#assets/icons/employee.svg';
 import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
 import Logo from '#assets/images/coldtivate_logo.svg';
+
 import InAppNotifications from '#common/InAppNotifications';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { AuthRouteProps } from '#navigation/Auth';
@@ -15,6 +16,7 @@ import AuthService from '#services/AuthService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { ERoles, MAP_ROLES } from '#types/global';
+import { CustomError } from '#services/utils/ErrorUtil';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -139,7 +141,11 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
         await useAuthStore.getState().renewSession();
       }
     } catch (exception) {
-      toast.show(t('Auth.SignIn.accounts.toasts.login'), { type: 'md_danger' });
+      if (exception instanceof CustomError && exception.originalError.response.status <= 401) {
+        toast.show(t('Auth.SignIn.accounts.toasts.login'), { type: 'md_danger' });
+      } else {
+        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+      }
       reportCrash(exception as Error);
     }
   }, []);

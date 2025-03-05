@@ -1,6 +1,6 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
-import React, { useMemo } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import {
   FlatList,
   type GestureResponderEvent,
@@ -29,6 +29,8 @@ import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
 import type { DashboardMainRoutePaths } from '../Main';
 import moize from 'moize';
+import * as BottomSheetUI from '#ui/components/BottomSheet';
+import type { BottomSheetBaseProps } from '#ui/components/BottomSheet';
 
 type NavigationState = TabNavigationState<ParamListBase>;
 type NavigationRoutes = Array<DashboardMainRoutePaths>;
@@ -62,7 +64,7 @@ function filterBottomSheetItems(state: NavigationState, shouldExclude: boolean) 
 }
 
 function BottomNavigation({ state, navigation, descriptors }: BottomTabBarProps) {
-  const modalRef = React.useRef<Modalize>(null);
+  const [modalRef, modalActions] = BottomSheetUI.useBottomSheet();
   const routeOptions = descriptors[state.routes[state.index].key].options;
   return (
     <React.Fragment>
@@ -70,14 +72,15 @@ function BottomNavigation({ state, navigation, descriptors }: BottomTabBarProps)
         state={state}
         descriptors={descriptors}
         navigation={navigation}
-        modalRef={modalRef}
         tabBarStyle={routeOptions.tabBarStyle as StyleProp<ViewStyle>}
+        {...modalActions}
       />
       <BottomSheet
         state={state}
         descriptors={descriptors}
         navigation={navigation}
-        modalRef={modalRef}
+        ref={modalRef}
+        close={modalActions.close}
       />
     </React.Fragment>
   );
@@ -85,11 +88,10 @@ function BottomNavigation({ state, navigation, descriptors }: BottomTabBarProps)
 
 function BottomNavBar(
   props: Pick<BottomTabBarProps, 'state' | 'descriptors' | 'navigation'> & {
-    modalRef: React.RefObject<Modalize>;
     tabBarStyle: StyleProp<ViewStyle>;
-  }
+  } & Omit<BottomSheetBaseProps, 'ref'>
 ) {
-  const { state, descriptors, navigation, modalRef, tabBarStyle } = props;
+  const { state, descriptors, navigation, tabBarStyle, open: openModal, close: closeModal } = props;
 
   const { bottom } = useSafeAreaInsets();
   const { t } = useTranslationUtils();
@@ -122,7 +124,7 @@ function BottomNavBar(
               onPress={(evt: GestureResponderEvent) => {
                 evt.stopPropagation();
                 navigation.navigate(route.name);
-                modalRef.current?.close();
+                closeModal();
               }}
               renderIcon={descriptors?.[route.key]?.options?.tabBarIcon}
               isFocused={state.index === idx}
@@ -133,7 +135,7 @@ function BottomNavBar(
               title="More"
               onPress={(evt: GestureResponderEvent) => {
                 evt.stopPropagation();
-                modalRef.current?.open();
+                openModal();
               }}
               renderIcon={() => (
                 <MaterialCommunityIcon
@@ -151,14 +153,13 @@ function BottomNavBar(
   );
 }
 
-function BottomSheet({
-  state,
-  descriptors,
-  navigation,
-  modalRef,
-}: Pick<BottomTabBarProps, 'state' | 'descriptors' | 'navigation'> & {
-  modalRef: React.RefObject<Modalize>;
-}) {
+const BottomSheet = forwardRef<
+  Modalize,
+  Pick<BottomTabBarProps, 'state' | 'descriptors' | 'navigation'> &
+    Pick<BottomSheetBaseProps, 'close'>
+>(function Component(props, ref) {
+  const { state, descriptors, navigation, close: closeModal } = props;
+
   const { t } = useTranslationUtils();
   const { guard } = RBAC.useRBAC();
 
@@ -170,21 +171,12 @@ function BottomSheet({
   );
 
   return (
-    <Modalize
-      ref={modalRef}
-      modalStyle={{
-        borderTopLeftRadius: 32,
-        borderTopRightRadius: 32,
-        marginBottom: BOTTOM_NAV_HEIGHT,
-      }}
-      adjustToContentHeight
-      withHandle={false}
+    <BottomSheetUI.Root
+      ref={ref}
+      modalStyle={{ marginBottom: BOTTOM_NAV_HEIGHT }}
+      usePortal={false}
     >
-      <View tw="w-full items-center justify-center h-10">
-        <View tw="h-1 w-10 bg-zinc-500 rounded-md" />
-      </View>
-
-      <View tw="px-4 pb-4">
+      <BottomSheetUI.Content>
         <FlatList
           data={sheetItems}
           keyExtractor={(item) => item.key}
@@ -205,7 +197,7 @@ function BottomSheet({
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={(evt) => {
                 evt.stopPropagation();
-                modalRef.current?.close();
+                closeModal();
                 switch (item.name) {
                   case 'History':
                     return navigation.navigate('History', { screen: 'RootHistoryTabStack' });
@@ -218,10 +210,10 @@ function BottomSheet({
             />
           )}
         />
-      </View>
-    </Modalize>
+      </BottomSheetUI.Content>
+    </BottomSheetUI.Root>
   );
-}
+});
 
 const TabItemComponent = ({
   title,

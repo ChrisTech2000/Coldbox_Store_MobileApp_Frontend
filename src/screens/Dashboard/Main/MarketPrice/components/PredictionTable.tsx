@@ -13,27 +13,28 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import type { PredictionCrop, PredictionState, PredictionTableData } from '#types/global';
+import type {
+  PredictionCrop,
+  PredictionMarket,
+  PredictionState,
+  PredictionTableData,
+} from '#types/global';
 import { cn } from '#ui/lib/cn';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
-import { Month } from '../Ranking';
-import type { AllowedCountry } from '../store';
-import { MAP_ALLOWED_COUNTRY, QueryCountry } from '../Trend';
+import type { TimeFrameDatum } from '../Ranking';
+import { QueryCountry } from '../Trend';
 import { changePage, compareAsc, compareDesc, parseDateString } from '../utils';
-
-enum ECurrency {
-  NG = '₦',
-  IN = 'Rs',
-}
+import { DEFAULT_COUNTRY_DATUM, useContextualCountryISO } from './PredictionMarketSelect';
 
 type Sorting = 'state' | 'date' | 'price';
 type Direction = 'ascending' | 'descending';
 
 type PredictionTableProps = {
   commodity: PredictionCrop;
-  states: Array<PredictionState>;
-  country: AllowedCountry;
-  dates: Month[];
+  states?: Array<PredictionState>;
+  dates: Array<TimeFrameDatum>;
+  markets?: Array<PredictionMarket>;
 };
 
 type TableHeaderProps = {
@@ -48,18 +49,26 @@ const deviceHeight = Dimensions.get('window').height;
 
 const ITEMS_PER_PAGE = 10;
 
-export function PredictionTable({ commodity, states, country, dates }: PredictionTableProps) {
+export function PredictionTable({ commodity, states, dates, markets }: PredictionTableProps) {
   const { t } = useTranslationUtils();
-  const mappedCountry = MAP_ALLOWED_COUNTRY[country ?? ('' as AllowedCountry)] as QueryCountry;
+
+  const countryISO = useContextualCountryISO();
+
+  const currency = useMemo(
+    () =>
+      countriesDict().getByValue(countryISO)?.currencyCode || DEFAULT_COUNTRY_DATUM.CURRENCY_CODE,
+    [countryISO]
+  );
 
   const { data: predictionData, isLoading: loadingPredictionData } = useApiCall(
     'getPredictionTable',
     ColdtivateService.getPredictionTable,
     {
       cropId: commodity.id,
-      statesIds: states.map(({ id }) => id),
+      statesIds: states?.map(({ id }) => id),
       days: dates.map(({ date }) => date),
-      country: mappedCountry,
+      country: countryISO as QueryCountry,
+      marketsIds: markets?.map(({ id }) => id),
     }
   );
 
@@ -90,7 +99,11 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
           );
         break;
       case 'state':
-        data = predictionData.slice().sort((a, b) => compare(a.state, b.state));
+        data = predictionData.slice().sort((a, b) => {
+          const datumA = a.state || a.market || '';
+          const datumB = b.state || b.market || '';
+          return compare(datumA, datumB);
+        });
         break;
       case 'price':
         data = predictionData
@@ -129,7 +142,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
 
   if (loadingPredictionData) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center mt-10">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
       </View>
     );
@@ -137,10 +150,8 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
 
   if (!predictionData || !predictionData?.length) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10">
-        <Text variant="TitleMedium" tw="text-center text-green-primary">
-          {t('Dashboard.MarketPrice.emptyState')}
-        </Text>
+      <View tw="flex-1 items-center justify-center mx-10 mt-3">
+        <Text tw="text-base text-center">{t('Dashboard.MarketPrice.no-data-found')}</Text>
       </View>
     );
   }
@@ -151,7 +162,11 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
         <SkiaShadow blur={6} dx={2} dy={8} color={colors.zinc[300]} borderRadius={10}>
           <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 py-2">
             <Header
-              title={t('Dashboard.MarketPrice.Ranking.table.column1')}
+              title={
+                states?.length
+                  ? t('Dashboard.MarketPrice.Ranking.table.column1')
+                  : t('Dashboard.MarketPrice.Ranking.market-district-state')
+              }
               onSort={(direction) =>
                 setSortingType({
                   sorting: 'state',
@@ -171,14 +186,7 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
               isSortingActive={sortingType.sorting === 'date'}
             />
             <Header
-              title={t('Dashboard.MarketPrice.Ranking.table.column3', {
-                currency:
-                  mappedCountry === 'IN'
-                    ? ECurrency.IN
-                    : mappedCountry === 'NG'
-                      ? ECurrency.NG
-                      : '$',
-              })}
+              title={t('Dashboard.MarketPrice.Ranking.table.column3', { currency })}
               onSort={(direction) =>
                 setSortingType({
                   sorting: 'price',
@@ -195,8 +203,10 @@ export function PredictionTable({ commodity, states, country, dates }: Predictio
             data={paginatedData}
             keyExtractor={(item, index) => `${item.date}-#${index}-${item.price}`}
             renderItem={({ item }) => (
-              <DataTable.Row tw="bg-white">
-                <DataTable.Cell tw="px-1">{item.state}</DataTable.Cell>
+              <DataTable.Row tw="bg-white py-1.5">
+                <DataTable.Cell tw="px-1">
+                  <Text>{item.state || item.market || ''}</Text>
+                </DataTable.Cell>
                 <DataTable.Cell tw="px-1">{item.date}</DataTable.Cell>
                 <DataTable.Cell numeric tw="px-1">
                   {item.price ?? t('Dashboard.MarketPrice.Ranking.table.emptyState')}

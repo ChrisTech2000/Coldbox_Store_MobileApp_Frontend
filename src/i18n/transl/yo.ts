@@ -25,6 +25,8 @@ export default {
     error: {
       errorMessage: 'Yeee... dabi ẹni pe ohun kan ti ko tọ.',
       tryAgainMessage: 'Jọwọ gbiyanju lẹẹkansi nigbamii.',
+      serverErrorMessage:
+        'Òpó! Ó dàbí pé ìṣòro kan ṣẹlẹ láti ọ̀dọ̀ wa. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kàn síi lẹ́yìn ìgbà díẹ̀ tàbí kan si ìtẹ́wọ́gbà.',
     },
     auth: {
       SignIn: 'Wo ile',
@@ -331,6 +333,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Awọn idiyele ọja ko si ni orilẹ ede rẹ',
+      'no-data-found': 'Ko si akosile ti a rii fun akojọpọ ọja ati eru yii',
       commodityLabel: 'oja',
       commodityModalTitle: 'Yan oja kan',
       Trend: {
@@ -354,6 +357,13 @@ export default {
           column3: 'Iye owo ni {{currency}}/KG',
           emptyState: 'Ko si iye to wa',
         },
+        'location-placeholder': 'Ipinle / Agbegbe / Oja',
+        'market-district-state': 'Oja / Agbegbe / Ipinle',
+        'district-label': 'Yan Agbegbe kan',
+        'district-placeholder': 'Agbegbe',
+        'market-label': 'Yan Oja kan',
+        'market-placeholder': 'Oja',
+        'select-warning': 'Jọwọ ṣe yiyan fun aaye kọọkan',
       },
     },
     CrateManagement: {

@@ -29,7 +29,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import type { Farmer } from '#types/global';
-import { downloadAndSaveFile } from '#ui/lib/pdf';
+import { FileUtility } from '#ui/lib/file';
 
 import FormModal from './components/FormModal';
 import Prompt from './components/Prompt';
@@ -99,14 +99,14 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
                 try {
                   if (!company) throw new Error();
                   toggleDownloading();
-                  await downloadAndSaveFile(
+                  await FileUtility.downloadFile(
                     [AIR_PROD_BASE_URL, 'company/', company.id, '/cusers'].join(''),
                     `cooling_users_comp_id_${company.id}`,
                     'xlsx'
                   );
                   toast.show(`${t('actions.done')}!`, { type: 'md_success' });
                 } catch (exception) {
-                  toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                  toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
                   reportCrash(exception as Error);
                 } finally {
                   toggleDownloading();

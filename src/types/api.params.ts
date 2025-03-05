@@ -1,11 +1,11 @@
-import { JsonObject } from '#services/utils';
 import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
+import { JsonObject } from '#services/utils';
 import {
   EBankAccountType,
   EImpactMode,
-  EPaymentThrough,
   EPaymentGateway,
   EPaymentMethod,
+  EPaymentThrough,
   EPickUpMethod,
   ERoles,
   ESellingLocation,
@@ -126,8 +126,7 @@ export interface GetLocationParams extends JsonObject {
 
 export interface AddLocationParams extends JsonObject {
   name?: string;
-  latitude?: number;
-  longitude?: number;
+  point?: string;
   country?: string;
   state?: string;
   city?: string;
@@ -400,14 +399,16 @@ export type VerifyVictronSensorConnectivityParams = {
 export interface GetPredictionParams extends JsonObject {
   country: 'IN' | 'NG';
   cropId: number;
-  stateId: number;
+  stateId?: number;
+  marketId?: number;
 }
 
 export type GetPredictionTableParams = {
   country: 'IN' | 'NG';
   cropId: number;
   days: Date[];
-  statesIds: number[];
+  statesIds?: number[];
+  marketsIds?: Array<number>;
 };
 
 export interface CreateCouponParams extends JsonObject {

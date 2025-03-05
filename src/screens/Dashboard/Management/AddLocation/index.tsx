@@ -4,11 +4,12 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
+import { Point } from 'wkx';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
-import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -18,6 +19,7 @@ import { EEmployeeTutorialSteps } from '#screens/Dashboard/Tutorial/utils/consta
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
+import { LocationGeocoder } from '#services/LocationGeocoder';
 
 import FormManager, {
   DEFAULT_VALUES,
@@ -27,7 +29,7 @@ import FormManager, {
 import LocationNameModule from './modules/LocationNameModule';
 import StepFactory from './modules/StepFactory';
 import StepModule from './modules/StepModule';
-import { Geocoder, getCountryFullName } from './utils';
+import { getCountryFullName } from './utils';
 
 function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   const { navigation } = props;
@@ -49,23 +51,36 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
     const { _step, ...rest } = values;
 
     try {
-      const geocoder = new Geocoder();
       let datums: Partial<PreprocessedFormValues> = {};
 
       switch (_step) {
         case 'geolocation':
         case 'coordinates': {
-          const address = await geocoder.getAddressFromCoords({
+          const address = await LocationGeocoder.getAddressFromCoords({
             latitude: rest.latitude,
             longitude: rest.longitude,
           });
+
           datums = merge(rest, address);
+          datums.point = new Point(
+            rest.longitude,
+            rest.latitude,
+            undefined,
+            undefined,
+            4326
+          ).toEwkt();
           break;
         }
         case 'address': {
           try {
-            const coordinates = await geocoder.getCoordsFromAddress(rest);
-            datums = merge(rest, coordinates);
+            const coordinates = await LocationGeocoder.getCoordsFromAddress(rest);
+            datums.point = new Point(
+              coordinates.longitude,
+              coordinates.latitude,
+              undefined,
+              undefined,
+              4326
+            ).toEwkt();
           } catch (exception) {
             console.error(exception);
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {

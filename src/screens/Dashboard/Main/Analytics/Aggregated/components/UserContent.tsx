@@ -1,11 +1,16 @@
 import React, { useMemo } from 'react';
+import { Dimensions } from 'react-native';
 
 import { ScrollView } from '#ui/components/ScrollView';
+import { cn } from '#ui/lib/cn';
 
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 
 import { UserSection } from '../../components/UserSection';
 import { useAggregatedData } from '../store';
+
+const screenHeight = Dimensions.get('window').height;
 
 export function UsersContent() {
   const { t } = useTranslationUtils();
@@ -85,7 +90,7 @@ export function UsersContent() {
 
   return (
     <ScrollView
-      tw="w-full mt-2"
+      tw={cn('w-full mt-2', screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-12' : 'mb-8')}
       contentContainerStyle="items-center"
       showsVerticalScrollIndicator={false}
     >

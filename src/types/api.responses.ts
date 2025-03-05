@@ -108,8 +108,7 @@ export type GetLocationResponse = {
   street: string;
   streetNumber: string | null;
   zipCode: string;
-  latitude: number;
-  longitude: number;
+  point: string;
   deleted: boolean;
   dateCreation: string;
   dateLastModified: string;
@@ -511,6 +510,7 @@ export interface GetAvailableListingResponse {
   nodes: Array<{
     availableWeightInKg: number;
     crateId: number;
+    produceInfo: string;
     createdAt: string;
     currency: string;
     distance: number;

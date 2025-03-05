@@ -27,19 +27,19 @@ import { type Crop, EUnitOfMeasurement } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
-import { defaultValues as _defaultValues, FarmerSurveySchema, formatFloat } from './schema';
+import { defaultValues as _defaultValues, FarmerSurveySchema } from './schema';
 
 export type FarmerSurveySchemaType = {
   weightDistribution: {
-    totalProducedWeekly: number;
-    quantitySelfConsumed: number;
-    quantitySold: number;
-    quantityLost: number;
+    totalProducedWeekly: string;
+    quantitySelfConsumed: string;
+    quantitySold: string;
+    quantityLost: string;
   };
   unitOfMeasurement: EUnitOfMeasurement;
-  unitaryWeight: number | undefined;
+  unitaryWeight: string | undefined;
   reasonsForSpoilage: string[];
-  averagePrice: number;
+  averagePrice: string;
   crop?: Crop | GetAllCropsResponse;
   cropSelection: boolean;
 };
@@ -104,34 +104,13 @@ export function FarmersSurveyModal({
     formState: { errors, isSubmitting },
   } = useForm<FarmerSurveySchemaType>({
     resolver: zodResolver(() => FarmerSurveySchema(t)),
-    // @ts-expect-error - data type coercion such as strings and integers
     defaultValues: {
       ...(defaultValues ?? _defaultValues),
       cropSelection: !!cropSelectionAvailable,
     },
   });
 
-  const onChangeNumericKeyboard = useCallback(
-    (newVal: string | number | undefined, onChange: (...event: unknown[]) => void) => {
-      if (newVal === undefined) return;
-
-      const value = typeof newVal === 'string' ? newVal.trim() : String(newVal);
-
-      if (value === '' || /^-?\d*[.,]?\d*$/.test(value)) {
-        onChange(value);
-      }
-    },
-    []
-  );
-
   const submit: SubmitHandler<FarmerSurveySchemaType> = useCallback((values) => {
-    values.averagePrice = Number(formatFloat(values.averagePrice));
-    values.weightDistribution = {
-      totalProducedWeekly: Number(formatFloat(values.weightDistribution.totalProducedWeekly)),
-      quantityLost: Number(formatFloat(values.weightDistribution.quantityLost)),
-      quantitySelfConsumed: Number(formatFloat(values.weightDistribution.quantitySelfConsumed)),
-      quantitySold: Number(formatFloat(values.weightDistribution.quantitySold)),
-    };
     onSelectSpoilageReasons([]);
     try {
       onSubmit(values);
@@ -141,15 +120,15 @@ export function FarmersSurveyModal({
   }, []);
 
   useEffect(() => {
-    if (measureUnit) setValue('unitOfMeasurement', measureUnit);
+    if (measureUnit) setValue('unitOfMeasurement', measureUnit, { shouldDirty: true });
   }, [measureUnit]);
 
   useEffect(() => {
-    if (spoilageReasons) setValue('reasonsForSpoilage', spoilageReasons);
+    if (spoilageReasons) setValue('reasonsForSpoilage', spoilageReasons, { shouldDirty: true });
   }, [spoilageReasons]);
 
   useEffect(() => {
-    if (crop) setValue('crop', crop);
+    if (crop) setValue('crop', crop, { shouldDirty: true });
   }, [crop]);
 
   useEffect(() => {
@@ -215,7 +194,7 @@ export function FarmersSurveyModal({
                       <TextInput
                         tw="h-10 w-32 mr-4 bg-transparent"
                         value={value?.toString()}
-                        onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
+                        onChangeText={(val) => onChange(val, onChange)}
                         onBlur={onBlur}
                         keyboardType="decimal-pad"
                         error={!!errors.weightDistribution?.totalProducedWeekly?.message}
@@ -264,9 +243,7 @@ export function FarmersSurveyModal({
                       render={({ field: { onChange, value, onBlur } }) => (
                         <View tw="flex flex-row items-center justify-between space-x-2">
                           <TouchableOpacity
-                            onPress={() =>
-                              onChangeNumericKeyboard(!value ? 0 : Number(value) - 1, onChange)
-                            }
+                            onPress={() => onChange(!value ? 0 : Number(value) - 1)}
                             tw="ml-2"
                             disabled={isSubmitting}
                           >
@@ -276,15 +253,13 @@ export function FarmersSurveyModal({
                             tw="h-10 bg-transparent"
                             keyboardType="number-pad"
                             value={value?.toString()}
-                            onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
+                            onChangeText={(val) => onChange(val)}
                             onBlur={onBlur}
                             error={!!errors.unitaryWeight?.message}
                             disabled={isSubmitting}
                           />
                           <TouchableOpacity
-                            onPress={() =>
-                              Number(onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange))
-                            }
+                            onPress={() => Number(onChange(Number(value ?? 0) + 1, onChange))}
                             tw="mr-2"
                             disabled={isSubmitting}
                           >
@@ -317,7 +292,7 @@ export function FarmersSurveyModal({
                         tw="h-10 bg-transparent"
                         keyboardType="decimal-pad"
                         value={value?.toString()}
-                        onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
+                        onChangeText={(val) => onChange(val, onChange)}
                         onBlur={onBlur}
                         disabled={isSubmitting}
                       />
@@ -337,7 +312,7 @@ export function FarmersSurveyModal({
                         tw="h-10 bg-transparent"
                         keyboardType="decimal-pad"
                         value={value?.toString()}
-                        onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
+                        onChangeText={(val) => onChange(val, onChange)}
                         onBlur={onBlur}
                         disabled={isSubmitting}
                       />
@@ -357,7 +332,7 @@ export function FarmersSurveyModal({
                         tw="h-10 bg-transparent"
                         value={value?.toString()}
                         keyboardType="decimal-pad"
-                        onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
+                        onChangeText={(val) => onChange(val, onChange)}
                         onBlur={onBlur}
                         disabled={isSubmitting}
                       />
@@ -430,7 +405,7 @@ export function FarmersSurveyModal({
                         label={t('Dashboard.CrateManagement.FarmerSurvey.modal.priceLabel')}
                         keyboardType="decimal-pad"
                         value={value?.toString()}
-                        onChangeText={(val) => onChangeNumericKeyboard(val, onChange)}
+                        onChangeText={(val) => onChange(val, onChange)}
                         onBlur={onBlur}
                         error={!!errors.averagePrice?.message}
                         disabled={isSubmitting}

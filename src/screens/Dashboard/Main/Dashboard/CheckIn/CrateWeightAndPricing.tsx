@@ -43,7 +43,7 @@ type FormValues<T = string> = {
   crates: Array<{
     weight: T;
     isSellable: boolean;
-    tag: number | undefined;
+    tag: string | undefined;
   }>;
   price: T | undefined;
 };
@@ -373,23 +373,25 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               );
             }}
             ListFooterComponent={
-              <Button
-                tw="w-2/6 my-3"
-                mode="text"
-                disabled={applyToAll}
-                uppercase
-                onPress={(evt) => {
-                  evt.stopPropagation();
-                  crateFields.append({
-                    weight: '25',
-                    isSellable: false,
-                    tag: undefined,
-                  });
-                  scrollViewRef.current?.scrollToEnd(true);
-                }}
-              >
-                {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.addMore')}
-              </Button>
+              <View tw="w-full flex-row justify-start">
+                <Button
+                  tw="my-3"
+                  mode="text"
+                  disabled={applyToAll}
+                  uppercase
+                  onPress={(evt) => {
+                    evt.stopPropagation();
+                    crateFields.append({
+                      weight: '25',
+                      isSellable: false,
+                      tag: undefined,
+                    });
+                    scrollViewRef.current?.scrollToEnd(true);
+                  }}
+                >
+                  {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.addMore')}
+                </Button>
+              </View>
             }
           />
         </View>

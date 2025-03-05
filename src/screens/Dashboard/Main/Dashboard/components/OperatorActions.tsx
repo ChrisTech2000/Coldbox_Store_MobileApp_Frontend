@@ -33,6 +33,7 @@ import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
+import { USER_WITHOUT_PHONE } from '#constants/general';
 
 type ManagementMode = 'check-in' | 'check-out';
 
@@ -80,7 +81,7 @@ export function OperatorActions({
   );
 
   const noPhoneUser = useMemo(
-    () => data?.find(({ user }) => user.firstName === 'User without a phone'),
+    () => data?.find(({ user }) => user.firstName === USER_WITHOUT_PHONE),
     [data]
   );
 

@@ -41,7 +41,7 @@ export type SetupSchema = {
   generalCrateWeight: number;
   crates: Array<{
     weight: number;
-    crateId: number | undefined;
+    tag: string | undefined;
     isSellable: boolean | undefined;
   }>;
   plannedDays: number | undefined;
@@ -107,7 +107,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         crates: z
           .object({
             weight: z.number(),
-            crateId: z.number().optional(),
+            tag: z.string().regex(/^\d+$/).optional(),
             isSellable: z.boolean(),
           })
           .array(),
@@ -133,8 +133,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   useCrateWeightPricingBridge((values) => {
     reset((state) => ({
       ...state,
-      crates: values.crates.map((crate, crateIdx) => ({
-        crateId: state?.crates?.[crateIdx]?.crateId,
+      crates: values.crates.map((crate) => ({
+        tag: crate.tag,
         weight: crate.weight,
         isSellable: crate.isSellable,
       })),
@@ -204,7 +204,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           !crates || crates.length === 0
             ? Array.from({ length: numberOfCrates }, () => ({
                 weight,
-                crateId: undefined,
+                tag: undefined,
                 isSellable: false,
               }))
             : [...crates];
@@ -215,7 +215,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
               { length: numberOfCrates - newCrates.length },
               () => ({
                 weight,
-                crateId: undefined,
+                tag: undefined,
                 isSellable: false,
               })
             );
@@ -254,7 +254,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         crates: values.crates.map((crate) => ({
           checkOut: null,
           weight: crate.weight,
-          tag: crate.crateId?.toString() ?? '',
+          tag: crate.tag?.toString() ?? '',
           coolingUnitId: coolingUnit.id,
           plannedDays: values.plannedDays,
           isSellable: crate.isSellable,
@@ -304,7 +304,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                   const contextualCrates = crates.map((crate) => ({
                     weight: crate.weight,
                     isSellable: crate.isSellable ?? false,
-                    tag: crate.crateId,
+                    tag: crate.tag,
                   }));
                   navigation.navigate('CrateWeightAndPricing', {
                     companyCurrency: company?.currency?.toUpperCase() ?? DEFAULT_CURRENCY_CODE,

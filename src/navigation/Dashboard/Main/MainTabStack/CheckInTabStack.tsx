@@ -41,7 +41,7 @@ export type CheckInStackRoutes = {
     crates: Array<{
       weight: number;
       isSellable: boolean;
-      tag: number | undefined;
+      tag: string | undefined;
     }>;
     sellingPrice: number;
     applyToAll: boolean;

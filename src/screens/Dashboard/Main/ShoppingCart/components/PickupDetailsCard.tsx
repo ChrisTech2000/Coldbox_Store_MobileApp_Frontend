@@ -13,6 +13,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
+import { parsePoint } from '#screens/Dashboard/Management/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { EPickUpMethod, EPricingType, type CoolingUnit } from '#types/global';
@@ -42,7 +43,9 @@ export function PickupDetailsCard({
 
   const address = useMemo(() => {
     if (isEmpty(location)) return;
-    return `${location.street ? location.street + ' ' : ''}${location.streetNumber ? location.streetNumber + ', ' : ''} ${location.city}${location.latitude ? ` (${location.latitude}, ${location.longitude})` : ''}`;
+
+    const point = parsePoint(location.point);
+    return `${location.street ? location.street + ' ' : ''}${location.streetNumber ? location.streetNumber + ', ' : ''} ${location.city}${point.latitude ? ` (${point.latitude}, ${point.longitude})` : ''}`;
   }, [location]);
 
   const copyToClipboard = useCallback(
