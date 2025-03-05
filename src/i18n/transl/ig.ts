@@ -337,6 +337,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Ọnụ ahịa ahịa adịghị na obodo gị',
+      'no-data-found': 'Enweghị data ahụrụ maka nchikota ahịa na ngwa ahịa a',
       commodityLabel: 'Ngwaahịa',
       commodityModalTitle: 'Ngwa horo ngwaahịa',
       Trend: {
@@ -366,6 +367,7 @@ export default {
         'district-placeholder': 'Mpaghara',
         'market-label': 'Họrọ ahịa',
         'market-placeholder': 'Ahịa',
+        'select-warning': 'Biko mee nhọrọ maka mpaghara ọ bụla',
       },
     },
     CrateManagement: {

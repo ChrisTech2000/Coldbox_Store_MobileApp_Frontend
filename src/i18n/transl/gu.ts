@@ -359,7 +359,8 @@ export default {
     coolingUserNavigateToMarketplace:
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
-      emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી', // TODO
+      emptyState: 'તમારા દેશમાં બજારના ભાવ ઉપલબ્ધ નથી',
+      'no-data-found': 'આ બજાર અને કોમોડિટી સંયોજન માટે કોઈ ડેટા મળ્યો નથી',
       commodityLabel: 'વસ্তু',
       commodityModalTitle: 'એક વસ્તુ પસંદ કરો',
       Trend: {
@@ -389,6 +390,7 @@ export default {
         'district-placeholder': 'જીલ્લો',
         'market-label': 'બજારને પસંદ કરો',
         'market-placeholder': 'બજાર',
+        'select-warning': 'કૃપા કરીને દરેક ક્ષેત્ર માટે પસંદગી કરો',
       },
     },
     CrateManagement: {

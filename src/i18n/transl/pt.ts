@@ -361,7 +361,8 @@ export default {
     coolingUserNavigateToMarketplace:
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
-      emptyState: 'Os preços de mercado não estão disponíveis no seu país', // TODO
+      emptyState: 'Os preços de mercado não estão disponíveis no seu país',
+      'no-data-found': 'Nenhum dado encontrado para esta combinação de mercado e commodity',
       commodityLabel: 'Produto',
       commodityModalTitle: 'Selecione um produto',
       Trend: {
@@ -391,6 +392,7 @@ export default {
         'district-placeholder': 'Distrito',
         'market-label': 'Selecione um mercado',
         'market-placeholder': 'Mercado',
+        'select-warning': 'Faça uma seleção para cada campo',
       },
     },
     CrateManagement: {

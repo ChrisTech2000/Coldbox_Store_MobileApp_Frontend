@@ -358,6 +358,7 @@ const en = {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!',
     MarketPrice: {
       emptyState: 'Crop Prices are not available in your country',
+      'no-data-found': 'No data found for this market and commodity combination',
       commodityLabel: 'Commodity',
       commodityModalTitle: 'Select a commodity',
       Trend: {
@@ -387,6 +388,7 @@ const en = {
         'district-placeholder': 'District',
         'market-label': 'Select a market',
         'market-placeholder': 'Market',
+        'select-warning': 'Please make a selection for each field',
       },
     },
     CrateManagement: {
