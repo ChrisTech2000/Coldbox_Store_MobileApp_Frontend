@@ -1185,9 +1185,9 @@ const en = {
           checkOutLabel: 'Check out code',
           idLabel: 'ID',
           itemLabel: 'Item',
-          calculatedPriceLabel: 'Calculated price',
+          calculatedPriceLabel: 'Calculated cooling fee',
           discountLabel: 'Discount',
-          totalPrice: 'Total price',
+          totalPrice: 'Total cooling fee',
         },
         checkIn: {
           title: 'Check-in receipt',
