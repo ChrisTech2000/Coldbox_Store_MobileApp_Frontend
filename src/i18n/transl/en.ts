@@ -896,6 +896,8 @@ const en = {
             apiKey: 'API Key',
             deviceTag: 'Device Tag',
           },
+          hybridFields: 'Which percentage of the room is powered by the different sources?',
+          cropSpecificPricing: 'Crop-specific pricing',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'It is a storage room placed at a farm-gate',

@@ -91,7 +91,9 @@ export default function CropSpecificPricing() {
   return (
     <React.Fragment>
       <View tw="flex flex-row items-center justify-between h-14 px-3">
-        <Text tw="text-gray-600 text-base truncate">Crop-specific pricing</Text>
+        <Text tw="text-gray-600 text-base truncate">
+          {t('Dashboard.Management.AddCoolingUnit.fields.cropSpecificPricing')}
+        </Text>
         <Button mode="contained" icon="eye-outline" onPress={toggleVisibility}>
           {t('Dashboard.Management.EditCoolingUnit.buttons.editPricing')}
         </Button>

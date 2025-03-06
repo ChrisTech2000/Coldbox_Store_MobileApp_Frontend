@@ -808,6 +808,8 @@ export default {
             field: 'مجال',
           },
           figorr: { apiKey: 'مفتاح API', deviceTag: 'علامة الجهاز' },
+          hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
+          cropSpecificPricing: 'Crop-specific pricing', // TODO
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'إنها غرفة تخزين تقع عند بوابة المزرعة',

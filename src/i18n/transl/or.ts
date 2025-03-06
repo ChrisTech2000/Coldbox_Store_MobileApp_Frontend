@@ -901,6 +901,8 @@ export default {
             apiKey: 'API କୀ',
             deviceTag: 'ଉପକରଣ ଟ୍ୟାଗ୍',
           },
+          hybridFields: 'ପ୍ରକୋଷ୍ଠ ର କେତେ ପ୍ରତିଶତ ଅଲଗା ଅଲଗା ବିଦ୍ୟୁତ ଉତ୍ସ ଦ୍ୱାରା ଚାଳିତ?',
+          cropSpecificPricing: 'ଫସଲ ହିସାବରେ ନିର୍ଦ୍ଧିଷ୍ଟ ମୂଲ୍ୟ ନିରୂପଣ|',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'ଏହା ଏକ ଖେତର ଦ୍ବାର ରୁମ୍',

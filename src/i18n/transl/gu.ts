@@ -897,6 +897,8 @@ export default {
             apiKey: 'API કી',
             deviceTag: 'ડિવાઇસ ટેગ',
           },
+          hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
+          cropSpecificPricing: 'Crop-specific pricing', // TODO
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'તે એક ખેડૂતના દ્વાર પર રાખવામાં આવેલ સ્ટોરેજ રૂમ છે',
