@@ -859,6 +859,8 @@ export default {
             field: 'Champ',
           },
           figorr: { apiKey: 'Clé API', deviceTag: "Étiquette de l'appareil" },
+          hybridFields: 'Quel pourcentage de la pièce est alimenté par les différentes sources ?',
+          cropSpecificPricing: 'Tarification spécifique à la culture',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: "C'est une salle de stockage située à la porte de la ferme",

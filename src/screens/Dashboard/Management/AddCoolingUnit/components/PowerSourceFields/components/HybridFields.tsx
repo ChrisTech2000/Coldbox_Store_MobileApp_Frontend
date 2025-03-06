@@ -17,7 +17,7 @@ export default function HybridFields() {
   return (
     <React.Fragment>
       <Text tw="mx-4 mt-4 mb-1 text-base">
-        Which percentage of the room is powered by the different sources?
+        {t('Dashboard.Management.AddCoolingUnit.fields.hybridFields')}
       </Text>
       <Controller
         name="powerSourceDieselPercent"
