@@ -73,6 +73,10 @@ export function useMarketplaceListing() {
     [filters]
   );
 
+  function _convertMilesToKm(miles: number): number {
+    return miles * 1.60934;
+  }
+
   const { data: datums, ...rest } = useApiCall(
     'getMarketplaceAvailableListing',
     async (params: GetAvailableListingParams) => {
@@ -94,7 +98,7 @@ export function useMarketplaceListing() {
 
           return {
             id: node.id,
-            distance: node.distance,
+            distance: _convertMilesToKm(node.distance),
             crateId: node.crateId,
             produceInfo: node.produceInfo,
             crateWeight: node.availableWeightInKg,
