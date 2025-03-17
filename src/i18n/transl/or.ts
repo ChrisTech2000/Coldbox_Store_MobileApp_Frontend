@@ -890,16 +890,9 @@ export default {
             password: 'ପାସୱର୍ଡ',
             machineId: 'ମେସିନ୍ ID',
           },
-          ubibot: {
-            accountKey: 'ଆକାଉଣ୍ଟ୍ କୀ',
-            channelId: 'ଚ୍ୟାନେଲ୍ ID',
-            sensorFieldTitle: 'ଆପଣଙ୍କର ସେନ୍ସର୍ କ୍ଷେତ୍ର ଚୟନ କରନ୍ତୁ',
-            sensorFieldDesc: 'ଆପଣଙ୍କର ସେନ୍ସର୍ କ୍ଷେତ୍ର ଚୟନ କରନ୍ତୁ',
-            field: 'କ୍ଷେତ୍ର',
-          },
-          figorr: {
-            apiKey: 'API କୀ',
-            deviceTag: 'ଉପକରଣ ଟ୍ୟାଗ୍',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'ପାସୱର୍ଡ',
           },
           hybridFields: 'ପ୍ରକୋଷ୍ଠ ର କେତେ ପ୍ରତିଶତ ଅଲଗା ଅଲଗା ବିଦ୍ୟୁତ ଉତ୍ସ ଦ୍ୱାରା ଚାଳିତ?',
           cropSpecificPricing: 'ଫସଲ ହିସାବରେ ନିର୍ଦ୍ଧିଷ୍ଟ ମୂଲ୍ୟ ନିରୂପଣ|',

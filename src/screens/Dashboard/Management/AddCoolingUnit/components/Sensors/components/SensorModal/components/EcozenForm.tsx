@@ -53,7 +53,7 @@ export default function EcozenForm() {
       }
 
       const sensorData = {
-        machineID: values.machineId,
+        source_id: values.machineId,
         username: values.username,
         password: values.password,
         type: 'ecozen',

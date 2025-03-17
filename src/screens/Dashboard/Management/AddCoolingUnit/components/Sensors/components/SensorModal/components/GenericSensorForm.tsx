@@ -15,8 +15,8 @@ import SensorsService from '#services/SensorsService';
 import { ESensorType } from '#types/global';
 
 type FormValues = {
-  apiKey: string;
-  deviceTag: string;
+  username: string;
+  password: string;
 };
 
 export default function GenericSensorForm({ type }: { type: ESensorType }) {
@@ -33,13 +33,14 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
     ),
   });
 
+  console.log(form.formState.errors);
   useUnmount(form.reset);
 
   async function onSubmit(values: FormValues) {
     try {
       const result = await SensorsService.listUserSensors({
-        username: values.apiKey,
-        password: values.deviceTag,
+        username: values.username,
+        password: values.password,
         type,
       });
 
@@ -55,7 +56,7 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
         type: 'md_success',
       });
 
-      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, result);
+      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_LIST_MODAL, result);
     } catch (exception) {
       toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
         type: 'md_danger',
@@ -70,7 +71,7 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
     <React.Fragment>
       <View tw="w-full pt-1.5 pb-3">
         <Controller
-          name="apiKey"
+          name="username"
           control={form.control}
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
@@ -80,12 +81,12 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              error={!!form.formState.errors.apiKey}
+              error={!!form.formState.errors.username}
             />
           )}
         />
         <Controller
-          name="deviceTag"
+          name="password"
           control={form.control}
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
@@ -95,7 +96,7 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              error={!!form.formState.errors.deviceTag}
+              error={!!form.formState.errors.password}
             />
           )}
         />
@@ -105,7 +106,7 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
           {isSubmitting ? (
             <ActivityIndicator color={paperTheme.colors.primary} size={16} animating />
           ) : (
-            t('actions.save-changes')
+            t('actions.confirm')
           )}
         </Button>
       </View>

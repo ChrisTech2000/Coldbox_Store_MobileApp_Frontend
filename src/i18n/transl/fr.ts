@@ -851,14 +851,10 @@ export default {
             password: 'Mot de passe',
             machineId: 'ID de la machine',
           },
-          ubibot: {
-            accountKey: 'Clé de compte',
-            channelId: 'ID du canal',
-            sensorFieldTitle: 'Sélectionnez votre champ de capteur',
-            sensorFieldDesc: 'Sélectionnez votre champ de capteur',
-            field: 'Champ',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'Mot de passe',
           },
-          figorr: { apiKey: 'Clé API', deviceTag: "Étiquette de l'appareil" },
           hybridFields: 'Quel pourcentage de la pièce est alimenté par les différentes sources ?',
           cropSpecificPricing: 'Tarification spécifique à la culture',
         },

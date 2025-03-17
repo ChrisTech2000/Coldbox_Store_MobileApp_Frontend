@@ -892,16 +892,9 @@ export default {
             password: 'पासवर्ड',
             machineId: 'मशीन आईडी',
           },
-          ubibot: {
-            accountKey: 'खाता कुंजी',
-            channelId: 'चैनल आईडी',
-            sensorFieldTitle: 'अपना सेंसर क्षेत्र चुनें',
-            sensorFieldDesc: 'केवल तापमान क्षेत्र समर्थित हैं',
-            field: 'खेत',
-          },
-          figorr: {
-            apiKey: 'API Key',
-            deviceTag: 'Device Tag',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'पासवर्ड',
           },
           hybridFields: 'प्रकोष्ठ का कितना प्रतिशत विभिन्न स्रोतों से संचालित होता है?',
           cropSpecificPricing: 'फसल-अनुरूप  मूल्य निर्धारण',

@@ -4,7 +4,6 @@ import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { AddCoolingUnitParams } from '#types/api.params';
-import { ListUserSensorsResponse } from '#types/api.responses';
 import type { ValueOf } from '#types/miscellaneous';
 
 import {
@@ -18,14 +17,12 @@ import {
   type ThermalStorageTypes,
 } from '../constants';
 
-export type SensorDatum =
-  | ListUserSensorsResponse
-  | {
-      machineID: string;
-      username: string;
-      password: string;
-      type: 'ecozen';
-    };
+export type SensorDatum = {
+  source_id: string;
+  username: string;
+  password: string;
+  type: string;
+};
 
 export type FormValues<T = string> = {
   //

@@ -895,16 +895,9 @@ export default {
             password: 'Palavra-passe',
             machineId: 'ID da máquina',
           },
-          ubibot: {
-            accountKey: 'Chave de conta',
-            channelId: 'ID do canal',
-            sensorFieldTitle: 'Selecione o seu campo de sensor',
-            sensorFieldDesc: 'Selecione o seu campo de sensor',
-            field: 'Campo',
-          },
-          figorr: {
-            apiKey: 'Chave API',
-            deviceTag: 'Etiqueta do dispositivo',
+          genericSensorForm: {
+            username: 'Nome de utilizador/Email',
+            password: 'Palavra-passe',
           },
           hybridFields: 'Qual porcentagem da sala é alimentada pelas diferentes fontes?',
           cropSpecificPricing: 'Preços específicos para cada cultura',

@@ -886,16 +886,9 @@ export default {
             password: 'પાસવર્ડ',
             machineId: 'મશીન ID',
           },
-          ubibot: {
-            accountKey: 'ખાતાના કી',
-            channelId: 'ચેનલ ID',
-            sensorFieldTitle: 'તમારા સેન્સર ફિલ્ડને પસંદ કરો',
-            sensorFieldDesc: 'તમારા સેન્સર ફિલ્ડને પસંદ કરો',
-            field: 'ફિલ્ડ',
-          },
-          figorr: {
-            apiKey: 'API કી',
-            deviceTag: 'ડિવાઇસ ટેગ',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'પાસવર્ડ',
           },
           hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
           cropSpecificPricing: 'Crop-specific pricing', // TODO

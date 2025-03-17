@@ -839,14 +839,10 @@ export default {
             password: 'Boyayin kalmomin siri',
             machineId: 'ID na inji',
           },
-          ubibot: {
-            accountKey: 'Mabudin Asusu',
-            channelId: 'ID magudanar',
-            sensorFieldTitle: 'Zaɓi filin firikwensin ku',
-            sensorFieldDesc: 'Zaɓi filin firikwensin ku',
-            field: 'Filin',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'Boyayin kalmomin siri',
           },
-          figorr: { apiKey: 'Maɓallin API', deviceTag: "Tag na na'ura" },
           hybridFields: 'Wanne kashi na dakin ke samun ƙarfi ta hanyoyi daban-daban?',
           cropSpecificPricing: 'takamaiman farashin amfanin gona',
         },

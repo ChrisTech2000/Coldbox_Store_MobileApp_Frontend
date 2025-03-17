@@ -825,14 +825,10 @@ export default {
             ubibot: 'Chọputa ozi ndị a na akaụntụ ubibot gị.',
           },
           ecozen: { username: 'Aha njirimara', password: 'Okwungafe', machineId: 'Igwe Id' },
-          ubibot: {
-            accountKey: 'Igodo akaụntụ',
-            channelId: 'Channel Id ya',
-            sensorFieldTitle: "Họrọ mpaghara ihe mmetụta senso gị di n'ubi",
-            sensorFieldDesc: "Họrọ mpaghara ihe mmetụta senso gị di n'ubi",
-            field: 'Ubi',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'Okwungafe',
           },
-          figorr: { apiKey: 'Igodo API', deviceTag: 'Mkpado ngwaọrụ' },
           hybridFields: "Kedu pasentị nke di n' ụlọ a na-akwado site na uzo di iche iche?",
           cropSpecificPricing: 'Ọnụ ahịa ihe ubi ya kpokwem',
         },
