@@ -167,50 +167,6 @@ build ci image:
     - <<: *cocoapods-cache
       policy: pull-push
 
-## Jobs
-
-### Staging
-
-build android app staging:
-  extends: .build-android-app
-  variables:
-    NG_CONFIGURATION: staging
-  when: manual
-  only:
-    - /^feat\/.*/
-    - /^hotfix\/-.*/
-    - development
-    - main
-
-build ios app staging:
-  extends: .build-ios-app
-  variables:
-    NG_CONFIGURATION: staging
-  when: manual
-  only:
-    - /^feat\/.*/
-    - /^hotfix\/-.*/
-    - development
-    - main
-
-### Production
-
-build android app production:
-  extends: .build-android-app
-  variables:
-    NG_CONFIGURATION: production
-  when: manual
-  only:
-    - tags
-
-build ios app production:
-  extends: .build-ios-app
-  variables:
-    NG_CONFIGURATION: production
-  when: manual
-  only:
-    - tags
-
 ###
 ## Deployment
 ###
