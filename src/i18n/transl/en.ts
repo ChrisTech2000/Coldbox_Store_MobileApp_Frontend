@@ -878,23 +878,16 @@ const en = {
           addTempSensor: 'Add a temperature sensor to your cooling unit.',
           sensorDesc: {
             default: 'Request this info from your sensor provider if not at hand.',
-            ubibot: 'Find these informations in your ubibot account.',
+            ubibot: 'Find this information in your ubibot account.',
           },
           ecozen: {
             username: 'Username',
             password: 'Password',
             machineId: 'Machine Id',
           },
-          ubibot: {
-            accountKey: 'Account Key',
-            channelId: 'Channel Id',
-            sensorFieldTitle: 'Select your sensor field',
-            sensorFieldDesc: 'Select your sensor field',
-            field: 'Field',
-          },
-          figorr: {
-            apiKey: 'API Key',
-            deviceTag: 'Device Tag',
+          genericSensorForm: {
+            username: 'Username/Email',
+            password: 'Password',
           },
           hybridFields: 'Which percentage of the room is powered by the different sources?',
           cropSpecificPricing: 'Crop-specific pricing',

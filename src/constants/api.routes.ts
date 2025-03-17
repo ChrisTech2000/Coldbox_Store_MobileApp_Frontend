@@ -72,10 +72,8 @@ export enum EImpactEndpoints {
 }
 
 export enum ESensorEndpoints {
-  ECOZEN_CHECK = 'storage/v1/ecozen-test/',
-  UBIBOT_CHECK = 'storage/v1/ubibot/',
-  FIGORR_CHECK = 'storage/v1/figorr/',
-  VICTRON_CHECK = 'storage/v1/victron/',
+  ECOZEN_CHECK = 'storage/v1/ecozen/',
+  LIST_USER_SENSORS = 'storage/v1/user-sensor/sources',
 }
 
 export enum EFarmerImpactEndpoints {

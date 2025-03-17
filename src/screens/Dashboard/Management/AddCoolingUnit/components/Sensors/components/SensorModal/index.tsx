@@ -1,16 +1,14 @@
 import React from 'react';
 
-import { Text } from '#ui/components/Text';
-
 import { useTranslationUtils } from '#i18n/utils';
-import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import type { SensorTypes } from '#screens/Dashboard/Management/AddCoolingUnit/constants';
+import { ESensorType } from '#types/global';
+import { Text } from '#ui/components/Text';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 
-import { ModalWorkaround } from './components/ModalWorkaround';
 import EcozenForm from './components/EcozenForm';
-import UbibotForm from './components/UbibotForm';
-import FigorrForm from './components/FigorrForm';
-import VictronForm from './components/VictronForm';
+import GenericSensorForm from './components/GenericSensorForm';
+import { ModalWorkaround } from './components/ModalWorkaround';
 
 export default function SensorModal() {
   const { t } = useTranslationUtils();
@@ -53,7 +51,7 @@ export default function SensorModal() {
           <Text tw="px-6 mt-2">
             {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
           </Text>
-          <FigorrForm />
+          <GenericSensorForm type={ESensorType.FIGORR} />
         </ModalWorkaround>
       );
     case 'victron':
@@ -65,11 +63,21 @@ export default function SensorModal() {
           <Text tw="px-6 mt-2">
             {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
           </Text>
-          <VictronForm />
+          <GenericSensorForm type={ESensorType.VICTRON} />
         </ModalWorkaround>
       );
     case 'ubibot':
-      return <UbibotForm onDismiss={onDismiss} />;
+      return (
+        <ModalWorkaround visible={isVisible} onDismiss={onDismiss}>
+          <Text variant="TitleRegular" tw="px-6">
+            {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
+          </Text>
+          <Text tw="px-6 mt-2">
+            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.ubibot')}
+          </Text>
+          <GenericSensorForm type={ESensorType.UBIBOT} />
+        </ModalWorkaround>
+      );
     default:
       return null;
   }

@@ -402,40 +402,10 @@ export type GetNotificationsResponse = Array<{
   marketListing: { currency: string; pricePerKg: number } | null;
 }>;
 
-export type VerifyFigorrSensorConnectivityResponse = Array<{
+export type ListUserSensorsResponse = Array<{
   id: string;
-  deviceTag: string;
-  imei: string;
-  type: string;
-  status: string;
-  settings: {
-    name: string;
-  };
-  stat: {
-    id: string;
-    device: string;
-    temperature: number;
-    humidity: number;
-    latitude: number;
-    longitude: number;
-    battery: number;
-    deviceSettings: {
-      name: string;
-    };
-    notes: Array<unknown>; // TODO: confirm type
-    deviceRtcTime: number;
-    deviceTimeStamp: string;
-  };
+  name: string;
 }>;
-
-export type VerifyUbibotSensorConnectivityResponse = {
-  success: string;
-  data: Array<string>;
-};
-
-export type VerifyVictronSensorConnectivityResponse = {
-  // TODO: fill in
-};
 
 export interface CreateCouponResponse {
   id: number;

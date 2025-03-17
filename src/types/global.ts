@@ -754,6 +754,13 @@ export enum EPickUpMethod {
   DELIVERY = 'delivery',
 }
 
+export enum ESensorType {
+  ECOZEN = 'ecozen',
+  VICTRON = 'victron',
+  FIGORR = 'figorr',
+  UBIBOT = 'ubibot',
+}
+
 //////////////////////// MAPPERS
 export const MAP_ROLES = {
   [ERoles.OPERATOR]: 'op',

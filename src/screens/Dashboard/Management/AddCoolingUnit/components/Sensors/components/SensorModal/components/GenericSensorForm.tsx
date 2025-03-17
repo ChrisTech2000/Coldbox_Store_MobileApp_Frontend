@@ -6,20 +6,20 @@ import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { Button } from '#ui/components/Button';
 import { useUnmount } from '#ui/hooks/useUnmount';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
+import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import type { SensorDatum } from '#screens/Dashboard/Management/AddCoolingUnit/contexts/FormManager';
 import SensorsService from '#services/SensorsService';
+import { ESensorType } from '#types/global';
 
 type FormValues = {
   apiKey: string;
   deviceTag: string;
 };
 
-export default function FigorrForm() {
+export default function GenericSensorForm({ type }: { type: ESensorType }) {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
@@ -27,8 +27,8 @@ export default function FigorrForm() {
     reValidateMode: 'onSubmit',
     resolver: zodResolver((z) =>
       z.object({
-        apiKey: z.string().min(1),
-        deviceTag: z.string().min(1),
+        username: z.string().min(1),
+        password: z.string().min(1),
       })
     ),
   });
@@ -37,9 +37,10 @@ export default function FigorrForm() {
 
   async function onSubmit(values: FormValues) {
     try {
-      const result = await SensorsService.verifyFigorrSensorConnectivity({
-        apiKey: values.apiKey,
-        deviceTag: values.deviceTag,
+      const result = await SensorsService.listUserSensors({
+        username: values.apiKey,
+        password: values.deviceTag,
+        type,
       });
 
       const contextualSensor = result?.at(0);
@@ -50,22 +51,11 @@ export default function FigorrForm() {
         return;
       }
 
-      const sensorData = {
-        machineID: contextualSensor.deviceTag,
-        id: contextualSensor.imei,
-        username: contextualSensor.id,
-        settings: contextualSensor.settings,
-        stat: contextualSensor.stat,
-        status: contextualSensor.status,
-        password: values.apiKey,
-        type: contextualSensor.type,
-      } satisfies SensorDatum;
-
       toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationSuccess'), {
         type: 'md_success',
       });
 
-      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
+      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, result);
     } catch (exception) {
       toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
         type: 'md_danger',
@@ -85,7 +75,7 @@ export default function FigorrForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label={t('Dashboard.Management.AddCoolingUnit.fields.figorr.apiKey')}
+              label={t('Dashboard.Management.AddCoolingUnit.fields.genericSensorForm.username')}
               mode="flat"
               value={value}
               onChangeText={onChange}
@@ -100,7 +90,7 @@ export default function FigorrForm() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               tw="bg-transparent px-3"
-              label={t('Dashboard.Management.AddCoolingUnit.fields.figorr.deviceTag')}
+              label={t('Dashboard.Management.AddCoolingUnit.fields.genericSensorForm.password')}
               mode="flat"
               value={value}
               onChangeText={onChange}

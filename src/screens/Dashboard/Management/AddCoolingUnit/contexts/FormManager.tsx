@@ -1,42 +1,25 @@
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { useIsFocused } from '@react-navigation/native';
 
-import type { ValueOf } from '#types/miscellaneous';
 import { useTranslationUtils } from '#i18n/utils';
+import type { AddCoolingUnitParams } from '#types/api.params';
+import { ListUserSensorsResponse } from '#types/api.responses';
+import type { ValueOf } from '#types/miscellaneous';
+
 import {
-  PRICING_TYPE,
   METRIC_UNITS,
-  type CoolingUnitTypes,
-  type PowerSourcesIds,
-  type ElectricityStorageIds,
-  type PvPanelsTypes,
+  PRICING_TYPE,
   type BatteryTypes,
+  type CoolingUnitTypes,
+  type ElectricityStorageIds,
+  type PowerSourcesIds,
+  type PvPanelsTypes,
   type ThermalStorageTypes,
 } from '../constants';
-import type { AddCoolingUnitParams } from '#types/api.params';
-import type { VerifyFigorrSensorConnectivityResponse } from '#types/api.responses';
 
 export type SensorDatum =
-  | {
-      // TODO: fill
-    }
-  | {
-      machineID: string;
-      id: string;
-      username: string;
-      settings: VerifyFigorrSensorConnectivityResponse[0]['settings'];
-      stat: VerifyFigorrSensorConnectivityResponse[0]['stat'];
-      status: string;
-      password: string;
-      type: string; // lora, mote
-    }
-  | {
-      accountKey: string;
-      channelId: string;
-      field: string;
-      type: 'ubibot';
-    }
+  | ListUserSensorsResponse
   | {
       machineID: string;
       username: string;
