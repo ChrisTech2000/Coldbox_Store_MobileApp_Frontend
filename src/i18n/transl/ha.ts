@@ -847,6 +847,8 @@ export default {
             field: 'Filin',
           },
           figorr: { apiKey: 'Maɓallin API', deviceTag: "Tag na na'ura" },
+          hybridFields: 'Wanne kashi na dakin ke samun ƙarfi ta hanyoyi daban-daban?',
+          cropSpecificPricing: 'takamaiman farashin amfanin gona',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'Dakin ajiya ne da ke a kofar gona',

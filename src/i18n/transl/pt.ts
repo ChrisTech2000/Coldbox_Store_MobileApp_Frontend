@@ -906,6 +906,8 @@ export default {
             apiKey: 'Chave API',
             deviceTag: 'Etiqueta do dispositivo',
           },
+          hybridFields: 'Qual porcentagem da sala é alimentada pelas diferentes fontes?',
+          cropSpecificPricing: 'Preços específicos para cada cultura',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'É uma sala de armazenamento colocada no portão da quinta',

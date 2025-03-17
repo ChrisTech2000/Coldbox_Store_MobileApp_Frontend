@@ -54,16 +54,16 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
   const operatorsData = useMemo(() => {
     const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
     const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
-      const fem = coolingUnitData?.roomOpFem?.[i] ?? 0;
-      const male = coolingUnitData?.roomOpMa?.[i] ?? 0;
-      const ot = coolingUnitData?.roomOpOt?.[i] ?? 0;
+      const fem = Math.round(coolingUnitData?.roomOpFem?.[i] ?? 0);
+      const male = Math.round(coolingUnitData?.roomOpMa?.[i] ?? 0);
+      const ot = Math.round(coolingUnitData?.roomOpOt?.[i] ?? 0);
       const coolingUnitName = coolingUnitData?.unitName?.[i] ?? '';
 
       if (!coolingUnitName) return;
       return {
         coolingUnitName,
         value: [male, fem, ot],
-        sum: coolingUnitData?.roomOp?.[i] ?? 0,
+        sum: Math.round(coolingUnitData?.roomOp?.[i] ?? 0),
       };
     }).filter(Boolean);
 
@@ -73,16 +73,16 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
   const usersData = useMemo(() => {
     const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
     const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
-      const fem = coolingUnitData?.roomActiveFem?.[i] ?? 0;
-      const male = coolingUnitData?.roomActiveMa?.[i] ?? 0;
-      const ot = coolingUnitData?.roomActiveOt?.[i] ?? 0;
+      const fem = Math.round(coolingUnitData?.roomActiveFem?.[i] ?? 0);
+      const male = Math.round(coolingUnitData?.roomActiveMa?.[i] ?? 0);
+      const ot = Math.round(coolingUnitData?.roomActiveOt?.[i] ?? 0);
       const coolingUnitName = coolingUnitData?.unitName?.[i] ?? '';
 
       if (!coolingUnitName) return;
       return {
         coolingUnitName,
         value: [male, fem, ot],
-        sum: coolingUnitData?.roomActiveUsers?.[i] ?? 0,
+        sum: Math.round(coolingUnitData?.roomActiveUsers?.[i] ?? 0),
       };
     }).filter(Boolean);
 

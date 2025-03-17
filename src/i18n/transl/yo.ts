@@ -826,6 +826,9 @@ export default {
             field: 'aaye',
           },
           figorr: { apiKey: 'kọkọrọ API', deviceTag: 'àmì ìdánilẹ́kọ̀ ẹ̀rọ̀' },
+          hybridFields:
+            'Iwọn ida ogorun wo ninu yara naa ni oun gba agbara nipasẹ awọn orisun oriṣiriṣi?',
+          cropSpecificPricing: 'Ifowoleri-iru irugbin kan pato',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'O jẹ yara ipamọ ti a gbe si ẹnu-bode oko kan',

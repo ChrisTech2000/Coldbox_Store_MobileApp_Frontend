@@ -1,129 +1,65 @@
-# Getting Started
+# Coldtivate Mobile Application
 
-## Installation
+## Table of Contents
 
-```sh
-# 1st step
-yarn install
+- [Documentation](#documentation)
+- [Usage Instructions](#usage-instructions)
+- [Contribution Guidelines](#contribution-guidelines)
+- [License Information](#license-information)
 
-# 2nd step - iOS
-cd ios
-bundle install
-bundle exec pod install
+## Documentation
 
-# 2nd step - android
-cd android
-./gradlew clean
+Detailed documentation for Coldtivate is accessible at [docs.coldtivate.org](https://docs.coldtivate.org).
+
+## Usage Instructions
+
+### System Requirements
+
+Your environment must meet the following software requirements before starting:
+
+-   **Node.js:** Version 20 or later.
+-   **Yarn:** Version 1.22.19.
+-   **Xcode (macOS):** Required for iOS application development.
+-   **Android Studio:** Required for Android application development.
+
+### Getting Started Guide
+
+To initiate Coldtivate locally, adhere to these steps:
+
+1.  Consult our detailed [local development guide](https://docs.coldtivate.org/contributing/local-dev/mobile/) to configure and run the project on your machine.
+2.  Configure your development environment according to the instructions provided in the guide.
+3.  Launch the application locally.
+
+### Further Information
+
+For comprehensive technical information on implemented features, please refer to the following documentation:
+
+* **Deep Linking:** Detailed implementation information: [Deep Linking](https://docs.coldtivate.org/core-concepts/technical-features/deep-linking/)
+* **SWR Data Fetching:** Information on SWR data fetching implementation: [SWR](https://docs.coldtivate.org/core-concepts/technical-features/swr/)
+* **Role-Based Access Control (RBAC):** Implementation guide for RBAC: [RBAC](https://docs.coldtivate.org/core-concepts/technical-features/rbac/)
+* **Internationalization (i18n):** Documentation on the i18n implementation: [Internationalization](https://docs.coldtivate.org/core-concepts/technical-features/internationalization/)
+* **End-to-End Testing:** Implementation details for E2E testing with Maestro framework: [Testing](https://docs.coldtivate.org/contributing/testing/#testing-framework-maestro)
+
+## Contribution Guidelines
+
+### Contributing Guide
+
+For information on making your first contribution, please refer to our [contribution guidelines](https://docs.coldtivate.org/contributing/guidelines/#your-first-contribution).
+
+Ready to begin? Clone the repository using the following command to create a local copy:
+
+```bash
+git clone https://gitlab.com/b1866/coldtivate/mobile-app-react-native.git
 ```
 
-## Dev env
+### Branching
 
-```sh
-# start metro (mandatory)
-yarn start
+Refer to the [Git Branching Workflow](https://docs.coldtivate.org/contributing/git-flow/).
 
-# reset cache (if needed)
-yarn start --reset-cache
+### Code of Conduct
 
-# run iOS emulator (optional)
-yarn ios
+We are committed to fostering a safe and inclusive environment for all contributors. Please review our [Code of Conduct](https://docs.coldtivate.org/contributing/guidelines/#code-of-conduct) to ensure a positive and respectful experience.
 
-# run android emulator (optional)
-yarn android
+## License
 
-# remove all watchers and running processes
-watchman watch-del-all
-watchman shutdown-server
-```
-
-### Android Emulator
-
-If you need the `debug.keystore` file, you can [download it](https://github.com/react-native-community/react-native-template-typescript/blob/main/template/android/app/debug.keystore) and then move it to the `/android/app` folder.
-
-### Configuring Mapbox Credentials
-
-#### Prerequisites
-
-To use Mapbox services, you need to obtain two types of access tokens from the Mapbox dashboard:
-
-1. **Public Key**: This is the default public token, easily obtainable from the dashboard's access tokens section. It starts with `pk.ey`.
-2. **Secret Key**: This key must be created in the dashboard. You can name it whatever you want. Ensure it has the scope `Downloads:Read`. It starts with `sk.ey`.
-
-The public key is used to access Mapbox API features, while the secret key is required for downloading dependencies for Android and iOS.
-
-#### Steps to Obtain Access Tokens
-
-1. **Public Key**:
-
-   - Navigate to the Mapbox dashboard.
-   - Go to the access tokens section.
-   - Locate the public token (it starts with `pk.ey`).
-
-2. **Secret Key**:
-   - In the Mapbox dashboard, go to the access tokens section.
-   - Create a new token and assign it a name of your choice.
-   - Ensure the token has the `Downloads:Read` scope.
-   - Save the generated secret token (it starts with `sk.ey`).
-
-#### Setting up Android
-
-1. **Check for the `gradle.properties` file**
-
-   Ensure that you have the file `~/.gradle/gradle.properties` on your machine.
-
-   If the file does not exist, create it by following these steps:
-
-   ```sh
-   cd ~/.gradle
-   touch gradle.properties
-   ```
-
-2. **Edit `gradle.properties`**
-
-   Open the `gradle.properties` file and add the following line to include your Mapbox Downloads Token:
-
-   ```
-   MAPBOX_DOWNLOADS_TOKEN=sk.ey...
-   ```
-
-   Replace _sk.ey..._ with your actual Mapbox token.
-
-#### Setting up iOS
-
-1. **Check for the `.netrc` file**
-
-   Ensure that you have the file `.netrc` in your user directory.
-
-   If the file does not exist, create it by following these steps:
-
-   ```sh
-   cd ~
-   touch .netrc
-   ```
-
-2. **Edit `.netrc`**
-
-   Open the `.netrc` file and add the following lines to include your Mapbox credentials:
-
-   ```
-   machine api.mapbox.com
-      login mapbox
-      password sk.ey...
-   ```
-
-   Replace _sk.ey..._ with your actual Mapbox token.
-
-#### Rebuild
-
-After this, repeat the installation process (from 2nd step).
-
-### Miscellaneous
-
-```sh
-# splash screen asset generation
-yarn react-native generate-bootsplash src/assets/images/root_hero.svg \
-  --platforms=android,ios \
-  --background=FFFFFF \
-  --logo-width=178 \
-  --assets-output=src/assets/bootsplash
-```
+Coldtivate is distributed under the MIT License. The complete license text is available in the [LICENSE](LICENSE) file.

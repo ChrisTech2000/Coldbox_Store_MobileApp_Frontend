@@ -833,6 +833,8 @@ export default {
             field: 'Ubi',
           },
           figorr: { apiKey: 'Igodo API', deviceTag: 'Mkpado ngwaọrụ' },
+          hybridFields: "Kedu pasentị nke di n' ụlọ a na-akwado site na uzo di iche iche?",
+          cropSpecificPricing: 'Ọnụ ahịa ihe ubi ya kpokwem',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: "Ọ bụ ụlọ nchekwa etinyere n'ọnụ ụzọ ugbo",
