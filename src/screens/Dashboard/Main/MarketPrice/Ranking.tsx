@@ -18,7 +18,10 @@ import { cn } from '#ui/lib/cn';
 
 import { PredictionTable } from './components/PredictionTable';
 import { usePriceTrendsStore } from './store';
-import { CountryBasedContentSwitch } from './components/PredictionMarketSelect';
+import {
+  CountryBasedContentSwitch,
+  useContextualCountryISO,
+} from './components/PredictionMarketSelect';
 import PriceRankingMarketFilters, {
   getMarketsGroupedByDistrict,
 } from './components/PriceRankingMarketFilters';
@@ -75,10 +78,37 @@ function MarketPriceRanking() {
     []
   );
 
+  const stateDatums = useMemo(
+    (): Array<PredictionState> =>
+      states.length > 0 && filterByLocation
+        ? states
+        : predictionParams && 'availableStates' in predictionParams
+          ? predictionParams.availableStates
+          : [],
+    [states, filterByLocation, predictionParams]
+  );
+
+  const marketDatums = useMemo(
+    (): Array<PredictionMarket> =>
+      selectedMarkets.length > 0 && filterByLocation
+        ? selectedMarkets
+        : predictionParams && 'availableMarkets' in predictionParams
+          ? getMarketsGroupedByDistrict(predictionParams.availableMarkets).defaultList()
+          : [],
+    [selectedMarkets, filterByLocation, predictionParams]
+  );
+
+  const isInvalidSelection = _useIsInvalidSelection({
+    commodity,
+    selectedTimeframe,
+    markets: marketDatums,
+    states: stateDatums,
+  });
+
   if (!allowedCountry) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10">
-        <Text variant="TitleMedium" tw="text-center text-green-primary">
+      <View tw="flex-1 items-center justify-center mx-10 mt-3">
+        <Text variant="TitleMedium" tw="text-base text-center text-green-primary">
           {t('Dashboard.MarketPrice.emptyState')}
         </Text>
       </View>
@@ -188,32 +218,24 @@ function MarketPriceRanking() {
           }
         />
 
-        {predictionParams && commodity && selectedTimeframe.length > 0 ? (
+        {isInvalidSelection ? (
+          <View tw="py-3">
+            <Text tw="text-base">{t('Dashboard.MarketPrice.Ranking.select-warning')}</Text>
+          </View>
+        ) : predictionParams && commodity && selectedTimeframe.length > 0 ? (
           <CountryBasedContentSwitch
             standard={
               <PredictionTable
-                states={
-                  states.length > 0
-                    ? states
-                    : 'availableStates' in predictionParams
-                      ? predictionParams.availableStates
-                      : []
-                }
+                states={stateDatums}
                 commodity={commodity}
                 dates={selectedTimeframe}
               />
             }
             fallback={
               <PredictionTable
+                markets={marketDatums}
                 commodity={commodity}
                 dates={selectedTimeframe}
-                markets={
-                  selectedMarkets.length > 0
-                    ? selectedMarkets
-                    : 'availableMarkets' in predictionParams
-                      ? getMarketsGroupedByDistrict(predictionParams.availableMarkets).defaultList()
-                      : []
-                }
               />
             }
           />
@@ -221,6 +243,25 @@ function MarketPriceRanking() {
       </ScrollView>
     </View>
   );
+}
+
+function _useIsInvalidSelection(obj: {
+  commodity: PredictionCrop | null;
+  selectedTimeframe: Array<TimeFrameDatum>;
+  states: Array<PredictionState>;
+  markets: Array<PredictionMarket>;
+}): boolean {
+  const { commodity, selectedTimeframe, states, markets } = obj;
+
+  const contextualCountry = useContextualCountryISO();
+  const isIndian = contextualCountry === 'IN';
+
+  const hasNoCommodity = !commodity;
+  const hasNoTimeframe = !selectedTimeframe.length;
+  const hasNoMarkets = !markets?.length;
+  const hasNoStates = !states?.length;
+
+  return hasNoCommodity || hasNoTimeframe || (isIndian ? hasNoMarkets : hasNoStates);
 }
 
 export default withSafeArea(

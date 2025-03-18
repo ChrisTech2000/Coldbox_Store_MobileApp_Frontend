@@ -337,6 +337,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Ọnụ ahịa ahịa adịghị na obodo gị',
+      'no-data-found': 'Enweghị data ahụrụ maka nchikota ahịa na ngwa ahịa a',
       commodityLabel: 'Ngwaahịa',
       commodityModalTitle: 'Ngwa horo ngwaahịa',
       Trend: {
@@ -366,6 +367,7 @@ export default {
         'district-placeholder': 'Mpaghara',
         'market-label': 'Họrọ ahịa',
         'market-placeholder': 'Ahịa',
+        'select-warning': 'Biko mee nhọrọ maka mpaghara ọ bụla',
       },
     },
     CrateManagement: {
@@ -831,6 +833,8 @@ export default {
             field: 'Ubi',
           },
           figorr: { apiKey: 'Igodo API', deviceTag: 'Mkpado ngwaọrụ' },
+          hybridFields: "Kedu pasentị nke di n' ụlọ a na-akwado site na uzo di iche iche?",
+          cropSpecificPricing: 'Ọnụ ahịa ihe ubi ya kpokwem',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: "Ọ bụ ụlọ nchekwa etinyere n'ọnụ ụzọ ugbo",

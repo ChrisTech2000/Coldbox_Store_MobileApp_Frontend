@@ -6,6 +6,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { ERoles, PredictionParams } from '#types/global';
+import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 type State = {
   predictionParams: PredictionParams | null;
@@ -15,9 +16,9 @@ type Actions = {
   setPredictionParams: (predictionParams: PredictionParams | null) => void;
 };
 
-export type AllowedCountry = 'IN' | 'NG' | 'India' | 'Nigeria';
+type AllowedCountry = 'IN' | 'NG';
 
-const availableCountries: AllowedCountry[] = ['IN', 'NG', 'India', 'Nigeria'];
+const MARKET_PRICE_ALLOWED_COUNTRIES: Array<AllowedCountry> = ['IN', 'NG'];
 
 const useStore = create<State & Actions>((set) => ({
   predictionParams: null,
@@ -39,21 +40,14 @@ export function usePriceTrendsStore() {
     }
   );
 
-  const country: AllowedCountry | null = useMemo(() => {
-    if (
-      user?.role === ERoles.COOLING_USER &&
-      farmer?.[0]?.country &&
-      availableCountries.includes(farmer[0].country as AllowedCountry)
-    ) {
-      return farmer[0].country as AllowedCountry;
-    }
-
-    if (company?.country && availableCountries.includes(company.country as AllowedCountry)) {
-      return company.country as AllowedCountry;
-    }
-
+  const country = useMemo((): AllowedCountry | null => {
+    const contextualCountry = farmer?.[0]?.country || company?.country || '';
+    const countryDatum = countriesDict().getByValue(contextualCountry);
+    if (typeof countryDatum === 'undefined') return null;
+    const isValid = MARKET_PRICE_ALLOWED_COUNTRIES.includes(countryDatum.ISO as AllowedCountry);
+    if (isValid) return countryDatum.ISO as AllowedCountry;
     return null;
-  }, [user, company, farmer]);
+  }, [farmer, company]);
 
   return {
     predictionParams,

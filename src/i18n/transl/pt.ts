@@ -361,7 +361,8 @@ export default {
     coolingUserNavigateToMarketplace:
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
-      emptyState: 'Os preços de mercado não estão disponíveis no seu país', // TODO
+      emptyState: 'Os preços de mercado não estão disponíveis no seu país',
+      'no-data-found': 'Nenhum dado encontrado para esta combinação de mercado e commodity',
       commodityLabel: 'Produto',
       commodityModalTitle: 'Selecione um produto',
       Trend: {
@@ -391,6 +392,7 @@ export default {
         'district-placeholder': 'Distrito',
         'market-label': 'Selecione um mercado',
         'market-placeholder': 'Mercado',
+        'select-warning': 'Faça uma seleção para cada campo',
       },
     },
     CrateManagement: {
@@ -904,6 +906,8 @@ export default {
             apiKey: 'Chave API',
             deviceTag: 'Etiqueta do dispositivo',
           },
+          hybridFields: 'Qual porcentagem da sala é alimentada pelas diferentes fontes?',
+          cropSpecificPricing: 'Preços específicos para cada cultura',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'É uma sala de armazenamento colocada no portão da quinta',

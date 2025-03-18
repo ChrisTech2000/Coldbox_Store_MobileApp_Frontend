@@ -336,6 +336,7 @@ export default {
       'مرحبًا بك في Coldtivate. ابدأ بإضافة المواقع إلى تطبيقك في لوحة الإدارة.',
     MarketPrice: {
       emptyState: 'أسعار المحاصيل غير متوفرة في بلدك',
+      'no-data-found': 'No data found for this market and commodity combination', // TODO
       commodityLabel: 'سلعة',
       commodityModalTitle: 'حدد سلعة',
       Trend: {
@@ -365,6 +366,7 @@ export default {
         'district-placeholder': 'District', // TODO
         'market-label': 'Select a market', // TODO
         'market-placeholder': 'Market', // TODO
+        'select-warning': 'Please make a selection for each field', // TODO
       },
     },
     CrateManagement: {
@@ -806,6 +808,8 @@ export default {
             field: 'مجال',
           },
           figorr: { apiKey: 'مفتاح API', deviceTag: 'علامة الجهاز' },
+          hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
+          cropSpecificPricing: 'Crop-specific pricing', // TODO
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'إنها غرفة تخزين تقع عند بوابة المزرعة',

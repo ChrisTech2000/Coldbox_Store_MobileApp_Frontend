@@ -358,7 +358,8 @@ export default {
     coolingUserNavigateToMarketplace:
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
-      emptyState: 'ଆପଣଙ୍କ ଦେଶରେ ବଜାର ମୂଲ୍ୟ ଉପଲବ୍ଧ ନାହିଁ', // TODO
+      emptyState: 'ଆପଣଙ୍କ ଦେଶରେ ବଜାର ମୂଲ୍ୟ ଉପଲବ୍ଧ ନାହିଁ',
+      'no-data-found': 'ଏହି ବଜାର ଏବଂ ଖଣିଜ ମିଶ୍ରଣ ପାଇଁ କ data ଣସି ତଥ୍ୟ ମିଳିଲା ନାହିଁ |',
       commodityLabel: 'ବସ୍ତୁ',
       commodityModalTitle: 'ଏକ ବସ୍ତୁ ଚୟନ କରନ୍ତୁ',
       Trend: {
@@ -388,6 +389,7 @@ export default {
         'district-placeholder': 'ଜିଲ୍ଲା',
         'market-label': 'ଏକ ବଜାର ଚୟନ କରନ୍ତୁ |',
         'market-placeholder': 'ବଜାର',
+        'select-warning': 'ଦୟାକରି ପ୍ରତ୍ୟେକ କ୍ଷେତ୍ର ପାଇଁ ଏକ ଚୟନ କରନ୍ତୁ |',
       },
     },
     CrateManagement: {
@@ -899,6 +901,8 @@ export default {
             apiKey: 'API କୀ',
             deviceTag: 'ଉପକରଣ ଟ୍ୟାଗ୍',
           },
+          hybridFields: 'ପ୍ରକୋଷ୍ଠ ର କେତେ ପ୍ରତିଶତ ଅଲଗା ଅଲଗା ବିଦ୍ୟୁତ ଉତ୍ସ ଦ୍ୱାରା ଚାଳିତ?',
+          cropSpecificPricing: 'ଫସଲ ହିସାବରେ ନିର୍ଦ୍ଧିଷ୍ଟ ମୂଲ୍ୟ ନିରୂପଣ|',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'ଏହା ଏକ ଖେତର ଦ୍ବାର ରୁମ୍',

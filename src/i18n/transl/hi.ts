@@ -360,6 +360,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'आपके देश में बाजार मूल्य उपलब्ध नहीं हैं', // TODO
+      'no-data-found': 'इस बाज़ार और कमोडिटी संयोजन के लिए कोई डेटा नहीं मिला',
       commodityLabel: 'वस्तु',
       commodityModalTitle: 'एक वस्तु का चयन करें',
       Trend: {
@@ -390,6 +391,7 @@ export default {
         'market-label': 'एक बाजार का चयन करें',
         'market-placeholder':
           'मूल्य पूर्वानुमान प्राप्त करने के लिए एक वस्तु और एक राज्य का चयन करें',
+        'select-warning': 'कृपया प्रत्येक क्षेत्र के लिए चयन करें',
       },
     },
     CrateManagement: {
@@ -901,6 +903,8 @@ export default {
             apiKey: 'API Key',
             deviceTag: 'Device Tag',
           },
+          hybridFields: 'प्रकोष्ठ का कितना प्रतिशत विभिन्न स्रोतों से संचालित होता है?',
+          cropSpecificPricing: 'फसल-अनुरूप  मूल्य निर्धारण',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'यह फार्म-गेट पर रखा गया भंडारण कक्ष है',

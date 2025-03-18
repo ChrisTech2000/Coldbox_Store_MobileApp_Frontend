@@ -333,6 +333,7 @@ export default {
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
     MarketPrice: {
       emptyState: 'Awọn idiyele ọja ko si ni orilẹ ede rẹ',
+      'no-data-found': 'Ko si akosile ti a rii fun akojọpọ ọja ati eru yii',
       commodityLabel: 'oja',
       commodityModalTitle: 'Yan oja kan',
       Trend: {
@@ -362,6 +363,7 @@ export default {
         'district-placeholder': 'Agbegbe',
         'market-label': 'Yan Oja kan',
         'market-placeholder': 'Oja',
+        'select-warning': 'Jọwọ ṣe yiyan fun aaye kọọkan',
       },
     },
     CrateManagement: {
@@ -824,6 +826,9 @@ export default {
             field: 'aaye',
           },
           figorr: { apiKey: 'kọkọrọ API', deviceTag: 'àmì ìdánilẹ́kọ̀ ẹ̀rọ̀' },
+          hybridFields:
+            'Iwọn ida ogorun wo ninu yara naa ni oun gba agbara nipasẹ awọn orisun oriṣiriṣi?',
+          cropSpecificPricing: 'Ifowoleri-iru irugbin kan pato',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'O jẹ yara ipamọ ti a gbe si ẹnu-bode oko kan',
