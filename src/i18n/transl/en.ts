@@ -875,6 +875,7 @@ const en = {
           batteryPeakEnergyStorage: 'Energy storage at peak level of one battery',
           batteryType: 'Type of batteries',
           selectSensorType: 'Select a sensor type',
+          selectSensor: 'Select a sensor',
           addTempSensor: 'Add a temperature sensor to your cooling unit.',
           sensorDesc: {
             default: 'Request this info from your sensor provider if not at hand.',

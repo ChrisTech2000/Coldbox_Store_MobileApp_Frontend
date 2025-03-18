@@ -885,6 +885,7 @@ export default {
           batteryPeakEnergyStorage: 'Armazenamento de energia no nível máximo de uma bateria',
           batteryType: 'Tipo de baterias',
           selectSensorType: 'Selecione tipo de sensor',
+          selectSensor: 'Selecione um sensor',
           addTempSensor: 'Adicionar um sensor de temperatura à sua unidade de refrigeração.',
           sensorDesc: {
             default: 'Solicite esta informação ao seu fornecedor de sensores se não a tiver.',

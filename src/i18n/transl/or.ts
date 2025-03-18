@@ -880,6 +880,7 @@ export default {
           batteryPeakEnergyStorage: 'ଏକ ବ୍ୟାଟେରୀ ର ପୀକ୍ ଷ୍ଟୋରେଜ୍ ଇନେର୍ଜୀ',
           batteryType: 'ବ୍ୟାଟେରୀ ପ୍ରକାର',
           selectSensorType: 'ସେନ୍ସର ପ୍ରକାର ଚୟନ କରନ୍ତୁ',
+          selectSensor: 'Select a sensor', // TODO
           addTempSensor: 'ଆପଣଙ୍କର କୁଲିଂ ଇଉନିଟ୍ କୁ ଏକ ତାପମାପକ ସେନ୍ସର୍ ଯୋଡନ୍ତୁ',
           sensorDesc: {
             default: 'ଯଦି ହାତରେ ନାହିଁ, ତେବେ ସେନ୍ସର୍ ପ୍ରଦାତା ସହିତ ଏହି ସୂଚନା ଅନୁରୋଧ କରନ୍ତୁ।',

@@ -384,7 +384,7 @@ export type VerifyEcozenSensorConnectivityParams = {
 export type ListUserSensorsParams = {
   username: string;
   password: string;
-  type: ESensorType;
+  integrationType: ESensorType;
 };
 
 export interface GetPredictionParams extends JsonObject {

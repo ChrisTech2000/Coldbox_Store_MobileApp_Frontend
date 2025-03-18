@@ -882,6 +882,7 @@ export default {
           batteryPeakEnergyStorage: 'एक बैटरी के चरम स्तर पर ऊर्जा भंडारण',
           batteryType: 'बैटरियों का प्रकार',
           selectSensorType: 'एक सेंसर प्रकार का चयन करें',
+          selectSensor: 'Select a sensor', // TODO
           addTempSensor: 'अपनी प्रशीतलन इकाई में इकोज़ेन सेंसर डालें',
           sensorDesc: {
             default: 'अगर जानकारी उपलब्ध नहीं है, कृपया अपने इकोज़ेन प्रदाता से अनुरोध करें',

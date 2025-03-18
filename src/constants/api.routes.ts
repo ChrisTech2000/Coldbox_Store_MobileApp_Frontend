@@ -73,7 +73,7 @@ export enum EImpactEndpoints {
 
 export enum ESensorEndpoints {
   ECOZEN_CHECK = 'storage/v1/ecozen/',
-  LIST_USER_SENSORS = 'storage/v1/user-sensor/sources',
+  LIST_USER_SENSORS = 'storage/v1/user-sensor/sources/',
 }
 
 export enum EFarmerImpactEndpoints {

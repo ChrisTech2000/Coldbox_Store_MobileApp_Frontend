@@ -840,6 +840,7 @@ export default {
           batteryPeakEnergyStorage: "Stockage d'énergie au niveau de pointe d'une batterie",
           batteryType: 'Type de batteries',
           selectSensorType: 'Sélectionner un type de capteur',
+          selectSensor: 'Select a sensor', // TODO
           addTempSensor: 'Ajouter un capteur de température à votre unité de réfrigération',
           sensorDesc: {
             default:

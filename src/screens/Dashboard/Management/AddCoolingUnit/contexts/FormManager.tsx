@@ -18,7 +18,7 @@ import {
 } from '../constants';
 
 export type SensorDatum = {
-  source_id: string;
+  sourceId: string;
   username: string;
   password: string;
   type: string;
@@ -147,46 +147,12 @@ export default function FormManager(props: FormManagerProps) {
         editableCheckins: z.boolean().default(true),
         sensor: z.boolean().default(false),
         sensorData: z
-          .union([
-            z.object({
-              machineID: z.string(),
-              username: z.string(),
-              password: z.string(),
-              type: z.literal('ecozen'),
-            }),
-            z.object({
-              accountKey: z.string(),
-              channelId: z.string(),
-              field: z.string(),
-              type: z.literal('ubibot'),
-            }),
-            z.object({
-              machineID: z.string(),
-              id: z.string(),
-              username: z.string(),
-              settings: z.object({
-                name: z.string(),
-              }),
-              stat: z.object({
-                id: z.string(),
-                device: z.string(),
-                temperature: z.number(),
-                humidity: z.number(),
-                latitude: z.number(),
-                longitude: z.number(),
-                battery: z.number(),
-                deviceSettings: z.object({
-                  name: z.string(),
-                }),
-                notes: z.array(z.unknown()),
-                deviceRtcTime: z.number(),
-                deviceTimeStamp: z.string(),
-              }),
-              status: z.string(),
-              password: z.string(),
-              type: z.string(),
-            }),
-          ])
+          .object({
+            sourceId: z.string(),
+            username: z.string(),
+            password: z.string(),
+            type: z.string(),
+          })
           .optional(),
         public: z.boolean().default(false),
         operators: z.array(z.number()).default([]),

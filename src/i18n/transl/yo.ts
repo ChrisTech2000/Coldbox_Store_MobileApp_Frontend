@@ -812,6 +812,7 @@ export default {
           batteryPeakEnergyStorage: 'Ibi ipamọ agbara ni ipele ti o ga julọ ti batiri kan',
           batteryType: 'Iru awọn batiri',
           selectSensorType: 'Yan iru sensọ kan',
+          selectSensor: 'Select a sensor', // TODO
           addTempSensor: 'Ṣafikun sensọ iwọn otutu si ẹyọ itutu rẹ.',
           sensorDesc: {
             default: 'Beere alaye yii lati ọdọ olupese sensọ rẹ ti ko ba wa ni ọwọ.',

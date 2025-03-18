@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
-import { Dialog, Divider, List, Portal } from 'react-native-paper';
+import { Dialog, Divider, List, Portal, RadioButton } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -18,7 +18,7 @@ type SensorData = {
   username: string;
   password: string;
   sensorType: ESensorType;
-  sensors: ListUserSensorsResponse;
+  sensors: ListUserSensorsResponse['sources'];
 };
 
 export default function SensorsList() {
@@ -28,19 +28,23 @@ export default function SensorsList() {
 
   const [data, setData] = useState<SensorData | undefined>(undefined);
 
-  const [selectedSensor, setSelectedSensor] = useState<ListUserSensorsResponse[number] | undefined>(
-    undefined
-  );
+  const [selectedSensor, setSelectedSensor] = useState<
+    ListUserSensorsResponse['sources'][number] | undefined
+  >(undefined);
 
-  useAppEventListener<[boolean, SensorData]>(APP_EVENTS.DISPATCH_SENSOR_MODAL, (status, data) => {
-    setModalVisibility(status);
-    setData(data);
-  });
+  useAppEventListener<[boolean, SensorData]>(
+    APP_EVENTS.DISPATCH_SENSOR_LIST_MODAL,
+    (status, data) => {
+      setModalVisibility(status);
+      setData(data);
+      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_MODAL, false, undefined);
+    }
+  );
 
   async function onSubmit() {
     if (!selectedSensor || !data) return;
     const sensorData = {
-      source_id: selectedSensor.id,
+      sourceId: selectedSensor.id,
       username: data.username,
       password: data.password,
       type: data.sensorType,
@@ -51,37 +55,46 @@ export default function SensorsList() {
     });
 
     emitter.emit(APP_EVENTS.DISPATCH_SENSOR_DATUMS, sensorData);
+    toggleVisibility();
   }
 
   return (
     <Portal>
       <Dialog visible={isVisible} onDismiss={toggleVisibility} style={{ backgroundColor: 'white' }}>
-        <Dialog.Title>
-          {t('Dashboard.Management.AddCoolingUnit.fields.selectSensorType')}
-        </Dialog.Title>
+        <Dialog.Title>{t('Dashboard.Management.AddCoolingUnit.fields.selectSensor')}</Dialog.Title>
         <Dialog.Content>
-          <FlatList
-            tw="m-0 p-0"
-            showsVerticalScrollIndicator={false}
-            nestedScrollEnabled
-            data={data?.sensors ?? []}
-            keyExtractor={(item) => `sensor-item-${item.id}-#${item.name}`}
-            renderItem={({ item }) => (
-              <React.Fragment>
-                <List.Item
-                  title={undefined}
-                  left={() => (
-                    <Text tw="text-base">
-                      {item.name} ({item.id})
-                    </Text>
-                  )}
-                  tw="m-0 py-2 px-2.5"
-                  onPress={() => setSelectedSensor(item)}
-                />
-                <Divider tw="bg-zinc-400" />
-              </React.Fragment>
-            )}
-          />
+          <RadioButton.Group
+            value={selectedSensor?.id ?? ''}
+            onValueChange={(value) => {
+              if (!value) return;
+              const sensor = data?.sensors.find((item) => item.id === value);
+              setSelectedSensor(sensor);
+            }}
+          >
+            <FlatList
+              tw="m-0 p-0"
+              showsVerticalScrollIndicator={false}
+              nestedScrollEnabled
+              data={data?.sensors ?? []}
+              keyExtractor={(item) => `sensor-item-${item.id}`}
+              renderItem={({ item }) => (
+                <React.Fragment>
+                  <List.Item
+                    title={undefined}
+                    left={() => (
+                      <Text tw="text-base">
+                        {item.id} {item.name ? `(${item.name})` : ''}
+                      </Text>
+                    )}
+                    right={() => <RadioButton value={item.id} />}
+                    tw="m-0 pb-0.5 px-2.5"
+                    onPress={() => setSelectedSensor(item)}
+                  />
+                  <Divider tw="bg-zinc-400" />
+                </React.Fragment>
+              )}
+            />
+          </RadioButton.Group>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onSubmit}>{t('actions.save')}</Button>

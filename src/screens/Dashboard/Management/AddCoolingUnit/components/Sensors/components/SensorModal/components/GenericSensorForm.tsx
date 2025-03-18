@@ -33,7 +33,6 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
     ),
   });
 
-  console.log(form.formState.errors);
   useUnmount(form.reset);
 
   async function onSubmit(values: FormValues) {
@@ -41,22 +40,22 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
       const result = await SensorsService.listUserSensors({
         username: values.username,
         password: values.password,
-        type,
+        integrationType: type,
       });
 
-      const contextualSensor = result?.at(0);
-      if (!contextualSensor) {
+      if (!result?.sources.length) {
         toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
           type: 'md_danger',
         });
         return;
       }
 
-      toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationSuccess'), {
-        type: 'md_success',
+      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_LIST_MODAL, true, {
+        username: values.username,
+        password: values.password,
+        sensorType: type,
+        sensors: result.sources,
       });
-
-      emitter.emit(APP_EVENTS.DISPATCH_SENSOR_LIST_MODAL, result);
     } catch (exception) {
       toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
         type: 'md_danger',
@@ -102,6 +101,9 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
         />
       </View>
       <View tw="self-end px-6">
+        {/* <Button mode="text" onPress={} disabled={isSubmitting}>
+          {t('actions.close')}
+        </Button> */}
         <Button mode="text" onPress={form.handleSubmit(onSubmit)} disabled={isSubmitting}>
           {isSubmitting ? (
             <ActivityIndicator color={paperTheme.colors.primary} size={16} animating />

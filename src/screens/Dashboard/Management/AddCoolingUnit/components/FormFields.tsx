@@ -1,32 +1,33 @@
 import React from 'react';
+import { Controller } from 'react-hook-form';
 import { View } from 'react-native';
 import { Divider, Switch, TextInput } from 'react-native-paper';
-import { Controller } from 'react-hook-form';
 
 import { Text } from '#ui/components/Text';
 
-import type { GetCoolingUnitResponse } from '#types/api.responses';
 import { useTranslationUtils } from '#i18n/utils';
+import type { GetCoolingUnitResponse } from '#types/api.responses';
 
 import FormManager from '../contexts/FormManager';
-import LocationField from './LocationField';
-import UnitTypeField from './UnitTypeField';
-import PriceTypeField from './PriceTypeField';
-import MetricUnitField from './MetricUnitField';
-import PriceField from './PriceField';
-import VolumeFields from './VolumeFields';
-import UnitSizeFields from './UnitSizeFields';
-import UnitCapacityFields from './UnitCapacityFields';
-import CrateDimensionsFields from './CrateDimensionsFields';
-import OperatorsField from './OperatorsField';
 import CommoditiesField from './CommoditiesField';
-import RefrigerantFields from './RefrigerantFields';
+import CrateDimensionsFields from './CrateDimensionsFields';
+import CropSpecificPricing from './CropSpecificPricing';
+import ElectricityStorageFields from './ElectricityStorageFields';
+import LocationField from './LocationField';
+import MetricUnitField from './MetricUnitField';
+import OperatorsField from './OperatorsField';
 import PowerConsumptionFields from './PowerConsumptionFields';
 import PowerSourceFields from './PowerSourceFields';
-import ElectricityStorageFields from './ElectricityStorageFields';
+import PriceField from './PriceField';
+import PriceTypeField from './PriceTypeField';
+import RefrigerantFields from './RefrigerantFields';
 import Sensors from './Sensors';
-import CropSpecificPricing from './CropSpecificPricing';
+import SensorsList from './Sensors/components/SensorsListModal';
 import TableModal from './Sensors/components/TableModal';
+import UnitCapacityFields from './UnitCapacityFields';
+import UnitSizeFields from './UnitSizeFields';
+import UnitTypeField from './UnitTypeField';
+import VolumeFields from './VolumeFields';
 
 export default function FormFields(props: {
   isEditMode?: boolean;
@@ -89,6 +90,7 @@ export default function FormFields(props: {
         !integratedSensor ? null : (
           <TableModal datums={sensorList ?? []} />
         )}
+        <SensorsList />
       </Sensors>
       <Controller
         name="public"

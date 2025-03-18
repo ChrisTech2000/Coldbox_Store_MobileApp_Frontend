@@ -402,10 +402,12 @@ export type GetNotificationsResponse = Array<{
   marketListing: { currency: string; pricePerKg: number } | null;
 }>;
 
-export type ListUserSensorsResponse = Array<{
-  id: string;
-  name: string;
-}>;
+export type ListUserSensorsResponse = {
+  sources: Array<{
+    id: string;
+    name: string;
+  }>;
+};
 
 export interface CreateCouponResponse {
   id: number;

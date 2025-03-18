@@ -794,6 +794,7 @@ export default {
           batteryPeakEnergyStorage: 'تخزين الطاقة عند مستوى الذروة لبطارية واحدة',
           batteryType: 'نوع البطاريات',
           selectSensorType: 'حدد نوع المستشعر',
+          selectSensor: 'Select a sensor', // TODO
           addTempSensor: 'أضف مستشعر درجة الحرارة إلى وحدة التبريد الخاصة بك.',
           sensorDesc: {
             default: 'اطلب هذه المعلومات من مزود المستشعر الخاص بك إذا لم تكن في متناول اليد.',

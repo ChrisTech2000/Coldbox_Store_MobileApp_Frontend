@@ -876,6 +876,7 @@ export default {
           batteryPeakEnergyStorage: 'એક બેટરીની પીક એનર્જી સંગ્રહ',
           batteryType: 'બેટરીનો પ્રકાર',
           selectSensorType: 'સેન્સરનો પ્રકાર પસંદ કરો',
+          selectSensor: 'Select a sensor', // TODO
           addTempSensor: 'તમારા કૂલિંગ યુનિટમાં તાપમાપક સેન્સર ઉમેરો',
           sensorDesc: {
             default: 'જો તમારા હાથમાં નથી, તો તમારા સેન્સર પ્રદાતા પાસેથી આ માહિતી વિનંતી કરો.',

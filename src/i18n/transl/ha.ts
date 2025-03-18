@@ -829,6 +829,7 @@ export default {
           batteryPeakEnergyStorage: "Ma'ajiyar makamashi a matakin kololuwar baturi daya",
           batteryType: "Nau'in batura",
           selectSensorType: "Zaɓi nau'in firikwensin",
+          selectSensor: 'Select a sensor', // TODO
           addTempSensor: 'Ƙara firikwensin yanayin zafi zuwa sashin naúrar sanyayawar ku.',
           sensorDesc: {
             default: 'Nemi wannan bayanin daga mai bada firikwensin ku idan babu a hannu.',
