@@ -813,6 +813,8 @@ export default {
           batteryType: 'Iru awọn batiri',
           selectSensorType: 'Yan iru sensọ kan',
           selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'Ṣafikun sensọ iwọn otutu si ẹyọ itutu rẹ.',
           sensorDesc: {
             default: 'Beere alaye yii lati ọdọ olupese sensọ rẹ ti ko ba wa ni ọwọ.',

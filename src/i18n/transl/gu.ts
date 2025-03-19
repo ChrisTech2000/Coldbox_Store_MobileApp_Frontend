@@ -877,6 +877,8 @@ export default {
           batteryType: 'બેટરીનો પ્રકાર',
           selectSensorType: 'સેન્સરનો પ્રકાર પસંદ કરો',
           selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'તમારા કૂલિંગ યુનિટમાં તાપમાપક સેન્સર ઉમેરો',
           sensorDesc: {
             default: 'જો તમારા હાથમાં નથી, તો તમારા સેન્સર પ્રદાતા પાસેથી આ માહિતી વિનંતી કરો.',

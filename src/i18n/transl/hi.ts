@@ -883,6 +883,8 @@ export default {
           batteryType: 'बैटरियों का प्रकार',
           selectSensorType: 'एक सेंसर प्रकार का चयन करें',
           selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'अपनी प्रशीतलन इकाई में इकोज़ेन सेंसर डालें',
           sensorDesc: {
             default: 'अगर जानकारी उपलब्ध नहीं है, कृपया अपने इकोज़ेन प्रदाता से अनुरोध करें',

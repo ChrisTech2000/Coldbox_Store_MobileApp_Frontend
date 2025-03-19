@@ -830,6 +830,8 @@ export default {
           batteryType: "Nau'in batura",
           selectSensorType: "Zaɓi nau'in firikwensin",
           selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'Ƙara firikwensin yanayin zafi zuwa sashin naúrar sanyayawar ku.',
           sensorDesc: {
             default: 'Nemi wannan bayanin daga mai bada firikwensin ku idan babu a hannu.',

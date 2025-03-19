@@ -185,7 +185,6 @@ export type CoolingUnit = {
   commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
-  ubibotSensorChannel: unknown; // TODO: figure out type
   sensorError: boolean;
   latestTemperatureTimestamp: Date;
   lastCheckInDate: Date;

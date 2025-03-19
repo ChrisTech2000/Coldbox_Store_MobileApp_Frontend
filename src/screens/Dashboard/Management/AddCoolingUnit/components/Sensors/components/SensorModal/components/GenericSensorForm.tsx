@@ -44,7 +44,7 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
       });
 
       if (!result?.sources.length) {
-        toast.show(t('Dashboard.Management.AddCoolingUnit.toasts.integrationError'), {
+        toast.show(t('Dashboard.Management.AddCoolingUnit.fields.emptySensorListError', { type }), {
           type: 'md_danger',
         });
         return;
@@ -77,6 +77,7 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
               tw="bg-transparent px-3"
               label={t('Dashboard.Management.AddCoolingUnit.fields.genericSensorForm.username')}
               mode="flat"
+              autoCapitalize="none"
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
@@ -92,6 +93,8 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
               tw="bg-transparent px-3"
               label={t('Dashboard.Management.AddCoolingUnit.fields.genericSensorForm.password')}
               mode="flat"
+              secureTextEntry
+              autoCapitalize="none"
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
@@ -101,9 +104,6 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
         />
       </View>
       <View tw="self-end px-6">
-        {/* <Button mode="text" onPress={} disabled={isSubmitting}>
-          {t('actions.close')}
-        </Button> */}
         <Button mode="text" onPress={form.handleSubmit(onSubmit)} disabled={isSubmitting}>
           {isSubmitting ? (
             <ActivityIndicator color={paperTheme.colors.primary} size={16} animating />

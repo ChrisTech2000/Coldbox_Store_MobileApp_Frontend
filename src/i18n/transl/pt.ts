@@ -886,6 +886,8 @@ export default {
           batteryType: 'Tipo de baterias',
           selectSensorType: 'Selecione tipo de sensor',
           selectSensor: 'Selecione um sensor',
+          emptySensorListError:
+            'Não existem sensores conectados na sua conta {{type}}. Por favor conecte pelo menos um e tente novamente.', // TODO
           addTempSensor: 'Adicionar um sensor de temperatura à sua unidade de refrigeração.',
           sensorDesc: {
             default: 'Solicite esta informação ao seu fornecedor de sensores se não a tiver.',

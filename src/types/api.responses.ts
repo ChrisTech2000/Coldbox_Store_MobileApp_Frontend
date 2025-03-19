@@ -192,7 +192,6 @@ export type GetCoolingUnitsByStatusResponse = {
   commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
-  ubibotSensorChannel?: unknown; // TODO: figure this structure data type
   commonPricingType: CommonPricingType;
   sensorError: boolean;
   latestTemperatureTimestamp: string;
@@ -291,12 +290,11 @@ export interface GetCoolingUnitResponse {
   sensor: boolean;
   sensorList: Array<{
     id: number;
-    machineId: string;
+    sourceId: string;
     type: string;
     field: null | string;
     dateSensorFirstLinked: string;
     username: string;
-    channelId: string;
   }>;
   capacityInMetricTons: number;
   capacityInNumberCrates: number;
@@ -332,7 +330,6 @@ export interface GetCoolingUnitResponse {
   commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
-  ubibotSensorChannel: unknown; // TODO: confirm type
   commonPricingType: CommonPricingType;
   sensorError: boolean;
   latestTemperatureTimestamp: string;

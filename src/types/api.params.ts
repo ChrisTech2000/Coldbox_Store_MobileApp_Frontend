@@ -378,7 +378,7 @@ export interface GetFarmerImpactParams extends JsonObject {
 export type VerifyEcozenSensorConnectivityParams = {
   username: string;
   password: string;
-  machineID: string;
+  sourceId: string;
 };
 
 export type ListUserSensorsParams = {

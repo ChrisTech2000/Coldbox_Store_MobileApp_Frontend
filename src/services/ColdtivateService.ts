@@ -788,14 +788,7 @@ class ColdtivateService extends HttpClient {
         EStorageEndpoints.GET_COOLING_UNITS,
         params,
         undefined,
-        [
-          'machineID',
-          'deviceRtcTime',
-          'deviceSettings',
-          'deviceTimeStamp',
-          'accountKey',
-          'channelId',
-        ]
+        ['deviceRtcTime', 'deviceSettings', 'deviceTimeStamp']
       );
       return data;
     } catch (error) {
@@ -829,14 +822,7 @@ class ColdtivateService extends HttpClient {
         subs(EStorageEndpoints.GET_COOLING_UNIT, { coolingUnitId }),
         params,
         undefined,
-        [
-          'machineID',
-          'deviceRtcTime',
-          'deviceSettings',
-          'deviceTimeStamp',
-          'accountKey',
-          'channelId',
-        ]
+        ['deviceRtcTime', 'deviceSettings', 'deviceTimeStamp']
       );
       return data;
     } catch (error) {

@@ -23,7 +23,6 @@ import PriceTypeField from './PriceTypeField';
 import RefrigerantFields from './RefrigerantFields';
 import Sensors from './Sensors';
 import SensorsList from './Sensors/components/SensorsListModal';
-import TableModal from './Sensors/components/TableModal';
 import UnitCapacityFields from './UnitCapacityFields';
 import UnitSizeFields from './UnitSizeFields';
 import UnitTypeField from './UnitTypeField';
@@ -33,13 +32,11 @@ export default function FormFields(props: {
   isEditMode?: boolean;
   sensorList?: GetCoolingUnitResponse['sensorList'];
 }) {
-  const { isEditMode, sensorList } = props;
+  const { isEditMode } = props;
 
-  const { control, watch, formState } = FormManager.useFormManager();
+  const { control, formState } = FormManager.useFormManager();
   const { t } = useTranslationUtils();
 
-  const integratedSensor = watch('sensor');
-  const sensorData = watch('sensorData');
   const errors = formState.errors;
 
   return (
@@ -85,11 +82,6 @@ export default function FormFields(props: {
         )}
       />
       <Sensors>
-        {!sensorList?.length ||
-        (sensorData && sensorList[0].type !== sensorData?.type) ||
-        !integratedSensor ? null : (
-          <TableModal datums={sensorList ?? []} />
-        )}
         <SensorsList />
       </Sensors>
       <Controller

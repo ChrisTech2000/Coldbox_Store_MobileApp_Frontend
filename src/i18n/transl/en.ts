@@ -875,6 +875,8 @@ const en = {
           batteryPeakEnergyStorage: 'Energy storage at peak level of one battery',
           batteryType: 'Type of batteries',
           selectSensorType: 'Select a sensor type',
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.',
           selectSensor: 'Select a sensor',
           addTempSensor: 'Add a temperature sensor to your cooling unit.',
           sensorDesc: {

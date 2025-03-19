@@ -73,7 +73,7 @@ export default function SensorModal() {
             {t('Dashboard.Management.AddCoolingUnit.fields.addTempSensor')}
           </Text>
           <Text tw="px-6 mt-2">
-            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.ubibot')}
+            {t('Dashboard.Management.AddCoolingUnit.fields.sensorDesc.default')}
           </Text>
           <GenericSensorForm type={ESensorType.UBIBOT} />
         </ModalWorkaround>

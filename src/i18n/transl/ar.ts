@@ -795,6 +795,8 @@ export default {
           batteryType: 'نوع البطاريات',
           selectSensorType: 'حدد نوع المستشعر',
           selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'أضف مستشعر درجة الحرارة إلى وحدة التبريد الخاصة بك.',
           sensorDesc: {
             default: 'اطلب هذه المعلومات من مزود المستشعر الخاص بك إذا لم تكن في متناول اليد.',
