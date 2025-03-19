@@ -899,6 +899,7 @@ export default {
             username: 'Username/Email', // TODO
             password: 'पासवर्ड',
           },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'प्रकोष्ठ का कितना प्रतिशत विभिन्न स्रोतों से संचालित होता है?',
           cropSpecificPricing: 'फसल-अनुरूप  मूल्य निर्धारण',
         },

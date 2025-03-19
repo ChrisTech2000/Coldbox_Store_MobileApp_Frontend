@@ -893,6 +893,7 @@ export default {
             username: 'Username/Email', // TODO
             password: 'પાસવર્ડ',
           },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
           cropSpecificPricing: 'Crop-specific pricing', // TODO
         },

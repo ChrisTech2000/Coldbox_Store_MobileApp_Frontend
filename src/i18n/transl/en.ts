@@ -892,6 +892,7 @@ const en = {
             username: 'Username/Email',
             password: 'Password',
           },
+          unknownSensor: 'Unknown',
           hybridFields: 'Which percentage of the room is powered by the different sources?',
           cropSpecificPricing: 'Crop-specific pricing',
         },

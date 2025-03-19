@@ -846,6 +846,7 @@ export default {
             username: 'Username/Email', // TODO
             password: 'Boyayin kalmomin siri',
           },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'Wanne kashi na dakin ke samun ƙarfi ta hanyoyi daban-daban?',
           cropSpecificPricing: 'takamaiman farashin amfanin gona',
         },

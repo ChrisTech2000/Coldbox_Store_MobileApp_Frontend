@@ -858,6 +858,7 @@ export default {
             username: 'Username/Email', // TODO
             password: 'Mot de passe',
           },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'Quel pourcentage de la pièce est alimenté par les différentes sources ?',
           cropSpecificPricing: 'Tarification spécifique à la culture',
         },

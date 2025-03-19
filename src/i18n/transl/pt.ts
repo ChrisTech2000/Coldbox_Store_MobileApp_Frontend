@@ -902,6 +902,7 @@ export default {
             username: 'Nome de utilizador/Email',
             password: 'Palavra-passe',
           },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'Qual porcentagem da sala é alimentada pelas diferentes fontes?',
           cropSpecificPricing: 'Preços específicos para cada cultura',
         },

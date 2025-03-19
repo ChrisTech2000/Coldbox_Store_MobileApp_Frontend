@@ -832,6 +832,7 @@ export default {
             username: 'Username/Email', // TODO
             password: 'Okwungafe',
           },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: "Kedu pasentị nke di n' ụlọ a na-akwado site na uzo di iche iche?",
           cropSpecificPricing: 'Ọnụ ahịa ihe ubi ya kpokwem',
         },

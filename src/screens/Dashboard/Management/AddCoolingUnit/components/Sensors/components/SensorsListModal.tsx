@@ -86,9 +86,10 @@ export default function SensorsList() {
                     left={() => (
                       <View tw="w-[85%]">
                         <Text tw="text-base">{item.id}</Text>
-                        {item.name ? (
-                          <Text tw="text-sm text-gray-400 mt-1">{item.name}</Text>
-                        ) : null}
+                        <Text tw="text-sm text-gray-400 mt-1">
+                          {item.name ||
+                            t('Dashboard.Management.AddCoolingUnit.fields.unknownSensor')}
+                        </Text>
                       </View>
                     )}
                     right={() => (

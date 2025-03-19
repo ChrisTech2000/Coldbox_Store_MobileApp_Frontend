@@ -825,6 +825,7 @@ export default {
             username: 'Username/Email', // TODO
             password: 'oro-iwole',
           },
+          unknownSensor: 'Unknown', // TODO
           hybridFields:
             'Iwọn ida ogorun wo ninu yara naa ni oun gba agbara nipasẹ awọn orisun oriṣiriṣi?',
           cropSpecificPricing: 'Ifowoleri-iru irugbin kan pato',

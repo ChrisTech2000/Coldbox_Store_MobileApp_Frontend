@@ -897,6 +897,7 @@ export default {
             username: 'Username/Email', // TODO
             password: 'ପାସୱର୍ଡ',
           },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'ପ୍ରକୋଷ୍ଠ ର କେତେ ପ୍ରତିଶତ ଅଲଗା ଅଲଗା ବିଦ୍ୟୁତ ଉତ୍ସ ଦ୍ୱାରା ଚାଳିତ?',
           cropSpecificPricing: 'ଫସଲ ହିସାବରେ ନିର୍ଦ୍ଧିଷ୍ଟ ମୂଲ୍ୟ ନିରୂପଣ|',
         },
