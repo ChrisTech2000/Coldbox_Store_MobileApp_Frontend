@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Dialog, Divider, List, Portal, RadioButton } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -62,7 +62,7 @@ export default function SensorsList() {
     <Portal>
       <Dialog visible={isVisible} onDismiss={toggleVisibility} style={{ backgroundColor: 'white' }}>
         <Dialog.Title>{t('Dashboard.Management.AddCoolingUnit.fields.selectSensor')}</Dialog.Title>
-        <Dialog.Content>
+        <Dialog.Content style={{ maxHeight: '85%' }}>
           <RadioButton.Group
             value={selectedSensor?.id ?? ''}
             onValueChange={(value) => {
@@ -81,14 +81,22 @@ export default function SensorsList() {
                 <React.Fragment>
                   <List.Item
                     title={undefined}
-                    left={() => (
-                      <Text tw="text-base">
-                        {item.id} {item.name ? `(${item.name})` : ''}
-                      </Text>
-                    )}
-                    right={() => <RadioButton value={item.id} />}
-                    tw="m-0 pb-0.5 px-2.5"
                     onPress={() => setSelectedSensor(item)}
+                    tw="flex flex-row items-center justify-between px-1 py-1"
+                    left={() => (
+                      <View tw="w-[85%]">
+                        <Text tw="text-base">{item.id}</Text>
+                        {item.name ? (
+                          <Text tw="text-sm text-gray-400 mt-1">{item.name}</Text>
+                        ) : null}
+                      </View>
+                    )}
+                    right={() => (
+                      <RadioButton
+                        value={item.id}
+                        status={selectedSensor?.id === item.id ? 'checked' : 'unchecked'}
+                      />
+                    )}
                   />
                   <Divider tw="bg-zinc-400" />
                 </React.Fragment>
