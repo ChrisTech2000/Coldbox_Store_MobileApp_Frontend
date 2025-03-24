@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useSWRConfig } from 'swr';
 
 import { Button } from '#ui/components/Button';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
@@ -103,24 +104,30 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
   return (
     <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
       {({ submitHandler, isSubmitting }) => (
-        <KeyboardAwareScrollView
-          tw="h-full pt-5 mx-4"
-          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-          showsVerticalScrollIndicator={false}
-        >
-          <TextInput
-            tw="w-full bg-transparent mb-3"
-            label={t('Dashboard.Management.CompanyDetails.labels.name')}
-            mode="flat"
-            value={companyDetails.name}
-            disabled
-            dense
-          />
-          <LogoField />
-          <CountryField />
-          <CommodityField crops={allCrops} />
-          <CurrencyField />
-          <View tw="w-full flex-row items-center justify-between mt-5">
+        <View tw="flex-1">
+          <KeyboardAwareScrollView
+            keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+            showsVerticalScrollIndicator={false}
+          >
+            <View tw="pt-5 mx-4 flex-1">
+              <View>
+                <TextInput
+                  tw="w-full bg-transparent mb-3"
+                  label={t('Dashboard.Management.CompanyDetails.labels.name')}
+                  mode="flat"
+                  value={companyDetails.name}
+                  disabled
+                  dense
+                />
+                <LogoField />
+                <CountryField />
+                <CommodityField crops={allCrops} />
+                <CurrencyField />
+              </View>
+            </View>
+          </KeyboardAwareScrollView>
+
+          <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
             <Button
               style={{ width }}
               mode="contained"
@@ -146,8 +153,8 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
                 t('Dashboard.Management.CompanyDetails.actions.save')
               )}
             </Button>
-          </View>
-        </KeyboardAwareScrollView>
+          </HideWithKeyboardView>
+        </View>
       )}
     </FormManager>
   );
