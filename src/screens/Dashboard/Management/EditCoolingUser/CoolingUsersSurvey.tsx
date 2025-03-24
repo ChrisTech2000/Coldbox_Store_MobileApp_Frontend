@@ -8,6 +8,7 @@ import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
@@ -141,7 +142,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
   }
 
   return (
-    <ScrollView tw="space-y-4 mx-4" showsVerticalScrollIndicator={false}>
+    <View tw="flex-1 pt-4">
       <SurveyFormManager
         initialValues={baseDatums}
         onSubmit={async (values): Promise<void> => {
@@ -163,58 +164,60 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
         }}
       >
         {({ submitHandler, isSubmitting }) => (
-          <View tw="pt-2 pb-4">
-            <OccupationField />
-            <ExperienceField />
-            <CommoditiesField
-              companyCurrency={companyCurrency}
-              farmerSurveys={data.surveys}
-              commodityPatcher={commodityPatcher}
-            />
-
-            <View tw="w-full flex flex-col space-y-4 mt-5">
-              <AddCommodity
+          <React.Fragment>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle="px-4 pb-28">
+              <OccupationField />
+              <ExperienceField />
+              <CommoditiesField
                 companyCurrency={companyCurrency}
-                farmerSurveysLength={data.surveys.length}
+                farmerSurveys={data.surveys}
                 commodityPatcher={commodityPatcher}
-                crops={data.crops}
               />
 
-              <View tw="w-full flex-row items-center justify-between mb-4">
-                <Button
-                  style={{ width }}
-                  mode="contained"
-                  onPress={(evt) => {
-                    evt?.stopPropagation();
-                    redirect();
-                  }}
-                  icon="close-circle-outline"
-                  buttonColor={paperTheme.colors.error}
-                  uppercase
-                >
-                  {typeof params.redirectTo === 'undefined'
-                    ? t('actions.cancel')
-                    : t('Dashboard.Management.EditCoolingUsers.actions.completeLater')}
-                </Button>
-                <Button
-                  style={{ width }}
-                  mode="contained"
-                  onPress={submitHandler}
-                  icon={isSubmitting ? undefined : 'check-circle-outline'}
-                  uppercase
-                >
-                  {isSubmitting ? (
-                    <ActivityIndicator size="small" color="white" />
-                  ) : (
-                    t('actions.confirm')
-                  )}
-                </Button>
+              <View tw="w-full flex flex-col space-y-4 mt-5">
+                <AddCommodity
+                  companyCurrency={companyCurrency}
+                  farmerSurveysLength={data?.surveys?.length ?? 0}
+                  commodityPatcher={commodityPatcher}
+                  crops={data.crops}
+                />
               </View>
-            </View>
-          </View>
+            </ScrollView>
+
+            <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
+              <Button
+                style={{ width }}
+                mode="contained"
+                onPress={(evt) => {
+                  evt?.stopPropagation();
+                  redirect();
+                }}
+                icon="close-circle-outline"
+                buttonColor={paperTheme.colors.error}
+                uppercase
+              >
+                {typeof params.redirectTo === 'undefined'
+                  ? t('actions.cancel')
+                  : t('Dashboard.Management.EditCoolingUsers.actions.completeLater')}
+              </Button>
+              <Button
+                style={{ width }}
+                mode="contained"
+                onPress={submitHandler}
+                icon={isSubmitting ? undefined : 'check-circle-outline'}
+                uppercase
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  t('actions.confirm')
+                )}
+              </Button>
+            </HideWithKeyboardView>
+          </React.Fragment>
         )}
       </SurveyFormManager>
-    </ScrollView>
+    </View>
   );
 }
 
