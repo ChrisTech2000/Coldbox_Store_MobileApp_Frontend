@@ -10,6 +10,7 @@ import ColdRoom from '#assets/icons/coldroom.svg';
 import { Button } from '#ui/components/Button';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -173,23 +174,29 @@ export default function ScreenContainer(props: Props) {
   }
 
   return (
-    <KeyboardAwareScrollView
-      tw="h-full"
-      contentContainerStyle="pt-5 pb-8"
-      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-      showsVerticalScrollIndicator={false}
-    >
+    <View tw="flex-1">
       <FormManager onSubmit={onSubmit} initialValues={initialFormValues.current}>
         {({ submitHandler, isSubmitting }) => (
           <React.Fragment>
-            <View tw="flex-row items-center space-x-3 mb-3 mx-3.5 w-[85%]">
-              <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
-              <Text tw="text-lg" numberOfLines={1}>
-                {t('Dashboard.Management.AddCoolingUnit.heading')}
-              </Text>
-            </View>
-            <FormFields isEditMode sensorList={unit?.sensorList} />
-            <View tw="w-full flex-row items-center justify-around mt-5 px-2">
+            <KeyboardAwareScrollView
+              keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+              showsVerticalScrollIndicator={false}
+            >
+              <View tw="pt-5">
+                <View tw="flex-row items-center space-x-3 mb-3 mx-3.5 w-[85%]">
+                  <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
+                  <Text tw="text-lg" numberOfLines={1}>
+                    {t('Dashboard.Management.AddCoolingUnit.heading')}
+                  </Text>
+                </View>
+
+                <View tw="pb-28">
+                  <FormFields isEditMode sensorList={unit?.sensorList} />
+                </View>
+              </View>
+            </KeyboardAwareScrollView>
+
+            <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
               <DeleteAction
                 coolingUnitId={coolingUnitId}
                 coolingUnitName={unit.name}
@@ -209,11 +216,11 @@ export default function ScreenContainer(props: Props) {
                   t('actions.save')
                 )}
               </Button>
-            </View>
+            </HideWithKeyboardView>
           </React.Fragment>
         )}
       </FormManager>
-    </KeyboardAwareScrollView>
+    </View>
   );
 }
 
