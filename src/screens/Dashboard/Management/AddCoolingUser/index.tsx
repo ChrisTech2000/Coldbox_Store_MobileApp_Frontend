@@ -19,6 +19,7 @@ import { useManagementStore } from '#stores/management';
 import { EApiGender, type Farmer } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import InAppNotifications from '#common/InAppNotifications';
 import FormManager, { type FormValues } from './components/FormManager';
@@ -113,18 +114,19 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   return (
     <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(contextualFarmer)}>
       {({ submitHandler, isSubmitting }) => (
-        <View tw="flex-1 justify-between pt-6 pb-8 mx-4">
+        <View tw="flex-1 pt-4">
           <KeyboardAwareScrollView
             keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
             showsVerticalScrollIndicator={false}
-            tw="w-full"
+            tw="px-4"
           >
             <TextFields disabled={disabled} />
             <GenderField disabled={disabled} />
             <ContactField disabled={disabled} />
             <LanguageField disabled={disabled} />
           </KeyboardAwareScrollView>
-          <View tw="w-full flex-row items-center justify-between mt-5">
+
+          <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
             <Button
               style={{ width }}
               mode="contained"
@@ -144,7 +146,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
             >
               {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
             </Button>
-          </View>
+          </HideWithKeyboardView>
         </View>
       )}
     </FormManager>
