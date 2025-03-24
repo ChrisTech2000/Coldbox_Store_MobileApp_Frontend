@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { useShallow } from 'zustand/react/shallow';
@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -22,6 +23,8 @@ import InAppNotifications from '#common/InAppNotifications';
 import FormManager, { type FormValues } from './components/FormManager';
 import CoolingUnitsField from './modules/CoolingUnitsField';
 import GenderField from './modules/GenderField';
+
+const width = (Dimensions.get('window').width - 42) / 2;
 
 const ButtonLoader = () => <ActivityIndicator animating size="small" color="white" />;
 
@@ -106,43 +109,45 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
   }
 
   return (
-    <ScrollView contentContainerStyle="h-full pt-5 space-y-6" showsVerticalScrollIndicator={false}>
+    <ScrollView contentContainerStyle="flex-1" showsVerticalScrollIndicator={false}>
       <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
         {({ submitHandler, isSubmitting }) => (
-          <View tw="mx-4 space-y-6">
-            <TextInput
-              tw="w-full bg-transparent"
-              label={t('Auth.SignUp.commonForm.firstNameLabel')}
-              mode="flat"
-              value={contextualOperator?.user.firstName}
-              disabled
-              dense
-            />
-            <TextInput
-              tw="w-full bg-transparent"
-              label={t('Auth.SignUp.commonForm.lastNameLabel')}
-              mode="flat"
-              value={contextualOperator?.user.lastName}
-              disabled
-              dense
-            />
+          <React.Fragment>
+            <View tw="pt-5 px-4 space-y-6">
+              <TextInput
+                tw="w-full bg-transparent"
+                label={t('Auth.SignUp.commonForm.firstNameLabel')}
+                mode="flat"
+                value={contextualOperator?.user.firstName}
+                disabled
+                dense
+              />
+              <TextInput
+                tw="w-full bg-transparent"
+                label={t('Auth.SignUp.commonForm.lastNameLabel')}
+                mode="flat"
+                value={contextualOperator?.user.lastName}
+                disabled
+                dense
+              />
 
-            <GenderField />
+              <GenderField />
 
-            <TextInput
-              tw="w-full bg-transparent"
-              label={t('Auth.ForgotPassword.phoneInputLabel')}
-              mode="flat"
-              value={contextualOperator?.user.phone}
-              disabled
-              dense
-            />
+              <TextInput
+                tw="w-full bg-transparent"
+                label={t('Auth.ForgotPassword.phoneInputLabel')}
+                mode="flat"
+                value={contextualOperator?.user.phone}
+                disabled
+                dense
+              />
 
-            <CoolingUnitsField coolingUnits={coolingUnitsOptions} />
+              <CoolingUnitsField coolingUnits={coolingUnitsOptions} />
+            </View>
 
-            <View tw="space-y-5">
+            <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
               <Button
-                tw="w-full"
+                style={{ width }}
                 mode="contained"
                 onPress={() => navigation.goBack()}
                 icon="close-circle-outline"
@@ -153,7 +158,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
                 {t('actions.cancel')}
               </Button>
               <Button
-                tw="w-full"
+                style={{ width }}
                 mode="contained"
                 onPress={submitHandler}
                 icon={isSubmitting ? undefined : 'check-circle-outline'}
@@ -162,8 +167,8 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
               >
                 {isSubmitting ? <ButtonLoader /> : t('Dashboard.Management.Operators.actions.save')}
               </Button>
-            </View>
-          </View>
+            </HideWithKeyboardView>
+          </React.Fragment>
         )}
       </FormManager>
     </ScrollView>
