@@ -9,6 +9,7 @@ import validator from 'validator';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -100,59 +101,64 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
   }
 
   return (
-    <KeyboardAwareScrollView
-      tw="h-full pt-5 mx-4"
-      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-      showsVerticalScrollIndicator={false}
-    >
-      <View>
-        <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-          <Banner
-            visible
-            elevation={0}
-            style={{ backgroundColor: paperTheme.colors.elevation.level3 }}
-          >
-            {t('Dashboard.Management.Operators.banner')}
-          </Banner>
-        </SkiaShadow>
-      </View>
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            tw="w-full bg-transparent mt-6"
-            label={`${t('Auth.ForgotPassword.phoneInputLabel')}*`}
-            mode="flat"
-            dense
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            error={!!errors.phoneNumber}
-          />
-        )}
-        name="phoneNumber"
-      />
-      {errors.phoneNumber && (
-        <Text tw="text-xs text-red-600 mt-2 mb-7 pl-3 w-[95%]">
-          {errors.phoneNumber.message?.toString()}
-        </Text>
-      )}
-
-      <Button
-        mode="contained"
-        tw="w-2/3 self-center mt-6"
-        icon={isSubmitting ? undefined : 'account-arrow-down-outline'}
-        onPress={handleSubmit(onSubmit)}
-        disabled={isSubmitting}
+    <View tw="flex-1">
+      <KeyboardAwareScrollView
+        keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+        showsVerticalScrollIndicator={false}
       >
-        {isSubmitting ? (
-          <ActivityIndicator animating size="small" color="white" />
-        ) : (
-          t('Dashboard.Management.Operators.actions.invite')
-        )}
-      </Button>
-    </KeyboardAwareScrollView>
+        <View tw="h-full pt-5 mx-4">
+          <View>
+            <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
+              <Banner
+                visible
+                elevation={0}
+                style={{ backgroundColor: paperTheme.colors.elevation.level3 }}
+              >
+                {t('Dashboard.Management.Operators.banner')}
+              </Banner>
+            </SkiaShadow>
+          </View>
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, value, onBlur } }) => (
+              <TextInput
+                tw="w-full bg-transparent mt-6"
+                label={`${t('Auth.ForgotPassword.phoneInputLabel')}*`}
+                mode="flat"
+                dense
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={!!errors.phoneNumber}
+              />
+            )}
+            name="phoneNumber"
+          />
+          {errors.phoneNumber ? (
+            <Text tw="text-xs text-red-600 mt-2 mb-7 pl-3 w-[95%]">
+              {errors.phoneNumber.message?.toString()}
+            </Text>
+          ) : null}
+        </View>
+      </KeyboardAwareScrollView>
+
+      <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
+        <Button
+          mode="contained"
+          tw="w-full"
+          icon={isSubmitting ? undefined : 'account-arrow-down-outline'}
+          onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <ActivityIndicator animating size="small" color="white" />
+          ) : (
+            t('Dashboard.Management.Operators.actions.invite')
+          )}
+        </Button>
+      </HideWithKeyboardView>
+    </View>
   );
 }
 
