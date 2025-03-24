@@ -12,6 +12,7 @@ import { useToggle } from '#ui/hooks/useToggle';
 import reportCrash from '#ui/lib/reportCrash';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -173,15 +174,18 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     <React.Fragment>
       <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
         {(handler, isSubmitting) => (
-          <KeyboardAwareScrollView
-            tw="h-full pt-5 mx-4"
-            keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-            showsVerticalScrollIndicator={false}
-          >
-            <LocationNameModule />
-            <StepModule />
-            <StepFactory />
-            <View tw="w-full flex-row items-center justify-between mt-5 mb-6">
+          <View tw="flex-1">
+            <KeyboardAwareScrollView
+              tw="h-full pt-5 mx-4"
+              keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+              showsVerticalScrollIndicator={false}
+            >
+              <LocationNameModule />
+              <StepModule />
+              <StepFactory />
+            </KeyboardAwareScrollView>
+
+            <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
               <Button
                 style={{ width }}
                 mode="contained"
@@ -203,8 +207,8 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
               >
                 {isSubmitting ? <ButtonLoader /> : t('actions.save')}
               </Button>
-            </View>
-          </KeyboardAwareScrollView>
+            </HideWithKeyboardView>
+          </View>
         )}
       </FormManager>
 
