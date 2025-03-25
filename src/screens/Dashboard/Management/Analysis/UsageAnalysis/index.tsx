@@ -114,7 +114,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     const { totalCrates, totalWeight, users } = filteredMovements
       .flatMap((movement) => ({
         cratesNumber: movement.checkin?.crates.length,
-        weight: movement.checkin?.crates.reduce((acc, crate) => (acc += crate.weight), 0),
+        weight: movement.checkin?.crates.reduce((acc, crate) => (acc += crate.initialWeight), 0),
         user: movement.checkin?.ownerName ?? '',
       }))
       .reduce(
