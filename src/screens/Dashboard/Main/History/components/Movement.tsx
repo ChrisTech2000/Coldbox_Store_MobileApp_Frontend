@@ -226,52 +226,55 @@ export function Movement({
 
   return (
     <View tw="w-full">
-      <View tw="w-full flex flex-row items-center justify-between my-2 space-x-1">
-        <_IconByMovementType movementType={movement.initiatedFor} />
+      <View tw="w-full flex flex-row items-center">
+        <View tw="w-[96%] flex flex-row items-center justify-between my-2 space-x-1">
+          <_IconByMovementType movementType={movement.initiatedFor} />
 
-        <View tw="h-full w-[80%] space-y-1">
-          <Text tw="text-base" numberOfLines={3}>
-            {movement.code} -{' '}
-            {movement.initiatedFor === EInitiatedFor.CHECK_IN
-              ? movement.checkin?.crates.length
-              : movement.checkout?.crates.length}{' '}
-            - {crops}
-          </Text>
+          <View tw="h-full w-[80%] space-y-1">
+            <Text tw="text-base" numberOfLines={3}>
+              {movement.code} -{' '}
+              {movement.initiatedFor === EInitiatedFor.CHECK_IN
+                ? movement.checkin?.crates.length
+                : movement.checkout?.crates.length}{' '}
+              - {crops}
+            </Text>
 
-          <View tw="flex flex-row justify-between space-x-1">
-            <View tw="w-[55%]">
-              <Text tw="text-base text-gray-400">
-                {dateFmt(movement.date.toString(), 'dd/MM/yyyy HH:mm a')}
-              </Text>
-              <Text tw="text-base text-gray-400">
-                {movement.initiatedFor === EInitiatedFor.CHECK_OUT
-                  ? movement.checkout?.crates[0].ownerName
-                  : movement.checkin?.ownerName}
-              </Text>
-            </View>
-            <View tw="w-[45%] items-end">
-              <Text tw="text-base">{price}</Text>
-              <Text tw="text-base">
-                {movement.initiatedFor === EInitiatedFor.CHECK_IN
-                  ? movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)
-                  : movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
-                    ? movement.checkout?.crates.reduce(
-                        (acc, curr) => (acc += curr.affectedWeight ?? 0),
-                        0
-                      )
-                    : movement.checkout?.crates.reduce(
-                        (acc, curr) => (acc += curr.affectedWeight ?? 0),
-                        0
-                      )}{' '}
-                {t('Dashboard.ProduceDetails.kilogram')}
-              </Text>
+            <View tw="flex flex-row justify-between space-x-1">
+              <View tw="w-[55%]">
+                <Text tw="text-base text-gray-400">
+                  {dateFmt(movement.date.toString(), 'dd/MM/yyyy HH:mm a')}
+                </Text>
+                <Text tw="text-base text-gray-400">
+                  {movement.initiatedFor === EInitiatedFor.CHECK_OUT
+                    ? movement.checkout?.crates[0].ownerName
+                    : movement.checkin?.ownerName}
+                </Text>
+              </View>
+              <View tw="w-[45%] items-end">
+                <Text tw="text-base">{price}</Text>
+                <Text tw="text-base">
+                  {movement.initiatedFor === EInitiatedFor.CHECK_IN
+                    ? movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0)
+                    : movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
+                      ? movement.checkout?.crates.reduce(
+                          (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                          0
+                        )
+                      : movement.checkout?.crates.reduce(
+                          (acc, curr) => (acc += curr.affectedWeight ?? 0),
+                          0
+                        )}{' '}
+                  {t('Dashboard.ProduceDetails.kilogram')}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        <TouchableOpacity tw="w-5" onPress={() => setIsOptionsModalOpen(true)}>
-          <Icon source="dots-vertical" size={20} />
-        </TouchableOpacity>
+          <TouchableOpacity tw="w-5" onPress={() => setIsOptionsModalOpen(true)}>
+            <Icon source="dots-vertical" size={20} />
+          </TouchableOpacity>
+        </View>
+        {movement.checkout?.marketSurveyDelay ? <View tw="w-2 h-2 bg-red-700 rounded-xl" /> : null}
       </View>
       <Divider tw="w-full bg-gray-400" />
       <Portal>
