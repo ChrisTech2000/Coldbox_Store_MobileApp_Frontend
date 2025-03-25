@@ -577,9 +577,9 @@ function EditCrateWeightAndPricing(
             </Text>
           </View>
         ) : null}
-        <View tw="w-full mb-2 items-center bg-white border-t-0.5 border-gray-600 border-solid">
+        <View tw="w-full items-center bg-white border-t-0.5 border-gray-600 border-solid pt-4 pb-5 px-4">
           <Button
-            tw="w-5/6 my-4"
+            tw="w-full"
             mode="contained"
             uppercase
             // eslint-disable-next-line
