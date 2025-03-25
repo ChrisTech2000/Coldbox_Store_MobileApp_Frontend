@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -8,7 +9,6 @@ import {
 } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider } from 'react-native-paper';
-import { useFocusEffect } from '@react-navigation/native';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
@@ -62,20 +62,50 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     }
   );
 
+  const {
+    data: dashboardProduces,
+    refetch: refetchDashboardProduces,
+    isLoading: isLoadingDashboardProduces,
+  } = useApiCall(
+    'getDashboardProduces',
+    ColdtivateService.getDashboardProduces,
+    {
+      coolingUnit: coolingUnit?.id as number,
+    },
+    {
+      skip: !user?.id || !coolingUnit?.id || !!_crates?.length,
+      defaultData: [],
+    }
+  );
+
   useFocusEffect(
     useCallback(() => {
       if (!data) return;
-      refetch().catch((error) => {
-        console.error('Error refetching crates:', error);
+      Promise.all([refetch(), refetchDashboardProduces()]).catch((error) => {
+        console.error('Error refetching data:', error);
       });
-    }, [data, refetch])
+    }, [data, refetch, refetchDashboardProduces])
   );
 
-  const crates = useMemo(() => _crates ?? data, [_crates, data]);
-  const allSelectableCrates = useMemo(
-    () => crates?.filter((crate) => !crate.lockedWithinPendingOrders),
-    [crates]
-  );
+  const { crates, allSelectableCrates } = useMemo(() => {
+    const mappedCrates =
+      _crates ??
+      data?.map((crate) => {
+        const dashboardProduce = dashboardProduces?.find(
+          (p) => p.movementCode === crate.movementCode
+        );
+        return {
+          ...crate,
+          remainingShelfLife:
+            crate.remainingShelfLife ?? dashboardProduce?.minimumRemainingShelfLife ?? -1,
+        };
+      }) ??
+      [];
+
+    const selectableCrates = mappedCrates.filter((crate) => !crate.lockedWithinPendingOrders);
+
+    return { crates: mappedCrates, allSelectableCrates: selectableCrates };
+  }, [_crates, data, dashboardProduces]);
 
   const onPress = useCallback(
     (crate: Crate) => {
@@ -117,7 +147,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     if (_coolingUnit) onSelectCoolingUnit(_coolingUnit);
   }, [_crates, _coolingUnit, allSelectableCrates]);
 
-  if (isLoading) {
+  if (isLoading || isLoadingDashboardProduces) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
