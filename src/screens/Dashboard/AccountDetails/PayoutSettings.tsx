@@ -8,13 +8,12 @@ import { Input } from '#ui/components/Input';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 import reportCrash from '#ui/lib/reportCrash';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { Translator, useTranslationUtils } from '#i18n/utils';
 import { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
@@ -59,7 +58,7 @@ function mapEnum(t: Translator) {
   };
 }
 
-const screenHeight = Dimensions.get('window').height;
+const width = (Dimensions.get('window').width - 42) / 2;
 
 function PayoutSettings(
   props: AccountDetailsRouteProps<'PayoutSettings'> | CheckInStackRouteProps<'AddFarmerBankAccount'>
@@ -228,12 +227,11 @@ function PayoutSettings(
   }
 
   return (
-    <View
-      tw={cn('h-full justify-between p-3', screenHeight > SMALL_SCREEN_THRESHOLD ? 'flex-1' : '')}
-    >
+    <View tw="flex-1">
       <KeyboardAwareScrollView
         keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle="pt-3 px-4 pb-28"
       >
         {hasPayoutMethods ? (
           <Text tw="text-base font-bold text-green-primary">
@@ -253,7 +251,7 @@ function PayoutSettings(
           </Text>
         )}
 
-        <View tw="mt-4 space-y-3">
+        <View tw="mt-4 space-y-4">
           <View>
             <Text tw="text-base mb-1.5">
               {t('Dashboard.AccountDetails.PayoutSettings.form.countryLabel')}
@@ -365,14 +363,9 @@ function PayoutSettings(
         </View>
       </KeyboardAwareScrollView>
 
-      <View
-        tw={cn(
-          'flex flex-row items-end justify-evenly',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mt-3 pb-3' : ''
-        )}
-      >
+      <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
         <Button
-          tw="w-[48%] border-green-primary"
+          style={{ width }}
           mode="outlined"
           onPress={() => props.navigation.goBack()}
           uppercase
@@ -382,7 +375,7 @@ function PayoutSettings(
         </Button>
 
         <Button
-          tw="w-[48%]"
+          style={{ width }}
           mode="contained"
           onPress={handleSubmit(onSubmit)}
           icon={isSubmitting ? undefined : 'check-circle-outline'}
@@ -397,7 +390,7 @@ function PayoutSettings(
             t('actions.save')
           )}
         </Button>
-      </View>
+      </HideWithKeyboardView>
     </View>
   );
 }

@@ -19,6 +19,7 @@ import { useAuthStore } from '#stores/auth';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import reportCrash from '#ui/lib/reportCrash';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import FormManager, { type FormValues } from './components/FormManager';
 import NameFields from './modules/NameFields';
@@ -98,7 +99,7 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
             </View>
           </KeyboardAwareScrollView>
 
-          <View tw="bottom-0 right-0 w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
+          <HideWithKeyboardView tw="bottom-0 right-0 w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
             <Button
               tw="w-4/5 my-4"
               mode="contained"
@@ -108,7 +109,7 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
             >
               {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
             </Button>
-          </View>
+          </HideWithKeyboardView>
         </React.Fragment>
       )}
     </FormManager>

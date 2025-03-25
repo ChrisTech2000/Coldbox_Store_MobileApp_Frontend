@@ -6,8 +6,10 @@ import { ActivityIndicator } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import { Point } from 'wkx';
 import { useShallow } from 'zustand/react/shallow';
+import { View } from 'react-native';
 
 import { Button } from '#ui/components/Button';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
@@ -119,24 +121,30 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
   return (
     <FormManager onSubmit={onSubmit} initialValues={formInitialValues.current}>
       {(handler, isSubmitting) => (
-        <KeyboardAwareScrollView
-          tw="pt-5 mx-4"
-          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-          showsVerticalScrollIndicator={false}
-        >
-          <LocationNameModule />
-          <StepModule />
-          <StepFactory />
-          <Button
-            tw="w-full my-6"
-            mode="contained"
-            onPress={handler}
-            icon={isSubmitting ? undefined : 'plus-circle'}
-            uppercase
+        <View tw="flex-1">
+          <KeyboardAwareScrollView
+            keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+            showsVerticalScrollIndicator={false}
           >
-            {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
-          </Button>
-        </KeyboardAwareScrollView>
+            <View tw="pt-5 mx-4 flex-1">
+              <LocationNameModule />
+              <StepModule />
+              <StepFactory />
+            </View>
+          </KeyboardAwareScrollView>
+
+          <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
+            <Button
+              tw="w-full"
+              mode="contained"
+              onPress={handler}
+              icon={isSubmitting ? undefined : 'plus-circle'}
+              uppercase
+            >
+              {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
+            </Button>
+          </HideWithKeyboardView>
+        </View>
       )}
     </FormManager>
   );

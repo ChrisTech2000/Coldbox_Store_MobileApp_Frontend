@@ -2,16 +2,25 @@ import { styled } from 'nativewind';
 import React from 'react';
 import {
   KeyboardAwareScrollView,
-  KeyboardAwareScrollViewProps,
+  type KeyboardAwareScrollViewProps,
 } from 'react-native-keyboard-aware-scroll-view';
 
 type WrapperProps = {
   contentContainerStyle?: string;
 } & Exclude<KeyboardAwareScrollViewProps, 'contentContainerStyle'>;
 
-function _Wrapper({ children, ...rest }: WrapperProps) {
-  return <KeyboardAwareScrollView {...rest}>{children}</KeyboardAwareScrollView>;
-}
+const _Wrapper = React.forwardRef<KeyboardAwareScrollView, WrapperProps>(function Component(
+  { children, ...rest },
+  ref
+) {
+  return (
+    <KeyboardAwareScrollView ref={ref} {...rest}>
+      {children}
+    </KeyboardAwareScrollView>
+  );
+});
+
+_Wrapper.displayName = 'KeyboardAwareScrollViewWrapper';
 
 const _StyledKeyboardAwareScrollView = styled(_Wrapper, {
   props: {

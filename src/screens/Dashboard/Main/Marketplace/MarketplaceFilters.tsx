@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
@@ -26,6 +26,8 @@ import MarketplaceFormManager, { type FormValues } from './modules/MarketplaceFo
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { type FilterItem, useMarketplaceFilters } from './store';
+
+const width = (Dimensions.get('window').width - 42) / 2;
 
 function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) {
   const { t } = useTranslationUtils();
@@ -80,9 +82,9 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
         </View>
       </ScrollView>
 
-      <HideWithKeyboardView tw="w-full bottom-0 left-0 py-6 px-4 flex-row items-center justify-evenly bg-zinc-50 border-t border-solid border-zinc-400">
+      <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
         <Button
-          tw="w-[47%]"
+          style={{ width }}
           mode="outlined"
           uppercase
           onPress={(evt) => {
@@ -94,7 +96,7 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
           {t('actions.cancel')}
         </Button>
         <Button
-          tw="w-[47%]"
+          style={{ width }}
           mode="contained"
           uppercase
           onPress={(evt) => {

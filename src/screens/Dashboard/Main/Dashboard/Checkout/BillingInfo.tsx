@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, ScrollView, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider, Icon, Switch } from 'react-native-paper';
 
@@ -29,9 +29,14 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 
 import { useMarketplaceListing } from '../../Marketplace/utils';
 import { BankTransferModal } from './BankTransferDetailsModal';
+
+const DEVICE_WIDTH = Dimensions.get('window').width;
+const BUTTON_WIDTH = (DEVICE_WIDTH - 42) / 2;
 
 export const usePaymentTypeStore = createSelectStore<EPaymentMethod>();
 
@@ -177,8 +182,12 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const finalPrice = total - (isNaN(Number(discount)) ? 0 : Math.min(Number(discount), total));
 
   return (
-    <View tw="flex-1 p-4">
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <View tw="flex-1">
+      <KeyboardAwareScrollView
+        keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle="px-4"
+      >
         <View tw="flex flex-row w-full justify-between items-center">
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.coolingUserLabel')}
@@ -231,8 +240,9 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
         <View>
           <FlatList
-            showsVerticalScrollIndicator={false}
             data={crates}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
             renderItem={({ item: crate, index }) => (
               <View
                 key={`${crate.id}-${index}`}
@@ -348,10 +358,11 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           <Switch value={isPaid} onChange={() => setIsPaid(!isPaid)} />
         </View>
         <Divider tw="bg-gray-400 my-2" />
-      </ScrollView>
-      <View tw="flex flex-row space-x-2 w-full mt-4 justify-center">
+      </KeyboardAwareScrollView>
+
+      <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
         <Button
-          tw="border-green-primary"
+          style={{ width: BUTTON_WIDTH }}
           mode="outlined"
           uppercase
           onPress={(evt) => {
@@ -364,6 +375,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           {t('actions.back')}
         </Button>
         <Button
+          style={{ width: BUTTON_WIDTH }}
           mode="contained"
           uppercase
           onPress={checkout}
@@ -373,7 +385,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         >
           {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.ok')}
         </Button>
-      </View>
+      </HideWithKeyboardView>
 
       <BankTransferModal
         isOpen={isBankTransferDetailsModalOpen}
