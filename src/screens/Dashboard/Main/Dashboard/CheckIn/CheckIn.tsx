@@ -367,7 +367,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           />
         </ScrollView>
 
-        <View tw="space-y-2 mb-20">
+        <View tw="space-y-2 mb-32 py-2.5">
           {!checkOutCode ? (
             <Button
               tw={cn('w-full border-2', !isSubmitting && 'border-green-primary')}
@@ -408,60 +408,64 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
         ) : null}
       </View>
 
-      <View tw="w-full flex flex-row items-center justify-center space-x-1 py-1.5 px-4">
-        <Button
-          tw={cn('w-1/2 border-2', !isSubmitting && 'border-green-primary')}
-          mode="outlined"
-          onPress={() => {
-            resetCheckInStore();
-            rootNavigation.navigate('RootMainTabStack');
-          }}
-          icon="close-circle-outline"
-          contentStyle="flex flex-row-reverse items-center"
-          labelStyle={cn(!isSubmitting && 'text-green-primary')}
-          disabled={isSubmitting}
-        >
-          {t('actions.cancel')}
-        </Button>
-        <Button
-          onLayout={onCheckIn3Layout}
-          tw={cn(
-            'w-1/2 border-2',
-            !produces || (produces.length === 0 && 'border-2 border-gray-100'),
-            !(!produces || produces.length === 0 || isSubmitting) && 'border-green-primary'
-          )}
-          mode="contained"
-          onPress={async (evt) => {
-            evt.stopPropagation();
-            try {
-              await onSubmit();
-            } catch (exception) {
-              reportCrash(exception as Error);
-            }
-          }}
-          icon="check-circle-outline"
-          contentStyle="flex flex-row-reverse items-center"
-          disabled={!produces || produces.length === 0 || isSubmitting}
-        >
-          {t('actions.confirm')}
-        </Button>
-      </View>
-
-      <View tw="absolute bottom-20 right-0 left-0 w-full">
-        <View tw="w-full h-14 flex flex-row items-center justify-between bg-teal-50 px-4">
-          <Text variant="TextMedium" tw="text-lg font-bold">
-            {allHavePlannedDays
-              ? t('Dashboard.CrateManagement.CheckIn.estimatedCost')
-              : t('Dashboard.CrateManagement.CheckIn.pricing')}
-          </Text>
-          <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
-            {formatCurrencyWithSymbol(company?.currency || DEFAULT_CURRENCY_CODE, total)}
-            {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY && !allHavePlannedDays
-              ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
-              : ''}
-          </Text>
+      <View tw="absolute bottom-0 right-0 left-0 w-full">
+        <View>
+          <View tw="w-full h-14 flex flex-row items-center justify-between bg-teal-50 px-4">
+            <Text variant="TextMedium" tw="text-lg font-bold">
+              {allHavePlannedDays
+                ? t('Dashboard.CrateManagement.CheckIn.estimatedCost')
+                : t('Dashboard.CrateManagement.CheckIn.pricing')}
+            </Text>
+            <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
+              {formatCurrencyWithSymbol(company?.currency || DEFAULT_CURRENCY_CODE, total)}
+              {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY &&
+              !allHavePlannedDays
+                ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
+                : ''}
+            </Text>
+          </View>
+          <Divider tw="w-full bg-gray-600" />
         </View>
-        <Divider tw="w-full bg-gray-600" />
+
+        <View tw="w-full flex flex-row items-center justify-center bg-white pt-4 pb-5 px-4 space-x-2">
+          <Button
+            tw={cn('flex-1 border-2', !isSubmitting && 'border-green-primary')}
+            mode="outlined"
+            onPress={() => {
+              resetCheckInStore();
+              rootNavigation.navigate('RootMainTabStack');
+            }}
+            icon="close-circle-outline"
+            contentStyle="flex flex-row-reverse items-center"
+            labelStyle={cn(!isSubmitting && 'text-green-primary')}
+            disabled={isSubmitting}
+          >
+            {t('actions.cancel')}
+          </Button>
+          <Button
+            testID="confirm-check-in-button"
+            onLayout={onCheckIn3Layout}
+            tw={cn(
+              'flex-1 border-2',
+              !produces || (produces.length === 0 && 'border-2 border-gray-100'),
+              !(!produces || produces.length === 0 || isSubmitting) && 'border-green-primary'
+            )}
+            mode="contained"
+            onPress={async (evt) => {
+              evt.stopPropagation();
+              try {
+                await onSubmit();
+              } catch (exception) {
+                reportCrash(exception as Error);
+              }
+            }}
+            icon="check-circle-outline"
+            contentStyle="flex flex-row-reverse items-center"
+            disabled={!produces || produces.length === 0 || isSubmitting}
+          >
+            {t('actions.confirm')}
+          </Button>
+        </View>
       </View>
 
       <Portal>
