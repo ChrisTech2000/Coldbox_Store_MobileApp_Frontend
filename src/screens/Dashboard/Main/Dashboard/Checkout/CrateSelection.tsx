@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider } from 'react-native-paper';
-import { useFocusEffect } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 
 import { useTranslationUtils } from '#i18n/utils';
@@ -161,14 +160,6 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     if (_coolingUnit) onSelectCoolingUnit(_coolingUnit);
   }, [_crates, _coolingUnit, allSelectableCrates]);
 
-  if (isLoading || isLoadingDashboardProduces) {
-    return (
-      <View tw="flex-1 items-center justify-center">
-        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-      </View>
-    );
-  }
-
   return (
     <View tw="flex-1">
       <View tw="pt-4 px-4">
@@ -204,7 +195,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
         </View>
         <Divider tw="bg-gray-400 my-2" />
 
-        <_LoadingSlot isLoading={isLoading}>
+        <_LoadingSlot isLoading={isLoading || isLoadingDashboardProduces}>
           {!coolingUnit ? (
             <Text variant="TextBold" tw="text-lg mt-2 ml-4">
               {t('Dashboard.CrateManagement.noUnitWarning')}
