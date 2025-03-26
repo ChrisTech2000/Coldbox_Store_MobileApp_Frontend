@@ -1,6 +1,6 @@
 import type { AxiosError } from 'axios';
 
-import { CouponsEndpoints } from '#constants/api.routes';
+import { ECouponsEndpoints } from '#constants/api.routes';
 import type { CreateCouponParams, GetCouponListParams } from '#types/api.params';
 import type { CreateCouponResponse, GetCouponListResponse } from '#types/api.responses';
 
@@ -12,7 +12,7 @@ class CouponService extends HttpClient {
   public getCouponList = async (params?: GetCouponListParams): Promise<GetCouponListResponse> => {
     try {
       const { data } = await this.get<GetCouponListResponse>(
-        query(CouponsEndpoints.LIST_OWN_COUPONS, {
+        query(ECouponsEndpoints.LIST_OWN_COUPONS, {
           showRevoked: params?.revoked,
           ownedOnBehalfOfCompanyId: params?.ownedOnBehalfOfCompanyId,
         })
@@ -28,7 +28,7 @@ class CouponService extends HttpClient {
   public createCoupon = async (params: CreateCouponParams): Promise<CreateCouponResponse> => {
     try {
       const { data } = await this.post<CreateCouponResponse>(
-        query(CouponsEndpoints.LIST_OWN_COUPONS, {
+        query(ECouponsEndpoints.LIST_OWN_COUPONS, {
           ownedOnBehalfOfCompanyId: params.ownedOnBehalfOfCompanyId,
         }),
         {
@@ -49,7 +49,7 @@ class CouponService extends HttpClient {
     ownedOnBehalfOfCompanyId?: number;
   }): Promise<void> => {
     try {
-      const base = subs(CouponsEndpoints.REVOKE_COUPON, { couponId: params.couponId });
+      const base = subs(ECouponsEndpoints.REVOKE_COUPON, { couponId: params.couponId });
       await this.delete(query(base, { ownedOnBehalfOfCompanyId: params.ownedOnBehalfOfCompanyId }));
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -61,7 +61,7 @@ class CouponService extends HttpClient {
   public getCoupon = async (couponId: number): Promise<CreateCouponResponse> => {
     try {
       const { data } = await this.get<CreateCouponResponse>(
-        subs(CouponsEndpoints.REVOKE_COUPON, { couponId })
+        subs(ECouponsEndpoints.REVOKE_COUPON, { couponId })
       );
       return data;
     } catch (error) {
