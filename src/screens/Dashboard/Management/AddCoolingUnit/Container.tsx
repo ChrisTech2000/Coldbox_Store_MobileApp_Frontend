@@ -176,6 +176,7 @@ export default function ScreenContainer(props: Props) {
                 onPress={submitHandler}
                 icon={isSubmitting ? undefined : 'plus-circle-outline'}
                 uppercase
+                disabled={isSubmitting}
               >
                 {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
               </Button>

@@ -9,6 +9,7 @@ import {
   EPickUpMethod,
   ERoles,
   ESellingLocation,
+  ESensorType,
   type Company,
   type FarmerSurvey,
   type User,
@@ -377,17 +378,13 @@ export interface GetFarmerImpactParams extends JsonObject {
 export type VerifyEcozenSensorConnectivityParams = {
   username: string;
   password: string;
-  machineID: string;
+  sourceId: string;
 };
 
-export type VerifyUbibotSensorConnectivityParams = {
-  accountKey: string;
-  channelId: string;
-};
-
-export type VerifyFigorrSensorConnectivityParams = {
-  apiKey: string;
-  deviceTag: string;
+export type ListUserSensorsParams = {
+  username: string;
+  password: string;
+  integrationType: ESensorType;
 };
 
 export interface GetPredictionParams extends JsonObject {

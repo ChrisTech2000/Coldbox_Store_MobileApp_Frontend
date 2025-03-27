@@ -20,14 +20,7 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
     const contextualSensor = datums.at(0);
     if (typeof contextualSensor === 'undefined') return [];
 
-    const {
-      type: sensorType,
-      dateSensorFirstLinked,
-      username,
-      machineId,
-      channelId,
-      field,
-    } = contextualSensor;
+    const { type: sensorType, dateSensorFirstLinked, username, sourceId } = contextualSensor;
 
     const commonFields = [
       { name: 'Sensor Type', value: sensorType.charAt(0).toUpperCase() + sensorType.slice(1) },
@@ -39,20 +32,17 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
 
     switch (sensorType) {
       case 'ecozen':
-        specificFields = [{ name: 'Machine ID', value: machineId }];
+      case 'victron':
+        specificFields = [{ name: 'Machine ID', value: sourceId }];
         break;
 
       case 'ubibot':
-        specificFields = [
-          { name: 'Channel ID', value: channelId },
-          { name: 'Field', value: field ?? '' },
-        ];
+        specificFields = [{ name: 'Channel ID', value: sourceId }];
         break;
 
-      case 'lora':
-      case 'mote':
+      case 'figorr':
         specificFields = [
-          { name: 'Device Tag', value: machineId },
+          { name: 'Device Tag', value: sourceId },
           { name: 'IMEI', value: username },
         ];
         break;

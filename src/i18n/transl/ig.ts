@@ -819,20 +819,20 @@ export default {
           batteryPeakEnergyStorage: 'Nchekwa ike na ọkwa kacha elu nke otu batrị',
           batteryType: 'Ụdị batrị',
           selectSensorType: 'Họrọ ụdị ihe mmetụta',
+          selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'Tinye ihe mmetụta okpomọkụ na nkeji jụrụ oyi gị.',
           sensorDesc: {
             default: "Rịọ ozi a n'aka onye na-eweta ihe mmetụta gị ma ọ bụrụ na ichoro ya ozugbo.",
             ubibot: 'Chọputa ozi ndị a na akaụntụ ubibot gị.',
           },
           ecozen: { username: 'Aha njirimara', password: 'Okwungafe', machineId: 'Igwe Id' },
-          ubibot: {
-            accountKey: 'Igodo akaụntụ',
-            channelId: 'Channel Id ya',
-            sensorFieldTitle: "Họrọ mpaghara ihe mmetụta senso gị di n'ubi",
-            sensorFieldDesc: "Họrọ mpaghara ihe mmetụta senso gị di n'ubi",
-            field: 'Ubi',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'Okwungafe',
           },
-          figorr: { apiKey: 'Igodo API', deviceTag: 'Mkpado ngwaọrụ' },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: "Kedu pasentị nke di n' ụlọ a na-akwado site na uzo di iche iche?",
           cropSpecificPricing: 'Ọnụ ahịa ihe ubi ya kpokwem',
         },

@@ -812,20 +812,20 @@ export default {
           batteryPeakEnergyStorage: 'Ibi ipamọ agbara ni ipele ti o ga julọ ti batiri kan',
           batteryType: 'Iru awọn batiri',
           selectSensorType: 'Yan iru sensọ kan',
+          selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'Ṣafikun sensọ iwọn otutu si ẹyọ itutu rẹ.',
           sensorDesc: {
             default: 'Beere alaye yii lati ọdọ olupese sensọ rẹ ti ko ba wa ni ọwọ.',
             ubibot: 'Wa awọn alaye wọnyi ninu akọọlẹ ubibot rẹ.',
           },
           ecozen: { username: 'Orukọ olumulo', password: 'oro-iwole', machineId: 'idanimo Ẹrọ' },
-          ubibot: {
-            accountKey: 'kokoro akant',
-            channelId: 'ikanni idanimo',
-            sensorFieldTitle: 'Yan aaye sensọ rẹ',
-            sensorFieldDesc: 'Yan aaye sensọ rẹ',
-            field: 'aaye',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'oro-iwole',
           },
-          figorr: { apiKey: 'kọkọrọ API', deviceTag: 'àmì ìdánilẹ́kọ̀ ẹ̀rọ̀' },
+          unknownSensor: 'Unknown', // TODO
           hybridFields:
             'Iwọn ida ogorun wo ninu yara naa ni oun gba agbara nipasẹ awọn orisun oriṣiriṣi?',
           cropSpecificPricing: 'Ifowoleri-iru irugbin kan pato',
