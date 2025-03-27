@@ -81,9 +81,11 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
       .sort((a, b) => sortMovements(a, b, sorting))
       .filter((movement) => {
         const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-        const matchesFarmer = movement.checkin?.ownerName
-          ?.toLowerCase()
-          .includes(lowerCaseSearchString);
+        const matchesFarmer =
+          movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString) ??
+          movement.checkout.crates.some((crate) =>
+            crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
+          );
 
         const crops = sortMovementCrops(movement);
         const matchesCrop = crops.some((crop) =>
