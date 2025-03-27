@@ -17,7 +17,7 @@ import reportCrash from '#ui/lib/reportCrash';
 type FormValues = {
   username: string;
   password: string;
-  machineId: string;
+  sourceId: string;
 };
 
 export default function EcozenForm() {
@@ -30,7 +30,7 @@ export default function EcozenForm() {
       z.object({
         username: z.string().min(1),
         password: z.string().min(1),
-        machineId: z.string().min(1),
+        sourceId: z.string().min(1),
       })
     ),
   });
@@ -42,7 +42,7 @@ export default function EcozenForm() {
       const result = await SensorsService.verifyEcozenSensorConnectivity({
         username: values.username,
         password: values.password,
-        machineID: values.machineId,
+        sourceId: values.sourceId,
       });
 
       if (!result) {
@@ -53,7 +53,7 @@ export default function EcozenForm() {
       }
 
       const sensorData = {
-        machineID: values.machineId,
+        sourceId: values.sourceId,
         username: values.username,
         password: values.password,
         type: 'ecozen',
@@ -109,7 +109,7 @@ export default function EcozenForm() {
           )}
         />
         <Controller
-          name="machineId"
+          name="sourceId"
           control={form.control}
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
@@ -119,7 +119,7 @@ export default function EcozenForm() {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              error={!!form.formState.errors.machineId}
+              error={!!form.formState.errors.sourceId}
             />
           )}
         />

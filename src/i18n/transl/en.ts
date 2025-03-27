@@ -875,27 +875,24 @@ const en = {
           batteryPeakEnergyStorage: 'Energy storage at peak level of one battery',
           batteryType: 'Type of batteries',
           selectSensorType: 'Select a sensor type',
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.',
+          selectSensor: 'Select a sensor',
           addTempSensor: 'Add a temperature sensor to your cooling unit.',
           sensorDesc: {
             default: 'Request this info from your sensor provider if not at hand.',
-            ubibot: 'Find these informations in your ubibot account.',
+            ubibot: 'Find this information in your ubibot account.',
           },
           ecozen: {
             username: 'Username',
             password: 'Password',
             machineId: 'Machine Id',
           },
-          ubibot: {
-            accountKey: 'Account Key',
-            channelId: 'Channel Id',
-            sensorFieldTitle: 'Select your sensor field',
-            sensorFieldDesc: 'Select your sensor field',
-            field: 'Field',
+          genericSensorForm: {
+            username: 'Username/Email',
+            password: 'Password',
           },
-          figorr: {
-            apiKey: 'API Key',
-            deviceTag: 'Device Tag',
-          },
+          unknownSensor: 'Unknown',
           hybridFields: 'Which percentage of the room is powered by the different sources?',
           cropSpecificPricing: 'Crop-specific pricing',
         },

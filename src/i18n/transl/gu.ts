@@ -876,6 +876,9 @@ export default {
           batteryPeakEnergyStorage: 'એક બેટરીની પીક એનર્જી સંગ્રહ',
           batteryType: 'બેટરીનો પ્રકાર',
           selectSensorType: 'સેન્સરનો પ્રકાર પસંદ કરો',
+          selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'તમારા કૂલિંગ યુનિટમાં તાપમાપક સેન્સર ઉમેરો',
           sensorDesc: {
             default: 'જો તમારા હાથમાં નથી, તો તમારા સેન્સર પ્રદાતા પાસેથી આ માહિતી વિનંતી કરો.',
@@ -886,17 +889,11 @@ export default {
             password: 'પાસવર્ડ',
             machineId: 'મશીન ID',
           },
-          ubibot: {
-            accountKey: 'ખાતાના કી',
-            channelId: 'ચેનલ ID',
-            sensorFieldTitle: 'તમારા સેન્સર ફિલ્ડને પસંદ કરો',
-            sensorFieldDesc: 'તમારા સેન્સર ફિલ્ડને પસંદ કરો',
-            field: 'ફિલ્ડ',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'પાસવર્ડ',
           },
-          figorr: {
-            apiKey: 'API કી',
-            deviceTag: 'ડિવાઇસ ટેગ',
-          },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
           cropSpecificPricing: 'Crop-specific pricing', // TODO
         },

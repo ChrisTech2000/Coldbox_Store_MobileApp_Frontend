@@ -1,15 +1,12 @@
 import type { AxiosError } from 'axios';
 
-import type {
-  VerifyEcozenSensorConnectivityParams,
-  VerifyFigorrSensorConnectivityParams,
-  VerifyUbibotSensorConnectivityParams,
-} from '#types/api.params';
 import { ESensorEndpoints } from '#constants/api.routes';
 import type {
-  VerifyFigorrSensorConnectivityResponse,
-  VerifyUbibotSensorConnectivityResponse,
-} from '#types/api.responses';
+  ListUserSensorsParams,
+  VerifyEcozenSensorConnectivityParams,
+} from '#types/api.params';
+import type { ListUserSensorsResponse } from '#types/api.responses';
+import { ESensorType } from '#types/global';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
@@ -25,7 +22,7 @@ class SensorsService extends HttpClient {
         ESensorEndpoints.ECOZEN_CHECK,
         {
           ...params,
-          type: 'ecozen',
+          type: ESensorType.ECOZEN,
         },
         {
           // eslint-disable-next-line
@@ -43,41 +40,16 @@ class SensorsService extends HttpClient {
     }
   };
 
-  public verifyUbibotSensorConnectivity = async (params: VerifyUbibotSensorConnectivityParams) => {
+  public listUserSensors = async (params: ListUserSensorsParams) => {
     try {
-      const { data } = await this.post<VerifyUbibotSensorConnectivityResponse>(
-        ESensorEndpoints.UBIBOT_CHECK,
-        {
-          ...params,
-          type: 'ubibot',
-        },
-        {
-          // eslint-disable-next-line
-          // @ts-ignore
-          ignoreUnauthorized: true,
-        },
-        ['accountKey', 'channelId']
-      );
-      return data;
-    } catch (error) {
-      console.log(error);
-      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
-      throw customError;
-    }
-  };
-
-  public verifyFigorrSensorConnectivity = async (params: VerifyFigorrSensorConnectivityParams) => {
-    try {
-      const { data } = await this.post<VerifyFigorrSensorConnectivityResponse>(
-        ESensorEndpoints.FIGORR_CHECK,
+      const { data } = await this.post<ListUserSensorsResponse>(
+        ESensorEndpoints.LIST_USER_SENSORS,
         params,
         {
           // eslint-disable-next-line
           // @ts-ignore
           ignoreUnauthorized: true,
-        },
-        ['apiKey', 'deviceTag']
+        }
       );
       return data;
     } catch (error) {

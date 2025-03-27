@@ -880,6 +880,9 @@ export default {
           batteryPeakEnergyStorage: 'ଏକ ବ୍ୟାଟେରୀ ର ପୀକ୍ ଷ୍ଟୋରେଜ୍ ଇନେର୍ଜୀ',
           batteryType: 'ବ୍ୟାଟେରୀ ପ୍ରକାର',
           selectSensorType: 'ସେନ୍ସର ପ୍ରକାର ଚୟନ କରନ୍ତୁ',
+          selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'ଆପଣଙ୍କର କୁଲିଂ ଇଉନିଟ୍ କୁ ଏକ ତାପମାପକ ସେନ୍ସର୍ ଯୋଡନ୍ତୁ',
           sensorDesc: {
             default: 'ଯଦି ହାତରେ ନାହିଁ, ତେବେ ସେନ୍ସର୍ ପ୍ରଦାତା ସହିତ ଏହି ସୂଚନା ଅନୁରୋଧ କରନ୍ତୁ।',
@@ -890,17 +893,11 @@ export default {
             password: 'ପାସୱର୍ଡ',
             machineId: 'ମେସିନ୍ ID',
           },
-          ubibot: {
-            accountKey: 'ଆକାଉଣ୍ଟ୍ କୀ',
-            channelId: 'ଚ୍ୟାନେଲ୍ ID',
-            sensorFieldTitle: 'ଆପଣଙ୍କର ସେନ୍ସର୍ କ୍ଷେତ୍ର ଚୟନ କରନ୍ତୁ',
-            sensorFieldDesc: 'ଆପଣଙ୍କର ସେନ୍ସର୍ କ୍ଷେତ୍ର ଚୟନ କରନ୍ତୁ',
-            field: 'କ୍ଷେତ୍ର',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'ପାସୱର୍ଡ',
           },
-          figorr: {
-            apiKey: 'API କୀ',
-            deviceTag: 'ଉପକରଣ ଟ୍ୟାଗ୍',
-          },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'ପ୍ରକୋଷ୍ଠ ର କେତେ ପ୍ରତିଶତ ଅଲଗା ଅଲଗା ବିଦ୍ୟୁତ ଉତ୍ସ ଦ୍ୱାରା ଚାଳିତ?',
           cropSpecificPricing: 'ଫସଲ ହିସାବରେ ନିର୍ଦ୍ଧିଷ୍ଟ ମୂଲ୍ୟ ନିରୂପଣ|',
         },

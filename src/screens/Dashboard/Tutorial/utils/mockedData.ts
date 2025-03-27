@@ -188,16 +188,14 @@ export const MOCKED_COOLING_UNIT = {
   sensorError: false,
   sensorList: [
     {
-      channelId: '62116',
       dateSensorFirstLinked: '2024-09-04T10:24:48.947116Z',
       field: 'Temperature',
       id: 5,
-      machineId: 'GRD2493640',
-      type: 'lora',
+      source_id: 'GRD2493640',
+      type: 'figorr',
       username: '6695400a2136d15a7d363542',
     },
   ],
-  ubibotSensorChannel: null,
 };
 
 export const MOCKED_CHECK_IN_DATA = [

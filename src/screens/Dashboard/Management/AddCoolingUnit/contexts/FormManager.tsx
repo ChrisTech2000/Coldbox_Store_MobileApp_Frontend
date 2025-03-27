@@ -1,45 +1,28 @@
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { useIsFocused } from '@react-navigation/native';
 
-import type { ValueOf } from '#types/miscellaneous';
 import { useTranslationUtils } from '#i18n/utils';
+import type { AddCoolingUnitParams } from '#types/api.params';
+import type { ValueOf } from '#types/miscellaneous';
+
 import {
-  PRICING_TYPE,
   METRIC_UNITS,
-  type CoolingUnitTypes,
-  type PowerSourcesIds,
-  type ElectricityStorageIds,
-  type PvPanelsTypes,
+  PRICING_TYPE,
   type BatteryTypes,
+  type CoolingUnitTypes,
+  type ElectricityStorageIds,
+  type PowerSourcesIds,
+  type PvPanelsTypes,
   type ThermalStorageTypes,
 } from '../constants';
-import type { AddCoolingUnitParams } from '#types/api.params';
-import type { VerifyFigorrSensorConnectivityResponse } from '#types/api.responses';
 
-export type SensorDatum =
-  | {
-      machineID: string;
-      username: string;
-      password: string;
-      type: 'ecozen';
-    }
-  | {
-      machineID: string;
-      id: string;
-      username: string;
-      settings: VerifyFigorrSensorConnectivityResponse[0]['settings'];
-      stat: VerifyFigorrSensorConnectivityResponse[0]['stat'];
-      status: string;
-      password: string;
-      type: string; // lora, mote
-    }
-  | {
-      accountKey: string;
-      channelId: string;
-      field: string;
-      type: 'ubibot';
-    };
+export type SensorDatum = {
+  sourceId: string;
+  username: string;
+  password: string;
+  type: string;
+};
 
 export type FormValues<T = string> = {
   //
@@ -164,46 +147,12 @@ export default function FormManager(props: FormManagerProps) {
         editableCheckins: z.boolean().default(true),
         sensor: z.boolean().default(false),
         sensorData: z
-          .union([
-            z.object({
-              machineID: z.string(),
-              username: z.string(),
-              password: z.string(),
-              type: z.literal('ecozen'),
-            }),
-            z.object({
-              accountKey: z.string(),
-              channelId: z.string(),
-              field: z.string(),
-              type: z.literal('ubibot'),
-            }),
-            z.object({
-              machineID: z.string(),
-              id: z.string(),
-              username: z.string(),
-              settings: z.object({
-                name: z.string(),
-              }),
-              stat: z.object({
-                id: z.string(),
-                device: z.string(),
-                temperature: z.number(),
-                humidity: z.number(),
-                latitude: z.number(),
-                longitude: z.number(),
-                battery: z.number(),
-                deviceSettings: z.object({
-                  name: z.string(),
-                }),
-                notes: z.array(z.unknown()),
-                deviceRtcTime: z.number(),
-                deviceTimeStamp: z.string(),
-              }),
-              status: z.string(),
-              password: z.string(),
-              type: z.string(),
-            }),
-          ])
+          .object({
+            sourceId: z.string(),
+            username: z.string(),
+            password: z.string(),
+            type: z.string(),
+          })
           .optional(),
         public: z.boolean().default(false),
         operators: z.array(z.number()).default([]),

@@ -192,7 +192,6 @@ export type GetCoolingUnitsByStatusResponse = {
   commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
-  ubibotSensorChannel?: unknown; // TODO: figure this structure data type
   commonPricingType: CommonPricingType;
   sensorError: boolean;
   latestTemperatureTimestamp: string;
@@ -291,12 +290,11 @@ export interface GetCoolingUnitResponse {
   sensor: boolean;
   sensorList: Array<{
     id: number;
-    machineId: string;
+    sourceId: string;
     type: string;
     field: null | string;
     dateSensorFirstLinked: string;
     username: string;
-    channelId: string;
   }>;
   capacityInMetricTons: number;
   capacityInNumberCrates: number;
@@ -332,7 +330,6 @@ export interface GetCoolingUnitResponse {
   commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
-  ubibotSensorChannel: unknown; // TODO: confirm type
   commonPricingType: CommonPricingType;
   sensorError: boolean;
   latestTemperatureTimestamp: string;
@@ -402,35 +399,11 @@ export type GetNotificationsResponse = Array<{
   marketListing: { currency: string; pricePerKg: number } | null;
 }>;
 
-export type VerifyFigorrSensorConnectivityResponse = Array<{
-  id: string;
-  deviceTag: string;
-  imei: string;
-  type: string;
-  status: string;
-  settings: {
-    name: string;
-  };
-  stat: {
+export type ListUserSensorsResponse = {
+  sources: Array<{
     id: string;
-    device: string;
-    temperature: number;
-    humidity: number;
-    latitude: number;
-    longitude: number;
-    battery: number;
-    deviceSettings: {
-      name: string;
-    };
-    notes: Array<unknown>; // TODO: confirm type
-    deviceRtcTime: number;
-    deviceTimeStamp: string;
-  };
-}>;
-
-export type VerifyUbibotSensorConnectivityResponse = {
-  success: string;
-  data: Array<string>;
+    name: string;
+  }>;
 };
 
 export interface CreateCouponResponse {
