@@ -1,23 +1,23 @@
 import React from 'react';
-import { DataTable, Dialog, Portal, TextInput } from 'react-native-paper';
-import { FlatList, View, Dimensions } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
+import { Dimensions, FlatList, View } from 'react-native';
+import { DataTable, Dialog, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import colors from 'tailwindcss/colors';
 import { useSWRConfig } from 'swr';
+import colors from 'tailwindcss/colors';
 
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
-import { ScrollView } from '#ui/components/ScrollView';
-
-import type { CommodityInfo } from '#types/global';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import InAppNotifications from '#common/InAppNotifications';
-import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
-import ColdtivateService from '#services/ColdtivateService';
-import { getQueryKey } from '#services/hooks/useAPiCall';
+import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import reportCrash from '#ui/lib/reportCrash';
+import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
+
+import InAppNotifications from '#common/InAppNotifications';
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { getQueryKey } from '#services/hooks/useAPiCall';
+import type { CommodityInfo } from '#types/global';
 
 type LocalState<T = string> = {
   coolingUnitId: number | undefined;
@@ -132,7 +132,7 @@ export default function TemperatureAlert() {
   const isVisible = typeof commodityInfo !== 'undefined';
 
   const Container = showCompleteInfo ? Dialog.ScrollArea : Dialog.Content;
-  const ContextualView = showCompleteInfo ? ScrollView : React.Fragment;
+  const ContextualView = showCompleteInfo ? KeyboardAwareScrollView : React.Fragment;
 
   return (
     <Portal>

@@ -6,6 +6,7 @@ import { useSWRConfig } from 'swr';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Button } from '#ui/components/Button';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import type { AccountDetailsRouteProps } from '#navigation/Dashboard/AccountDetails';
 import { useTranslationUtils } from '#i18n/utils';
@@ -85,7 +86,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
             </View>
           </KeyboardAwareScrollView>
 
-          <View tw="bottom-0 right-0 w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
+          <HideWithKeyboardView tw="bottom-0 right-0 w-full items-center bg-white border-t-0.5 border-gray-600 border-solid">
             <Button
               tw="w-4/5 my-4"
               mode="contained"
@@ -116,7 +117,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
             >
               {isProcessing ? <ActivityIndicator size="small" color="white" /> : t('actions.save')}
             </Button>
-          </View>
+          </HideWithKeyboardView>
         </React.Fragment>
       )}
     </FormManager>

@@ -794,20 +794,20 @@ export default {
           batteryPeakEnergyStorage: 'تخزين الطاقة عند مستوى الذروة لبطارية واحدة',
           batteryType: 'نوع البطاريات',
           selectSensorType: 'حدد نوع المستشعر',
+          selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'أضف مستشعر درجة الحرارة إلى وحدة التبريد الخاصة بك.',
           sensorDesc: {
             default: 'اطلب هذه المعلومات من مزود المستشعر الخاص بك إذا لم تكن في متناول اليد.',
             ubibot: 'ابحث عن هذه المعلومات في حساب Ubibot الخاص بك.',
           },
           ecozen: { username: 'اسم المستخدم', password: 'كلمة المرور', machineId: 'معرف الجهاز' },
-          ubibot: {
-            accountKey: 'مفتاح الحساب',
-            channelId: 'معرف القناة',
-            sensorFieldTitle: 'حدد مجال الاستشعار الخاص بك',
-            sensorFieldDesc: 'حدد مجال الاستشعار الخاص بك',
-            field: 'مجال',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'كلمة المرور',
           },
-          figorr: { apiKey: 'مفتاح API', deviceTag: 'علامة الجهاز' },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
           cropSpecificPricing: 'Crop-specific pricing', // TODO
         },

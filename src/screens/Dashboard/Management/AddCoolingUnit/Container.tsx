@@ -11,6 +11,7 @@ import { Button } from '#ui/components/Button';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { AddCoolingUnitOverlay } from '#screens/Dashboard/Tutorial/AddCoolingUnitOverlay';
@@ -148,33 +149,42 @@ export default function ScreenContainer(props: Props) {
   }
 
   return (
-    <KeyboardAwareScrollView
-      tw="h-full"
-      contentContainerStyle="pt-5 pb-8"
-      keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-      showsVerticalScrollIndicator={false}
-    >
+    <View tw="flex-1">
       <FormManager onSubmit={onSubmit} initialValues={initialFormValues.current}>
         {({ submitHandler, isSubmitting }) => (
           <React.Fragment>
-            <View tw="flex-row items-center space-x-3 mb-3 mx-3.5">
-              <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
-              <Text tw="text-lg">{t('Dashboard.Management.AddCoolingUnit.heading')}</Text>
-            </View>
-            <FormFields />
-            <Button
-              tw="w-11/12 self-center mt-7"
-              mode="contained"
-              onPress={submitHandler}
-              icon={isSubmitting ? undefined : 'plus-circle-outline'}
-              uppercase
+            <KeyboardAwareScrollView
+              keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+              showsVerticalScrollIndicator={false}
             >
-              {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
-            </Button>
+              <View tw="pt-5">
+                <View tw="flex-row items-center space-x-3 mb-3 mx-3.5">
+                  <ColdRoom width={28} height={28} color={paperTheme.colors.primary} />
+                  <Text tw="text-lg">{t('Dashboard.Management.AddCoolingUnit.heading')}</Text>
+                </View>
+
+                <View tw="pb-28">
+                  <FormFields />
+                </View>
+              </View>
+            </KeyboardAwareScrollView>
+
+            <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
+              <Button
+                tw="w-full"
+                mode="contained"
+                onPress={submitHandler}
+                icon={isSubmitting ? undefined : 'plus-circle-outline'}
+                uppercase
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
+              </Button>
+            </HideWithKeyboardView>
           </React.Fragment>
         )}
       </FormManager>
-    </KeyboardAwareScrollView>
+    </View>
   );
 }
 

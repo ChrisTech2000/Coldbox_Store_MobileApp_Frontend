@@ -59,7 +59,7 @@ export default function GeoLocationForm() {
   }
 
   return (
-    <View>
+    <View tw="my-4.5">
       <Button
         tw="self-center mb-3.5 mt-1 w-5/6"
         mode="text"

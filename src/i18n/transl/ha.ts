@@ -829,6 +829,9 @@ export default {
           batteryPeakEnergyStorage: "Ma'ajiyar makamashi a matakin kololuwar baturi daya",
           batteryType: "Nau'in batura",
           selectSensorType: "Zaɓi nau'in firikwensin",
+          selectSensor: 'Select a sensor', // TODO
+          emptySensorListError:
+            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
           addTempSensor: 'Ƙara firikwensin yanayin zafi zuwa sashin naúrar sanyayawar ku.',
           sensorDesc: {
             default: 'Nemi wannan bayanin daga mai bada firikwensin ku idan babu a hannu.',
@@ -839,14 +842,11 @@ export default {
             password: 'Boyayin kalmomin siri',
             machineId: 'ID na inji',
           },
-          ubibot: {
-            accountKey: 'Mabudin Asusu',
-            channelId: 'ID magudanar',
-            sensorFieldTitle: 'Zaɓi filin firikwensin ku',
-            sensorFieldDesc: 'Zaɓi filin firikwensin ku',
-            field: 'Filin',
+          genericSensorForm: {
+            username: 'Username/Email', // TODO
+            password: 'Boyayin kalmomin siri',
           },
-          figorr: { apiKey: 'Maɓallin API', deviceTag: "Tag na na'ura" },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'Wanne kashi na dakin ke samun ƙarfi ta hanyoyi daban-daban?',
           cropSpecificPricing: 'takamaiman farashin amfanin gona',
         },

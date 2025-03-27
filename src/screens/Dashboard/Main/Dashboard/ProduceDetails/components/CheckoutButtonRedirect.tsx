@@ -1,30 +1,39 @@
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { type NavigationProp, useNavigation } from '@react-navigation/native';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-
-import type { CoolingUnit, Crate, Farmer } from '#types/global';
-import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
+
+import { useTranslationUtils } from '#i18n/utils';
+import type { CoolingUnit, DashboardProduce, Farmer } from '#types/global';
 
 export default function CheckoutButtonRedirect(props: {
   coolingUnit: CoolingUnit | null;
   farmer?: Farmer;
   owner?: string;
-  crates: Array<Crate>;
+  produce: DashboardProduce;
 }) {
-  const { coolingUnit, farmer, owner, crates } = props;
+  const { coolingUnit, farmer, owner, produce } = props;
 
   // eslint-disable-next-line
   const navigation = useNavigation<NavigationProp<any>>();
   const { t } = useTranslationUtils();
 
-  const isDisabled = useMemo(
-    () => crates.every((crate) => crate.lockedWithinPendingOrders),
-    [crates]
-  );
+  const { isDisabled, crates } = useMemo(() => {
+    let disabled = false;
+    const updatedCrates = produce.checkedInCrates.map((crate) => {
+      if (crate.lockedWithinPendingOrders && !disabled) {
+        disabled = true;
+      }
+      return {
+        ...crate,
+        remainingShelfLife: crate.remainingShelfLife ?? produce.minimumRemainingShelfLife,
+      };
+    });
+    return { isDisabled: disabled, crates: updatedCrates };
+  }, [produce]);
 
   return (
     <View

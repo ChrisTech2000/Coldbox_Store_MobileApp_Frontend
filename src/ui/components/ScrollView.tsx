@@ -6,9 +6,16 @@ type WrapperProps = {
   contentContainerStyle?: string;
 } & Exclude<ScrollViewProps, 'contentContainerStyle'>;
 
-function _Wrapper({ children, ...rest }: WrapperProps) {
-  return <ScrollView {...rest}>{children}</ScrollView>;
-}
+const _Wrapper = React.forwardRef<ScrollView, WrapperProps>(function Component(
+  { children, ...rest }: WrapperProps,
+  ref: React.ForwardedRef<ScrollView>
+) {
+  return (
+    <ScrollView {...rest} ref={ref}>
+      {children}
+    </ScrollView>
+  );
+});
 
 const _StyledScrollView = styled(_Wrapper, {
   props: {

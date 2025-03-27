@@ -885,6 +885,9 @@ export default {
           batteryPeakEnergyStorage: 'Armazenamento de energia no nível máximo de uma bateria',
           batteryType: 'Tipo de baterias',
           selectSensorType: 'Selecione tipo de sensor',
+          selectSensor: 'Selecione um sensor',
+          emptySensorListError:
+            'Não existem sensores conectados na sua conta {{type}}. Por favor conecte pelo menos um e tente novamente.', // TODO
           addTempSensor: 'Adicionar um sensor de temperatura à sua unidade de refrigeração.',
           sensorDesc: {
             default: 'Solicite esta informação ao seu fornecedor de sensores se não a tiver.',
@@ -895,17 +898,11 @@ export default {
             password: 'Palavra-passe',
             machineId: 'ID da máquina',
           },
-          ubibot: {
-            accountKey: 'Chave de conta',
-            channelId: 'ID do canal',
-            sensorFieldTitle: 'Selecione o seu campo de sensor',
-            sensorFieldDesc: 'Selecione o seu campo de sensor',
-            field: 'Campo',
+          genericSensorForm: {
+            username: 'Nome de utilizador/Email',
+            password: 'Palavra-passe',
           },
-          figorr: {
-            apiKey: 'Chave API',
-            deviceTag: 'Etiqueta do dispositivo',
-          },
+          unknownSensor: 'Unknown', // TODO
           hybridFields: 'Qual porcentagem da sala é alimentada pelas diferentes fontes?',
           cropSpecificPricing: 'Preços específicos para cada cultura',
         },

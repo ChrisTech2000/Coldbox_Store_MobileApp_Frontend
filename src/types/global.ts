@@ -185,7 +185,6 @@ export type CoolingUnit = {
   commodityInfos: Array<CommodityInfo>;
   foodCapacityInMetricTons: number;
   public: boolean;
-  ubibotSensorChannel: unknown; // TODO: figure out type
   sensorError: boolean;
   latestTemperatureTimestamp: Date;
   lastCheckInDate: Date;
@@ -752,6 +751,13 @@ export enum EPickUpMethod {
   PICK_UP_SAME_DAY = 'pick-up-same-day',
   KEEP_IN_STORAGE = 'keep-in-storage',
   DELIVERY = 'delivery',
+}
+
+export enum ESensorType {
+  ECOZEN = 'ecozen',
+  VICTRON = 'victron',
+  FIGORR = 'figorr',
+  UBIBOT = 'ubibot',
 }
 
 //////////////////////// MAPPERS
