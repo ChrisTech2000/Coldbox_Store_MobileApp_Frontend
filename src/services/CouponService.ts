@@ -57,19 +57,6 @@ class CouponService extends HttpClient {
       throw customError;
     }
   };
-
-  public getCoupon = async (couponId: number): Promise<CreateCouponResponse> => {
-    try {
-      const { data } = await this.get<CreateCouponResponse>(
-        subs(ECouponsEndpoints.REVOKE_COUPON, { couponId })
-      );
-      return data;
-    } catch (error) {
-      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
-      throw customError;
-    }
-  };
 }
 
 export default new CouponService();
