@@ -829,6 +829,12 @@ export default {
           hybridFields:
             'Iwọn ida ogorun wo ninu yara naa ni oun gba agbara nipasẹ awọn orisun oriṣiriṣi?',
           cropSpecificPricing: 'Ifowoleri-iru irugbin kan pato',
+          value: 'Iye',
+          machineId: 'ID Ẹrọ',
+          channelId: 'ID Ikanni',
+          deviceTag: 'Tag Ẹrọ',
+          dateAdded: 'Ọjọ Ti A Fi Kun',
+          sensorType: 'Iru Sensor',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'O jẹ yara ipamọ ti a gbe si ẹnu-bode oko kan',

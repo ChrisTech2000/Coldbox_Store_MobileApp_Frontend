@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
@@ -23,6 +23,8 @@ type FormValues = {
 export default function EcozenForm() {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
+
+  const [hidePass, setHidePass] = useState<boolean>(true);
 
   const form = useForm<FormValues>({
     reValidateMode: 'onSubmit',
@@ -102,7 +104,13 @@ export default function EcozenForm() {
               mode="flat"
               value={value}
               onChangeText={onChange}
-              secureTextEntry
+              secureTextEntry={hidePass}
+              right={
+                <TextInput.Icon
+                  icon={hidePass ? 'eye' : 'eye-off'}
+                  onPress={() => setHidePass(!hidePass)}
+                />
+              }
               onBlur={onBlur}
               error={!!form.formState.errors.password}
             />

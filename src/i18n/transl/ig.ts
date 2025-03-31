@@ -835,6 +835,12 @@ export default {
           unknownSensor: 'Unknown', // TODO
           hybridFields: "Kedu pasentị nke di n' ụlọ a na-akwado site na uzo di iche iche?",
           cropSpecificPricing: 'Ọnụ ahịa ihe ubi ya kpokwem',
+          value: 'Uru',
+          machineId: 'ID Ụlọọrụ',
+          channelId: 'ID Ụgbọchị',
+          deviceTag: 'Mkpado Ngwaọrụ',
+          dateAdded: 'Ụbọchị Tinyechara',
+          sensorType: 'Ụdị Sensor',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: "Ọ bụ ụlọ nchekwa etinyere n'ọnụ ụzọ ugbo",

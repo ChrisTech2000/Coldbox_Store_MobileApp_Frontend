@@ -810,6 +810,12 @@ export default {
           unknownSensor: 'Unknown', // TODO
           hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
           cropSpecificPricing: 'Crop-specific pricing', // TODO
+          value: 'القيمة',
+          machineId: 'معرّف الآلة',
+          channelId: 'معرّف القناة',
+          deviceTag: 'علامة الجهاز',
+          dateAdded: 'تاريخ الإضافة',
+          sensorType: 'نوع المستشعر',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'إنها غرفة تخزين تقع عند بوابة المزرعة',
