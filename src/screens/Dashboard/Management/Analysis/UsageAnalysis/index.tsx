@@ -31,7 +31,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { type CoolingUnit, ERoles } from '#types/global';
+import { type CoolingUnit, EInitiatedFor, ERoles } from '#types/global';
 
 import { DownloadDataModal } from '../components/DownloadDataModal';
 import { sortMovements } from '../utils';
@@ -114,7 +114,10 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     const { totalCrates, totalWeight, users } = filteredMovements
       .flatMap((movement) => ({
         cratesNumber: movement.checkin?.crates.length,
-        weight: movement.checkin?.crates.reduce((acc, crate) => (acc += crate.initialWeight), 0),
+        weight:
+          movement.initiatedFor === EInitiatedFor.CHECK_IN
+            ? movement.checkin?.crates.reduce((acc, crate) => (acc += crate.initialWeight), 0)
+            : movement.checkout?.crates.reduce((acc, crate) => (acc += crate.initialWeight), 0),
         user: movement.checkin?.ownerName ?? '',
       }))
       .reduce(
