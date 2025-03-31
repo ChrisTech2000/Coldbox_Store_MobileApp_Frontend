@@ -109,8 +109,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
         );
         return {
           ...crate,
-          remainingShelfLife:
-            crate.remainingShelfLife ?? dashboardProduce?.minimumRemainingShelfLife ?? -1,
+          remainingShelfLife: dashboardProduce?.minimumRemainingShelfLife ?? -1,
         };
       }) ??
       [];
