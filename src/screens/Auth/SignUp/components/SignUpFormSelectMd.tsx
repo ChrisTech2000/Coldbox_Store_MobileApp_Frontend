@@ -8,7 +8,7 @@ import { Select } from '#ui/components/Select';
 import { Button } from '#ui/components/Button';
 import { RadioButtonItem } from '#ui/components/RadioButton';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { type TranslationPaths, useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
 
 type Props<T extends FieldValues> = {
@@ -18,6 +18,7 @@ type Props<T extends FieldValues> = {
   control: Control<T>;
   required?: boolean;
   enableScroll?: boolean;
+  translateItemLabel?: (item: string) => TranslationPaths;
 };
 
 export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
@@ -26,9 +27,9 @@ export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
   const { field, fieldState } = useController({ name, control, rules: { required } });
   const { t } = useTranslationUtils();
 
-  const initialValue = field.value || '';
+  const safeSelectedValue = field.value || '';
 
-  const [selectedValue, setSelectedValue] = useState<string>(initialValue);
+  const [selectedValue, setSelectedValue] = useState<string>(safeSelectedValue);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const submit = useCallback(
@@ -43,13 +44,14 @@ export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
   const cancel = useCallback(
     (evt: GestureResponderEvent) => {
       evt.stopPropagation();
-      setSelectedValue(initialValue);
+      setSelectedValue(safeSelectedValue);
       setIsModalOpen((state) => !state);
     },
-    [initialValue]
+    [safeSelectedValue]
   );
 
   const error = typeof fieldState.error !== 'undefined';
+  const selectedValuePath = props?.translateItemLabel?.(field.value);
 
   return (
     <View tw="mt-2">
@@ -63,7 +65,7 @@ export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
         >
           <Select.Touchable
             label={required ? `${startCase(label)}*` : startCase(label)}
-            displayValue={field.value || ''}
+            displayValue={selectedValuePath ? t(selectedValuePath) : safeSelectedValue}
           />
           <Select.Dialog
             enableScroll={enableScroll}
@@ -88,13 +90,17 @@ export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
                 showsVerticalScrollIndicator={false}
                 data={items}
                 keyExtractor={(item, itemIdx) => `${item}-${itemIdx}`}
-                renderItem={({ item }) => (
-                  <RadioButtonItem
-                    label={item}
-                    value={item}
-                    tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
-                  />
-                )}
+                renderItem={({ item }) => {
+                  const itemPath = props?.translateItemLabel?.(item);
+                  const safeItemValue = item || '';
+                  return (
+                    <RadioButtonItem
+                      label={itemPath ? t(itemPath) : safeItemValue}
+                      value={safeItemValue}
+                      tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
+                    />
+                  );
+                }}
               />
             </RadioButton.Group>
           </Select.Dialog>
