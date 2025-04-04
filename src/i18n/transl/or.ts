@@ -900,6 +900,12 @@ export default {
           unknownSensor: 'Unknown', // TODO
           hybridFields: 'ପ୍ରକୋଷ୍ଠ ର କେତେ ପ୍ରତିଶତ ଅଲଗା ଅଲଗା ବିଦ୍ୟୁତ ଉତ୍ସ ଦ୍ୱାରା ଚାଳିତ?',
           cropSpecificPricing: 'ଫସଲ ହିସାବରେ ନିର୍ଦ୍ଧିଷ୍ଟ ମୂଲ୍ୟ ନିରୂପଣ|',
+          value: 'ମୂଲ୍ୟ',
+          machineId: 'ମେସିନ୍ ID',
+          channelId: 'ଚ୍ୟାନେଲ୍ ID',
+          deviceTag: 'ଡିଭାଇସ୍ ଟ୍ୟାଗ୍',
+          dateAdded: 'ଯୋଡିଥିବା ତାରିଖ',
+          sensorType: 'ସେନସର୍ ପ୍ରକାର',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'ଏହା ଏକ ଖେତର ଦ୍ବାର ରୁମ୍',

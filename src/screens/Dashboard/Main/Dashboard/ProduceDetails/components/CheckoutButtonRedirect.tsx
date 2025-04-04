@@ -29,7 +29,7 @@ export default function CheckoutButtonRedirect(props: {
       }
       return {
         ...crate,
-        remainingShelfLife: crate.remainingShelfLife ?? produce.minimumRemainingShelfLife,
+        remainingShelfLife: produce.minimumRemainingShelfLife,
       };
     });
     return { isDisabled: disabled, crates: updatedCrates };

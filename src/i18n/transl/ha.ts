@@ -849,6 +849,12 @@ export default {
           unknownSensor: 'Unknown', // TODO
           hybridFields: 'Wanne kashi na dakin ke samun ƙarfi ta hanyoyi daban-daban?',
           cropSpecificPricing: 'takamaiman farashin amfanin gona',
+          value: 'Ƙima',
+          machineId: 'ID na Inji',
+          channelId: 'ID na Tashar',
+          deviceTag: 'Alamar Na’ura',
+          dateAdded: 'Ranar Da Aka Ƙara',
+          sensorType: 'Nau’in Sensor',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'Dakin ajiya ne da ke a kofar gona',

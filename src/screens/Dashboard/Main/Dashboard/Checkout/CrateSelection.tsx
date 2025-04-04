@@ -109,8 +109,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
         );
         return {
           ...crate,
-          remainingShelfLife:
-            crate.remainingShelfLife ?? dashboardProduce?.minimumRemainingShelfLife ?? -1,
+          remainingShelfLife: dashboardProduce?.minimumRemainingShelfLife ?? -1,
         };
       }) ??
       [];
@@ -273,7 +272,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
         </_LoadingSlot>
       </View>
 
-      <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
+      <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-16 pt-4 absolute bottom-[-5%] left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
         <Button
           style={{ width: BUTTON_WIDTH }}
           mode="outlined"
