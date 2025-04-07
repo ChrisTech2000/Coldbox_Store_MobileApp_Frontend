@@ -23,8 +23,9 @@ import { EAccountProfile } from '../SignIn';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import {
+  GENDER_CODES,
   GENDERS,
-  getLanguageCode,
+  LANGUAGE_CODES,
   LANGUAGES,
   SignUpAsCoolingUserSchema,
   SignUpCoolingUserSchemaType,
@@ -84,7 +85,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
           lastName,
           phone,
           password,
-          language: getLanguageCode(language, t),
+          language,
           country,
           gender: MAP_APP_GENDER_TO_API[gender],
         },
@@ -208,7 +209,8 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         label={t('Auth.SignUp.SignUpCoolingUser.languageFieldName')}
         name="language"
         control={control}
-        items={LANGUAGES(t)}
+        items={LANGUAGES}
+        translateItemLabel={(item) => LANGUAGE_CODES[item as keyof typeof LANGUAGE_CODES]}
         required
       />
       {errors.language && (
@@ -222,7 +224,8 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         label={t('Auth.SignUp.commonForm.genderFieldName')}
         name="gender"
         control={control}
-        items={GENDERS(t)}
+        items={GENDERS}
+        translateItemLabel={(item) => GENDER_CODES[item as keyof typeof GENDER_CODES]}
         enableScroll={false}
         required
       />

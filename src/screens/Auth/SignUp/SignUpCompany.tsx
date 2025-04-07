@@ -26,7 +26,7 @@ import { CustomError } from '#services/utils/ErrorUtil';
 
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
-import { GENDERS, SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
+import { GENDERS, GENDER_CODES, SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
 import { customCountrySort } from './utils';
 
 const allCountries = getAllISOCodes();
@@ -293,7 +293,8 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
 
       {/** GENDER */}
       <SignUpFormSelectMd
-        items={GENDERS(t)}
+        items={GENDERS}
+        translateItemLabel={(item) => GENDER_CODES[item as keyof typeof GENDER_CODES]}
         name="gender"
         control={control}
         label={t('Auth.SignUp.commonForm.genderFieldName')}
