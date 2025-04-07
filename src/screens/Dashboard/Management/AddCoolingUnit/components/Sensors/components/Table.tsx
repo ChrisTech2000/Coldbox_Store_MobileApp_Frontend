@@ -1,12 +1,14 @@
+import startCase from 'lodash/startCase';
 import React, { useMemo } from 'react';
 import { FlatList } from 'react-native';
-import { DataTable, Dialog, Portal } from 'react-native-paper';
+import { DataTable, Dialog, Portal, Text } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
-
-import type { GetCoolingUnitResponse } from '#types/api.responses';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
+
+import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import type { GetCoolingUnitResponse } from '#types/api.responses';
+import { ESensorType } from '#types/global';
 
 type RowsDatums = Array<{ name: string; value: string }>;
 
@@ -23,9 +25,18 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
     const { type: sensorType, dateSensorFirstLinked, username, sourceId } = contextualSensor;
 
     const commonFields = [
-      { name: 'Sensor Type', value: sensorType.charAt(0).toUpperCase() + sensorType.slice(1) },
-      { name: 'Date Added', value: dateSensorFirstLinked ? dateFmt(dateSensorFirstLinked) : '' },
-      { name: 'Username', value: username },
+      {
+        name: t('Dashboard.Management.AddCoolingUnit.fields.sensorType'),
+        value:
+          sensorType === ESensorType.VICTRON
+            ? `${startCase(sensorType)} Energy`
+            : startCase(sensorType),
+      },
+      {
+        name: t('Dashboard.Management.AddCoolingUnit.fields.dateAdded'),
+        value: dateSensorFirstLinked ? dateFmt(dateSensorFirstLinked) : '',
+      },
+      { name: t('Dashboard.Management.AddCoolingUnit.fields.ecozen.username'), value: username },
     ] satisfies RowsDatums;
 
     let specificFields: RowsDatums = [];
@@ -33,17 +44,20 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
     switch (sensorType) {
       case 'ecozen':
       case 'victron':
-        specificFields = [{ name: 'Machine ID', value: sourceId }];
+        specificFields = [
+          { name: t('Dashboard.Management.AddCoolingUnit.fields.machineId'), value: sourceId },
+        ];
         break;
 
       case 'ubibot':
-        specificFields = [{ name: 'Channel ID', value: sourceId }];
+        specificFields = [
+          { name: t('Dashboard.Management.AddCoolingUnit.fields.channelId'), value: sourceId },
+        ];
         break;
 
       case 'figorr':
         specificFields = [
-          { name: 'Device Tag', value: sourceId },
-          { name: 'IMEI', value: username },
+          { name: t('Dashboard.Management.AddCoolingUnit.fields.deviceTag'), value: sourceId },
         ];
         break;
 
@@ -52,7 +66,7 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
     }
 
     return commonFields.concat(specificFields);
-  }, [datums]);
+  }, [datums, t]);
 
   return (
     <React.Fragment>
@@ -69,8 +83,10 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
           <Dialog.Content>
             <DataTable>
               <DataTable.Header>
-                <DataTable.Title>Name</DataTable.Title>
-                <DataTable.Title>Value</DataTable.Title>
+                <DataTable.Title>{t('Dashboard.Management.Location.fields.name')}</DataTable.Title>
+                <DataTable.Title>
+                  {t('Dashboard.Management.AddCoolingUnit.fields.value')}
+                </DataTable.Title>
               </DataTable.Header>
 
               <FlatList
@@ -80,7 +96,17 @@ export default function TableModal(props: { datums: GetCoolingUnitResponse['sens
                 renderItem={({ item }) => (
                   <DataTable.Row>
                     <DataTable.Cell>{item.name}</DataTable.Cell>
-                    <DataTable.Cell>{item.value}</DataTable.Cell>
+                    <DataTable.Cell>
+                      <Text
+                        numberOfLines={3}
+                        style={{
+                          flexWrap: 'wrap',
+                          width: '90%',
+                        }}
+                      >
+                        {item.value}
+                      </Text>
+                    </DataTable.Cell>
                   </DataTable.Row>
                 )}
                 nestedScrollEnabled

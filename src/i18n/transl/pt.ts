@@ -905,6 +905,12 @@ export default {
           unknownSensor: 'Unknown', // TODO
           hybridFields: 'Qual porcentagem da sala é alimentada pelas diferentes fontes?',
           cropSpecificPricing: 'Preços específicos para cada cultura',
+          value: 'Valor',
+          machineId: 'ID da Máquina',
+          channelId: 'ID do Canal',
+          deviceTag: 'Etiqueta do Dispositivo',
+          dateAdded: 'Data de Adição',
+          sensorType: 'Tipo de Sensor',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'É uma sala de armazenamento colocada no portão da quinta',

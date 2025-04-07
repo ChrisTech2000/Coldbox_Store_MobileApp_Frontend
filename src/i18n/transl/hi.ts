@@ -902,6 +902,12 @@ export default {
           unknownSensor: 'Unknown', // TODO
           hybridFields: 'प्रकोष्ठ का कितना प्रतिशत विभिन्न स्रोतों से संचालित होता है?',
           cropSpecificPricing: 'फसल-अनुरूप  मूल्य निर्धारण',
+          value: 'मूल्य',
+          machineId: 'मशीन आईडी',
+          channelId: 'चैनल आईडी',
+          deviceTag: 'डिवाइस टैग',
+          dateAdded: 'जोड़े जाने की तारीख',
+          sensorType: 'सेंसर प्रकार',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'यह फार्म-गेट पर रखा गया भंडारण कक्ष है',

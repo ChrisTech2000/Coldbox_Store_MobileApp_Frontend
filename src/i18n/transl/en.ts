@@ -895,6 +895,12 @@ const en = {
           unknownSensor: 'Unknown',
           hybridFields: 'Which percentage of the room is powered by the different sources?',
           cropSpecificPricing: 'Crop-specific pricing',
+          value: 'Value',
+          machineId: 'Machine ID',
+          channelId: 'Channel ID',
+          deviceTag: 'Device Tag',
+          dateAdded: 'Date Added',
+          sensorType: 'Sensor Type',
         },
         coolingUnitTypes: {
           FARM_GATE_STORAGE_ROOM: 'It is a storage room placed at a farm-gate',

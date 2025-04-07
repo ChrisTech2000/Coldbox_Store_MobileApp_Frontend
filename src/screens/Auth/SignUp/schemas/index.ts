@@ -1,63 +1,32 @@
-import { passwordRegex, stripSpacesRegex } from '#constants/schemas';
-import { Path, Translator } from '#i18n/utils';
-import { EAppGender } from '#types/global';
-
 import validator from 'validator';
 import { z } from 'zod';
 
-export const LANGUAGE_CODES: Record<string, Path> = {
+import { passwordRegex, stripSpacesRegex } from '#constants/schemas';
+import type { TranslationPaths, Translator } from '#i18n/utils';
+import { EAppGender } from '#types/global';
+import type { TranslationLocales } from '#i18n/constants';
+
+export const LANGUAGE_CODES: Record<TranslationLocales, TranslationPaths> = {
   en: 'languages.options.en',
   hi: 'languages.options.hi',
   or: 'languages.options.or',
   gu: 'languages.options.gu',
   fr: 'languages.options.fr',
   pt: 'languages.options.pt',
+  ha: 'languages.options.ha',
+  yo: 'languages.options.yo',
+  ig: 'languages.options.ig',
 };
 
-export const getLanguageCode = (translatedName: string, t: Translator): string | undefined => {
-  const entries = Object.entries(LANGUAGE_CODES);
+export const LANGUAGES = Object.keys(LANGUAGE_CODES);
 
-  for (const [code, key] of entries) {
-    if (t(key) === translatedName) {
-      return code;
-    }
-  }
-
-  return undefined;
-};
-
-export const LANGUAGES = (t: Translator) => [
-  t(LANGUAGE_CODES.en),
-  t(LANGUAGE_CODES.hi),
-  t(LANGUAGE_CODES.or),
-  t(LANGUAGE_CODES.gu),
-  t(LANGUAGE_CODES.fr),
-  t(LANGUAGE_CODES.pt),
-];
-
-export const GENDER_CODES: Record<EAppGender, Path> = {
+export const GENDER_CODES: Record<EAppGender, TranslationPaths> = {
   [EAppGender.FEMALE]: 'gender.female',
   [EAppGender.MALE]: 'gender.male',
   [EAppGender.OTHER]: 'gender.other',
 };
 
-export const getGenderCode = (translatedName: string, t: Translator): EAppGender | undefined => {
-  const entries = Object.entries(GENDER_CODES);
-
-  for (const [code, key] of entries) {
-    if (t(key) === translatedName) {
-      return code as EAppGender;
-    }
-  }
-
-  return undefined;
-};
-
-export const GENDERS = (t: Translator) => [
-  t(GENDER_CODES[EAppGender.FEMALE]),
-  t(GENDER_CODES[EAppGender.MALE]),
-  t(GENDER_CODES[EAppGender.OTHER]),
-];
+export const GENDERS = Object.keys(GENDER_CODES);
 
 const passwordSchema = (t: Translator) =>
   z
@@ -124,13 +93,13 @@ export const SignUpAsCoolingUserSchema = (t: Translator) =>
     language: z
       .string()
       .default('')
-      .refine((lang) => lang.length && LANGUAGES(t).includes(lang), {
+      .refine((lang) => lang.length && LANGUAGES.includes(lang), {
         message: t('Auth.SignUp.schema.languageError'),
       }),
     gender: z
       .string()
       .default('')
-      .refine((gender) => gender.length && GENDERS(t).includes(gender), {
+      .refine((gender) => gender.length && GENDERS.includes(gender), {
         message: t('Auth.SignUp.schema.genderError'),
       }),
     password: passwordSchema(t),

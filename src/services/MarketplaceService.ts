@@ -24,7 +24,6 @@ import type {
   GetCartResponse,
   GetDeliveryContactsResponse,
   GetSellerListedCrates,
-  SellerListedCratesResponse,
   SetPickUpDetailsResponse,
   ToggleCartOwnershipResponse,
   UpdateListedCrateResponse,
@@ -32,7 +31,7 @@ import type {
 import type { BankAccount } from '#types/global';
 
 import HttpClient from './HttpClient';
-import { subs, query } from './utils';
+import { query, subs } from './utils';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 
 class MarketplaceService extends HttpClient {
@@ -133,19 +132,6 @@ class MarketplaceService extends HttpClient {
   };
 
   public getUserBankAccounts = async (companyId?: number): Promise<Array<BankAccount>> => {
-    try {
-      const { data } = await this.get<Array<BankAccount>>(
-        query(EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS, { companyId })
-      );
-      return data;
-    } catch (error) {
-      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
-      throw customError;
-    }
-  };
-
-  public getCompanyBankAccounts = async (companyId: number): Promise<Array<BankAccount>> => {
     try {
       const { data } = await this.get<Array<BankAccount>>(
         query(EMarketplaceEndpoints.SELLER_BANK_ACCOUNTS, { companyId })
@@ -341,23 +327,6 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public getSellerListedCratesByCrateId = async (
-    params: ListedCratesBaseParams & { crateId: number }
-  ): Promise<SellerListedCratesResponse> => {
-    try {
-      const { crateId, ...rest } = params;
-      const { data } = await this.get<SellerListedCratesResponse>(
-        subs(EMarketplaceEndpoints.GET_SELLER_LISTED_CRATES_BY_CRATE_ID, { crateId }),
-        { params: rest }
-      );
-      return data;
-    } catch (error) {
-      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
-      throw customError;
-    }
-  };
-
   public getSellerListedCrates = async (
     params?: ListedCratesBaseParams
   ): Promise<GetSellerListedCrates> => {
@@ -438,18 +407,6 @@ class MarketplaceService extends HttpClient {
   public getSales = async (): Promise<GetAllSalesResponse> => {
     try {
       const { data } = await this.get<GetAllSalesResponse>(EMarketplaceEndpoints.GET_MY_SALES);
-      return data;
-    } catch (error) {
-      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
-      throw customError;
-    }
-  };
-
-  public getSale = async (orderId: number): Promise<GetAllOrdersResponse> => {
-    try {
-      const url = subs(EMarketplaceEndpoints.GET_SALE, { orderId });
-      const { data } = await this.get<GetAllOrdersResponse>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

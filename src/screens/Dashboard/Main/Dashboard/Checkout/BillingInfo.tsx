@@ -186,7 +186,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       <KeyboardAwareScrollView
         keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle="px-4"
+        contentContainerStyle="px-4 pb-20"
       >
         <View tw="flex flex-row w-full justify-between items-center">
           <Text variant="TextMedium" tw="text-lg">
@@ -360,7 +360,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         <Divider tw="bg-gray-400 my-2" />
       </KeyboardAwareScrollView>
 
-      <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-5 pt-4 absolute bottom-0 left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
+      <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-16 pt-4 absolute bottom-[-5%] left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">
         <Button
           style={{ width: BUTTON_WIDTH }}
           mode="outlined"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
@@ -22,6 +22,8 @@ type FormValues = {
 export default function GenericSensorForm({ type }: { type: ESensorType }) {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
+
+  const [hidePass, setHidePass] = useState<boolean>(true);
 
   const form = useForm<FormValues>({
     reValidateMode: 'onSubmit',
@@ -93,11 +95,17 @@ export default function GenericSensorForm({ type }: { type: ESensorType }) {
               tw="bg-transparent px-3"
               label={t('Dashboard.Management.AddCoolingUnit.fields.genericSensorForm.password')}
               mode="flat"
-              secureTextEntry
               autoCapitalize="none"
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
+              secureTextEntry={hidePass}
+              right={
+                <TextInput.Icon
+                  icon={hidePass ? 'eye' : 'eye-off'}
+                  onPress={() => setHidePass(!hidePass)}
+                />
+              }
               error={!!form.formState.errors.password}
             />
           )}
