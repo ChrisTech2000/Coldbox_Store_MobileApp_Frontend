@@ -98,16 +98,19 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   const filteredMovements = useMemo(() => {
     if (!search) return dateFilteredMovements;
     const lowerCaseSearchString = search.toLowerCase();
-    return dateFilteredMovements.filter(
-      (movement) =>
-        movement.code.toLowerCase().includes(lowerCaseSearchString) ||
-        movement.checkin?.crates.some((crate) =>
+    return dateFilteredMovements.filter((movement) => {
+      const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
+      const matchesFarmer =
+        movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString) ??
+        movement.checkout.crates.some((crate) =>
           crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
-        ) ||
-        sortMovementCrops(movement).some((crop) =>
-          crop.toLowerCase().includes(lowerCaseSearchString)
-        )
-    );
+        );
+
+      const crops = sortMovementCrops(movement);
+      const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(lowerCaseSearchString));
+
+      return matchesCode || matchesFarmer || matchesCrop;
+    });
   }, [dateFilteredMovements, search]);
 
   const { totalCheckIns, totalCrates, totalUsers, totalWeight } = useMemo(() => {

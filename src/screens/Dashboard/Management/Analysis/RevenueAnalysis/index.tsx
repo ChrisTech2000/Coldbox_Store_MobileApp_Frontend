@@ -107,15 +107,21 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
   const filteredMovements = useMemo(() => {
     if (!search) return dateFilteredMovements;
-    const lowerSearch = search.toLowerCase();
-    return dateFilteredMovements.filter(
-      (movement) =>
-        movement.code.toLowerCase().includes(lowerSearch) ||
-        movement.checkout?.crates.some((crate) =>
-          crate.ownerName?.toLowerCase().includes(lowerSearch)
-        ) ||
-        sortMovementCrops(movement).some((crop) => crop.toLowerCase().includes(lowerSearch))
-    );
+    const lowerCaseSearchString = search.toLowerCase();
+
+    return dateFilteredMovements.filter((movement) => {
+      const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
+      const matchesFarmer =
+        movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString) ??
+        movement.checkout.crates.some((crate) =>
+          crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
+        );
+
+      const crops = sortMovementCrops(movement);
+      const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(lowerCaseSearchString));
+
+      return matchesCode || matchesFarmer || matchesCrop;
+    });
   }, [dateFilteredMovements, search]);
 
   useEffect(() => reset, []);
