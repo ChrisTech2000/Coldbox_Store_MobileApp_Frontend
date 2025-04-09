@@ -121,6 +121,7 @@ export enum EUserEndpoints {
   GET_USERS = 'user/v1/users/',
   INVITE_EMPLOYEE = 'user/v1/service-provider-invite/',
   INVITE_OPERATOR = 'user/v1/operator-invite/',
+  OPERATOR_PROXY_USER_DELETE = 'user/v1/users/:userId/operator-proxy-delete/',
   UPDATE_FARMER = 'user/v1/farmers/:farmerId/',
   UPDATE_FARMER_SURVEYS = 'user/v1/farmer-survey/:farmerId/',
   UPDATE_USER = 'user/v1/users/:userId/',

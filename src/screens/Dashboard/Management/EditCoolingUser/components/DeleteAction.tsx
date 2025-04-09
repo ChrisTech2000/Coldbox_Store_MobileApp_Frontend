@@ -71,7 +71,7 @@ export default function DeleteAction(props: Props) {
     try {
       if (typeof contextualFarmer === 'undefined' || !company) throw new Error(); // safe guard
       toggleProcessing();
-      if (!contextualFarmer.userCode) await ColdtivateService.deleteUser(userId);
+      if (!contextualFarmer.userCode) await ColdtivateService.operatorProxyUserDelete(userId);
       else await ColdtivateService.removeCompany({ farmerId, companyId: company.id });
       await revalidateCache();
       resetPopup();
