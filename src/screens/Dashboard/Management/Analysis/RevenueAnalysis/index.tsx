@@ -92,31 +92,35 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     paymentMethods
   );
 
-  const sortedMovements = useMemo(() => {
-    if (!revenueData) return [];
-    return revenueData.slice().sort((a, b) => sortMovements(a, b, sorting));
-  }, [revenueData, sorting]);
-
-  const dateFilteredMovements = useMemo(() => {
-    if (!startDate || !endDate) return sortedMovements;
-    return sortedMovements.filter((movement) => {
-      const date = new Date(movement.date);
-      return (!startDate || date >= startDate) && (!endDate || date <= endDate);
-    });
-  }, [sortedMovements, startDate, endDate]);
-
   const filteredMovements = useMemo(() => {
-    if (!search) return dateFilteredMovements;
-    const lowerSearch = search.toLowerCase();
-    return dateFilteredMovements.filter(
-      (movement) =>
-        movement.code.toLowerCase().includes(lowerSearch) ||
-        movement.checkout?.crates.some((crate) =>
-          crate.ownerName?.toLowerCase().includes(lowerSearch)
-        ) ||
-        sortMovementCrops(movement).some((crop) => crop.toLowerCase().includes(lowerSearch))
-    );
-  }, [dateFilteredMovements, search]);
+    if (!revenueData) return [];
+
+    const lowerCaseSearchString = search ? search.toLowerCase() : null;
+
+    return revenueData
+      .slice()
+      .sort((a, b) => sortMovements(a, b, sorting))
+      .filter((movement) => {
+        const date = new Date(movement.date);
+        if (startDate && date < startDate) return false;
+        if (endDate && date > endDate) return false;
+
+        if (!lowerCaseSearchString) return true;
+
+        const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
+        const matchesFarmer =
+          movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString) ||
+          (movement.checkout &&
+            movement.checkout.crates.some((crate) =>
+              crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
+            ));
+        const crops = sortMovementCrops(movement);
+        const matchesCrop = crops.some((crop) =>
+          crop.toLowerCase().includes(lowerCaseSearchString)
+        );
+        return matchesCode || matchesFarmer || matchesCrop;
+      });
+  }, [revenueData, sorting, startDate, endDate, search]);
 
   useEffect(() => reset, []);
 
