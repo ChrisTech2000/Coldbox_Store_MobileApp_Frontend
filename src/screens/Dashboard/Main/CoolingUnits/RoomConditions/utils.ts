@@ -56,11 +56,11 @@ export function processTemperatures(
   return {
     info: {
       lastUpdated: lastEntry.datetimeStamp,
-      temperature: parseInt(lastEntry.value),
+      temperature: parseFloat(lastEntry.value),
     },
     datums: clone.map((item) => ({
       timestamp: item.datetimeStamp,
-      temperature: parseInt(item.value),
+      temperature: parseFloat(item.value),
     })),
   };
 }
