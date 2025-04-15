@@ -762,6 +762,18 @@ class ColdtivateService extends HttpClient {
     }
   };
 
+  public operatorProxyUserDelete = async (userId: number): Promise<Record<string, string>> => {
+    try {
+      const url = subs(EUserEndpoints.OPERATOR_PROXY_USER_DELETE, { userId });
+      const { data } = await this.delete<Record<string, string>>(url);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
   public getUser = async (userId: number): Promise<User> => {
     try {
       const { data } = await this.get<User>(subs(EUserEndpoints.UPDATE_USER, { userId }));
