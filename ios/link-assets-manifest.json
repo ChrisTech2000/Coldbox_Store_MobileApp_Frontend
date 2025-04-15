@@ -54,6 +54,10 @@
       "sha1": "3caaa2bd3439db8e56f5536f83851d0e591376a2"
     },
     {
+      "path": "src/assets/fonts/NotoSansArabic-VariableFont.ttf",
+      "sha1": "9b9b809d31775dbe4ed614105510f6cbf588e6d2"
+    },
+    {
       "path": "src/assets/fonts/NotoSansDevanagari-VariableFont.ttf",
       "sha1": "49e1a2b0af8f60e601fbb3c3bbbf28d280f391df"
     },

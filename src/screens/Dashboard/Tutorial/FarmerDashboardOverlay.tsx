@@ -6,7 +6,7 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useRightDrawerStore } from '#navigation/Dashboard';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useTutorialStore } from '#stores/tutorial';
@@ -41,7 +41,7 @@ export function Dashboard1Overlay({ next, goTo, stop }: IOverlayComponentProps) 
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               rootNavigation.dispatch(DrawerActions.openDrawer());
@@ -53,7 +53,7 @@ export function Dashboard1Overlay({ next, goTo, stop }: IOverlayComponentProps) 
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={next}
             labelStyle="text-green-primary"
@@ -102,7 +102,7 @@ export function Dashboard2Overlay({ next, goTo, stop }: IOverlayComponentProps) 
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               goTo(EFarmerTutorialSteps.DASHBOARD_STEP_1);
@@ -113,7 +113,7 @@ export function Dashboard2Overlay({ next, goTo, stop }: IOverlayComponentProps) 
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={next}
             labelStyle="text-green-primary"
@@ -162,7 +162,7 @@ export function Dashboard3Overlay({ next, goTo, stop }: IOverlayComponentProps) 
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               goTo(EFarmerTutorialSteps.DASHBOARD_STEP_2);
@@ -173,7 +173,7 @@ export function Dashboard3Overlay({ next, goTo, stop }: IOverlayComponentProps) 
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={next}
             labelStyle="text-green-primary"
@@ -219,7 +219,7 @@ export function Dashboard4Overlay({ next, goTo, stop }: IOverlayComponentProps) 
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               goTo(EFarmerTutorialSteps.DASHBOARD_STEP_3);
@@ -230,7 +230,7 @@ export function Dashboard4Overlay({ next, goTo, stop }: IOverlayComponentProps) 
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={next}
             labelStyle="text-green-primary"
@@ -276,7 +276,7 @@ export function Dashboard5Overlay({ next, goTo, stop }: IOverlayComponentProps) 
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               goTo(EFarmerTutorialSteps.DASHBOARD_STEP_4);
@@ -287,7 +287,7 @@ export function Dashboard5Overlay({ next, goTo, stop }: IOverlayComponentProps) 
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={next}
             labelStyle="text-green-primary"
@@ -320,6 +320,8 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
 
   const [isOpen, toggle] = useRightDrawerStore((store) => [store.isOpen, store.toggle]);
 
+  const isRTL = LanguageManager.isRTL;
+
   return (
     <View tw="h-full w-full absolute">
       {isOpen ? null : (
@@ -329,7 +331,7 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
               position: 'absolute',
               top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 30 : 70,
               left: screenHeight <= SMALL_SCREEN_THRESHOLD ? '78%' : '80%',
-              transform: [{ rotate: '90deg' }],
+              transform: [{ rotate: '90deg' }, ...(isRTL ? [{ scaleY: -1 }] : [])],
             },
           ]}
         >
@@ -352,7 +354,7 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               if (isOpen) {
@@ -366,7 +368,7 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
               if (isOpen) {

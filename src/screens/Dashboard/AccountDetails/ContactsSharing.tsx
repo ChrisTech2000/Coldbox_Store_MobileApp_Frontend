@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { ActivityIndicator, Divider, List, Switch } from 'react-native-paper';
 import isNil from 'lodash/isNil';
 
@@ -16,6 +16,12 @@ import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import RBAC from '#common/RBAC';
 import reportCrash from '#ui/lib/reportCrash';
+import { cn } from '#ui/lib/cn';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-3',
+  ios: 'mx-3',
+});
 
 function ContactsSharing() {
   const { t } = useTranslationUtils();
@@ -65,7 +71,7 @@ function ContactsSharing() {
   }
 
   return (
-    <ScrollView tw="flex-1 p-3" showsVerticalScrollIndicator={false}>
+    <ScrollView tw={cn('flex-1 py-3', HORIZONTAL_SPACING)} showsVerticalScrollIndicator={false}>
       <View tw="space-y-3">
         <_Field
           label={t('Dashboard.AccountDetails.ContactsSharing.publicPhone')}

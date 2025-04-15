@@ -10,6 +10,7 @@ export const APP_LOCALES = {
   YORUBA: 'yo',
   HAUSA: 'ha',
   IGBO: 'ig',
+  ARABIC: 'ar',
 } as const;
 
 export type TranslationLocales = ValueOf<typeof APP_LOCALES>;

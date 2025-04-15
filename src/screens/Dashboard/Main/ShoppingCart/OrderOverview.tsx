@@ -1,6 +1,6 @@
 import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
@@ -23,6 +23,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { CoolingUnit } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
@@ -30,6 +31,11 @@ import { PickupDetailsCard } from './components/PickupDetailsCard';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
@@ -93,7 +99,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
 
   return (
     <React.Fragment>
-      <ScrollView tw="px-4 bg-white" showsVerticalScrollIndicator={false}>
+      <ScrollView tw={cn('bg-white', HORIZONTAL_SPACING)} showsVerticalScrollIndicator={false}>
         <View tw="pt-14 pb-24">
           <View tw="flex-1 pb-8 space-y-6">
             <View tw="items-center justify-center space-y-1.5 py-4">

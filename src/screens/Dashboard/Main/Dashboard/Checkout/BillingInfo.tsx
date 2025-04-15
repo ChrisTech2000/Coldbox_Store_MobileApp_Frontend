@@ -7,7 +7,7 @@ import { ActivityIndicator, Divider, Icon, Switch } from 'react-native-paper';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
@@ -369,7 +369,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             evt.stopPropagation();
             navigation.goBack();
           }}
-          icon="arrow-left"
+          icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
           disabled={isSubmitting}
         >
           {t('actions.back')}

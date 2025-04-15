@@ -9,6 +9,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { ECropType } from '#types/global';
+import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
 
 type Option = {
   id: ECropType;
@@ -54,7 +55,7 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
                   type: item.id,
                 });
               }}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={ListItemArrow}
             />
             <Divider tw="bg-gray-400" />
           </View>

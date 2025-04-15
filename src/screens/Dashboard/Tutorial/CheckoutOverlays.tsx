@@ -6,7 +6,7 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckOutStackRoutes } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
@@ -100,7 +100,7 @@ export function OperatorActionsOverlay({ next, goTo, stop }: IOverlayComponentPr
 
         <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
@@ -154,7 +154,7 @@ export function CheckOutScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               // eslint-disable-next-line
@@ -168,7 +168,7 @@ export function CheckOutScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
               navigation.navigate(
@@ -227,7 +227,7 @@ export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPr
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               // eslint-disable-next-line
@@ -250,7 +250,7 @@ export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPr
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
               rootNavigation.navigate('RootMainTabStack');

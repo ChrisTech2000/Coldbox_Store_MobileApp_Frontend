@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator, Icon } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -28,6 +28,7 @@ import { InnerTabs, Tab } from './components/InnerTabs';
 import { createSortingStore, SortingMenu } from './components/SortMenu';
 import { UsersContent } from './components/UsersContent';
 import { useComparisonData } from './store';
+import { BackArrowIcon } from '../components/GoBackArrow';
 
 export const useSortingStore = createSortingStore();
 
@@ -154,7 +155,7 @@ export function ComparisonSection() {
                 tw="flex flex-row items-center space-x-2 justify-start"
                 onPress={onBackToMain}
               >
-                <Icon source="arrow-left-circle-outline" size={15} />
+                <BackArrowIcon />
                 <Text variant="TextMedium" tw="text-base">
                   {t(`Dashboard.Analytics.companyTab.goBackButton`)}
                 </Text>

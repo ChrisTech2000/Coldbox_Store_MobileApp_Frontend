@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
+  Platform,
 } from 'react-native';
 import { Dialog, Divider, Icon, Portal, TextInput } from 'react-native-paper';
 
@@ -25,9 +26,15 @@ import type { ManagementCompany } from '#stores/management';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { type Crop, EUnitOfMeasurement } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
+import { cn } from '#ui/lib/cn';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { defaultValues as _defaultValues, FarmerSurveySchema } from './schema';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-5',
+  ios: 'mx-5',
+});
 
 export type FarmerSurveySchemaType = {
   weightDistribution: {
@@ -149,7 +156,10 @@ export function FarmersSurveyModal({
         ) : null}
         <Dialog.ScrollArea tw="px-0">
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <KeyboardAwareScrollView tw="pt-2 px-5 space-y-2" showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView
+              tw={cn('pt-2 space-y-2', HORIZONTAL_SPACING)}
+              showsVerticalScrollIndicator={false}
+            >
               {cropSelectionAvailable && (
                 <View tw="space-y-2">
                   <View tw="flex flex-row items-center justify-between space-x-1">

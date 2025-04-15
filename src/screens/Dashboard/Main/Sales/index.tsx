@@ -12,6 +12,7 @@ import {
   RefreshControl,
   ScrollView as RNScrollView,
   View,
+  Platform,
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -32,11 +33,17 @@ import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
+import { cn } from '#ui/lib/cn';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -104,7 +111,7 @@ function SalesRoot() {
   return (
     <View tw="flex-1">
       <RNScrollView
-        tw="p-4 bg-white"
+        tw={cn('py-4 bg-white', HORIZONTAL_SPACING)}
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         ref={scrollRef}

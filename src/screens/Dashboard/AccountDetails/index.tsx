@@ -1,8 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List } from 'react-native-paper';
-import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
@@ -15,6 +14,7 @@ import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { EApiGender, ERoles } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 import type {
   AccountDetailsRouteProps,
@@ -27,6 +27,12 @@ import { LocalizationPreferencesOverlay } from '../Tutorial/LocalizationPreferan
 import { PersonalDetailsOverlay } from '../Tutorial/PersonalDetailsOverlay';
 import { EFarmerTutorialSteps } from '../Tutorial/utils/constants';
 import DeleteAccountAction from './components/DeleteAccountAction';
+import { ListItemArrow } from './components/ListItemArrow';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
@@ -78,7 +84,10 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
 
   return (
     <React.Fragment>
-      <ScrollView tw="flex-1 pt-3 px-4 pb-8 space-y-6" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        tw={cn('flex-1 pt-3 pb-8 space-y-6', HORIZONTAL_SPACING)}
+        showsVerticalScrollIndicator={false}
+      >
         <View tw="space-y-3">
           <Text tw="text-base text-green-primary font-bold">
             {t('Dashboard.AccountDetails.sections.details')}
@@ -91,7 +100,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                 left={() => (
                   <Text tw="text-base w-[80%]">{t('navigation.dashboard.PersonalDetails')}</Text>
                 )}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                right={ListItemArrow}
                 onPress={(evt) => {
                   evt.stopPropagation();
                   if (!user) return; // safe guard
@@ -109,9 +118,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                     {t('navigation.dashboard.LocalizationPreferences')}
                   </Text>
                 )}
-                right={(props) => (
-                  <List.Icon {...props} icon="chevron-right" color={colors.gray[800]} />
-                )}
+                right={ListItemArrow}
                 onPress={(evt) => {
                   evt.stopPropagation();
                   if (!user) return; // safe guard
@@ -130,7 +137,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                       {t('navigation.history.BaseSurvey')}
                     </Text>
                   )}
-                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                  right={ListItemArrow}
                   onPress={(evt) => {
                     evt.stopPropagation();
                     if (!farmerId) return; // safe guard
@@ -157,7 +164,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                     left={() => (
                       <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
                     )}
-                    right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                    right={ListItemArrow}
                     onPress={(evt) => {
                       evt.stopPropagation();
                       props.navigation.navigate('PayoutSettings');
@@ -175,7 +182,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                     left={() => (
                       <Text tw="text-base w-[80%]">{t('Dashboard.Management.Coupons.title')}</Text>
                     )}
-                    right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                    right={ListItemArrow}
                     onPress={(evt) => {
                       evt.stopPropagation();
                       props.navigation.navigate('CouponStack');
@@ -191,7 +198,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                   left={() => (
                     <Text tw="text-base w-[80%]">{t('navigation.dashboard.ContactsSharing')}</Text>
                   )}
-                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                  right={ListItemArrow}
                   onPress={(evt) => {
                     evt.stopPropagation();
                     props.navigation.navigate('ContactsSharing');

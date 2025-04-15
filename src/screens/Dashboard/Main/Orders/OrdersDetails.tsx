@@ -9,6 +9,7 @@ import {
   NativeSyntheticEvent,
   ScrollView,
   View,
+  Platform,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
@@ -27,7 +28,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -44,6 +45,12 @@ import PaymentPendingBottomSheet from './components/PaymentPendingBottomSheet';
 import { useDashboardStore } from '#stores/dashboard';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
+import { cn } from '#ui/lib/cn';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
@@ -184,14 +191,18 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
           onPress={props.navigation.goBack}
           tw="flex flex-row space-x-1 mt-4 pl-2 bg-white items-center"
         >
-          <MaterialCommunityIcon name="chevron-left" size={20} color={colors.gray[700]} />
+          <MaterialCommunityIcon
+            name={LanguageManager.isRTL ? 'chevron-right' : 'chevron-left'}
+            size={20}
+            color={colors.gray[700]}
+          />
 
           <Text tw="text-base">{t('actions.back')}</Text>
         </Touchable>
       ) : null}
 
       <ScrollView
-        tw="px-4 pt-4 bg-white"
+        tw={cn('pt-4 bg-white', HORIZONTAL_SPACING)}
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         ref={scrollRef}

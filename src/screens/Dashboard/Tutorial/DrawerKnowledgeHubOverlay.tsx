@@ -4,7 +4,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardRoutes } from '#navigation/Dashboard';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
@@ -34,7 +34,7 @@ export function DrawerKnowledgeHubOverlay({ next, goTo, stop }: IOverlayComponen
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               rootNavigation.navigate('AccountDetails', { screen: 'Root', params: undefined });
@@ -46,7 +46,7 @@ export function DrawerKnowledgeHubOverlay({ next, goTo, stop }: IOverlayComponen
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={next}
             labelStyle="text-green-primary"

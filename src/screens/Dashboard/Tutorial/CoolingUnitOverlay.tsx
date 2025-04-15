@@ -8,7 +8,7 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
@@ -43,7 +43,7 @@ export function CoolingUnitOverlay({ next, goTo, stop }: IOverlayComponentProps)
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.OPERATOR) {
@@ -63,7 +63,7 @@ export function CoolingUnitOverlay({ next, goTo, stop }: IOverlayComponentProps)
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={
               user?.role === ERoles.OPERATOR

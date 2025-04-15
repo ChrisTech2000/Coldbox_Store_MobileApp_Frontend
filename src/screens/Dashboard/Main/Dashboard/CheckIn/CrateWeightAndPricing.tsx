@@ -244,16 +244,14 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               const isDisabled = applyToAll && index > 0;
               return (
                 <View tw="flex-row items-center my-3 justify-between">
-                  <View tw="flex-col self-end px-3 self-center mt-5">
+                  <View tw="flex-col items-center px-3 mt-5 self-end">
                     <Icon
                       name="basket-outline"
                       size={30}
                       color={isDisabled ? colors.gray[400] : paperTheme.colors.onSurface}
                     />
-                    <Text
-                      tw={cn('text-sm self-center w-12 text-wrap', isDisabled && 'text-gray-400')}
-                    >
-                      #{' '}
+                    <Text tw={cn('text-sm w-12 text-center', isDisabled && 'text-gray-400')}>
+                      #&nbsp;
                       {areTagsDefined
                         ? (item.tag ??
                           t(

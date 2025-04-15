@@ -10,7 +10,7 @@ import colors from 'tailwindcss/colors';
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
@@ -287,6 +287,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     }
   }
 
+  const isRTL = LanguageManager.isRTL;
+
   return (
     <View tw="flex-1">
       <View tw="flex-1 p-4">
@@ -323,13 +325,13 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
         <ScrollView showsVerticalScrollIndicator={false}>
           {produces.length > 0 ? (
-            <Text tw="text-base mt-4 mb-2 self-center">
+            <Text tw={cn('text-base mt-4 mb-2 self-center', isRTL && 'self-start')}>
               {t('Dashboard.CrateManagement.CheckIn.cratesAddedLabel')}
             </Text>
           ) : null}
 
           {produces.length === 0 ? (
-            <Text tw="text-base mt-6 self-center text-gray-600">
+            <Text tw={cn('text-base mt-6 self-center text-gray-600', isRTL && 'self-start')}>
               {t('Dashboard.CrateManagement.CheckIn.emptyState')}
             </Text>
           ) : null}

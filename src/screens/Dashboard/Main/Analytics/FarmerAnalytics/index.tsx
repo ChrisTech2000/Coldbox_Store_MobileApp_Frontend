@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator, Icon } from 'react-native-paper';
+import { TouchableOpacity, View, Platform } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
 import Logo from '#assets/images/coldtivate_logo.svg';
 
@@ -17,6 +17,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import type { Farmer } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 import {
   CONSTRAINT_EXCEPTIONS,
@@ -37,6 +38,12 @@ import { ImpactTab } from './components/ImpactTab';
 import { InnerTabs, Tab } from './components/InnerTabs';
 import { useFarmerAnalyticsData } from './store';
 import { useDashboardCompanyStore } from '../../Dashboard';
+import { BackArrowIcon } from '../components/GoBackArrow';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 export function FarmerAnalytics() {
   const { t } = useTranslationUtils();
@@ -180,7 +187,10 @@ export function FarmerAnalytics() {
 
   return (
     <React.Fragment>
-      <ScrollView tw="flex-1 px-4 pt-4 mb-20" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        tw={cn('flex-1 pt-4 mb-20', HORIZONTAL_SPACING)}
+        showsVerticalScrollIndicator={false}
+      >
         <View tw="space-y-4 pb-8">
           {!configData ? (
             <Configuration openModal={() => setIsModalOpen(true)} />
@@ -191,7 +201,7 @@ export function FarmerAnalytics() {
                   tw="flex flex-row items-center space-x-2 justify-start"
                   onPress={onBackToMain}
                 >
-                  <Icon source="arrow-left-circle-outline" size={15} />
+                  <BackArrowIcon />
                   <Text variant="TextMedium" tw="text-base">
                     {t(`Dashboard.Analytics.companyTab.goBackButton`)}
                   </Text>

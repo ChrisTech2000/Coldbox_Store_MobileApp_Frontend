@@ -11,7 +11,7 @@ import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -281,7 +281,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
             evt.stopPropagation();
             navigation.goBack();
           }}
-          icon="arrow-left"
+          icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
         >
           {t('actions.back')}
         </Button>
@@ -291,7 +291,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           uppercase
           onPress={onNext}
           contentStyle="flex flex-row-reverse items-center"
-          icon="arrow-right"
+          icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
           disabled={selectedCrates.length === 0}
         >
           {t('actions.next')}

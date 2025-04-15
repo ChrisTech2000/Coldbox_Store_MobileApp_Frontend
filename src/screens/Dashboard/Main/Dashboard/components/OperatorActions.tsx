@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, TouchableOpacity, View, Dimensions } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Dialog, Icon, Portal, TextInput } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -10,7 +10,7 @@ import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
 import CratesManagement from '#assets/icons/crates-management.svg';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardRoutes } from '#navigation/Dashboard';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -37,6 +37,8 @@ import { USER_WITHOUT_PHONE } from '#constants/general';
 
 type ManagementMode = 'check-in' | 'check-out';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
 export function OperatorActions({
   navigation,
   coolingUnit,
@@ -52,10 +54,15 @@ export function OperatorActions({
   const [selectedUser, setSelectedUser] = useState<Farmer | undefined>();
   const [search, setSearch] = useState<string>('');
 
+  const isRTL = LanguageManager.isRTL;
+
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_1,
     OverlayComponent: OperatorActionsOverlay,
     onPressMask: () => setIsCrateManagementOpen(true),
+    layoutAdjustments: {
+      x: isRTL ? SCREEN_WIDTH - 65 : undefined,
+    },
   });
 
   const { onLayout: onInitiateCheckoutLayout } = useWalkthroughStep({
@@ -63,11 +70,17 @@ export function OperatorActions({
     OverlayComponent: CheckoutOverlay,
     onStart: () => setIsCrateManagementOpen(true),
     onFinish: () => setIsCrateManagementOpen(false),
+    layoutAdjustments: {
+      x: isRTL ? SCREEN_WIDTH - 108 : undefined,
+    },
   });
 
   const { onLayout: onCheckInLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_2,
     OverlayComponent: CheckInButtonOverlay,
+    layoutAdjustments: {
+      x: isRTL ? SCREEN_WIDTH - 157 : undefined,
+    },
   });
 
   const { data, isLoading } = useApiCall(

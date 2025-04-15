@@ -6,13 +6,14 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { EFarmerTutorialSteps } from './utils/constants';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -40,7 +41,7 @@ export function CoolingUserSurveyOverlay({ next, goTo, stop }: IOverlayComponent
             tw="pl-4 pr-7 py-2 w-[90%]"
             title={undefined}
             left={() => <Text tw="text-base w-full">{t('navigation.history.BaseSurvey')}</Text>}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
         </View>
 
@@ -62,7 +63,7 @@ export function CoolingUserSurveyOverlay({ next, goTo, stop }: IOverlayComponent
 
           <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
             <Button
-              icon="arrow-left"
+              icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
               mode="text"
               onPress={() => {
                 goTo(EFarmerTutorialSteps.GO_TO_PERSONAL_DETAILS);
@@ -73,7 +74,7 @@ export function CoolingUserSurveyOverlay({ next, goTo, stop }: IOverlayComponent
             </Button>
 
             <Button
-              icon="arrow-right"
+              icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
               mode="text"
               onPress={() => {
                 rootNavigation.goBack();

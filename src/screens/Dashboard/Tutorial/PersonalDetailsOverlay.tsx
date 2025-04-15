@@ -6,13 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { EFarmerTutorialSteps } from './utils/constants';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -40,7 +41,7 @@ export function PersonalDetailsOverlay({ next, goTo, stop }: IOverlayComponentPr
             left={() => (
               <Text tw="text-base w-full">{t('navigation.dashboard.PersonalDetails')}</Text>
             )}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
         </View>
 
@@ -62,7 +63,7 @@ export function PersonalDetailsOverlay({ next, goTo, stop }: IOverlayComponentPr
 
           <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
             <Button
-              icon="arrow-left"
+              icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
               mode="text"
               onPress={() => {
                 goTo(EFarmerTutorialSteps.GO_TO_LOCALIZATION_PREFERENCES_STEP);
@@ -73,7 +74,7 @@ export function PersonalDetailsOverlay({ next, goTo, stop }: IOverlayComponentPr
             </Button>
 
             <Button
-              icon="arrow-right"
+              icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
               mode="text"
               onPress={next}
               labelStyle="text-green-primary"

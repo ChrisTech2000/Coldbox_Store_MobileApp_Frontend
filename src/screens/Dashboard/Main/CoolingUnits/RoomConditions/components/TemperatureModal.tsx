@@ -7,9 +7,10 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useToggle } from '#ui/hooks/useToggle';
+import { cn } from '#ui/lib/cn';
 
 type FormValues<T = string> = { temperature: T };
 type PreprocessedFormValues = FormValues<number>;
@@ -56,8 +57,10 @@ export default function TemperatureModal(props: Props) {
     }
   }
 
+  const isRTL = LanguageManager.isRTL;
+
   return (
-    <View>
+    <View tw="w-full px-4">
       <Button
         mode="contained"
         tw="mt-3"
@@ -68,7 +71,7 @@ export default function TemperatureModal(props: Props) {
       </Button>
 
       {props.hasSensorIntegration ? (
-        <Text tw="px-16 mt-2 text-zinc-500 text-center">
+        <Text tw={cn('px-16 mt-2 text-zinc-500 text-center', isRTL && 'text-left px-2 py-3.5')}>
           {t('Dashboard.TemperatureAlert.sensorHint')}
         </Text>
       ) : null}

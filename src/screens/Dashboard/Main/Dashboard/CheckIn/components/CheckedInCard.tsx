@@ -8,9 +8,10 @@ import ColdRoom from '#assets/icons/coldroom.svg';
 import { Text } from '#ui/components/Text';
 
 import { API_BASE_URL } from '#constants/environment';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { ProduceCrate } from '#stores/checkIn';
 import { CoolingUnit, ECoolingUnitMetric, EPricingType } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 import { CrateSetupModal } from './CrateSetupModal';
 import { SetupSchema } from '../CrateSetup';
@@ -63,6 +64,8 @@ export function CheckedInCard({
       item.price / item.crates.reduce((acc, cur) => (acc += cur.isSellable ? cur.weight : 0), 0)
     );
   }, [item]);
+
+  const isRTL = LanguageManager.isRTL;
 
   return (
     <View tw="rounded-md border border-gray-300 mb-2">
@@ -163,7 +166,13 @@ export function CheckedInCard({
         : null}
 
       <TouchableOpacity onPress={() => setIsExtended(!isExtended)}>
-        <Text tw="self-center text-base text-green-primary my-2">
+        <Text
+          tw={cn(
+            'self-center text-base text-green-primary mt-2 mb-2',
+            isRTL && 'self-start ml-4',
+            isExtended && 'mt-3 mb-2'
+          )}
+        >
           {isExtended
             ? t('Dashboard.CrateManagement.CheckIn.seeLess')
             : t('Dashboard.CrateManagement.CheckIn.seeMore')}

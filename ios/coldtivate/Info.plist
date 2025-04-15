@@ -88,6 +88,7 @@
 		<string>NotoSansDevanagari-VariableFont.ttf</string>
 		<string>NotoSansGujarati-VariableFont.ttf</string>
 		<string>NotoSansOriya-VariableFont.ttf</string>
+		<string>NotoSansArabic-VariableFont.ttf</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

@@ -5,7 +5,7 @@ import { Dimensions, LayoutChangeEvent } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Drawer } from 'react-native-paper';
 
-import type { TranslationPaths, Translator } from '#i18n/utils';
+import { LanguageManager, TranslationPaths, Translator } from '#i18n/utils';
 import { DrawerAccountDetailsOverlay } from '#screens/Dashboard/Tutorial/DrawerAccountDetailsOverlay';
 import { DrawerFAQOverlay } from '#screens/Dashboard/Tutorial/DrawerFAQOverlay';
 import { DrawerKnowledgeHubOverlay } from '#screens/Dashboard/Tutorial/DrawerKnowledgeHubOverlay';
@@ -41,11 +41,14 @@ export function DrawerItem({ t, datums, routeName, focusedRoute, navigation }: D
   const drawerStatus = useDrawerStatus();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
 
+  const isRTL = LanguageManager.isRTL;
+
   const { start, onLayout: onTutorialLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.REPEAT_TUTORIAL_STEP,
     OverlayComponent: RepeatTutorialOverlay,
     layoutAdjustments: {
-      addWidth: screenWidth / 2,
+      addWidth: isRTL ? undefined : screenWidth / 2,
+      x: isRTL ? 0 : undefined,
     },
   });
 
@@ -53,7 +56,8 @@ export function DrawerItem({ t, datums, routeName, focusedRoute, navigation }: D
     number: ECommonTutorialSteps.GO_TO_MANAGEMENT_STEP,
     OverlayComponent: DrawerManagementOverlay,
     layoutAdjustments: {
-      addWidth: screenWidth / 2,
+      addWidth: isRTL ? undefined : screenWidth / 2,
+      x: isRTL ? 0 : undefined,
     },
   });
 
@@ -61,7 +65,8 @@ export function DrawerItem({ t, datums, routeName, focusedRoute, navigation }: D
     number: EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP,
     OverlayComponent: DrawerAccountDetailsOverlay,
     layoutAdjustments: {
-      addWidth: screenWidth / 2,
+      addWidth: isRTL ? undefined : screenWidth / 2,
+      x: isRTL ? 0 : undefined,
     },
   });
 
@@ -69,7 +74,8 @@ export function DrawerItem({ t, datums, routeName, focusedRoute, navigation }: D
     number: EFarmerTutorialSteps.GO_TO_KNOWLEDGE_HUB_STEP,
     OverlayComponent: DrawerKnowledgeHubOverlay,
     layoutAdjustments: {
-      addWidth: screenWidth / 2,
+      addWidth: isRTL ? undefined : screenWidth / 2,
+      x: isRTL ? 0 : undefined,
     },
   });
 
@@ -77,7 +83,8 @@ export function DrawerItem({ t, datums, routeName, focusedRoute, navigation }: D
     number: EFarmerTutorialSteps.GO_TO_FAQ_STEP,
     OverlayComponent: DrawerFAQOverlay,
     layoutAdjustments: {
-      addWidth: screenWidth / 2,
+      addWidth: isRTL ? undefined : screenWidth / 2,
+      x: isRTL ? 0 : undefined,
     },
   });
 

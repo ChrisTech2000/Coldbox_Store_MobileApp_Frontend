@@ -60,7 +60,7 @@ function CoolingUnits(props: ManagementRouteProps<'CoolingUnits'>) {
               left={(props) => <List.Icon {...props} icon="map-marker-outline" />}
             />
             {!section.data.length && (
-              <Text tw="m-4 text-base text-center text-gray-400">
+              <Text tw="m-4 text-base text-left text-gray-400">
                 {t('Dashboard.Management.CoolingUnit.emptyState')}
               </Text>
             )}

@@ -6,7 +6,7 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
@@ -26,12 +26,14 @@ export function AddCoolingUserNavigationOverLay({ next, goTo, stop }: IOverlayCo
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
+  const isRTL = LanguageManager.isRTL;
 
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
         tw={cn(
-          'absolute right-2 w-[15%] h-14',
+          'absolute w-[15%] h-14',
+          isRTL ? 'right-8' : 'right-2',
           screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-6' : 'top-14'
         )}
         onPress={() => {
@@ -40,11 +42,7 @@ export function AddCoolingUserNavigationOverLay({ next, goTo, stop }: IOverlayCo
         }}
       >
         <Animated.View
-          style={[
-            {
-              opacity: blinkAnim,
-            },
-          ]}
+          style={{ opacity: blinkAnim }}
           tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-9 left-4' : 'top-8 left-5'}
         >
           <MaterialIcon
@@ -73,7 +71,7 @@ export function AddCoolingUserNavigationOverLay({ next, goTo, stop }: IOverlayCo
 
         <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               goTo(EOperatorTutorialSteps.LIST_COOLING_USERS_STEP);

@@ -4,8 +4,7 @@ import Roboto from '#assets/fonts/Roboto-Regular.ttf';
 import NotoSansDevanagari from '#assets/fonts/NotoSansDevanagari-VariableFont.ttf';
 import NotoSansOriya from '#assets/fonts/NotoSansOriya-VariableFont.ttf';
 import NotoSansGujarati from '#assets/fonts/NotoSansGujarati-VariableFont.ttf';
-
-// TODO: download and import "Noto Sans Arabic" font to support Arabic language text rendering (RTL related)
+import NotoSansArabic from '#assets/fonts/NotoSansArabic-VariableFont.ttf';
 
 import { LanguageManager } from '#i18n/utils';
 
@@ -17,6 +16,8 @@ export default function useSkiaFont(fontSize?: number) {
       return useFontLoader(NotoSansOriya, fontSize);
     case 'gu':
       return useFontLoader(NotoSansGujarati, fontSize);
+    case 'ar':
+      return useFontLoader(NotoSansArabic, fontSize);
     default:
       return useFontLoader(Roboto, fontSize);
   }

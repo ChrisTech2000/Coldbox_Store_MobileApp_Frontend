@@ -5,7 +5,7 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
@@ -97,7 +97,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
 
         <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => goTo(ECommonTutorialSteps.REPEAT_TUTORIAL_STEP)}
             labelStyle="text-green-primary"

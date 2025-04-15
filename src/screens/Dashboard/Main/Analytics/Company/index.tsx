@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ActivityIndicator, Icon } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -28,6 +28,7 @@ import { InnerTabs } from './components/InnerTabs';
 import { UsersContent } from './components/UsersContent';
 import { UtilizationContent } from './components/UtilizationContent';
 import { useCompanyData } from './store';
+import { BackArrowIcon } from '../components/GoBackArrow';
 
 export type Tab = 'users' | 'utilization' | 'impact';
 
@@ -138,7 +139,7 @@ export function CompanySection() {
             tw="flex flex-row w-full items-center space-x-2 justify-start"
             onPress={() => setActiveTab(undefined)}
           >
-            <Icon source="arrow-left-circle-outline" size={15} />
+            <BackArrowIcon />
             <Text variant="TextMedium" tw="text-base">
               {t(`Dashboard.Analytics.companyTab.goBackButton`)}
             </Text>

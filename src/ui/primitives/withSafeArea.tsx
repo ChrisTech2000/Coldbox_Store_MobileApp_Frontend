@@ -4,7 +4,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Boundaries = 'top' | 'bottom';
 
-export const BOTTOM_NAV_HEIGHT = Platform.OS === 'android' ? 75 : 108;
+export const BOTTOM_NAV_HEIGHT = Platform.select({
+  ios: 108,
+  default: 75,
+});
 
 export function withSafeArea<T extends object>(
   WrappedComponent: ComponentType<T>,
@@ -43,6 +46,8 @@ export function withSafeArea<T extends object>(
       </View>
     );
   };
+
+  SafeAreaInsets.displayName = `withSafeArea(${WrappedComponent.displayName || WrappedComponent.name || 'ScreenComponent'})`;
 
   return SafeAreaInsets;
 }

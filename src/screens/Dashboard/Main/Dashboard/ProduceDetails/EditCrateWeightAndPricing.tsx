@@ -403,16 +403,16 @@ function EditCrateWeightAndPricing(
               const isDisabled = applyToAll && index > 0;
               return (
                 <View tw="flex-row items-center justify-between my-3">
-                  <View tw="flex-col self-end px-3">
+                  <View tw="flex-col items-center justify-center px-3 self-end">
                     <Icon
                       name="basket-outline"
                       size={30}
                       color={isDisabled ? colors.gray[400] : paperTheme.colors.onSurface}
                     />
                     <Text
-                      tw={cn('text-sm self-center w-12 text-wrap', isDisabled && 'text-gray-400')}
+                      tw={cn('text-sm text-center w-12 text-wrap', isDisabled && 'text-gray-400')}
                     >
-                      #{' '}
+                      #&nbsp;
                       {areCrateTagsSet
                         ? item.tag ||
                           t(

@@ -31,6 +31,7 @@ import type { DashboardMainRoutePaths } from '../Main';
 import moize from 'moize';
 import * as BottomSheetUI from '#ui/components/BottomSheet';
 import type { BottomSheetBaseProps } from '#ui/components/BottomSheet';
+import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
 
 type NavigationState = TabNavigationState<ParamListBase>;
 type NavigationRoutes = Array<DashboardMainRoutePaths>;
@@ -194,7 +195,7 @@ const BottomSheet = forwardRef<
                   size: ICON_SIZE,
                 }) ?? null
               }
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={ListItemArrow}
               onPress={(evt) => {
                 evt.stopPropagation();
                 closeModal();

@@ -18,6 +18,7 @@ export default {
       ig: 'ଇଗ୍ବୋ',
       yo: 'ୟୋରୁବା',
       ha: 'ହାଉସା',
+      ar: 'Arabic', // TODO
     },
   },
   gender: {

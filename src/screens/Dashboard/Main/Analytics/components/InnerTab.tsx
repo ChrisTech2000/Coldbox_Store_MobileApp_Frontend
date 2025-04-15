@@ -1,10 +1,12 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-paper';
+import colors from 'tailwindcss/colors';
+
+import { Text } from '#ui/components/Text';
 
 import { cn } from '#ui/lib/cn';
-import { Text } from '#ui/components/Text';
-import colors from 'tailwindcss/colors';
+import { LanguageManager } from '#i18n/utils';
 
 type TabProps = {
   compactMode?: boolean;
@@ -51,9 +53,12 @@ export function Tab({ compactMode, disabled, name, icon, isActive, onSelect }: T
         {name}
       </Text>
 
-      {!compactMode && (
-        <Icon source="arrow-right" size={15} color={disabled ? colors.gray[300] : 'black'} />
-      )}
+      {!compactMode ? <_NavigationArrow color={disabled ? colors.gray[300] : 'black'} /> : null}
     </TouchableOpacity>
   );
+}
+
+function _NavigationArrow(props: { color: string }) {
+  const isRTL = LanguageManager.isRTL;
+  return <Icon source={isRTL ? 'arrow-left' : 'arrow-right'} size={15} color={props.color} />;
 }

@@ -6,7 +6,7 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardRoutes } from '#navigation/Dashboard';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
@@ -37,6 +37,7 @@ export function OperatorActionsOverlay({
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
+  const isRTL = LanguageManager.isRTL;
 
   return (
     <View tw="h-full w-full absolute">
@@ -54,7 +55,7 @@ export function OperatorActionsOverlay({
           style={[
             {
               opacity: blinkAnim,
-              transform: [{ rotate: '90deg' }],
+              transform: [{ rotate: '90deg' }, ...(isRTL ? [{ scaleY: -1 }] : [])],
               top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 25 : 50,
               left: -40,
             },
@@ -90,7 +91,7 @@ export function OperatorActionsOverlay({
         <Text tw="text-base">{t('tutorial.steps.initiateCheckIn1')}</Text>
         <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               goTo(ECommonTutorialSteps.COOLING_UNIT_STEP);
@@ -124,6 +125,7 @@ export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProp
   const navigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
+  const isRTL = LanguageManager.isRTL;
 
   return (
     <View tw="h-full w-full absolute">
@@ -146,7 +148,7 @@ export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProp
           style={[
             {
               opacity: blinkAnim,
-              transform: [{ rotate: '90deg' }],
+              transform: [{ rotate: '90deg' }, ...(isRTL ? [{ scaleY: -1 }] : [])],
               top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 60,
               left: screenHeight <= SMALL_SCREEN_THRESHOLD ? -45 : -30,
             },
@@ -175,7 +177,7 @@ export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProp
         <Text tw="text-base">{t('tutorial.steps.initiateCheckIn2')}</Text>
         <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
@@ -228,7 +230,7 @@ export function CheckIn1ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               rootNavigation.navigate('RootMainTabStack');
@@ -241,7 +243,7 @@ export function CheckIn1ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
               // eslint-disable-next-line
@@ -298,7 +300,7 @@ export function CheckIn2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               setProduces([]);
@@ -310,7 +312,7 @@ export function CheckIn2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={next}
             labelStyle="text-green-primary"
@@ -394,7 +396,7 @@ export function CheckIn3ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               goTo(EOperatorTutorialSteps.CHECK_IN_STEP_2);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
@@ -14,12 +14,19 @@ import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
+import { cn } from '#ui/lib/cn';
 
 import { LocationsOverlay } from '../Tutorial/LocationsOverlay';
 import { ManagementCoolingUnitsOverlay } from '../Tutorial/ManagementCoolingUnitsOverlay';
 import { ManagementEmployeesOperatorsOverlay } from '../Tutorial/ManagementEmployeesOperatorsOverlay';
 import { ManagementOverlay } from '../Tutorial/ManagementOverlay';
 import { EEmployeeTutorialSteps, EOperatorTutorialSteps } from '../Tutorial/utils/constants';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const { navigation } = props;
@@ -67,7 +74,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
   const coolingUnitsColor = disabledCoolingUnits ? colors.gray[400] : colors.gray[800];
 
   return (
-    <ScrollView tw="p-4" showsVerticalScrollIndicator={false}>
+    <ScrollView tw={cn('py-4', HORIZONTAL_SPACING)} showsVerticalScrollIndicator={false}>
       <View tw="space-y-3">
         <Text tw="text-base text-green-primary font-bold">
           {t('Dashboard.AccountDetails.sections.details')}
@@ -81,7 +88,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
               <Text tw="text-base w-[80%]">{t('navigation.management.CoolingUsers')}</Text>
             )}
             onPress={() => navigation.navigate('CoolingUsers')}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
           <Divider />
         </RBAC.ProtectedResource>
@@ -94,7 +101,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
               <Text tw="text-base w-[80%]">{t('navigation.management.CompanyDetails')}</Text>
             )}
             onPress={() => navigation.navigate('CompanyDetails')}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
           <Divider />
         </RBAC.ProtectedResource>
@@ -107,7 +114,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             onPress={() => {
               navigation.navigate('Locations');
             }}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
           <Divider />
         </RBAC.ProtectedResource>
@@ -128,9 +135,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
                 <Text tw="text-base w-[80%]">{t('navigation.management.CoolingUnits')}</Text>
               )
             }
-            right={(props) => (
-              <List.Icon {...props} icon="chevron-right" color={coolingUnitsColor} />
-            )}
+            right={(props) => <ListItemArrow {...props} color={coolingUnitsColor} />}
             titleStyle={{ color: coolingUnitsColor }}
             descriptionStyle={{ color: coolingUnitsColor }}
           />
@@ -145,7 +150,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             onPress={() => {
               navigation.navigate('Operators');
             }}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
           <Divider />
         </RBAC.ProtectedResource>
@@ -160,7 +165,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             onPress={() => {
               navigation.navigate('RegisteredEmployee');
             }}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
           <Divider />
         </RBAC.ProtectedResource>
@@ -175,7 +180,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             onPress={() => {
               navigation.navigate('RevenueAnalysis');
             }}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
           <Divider />
         </RBAC.ProtectedResource>
@@ -190,7 +195,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
             onPress={() => {
               navigation.navigate('UsageAnalysis');
             }}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
           <Divider />
         </RBAC.ProtectedResource>
@@ -209,7 +214,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
                 left={() => (
                   <Text tw="text-base w-[80%]">{t('navigation.dashboard.PayoutOptions')}</Text>
                 )}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                right={ListItemArrow}
                 onPress={(evt) => {
                   evt.stopPropagation();
                   props.navigation.navigate('PayoutSettings', { isCompanyView: true });
@@ -227,7 +232,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
                 left={() => (
                   <Text tw="text-base w-[80%]">{t('Dashboard.Management.Coupons.title')}</Text>
                 )}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                right={ListItemArrow}
                 onPress={(evt) => {
                   evt.stopPropagation();
                   props.navigation.navigate('CouponStack');
@@ -244,7 +249,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
               left={() => (
                 <Text tw="text-base w-[80%]">{t('navigation.management.DeliveryContacts')}</Text>
               )}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={ListItemArrow}
               onPress={(evt) => {
                 evt.stopPropagation();
                 props.navigation.navigate('DeliveryContacts');

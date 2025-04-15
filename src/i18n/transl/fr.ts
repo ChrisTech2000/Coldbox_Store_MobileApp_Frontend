@@ -18,6 +18,7 @@ export default {
       ig: 'Igbo',
       yo: 'Yoruba',
       ha: 'Haoussa',
+      ar: 'Arabic', // TODO
     },
   },
   gender: { female: 'Femme', male: 'Homme', other: 'Autre' },

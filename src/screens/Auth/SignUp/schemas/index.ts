@@ -16,6 +16,7 @@ export const LANGUAGE_CODES: Record<TranslationLocales, TranslationPaths> = {
   ha: 'languages.options.ha',
   yo: 'languages.options.yo',
   ig: 'languages.options.ig',
+  ar: 'languages.options.ar',
 };
 
 export const LANGUAGES = Object.keys(LANGUAGE_CODES);

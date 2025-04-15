@@ -7,7 +7,7 @@ import { List } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
@@ -17,6 +17,7 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 import { ECommonTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -47,7 +48,7 @@ export function LocationsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
             tw="pl-4 pr-7 py-2 w-[90%]"
             title={undefined}
             left={() => <Text tw="text-base w-full">{t('navigation.management.Locations')}</Text>}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            right={ListItemArrow}
           />
 
           <Animated.View
@@ -84,7 +85,7 @@ export function LocationsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
 
           <View tw="flex flex-row flex-wrap-reverse justify-center items-center mt-2">
             <Button
-              icon="arrow-left"
+              icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
               mode="text"
               onPress={() => {
                 rootNavigation.navigate('Dashboard');

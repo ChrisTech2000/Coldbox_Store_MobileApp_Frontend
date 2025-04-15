@@ -12,6 +12,7 @@ import {
   RefreshControl,
   ScrollView as RNScrollView,
   View,
+  Platform,
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,7 +30,7 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { dateFmt, LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
@@ -44,6 +45,11 @@ import CropsBottomSheet from './components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
 
 type Status = 'payment-pending' | 'cancelled' | 'paid' | 'payment-expired';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -119,7 +125,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   return (
     <View tw="flex-1">
       <RNScrollView
-        tw="px-4 p-4 bg-white"
+        tw={cn('py-4 bg-white', HORIZONTAL_SPACING)}
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         ref={scrollRef}
@@ -239,7 +245,11 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
                       </Text>
                     </View>
                   </View>
-                  <MaterialCommunityIcon name="chevron-right" size={28} color={colors.gray[700]} />
+                  <MaterialCommunityIcon
+                    name={LanguageManager.isRTL ? 'chevron-left' : 'chevron-right'}
+                    size={28}
+                    color={colors.gray[700]}
+                  />
                 </Touchable>
               );
             }}

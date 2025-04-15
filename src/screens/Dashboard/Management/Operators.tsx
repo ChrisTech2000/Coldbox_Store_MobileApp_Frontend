@@ -18,6 +18,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import type { User } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 type Invite = { phone: string };
 
@@ -119,7 +120,7 @@ function _propsFactory(
     props.onPress = () => {
       navigation.navigate('EditOperator', { userId: datum.id });
     };
-    props.right = (props) => <List.Icon {...props} icon="chevron-right" />;
+    props.right = ListItemArrow;
   } else {
     props.title = datum.phone;
   }

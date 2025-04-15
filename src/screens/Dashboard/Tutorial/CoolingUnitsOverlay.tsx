@@ -5,7 +5,7 @@ import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
@@ -52,7 +52,7 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.OPERATOR) {
@@ -71,7 +71,7 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.OPERATOR) {
@@ -133,7 +133,7 @@ export function RoomConditionsOverlay({ next, goTo, stop }: IOverlayComponentPro
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               // eslint-disable-next-line
@@ -147,7 +147,7 @@ export function RoomConditionsOverlay({ next, goTo, stop }: IOverlayComponentPro
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
               rootNavigation.navigate('RootMainTabStack');
