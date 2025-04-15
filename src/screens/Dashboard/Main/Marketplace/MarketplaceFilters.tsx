@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useMemo } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Platform, Dimensions, View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
@@ -17,6 +17,7 @@ import { MarketplaceRouteProps } from '#navigation/Dashboard/Main/Marketplace/Ma
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import { cn } from '#ui/lib/cn';
 
 import CompanyFilters from './components/CompanyFilter';
 import CoolingUnitFilters from './components/CoolingUnitFilter';
@@ -26,6 +27,11 @@ import MarketplaceFormManager, { type FormValues } from './modules/MarketplaceFo
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { type FilterItem, useMarketplaceFilters } from './store';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 const width = (Dimensions.get('window').width - 42) / 2;
 
@@ -42,7 +48,7 @@ function MarketplaceFilters(props: MarketplaceRouteProps<'MarketplaceFilters'>) 
 
   return (
     <React.Fragment>
-      <ScrollView tw="px-4 pt-3 bg-white" showsVerticalScrollIndicator={false}>
+      <ScrollView tw={cn('pt-3 bg-white', HORIZONTAL_SPACING)} showsVerticalScrollIndicator={false}>
         <View tw="flex-1 pb-8">
           <MarketplaceFormManager
             initialValues={_buildInitialValues()}

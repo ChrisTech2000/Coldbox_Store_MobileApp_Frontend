@@ -6,6 +6,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import type { AboutStackRouteProps } from '#navigation/Dashboard/About';
 import { useTranslationUtils } from '#i18n/utils';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 function About(props: AboutStackRouteProps<'Root'>) {
   const { navigation } = props;
@@ -17,28 +18,28 @@ function About(props: AboutStackRouteProps<'Root'>) {
       <List.Item
         title={t('Dashboard.About.runtimeAgree')}
         onPress={() => navigation.navigate('ComsolAgreement')}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
 
       <List.Item
         title={t('Dashboard.About.userLicense')}
         onPress={() => navigation.navigate('UserAgreement')}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
 
       <List.Item
         title={t('Dashboard.About.privacyPolicy')}
         onPress={() => navigation.navigate('Privacy')}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
 
       <List.Item
         title={t('Dashboard.About.comsolAbout')}
         onPress={() => navigation.navigate('ComsolAbout')}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
     </View>

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
 import { GenericError } from '#ui/components/GenericError';
@@ -23,6 +23,7 @@ import {
   EDateCropped,
   EPricingType,
 } from '#types/global';
+import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
 
 import colors from 'tailwindcss/colors';
 import { CrateSetupModal } from '../components/CrateSetupModal';
@@ -35,6 +36,11 @@ import CropDetails from './CropDetails';
 import CropHarvest from './CropHarvest';
 import FloatingFooter from './FloatingFooter';
 import PlannedDays from './PlannedDays';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 export type SetupSchema = {
   numberOfCrates: number;
@@ -277,7 +283,10 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
 
   return (
     <React.Fragment>
-      <KeyboardAwareScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView
+        tw={cn('py-4 bg-white', HORIZONTAL_SPACING)}
+        showsVerticalScrollIndicator={false}
+      >
         <View tw="flex-1 pb-48">
           <CropDetails cropName={contextualCrop.name} additionalInfo={contextualAdditionalInfo} />
 
@@ -321,9 +330,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                   </Text>
                 )}
                 right={(props) => (
-                  <List.Icon
+                  <ListItemArrow
                     {...props}
-                    icon="chevron-right"
                     color={!crates || crates.length === 0 ? colors.gray[400] : colors.gray[800]}
                   />
                 )}
@@ -344,7 +352,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                     {t('Dashboard.CrateManagement.CheckIn.Setup.individualCrateIdButton')}
                   </Text>
                 )}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                right={ListItemArrow}
               />
               <Divider tw="bg-gray-400" />
             </View>

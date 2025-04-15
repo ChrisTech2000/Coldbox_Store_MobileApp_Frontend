@@ -14,6 +14,7 @@ import { Text } from '#ui/components/Text';
 
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CoolingUnit } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 export type ConfigData = {
   startDate: Date;
@@ -110,10 +111,10 @@ export function ConfigurationModal({
 
 export function Configuration({ openModal }: { openModal: () => void }) {
   const { t } = useTranslationUtils();
-
+  const isRTL = LanguageManager.isRTL;
   return (
     <View tw="bg-gray-200 px-4 py-2 items-center w-full rounded-lg space-y-2">
-      <Text variant="TextMedium" tw="text-base text-center">
+      <Text variant="TextMedium" tw={cn('text-base text-center', isRTL && 'text-left')}>
         {t('Dashboard.Analytics.tabsShared.configurationMessage')}
       </Text>
       <Button mode="contained" contentStyle="bg-gray-800" icon="cog" onPress={openModal}>

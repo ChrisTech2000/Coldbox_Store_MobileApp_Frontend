@@ -10,7 +10,7 @@ import ColdRoom from '#assets/icons/coldroom.svg';
 import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { type DashboardProduce, EPricingType, ERoles, type Farmer } from '#types/global';
 
 import RBAC from '#common/RBAC';
@@ -191,7 +191,7 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
       </View>
 
       <TouchableOpacity tw="absolute right-[-3] top-[40%]" onPress={onNavigate}>
-        <Icon source="chevron-right" size={30} />
+        <Icon source={LanguageManager.isRTL ? 'chevron-left' : 'chevron-right'} size={30} />
       </TouchableOpacity>
     </View>
   );

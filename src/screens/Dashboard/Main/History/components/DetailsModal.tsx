@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Dimensions, FlatList, ScrollView, View } from 'react-native';
+import { Dimensions, FlatList, Platform, ScrollView, View } from 'react-native';
 import { Dialog, Divider, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
@@ -11,6 +11,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EInitiatedFor, EPaymentMethod, MovementCrate } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
@@ -19,6 +20,11 @@ const PAYMENT_METHOD_TRANSLATIONS: Partial<Record<EPaymentMethod, TranslationPat
   [EPaymentMethod.CREDIT_CARD]: 'Dashboard.Management.RevenueAnalysis.paymentType.creditCard',
   [EPaymentMethod.BANK_TRANSFER]: 'Dashboard.Management.RevenueAnalysis.paymentType.bankTransfer',
 };
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 type DetailsModalProps = {
   isOpen: boolean;
@@ -70,7 +76,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
     >
       <Dialog.Title>{t('Dashboard.History.stringTemplates.movementType.checkOut')}</Dialog.Title>
       <Dialog.ScrollArea tw="px-0">
-        <ScrollView tw="px-4 py-2" showsVerticalScrollIndicator>
+        <ScrollView tw={cn('py-2', HORIZONTAL_SPACING)} showsVerticalScrollIndicator>
           <View tw="space-y-1">
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">

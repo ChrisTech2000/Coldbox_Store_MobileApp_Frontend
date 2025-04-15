@@ -17,7 +17,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRoutes } from '#navigation/Dashboard/Main/HistoryTabStack';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
@@ -267,7 +267,10 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
                     <Text variant="TextMedium" tw="text-lg">
                       {survey.cropName}
                     </Text>
-                    <Icon source="chevron-right" size={20} />
+                    <Icon
+                      source={LanguageManager.isRTL ? 'chevron-left' : 'chevron-right'}
+                      size={20}
+                    />
                   </View>
                 </View>
                 {openFarmersSurveyModal === index ? (

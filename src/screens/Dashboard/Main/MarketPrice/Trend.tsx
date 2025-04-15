@@ -11,12 +11,13 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MarketPriceOverlay } from '#screens/Dashboard/Tutorial/MarketPriceOverlay';
 import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { PredictionCrop, PredictionMarket, PredictionState } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 import { TrendChart } from './components/TrendChart';
 import { usePriceTrendsStore } from './store';
@@ -67,9 +68,13 @@ function MarketPriceTrend() {
     );
   }
 
+  const isRTL = LanguageManager.isRTL;
+
   if (!allowedCountry) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10 mt-3">
+      <View
+        tw={cn('flex-1 items-start mt-8 mx-4', !isRTL && 'items-center justify-center mx-10 mt-3')}
+      >
         <Text variant="TitleMedium" tw="text-base text-center text-green-primary">
           {t('Dashboard.MarketPrice.emptyState')}
         </Text>

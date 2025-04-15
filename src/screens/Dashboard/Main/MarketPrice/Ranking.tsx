@@ -12,7 +12,7 @@ import { Text } from '#ui/components/Text';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import type { PredictionCrop, PredictionMarket, PredictionState } from '#types/global';
 import { cn } from '#ui/lib/cn';
 
@@ -105,9 +105,13 @@ function MarketPriceRanking() {
     states: stateDatums,
   });
 
+  const isRTL = LanguageManager.isRTL;
+
   if (!allowedCountry) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10 mt-3">
+      <View
+        tw={cn('flex-1 items-start mt-8 mx-4', !isRTL && 'items-center justify-center mx-10 mt-3')}
+      >
         <Text variant="TitleMedium" tw="text-base text-center text-green-primary">
           {t('Dashboard.MarketPrice.emptyState')}
         </Text>

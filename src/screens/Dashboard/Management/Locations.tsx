@@ -7,11 +7,13 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
+import { cn } from '#ui/lib/cn';
 
 function Locations(props: ManagementRouteProps<'Locations'>) {
   const { navigation } = props;
@@ -37,10 +39,12 @@ function Locations(props: ManagementRouteProps<'Locations'>) {
     );
   }
 
+  const isRTL = LanguageManager.isRTL;
+
   return (
     <View tw="flex-1 justify-start">
       {!data.length ? (
-        <Text tw="m-4 text-base text-center text-gray-400">
+        <Text tw={cn('m-4 text-base text-center text-gray-400', isRTL && 'text-left')}>
           {t('Dashboard.Management.Location.emptyState')}
         </Text>
       ) : (
@@ -58,7 +62,7 @@ function Locations(props: ManagementRouteProps<'Locations'>) {
                     companyId: item.company.id,
                   });
                 }}
-                right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                right={ListItemArrow}
               />
               <Divider />
             </React.Fragment>

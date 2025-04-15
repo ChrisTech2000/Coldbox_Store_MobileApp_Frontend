@@ -7,6 +7,7 @@ import {
 } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
 import { Appbar } from 'react-native-paper';
+import { Dimensions } from 'react-native';
 
 import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 import EditCheckIn from '#screens/Dashboard/Main/History/EditCheckIn';
@@ -32,7 +33,7 @@ import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredE
 import { AddCoolingUserNavigationOverLay } from '#screens/Dashboard/Tutorial/AddCoolingUserNavigationOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
-import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths, LanguageManager } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
@@ -220,9 +221,14 @@ function _rightContentFactory(
   routeName: ManagementRoutePaths,
   navigation: NavigationProp<ManagementRoutes, ManagementRoutePaths>
 ): NavigationHeaderProps {
+  const isRTL = LanguageManager.isRTL;
+
   const { onLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.ADD_COOLING_USER_NAVIGATION_STEP,
     OverlayComponent: AddCoolingUserNavigationOverLay,
+    layoutAdjustments: {
+      x: isRTL ? Dimensions.get('window').width - 58 : undefined,
+    },
   });
 
   switch (routeName) {

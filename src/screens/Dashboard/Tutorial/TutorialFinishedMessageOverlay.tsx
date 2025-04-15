@@ -6,7 +6,7 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import Logo from '#assets/images/coldtivate_logo.svg';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
@@ -57,7 +57,7 @@ export const TutorialFinishedMessageOverlay = ({
 
           <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
             <Button
-              icon="arrow-left"
+              icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
               mode="text"
               onPress={() => {
                 if (user?.role === ERoles.OPERATOR) {

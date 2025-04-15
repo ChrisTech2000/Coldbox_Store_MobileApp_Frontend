@@ -7,7 +7,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { DashboardRoutes } from '#navigation/Dashboard';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -16,6 +16,7 @@ import { useManagementStore } from '#stores/management';
 import { ERoles } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import RBAC from '#common/RBAC';
+import { cn } from '#ui/lib/cn';
 
 export function DashboardEmptyState() {
   const managementNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
@@ -39,10 +40,15 @@ export function DashboardEmptyState() {
     );
   }
 
+  const isRTL = LanguageManager.isRTL;
+
   if (user?.role === ERoles.EMPLOYEE && !locations.length) {
     return (
       <View tw="flex-1 items-center mx-4 mt-4 space-y-4">
-        <Text variant="TextBold" tw="text-base text-green-primary text-center">
+        <Text
+          variant="TextBold"
+          tw={cn('text-base text-green-primary text-center', isRTL && 'text-left')}
+        >
           {t('Dashboard.noLocationsAvailable')}
         </Text>
         <Button
@@ -64,7 +70,10 @@ export function DashboardEmptyState() {
   if (user?.role === ERoles.COOLING_USER && guard('VIEW', 'MarketplaceListing')) {
     return (
       <View tw="flex-1 items-center mx-4 mt-4">
-        <Text variant="TextBold" tw="text-base text-green-primary text-center">
+        <Text
+          variant="TextBold"
+          tw={cn('text-base text-green-primary text-center', isRTL && 'text-left')}
+        >
           {t('Dashboard.coolingUserNavigateToMarketplace')}
         </Text>
       </View>
@@ -72,8 +81,8 @@ export function DashboardEmptyState() {
   }
 
   return (
-    <View tw="flex-1 items-center mx-4 mt-4">
-      <Text variant="TextBold" tw="text-base text-green-primary text-center">
+    <View tw={cn('flex-1 items-center mx-4 mt-4', isRTL && 'items-start')}>
+      <Text variant="TextBold" tw="text-base text-green-primary">
         {user?.role === ERoles.COOLING_USER
           ? t('Dashboard.emptyCoolingUser')
           : t('Dashboard.emptyGeneral')}

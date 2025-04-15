@@ -4,7 +4,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardRoutes } from '#navigation/Dashboard';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
@@ -41,7 +41,7 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.COOLING_USER) {
@@ -55,7 +55,7 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.COOLING_USER) {

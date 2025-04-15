@@ -18,6 +18,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
 import type { User } from '#types/global';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 type Invite = { user: Pick<User, 'phone'> };
 type Employee = { employeeId: number; user: User };
@@ -129,7 +130,7 @@ function _propsFactory(
         registeredEmployeeId: datum.employeeId,
       });
     };
-    props.right = (props) => <List.Icon {...props} icon="chevron-right" />;
+    props.right = ListItemArrow;
   } else {
     props.title = datum.user.phone;
   }

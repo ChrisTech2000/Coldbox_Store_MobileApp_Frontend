@@ -14,6 +14,7 @@ import portugueseTranslations from './transl/pt';
 import hausaTranslations from './transl/ha';
 import igboTranslations from './transl/ig';
 import yorubaTranslations from './transl/yo';
+import arabicTranslations from './transl/ar';
 
 import { LanguageManager } from './utils';
 
@@ -52,6 +53,9 @@ async function _initializeI18nConfiguration(): Promise<void> {
       },
       [APP_LOCALES.YORUBA]: {
         translation: yorubaTranslations,
+      },
+      [APP_LOCALES.ARABIC]: {
+        translation: arabicTranslations,
       },
     },
     lng: initialLanguage,

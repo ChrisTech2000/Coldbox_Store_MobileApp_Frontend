@@ -12,7 +12,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -123,7 +123,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
                 {item.name || DEFAULT_CROP_VALUES.name}
               </Text>
               <Icon
-                source="chevron-right"
+                source={LanguageManager.isRTL ? 'chevron-left' : 'chevron-right'}
                 size={20}
                 color={item.hasSurvey ? colors.black : colors.gray[400]}
               />

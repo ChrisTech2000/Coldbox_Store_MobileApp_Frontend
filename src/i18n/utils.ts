@@ -5,6 +5,7 @@ import { enGB as englishLocale } from 'date-fns/locale/en-GB';
 import { fr as frenchLocale } from 'date-fns/locale/fr';
 import { gu as gujaratiLocale } from 'date-fns/locale/gu';
 import { hi as hindiLocale } from 'date-fns/locale/hi';
+import { ar as arabicLocale } from 'date-fns/locale/ar';
 import { pt as portugueseLocale } from 'date-fns/locale';
 import { parseISO } from 'date-fns/parseISO';
 import type { TOptions } from 'i18next';
@@ -38,7 +39,7 @@ let _currentDateFnsLocale: Locale;
 export class LanguageManager {
   private static readonly _KEY = 'i18n-locale';
   private static readonly _locales = new Set<string>(Object.values(APP_LOCALES));
-  private static readonly _rtlLocales = new Set<string>([]); // TODO -> assign languages that use RTL text direction from APP_LOCALES
+  private static readonly _rtlLocales = new Set<string>([APP_LOCALES.ARABIC]);
 
   public static initializeLanguage(): TranslationLocales {
     const language = LanguageManager.read();
@@ -83,6 +84,7 @@ export class LanguageManager {
       or: oriyaLocale,
       yo: yorubaLocale,
       en: englishLocale,
+      ar: arabicLocale,
     };
     _currentDateFnsLocale = _localeMap[locale];
   }

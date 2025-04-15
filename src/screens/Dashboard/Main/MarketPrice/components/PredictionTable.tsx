@@ -10,7 +10,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { ScrollView } from '#ui/components/ScrollView';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type {
@@ -148,10 +148,14 @@ export function PredictionTable({ commodity, states, dates, markets }: Predictio
     );
   }
 
+  const isRTL = LanguageManager.isRTL;
+
   if (!predictionData || !predictionData?.length) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10 mt-3">
-        <Text tw="text-base text-center">{t('Dashboard.MarketPrice.no-data-found')}</Text>
+      <View tw={cn('flex-1 items-center justify-center mx-10 mt-3', isRTL && 'items-start mx-2')}>
+        <Text tw={cn('text-base text-center', isRTL && 'text-left')}>
+          {t('Dashboard.MarketPrice.no-data-found')}
+        </Text>
       </View>
     );
   }

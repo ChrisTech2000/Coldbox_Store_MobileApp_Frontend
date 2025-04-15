@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator, Icon } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -27,6 +27,7 @@ import { CratesContent } from './components/CratesContent';
 import { InnerTabs, Tab } from './components/InnerTabs';
 import { UsersContent } from './components/UserContent';
 import { useAggregatedData } from './store';
+import { BackArrowIcon } from '../components/GoBackArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -155,7 +156,7 @@ export function AggregatedSection() {
                 tw="flex flex-row items-center space-x-2 justify-start"
                 onPress={onBackToMain}
               >
-                <Icon source="arrow-left-circle-outline" size={15} />
+                <BackArrowIcon />
                 <Text variant="TextMedium" tw="text-base">
                   {t(`Dashboard.Analytics.companyTab.goBackButton`)}
                 </Text>

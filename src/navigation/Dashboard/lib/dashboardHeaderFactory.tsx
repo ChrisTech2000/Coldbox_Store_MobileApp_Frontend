@@ -19,6 +19,7 @@ import type { MarketplaceRoutePaths } from '../Main/Marketplace/MarketplaceStack
 import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { OrdersRoutePaths } from '../Main/OrdersStack';
 import { useNotifications } from './notifications';
+import { LanguageManager } from '#i18n/utils';
 
 function _HeaderLeftContent<Params extends Record<string, unknown>, Path extends string>(props: {
   dispatch: NavigationProp<Params, Path>['dispatch'];
@@ -100,9 +101,12 @@ export function useDashboardHeader() {
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
   const cartItemsCount = useCartStore((store) => store.cartData)?.items?.length ?? 0;
 
+  const isRTL = LanguageManager.isRTL;
+
   const { onLayout } = useWalkthroughStep({
     number: ECommonTutorialSteps.OPEN_DRAWER_STEP,
     OverlayComponent: DrawerOverlay,
+    layoutAdjustments: { x: isRTL ? 10 : undefined },
   });
 
   return useCallback(

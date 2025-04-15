@@ -4,6 +4,7 @@ import { Divider, List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { Text } from '#ui/components/Text';
+import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { cn } from '#ui/lib/cn';
@@ -35,7 +36,7 @@ export default function CropDetails(props: { cropName: string; additionalInfo: s
               <Text tw="text-base">{cropName}</Text>
               {additionalInfo ? <Text tw="text-gray-500">{additionalInfo}</Text> : null}
             </View>
-            <List.Icon {...props} icon="chevron-right" />
+            <ListItemArrow {...props} />
           </View>
         )}
       />

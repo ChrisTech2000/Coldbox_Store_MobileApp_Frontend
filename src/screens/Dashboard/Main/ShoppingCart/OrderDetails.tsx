@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, GestureResponderEvent, TouchableOpacity, View } from 'react-native';
+import { FlatList, GestureResponderEvent, Platform, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -24,6 +24,7 @@ import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
 import { EPickUpMethod, EPricingType } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
+import { cn } from '#ui/lib/cn';
 
 import { CART_MINIMUM_VALUE } from '.';
 import AddCouponBottomSheet from './components/AddCouponBottomSheet';
@@ -34,6 +35,11 @@ import OrderPickupMethod from './components/OrderPickupMethod';
 import { OwnershipModal } from './components/OwnershipModal';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const { t } = useTranslationUtils();
@@ -128,7 +134,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
     cartData.totalProduceAmount - cartData.totalDiscountAmount < CART_MINIMUM_VALUE;
 
   return (
-    <ScrollView tw="p-4 bg-white" showsVerticalScrollIndicator={false}>
+    <ScrollView tw={cn('py-4 bg-white', HORIZONTAL_SPACING)} showsVerticalScrollIndicator={false}>
       <View tw="flex-1 pb-8 space-y-6">
         <FlatList
           data={cartDataByCoolingUnit}

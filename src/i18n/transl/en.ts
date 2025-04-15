@@ -16,6 +16,7 @@ const en = {
       ig: 'Igbo',
       yo: 'Yoruba',
       ha: 'Hausa',
+      ar: 'Arabic',
     },
   },
   gender: {

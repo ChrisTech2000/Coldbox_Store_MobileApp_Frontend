@@ -4,7 +4,7 @@ import { Divider, Icon } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import { paperTheme } from '#ui/lib/theme';
 import reportCrash from '#ui/lib/reportCrash';
@@ -109,7 +109,7 @@ export default function CommoditiesField(props: Props) {
               </Text>
               <View tw="flex flex-row space-x-2 items-center">
                 <Text tw="text-lg">{item.cropName}</Text>
-                <Icon source="chevron-right" size={20} />
+                <Icon source={LanguageManager.isRTL ? 'chevron-left' : 'chevron-right'} size={20} />
               </View>
             </View>
           </TouchableOpacity>

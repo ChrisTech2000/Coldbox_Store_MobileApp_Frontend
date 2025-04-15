@@ -4,7 +4,7 @@ import { Dimensions, Platform, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -43,7 +43,7 @@ export function DrawerFAQOverlay({ next, goTo, stop }: IOverlayComponentProps) {
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
-            icon="arrow-left"
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
               goTo(EFarmerTutorialSteps.GO_TO_KNOWLEDGE_HUB_STEP);
@@ -54,7 +54,7 @@ export function DrawerFAQOverlay({ next, goTo, stop }: IOverlayComponentProps) {
           </Button>
 
           <Button
-            icon="arrow-right"
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
               navigation.dispatch(DrawerActions.closeDrawer());

@@ -8,7 +8,7 @@ import { Divider, Icon, List } from 'react-native-paper';
 import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import { useAuthStore } from '#stores/auth';
 import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
@@ -86,7 +86,10 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
               label: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightLabel'),
               value: (
                 <View tw="self-center">
-                  <Icon source="chevron-right" size={25} />
+                  <Icon
+                    source={LanguageManager.isRTL ? 'chevron-left' : 'chevron-right'}
+                    size={25}
+                  />
                 </View>
               ),
               custom: true,

@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { FlatList, RefreshControl, View, Platform } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -20,11 +20,17 @@ import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/Sho
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
+import { cn } from '#ui/lib/cn';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 import { OwnershipModal } from './components/OwnershipModal';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 export const CART_MINIMUM_VALUE = 100;
 
@@ -67,7 +73,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   return (
     <React.Fragment>
       <ScrollView
-        tw="h-full px-4 pt-3 bg-white"
+        tw={cn('h-full pt-3 bg-white', HORIZONTAL_SPACING)}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

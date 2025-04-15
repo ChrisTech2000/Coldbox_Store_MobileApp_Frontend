@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FlatList, View } from 'react-native';
+import { FlatList, Platform, View } from 'react-native';
 import { ActivityIndicator, Dialog, Divider, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import validator from 'validator';
@@ -23,6 +23,12 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
+import { cn } from '#ui/lib/cn';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-3',
+  ios: 'mx-3',
+});
 
 interface FormValues {
   contactName: string;
@@ -61,7 +67,7 @@ function DeliveryContacts() {
   return (
     <React.Fragment>
       <KeyboardAwareScrollView
-        tw="px-3 pt-3 bg-white"
+        tw={cn('pt-3 bg-white', HORIZONTAL_SPACING)}
         keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
         showsVerticalScrollIndicator={false}
       >

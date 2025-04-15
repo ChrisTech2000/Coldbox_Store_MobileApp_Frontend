@@ -9,10 +9,11 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
+import { useTranslationUtils, type TranslationPaths, LanguageManager } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ColdtivateService from '#services/ColdtivateService';
 import { paperTheme } from '#ui/lib/theme';
+import { cn } from '#ui/lib/cn';
 
 function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmployeeDetails'>) {
   const { registeredEmployeeId } = props.route.params;
@@ -63,10 +64,11 @@ function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmploy
   }
 
   const isCurrentUser = data?.user?.id === user?.id;
+  const isRTL = LanguageManager.isRTL;
 
   return (
-    <View tw="flex-1 space-y-12">
-      <View tw="h-1/2">
+    <View tw={cn('flex-1 space-y-32', isRTL && 'space-y-12')}>
+      <View>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={datums}
@@ -89,7 +91,7 @@ function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmploy
       </View>
 
       <View tw="mx-4">
-        <Text tw="text-center">
+        <Text tw={cn('text-center', isRTL && 'text-left')}>
           {isCurrentUser
             ? t('Dashboard.Management.RegisteredEmployeeDetails.deletePersonal')
             : t('Dashboard.Management.RegisteredEmployeeDetails.deleteOther', {

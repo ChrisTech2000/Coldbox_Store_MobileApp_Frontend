@@ -18,7 +18,7 @@ import {
 import { CartesianChart, Line, Scatter, useChartPressState } from 'victory-native';
 import colors from 'tailwindcss/colors';
 
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type {
@@ -82,10 +82,14 @@ export function TrendChart({ commodity, state, market }: TrendChartProps) {
     );
   }
 
+  const isRTL = LanguageManager.isRTL;
+
   if (!predictionData || !predictionData?.pastValues?.length) {
     return (
-      <View tw="flex-1 items-center justify-center mx-10 mt-3">
-        <Text tw="text-base text-center">{t('Dashboard.MarketPrice.no-data-found')}</Text>
+      <View tw={cn('flex-1 items-center justify-center mx-10 mt-3', isRTL && 'items-start mx-2')}>
+        <Text tw={cn('text-base text-center', isRTL && 'text-left')}>
+          {t('Dashboard.MarketPrice.no-data-found')}
+        </Text>
       </View>
     );
   }

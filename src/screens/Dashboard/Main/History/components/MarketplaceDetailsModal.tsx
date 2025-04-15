@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, Platform, ScrollView, View } from 'react-native';
 import { Dialog, Divider } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -8,8 +8,14 @@ import { Text } from '#ui/components/Text';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EInitiatedFor, EPaymentGateway } from '#types/global';
+import { cn } from '#ui/lib/cn';
 
 const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-6',
+  ios: 'mx-6',
+});
 
 type DetailsModalProps = {
   isOpen: boolean;
@@ -32,7 +38,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
         {t('navigation.dashboard.Marketplace')} {}
       </Dialog.Title>
       <Dialog.ScrollArea tw="px-0">
-        <ScrollView tw="px-6 py-2" showsVerticalScrollIndicator>
+        <ScrollView tw={cn('py-2', HORIZONTAL_SPACING)} showsVerticalScrollIndicator>
           <Text tw="text-base font-bold">{t('Dashboard.History.pdfModal.dateLabel')}:</Text>
           <Text tw="text-base">{dateFmt(movement.date.toString(), 'dd-MM-yyyy hh:mm:ss')}</Text>
 

@@ -57,6 +57,7 @@
 		3B38712863DC43DFB418DF60 /* visa.svg in Resources */ = {isa = PBXBuildFile; fileRef = D58162FB86F54CD3904B2957 /* visa.svg */; };
 		1BB18B72E858487C9852222C /* check-in.svg in Resources */ = {isa = PBXBuildFile; fileRef = C5557BDE2E30475B88B30240 /* check-in.svg */; };
 		3C97D472EA6340A0A1B76662 /* check-out.svg in Resources */ = {isa = PBXBuildFile; fileRef = 5B7F007613994315A3F499D8 /* check-out.svg */; };
+		CAD7F003ABEE4BD9AE9B227E /* NotoSansArabic-VariableFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79E30680635F4926BC132802 /* NotoSansArabic-VariableFont.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,6 +132,7 @@
 		D58162FB86F54CD3904B2957 /* visa.svg */ = {isa = PBXFileReference; name = "visa.svg"; path = "../src/assets/images/visa.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		C5557BDE2E30475B88B30240 /* check-in.svg */ = {isa = PBXFileReference; name = "check-in.svg"; path = "../src/assets/icons/check-in.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		5B7F007613994315A3F499D8 /* check-out.svg */ = {isa = PBXFileReference; name = "check-out.svg"; path = "../src/assets/icons/check-out.svg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		79E30680635F4926BC132802 /* NotoSansArabic-VariableFont.ttf */ = {isa = PBXFileReference; name = "NotoSansArabic-VariableFont.ttf"; path = "../src/assets/fonts/NotoSansArabic-VariableFont.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,6 +284,7 @@
 				D58162FB86F54CD3904B2957 /* visa.svg */,
 				C5557BDE2E30475B88B30240 /* check-in.svg */,
 				5B7F007613994315A3F499D8 /* check-out.svg */,
+				79E30680635F4926BC132802 /* NotoSansArabic-VariableFont.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 				3B38712863DC43DFB418DF60 /* visa.svg in Resources */,
 				1BB18B72E858487C9852222C /* check-in.svg in Resources */,
 				3C97D472EA6340A0A1B76662 /* check-out.svg in Resources */,
+				CAD7F003ABEE4BD9AE9B227E /* NotoSansArabic-VariableFont.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

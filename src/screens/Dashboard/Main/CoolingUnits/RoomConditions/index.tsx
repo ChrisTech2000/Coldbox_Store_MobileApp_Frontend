@@ -11,9 +11,10 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { cn } from '#ui/lib/cn';
 
 import { RoomConditionsOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
@@ -49,6 +50,7 @@ function CoolingUnitsRoomConditions() {
   );
 
   const chartDatums = useMemo(() => processTemperatures(temperatures), [temperatures]);
+  const isRTL = LanguageManager.isRTL;
 
   return (
     <View tw="py-5">
@@ -87,7 +89,7 @@ function CoolingUnitsRoomConditions() {
           </React.Fragment>
         ) : (
           <View tw="mx-2 mt-4">
-            <Text tw="text-green-primary text-center">
+            <Text tw={cn('text-green-primary text-center', isRTL && 'text-left')}>
               {t('Dashboard.CoolingUnitsCratesInfo.messages.empty')}
             </Text>
           </View>

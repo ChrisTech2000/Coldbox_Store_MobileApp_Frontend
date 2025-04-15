@@ -20,6 +20,7 @@ import { GenericError } from '#ui/components/GenericError';
 import { cn } from '#ui/lib/cn';
 
 import { countriesDict } from '../Management/CompanyDetails/utils';
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const _getLanguage = () => LanguageManager.read();
 
@@ -71,14 +72,14 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
         title={t('Dashboard.KnowledgeHub.comic')}
         onPress={() => navigation.navigate('Details', { sourceUri: buildPath('/farmer-journey') })}
         titleNumberOfLines={2}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
       <List.Item
         title={t('Dashboard.KnowledgeHub.cooling')}
         onPress={() => navigation.navigate('Details', { sourceUri: buildPath('/cooling-service') })}
         titleNumberOfLines={2}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
       <List.Item
@@ -87,7 +88,7 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
           navigation.navigate('Details', { sourceUri: buildPath('/maximize-crop-quality') })
         }
         titleNumberOfLines={2}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
       <List.Item
@@ -98,7 +99,7 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
           })
         }
         titleNumberOfLines={2}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
       <List.Item
@@ -107,7 +108,7 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
           navigation.navigate('Details', { sourceUri: buildPath('/crop-storage', countryCode) })
         }
         titleNumberOfLines={2}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
       <List.Item
@@ -116,7 +117,7 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
           navigation.navigate('Details', { sourceUri: buildPath('/sensors-pickup-model') })
         }
         titleNumberOfLines={2}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
       <List.Item
@@ -125,7 +126,7 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
           navigation.navigate('Details', { sourceUri: buildPath('/crate-checking-tips') })
         }
         titleNumberOfLines={2}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
       <List.Item
@@ -134,7 +135,7 @@ function KnowledgeHub(props: KnowledgeHubStackRouteProps<'Root'>) {
           navigation.navigate('Details', { sourceUri: buildPath('/cold-room-glitches') })
         }
         titleNumberOfLines={2}
-        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        right={ListItemArrow}
       />
       <Divider />
 

@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, View, Platform } from 'react-native';
 import { Divider, Portal } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -11,8 +11,14 @@ import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
+import { cn } from '#ui/lib/cn';
 
 import type { SetupSchema } from '../CrateSetup';
+
+const HORIZONTAL_SPACING = Platform.select({
+  android: 'px-4',
+  ios: 'mx-4',
+});
 
 type CrateModalProps = {
   crates: SetupSchema['crates'];
@@ -75,7 +81,7 @@ export function CrateSetupModal({ crates, isOpen, title, closeModal, setValue }:
           <Text tw="text-lg px-6 py-2">{title}</Text>
           <Divider tw="bg-zinc-400 w-full" />
 
-          <ScrollView tw="w-full max-h-56 px-4" showsVerticalScrollIndicator>
+          <ScrollView tw={cn('w-full max-h-56', HORIZONTAL_SPACING)} showsVerticalScrollIndicator>
             <FlashList
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
