@@ -31,7 +31,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { type CoolingUnit, EPaymentMethod, ERoles } from '#types/global';
+import { type CoolingUnit, EInitiatedFor, EPaymentMethod, ERoles } from '#types/global';
 
 import { DownloadDataModal } from '../components/DownloadDataModal';
 import { sortMovements } from '../utils';
@@ -109,11 +109,12 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
         const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
         const matchesFarmer =
-          movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString) ||
-          (movement.checkout &&
-            movement.checkout.crates.some((crate) =>
-              crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
-            ));
+          movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
+            ? movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString)
+            : movement.checkout &&
+              movement.checkout.crates.some((crate) =>
+                crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
+              );
         const crops = sortMovementCrops(movement);
         const matchesCrop = crops.some((crop) =>
           crop.toLowerCase().includes(lowerCaseSearchString)

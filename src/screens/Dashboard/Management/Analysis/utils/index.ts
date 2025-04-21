@@ -29,7 +29,7 @@ export function sortMovementOwners(movement: Movement): Array<string> {
   let owners: string[] = [];
 
   if (movement.initiatedFor !== EInitiatedFor.CHECK_OUT) {
-    owners = movement.checkin?.crates?.flatMap((crate) => crate.ownerName || []);
+    owners = [movement.checkin.ownerName || ''];
   } else {
     owners = movement.checkout?.crates?.flatMap((crate) => crate.ownerName || []);
   }
