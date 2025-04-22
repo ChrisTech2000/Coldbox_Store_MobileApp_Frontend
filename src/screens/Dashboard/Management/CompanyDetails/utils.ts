@@ -2,8 +2,16 @@ import { getAllISOCodes } from 'iso-country-currency';
 import { currencies } from 'currencies.json';
 import moize from 'moize';
 import ms from 'ms';
+import { useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
 import type { Company } from '#types/global';
+import type { GetAllCropsResponse } from '#types/api.responses';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { LanguageManager } from '#i18n/utils';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 type Models = keyof Pick<Company, 'digitalTwin' | 'ml4Market' | 'ml4Quality' | 'ml4Farmers'>;
 
@@ -140,4 +148,24 @@ export function currenciesDict() {
       return datum?.symbol;
     },
   };
+}
+
+export function useTranslatedCrops(crops: Array<GetAllCropsResponse>): Array<GetAllCropsResponse> {
+  const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+
+  return useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const lookupMap = buildMap();
+    return cloneDeep(crops).map((crop) => {
+      crop.name = find(lookupMap, {
+        name: crop.name,
+        country: companyCountry || farmerCountry || '',
+        locale,
+      });
+      return crop;
+    });
+  }, [crops, companyCountry, farmerCountry, locale]);
 }
