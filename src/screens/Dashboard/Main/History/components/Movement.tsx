@@ -4,6 +4,7 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Dialog, Divider, Icon, Portal } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
 import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
@@ -13,7 +14,7 @@ import { cn } from '#ui/lib/cn';
 import * as BottomSheet from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore, type ManagementCompany } from '#stores/management';
@@ -26,6 +27,8 @@ import {
   type Company,
   type CoolingUnit,
 } from '#types/global';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { isWithinLast24Hours } from '../utils/dates';
 import { sortMovementCrops } from '../utils/sortMovements';
@@ -86,14 +89,28 @@ export function Movement({
 
   const [modalRef, modalActions] = BottomSheet.useBottomSheet();
 
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+  const locale = LanguageManager.read();
+
   const crops = useMemo(() => {
-    const _crops = sortMovementCrops(movement);
-    if (_crops.length <= 2) return _crops.join(', ');
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    const translatedCrops = sortMovementCrops(movement).map((cropName) =>
+      find(translationMap, {
+        name: cropName,
+        country: company?.country || farmerCountry || undefined,
+        locale,
+      })
+    );
+
+    if (translatedCrops.length <= 2) return translatedCrops.join(', ');
+
     return t('Dashboard.History.cropsLabel', {
-      crop: _crops[0],
-      amount: _crops.length - 1,
+      crop: translatedCrops.at(0),
+      amount: translatedCrops.length - 1,
     });
-  }, [movement, t]);
+  }, [movement, t, company?.country, farmerCountry, locale]);
 
   const isCheckIn = movement.initiatedFor === EInitiatedFor.CHECK_IN;
   const isCheckOut = movement.initiatedFor === EInitiatedFor.CHECK_OUT;
