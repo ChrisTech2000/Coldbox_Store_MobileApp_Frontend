@@ -36,6 +36,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { CoolingUnit, EOrderStatus } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import colors from 'tailwindcss/colors';
 import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryInformationBottomSheet';
@@ -71,7 +72,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
     defaultData: undefined,
   });
 
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+  const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
@@ -79,6 +80,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
       defaultData: [],
     }
   );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   const orderDataByCoolingUnit = useMemo(() => {
     if (!order?.items) return [];

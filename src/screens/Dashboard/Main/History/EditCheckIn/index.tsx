@@ -23,6 +23,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import { DTInfo } from './components/DTInfo';
 import { Pagination } from './components/Pagination';
@@ -67,7 +68,8 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     }
   );
 
-  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, {});
+  const { data: cropsResult } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined);
+  const crops = useTranslatedCrops(cropsResult);
 
   const farmer = useMemo(() => {
     return farmers?.find(

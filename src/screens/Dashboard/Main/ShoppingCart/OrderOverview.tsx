@@ -24,6 +24,7 @@ import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { CoolingUnit } from '#types/global';
 import { cn } from '#ui/lib/cn';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
@@ -53,12 +54,14 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     { defaultData: undefined }
   );
 
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+  const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
     { defaultData: [] }
   );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   const orderDataByCoolingUnit = useMemo(() => {
     if (!order?.items) return [];
