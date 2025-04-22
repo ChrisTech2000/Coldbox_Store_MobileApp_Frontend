@@ -9,6 +9,7 @@ import { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.res
 import { Company, type CoolingUnit, type User } from '#types/global';
 
 import { PaymentOption } from '../RevenueAnalysis';
+import { useTranslatedCrops } from '../../CompanyDetails/utils';
 
 const getCompanyOwnerName = moize(
   (companyId: number | null | undefined, companies: Array<Company>) =>
@@ -143,7 +144,7 @@ export function useAnalysis(
     }
   );
 
-  const { data: crops, isLoading: areCropsLoading } = useApiCall(
+  const { data: cropsResult, isLoading: areCropsLoading } = useApiCall(
     'getAllCrops',
     DataloaderService.crops.getAll,
     undefined,
@@ -152,6 +153,8 @@ export function useAnalysis(
       defaultData: [],
     }
   );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   const { data: companies, isLoading: areCompaniesLoading } = useApiCall(
     'getCompanies',

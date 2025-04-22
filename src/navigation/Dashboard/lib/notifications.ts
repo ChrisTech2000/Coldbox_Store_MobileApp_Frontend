@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import ms from 'ms';
-import { dateFmt, type Translator, useTranslationUtils } from '#i18n/utils';
+import { useShallow } from 'zustand/react/shallow';
+
+import { dateFmt, type Translator, useTranslationUtils, LanguageManager } from '#i18n/utils';
 import { ERoles, type User } from '#types/global';
 import NotificationService from '#services/NotificationService';
 import { useAuthStore } from '#stores/auth';
@@ -11,6 +13,10 @@ import type { MarketSurveyStackRoutes } from '../Main/HistoryTabStack/MarketSurv
 import DataloaderService from '#services/DataloaderService';
 import { formatCurrencyWithSymbol } from '#screens/Dashboard/Main/Dashboard/CheckIn/utils';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import type { TranslationLocales } from '#i18n/constants';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 class NotificationManager {
   private readonly _t: Translator;
@@ -23,8 +29,11 @@ class NotificationManager {
     this._userRole = user?.role;
   }
 
-  public processNotifications = async () => {
-    const { notifications, newNotificationsCount } = await this._formatNotifications();
+  public processNotifications = async (options: {
+    country?: string;
+    locale: TranslationLocales;
+  }) => {
+    const { notifications, newNotificationsCount } = await this._formatNotifications(options);
 
     return {
       newNotificationsCount,
@@ -50,18 +59,28 @@ class NotificationManager {
     };
   };
 
-  private _formatNotifications = async () => {
+  private _formatNotifications = async (options: {
+    country?: string;
+    locale: TranslationLocales;
+  }) => {
     if (!this._userId) throw new Error();
     const result = await NotificationService.getNotifications(this._userId);
 
     let newNotificationsCount: number = 0;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const lookupMap = buildMap();
 
     const notifications = (result ?? []).map((item) => {
       const isFarmer = this._userRole === ERoles.COOLING_USER;
       const crates = item.crates || {};
       const commonParams = {
         farmer: crates.farmer ?? '',
-        crop: crates.crop ?? '',
+        crop: find(lookupMap, {
+          name: crates.crop,
+          country: options.country,
+          locale: options.locale,
+        }),
         movementCode: item.movementCode ?? '',
       };
 
@@ -95,7 +114,7 @@ class NotificationManager {
         }
         case 'FARMER_SURVEY': {
           message = isFarmer
-            ? this._t('Dashboard.Notifications.coolingUserSurvey', { crop: crates.crop ?? '' })
+            ? this._t('Dashboard.Notifications.coolingUserSurvey', { crop: commonParams.crop })
             : this._t('Dashboard.Notifications.operatorSurvey', commonParams);
           link = this._t('Dashboard.Notifications.link');
           break;
@@ -111,7 +130,7 @@ class NotificationManager {
         }
         case 'LISTING_PRICE_UPDATED': {
           message = this._t('Dashboard.Notifications.listingPriceUpdated', {
-            crop: item.crates.crop,
+            crop: commonParams.crop,
             unitName: item.crates.coolingUnit,
             priceTag: formatCurrencyWithSymbol(
               item.marketListing?.currency ?? DEFAULT_CURRENCY_CODE,
@@ -147,16 +166,27 @@ export function useNotifications() {
   const user = useAuthStore((store) => store.user);
   const { t } = useTranslationUtils();
 
+  const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+  const country = companyCountry || farmerCountry || undefined;
+
   const manager = useMemo(() => new NotificationManager(t, user), [t, user]);
 
-  return useApiCall('getNotifications', manager.processNotifications, undefined, {
-    skip: !user?.id,
-    defaultData: {
-      notifications: [],
-      newNotificationsCount: 0,
-    },
-    refreshInterval: ms('10 seconds'),
-  });
+  return useApiCall(
+    'getNotifications',
+    manager.processNotifications,
+    { locale, country },
+    {
+      skip: !user?.id,
+      defaultData: {
+        notifications: [],
+        newNotificationsCount: 0,
+      },
+      refreshInterval: ms('10 seconds'),
+    }
+  );
 }
 
 export type NotificationOpenSurveyEventDatums = {
