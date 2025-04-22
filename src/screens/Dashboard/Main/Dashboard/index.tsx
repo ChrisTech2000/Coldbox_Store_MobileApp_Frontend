@@ -8,7 +8,7 @@ import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import MarketplaceService from '#services/MarketplaceService';
@@ -53,6 +53,7 @@ import { OperatorActions } from './components/OperatorActions';
 import { Produce } from './components/Produce';
 import { SortingMenu, useSortingStore } from './components/SortMenu';
 import { sortProduces } from './utils/sortProduces';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 export const useDashboardCoolingUnitStore = createSelectStore<CoolingUnit>();
 export const useDashboardCompanyStore = createSelectStore<Company>();
@@ -67,11 +68,7 @@ const ESTIMATED_LIST_SIZE = {
 
 const _findFarmerById = moize(
   (id: number | undefined, list: Array<Farmer>) => list.find((f) => f.id === id),
-  {
-    maxAge: ms('6 seconds'),
-    // isSerialized: true,
-    // serializer: ([id, list]) => [stringToHash([id, JSON.stringify(list)].join(':::'))],
-  }
+  { maxAge: ms('6 seconds') }
 );
 
 const _checkMarketplaceEligibilityMemoized = moize.promise(
@@ -93,9 +90,12 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   const { t } = useTranslationUtils();
   const { user } = useAuthStore();
+  const { farmerCountry } = useDashboardStore();
   const { company } = useManagementStore();
   const { guard } = RBAC.useRBAC();
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
+
+  const locale = LanguageManager.read();
 
   const [isBankAccountModalOpen, setIsBankAccountModalOpen] = useState<boolean>(false);
   const [isBankAccountModalAllowedToOpen, setIsBankAccountModalAllowedToOpen] =
@@ -200,17 +200,33 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
   const [areCoolingUnitsLoading, setAreCoolingUnitsLoading] = useState<boolean>(true);
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
 
-  const dashboardProduces = useMemo(
-    () =>
-      isTutorialOn
-        ? // eslint-disable-next-line
-          // @ts-ignore
-          (MOCKED_DASHBOARD_DATA as DashboardProduce[])
-        : user?.role === ERoles.COOLING_USER
-          ? farmerDashboardProduces
-          : operatorDashboardProduces,
-    [isTutorialOn, user?.role, farmerDashboardProduces, operatorDashboardProduces]
-  );
+  const dashboardProduces: Array<DashboardProduce> = useMemo(() => {
+    if (isTutorialOn) return MOCKED_DASHBOARD_DATA as unknown as Array<DashboardProduce>;
+
+    const isCoolingUser = user?.role === ERoles.COOLING_USER;
+    const sourceProduces = isCoolingUser ? farmerDashboardProduces : operatorDashboardProduces;
+    if (!sourceProduces) return [];
+
+    const { buildMap, find } = cropTranslationLookup();
+    const lookupMap = buildMap();
+
+    return cloneDeep(sourceProduces).map((produce) => {
+      produce.cropName = find(lookupMap, {
+        name: produce.cropName,
+        country: company?.country || farmerCountry || undefined,
+        locale,
+      });
+      return produce;
+    });
+  }, [
+    isTutorialOn,
+    user?.role,
+    farmerDashboardProduces,
+    operatorDashboardProduces,
+    company?.country,
+    farmerCountry,
+    locale,
+  ]);
 
   const filteredProduces = useMemo(() => {
     if (!dashboardProduces?.length) return [];
