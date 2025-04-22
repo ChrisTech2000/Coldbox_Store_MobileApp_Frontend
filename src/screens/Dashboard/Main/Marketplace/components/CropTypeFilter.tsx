@@ -32,6 +32,10 @@ import LoadingConditionalRenderer from '../modules/LoadingConditionalRenderer';
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
+type MapDatum = GetAllCropsResponse & {
+  originalName: string;
+};
+
 export default function CropTypeFilters() {
   const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
@@ -48,18 +52,19 @@ export default function CropTypeFilters() {
       const result = await ColdtivateService.getAllCrops();
       const { buildMap, find } = cropTranslationLookup();
       const lookupMap = buildMap();
-      const translated = cloneDeep(result).map((crop) => {
-        crop.name = find(lookupMap, {
+      const translated: Array<MapDatum> = cloneDeep(result).map((crop) => ({
+        ...crop,
+        originalName: crop.name,
+        name: find(lookupMap, {
           name: crop.name,
           country: companyCountry || farmerCountry || '',
           locale,
-        });
-        return crop;
-      });
-      return new Map<number, GetAllCropsResponse>(translated.map((item) => [item.id, item]));
+        }),
+      }));
+      return new Map<number, MapDatum>(translated.map((item) => [item.id, item]));
     },
     undefined,
-    { defaultData: new Map<number, GetAllCropsResponse>() }
+    { defaultData: new Map<number, MapDatum>() }
   );
 
   const [search, setSearch] = useState<string>('');
@@ -177,7 +182,7 @@ export default function CropTypeFilters() {
                             for (const value of internalSelection) {
                               const crop = data.get(value);
                               if (typeof crop === 'undefined') continue;
-                              datums.push({ label: crop.name, value });
+                              datums.push({ label: crop.originalName, value });
                             }
                             onChange(datums);
                             setIsModalVisible(false);

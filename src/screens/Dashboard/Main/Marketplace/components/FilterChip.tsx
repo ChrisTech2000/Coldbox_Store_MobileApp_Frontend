@@ -1,12 +1,22 @@
-import React, { useCallback, useRef } from 'react';
-import { FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native';
+import React, { useCallback, useMemo, useRef } from 'react';
+import { FlatList, type NativeScrollEvent, type NativeSyntheticEvent, View } from 'react-native';
 import { Chip } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { useMarketplaceFilters } from '../store';
 
 export default function FilterChip() {
+  const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+
   const { t } = useTranslationUtils();
   const filters = useMarketplaceFilters((store) => store.filters);
 
@@ -31,6 +41,19 @@ export default function FilterChip() {
     [filters]
   );
 
+  const datums = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const lookupMap = buildMap();
+    return cloneDeep(filters || []).map((filter) => ({
+      ...filter,
+      label: find(lookupMap, {
+        name: filter.label,
+        country: companyCountry || farmerCountry || undefined,
+        locale,
+      }),
+    }));
+  }, [filters, companyCountry, farmerCountry, locale]);
+
   if (filters.length === 0) return null;
 
   return (
@@ -40,7 +63,7 @@ export default function FilterChip() {
         scrollEnabled
         ref={flatListRef}
         showsHorizontalScrollIndicator={false}
-        data={filters}
+        data={datums}
         ListHeaderComponent={
           <Chip
             tw="bg-transparent mr-2 ml-3"
