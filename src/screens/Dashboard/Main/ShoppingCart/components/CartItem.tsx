@@ -25,10 +25,10 @@ import { parsePoint } from '#screens/Dashboard/Management/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
-import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 import { type CartItem as CartItemType } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
+import type { GetAllCropsResponse } from '#types/api.responses';
 
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
@@ -36,7 +36,9 @@ import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
 import CartItemInput from './CartItemInput';
 
 type CartItemProps = {
-  item: CartItemType;
+  item: Omit<CartItemType, 'relCropId'> & {
+    crop?: GetAllCropsResponse;
+  };
 };
 
 export function CartItem({ item }: CartItemProps) {
@@ -44,7 +46,6 @@ export function CartItem({ item }: CartItemProps) {
   const toast = InAppNotifications.useToast();
 
   const [setCart, coolingUnits] = useCartStore((store) => [store.setCart, store.allCoolingUnits]);
-  const crops = useDashboardStore((store) => store.allCrops);
 
   const { data: company, isLoading: isLoadingCompany } = useApiCall(
     'getCompanyById',
@@ -80,8 +81,6 @@ export function CartItem({ item }: CartItemProps) {
     () => coolingUnits?.find((c) => c.id === item.relCoolingUnitId),
     [coolingUnits]
   );
-
-  const crop = useMemo(() => crops?.find((c) => c.id === item.relCropId), [crops]);
 
   const openCompanyDetailsModal = useDebouncedCallback(async () => {
     const unit = await ColdtivateService.getCoolingUnit({
@@ -173,7 +172,7 @@ export function CartItem({ item }: CartItemProps) {
 
             <View tw="my-1.5">
               <Text variant="TextMedium" tw="text-xl">
-                {crop?.name ?? DEFAULT_CROP_VALUES.name}
+                {item.crop?.name ?? DEFAULT_CROP_VALUES.name}
               </Text>
               <Text variant="TextMedium" tw="text-sm text-gray-600">
                 {t('Dashboard.Marketplace.owner')}:{' '}
@@ -204,7 +203,9 @@ export function CartItem({ item }: CartItemProps) {
           <FastImage
             tw="w-20 h-16 mr-1"
             resizeMode="contain"
-            source={{ uri: `${API_BASE_URL}media/${crop?.image ?? DEFAULT_CROP_VALUES.imageUri}` }}
+            source={{
+              uri: `${API_BASE_URL}media/${item.crop?.image ?? DEFAULT_CROP_VALUES.imageUri}`,
+            }}
           />
         </View>
         <Touchable
