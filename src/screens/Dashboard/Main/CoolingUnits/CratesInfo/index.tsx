@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Dimensions, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, DataTable } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
@@ -9,12 +10,13 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { ERoles } from '#types/global';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
 
@@ -26,6 +28,8 @@ function CoolingUnitsCratesInfo() {
 
   const selectedCoolingUnit = useCoolingUnitStore(useShallow((store) => store.selectedItem));
   const { t } = useTranslationUtils();
+
+  const locale = LanguageManager.read();
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getCoolingUnits',
@@ -48,14 +52,24 @@ function CoolingUnitsCratesInfo() {
     if (!selectedCoolingUnit) return [[], 0];
 
     const unit = data?.find(({ id }) => id === selectedCoolingUnit.id);
-    if (!unit) return [[], 0];
+    if (!unit || !unit.commodityInfos?.length) return [[], 0];
 
-    const sortedCommodityInfos = [...unit.commodityInfos].sort(
-      (a, b) => b.percentage - a.percentage
-    );
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    const sortedCommodityInfos = cloneDeep(unit.commodityInfos)
+      .sort((a, b) => b.percentage - a.percentage)
+      .map((info) => ({
+        ...info,
+        commodity: find(translationMap, {
+          name: info.commodity,
+          country: company?.country,
+          locale,
+        }),
+      }));
 
     return [sortedCommodityInfos, unit.commodityTotal.totalCrates];
-  }, [selectedCoolingUnit, data]);
+  }, [selectedCoolingUnit, data, company?.country, locale]);
 
   if (isLoading) {
     return (
