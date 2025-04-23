@@ -2,6 +2,7 @@ import { addMonths, startOfMonth } from 'date-fns';
 import React, { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Divider, Switch } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { GenericError } from '#ui/components/GenericError';
 import MultipleSelectWithStore, {
@@ -15,6 +16,9 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import type { PredictionCrop, PredictionMarket, PredictionState } from '#types/global';
 import { cn } from '#ui/lib/cn';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { PredictionTable } from './components/PredictionTable';
 import { usePriceTrendsStore } from './store';
@@ -43,7 +47,13 @@ export const rankingStores = [
 ];
 
 function MarketPriceRanking() {
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const farmerCountry = useDashboardStore(useShallow((store) => store.farmerCountry));
+
+  const locale = LanguageManager.read();
+
   const { t } = useTranslationUtils();
+
   const { country: allowedCountry, predictionParams } = usePriceTrendsStore();
   const { selectedItem: commodity } = useRankingCommodityStore();
   const { selectedItems: states } = useRankingStateStore();
@@ -54,6 +64,27 @@ function MarketPriceRanking() {
   const [isSatesModalOpen, setIsStatesModalOpen] = useState<boolean>(false);
   const [isDatesModalOpen, setIsDateModalOpen] = useState<boolean>(false);
   const [selectedMarkets, setSelectedMarkets] = useState<Array<PredictionMarket>>([]);
+
+  const cropTranslations = useMemo(() => {
+    const safeValue = predictionParams?.availableCrops ?? [];
+
+    const record: Record<number, string> = {};
+    if (!safeValue?.length) return record;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    for (const crop of safeValue) {
+      if (typeof record[crop.id] === 'string') continue;
+      record[crop.id] = find(translationMap, {
+        name: crop.name,
+        country: companyCountry || farmerCountry || undefined,
+        locale,
+      });
+    }
+
+    return record;
+  }, [predictionParams?.availableCrops, companyCountry, farmerCountry, locale]);
 
   const { months, days } = useMemo(
     () => ({
@@ -133,9 +164,11 @@ function MarketPriceRanking() {
           datums={predictionParams?.availableCrops ?? []}
           isModalVisible={isCommoditiesModalOpen}
           setIsModalVisible={setIsCommoditiesModalOpen}
-          itemName={(item) => item?.name}
+          itemName={(item) => cropTranslations[item.id]}
           useSelectStore={useRankingCommodityStore}
-          label={commodity ? commodity.name : t('Dashboard.MarketPrice.commodityLabel')}
+          label={
+            commodity ? cropTranslations[commodity.id] : t('Dashboard.MarketPrice.commodityLabel')
+          }
           modalHeader={t('Dashboard.MarketPrice.commodityModalTitle')}
           occupyFullWidth
         />
