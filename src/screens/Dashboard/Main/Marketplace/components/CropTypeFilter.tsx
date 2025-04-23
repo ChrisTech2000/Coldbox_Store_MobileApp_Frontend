@@ -41,41 +41,31 @@ export default function CropTypeFilters() {
   const { control, watch, formState } = MarketplaceFormManager.useForm();
   const selectedCrops = watch('crops');
 
-  const {
-    data: { cropsMap, translatedCropNames },
-    isLoading,
-  } = useApiCall(
+  const { data, isLoading } = useApiCall(
     'getMarketplaceCropFilterOptions',
     async () => {
       const result = await ColdtivateService.getAllCrops();
-
-      const { buildMap, find } = cropTranslationLookup();
-      const lookupMap = buildMap();
-
-      const cropsMap = new Map<number, GetAllCropsResponse>();
-      const translatedCropNames: Record<number, string> = {};
-
-      for (const item of result) {
-        cropsMap.set(item.id, item);
-        if (!translatedCropNames[item.id]) {
-          translatedCropNames[item.id] = find(lookupMap, {
-            name: item.name,
-            country: companyCountry || farmerCountry || '',
-            locale,
-          });
-        }
-      }
-
-      return { cropsMap, translatedCropNames };
+      return new Map<number, GetAllCropsResponse>(result.map((item) => [item.id, item]));
     },
     undefined,
-    {
-      defaultData: {
-        cropsMap: new Map<number, GetAllCropsResponse>(),
-        translatedCropNames: {},
-      },
-    }
+    { defaultData: new Map<number, GetAllCropsResponse>() }
   );
+
+  const translatedCropNames = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const lookupMap = buildMap();
+    const translatedCropNames: Record<number, string> = {};
+    for (const [key, value] of data) {
+      if (!translatedCropNames[key]) {
+        translatedCropNames[key] = find(lookupMap, {
+          name: value.name,
+          country: companyCountry || farmerCountry || '',
+          locale,
+        });
+      }
+    }
+    return translatedCropNames;
+  }, [data, companyCountry, locale]);
 
   const [search, setSearch] = useState<string>('');
   const [internalSelection, setInternalSelection] = MarketplaceFormManager.useFieldState('crops');
@@ -84,19 +74,19 @@ export default function CropTypeFilters() {
   const displayValue = useMemo(() => {
     const cropNames = internalSelection
       .slice(0, 2)
-      .map((cropId) => cropsMap.get(cropId)?.name)
+      .map((cropId) => data.get(cropId)?.name)
       .filter(Boolean);
     return cropNames.length > 0 ? truncate(cropNames.join(', '), { length: 20 }) : t('actions.all');
-  }, [internalSelection, cropsMap, t]);
+  }, [internalSelection, data, t]);
 
   const fieldError = !!formState.errors.crops;
 
   const datums = useMemo(
     () =>
-      Array.from(cropsMap.values()).filter((crop) =>
+      Array.from(data.values()).filter((crop) =>
         crop.name.toLowerCase().includes(search.toLowerCase())
       ),
-    [cropsMap, search]
+    [data, search]
   );
 
   return (
@@ -150,7 +140,7 @@ export default function CropTypeFilters() {
                           uppercase
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            setInternalSelection(Array.from(cropsMap.keys()));
+                            setInternalSelection(Array.from(data.keys()));
                           }}
                         >
                           {t('actions.all')}
@@ -190,7 +180,7 @@ export default function CropTypeFilters() {
                             evt.stopPropagation();
                             const datums: Array<FilterValue> = [];
                             for (const value of internalSelection) {
-                              const crop = cropsMap.get(value);
+                              const crop = data.get(value);
                               if (typeof crop === 'undefined') continue;
                               datums.push({ label: crop.name, value });
                             }

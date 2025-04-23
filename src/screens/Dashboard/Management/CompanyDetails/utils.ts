@@ -159,7 +159,7 @@ export function useTranslatedCrops(crops: Array<GetAllCropsResponse>): Array<Get
   return useMemo(() => {
     const { buildMap, find } = cropTranslationLookup();
     const lookupMap = buildMap();
-    return cloneDeep(crops).map((crop) => {
+    return cloneDeep(crops || []).map((crop) => {
       crop.name = find(lookupMap, {
         name: crop.name,
         country: companyCountry || farmerCountry || '',
