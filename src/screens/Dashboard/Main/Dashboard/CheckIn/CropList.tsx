@@ -4,9 +4,13 @@ import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon, List, TextInput } from 'react-native-paper';
 import { useDebouncedCallback } from 'use-debounce';
+import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
+import set from 'lodash/set';
+import unset from 'lodash/unset';
 
 import { API_BASE_URL } from '#constants/environment';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -17,6 +21,8 @@ import { Input } from '#ui/components/Input';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -31,6 +37,10 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
 
   const { t } = useTranslationUtils();
   const { coolingUnit } = useCheckInStore();
+
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+
+  const locale = LanguageManager.read();
 
   const additionalInfoRef = useRef<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -48,11 +58,28 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
     }
   );
 
+  const datums = useMemo(() => {
+    if (!data) return [];
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+    return cloneDeep(data).map((item) => ({
+      ...item,
+      fullCrop: {
+        ...item.fullCrop,
+        name: find(translationMap, {
+          name: item.fullCrop.name,
+          country: companyCountry || undefined,
+          locale,
+        }),
+        originalName: item.fullCrop.name,
+      },
+    }));
+  }, [data, companyCountry, locale]);
+
   const filteredData = useMemo(
     () =>
-      data?.filter((item) => item.fullCrop.name.toLowerCase().includes(searchTerm.toLowerCase())) ??
-      [],
-    [data, searchTerm]
+      datums.filter((item) => item.fullCrop.name.toLowerCase().includes(searchTerm.toLowerCase())),
+    [datums, searchTerm]
   );
 
   if (isLoading) {
@@ -97,9 +124,12 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
                   />
                   <TouchableOpacity
                     onPress={(evt) => {
-                      evt?.stopPropagation();
+                      evt.stopPropagation();
+                      const crop = cloneDeep(item.fullCrop);
+                      set(crop, 'name', crop.originalName);
+                      unset(crop, 'originalName');
                       navigation.navigate('CrateSetup', {
-                        crop: item.fullCrop,
+                        crop,
                         additionalInfo: additionalInfoRef.current,
                       });
                     }}

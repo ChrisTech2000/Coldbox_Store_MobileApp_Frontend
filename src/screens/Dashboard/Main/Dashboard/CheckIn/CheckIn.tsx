@@ -87,27 +87,30 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { data: surveys } = useApiCall(
     'getFarmerSurveys',
     ColdtivateService.getFarmerSurveys,
-    {
-      farmerId: user.id as number,
-    },
-    {
-      skip: !user.id,
-      defaultData: [],
-    }
+    { farmerId: user.id as number },
+    { skip: !user.id, defaultData: [] }
   );
 
   const [isCodeModalOpen, setIsCodeModalOpen] = useState<boolean>(false);
   const [indexForActiveOptions, setIndexForActiveOptions] = useState<number>(-1);
   const [isSubmitting, toggleIsSubmitting] = useToggle(false);
 
-  const allCrates = useMemo(
-    () => produces.flatMap((produce) => produce.crates),
-    [produces, produces.length]
-  );
-
-  const allHavePlannedDays = useMemo(() => {
-    return produces.every((produce) => produce.crates.every((crate) => !!crate.plannedDays));
-  }, [produces, produces.length]);
+  const { allCrates, allHavePlannedDays } = useMemo(() => {
+    const combinedCrates: ProduceCrate['crates'] = [];
+    let everyCrateHasPlannedDays = true;
+    for (const produce of produces) {
+      for (const crate of produce.crates) {
+        combinedCrates.push(crate);
+        if (!crate.plannedDays) {
+          everyCrateHasPlannedDays = false;
+        }
+      }
+    }
+    return {
+      allCrates: combinedCrates,
+      allHavePlannedDays: everyCrateHasPlannedDays,
+    };
+  }, [produces]);
 
   const total = useMemo(() => {
     if (!coolingUnit.commonPricingType) return '0.00';
