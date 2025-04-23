@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Divider, Icon, IconButton } from 'react-native-paper';
-import { useShallow } from 'zustand/react/shallow';
 
 import ColdRoom from '#assets/icons/coldroom.svg';
 
@@ -13,8 +12,6 @@ import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { ProduceCrate } from '#stores/checkIn';
 import { CoolingUnit, ECoolingUnitMetric, EPricingType } from '#types/global';
 import { cn } from '#ui/lib/cn';
-import { useManagementStore } from '#stores/management';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { CrateSetupModal } from './CrateSetupModal';
 import { SetupSchema } from '../CrateSetup';
@@ -30,6 +27,7 @@ type CheckedInCardProps = {
   setCrateIDs: (modalCrates: SetupSchema['crates'], item: ProduceCrate) => void;
   openOptionsModal: () => void;
   disabled?: boolean;
+  cropName: string;
 };
 
 export function CheckedInCard({
@@ -42,13 +40,11 @@ export function CheckedInCard({
   setCrateIDs,
   openOptionsModal,
   disabled,
+  cropName,
 }: CheckedInCardProps) {
   const { t } = useTranslationUtils();
 
-  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
-
   const isRTL = LanguageManager.isRTL;
-  const locale = LanguageManager.read();
 
   const [isExtended, setIsExtended] = useState<boolean>(false);
   const [isIdsModalOpen, setIsIdsModalOpen] = useState<number | undefined>(undefined);
@@ -72,15 +68,6 @@ export function CheckedInCard({
       item.price / item.crates.reduce((acc, cur) => (acc += cur.isSellable ? cur.weight : 0), 0)
     );
   }, [item]);
-
-  const cropName = useMemo(() => {
-    const { buildMap, find } = cropTranslationLookup();
-    return find(buildMap(), {
-      name: item.crop.name,
-      country: companyCountry || undefined,
-      locale,
-    });
-  }, [item, companyCountry, locale]);
 
   return (
     <View tw="rounded-md border border-gray-300 mb-2">

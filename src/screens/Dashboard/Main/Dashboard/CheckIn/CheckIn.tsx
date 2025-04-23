@@ -32,6 +32,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import {
   CheckIn1ScreenOverlay,
@@ -95,10 +96,25 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const [indexForActiveOptions, setIndexForActiveOptions] = useState<number>(-1);
   const [isSubmitting, toggleIsSubmitting] = useToggle(false);
 
-  const { allCrates, allHavePlannedDays } = useMemo(() => {
+  const locale = LanguageManager.read();
+
+  const { allCrates, allHavePlannedDays, translatedCropNames } = useMemo(() => {
     const combinedCrates: ProduceCrate['crates'] = [];
     let everyCrateHasPlannedDays = true;
+    const translatedCropNames: Record<number, string> = {};
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
     for (const produce of produces) {
+      const cropId = produce.crop.id;
+      if (!translatedCropNames[cropId]) {
+        translatedCropNames[cropId] = find(translationMap, {
+          name: produce.crop.name,
+          country: company?.country,
+          locale,
+        });
+      }
       for (const crate of produce.crates) {
         combinedCrates.push(crate);
         if (!crate.plannedDays) {
@@ -109,8 +125,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     return {
       allCrates: combinedCrates,
       allHavePlannedDays: everyCrateHasPlannedDays,
+      translatedCropNames,
     };
-  }, [produces]);
+  }, [produces, company?.country, locale]);
 
   const total = useMemo(() => {
     if (!coolingUnit.commonPricingType) return '0.00';
@@ -342,7 +359,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
           <FlatList
             showsVerticalScrollIndicator={false}
             data={produces}
-            extraData={surveys}
+            extraData={{ surveys, translatedCropNames }}
             keyExtractor={(item, itemIdx) => `crate-${item.crop.id}-#${itemIdx}`}
             renderItem={({ item, index }) => (
               <View>
@@ -356,6 +373,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                   openOptionsModal={() => setIndexForActiveOptions(index)}
                   setCrateIDs={setCrateIDs}
                   disabled={isSubmitting}
+                  cropName={translatedCropNames?.[item.crop.id] || ''}
                 />
                 {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) ? (
                   <FarmerSurvey

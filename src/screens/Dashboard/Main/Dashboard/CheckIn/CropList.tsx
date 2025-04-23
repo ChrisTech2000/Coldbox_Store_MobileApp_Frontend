@@ -5,9 +5,6 @@ import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon, List, TextInput } from 'react-native-paper';
 import { useDebouncedCallback } from 'use-debounce';
 import { useShallow } from 'zustand/react/shallow';
-import cloneDeep from 'lodash/cloneDeep';
-import set from 'lodash/set';
-import unset from 'lodash/unset';
 
 import { API_BASE_URL } from '#constants/environment';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
@@ -58,28 +55,33 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
     }
   );
 
-  const datums = useMemo(() => {
-    if (!data) return [];
+  const translatedCropNames = useMemo(() => {
+    const translatedCropNames: Record<number, string> = {};
+    if (!data) return translatedCropNames;
+
     const { buildMap, find } = cropTranslationLookup();
     const translationMap = buildMap();
-    return cloneDeep(data).map((item) => ({
-      ...item,
-      fullCrop: {
-        ...item.fullCrop,
-        name: find(translationMap, {
+
+    for (const item of data) {
+      const cropId = item.fullCrop.id;
+      if (!translatedCropNames?.[cropId]) {
+        translatedCropNames[cropId] = find(translationMap, {
           name: item.fullCrop.name,
           country: companyCountry || undefined,
           locale,
-        }),
-        originalName: item.fullCrop.name,
-      },
-    }));
+        });
+      }
+    }
+
+    return translatedCropNames;
   }, [data, companyCountry, locale]);
 
   const filteredData = useMemo(
     () =>
-      datums.filter((item) => item.fullCrop.name.toLowerCase().includes(searchTerm.toLowerCase())),
-    [datums, searchTerm]
+      (data || []).filter((item) =>
+        item.fullCrop.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [data, searchTerm]
   );
 
   if (isLoading) {
@@ -98,10 +100,11 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
         data={filteredData}
         keyExtractor={(item) => `crop-list-item-#${item.id}`}
         showsVerticalScrollIndicator={false}
+        extraData={{ translatedCropNames }}
         renderItem={({ item, index }) => (
           <React.Fragment>
             <List.Item
-              title={item.fullCrop.name}
+              title={translatedCropNames?.[item.fullCrop.id] || ''}
               onPress={(evt) => evt.stopPropagation()}
               tw="p-0"
               disabled
@@ -125,11 +128,8 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
                   <TouchableOpacity
                     onPress={(evt) => {
                       evt.stopPropagation();
-                      const crop = cloneDeep(item.fullCrop);
-                      set(crop, 'name', crop.originalName);
-                      unset(crop, 'originalName');
                       navigation.navigate('CrateSetup', {
-                        crop,
+                        crop: item.fullCrop,
                         additionalInfo: additionalInfoRef.current,
                       });
                     }}
