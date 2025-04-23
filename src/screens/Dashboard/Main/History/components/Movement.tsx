@@ -104,11 +104,13 @@ export function Movement({
       })
     );
 
-    if (translatedCrops.length <= 2) return translatedCrops.join(', ');
+    const sorted = [...translatedCrops].sort((a, b) => a.localeCompare(b));
+
+    if (sorted.length <= 2) return sorted.join(', ');
 
     return t('Dashboard.History.cropsLabel', {
-      crop: translatedCrops.at(0),
-      amount: translatedCrops.length - 1,
+      crop: sorted.at(0),
+      amount: sorted.length - 1,
     });
   }, [movement, t, company?.country, farmerCountry, locale]);
 
