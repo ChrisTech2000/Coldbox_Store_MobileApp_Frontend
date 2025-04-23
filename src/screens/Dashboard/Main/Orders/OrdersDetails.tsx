@@ -14,6 +14,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -36,7 +37,6 @@ import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { CoolingUnit, EOrderStatus } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
-import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import colors from 'tailwindcss/colors';
 import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryInformationBottomSheet';
@@ -47,6 +47,8 @@ import { useDashboardStore } from '#stores/dashboard';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 import { cn } from '#ui/lib/cn';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { useManagementStore } from '#stores/management';
 
 const HORIZONTAL_SPACING = Platform.select({
   android: 'px-4',
@@ -64,6 +66,11 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const [showButton, setShowButton] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const farmerCountry = useDashboardStore(useShallow((store) => store.farmerCountry));
+
+  const locale = LanguageManager.read();
+
   const {
     data: order,
     isLoading,
@@ -72,16 +79,30 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
     defaultData: undefined,
   });
 
-  const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
+  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
-    {
-      defaultData: [],
-    }
+    { defaultData: [] }
   );
 
-  const crops = useTranslatedCrops(cropsResult);
+  const cropDatums = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+    return new Map(
+      crops.map((crop) => [
+        crop.id,
+        {
+          name: find(translationMap, {
+            name: crop.name,
+            country: companyCountry || farmerCountry || undefined,
+            locale,
+          }),
+          image: crop.image,
+        },
+      ])
+    );
+  }, [crops, companyCountry, farmerCountry, locale]);
 
   const orderDataByCoolingUnit = useMemo(() => {
     if (!order?.items) return [];
@@ -274,7 +295,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => {
                   const coolingUnit = unitsMap.get(item.coolingUnitId) as CoolingUnit;
-
                   return (
                     <PickupDetailsCard
                       coolingUnit={coolingUnit}
@@ -301,7 +321,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {
-                const crop = crops?.find((c) => c.id === item.relCropId);
+                const crop = cropDatums.get(item.relCropId);
                 return (
                   <ProduceCard
                     crop={{
