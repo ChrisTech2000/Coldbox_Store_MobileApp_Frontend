@@ -5,7 +5,6 @@ import { Controller } from 'react-hook-form';
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -32,10 +31,6 @@ import LoadingConditionalRenderer from '../modules/LoadingConditionalRenderer';
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-type MapDatum = GetAllCropsResponse & {
-  originalName: string;
-};
-
 export default function CropTypeFilters() {
   const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
@@ -46,25 +41,40 @@ export default function CropTypeFilters() {
   const { control, watch, formState } = MarketplaceFormManager.useForm();
   const selectedCrops = watch('crops');
 
-  const { data, isLoading } = useApiCall(
+  const {
+    data: { cropsMap, translatedCropNames },
+    isLoading,
+  } = useApiCall(
     'getMarketplaceCropFilterOptions',
     async () => {
       const result = await ColdtivateService.getAllCrops();
+
       const { buildMap, find } = cropTranslationLookup();
       const lookupMap = buildMap();
-      const translated: Array<MapDatum> = cloneDeep(result).map((crop) => ({
-        ...crop,
-        originalName: crop.name,
-        name: find(lookupMap, {
-          name: crop.name,
-          country: companyCountry || farmerCountry || '',
-          locale,
-        }),
-      }));
-      return new Map<number, MapDatum>(translated.map((item) => [item.id, item]));
+
+      const cropsMap = new Map<number, GetAllCropsResponse>();
+      const translatedCropNames: Record<number, string> = {};
+
+      for (const item of result) {
+        cropsMap.set(item.id, item);
+        if (!translatedCropNames[item.id]) {
+          translatedCropNames[item.id] = find(lookupMap, {
+            name: item.name,
+            country: companyCountry || farmerCountry || '',
+            locale,
+          });
+        }
+      }
+
+      return { cropsMap, translatedCropNames };
     },
     undefined,
-    { defaultData: new Map<number, MapDatum>() }
+    {
+      defaultData: {
+        cropsMap: new Map<number, GetAllCropsResponse>(),
+        translatedCropNames: {},
+      },
+    }
   );
 
   const [search, setSearch] = useState<string>('');
@@ -74,19 +84,19 @@ export default function CropTypeFilters() {
   const displayValue = useMemo(() => {
     const cropNames = internalSelection
       .slice(0, 2)
-      .map((cropId) => data.get(cropId)?.name)
+      .map((cropId) => cropsMap.get(cropId)?.name)
       .filter(Boolean);
     return cropNames.length > 0 ? truncate(cropNames.join(', '), { length: 20 }) : t('actions.all');
-  }, [internalSelection, data, t]);
+  }, [internalSelection, cropsMap, t]);
 
   const fieldError = !!formState.errors.crops;
 
   const datums = useMemo(
     () =>
-      Array.from(data.values()).filter((crop) =>
+      Array.from(cropsMap.values()).filter((crop) =>
         crop.name.toLowerCase().includes(search.toLowerCase())
       ),
-    [data, search]
+    [cropsMap, search]
   );
 
   return (
@@ -140,7 +150,7 @@ export default function CropTypeFilters() {
                           uppercase
                           onPress={(evt) => {
                             evt.stopPropagation();
-                            setInternalSelection(Array.from(data.keys()));
+                            setInternalSelection(Array.from(cropsMap.keys()));
                           }}
                         >
                           {t('actions.all')}
@@ -180,9 +190,9 @@ export default function CropTypeFilters() {
                             evt.stopPropagation();
                             const datums: Array<FilterValue> = [];
                             for (const value of internalSelection) {
-                              const crop = data.get(value);
+                              const crop = cropsMap.get(value);
                               if (typeof crop === 'undefined') continue;
-                              datums.push({ label: crop.originalName, value });
+                              datums.push({ label: crop.name, value });
                             }
                             onChange(datums);
                             setIsModalVisible(false);
@@ -211,12 +221,12 @@ export default function CropTypeFilters() {
                       scrollEnabled={false}
                       showsVerticalScrollIndicator={false}
                       data={datums}
-                      extraData={internalSelection}
+                      extraData={{ internalSelection, translatedCropNames }}
                       keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
                       renderItem={({ item }) => (
                         <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
                           <Text tw="text-base w-[70%]" numberOfLines={2}>
-                            {item.name}
+                            {translatedCropNames?.[item.id] || ''}
                           </Text>
                           <Checkbox
                             status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
