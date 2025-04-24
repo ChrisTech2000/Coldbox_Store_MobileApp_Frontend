@@ -109,7 +109,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     const { buildMap, find } = cropTranslationLookup();
     const translationMap = buildMap();
 
-    return revenueData.filter((movement) => {
+    return sortedMovements.filter((movement) => {
       const date = new Date(movement.date);
       if (startDate && date < startDate) return false;
       if (endDate && date > endDate) return false;
