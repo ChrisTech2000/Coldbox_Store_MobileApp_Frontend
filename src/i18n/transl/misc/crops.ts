@@ -23,9 +23,9 @@ type CropTranslationMap = Map<string, Commodity>;
 
 let _cropTranslationsMap: CropTranslationMap | null = null;
 
-const _normalize = (str: string) => str.trim().toLowerCase();
-
 export function cropTranslationLookup() {
+  const _normalize = (str: string) => str.trim().toLowerCase();
+
   return {
     buildMap: (): CropTranslationMap => {
       if (_cropTranslationsMap) return _cropTranslationsMap;
