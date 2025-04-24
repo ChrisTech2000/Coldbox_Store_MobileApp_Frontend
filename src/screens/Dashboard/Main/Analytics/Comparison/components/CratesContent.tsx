@@ -2,14 +2,17 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Text } from '#ui/components/Text';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { ScrollView } from '#ui/components/ScrollView';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useDashboardStore } from '#stores/dashboard';
 import { GetAllCropsResponse } from '#types/api.responses';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
 import { sortAndMapData } from '../../utils';
@@ -57,7 +60,30 @@ type ExtendedTableProps = {
 
 export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
   const { t } = useTranslationUtils();
+
   const crops = useDashboardStore((store) => store.allCrops ?? []);
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+
+  const locale = LanguageManager.read();
+
+  const cropsTranslations = useMemo(() => {
+    const record: Record<number, string> = {};
+    if (!crops.length) return record;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    for (const crop of crops) {
+      if (typeof record?.[crop.id] === 'string') continue;
+      record[crop.id] = find(translationMap, {
+        name: crop.name,
+        country: companyCountry,
+        locale,
+      });
+    }
+
+    return record;
+  }, [crops, companyCountry, locale]);
 
   const { coolingUnitData, configData } = useComparisonData((store) => ({
     coolingUnitData: store.coolingUnitData,
@@ -147,7 +173,11 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
             ))}
           </View>
         ),
-        column2: <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>,
+        column2: (
+          <View tw="space-y-1 my-1">
+            {generateSecondColumnContent(sortedData, crops, cropsTranslations)}
+          </View>
+        ),
         sum: sortedData.reduce((acc, current) => (acc += current.val), 0),
       });
     }
@@ -156,7 +186,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
       data.filter((item) => item.coolingUnitName),
       sorting
     );
-  }, [coolingUnitData, crops, sorting, configData]);
+  }, [coolingUnitData, crops, sorting, configData, cropsTranslations]);
 
   const generateDistributionData = useCallback(
     (
@@ -181,7 +211,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
           ),
           column2: (
             <View tw="space-y-1 my-1 h-full w-full pr-1">
-              {generateSecondColumnContent(sortedData, crops)}
+              {generateSecondColumnContent(sortedData, crops, cropsTranslations)}
             </View>
           ),
           sum: sortedData.reduce((acc, current) => acc + current.val, 0),
@@ -190,7 +220,7 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
 
       return sortData(data, sorting);
     },
-    [coolingUnitData, sorting, configData]
+    [coolingUnitData, sorting, configData, cropsTranslations]
   );
 
   const distributionCratesIn = useMemo(
