@@ -51,9 +51,10 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   );
 
   const [groupedCrates, cropsRecord] = useMemo(() => {
-    if (!movement.checkout?.crates) return [[], {}];
-    const groupedCrates = new Map<number, Array<MovementCrate>>();
     const cropsRecord: Record<number, string> = {};
+    if (!movement.checkout?.crates) return [[], cropsRecord];
+
+    const groupedCrates = new Map<number, Array<MovementCrate>>();
 
     const { buildMap, find } = cropTranslationLookup();
     const translationMap = buildMap();

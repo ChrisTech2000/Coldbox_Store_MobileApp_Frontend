@@ -1041,7 +1041,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'تنزيل الإيصال بصيغة PDF',
-          seeMovement: 'See movement', // TODO
+          seeMovement: 'عرض الحركة',
         },
         checkOut: {
           seeDetails: 'شاهد التفاصيل',
@@ -1179,7 +1179,7 @@ export default {
       produce: 'ينتج',
       discount: 'تخفيض',
       fees: 'رسوم الخدمة',
-      paymentFees: 'Payment fee', // TODO
+      paymentFees: 'رسوم الدفع',
       marketFees: 'رسوم السوق',
       coolingFees: 'رسوم التبريد',
       viewContacts: 'عرض جهات الاتصال',
