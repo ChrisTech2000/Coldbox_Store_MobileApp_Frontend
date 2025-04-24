@@ -33,7 +33,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
-import { type CoolingUnit, EPaymentMethod, ERoles } from '#types/global';
+import { type CoolingUnit, EInitiatedFor, EPaymentMethod, ERoles } from '#types/global';
 import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { DownloadDataModal } from '../components/DownloadDataModal';
@@ -118,11 +118,12 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
       const matchesCode = movement.code.toLowerCase().includes(searchTerm);
       const matchesFarmer =
-        movement.checkin?.ownerName?.toLowerCase().includes(searchTerm) ||
-        (movement.checkout &&
-          movement.checkout.crates.some((crate) =>
-            crate.ownerName?.toLowerCase().includes(searchTerm)
-          ));
+        movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
+          ? movement.checkin?.ownerName?.toLowerCase().includes(searchTerm)
+          : movement.checkout &&
+            movement.checkout.crates.some((crate) =>
+              crate.ownerName?.toLowerCase().includes(searchTerm)
+            );
 
       const crops = sortMovementCrops(movement).map((cropName) =>
         find(translationMap, {

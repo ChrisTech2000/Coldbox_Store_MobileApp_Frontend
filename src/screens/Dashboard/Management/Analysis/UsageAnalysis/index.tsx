@@ -110,12 +110,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
       if (!searchTerm) return true;
 
       const matchesCode = movement.code.toLowerCase().includes(searchTerm);
-      const matchesFarmer =
-        movement.checkin?.ownerName?.toLowerCase().includes(searchTerm) ||
-        (movement.checkout &&
-          movement.checkout.crates.some((crate) =>
-            crate.ownerName?.toLowerCase().includes(searchTerm)
-          ));
+      const matchesFarmer = movement.checkin?.ownerName?.toLowerCase().includes(searchTerm);
 
       const crops = sortMovementCrops(movement).map((cropName) =>
         find(translationMap, {
