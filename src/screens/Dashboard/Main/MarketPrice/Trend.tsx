@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { GenericError } from '#ui/components/GenericError';
@@ -19,6 +20,9 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import type { PredictionCrop, PredictionMarket, PredictionState } from '#types/global';
 import { cn } from '#ui/lib/cn';
 
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
 import { TrendChart } from './components/TrendChart';
 import { usePriceTrendsStore } from './store';
 import PredictionMarketSelect, {
@@ -32,7 +36,13 @@ export const useTrendStateStore = createSelectStore<PredictionState>();
 export type QueryCountry = 'IN' | 'NG';
 
 function MarketPriceTrend() {
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const farmerCountry = useDashboardStore(useShallow((store) => store.farmerCountry));
+
+  const locale = LanguageManager.read();
+
   const { t } = useTranslationUtils();
+
   const { country: allowedCountry, loadingFarmer, setPredictionParams } = usePriceTrendsStore();
   const { selectedItem: commodity } = useTrendCommodityStore();
   const { selectedItem: state } = useTrendStateStore();
@@ -59,6 +69,27 @@ function MarketPriceTrend() {
   });
 
   const isInvalidSelection = _useIsInvalidSelection({ commodity, state, market: selectedMarket });
+
+  const cropTranslations = useMemo(() => {
+    const safeValue = predictionParams.availableCrops ?? [];
+
+    const record: Record<number, string> = {};
+    if (!safeValue?.length) return record;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    for (const crop of safeValue) {
+      if (typeof record[crop.id] === 'string') continue;
+      record[crop.id] = find(translationMap, {
+        name: crop.name,
+        country: companyCountry || farmerCountry || undefined,
+        locale,
+      });
+    }
+
+    return record;
+  }, [predictionParams.availableCrops, companyCountry, farmerCountry, locale]);
 
   if (loadingPredictionParams || loadingFarmer) {
     return (
@@ -97,9 +128,11 @@ function MarketPriceTrend() {
           datums={predictionParams.availableCrops ?? []}
           isModalVisible={isCommoditiesModalOpen}
           setIsModalVisible={setIsCommoditiesModalOpen}
-          itemName={(item) => item?.name}
+          itemName={(item) => cropTranslations[item.id]}
           useSelectStore={useTrendCommodityStore}
-          label={commodity ? commodity.name : t('Dashboard.MarketPrice.commodityLabel')}
+          label={
+            commodity ? cropTranslations[commodity.id] : t('Dashboard.MarketPrice.commodityLabel')
+          }
           modalHeader={t('Dashboard.MarketPrice.commodityModalTitle')}
           occupyFullWidth
         />

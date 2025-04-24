@@ -2,16 +2,20 @@ import React, { useMemo } from 'react';
 import { Dimensions, FlatList, Platform, ScrollView, View } from 'react-native';
 import { Dialog, Divider, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
-import { dateFmt, useTranslationUtils, type TranslationPaths } from '#i18n/utils';
+import { dateFmt, useTranslationUtils, type TranslationPaths, LanguageManager } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EInitiatedFor, EPaymentMethod, MovementCrate } from '#types/global';
 import { cn } from '#ui/lib/cn';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 const DIALOG_MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
@@ -32,12 +36,12 @@ type DetailsModalProps = {
   dismiss: () => void;
 };
 
-type GroupedCrates = {
-  [cropName: string]: Array<MovementCrate>;
-};
-
 export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
   const { t } = useTranslationUtils();
+
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const farmerCountry = useDashboardStore(useShallow((store) => store.farmerCountry));
+  const locale = LanguageManager.read();
 
   const { data } = useApiCall(
     'getMovementOperators',
@@ -46,24 +50,36 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
     { defaultData: [], skip: !isOpen }
   );
 
-  const groupedCrates = useMemo(() => {
-    const grouped: GroupedCrates = {};
+  const [groupedCrates, cropsRecord] = useMemo(() => {
+    if (!movement.checkout?.crates) return [[], {}];
+    const groupedCrates = new Map<number, Array<MovementCrate>>();
+    const cropsRecord: Record<number, string> = {};
 
-    movement.checkout?.crates.forEach((crate) => {
-      const cropName = crate.crop?.name ?? '';
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
 
-      if (!grouped[cropName]) {
-        grouped[cropName] = [];
-      }
+    for (const crate of movement.checkout.crates) {
+      const translatedName = find(translationMap, {
+        name: crate.crop?.name || '',
+        country: companyCountry || farmerCountry || undefined,
+        locale,
+      });
 
-      grouped[cropName].push(crate);
-    });
+      const datum = groupedCrates.get(crate.cropId);
+      const newMovementCrate = {
+        ...crate,
+        crop: {
+          id: crate.cropId,
+          name: translatedName,
+        },
+      } satisfies MovementCrate;
+      if (!datum) groupedCrates.set(crate.cropId, [newMovementCrate]);
+      else groupedCrates.set(crate.cropId, [...datum, newMovementCrate]);
+      cropsRecord[crate.cropId] = translatedName;
+    }
 
-    return Object.entries(grouped).map(([cropName, crates]) => ({
-      cropName,
-      crates,
-    }));
-  }, [movement]);
+    return [Array.from(groupedCrates.entries()), cropsRecord];
+  }, [movement, companyCountry, farmerCountry, locale]);
 
   if (movement.initiatedFor === EInitiatedFor.CHECK_IN) return null;
   const paymentMethod = PAYMENT_METHOD_TRANSLATIONS[movement.checkout?.paymentMethod];
@@ -186,14 +202,15 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             data={groupedCrates}
-            keyExtractor={(item, index) => `${item.cropName}-${index}`}
-            renderItem={({ item }) => (
+            extraData={cropsRecord}
+            keyExtractor={([cropId], index) => `${cropId}-${index}`}
+            renderItem={({ item: [cropId, crates] }) => (
               <View tw="mb-8 space-y-2">
                 <Text variant="TextMedium" tw="flex flex-row text-base text-gray-400">
                   {t('Dashboard.History.detailsModal.cropTypeLabel')}:
                   <Text variant="TextMedium" tw="text-base">
                     {' '}
-                    {item.cropName}
+                    {cropsRecord[cropId]}
                   </Text>
                 </Text>
 
@@ -208,7 +225,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                 <Text variant="TextMedium" tw="flex flex-row items-center text-base text-gray-400">
                   {t('Dashboard.History.detailsModal.crateIdsLabel')}:
                   <Text variant="TextMedium" tw="text-base">
-                    {item.crates
+                    {crates
                       .map((crate) => crate.tag ?? '')
                       .filter(Boolean)
                       .join(', ')}
@@ -219,7 +236,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
                   {t('Dashboard.History.pdfModal.checkIn.numberOfCratesLabel')}:
                   <Text variant="TextMedium" tw="text-base">
                     {' '}
-                    {item.crates.length}
+                    {crates.length}
                   </Text>
                 </Text>
 

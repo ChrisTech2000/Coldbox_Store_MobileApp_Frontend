@@ -2,6 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, RefreshControl, ScrollView, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { Movement } from '#screens/Dashboard/Main/History/components/Movement';
 import {
@@ -24,6 +25,7 @@ import MultipleSelectWithStore, {
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
@@ -32,6 +34,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, EInitiatedFor, EPaymentMethod, ERoles } from '#types/global';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { DownloadDataModal } from '../components/DownloadDataModal';
 import { sortMovements } from '../utils';
@@ -92,36 +95,49 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     paymentMethods
   );
 
+  const sortedMovements = useMemo(
+    () => cloneDeep(revenueData || []).sort((a, b) => sortMovements(a, b, sorting)),
+    [revenueData, sorting]
+  );
+
   const filteredMovements = useMemo(() => {
-    if (!revenueData) return [];
+    if (!sortedMovements.length) return [];
 
-    const lowerCaseSearchString = search ? search.toLowerCase() : null;
+    const searchTerm = search ? search.toLowerCase() : null;
 
-    return revenueData
-      .slice()
-      .sort((a, b) => sortMovements(a, b, sorting))
-      .filter((movement) => {
-        const date = new Date(movement.date);
-        if (startDate && date < startDate) return false;
-        if (endDate && date > endDate) return false;
+    // FYK → only used for filtering purposes
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
 
-        if (!lowerCaseSearchString) return true;
+    return sortedMovements.filter((movement) => {
+      const date = new Date(movement.date);
+      if (startDate && date < startDate) return false;
+      if (endDate && date > endDate) return false;
 
-        const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-        const matchesFarmer =
-          movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
-            ? movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString)
-            : movement.checkout &&
-              movement.checkout.crates.some((crate) =>
-                crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
-              );
-        const crops = sortMovementCrops(movement);
-        const matchesCrop = crops.some((crop) =>
-          crop.toLowerCase().includes(lowerCaseSearchString)
-        );
-        return matchesCode || matchesFarmer || matchesCrop;
-      });
-  }, [revenueData, sorting, startDate, endDate, search]);
+      if (!searchTerm) return true;
+
+      const matchesCode = movement.code.toLowerCase().includes(searchTerm);
+      const matchesFarmer =
+        movement.initiatedFor === EInitiatedFor.MARKETPLACE_ORDER
+          ? movement.checkin?.ownerName?.toLowerCase().includes(searchTerm)
+          : movement.checkout &&
+            movement.checkout.crates.some((crate) =>
+              crate.ownerName?.toLowerCase().includes(searchTerm)
+            );
+
+      const crops = sortMovementCrops(movement).map((cropName) =>
+        find(translationMap, {
+          name: cropName,
+          country: company?.country || undefined,
+          locale: language,
+        })
+      );
+
+      const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(searchTerm));
+
+      return matchesCode || matchesFarmer || matchesCrop;
+    });
+  }, [sortedMovements, startDate, endDate, search]);
 
   useEffect(() => reset, []);
 
@@ -262,7 +278,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
         )}
       </ScrollView>
 
-      <View tw="flex flex-row justify-between items-center mb-4 mx-4">
+      <HideWithKeyboardView tw="flex flex-row justify-between items-center mb-4 mx-4">
         <Text variant="TextBold" tw="text-base font-bold">
           {t('Dashboard.Management.RevenueAnalysis.summary.total')}
         </Text>
@@ -274,7 +290,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
             currency: company?.currency,
           })}
         </Text>
-      </View>
+      </HideWithKeyboardView>
 
       <DownloadDataModal
         isOpen={isPDFModalOpen}

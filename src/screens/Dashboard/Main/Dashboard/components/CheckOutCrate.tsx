@@ -12,9 +12,10 @@ import isNil from 'lodash/isNil';
 
 type ProduceProps = {
   crate: Crate;
+  cropName: string;
 };
 
-export function CheckoutCrate({ crate }: ProduceProps) {
+export function CheckoutCrate({ crate, cropName }: ProduceProps) {
   const { t } = useTranslationUtils();
 
   const generateDaysString = useCallback((days: number) => {
@@ -50,7 +51,7 @@ export function CheckoutCrate({ crate }: ProduceProps) {
             {crate.movementCode}
           </Text>
           <View>
-            {crate.name.split(' ').map((name, index) => (
+            {cropName.split(' ').map((name, index) => (
               <Text key={`${name}-${index}`} tw="text-gray-400">
                 {name}
               </Text>

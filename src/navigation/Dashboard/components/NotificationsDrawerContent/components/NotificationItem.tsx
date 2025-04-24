@@ -3,6 +3,8 @@ import { type GestureResponderEvent, TouchableOpacity, View } from 'react-native
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import isEmpty from 'lodash/isEmpty';
 import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { Text } from '#ui/components/Text';
 
@@ -16,10 +18,12 @@ import { useManagementStore } from '#stores/management';
 import { useRightDrawerStore } from '#navigation/Dashboard';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { resolveCropInfo, resolveOwnerName } from '#services/utils/resolvers';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
 import reportCrash from '#ui/lib/reportCrash';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import type { Notifications, CommoditySurveyDatum, OrderRequiresMovementDatum } from '../index';
 
@@ -152,12 +156,19 @@ export function FarmerSurveyNotification(props: {
   const { notification, onSelect } = props;
 
   const company = useManagementStore((store) => store.company);
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+  const contextualCountry = company?.country || farmerCountry || undefined;
 
   async function updateStatusHandler(): Promise<void> {
     const farmer = notification.ctx.farmer;
     if (!farmer) throw new Error(NOTIFICATION_EXCEPTIONS.FARMER_REQUIRED);
 
     const surveys = await ColdtivateService.getFarmerSurveys({ farmerId: farmer.id });
+
+    const { buildMap, find } = cropTranslationLookup();
+    const lookupMap = buildMap();
 
     const surveyList = surveys
       ? await Promise.all(
@@ -166,7 +177,11 @@ export function FarmerSurveyNotification(props: {
               const crop = await DataloaderService.crops.getById(item.cropId);
               return {
                 ...item,
-                cropName: crop?.name ?? '',
+                cropName: find(lookupMap, {
+                  name: crop?.name ?? '',
+                  country: contextualCountry,
+                  locale,
+                }),
               };
             })
           )
@@ -188,8 +203,22 @@ export function FarmerSurveyNotification(props: {
     onSelect({
       farmerSurveysLength: surveyList.length + 1,
       companyCurrency: company?.currency ?? DEFAULT_CURRENCY_CODE,
-      crops: await DataloaderService.crops.getAll(),
-      contextualCrop,
+      crops: cloneDeep(await DataloaderService.crops.getAll()).map((crop) => {
+        crop.name = find(lookupMap, {
+          name: crop.name,
+          country: contextualCountry,
+          locale,
+        });
+        return crop;
+      }),
+      contextualCrop: {
+        ...contextualCrop,
+        name: find(lookupMap, {
+          name: contextualCrop.name,
+          country: contextualCountry,
+          locale,
+        }),
+      },
       farmerId: farmer.id,
       commoditySurveys: surveyList,
       userType: (contextualFarmerSurvey?.userType as EOccupation) ?? EOccupation.FARMER,
@@ -214,6 +243,10 @@ export function MarketSurveyNotification(props: {
   const { notification, onSelect } = props;
 
   const company = useManagementStore((store) => store.company);
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+  const contextualCountry = company?.country || farmerCountry || undefined;
 
   async function updateStatusHandler(): Promise<void> {
     const farmer = notification.ctx.farmer;
@@ -230,13 +263,23 @@ export function MarketSurveyNotification(props: {
     const isValidMovement = movementDetails && movementDetails.checkout?.crates?.[0]?.ownedByUserId;
     if (!isValidMovement) throw new Error(NOTIFICATION_EXCEPTIONS.INVALID_HISTORY_MOVEMENT);
 
+    const { buildMap, find } = cropTranslationLookup();
+    const lookupMap = buildMap();
+
     const movementCropsForSurvey = (
       await Promise.all(
         movementDetails.checkout.crates.map(async (crate) => {
           if (movementDetails.checkout.hasMarketSurvey.includes(crate.cropId)) return;
           const crop = await DataloaderService.crops.getById(crate.cropId);
           if (!crop) return;
-          return { id: crop.id, name: crop.name };
+          return {
+            id: crop.id,
+            name: find(lookupMap, {
+              name: crop.name,
+              country: contextualCountry,
+              locale,
+            }),
+          };
         })
       )
     ).filter(Boolean) as Array<{ id: number; name: string }>;
@@ -278,6 +321,12 @@ export function OrderRequiresMovementNotification(props: {
 }) {
   const { notification, onSelect } = props;
 
+  const company = useManagementStore((store) => store.company);
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+  const contextualCountry = company?.country || farmerCountry || undefined;
+
   async function updateStatusHandler(): Promise<void> {
     const coolingUnit = notification.ctx.coolingUnit;
     if (!coolingUnit) throw new Error(NOTIFICATION_EXCEPTIONS.UNIT_REQUIRED);
@@ -287,6 +336,9 @@ export function OrderRequiresMovementNotification(props: {
     if (!movement) throw new Error(NOTIFICATION_EXCEPTIONS.MOVEMENT_NOT_FOUND);
 
     if (!isEmpty(movement.checkin)) {
+      const { buildMap, find } = cropTranslationLookup();
+      const lookupMap = buildMap();
+
       movement.checkin = {
         ...movement.checkin,
         ownerName: await resolveOwnerName(
@@ -294,23 +346,49 @@ export function OrderRequiresMovementNotification(props: {
           movement.checkin?.ownedOnBehalfOfCompanyId
         ),
         crates: await Promise.all(
-          movement.checkin?.crates.map(async (crate) => ({
-            ...crate,
-            crop: await resolveCropInfo(crate.cropId),
-          }))
+          movement.checkin?.crates.map(async (crate) => {
+            const resolvedCrop = await resolveCropInfo(crate.cropId);
+            return {
+              ...crate,
+              crop: {
+                ...resolvedCrop,
+                name: find(lookupMap, {
+                  name: resolvedCrop.name,
+                  country: contextualCountry,
+                  locale,
+                }),
+              },
+            };
+          })
         ),
       };
     }
 
     if (!isEmpty(movement.checkout)) {
+      const { buildMap, find } = cropTranslationLookup();
+      const lookupMap = buildMap();
+
       movement.checkout = {
         ...movement.checkout,
         crates: await Promise.all(
-          movement.checkout?.crates.map(async (crate) => ({
-            ...crate,
-            ownerName: await resolveOwnerName(crate.ownedByUserId, crate.ownedOnBehalfOfCompanyId),
-            crop: await resolveCropInfo(crate.cropId),
-          }))
+          movement.checkout?.crates.map(async (crate) => {
+            const resolvedCrop = await resolveCropInfo(crate.cropId);
+            return {
+              ...crate,
+              ownerName: await resolveOwnerName(
+                crate.ownedByUserId,
+                crate.ownedOnBehalfOfCompanyId
+              ),
+              crop: {
+                ...resolvedCrop,
+                name: find(lookupMap, {
+                  name: resolvedCrop.name,
+                  country: contextualCountry,
+                  locale,
+                }),
+              },
+            };
+          })
         ),
       };
     }

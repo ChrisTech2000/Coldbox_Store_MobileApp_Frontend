@@ -2,6 +2,7 @@ import React, { createContext, useContext, useMemo, type PropsWithChildren } fro
 
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import { useTranslatedCrops } from '../../CompanyDetails/utils';
 
 export type Datum = Record<number, string>;
 
@@ -42,7 +43,7 @@ export default function DataAggregator(props: PropsWithChildren<{ companyId?: nu
     }
   );
 
-  const { data: allCrops, isLoading: isLoadingAllCrops } = useApiCall(
+  const { data: cropsResult, isLoading: isLoadingAllCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
@@ -61,6 +62,8 @@ export default function DataAggregator(props: PropsWithChildren<{ companyId?: nu
       defaultData: [],
     }
   );
+
+  const allCrops = useTranslatedCrops(cropsResult);
 
   const [companyCrops, companyOperators, companyLocations] = useMemo(() => {
     const crops: Array<[number, string]> = [];

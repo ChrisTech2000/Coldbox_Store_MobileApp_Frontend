@@ -1,30 +1,57 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { Divider } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 import * as BottomSheet from '#ui/components/BottomSheet';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useDashboardStore } from '#stores/dashboard';
 import { GetAllOrdersResponse } from '#types/api.responses';
 import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 export default function CropsBottomSheet() {
   const { t } = useTranslationUtils();
-  const [crops] = useDashboardStore((store) => [store.allCrops ?? []]);
+
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const [crops, farmerCountry] = useDashboardStore((store) => [
+    store.allCrops,
+    store.farmerCountry,
+  ]);
 
   const [data, setData] = useState<GetAllOrdersResponse | undefined>(undefined);
   const [modalRef, modalActions] = BottomSheet.useBottomSheet();
+
+  const locale = LanguageManager.read();
 
   useAppEventListener(APP_EVENTS.DISPATCH_CROPS_BOTTOM_SHEET, (data: GetAllOrdersResponse) => {
     modalActions.open();
     setData(data);
   });
 
-  const cropMap = useMemo(() => new Map(crops.map((crop) => [crop.id, crop])), [crops]);
+  const cropDatums = useMemo(() => {
+    const record: Record<number, string> = {};
+    if (!crops?.length) return record;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    for (const crop of crops) {
+      if (typeof record?.[crop.id] === 'string') continue;
+      record[crop.id] = find(translationMap, {
+        name: crop.name,
+        country: companyCountry || farmerCountry || undefined,
+        locale,
+      });
+    }
+
+    return record;
+  }, [crops, companyCountry, farmerCountry, locale]);
 
   return (
     <BottomSheet.Root ref={modalRef} onClose={() => setData(undefined)}>
@@ -39,7 +66,7 @@ export default function CropsBottomSheet() {
             <View tw="py-2">
               <View tw="flex flex-row justify-between w-full">
                 <Text tw="text-base">
-                  {cropMap.get(item.relCropId)?.name ?? DEFAULT_CROP_VALUES.name}
+                  {cropDatums?.[item.relCropId] ?? DEFAULT_CROP_VALUES.name}
                 </Text>
                 <Text tw="text-base uppercase">
                   {item.orderedProduceWeight}

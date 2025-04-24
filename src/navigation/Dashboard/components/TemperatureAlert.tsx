@@ -5,6 +5,8 @@ import { DataTable, Dialog, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useSWRConfig } from 'swr';
 import colors from 'tailwindcss/colors';
+import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { Button } from '#ui/components/Button';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
@@ -14,10 +16,12 @@ import reportCrash from '#ui/lib/reportCrash';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import type { CommodityInfo } from '#types/global';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 type LocalState<T = string> = {
   coolingUnitId: number | undefined;
@@ -49,6 +53,9 @@ export default function TemperatureAlert() {
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const { mutate } = useSWRConfig();
+
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const locale = LanguageManager.read();
 
   const form = useForm<LocalState>({
     defaultValues: DEFAULT_STATE,
@@ -102,6 +109,8 @@ export default function TemperatureAlert() {
     async ({ coolingUnitId, companyId, showCompleteInfo }) => {
       try {
         const result = await ColdtivateService.getCoolingUnit({ coolingUnitId, companyId });
+        const { buildMap, find } = cropTranslationLookup();
+        const translationMap = buildMap();
         form.reset({
           ...DEFAULT_STATE,
           coolingUnitId,
@@ -110,10 +119,15 @@ export default function TemperatureAlert() {
           lastUpdated: result.latestTemperatureTimestamp
             ? new Date(result.latestTemperatureTimestamp)
             : undefined,
-          datums: result.commodityInfos
-            .map((item) => ({
-              ...item,
-              optimalStorageTemperature: item.optimalStorageTemperature || 'N/A',
+          datums: cloneDeep(result.commodityInfos)
+            .map((commodityInfo) => ({
+              ...commodityInfo,
+              optimalStorageTemperature: commodityInfo.optimalStorageTemperature || 'N/A',
+              commodity: find(translationMap, {
+                name: commodityInfo.commodity,
+                country: companyCountry || undefined,
+                locale,
+              }),
             }))
             .sort((a, b) => b.percentage - a.percentage),
         });

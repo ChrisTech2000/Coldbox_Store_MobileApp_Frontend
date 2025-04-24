@@ -10,6 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { Dialog, Divider, Icon, Portal, TextInput } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 
@@ -21,12 +22,14 @@ import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithSto
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 
-import { useTranslationUtils } from '#i18n/utils';
-import type { ManagementCompany } from '#stores/management';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { ManagementCompany, useManagementStore } from '#stores/management';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { type Crop, EUnitOfMeasurement } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
 import { cn } from '#ui/lib/cn';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { useDashboardStore } from '#stores/dashboard';
 
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { defaultValues as _defaultValues, FarmerSurveySchema } from './schema';
@@ -89,6 +92,11 @@ export function FarmersSurveyModal({
   const { t, zodResolver } = useTranslationUtils();
   const colors = useTailwindColors();
 
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const farmerCountry = useDashboardStore(useShallow((store) => store.farmerCountry));
+
+  const locale = LanguageManager.read();
+
   const useCropStore = useMemo(
     () => instantiateCropStore(props.initialCropSelection),
     [isModalVisible]
@@ -98,6 +106,33 @@ export function FarmersSurveyModal({
   const { selectedItem: crop } = useCropStore();
   const { selectedItems: spoilageReasons, onSelect: onSelectSpoilageReasons } =
     useSpoilageReasonsStore();
+
+  const { cropTranslations, selectedItemTranslation } = useMemo(() => {
+    const datums = cropSelectionAvailable?.crops ?? [];
+    const record: Record<number, string> = {};
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    for (const datum of datums) {
+      if (!record[datum.id]) {
+        record[datum.id] = find(translationMap, {
+          name: datum.name,
+          country: companyCountry || farmerCountry || undefined,
+          locale,
+        });
+      }
+    }
+
+    return {
+      cropTranslations: record,
+      selectedItemTranslation: find(translationMap, {
+        name: crop?.name ?? '',
+        country: companyCountry || farmerCountry || undefined,
+        locale,
+      }),
+    };
+  }, [cropSelectionAvailable?.crops, companyCountry, farmerCountry, locale, crop]);
 
   const [isUnitModalVisible, setIsUnitModalVisible] = useState<boolean>(false);
   const [isCropModalVisible, setIsCropModalVisible] = useState<boolean>(false);
@@ -169,10 +204,10 @@ export function FarmersSurveyModal({
                     <SelectWithStore<Crop | GetAllCropsResponse>
                       datums={cropSelectionAvailable.crops}
                       isModalVisible={isCropModalVisible}
-                      itemName={(item) => item?.name}
+                      itemName={(item) => cropTranslations?.[item.id] || item?.name || ''}
                       setIsModalVisible={setIsCropModalVisible}
                       useSelectStore={useCropStore}
-                      label={crop?.name ?? ''}
+                      label={selectedItemTranslation ?? ''}
                       modalHeader={t('Dashboard.Management.CompanyDetails.headings.commodity')}
                     />
                   </View>
@@ -188,7 +223,7 @@ export function FarmersSurveyModal({
               {/** QUANTITY */}
               <Question
                 question={t('Dashboard.CrateManagement.FarmerSurvey.modal.weeklyQuantityQuestion', {
-                  crop: _cropName ?? crop?.name ?? '__',
+                  crop: _cropName ?? selectedItemTranslation ?? '__',
                 })}
               />
 
@@ -402,7 +437,7 @@ export function FarmersSurveyModal({
               {/** PRICE */}
               <Question
                 question={t('Dashboard.CrateManagement.FarmerSurvey.modal.marketPriceQuestion', {
-                  crop: _cropName ?? crop?.name ?? '__',
+                  crop: _cropName ?? selectedItemTranslation ?? '__',
                 })}
               />
               <View tw="pb-8 space-y-1.5">

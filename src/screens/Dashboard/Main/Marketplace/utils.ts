@@ -1,6 +1,8 @@
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import { useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
 import DataloaderService from '#services/DataloaderService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -9,6 +11,10 @@ import type { GetAvailableListingParams } from '#types/api.params';
 import type { Company, User } from '#types/global';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { LanguageManager } from '#i18n/utils';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
 
@@ -50,6 +56,11 @@ export type AvailableListingDatum = {
 };
 
 export function useMarketplaceListing() {
+  const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+
   const queryParams = useMarketplaceQueryParams();
   const filters = useMarketplaceFilters((store) => store.filters);
 
@@ -154,11 +165,26 @@ export function useMarketplaceListing() {
     data: useMemo(() => {
       const { companiesToFilterIn, cropsToFilterIn, priceRangeFilter } = filtering;
 
-      if (isEmpty(companiesToFilterIn) && isEmpty(cropsToFilterIn) && isNil(priceRangeFilter))
-        return datums;
+      const { buildMap, find } = cropTranslationLookup();
+      const lookupMap = buildMap();
+      const datumsWithTranslatedCrops = cloneDeep(datums).map((datum) => ({
+        ...datum,
+        crop: {
+          ...datum.crop,
+          name: find(lookupMap, {
+            name: datum.crop.name,
+            country: companyCountry || farmerCountry || undefined,
+            locale,
+          }),
+        },
+      }));
+
+      if (isEmpty(companiesToFilterIn) && isEmpty(cropsToFilterIn) && isNil(priceRangeFilter)) {
+        return datumsWithTranslatedCrops;
+      }
 
       // apply filters to the remapped listings
-      return datums.filter((datum) => {
+      return datumsWithTranslatedCrops.filter((datum) => {
         const isInCompanyFilter =
           !companiesToFilterIn.size || companiesToFilterIn.has(datum.company.id);
         const isInCropFilter = !cropsToFilterIn.size || cropsToFilterIn.has(datum.crop.id);
@@ -179,6 +205,6 @@ export function useMarketplaceListing() {
 
         return isInCompanyFilter && isInCropFilter && isInPriceRange;
       });
-    }, [datums, filtering]),
+    }, [datums, companyCountry, farmerCountry, locale, filtering]),
   };
 }

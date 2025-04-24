@@ -25,6 +25,7 @@ import {
   getPdfContent,
   type AggregateFarmerDataArgs,
 } from '#screens/Dashboard/Management/EditCoolingUser/utils';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import {
   ConfigData,
@@ -70,12 +71,14 @@ export function FarmerAnalytics() {
     { skip: !user?.id, defaultData: [] }
   );
 
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+  const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
     { skip: !user?.id, defaultData: [] }
   );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   const { data: companies, isLoading: isLoadingCompanies } = useApiCall(
     'getCompanies',

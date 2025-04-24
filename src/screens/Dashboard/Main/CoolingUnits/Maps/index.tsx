@@ -19,6 +19,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { LocationGeocoder } from '#services/LocationGeocoder';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import { DEFAULT_COORDINATES } from '../../Marketplace/utils';
 import * as Map from './components/Map';
@@ -43,12 +44,14 @@ function CoolingUnitsMaps() {
     useShallow((store) => [store.farmerId, store.coolingUnits])
   );
 
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+  const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
     { skip: !farmerId, defaultData: [] }
   );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   useWalkthroughStep({
     number: EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP,

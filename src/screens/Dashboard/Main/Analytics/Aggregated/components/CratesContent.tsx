@@ -1,11 +1,14 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { sortAndMapData } from '../../utils';
 import { generateSecondColumnContent } from '../../utils/generateSecondColumnContent';
@@ -20,7 +23,30 @@ type SectionProps = {
 export function CratesContent() {
   const { t } = useTranslationUtils();
   const { coolingUnitData } = useAggregatedData();
+
   const crops = useDashboardStore((store) => store.allCrops ?? []);
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+
+  const locale = LanguageManager.read();
+
+  const cropsTranslations = useMemo(() => {
+    const record: Record<number, string> = {};
+    if (!crops.length) return record;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    for (const crop of crops) {
+      if (typeof record?.[crop.id] === 'string') continue;
+      record[crop.id] = find(translationMap, {
+        name: crop.name,
+        country: companyCountry,
+        locale,
+      });
+    }
+
+    return record;
+  }, [crops, companyCountry, locale]);
 
   const crates = useMemo(() => {
     return {
@@ -114,6 +140,7 @@ export function CratesContent() {
         {generateSecondColumnContent(
           sortAndMapData(sumCropValues(coolingUnitData?.checkInCratesCrop ?? {})),
           crops,
+          cropsTranslations,
           true
         )}
       </View>
@@ -125,6 +152,7 @@ export function CratesContent() {
         {generateSecondColumnContent(
           sortAndMapData(sumCropValues(coolingUnitData?.checkOutCratesCrop ?? {})),
           crops,
+          cropsTranslations,
           true
         )}
       </View>
@@ -136,6 +164,7 @@ export function CratesContent() {
         {generateSecondColumnContent(
           sortAndMapData(sumCropValues(coolingUnitData?.checkInKgCrop ?? {})),
           crops,
+          cropsTranslations,
           true
         )}
       </View>
@@ -147,6 +176,7 @@ export function CratesContent() {
         {generateSecondColumnContent(
           sortAndMapData(sumCropValues(coolingUnitData?.checkOutKgCrop ?? {})),
           crops,
+          cropsTranslations,
           true
         )}
       </View>
@@ -158,6 +188,7 @@ export function CratesContent() {
         {generateSecondColumnContent(
           sortAndMapData(sumCropValues(coolingUnitData?.co2Crops ?? {})),
           crops,
+          cropsTranslations,
           true,
           t('Dashboard.Analytics.comparisonTab.cratesTab.co2Kg')
         )}

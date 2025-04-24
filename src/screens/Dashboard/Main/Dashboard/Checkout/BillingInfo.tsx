@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider, Icon, Switch } from 'react-native-paper';
+import cloneDeep from 'lodash/cloneDeep';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -16,6 +17,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { EPaymentMethod, EPaymentThrough, EPricingType } from '#types/global';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { CheckOut2ScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
@@ -41,7 +43,7 @@ const BUTTON_WIDTH = (DEVICE_WIDTH - 42) / 2;
 export const usePaymentTypeStore = createSelectStore<EPaymentMethod>();
 
 function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo'>) {
-  const { user, crates, coolingUnit } = route.params;
+  const { user, crates: datums, coolingUnit } = route.params;
 
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const { t } = useTranslationUtils();
@@ -68,6 +70,21 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     OverlayComponent: CheckOut2ScreenOverlay,
     fullScreen: true,
   });
+
+  const locale = LanguageManager.read();
+
+  const crates = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+    return cloneDeep(datums || []).map((datum) => ({
+      ...datum,
+      name: find(translationMap, {
+        name: datum.name,
+        country: company?.country,
+        locale,
+      }),
+    }));
+  }, [datums, company?.country, locale]);
 
   const { data: locations } = useApiCall(
     'getLocations',

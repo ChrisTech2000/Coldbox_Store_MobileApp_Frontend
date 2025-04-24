@@ -23,6 +23,7 @@ import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryT
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import { FarmersSurveyModal, FarmerSurveySchemaType } from '../../components/FarmerSurveyModal';
 import { BaseSurveySchema, EExperience, EOccupation, type BaseSurveySchemaType } from './schema';
@@ -38,11 +39,13 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
   const { t, zodResolver } = useTranslationUtils();
   const { surveys, farmerId, refetchSurveys, resetMarketSurveyStore } = useMarketSurveyStore();
 
-  const { data: crops, isLoading: isCropsLoading } = useApiCall(
+  const { data: cropsResult, isLoading: isCropsLoading } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
-    {}
+    undefined
   );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   const [openFarmersSurveyModal, setOpenFarmersSurveyModal] = useState<number | null>(null);
   const [isAddCommodityModalOpen, setIsAddCommodityModalOpen] = useState<boolean>(false);

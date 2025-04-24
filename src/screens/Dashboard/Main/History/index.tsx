@@ -4,8 +4,9 @@ import { Dimensions, Platform, RefreshControl, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
@@ -29,6 +30,7 @@ import { Movement } from './components/Movement';
 import { createSortingStore, ESortingOptions, SortingMenu } from './components/SortMenu';
 import { sortMovementCrops, sortMovements } from './utils/sortMovements';
 import { useMovementsHistory } from './utils/useMovementsData';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 const useCoolingUnitStore = createSelectStore<CoolingUnit>();
 const useCompanyStore = createSelectStore<Company>();
@@ -45,15 +47,18 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   const user = useAuthStore((store) => store.user);
   const [isTutorialActive] = useTutorialStore((store) => [store.isTutorialActive]);
   const sorting = useSortingStore((store) => store.sorting);
-  const { farmerId, addRefreshDataFn } = useDashboardStore(
+  const { farmerId, addRefreshDataFn, farmerCountry } = useDashboardStore(
     useShallow((store) => ({
       farmerId: store.farmerId,
       addRefreshDataFn: store.addRefreshDataFn,
+      farmerCountry: store.farmerCountry,
     }))
   );
 
   const coolingUnit = useCoolingUnitStore((store) => store.selectedItem);
   const company = useCompanyStore((store) => store.selectedItem);
+
+  const locale = LanguageManager.read();
 
   const [search, setSearch] = useState<string>('');
   const [areCoolingUnitsLoading, setAreCoolingUnitsLoading] = useState<boolean>(false);
@@ -72,29 +77,40 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
     isValidating,
   } = useMovementsHistory(farmerId, user as User, coolingUnit);
 
-  const filteredAndSortedMovements = useMemo(() => {
-    if (!movements) return [];
-    const lowerCaseSearchString = search.toLowerCase();
+  const sortedMovements = useMemo(
+    () => cloneDeep(movements).sort((a, b) => sortMovements(a, b, sorting)),
+    [movements, sorting]
+  );
 
-    return movements
-      .slice()
-      .sort((a, b) => sortMovements(a, b, sorting))
-      .filter((movement) => {
-        const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-        const matchesFarmer =
-          movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString) ??
-          movement.checkout.crates.some((crate) =>
-            crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
-          );
+  const filteredMovements = useMemo(() => {
+    if (!sortedMovements) return [];
+    const searchTerm = search.toLowerCase();
 
-        const crops = sortMovementCrops(movement);
-        const matchesCrop = crops.some((crop) =>
-          crop.toLowerCase().includes(lowerCaseSearchString)
+    // FYK → only used for filtering purposes
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    return sortedMovements.filter((movement) => {
+      const matchesCode = movement.code.toLowerCase().includes(searchTerm);
+      const matchesFarmer =
+        movement.checkin?.ownerName?.toLowerCase().includes(searchTerm) ??
+        movement.checkout.crates.some((crate) =>
+          crate.ownerName?.toLowerCase().includes(searchTerm)
         );
 
-        return matchesCode || matchesFarmer || matchesCrop;
-      });
-  }, [movements, sorting, search]);
+      const crops = sortMovementCrops(movement).map((cropName) =>
+        find(translationMap, {
+          name: cropName,
+          country: company?.country || farmerCountry || undefined,
+          locale,
+        })
+      );
+
+      const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(searchTerm));
+
+      return matchesCode || matchesFarmer || matchesCrop;
+    });
+  }, [sortedMovements, search, company?.country, farmerCountry, locale]);
 
   useEffect(() => {
     addRefreshDataFn(refetchHistoryMovements);
@@ -140,7 +156,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
           data={
             (isTutorialActive
               ? MOCKED_HISTORY_DATA
-              : filteredAndSortedMovements) as GetMovementsHistoryResponse
+              : filteredMovements) as GetMovementsHistoryResponse
           }
           renderItem={({ item: movement, index }) => (
             <Movement

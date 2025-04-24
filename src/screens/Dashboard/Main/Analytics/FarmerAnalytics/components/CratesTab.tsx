@@ -1,15 +1,16 @@
 import isArray from 'lodash/isArray';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { SectionAccordion } from '../../components/SectionAccordion';
 import { sortAndMapData } from '../../utils';
@@ -28,7 +29,32 @@ type Section =
 
 export function CratesTab() {
   const { t } = useTranslationUtils();
-  const crops = useDashboardStore((store) => store.allCrops ?? []);
+
+  const [crops, farmerCountry] = useDashboardStore((store) => [
+    store.allCrops ?? [],
+    store.farmerCountry,
+  ]);
+
+  const locale = LanguageManager.read();
+
+  const cropsTranslations = useMemo(() => {
+    const record: Record<number, string> = {};
+    if (!crops.length) return record;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    for (const crop of crops) {
+      if (typeof record?.[crop.id] === 'string') continue;
+      record[crop.id] = find(translationMap, {
+        name: crop.name,
+        country: farmerCountry || undefined,
+        locale,
+      });
+    }
+
+    return record;
+  }, [crops, farmerCountry, locale]);
 
   const { configData, farmer } = useFarmerAnalyticsData((store) => ({
     configData: store.configData,
@@ -87,7 +113,9 @@ export function CratesTab() {
             </View>
           );
           _data.cropsCratesIn.column2 = (
-            <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
+            <View tw="space-y-1 my-1">
+              {generateSecondColumnContent(sortedData, crops, cropsTranslations)}
+            </View>
           );
         }
 
@@ -103,7 +131,9 @@ export function CratesTab() {
             </View>
           );
           _data.cropsCratesOut.column2 = (
-            <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
+            <View tw="space-y-1 my-1">
+              {generateSecondColumnContent(sortedData, crops, cropsTranslations)}
+            </View>
           );
         }
 
@@ -119,7 +149,9 @@ export function CratesTab() {
             </View>
           );
           _data.cropsKgIn.column2 = (
-            <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
+            <View tw="space-y-1 my-1">
+              {generateSecondColumnContent(sortedData, crops, cropsTranslations)}
+            </View>
           );
         }
 
@@ -135,14 +167,16 @@ export function CratesTab() {
             </View>
           );
           _data.cropsKgOut.column2 = (
-            <View tw="space-y-1 my-1">{generateSecondColumnContent(sortedData, crops)}</View>
+            <View tw="space-y-1 my-1">
+              {generateSecondColumnContent(sortedData, crops, cropsTranslations)}
+            </View>
           );
         }
       });
 
       return _data;
     },
-    [farmerImpact, crops]
+    [farmerImpact, crops, cropsTranslations]
   );
 
   if (loadingFarmerImpact) {

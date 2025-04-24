@@ -12,7 +12,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
@@ -24,6 +24,7 @@ import {
   EPricingType,
 } from '#types/global';
 import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import colors from 'tailwindcss/colors';
 import { CrateSetupModal } from '../components/CrateSetupModal';
@@ -72,6 +73,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   ]);
 
   const { t, zodResolver } = useTranslationUtils();
+  const locale = LanguageManager.read();
 
   const {
     control,
@@ -281,6 +283,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
     [coolingUnit, contextualAdditionalInfo, contextualCrop, user, reset, route.params]
   );
 
+  const cropName = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    return find(buildMap(), {
+      name: contextualCrop.name,
+      country: company?.country,
+      locale,
+    });
+  }, [contextualCrop, company?.country, locale]);
+
   return (
     <React.Fragment>
       <KeyboardAwareScrollView
@@ -288,7 +299,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         showsVerticalScrollIndicator={false}
       >
         <View tw="flex-1 pb-48">
-          <CropDetails cropName={contextualCrop.name} additionalInfo={contextualAdditionalInfo} />
+          <CropDetails cropName={cropName} additionalInfo={contextualAdditionalInfo} />
 
           <View tw="mt-8">
             <Text tw="text-base text-green-primary font-bold">Details</Text>

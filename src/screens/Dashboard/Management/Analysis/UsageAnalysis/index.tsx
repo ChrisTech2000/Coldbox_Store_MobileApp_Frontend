@@ -2,6 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, RefreshControl, ScrollView, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { Movement } from '#screens/Dashboard/Main/History/components/Movement';
 import {
@@ -23,6 +24,7 @@ import MultipleSelectWithStore, {
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
@@ -32,6 +34,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { type CoolingUnit, EInitiatedFor, ERoles } from '#types/global';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { DownloadDataModal } from '../components/DownloadDataModal';
 import { sortMovements } from '../utils';
@@ -83,33 +86,45 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     selectedUnits ?? []
   );
 
+  const sortedMovements = useMemo(
+    () => cloneDeep(usageData || []).sort((a, b) => sortMovements(a, b, sorting)),
+    [usageData, sorting]
+  );
+
+  const language = LanguageManager.read();
+
   const filteredMovements = useMemo(() => {
-    if (!usageData) return [];
+    if (!sortedMovements.length) return [];
 
-    const lowerCaseSearchString = search ? search.toLowerCase() : null;
+    const searchTerm = search ? search.toLowerCase() : null;
 
-    return usageData
-      .slice()
-      .sort((a, b) => sortMovements(a, b, sorting))
-      .filter((movement) => {
-        const date = new Date(movement.date);
-        if (startDate && date < startDate) return false;
-        if (endDate && date > endDate) return false;
+    // FYK → only used for filtering purposes
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
 
-        if (!lowerCaseSearchString) return true;
+    return sortedMovements.filter((movement) => {
+      const date = new Date(movement.date);
+      if (startDate && date < startDate) return false;
+      if (endDate && date > endDate) return false;
 
-        const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-        const matchesFarmer = movement.checkin?.ownerName
-          ?.toLowerCase()
-          .includes(lowerCaseSearchString);
+      if (!searchTerm) return true;
 
-        const crops = sortMovementCrops(movement);
-        const matchesCrop = crops.some((crop) =>
-          crop.toLowerCase().includes(lowerCaseSearchString)
-        );
-        return matchesCode || matchesFarmer || matchesCrop;
-      });
-  }, [usageData, sorting, startDate, endDate, search]);
+      const matchesCode = movement.code.toLowerCase().includes(searchTerm);
+      const matchesFarmer = movement.checkin?.ownerName?.toLowerCase().includes(searchTerm);
+
+      const crops = sortMovementCrops(movement).map((cropName) =>
+        find(translationMap, {
+          name: cropName,
+          country: company?.country || undefined,
+          locale: language,
+        })
+      );
+
+      const matchesCrop = crops.some((crop) => crop.toLowerCase().includes(searchTerm));
+
+      return matchesCode || matchesFarmer || matchesCrop;
+    });
+  }, [sortedMovements, startDate, endDate, search, language]);
 
   const { totalCheckIns, totalCrates, totalUsers, totalWeight } = useMemo(() => {
     const { totalCrates, totalWeight, users } = filteredMovements
@@ -142,8 +157,6 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   }, [filteredMovements]);
 
   useEffect(() => reset, []);
-
-  const language = LanguageManager.read();
 
   return (
     <View tw="absolute bottom-0 top-0 right-0 left-0 m-4 space-y-4">
@@ -235,7 +248,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
         )}
       </ScrollView>
 
-      <View tw="mb-4 mx-4">
+      <HideWithKeyboardView tw="mb-4 mx-4">
         <View tw="flex flex-row justify-between items-center">
           <Text variant="TextBold" tw="text-base font-bold">
             {t('Dashboard.Management.UsageAnalysis.summary.totalCheckIns')}
@@ -271,7 +284,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
             {totalUsers}
           </Text>
         </View>
-      </View>
+      </HideWithKeyboardView>
 
       <DownloadDataModal
         isOpen={isPDFModalOpen}

@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { DataTable, Divider } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -8,9 +9,12 @@ import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import { DEFAULT_CROP_VALUES } from '#screens/Dashboard/Main/Marketplace/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 type CheckOutDataProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -20,6 +24,11 @@ type CheckOutDataProps = {
 export function CheckOutData(props: CheckOutDataProps) {
   const { movement, dismissModal } = props;
 
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const farmerCountry = useDashboardStore(useShallow((store) => store.farmerCountry));
+
+  const locale = LanguageManager.read();
+
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
@@ -27,6 +36,9 @@ export function CheckOutData(props: CheckOutDataProps) {
 
   const generatePDF = useCallback(async () => {
     setIsProcessing(true);
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
 
     try {
       const html = `
@@ -83,7 +95,11 @@ export function CheckOutData(props: CheckOutDataProps) {
                   (crate) => `
                 <tr>
                   <td>${crate.tag}</td>
-                  <td>${crate.crop?.name ?? ''}</td>
+                  <td>${find(translationMap, {
+                    name: crate.crop?.name ?? '',
+                    country: companyCountry || farmerCountry || undefined,
+                    locale,
+                  })}</td>
                   <td>${crate.affectedWeight}</td>
                 </tr>
               `
@@ -137,7 +153,26 @@ export function CheckOutData(props: CheckOutDataProps) {
     } finally {
       setIsProcessing(false);
     }
-  }, [t, toast, movement, dismissModal]);
+  }, [t, toast, movement, dismissModal, companyCountry, farmerCountry, locale]);
+
+  const tableDatums = useMemo(() => {
+    if (!movement.checkout?.crates) return [];
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    return movement.checkout.crates.map((crate) => ({
+      ...crate,
+      crop: {
+        ...crate.crop,
+        name: find(translationMap, {
+          name: crate.crop?.name || '',
+          country: companyCountry || farmerCountry || undefined,
+          locale,
+        }),
+      },
+    }));
+  }, [movement, companyCountry, farmerCountry, locale]);
 
   return (
     <React.Fragment>
@@ -178,7 +213,7 @@ export function CheckOutData(props: CheckOutDataProps) {
             <DataTable.Title>{t('Dashboard.History.pdfModal.weightLabel')}</DataTable.Title>
           </DataTable.Header>
 
-          {movement.checkout?.crates.map((crate, index) => (
+          {tableDatums.map((crate, index) => (
             <DataTable.Row key={`${crate.crop?.name ?? ''}-${index}`}>
               <DataTable.Cell>{crate.tag}</DataTable.Cell>
               <DataTable.Cell>{crate.crop?.name ?? DEFAULT_CROP_VALUES.name}</DataTable.Cell>
