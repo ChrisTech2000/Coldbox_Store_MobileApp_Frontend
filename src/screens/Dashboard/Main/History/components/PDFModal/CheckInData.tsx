@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { DataTable } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -8,10 +9,13 @@ import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import { DEFAULT_CROP_VALUES } from '#screens/Dashboard/Main/Marketplace/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { MovementCrate, type CoolingUnit } from '#types/global';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 type CheckInDataProps = {
   companyName: string;
@@ -24,6 +28,11 @@ type CheckInDataProps = {
 export function CheckInData(props: CheckInDataProps) {
   const { companyName, coolingUnit, currency, movement, dismissModal } = props;
 
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const farmerCountry = useDashboardStore(useShallow((store) => store.farmerCountry));
+
+  const locale = LanguageManager.read();
+
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
@@ -31,6 +40,9 @@ export function CheckInData(props: CheckInDataProps) {
 
   const generatePDF = useCallback(async () => {
     setIsProcessing(true);
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
 
     try {
       const html = `
@@ -118,9 +130,15 @@ export function CheckInData(props: CheckInDataProps) {
                       (coolingUnit?.commonPricingType?.value ?? 0) * crates.length
                     ).toFixed(2);
 
+                    const translatedName = find(translationMap, {
+                      name: crop?.name ?? '',
+                      country: companyCountry || farmerCountry || undefined,
+                      locale,
+                    });
+
                     return `
                                 <tr>
-                                  <td>${crop?.name ?? ''}</td>
+                                  <td>${translatedName}</td>
                                   <td>${crates.length}</td>
                                   <td>${totalWeight}</td>
                                   <td>${totalPrice}</td>
@@ -161,7 +179,53 @@ export function CheckInData(props: CheckInDataProps) {
     } finally {
       setIsProcessing(false);
     }
-  }, [t, toast, movement, coolingUnit, currency, companyName]);
+  }, [
+    t,
+    toast,
+    movement,
+    coolingUnit,
+    currency,
+    companyName,
+    companyCountry,
+    farmerCountry,
+    locale,
+  ]);
+
+  const tableDatums = useMemo(() => {
+    if (!movement.checkin?.crates) return [];
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    const cropMap = new Map<number, MovementCrate['crop']>();
+    const cropCrateMap = new Map<number, Array<MovementCrate>>();
+
+    for (const crate of movement.checkin.crates) {
+      const crop = crate.crop;
+      if (!crop) continue;
+
+      if (!cropMap.has(crop.id)) {
+        cropMap.set(crop.id, {
+          ...crop,
+          name: find(translationMap, {
+            name: crop.name ?? '',
+            country: companyCountry || farmerCountry || undefined,
+            locale,
+          }),
+        });
+      }
+
+      if (!cropCrateMap.has(crop.id)) {
+        cropCrateMap.set(crop.id, []);
+      }
+      cropCrateMap.get(crop.id)!.push(crate);
+    }
+
+    return Array.from(cropMap.entries()).map(([cropId, crop]) => ({
+      crop,
+      crates: cropCrateMap.get(cropId) ?? [],
+    }));
+  }, [movement, companyCountry, farmerCountry, locale]);
 
   return (
     <React.Fragment>
@@ -240,31 +304,18 @@ export function CheckInData(props: CheckInDataProps) {
             </DataTable.Title>
           </DataTable.Header>
 
-          {movement.checkin?.crates
-            .reduce(
-              (acc, curr) => {
-                if (!acc.find((crop) => crop?.id === curr.crop?.id)) {
-                  acc.push(curr.crop);
-                }
-                return acc;
-              },
-              [] as Array<MovementCrate['crop']>
-            )
-            .map((crop, index) => {
-              const crates = movement.checkin?.crates.filter((crate) => crate.cropId === crop?.id);
-              return (
-                <DataTable.Row key={`${crop?.name || DEFAULT_CROP_VALUES.name}-${index}`}>
-                  <DataTable.Cell>{crop?.name || DEFAULT_CROP_VALUES.name}</DataTable.Cell>
-                  <DataTable.Cell numeric>{crates.length}</DataTable.Cell>
-                  <DataTable.Cell numeric>
-                    {crates.reduce((acc, current) => (acc += current.initialWeight), 0)}
-                  </DataTable.Cell>
-                  <DataTable.Cell numeric>
-                    {((coolingUnit?.commonPricingType?.value ?? 0) * crates.length).toFixed(2)}
-                  </DataTable.Cell>
-                </DataTable.Row>
-              );
-            })}
+          {tableDatums.map(({ crop, crates }, index) => (
+            <DataTable.Row key={`${crop?.name || DEFAULT_CROP_VALUES.name}-${index}`}>
+              <DataTable.Cell>{crop?.name || DEFAULT_CROP_VALUES.name}</DataTable.Cell>
+              <DataTable.Cell numeric>{crates.length}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {crates.reduce((acc, current) => (acc += current.initialWeight), 0)}
+              </DataTable.Cell>
+              <DataTable.Cell numeric>
+                {((coolingUnit?.commonPricingType?.value ?? 0) * crates.length).toFixed(2)}
+              </DataTable.Cell>
+            </DataTable.Row>
+          ))}
 
           <DataTable.Row tw="bg-gray-200">
             <DataTable.Cell>

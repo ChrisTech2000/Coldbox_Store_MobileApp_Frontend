@@ -23,7 +23,7 @@ import CountryField from './modules/CountryField';
 import CommodityField from './modules/CommodityField';
 import CurrencyField from './modules/CurrencyField';
 
-import { derivedSubjects } from './utils';
+import { derivedSubjects, useTranslatedCrops } from './utils';
 import InAppNotifications from '#common/InAppNotifications';
 
 const width = (Dimensions.get('window').width - 42) / 2;
@@ -48,7 +48,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
     }
   );
 
-  const { data: allCrops, isLoading: isLoadingAllCrops } = useApiCall(
+  const { data: cropsResult, isLoading: isLoadingAllCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
@@ -58,6 +58,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
     }
   );
 
+  const allCrops = useTranslatedCrops(cropsResult);
   const subjects = useMemo(() => derivedSubjects(companyDetails), [companyDetails]);
 
   async function onSubmit(values: FormValues) {

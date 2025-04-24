@@ -4,13 +4,15 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, DataTable, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
+import { parse } from 'date-fns';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { ScrollView } from '#ui/components/ScrollView';
 
-import { LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type {
@@ -121,7 +123,15 @@ export function PredictionTable({ commodity, states, dates, markets }: Predictio
     const startIndex = currentPage * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
 
-    return sortedData.slice(startIndex, endIndex);
+    return cloneDeep(sortedData)
+      .slice(startIndex, endIndex)
+      .map((datum) => {
+        const parsedDate = parse(datum.date, 'MMM, dd, yyyy', new Date());
+        return {
+          ...datum,
+          date: dateFmt(parsedDate.toISOString(), 'MMM dd yyyy'),
+        };
+      });
   }, [sortedData, currentPage]);
 
   const totalPages = useMemo(

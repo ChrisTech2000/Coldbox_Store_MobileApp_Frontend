@@ -15,6 +15,7 @@ import reportCrash from '#ui/lib/reportCrash';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
 import { CONSTRAINT_EXCEPTIONS, DataLoader, getPdfContent } from '../utils';
+import { useTranslatedCrops } from '../../CompanyDetails/utils';
 
 export default function FarmerDashboardData(props: { farmerId: number }) {
   const { farmerId } = props;
@@ -24,7 +25,7 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
 
   const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
 
-  const { data: crops, isLoading: isLoadingCrops } = useApiCall(
+  const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
     undefined,
@@ -33,6 +34,8 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
       defaultData: [],
     }
   );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   const { data: companies, isLoading: isLoadingCompanies } = useApiCall(
     'getCompanies',

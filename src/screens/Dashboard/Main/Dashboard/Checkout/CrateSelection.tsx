@@ -10,6 +10,7 @@ import {
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
+import { useShallow } from 'zustand/react/shallow';
 
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
@@ -33,6 +34,12 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { ScrollView } from '#ui/components/ScrollView';
 
 import { CheckoutCrate } from '../components/CheckOutCrate';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+
+type CrateDatum = Crate & {
+  remainingShelfLife: number;
+};
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -52,6 +59,9 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const { coolingUnits } = useDashboardStore();
   const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } =
     useCrateSelectionCoolingUnitStore();
+
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const locale = LanguageManager.read();
 
   const [isUnitsModalOpen, setIsUnitsModalOpen] = useState<boolean>(false);
   const [selectedCrates, setSelectedCrates] = useState<Crate[]>([]);
@@ -100,24 +110,45 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     }, [data, refetch, refetchDashboardProduces])
   );
 
-  const { crates, allSelectableCrates } = useMemo(() => {
-    const mappedCrates =
-      _crates ??
-      data?.map((crate) => {
-        const dashboardProduce = dashboardProduces?.find(
-          (p) => p.movementCode === crate.movementCode
-        );
-        return {
-          ...crate,
-          remainingShelfLife: dashboardProduce?.minimumRemainingShelfLife ?? -1,
-        };
-      }) ??
-      [];
+  const { crates, allSelectableCrates, translatedCropNames } = useMemo(() => {
+    const datums = _crates ?? data ?? [];
 
-    const selectableCrates = mappedCrates.filter((crate) => !crate.lockedWithinPendingOrders);
+    const produceMap = new Map(dashboardProduces?.map((p) => [p.movementCode, p]) ?? []);
 
-    return { crates: mappedCrates, allSelectableCrates: selectableCrates };
-  }, [_crates, data, dashboardProduces]);
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    const translatedCropNames: Record<number, string> = {};
+    const selectableCrates: Array<CrateDatum> = [];
+
+    const mappedCrates = datums.map((crate) => {
+      if (!translatedCropNames[crate.id]) {
+        translatedCropNames[crate.id] = find(translationMap, {
+          name: crate.name,
+          country: companyCountry,
+          locale,
+        });
+      }
+
+      const dashboardProduce = produceMap.get(crate.movementCode);
+      const newCrateDatum = {
+        ...crate,
+        remainingShelfLife: dashboardProduce?.minimumRemainingShelfLife ?? -1,
+      } satisfies CrateDatum;
+
+      if (!newCrateDatum.lockedWithinPendingOrders) {
+        selectableCrates.push(newCrateDatum);
+      }
+
+      return newCrateDatum;
+    });
+
+    return {
+      crates: mappedCrates,
+      allSelectableCrates: selectableCrates,
+      translatedCropNames,
+    };
+  }, [_crates, data, dashboardProduces, companyCountry, locale]);
 
   const onPress = useCallback(
     (crate: Crate) => {
@@ -231,7 +262,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
               <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle="pb-72">
                 <FlashList
                   data={crates}
-                  extraData={selectedCrates.length}
+                  extraData={{ selectedCrates, translatedCropNames }}
                   showsVerticalScrollIndicator={false}
                   scrollEnabled={false}
                   keyExtractor={(item, itemIdx) => `checkout-list-item-${item.id}-#${itemIdx}`}
@@ -242,7 +273,10 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
                         onPress={() => onPress(crate)}
                         disabled={crate.lockedWithinPendingOrders}
                       >
-                        <CheckoutCrate crate={crate} />
+                        <CheckoutCrate
+                          crate={crate}
+                          cropName={translatedCropNames?.[crate.id] || ''}
+                        />
                         <View tw="absolute right-[-2]">
                           <RadioButtonItem
                             disabled={crate.lockedWithinPendingOrders}

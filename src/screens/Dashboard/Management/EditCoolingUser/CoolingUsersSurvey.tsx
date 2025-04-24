@@ -12,12 +12,14 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 import reportCrash from '#ui/lib/reportCrash';
+import type { TranslationLocales } from '#i18n/constants';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 import type { FarmerSurveySchemaType } from '#screens/Dashboard/Main/components/FarmerSurveyModal';
@@ -57,11 +59,21 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
   const toast = InAppNotifications.useToast();
 
   const companyCurrency: string = company?.currency ?? DEFAULT_CURRENCY_CODE;
+  const locale = LanguageManager.read();
 
-  const { data, isLoading, refetch } = useApiCall(SWR_CACHE_KEY, _dataFetcher, params.farmerId, {
-    skip: !params.farmerId,
-    defaultData: undefined,
-  });
+  const { data, isLoading, refetch } = useApiCall(
+    SWR_CACHE_KEY,
+    _dataFetcher,
+    {
+      farmerId: params.farmerId,
+      country: company?.country,
+      locale,
+    },
+    {
+      skip: !params.farmerId,
+      defaultData: undefined,
+    }
+  );
 
   const baseDatums = useMemo(
     () => ({
@@ -221,15 +233,30 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
   );
 }
 
-async function _dataFetcher(farmerId: number) {
+async function _dataFetcher(opts: {
+  country?: string;
+  locale: TranslationLocales;
+  farmerId: number;
+}) {
   const [allCropsResult, farmerSurveysResult] = await Promise.allSettled([
     ColdtivateService.getAllCrops(),
-    ColdtivateService.getFarmerSurveys({ farmerId }),
+    ColdtivateService.getFarmerSurveys({ farmerId: opts.farmerId }),
   ]);
 
-  const crops = allCropsResult.status === 'fulfilled' ? allCropsResult.value : [];
+  const allCrops = allCropsResult.status === 'fulfilled' ? allCropsResult.value : [];
   const surveys =
     farmerSurveysResult.status === 'fulfilled' ? farmerSurveysResult.value : undefined;
+
+  const { buildMap, find } = cropTranslationLookup();
+  const lookupMap = buildMap();
+  const crops = cloneDeep(allCrops).map((crop) => {
+    crop.name = find(lookupMap, {
+      name: crop.name,
+      country: opts.country,
+      locale: opts.locale,
+    });
+    return crop;
+  });
 
   const contextualFarmerSurvey = surveys?.at(0);
   return {

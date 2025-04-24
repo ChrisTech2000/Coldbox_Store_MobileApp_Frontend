@@ -3,7 +3,6 @@ import { Control, Controller } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
 import { Divider, RadioButton } from 'react-native-paper';
 
-import { GetAllCropsResponse } from '#types/api.responses';
 import { useTranslationUtils } from '#i18n/utils';
 
 import { Text } from '#ui/components/Text';
@@ -16,7 +15,7 @@ import { Schema } from '../schema';
 type ProduceDetailsOptionProps = {
   option: { label?: string; id?: string; value?: string | number };
   index: number;
-  crops: Array<GetAllCropsResponse>;
+  crops: Record<number, string>;
   control: Control<Schema>;
 };
 
@@ -33,33 +32,33 @@ export function ProduceDetailsOption({ option, index, crops, control }: ProduceD
         </Text>
         {option.id === 'cropType' ? (
           <Controller
-            name={`produces.${index}.crop`}
+            name={`produces.${index}.cropId`}
             control={control}
             render={({ field }) => (
               <Select variant="md" isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
-                <Select.Touchable label={field.value} />
+                <Select.Touchable label={crops[field.value]} />
                 <Select.Dialog
                   enableScroll
                   header={t('Dashboard.History.editCheckIn.selectCropLabel')}
                 >
                   <RadioButton.Group
-                    value={field.value || ''}
+                    value={crops[field.value]}
                     onValueChange={(value) => {
-                      const item = crops.find((crop) => crop.name === value);
-                      if (!item) return;
-                      field.onChange(item.name);
+                      const parsed = Number(value);
+                      if (isNaN(parsed)) return; // safe guard
+                      field.onChange(parsed);
                       setIsModalOpen(false);
                     }}
                   >
                     <FlatList
                       scrollEnabled={false}
                       showsVerticalScrollIndicator={false}
-                      data={crops}
-                      keyExtractor={(item, idx) => `rb-${item.name}-${idx}-${index}`}
-                      renderItem={({ item }) => (
+                      data={Object.entries(crops)}
+                      keyExtractor={([cropId], idx) => `rb-${cropId}-${idx}-${index}`}
+                      renderItem={({ item: [cropId, cropName] }) => (
                         <RadioButtonItem
-                          label={item.name}
-                          value={item.name}
+                          label={cropName}
+                          value={cropId}
                           tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
                         />
                       )}

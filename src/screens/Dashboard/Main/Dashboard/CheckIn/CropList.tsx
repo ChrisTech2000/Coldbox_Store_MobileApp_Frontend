@@ -4,9 +4,10 @@ import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon, List, TextInput } from 'react-native-paper';
 import { useDebouncedCallback } from 'use-debounce';
+import { useShallow } from 'zustand/react/shallow';
 
 import { API_BASE_URL } from '#constants/environment';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -17,6 +18,8 @@ import { Input } from '#ui/components/Input';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -31,6 +34,10 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
 
   const { t } = useTranslationUtils();
   const { coolingUnit } = useCheckInStore();
+
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+
+  const locale = LanguageManager.read();
 
   const additionalInfoRef = useRef<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -48,10 +55,32 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
     }
   );
 
+  const translatedCropNames = useMemo(() => {
+    const translatedCropNames: Record<number, string> = {};
+    if (!data) return translatedCropNames;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    for (const item of data) {
+      const cropId = item.fullCrop.id;
+      if (!translatedCropNames?.[cropId]) {
+        translatedCropNames[cropId] = find(translationMap, {
+          name: item.fullCrop.name,
+          country: companyCountry || undefined,
+          locale,
+        });
+      }
+    }
+
+    return translatedCropNames;
+  }, [data, companyCountry, locale]);
+
   const filteredData = useMemo(
     () =>
-      data?.filter((item) => item.fullCrop.name.toLowerCase().includes(searchTerm.toLowerCase())) ??
-      [],
+      (data || []).filter((item) =>
+        item.fullCrop.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
     [data, searchTerm]
   );
 
@@ -71,10 +100,11 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
         data={filteredData}
         keyExtractor={(item) => `crop-list-item-#${item.id}`}
         showsVerticalScrollIndicator={false}
+        extraData={{ translatedCropNames }}
         renderItem={({ item, index }) => (
           <React.Fragment>
             <List.Item
-              title={item.fullCrop.name}
+              title={translatedCropNames?.[item.fullCrop.id] || ''}
               onPress={(evt) => evt.stopPropagation()}
               tw="p-0"
               disabled
@@ -97,7 +127,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
                   />
                   <TouchableOpacity
                     onPress={(evt) => {
-                      evt?.stopPropagation();
+                      evt.stopPropagation();
                       navigation.navigate('CrateSetup', {
                         crop: item.fullCrop,
                         additionalInfo: additionalInfoRef.current,

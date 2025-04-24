@@ -27,6 +27,7 @@ type CheckedInCardProps = {
   setCrateIDs: (modalCrates: SetupSchema['crates'], item: ProduceCrate) => void;
   openOptionsModal: () => void;
   disabled?: boolean;
+  cropName: string;
 };
 
 export function CheckedInCard({
@@ -39,8 +40,11 @@ export function CheckedInCard({
   setCrateIDs,
   openOptionsModal,
   disabled,
+  cropName,
 }: CheckedInCardProps) {
   const { t } = useTranslationUtils();
+
+  const isRTL = LanguageManager.isRTL;
 
   const [isExtended, setIsExtended] = useState<boolean>(false);
   const [isIdsModalOpen, setIsIdsModalOpen] = useState<number | undefined>(undefined);
@@ -65,8 +69,6 @@ export function CheckedInCard({
     );
   }, [item]);
 
-  const isRTL = LanguageManager.isRTL;
-
   return (
     <View tw="rounded-md border border-gray-300 mb-2">
       <View tw="flex flex-row-reverse justify-between">
@@ -90,7 +92,7 @@ export function CheckedInCard({
 
           <View tw="my-1 space-y-1">
             <Text tw="text-base text-green-primary">
-              {item.crop.name} ({item.crates.length})
+              {cropName} ({item.crates.length})
             </Text>
             {item.additionalInfo ? <Text tw="text-sm">{item.additionalInfo}</Text> : null}
 

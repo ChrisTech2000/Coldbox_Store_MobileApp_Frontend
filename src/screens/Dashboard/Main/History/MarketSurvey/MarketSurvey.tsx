@@ -22,6 +22,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 
@@ -73,11 +74,13 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
     },
   });
 
-  const { data: crops, isLoading: isCropsLoading } = useApiCall(
+  const { data: cropsResult, isLoading: isCropsLoading } = useApiCall(
     'getAllCrops',
     ColdtivateService.getAllCrops,
-    {}
+    undefined
   );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   const crop = useMemo(() => {
     if (!crops || !crops.length) return;

@@ -39,7 +39,7 @@ export default function CommodityField(props: Props) {
 
   const datums = useMemo(
     () => crops.filter(({ name }) => name.toLowerCase().includes(search.toLowerCase())),
-    [search]
+    [crops, search]
   );
 
   const displayValue = useMemo(() => {

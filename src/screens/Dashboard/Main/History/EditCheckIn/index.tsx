@@ -5,6 +5,7 @@ import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Icon } from 'react-native-paper';
 import { Easing, useSharedValue } from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
+import { useShallow } from 'zustand/react/shallow';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 
@@ -15,9 +16,11 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -29,6 +32,7 @@ import { Pagination } from './components/Pagination';
 import { ProduceDetailsOption } from './components/ProduceDetailsOption';
 import { EditCheckInSchema, Schema } from './schema';
 import { generateData } from './utils';
+import type { DashboardProduce } from '#types/global';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -40,6 +44,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
   const toast = InAppNotifications.useToast();
   const { user } = useAuthStore();
   const { refreshData } = useDashboardStore();
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
 
   const progress = useSharedValue<number>(0);
 
@@ -62,12 +67,15 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
       coolingUnit: coolingUnitId as number,
     },
     {
-      skip: !coolingUnitId,
+      skip: !user?.id || !coolingUnitId,
       defaultData: [],
     }
   );
 
-  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, {});
+  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
+    skip: !user?.id,
+    defaultData: [],
+  });
 
   const farmer = useMemo(() => {
     return farmers?.find(
@@ -75,16 +83,56 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     );
   }, [farmers]);
 
+  const locale = LanguageManager.read();
+
   const matchingProduces = useMemo(() => {
-    return produces?.filter((produce) => produce.movementCode === movement.code) ?? [];
-  }, [produces, movement]);
+    if (!produces) return [];
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    const datums: Array<DashboardProduce> = [];
+
+    for (const produce of produces) {
+      if (produce.movementCode !== movement.code) continue;
+      datums.push({
+        ...produce,
+        cropName: find(translationMap, {
+          name: produce.cropName,
+          country: companyCountry,
+          locale,
+        }),
+      });
+    }
+
+    return datums;
+  }, [produces, movement, companyCountry, locale]);
+
+  const cropsTranslations = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+
+    const cropsTranslations: Record<number, string> = {};
+
+    for (const crop of crops) {
+      if (!cropsTranslations[crop.id]) {
+        cropsTranslations[crop.id] = find(translationMap, {
+          name: crop.name,
+          country: companyCountry,
+          locale,
+        });
+      }
+    }
+
+    return cropsTranslations;
+  }, [crops, companyCountry, locale]);
 
   const { handleSubmit, control, formState } = useForm<Schema>({
     resolver: zodResolver(() => EditCheckInSchema()),
     defaultValues: {
       produces: matchingProduces.map((produce) => ({
         id: produce.id,
-        crop: produce.cropName,
+        cropId: produce.cropId,
         plannedDays: produce?.plannedDays?.toString() ?? '',
       })),
     },
@@ -104,7 +152,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         const promises = values.produces.map((produce) => {
           return ColdtivateService.editCheckIn({
             id: produce.id,
-            cropId: crops?.find((crop) => crop.name === produce.crop)?.id as number,
+            cropId: produce.cropId,
             plannedDays: Number(produce.plannedDays) as number,
             farmerId: farmer?.id as number,
           });
@@ -120,7 +168,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         reportCrash(error as Error);
       }
     },
-    [toast, t, matchingProduces, farmer, refreshData, crops]
+    [toast, t, matchingProduces, farmer, refreshData]
   );
 
   if (loadingFarmers || loadingProduces) {
@@ -191,16 +239,14 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
                   showsVerticalScrollIndicator={false}
                   data={generateData(produce, t)}
                   keyExtractor={(item, idx) => `${item.label}-#${index}-${idx}`}
-                  renderItem={({ item }) => {
-                    return (
-                      <ProduceDetailsOption
-                        index={index}
-                        option={item}
-                        crops={crops}
-                        control={control}
-                      />
-                    );
-                  }}
+                  renderItem={({ item }) => (
+                    <ProduceDetailsOption
+                      index={index}
+                      option={item}
+                      crops={cropsTranslations}
+                      control={control}
+                    />
+                  )}
                 />
               </View>
             </View>

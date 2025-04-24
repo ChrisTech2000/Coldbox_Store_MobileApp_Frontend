@@ -16,6 +16,8 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { GenericError } from '#ui/components/GenericError';
@@ -29,11 +31,13 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { dateFmt, LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
 import { cn } from '#ui/lib/cn';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
@@ -63,6 +67,11 @@ function SalesRoot() {
     store.addRefreshDataFn,
   ]);
 
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
   const [showButton, setShowButton] = useState<boolean>(false);
 
@@ -81,7 +90,23 @@ function SalesRoot() {
       .sort((a, b) => multiplier * (a.timestamp - b.timestamp));
   }, [data, sorting]);
 
-  const cropsExtraData = useMemo(() => ({ crops }), [crops]);
+  const cropsExtraData = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+    return {
+      crops: cloneDeep(crops).map((crop) => {
+        const cropName = crop?.name || DEFAULT_CROP_VALUES.name;
+        return {
+          ...crop,
+          name: find(translationMap, {
+            name: cropName,
+            country: companyCountry || farmerCountry || undefined,
+            locale,
+          }),
+        };
+      }),
+    };
+  }, [crops, companyCountry, farmerCountry, locale]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;

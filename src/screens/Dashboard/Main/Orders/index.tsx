@@ -16,6 +16,8 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useShallow } from 'zustand/react/shallow';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { GenericError } from '#ui/components/GenericError';
@@ -38,6 +40,8 @@ import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import type { CartItem, CoolingUnit } from '#types/global';
+import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
@@ -77,6 +81,11 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   ]);
   const allUnits = useCartStore((store) => store.allCoolingUnits);
 
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
+
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
   const [showButton, setShowButton] = useState<boolean>(false);
 
@@ -95,7 +104,24 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
       .sort((a, b) => multiplier * (a.timestamp - b.timestamp));
   }, [data, sorting]);
 
-  const cropsAndUnitsData = useMemo(() => ({ crops, allUnits }), [crops, allUnits]);
+  const cropsAndUnitsData = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+    return {
+      crops: cloneDeep(crops).map((crop) => {
+        const cropName = crop?.name || DEFAULT_CROP_VALUES.name;
+        return {
+          ...crop,
+          name: find(translationMap, {
+            name: cropName,
+            country: companyCountry || farmerCountry || undefined,
+            locale,
+          }),
+        };
+      }),
+      allUnits,
+    };
+  }, [crops, allUnits, companyCountry, farmerCountry, locale]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;

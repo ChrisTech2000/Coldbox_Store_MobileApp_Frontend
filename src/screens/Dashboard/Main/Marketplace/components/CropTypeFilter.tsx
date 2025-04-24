@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { Dimensions, View } from 'react-native';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -11,12 +12,15 @@ import { Select, VIRTUAL_LIST_SIZE_WIDTH } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import MarketplaceFormManager, {
   FilterValue,
@@ -28,6 +32,10 @@ const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
 export default function CropTypeFilters() {
+  const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+
+  const locale = LanguageManager.read();
   const { t } = useTranslationUtils();
 
   const { control, watch, formState } = MarketplaceFormManager.useForm();
@@ -37,11 +45,27 @@ export default function CropTypeFilters() {
     'getMarketplaceCropFilterOptions',
     async () => {
       const result = await ColdtivateService.getAllCrops();
-      return new Map<number, GetAllCropsResponse>(result?.map((item) => [item.id, item]));
+      return new Map<number, GetAllCropsResponse>(result.map((item) => [item.id, item]));
     },
     undefined,
     { defaultData: new Map<number, GetAllCropsResponse>() }
   );
+
+  const translatedCropNames = useMemo(() => {
+    const { buildMap, find } = cropTranslationLookup();
+    const lookupMap = buildMap();
+    const translatedCropNames: Record<number, string> = {};
+    for (const [key, value] of data) {
+      if (!translatedCropNames[key]) {
+        translatedCropNames[key] = find(lookupMap, {
+          name: value.name,
+          country: companyCountry || farmerCountry || '',
+          locale,
+        });
+      }
+    }
+    return translatedCropNames;
+  }, [data, companyCountry, locale]);
 
   const [search, setSearch] = useState<string>('');
   const [internalSelection, setInternalSelection] = MarketplaceFormManager.useFieldState('crops');
@@ -187,12 +211,12 @@ export default function CropTypeFilters() {
                       scrollEnabled={false}
                       showsVerticalScrollIndicator={false}
                       data={datums}
-                      extraData={internalSelection}
+                      extraData={{ internalSelection, translatedCropNames }}
                       keyExtractor={(item, itemIdx) => `crops-list-item-${item.id}-#${itemIdx}`}
                       renderItem={({ item }) => (
                         <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
                           <Text tw="text-base w-[70%]" numberOfLines={2}>
-                            {item.name}
+                            {translatedCropNames?.[item.id] || ''}
                           </Text>
                           <Checkbox
                             status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}

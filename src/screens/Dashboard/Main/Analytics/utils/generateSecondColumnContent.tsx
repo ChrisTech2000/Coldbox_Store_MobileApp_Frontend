@@ -18,6 +18,7 @@ export function normalizeName(name: string) {
 export function generateSecondColumnContent(
   sortedData: { key: string; val: number; index: number }[],
   crops: Array<GetAllCropsResponse>,
+  cropsTranslations?: Record<number, string>,
   withAmount?: boolean,
   suffix?: string
 ) {
@@ -47,6 +48,8 @@ export function generateSecondColumnContent(
       (crop) => normalizeName(crop.name).toLowerCase() === startCase(key).toLowerCase()
     );
 
+    const cropName = (crop && cropsTranslations?.[crop.id]) ?? crop?.name ?? startCase(key);
+
     return (
       <View
         key={`${key}-${val}-${index}`}
@@ -67,7 +70,7 @@ export function generateSecondColumnContent(
         )}
 
         <Text tw={cn('flex-wrap w-[90%] text-sm', withAmount ? 'font-bold' : '')} numberOfLines={3}>
-          {`${crop?.name ?? startCase(key)}${withAmount ? `: ${Number.isFinite(+val) ? (+val % 1 === 0 ? val : (+val).toFixed(2)) : val}` : ''} ${suffix ?? ''}`}
+          {`${cropName}${withAmount ? `: ${Number.isFinite(+val) ? (+val % 1 === 0 ? val : (+val).toFixed(2)) : val}` : ''} ${suffix ?? ''}`}
         </Text>
       </View>
     );

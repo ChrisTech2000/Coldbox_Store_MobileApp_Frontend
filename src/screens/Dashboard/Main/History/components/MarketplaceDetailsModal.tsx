@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Dimensions, Platform, ScrollView, View } from 'react-native';
 import { Dialog, Divider } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
-import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { useManagementStore } from '#stores/management';
+import { useDashboardStore } from '#stores/dashboard';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EInitiatedFor, EPaymentGateway } from '#types/global';
 import { cn } from '#ui/lib/cn';
@@ -24,7 +28,33 @@ type DetailsModalProps = {
 };
 
 export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
+  const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
+  const farmerCountry = useDashboardStore(useShallow((store) => store.farmerCountry));
+
   const { t } = useTranslationUtils();
+  const locale = LanguageManager.read();
+
+  const [checkoutCropNames, checkinCropNames] = useMemo(() => {
+    const checkoutCrates = movement.checkout?.crates;
+    const checkinCrates = movement.checkin?.crates;
+
+    const { buildMap, find } = cropTranslationLookup();
+    const translationMap = buildMap();
+    const country = companyCountry || farmerCountry || undefined;
+
+    const _translateCrates = (crates: typeof checkoutCrates) => {
+      const cropSet = new Set<string>();
+      for (const crate of crates) {
+        const name = crate.crop?.name;
+        if (!name) continue;
+        const translated = find(translationMap, { name, country, locale });
+        if (translated) cropSet.add(translated);
+      }
+      return Array.from(cropSet);
+    };
+
+    return [_translateCrates(checkoutCrates), _translateCrates(checkinCrates)];
+  }, [movement, companyCountry, farmerCountry, locale]);
 
   if (movement.initiatedFor !== EInitiatedFor.MARKETPLACE_ORDER) return null;
 
@@ -81,9 +111,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.Analytics.farmersAnalytics.crops')}:
               </Text>
               &nbsp;
-              {Array.from(new Set(movement.checkout?.crates.map((crate) => crate.crop?.name)))
-                .filter(Boolean)
-                .join(', ')}
+              {checkoutCropNames.join(', ')}
             </Text>
             <Text variant="TextBold" tw="font-bold text-base">
               <Text variant="TextMedium" tw="text-base">
@@ -158,9 +186,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.Analytics.farmersAnalytics.crops')}:
               </Text>
               &nbsp;
-              {Array.from(new Set(movement.checkin?.crates.map((crate) => crate.crop?.name ?? '')))
-                .filter(Boolean)
-                .join(', ')}
+              {checkinCropNames.join(', ')}
             </Text>
           </View>
         </ScrollView>
