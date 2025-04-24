@@ -99,12 +99,10 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
         if (!lowerCaseSearchString) return true;
 
         const matchesCode = movement.code.toLowerCase().includes(lowerCaseSearchString);
-        const matchesFarmer =
-          movement.checkin?.ownerName?.toLowerCase().includes(lowerCaseSearchString) ||
-          (movement.checkout &&
-            movement.checkout.crates.some((crate) =>
-              crate.ownerName?.toLowerCase().includes(lowerCaseSearchString)
-            ));
+        const matchesFarmer = movement.checkin?.ownerName
+          ?.toLowerCase()
+          .includes(lowerCaseSearchString);
+
         const crops = sortMovementCrops(movement);
         const matchesCrop = crops.some((crop) =>
           crop.toLowerCase().includes(lowerCaseSearchString)
