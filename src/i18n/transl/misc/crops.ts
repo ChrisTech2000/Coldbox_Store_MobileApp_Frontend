@@ -1,3 +1,5 @@
+import pluralize from 'pluralize';
+
 import type { TranslationLocales } from '#i18n/constants';
 
 type CropBaseEnglish = {
@@ -7,7 +9,7 @@ type CropBaseEnglish = {
 };
 
 type CropBase = {
-  commodityName: string; // crop index
+  commodityName: string; // crop index lookup
   en: CropBaseEnglish;
 };
 
@@ -19,9 +21,15 @@ type Commodity = CropBase & TranslationStrings;
 
 type CropTranslationMap = Map<string, Commodity>;
 
+let _cropTranslationsMap: CropTranslationMap | null = null;
+
+const _normalize = (str: string) => str.trim().toLowerCase();
+
 export function cropTranslationLookup() {
   return {
     buildMap: (): CropTranslationMap => {
+      if (_cropTranslationsMap) return _cropTranslationsMap;
+
       const CROP_TRANSLATIONS_STATIC = [
         {
           commodityName: 'Capsicum (Bell Pepper)',
@@ -313,7 +321,7 @@ export function cropTranslationLookup() {
           ar: 'خيار',
         },
         {
-          commodityName: 'Diary',
+          commodityName: 'Dairy',
           en: {
             IN: 'Dairy',
             NG: 'Dairy',
@@ -1299,18 +1307,42 @@ export function cropTranslationLookup() {
           ar: 'تفاح النجمة الأفريقي',
         },
       ] satisfies Array<Commodity>;
-      return new Map(CROP_TRANSLATIONS_STATIC.map((item) => [item.commodityName, item]));
+
+      _cropTranslationsMap = new Map(
+        CROP_TRANSLATIONS_STATIC.map((item) => [_normalize(item.commodityName), item])
+      );
+
+      return _cropTranslationsMap;
     },
     find: (
       map: CropTranslationMap,
       opts: { name: string; country?: string; locale: TranslationLocales }
     ): string => {
-      const datum = map.get(opts.name);
-      if (typeof datum === 'undefined') return opts.name;
-      const contextualCountry = opts?.country || 'global';
-      // eslint-disable-next-line
-      // @ts-ignore
-      return datum[opts.locale][contextualCountry] || datum[opts.locale] || opts.name;
+      const baseName = _normalize(opts.name);
+
+      const nameCandidates = new Set([
+        baseName,
+        _normalize(pluralize.singular(baseName)),
+        _normalize(pluralize.plural(baseName)),
+      ]);
+
+      let translationEntry: Commodity | undefined = undefined;
+      for (const name of nameCandidates) {
+        const entry = map.get(name);
+        if (entry) {
+          translationEntry = entry;
+          break;
+        }
+      }
+
+      if (!translationEntry) return opts.name;
+
+      if (opts.locale === 'en') {
+        const countryKey = (opts.country as keyof CropBaseEnglish) || 'global';
+        return translationEntry.en[countryKey] || translationEntry.en.global || opts.name;
+      }
+
+      return translationEntry[opts.locale] || opts.name;
     },
   };
 }
