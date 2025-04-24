@@ -161,7 +161,7 @@ export default {
   },
   components: {
     datePicker: {
-      heading: 'Select a date', // TODO
+      heading: 'اختر تاريخًا',
       clearButtonLabel: 'مسح',
       confirmButtonLabel: 'تأكيد',
       placeholder: 'يوم/شهر/سنة',
@@ -328,7 +328,7 @@ export default {
     },
     emptyGeneral: 'في الوقت الحالي، لا توجد بيانات متاحة.',
     coolingUserNavigateToMarketplace:
-      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
+      'مهتم بشراء منتجات مخزنة في غرف التبريد؟ قم بزيارة علامة التبويب "السوق" في الزاوية اليمنى السفلية!',
     emptyCoolingUser:
       'ستظهر العناصر المخزنة في لوحة المعلومات عندما تقوم بإجراء تسجيل وصول واحد على الأقل في أي غرفة.',
     noCompanyAvailable: 'لا توجد شركة متاحة',
@@ -337,7 +337,7 @@ export default {
       'مرحبًا بك في Coldtivate. ابدأ بإضافة المواقع إلى تطبيقك في لوحة الإدارة.',
     MarketPrice: {
       emptyState: 'أسعار المحاصيل غير متوفرة في بلدك',
-      'no-data-found': 'No data found for this market and commodity combination', // TODO
+      'no-data-found': '"لم يتم العثور على بيانات لهذا السوق ومجموعة السلع"',
       commodityLabel: 'سلعة',
       commodityModalTitle: 'حدد سلعة',
       Trend: {
@@ -361,13 +361,13 @@ export default {
           column3: 'السعر بالعملة {{currency}}/كجم',
           emptyState: 'لا توجد قيمة متاحة',
         },
-        'location-placeholder': 'State / District / Market', // TODO
-        'market-district-state': 'Market / District / State', // TODO
-        'district-label': 'Select a district', // TODO
-        'district-placeholder': 'District', // TODO
-        'market-label': 'Select a market', // TODO
-        'market-placeholder': 'Market', // TODO
-        'select-warning': 'Please make a selection for each field', // TODO
+        'location-placeholder': 'الولاية / المنطقة / السوق',
+        'market-district-state': 'السوق / المنطقة / الولاية',
+        'district-label': 'اختر منطقة',
+        'district-placeholder': 'المنطقة',
+        'market-label': 'اختر سوقًا',
+        'market-placeholder': 'السوق',
+        'select-warning': 'يرجى اختيار قيمة لكل حقل',
       },
     },
     CrateManagement: {
@@ -453,8 +453,7 @@ export default {
           bankName: 'اسم البنك',
         },
         paid: 'مدفوع',
-        lockedWithinPendingOrders:
-          'Crates that are locked in pending orders cannot be checked out.', // TODO
+        lockedWithinPendingOrders: 'الصناديق المقفلة في الطلبات المعلقة لا يمكن تسجيل خروجها.',
       },
       CheckIn: {
         emptyState: 'لم يتم إضافة أي صناديق بعد',
@@ -582,7 +581,7 @@ export default {
       checkOutButton: 'الدفع',
       cratesListedForSale: 'تم وضع علامة على أن {{amount}} صندوقًا مدرجًا للبيع',
       preSaleError:
-        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
+        'يرجى ملاحظة: لا يمكنك تغيير حالة القائمة للصناديق مع الطلبات المعلقة. إذا لم يكن هذا ينطبق، يرجى التواصل مع الدعم للحصول على المساعدة.',
       operatorNoBankAccountWarning:
         'لا يمتلك {{name}} تفاصيل حساب مصرفي حتى يتمكن من تلقي المدفوعات الخاصة بمبيعاته. يُرجى إضافة تفاصيل حسابه المصرفي في حالة مشاركته هذه معك.',
       farmerNoBankAccountWarning:
@@ -595,7 +594,7 @@ export default {
       addBankAccountHeader:
         'أنت تقوم بإعداد تفاصيل الحساب المصرفي نيابةً عن {{name}}. يُرجى إدخال هذه البيانات بعناية حيث لن تتمكن من إجراء أي تغييرات عليها بعد ذلك.',
       userWithoutPhone:
-        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone.', // TODO
+        'لا يمكن عرض الصناديق التابعة لهذا الحساب للبيع حيث لا يمكن ربط حساب مصرفي بالمستخدم بدون هاتف.',
     },
     SearchFilter: {
       detailsMessage:
@@ -795,9 +794,9 @@ export default {
           batteryPeakEnergyStorage: 'تخزين الطاقة عند مستوى الذروة لبطارية واحدة',
           batteryType: 'نوع البطاريات',
           selectSensorType: 'حدد نوع المستشعر',
-          selectSensor: 'Select a sensor', // TODO
+          selectSensor: 'اختر مستشعرًا',
           emptySensorListError:
-            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
+            'يبدو أنه لا توجد أجهزة استشعار متصلة بحساب {{type}} الخاص بك. يرجى توصيل جهاز واحد على الأقل وحاول مرة أخرى.',
           addTempSensor: 'أضف مستشعر درجة الحرارة إلى وحدة التبريد الخاصة بك.',
           sensorDesc: {
             default: 'اطلب هذه المعلومات من مزود المستشعر الخاص بك إذا لم تكن في متناول اليد.',
@@ -805,12 +804,12 @@ export default {
           },
           ecozen: { username: 'اسم المستخدم', password: 'كلمة المرور', machineId: 'معرف الجهاز' },
           genericSensorForm: {
-            username: 'Username/Email', // TODO
+            username: 'اسم المستخدم/البريد الإلكتروني',
             password: 'كلمة المرور',
           },
-          unknownSensor: 'Unknown', // TODO
-          hybridFields: 'Which percentage of the room is powered by the different sources?', // TODO
-          cropSpecificPricing: 'Crop-specific pricing', // TODO
+          unknownSensor: 'غير معروف',
+          hybridFields: 'ما هي النسبة المئوية للغرفة التي تعمل بمصادر مختلفة؟',
+          cropSpecificPricing: 'تسعير خاص بالمحاصيل',
           value: 'القيمة',
           machineId: 'معرّف الآلة',
           channelId: 'معرّف القناة',
@@ -879,7 +878,7 @@ export default {
         revokeMessage:
           'هل أنت متأكد من رغبتك في إلغاء هذه القسيمة؟ بمجرد إلغائها، لن تتمكن من استخدامها مرة أخرى ولن يكون الخصم متاحًا بعد الآن. هذا الإجراء دائم ولا يمكن التراجع عنه.',
         messages: {
-          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+          codeField: 'يجب أن يكون بحد أقصى 25 حرفًا ويحتوي فقط على حروف وأرقام',
         },
       },
     },
@@ -908,14 +907,12 @@ export default {
         goToCart: 'أضف إلى سلة التسوق واعرض الملخص',
       },
       currentLocation: 'الموقع الحالي',
-      invalidFormatWarning:
-        'Warning: The city name format is invalid. Results may not be accurate.', // TODO
+      invalidFormatWarning: 'تحذير: تنسيق اسم المدينة غير صالح. النتائج قد لا تكون دقيقة.',
       unresolvedCityFormatWarning:
-        'Warning: The specified city could not be resolved accurately. Results may not be accurate.', // TODO
-      lowConfidenceWarning:
-        'Warning: The city could not be confidently identified. Results may not be accurate.', // TODO
+        'تحذير: لم يمكن تحديد المدينة المحددة بدقة. النتائج قد لا تكون دقيقة.',
+      lowConfidenceWarning: 'تحذير: لم يمكن تحديد المدينة بثقة. النتائج قد لا تكون دقيقة.',
       filterGeneralWarning:
-        'Warning: An issue occurred during geolocation. Results may not be accurate.', // TODO
+        'تحذير: حدثت مشكلة أثناء تحديد الموقع الجغرافي. النتائج قد لا تكون دقيقة.',
       standardCrateWeight: 'الوزن القياسي للصندوق هو {{value}} كجم',
       owner: 'مالك',
       priceRange: 'النطاق السعر / كجم',
@@ -923,12 +920,12 @@ export default {
         min: 'الحد الأدنى',
         max: 'الأعلى',
         label: 'المرشحات',
-        coolingUnitLabel: 'Cooling unit', // TODO
-        coolingUnitHeading: 'Select cooling units', // TODO
-        cropTypeLabel: 'Produce / Crop Type', // TODO
-        cropTypeHeading: 'Select crops', // TODO
-        companyLabel: 'Company', // TODO
-        companyHeading: 'Select companies', // TODO
+        coolingUnitLabel: 'وحدة التبريد',
+        coolingUnitHeading: 'اختر وحدات التبريد',
+        cropTypeLabel: 'نوع المحصول',
+        cropTypeHeading: 'اختر المحاصيل',
+        companyLabel: 'الشركة',
+        companyHeading: 'اختر الشركات',
       },
       maxDistance: 'المسافة القصوى',
     },
@@ -1167,7 +1164,7 @@ export default {
     },
     ShoppingCart: {
       cartUpdatedMessage:
-        'Some products have been removed from your cart because they are no longer available for purchase.', // TODO
+        'تمت إزالة بعض المنتجات من سلة التسوق الخاصة بك لأنها لم تعد متاحة للشراء.',
       ownership: 'تغيير ملكية عربة التسوق إلى {{name}}',
       changeOwnership:
         'قم بتغيير ملكية عربة التسوق إلى {{name}}. قد يؤثر هذا على محتويات عربة التسوق الخاصة بك، بما في ذلك الإزالة المحتملة لبعض الصناديق التي قد لا تكون متاحة بعد هذا التغيير. هل أنت متأكد من أنك تريد المتابعة؟',
@@ -1189,9 +1186,9 @@ export default {
       contactsForDelivery: 'جهات الاتصال للحصول على معلومات التسليم',
       gotItButton: 'فهمتها!',
       pickupMethods: 'طريقة الاستلام',
-      selectPickupMethod: 'Select a pickup method', // TODO
-      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
-      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
+      selectPickupMethod: 'اختر طريقة الاستلام',
+      selectPickupMethodInfo: 'يلزم اختيار طريقة الاستلام لكل وحدة تبريد.',
+      pickupMethodSelectionMissing: 'اختيار طريقة الاستلام مفقود لـ {{amount}} وحدات تبريد.',
       pickUpToday: 'الاستلام اليوم',
       keepInStorageDailyRate: 'يحفظ في المخزن ({{price}} / يوم)',
       keepInStorageFixedRate: 'يحفظ في التخزين ({{price}})',
@@ -1390,9 +1387,9 @@ export default {
       checkIn: 'قام المشغل {{farmer}} بتحرير عملية تسجيل الوصول {{movementCode}} في {{date}}.',
       surveyAlreadyFilled: 'لقد تم ملء الاستبيان بالفعل',
       orderRequiresMovement:
-        'Produces need to be redistributed between crates. Click for details on which items to move.', // TODO
+        'يجب إعادة توزيع المنتجات بين الصناديق. انقر للحصول على تفاصيل حول العناصر التي يجب نقلها.',
       listingPriceUpdated:
-        'The listing prices for the crates storing {{crop}} at {{unitName}} have been updated: {{priceTag}}', // TODO
+        'تم تحديث أسعار القوائم للصناديق التي تخزن {{crop}} في {{unitName}}: {{priceTag}}',
     },
   },
   tutorial: {
