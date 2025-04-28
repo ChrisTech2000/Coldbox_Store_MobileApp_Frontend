@@ -133,7 +133,7 @@ function BottomNavBar(
           ))}
           <View>
             <TabItem
-              title="More"
+              title={t('navigation.bottomTabs.More')}
               onPress={(evt: GestureResponderEvent) => {
                 evt.stopPropagation();
                 openModal();

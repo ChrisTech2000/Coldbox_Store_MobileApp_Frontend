@@ -79,6 +79,7 @@ export default {
       CheckIn: 'Enregistrement',
       CheckOut: 'Retirer',
       Maps: 'Cartes',
+      More: 'More', // TODO
     },
     dashboard: {
       AccountDetails: 'Détails du compte',

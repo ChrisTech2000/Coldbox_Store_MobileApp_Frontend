@@ -78,6 +78,7 @@ export default {
       CheckIn: 'Wole sinu',
       CheckOut: 'jade',
       Maps: 'MAAPU',
+      More: 'More', // TODO
     },
     dashboard: {
       AccountDetails: 'Awọn alaye akanti',

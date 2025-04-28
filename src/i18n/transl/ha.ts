@@ -78,6 +78,7 @@ export default {
       CheckIn: 'Rajistan shiga',
       CheckOut: 'Duba fita',
       Maps: 'TASWIRORI',
+      More: 'More', // TODO
     },
     dashboard: {
       AccountDetails: 'Bayanan asusun',
