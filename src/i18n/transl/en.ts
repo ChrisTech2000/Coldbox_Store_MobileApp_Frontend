@@ -80,6 +80,7 @@ const en = {
       CheckIn: 'Check In',
       CheckOut: 'Check Out',
       Maps: 'Maps',
+      More: 'More',
     },
     dashboard: {
       AccountDetails: 'Account details',

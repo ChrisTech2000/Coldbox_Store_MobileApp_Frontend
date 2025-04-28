@@ -77,7 +77,7 @@ class NotificationManager {
       const commonParams = {
         farmer: crates.farmer ?? '',
         crop: find(lookupMap, {
-          name: crates.crop,
+          name: crates.crop ?? '',
           country: options.country,
           locale: options.locale,
         }),
