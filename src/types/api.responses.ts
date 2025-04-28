@@ -288,14 +288,6 @@ export interface GetCoolingUnitResponse {
   location: number;
   metric: string;
   sensor: boolean;
-  sensorList: Array<{
-    id: number;
-    sourceId: string;
-    type: string;
-    field: null | string;
-    dateSensorFirstLinked: string;
-    username: string;
-  }>;
   capacityInMetricTons: number;
   capacityInNumberCrates: number;
   occupancy: number;
@@ -338,6 +330,17 @@ export interface GetCoolingUnitResponse {
   commodityTotal: CommodityTotal;
   powerOptions: Array<PowerOption>;
   editableCheckins: boolean;
+}
+
+export interface GetCoolingUnitSensorDataResponse {
+  sensorData: Array<{
+    id: number;
+    sourceId: string;
+    type: string;
+    field: null | string;
+    dateSensorFirstLinked: string;
+    username: string;
+  }>;
 }
 
 export type AddMarketSurveyResponse = {

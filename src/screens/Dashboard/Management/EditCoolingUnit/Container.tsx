@@ -8,9 +8,9 @@ import { useShallow } from 'zustand/react/shallow';
 
 import ColdRoom from '#assets/icons/coldroom.svg';
 import { Button } from '#ui/components/Button';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import { Text } from '#ui/components/Text';
-import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -72,7 +72,23 @@ export default function ScreenContainer(props: Props) {
     }
   );
 
-  if (isLoading || isUnitLoading || isEmpty(unit)) {
+  const {
+    data: { sensorData },
+    isLoading: isSensorDataLoading,
+    refetch: refetchSensorData,
+  } = useApiCall(
+    'getCoolingUnit',
+    ColdtivateService.getCoolingUnitSensorData,
+    {
+      coolingUnitId,
+    },
+    {
+      skip: !coolingUnitId,
+      defaultData: undefined,
+    }
+  );
+
+  if (isLoading || isUnitLoading || isSensorDataLoading || isEmpty(unit)) {
     return (
       <View tw="flex-1 items-center justify-center">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -153,6 +169,7 @@ export default function ScreenContainer(props: Props) {
 
       await Promise.allSettled([
         refetch(),
+        refetchSensorData(),
         mutate(getQueryKey('getLocations', props.companyId)),
         ...(typeof user?.id !== 'undefined' && typeof props.companyId !== 'undefined'
           ? [
@@ -191,7 +208,7 @@ export default function ScreenContainer(props: Props) {
                 </View>
 
                 <View tw="pb-28">
-                  <FormFields isEditMode sensorList={unit?.sensorList} />
+                  <FormFields isEditMode sensorList={sensorData} />
                 </View>
               </View>
             </KeyboardAwareScrollView>
