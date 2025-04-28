@@ -82,6 +82,7 @@ export default {
       CheckIn: 'Check-In',
       CheckOut: 'Check-Out',
       Maps: 'Mapas',
+      More: 'Mais',
     },
     dashboard: {
       AccountDetails: 'Detalhes da Conta',

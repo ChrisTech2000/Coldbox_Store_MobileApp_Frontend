@@ -78,6 +78,7 @@ export default {
       CheckIn: 'دخول البضائع',
       CheckOut: 'خروج البضائع',
       Maps: 'خرائط',
+      More: 'المزيد',
     },
     dashboard: {
       AccountDetails: 'تفاصيل الحساب',

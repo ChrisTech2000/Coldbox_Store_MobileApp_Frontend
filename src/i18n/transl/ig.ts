@@ -78,6 +78,7 @@ export default {
       CheckIn: 'Ngwa banye',
       CheckOut: 'Puo ebe a ahu',
       Maps: 'MAP',
+      More: 'More', // TODO
     },
     dashboard: {
       AccountDetails: 'Nkọwa akaụntụ',

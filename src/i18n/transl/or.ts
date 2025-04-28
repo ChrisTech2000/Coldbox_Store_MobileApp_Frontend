@@ -82,6 +82,7 @@ export default {
       CheckIn: 'ଚେକ୍-ଇନ୍',
       CheckOut: 'ଚେକ୍-ଆଉଟ୍',
       Maps: 'ମାପ୍ସ',
+      More: 'More', // TODO
     },
     dashboard: {
       AccountDetails: 'ଆକାଉଣ୍ଟ ବିବରଣୀ',
