@@ -7,19 +7,19 @@ import { useDebouncedCallback } from 'use-debounce';
 import { useShallow } from 'zustand/react/shallow';
 
 import { API_BASE_URL } from '#constants/environment';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useCheckInStore } from '#stores/checkIn';
+import { useManagementStore } from '#stores/management';
 
 import { GenericError } from '#ui/components/GenericError';
 import { Input } from '#ui/components/Input';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import { useManagementStore } from '#stores/management';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -126,6 +126,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
                     placeholder={t('Dashboard.CrateManagement.CheckIn.SelectCrop.additionalInfo')}
                   />
                   <TouchableOpacity
+                    testID={`crop-list-item-#${item.fullCrop.name.toLowerCase()}`}
                     onPress={(evt) => {
                       evt.stopPropagation();
                       navigation.navigate('CrateSetup', {

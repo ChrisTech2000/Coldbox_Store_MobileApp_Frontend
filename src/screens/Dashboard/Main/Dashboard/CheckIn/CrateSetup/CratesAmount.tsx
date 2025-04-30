@@ -58,6 +58,7 @@ export default function CratesAmount(props: {
                 evt.stopPropagation();
                 onChangeNumericKeyboard(!value ? 0 : Number(value) - 1, onChange, 'numberOfCrates');
               }}
+              testID="numberOfCrates-minus"
             />
             <IconButton
               mode="contained-tonal"
@@ -70,6 +71,7 @@ export default function CratesAmount(props: {
                 evt.stopPropagation();
                 onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'numberOfCrates');
               }}
+              testID="numberOfCrates-plus"
             />
           </View>
         )}

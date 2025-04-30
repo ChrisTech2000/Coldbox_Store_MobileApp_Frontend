@@ -6,9 +6,9 @@ def setup_dotenv(options)
   source_env_file = ".env.#{pipeline}"
   default_env_file = ".env"
 
-  # Copy the pipeline-specific .env file to the destination
-  sh("cd ..; cp #{source_env_file} #{default_env_file}")
   ENV['ENVFILE'] = source_env_file
+  # Just in case the ENVFILE doesn't work, we're going to override the default .env file
+  sh("cd ..; cp #{source_env_file} #{default_env_file}")
 
 
   # clear the react-native-config cache
@@ -115,6 +115,23 @@ platform :android do
     ##
     # Environment specific lanes
     ##
+
+    desc "E2E build for automated testing"
+    lane :e2e do |options|
+        options = options.merge(
+            pipeline: "e2e",
+        )
+        setup_dotenv(options)
+
+        gradle(
+            project_dir: "android",
+            tasks: ["assembleE2e"],
+            properties: {
+            "versionCode" => generate_build_id(version_id: parse_version_id(version_id: options[:version_id])[:id]),
+            "versionName" => parse_version_id(version_id: options[:version_id])[:id],
+            }
+        )
+    end
 
     desc "Submit a new Staging Build to the Play Store"
     desc "This will also deploy just for the staging group."

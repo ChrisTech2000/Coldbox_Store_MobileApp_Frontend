@@ -1,0 +1,11 @@
+appId: com.base.coldtivate
+name: Cooling user sign in
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- runFlow: '../common/subflows/cu-login.yml'
+- assertVisible: 'Welcome to Coldtivate'
+- assertVisible: 'Start Tutorial'
+- assertVisible: 'Quit Tutorial'

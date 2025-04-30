@@ -40,6 +40,7 @@ export default function UnitTypeField() {
           onDismiss={() => setInternalSelection(field.value)}
         >
           <Select.Touchable
+            testID="cooling-unit-type-select"
             label={`${t('Dashboard.Management.AddCoolingUnit.fields.coolingUnitType')}*`}
             displayValue={displayValue}
           />

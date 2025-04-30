@@ -194,6 +194,7 @@ export function OperatorActions({
           }}
           onLayout={onLayout}
           disabled={!coolingUnit}
+          testID="dashboard-operator-actions"
         >
           {isCrateManagementOpen ? (
             <Icon source="close" size={25} color="white" />
@@ -209,6 +210,7 @@ export function OperatorActions({
               tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-green-primary"
               onPress={onCheckIn}
               onLayout={onCheckInLayout}
+              testID="dashboard-operator-actions-checkin"
             >
               <CheckIn width={20} height={20} />
             </TouchableOpacity>
@@ -218,6 +220,7 @@ export function OperatorActions({
               tw="w-10 h-10 mx-1 items-center justify-center rounded-xl bg-red-400"
               onPress={onCheckOut}
               onLayout={onInitiateCheckoutLayout}
+              testID="dashboard-operator-actions-checkout"
             >
               <CheckOut width={20} height={20} />
             </TouchableOpacity>
@@ -258,6 +261,7 @@ export function OperatorActions({
                           ? 'border border-green-primary'
                           : 'border-b'
                       )}
+                      testID={`check-in-user-${item?.user.firstName}`}
                     >
                       <Text variant="TextMedium" tw="text-base">
                         {`${item?.user.firstName} ${item?.user.lastName}`}

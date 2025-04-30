@@ -1,10 +1,12 @@
-FROM node:20.13.1-alpine
+FROM docker:25.0.3-dind
 
-RUN apk add --update \
-    bash busybox coreutils \
-    git openssh-client curl wget tar \
-    make cmake gcc g++ musl-dev \
-    linux-headers gcompat
+RUN --mount=type=cache,target=/var/cache/apk <<INSTALL
+    apk add --update \
+        bash busybox coreutils \
+        git openssh-client curl wget tar \
+        make cmake gcc g++ musl-dev \
+        linux-headers gcompat
+INSTALL
 
 # Android
 ENV ANDROID_HOME=/usr/local/android-sdk \
@@ -20,23 +22,35 @@ RUN mkdir "$ANDROID_HOME" ~/.android && touch ~/.android/repositories.cfg \
     && chmod +x -R $ANDROID_HOME/tools/bin
 
 # Set the default JVM to OpenJDK 8
-RUN apk add openjdk8
+RUN --mount=type=cache,target=/var/cache/apk apk add openjdk8
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk/
 ENV JAVA_INCLUDE_DIR=$JAVA_HOME/include
+
+# NodeJS / NPM / Yarn
+ENV NODE_VERSION=20.13.1 \
+    NODE_HOME=/usr/local/nodejs \
+    YARN_VERSION=1.22.19 \
+    YARN_HOME=/usr/local/yarn \
+    PATH=$PATH:/usr/local/nodejs/bin:/usr/local/yarn/bin
+RUN mkdir -p $NODE_HOME $YARN_HOME \
+    && curl --silent --compressed -L "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | tar -C "$NODE_HOME" --strip-components 1 -xJf - \
+    && curl --silent --compressed -L "https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz" | tar -C "$YARN_HOME" --strip-components 1 -xzf -
 
 # Accept licenses and Update the SDK Manager repositories
 RUN yes | sdkmanager --licenses > /dev/null \
     && sdkmanager --update > /dev/null
 
 # Install build, platform, and platform tools
-RUN sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_VERSION}" "platform-tools" > /dev/null
+RUN sdkmanager "build-tools;34.0.0" "platform-tools" > /dev/null
+RUN sdkmanager "platforms;android-33" "platforms;android-34" > /dev/null
+RUN sdkmanager "ndk;25.1.8937393" "ndk;26.1.10909125" > /dev/null
 
 # Add Ruby and Bundler (because we need fastlane)
-RUN apk add ruby-dev ruby-bundler ruby-rake
+RUN --mount=type=cache,target=/var/cache/apk apk add ruby-dev ruby-bundler ruby-rake
 # RUN gem install fastlane:2.221
 
 # Set the default JVM to OpenJDK 17
-RUN apk add openjdk17
+RUN --mount=type=cache,target=/var/cache/apk apk add openjdk17
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk/
 ENV JAVA_INCLUDE_DIR=$JAVA_HOME/include
 

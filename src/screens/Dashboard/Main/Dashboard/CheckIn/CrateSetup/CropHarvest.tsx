@@ -56,6 +56,7 @@ export default function CropHarvest(props: {
           <RadioButton.Group value={value?.toString() ?? ''} onValueChange={onChange}>
             {harvestDateOptions.map((option, optionIdx) => (
               <RadioButtonItem
+                testID={`radio-harvest-date-${option.label.toLowerCase()}`}
                 key={`${option}-${optionIdx}`}
                 label={option.label}
                 value={option.value}

@@ -7,13 +7,15 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 type AccountCardProps = {
   isActive: boolean;
   onPress: () => void;
+  testID?: string;
 } & React.PropsWithChildren;
 
-export function AccountCard({ children, isActive, onPress }: AccountCardProps) {
+export function AccountCard({ children, isActive, onPress, ...props }: AccountCardProps) {
   return isActive ? (
     <TouchableOpacity
       tw="border-green-primary rounded-md border bg-white border-4"
       onPress={onPress}
+      testID={props.testID}
     >
       {children}
     </TouchableOpacity>
@@ -29,6 +31,7 @@ export function AccountCard({ children, isActive, onPress }: AccountCardProps) {
         tw="border-green-primary rounded-md border bg-white"
         style={{ padding: 3 }}
         onPress={onPress}
+        testID={props.testID}
       >
         {children}
       </TouchableOpacity>

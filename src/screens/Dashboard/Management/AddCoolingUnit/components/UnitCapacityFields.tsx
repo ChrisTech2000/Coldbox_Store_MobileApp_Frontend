@@ -40,6 +40,7 @@ export default function UnitCapacityFields() {
           <TextInput
             tw="w-full bg-transparent mt-1"
             label={`${t('Dashboard.Management.AddCoolingUnit.fields.capacityInNumberCrates')}*`}
+            testID="field-max-number-crates"
             mode="flat"
             dense
             value={value}

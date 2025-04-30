@@ -1,0 +1,28 @@
+appId: com.base.coldtivate
+tags:
+  - subflow
+---
+- tapOn: 'SIGN IN'
+- tapOn:
+    id: 'farmer-account-card'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+    retryTapIfNoChange: false
+- inputText: '+2348033709552'
+- tapOn:
+    id: 'farmer-account-card'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+    retryTapIfNoChange: false
+- inputText: 'e2ePass1'
+- tapOn:
+    id: 'farmer-account-card'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'button'
+    index: 0
+    retryTapIfNoChange: false

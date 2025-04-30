@@ -1,0 +1,11 @@
+appId: com.base.coldtivate
+tags:
+  - util
+---
+- evalScript: ${output.shouldExecuteTeardown = TEARDOWN || 'true'}
+- runFlow:
+    when:
+      true: ${output.shouldExecuteTeardown == 'true'}
+    commands:
+      - clearState
+      - stopApp
