@@ -1,0 +1,56 @@
+appId: com.base.coldtivate
+name: RE add new location
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- runFlow: '../common/subflows/re-login.yml'
+- tapOn:
+    text: 'Welcome to Coldtivate'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Quit Tutorial'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    point: '50%,70%'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'icon-button'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'drawer-item-management'
+    retryTapIfNoChange: false
+- assertVisible: '.*Details.*'
+- tapOn:
+    id: 'locations-list-item'
+    retryTapIfNoChange: false
+- assertVisible: 'Locations'
+- tapOn:
+    id: 'icon-button'
+    index: 0
+- assertVisible: 'Add Location'
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+- inputText: 'E2E NEW LOCATION'
+- hideKeyboard
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+- inputText: '6.465422'
+- hideKeyboard
+- tapOn:
+    id: 'text-input-flat'
+    index: 2
+- inputText: '3.406448'
+- hideKeyboard
+- tapOn:
+    point: 50%,94%
+    retryTapIfNoChange: false
+- assertVisible: 'Locations'
+- tapOn: 'Back'
+- assertVisible: 'Management'

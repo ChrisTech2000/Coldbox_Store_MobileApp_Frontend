@@ -24,6 +24,7 @@ import phoneNumberCodes from '#constants/phoneNumberCodes';
 import { currenciesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { CustomError } from '#services/utils/ErrorUtil';
 
+import launchArgs from '../../../constants/launch.args';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
 import { GENDERS, GENDER_CODES, SignUpAsCompanySchema, SignUpCompanySchemaType } from './schemas';
@@ -188,6 +189,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
 
       {/** COUNTRY */}
       <SignUpFormSelectLg<SignUpCompanySchemaType>
+        testID="country-select"
         items={countries}
         name="country"
         control={control}
@@ -293,6 +295,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
 
       {/** GENDER */}
       <SignUpFormSelectMd
+        testID="gender-select"
         items={GENDERS}
         translateItemLabel={(item) => GENDER_CODES[item as keyof typeof GENDER_CODES]}
         name="gender"
@@ -333,10 +336,11 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
             label={`${t('Auth.SignUp.commonForm.passwordLabel')}*`}
             onChangeText={onChange}
             value={value}
-            secureTextEntry={hidePass}
+            secureTextEntry={hidePass && !launchArgs.isE2E}
             error={errors.password?.password}
             right={
               <TextInput.Icon
+                testID="password-eye-icon"
                 icon={hidePass ? 'eye' : 'eye-off'}
                 onPress={() => setHidePass(!hidePass)}
               />
@@ -359,9 +363,10 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
             onChangeText={onChange}
             value={value}
             error={errors.password?.confirmPassword}
-            secureTextEntry={hideConfirmPass}
+            secureTextEntry={hideConfirmPass && !launchArgs.isE2E}
             right={
               <TextInput.Icon
+                testID="password-eye-icon"
                 icon={hideConfirmPass ? 'eye' : 'eye-off'}
                 onPress={() => setHideConfirmPass(!hideConfirmPass)}
               />
@@ -381,6 +386,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
           <View tw="flex flex-row items-center max-w-[85%] mx-4 my-2 space-x-2">
             <View tw="border border-green-primary rounded-md scale-75">
               <Checkbox
+                testID="terms-checkbox"
                 onPress={() => {
                   onChange(!value);
                 }}

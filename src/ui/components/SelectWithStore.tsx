@@ -35,6 +35,7 @@ type SelectItemProps<T> = {
   setIsModalVisible: (value: SetStateAction<boolean>) => void;
   itemName: (item: T) => string;
   postSelectionAction?: (val?: T) => void;
+  testID?: string;
 };
 
 export const createSelectStore = <T,>(initialState?: T) =>
@@ -137,7 +138,10 @@ export default function SelectWithStore<T>(props: SelectItemProps<T>) {
   }
 
   return (
-    <View tw={cn(rest.occupyFullWidth && 'w-full', rest.border && 'border border-gray-900 py-4')}>
+    <View
+      tw={cn(rest.occupyFullWidth && 'w-full', rest.border && 'border border-gray-900 py-4')}
+      testID={props.testID}
+    >
       <View tw="px-2">
         <Select
           variant="md"

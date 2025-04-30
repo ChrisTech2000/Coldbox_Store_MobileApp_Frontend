@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import { View, Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
+import colors from 'tailwindcss/colors';
 
 import { GenericError } from '#ui/components/GenericError';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
@@ -12,8 +13,11 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import launchArgs from '#constants/launch.args';
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
+import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
 import {
@@ -23,10 +27,7 @@ import {
   EDateCropped,
   EPricingType,
 } from '#types/global';
-import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
-import colors from 'tailwindcss/colors';
 import { CrateSetupModal } from '../components/CrateSetupModal';
 import {
   resetCrateWeightPricingBridge,
@@ -386,7 +387,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         />
       </KeyboardAwareScrollView>
 
-      <HideWithKeyboardView>
+      <HideWithKeyboardView isE2e={launchArgs.isE2E}>
         <FloatingFooter
           dailyPriceLabel={dailyPriceLabel}
           currencyCode={company?.currency || DEFAULT_CURRENCY_CODE}

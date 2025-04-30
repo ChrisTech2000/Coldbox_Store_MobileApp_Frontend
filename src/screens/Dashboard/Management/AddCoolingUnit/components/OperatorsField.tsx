@@ -44,6 +44,7 @@ export default function OperatorsField() {
           onDismiss={() => setInternalSelection(field.value)}
         >
           <Select.Touchable
+            testID="operators-select"
             label={t('navigation.management.Operators')}
             displayValue={displayValue}
           />

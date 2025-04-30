@@ -37,6 +37,7 @@ export default function LocationField() {
           onDismiss={() => setInternalSelection(field.value?.toString() ?? null)}
         >
           <Select.Touchable
+            testID="location-select"
             label={`${t('Dashboard.Management.AddCoolingUnit.fields.location')}*`}
             displayValue={field.value ? companyLocations[field.value] : ''}
           />

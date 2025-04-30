@@ -49,6 +49,7 @@ export default function PlannedDays(props: {
                 evt.stopPropagation();
                 onChangeNumericKeyboard(!value ? 0 : Number(value) - 1, onChange, 'plannedDays');
               }}
+              testID="plannedDays-minus"
             />
             <IconButton
               mode="contained-tonal"
@@ -61,6 +62,7 @@ export default function PlannedDays(props: {
                 evt.stopPropagation();
                 onChangeNumericKeyboard(Number(value ?? 0) + 1, onChange, 'plannedDays');
               }}
+              testID="plannedDays-plus"
             />
           </View>
         )}

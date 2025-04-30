@@ -1,0 +1,22 @@
+flows:
+  - 'auth/*'
+  - 'management/*'
+excludeTags:
+  - util
+  - subflow
+executionOrder:
+  continueOnFailure: false
+  flowsOrder:
+    # Registered Employee flows
+    - RE sign up
+    - RE sign in
+    - RE add new location
+    - RE invite operator
+    - RE add new cooling unit
+    # Cooling user (Farmer) flows
+    - Cooling user sign up
+    - Cooling user sign in
+    # Operator flows
+    - OP login
+    - OP check in produces
+    - OP check out produces

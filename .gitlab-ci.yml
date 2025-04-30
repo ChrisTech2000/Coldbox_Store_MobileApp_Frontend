@@ -1,6 +1,6 @@
 stages:
   - dependencies
-  # - validation
+  - test
   - build
   - deploy
 
@@ -9,6 +9,9 @@ image: ${CI_REGISTRY_IMAGE}:ci
 ###
 ## Template Scripts
 ###
+
+.wait-for-emulator: &wait-for-emulator
+  - while [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; do sleep 2; done; sleep 10 # Lets wait for the emulator a bit more, just to be sure it's ready
 
 .yarn-install: &yarn-install
   - yarn config set cache-folder ~/.yarn
@@ -40,13 +43,19 @@ image: ${CI_REGISTRY_IMAGE}:ci
   paths:
     - node_modules/
     - ~/.yarn
+.gradle-cache: &gradle-cache
+  key: gradle-cache
+  policy: pull
+  paths:
+    - ~/.gradle/caches
+    - ~/.gradle/wrapper
 .android-cache: &android-cache
   key: android-cache
   policy: pull
   paths:
     - android/.gradle
     - android/build
-    - android/*/build
+    - android/app/build
 .cocoapods-cache: &cocoapods-cache
   key:
     files:
@@ -82,10 +91,10 @@ build ci image:
     - docker build --cache-from "${CI_REGISTRY_IMAGE}:ci" --tag "${CI_REGISTRY_IMAGE}:ci" --file ./docker/ci/Dockerfile.debian-based ./docker/ci
     - docker push "${CI_REGISTRY_IMAGE}:ci"
   only:
-    refs:
-      - main
-      - development
-      - feat/*
+    # refs:
+    #   - main
+    #   - development
+    #   - feat/*
     changes:
       - docker/ci/*
 
@@ -100,6 +109,99 @@ build ci image:
 #   script:
 #     - yarn run lint
 
+build android app e2e:
+  extends: .build-android-app
+  stage: test
+  variables:
+    LANE: e2e
+
+    # API base urls
+    BASE_API_BASE_URL: http://docker/base_api/
+    AIR_PROD_BASE_URL: http://docker/air_api/
+    IMPACT_BACKUP_BASE_URL: http://docker/impact_api/
+    FARMER_IMPACT_BASE_URL: http://docker/farmer_api/
+  when: manual
+  before_script:
+    - mv .env.e2e .env.e2e.bak;
+    - cat .env.e2e.bak | grep -v "_BASE_URL" >> .env.e2e;
+    - echo "BASE_API_BASE_URL=$BASE_API_BASE_URL" >> .env.e2e;
+    - echo "AIR_PROD_BASE_URL=$AIR_PROD_BASE_URL" >> .env.e2e;
+    - echo "IMPACT_BACKUP_BASE_URL=$IMPACT_BACKUP_BASE_URL" >> .env.e2e;
+    - echo "FARMER_IMPACT_BASE_URL=$FARMER_IMPACT_BASE_URL" >> .env.e2e;
+    - echo "## Resulting .env.e2e file:"
+    - cat .env.e2e
+  only:
+    refs:
+      - development
+      - feat/e2e
+
+run e2e tests with maestro:
+  stage: test
+  needs:
+    - build android app e2e
+  services:
+    - name: docker:25.0.3-dind
+      alias: docker
+    - name: budtmo/docker-android:emulator_14.0_v2.15.0-p0
+      alias: android-emulator
+  variables:
+    # Emulator variables
+    EMULATOR_DEVICE: Samsung Galaxy S10
+    WEB_VNC: true
+    # Docker server variables
+    FF_NETWORK_PER_BUILD: 'true'
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_CERT_PATH: /certs/client
+    DOCKER_TLS_VERIFY: '1'
+
+    # API base urls
+    BASE_API_BASE_URL: http://docker/base_api/
+    AIR_PROD_BASE_URL: http://docker/air_api/
+    IMPACT_BACKUP_BASE_URL: http://docker/impact_api/
+    FARMER_IMPACT_BASE_URL: http://docker/farmer_api/
+  before_script:
+    # Install Maestro
+    - curl -Ls "https://get.maestro.mobile.dev" | bash
+    - export PATH="$PATH:$HOME/.maestro/bin"
+
+    # Fix issue with path to the adb bin
+    - export PATH="$PATH:/usr/local/android-sdk/platform-tools/"
+
+    # Connect to the emulator
+    - adb connect android-emulator:5555
+
+    # Fix issue with access to the docker host
+    - apt update && apt install -y inetutils-ping
+    - export DOCKER_IP_ADDRESS=$(ping -c 1 docker | awk -F'[()]' '/PING/{print $2}')
+    - *wait-for-emulator
+    - adb root
+    - adb remount /
+    - adb reboot
+    - *wait-for-emulator
+    - adb root
+    - adb remount /
+    - adb pull /etc/hosts /tmp/hosts
+    - echo "$DOCKER_IP_ADDRESS docker" >> /tmp/hosts
+    - adb push /tmp/hosts /etc/hosts
+
+    # Install app
+    - adb install -r -g android/app/build/outputs/apk/e2e/app-e2e.apk
+
+    # Setup e2e backend services
+    - command -v docker && docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.gitlab.com
+    - ./docker/e2e/setup.sh
+
+    # Uncomment for debugging purposes
+    #- apt update && apt install -y tmate && tmate -F
+  script:
+    - maestro test .maestro
+  only:
+    refs:
+      - development
+      - feat/e2e
+
 ###
 ## Build
 ###
@@ -110,14 +212,13 @@ build ci image:
   variables:
     LC_ALL: en_US.UTF-8
     LANG: en_US.UTF-8
-    NG_CONFIGURATION: production
     LANE: build
-  before_script:
+  script:
     - *git-secret-reveal
     - *yarn-install
     - *bundler-install
+    - export GRADLE_USER_HOME=$(pwd)/android/.gradle
     # - *trust-git-providers # mosano's runner already trust these
-  script:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
     - export VERSION_ID=${CI_COMMIT_REF_NAME}
     - if [ "$VERSION_ID" == "" ]; then git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
@@ -132,6 +233,8 @@ build ci image:
       key: bundler-cache-android
     - <<: *android-cache
       policy: pull-push
+    - <<: *gradle-cache
+      policy: pull-push
 
 .build-ios-app:
   tags:
@@ -142,16 +245,14 @@ build ci image:
   variables:
     LC_ALL: en_US.UTF-8
     LANG: en_US.UTF-8
-    NG_CONFIGURATION: production
     LANE: build
-  before_script:
+  script:
     - *yarn-install
     - *bundler-install
     - *trust-git-providers
     - eval $(ssh-agent -s)
     - chmod 0600 "$MATCH_GIT_PRIVATE_KEY_PATH"
     - ssh-add "$MATCH_GIT_PRIVATE_KEY_PATH"
-  script:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
     - export VERSION_ID=${CI_COMMIT_REF_NAME}
     - if [ "$VERSION_ID" == "" ]; then git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
@@ -178,7 +279,6 @@ build ci image:
 build and publish android app staging:
   extends: .build-android-app
   variables:
-    NG_CONFIGURATION: staging
     LANE: staging
   when: manual
   only:
@@ -198,7 +298,6 @@ build and publish ios app staging:
 build and publish android app production:
   extends: .build-android-app
   variables:
-    NG_CONFIGURATION: production
     LANE: production
   when: manual
   only:
@@ -207,7 +306,6 @@ build and publish android app production:
 build and publish ios app production:
   extends: .build-ios-app
   variables:
-    NG_CONFIGURATION: production
     LANE: production
   when: manual
   only:

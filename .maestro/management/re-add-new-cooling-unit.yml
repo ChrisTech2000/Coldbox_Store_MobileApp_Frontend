@@ -1,0 +1,85 @@
+appId: com.base.coldtivate
+name: RE add new cooling unit
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- runFlow: '../common/subflows/re-login.yml'
+- tapOn:
+    text: 'Welcome to Coldtivate'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Quit Tutorial'
+    optional: true
+- tapOn:
+    point: '50%,70%'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'icon-button'
+    index: 0
+- tapOn:
+    id: 'drawer-item-management'
+    retryTapIfNoChange: false
+- assertVisible: 'Details'
+- tapOn:
+    id: 'cooling-units-list-item'
+    retryTapIfNoChange: false
+- assertVisible: 'Cooling Units'
+- assertVisible: E2E NEW LOCATION
+- tapOn:
+    id: 'icon-button'
+    index: 0
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+- inputText: 'E2E NEW COOLING UNIT'
+- hideKeyboard
+- tapOn:
+    id: 'location-select'
+    retryTapIfNoChange: false
+- tapOn:
+    text: E2E NEW LOCATION
+- tapOn: 'OK'
+- tapOn:
+    id: 'cooling-unit-type-select'
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'It is a storage room placed at a market'
+    retryTapIfNoChange: false
+- tapOn: 'OK'
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+- inputText: 350
+- hideKeyboard
+- tapOn:
+    id: 'text-input-flat'
+    index: 2
+- inputText: 1
+- hideKeyboard
+- tapOn:
+    id: 'text-input-flat'
+    index: 3
+- inputText: 1
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: 'field-max-number-crates'
+    centerElement: true
+    direction: 'DOWN'
+    visibilityPercentage: 30
+    speed: 30
+- tapOn:
+    id: 'field-max-number-crates'
+    retryTapIfNoChange: false
+- inputText: 40
+- hideKeyboard
+- tapOn:
+    point: 50%,94%
+    index: 0
+    retryTapIfNoChange: false
+- assertVisible: 'Cooling Units'
+- tapOn: 'Back'
+- assertVisible: 'Management'

@@ -103,6 +103,7 @@ export function DrawerItem({ t, datums, routeName, focusedRoute, navigation }: D
       label={t(datums.translationPath)}
       active={focusedRoute === routeName}
       onLayout={layoutFns[routeName]}
+      testID={`drawer-item-${routeName.toLowerCase()}`}
       onPress={(evt) => {
         evt.stopPropagation();
         switch (routeName) {

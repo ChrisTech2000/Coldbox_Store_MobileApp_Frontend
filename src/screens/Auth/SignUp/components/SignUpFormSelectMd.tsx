@@ -18,6 +18,7 @@ type Props<T extends FieldValues> = {
   control: Control<T>;
   required?: boolean;
   enableScroll?: boolean;
+  testID?: string;
   translateItemLabel?: (item: string) => TranslationPaths;
 };
 
@@ -64,6 +65,7 @@ export function SignUpFormSelectMd<T extends FieldValues>(props: Props<T>) {
           onDismiss={() => setSelectedValue(field.value)}
         >
           <Select.Touchable
+            testID={props.testID}
             label={required ? `${startCase(label)}*` : startCase(label)}
             displayValue={selectedValuePath ? t(selectedValuePath) : safeSelectedValue}
           />

@@ -1,0 +1,80 @@
+appId: com.base.coldtivate
+name: Cooling user sign up
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- tapOn:
+    text: 'SIGN UP AS A COOLING USER OR CONSUMER'
+    retryTapIfNoChange: false
+- assertVisible: 'Sign Up as a Cooling User or Consumer'
+- tapOn:
+    id: 'country-select'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Nigeria'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+    retryTapIfNoChange: false
+- inputText: '8033709555'
+- hideKeyboard
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+- inputText: 'Primary'
+- hideKeyboard
+- tapOn:
+    id: 'text-input-flat'
+    index: 2
+- inputText: 'Farmer'
+- hideKeyboard
+- tapOn:
+    id: 'language-select'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'English'
+    retryTapIfNoChange: false
+- tapOn: 
+    text: 'OK'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'gender-select'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Male'
+    retryTapIfNoChange: false
+- tapOn: 
+    text: 'OK'
+    retryTapIfNoChange: false
+- 'scroll'
+- tapOn:
+    id: 'text-input-flat'
+    index: 3
+- inputText: 'e2ePass1'
+- tapOn:
+    id: 'password-eye-icon'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'text-input-flat'
+    index: 4
+- inputText: 'e2ePass1'
+- tapOn:
+    id: 'password-eye-icon'
+    index: 1
+    retryTapIfNoChange: false
+- 'scroll'
+- tapOn:
+    id: 'terms-checkbox'
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'SIGN UP'
+    index: 1
+    retryTapIfNoChange: false
+- assertVisible: 'LOG IN'

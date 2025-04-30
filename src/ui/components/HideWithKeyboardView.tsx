@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Keyboard, View, type ViewProps } from 'react-native';
 
-export default function HideWithKeyboardView({ children, ...props }: ViewProps) {
-  const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
+type Props = ViewProps & {
+  isE2e?: boolean;
+};
 
-  useEffect(() => {
+export default function HideWithKeyboardView(
+  props: React.PropsWithChildren<Props>
+): JSX.Element | null {
+  const { children, isE2e, ...rest } = props;
+
+  const [keyboardVisible, setKeyboardVisible] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
     const showEvtListener = Keyboard.addListener('keyboardDidShow', () => {
       setKeyboardVisible(true);
     });
@@ -19,6 +27,7 @@ export default function HideWithKeyboardView({ children, ...props }: ViewProps) 
   }, []);
 
   if (keyboardVisible) return null;
+  if (isE2e) return <React.Fragment>{children}</React.Fragment>;
 
-  return <View {...props}>{children}</View>;
+  return <View {...rest}>{children}</View>;
 }

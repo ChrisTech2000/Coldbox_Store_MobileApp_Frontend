@@ -49,6 +49,7 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
         renderItem={({ item }) => (
           <View tw="px-3">
             <List.Item
+              testID={`crop-type-${item.name}`}
               title={item.name}
               onPress={() => {
                 navigation.navigate('CropList', {
