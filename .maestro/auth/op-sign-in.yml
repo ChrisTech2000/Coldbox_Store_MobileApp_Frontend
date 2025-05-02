@@ -1,0 +1,11 @@
+appId: com.base.coldtivate
+name: Operator sign in
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- runFlow: '../common/subflows/op-login.yml'
+- assertVisible: 'Welcome to Coldtivate'
+- assertVisible: 'Start Tutorial'
+- assertVisible: 'Quit Tutorial'

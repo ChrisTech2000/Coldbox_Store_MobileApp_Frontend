@@ -208,6 +208,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           </Text>
           <View tw="max-w-[30%]">
             <SelectWithStore<CoolingUnit>
+              testID="cooling-unit-select"
               datums={coolingUnits ?? []}
               isModalVisible={isUnitsModalOpen}
               setIsModalVisible={setIsUnitsModalOpen}
@@ -266,9 +267,10 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
                   showsVerticalScrollIndicator={false}
                   scrollEnabled={false}
                   keyExtractor={(item, itemIdx) => `checkout-list-item-${item.id}-#${itemIdx}`}
-                  renderItem={({ item: crate }) => (
+                  renderItem={({ item: crate, index }) => (
                     <View>
                       <TouchableOpacity
+                        testID={`checkout-list-item-#${index}`}
                         tw="flex flex-row items-center"
                         onPress={() => onPress(crate)}
                         disabled={crate.lockedWithinPendingOrders}
@@ -320,6 +322,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           {t('actions.back')}
         </Button>
         <Button
+          testID="next-button"
           style={{ width: BUTTON_WIDTH }}
           mode="contained"
           uppercase

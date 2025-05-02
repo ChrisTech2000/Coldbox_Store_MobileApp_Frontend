@@ -1,0 +1,80 @@
+appId: com.base.coldtivate
+name: OP check in produces
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- runFlow: '../common/subflows/op-login.yml'
+- tapOn:
+    text: 'Welcome to Coldtivate'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Quit Tutorial'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'dashboard-operator-actions'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'dashboard-operator-actions-checkin'
+    retryTapIfNoChange: false
+- assertVisible: 'Select a cooling user:'
+- tapOn:
+    id: 'check-in-user-User without a phone.*'
+    retryTapIfNoChange: false
+- tapOn:
+    text: '.*CONFIRM.*'
+    retryTapIfNoChange: false
+- assertVisible: 'CheckIn'
+- assertVisible: 'No boxes added yet'
+- tapOn:
+    id: 'button'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'crop-type-fruits'
+    retryTapIfNoChange: false
+- assertVisible: 'Fruits'
+- tapOn:
+    id: 'crop-list-item-#apple'
+    retryTapIfNoChange: false
+- assertVisible: 'Details'
+- assertVisible: 'Number of crates*'
+- tapOn:
+    id: 'numberOfCrates-plus'
+    repeat: 3
+- tapOn:
+    id: 'numberOfCrates-minus'
+- assertVisible: 'Storage'
+- assertVisible: 'Planned number of days in storage'
+- tapOn:
+    id: 'plannedDays-plus'
+    repeat: 2
+- tapOn:
+    id: 'plannedDays-minus'
+- 'scroll'
+- tapOn:
+    id: 'radio-harvest-date-today'
+    retryTapIfNoChange: false
+- tapOn:
+    point: '70%,96%'
+    retryTapIfNoChange: false
+- assertVisible: 'Apple (2)'
+- tapOn: 'See more'
+- tapOn: 'See less'
+- tapOn:
+    id: 'confirm-check-in-button'
+    retryTapIfNoChange: false
+- assertVisible: 'Temperature alert'
+- scrollUntilVisible:
+    element:
+      text: 'Continue without update'
+    direction: 'DOWN'
+    visibilityPercentage: 60
+    speed: 30
+    optional: true # workaround for consistency
+- tapOn:
+    text: 'Continue without update'
+    retryTapIfNoChange: false

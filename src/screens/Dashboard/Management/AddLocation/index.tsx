@@ -141,6 +141,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
               onPress={handler}
               icon={isSubmitting ? undefined : 'plus-circle'}
               uppercase
+              testID="add-location-button"
             >
               {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
             </Button>

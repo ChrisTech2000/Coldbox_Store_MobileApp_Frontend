@@ -1,0 +1,26 @@
+:80 {
+    @cors header Origin *
+    handle @cors {
+        header Access-Control-Allow-Origin *
+        header Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
+        header Access-Control-Allow-Headers "Origin,X-Requested-With,Content-Type,Accept,Authorization"
+        header Access-Control-Max-Age "3600"
+        respond "" 204
+    }
+
+    handle_path /base_api/* {
+        reverse_proxy http://base_api:8000
+    }
+
+    handle_path /air_api/* {
+        reverse_proxy http://air_api:5000
+    }
+
+    handle_path /farmer_api/* {
+        reverse_proxy http://farmer_api:5000
+    }
+
+    handle_path /impact_api/* {
+        reverse_proxy http://impact_api:5000
+    }
+}
