@@ -108,6 +108,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
         <RBAC.ProtectedResource action="NAVIGATE" subject="Locations">
           <List.Item
+            testID="locations-list-item"
             tw="px-0 py-2"
             title={undefined}
             left={() => <Text tw="text-base w-[80%]">{t('navigation.management.Locations')}</Text>}
@@ -121,6 +122,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
         <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUnits">
           <List.Item
+            testID="cooling-units-list-item"
             tw="px-0 py-2"
             title={disabledCoolingUnits ? t('navigation.management.CoolingUnits') : undefined}
             description={
@@ -144,6 +146,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
 
         <RBAC.ProtectedResource action="NAVIGATE" subject="Operators">
           <List.Item
+            testID="operators-list-item"
             tw="px-0 py-2"
             title={undefined}
             left={() => <Text tw="text-base w-[80%]">{t('navigation.management.Operators')}</Text>}

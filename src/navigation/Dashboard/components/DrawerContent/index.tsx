@@ -104,7 +104,12 @@ export default function DrawerContent(props: Props) {
         ))}
       </Drawer.Section>
 
-      <Drawer.Item label={t('navigation.auth.Logout')} onPress={onLogout} icon="logout-variant" />
+      <Drawer.Item
+        label={t('navigation.auth.Logout')}
+        onPress={onLogout}
+        icon="logout-variant"
+        testID="drawer-item-logout"
+      />
     </StyledDrawerContentScrollView>
   );
 }

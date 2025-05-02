@@ -127,7 +127,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       allHavePlannedDays: everyCrateHasPlannedDays,
       translatedCropNames,
     };
-  }, [produces, company?.country, locale]);
+  }, [produces.length, company?.country, locale]);
 
   const total = useMemo(() => {
     if (!coolingUnit.commonPricingType) return '0.00';

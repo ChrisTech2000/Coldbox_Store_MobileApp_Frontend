@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
-import { Dialog, Portal } from 'react-native-paper';
 import { getBuildNumber } from 'react-native-device-info';
+import { Dialog, Portal } from 'react-native-paper';
 
-import { Text } from '#ui/components/Text';
 import { Button } from '#ui/components/Button';
-
-import AuthService from '#services/AuthService';
-import { useTranslationUtils } from '#i18n/utils';
-import { paperTheme } from '#ui/lib/theme';
-import { ENVIRONMENT } from '#constants/environment';
-import reportCrash from '#ui/lib/reportCrash';
+import { Text } from '#ui/components/Text';
 import { launchBrowserUrl } from '#ui/lib/launchBrowserUrl';
+import reportCrash from '#ui/lib/reportCrash';
+import { paperTheme } from '#ui/lib/theme';
+
+import { ENVIRONMENT } from '#constants/environment';
+import launchArgs from '#constants/launch.args';
+import { useTranslationUtils } from '#i18n/utils';
+import AuthService from '#services/AuthService';
 
 const IS_DEV_ENV = typeof ENVIRONMENT === 'string' && ENVIRONMENT === 'development';
 
@@ -54,7 +55,7 @@ export default function AppVersionModal() {
   });
 
   useAppVersionCheck((needsUpdate) => {
-    if (IS_DEV_ENV) return;
+    if (IS_DEV_ENV || launchArgs.isE2E) return;
     return setState({
       isDismissable: !needsUpdate,
       isVisible: needsUpdate,

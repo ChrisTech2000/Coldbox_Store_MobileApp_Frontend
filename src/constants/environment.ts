@@ -1,6 +1,6 @@
 import { Config } from 'react-native-config';
 
-export const API_BASE_URL = `${Config.BASE_API_URL}`;
+export const API_BASE_URL = `${Config.BASE_API_BASE_URL}`;
 export const AIR_PROD_BASE_URL = `${Config.AIR_PROD_BASE_URL}`;
 export const MAPBOX_ACCESS_TOKEN = `${Config.MAPBOX_ACCESS_TOKEN}`;
 export const IMPACT_BACKUP_BASE_URL = `${Config.IMPACT_BACKUP_BASE_URL}`;

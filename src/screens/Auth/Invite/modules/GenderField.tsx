@@ -36,6 +36,7 @@ export default function GenderField() {
           onDismiss={() => setInternalSelection(selectedGender)}
         >
           <Select.Touchable
+            testID="gender-select"
             label={t('Dashboard.Management.Operators.text.gender')}
             displayValue={displayValue}
           />

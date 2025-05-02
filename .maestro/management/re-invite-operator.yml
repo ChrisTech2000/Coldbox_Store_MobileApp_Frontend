@@ -1,0 +1,114 @@
+appId: com.base.coldtivate
+name: RE invite operator
+env:
+  BASE_API_BASE_URL: 'http://docker/base_api'
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- runFlow: '../common/subflows/re-login.yml'
+- tapOn:
+    text: 'Welcome to Coldtivate'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Quit Tutorial'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    point: '50%,70%'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'icon-button'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'drawer-item-management'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'operators-list-item'
+    retryTapIfNoChange: false
+- assertVisible: 'Invited (0)'
+- tapOn:
+    id: 'icon-button'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+    retryTapIfNoChange: false
+- inputText: '+2348033709554'
+- hideKeyboard
+- tapOn:
+    point: 50%,94%
+    retryTapIfNoChange: false
+- assertVisible: 'Invited (1)'
+- tapOn: 'Back'
+- assertVisible: 'Management'
+- tapOn: 'Back'
+- tapOn:
+    id: 'drawer-item-logout'
+    retryTapIfNoChange: false
+- assertVisible: '.*Welcome to.*'
+- runScript:
+    file: '../scripts/setInviteLink.js'
+    env:
+      BASE_API_BASE_URL: '${BASE_API_BASE_URL}'
+- openLink:
+    link: '${output.invitationLink}'
+    autoVerify: true
+    browser: false
+- extendedWaitUntil:
+    visible: '.*You have been invited as Operator.*'
+    timeout: 10000
+- assertVisible: '.*You have been invited as Operator.*'
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+    retryTapIfNoChange: false
+- inputText: 'First'
+- hideKeyboard
+- tapOn:
+    id: 'text-input-flat'
+    index: 2
+    retryTapIfNoChange: false
+- inputText: 'Operator'
+- hideKeyboard
+- tapOn:
+    id: 'gender-select'
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Female'
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'OK'
+    retryTapIfNoChange: false
+- 'scroll'
+- tapOn:
+    id: 'text-input-flat'
+    index: 3
+    retryTapIfNoChange: false
+- inputText: 'e2ePass1'
+- tapOn:
+    id: 'password-eye-icon'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'text-input-flat'
+    index: 4
+    retryTapIfNoChange: false
+- inputText: 'e2ePass1'
+- tapOn:
+    id: 'password-eye-icon'
+    index: 1
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'terms-checkbox'
+    retryTapIfNoChange: false
+- scroll
+- tapOn:
+    text: 'SIGN UP'
+    index: 1
+    retryTapIfNoChange: false
+- assertVisible: 'LOG IN'

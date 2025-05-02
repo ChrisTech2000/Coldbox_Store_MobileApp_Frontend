@@ -274,6 +274,7 @@ function PayoutSettings(
               {t('Dashboard.AccountDetails.PayoutSettings.form.accountType')}
             </Text>
             <SelectWithStore<EBankAccountType>
+              testID="account-type-select"
               datums={[EBankAccountType.PERSONAL, EBankAccountType.BUSINESS]}
               isModalVisible={isAccountTypeOpen}
               setIsModalVisible={setIsAccountTypeOpen}
@@ -342,6 +343,7 @@ function PayoutSettings(
               {t('Dashboard.AccountDetails.PayoutSettings.form.bank')}
             </Text>
             <SelectWithStore<Bank>
+              testID="bank-select"
               datums={availableBanks.banks ?? []}
               isModalVisible={isBanksModalOpen}
               setIsModalVisible={setIsBanksModalOpen}
@@ -381,6 +383,7 @@ function PayoutSettings(
           icon={isSubmitting ? undefined : 'check-circle-outline'}
           disabled={(hasPayoutMethods && !isDirty) || isSubmitting}
           uppercase
+          testID="payout-settings-save-button"
         >
           {isSubmitting ? (
             <ActivityIndicator size="small" color="white" />
