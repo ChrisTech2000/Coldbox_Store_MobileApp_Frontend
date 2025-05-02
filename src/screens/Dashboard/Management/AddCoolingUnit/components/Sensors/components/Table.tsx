@@ -7,12 +7,14 @@ import { Button } from '#ui/components/Button';
 import { useToggle } from '#ui/hooks/useToggle';
 
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import type { GetCoolingUnitResponse } from '#types/api.responses';
+import type { GetCoolingUnitSensorDataResponse } from '#types/api.responses';
 import { ESensorType } from '#types/global';
 
 type RowsDatums = Array<{ name: string; value: string }>;
 
-export default function TableModal(props: { datums: GetCoolingUnitResponse['sensorList'] }) {
+export default function TableModal(props: {
+  datums: GetCoolingUnitSensorDataResponse['sensorData'];
+}) {
   const { datums } = props;
 
   const { t } = useTranslationUtils();

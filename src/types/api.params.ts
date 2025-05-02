@@ -321,6 +321,10 @@ export type GetCoolingUnitParams = {
     }
 );
 
+export type GetCoolingUnitSensorDataParams = {
+  coolingUnitId: number;
+};
+
 export interface EditCoolingUnitParams extends AddCoolingUnitParams {
   pricingId: number;
 }

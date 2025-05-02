@@ -101,6 +101,7 @@ export enum EStorageEndpoints {
   GET_CAPACITY = 'storage/v1/cooling-unit-capacity/',
   GET_COOLING_UNIT = 'storage/v1/cooling-units/:coolingUnitId/',
   GET_COOLING_UNIT_CROPS = 'storage/v1/cooling-unit-crops/',
+  GET_COOLING_UNIT_SENSOR_DATA = 'storage/v1/cooling-units/:coolingUnitId/sensor-data/',
   GET_COOLING_UNITS = 'storage/v1/cooling-units/',
   GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
   GET_FARMER_CRATES = '/storage/v1/crates/',

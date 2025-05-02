@@ -42,6 +42,7 @@ import type {
   AddCoolingUnitTemperatureParams,
   GetPredictionParams,
   GetPredictionTableParams,
+  GetCoolingUnitSensorDataParams,
 } from '#types/api.params';
 import type {
   AddLocationResponse,
@@ -67,6 +68,7 @@ import type {
   AddMarketSurveyResponse,
   GetCoolingUnitCapacityResponse,
   GetCoolingUnitTemperaturesResponse,
+  GetCoolingUnitSensorDataResponse,
 } from '#types/api.responses';
 import type {
   Company,
@@ -877,6 +879,22 @@ class ColdtivateService extends HttpClient {
         params:
           'companyId' in params ? { company: params.companyId } : { operator: params.operatorId },
       });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getCoolingUnitSensorData = async (
+    params: GetCoolingUnitSensorDataParams
+  ): Promise<GetCoolingUnitSensorDataResponse> => {
+    try {
+      const url = subs(EStorageEndpoints.GET_COOLING_UNIT_SENSOR_DATA, {
+        coolingUnitId: params.coolingUnitId,
+      });
+      const { data } = await this.get<GetCoolingUnitSensorDataResponse>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
