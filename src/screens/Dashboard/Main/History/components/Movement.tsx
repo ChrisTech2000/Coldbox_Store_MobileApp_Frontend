@@ -96,7 +96,7 @@ export function Movement({
     const { buildMap, find } = cropTranslationLookup();
     const translationMap = buildMap();
 
-    const translatedCrops = sortMovementCrops(movement).map((cropName) =>
+    const translatedCrops = sortMovementCrops(movement, t).map((cropName) =>
       find(translationMap, {
         name: cropName,
         country: company?.country || farmerCountry || undefined,

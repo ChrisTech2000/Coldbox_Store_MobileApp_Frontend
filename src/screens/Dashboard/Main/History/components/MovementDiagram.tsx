@@ -15,10 +15,9 @@ import { cn } from '#ui/lib/cn';
 import CheckIn from '#assets/icons/check-in.svg';
 import CheckOut from '#assets/icons/check-out.svg';
 import ColdRoom from '#assets/icons/coldroom.svg';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
-import { useManagementStore } from '#stores/management';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { useDashboardStore } from '#stores/dashboard';
-import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
+import { useManagementStore } from '#stores/management';
 
 type MovementDiagramProps = {
   coolingUnit: CoolingUnit;
@@ -170,7 +169,7 @@ function MovementDiagramMarketplaceOrder(props: MovementDiagramProps) {
     const extractCrops = (crates: Array<MovementCrate>) => {
       for (const crate of crates) {
         if (!uniqueCropsMap.has(crate.cropId)) {
-          uniqueCropsMap.set(crate.cropId, crate.crop?.name || DEFAULT_CROP_VALUES.name);
+          uniqueCropsMap.set(crate.cropId, crate.crop?.name || getDefaultCropValues(t).name);
         }
       }
     };

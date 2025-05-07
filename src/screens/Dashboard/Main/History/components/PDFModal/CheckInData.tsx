@@ -10,12 +10,11 @@ import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
-import { DEFAULT_CROP_VALUES } from '#screens/Dashboard/Main/Marketplace/utils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { MovementCrate, type CoolingUnit } from '#types/global';
 import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 
 type CheckInDataProps = {
   companyName: string;
@@ -305,8 +304,8 @@ export function CheckInData(props: CheckInDataProps) {
           </DataTable.Header>
 
           {tableDatums.map(({ crop, crates }, index) => (
-            <DataTable.Row key={`${crop?.name || DEFAULT_CROP_VALUES.name}-${index}`}>
-              <DataTable.Cell>{crop?.name || DEFAULT_CROP_VALUES.name}</DataTable.Cell>
+            <DataTable.Row key={`${crop?.name || getDefaultCropValues(t).name}-${index}`}>
+              <DataTable.Cell>{crop?.name || getDefaultCropValues(t).name}</DataTable.Cell>
               <DataTable.Cell numeric>{crates.length}</DataTable.Cell>
               <DataTable.Cell numeric>
                 {crates.reduce((acc, current) => (acc += current.initialWeight), 0)}

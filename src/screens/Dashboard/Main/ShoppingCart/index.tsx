@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
-import { FlatList, RefreshControl, View, Platform } from 'react-native';
+import { FlatList, Platform, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
@@ -16,20 +16,19 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import { useAuthStore } from '#stores/auth';
+import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
 import { cn } from '#ui/lib/cn';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
-import { useDashboardStore } from '#stores/dashboard';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 import { OwnershipModal } from './components/OwnershipModal';
-import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 
 const HORIZONTAL_SPACING = Platform.select({
   android: 'px-4',
@@ -69,16 +68,16 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
         ...item,
         crop: {
           ...(crop || {}),
-          image: crop?.image || DEFAULT_CROP_VALUES.imageUri,
+          image: crop?.image || getDefaultCropValues(t).imageUri,
           name: find(translationsLookup, {
-            name: crop?.name || DEFAULT_CROP_VALUES.name,
+            name: crop?.name || getDefaultCropValues(t).name,
             country: company?.country || farmerCountry || undefined,
             locale,
           }),
         },
       };
     });
-  }, [cartData?.items, company?.country, farmerCountry, locale]);
+  }, [t, cartData?.items, company?.country, farmerCountry, locale]);
 
   if (isLoading && !cartData) {
     return (

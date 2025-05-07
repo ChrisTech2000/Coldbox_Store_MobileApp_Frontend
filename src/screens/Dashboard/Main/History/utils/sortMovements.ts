@@ -1,8 +1,9 @@
 import { EInitiatedFor } from '#types/global';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
+import { getDefaultCropValues } from '#i18n/transl/misc/crops';
+import { Translator } from '#i18n/utils';
 
 import { ESortingOptions } from '../components/SortMenu';
-import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
 
 type Movement = GetMovementsHistoryResponse[number];
 
@@ -10,9 +11,14 @@ const compareByDate = (dateA: Date | undefined, dateB: Date | undefined) => {
   return new Date(dateA || 0).getTime() - new Date(dateB || 0).getTime();
 };
 
-export function sortMovements(a: Movement, b: Movement, sorting: ESortingOptions): number {
-  const movementACrops = sortMovementCrops(a).join(', ');
-  const movementBCrops = sortMovementCrops(b).join(', ');
+export function sortMovements(
+  a: Movement,
+  b: Movement,
+  sorting: ESortingOptions,
+  t: Translator
+): number {
+  const movementACrops = sortMovementCrops(a, t).join(', ');
+  const movementBCrops = sortMovementCrops(b, t).join(', ');
 
   switch (sorting) {
     case ESortingOptions.CROP_TYPE:
@@ -41,23 +47,26 @@ export function sortMovements(a: Movement, b: Movement, sorting: ESortingOptions
       return 0;
   }
 }
-export function sortMovementCrops(movement: Movement): Array<string> {
+export function sortMovementCrops(movement: Movement, t: Translator): Array<string> {
   let crops: string[];
   switch (movement.initiatedFor) {
     case EInitiatedFor.CHECK_IN:
-      crops = _getCropNames(movement.checkin);
+      crops = _getCropNames(movement.checkin, t);
       break;
     case EInitiatedFor.CHECK_OUT:
-      crops = _getCropNames(movement.checkout);
+      crops = _getCropNames(movement.checkout, t);
       break;
     default:
-      crops = [..._getCropNames(movement.checkin), ..._getCropNames(movement.checkout)];
+      crops = [..._getCropNames(movement.checkin, t), ..._getCropNames(movement.checkout, t)];
   }
 
   return Array.from(new Set(crops)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 }
 
-function _getCropNames(data: Movement['checkin'] | Movement['checkout']): Array<string> {
+function _getCropNames(
+  data: Movement['checkin'] | Movement['checkout'],
+  t: Translator
+): Array<string> {
   if (!data?.crates) return [];
-  return data.crates.flatMap((crate) => crate.crop?.name || DEFAULT_CROP_VALUES.name);
+  return data.crates.flatMap((crate) => crate.crop?.name || getDefaultCropValues(t).name);
 }

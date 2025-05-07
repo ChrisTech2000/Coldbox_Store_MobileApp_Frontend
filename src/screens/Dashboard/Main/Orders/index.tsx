@@ -32,7 +32,7 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { dateFmt, LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { dateFmt, LanguageManager, Translator, useTranslationUtils } from '#i18n/utils';
 import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
@@ -41,10 +41,9 @@ import useCartStore from '#stores/shoppingCart';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import type { CartItem, CoolingUnit } from '#types/global';
 import { useManagementStore } from '#stores/management';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
-import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 import CropsBottomSheet from './components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
 
@@ -109,7 +108,8 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
     const translationMap = buildMap();
     return {
       crops: cloneDeep(crops).map((crop) => {
-        const cropName = crop?.name || DEFAULT_CROP_VALUES.name;
+        const cropName = crop?.name || getDefaultCropValues(t).name;
+
         return {
           ...crop,
           name: find(translationMap, {
@@ -121,7 +121,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
       }),
       allUnits,
     };
-  }, [crops, allUnits, companyCountry, farmerCountry, locale]);
+  }, [t, crops, allUnits, companyCountry, farmerCountry, locale]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;
@@ -185,7 +185,8 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
               const { contextualCropNames, contextualUnitNames } = _getRowDatums(
                 order.items,
                 _extraData.crops,
-                _extraData?.allUnits
+                _extraData?.allUnits,
+                t
               );
 
               return (
@@ -300,16 +301,19 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
 function _getRowDatums(
   cartData: Array<CartItem>,
   crops: Array<GetAllCropsResponse> = [],
-  units: Array<CoolingUnit> = []
+  units: Array<CoolingUnit> = [],
+  t: Translator
 ) {
   const { cropNames, unitNames } = cartData.reduce(
     (acc, elm) => {
-      acc.cropNames.add(_getNameById(elm.relCropId, crops));
-      acc.unitNames.add(_getNameById(elm.relCoolingUnitId, units));
+      acc.cropNames.add(_getNameById(elm.relCropId, crops, t));
+      acc.unitNames.add(_getNameById(elm.relCoolingUnitId, units, t));
       return acc;
     },
     { cropNames: new Set<string>(), unitNames: new Set<string>() }
   );
+
+  console.log('cropNames', cropNames);
 
   return {
     contextualCropNames: Array.from(cropNames).filter(Boolean),
@@ -318,8 +322,8 @@ function _getRowDatums(
 }
 
 const _getNameById = moize(
-  (id: number, list: Array<{ id: number; name: string }>) =>
-    list.find((item) => item.id === id)?.name ?? DEFAULT_CROP_VALUES.name,
+  (id: number, list: Array<{ id: number; name: string }>, t: Translator) =>
+    list.find((item) => item.id === id)?.name ?? getDefaultCropValues(t).name,
   { maxAge: ms('6 seconds') }
 );
 

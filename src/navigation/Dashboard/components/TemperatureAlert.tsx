@@ -189,7 +189,7 @@ export default function TemperatureAlert() {
                         </DataTable.Header>
                       }
                       data={commodityInfo}
-                      keyExtractor={(item) => `data-table-row-${item.commodity}`}
+                      keyExtractor={(item, index) => `data-table-row-${item.commodity}-${index}`}
                       renderItem={({ item }) => (
                         <DataTable.Row>
                           <DataTable.Cell>{item.commodity}</DataTable.Cell>

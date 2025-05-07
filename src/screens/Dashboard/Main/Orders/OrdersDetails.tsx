@@ -7,13 +7,14 @@ import {
   GestureResponderEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   ScrollView,
   View,
-  Platform,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
@@ -21,7 +22,9 @@ import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import reportCrash from '#ui/lib/reportCrash';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
@@ -29,26 +32,22 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
+import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
 import { CoolingUnit, EOrderStatus } from '#types/global';
-import reportCrash from '#ui/lib/reportCrash';
 
-import colors from 'tailwindcss/colors';
 import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
 import { PickupDetailsCard } from '../ShoppingCart/components/PickupDetailsCard';
 import PaymentPendingBottomSheet from './components/PaymentPendingBottomSheet';
-import { useDashboardStore } from '#stores/dashboard';
-import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
-import { cn } from '#ui/lib/cn';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
-import { useManagementStore } from '#stores/management';
 
 const HORIZONTAL_SPACING = Platform.select({
   android: 'px-4',
@@ -325,8 +324,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 return (
                   <ProduceCard
                     crop={{
-                      name: crop?.name ?? DEFAULT_CROP_VALUES.name,
-                      image: crop?.image ?? DEFAULT_CROP_VALUES.imageUri,
+                      name: crop?.name ?? getDefaultCropValues(t).name,
+                      image: crop?.image ?? getDefaultCropValues(t).imageUri,
                     }}
                     currency={order.currency ?? DEFAULT_CURRENCY_CODE}
                     producePricePerKg={item.producePricePerKg}
@@ -450,7 +449,7 @@ function ProduceCard(props: {
     <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
       <View tw="flex-row items-start justify-between">
         <View tw="flex-col items-start">
-          <Text tw="text-lg font-bold">{props.crop?.name ?? DEFAULT_CROP_VALUES.name}</Text>
+          <Text tw="text-lg font-bold">{props.crop?.name ?? getDefaultCropValues(t).name}</Text>
           <Text tw="text-zinc-500">
             {t('Dashboard.Marketplace.owner')}:{' '}
             {owner?.[0]
@@ -495,7 +494,7 @@ function ProduceCard(props: {
           tw="w-24 h-20"
           resizeMode="contain"
           source={{
-            uri: `${API_BASE_URL}media/${props.crop?.image ?? DEFAULT_CROP_VALUES.imageUri}`,
+            uri: `${API_BASE_URL}media/${props.crop?.image ?? getDefaultCropValues(t).imageUri}`,
           }}
         />
       </View>
