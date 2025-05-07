@@ -14,11 +14,13 @@ import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import reportCrash from '#ui/lib/reportCrash';
 import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { parsePoint } from '#screens/Dashboard/Management/utils';
@@ -26,13 +28,11 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
-import { type CartItem as CartItemType } from '#types/global';
-import reportCrash from '#ui/lib/reportCrash';
 import type { GetAllCropsResponse } from '#types/api.responses';
+import { type CartItem as CartItemType } from '#types/global';
 
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 import { CompanyBottomSheetDatum } from '../../Marketplace/components/CompanyBottomSheet';
-import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
 import CartItemInput from './CartItemInput';
 
 type CartItemProps = {
@@ -172,7 +172,7 @@ export function CartItem({ item }: CartItemProps) {
 
             <View tw="my-1.5">
               <Text variant="TextMedium" tw="text-xl">
-                {item.crop?.name ?? DEFAULT_CROP_VALUES.name}
+                {item.crop?.name ?? getDefaultCropValues(t).name}
               </Text>
               <Text variant="TextMedium" tw="text-sm text-gray-600">
                 {t('Dashboard.Marketplace.owner')}:{' '}
@@ -204,7 +204,7 @@ export function CartItem({ item }: CartItemProps) {
             tw="w-20 h-16 mr-1"
             resizeMode="contain"
             source={{
-              uri: `${API_BASE_URL}media/${item.crop?.image ?? DEFAULT_CROP_VALUES.imageUri}`,
+              uri: `${API_BASE_URL}media/${item.crop?.image ?? getDefaultCropValues(t).imageUri}`,
             }}
           />
         </View>

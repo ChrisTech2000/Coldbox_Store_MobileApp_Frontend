@@ -1,5 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
+import cloneDeep from 'lodash/cloneDeep';
 import isArray from 'lodash/isArray';
 import moize from 'moize';
 import ms from 'ms';
@@ -9,21 +10,21 @@ import {
   type GestureResponderEvent,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
+  Platform,
   RefreshControl,
   ScrollView as RNScrollView,
   View,
-  Platform,
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { GenericError } from '#ui/components/GenericError';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
+import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
@@ -31,16 +32,14 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { dateFmt, LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
+import { dateFmt, LanguageManager, Translator, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
-import { cn } from '#ui/lib/cn';
 import { useManagementStore } from '#stores/management';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
-import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
 
@@ -95,7 +94,7 @@ function SalesRoot() {
     const translationMap = buildMap();
     return {
       crops: cloneDeep(crops).map((crop) => {
-        const cropName = crop?.name || DEFAULT_CROP_VALUES.name;
+        const cropName = crop?.name || getDefaultCropValues(t).name;
         return {
           ...crop,
           name: find(translationMap, {
@@ -169,7 +168,7 @@ function SalesRoot() {
 
               const contextualCropNames = Array.from(
                 new Set<string>(
-                  item.items.map((elm) => _getNameById(elm.relCropId, _extraData.crops))
+                  item.items.map((elm) => _getNameById(elm.relCropId, _extraData.crops, t))
                 )
               ).filter(Boolean);
 
@@ -263,8 +262,8 @@ function SalesRoot() {
 }
 
 const _getNameById = moize(
-  (id: number, list: Array<{ id: number; name: string }>) =>
-    list.find((item) => item.id === id)?.name ?? DEFAULT_CROP_VALUES.name,
+  (id: number, list: Array<{ id: number; name: string }>, t: Translator) =>
+    list.find((item) => item.id === id)?.name ?? getDefaultCropValues(t).name,
   {
     maxAge: ms('6 seconds'),
   }

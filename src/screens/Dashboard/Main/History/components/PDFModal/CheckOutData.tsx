@@ -9,12 +9,11 @@ import { FileUtility } from '#ui/lib/file';
 import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
-import { DEFAULT_CROP_VALUES } from '#screens/Dashboard/Main/Marketplace/utils';
-import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { useManagementStore } from '#stores/management';
+import { GetMovementsHistoryResponse } from '#types/api.responses';
 
 type CheckOutDataProps = {
   movement: GetMovementsHistoryResponse[number];
@@ -216,7 +215,7 @@ export function CheckOutData(props: CheckOutDataProps) {
           {tableDatums.map((crate, index) => (
             <DataTable.Row key={`${crate.crop?.name ?? ''}-${index}`}>
               <DataTable.Cell>{crate.tag}</DataTable.Cell>
-              <DataTable.Cell>{crate.crop?.name ?? DEFAULT_CROP_VALUES.name}</DataTable.Cell>
+              <DataTable.Cell>{crate.crop?.name ?? getDefaultCropValues(t).name}</DataTable.Cell>
               <DataTable.Cell numeric>{crate.affectedWeight ?? 0}</DataTable.Cell>
             </DataTable.Row>
           ))}

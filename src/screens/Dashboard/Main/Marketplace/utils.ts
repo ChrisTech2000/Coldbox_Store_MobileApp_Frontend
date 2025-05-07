@@ -13,15 +13,10 @@ import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { useMarketplaceFilters, useMarketplaceQueryParams } from './store';
 import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
-import { LanguageManager } from '#i18n/utils';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 
 export const DEFAULT_COORDINATES: [number, number] = [0, 0];
-
-export const DEFAULT_CROP_VALUES = {
-  name: 'Other',
-  imageUri: 'crop_images/other_b3HuBUE.png',
-} as const;
 
 export type AvailableListingDatum = {
   id: number;
@@ -60,6 +55,7 @@ export function useMarketplaceListing() {
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
 
   const locale = LanguageManager.read();
+  const { t } = useTranslationUtils();
 
   const queryParams = useMarketplaceQueryParams();
   const filters = useMarketplaceFilters((store) => store.filters);
@@ -136,8 +132,8 @@ export function useMarketplaceListing() {
             },
             crop: {
               id: contextualCrop?.id ?? 0,
-              name: contextualCrop?.name ?? DEFAULT_CROP_VALUES.name,
-              image: contextualCrop?.image ?? DEFAULT_CROP_VALUES.imageUri,
+              name: contextualCrop?.name ?? getDefaultCropValues(t).name,
+              image: contextualCrop?.image ?? getDefaultCropValues(t).imageUri,
             },
             movementCode: node.relCheckInMovementCode,
             currencyValue: formatCurrencyWithSymbol(node.currency, node.producePricePerKg),

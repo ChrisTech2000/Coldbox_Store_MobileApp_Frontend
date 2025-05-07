@@ -32,7 +32,7 @@ import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 
 import {
   CheckIn1ScreenOverlay,
@@ -378,7 +378,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                 {!surveys?.find((survey) => survey.co.some((s) => s.cropId === item.crop.id)) ? (
                   <FarmerSurvey
                     cropId={item.crop.id}
-                    cropName={item.crop.name}
+                    cropName={translatedCropNames?.[item.crop.id] || getDefaultCropValues(t).name}
                     farmerId={user.id}
                     surveys={surveys}
                     disabled={isSubmitting}
