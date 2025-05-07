@@ -1,12 +1,13 @@
+import { isToday } from 'date-fns/isToday';
 import React, { memo } from 'react';
 import { View } from 'react-native';
-import Svg, { G, Circle, type CircleProps } from 'react-native-svg';
-import { isToday } from 'date-fns/isToday';
+import Svg, { Circle, G, type CircleProps } from 'react-native-svg';
+import colors from 'tailwindcss/colors';
 
 import { Text } from '#ui/components/Text';
 
-import { paperTheme } from '#ui/lib/theme';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { paperTheme } from '#ui/lib/theme';
 
 export type SemiCircleChartProps = {
   currentAmount: number;
@@ -66,11 +67,11 @@ function SemiCircleChart(props: SemiCircleChartProps) {
 
 export function getCapacityColor(amount: number): string {
   if (amount < 60) {
-    return paperTheme.colors.primary;
+    return colors.green[400];
   } else if (amount >= 60 && amount < 80) {
-    return 'rgb(255, 196, 9)';
+    return colors.yellow[400];
   } else {
-    return paperTheme.colors.error;
+    return colors.red[700];
   }
 }
 
