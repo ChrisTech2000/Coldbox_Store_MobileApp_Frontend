@@ -1,17 +1,18 @@
-import { getAllISOCodes } from 'iso-country-currency';
 import { currencies } from 'currencies.json';
+import { getAllISOCodes } from 'iso-country-currency';
+import cloneDeep from 'lodash/cloneDeep';
+import isEmpty from 'lodash/isEmpty';
 import moize from 'moize';
 import ms from 'ms';
 import { useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import cloneDeep from 'lodash/cloneDeep';
 
-import type { Company } from '#types/global';
-import type { GetAllCropsResponse } from '#types/api.responses';
-import { useManagementStore } from '#stores/management';
-import { useDashboardStore } from '#stores/dashboard';
-import { LanguageManager } from '#i18n/utils';
 import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { LanguageManager } from '#i18n/utils';
+import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
+import type { GetAllCropsResponse } from '#types/api.responses';
+import type { Company } from '#types/global';
 
 type Models = keyof Pick<Company, 'digitalTwin' | 'ml4Market' | 'ml4Quality' | 'ml4Farmers'>;
 
@@ -157,9 +158,11 @@ export function useTranslatedCrops(crops: Array<GetAllCropsResponse>): Array<Get
   const locale = LanguageManager.read();
 
   return useMemo(() => {
+    if (isEmpty(crops)) return [];
     const { buildMap, find } = cropTranslationLookup();
     const lookupMap = buildMap();
-    return cloneDeep(crops || []).map((crop) => {
+
+    return cloneDeep(crops).map((crop) => {
       crop.name = find(lookupMap, {
         name: crop.name,
         country: companyCountry || farmerCountry || '',
