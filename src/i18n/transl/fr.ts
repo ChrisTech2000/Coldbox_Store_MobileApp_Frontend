@@ -18,7 +18,7 @@ export default {
       ig: 'Igbo',
       yo: 'Yoruba',
       ha: 'Haoussa',
-      ar: 'Arabic', // TODO
+      ar: 'Arabic',
     },
   },
   gender: { female: 'Femme', male: 'Homme', other: 'Autre' },
@@ -79,7 +79,7 @@ export default {
       CheckIn: 'Enregistrement',
       CheckOut: 'Retirer',
       Maps: 'Cartes',
-      More: 'More', // TODO
+      More: 'Plus',
     },
     dashboard: {
       AccountDetails: 'Détails du compte',
@@ -163,7 +163,7 @@ export default {
   },
   components: {
     datePicker: {
-      heading: 'Select a date', // TODO
+      heading: 'Sélectionnez une date',
       clearButtonLabel: 'Effacer',
       confirmButtonLabel: 'Confirmer',
       placeholder: 'jj/mm/aaaa',
@@ -348,7 +348,7 @@ export default {
     noLocationsAvailable:
       'Bienvenue sur Coldtivate. Commencez en ajoutant des lieux à votre application dans le panneau de gestion.',
     coolingUserNavigateToMarketplace:
-      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
+      'Intéressé par l’achat de produits stockés en chambre froide ? Rendez-vous dans l’onglet Marché en bas à droite !',
     MarketPrice: {
       emptyState: 'Les prix des recoltes ne sont pas disponibles dans votre pays',
       'no-data-found': 'Aucune donnée trouvée pour cette combinaison de marché et de produits',
@@ -587,8 +587,6 @@ export default {
       SelectCompany: { label: 'Entreprise : {{name}}', header: 'Sélectionner une entreprise' },
     },
     ProduceDetails: {
-      userWithoutPhone:
-        'Les caisses appartenant à ce compte ne peuvent pas être mises en vente car aucun compte bancaire ne peut être lié à un utilisateur sans téléphone.',
       seeDetails: 'Voir les détails',
       kilogram: 'kg',
       coolingUser: 'Utilisateur de chambre froide',
@@ -624,6 +622,8 @@ export default {
       addBankAccountButton: 'Ajouter des coordonnées bancaires',
       addBankAccountHeader:
         'Vous configurez les coordonnées bancaires pour le compte de {{name}}. Veuillez insérer ces données avec soin, car vous ne pourrez pas les modifier par la suite.',
+      userWithoutPhone:
+        'Les caisses appartenant à ce compte ne peuvent pas être mises en vente car aucun compte bancaire ne peut être lié à un utilisateur sans téléphone.',
     },
     SearchFilter: {
       detailsMessage:
@@ -842,9 +842,9 @@ export default {
           batteryPeakEnergyStorage: "Stockage d'énergie au niveau de pointe d'une batterie",
           batteryType: 'Type de batteries',
           selectSensorType: 'Sélectionner un type de capteur',
-          selectSensor: 'Select a sensor', // TODO
           emptySensorListError:
-            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
+            'Il semble qu’aucun capteur ne soit connecté à votre compte {{type}}. Veuillez en connecter au moins un et réessayer.',
+          selectSensor: 'Sélectionnez un capteur',
           addTempSensor: 'Ajouter un capteur de température à votre unité de réfrigération',
           sensorDesc: {
             default:
@@ -857,10 +857,10 @@ export default {
             machineId: 'ID de la machine',
           },
           genericSensorForm: {
-            username: 'Username/Email', // TODO
+            username: 'Nom d’utilisateur / E-mail',
             password: 'Mot de passe',
           },
-          unknownSensor: 'Unknown', // TODO
+          unknownSensor: 'Inconnu',
           hybridFields: 'Quel pourcentage de la pièce est alimenté par les différentes sources ?',
           cropSpecificPricing: 'Tarification spécifique à la culture',
           value: 'Valeur',
@@ -982,12 +982,12 @@ export default {
         min: 'Min',
         max: 'Max',
         label: 'Filters',
-        coolingUnitLabel: 'Cooling unit', // TODO
-        coolingUnitHeading: 'Select cooling units', // TODO
-        cropTypeLabel: 'Produce / Crop Type', // TODO
-        cropTypeHeading: 'Select crops', // TODO
-        companyLabel: 'Company', // TODO
-        companyHeading: 'Select companies', // TODO
+        coolingUnitLabel: 'Unité de réfrigération',
+        coolingUnitHeading: 'Sélectionnez des unités de réfrigération',
+        cropTypeLabel: 'Produit / Type de culture',
+        cropTypeHeading: 'Sélectionnez des cultures',
+        companyLabel: 'Entreprise',
+        companyHeading: 'Sélectionnez des entreprises',
       },
       maxDistance: 'Max Distance',
     },

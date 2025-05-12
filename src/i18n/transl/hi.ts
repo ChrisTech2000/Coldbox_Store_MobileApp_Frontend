@@ -18,7 +18,7 @@ export default {
       ig: 'इग्बो',
       yo: 'योरूबा',
       ha: 'हौसा',
-      ar: 'Arabic', // TODO
+      ar: 'अरबी',
     },
   },
   gender: {
@@ -47,10 +47,10 @@ export default {
       RevenueAnalysis: 'राजस्व विश्लेषण',
       UsageAnalysis: 'उपयोग विश्लेषण',
       Locations: 'स्थान',
-      DisabledCoolingUnitsDescription: 'कम से कम एक स्थान जोड़ें',
       AddLocation: 'स्थान जोड़ें',
       EditLocation: 'स्थान बदले',
       CoolingUnits: 'शीतलन इकाइयाँ',
+      DisabledCoolingUnitsDescription: 'कम से कम एक स्थान जोड़ें',
       CoolingUsers: 'किसान',
       AddCoolingUser: 'किसान जोड़ें',
       EditCoolingUser: 'किसानबदले',
@@ -63,7 +63,7 @@ export default {
       AddRegisteredEmployee: 'कर्मचारी जोड़ें',
       RegisteredEmployeeDetails: 'पंजीकृत कर्मचारी विवरण',
       DeliveryContacts: 'डिलीवरी संपर्क',
-      AddUserBankAccount: '{{user}} Bank Account', // TODO
+      AddUserBankAccount: '{{user}} का बैंक खाता',
     },
     bottomTabs: {
       RootMainTabStack: '{{firstName}} का Coldtivate',
@@ -76,13 +76,13 @@ export default {
       CratesInfo: 'क्रेट जानकारी',
       Dashboard: 'डैशबोर्ड',
       History: 'से. मैनेजर',
-      MarketPrice: 'बाजार कीमत', // TODO
+      MarketPrice: 'बाजार कीमत',
       CoolingUnits: 'शीतलन इकाइयाँ',
       Analytics: 'वैश्लेषिकी',
       CheckIn: 'चेक इन',
       CheckOut: 'चेक आउट',
       Maps: 'नक्शा',
-      More: 'More', // TODO
+      More: 'अधिक',
     },
     dashboard: {
       AccountDetails: 'अकाउंट डिटेल्स',
@@ -98,7 +98,7 @@ export default {
       MarketplaceFavoritesTab: 'पसंदीदा',
       Orders: 'ऑर्डर',
       MyOrders: 'मेरे ऑर्डर',
-      MySales: 'My Sales', // TODO
+      MySales: 'मेरी बिक्री',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'नॉलेज हब',
       QuitTutorial: 'ट्यूटोरियल छोड़ें',
@@ -121,10 +121,10 @@ export default {
       CrateWeightAndPricing: 'क्रेट का वजन और मूल्य निर्धारण',
     },
     about: {
-      comsolAgreement: 'COMSOL Runtime License Agreement 6.0',
-      userLicense: 'END USER LICENSE AGREEMENT',
-      aboutComsol: 'About COMSOL',
-      privacyPolicy: 'Privacy Policy',
+      comsolAgreement: 'COMSOL रनटाइम लाइसेंस समझौता 6.0',
+      userLicense: 'अंतिम उपयोगकर्ता लाइसेंस समझौता',
+      aboutComsol: 'COMSOL के बारे में',
+      privacyPolicy: 'गोपनीयता नीति',
     },
     history: {
       EditCheckIn: '{{code}}',
@@ -150,25 +150,25 @@ export default {
     none: 'कोई नहीं',
     next: 'अगला',
     back: 'वापस',
-    add: 'ऐड',
-    edit: 'एडिट',
     search: 'खोजा जा रहा है...',
     or: 'या',
+    add: 'ऐड',
+    edit: 'एडिट',
     go: 'चलो!',
     done: 'पूर्ण',
     'not-available': 'अभी उपलब्ध नहीं है',
     'complete-later': 'बाद में पूरा करें',
     'update-success': 'सफलतापूर्वक उत्परिवर्तित',
     'save-changes': 'बदलाव सहेजें',
-    continue: 'जारी रखना',
     save: 'सहेजें',
+    continue: 'जारी रखना',
     update: 'अपडेट करें',
-    clearAll: 'Clear all', // TODO
-    apply: 'Apply', // TODO
+    clearAll: 'सभी हटाएँ',
+    apply: 'लागू करें',
   },
   components: {
     datePicker: {
-      heading: 'Select a date', // TODO
+      heading: 'एक तारीख़ चुनें',
       clearButtonLabel: 'साफ़ करें',
       confirmButtonLabel: 'पुष्टि करें',
       placeholder: 'dd/mm/yyyy',
@@ -215,11 +215,11 @@ export default {
         user: {
           placeholder: 'ईमेल/ फ़ोन नंबर',
           description: {
-            default: 'कृपया वैध ईमेल या फोन नंबर प्रदान करें', // TODO: review this
+            default: 'कृपया वैध ईमेल या फोन नंबर प्रदान करें',
             registeredEmployee: 'कृपया वैध ईमेल या फोन नंबर प्रदान करें',
           },
           messages: {
-            default: 'पता, ईमेल या फोन नंबर डालना आवश्यक है|', // TODO: review this
+            default: 'पता, ईमेल या फोन नंबर डालना आवश्यक है|',
             registeredEmployee: 'पता, ईमेल या फोन नंबर डालना आवश्यक है|',
           },
         },
@@ -303,7 +303,7 @@ export default {
       },
       toasts: {
         error:
-          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
+          'कृपया सुनिश्चित करें कि आपकी जानकारी सही है और पुनः प्रयास करें। ध्यान दें कि एक फ़ोन नंबर और ईमेल केवल एक ही खाते के लिए उपयोग किए जा सकते हैं।',
       },
     },
     ForgotPassword: {
@@ -314,7 +314,7 @@ export default {
         'अपना पासवर्ड रीसेट करने के लिए, कृपया फोन नंबर दर्ज करें जिसके साथ देश कोड है, जिससे खाता जुड़ा हुआ है।',
       phoneInputLabel: 'फोन नंबर',
       resetButton: 'रीसेट',
-      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
+      requestLimitMessage: 'अनुरोध सीमा पूरी हो गई है। कृपया 2 घंटे बाद पुनः प्रयास करें।',
     },
     ResetPassword: {
       schema: {
@@ -359,18 +359,18 @@ export default {
     noLocationsAvailable:
       'Coldtivate में आपका स्वागत है। प्रबंधन पैनल में अपने ऐप में स्थान जोड़कर शुरुआत करें।',
     coolingUserNavigateToMarketplace:
-      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
+      'कोल्ड रूम में रखी उपज खरीदने में रुचि है? नीचे दाईं ओर स्थित मार्केटप्लेस टैब पर जाएं!',
     MarketPrice: {
-      emptyState: 'आपके देश में बाजार मूल्य उपलब्ध नहीं हैं', // TODO
+      emptyState: 'आपके देश में बाजार मूल्य उपलब्ध नहीं हैं',
       'no-data-found': 'इस बाज़ार और कमोडिटी संयोजन के लिए कोई डेटा नहीं मिला',
       commodityLabel: 'वस्तु',
       commodityModalTitle: 'एक वस्तु का चयन करें',
       Trend: {
         title: 'मूल्य पूर्वानुमान प्राप्त करने के लिए एक वस्तु और एक राज्य का चयन करें',
-        stateLabel: 'राज्य',
-        stateModalTitle: 'एक राज्य का चयन करें',
         emptyState: 'इस बाजार और वस्तु संयोजन के लिए कोई डेटा नहीं मिला',
         pastLabel: 'पिछला',
+        stateLabel: 'राज्य',
+        stateModalTitle: 'एक राज्य का चयन करें',
         forecastLabel: 'पूर्वानुमान',
         chartLabel: 'कीमत {{currency}}/किग्रा में',
       },
@@ -448,8 +448,8 @@ export default {
             other: 'अन्य',
           },
           errorMessages: {
-            reasonsForSpoilage: 'कृपया कम से कम एक कारण दर्ज करें।',
             number: 'एक गैर-शून्य, सकारात्मक संख्या होनी चाहिए',
+            reasonsForSpoilage: 'कृपया कम से कम एक कारण दर्ज करें।',
             totalMismatch:
               'स्व-उपभोग, बेचा और खोया या बाजार मूल्य से नीचे बेचा का योग कुल उत्पादित मात्रा के बराबर होना चाहिए।',
             cropError: 'कृपया एक माल का चयन करें',
@@ -486,11 +486,12 @@ export default {
         },
         paid: 'भुगतान किया गया',
         lockedWithinPendingOrders:
-          'Crates that are locked in pending orders cannot be checked out.', // TODO
+          'लंबित ऑर्डरों में लॉक की गई क्रेट्स को चेक आउट नहीं किया जा सकता।',
       },
       CheckIn: {
         emptyState: 'अभी तक कोई बॉक्स नहीं जोड़ा गया',
         addCrates: 'क्रेट जोड़ें',
+        cratesAddedLabel: 'टोकरियाँ जोड़ी गईं',
         checkInWithCode: 'कोड के साथ चेक इन करें',
         estimatedCost: 'अनुमानित लागत',
         pricing: 'मूल्य निर्धारण',
@@ -502,7 +503,6 @@ export default {
         seeMore: 'और देखें',
         seeLess: 'कम देखें',
         listed: 'सूचीबद्ध',
-        cratesAddedLabel: 'टोकरियाँ जोड़ी गईं',
         WithCode: {
           modalTitle: 'मौजूदा चेक आउट से नया चेक इन बनाएं',
           modalDescription:
@@ -510,7 +510,7 @@ export default {
           codeLabel: 'कोड जोड़ें',
           codeErrorMessage: 'कोड आवश्यक है',
           failedMessage:
-            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
+            'चेक-इन विफल रहा। कृपया सुनिश्चित करें कि आपका कोड पहले से इस्तेमाल नहीं हुआ है या सहायता के लिए सपोर्ट से संपर्क करें।',
         },
         SelectCropType: {
           fruits: 'फल',
@@ -547,7 +547,7 @@ export default {
             sellingPrice: 'विक्रय मूल्य सूचीबद्ध करें',
             potentialSellingPrice: 'संभावित विक्रय मूल्य',
             info: 'मूल्य कॉन्फ़िगरेशन उत्पाद की बिक्री को संदर्भित करता है, ठंडे भंडारण शुल्क को नहीं।',
-            unavailableId: 'ID not set', // TODO
+            unavailableId: 'ID सेट नहीं है',
           },
           cratesError: 'कृपया एक सकारात्मक क्रेट संख्या डालें',
           crateWeightError: 'कृपया एक सकारात्मक क्रेट वजन डालें',
@@ -624,22 +624,22 @@ export default {
       days: 'दिन',
       noDTMessage: 'इस विशेष वस्त्र के लिए एक शेल्फ-लाइफ मॉडल उपलब्ध नहीं है।',
       checkOutButton: 'चेक आउट',
-      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      cratesListedForSale: '{{amount}} क्रेट बिक्री के लिए सूचीबद्ध की गई हैं',
       preSaleError:
-        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
+        'कृपया ध्यान दें: लंबित ऑर्डर वाली क्रेट्स की सूची स्थिति नहीं बदली जा सकती। यदि यह स्थिति आप पर लागू नहीं होती है, तो सहायता के लिए सपोर्ट से संपर्क करें।',
       operatorNoBankAccountWarning:
-        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+        '{{name}} के पास बिक्री से भुगतान प्राप्त करने के लिए बैंक खाता विवरण उपलब्ध नहीं हैं। यदि उन्होंने आपके साथ ये विवरण साझा किए हैं तो कृपया जोड़ें।',
       farmerNoBankAccountWarning:
-        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+        'बिक्री की राशि प्राप्त करने के लिए आपका बैंक खाता परिभाषित नहीं है। कृपया अपने बैंक खाते की जानकारी जोड़ें।',
       operatorNoCompanyBankAccount:
-        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+        'यह कूलिंग यूनिट मार्केटप्लेस लिस्टिंग का समर्थन नहीं करता है। कृपया इस मामले में कंपनी के मैनेजर से संपर्क करें।',
       employeeNoBankAccount:
-        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
-      addBankAccountButton: 'Add bank account details', // TODO
+        'इस कंपनी के पास मार्केटप्लेस में बेचे गए उत्पादों और कूलिंग शुल्क दोनों के लिए भुगतान प्राप्त करने हेतु कोई बैंक खाता सेट नहीं है। इसे सेट करें ताकि आपके कूलिंग यूनिट की क्रेट्स मार्केटप्लेस में सूचीबद्ध हो सकें।',
+      addBankAccountButton: 'बैंक खाता विवरण जोड़ें',
       addBankAccountHeader:
-        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+        'आप {{name}} की ओर से बैंक खाता विवरण सेट कर रहे हैं। कृपया यह जानकारी सावधानी से दर्ज करें क्योंकि बाद में इसे संशोधित नहीं किया जा सकेगा।',
       userWithoutPhone:
-        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
+        'इस खाते की क्रेट्स बिक्री के लिए सूचीबद्ध नहीं की जा सकती क्योंकि फ़ोन नंबर के बिना उपयोगकर्ता से कोई बैंक खाता लिंक नहीं किया जा सकता।',
     },
     SearchFilter: {
       detailsMessage:
@@ -698,8 +698,8 @@ export default {
           streetNumber: 'गली नंबर',
         },
         fieldErrorMessages: {
-          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
-          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+          latitude: 'कृपया -90 से 90 के बीच की संख्या दर्ज करें (उदा. 34.0522)',
+          longitude: 'कृपया -180 से 180 के बीच की संख्या दर्ज करें (उदा. -118.2437)',
         },
         modal: {
           message:
@@ -713,11 +713,13 @@ export default {
           editLocationSuccess: 'स्थान सफलतापूर्वक संपादित किया गया',
           removeLocationSuccess: 'स्थान {{name}} सफलतापूर्वक हटा दिया गया था।',
           failedToFetchLocation:
-            'Unable to retrieve the location. Please check the address and try again.', // TODO
-          positionCancelled: 'Location request canceled.', // TODO
-          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
-          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
-          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
+            'स्थान प्राप्त करने में असमर्थ। कृपया पता जाँचें और पुनः प्रयास करें।',
+          positionCancelled: 'स्थान अनुरोध रद्द किया गया।',
+          positionUnauthorized:
+            'स्थान की अनुमति अस्वीकृत। कृपया जारी रखने के लिए अनुमति प्रदान करें।',
+          locationUnavailable: 'स्थान अक्षम है। कृपया जारी रखने के लिए सक्षम करें।',
+          locationSubmissionError:
+            'कुछ त्रुटि हुई। कृपया अपना स्थान पुनः जाँचकर दोबारा प्रयास करें।',
         },
       },
       Operators: {
@@ -752,11 +754,7 @@ export default {
           success: 'परिचालक को सफलतापूर्वक संपादित किया गया',
         },
       },
-      AddCoolingUser: {
-        toasts: {
-          add: 'किसान जोड़ें',
-        },
-      },
+      AddCoolingUser: { toasts: { add: 'किसान जोड़ें' } },
       CompanyDetails: {
         labels: {
           name: 'नाम',
@@ -771,12 +769,10 @@ export default {
           commodity: 'उपज को चयन करें',
           currency: 'एक मुद्रा चुनें',
         },
-        actions: {
-          save: 'सेव चंगेस',
-        },
+        actions: { save: 'सेव चंगेस' },
         toasts: {
           success: 'सफलतापूर्वक संपादित किया गया',
-          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
+          photoLibrary: 'अनुमति अस्वीकृत: कृपया अपनी फ़ोटो लाइब्रेरी तक पहुँच सक्षम करें।',
         },
       },
       RegisteredEmployee: {
@@ -810,7 +806,7 @@ export default {
         },
       },
       EditCoolingUsers: {
-        accountDetails: 'Payout Details', // TODO
+        accountDetails: 'भुगतान विवरण',
         toasts: {
           warning:
             'इस खाते को हटाया नहीं जा सकता क्योंकि प्रयोक्ता ने कूलिंग यूनिट(इकाइयों) {{names}} में सक्रिय चेक-इन किया है। कृपया उपयोगकर्ता को इन वस्तुओं को लेने के लिए कमरे में आने और खाता हटाने से पहले चेक-आउट पूरा करने के लिए सूचित करें!',
@@ -818,7 +814,7 @@ export default {
             'क्या आप वाकई इस उपयोगकर्ता को कूलिंग उपयोगकर्ताओं की सूची से हटाना चाहते हैं? यह ऑपरेशन इस कूलिंग यूजर को हटा देगा और इसे वापस नहीं किया जा सकता है!',
           edit: 'कूलिंग उपयोगकर्ता को सफलतापूर्वक संपादित किया गया',
           noCoolingUnits: 'आपके पास अभी तक कोई प्रशीतलन इकई नही है',
-          noSurveys: 'No surveys have been completed yet.', // TODO
+          noSurveys: 'अभी तक कोई सर्वेक्षण पूरा नहीं किया गया है।',
           updateSuccess: 'सफलतापूर्वक उत्परिवर्तित',
         },
         pdf: {
@@ -827,7 +823,7 @@ export default {
           coolingUnit: 'प्रशीतलन इकई',
         },
         actions: {
-          downloadFarmers: "Download farmer's dashboard data",
+          downloadFarmers: 'किसान के डैशबोर्ड डेटा डाउनलोड करें',
           completeLater: 'बाद में पूरा करें',
         },
       },
@@ -884,9 +880,9 @@ export default {
           batteryPeakEnergyStorage: 'एक बैटरी के चरम स्तर पर ऊर्जा भंडारण',
           batteryType: 'बैटरियों का प्रकार',
           selectSensorType: 'एक सेंसर प्रकार का चयन करें',
-          selectSensor: 'Select a sensor', // TODO
           emptySensorListError:
-            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
+            'ऐसा लगता है कि आपके {{type}} खाते से कोई सेंसर कनेक्ट नहीं है। कृपया कम-से-कम एक सेंसर कनेक्ट करें और पुनः प्रयास करें।',
+          selectSensor: 'एक सेंसर चुनें',
           addTempSensor: 'अपनी प्रशीतलन इकाई में इकोज़ेन सेंसर डालें',
           sensorDesc: {
             default: 'अगर जानकारी उपलब्ध नहीं है, कृपया अपने इकोज़ेन प्रदाता से अनुरोध करें',
@@ -898,10 +894,10 @@ export default {
             machineId: 'मशीन आईडी',
           },
           genericSensorForm: {
-            username: 'Username/Email', // TODO
+            username: 'उपयोगकर्ता नाम/ईमेल',
             password: 'पासवर्ड',
           },
-          unknownSensor: 'Unknown', // TODO
+          unknownSensor: 'अज्ञात',
           hybridFields: 'प्रकोष्ठ का कितना प्रतिशत विभिन्न स्रोतों से संचालित होता है?',
           cropSpecificPricing: 'फसल-अनुरूप  मूल्य निर्धारण',
           value: 'मूल्य',
@@ -942,7 +938,7 @@ export default {
         },
         buttons: {
           viewExisting: 'मौजूदा देखें',
-          editPricing: 'Edit Pricing',
+          editPricing: 'मूल्य संपादित करें',
         },
         toasts: {
           editSuccess: 'शीतलन इकाई को सफलतापूर्वक संपादित किया गया',
@@ -979,7 +975,7 @@ export default {
         },
       },
       Coupons: {
-        title: 'Discount coupons', // TODO
+        title: 'रियायती कूपन',
         emptyMessage: 'अभी तक कोई कूपन नहीं जोड़ा गया है',
         addCoupon: 'कूपन जोड़ें',
         code: 'कूपन कोड',
@@ -989,15 +985,15 @@ export default {
         revokeMessage:
           'क्या आप सुनिश्चित हैं कि आप इस कूपन को रद्द करना चाहते हैं? एक बार रद्द होने पर, इसे फिर से इस्तेमाल नहीं किया जा सकता और छूट उपलब्ध नहीं होगी। यह कार्रवाई स्थायी है और इसे पूर्ववत नहीं किया जा सकता।',
         messages: {
-          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+          codeField: 'यह अधिकतम 25 अक्षरों का होना चाहिए और इसमें केवल अक्षर और अंक ही होने चाहिए',
         },
       },
     },
     Marketplace: {
       buyerSelection: {
-        onBehalfOfCompany: 'Buy on behalf of company', // TODO
-        forMyself: 'Buy for myself', // TODO
-        label: 'Buyer', // TODO
+        onBehalfOfCompany: 'कंपनी की ओर से खरीदें',
+        forMyself: 'अपने लिए खरीदें',
+        label: 'खरीदार',
       },
       sorting: {
         'price-asc': 'कीमत बढ़ती हुई',
@@ -1005,17 +1001,17 @@ export default {
         'nearby-me': 'मेरे करीब',
       },
       distance: {
-        withing5Km: '1 to 5 KM away', // TODO
-        within10Km: '5 to 10 KM away', // TODO
-        within25Km: '10 to 25 KM away', // TODO
-        beyond25Km: 'More than 25 KM away', // TODO
+        withing5Km: '1 से 5 किमी दूर',
+        within10Km: '5 से 10 किमी दूर',
+        within25Km: '10 से 25 किमी दूर',
+        beyond25Km: '25 किमी से अधिक दूर',
       },
       priceConfig: 'कीमत कॉन्फ़िगरेशन उत्पाद बिक्री से संबंधित है, कूलिंग भंडारण शुल्क नहीं।',
       addToCart: {
         addToCartButton: 'कार्ट में जोड़ें और खरीदारी जारी रखें',
+        buyFullCrate: 'पूर्ण क्रेट खरीदें',
         selectQuantity: 'मात्रा चुनें',
-        buyFullCrate: 'Buy full crate', // TODO
-        goToCart: 'Go to Cart Summary', // TODO
+        goToCart: 'कार्ट सारांश पर जाएं',
       },
       currentLocation: 'वर्तमान स्थान',
       invalidFormatWarning:
@@ -1026,21 +1022,21 @@ export default {
         'चेतावनी: शहर को विश्वासपूर्वक पहचाना नहीं जा सका। परिणाम सटीक नहीं हो सकते हैं।',
       filterGeneralWarning:
         'चेतावनी: स्थान पहचानने के दौरान कोई समस्या हुई। परिणाम सटीक नहीं हो सकते हैं।',
-      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
-      owner: 'Owner', // TODO
-      priceRange: 'Range Price / KG',
+      standardCrateWeight: 'क्रेट का मानक वजन {{value}} किलोग्राम है',
+      owner: 'मालिक',
+      priceRange: 'कीमत सीमा / किलोग्राम',
       Filters: {
-        min: 'Min',
-        max: 'Max',
-        label: 'Filters',
-        coolingUnitLabel: 'Cooling unit', // TODO
-        coolingUnitHeading: 'Select cooling units', // TODO
-        cropTypeLabel: 'Produce / Crop Type', // TODO
-        cropTypeHeading: 'Select crops', // TODO
-        companyLabel: 'Company', // TODO
-        companyHeading: 'Select companies', // TODO
+        min: 'न्यूनतम',
+        max: 'अधिकतम',
+        label: 'फ़िल्टर',
+        coolingUnitLabel: 'कूलिंग यूनिट',
+        coolingUnitHeading: 'कूलिंग यूनिट्स चुनें',
+        cropTypeLabel: 'उत्पाद / फसल प्रकार',
+        cropTypeHeading: 'फसलें चुनें',
+        companyLabel: 'कंपनी',
+        companyHeading: 'कंपनियां चुनें',
       },
-      maxDistance: 'Max Distance',
+      maxDistance: 'अधिकतम दूरी',
     },
     AccountDetails: {
       popups: {
@@ -1063,8 +1059,8 @@ export default {
       },
       sections: {
         sellerSettings: 'विक्रेता सेटिंग्स',
+        companySellerSettings: 'बेचने वाले की सेटिंग्स (कंपनी)',
         buyerSettings: 'खरीदार सेटिंग्स',
-        companySellerSettings: 'Seller Settings (Company)', // TODO
         details: 'विवरण',
       },
       ContactsSharing: {
@@ -1074,8 +1070,8 @@ export default {
       PayoutSettings: {
         addTitle: 'कृपया अपना बैंक खाता विवरण डालें',
         editTitle: 'आपका बैंक खाता विवरण',
-        addTittleForCompany: "Please insert you company's bank account information", //TODO
-        editTitleForCompany: "Your company's bank account information", //TODO
+        addTittleForCompany: 'कृपया अपनी कंपनी के बैंक खाता विवरण दर्ज करें',
+        editTitleForCompany: 'आपकी कंपनी का बैंक खाता विवरण',
         form: {
           nameLabel: 'खाता नाम',
           namePlaceholder: 'खाता नाम डालें',
@@ -1148,7 +1144,7 @@ export default {
       clickHere: 'Click यहां',
     },
     History: {
-      cropsLabel: '{{crop}} and {{amount}} more', // TODO
+      cropsLabel: '{{crop}} और {{amount}} और',
       priceLabel: 'कीमत',
       empty:
         'किसी भी कक्ष में कम से कम एक चेक-इन करने पर चेक-इन और चेक-आउट डैशबोर्ड में दिखाई देंगे।',
@@ -1163,7 +1159,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'पीडीएफ रसीद डाउनलोड करें',
-          seeMovement: 'See movement', // TODO
+          seeMovement: 'मूवमेंट देखें',
         },
         checkOut: {
           seeDetails: 'विवरण देखें',
@@ -1268,20 +1264,20 @@ export default {
       },
     },
     MyOrders: {
-      coolingFees: 'Cooling fees', // TODO
-      soldFor: 'Sold for', // TODO
-      ownedBy: 'Owned by', // TODO
-      you: 'You', // TODO
+      coolingFees: 'कूलिंग शुल्क',
+      soldFor: 'बेचा गया',
+      ownedBy: 'मालिक',
+      you: 'आप',
       sort: {
         mostRecent: 'सबसे हाल का',
         oldest: 'सबसे पुराना',
         date: 'तारीख',
       },
       status: {
-        'payment-pending': 'Payment Pending', // TODO
-        'payment-expired': 'Payment Expired', // TODO
-        cancelled: 'Cancelled', // TODO
-        paid: 'Paid', // TODO
+        'payment-pending': 'भुगतान लंबित',
+        'payment-expired': 'भुगतान समाप्त',
+        cancelled: 'रद्द किया गया',
+        paid: 'भुगतान किया गया',
       },
       title: 'आदेश का अवलोकन',
       orderId: 'आदेश आईडी',
@@ -1293,9 +1289,9 @@ export default {
     ShoppingCart: {
       cartUpdatedMessage:
         'कुछ उत्पादों को आपके कार्ट से हटा दिया गया है क्योंकि वे अब खरीद के लिए उपलब्ध नहीं हैं।',
-      ownership: 'Change cart ownership to {{name}}', // TODO
+      ownership: 'कार्ट की स्वामित्व को {{name}} में बदलें',
       changeOwnership:
-        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
+        'कार्ट की स्वामित्व को {{name}} में बदलें। यह आपके कार्ट की सामग्री को प्रभावित कर सकता है, जिसमें कुछ क्रेट्स का हटाना भी शामिल हो सकता है जो इस परिवर्तन के बाद उपलब्ध नहीं हो सकते। क्या आप निश्चित रूप से आगे बढ़ना चाहते हैं?',
       empty: 'आपकी गाड़ी खाली है',
       daysLeft: 'दिन बचे हैं',
       weight: 'केजी उपलब्ध',
@@ -1308,15 +1304,15 @@ export default {
       discount: 'छूट',
       fees: 'सेवा शुल्क',
       marketFees: 'मार्केटप्लेस शुल्क',
-      paymentFees: 'Payment fee', // TODO
-      coolingFees: 'Cooling fee', // TODO
+      paymentFees: 'भुगतान शुल्क',
+      coolingFees: 'कूलिंग शुल्क',
       viewContacts: 'संपर्क देखें',
       contactsForDelivery: 'डिलीवरी जानकारी के लिए संपर्क',
       gotItButton: 'समझ गया!',
       pickupMethods: 'पिकअप विधि',
-      selectPickupMethod: 'Select a pickup method', // TODO
-      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
-      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
+      selectPickupMethod: 'पिकअप विधि चुनें',
+      selectPickupMethodInfo: 'हर कूलिंग यूनिट के लिए पिकअप विधि का चयन आवश्यक है।',
+      pickupMethodSelectionMissing: '{{amount}} कूलिंग यूनिट्स के लिए पिकअप विधि चयन गायब है।',
       pickUpToday: 'आज पिकअप',
       keepInStorageDailyRate: 'संग्रह में रखें ({{price}} / दिन)',
       keepInStorageFixedRate: 'संग्रह में रखें ({{price}})',
@@ -1333,24 +1329,22 @@ export default {
       redeemCoupon: 'कूपन भुनाएं',
       couponPlaceholder: 'उदाहरण: 20OFF',
       discountsApplied: 'लागू की गई छूट',
-      pickupModal: {
-        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
-        delivery:
-          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
-      },
-      errors: {
-        invalid: 'अमान्य मूल्य',
-        minimumCartValue: 'ऑर्डर कम से कम ₦100 होना चाहिए।',
-      },
-      method: 'Method:', // TODO
+      method: 'विधि:',
       deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
+        'कृपया ध्यान दें कि डिलीवरी शुल्क प्रदाता पर निर्भर करता है। यदि डिलीवरी कल के लिए निर्धारित है, तो एक कूलिंग शुल्क {{value}} भी लागू किया जाएगा।',
       pickUpTodayInfo:
-        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
-      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+        'कृपया सुनिश्चित करें कि आप दिन के अंत तक अपने उत्पादों को पिकअप कर लें ताकि अतिरिक्त कूलिंग शुल्क से बच सकें।',
+      keepInStorageInfo: 'जब आप अपना ऑर्डर पिकअप करेंगे तो कूलिंग शुल्क लागू होगा।',
       orderOverviewSubtitle:
-        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
+        "आप इस जानकारी को 'My Orders' टैब में 'Marketplace' स्क्रीन के तहत पुनः देख सकते हैं।",
+      pickupModal: {
+        today: 'कृपया आज अपना ऑर्डर {{company}}, जो {{location}} में स्थित है, से पिकअप करें।',
+        storage:
+          'आपके क्रेट्स अब {{company}}, जो {{location}} में स्थित है, में संग्रहित किए जा रहे हैं।',
+        delivery:
+          "कृपया डिलीवरी की व्यवस्था के लिए उपलब्ध नंबरों से संपर्क करें। आप 'Order details' में डिलीवरी विकल्पों की सूची देख सकते हैं।",
+      },
+      errors: { invalid: 'अमान्य मूल्य', minimumCartValue: 'ऑर्डर कम से कम ₦100 होना चाहिए।' },
     },
     Analytics: {
       emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',
@@ -1363,8 +1357,8 @@ export default {
       maleLabel: '👨🏽 पुरुष: {{amount}}',
       femaleLabel: '👩🏽 महिला: {{amount}}',
       otherLabel: 'अन्य: {{amount}}',
-      operatorsTotal: 'कुल ऑपरेटरों की संख्या = {{amount}}',
       usersTotal: 'अलग-अलग ठंडक उपयोगकर्ताओं की कुल संख्या = {{amount}}',
+      operatorsTotal: 'कुल ऑपरेटरों की संख्या = {{amount}}',
       beneficiariesTotal: 'अप्रत्यक्ष लाभार्थियों की कुल संख्या = {{amount}}',
       totalCratesLabel: '🧺 कुल क्रेट्स',
       totalQuantityLabel: '📦 कुल मात्रा (किलोग्राम)',
@@ -1397,8 +1391,8 @@ export default {
         revenueLevels: 'राजस्व के स्तर',
         baselineSurveyLabel: '📊 पूर्ण किए गए बेसलाइन सर्वेक्षण की संख्या',
         postCheckoutSurveyLabel: '📊 पूर्ण किए गए पोस्ट-चेकआउट सर्वेक्षण की संख्या',
-        allBaselineSurveysCompleted: 'सभी आधारभूत सर्वेक्षण पूरे हो गए 🤝',
         allPostCheckoutSurveysCompleted: 'सभी पोस्ट-चेकआउट सर्वेक्षण पूरे हो गए 🤝',
+        allBaselineSurveysCompleted: 'सभी आधारभूत सर्वेक्षण पूरे हो गए 🤝',
       },
       companyTab: {
         usersTab: {
@@ -1419,8 +1413,8 @@ export default {
             '📊 खाद्य हानि और राजस्व विकास की गणना के लिए उपयोग किए गए सर्वेक्षणों की संख्या',
           co2Increase: 'कूलिंग के साथ उत्पाद के प्रति किलोग्राम CO2e उत्सर्जन',
           co2Decrease: 'कूलिंग के साथ प्रति किलोग्राम उत्पादन पर CO2e उत्सर्जन में कमी आई है',
-          co2WithCooling: 'कूलिंग के साथ उत्पाद के प्रति किलोग्राम CO2e उत्सर्जित',
           co2WithoutCooling: 'कूलिंग के बिना उत्पाद के प्रति किलोग्राम CO2e उत्सर्जन',
+          co2WithCooling: 'कूलिंग के साथ उत्पाद के प्रति किलोग्राम CO2e उत्सर्जित',
           from: 'से',
           to: 'तक',
         },
@@ -1516,7 +1510,7 @@ export default {
         'आपके टोकरे {{crop}} के टोकरी को जल्द से जल्द उठाया जाना चाहिए! (चेक-इन तिथि: {{checkIn}}, कूलिंग यूनिट आईडी: {{unitId}}, ପ୍ରବେଶ ପରିଚୟ ସଂଖ୍ୟା: {{movementCode}}).',
       notifyCoolingUser:
         'कृपया उपयोगकर्ता {{farmer}} को सूचित करें कि उसके {{crop}} के टोकरी को जल्द से जल्द उठाया जाना चाहिए! (चेक-इन तिथि: {{checkIn}}, कूलिंग यूनिट आईडी: {{unitId}}, ପ୍ରବେଶ ପରିଚୟ ସଂଖ୍ୟା: {{movementCode}}).',
-      checkIn: 'Operator {{farmer}} has edited check-in {{movementCode}} on {{date}}.',
+      checkIn: 'ऑपरेटर {{farmer}} ने {{date}} को चेक-इन {{movementCode}} में संपादन किया।',
       surveyAlreadyFilled: 'सर्वेक्षण पहले ही भरा जा चुका है',
       orderRequiresMovement:
         'कार्गो को क्रेट्स के बीच पुनर्वितरित करने की आवश्यकता है। किन वस्तुओं को स्थानांतरित करना है, इसके विवरण के लिए क्लिक करें।',
@@ -1527,7 +1521,7 @@ export default {
   tutorial: {
     welcome: 'कोल्टिवेट में आपका स्वागत है। यह कार्यों की प्रक्रिया है।',
     farmerWelcome:
-      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
+      'Coldtivate में आपका स्वागत है! यह ट्यूटोरियल आपको ऐप का उपयोग समझने में मदद करेगा।',
     quit: 'ट्यूटोरियल छोड़ें',
     congratulations:
       'बधाई हो! आपने ट्यूटोरियल पूरा कर लिया है! ऐप का उपयोग करने के लिए डैशबोर्ड पर वापस जाएं।',
@@ -1545,7 +1539,7 @@ export default {
       managementNavigation:
         'मेनू में, आप "प्रबंधन" पर नेविगेट कर सकते हैं और वहां टैप करके कूलिंग उपयोगकर्ताओं को जोड़ सकते हैं या संपादित कर सकते हैं। आगे बढ़ें और इसे आजमाएं।',
       operatorManagementNavigation:
-        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
+        'मेन्‍यू में, आप "मैनेजमेंट" पर जा सकते हैं और वहां जाकर कूलिंग उपयोगकर्ताओं को जोड़ने या संपादित करने के लिए टैप कर सकते हैं।',
       addCoolingUser:
         'जो कूलिंग उपयोगकर्ता कोल्टिवेट पर पंजीकृत नहीं हैं, उन्हें उनके विवरण (नाम, फोन नंबर) दर्ज करके जोड़ा जा सकता है। जो कूलिंग उपयोगकर्ता पहले से ऐप में साइन अप कर चुके हैं, उन्हें कोड द्वारा जोड़ा जा सकता है। वे अपना कोड अपने प्रोफ़ाइल में -> "खाता विवरण" -> "कूलिंग उपयोगकर्ता आयात कोड" पर पा सकते हैं।',
       navigateToCoolingUser: 'आगे बढ़ें और कूलिंग उपयोगकर्ता टैब पर क्लिक करें।',
@@ -1590,7 +1584,7 @@ export default {
       accountDetailsNavigation:
         'मेनू में, आप "खाता विवरण" पर नेविगेट कर सकते हैं और वहां टैप करके अपने खाते से संबंधित कॉन्फ़िगरेशन के सेट को देख/संपादित कर सकते हैं। आगे बढ़ें और इसे आजमाएं।',
       coolingUserSurvey:
-        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
+        'जब आप पहली बार ऐप खोलते हैं, तो आपसे एक छोटा सर्वे पूरा करने के लिए कहा जाता है। यह बहुत महत्वपूर्ण है कि आप सर्वे को पूरा करें ताकि ऐप आपको कस्टमाइज्ड सिफारिशें दे सके। अगर आप पहले लॉग इन करते समय सर्वे पूरा नहीं कर पाते हैं, तो आप "खाता विवरण" -> "कूलिंग उपयोगकर्ता सर्वे" में जाकर सर्वे तक पहुँच सकते हैं। सर्वे पूरा करने के लिए समय देने के लिए धन्यवाद!',
       coolingUserCode:
         'जब आप अपने उत्पाद को संग्रहित करने के लिए पहली बार एक ठंडे कमरे में पहुंचते हैं, तो ऑपरेटर आपसे अपना व्यक्तिगत कोड देने के लिए कहेगा, ताकि आपको ठंडे कमरे के उपयोगकर्ताओं की सूची में जोड़ा जा सके। आप यह कोड "व्यक्तिगत विवरण" -> "कूलिंग उपयोगकर्ता आयात कोड" में पा सकते हैं।',
       knowledgeHub:
@@ -1611,14 +1605,14 @@ export default {
       farmerHistory:
         'टैब "इतिहास" में, आप प्रत्येक कमरे में किए गए सभी चेक-इन और चेक-आउट का सारांश देख सकते हैं। यदि आप किसी चेक-आउट के बगल में एक लाल बिंदु देखते हैं, तो कृपया तीन बिंदुओं पर क्लिक करें और "बाजार सर्वेक्षण भरें" चुनें। यहां, हम जानना चाहते हैं कि आपने अपने उत्पाद को किस कीमत पर बेचा है, और क्या कुछ खराब हो गया है। हम इस जानकारी का उपयोग ठंडे कमरे के संचालन में सुधार के लिए करते हैं, इसलिए महत्वपूर्ण है कि आप सही उत्तर दें।',
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
+        'अपने पास कूलिंग यूनिट्स देखने के लिए, आप स्क्रीन के नीचे दिए गए बटनों पर जा सकते हैं, "More" टैब पर क्लिक करें, "Cooling units" पर क्लिक करें और "Map" चुनें। मानचित्र पर प्रत्येक पिन पर क्लिक करके, आप यूनिट का प्रकार और भंडारण का मूल्य देख सकते हैं।',
       farmersUnitsPlanner:
         'टैब "कूलिंग इकाइयाँ" में आप मानचित्र, कमरे की वर्तमान और भविष्य की भरी हुई स्थिति ("योजनाकार" में) और कमरे का तापमान ("कमरे की स्थिति" में) देख सकते हैं। ये स्क्रीन आपको दूर से यह देखने में मदद करती हैं कि ठंडे कमरों में क्या हो रहा है, बिना वहां व्यक्तिगत रूप से जाने की आवश्यकता के!',
       marketPrice:
-        'यदि आप "बाजार मूल्य" नामक टैब देखते हैं, तो आप पिछले दिनों में देश भर में विभिन्न फलों और सब्जियों के मूल्य और भविष्य के लिए कीमतों का पूर्वानुमान देख सकते हैं। फिलहाल, यह विकल्प केवल चयनित देशों के लिए उपलब्ध है।', // TODO
+        'यदि आप "बाजार मूल्य" नामक टैब देखते हैं, तो आप पिछले दिनों में देश भर में विभिन्न फलों और सब्जियों के मूल्य और भविष्य के लिए कीमतों का पूर्वानुमान देख सकते हैं। फिलहाल, यह विकल्प केवल चयनित देशों के लिए उपलब्ध है।',
       farmerFinalStep:
         'बधाई हो! आपने ट्यूटोरियल पूरा कर लिया है! यदि आपके पास ऐप के बारे में कोई प्रश्न हैं, तो हम आपको सुझाव देते हैं कि आप FAQ की जांच करें, ठंडे कमरे के एक ऑपरेटर से पूछें, या हमें app@yourvcca.org पर लिखें।',
-      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
+      more: '"अधिक" पर क्लिक करने से, आप "इतिहास", "फसल के मूल्य", "कूलिंग यूनिट्स", और "आदेश" स्क्रीन का चयन कर सकते हैं।',
     },
   },
 } satisfies Translations;

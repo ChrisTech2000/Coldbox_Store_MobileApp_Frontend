@@ -2,8 +2,8 @@ import { Translations } from './en';
 
 export default {
   appVersion: {
-    newVersion: 'A new version of Coldtivate is available!', // TODO
-    pleaseUpdate: 'Please update app before continuing.', // TODO
+    newVersion: 'Sabon sigar Coldtivate tana nan!',
+    pleaseUpdate: 'Don Allah a sabunta manhaja kafin ci gaba.',
   },
   languages: {
     current: 'Turanci',
@@ -15,10 +15,10 @@ export default {
       gu: 'Gujarati',
       fr: 'Faransanci',
       pt: 'Fotigal',
-      ig: 'Igbo', // TODO
-      yo: 'Yoruba', // TODO
-      ha: 'Hausa', // TODO
-      ar: 'Arabic', // TODO
+      ig: 'Ibo',
+      yo: 'Yarbanci',
+      ha: 'Hausa',
+      ar: 'Larabci',
     },
   },
   gender: { female: 'Mace', male: 'Namiji', other: 'Sauran' },
@@ -58,8 +58,8 @@ export default {
       RegisteredEmployee: "Ma'aikaci mai rijista",
       AddRegisteredEmployee: "Ƙara Ma'aikacin Rijista",
       RegisteredEmployeeDetails: "Cikakkun Bayanan Ma'aikata",
-      DeliveryContacts: 'Delivery Contacts', // TODO
-      AddUserBankAccount: '{{user}} Bank Account', // TODO
+      DeliveryContacts: 'Lambobin Tuntuɓa na Isarwa',
+      AddUserBankAccount: 'Asusun Banki na {{user}}',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -78,7 +78,7 @@ export default {
       CheckIn: 'Rajistan shiga',
       CheckOut: 'Duba fita',
       Maps: 'TASWIRORI',
-      More: 'More', // TODO
+      More: 'Kara',
     },
     dashboard: {
       AccountDetails: 'Bayanan asusun',
@@ -94,7 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'Abubuwan da aka fi so',
       Orders: 'Umarni',
       MyOrders: 'Umarnina',
-      MySales: 'My Sales', // TODO
+      MySales: 'Sayarwar da Na Yi',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Cibiyar Ilimi',
       QuitTutorial: 'Bar koyarwa',
@@ -107,7 +107,7 @@ export default {
       Wallet: 'Walat',
       Transactions: "Ma'amaloli",
       Transaction: '{{id}}',
-      ShoppingCart: 'Shopping Cart', // TODO
+      ShoppingCart: 'Katon Siyayya',
     },
     checkIn: {
       SelectCropType: "Zaɓi nau'in amfanin gona",
@@ -156,13 +156,13 @@ export default {
     'save-changes': 'Ajiye canje-canje',
     save: 'Ajiye',
     continue: 'Ci gaba',
-    update: 'update', // TODO
-    clearAll: 'Clear all', // TODO
-    apply: 'Apply', // TODO
+    update: 'sabunta',
+    clearAll: 'Goge duk',
+    apply: 'Aiwatar',
   },
   components: {
     datePicker: {
-      heading: 'Select a date', // TODO
+      heading: 'Zaɓi kwanan wata',
       clearButtonLabel: 'Share',
       confirmButtonLabel: 'Tabbatar',
       placeholder: 'dd/mm/yy',
@@ -282,7 +282,7 @@ export default {
       },
       toasts: {
         error:
-          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
+          'Da fatan za a tabbatar da cewa bayananka daidai ne sannan a sake gwadawa. Lura cewa lambar waya ɗaya da imel za su iya amfani da asusu guda ɗaya kawai.',
       },
     },
     ForgotPassword: {
@@ -293,7 +293,7 @@ export default {
         'Domin sake saita kalmar wucewar ku, da fatan za a shigar da lambar waya tare da lambar ƙasa, wacce aka haɗa asusun.',
       phoneInputLabel: 'Lambar waya',
       resetButton: 'Sake saiti',
-      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
+      requestLimitMessage: 'An kai iyakar buƙatu. Da fatan za a sake gwadawa cikin awa 2.',
     },
     ResetPassword: {
       schema: {
@@ -339,7 +339,7 @@ export default {
     noLocationsAvailable:
       'Barka da zuwa Coldtivate. Fara ta hanyar ƙara wurare zuwa manhajar ku a cikin kwamitin gudanarwa.',
     coolingUserNavigateToMarketplace:
-      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
+      'Kana sha’awar siyan amfanin gona da aka adana a ɗakunan sanyaya kaya? Je zuwa shafin Kasuwa a ƙasan dama!',
     MarketPrice: {
       emptyState: 'Babu farashin kasuwa a cikin ƙasar ku',
       'no-data-found': 'આ બજાર અને કોમોડિટી સંયોજન માટે કોઈ ડેટા મળ્યો નથી',
@@ -406,13 +406,13 @@ export default {
           commodityShortlist: 'Jerin sunayen Kayayyaki',
           unit: {
             kg: 'kg',
-            crates: 'crates',
-            boxes: 'Kwalaye',
-            sacks: 'Buhuwa',
-            baskets: 'Kwanduna',
+            crates: 'akwatuna',
+            boxes: 'kwallaye',
+            sacks: 'buhuna',
+            baskets: 'kwanduna',
             singular: {
               kg: 'kg',
-              crates: 'Crate',
+              crates: 'akwati',
               boxes: 'akwati',
               sacks: 'buhu',
               baskets: 'kwando',
@@ -457,23 +457,23 @@ export default {
         paymentType: {
           label: "Nau'in Biyan Kuɗi",
           cash: 'Kuɗi',
-          creditCard: 'Katin biya/cira kudi',
-          bankTransfer: 'Bank Transfer', // TODO
+          creditCard: 'Katin Biya/Cire Kuɗi',
+          bankTransfer: 'Canja wurin kuɗi ta banki',
         },
         bankTransfer: {
-          title: "Receiver's Details", // TODO
-          accountName: 'Account Name', // TODO
-          accountNumber: 'Account Number', // TODO
-          bankName: 'Bank Name', // TODO
+          title: 'Bayanan Mai Karɓa',
+          accountName: 'Sunan Asusu',
+          accountNumber: 'Lambar Asusu',
+          bankName: 'Sunan Banki',
         },
         paid: 'An biya',
         lockedWithinPendingOrders:
-          'Crates that are locked in pending orders cannot be checked out.', // TODO
+          'Akwatuna da ke kulle a cikin odar da ba a kammala ba ba za a iya cire su ba.',
       },
       CheckIn: {
         emptyState: 'Har yanzu ba a saka akwatuna ba',
         addCrates: 'Ƙara Crates',
-        cratesAddedLabel: 'Crates Added', // TODO
+        cratesAddedLabel: 'An Ƙara Akwatuna',
         checkInWithCode: 'Shiga tare da lamba',
         estimatedCost: 'Ƙimar Kuɗi',
         pricing: 'Tayin farashi',
@@ -482,9 +482,9 @@ export default {
         emptyMessage: 'Da fatan za a ƙara aƙalla akwati ɗaya a cikin rajistan shiga ku',
         noPlannedDaysMessage:
           'Rasa kwanakin da aka tsara akan wasu abubuwa. Ba za a iya ƙididdige ƙididdigan farashi ba.',
-        seeMore: 'See more', // TODO
-        seeLess: 'See less', // TODO
-        listed: 'Listed', // TODO
+        seeMore: 'Gani ƙari',
+        seeLess: 'Gani kaɗan',
+        listed: 'An jera',
         WithCode: {
           modalTitle: 'Ƙirƙiri Duba Shiga daga Dubawa na yanzu',
           modalDescription:
@@ -492,7 +492,7 @@ export default {
           codeLabel: 'Ƙara lamba',
           codeErrorMessage: 'Ana buƙatar lamba',
           failedMessage:
-            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
+            'Shiga ya gaza. Da fatan za a tabbatar cewa an riga an yi amfani da lambar ka ba, ko kuma tuntuɓi tallafi.',
         },
         SelectCropType: {
           fruits: "Ya'yan itãcen marmari",
@@ -521,13 +521,13 @@ export default {
             evenBefore: 'Tun kafin haka',
           },
           crateWeightAndPricing: {
-            applyAll: 'Apply to all', // TODO
-            list: 'List for sale', // TODO
-            addMore: 'Add more', // TODO
-            sellingPrice: 'Listing selling price', // TODO
-            potentialSellingPrice: 'Potential selling value', // TODO
-            info: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
-            unavailableId: 'ID not set', // TODO
+            applyAll: 'Aiwatar da duka',
+            list: 'Jera don siyarwa',
+            addMore: 'Ƙara ƙari',
+            sellingPrice: 'Farashin siyarwa da aka jera',
+            potentialSellingPrice: 'Yiwuwar kuɗin siyarwa',
+            info: 'Saitin farashi yana nufin siyar da samfur, ba kuɗin ajiya na sanyaya ba.',
+            unavailableId: 'ID ba a saita ba',
           },
           cratesError: 'Da fatan za a saka lambar kwano tabbatacce',
           crateWeightError: "Da fatan za a saka ma'auni mai inganci",
@@ -597,22 +597,22 @@ export default {
       days: 'kwanaki',
       noDTMessage: 'Babu samfurin shiryayyen-rayuwa don wannan kayan masarufi.',
       checkOutButton: 'Duba fita',
-      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      cratesListedForSale: 'An sa {{amount}} akwati/akwatu a jerin don siyarwa',
       preSaleError:
-        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
+        'Don Allah a lura: Ba za ka iya canza matsayin jerin akwatu da ke da odar da ba a kammala ba ba. Idan hakan bai shafe ka ba, don Allah a tuntuɓi tallafi don samun taimako.',
       operatorNoBankAccountWarning:
-        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+        '{{name}} ba shi da cikakkun bayanan asusun banki don karɓar kudin sayarwa. Don Allah a ƙara bayanan asusun bankinsu idan sun raba su da kai.',
       farmerNoBankAccountWarning:
-        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+        'Ba ka da wani asusun banki da aka saita don karɓar kuɗin sayarwa. Don Allah a ƙara cikakkun bayanan asusun bankinka.',
       operatorNoCompanyBankAccount:
-        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+        'Wannan na’urar sanyaya ba ta tallafa jerin kaya a kasuwa ba. Don Allah a tuntuɓi mai kula da kamfanin don magance wannan.',
       employeeNoBankAccount:
-        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
-      addBankAccountButton: 'Add bank account details', // TODO
+        'Wannan kamfani ba shi da asusun banki don karɓar kuɗi daga sayar da amfanin gona da kuɗin sanyaya a kasuwa. Da fatan za a saita asusun don ba da damar jerin akwatu daga na’urorin sanyaya.',
+      addBankAccountButton: 'Ƙara cikakkun bayanan asusun banki',
       addBankAccountHeader:
-        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+        'Kana saita cikakkun bayanan asusun banki a madadin {{name}}. Don Allah a shigar da wannan bayanin da kulawa domin ba za a iya yin gyara a gaba ba.',
       userWithoutPhone:
-        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
+        'Akwatu na wannan asusun ba za a iya jerawa don siyarwa ba domin ba za a iya haɗa asusun banki da mai amfani ba tare da lambar waya ba.',
     },
     SearchFilter: {
       detailsMessage:
@@ -635,18 +635,18 @@ export default {
     },
     Management: {
       Delivery: {
-        companyName: 'Company name', // TODO
-        companyNamePlaceholder: 'Insert company name', // TODO
-        companyNameError: 'Please insert the company name', // TODO
-        contactName: 'Contact name', // TODO
-        contactNamePlaceholder: 'Insert contact name', // TODO
-        contactNameError: 'Please insert the contact name', // TODO
-        phoneNumber: 'Phone number', // TODO
-        phoneNumberPlaceholder: 'Insert phone number', // TODO
-        emptyMessage: 'No contacts have been added yet', // TODO
-        deleteContactMessage: 'Are you sure you want to delete this contact?', // TODO
-        noAvailableContacts: 'There are no available contacts for this particular cooling unit.', // TODO
-        contactedAddedSuccessfully: 'Contact added successfully.', // TODO
+        companyName: 'Sunan kamfani',
+        companyNamePlaceholder: 'Shigar da sunan kamfani',
+        companyNameError: 'Don Allah a shigar da sunan kamfani',
+        contactName: 'Sunan wanda za a tuntuba',
+        contactNamePlaceholder: 'Shigar da sunan wanda za a tuntuba',
+        contactNameError: 'Don Allah a shigar da sunan wanda za a tuntuba',
+        phoneNumber: 'Lambar waya',
+        phoneNumberPlaceholder: 'Shigar da lambar waya',
+        emptyMessage: 'Ba a ƙara kowane lamba ba tukuna',
+        deleteContactMessage: 'Ka tabbata kana son goge wannan lambar?',
+        noAvailableContacts: 'Babu lambobin tuntuɓa da ake da su don wannan na’urar sanyaya.',
+        contactedAddedSuccessfully: 'An ƙara lambar tuntuɓa cikin nasara.',
       },
       Location: {
         emptyState: 'Har yanzu ba a ƙara wasu wurare ba. Danna alamar + don ƙara ɗaya.',
@@ -659,10 +659,6 @@ export default {
           coordinates: 'Daidaitawa',
           geolocation: 'Wurin zama na waya',
         },
-        fieldErrorMessages: {
-          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
-          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
-        },
         fields: {
           name: 'Suna',
           latitude: 'Latitude',
@@ -674,6 +670,10 @@ export default {
           street: 'Titin',
           streetNumber: 'Lambar titi',
         },
+        fieldErrorMessages: {
+          latitude: 'Shigar da lamba tsakanin -90 da 90 (misali: 34.0522)',
+          longitude: 'Shigar da lamba tsakanin -180 da 180 (misali: -118.2437)',
+        },
         modal: {
           message:
             "Wannan aikin zai share duk na'urorin sanyayawa da ke da alaƙa da wannan wurin. Kuna so ku ci gaba?",
@@ -684,11 +684,13 @@ export default {
           editLocationSuccess: 'An yi nasarar gyara wurin',
           removeLocationSuccess: 'An yi nasarar goge wurin {{name}}.',
           failedToFetchLocation:
-            'Unable to retrieve the location. Please check the address and try again.', // TODO
-          positionCancelled: 'Location request canceled.', // TODO
-          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
-          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
-          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
+            'An kasa samo wurin. Don Allah a duba adireshin kuma a sake gwadawa.',
+          positionCancelled: 'An soke buƙatar wurin.',
+          positionUnauthorized:
+            'An ƙi bayar da izinin wurin. Don Allah a bayar da izini don ci gaba.',
+          locationUnavailable: 'An kashe wurin. Don Allah a kunna don ci gaba.',
+          locationSubmissionError:
+            'An samu kuskure. Don Allah a duba wurin da ka shigar kuma a sake gwadawa.',
         },
       },
       Operators: {
@@ -725,7 +727,7 @@ export default {
         actions: { save: 'Ajiye canje-canje' },
         toasts: {
           success: 'Anyi nasarar gyarawa',
-          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
+          photoLibrary: 'An ƙi izini: Don Allah a kunna damar zuwa ɗakin hotuna naka.',
         },
       },
       RegisteredEmployee: {
@@ -757,15 +759,15 @@ export default {
         },
       },
       EditCoolingUsers: {
-        accountDetails: 'Payout Details', // TODO
+        accountDetails: 'Cikakkun Bayanai na Biyan Kuɗi',
         toasts: {
-          noSurveys: 'No surveys have been completed yet.', // TODO
           warning:
             'Ba za a iya share wannan asusun ba saboda mai amfani yana da rajistan shiga mai aiki a cikin naúrar sanyayawa {{name}}. Da fatan za a sanar da mai amfani don zuwa ɗakin don ɗaukar waɗannan abubuwan kuma ya kammala rajistan shiga kafin share asusun!',
           confirmation:
             'Shin kun tabbata kuna son share wannan mai amfani daga jerin masu amfani da sanyaya? Wannan aikin zai share wannan mai amfani da naúrar sanyayawa kuma ba za a iya juya shi ba!',
           edit: 'An yi nasarar gyara mai amfani mai da naúrar sanyayawa',
           noCoolingUnits: 'Ba ku da sashin naúrar sanyayawa tukuna',
+          noSurveys: 'Babu wani bincike da aka kammala tukuna.',
           updateSuccess: 'Anyi nasarar sabunta',
         },
         pdf: {
@@ -797,7 +799,7 @@ export default {
           width: 'Faɗi',
           height: 'Zurfi',
           weight: 'Nauyi',
-          roomInsulator: 'Insulator',
+          roomInsulator: 'Keɓaɓɓen ɗaki',
           capacityInNumberCrates: 'Makurar yawan adadin crates',
           crateWeight: 'Daidaitaccen girman crate',
           crateSizeHeading: 'Girman daidaitaccen akwati',
@@ -831,9 +833,9 @@ export default {
           batteryPeakEnergyStorage: "Ma'ajiyar makamashi a matakin kololuwar baturi daya",
           batteryType: "Nau'in batura",
           selectSensorType: "Zaɓi nau'in firikwensin",
-          selectSensor: 'Select a sensor', // TODO
           emptySensorListError:
-            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
+            'Alama babu wani na’ura mai gano yanayi da aka haɗa da asusun {{type}} naka. Don Allah a haɗa aƙalla ɗaya sannan a sake gwadawa.',
+          selectSensor: 'Zaɓi na’ura mai gano yanayi',
           addTempSensor: 'Ƙara firikwensin yanayin zafi zuwa sashin naúrar sanyayawar ku.',
           sensorDesc: {
             default: 'Nemi wannan bayanin daga mai bada firikwensin ku idan babu a hannu.',
@@ -845,10 +847,10 @@ export default {
             machineId: 'ID na inji',
           },
           genericSensorForm: {
-            username: 'Username/Email', // TODO
+            username: 'Sunan mai amfani/Imel',
             password: 'Boyayin kalmomin siri',
           },
-          unknownSensor: 'Unknown', // TODO
+          unknownSensor: 'Ba a sani ba',
           hybridFields: 'Wanne kashi na dakin ke samun ƙarfi ta hanyoyi daban-daban?',
           cropSpecificPricing: 'takamaiman farashin amfanin gona',
           value: 'Ƙima',
@@ -910,49 +912,50 @@ export default {
           label: 'Zaɓi hanyoyin biyan kuɗi:',
           cash: 'Kuɗi',
           creditCard: 'Katin biya/cira kudi',
-          bankTransfer: 'Bank Transfer', // TODO
+          bankTransfer: 'Canja wurin kuɗi ta banki',
         },
       },
       Coupons: {
-        title: 'Discount coupons', // TODO
+        title: 'Takardun ragi',
         emptyMessage: 'Babu takardun shaida da aka kara har yanzu',
         addCoupon: 'Ƙara Coupon',
         code: 'Lambar kuɗi',
         percentage: 'Kashi na kwafin',
         revokeTitle: 'Shawarwarin Kuɗi',
-        revoke: 'Revoke', // TODO
+        revoke: 'Revoke',
         revokeMessage:
           'Shin kun tabbata kuna son soke wannan takardar kuɗi? Da zarar an soke, ba za a iya sake amfani da shi ba kuma ba za a ƙara samun rangwamen ba. Wannan aikin na dindindin ne kuma ba za a iya soke shi ba.',
         messages: {
-          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+          codeField:
+            'Ya zama dole ya ƙunshi haruffa da lambobi kawai, kuma ya kasance bai wuce haruffa 25 ba',
         },
       },
     },
     Marketplace: {
       buyerSelection: {
-        onBehalfOfCompany: 'Buy on behalf of company', // TODO
-        forMyself: 'Buy for myself', // TODO
-        label: 'Buyer', // TODO
+        onBehalfOfCompany: 'Saya a madadin kamfani',
+        forMyself: 'Saya don kaina',
+        label: 'Mai siya',
       },
       sorting: {
-        'price-asc': 'Price ascending', // TODO
-        'price-desc': 'Price descending', // TODO
-        'nearby-me': 'Near to me', // TODO
+        'price-asc': 'Farashi daga ƙasa zuwa sama',
+        'price-desc': 'Farashi daga sama zuwa ƙasa',
+        'nearby-me': 'Kusa da ni',
       },
       distance: {
-        withing5Km: '1 to 5 KM away', // TODO
-        within10Km: '5 to 10 KM away', // TODO
-        within25Km: '10 to 25 KM away', // TODO
-        beyond25Km: 'More than 25 KM away', // TODO
+        withing5Km: 'Daga 1 zuwa 5 KM nesa',
+        within10Km: 'Daga 5 zuwa 10 KM nesa',
+        within25Km: 'Daga 10 zuwa 25 KM nesa',
+        beyond25Km: 'Fiye da 25 KM nesa',
       },
-      priceConfig: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
+      priceConfig: 'Saitin farashi yana nufin siyar da samfur, ba kuɗin ajiya na sanyaya ba.',
       addToCart: {
-        addToCartButton: 'Add to cart and continue shopping', // TODO
-        buyFullCrate: 'Buy full crate', // TODO
-        selectQuantity: 'Select quantity', // TODO
-        goToCart: 'Go to Cart Summary', // TODO
+        addToCartButton: 'Ƙara a cikin katon siyayya kuma ci gaba da siyayya',
+        buyFullCrate: 'Saya cikakken akwati',
+        selectQuantity: 'Zaɓi adadi',
+        goToCart: 'Je zuwa taƙaitaccen katon siyayya',
       },
-      currentLocation: 'Current location', // TODO
+      currentLocation: 'Matsayin yanzu',
       invalidFormatWarning:
         'Gargadi: Tsarin sunan garin bai dace ba. Sakamakon na iya zama ba daidai ba.',
       unresolvedCityFormatWarning:
@@ -961,21 +964,21 @@ export default {
         'Gargadi: Ba a iya tantance garin da tabbaci ba. Sakamakon na iya zama ba daidai ba.',
       filterGeneralWarning:
         'Gargadi: Wani matsala ta faru yayin tantance wurin. Sakamakon na iya zama ba daidai ba.',
-      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
-      owner: 'Owner', // TODO
-      priceRange: 'Range Price / KG',
+      standardCrateWeight: 'Matsakaicin nauyin akwati shine {{value}} kg',
+      owner: 'Mai mallaka',
+      priceRange: 'Tsarin Farashi / KG',
       Filters: {
-        min: 'Min',
-        max: 'Max',
-        label: 'Filters',
-        coolingUnitLabel: 'Cooling unit', // TODO
-        coolingUnitHeading: 'Select cooling units', // TODO
-        cropTypeLabel: 'Produce / Crop Type', // TODO
-        cropTypeHeading: 'Select crops', // TODO
-        companyLabel: 'Company', // TODO
-        companyHeading: 'Select companies', // TODO
+        min: 'Mafi ƙanƙanta',
+        max: 'Mafi girma',
+        label: 'Matattara',
+        coolingUnitLabel: 'Na’urar sanyaya',
+        coolingUnitHeading: 'Zaɓi na’urorin sanyaya',
+        cropTypeLabel: 'Amfanin gona / Nau’in amfanin gona',
+        cropTypeHeading: 'Zaɓi amfanin gona',
+        companyLabel: 'Kamfani',
+        companyHeading: 'Zaɓi kamfanoni',
       },
-      maxDistance: 'Max Distance',
+      maxDistance: 'Matsakaicin Nesa',
     },
     AccountDetails: {
       popups: {
@@ -993,9 +996,9 @@ export default {
       toasts: { success: 'An yi nasarar sabunta mai amfani' },
       sections: {
         sellerSettings: 'Saitunan mai siyarwa',
+        companySellerSettings: 'Saitunan Mai Sayarwa (Kamfani)',
         buyerSettings: 'Saitunan siye',
         details: 'Cikakkun bayanai',
-        companySellerSettings: 'Seller Settings (Company)', // TODO
       },
       ContactsSharing: {
         publicPhone: "Sanya lambar waya ga jama'a",
@@ -1004,27 +1007,27 @@ export default {
       PayoutSettings: {
         addTitle: 'Da fatan za a saka bayanan asusun bankin ku',
         editTitle: 'Bayanin asusun ajiyar ku na banki',
-        addTittleForCompany: "Please insert you company's bank account information", // TODO
-        editTitleForCompany: "Your company's bank account information", // TODO
+        addTittleForCompany: 'Da fatan za a saka bayanan asusun bankin kamfaninku',
+        editTitleForCompany: 'Bayanan asusun bankin kamfaninku',
         form: {
-          nameLabel: 'Account name', // TODO
-          namePlaceholder: 'Insert account name', // TODO
-          accountNumberLabel: 'Lambar akant',
+          nameLabel: 'Sunan asusu',
+          namePlaceholder: 'Saka sunan asusu',
+          accountNumberLabel: 'Lambar asusu',
           accountNumberPlaceholder: 'Saka lambar asusun',
-          bank: 'Bank', // TODO
-          countryLabel: 'Country', // TODO
-          nigeria: 'Nigeria', // TODO
-          selectBank: 'Select bank from list', // TODO
-          accountType: 'Account Type', // TODO
-          selectAccountType: 'Select account type', // TODO
+          countryLabel: 'Ƙasa',
+          nigeria: 'Najeriya',
+          selectBank: 'Zaɓi banki daga jerin',
+          bank: 'Banki',
+          accountType: 'Nau’in Asusu',
+          selectAccountType: 'Zaɓi nau’in asusu',
           accountTypes: {
-            personal: 'Personal', // TODO
-            business: 'Business', // TODO
+            personal: 'Na kashin kai',
+            business: 'Na kasuwanci',
           },
           errors: {
-            accountName: 'Account name is required', // TODO
-            accountType: 'Account type is required', // TODO
+            accountName: 'Ana buƙatar sunan asusu',
             account: 'Ana buƙatar lambar asusun',
+            accountType: 'Ana buƙatar nau’in asusu',
             bank: 'Ana buƙatar sunan banki',
           },
         },
@@ -1078,7 +1081,7 @@ export default {
       clickHere: 'Danna nan',
     },
     History: {
-      cropsLabel: '{{crop}} and {{amount}} more', // TODO
+      cropsLabel: '{{crop}} da ƙari {{amount}}',
       priceLabel: 'Farashin',
       empty:
         'duba-shiga ko duba-fita za su bayyana a cikin dashboard lokacin da kuka yi aƙalla duba-shiga ɗaya a kowane ɗaki.',
@@ -1092,8 +1095,8 @@ export default {
       },
       optionsMenu: {
         common: {
-          pdfReceipt: 'Sauke takardar sheda pdf',
-          seeMovement: 'See movement', // TODO
+          pdfReceipt: 'Sauke takardar shaidar PDF',
+          seeMovement: 'Duba motsi',
         },
         checkOut: {
           seeDetails: 'Duba cikakkun bayanai',
@@ -1196,89 +1199,89 @@ export default {
       },
     },
     MyOrders: {
-      coolingFees: 'Cooling fees', // TODO
-      soldFor: 'Sold for', // TODO
-      ownedBy: 'Owned by', // TODO
-      you: 'You', // TODO
+      coolingFees: 'Kuɗin sanyaya',
+      soldFor: 'An sayar da shi akan',
+      ownedBy: 'Mallakar',
+      you: 'Kai',
       sort: {
-        mostRecent: 'Most recent', // TODO
-        oldest: 'Oldest', // TODO
-        date: 'Date', // TODO
+        mostRecent: 'Mafi sabo',
+        oldest: 'Mafi tsoho',
+        date: 'Kwanan wata',
       },
       status: {
-        'payment-pending': 'Payment Pending', // TODO
-        'payment-expired': 'Payment Expired', // TODO
-        cancelled: 'Cancelled', // TODO
-        paid: 'Paid', // TODO
+        'payment-pending': 'Ana jiran biyan kuɗi',
+        'payment-expired': 'Lokacin biyan ya ƙare',
+        cancelled: 'An soke',
+        paid: 'An biya',
       },
-      title: 'Order Overview', // TODO
-      orderId: 'Order ID', // TODO
-      cropType: 'Crop Type', // TODO
-      coolingUnit: 'Cooling Unit', // TODO
-      orderTotal: 'Order Total', // TODO
-      backToTopButton: 'Back to the top', // TODO
+      title: 'Bayyani game da oda',
+      orderId: 'Lambar Oda',
+      cropType: 'Nau’in amfanin gona',
+      coolingUnit: 'Na’urar sanyaya',
+      orderTotal: 'Jimillar oda',
+      backToTopButton: 'Koma sama',
     },
     ShoppingCart: {
       cartUpdatedMessage:
-        'Wasu kayayyaki an cire su daga kwandon siyayyarka saboda ba su da samuwa don siye yanzu.',
-      ownership: 'Change cart ownership to {{name}}', // TODO
+        'An cire wasu kayayyaki daga kwandon siyayyarka saboda ba su da samuwa don siye yanzu.',
+      ownership: 'Canja mallakar kwandon siyayya zuwa {{name}}',
       changeOwnership:
-        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
-      empty: 'Your cart is empty', // TODO
-      daysLeft: 'days left', // TODO
-      weight: 'KG available', // TODO
-      perKg: '/ KG', // TODO
-      totalToPay: 'Total to pay', // TODO
-      pay: 'Pay', // TODO
-      orderHeader: 'Order', // TODO
-      subtotal: 'Subtotal', // TODO
-      produce: 'Produce', // TODO
-      discount: 'Discount', // TODO
-      fees: 'Service fees', // TODO
-      marketFees: 'Marketplace fee', // TODO
-      paymentFees: 'Payment fee', // TODO
-      coolingFees: 'Cooling fee', // TODO
-      viewContacts: 'View contact(s)', // TODO
-      contactsForDelivery: 'Contact(s) for delivery information', // TODO
-      gotItButton: 'Got it!', // TODO
-      pickupMethods: 'Pickup method', // TODO
-      selectPickupMethod: 'Select a pickup method', // TODO
-      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
-      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
-      pickUpToday: 'Pickup today', // TODO
-      keepInStorageDailyRate: 'Keep in storage ({{price}} / day)', // TODO
-      keepInStorageFixedRate: 'Keep in storage ({{price}})', // TODO
-      delivery: 'Delivery', // TODO
-      contactName: 'Contact name', // TODO
-      phoneNumber: 'Phone number', // TODO
-      thankYouMessage: 'Thank You for Ordering', // TODO
-      orderOverview: 'Order overview', // TODO
-      products: 'Products', // TODO
-      consultOrders: 'Consult My Orders', // TODO
-      total: 'Total', // TODO
-      couponQuestion: 'Have a discount coupon?', // TODO
-      redeem: 'Redeem code.', // TODO
-      redeemCoupon: 'Redeem coupon', // TODO
-      couponPlaceholder: 'E.g. 20OFF', // TODO
-      discountsApplied: 'Discounts Applied', // TODO
+        'Canja mallakar kwandon siyayya zuwa {{name}}. Wannan na iya shafar abun da ke cikin kwandonka, ciki har da yiwuwar cire wasu akwatuna waɗanda ba za su kasance samuwa ba bayan wannan canjin. Ka tabbata kana son ci gaba?',
+      empty: 'Kwandon siyayyarka babu komai',
+      daysLeft: 'kwanaki sun rage',
+      weight: 'KG da ake da su',
+      perKg: '/ KG',
+      totalToPay: 'Jimillar kuɗin da za a biya',
+      pay: 'Biyaa',
+      orderHeader: 'Oda',
+      subtotal: 'Jimillar ƙasa',
+      produce: 'Amfanin gona',
+      discount: 'Ragi',
+      fees: 'Kudin sabis',
+      marketFees: 'Kuɗin kasuwa',
+      paymentFees: 'Kuɗin biyan kuɗi',
+      coolingFees: 'Kuɗin sanyaya',
+      viewContacts: 'Duba lambar tuntuɓa',
+      contactsForDelivery: 'Lambobin tuntuɓa don bayani kan isarwa',
+      gotItButton: 'Na gane!',
+      pickupMethods: 'Hanyar karɓa',
+      selectPickupMethod: 'Zaɓi hanyar karɓa',
+      selectPickupMethodInfo: 'Dole ne a zaɓi hanyar karɓa don kowace na’urar sanyaya.',
+      pickupMethodSelectionMissing: 'Ba a zaɓi hanyar karɓa ba don {{amount}} na’urorin sanyaya.',
+      pickUpToday: 'Karɓa yau',
+      keepInStorageDailyRate: 'Ajiye a wurin ({{price}} / rana)',
+      keepInStorageFixedRate: 'Ajiye a wurin ({{price}})',
+      delivery: 'Isarwa',
+      contactName: 'Sunan wanda za a tuntuɓa',
+      phoneNumber: 'Lambar waya',
+      thankYouMessage: 'Na gode da yin oda',
+      orderOverview: 'Bayyani kan oda',
+      products: 'Kayayyaki',
+      consultOrders: 'Duba Odoyina',
+      total: 'Jimilla',
+      couponQuestion: 'Kana da takardar rangwame?',
+      redeem: 'Fanshi lamba.',
+      redeemCoupon: 'Fanshi takardar rangwame',
+      couponPlaceholder: 'Misali: 20OFF',
+      discountsApplied: 'An yi amfani da rangwame',
+      method: 'Hanya:',
+      deliveryInfo:
+        'Lura cewa kuɗin isarwa yana danganta da mai bayar da sabis. Idan an shirya isarwa gobe, za a kuma ɗora kuɗin sanyaya na {{value}}.',
+      pickUpTodayInfo:
+        'Da fatan za a karɓi kayanka kafin ƙarshen rana don guje wa ƙarin kuɗin sanyaya.',
+      keepInStorageInfo: 'Za a ɗora kuɗin sanyaya ne lokacin da ka karɓi odarka.',
+      orderOverviewSubtitle:
+        "Za ka iya sake duban wannan bayanin a ƙarƙashin shafin 'Odoyina' a cikin allon 'Kasuwa'.",
       pickupModal: {
-        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
+        today: 'Da fatan za a karɓi odarka a {{company}}, da ke {{location}} yau.',
+        storage: 'Akwatunka yanzu suna ajiye a {{company}}, da ke {{location}}.',
         delivery:
-          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+          "Da fatan za a tuntuɓi lambobin da ke akwai don tsara isarwa. Za ka iya duba jerin zaɓuɓɓukan isarwa a ƙarƙashin 'Bayanan oda'.",
       },
       errors: {
-        invalid: 'Invalid value', // TODO
-        minimumCartValue: 'Order must be at least ₦100.', // TODO
+        invalid: 'Bayanan da aka shigar ba daidai ba ne',
+        minimumCartValue: 'Oda dole ne ya kai aƙalla ₦100.',
       },
-      method: 'Method:', // TODO
-      deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
-      pickUpTodayInfo:
-        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
-      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
-      orderOverviewSubtitle:
-        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
     },
     Analytics: {
       emptyState: 'Babu bayanai don nunawa',
@@ -1411,7 +1414,7 @@ export default {
           co2: '💨 CO2e da aka fitar don sanyaya',
           co2EmissionsLabel: 'CO2e watsi (kg)',
           co2DistributionLabel: 'CO2e rarraba amfanin gona',
-          co2Kg: 'Kg CO2 emitted', // TODO
+          co2Kg: 'Kg na CO2 da aka fitar',
         },
         impactTab: {
           occupancyLabel: 'Matsakaicin zama na sassan sanyayawa',
@@ -1460,36 +1463,35 @@ export default {
     congratulations: 'Taya murna! Kun gama koyawa! Koma kan dashboard don fara amfani da app.',
     prev: 'Mataki na baya',
     next: 'Na gaba',
-    start: 'Start Tutorial', // TODO
-    final:
-      'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.', // TODO
-    backToDashboard: 'Laghachi na Dashboard', // TODO
+    start: 'Fara Koyarwa',
+    final: 'Taya murna! Kun kammala koyarwar! Koma zuwa Dashboard don fara amfani da manhajar.',
+    backToDashboard: 'Koma zuwa Dashboard',
     steps: {
-      openDrawer:
-        'On the top left, you find a menu with the main functionalities. Go ahead and click it.', // TODO
+      openDrawer: 'A saman hagu, za ka ga menu da manyan ayyuka. Je ka danna shi.',
       repeatTutorial: 'Idan kuna son sake kallon wannan koyawa, kuna iya samunsa a cikin menu.',
-      operatorManagementNavigation:
-        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
       managementNavigation:
         'A cikin menu, zaku iya kewayawa zuwa shafin "Management" kuma a can za ku ƙara sabbin Wurare, Rukunin sanyaya, Ma\'aikata masu rijista da Ma\'aikata.',
+      operatorManagementNavigation:
+        'A cikin menu, zaka iya zuwa zuwa "Gudanarwa" sannan ka danna can don ƙara ko gyara Masu Amfani da Sanyaya.',
       addCoolingUser:
         'Ana iya ƙara masu amfani da sanyaya waɗanda ba su yi rajista ba akan Coldtivate ta saka bayanansu (suna, lambar waya). Ana iya ƙara masu amfani da sanyaya waɗanda suka riga sun yi rajista a cikin ƙa\'idar ta lamba. Za su iya nemo lambar su akan bayanan martabarsu -> "Bayanan asusu" -> "Lambar shigo da mai amfani mai sanyaya".',
-      navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO
+      navigateToCoolingUser: 'Je ka danna shafin Masu Amfani da Sanyaya',
       listCoolingUsers:
         'Ana gano masu amfani da sanyaya tare da wayar hannu ta alamar waya a gefen dama na allo. Sauran suna sanyaya masu amfani da wayar asali. A cikin lokuta biyu, zaku iya danna sunan don samun damar bayanan su da binciken mai sanyaya mai amfani.',
-      navigateToAddCoolingUser: "Clicking the '+' sign allows you to add a new Cooling User.", // TODO
+      navigateToAddCoolingUser:
+        "Danna alamar '+' yana ba ka damar ƙara sabon Mai Amfani da Sanyaya.",
       coolingUnitStep: "Kuna iya kewaya rak'o'in sanyaya ta danna menu na zazzage a saman.",
       initiateCheckIn1:
-        'Once you add a cooling user, you can make a check-in for that cooling user. Go ahead and click the activity button.', // TODO
-      initiateCheckIn2: 'Now click on the check-in button (the one in green).', // TODO
+        'Da zarar ka ƙara Mai Amfani da Sanyaya, zaka iya yin rajistar shigowa (check-in) gare shi. Je ka danna maɓallin ayyuka.',
+      initiateCheckIn2: 'Yanzu danna maɓallin check-in (wanda ke da launin kore).',
       checkIn1:
-        'To complete the check-in, you need to click on "Add Crates" and follow the instructions step by step. Click \'Continue\' to see what the result would look like.', // TODO
+        'Don kammala check-in, dole ne ka danna "Ƙara Akwatuna" sannan ka bi umarni mataki-mataki. Danna \'Ci gaba\' don ganin yadda sakamakon zai kasance.',
       checkIn2:
         'Bayan kammala duk matakan, za ku ga bayyani na akwatunan da kuke shirin bincika cikin ɗakin.',
       checkIn3:
         'Idan kun gamsu, za ku iya danna "Tabbatar" kuma za a ƙara sabon akwatuna a cikin Dashboard.',
       history:
-        'Clicking on "History", you can see all the movements in the room. The check-outs for which the after-storage survey has not been completed are marked by a red dot.', // TODO
+        'Danna "Tarihi" zai baka damar ganin duk motsin da aka yi a ɗakin. Ana nuna check-out ɗin da ba a kammala binciken bayan ajiya ba da ja ɗin dila.',
       coolingUnits:
         'Danna "Raka\'a sanyaya" don ganin ƙarfin naúrar sanyaya a cikin kwanaki 7 masu zuwa (Tsarin shirin) da zafin jiki na ɗakin (Shafin yanayin ɗaki).',
       roomConditions:
@@ -1498,26 +1500,25 @@ export default {
         'Don fara rajistan shiga, danna maɓallin Aiki sannan a kan maɓallin ja. Sannan bi umarnin don kammala rajistan.',
       checkOut2: 'Kuna iya zaɓar sashin sanyaya da amfanin gona da kuke son dubawa.',
       checkOut3: 'Da zarar an biya kayan, danna maɓallin daban kuma kammala rajistan.',
-      navigateToLocations:
-        'The first thing you will need to do is add a location. Go ahead and click the locations tab.', // TODO
+      navigateToLocations: 'Abu na farko da zaka yi shi ne ƙara wuri. Je ka danna shafin wurare.',
       locations:
-        'You can add a location by selecting a name and adding its latitude and longitude, by sharing your GPS coordinates (if you are at the cold room location), or by typing the address.', // TODO
+        'Zaka iya ƙara wuri ta zaɓar suna da ƙara latitude da longitude, ta hanyar raba haɗin GPS ɗinka (idan kana wurin ɗakin sanyaya), ko kuma ta hanyar rubuta adireshin.',
       navigateToCoolingUnits:
-        'After a location has been added, you can add a cooling unit. Go ahead and click the cooling units tab.', // TODO
+        'Bayan ƙara wuri, zaka iya ƙara na’urar sanyaya. Je ka danna shafin na’urorin sanyaya.',
       addCoolingUnits:
-        'A cooling unit can be added by completing the details above. If you have temperature sensors in the cooling unit and an API in place, you can input the credentials and automatically connect your sensors to the app.', // TODO
+        'Ana iya ƙara na’urar sanyaya ta cika bayanan da ke sama. Idan kana da na’urorin auna zafin jiki a cikin na’urar sanyaya da kuma API, zaka iya shigar da bayanan shiga don haɗa na’urorin ka da app ɗin ta atomatik.',
       addEmployeesOperators:
-        'You can add Registered Employees and Operators through the Management screen. In order to add either role, you will need their phone number. They will receive an SMS with an invitation link. A phone number can be used for only one user.', // TODO
+        'Zaka iya ƙara Ma’aikata da Masu Gudanarwa da aka yi musu rajista ta hanyar shafin Gudanarwa. Don ƙara kowane matsayi, za ka buƙaci lambar wayarsu. Za su karɓi saƙon SMS tare da mahaɗin gayyata. Ana iya amfani da lambar waya ɗaya ne kawai ga mai amfani guda ɗaya.',
       employeeCoolingUnitsStep:
-        'Once you have selected a cooling unit you will see an overview of: the crates currently in storage in the "Dashboard" tab, statistics about utilisation and impact in the "Analytics" tab, and the list of crates for sale in the "Marketplace" tab. Clicking on "More", you can also navigate to the "Crop Prices", "History", "Cooling Units", and "Orders" tab.', // TODO
+        'Da zarar ka zaɓi na’urar sanyaya, zaka ga taƙaitaccen bayani game da: akwatunan da ke cikin ajiya a cikin shafin "Dashboard", kididdigar amfani da tasiri a cikin shafin "Analytics", da jerin akwatunan da ake siyarwa a cikin shafin "Marketplace". Danna "More" kuma zaka iya kewaya zuwa shafukan "Farashin Amfanin Gona", "Tarihi", "Na’urorin Sanyaya", da "Odoyi".',
       localizationPreferences:
-        'You can change the language of the app by selecting "Localization Preferences". Make sure to click the "Save changes" button for the language to be changed!', // TODO
+        'Zaka iya canza harshen manhajar ta hanyar zaɓar "Saitunan Harshen Wuri". Tabbatar ka danna maɓallin "Ajiye Sauye-sauye" don tabbatar da sauyin harshen!',
       accountDetailsNavigation:
-        'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.', // TODO
+        'A cikin menu, zaka iya zuwa "Bayanan Asusu" sannan ka danna don duba/gyara wasu saituna da suka shafi asusunka. Je ka gwada shi.',
       coolingUserSurvey:
-        'Da farko da ka bude app, ana tambayarka don kammala ɗan gajeren bincike. Yana da matukar mahimmanci ku cika binciken don ƙa\'idar don samar muku da shawarwari na musamman. Idan ba za ku iya cika binciken a karon farko da kuka shiga ba, za ku iya samun damar binciken a cikin "Bayanan Asusu" -> "Binciken Mai Amfani". Na gode don ɗaukar lokaci don kammala binciken!',
+        'Da farko da ka bude app, ana tambayarka don kammala ɗan gajeren bincike. Yana da matuƙar muhimmanci ka cika binciken domin ƙa’idar ta iya ba ka shawarwari na musamman. Idan ba ka iya cika binciken a karon farko da ka shiga ba, zaka iya samun damar shiga binciken a cikin "Bayanan Asusu" -> "Binciken Mai Amfani". Mun gode da ɗaukar lokaci don kammala binciken!',
       coolingUserCode:
-        'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".', // TODO
+        'A karon farko da ka isa ɗakin sanyi don adana amfanin gona, mai aiki zai tambaye ka ka ba shi/ta lambar sirrinka, domin a ƙara ka cikin jerin masu amfani da ɗakin sanyi. Zaka iya samun wannan lambar a cikin "Bayanan kanka" -> "Lambar Shigo da Mai Amfani da Sanyi".',
       knowledgeHub:
         'A cikin menu, zaku iya samun "Cibiyar Ilimi", wanda ya ƙunshi shawarwari kan tsawon lokacin adana amfanin gona daban-daban, da mafi kyawun zafin jiki. Duba shi don fahimtar yadda ɗakin sanyi zai iya taimaka muku don adana ingancin \'ya\'yan itatuwa da kayan marmari daban-daban!',
       faq: "A cikin menu, zaku iya samun Tambayoyin Tambayoyi akai-akai (FAQ). Muna ba da shawarar ku duba su don ƙarin koyo game da ƙa'idar da fa'idar adana kayan amfanin ku a cikin dakuna masu sanyi.",
@@ -1532,18 +1533,18 @@ export default {
       dashboardStep5:
         'Idan kuna da akwatunan da aka adana a ɗakuna da yawa, zaku iya canza ɗakin da kuke kallo ta zaɓi kamfani da sashin sanyaya daga jerin zaɓuka.',
       dashboardStep6:
-        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advises you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.', // TODO
+        'Idan lokacin ɗaukar akwatunka ya kusanto kuma katin ya koma ja, za ka karɓi sanarwa da ke ba ka shawarar zuwa ɗakin, ɗaukar akwatunan, sannan ka sayar da su. Zaka iya duba sanarwarka ta danna kararrawa da ke dama.',
       farmerHistory:
-        'In the tab "History" you can see a summary of all check-ins and check-outs that you have completed in each room. If you see a red dot next to a check out, please click on the three dots and "Fill in market survey". Here, we would like to understand at what price you have sold your produce, and if anything got spoiled. We use this information to improve the operations at the cold room, so it is important that you answer accurately.', // TODO
+        'A cikin shafin "Tarihi" zaka iya ganin taƙaitaccen bayani na duk rajistar shiga da fita da ka kammala a kowanne ɗaki. Idan ka ga ja ɗin dila kusa da rajistar fita, don Allah danna kan maki uku sannan ka zaɓi "Cika binciken kasuwa". Muna son fahimtar farashin da ka sayar da amfanin gonarka, da ko wani abu ya lalace. Muna amfani da wannan bayanin don inganta ayyukan ɗakin sanyi, don haka yana da muhimmanci ka ba da amsa daidai.',
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
+        'Don duba na’urorin sanyaya da ke kusa da kai, zaka iya zuwa ga maɓallan da ke ƙasan allo, ka danna shafin "More", "Na’urorin Sanyaya", sannan ka zaɓi "Taswira". Ta danna kowane alamar tasha akan taswira, zaka ga nau’in na’ura da kuma farashin ajiyar sanyi.',
       farmersUnitsPlanner:
-        'A cikin shafin "Cooling Units" zaka iya samun Taswirar, zama na yanzu da na gaba na dakin (a cikin "Mai Tsara") da kuma yawan zafin jiki na ɗakin (a cikin "Yanayin ɗakin"). Wadannan allon suna taimaka muku saka idanu daga nesa abin da ke faruwa a dakunan sanyi, ba tare da zuwa wurin da mutum don dubawa ba!',
+        'A cikin shafin "Na’urorin Sanyaya" zaka iya ganin Taswira, jadawalin amfani da ɗaki a halin yanzu da nan gaba (a cikin "Mai Tsara") da kuma yanayin zafin jikin ɗakin (a cikin "Yanayin ɗaki"). Wadannan shafuka suna taimaka maka don saka idanu daga nesa ba tare da ka je wurin da kanka ba.',
       marketPrice:
-        'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.', // TODO
+        'Idan ka ga wani shafi mai suna "Farashin Amfanin Gona", zaka iya duba farashin ’ya’yan itatuwa da kayan marmari daban-daban a fadin ƙasa a kwanakin baya, da kuma hasashen farashi nan gaba. A halin yanzu, wannan zaɓin yana samuwa ne kawai ga ƙasashe da aka zaɓa.',
       farmerFinalStep:
-        'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.', // TODO
-      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
+        'Taya murna! Ka kammala koyarwar! Idan kana da tambayoyi game da manhajar, muna ba da shawarar duba FAQ, tambayar mai aiki na ɗakin sanyi, ko aiko da saƙo zuwa app@yourvcca.org.',
+      more: 'Danna "More" zai baka damar zaɓar shafukan "Tarihi", "Farashin Amfanin Gona", "Na’urorin Sanyaya", da "Odoyi".',
     },
   },
 } satisfies Translations;

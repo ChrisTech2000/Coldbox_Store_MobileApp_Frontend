@@ -2,8 +2,8 @@ import { Translations } from './en';
 
 export default {
   appVersion: {
-    newVersion: 'A new version of Coldtivate is available!', // TODO
-    pleaseUpdate: 'Please update app before continuing.', // TODO
+    newVersion: 'Ụzọ ọhụrụ nke Coldtivate dị!',
+    pleaseUpdate: "Biko mezie ngwa tupu ịga n'ihu.",
   },
   languages: {
     current: 'Bekee',
@@ -15,10 +15,10 @@ export default {
       gu: 'Gujarati',
       fr: 'French',
       pt: 'Portuguese',
-      ig: 'Igbo', // TODO
-      yo: 'Yoruba', // TODO
-      ha: 'Hausa', // TODO
-      ar: 'Arabic', // TODO
+      ig: 'Igbo',
+      yo: 'Yoruba',
+      ha: 'Hausa',
+      ar: 'Arabic',
     },
   },
   gender: { female: 'Nwanyi', male: 'Nwoke', other: 'nke Ọzọ' },
@@ -58,8 +58,8 @@ export default {
       RegisteredEmployee: 'Onye ọrụ edebanyere aha',
       AddRegisteredEmployee: 'Tinye onye ọrụ edebanyere aha',
       RegisteredEmployeeDetails: 'Nkọwa ndị ọrụ edebanyere aha',
-      DeliveryContacts: 'Delivery Contacts', // TODO
-      AddUserBankAccount: '{{user}} Bank Account', // TODO
+      DeliveryContacts: 'Maka Ọrụ Nyefe',
+      AddUserBankAccount: '{{user}} Akaụntụ akụ',
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate  {{firstName}}',
@@ -78,7 +78,7 @@ export default {
       CheckIn: 'Ngwa banye',
       CheckOut: 'Puo ebe a ahu',
       Maps: 'MAP',
-      More: 'More', // TODO
+      More: 'Ọzọ',
     },
     dashboard: {
       AccountDetails: 'Nkọwa akaụntụ',
@@ -94,7 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'ọkacha mma',
       Orders: 'Iwu',
       MyOrders: 'Iwu m',
-      MySales: 'My Sales', // TODO
+      MySales: 'Ahịa m',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Ebe Ọmụmamihe',
       QuitTutorial: 'Wepụ nkuzi',
@@ -107,7 +107,7 @@ export default {
       Wallet: ' akpa',
       Transactions: 'Azụmahịa',
       Transaction: '{{id}}',
-      ShoppingCart: 'Shopping Cart', // TODO
+      ShoppingCart: 'Ụgbọahịa',
     },
     checkIn: {
       SelectCropType: 'Họrọ ụdị ihe ọkụkụ ichoro',
@@ -156,13 +156,13 @@ export default {
     'save-changes': 'chekwaa mgbanwe',
     save: 'Chekwa',
     continue: 'Aga nihu',
-    update: 'update', // TODO
-    clearAll: 'Clear all', // TODO
-    apply: 'Apply', // TODO
+    update: 'mepụta',
+    clearAll: 'Hichapụ niile',
+    apply: 'Tinye',
   },
   components: {
     datePicker: {
-      heading: 'Select a date', // TODO
+      heading: 'Họrọ ụbọchị',
       clearButtonLabel: 'Kpochapụ',
       confirmButtonLabel: 'Gosi',
       placeholder: 'ụbọchị /Onwa/afọ',
@@ -283,7 +283,7 @@ export default {
       },
       toasts: {
         error:
-          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
+          "Biko jide n'aka na nkọwa gị ziri ezi ma gbalịa ọzọ. Biko mara na otu nọmba ekwentị na email nwere ike iji naanị otu akaụntụ.",
       },
     },
     ForgotPassword: {
@@ -293,7 +293,7 @@ export default {
         'Iji tọgharịa paswọọdụ gị, biko tinye akara ekwentị na koodu obodo ya, nke ejikọrọ akaụntụ ahụ.',
       phoneInputLabel: 'Nọmba ekwentị',
       resetButton: 'Tọgharia (Reset)',
-      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
+      requestLimitMessage: 'Akwụsịrị oke arịrịọ. Biko gbalịa ọzọ n’ime awa 2.',
     },
     ResetPassword: {
       schema: {
@@ -336,7 +336,7 @@ export default {
     noLocationsAvailable:
       'Nnọọ na Coldtivate. Bido site na ịgbakwunye ebe ino na app gi nke di na panel njikwa gi.',
     coolingUserNavigateToMarketplace:
-      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
+      'Ị chọọ ịzụta ngwaahịa echekwara n’ime ụlọ oyi? Gaa na taabụ Marketplace dị na aka nri ala!',
     MarketPrice: {
       emptyState: 'Ọnụ ahịa ahịa adịghị na obodo gị',
       'no-data-found': 'Enweghị data ahụrụ maka nchikota ahịa na ngwa ahịa a',
@@ -453,22 +453,22 @@ export default {
           label: 'Ụdị ịkwụ ụgwọ',
           cash: 'Ego',
           creditCard: 'Kaadị kredit',
-          bankTransfer: 'Bank Transfer', // TODO
+          bankTransfer: 'Mbupu ego site n’ụgwọ ụlọ akụ',
         },
         bankTransfer: {
-          title: "Receiver's Details", // TODO
-          accountName: 'Account Name', // TODO
-          accountNumber: 'Account Number', // TODO
-          bankName: 'Bank Name', // TODO
+          title: 'Nkọwa onye natara',
+          accountName: 'Aha akaụntụ',
+          accountNumber: 'Nọmba akaụntụ',
+          bankName: 'Aha ụlọ akụ',
         },
         paid: 'Akwụ ụgw',
         lockedWithinPendingOrders:
-          'Crates that are locked in pending orders cannot be checked out.', // TODO
+          'Crati nke edoziri na arịrịọ na-atụgharị na-anaghị enwe ike ị nweta ya.',
       },
       CheckIn: {
         emptyState: 'Ọnweghị igbe agbakwunyere',
         addCrates: 'Tinye Crates',
-        cratesAddedLabel: 'Crates Added', // TODO
+        cratesAddedLabel: 'Crati Tinyeere',
         checkInWithCode: 'Jiri koodu banye',
         estimatedCost: 'Ọnụ ego echere eche',
         pricing: 'Nye  ọnụahịa',
@@ -477,9 +477,9 @@ export default {
         emptyMessage: 'Biko tinye opekata mpe otu igbe na ndenye aha gị',
         noPlannedDaysMessage:
           'Ụbọchị echere na-efu efu na ụfọdụ ihe ndi a. Enweghị ike ịgbakọ ọnụ ahịa echere.',
-        seeMore: 'See more', // TODO
-        seeLess: 'See less', // TODO
-        listed: 'Listed', // TODO
+        seeMore: 'Họrọ ihe ndị ọzọ',
+        seeLess: 'Họrọ ihe dị nta',
+        listed: 'Edepụtara',
         WithCode: {
           modalTitle: 'Mepụta ndi itinyere site na nlele dị adị',
           modalDescription:
@@ -487,7 +487,7 @@ export default {
           codeLabel: 'Tinye Koodu',
           codeErrorMessage: 'Achọrọ koodu',
           failedMessage:
-            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
+            "Ndenye anọghị nke ọma. Biko jide n'aka na koodu gị agaghị eji ma ọ bụ kpọtụrụ nkwado.",
         },
         SelectCropType: {
           fruits: 'Mkpụrụ osisi',
@@ -518,13 +518,13 @@ export default {
             evenBefore: 'Ma Ọbụ nwanne unyiahu',
           },
           crateWeightAndPricing: {
-            applyAll: 'Apply to all', // TODO
-            list: 'List for sale', // TODO
-            addMore: 'Add more', // TODO
-            sellingPrice: 'Listing selling price', // TODO
-            potentialSellingPrice: 'Potential selling value', // TODO
-            info: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
-            unavailableId: 'ID not set', // TODO
+            applyAll: 'Tinye na niile',
+            list: 'Depụta maka ire',
+            addMore: 'Tinyekwuru',
+            sellingPrice: 'Ọnụahịa ire ndepụta',
+            potentialSellingPrice: 'Ọnụahịa nwere ike ire',
+            info: 'Ntọala ọnụahịa na-ezo aka n’ịre ngwaahịa, ọ bụghị ụgwọ nchekwa ụlọ oyi.',
+            unavailableId: 'ID ezighi ezi',
           },
           cratesError: 'Biko tinye nọmba igbe dị mma',
           crateWeightError: 'Biko tinye igbe dị mma',
@@ -591,22 +591,22 @@ export default {
       days: 'Ubọchi',
       noDTMessage: 'Ngwa ahịa a nweghi Ụdị ndụ achoro.',
       checkOutButton: 'Puo ebe a ahu',
-      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      cratesListedForSale: '{{amount}} crati depụtara maka ire',
       preSaleError:
-        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
+        'Biko mara: Ị gaghị enwe ike ịgbanwe ọnọdụ ndepụta nke crati nwere arịrịọ na-atụgharị. Ọ bụrụ na nke a anaghị ekwe omume, biko kpọtụrụ nkwado maka enyemaka.',
       operatorNoBankAccountWarning:
-        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+        '{{name}} enweghi nkọwa akaụntụ banki iji nata ụgwọ maka ire ha. Biko tinye nkọwa akaụntụ banki ha ma ọ bụrụ na ha kesara gị.',
       farmerNoBankAccountWarning:
-        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+        'Ị nweghị Akaụntụ Banki iji nata ụgwọ maka ire gị. Biko tinye nkọwa Akaụntụ Banki gị.',
       operatorNoCompanyBankAccount:
-        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+        "Ụzọ nke a na-ahụ maka kụrụghị ụlọ ahịa na-akwado ndepụta n'ahịa. Biko chọta onye njikwa ụlọ ọrụ ahụ ka ọ jikwaa nke a.",
       employeeNoBankAccount:
-        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
-      addBankAccountButton: 'Add bank account details', // TODO
+        "Ụlọ ọrụ a enweghị Akaụntụ Banki na-akwado ụgwọ maka ngwaahịa na ụgwọ ụlọ oyi nke a na-ere n'ahịa. Kwado nke a ka e nwee ike ịdepụta crati na ngwaọrụ gị na cooling units n'ahịa.",
+      addBankAccountButton: 'Tinye nkọwa Akaụntụ Banki',
       addBankAccountHeader:
-        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+        "Ị na-etinye nkọwa Akaụntụ Banki n'ọkwá {{name}}. Biko tinye data a nke ọma n’ihi na ị gaghị enwe ike ime mgbanwe ọzọ.",
       userWithoutPhone:
-        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
+        'Crati nke na-eri ụgwọ nke akaụntụ a enweghị ike ịdepụta maka ire n’ihi na a gaghị enwe ike ijikọ Akaụntụ Banki na onye ọrụ na-enweghị ekwentị.',
     },
     SearchFilter: {
       detailsMessage:
@@ -628,18 +628,18 @@ export default {
     },
     Management: {
       Delivery: {
-        companyName: 'Company name', // TODO
-        companyNamePlaceholder: 'Insert company name', // TODO
-        companyNameError: 'Please insert the company name', // TODO
-        contactName: 'Contact name', // TODO
-        contactNamePlaceholder: 'Insert contact name', // TODO
-        contactNameError: 'Please insert the contact name', // TODO
-        phoneNumber: 'Phone number', // TODO
-        phoneNumberPlaceholder: 'Insert phone number', // TODO
-        emptyMessage: 'No contacts have been added yet', // TODO
-        deleteContactMessage: 'Are you sure you want to delete this contact?', // TODO
-        noAvailableContacts: 'There are no available contacts for this particular cooling unit.', // TODO
-        contactedAddedSuccessfully: 'Contact added successfully.', // TODO
+        companyName: 'Aha ụlọ ọrụ',
+        companyNamePlaceholder: 'Tinye aha ụlọ ọrụ',
+        companyNameError: 'Biko tinye aha ụlọ ọrụ',
+        contactName: 'Aha kọntaktị',
+        contactNamePlaceholder: 'Tinye aha kọntaktị',
+        contactNameError: 'Biko tinye aha kọntaktị',
+        phoneNumber: 'Nọmba ekwentị',
+        phoneNumberPlaceholder: 'Tinye nọmba ekwentị',
+        emptyMessage: 'Enweghị kọntaktị e tinyeere ugbu a',
+        deleteContactMessage: 'Ị bụ́rịrị echepụtara ma ị chọrọ ihichapụ kọntaktị a?',
+        noAvailableContacts: 'Enweghị kọntaktị dị maka nke a kụrụ ụlọ oyi.',
+        contactedAddedSuccessfully: 'Kọntaktị e tinyeere nke ọma.',
       },
       Location: {
         emptyState: 'Enweghị ebe agbakwunyere. Pịa na akara + ka ịgbakwunye otu.',
@@ -648,10 +648,6 @@ export default {
           address: 'Adreesị',
           coordinates: 'Achikota',
           geolocation: 'Geolocation ekwentị',
-        },
-        fieldErrorMessages: {
-          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
-          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
         },
         fields: {
           name: 'Aha',
@@ -664,20 +660,24 @@ export default {
           street: 'Okporo ámá',
           streetNumber: 'Nọmba okporo ụzọ',
         },
+        fieldErrorMessages: {
+          latitude: "Tinye ọnụ ọgụgụ n'etiti -90 na 90 (dịka, 34.0522)",
+          longitude: "Tinye ọnụ ọgụgụ n'etiti -180 na 180 (dịka, -118.2437)",
+        },
         modal: {
           message: "Ọrụ a ga-ehichapụ akụkụ niile jụrụ oyi metụtara ebe a. Ị chọrọ ịga n'ihu?",
         },
         actions: { currentLocation: 'Họrọ ebe dị ugbu a' },
         toasts: {
-          addLocationSuccess: 'agbakwunyere Ebe ano nke ọma',
+          addLocationSuccess: 'Agbakwunyere ebe anọ nke ọma',
           editLocationSuccess: 'Ebe edeziri nke ọma',
           removeLocationSuccess: 'E ehichapụrụ ebe {{name}} nke ọma.',
           failedToFetchLocation:
-            'Unable to retrieve the location. Please check the address and try again.', // TODO
-          positionCancelled: 'Location request canceled.', // TODO
-          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
-          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
-          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
+            'Enweghị ike inweta ebe ahụ. Biko lelee adreesị ahụ ma gbalịa ọzọ.',
+          positionCancelled: 'Akwụsịrị arịrịọ ebe ahụ.',
+          positionUnauthorized: "E nyereghị ikike maka ebe ahụ. Biko nyere ikike iji gaa n'ihu.",
+          locationUnavailable: "Ebe ahụ anaghị arụ ọrụ. Biko mee ka ọ bụrụ nke ọrụ iji gaa n'ihu.",
+          locationSubmissionError: 'Enwere njehie. Biko lelee ebe gị ma gbalịa ọzọ.',
         },
       },
       Operators: {
@@ -718,7 +718,7 @@ export default {
         actions: { save: 'chekwaa mgbanwe' },
         toasts: {
           success: 'Edeziri ya nke ọma',
-          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
+          photoLibrary: 'Anumachaghị: Biko mee ka ịnweta Library Foto gị.',
         },
       },
       RegisteredEmployee: {
@@ -748,15 +748,15 @@ export default {
         },
       },
       EditCoolingUsers: {
-        accountDetails: 'Payout Details', // TODO
+        accountDetails: 'Nkọwa Payout',
         toasts: {
-          noSurveys: 'No surveys have been completed yet.', // TODO
           warning:
             "Enweghị ike ihichapụ akaụntụ a n'ihi na onye ọrụ nwere nbanye na-arụ ọrụ na nkeji jụrụ oyi {{names}}. Biko gwa onye ọrụ ka ọ bịa n'ime ụlọ ka ọ buru ihe ndị a wee mechaa ndenye ọpụpụ tupu ihichapụ akaụntụ ahụ!",
           confirmation:
             "Ị ji n'aka na ịchọrọ ihichapụ onye ọrụ a na ndepụta ndị ọrụ jụrụ oyi? Ọrụ a ga-ehichapụ onye ọrụ jụrụ oyi na enweghị ike ịtụgharị ya ozo!",
           edit: 'Onye ọrụ jụrụ oyi edeziri nke ọma',
           noCoolingUnits: 'Ị nweghị nkeji jụrụ oyi',
+          noSurveys: 'Akwụkwọ nyocha anaghị ezuola.',
           updateSuccess: 'Emelitere nke ọma',
         },
         pdf: {
@@ -821,9 +821,9 @@ export default {
           batteryPeakEnergyStorage: 'Nchekwa ike na ọkwa kacha elu nke otu batrị',
           batteryType: 'Ụdị batrị',
           selectSensorType: 'Họrọ ụdị ihe mmetụta',
-          selectSensor: 'Select a sensor', // TODO
           emptySensorListError:
-            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
+            'O yiri ka enweghi sensọ jikọtara na akaụntụ {{type}} gị. Biko jikọta otu ma gbalịa ọzọ.',
+          selectSensor: 'Họrọ sensọ',
           addTempSensor: 'Tinye ihe mmetụta okpomọkụ na nkeji jụrụ oyi gị.',
           sensorDesc: {
             default: "Rịọ ozi a n'aka onye na-eweta ihe mmetụta gị ma ọ bụrụ na ichoro ya ozugbo.",
@@ -831,10 +831,10 @@ export default {
           },
           ecozen: { username: 'Aha njirimara', password: 'Okwungafe', machineId: 'Igwe Id' },
           genericSensorForm: {
-            username: 'Username/Email', // TODO
+            username: 'Aha njirimara / Email',
             password: 'Okwungafe',
           },
-          unknownSensor: 'Unknown', // TODO
+          unknownSensor: 'A maara ya',
           hybridFields: "Kedu pasentị nke di n' ụlọ a na-akwado site na uzo di iche iche?",
           cropSpecificPricing: 'Ọnụ ahịa ihe ubi ya kpokwem',
           value: 'Uru',
@@ -857,7 +857,11 @@ export default {
           FIXED: 'i dozi',
           day: 'üböchï',
         },
-        metricUnit: { label: 'Nkeji', KILOGRAMS: 'kg', CRATES: 'Crati' },
+        metricUnit: {
+          label: 'Nkeji',
+          KILOGRAMS: 'kg',
+          CRATES: 'Crati',
+        },
         toasts: {
           addSuccess: 'Ngalaba jụrụ oyi agbakwunyere nke ọma',
           integrationError:
@@ -897,49 +901,49 @@ export default {
           label: 'Họrọ ụzọ ịkwụ ụgwọ:',
           cash: 'Ego',
           creditCard: 'Kaadị kredit',
-          bankTransfer: 'Bank Transfer', // TODO
+          bankTransfer: "Mbupu ego site n'ụgwọ ụlọ akụ",
         },
       },
       Coupons: {
-        title: 'Discount coupons', // TODO
+        title: 'Kọponu Ego',
         emptyMessage: 'Ọnweghị akwụkwọ ego agbakwunyere',
         addCoupon: 'Tinye coupon',
         code: 'Koodu ndenye ego',
         percentage: 'Pasent coupon',
         revokeTitle: 'Iwepụ ndenye ego',
-        revoke: 'Revoke', // TODO
+        revoke: 'Weghachite',
         revokeMessage:
           "Ị ji n'aka na ịchọrọ ịkagbu akwụkwọ ikike a? Ozugbo a kagburu ya, enweghị ike iji ya ọzọ ma ego agaghịzi adị. Omume a na-adịgide adịgide na enweghị ike ịmegharị ya.",
         messages: {
-          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+          codeField: 'Ọ ga-abụ ihe kachasị 25 mkpụrụedemede ma nwee naanị mkpụrụedemede na ọnụọgụ',
         },
       },
     },
     Marketplace: {
       buyerSelection: {
-        onBehalfOfCompany: 'Buy on behalf of company', // TODO
-        forMyself: 'Buy for myself', // TODO
-        label: 'Buyer', // TODO
+        onBehalfOfCompany: 'Zụta maka ụlọ ọrụ',
+        forMyself: 'Zụta maka onwe m',
+        label: 'Ụzụ ahịa',
       },
       sorting: {
-        'price-asc': 'Price ascending', // TODO
-        'price-desc': 'Price descending', // TODO
-        'nearby-me': 'Near to me', // TODO
+        'price-asc': 'Ọnụahịa na-arịgo',
+        'price-desc': 'Ọnụahịa na-ada',
+        'nearby-me': 'Ndị dị nso na m',
       },
       distance: {
-        withing5Km: '1 to 5 KM away', // TODO
-        within10Km: '5 to 10 KM away', // TODO
-        within25Km: '10 to 25 KM away', // TODO
-        beyond25Km: 'More than 25 KM away', // TODO
+        withing5Km: '1 ruo 5 KM dị anya',
+        within10Km: '5 ruo 10 KM dị anya',
+        within25Km: '10 ruo 25 KM dị anya',
+        beyond25Km: 'Karịrị 25 KM dị anya',
       },
-      priceConfig: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
+      priceConfig: 'Ntọala ọnụahịa na-ezo aka n’ịre ngwaahịa, ọ bụghị ụgwọ nchekwa ụlọ oyi.',
       addToCart: {
-        addToCartButton: 'Add to cart and continue shopping', // TODO
-        buyFullCrate: 'Buy full crate', // TODO
-        selectQuantity: 'Select quantity', // TODO
-        goToCart: 'Go to Cart Summary', // TODO
+        addToCartButton: 'Tinye na ụgbọahịa ma gbanwee ịzụrụ ọzọ',
+        buyFullCrate: 'Zụta crati zuru oke',
+        selectQuantity: 'Họrọ ọnụ ọgụgụ',
+        goToCart: 'Gaa na nkọwa ụgbọahịa',
       },
-      currentLocation: 'Current location', // TODO
+      currentLocation: 'Ebe ugbu a',
       invalidFormatWarning:
         'Ịdọ aka ná ntị: Usoro aha obodo ezighi ezi. Nsonaazụ nwere ike ọ gaghị ịdị kpọmkwem.',
       unresolvedCityFormatWarning:
@@ -948,21 +952,21 @@ export default {
         'Ịdọ aka ná ntị: E nweghị ike ịchọpụta obodo a nke ọma. Nsonaazụ nwere ike ọ gaghị ịdị kpọmkwem.',
       filterGeneralWarning:
         'Ịdọ aka ná ntị: Ihe ụfọdụ mere n’oge ịchọpụta ebe. Nsonaazụ nwere ike ọ gaghị ịdị kpọmkwem.',
-      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
-      owner: 'Owner', // TODO
-      priceRange: 'Range Price / KG',
+      standardCrateWeight: 'Nọmba dị na crati bụ {{value}} kg',
+      owner: 'M propietario',
+      priceRange: 'Ọnụahịa / KG',
       Filters: {
-        min: 'Min',
-        max: 'Max',
-        label: 'Filters',
-        coolingUnitLabel: 'Cooling unit', // TODO
-        coolingUnitHeading: 'Select cooling units', // TODO
-        cropTypeLabel: 'Produce / Crop Type', // TODO
-        cropTypeHeading: 'Select crops', // TODO
-        companyLabel: 'Company', // TODO
-        companyHeading: 'Select companies', // TODO
+        min: 'Nke kacha nta',
+        max: 'Nke kacha elu',
+        label: 'Ngwaọrụ',
+        coolingUnitLabel: 'Na-ahụ maka nchekwa oyi',
+        coolingUnitHeading: 'Họrọ ngwaọrụ nchekwa oyi',
+        cropTypeLabel: 'Ngwaahịa / Ụdị Fọlụ',
+        cropTypeHeading: 'Họrọ fọlụ',
+        companyLabel: 'Ụlọ ọrụ',
+        companyHeading: 'Họrọ ụlọ ọrụ',
       },
-      maxDistance: 'Max Distance',
+      maxDistance: 'Nkezi ọkara kachasị',
     },
     AccountDetails: {
       popups: {
@@ -980,7 +984,7 @@ export default {
       toasts: { success: 'E melitere Onye ọrụ  nke ọma' },
       sections: {
         sellerSettings: 'Ntọala ndị na-ere ere',
-        companySellerSettings: 'Seller Settings (Company)', // TODO
+        companySellerSettings: 'Ntọala ndị ahịa (Ụlọ Ọrụ)',
         buyerSettings: 'Ntọala ịzụ ahịa',
         details: 'Nkọwa',
       },
@@ -991,27 +995,24 @@ export default {
       PayoutSettings: {
         addTitle: 'Biko tinye ozi akaụntụ ụlọ akụ gị',
         editTitle: 'Ozi akaụntụ ụlọ akụ gị',
-        addTittleForCompany: "Please insert you company's bank account information", // TODO
-        editTitleForCompany: "Your company's bank account information", // TODO
+        addTittleForCompany: 'Biko tinye nkọwa akaụntụ banki nke ụlọ ọrụ gị',
+        editTitleForCompany: 'Nkọwa akaụntụ banki nke ụlọ ọrụ gị',
         form: {
-          nameLabel: 'Account name', // TODO
-          namePlaceholder: 'Insert account name', // TODO
+          nameLabel: 'Aha akaụntụ',
+          namePlaceholder: 'Tinye aha akaụntụ',
           accountNumberLabel: 'Nọmba akaụntụ',
           accountNumberPlaceholder: 'Tinye nọmba akaụntụ',
-          bank: 'Bank', // TODO
-          countryLabel: 'Country', // TODO
-          nigeria: 'Nigeria', // TODO
-          selectBank: 'Select bank from list', // TODO
-          accountType: 'Account Type', // TODO
-          selectAccountType: 'Select account type', // TODO
-          accountTypes: {
-            personal: 'Personal', // TODO
-            business: 'Business', // TODO
-          },
+          countryLabel: 'Mba',
+          nigeria: 'Naịjịrịa',
+          selectBank: 'Họrọ ụlọ akụ n’ime ndepụta',
+          bank: 'Ụlọ akụ',
+          accountType: 'Ụdị akaụntụ',
+          selectAccountType: 'Họrọ ụdị akaụntụ',
+          accountTypes: { personal: 'Onwe', business: 'Ụlọ ọrụ' },
           errors: {
-            accountName: 'Account name is required', // TODO
+            accountName: 'Aha akaụntụ bụ ihe dị mkpa',
             account: 'Achọrọ nọmba akaụntụ',
-            accountType: 'Account type is required', // TODO
+            accountType: 'Ụdị akaụntụ bụ ihe dị mkpa',
             bank: 'Achọrọ aha ụlọ akụ',
           },
         },
@@ -1065,7 +1066,7 @@ export default {
       clickHere: 'pịa ebe a',
     },
     History: {
-      cropsLabel: '{{crop}} and {{amount}} more', // TODO
+      cropsLabel: '{{crop}} na {{amount}} ndị ọzọ',
       priceLabel: 'Onu ahịa',
       empty:
         "Nbanye na nputa ga-apụta na dashboard mgbe ị mere opekata mpe otu nbanye n'ime ụlọ ọ bụla.",
@@ -1080,7 +1081,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'Budata nnata pdf',
-          seeMovement: 'See movement', // TODO
+          seeMovement: 'Lee mmegharị',
         },
         checkOut: {
           seeDetails: 'Hụ nkọwa',
@@ -1183,89 +1184,89 @@ export default {
       },
     },
     MyOrders: {
-      coolingFees: 'Cooling fees', // TODO
-      soldFor: 'Sold for', // TODO
-      ownedBy: 'Owned by', // TODO
-      you: 'You', // TODO
+      coolingFees: 'Ụgwọ oyi',
+      soldFor: 'Ere maka',
+      ownedBy: 'Nke onye',
+      you: 'Ị',
       sort: {
-        mostRecent: 'Most recent', // TODO
-        oldest: 'Oldest', // TODO
-        date: 'Date', // TODO
+        mostRecent: 'Kachasị ọhụrụ',
+        oldest: 'Kachasi ochie',
+        date: 'Ụbọchị',
       },
       status: {
-        'payment-pending': 'Payment Pending', // TODO
-        'payment-expired': 'Payment Expired', // TODO
-        cancelled: 'Cancelled', // TODO
-        paid: 'Paid', // TODO
+        'payment-pending': 'Ịkwụ ụgwọ na-achọ',
+        'payment-expired': 'Ịkwụ ụgwọ gafere oge',
+        cancelled: 'Ekwesịrị idobe',
+        paid: 'Kwụrụ ụgwọ',
       },
-      title: 'Order Overview', // TODO
-      orderId: 'Order ID', // TODO
-      cropType: 'Crop Type', // TODO
-      coolingUnit: 'Cooling Unit', // TODO
-      orderTotal: 'Order Total', // TODO
-      backToTopButton: 'Back to the top', // TODO
+      title: 'Ntụle iwu',
+      orderId: 'ID iwu',
+      cropType: 'Ụdị mkpụrụ',
+      coolingUnit: 'Nnukwu oyi',
+      orderTotal: 'Ngụkọta iwu',
+      backToTopButton: 'Laghachi n’elu',
     },
     ShoppingCart: {
       cartUpdatedMessage:
         'A na-ewepụ ụfọdụ ngwaahịa n’ụlọ ahịa gị maka na ha adịkwaghị maka ịzụta.',
-      ownership: 'Change cart ownership to {{name}}', // TODO
+      ownership: 'Gbanwee ikike ụgbọ ahịa na {{name}}',
       changeOwnership:
-        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
-      empty: 'Your cart is empty', // TODO
-      daysLeft: 'days left', // TODO
-      weight: 'KG available', // TODO
-      perKg: '/ KG', // TODO
-      totalToPay: 'Total to pay', // TODO
-      pay: 'Pay', // TODO
-      orderHeader: 'Order', // TODO
-      subtotal: 'Subtotal', // TODO
-      produce: 'Produce', // TODO
-      discount: 'Discount', // TODO
-      fees: 'Service fees', // TODO
-      marketFees: 'Marketplace fee', // TODO
-      paymentFees: 'Payment fee', // TODO
-      coolingFees: 'Cooling fee', // TODO
-      viewContacts: 'View contact(s)', // TODO
-      contactsForDelivery: 'Contact(s) for delivery information', // TODO
-      gotItButton: 'Got it!', // TODO
-      pickupMethods: 'Pickup method', // TODO
-      selectPickupMethod: 'Select a pickup method', // TODO
-      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
-      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
-      pickUpToday: 'Pickup today', // TODO
-      keepInStorageDailyRate: 'Keep in storage ({{price}} / day)', // TODO
-      keepInStorageFixedRate: 'Keep in storage ({{price}})', // TODO
-      delivery: 'Delivery', // TODO
-      contactName: 'Contact name', // TODO
-      phoneNumber: 'Phone number', // TODO
-      thankYouMessage: 'Thank You for Ordering', // TODO
-      orderOverview: 'Order overview', // TODO
-      products: 'Products', // TODO
-      consultOrders: 'Consult My Orders', // TODO
-      total: 'Total', // TODO
-      couponQuestion: 'Have a discount coupon?', // TODO
-      redeem: 'Redeem code.', // TODO
-      redeemCoupon: 'Redeem coupon', // TODO
-      couponPlaceholder: 'E.g. 20OFF', // TODO
-      discountsApplied: 'Discounts Applied', // TODO
-      pickupModal: {
-        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
-        delivery:
-          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
-      },
+        "Gbanwee ikike ụgbọ ahịa na {{name}}. Nke a nwere ike imetụta ọdịnaya nke ụgbọ gị, gụnyere iwepụ crati ụfọdụ nke nwere ike ọ gaghị adịrị gị mgbe mgbanwe a gasịrị. Ị bụ́rịrị echepụtara ma ị chọrọ ịga n'ihu?",
+      empty: 'Ụgbọ ahịa gị bụ efu',
+      daysLeft: 'ụbọchị fọdụrụ',
+      weight: 'KG dị',
+      perKg: '/ KG',
+      totalToPay: 'Total ịkwụ ụgwọ',
+      pay: 'Kwụọ ụgwọ',
+      orderHeader: 'Order',
+      subtotal: 'Sub-total',
+      produce: 'Ngwaahịa',
+      discount: 'Ụgwọ nkwụnye',
+      fees: 'Ụgwọ ọrụ',
+      marketFees: 'Ụgwọ ahịa',
+      paymentFees: 'Ụgwọ akwụ ụgwọ',
+      coolingFees: 'Ụgwọ ụlọ oyi',
+      viewContacts: 'Lee kọntaktị',
+      contactsForDelivery: 'Kọntaktị maka ozi nnyefe',
+      gotItButton: 'Aghọta!',
+      pickupMethods: 'Ụzọ nwetara',
+      selectPickupMethod: 'Họrọ ụzọ nwetara',
+      selectPickupMethodInfo: 'A chọrọ ịhọrọ ụzọ nwetara maka ngwaọrụ ụlọ oyi ọ bụla.',
+      pickupMethodSelectionMissing: 'Nzọụkwụ nwetara a na-achọghị maka {{amount}} ngwaọrụ ụlọ oyi.',
+      pickUpToday: 'Nweta taa',
+      keepInStorageDailyRate: 'Debe na nchekwa ({{price}} / ụbọchị)',
+      keepInStorageFixedRate: 'Debe na nchekwa ({{price}})',
+      delivery: 'Nnyefe',
+      contactName: 'Aha kọntaktị',
+      phoneNumber: 'Nọmba ekwentị',
+      thankYouMessage: 'Daalụ maka ịkpọtụrụ',
+      orderOverview: 'Nlele order',
+      products: 'Ngwaahịa',
+      consultOrders: 'Lee ma ọ bụ bido Orders m',
+      total: 'Total',
+      couponQuestion: 'Ị nwere kọponu nkwụnye?',
+      redeem: 'Ịkwụ ụgwọ koodu.',
+      redeemCoupon: 'Ịkwụ ụgwọ kọponu',
+      couponPlaceholder: 'Ihe atụ: 20OFF',
+      discountsApplied: 'Ụgwọ kwụ ụgwọ',
+      method: 'Ụzọ:',
       errors: {
-        invalid: 'Invalid value', // TODO
-        minimumCartValue: 'Order must be at least ₦100.', // TODO
+        invalid: 'Ọnọdụ adịghị mma',
+        minimumCartValue: 'Order ga-abụ nke kacha nta ₦100.',
       },
-      method: 'Method:', // TODO
       deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
+        'Biko mara na ụgwọ nnyefe dabere na onye nyefe. Ọ bụrụ na nnyefe akpọrọ taa, a ga-akwụ ụgwọ ụlọ oyi nke {{value}}.',
       pickUpTodayInfo:
-        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
-      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+        'Biko na-agba ọsọ nyefee ngwaahịa gị n’ime ụbọchị ka ị ghara iweta ụgwọ ụlọ oyi ọzọ.',
+      keepInStorageInfo: 'Ụgwọ ụlọ oyi ga-enyere mgbe ị na-ebelata ngwaahịa gị.',
       orderOverviewSubtitle:
-        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
+        "Ị nwere ike lee nhọrọ a ọzọ n'ime taabụ 'My Orders' n'ime 'Marketplace' njikọ.",
+      pickupModal: {
+        today: 'Biko nweta ngwaahịa gị na {{company}}, ebe {{location}} na ụbọchị.',
+        storage: 'A na-emekwa ngwaahịa gị na {{company}}, ebe {{location}}.',
+        delivery:
+          'Biko kpọtụrụ usoro nnyefe kwụsiri ike. Ị ga-ahụ ọbá akwụkwọ nyere gị Nnyefe ma ọ bụ gbasara Ụzọ',
+      },
     },
     Analytics: {
       emptyState: 'Enweghị data igosi',
@@ -1394,7 +1395,7 @@ export default {
           co2: '💨 CO2e ewepụtara maka jụrụ oyi',
           co2EmissionsLabel: 'Mgbapụta CO2e (kg)',
           co2DistributionLabel: 'Nkesa ihe ubi CO2e',
-          co2Kg: 'Kg CO2 emitted', // TODO
+          co2Kg: 'Kg CO2 ebuputara',
         },
         impactTab: {
           occupancyLabel: 'Nkezi ọnụnọ nke nkeji jụrụ oyi',
@@ -1435,43 +1436,40 @@ export default {
   },
   tutorial: {
     welcome: 'Nnọọ na Coldtivate. Nke a bụ ngagharị nke ọrụ.',
-    farmerWelcome:
-      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
+    farmerWelcome: 'Nnọọ na Coldtivate! Nkuzi a ga-enyere gị ghọta otu esi eji ngwa ahụ.',
     quit: 'Kwụsị nkuzi',
     congratulations: 'Ekele! Ị gụchara nkuzi ahụ! Laghachi na dashboard ka ịmalite iji ngwa ahụ.',
     prev: 'Nzọụkwụ gara aga',
     next: 'Osote',
-    start: 'Start Tutorial', // TODO
-    final:
-      'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.', // TODO
-    backToDashboard: 'Laghachi na Dashboard', // TODO
+    start: 'Malite Ntuziaka',
+    final: 'Ekele! Ịmechala nkuzi ahụ! Laghachi na Dashboard iji malite iji ngwa ahụ.',
+    backToDashboard: 'Laghachi na Dashboard',
     steps: {
-      openDrawer:
-        'On the top left, you find a menu with the main functionalities. Go ahead and click it.', // TODO
+      openDrawer: 'N’elu aka ekpe, ị ga-ahụ menu nwere ọrụ bụ isi. Gaa n’ihu ma pịa ya.',
       repeatTutorial: 'Ọ bụrụ na ịchọrọ ikiri nkuzi a ọzọ, ị nwekwara ike ịhụ ya na menu.',
       managementNavigation:
         'N\'ime menu, ị nwere ike ịnyagharịa na taabụ "Management" wee tinye ebe ọhụrụ, nkeji oyi, ndị ọrụ edebanyere aha na ndị ọrụ.',
       operatorManagementNavigation:
-        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
+        'Na Menu, ị nwere ike ịga na "Njikwa" ma pịa ebe ahụ iji tinye ma ọ bụ dezie Ndị ọrụ Oyi',
       addCoolingUser:
         'Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi na-edebeghị aha na Coldtivate site na itinye nkọwa ha (aha, nọmba ekwentị). Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi ndị debanyere aha na ngwa ahụ site na koodu. Ha nwere ike ịchọta koodu ha na profaịlụ ha -> "Nkọwa akaụntụ" -> "koodu na-ebubata onye ọrụ oyi".',
-      navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO
+      navigateToCoolingUser: 'Gaa n’ihu ma pịa taabụ Ndị ọrụ Oyi',
       listCoolingUsers:
         "A na-amata ndị ọrụ jụrụ oyi nwere smartphone site na akara ekwentị dị n'akụkụ aka nri nke ihuenyo ahụ. Ndị ọzọ na-eji ekwentị bụ isi na-eme ka ndị ọrụ jụrụ oyi. N'okwu abụọ a, ị nwere ike pịa aha iji nweta nkọwa ha yana nyocha onye ọrụ jụrụ oyi.",
-      navigateToAddCoolingUser: "Clicking the '+' sign allows you to add a new Cooling User.", // TODO
+      navigateToAddCoolingUser: 'Pịa akara "+" iji tinye onye ọrụ oyi ọhụrụ.',
       coolingUnitStep:
         "Ị nwere ike ịnyagharịa gafee nkeji jụrụ site na ịpị menu dropdown dị n'elu.",
       initiateCheckIn1:
-        'Once you add a cooling user, you can make a check-in for that cooling user. Go ahead and click the activity button.', // TODO
-      initiateCheckIn2: 'Now click on the check-in button (the one in green).', // TODO
+        'Ozugbo ị tinye onye ọrụ oyi, ị nwere ike ịmalite Kwanye maka onye ọrụ oyi ahụ. Gaa n’ihu ma pịa bọtịnụ omume.',
+      initiateCheckIn2: 'Ugbu a pịa bọtịnụ Kwanye (nke dị na akwụkwọ ndụ).',
       checkIn1:
-        'To complete the check-in, you need to click on "Add Crates" and follow the instructions step by step. Click \'Continue\' to see what the result would look like.', // TODO
+        "Iji mezue Kwanye, ị ga-pịa \"Tinye Crates\" ma soro ntuziaka otu n'otu. Pịa 'Gaa n’ihu' iji hụ ihe ga-adị ka.",
       checkIn2:
         "Mgbe ịmechara usoro ahụ niile, ị ga-ahụ nkọwa nke igbe ndị ị na-achọ ịbanye n'ime ụlọ ahụ.",
       checkIn3:
         'Ọ bụrụ na afọ juru gị afọ, ị nwere ike pịa "Kwenye" na a ga-agbakwunye krates ọhụrụ na Dashboard.',
       history:
-        'Clicking on "History", you can see all the movements in the room. The check-outs for which the after-storage survey has not been completed are marked by a red dot.', // TODO
+        "Ọ bụrụ na ịpị 'Akụkọ ihe mere eme', ị ga-ahụ ndepụta mmegharị niile e mere n'ime ime ụlọ. Mmegharị nke ụdị 'Puo ebe a ahu' ndị e mebeghị nnyocha ga-egosipụta mkpịsị ntụ uhie.",
       coolingUnits:
         'Pịa na " nkeji jụrụ oyi "ka ịhụ ike nke a jụrụ oyi ụbọchị 7 na-esote (Planner tab) na okpomọkụ nke ụlọ (room ọnọdụ taabụ).',
       roomConditions:
@@ -1480,26 +1478,25 @@ export default {
         'Iji malite ndenye ọpụpụ, pịa bọtịnụ Ọrụ wee pịa bọtịnụ uhie. Mgbe ahụ soro ntuziaka ka mezue ndenye ọpụpụ.',
       checkOut2: 'Ị nwere ike ịhọrọ ngalaba jụrụ oyi na ihe ọkụkụ ịchọrọ ịlele.',
       checkOut3: 'Ozugbo akwụchara ihe ndị ahụ, pịa bọtịnụ dị iche iche wee mechaa nlele ahụ.',
-      navigateToLocations:
-        'The first thing you will need to do is add a location. Go ahead and click the locations tab.', // TODO
+      navigateToLocations: "Ihe mbụ ị ga-eme bụ itinye ebe. Pịa taabụ 'Ebe' ka ị malite.",
       locations:
-        'You can add a location by selecting a name and adding its latitude and longitude, by sharing your GPS coordinates (if you are at the cold room location), or by typing the address.', // TODO
+        'Ị nwere ike itinye ebe site n’ịhọrọ aha ma tinye latitude na longitude, kesaa koodu GPS gị (ọ bụrụ na ị nọ na ebe ahụ), ma ọ bụ dee adreesị ya.',
       navigateToCoolingUnits:
-        'After a location has been added, you can add a cooling unit. Go ahead and click the cooling units tab.', // TODO
+        "Mgbe e tinyere ebe, ị nwere ike itinye igwe oyi. Pịa taabụ 'Igwe Oyi' ka ị gaa n'ihu.",
       addCoolingUnits:
-        'A cooling unit can be added by completing the details above. If you have temperature sensors in the cooling unit and an API in place, you can input the credentials and automatically connect your sensors to the app.', // TODO
+        'Ị nwere ike itinye igwe oyi site n’imejuputa nkọwa dị n’elu. Ọ bụrụ na igwe oyi gị nwere igwe ntị okpomọkụ na e nwere API, tinye ozi njikọ ha ka ha jikọọ na ngwa a na-akpaghị aka.',
       addEmployeesOperators:
-        'You can add Registered Employees and Operators through the Management screen. In order to add either role, you will need their phone number. They will receive an SMS with an invitation link. A phone number can be used for only one user.', // TODO
+        'Ị nwere ike itinye Ndị Ọrụ Debanyere Aha na Ndị Na-arụ Ọrụ site na ihuenyo Njikwa. Iji tinye otu n’ime ha, ịchọrọ nọmba ekwentị ha. Ha ga-enweta ozi SMS nwere njikọ n’akwụkwọ ozi. A pụghị iji otu nọmba ekwentị maka ndị ọrụ abụọ.',
       employeeCoolingUnitsStep:
-        'Once you have selected a cooling unit you will see an overview of: the crates currently in storage in the "Dashboard" tab, statistics about utilisation and impact in the "Analytics" tab, and the list of crates for sale in the "Marketplace" tab. Clicking on "More", you can also navigate to the "Crop Prices", "History", "Cooling Units", and "Orders" tab.', // TODO
+        "Ozugbo ịhọrọla igwe oyi, ị ga-ahụ nchịkọta: igbe ndị dị n’ebe nchekwa ugbu a n’ime taabụ 'Ụlọọrụ', ọmụmụ banyere ojiji na mmetụta ya n’ime taabụ 'Ntụle', na ndepụta igbe ndị e rere n’ime taabụ 'Ahịa'. Mgbe ịpị 'Ọzọ', ị nwekwara ike ịgagharị gaa taabụ 'Ọnụahịa Ọhịa', 'Akụkọ ihe mere eme', 'Igwe Oyi', na 'Ịtụ ahịa'.",
       localizationPreferences:
-        'You can change the language of the app by selecting "Localization Preferences". Make sure to click the "Save changes" button for the language to be changed!', // TODO
+        "Ị nwere ike ịgbanwe asụsụ ngwa a site n’ịchịkọta 'Nhọrọ Asụsụ'. Cheta ịpị bọtịnụ 'Zọpụta mgbanwe' ka mgbanwe asụsụ ahụ metụta ngwa ahụ!",
       accountDetailsNavigation:
-        'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.', // TODO
+        "N'ime menu, ị nwere ike ịga 'Nkọwa Akaụntụ' ma pịa ya ka ị hụ ma ọ bụ gbanwee ntọala metụtara akaụntụ gị. Gbalịa ya ugbu a.",
       coolingUserSurvey:
         'Oge izizi imepe ngwa ahụ, a na-agwa gị ka ịmechaa nyocha dị mkpirikpi. Ọ dị ezigbo mkpa na ị dejupụta nyocha maka ngwa ahụ iji nye gị ndụmọdụ ahaziri ahazi. Ọ bụrụ na ịnweghị ike imeju nyocha ahụ oge mbụ ị banyere, ị nwere ike ịnweta nyocha ahụ na "Nkọwa akaụntụ" -> "Nyocha onye ọrụ jụrụ oyi". Daalụ maka iwepụta oge iji mezue nyocha ahụ!',
       coolingUserCode:
-        'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".', // TODO
+        "Oge mbụ ị bịarutere na ime ụlọ oyi iji debe ngwaahịa gị, onye na-ahụ maka ya ga-arịọ ka i nye koodu gị onwe gị, ka etinye aha gị n’ime ndepụta ndị na-eji ime ụlọ oyi. Ị nwere ike ịchọta koodu a n’ime 'Nkọwa Onwe' → 'Koodu Mbubata Onye Ọrụ Ime Ụlọ Oyi'.",
       knowledgeHub:
         'N\'ime menu, ị nwere ike ịchọta "Ebe Ọmụma", nke nwere ndụmọdụ gbasara ogologo oge a ga-echekwa ihe ọkụkụ dị iche iche, na okpomọkụ ha kacha mma. Lelee ya ka ị ghọta otú ụlọ oyi nwere ike isi nyere gị aka ichekwa àgwà nke mkpụrụ osisi na akwụkwọ nri dị iche iche!',
       faq: "Na menu, ị nwekwara ike ịhụ ajụjụ a na-ajụkarị (FAQ). Anyị na-akwado ka ịlele ha ka ịmatakwu gbasara ngwa na uru nke ịchekwa ngwaahịa gị n'ime ụlọ oyi.",
@@ -1514,18 +1511,18 @@ export default {
       dashboardStep5:
         "Ọ bụrụ na ị nwere crates echekwara n'ọtụtụ ọnụ ụlọ, ị nwere ike ịgbanwe ụlọ ị na-elele site na ịhọrọ ụlọ ọrụ na nkeji oyi site na dropdown.",
       dashboardStep6:
-        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advises you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.', // TODO
+        'Mgbe igbe gị na-eru nso oge a họpụtara ka e weghachite ha ma kaadị ahụ amalite agba uhie, ị ga-enweta ọkwa na-adụ gị ọdụ ka ị gaa na ime ụlọ, weghachite igbe ndị ahụ, ma ree ha. Ị nwere ike ileta ọkwa gị site n’ịpị mgbịrịgba dị n’aka nri.',
       farmerHistory:
-        'In the tab "History" you can see a summary of all check-ins and check-outs that you have completed in each room. If you see a red dot next to a check out, please click on the three dots and "Fill in market survey". Here, we would like to understand at what price you have sold your produce, and if anything got spoiled. We use this information to improve the operations at the cold room, so it is important that you answer accurately.', // TODO
+        "N’ime taabụ 'Akụkọ ihe mere eme' ị nwere ike ịhụ nchịkọta nke igbe niile i debere (Kwanye) na nke i wepụpụtara (Puo ebe a ahu) n'ime ime ụlọ ọ bụla. Ọ bụrụ na ị hụ mkpịsị ntụ uhie nso igbe e wepụpụtara, biko pịa mkpịsị atọ wee họrọ 'Kwụọ ajụjụ ọnụ ahịa ahịa'. N'ebe ahụ, anyị chọrọ ịmata ego i rere ngwaahịa gị na ma ihe ọ bụla mebiri. Anyị na-eji ozi a mee ka ọrụ n'ime ụlọ oyi bụrụ nke ka mma, ya mere biko zaa nke ọma.",
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
+        "Iji lelee igwe oyi dị nso na gị, ị nwere ike ịga na bọtịnụ dị n’ala ihuenyo, pịa taabụ 'Ọzọ', họrọ 'Igwe Oyi' ma họpụta 'Maapụ'. Mgbe ịpị mkpịsị aka ọ bụla dị na maapụ, ị ga-ahụ ụdị igwe ahụ na ọnụahịa nchekwa ya.",
       farmersUnitsPlanner:
         'Na taabụ "Ụdị jụrụ oyi" ị nwere ike ịhụ Map ahụ, ebe obibi ugbu a na ọdịnihu nke ụlọ (na "Planner") na okpomọkụ nke ụlọ ahụ (na "ọnọdụ ime ụlọ"). Ihuenyo ndị a na-enyere gị aka inyocha anya ihe na-eme na ụlọ oyi, na-enweghị ịga ebe ahụ n\'onwe gị ịlele!',
       marketPrice:
-        'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.', // TODO
+        "Ọ bụrụ na ị hụ taabụ a na-akpọ 'Ọnụahịa Ọhịa', ị nwere ike ịlele ọnụahịa mkpụrụ osisi na akwukwo nri dị iche iche n’ime obodo n’ime ụbọchị ole na ole gara aga, tinyere amụma ọnụahịa n’ọdịnihu. Maka ugbu a, nhọrọ a dị naanị maka ụfọdụ mba.",
       farmerFinalStep:
-        'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.', // TODO
-      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
+        'Ekele! Ị mechala nkuzi a! Ọ bụrụ na ị nwere ajụjụ gbasara ngwa a, anyị na-akwado ka i lelee FAQ, jụọ onye na-ahụ maka ime ụlọ oyi, ma ọ bụ dee anyị na app@yourvcca.org.',
+      more: "Mgbe ịpị 'Ọzọ', ị ga-enwe ike ịhọrọ ihuenyo 'Akụkọ ihe mere eme', 'Ọnụahịa Ọhịa', 'Igwe Oyi', na 'Ịtụ ahịa'.",
     },
   },
 } satisfies Translations;
