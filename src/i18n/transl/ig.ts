@@ -1523,6 +1523,23 @@ export default {
       farmerFinalStep:
         'Ekele! Ị mechala nkuzi a! Ọ bụrụ na ị nwere ajụjụ gbasara ngwa a, anyị na-akwado ka i lelee FAQ, jụọ onye na-ahụ maka ime ụlọ oyi, ma ọ bụ dee anyị na app@yourvcca.org.',
       more: "Mgbe ịpị 'Ọzọ', ị ga-enwe ike ịhọrọ ihuenyo 'Akụkọ ihe mere eme', 'Ọnụahịa Ọhịa', 'Igwe Oyi', na 'Ịtụ ahịa'.",
+      marketplaceStep1:
+        "Nke a bụ ahịa dijitalụ Coldtivate, ebe ndị ọrụ niile nwere ike ịzụ na ire ngwaahịa a na-echekwa n'ime ụlọ oyi. A na-egosipụta igbe ọ bụla e tinyere n’ahịa ebe a, ma i nwere ike ịzụ ọ bụla n'ime kilogram ma ọ bụ igbe dum.",
+      marketplaceStep2:
+        "Mgbe i họrọla ihe ịchọrọ ịzụta, pịa akara ụgbọ ahịa iji hụ ihe dị n'ime ya.",
+      shoppingCart:
+        "Iji mezue ịzụ ahịa gị, i nwere ike nyochaa ihe ndị dị na ụgbọ ahịa gị ma pịa 'ga n'ihu' iji soro ntuziaka nke ọma iji kwụsị iwu gị.",
+      marketplaceStep3:
+        "Na taabụ ahịa bụ isi, i nwekwara ike ịga lee nchịkọta akụkọ banyere iwu na ahịa gị site na ibe 'Iwu M' na 'Ahịa M'. Pịa 'Iwu M' iji mụtakwuo.",
+      myOrders:
+        "Ebe a, i nwere ike ịhụ iwu ọ bụla i mere site n'ahịa, yana nkọwa zuru ezu maka iwu ọ bụla n'ime kaadị — pịa ntụaka dị n'akụkụ aka nri iji hụ nkọwa ndị ọzọ.",
+      operatorListForSale:
+        "I nwere ike inyere onye ọrụ ụlọ oyi aka itinye ihe n'ahịa. Pịa ntụaka dị n'akụkụ aka nri ka ị hụ nkọwa.",
+      coolingUserListForSale:
+        "I nwere ike ịhọrọ igbe ndị ị chọrọ itinye n'ahịa. Pịa ntụaka dị n'akụkụ aka nri ka ị hụ nkọwa.",
+      commonListForSale: 'Pịa "Tinye n\'ahịa" ka e tinye igbe #1 n\'ahịa.',
+      commonListForSalePrice:
+        "Mgbe i tinyere igbe n'ahịa, i nwekwara ike tinye ọnụ ahịa ire ere n'okpuru! I nwere ike gbanwee ntọala ndị a n'oge ọ bụla.",
     },
   },
 } satisfies Translations;

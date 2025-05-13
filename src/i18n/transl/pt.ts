@@ -1629,6 +1629,23 @@ export default {
       farmerFinalStep:
         'Parabéns! Completou o tutorial! Se tiver dúvidas sobre a aplicação, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da unidade de refrigeração ou escreva-nos para app@yourvcca.org.',
       more: 'Ao clicar em "Mais", poderá selecionar os ecrãs "Histórico", "Preços das Culturas", "Unidades de Refrigeração" e "Encomendas".',
+      marketplaceStep1:
+        'Este é o marketplace digital da Coldtivate, onde todos os utilizadores podem comprar e vender produtos que estão a ser armazenados na unidade de refrigeração. Cada caixa disponível para venda está listada aqui, e pode comprar qualquer quantidade (em kg) ou a caixa completa.',
+      marketplaceStep2:
+        'Depois de selecionar os itens para compra, clique no ícone do carrinho de compras para ver os itens no seu carrinho.',
+      shoppingCart:
+        'Para concluir a sua compra, pode rever os itens no seu carrinho de compras e clicar em continuar para seguir as instruções passo a passo até concluir a encomenda.',
+      marketplaceStep3:
+        'No separador principal do marketplace, também pode navegar para ver um resumo do histórico das suas encomendas e vendas através das páginas As Minhas Encomendas e As Minhas Vendas. Clique em As Minhas Encomendas para saber mais.',
+      myOrders:
+        'Aqui pode ver cada encomenda que fez através do marketplace, com todos os detalhes de cada uma apresentados em cartões — clique na seta à direita para mais detalhes sobre cada encomenda.',
+      operatorListForSale:
+        'Pode apoiar um utilizador da unidade de refrigeração a colocar um item à venda no marketplace. Clique na seta à direita para ver os detalhes.',
+      coolingUserListForSale:
+        'Pode gerir quais as caixas que pretende colocar à venda no mercado. Clique na seta à direita para ver os detalhes.',
+      commonListForSale: 'Clique em "Listar para venda" para colocar a caixa #1 à venda.',
+      commonListForSalePrice:
+        'Depois de listar a caixa para venda, também pode inserir o preço de venda abaixo! Estas definições podem ser editadas a qualquer momento.',
     },
   },
 } satisfies Translations;

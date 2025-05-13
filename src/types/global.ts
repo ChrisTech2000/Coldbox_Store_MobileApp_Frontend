@@ -541,7 +541,7 @@ export type CartItem = {
   relCompanyId: number;
   relCrateId: number;
   relCrateRemainingShelfLife: number | null;
-  relCheckInMovementCode: string;
+  relCheckinMovementCode: string;
   relCouponCode: string | undefined;
   ownedByUserId: number | null;
   ownedOnBehalfOfCompanyId: number | null;

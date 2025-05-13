@@ -1561,6 +1561,23 @@ export default {
       farmerFinalStep:
         "Félicitations ! Vous avez terminé le tutoriel ! Si vous avez des questions concernant l'application, nous vous recommandons de consulter la FAQ, de demander à un opérateur de la chambre froide, ou de nous écrire à app@yourvcca.org.",
       more: 'Si vous voyez un onglet nommé « Prix des cultures », vous pouvez vérifier les prix des différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu’une prévision des prix pour l’avenir. Pour l’instant, cette option n’est disponible que pour certains pays.',
+      marketplaceStep1:
+        'Bienvenue sur la place de marché numérique de Coldtivate, où tous les utilisateurs peuvent acheter et vendre des produits stockés dans la chambre froide. Chaque caisse mise en vente est listée ici, et vous pouvez acheter n’importe quelle quantité (en kg) ou la caisse entière.',
+      marketplaceStep2:
+        'Après avoir sélectionné les articles à acheter, cliquez sur l’icône du panier pour voir les articles dans votre panier.',
+      shoppingCart:
+        "Pour finaliser votre achat, vous pouvez consulter les articles dans votre panier, puis cliquer sur 'Continuer' pour suivre les instructions étape par étape et terminer votre commande.",
+      marketplaceStep3:
+        'Dans l’onglet principal de la place de marché, vous pouvez également consulter un résumé de l’historique de vos commandes et ventes via les pages Mes commandes et Mes ventes. Cliquez sur Mes commandes pour en savoir plus.',
+      myOrders:
+        'Ici, vous pouvez consulter chaque commande passée sur la place de marché, avec tous les détails affichés dans chaque carte — cliquez sur la flèche à droite pour voir plus de détails sur chaque commande.',
+      operatorListForSale:
+        'Vous pouvez aider un utilisateur de la chambre froide à mettre un article en vente sur la place de marché. Cliquez sur la flèche à droite pour voir les détails.',
+      coolingUserListForSale:
+        'Vous pouvez gérer les caisses que vous souhaitez mettre en vente sur la place de marché. Cliquez sur la flèche à droite pour voir les détails.',
+      commonListForSale: 'Cliquez sur "Mettre en vente" pour mettre la caisse n°1 en vente.',
+      commonListForSalePrice:
+        'Après avoir mis la caisse en vente, vous pouvez également saisir le prix de vente ci-dessous ! Ces paramètres peuvent être modifiés à tout moment.',
     },
   },
 } satisfies Translations;

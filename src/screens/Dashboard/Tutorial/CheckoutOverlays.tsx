@@ -10,6 +10,7 @@ import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckOutStackRoutes } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
+import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 
 import { Button } from '#ui/components/Button';
@@ -18,9 +19,9 @@ import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
+import { EMarketplaceTutorialSteps, EOperatorTutorialSteps } from './utils/constants';
 import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
 import { useBlinkAnimation } from './utils/useAnimation';
-import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -209,6 +210,7 @@ export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPr
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const { company } = useManagementStore();
 
   return (
     <View tw="h-full w-full absolute">
@@ -253,8 +255,20 @@ export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPr
             icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
-              rootNavigation.navigate('RootMainTabStack');
-              next();
+              if (company?.country === 'NG' || company?.country === 'Nigeria') {
+                // eslint-disable-next-line
+                // @ts-ignore
+                rootNavigation.navigate('Marketplace', {
+                  screen: 'MarketplaceRoot',
+                  params: {
+                    screen: 'Marketplace',
+                  },
+                });
+                goTo(EMarketplaceTutorialSteps.MARKETPLACE_STEP_1);
+              } else {
+                rootNavigation.navigate('RootMainTabStack');
+                next();
+              }
             }}
             labelStyle="text-green-primary"
             contentStyle="flex flex-row-reverse"

@@ -1,11 +1,12 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
+import moize from 'moize';
 import React, { forwardRef, useMemo } from 'react';
 import {
   FlatList,
+  View,
   type GestureResponderEvent,
   type StyleProp,
-  View,
   type ViewStyle,
 } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -15,23 +16,26 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
+import type { BottomSheetBaseProps } from '#ui/components/BottomSheet';
+import * as BottomSheetUI from '#ui/components/BottomSheet';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
+import { cn } from '#ui/lib/cn';
+import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
+import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
 import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
+import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
+import { Marketplace1ScreenOverlay } from '#screens/Dashboard/Tutorial/MarketplaceOverlay';
 import { MoreNavigationOverlay } from '#screens/Dashboard/Tutorial/MoreNavigationOverlay';
-import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import { cn } from '#ui/lib/cn';
-import { paperTheme } from '#ui/lib/theme';
-import { BOTTOM_NAV_HEIGHT } from '#ui/primitives/withSafeArea';
+import {
+  ECommonTutorialSteps,
+  EMarketplaceTutorialSteps,
+} from '#screens/Dashboard/Tutorial/utils/constants';
 
 import type { DashboardMainRoutePaths } from '../Main';
-import moize from 'moize';
-import * as BottomSheetUI from '#ui/components/BottomSheet';
-import type { BottomSheetBaseProps } from '#ui/components/BottomSheet';
-import { ListItemArrow } from '#screens/Dashboard/AccountDetails/components/ListItemArrow';
 
 type NavigationState = TabNavigationState<ParamListBase>;
 type NavigationRoutes = Array<DashboardMainRoutePaths>;
@@ -108,6 +112,12 @@ function BottomNavBar(
   useWalkthroughStep({
     number: ECommonTutorialSteps.MORE_STEP,
     OverlayComponent: MoreNavigationOverlay,
+    fullScreen: true,
+  });
+
+  useWalkthroughStep({
+    number: EMarketplaceTutorialSteps.MARKETPLACE_STEP_1,
+    OverlayComponent: Marketplace1ScreenOverlay,
     fullScreen: true,
   });
 

@@ -1545,6 +1545,23 @@ export default {
       farmerFinalStep:
         'Taya murna! Ka kammala koyarwar! Idan kana da tambayoyi game da manhajar, muna ba da shawarar duba FAQ, tambayar mai aiki na ɗakin sanyi, ko aiko da saƙo zuwa app@yourvcca.org.',
       more: 'Danna "More" zai baka damar zaɓar shafukan "Tarihi", "Farashin Amfanin Gona", "Na’urorin Sanyaya", da "Odoyi".',
+      marketplaceStep1:
+        'Wannan shi ne kasuwar dijital ta Coldtivate, inda duk masu amfani za su iya saye da sayar da amfanin gona da ake ajiye a dakin sanyaya. Kowanne akwatin da aka saka don sayarwa yana nan a jera, kuma zaka iya sayen kowanne adadi (a cikin kg) ko cikakken akwatin.',
+      marketplaceStep2:
+        'Bayan zaɓar kayan da kake son saya, danna gunkin keken sayayya domin ganin abubuwan da ke cikin kekenka.',
+      shoppingCart:
+        'Domin kammala sayayyarka, zaka iya duba kayan da ke cikin kekinka na sayayya sannan ka danna ci gaba domin bin umarni mataki-mataki har ka gama oda.',
+      marketplaceStep3:
+        'A babban shafin kasuwa, zaka iya kuma duba taƙaitaccen tarihin odarka da sayayyarka ta hanyar shafukan Odoyina da Sayayyata. Danna Odoyina domin ƙarin bayani.',
+      myOrders:
+        'A nan zaka ga kowanne oda da ka yi ta hanyar kasuwar, tare da cikakken bayani akan kowanne oda a cikin katin sa - danna kibiyar da ke dama don ƙarin bayani akan kowanne oda.',
+      operatorListForSale:
+        'Zaka iya taimaka wa mai amfani da dakin sanyaya wajen saka kaya don sayarwa a kasuwa. Danna kibiyar da ke dama don ganin cikakkun bayanai.',
+      coolingUserListForSale:
+        'Zaka iya sarrafa waɗanne akwatuna zaka saka don sayarwa a kasuwa. Danna kibiyar da ke dama don ganin cikakkun bayanai.',
+      commonListForSale: 'Danna "Saka don sayarwa" domin saka akwatin #1 don sayarwa.',
+      commonListForSalePrice:
+        'Bayan saka akwatin don sayarwa, zaka iya saka farashin da kake son sayar da shi a ƙasa! Ana iya gyara waɗannan saitunan a kowane lokaci.',
     },
   },
 } satisfies Translations;

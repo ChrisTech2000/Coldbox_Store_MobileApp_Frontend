@@ -1,14 +1,23 @@
 import { type NavigationProp, DrawerActions, useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { type LayoutChangeEvent, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Appbar, Badge } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
+import { LanguageManager } from '#i18n/utils';
 import type { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import useCartStore from '#stores/shoppingCart';
+import { useTutorialStore } from '#stores/tutorial';
 
 import { DrawerOverlay } from '#screens/Dashboard/Tutorial/DrawerOverlay';
-import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import { Marketplace2ScreenOverlay } from '#screens/Dashboard/Tutorial/MarketplaceOverlay';
+import {
+  ECommonTutorialSteps,
+  EMarketplaceTutorialSteps,
+} from '#screens/Dashboard/Tutorial/utils/constants';
+import { MOCKED_SHOPPING_CART_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
+
 import { useRightDrawerStore } from '../index';
 import type { DashboardMainRoutePaths, DashboardMainRoutes } from '../Main';
 import type { AnalyticsStackRoutePaths } from '../Main/AnalyticsStack';
@@ -19,7 +28,6 @@ import type { MarketplaceRoutePaths } from '../Main/Marketplace/MarketplaceStack
 import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { OrdersRoutePaths } from '../Main/OrdersStack';
 import { useNotifications } from './notifications';
-import { LanguageManager } from '#i18n/utils';
 
 function _HeaderLeftContent<Params extends Record<string, unknown>, Path extends string>(props: {
   dispatch: NavigationProp<Params, Path>['dispatch'];
@@ -64,8 +72,19 @@ function _NotificationBadge(props: { hasNotifications: boolean; newNotifications
 
 function _CartBadge(props: { count: number; onPress: () => void }) {
   const { count, onPress } = props;
+  const isRTL = LanguageManager.isRTL;
+
+  const { onLayout } = useWalkthroughStep({
+    number: EMarketplaceTutorialSteps.MARKETPLACE_STEP_2,
+    OverlayComponent: Marketplace2ScreenOverlay,
+    layoutAdjustments: { x: isRTL ? 10 : undefined },
+    onPressMask: () => {
+      onPress();
+    },
+  });
+
   return (
-    <View tw="relative">
+    <View tw="relative" onLayout={onLayout}>
       <Appbar.Action icon="cart-outline" size={27} onPress={onPress} />
       <Badge visible={count > 0} tw="absolute top-1.5 right-1.5">
         {count}
@@ -81,6 +100,7 @@ function _HeaderRightContent(props: {
   goToShoppingCart?: () => void;
 }) {
   const { hasNotifications, newNotificationsCount, cartItemsCount, goToShoppingCart } = props;
+
   return (
     <View tw="flex-row items-center space-x-1.5">
       <_NotificationBadge
@@ -100,6 +120,7 @@ export function useDashboardHeader() {
   const notificationsCount = useNotifications().data.notifications.length;
   const newNotificationsCount = useNotifications().data.newNotificationsCount;
   const cartItemsCount = useCartStore((store) => store.cartData)?.items?.length ?? 0;
+  const [isTutorialActive] = useTutorialStore(useShallow((store) => [store.isTutorialActive]));
 
   const isRTL = LanguageManager.isRTL;
 
@@ -118,7 +139,9 @@ export function useDashboardHeader() {
         <_HeaderRightContent
           hasNotifications={!!notificationsCount && notificationsCount > 0}
           newNotificationsCount={newNotificationsCount}
-          cartItemsCount={cartItemsCount}
+          cartItemsCount={
+            isTutorialActive ? MOCKED_SHOPPING_CART_DATA.items.length : cartItemsCount
+          }
           goToShoppingCart={
             opts?.showShoppingCart ? () => navigate('ShoppingCart', { screen: 'Root' }) : undefined
           }

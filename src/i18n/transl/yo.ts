@@ -1513,6 +1513,23 @@ export default {
       farmerFinalStep:
         'Ẹ kú oríire! O ti parí ìtọnisọna yìí! Tí o bá ní ìbéèrè nípa app náà, a ṣàbẹ̀wò kí o ṣàyẹ̀wò FAQ, bẹ̀rẹ̀ lọ́wọ́ alábòójútó yàrá tútù, tàbí kọ lẹ́tà sí wa ní app@yourvcca.org.',
       more: 'Tí o bá tẹ "Die e sii", o máa lè yan àwọn iboju "Ìtàn", "Ìye Ọ̀gbìn", "Ẹ̀ka Ìtútù", àti "Àṣẹ".',
+      marketplaceStep1:
+        'Eyi ni ọjà díjítàlì Coldtivate, níbi tí gbogbo àwọn olùmúlò ti le rà àti tà àwọn ọjà tí a ti fipamọ́ sínú yàrá tútù. Gbogbo apoti tí a fi sílẹ̀ fún tita wà níbí, o sì le rà iye kankan (ní kg) tàbí apoti kikun.',
+      marketplaceStep2:
+        'Lẹ́yìn yíyàn àwọn nǹkan tí o fẹ́ rà, tẹ aami kẹrísì rira láti wo àwọn nǹkan tó wà nínú rẹ.',
+      shoppingCart:
+        "Láti parí rira rẹ, o le ṣàyẹ̀wò àwọn nǹkan tó wà nínú kẹrísì rira rẹ, kí o sì tẹ 'tẹ̀síwájú' láti tẹ̀lé àwọn ìtọnisọna lẹ́sẹ̀kẹsẹ̀ láti parí àṣẹ rẹ.",
+      marketplaceStep3:
+        "Lórí taabu ọjà àkọ́kọ́, o tún le ṣàbẹ̀wò sí ìtàn kékèké àwọn àṣẹ àti tita rẹ nípasẹ̀ awọn ojúewé 'Àwọn Àṣẹ Mi' àti 'Àwọn Tita Mi'. Tẹ 'Àwọn Àṣẹ Mi' láti kọ́ ẹ̀kó síi.",
+      myOrders:
+        'Níbi yìí, o le rí gbogbo àṣẹ tí o ti ṣe nípasẹ̀ ọjà, pẹ̀lú gbogbo àlàyé àṣẹ kọọkan inú kàdì rẹ – tẹ ọfà tó wà ní apá ọ̀tún láti rí àlàyé kọọkan.',
+      operatorListForSale:
+        'O le ṣe ìtìlẹ́yìn fún Olùmúlò Ẹ̀ka Ìtútù láti fi nǹkan sílẹ̀ fún tita ní ọjà. Tẹ ọfà ní apá ọ̀tún láti rí àlàyé.',
+      coolingUserListForSale:
+        'O le ṣàkóso àwọn apoti wo ni kí o fi sílẹ̀ fún tita ní ọjà. Tẹ ọfà ní apá ọ̀tún láti rí àlàyé.',
+      commonListForSale: 'Tẹ “Fi sílẹ̀ fún tita” láti fi apoti #1 sílẹ̀ fún tita.',
+      commonListForSalePrice:
+        'Lẹ́yìn fífi apoti sílẹ̀ fún tita, o tún le tẹ ìye tita rẹ sílẹ̀ ní isalẹ! O le ṣe àtúnṣe àwọn àyípadà yìí nígbàkugba.',
     },
   },
 } satisfies Translations;
