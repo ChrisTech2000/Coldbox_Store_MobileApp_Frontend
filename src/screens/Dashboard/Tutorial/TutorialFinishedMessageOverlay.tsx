@@ -25,7 +25,12 @@ import {
   EMarketplaceTutorialSteps,
   EOperatorTutorialSteps,
 } from './utils/constants';
-import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
+import {
+  MOCKED_CHECK_OUT_DATA,
+  MOCKED_COOLING_UNIT,
+  MOCKED_PRODUCE_DETAILS_DATA,
+  MOCKED_USER,
+} from './utils/mockedData';
 
 const MOCKED_PARAMS = {
   user: MOCKED_USER,
@@ -77,15 +82,41 @@ export const TutorialFinishedMessageOverlay = ({
                   (isFarmer && isFarmerCountryNigeria) ||
                   (!isFarmer && isCompanyCountryNigeria)
                 ) {
-                  rootNavigation.navigate('Marketplace', {
-                    screen: 'MarketplaceRoot',
-                    // eslint-disable-next-line
-                    // @ts-ignore
-                    params: {
-                      screen: 'MyOrders',
-                    },
-                  });
-                  goTo(EMarketplaceTutorialSteps.MY_ORDERS_STEP);
+                  switch (user?.role) {
+                    case ERoles.OPERATOR:
+                    case ERoles.COOLING_USER:
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      rootNavigation.navigate('ProduceDetailsStack', {
+                        screen: 'EditCrateWeightAndPricing',
+                        params: {
+                          ...MOCKED_PRODUCE_DETAILS_DATA,
+                          produce: {
+                            ...MOCKED_PRODUCE_DETAILS_DATA.produce,
+                            checkedInCrates: [
+                              {
+                                ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[0],
+                                listedInTheMarketplace: true,
+                              },
+                              { ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[1] },
+                            ],
+                          },
+                          companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
+                        },
+                      });
+                      goTo(EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_PRICE_STEP);
+                      break;
+                    default:
+                      rootNavigation.navigate('Marketplace', {
+                        screen: 'MarketplaceRoot',
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        params: {
+                          screen: 'MyOrders',
+                        },
+                      });
+                      goTo(EMarketplaceTutorialSteps.MY_ORDERS_STEP);
+                  }
                   return;
                 }
 

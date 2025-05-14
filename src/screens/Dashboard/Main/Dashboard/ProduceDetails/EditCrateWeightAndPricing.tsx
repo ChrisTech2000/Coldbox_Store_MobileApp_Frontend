@@ -2,11 +2,13 @@ import cloneDeep from 'lodash/cloneDeep';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { useDebouncedCallback } from 'use-debounce';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -17,10 +19,10 @@ import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
+import reportCrash from '#ui/lib/reportCrash';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
@@ -28,11 +30,17 @@ import { USER_WITHOUT_PHONE } from '#constants/general';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
+import {
+  MarketplaceListing2ScreenOverlay,
+  MarketplaceListing3ScreenOverlay,
+} from '#screens/Dashboard/Tutorial/MarketplaceOverlay';
+import { EMarketplaceTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
+import { useTutorialStore } from '#stores/tutorial';
 import type { ListedCratesBaseParams } from '#types/api.params';
 import { ERoles, User } from '#types/global';
 
@@ -63,6 +71,7 @@ function EditCrateWeightAndPricing(
 
   const user = useAuthStore((store) => store.user);
   const refreshData = useDashboardStore((store) => store.refreshData);
+  const isTutorialActive = useTutorialStore(useShallow((store) => store.isTutorialActive));
   const { refetch: refetchMarketplace } = useMarketplaceListing();
   const { t, zodResolver } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
@@ -244,23 +253,25 @@ function EditCrateWeightAndPricing(
     try {
       const ownerId = params.produce.ownedByUserId;
       const companyOwnerId = params.produce.ownedOnBehalfOfCompanyId;
-      const result = await MarketplaceService.getSellerListedCrates(
-        user?.role === ERoles.OPERATOR
-          ? {
-              ...(companyOwnerId
-                ? { operatorOnBehalfOfSellerCompanyId: companyOwnerId }
-                : owner.role === ERoles.COOLING_USER
-                  ? { operatorOnBehalfOfSellerFarmerId: ownerId }
-                  : { operatorOnBehalfOfSellerUserId: ownerId }),
-            }
-          : undefined
-      );
+      const result = isTutorialActive
+        ? { nodes: [] }
+        : await MarketplaceService.getSellerListedCrates(
+            user?.role === ERoles.OPERATOR
+              ? {
+                  ...(companyOwnerId
+                    ? { operatorOnBehalfOfSellerCompanyId: companyOwnerId }
+                    : owner.role === ERoles.COOLING_USER
+                      ? { operatorOnBehalfOfSellerFarmerId: ownerId }
+                      : { operatorOnBehalfOfSellerUserId: ownerId }),
+                }
+              : undefined
+          );
 
       const initialCrates: FormValues['crates'] = params.produce.checkedInCrates.map((crate) => ({
         id: crate.id,
         weight: crate.weight.toString(),
         tag: crate.tag,
-        isSellable: false,
+        isSellable: isTutorialActive ? (crate.listedInTheMarketplace ?? false) : true,
       }));
 
       let price: undefined | string;
@@ -298,6 +309,20 @@ function EditCrateWeightAndPricing(
     void debouncedInitialSetup();
   }, [params.produce.checkedInCrates]);
 
+  const { onLayout } = useWalkthroughStep({
+    number: EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_STEP,
+    OverlayComponent: MarketplaceListing2ScreenOverlay,
+    onPressMask: () => {
+      form.setValue(`crates.${0}.isSellable`, true);
+    },
+  });
+
+  useWalkthroughStep({
+    number: EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_PRICE_STEP,
+    OverlayComponent: MarketplaceListing3ScreenOverlay,
+    fullScreen: true,
+  });
+
   const hasChanges = _isDirty(
     crates,
     Number(formatFloat(price ?? '0')),
@@ -305,10 +330,11 @@ function EditCrateWeightAndPricing(
     form.getValues('previous.sellableCrates')
   );
 
-  const companyEligible = eligibility.companies?.[params.companyId ?? ''];
+  const companyEligible = eligibility.companies?.[params.companyId ?? ''] || isTutorialActive;
   const farmerEligible =
     eligibility.users?.[owner?.id ?? user?.id ?? ''] ||
-    (ownedByCompanyId && eligibility.companies?.[ownedByCompanyId]);
+    (ownedByCompanyId && eligibility.companies?.[ownedByCompanyId]) ||
+    isTutorialActive;
 
   if (isSettingUp || isLoadingEligibility || isLoadingFarmer) {
     return (
@@ -506,6 +532,7 @@ function EditCrateWeightAndPricing(
                           }
                         }}
                         disabled={isDisabled || !farmerEligible || !companyEligible}
+                        onLayout={index === 0 ? onLayout : undefined}
                       >
                         <Checkbox
                           status={value ? 'checked' : 'unchecked'}

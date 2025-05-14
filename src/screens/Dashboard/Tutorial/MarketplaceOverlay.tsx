@@ -26,7 +26,12 @@ import {
   EMarketplaceTutorialSteps,
   EOperatorTutorialSteps,
 } from './utils/constants';
-import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
+import {
+  MOCKED_CHECK_OUT_DATA,
+  MOCKED_COOLING_UNIT,
+  MOCKED_PRODUCE_DETAILS_DATA,
+  MOCKED_USER,
+} from './utils/mockedData';
 import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
@@ -80,15 +85,15 @@ export function Marketplace1ScreenOverlay({ next, goTo, stop }: IOverlayComponen
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.OPERATOR) {
-                rootNavigation.navigate(
-                  // eslint-disable-next-line
-                  // @ts-ignore
-                  'BillingInfo',
-                  {
+                rootNavigation.navigate('CheckOutStack', {
+                  screen: 'BillingInfo',
+                  params: {
                     ...MOCKED_PARAMS,
+                    // eslint-disable-next-line
+                    // @ts-ignore
                     user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
-                  }
-                );
+                  },
+                });
                 goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_3);
               } else if (user?.role === ERoles.EMPLOYEE) {
                 rootNavigation.navigate('RootMainTabStack');
@@ -387,7 +392,8 @@ export function Marketplace3ScreenOverlay({
 
 export function MyOrdersScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
-  const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
+  const [user] = useAuthStore(useShallow((store) => [store.user]));
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   return (
@@ -419,6 +425,276 @@ export function MyOrdersScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
                 },
               });
               goTo(EMarketplaceTutorialSteps.MARKETPLACE_STEP_3);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
+            mode="text"
+            onPress={() => {
+              switch (user?.role) {
+                case ERoles.OPERATOR:
+                case ERoles.COOLING_USER:
+                  rootNavigation.navigate('ProduceDetailsStack', {
+                    screen: 'Root',
+                    params: MOCKED_PRODUCE_DETAILS_DATA,
+                  });
+                  goTo(EMarketplaceTutorialSteps.LIST_FOR_SALE_STEP);
+                  break;
+                default:
+                  rootNavigation.navigate('RootMainTabStack');
+                  goTo(ECommonTutorialSteps.FINAL_STEP);
+              }
+            }}
+            labelStyle="text-green-primary"
+            contentStyle="flex flex-row-reverse"
+          >
+            {t('actions.continue')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('RootMainTabStack');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+export function MarketplaceListing1ScreenOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
+  const { t } = useTranslationUtils();
+  const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
+  const [user] = useAuthStore(useShallow((store) => [store.user]));
+
+  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const colors = useTailwindColors();
+
+  const blinkAnim = useBlinkAnimation();
+
+  return (
+    <View tw="h-full w-full absolute">
+      <TouchableOpacity
+        tw={cn('absolute w-full h-[7%] items-end z-10')}
+        style={{
+          top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 20 : 65),
+        }}
+        onPress={() => {
+          rootNavigation.navigate(
+            // eslint-disable-next-line
+            // @ts-ignore
+            'EditCrateWeightAndPricing',
+            {
+              ...MOCKED_PRODUCE_DETAILS_DATA,
+              companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
+            }
+          );
+          next();
+        }}
+      >
+        <Animated.View
+          style={[
+            {
+              top: mask.y + mask.height - screenHeight * 0.45,
+              opacity: blinkAnim,
+            },
+          ]}
+        >
+          <MaterialIcon name="touch-app" size={40} color={colors.green.primary} />
+        </Animated.View>
+      </TouchableOpacity>
+
+      <View
+        tw="absolute left-2.5 bottom-40 w-[95%] h-auto bg-white p-3 rounded-md z-30"
+        style={[
+          {
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+          },
+        ]}
+      >
+        <Text tw="text-base">
+          {user?.role === ERoles.OPERATOR
+            ? t('tutorial.steps.operatorListForSale')
+            : t('tutorial.steps.coolingUserListForSale')}
+        </Text>
+
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
+            mode="text"
+            onPress={() => {
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Marketplace', {
+                screen: 'MarketplaceRoot',
+                params: {
+                  screen: 'MyOrders',
+                },
+              });
+              goTo(EMarketplaceTutorialSteps.MY_ORDERS_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('RootMainTabStack');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+export function MarketplaceListing2ScreenOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask, onPressMask },
+}: IOverlayComponentProps) {
+  const { t } = useTranslationUtils();
+  const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
+
+  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const colors = useTailwindColors();
+
+  const blinkAnim = useBlinkAnimation();
+
+  return (
+    <View tw="h-full w-full absolute">
+      <TouchableOpacity
+        tw={cn('absolute w-[35%] h-[5%] items-start self-end z-10')}
+        style={{
+          top: mask.y,
+        }}
+        onPress={() => {
+          onPressMask?.();
+          next();
+        }}
+      >
+        <Animated.View
+          style={[
+            {
+              top: 25,
+              opacity: blinkAnim,
+            },
+          ]}
+        >
+          <MaterialIcon name="touch-app" size={40} color={colors.green.primary} />
+        </Animated.View>
+      </TouchableOpacity>
+
+      <View
+        tw="absolute left-2.5 bottom-40 w-[95%] h-auto bg-white p-3 rounded-md z-30"
+        style={[
+          {
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+          },
+        ]}
+      >
+        <Text tw="text-base">{t('tutorial.steps.commonListForSale')}</Text>
+
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
+            mode="text"
+            onPress={() => {
+              rootNavigation.navigate('ProduceDetailsStack', {
+                screen: 'Root',
+                params: MOCKED_PRODUCE_DETAILS_DATA,
+              });
+              goTo(EMarketplaceTutorialSteps.LIST_FOR_SALE_STEP);
+            }}
+            labelStyle="text-green-primary"
+          >
+            {t('tutorial.prev')}
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => {
+              stop();
+              toggleTutorial(false);
+              rootNavigation.navigate('RootMainTabStack');
+            }}
+            labelStyle="text-red-700"
+          >
+            {t('tutorial.quit')}
+          </Button>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+export function MarketplaceListing3ScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
+  const { t } = useTranslationUtils();
+  const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
+
+  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const colors = useTailwindColors();
+
+  return (
+    <View tw="h-full w-full absolute">
+      <Icon
+        name="cursor-pointer"
+        size={40}
+        color={colors.green.primary}
+        style={{
+          top: '60%',
+          left: '50%',
+        }}
+      />
+
+      <View
+        tw="absolute left-2.5 bottom-[50%] w-[95%] h-auto bg-white p-3 rounded-md z-30"
+        style={[
+          {
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+          },
+        ]}
+      >
+        <Text tw="text-base">{t('tutorial.steps.commonListForSalePrice')}</Text>
+
+        <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
+          <Button
+            icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
+            mode="text"
+            onPress={() => {
+              goTo(EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_STEP);
             }}
             labelStyle="text-green-primary"
           >
