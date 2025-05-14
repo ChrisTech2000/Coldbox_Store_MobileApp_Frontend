@@ -45,7 +45,9 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.COOLING_USER) {
-                rootNavigation.navigate('Main', { screen: 'Dashboard' });
+                // eslint-disable-next-line
+                // @ts-ignore
+                rootNavigation.navigate('RootMainTabStack');
               }
               goTo(ECommonTutorialSteps.MORE_STEP);
             }}

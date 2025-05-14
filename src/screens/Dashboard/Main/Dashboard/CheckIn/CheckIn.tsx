@@ -176,7 +176,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const navigateToCropSelection = useCallback(() => {
     const now = new Date();
     const tempDate = new Date(coolingUnit.latestTemperatureTimestamp);
-    const checkInDate = new Date(coolingUnit.lastCheckInDate);
+    const checkInDate = new Date(coolingUnit.lastCheckInDate as Date);
     const lastTemperatureChangeSinceCheckIn =
       (checkInDate.getTime() - tempDate.getTime()) / 3600000;
     const lastCheckInChangeInHours = Math.abs(now.getTime() - checkInDate.getTime()) / 3600000;

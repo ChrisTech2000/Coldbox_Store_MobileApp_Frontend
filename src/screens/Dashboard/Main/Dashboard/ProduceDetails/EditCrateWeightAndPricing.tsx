@@ -28,7 +28,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { USER_WITHOUT_PHONE } from '#constants/general';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
 import {
   MarketplaceListing2ScreenOverlay,
@@ -62,6 +62,8 @@ type FormValues<T = string> = {
     price: number;
   };
 };
+
+const screenWidth = Dimensions.get('window').width;
 
 function EditCrateWeightAndPricing(
   props: ProduceDetailsStackRouteProps<'EditCrateWeightAndPricing'>
@@ -312,6 +314,7 @@ function EditCrateWeightAndPricing(
   const { onLayout } = useWalkthroughStep({
     number: EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_STEP,
     OverlayComponent: MarketplaceListing2ScreenOverlay,
+    layoutAdjustments: { x: LanguageManager.isRTL ? (screenWidth * 2) / 3 : undefined },
     onPressMask: () => {
       form.setValue(`crates.${0}.isSellable`, true);
     },

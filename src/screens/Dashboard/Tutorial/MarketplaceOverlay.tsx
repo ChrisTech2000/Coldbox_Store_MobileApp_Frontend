@@ -590,7 +590,7 @@ export function MarketplaceListing2ScreenOverlay({
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn('absolute w-[35%] h-[5%] items-start self-end z-10')}
+        tw="absolute w-[45%] h-[5%] items-start self-end z-10"
         style={{
           top: mask.y,
         }}
@@ -603,6 +603,8 @@ export function MarketplaceListing2ScreenOverlay({
           style={[
             {
               top: 25,
+              left: LanguageManager.isRTL ? undefined : 40,
+              right: LanguageManager.isRTL ? -40 : undefined,
               opacity: blinkAnim,
             },
           ]}
@@ -672,7 +674,8 @@ export function MarketplaceListing3ScreenOverlay({ goTo, stop }: IOverlayCompone
         color={colors.green.primary}
         style={{
           top: '60%',
-          left: '50%',
+          left: LanguageManager.isRTL ? undefined : '50%',
+          right: LanguageManager.isRTL ? '50%' : undefined,
         }}
       />
 
