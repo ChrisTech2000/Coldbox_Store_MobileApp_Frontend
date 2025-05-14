@@ -57,7 +57,7 @@ export function LocationsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
                 opacity: blinkAnim,
               },
             ]}
-            tw="-top-2/3 -right-2/3"
+            tw={cn('-top-2/3', LanguageManager.isRTL ? '-left-2/3' : ' -right-2/3')}
           >
             <MaterialIcon
               name="touch-app"

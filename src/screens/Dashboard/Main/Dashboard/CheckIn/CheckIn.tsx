@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Dialog, Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -47,6 +47,8 @@ import { CheckInWithCodeModal } from './components/CheckInWithCodeModal';
 import { CheckedInCard } from './components/CheckedInCard';
 import { formatCurrencyWithSymbol, processMarketplaceCrateListing } from './utils';
 
+const screenWidth = Dimensions.get('window').width;
+
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { user, coolingUnit } = route.params;
 
@@ -80,6 +82,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const { onLayout: onCheckIn3Layout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_IN_STEP_3,
     OverlayComponent: CheckIn3ScreenOverlay,
+    layoutAdjustments: { x: LanguageManager.isRTL ? screenWidth / 2 : undefined },
   });
 
   const toast = InAppNotifications.useToast();

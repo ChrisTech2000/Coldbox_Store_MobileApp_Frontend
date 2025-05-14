@@ -1,6 +1,6 @@
 import { type NavigationProp, DrawerActions, useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
-import { type LayoutChangeEvent, View } from 'react-native';
+import { Dimensions, type LayoutChangeEvent, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Appbar, Badge } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
@@ -28,6 +28,8 @@ import type { MarketplaceRoutePaths } from '../Main/Marketplace/MarketplaceStack
 import type { MarketPriceTabsRoutePaths } from '../Main/MarketPriceTabs';
 import type { OrdersRoutePaths } from '../Main/OrdersStack';
 import { useNotifications } from './notifications';
+
+const screenWidth = Dimensions.get('window').width;
 
 function _HeaderLeftContent<Params extends Record<string, unknown>, Path extends string>(props: {
   dispatch: NavigationProp<Params, Path>['dispatch'];
@@ -77,7 +79,7 @@ function _CartBadge(props: { count: number; onPress: () => void }) {
   const { onLayout } = useWalkthroughStep({
     number: EMarketplaceTutorialSteps.MARKETPLACE_STEP_2,
     OverlayComponent: Marketplace2ScreenOverlay,
-    layoutAdjustments: { x: isRTL ? 10 : undefined },
+    layoutAdjustments: { x: isRTL ? screenWidth - 60 : undefined },
     onPressMask: () => {
       onPress();
     },

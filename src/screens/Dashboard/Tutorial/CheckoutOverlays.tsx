@@ -43,7 +43,7 @@ export function OperatorActionsOverlay({ next, goTo, stop }: IOverlayComponentPr
     <View tw="h-full w-full absolute">
       <TouchableOpacity
         tw={cn(
-          'absolute right-14 w-[14%] h-[9%]',
+          'absolute w-[14%] h-[9%] right-14',
           Platform.OS === 'ios' ? 'bottom-28' : 'bottom-20'
         )}
         onPress={() => {
@@ -67,7 +67,8 @@ export function OperatorActionsOverlay({ next, goTo, stop }: IOverlayComponentPr
           style={[
             {
               top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 22 : 45,
-              left: -40,
+              left: LanguageManager.isRTL ? undefined : -40,
+              right: LanguageManager.isRTL ? -30 : undefined,
               opacity: blinkAnim,
               transform: [{ rotate: '90deg' }],
             },

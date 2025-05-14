@@ -51,7 +51,8 @@ export function Marketplace1ScreenOverlay({ next, goTo, stop }: IOverlayComponen
         style={[
           {
             top: 835,
-            left: '-35%',
+            left: LanguageManager.isRTL ? undefined : '-35%',
+            right: LanguageManager.isRTL ? '-55%' : undefined,
             transform: [{ rotate: '165deg' }],
           },
         ]}
@@ -79,12 +80,10 @@ export function Marketplace1ScreenOverlay({ next, goTo, stop }: IOverlayComponen
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.OPERATOR) {
-                // eslint-disable-next-line
-                // @ts-ignore
                 rootNavigation.navigate(
-                  'BillingInfo',
                   // eslint-disable-next-line
                   // @ts-ignore
+                  'BillingInfo',
                   {
                     ...MOCKED_PARAMS,
                     user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
@@ -145,14 +144,12 @@ export function Marketplace2ScreenOverlay({
   const colors = useTailwindColors();
 
   const blinkAnim = useBlinkAnimation();
-  const isRTL = LanguageManager.isRTL;
 
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
         tw={cn(
-          'absolute w-[13%] h-[7%]',
-          isRTL ? 'left-1' : 'right-1',
+          'absolute w-[13%] h-[7%] right-1',
           Platform.OS === 'ios'
             ? screenHeight <= SMALL_SCREEN_THRESHOLD
               ? 'top-8'
