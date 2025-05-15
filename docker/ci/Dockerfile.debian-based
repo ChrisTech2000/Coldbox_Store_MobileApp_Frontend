@@ -1,4 +1,4 @@
-FROM debian:sid-slim
+FROM debian:sid-20250428-slim
 
 # Runtime necessary env
 ENV LC_ALL=en_US.UTF-8
