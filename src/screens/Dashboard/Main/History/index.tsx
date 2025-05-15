@@ -78,7 +78,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   } = useMovementsHistory(farmerId, user as User, coolingUnit);
 
   const sortedMovements = useMemo(
-    () => cloneDeep(movements).sort((a, b) => sortMovements(a, b, sorting)),
+    () => cloneDeep(movements).sort((a, b) => sortMovements(a, b, sorting, t)),
     [movements, sorting]
   );
 
@@ -98,7 +98,7 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
           crate.ownerName?.toLowerCase().includes(searchTerm)
         );
 
-      const crops = sortMovementCrops(movement).map((cropName) =>
+      const crops = sortMovementCrops(movement, t).map((cropName) =>
         find(translationMap, {
           name: cropName,
           country: company?.country || farmerCountry || undefined,

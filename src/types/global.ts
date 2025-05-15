@@ -62,8 +62,8 @@ export type Crate = {
   coolingUnit: number; // the cooling unit id
   weight: number;
   remainingShelfLife: number;
-  plannedDays: number;
-  checkOut: Date; // TODO: confirm this type
+  plannedDays: number | null;
+  checkOut?: Date; // TODO: confirm this type
   pricing: Array<Pricing>;
   coolingUnitMetric: ECoolingUnitMetric;
   checkinDate: Date;
@@ -72,7 +72,7 @@ export type Crate = {
   movementCode: string;
   currentStorageDays: number;
   runDt: boolean;
-  qualityDt: boolean;
+  qualityDt: boolean | number;
   tag: string;
   listedInTheMarketplace?: boolean;
   lockedWithinPendingOrders: boolean;
@@ -91,14 +91,14 @@ export type DashboardProduce = {
   currentStorageDays: number;
   owner: string; // the cooling user's name
   ownerContact: string; // the cooling user's phone?
-  ownedOnBehalfOfCompanyId: number;
+  ownedOnBehalfOfCompanyId: number | null;
   ownedByUserId: number;
   farmerId?: number;
   hasDigitalTwin: boolean;
   id: number;
   minimumRemainingShelfLife: number;
   movementCode: string;
-  plannedDays: number;
+  plannedDays: number | null;
   qualityDt: number;
   runDt: boolean;
   operatorContact: string;
@@ -108,10 +108,10 @@ export type DashboardProduce = {
 export type CoolingUnitCrop = {
   id: number;
   cropId: number;
-  coolingUnitId: number;
-  pricingId: number;
+  coolingUnitId?: number;
+  pricingId?: number;
   active: boolean;
-  pricing: Array<Pricing>;
+  pricing: Pricing;
 };
 
 export type CommodityInfo = {
@@ -119,7 +119,7 @@ export type CommodityInfo = {
   percentage: number;
   combinedWeight: number;
   cratesNumber: number;
-  optimalStorageTemperature: string;
+  optimalStorageTemperature: string | null;
 };
 
 export type CommodityTotal = {
@@ -177,7 +177,7 @@ export type CoolingUnit = {
   roomWidth: number;
   roomWeight: number;
   operators: Array<number>;
-  latestTemperature: string;
+  latestTemperature: number;
   crateWeight: number;
   crateWidth: number;
   crateLength: number;
@@ -187,7 +187,7 @@ export type CoolingUnit = {
   public: boolean;
   sensorError: boolean;
   latestTemperatureTimestamp: Date;
-  lastCheckInDate: Date;
+  lastCheckInDate?: Date;
   canDelete: boolean;
   editableCheckins: boolean; // @Note: not a typo
   commonPricingType: CommonPricingType;
@@ -200,7 +200,7 @@ export type Crop = {
   cropTypeId: number;
   name: string;
   image: string;
-  optimalStorageTemperature: string;
+  optimalStorageTemperature: string | null;
   approximateShelfLife: string;
   harvestedToday: number;
   harvestedYesterday: number;
@@ -541,7 +541,7 @@ export type CartItem = {
   relCompanyId: number;
   relCrateId: number;
   relCrateRemainingShelfLife: number | null;
-  relCheckInMovementCode: string;
+  relCheckinMovementCode: string;
   relCouponCode: string | undefined;
   ownedByUserId: number | null;
   ownedOnBehalfOfCompanyId: number | null;

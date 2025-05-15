@@ -1,0 +1,72 @@
+appId: com.base.coldtivate
+name: OP check out produces
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- runFlow: '../common/subflows/op-login.yml'
+- tapOn:
+    text: 'Welcome to Coldtivate'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Quit Tutorial'
+    optional: true
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'dashboard-operator-actions'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'dashboard-operator-actions-checkout'
+    retryTapIfNoChange: false
+- assertVisible: 'Select a cooling user:'
+- tapOn:
+    id: 'check-in-user-First.*'
+    retryTapIfNoChange: false
+- tapOn:
+    text: '.*CONFIRM.*'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'cooling-unit-select'
+    retryTapIfNoChange: false
+- assertVisible:
+    text: 'Select a cooling unit'
+    index: 1
+- tapOn:
+    text: 'E2E COOLING UNIT TEST'
+    retryTapIfNoChange: false
+- tapOn: 'OK'
+- tapOn:
+    id: 'checkout-list-item-#0'
+    retryTapIfNoChange: false
+- tapOn:
+    point: 74%,93%
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'payment-method-select'
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Cash'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'button'
+    index: 1
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'checkout-paid'
+    retryTapIfNoChange: false
+- tapOn:
+    point: 74%,93%
+    retryTapIfNoChange: false
+- assertVisible: 'Temperature alert'
+- scrollUntilVisible:
+    element:
+      text: 'Continue without update'
+    direction: 'DOWN'
+    visibilityPercentage: 60
+    speed: 30
+    optional: true # workaround for consistency
+- tapOn:
+    text: 'Continue without update'
+    retryTapIfNoChange: false

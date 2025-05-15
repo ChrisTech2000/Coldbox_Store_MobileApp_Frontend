@@ -54,7 +54,10 @@ export function ManagementCoolingUnitsOverlay({ next, goTo, stop }: IOverlayComp
             right={ListItemArrow}
           />
 
-          <Animated.View style={[{ opacity: blinkAnim }]} tw="-top-2/3 -right-2/3">
+          <Animated.View
+            style={[{ opacity: blinkAnim }]}
+            tw={cn('-top-2/3', LanguageManager.isRTL ? '-left-2/3' : '-right-2/3')}
+          >
             <MaterialIcon
               name="touch-app"
               size={screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 40}

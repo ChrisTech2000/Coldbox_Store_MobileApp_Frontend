@@ -19,6 +19,7 @@ import { Input } from '#ui/components/Input';
 import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import launchArgs from '../../../constants/launch.args';
 import { EAccountProfile } from '../SignIn';
 import { SignUpFormSelectLg } from './components/SignUpFormSelectLg';
 import { SignUpFormSelectMd } from './components/SignUpFormSelectMd';
@@ -122,6 +123,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
 
       {/** COUNTRY */}
       <SignUpFormSelectLg<SignUpCoolingUserSchemaType>
+        testID="country-select"
         items={countries}
         label={t('Auth.SignUp.commonForm.countryFieldName')}
         name="country"
@@ -212,6 +214,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         items={LANGUAGES}
         translateItemLabel={(item) => LANGUAGE_CODES[item as keyof typeof LANGUAGE_CODES]}
         required
+        testID="language-select"
       />
       {errors.language && (
         <Text tw="text-xs text-red-600 mt-[-2] mb-2 pl-3 w-[95%]">
@@ -221,6 +224,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
 
       {/** GENDER */}
       <SignUpFormSelectMd<SignUpCoolingUserSchemaType>
+        testID="gender-select"
         label={t('Auth.SignUp.commonForm.genderFieldName')}
         name="gender"
         control={control}
@@ -247,10 +251,11 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
             label={`${t('Auth.SignUp.commonForm.passwordLabel')}*`}
             onChangeText={onChange}
             value={value}
-            secureTextEntry={hidePass}
+            secureTextEntry={hidePass && !launchArgs.isE2E}
             error={errors.password?.password}
             right={
               <TextInput.Icon
+                testID="password-eye-icon"
                 icon={hidePass ? 'eye' : 'eye-off'}
                 onPress={() => setHidePass(!hidePass)}
               />
@@ -272,10 +277,11 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
             label={`${t('Auth.SignUp.commonForm.confirmPasswordLabel')}*`}
             onChangeText={onChange}
             value={value}
-            secureTextEntry={hideConfirmPass}
+            secureTextEntry={hideConfirmPass && !launchArgs.isE2E}
             error={errors.password?.confirmPassword}
             right={
               <TextInput.Icon
+                testID="password-eye-icon"
                 icon={hideConfirmPass ? 'eye' : 'eye-off'}
                 onPress={() => setHideConfirmPass(!hideConfirmPass)}
               />
@@ -295,6 +301,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
           <View tw="flex flex-row items-center max-w-[85%] mx-4 my-2 space-x-2">
             <View tw="border border-green-primary rounded-md scale-75">
               <Checkbox
+                testID="terms-checkbox"
                 onPress={() => {
                   onChange(!value);
                 }}

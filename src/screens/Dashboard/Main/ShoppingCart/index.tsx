@@ -1,6 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
-import { FlatList, RefreshControl, View, Platform } from 'react-native';
+import { FlatList, Platform, RefreshControl, View } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
@@ -9,6 +10,7 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
+import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -16,20 +18,22 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
+import { ShoppingCartScreenOverlay } from '#screens/Dashboard/Tutorial/MarketplaceOverlay';
+import { EMarketplaceTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { MOCKED_SHOPPING_CART_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
 import { useAuthStore } from '#stores/auth';
+import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
-import { cn } from '#ui/lib/cn';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
-import { useDashboardStore } from '#stores/dashboard';
+import { useTutorialStore } from '#stores/tutorial';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 import { OwnershipModal } from './components/OwnershipModal';
-import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 
 const HORIZONTAL_SPACING = Platform.select({
   android: 'px-4',
@@ -46,6 +50,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
 
   const { t } = useTranslationUtils();
+  const [isTutorialActive] = useTutorialStore((store) => [store.isTutorialActive]);
 
   const { recomputeCart, cartData, isLoading } = useCartStore((store) => ({
     recomputeCart: store.recomputeCart,
@@ -53,34 +58,44 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
     isLoading: store.isLoading,
   }));
 
+  const contextualCartData = isTutorialActive ? MOCKED_SHOPPING_CART_DATA : cartData;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const locale = LanguageManager.read();
 
   const datums = useMemo(() => {
     const crops = useDashboardStore.getState().allCrops;
-    if (!cartData?.items) return [];
+
+    if (!contextualCartData?.items) return [];
+
     const { buildMap, find } = cropTranslationLookup();
     const translationsLookup = buildMap();
     const cropsLookup = Object.fromEntries(crops?.map((crop) => [crop.id, crop]) || []);
-    return cartData.items.map((item) => {
+
+    return contextualCartData.items.map((item) => {
       const crop = cropsLookup?.[item.relCropId];
       return {
         ...item,
         crop: {
           ...(crop || {}),
-          image: crop?.image || DEFAULT_CROP_VALUES.imageUri,
+          image: crop?.image || getDefaultCropValues(t).imageUri,
           name: find(translationsLookup, {
-            name: crop?.name || DEFAULT_CROP_VALUES.name,
+            name: crop?.name || getDefaultCropValues(t).name,
             country: company?.country || farmerCountry || undefined,
             locale,
           }),
         },
       };
     });
-  }, [cartData?.items, company?.country, farmerCountry, locale]);
+  }, [t, contextualCartData?.items, isTutorialActive, company?.country, farmerCountry, locale]);
 
-  if (isLoading && !cartData) {
+  useWalkthroughStep({
+    number: EMarketplaceTutorialSteps.SHOPPING_CART_STEP,
+    OverlayComponent: ShoppingCartScreenOverlay,
+    fullScreen: true,
+  });
+
+  if (isLoading && !contextualCartData) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
@@ -88,7 +103,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
     );
   }
 
-  if (!cartData || !cartData.items?.length) {
+  if (!contextualCartData || !contextualCartData.items?.length) {
     return (
       <View tw="flex-1 items-center justify-center space-y-3.5">
         <View tw="h-36 w-36 items-center justify-center rounded-full bg-zinc-100">
@@ -100,7 +115,9 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   }
 
   const orderDisabled =
-    cartData.totalProduceAmount - cartData.totalDiscountAmount + cartData.totalCoolingFeesAmount <
+    contextualCartData.totalProduceAmount -
+      contextualCartData.totalDiscountAmount +
+      contextualCartData.totalCoolingFeesAmount <
     CART_MINIMUM_VALUE;
 
   return (
@@ -132,7 +149,7 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                     onPress={() => setIsModalOpen(true)}
                   >
                     {t('Dashboard.ShoppingCart.ownership', {
-                      name: cartData?.ownedOnBehalfOfCompanyId
+                      name: contextualCartData?.ownedOnBehalfOfCompanyId
                         ? `${user?.firstName ?? ''} ${user?.lastName ?? ''}`
                         : (company?.name ?? ''),
                     })}
@@ -142,7 +159,10 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                 <View tw="flex-row items-center justify-between">
                   <Text tw="text-lg">{t('Dashboard.ShoppingCart.subtotal')}</Text>
                   <Text tw="text-lg">
-                    {formatCurrencyWithSymbol(DEFAULT_CURRENCY_CODE, cartData.totalProduceAmount)}
+                    {formatCurrencyWithSymbol(
+                      DEFAULT_CURRENCY_CODE,
+                      contextualCartData.totalProduceAmount
+                    )}
                   </Text>
                 </View>
 

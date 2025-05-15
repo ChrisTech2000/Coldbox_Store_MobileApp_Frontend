@@ -33,7 +33,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
     <View tw="h-full w-full absolute">
       <Touchable
         tw={cn(
-          'absolute left-3 w-[50%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
+          'absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2 z-10',
           screenHeight <= SMALL_SCREEN_THRESHOLD
             ? user?.role === ERoles.OPERATOR
               ? 'top-[23%]'
@@ -59,7 +59,8 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
                 : Platform.OS === 'ios'
                   ? '23%'
                   : '20%',
-            left: '40%',
+            left: LanguageManager.isRTL ? undefined : '40%',
+            right: LanguageManager.isRTL ? '40%' : undefined,
             opacity: blinkAnim,
           },
         ]}

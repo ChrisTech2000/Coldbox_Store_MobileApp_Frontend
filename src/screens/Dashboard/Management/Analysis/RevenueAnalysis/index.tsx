@@ -96,7 +96,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
   );
 
   const sortedMovements = useMemo(
-    () => cloneDeep(revenueData || []).sort((a, b) => sortMovements(a, b, sorting)),
+    () => cloneDeep(revenueData || []).sort((a, b) => sortMovements(a, b, sorting, t)),
     [revenueData, sorting]
   );
 
@@ -125,7 +125,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
               crate.ownerName?.toLowerCase().includes(searchTerm)
             );
 
-      const crops = sortMovementCrops(movement).map((cropName) =>
+      const crops = sortMovementCrops(movement, t).map((cropName) =>
         find(translationMap, {
           name: cropName,
           country: company?.country || undefined,
@@ -137,7 +137,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
       return matchesCode || matchesFarmer || matchesCrop;
     });
-  }, [sortedMovements, startDate, endDate, search]);
+  }, [sortedMovements, startDate, endDate, search, t]);
 
   useEffect(() => reset, []);
 

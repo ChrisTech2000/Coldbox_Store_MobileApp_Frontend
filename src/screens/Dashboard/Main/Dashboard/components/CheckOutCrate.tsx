@@ -35,7 +35,7 @@ export function CheckoutCrate({ crate, cropName }: ProduceProps) {
           crate.remainingShelfLife <= 7 &&
             crate.remainingShelfLife > 2 &&
             'bg-yellow-400 border-yellow-400',
-          crate.remainingShelfLife <= 2 && 'bg-red-500 border-red-500',
+          crate.remainingShelfLife <= 2 && 'bg-red-700 border-red-700',
           (isNil(crate.remainingShelfLife) || crate.remainingShelfLife === -1) &&
             'bg-gray-300 border-gray-300'
         )}

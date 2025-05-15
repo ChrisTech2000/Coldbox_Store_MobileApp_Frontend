@@ -76,13 +76,14 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
         case 'address': {
           try {
             const coordinates = await LocationGeocoder.getCoordsFromAddress(rest);
-            datums.point = new Point(
+            const point = new Point(
               coordinates.longitude,
               coordinates.latitude,
               undefined,
               undefined,
               4326
             ).toEwkt();
+            datums = merge(rest, { point });
           } catch (exception) {
             console.error(exception);
             toast.show(t('Dashboard.Management.Location.toasts.failedToFetchLocation'), {
@@ -140,6 +141,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
               onPress={handler}
               icon={isSubmitting ? undefined : 'plus-circle'}
               uppercase
+              testID="add-location-button"
             >
               {isSubmitting ? <ActivityIndicator size="small" color="white" /> : t('actions.add')}
             </Button>

@@ -3,13 +3,17 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import { useShallow } from 'zustand/react/shallow';
 
+import { DEFAULT_CUSTOMER_TYPE_COUNTRY } from '#common/RBAC/abilities';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { useAuthStore } from '#stores/auth';
+import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 
@@ -18,16 +22,29 @@ import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
-import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
+import {
+  ECommonTutorialSteps,
+  EFarmerTutorialSteps,
+  EMarketplaceTutorialSteps,
+} from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
 
 export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
-  const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const navigation = useNavigation<NativeStackNavigationProp<CoolingUnitsTabsRoutes>>();
+
+  const [user] = useAuthStore(useShallow((store) => [store.user]));
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+  const [company] = useManagementStore(useShallow((store) => [store.company]));
+
+  const isFarmer = user?.role === ERoles.COOLING_USER;
+  const isCompanyCountryNigeria =
+    company?.country === 'NG' || company?.country === DEFAULT_CUSTOMER_TYPE_COUNTRY;
+  const isFarmerCountryNigeria =
+    farmerCountry === 'NG' || farmerCountry === DEFAULT_CUSTOMER_TYPE_COUNTRY;
 
   return (
     <View tw="h-full w-full absolute">
@@ -81,8 +98,23 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
                 rootNavigation.navigate('MarketPrice');
                 goTo(EFarmerTutorialSteps.MARKET_PRICE);
               } else {
-                rootNavigation.navigate('Dashboard');
-                goTo(ECommonTutorialSteps.FINAL_STEP);
+                if (
+                  (isFarmer && isFarmerCountryNigeria) ||
+                  (!isFarmer && isCompanyCountryNigeria)
+                ) {
+                  rootNavigation.navigate('Marketplace', {
+                    screen: 'MarketplaceRoot',
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    params: {
+                      screen: 'Marketplace',
+                    },
+                  });
+                  goTo(EMarketplaceTutorialSteps.MARKETPLACE_STEP_1);
+                } else {
+                  rootNavigation.navigate('Dashboard');
+                  goTo(ECommonTutorialSteps.FINAL_STEP);
+                }
               }
             }}
             labelStyle="text-green-primary"

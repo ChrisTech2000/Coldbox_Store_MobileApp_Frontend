@@ -1,6 +1,7 @@
 import pluralize from 'pluralize';
 
 import type { TranslationLocales } from '#i18n/constants';
+import { Translator } from '#i18n/utils';
 
 type CropBaseEnglish = {
   IN: string; // India
@@ -1137,6 +1138,23 @@ export function cropTranslationLookup() {
           ar: 'آحرون',
         },
         {
+          commodityName: 'Other',
+          en: {
+            IN: 'Other',
+            NG: 'Other',
+            global: 'Other',
+          },
+          hi: 'अन्य',
+          or: 'ଅନ୍ୟ',
+          gu: 'અન્ય',
+          pt: 'Outro',
+          fr: 'Autre',
+          ha: 'Wani',
+          yo: 'Miíràn',
+          ig: 'Ọzọ',
+          ar: 'آخر',
+        },
+        {
           commodityName: 'Waterleaf',
           en: {
             IN: 'Waterleaf',
@@ -1345,4 +1363,11 @@ export function cropTranslationLookup() {
       return translationEntry[opts.locale] || opts.name;
     },
   };
+}
+
+export function getDefaultCropValues(t: Translator) {
+  return {
+    name: t('gender.other'),
+    imageUri: 'crop_images/other_b3HuBUE.png',
+  } as const;
 }

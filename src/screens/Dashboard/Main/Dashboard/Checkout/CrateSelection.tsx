@@ -1,4 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
+import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -9,14 +10,15 @@ import {
 } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider } from 'react-native-paper';
-import { FlashList } from '@shopify/flash-list';
 import { useShallow } from 'zustand/react/shallow';
 
+import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 import { CoolingUnit, Crate } from '#types/global';
 
 import { CheckOutScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
@@ -24,18 +26,16 @@ import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/consta
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
+import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { RadioButtonItem } from '#ui/components/RadioButton';
+import { ScrollView } from '#ui/components/ScrollView';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
-import { ScrollView } from '#ui/components/ScrollView';
 
 import { CheckoutCrate } from '../components/CheckOutCrate';
-import { useManagementStore } from '#stores/management';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 type CrateDatum = Crate & {
   remainingShelfLife: number;
@@ -113,8 +113,6 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const { crates, allSelectableCrates, translatedCropNames } = useMemo(() => {
     const datums = _crates ?? data ?? [];
 
-    const produceMap = new Map(dashboardProduces?.map((p) => [p.movementCode, p]) ?? []);
-
     const { buildMap, find } = cropTranslationLookup();
     const translationMap = buildMap();
 
@@ -130,10 +128,8 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
         });
       }
 
-      const dashboardProduce = produceMap.get(crate.movementCode);
       const newCrateDatum = {
         ...crate,
-        remainingShelfLife: dashboardProduce?.minimumRemainingShelfLife ?? -1,
       } satisfies CrateDatum;
 
       if (!newCrateDatum.lockedWithinPendingOrders) {
@@ -208,6 +204,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           </Text>
           <View tw="max-w-[30%]">
             <SelectWithStore<CoolingUnit>
+              testID="cooling-unit-select"
               datums={coolingUnits ?? []}
               isModalVisible={isUnitsModalOpen}
               setIsModalVisible={setIsUnitsModalOpen}
@@ -266,9 +263,10 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
                   showsVerticalScrollIndicator={false}
                   scrollEnabled={false}
                   keyExtractor={(item, itemIdx) => `checkout-list-item-${item.id}-#${itemIdx}`}
-                  renderItem={({ item: crate }) => (
+                  renderItem={({ item: crate, index }) => (
                     <View>
                       <TouchableOpacity
+                        testID={`checkout-list-item-#${index}`}
                         tw="flex flex-row items-center"
                         onPress={() => onPress(crate)}
                         disabled={crate.lockedWithinPendingOrders}
@@ -320,6 +318,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
           {t('actions.back')}
         </Button>
         <Button
+          testID="next-button"
           style={{ width: BUTTON_WIDTH }}
           mode="contained"
           uppercase

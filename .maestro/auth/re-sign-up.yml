@@ -1,0 +1,76 @@
+appId: com.base.coldtivate
+name: RE sign up
+onFlowStart:
+  - runFlow: ../common/utils/startup.yml
+onFlowComplete:
+  - runFlow: ../common/utils/teardown.yml
+---
+- assertVisible: 'Welcome to Coldtivate'
+- tapOn:
+    text: 'SIGN UP AS COMPANY'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+- inputText: 'E2E COMPANY TEST 2'
+- 'hideKeyboard'
+- tapOn:
+    id: 'country-select'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Nigeria'
+    retryTapIfNoChange: false
+- assertVisible: '.*Nigerian Naira.*'
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+    retryTapIfNoChange: false
+- inputText: 'e2e_second_employee_test@mail.com'
+- 'hideKeyboard'
+- tapOn:
+    id: 'text-input-flat'
+    index: 2
+    retryTapIfNoChange: false
+- inputText: 'Second'
+- 'hideKeyboard'
+- tapOn:
+    id: 'text-input-flat'
+    index: 3
+    retryTapIfNoChange: false
+- inputText: 'Employee'
+- 'hideKeyboard'
+- tapOn:
+    id: 'gender-select'
+    index: 0
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'Other'
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'OK'
+    retryTapIfNoChange: false
+- 'scroll'
+- tapOn:
+    text: 'Phone Number (with country code)'
+    retryTapIfNoChange: false
+- inputText: '8033709553'
+- 'hideKeyboard'
+- tapOn:
+    text: 'Password*'
+    retryTapIfNoChange: false
+- inputText: 'e2ePass1'
+- 'hideKeyboard'
+- tapOn:
+    text: 'Confirm Password*'
+    retryTapIfNoChange: false
+- inputText: 'e2ePass1'
+- 'hideKeyboard'
+- tapOn:
+    id: 'terms-checkbox'
+    retryTapIfNoChange: false
+- tapOn:
+    text: 'SIGN UP'
+    index: 1
+    retryTapIfNoChange: false
+- assertVisible: 'LOG IN'

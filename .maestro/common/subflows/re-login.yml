@@ -1,0 +1,24 @@
+appId: com.base.coldtivate
+tags:
+  - subflow
+---
+- tapOn: 'SIGN IN'
+- tapOn:
+    id: 'employee-account-card'
+    retryTapIfNoChange: false
+- tapOn:
+    id: 'text-input-flat'
+    index: 0
+    retryTapIfNoChange: false
+- inputText: '+2348033709550'
+- hideKeyboard
+- tapOn:
+    id: 'text-input-flat'
+    index: 1
+    retryTapIfNoChange: false
+- inputText: 'e2ePass1'
+- hideKeyboard
+- tapOn:
+    id: 'button'
+    index: 0
+    retryTapIfNoChange: false

@@ -6,7 +6,7 @@ import { Divider, Switch, TextInput } from 'react-native-paper';
 import { Text } from '#ui/components/Text';
 
 import { useTranslationUtils } from '#i18n/utils';
-import type { GetCoolingUnitResponse } from '#types/api.responses';
+import type { GetCoolingUnitSensorDataResponse } from '#types/api.responses';
 
 import FormManager from '../contexts/FormManager';
 import CommoditiesField from './CommoditiesField';
@@ -23,15 +23,15 @@ import PriceTypeField from './PriceTypeField';
 import RefrigerantFields from './RefrigerantFields';
 import Sensors from './Sensors';
 import SensorsList from './Sensors/components/SensorsListModal';
+import TableModal from './Sensors/components/Table';
 import UnitCapacityFields from './UnitCapacityFields';
 import UnitSizeFields from './UnitSizeFields';
 import UnitTypeField from './UnitTypeField';
 import VolumeFields from './VolumeFields';
-import TableModal from './Sensors/components/Table';
 
 export default function FormFields(props: {
   isEditMode?: boolean;
-  sensorList?: GetCoolingUnitResponse['sensorList'];
+  sensorList?: GetCoolingUnitSensorDataResponse['sensorData'];
 }) {
   const { isEditMode, sensorList } = props;
   const { control, watch, formState } = FormManager.useFormManager();

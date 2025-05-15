@@ -1,5 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
+import cloneDeep from 'lodash/cloneDeep';
 import isArray from 'lodash/isArray';
 import moize from 'moize';
 import ms from 'ms';
@@ -9,15 +10,15 @@ import {
   type GestureResponderEvent,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
+  Platform,
   RefreshControl,
   ScrollView as RNScrollView,
   View,
-  Platform,
 } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { GenericEmptyState } from '#ui/components/GenericEmptyState';
 import { GenericError } from '#ui/components/GenericError';
@@ -32,19 +33,22 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
-import { dateFmt, LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
+import { dateFmt, LanguageManager, Translator, useTranslationUtils } from '#i18n/utils';
 import type { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
+import { MyOrdersScreenOverlay } from '#screens/Dashboard/Tutorial/MarketplaceOverlay';
+import { EMarketplaceTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
+import { MOCKED_ORDER_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
+import { useTutorialStore } from '#stores/tutorial';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import type { CartItem, CoolingUnit } from '#types/global';
-import { useManagementStore } from '#stores/management';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
-import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 import CropsBottomSheet from './components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from './Sorting';
 
@@ -83,6 +87,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
 
   const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+  const [isTutorialActive] = useTutorialStore(useShallow((store) => [store.isTutorialActive]));
 
   const locale = LanguageManager.read();
 
@@ -96,20 +101,23 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
     { defaultData: undefined }
   );
 
+  const contextualData = isTutorialActive ? MOCKED_ORDER_DATA : data;
+
   const sortedData = useMemo(() => {
-    if (!data || !isArray(data)) return [];
+    if (!contextualData || !isArray(contextualData)) return [];
     const multiplier = sorting === ESortingOptions.MOST_RECENT ? -1 : 1;
-    return data
+    return contextualData
       .map((item) => ({ ...item, timestamp: new Date(item.createdAt).getTime() }))
       .sort((a, b) => multiplier * (a.timestamp - b.timestamp));
-  }, [data, sorting]);
+  }, [contextualData, sorting]);
 
   const cropsAndUnitsData = useMemo(() => {
     const { buildMap, find } = cropTranslationLookup();
     const translationMap = buildMap();
     return {
       crops: cloneDeep(crops).map((crop) => {
-        const cropName = crop?.name || DEFAULT_CROP_VALUES.name;
+        const cropName = crop?.name || getDefaultCropValues(t).name;
+
         return {
           ...crop,
           name: find(translationMap, {
@@ -121,7 +129,7 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
       }),
       allUnits,
     };
-  }, [crops, allUnits, companyCountry, farmerCountry, locale]);
+  }, [t, crops, allUnits, companyCountry, farmerCountry, locale]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;
@@ -139,6 +147,12 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
   useEffect(() => {
     addRefreshDataFn(refetch);
   }, []);
+
+  useWalkthroughStep({
+    number: EMarketplaceTutorialSteps.MY_ORDERS_STEP,
+    OverlayComponent: MyOrdersScreenOverlay,
+    fullScreen: true,
+  });
 
   if (isLoading) {
     return (
@@ -185,7 +199,8 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
               const { contextualCropNames, contextualUnitNames } = _getRowDatums(
                 order.items,
                 _extraData.crops,
-                _extraData?.allUnits
+                _extraData?.allUnits,
+                t
               );
 
               return (
@@ -300,12 +315,13 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
 function _getRowDatums(
   cartData: Array<CartItem>,
   crops: Array<GetAllCropsResponse> = [],
-  units: Array<CoolingUnit> = []
+  units: Array<CoolingUnit> = [],
+  t: Translator
 ) {
   const { cropNames, unitNames } = cartData.reduce(
     (acc, elm) => {
-      acc.cropNames.add(_getNameById(elm.relCropId, crops));
-      acc.unitNames.add(_getNameById(elm.relCoolingUnitId, units));
+      acc.cropNames.add(_getNameById(elm.relCropId, crops, t));
+      acc.unitNames.add(_getNameById(elm.relCoolingUnitId, units, t));
       return acc;
     },
     { cropNames: new Set<string>(), unitNames: new Set<string>() }
@@ -318,8 +334,8 @@ function _getRowDatums(
 }
 
 const _getNameById = moize(
-  (id: number, list: Array<{ id: number; name: string }>) =>
-    list.find((item) => item.id === id)?.name ?? DEFAULT_CROP_VALUES.name,
+  (id: number, list: Array<{ id: number; name: string }>, t: Translator) =>
+    list.find((item) => item.id === id)?.name ?? getDefaultCropValues(t).name,
   { maxAge: ms('6 seconds') }
 );
 

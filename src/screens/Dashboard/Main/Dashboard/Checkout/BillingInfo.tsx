@@ -343,6 +343,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
             </Text>
           </View>
           <SelectWithStore<EPaymentMethod>
+            testID="payment-method-select"
             datums={[
               EPaymentMethod.CASH,
               EPaymentMethod.CREDIT_CARD,
@@ -359,7 +360,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
                   : t('Dashboard.CrateManagement.CheckOut.paymentType.bankTransfer')
             }
             label={paymentMethodLabel}
-            modalHeader={t('Dashboard.CoolingUnitsPlanner.SelectCoolingUnit.header')}
+            modalHeader={t('Dashboard.Management.RevenueAnalysis.paymentType.label')}
             postSelectionAction={(paymentMethod?: EPaymentMethod) => {
               if (paymentMethod === EPaymentMethod.BANK_TRANSFER) {
                 setIsBankTransferDetailsModalOpen(true);
@@ -372,7 +373,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.CheckOut.paid')}
           </Text>
-          <Switch value={isPaid} onChange={() => setIsPaid(!isPaid)} />
+          <Switch value={isPaid} onChange={() => setIsPaid(!isPaid)} testID="checkout-paid" />
         </View>
         <Divider tw="bg-gray-400 my-2" />
       </KeyboardAwareScrollView>
@@ -392,6 +393,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           {t('actions.back')}
         </Button>
         <Button
+          testID="checkout-ok-button"
           style={{ width: BUTTON_WIDTH }}
           mode="contained"
           uppercase

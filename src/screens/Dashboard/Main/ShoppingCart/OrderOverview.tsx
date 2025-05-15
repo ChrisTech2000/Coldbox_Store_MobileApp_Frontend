@@ -1,6 +1,6 @@
 import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import React, { useMemo } from 'react';
-import { View, Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
@@ -13,25 +13,25 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import { cn } from '#ui/lib/cn';
 
 import { API_BASE_URL } from '#constants/environment';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { useTranslationUtils } from '#i18n/utils';
 import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
 import { CoolingUnit } from '#types/global';
-import { cn } from '#ui/lib/cn';
-import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import { PickupDetailsCard } from './components/PickupDetailsCard';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
-import { DEFAULT_CROP_VALUES } from '../Marketplace/utils';
 
 const HORIZONTAL_SPACING = Platform.select({
   android: 'px-4',
@@ -196,15 +196,15 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                       <View tw="flex-row items-start justify-between">
                         <View tw="flex-col items-start">
                           <Text tw="text-lg font-bold">
-                            {crop?.name ?? DEFAULT_CROP_VALUES.name}
+                            {crop?.name ?? getDefaultCropValues(t).name}
                           </Text>
-                          <Text tw="text-zinc-500">{item.relCheckInMovementCode}</Text>
+                          <Text tw="text-zinc-500">{item.relCheckinMovementCode}</Text>
                         </View>
                         <FastImage
                           tw="w-24 h-20"
                           resizeMode="contain"
                           source={{
-                            uri: `${API_BASE_URL}media/${crop?.image ?? DEFAULT_CROP_VALUES.imageUri}`,
+                            uri: `${API_BASE_URL}media/${crop?.image ?? getDefaultCropValues(t).imageUri}`,
                           }}
                         />
                       </View>

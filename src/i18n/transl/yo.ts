@@ -2,8 +2,8 @@ import { Translations } from './en';
 
 export default {
   appVersion: {
-    newVersion: 'A new version of Coldtivate is available!', // TODO
-    pleaseUpdate: 'Please update app before continuing.', // TODO
+    newVersion: 'Ẹya tuntun ti Coldtivate wa lọwọlọwọ!',
+    pleaseUpdate: 'Jọwọ ṣe imudojuiwọn ohun elo ṣaaju ki o to tẹsiwaju.',
   },
   languages: {
     current: 'Geesi',
@@ -14,11 +14,11 @@ export default {
       or: 'Oriya',
       gu: 'ede Gujarati',
       fr: 'Faranse',
-      pt: 'Portuguese',
-      ig: 'Igbo', // TODO
-      yo: 'Yoruba', // TODO
-      ha: 'Hausa', // TODO
-      ar: 'Arabic', // TODO
+      pt: 'Pọtugi',
+      ig: 'Igbo',
+      yo: 'Yorùbá',
+      ha: 'Hausa',
+      ar: 'Lárúbáwá',
     },
   },
   gender: { female: 'abo', male: 'Akọ', other: 'Omiiran' },
@@ -58,8 +58,8 @@ export default {
       RegisteredEmployee: 'Oṣiṣẹ ti o forukọsilẹ',
       AddRegisteredEmployee: 'Ṣafikun Oṣiṣẹ ti o forukọsilẹ',
       RegisteredEmployeeDetails: 'Akosile awọn osise ti o forukọsilẹ',
-      DeliveryContacts: 'Delivery Contacts', // TODO
-      AddUserBankAccount: '{{user}} Bank Account', // TODO
+      DeliveryContacts: 'Awọn olubasọrọ Ifijiṣẹ',
+      AddUserBankAccount: 'Akọọlẹ Banki {{user}}',
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate ti {{firstName}}',
@@ -78,7 +78,7 @@ export default {
       CheckIn: 'Wole sinu',
       CheckOut: 'jade',
       Maps: 'MAAPU',
-      More: 'More', // TODO
+      More: 'Die e sii',
     },
     dashboard: {
       AccountDetails: 'Awọn alaye akanti',
@@ -94,7 +94,7 @@ export default {
       MarketplaceFavoritesTab: 'Awọn ayanfẹ',
       Orders: 'Awọn ibere',
       MyOrders: 'Awọn aṣẹ Mi',
-      MySales: 'My Sales', // TODO
+      MySales: 'Awọn tita Mi',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Ibudo Imọ',
       QuitTutorial: 'fi eko kiko sile',
@@ -107,7 +107,7 @@ export default {
       Wallet: 'Apamọwọ',
       Transactions: 'Awọn iṣowo',
       Transaction: '{{id}}',
-      ShoppingCart: 'Shopping Cart', // TODO
+      ShoppingCart: 'Kẹrisi rira',
     },
     checkIn: {
       SelectCropType: 'se asayan irufe irugbin',
@@ -156,13 +156,13 @@ export default {
     'save-changes': 'Fi awọn ayipada pamọ',
     save: 'Fipamọ',
     continue: 'tesiwaju',
-    update: 'update', // TODO
-    clearAll: 'Clear all', // TODO
-    apply: 'Apply', // TODO
+    update: 'imudojuiwọn',
+    clearAll: 'Nu gbogbo rẹ',
+    apply: 'Lo',
   },
   components: {
     datePicker: {
-      heading: 'Select a date', // TODO
+      heading: 'Yan ọjọ',
       clearButtonLabel: 'Ko o',
       confirmButtonLabel: 'fi o n te lu',
       placeholder: 'Ọjọ́/Oṣù/Ọdún',
@@ -278,7 +278,7 @@ export default {
       },
       toasts: {
         error:
-          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
+          'Jọwọ rii daju pe alaye rẹ tọ́, kí o sì tún gbìyànjú lẹẹkansi. Ṣàkíyèsí pé nọ́mbà foonu kan àti imeeli kan le jẹ ti àkọọlẹ kan ṣoṣo nikan.',
       },
     },
     ForgotPassword: {
@@ -289,7 +289,7 @@ export default {
         'Lati le tun ọrọ igbaniwọle rẹ pada, jọwọ tẹ nọmba foonu sii pẹlu koodu orilẹ-ede rẹ, eyiti akọọlẹ naa ti sopọ si.',
       phoneInputLabel: 'Nomba ero ibara eni soro',
       resetButton: 'tun to',
-      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
+      requestLimitMessage: 'Ìlà àìbéèrè ti pé. Jọwọ tún gbìyànjú lẹ́yìn wákàtí méjì.',
     },
     ResetPassword: {
       schema: {
@@ -332,7 +332,7 @@ export default {
     noLocationsAvailable:
       'Kaabo si Coldtivate. Bẹrẹ nipa fifi agbe gbe re kun app rẹ ni ibi iṣakoso.',
     coolingUserNavigateToMarketplace:
-      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
+      'Ṣe o nifẹ si rira ọja tí a fipamọ sinu yàrá tó tútù? Ṣàbẹwò taabu Ọjà ni apa ọtún isalẹ!',
     MarketPrice: {
       emptyState: 'Awọn idiyele ọja ko si ni orilẹ ede rẹ',
       'no-data-found': 'Ko si akosile ti a rii fun akojọpọ ọja ati eru yii',
@@ -448,22 +448,21 @@ export default {
           label: 'irufe ona ati sanwo',
           cash: 'Owo owo',
           creditCard: 'Kaddi kirediti',
-          bankTransfer: 'Bank Transfer', // TODO
+          bankTransfer: 'Fifiranṣẹ owó nípa ilé-ifowopamọ',
         },
         bankTransfer: {
-          title: "Receiver's Details", // TODO
-          accountName: 'Account Name', // TODO
-          accountNumber: 'Account Number', // TODO
-          bankName: 'Bank Name', // TODO
+          title: 'Alábàápamọ̀',
+          accountName: 'Orúkọ àkóọlẹ',
+          accountNumber: 'Nọ́mbà àkóọlẹ',
+          bankName: 'Orúkọ ilé-ifowopamọ̀',
         },
         paid: 'ti sanwo',
-        lockedWithinPendingOrders:
-          'Crates that are locked in pending orders cannot be checked out.', // TODO
+        lockedWithinPendingOrders: 'Àwọ̀n apoti tí ó wà nínú àṣẹ tí kò tíì pé kò le yọ̀ síta.',
       },
       CheckIn: {
         emptyState: 'Ko si awọn apoti ti a ṣafikun sibẹsibẹ',
         addCrates: 'fi kun apoti',
-        cratesAddedLabel: 'Crates Added', // TODO
+        cratesAddedLabel: 'Àwọ̀n apoti tí a fi kun',
         checkInWithCode: 'wole pelu koodu',
         estimatedCost: 'iye owo tia fi oju sun',
         pricing: 'idiyele',
@@ -472,9 +471,9 @@ export default {
         emptyMessage: 'Jọwọ ṣafikun o kere ju apoti kan si iṣayẹwo rẹ',
         noPlannedDaysMessage:
           'awon Ojo ti a padanu lori awọn ohun kan. Ko le ṣe iṣiro iye owo ti a fi ojusun.',
-        seeMore: 'See more', // TODO
-        seeLess: 'See less', // TODO
-        listed: 'Listed', // TODO
+        seeMore: 'Rí i díẹ̀ síi',
+        seeLess: 'Dínkù',
+        listed: 'Tí a fi sílẹ̀',
         WithCode: {
           modalTitle: 'seda ati wole ninu ati jade ti o ti seda t le ri',
           modalDescription:
@@ -482,7 +481,7 @@ export default {
           codeLabel: 'fi koodu kun',
           codeErrorMessage: 'O nilo koodu ',
           failedMessage:
-            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
+            'Ìforúkọsílẹ̀ ṣìṣe kù. Jọwọ jẹ́ kó dájú pé kóòdù rẹ kò tíì lo tàbí kan si ẹgbẹ́ ìtóyè.',
         },
         SelectCropType: {
           fruits: 'Awọn eso',
@@ -511,13 +510,13 @@ export default {
             evenBefore: 'paa pa julo igba kan ri',
           },
           crateWeightAndPricing: {
-            applyAll: 'Apply to all', // TODO
-            list: 'List for sale', // TODO
-            addMore: 'Add more', // TODO
-            sellingPrice: 'Listing selling price', // TODO
-            potentialSellingPrice: 'Potential selling value', // TODO
-            info: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
-            unavailableId: 'ID not set', // TODO
+            applyAll: 'Lọ sí gbogbo wọn',
+            list: 'Fi fún tita',
+            addMore: 'Fikun-un síi',
+            sellingPrice: 'Ìye tita tí a fi sílẹ̀',
+            potentialSellingPrice: 'Ìye tita tí ó ṣeé ṣe',
+            info: 'Ìtọ́kasí iye yìí jẹ́ fún tita ọja, kì í ṣe owó ìpamọ́ nínú yàrá tó tútù.',
+            unavailableId: 'ID kò tíì ṣètò',
           },
           cratesError: 'Jọwọ fi kan rere nọmba crate',
           crateWeightError: 'Jọwọ fi iwuwo apoti rere sii',
@@ -584,22 +583,22 @@ export default {
       days: 'ojo pupo',
       noDTMessage: 'Awoṣe Shelf-life kan ko si fun ọja pataki yii.',
       checkOutButton: 'jade',
-      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      cratesListedForSale: '{{amount}} apoti ni a ti samisi gẹ́gẹ́ bí wọ́n ṣe wa fún tita',
       preSaleError:
-        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
+        'Jọwọ ṣàkíyèsí: O kò le yí ipo tita apoti tí ó ní àṣẹ tí kò tíì pé. Tí ìṣòro yìí kò bá jẹ́ tọ́, jọwọ kan si ẹgbẹ́ ìtóyè fún ìrànlọ́wọ́.',
       operatorNoBankAccountWarning:
-        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+        '{{name}} kò ní àlàyé àkọọlẹ ilé-ifowopamọ̀ láti gba owó tita. Jọwọ fi àlàyé àkọọlẹ wọn kun bí wọ́n bá ti fi ranṣẹ́ sí ọ.',
       farmerNoBankAccountWarning:
-        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+        'O kò ní àkọọlẹ ilé-ifowopamọ̀ tí a ṣètò fún gbigba owó tita rẹ. Jọwọ fi àlàyé àkọọlẹ rẹ kun.',
       operatorNoCompanyBankAccount:
-        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+        'Ẹ̀ka ìtútù yìí kò ṣe àtìlẹ́yìn fún àfihàn ọja nípa ọjà ayelujara. Jọwọ kan si alákóso ilé-iṣẹ́ láti ṣètò èyí.',
       employeeNoBankAccount:
-        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
-      addBankAccountButton: 'Add bank account details', // TODO
+        'Ilé-iṣẹ́ yìí kò ní àkọọlẹ ilé-ifowopamọ̀ tí a ṣètò fún gbigba owó fún tita ọja àti owó ìtútù nínú ọjà ayelujara. Ṣètò rẹ kí apoti nínú ẹ̀ka ìtútù rẹ lè wà lórí ọjà ayelujara.',
+      addBankAccountButton: 'Fi àlàyé àkọọlẹ ilé-ifowopamọ̀ kun',
       addBankAccountHeader:
-        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+        'O ń ṣètò àlàyé àkọọlẹ ilé-ifowopamọ̀ fún orúkọ {{name}}. Jọwọ tẹ̀ alaye yìí pẹ̀lú ìtójú, nítorí pé o kò ní lè yí i padà lẹ́yìn náà.',
       userWithoutPhone:
-        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
+        'Àwọ̀n apoti tí akántì yìí ní kò le wà fún tita torí pé a kò le so àkọọlẹ ilé-ifowopamọ̀ mọ́ olùmúlò tí kò ní foonu.',
     },
     SearchFilter: {
       detailsMessage:
@@ -621,18 +620,18 @@ export default {
     },
     Management: {
       Delivery: {
-        companyName: 'Company name', // TODO
-        companyNamePlaceholder: 'Insert company name', // TODO
-        companyNameError: 'Please insert the company name', // TODO
-        contactName: 'Contact name', // TODO
-        contactNamePlaceholder: 'Insert contact name', // TODO
-        contactNameError: 'Please insert the contact name', // TODO
-        phoneNumber: 'Phone number', // TODO
-        phoneNumberPlaceholder: 'Insert phone number', // TODO
-        emptyMessage: 'No contacts have been added yet', // TODO
-        deleteContactMessage: 'Are you sure you want to delete this contact?', // TODO
-        noAvailableContacts: 'There are no available contacts for this particular cooling unit.', // TODO
-        contactedAddedSuccessfully: 'Contact added successfully.', // TODO
+        companyName: 'Orúkọ ilé-iṣẹ́',
+        companyNamePlaceholder: 'Tẹ orúkọ ilé-iṣẹ́',
+        companyNameError: 'Jọwọ tẹ orúkọ ilé-iṣẹ́',
+        contactName: 'Orúkọ olubasọrọ',
+        contactNamePlaceholder: 'Tẹ orúkọ olubasọrọ',
+        contactNameError: 'Jọwọ tẹ orúkọ olubasọrọ',
+        phoneNumber: 'Nọ́mbà fóònù',
+        phoneNumberPlaceholder: 'Tẹ nọ́mbà fóònù',
+        emptyMessage: 'Kò tíì sí olubasọrọ kankan tí a fi kun',
+        deleteContactMessage: 'Ṣé ó dájú pé o fẹ́ pa olubasọrọ yìí rẹ́?',
+        noAvailableContacts: 'Kò sí olubasọrọ tí ó wà fún ẹ̀ka ìtútù yìí pátápátá.',
+        contactedAddedSuccessfully: 'Olubasọrọ ti fi kun láìsí ìṣòro.',
       },
       Location: {
         emptyState: 'Ko si awọn agbe gbe ti a ti se afikun rẹ. Tẹ ami + lati ṣafikun ọkan.',
@@ -646,8 +645,8 @@ export default {
           geolocation: 'agbe gbe ibi ti ero ibara eni soro wa',
         },
         fieldErrorMessages: {
-          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
-          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+          latitude: 'Tẹ́ nọ́mbà tó wà láàárín -90 sí 90 (àpẹẹrẹ: 34.0522)',
+          longitude: 'Tẹ́ nọ́mbà tó wà láàárín -180 sí 180 (àpẹẹrẹ: -118.2437)',
         },
         fields: {
           name: 'Oruko',
@@ -669,12 +668,11 @@ export default {
           addLocationSuccess: 'Ti se aṣeyọri ifikun agbe gbe',
           editLocationSuccess: 'Ti se aṣeyọri ti tun agbe gbe ko',
           removeLocationSuccess: 'agbe gbe {{name}} ti paarẹ yọri.',
-          failedToFetchLocation:
-            'Unable to retrieve the location. Please check the address and try again.', // TODO
-          positionCancelled: 'Location request canceled.', // TODO
-          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
-          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
-          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
+          failedToFetchLocation: 'A kò le gba ipò. Jọwọ ṣàyẹ̀wò àdírẹ́sì rẹ àti gbìyànjú lẹ́ẹkansi.',
+          positionCancelled: 'Ìbéèrè ipò ti fagilé.',
+          positionUnauthorized: 'A kọ́ ipò. Jọwọ fún ni ní àṣẹ láti tẹ̀síwájú.',
+          locationUnavailable: 'Ipò ti wa nípò ìdákẹ́jẹ. Jọwọ mu u ṣiṣẹ́ kí o lè tẹ̀síwájú.',
+          locationSubmissionError: 'Àṣìṣe kan ṣẹlẹ̀. Jọwọ ṣàyẹ̀wò ipò rẹ kí o tún gbìyànjú lẹ́ẹkansi.',
         },
       },
       Operators: {
@@ -710,7 +708,7 @@ export default {
         actions: { save: 'Fi awọn ayipada pamọ' },
         toasts: {
           success: 'Ti se aṣeyọri atunkọ',
-          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
+          photoLibrary: 'Àṣẹ kọ́: Jọwọ jẹ́ kí ìforúkọsílẹ̀ sí Ìkànsí Fọ́tò rẹ.',
         },
       },
       RegisteredEmployee: {
@@ -740,9 +738,9 @@ export default {
         },
       },
       EditCoolingUsers: {
-        accountDetails: 'Payout Details', // TODO
+        accountDetails: 'Alaye Èrè Òwò',
         toasts: {
-          noSurveys: 'No surveys have been completed yet.', // TODO
+          noSurveys: 'Kò sí ìwádìí tí a ti parí títí di báyìí.',
           warning:
             'Akanti yìí kò ṣe é parẹ́ nítorí pé oníṣe náà ní àwọn àyẹ̀wò tí ń ṣiṣẹ́ nínú ẹ̀ka ìtura {{names}}. Jọwọ fi to olumulo leti lati wa si yara lati wa gbe awọn nkan wọnyi jade ki o to le pa akanti naa rẹ!',
           confirmation:
@@ -814,9 +812,9 @@ export default {
           batteryPeakEnergyStorage: 'Ibi ipamọ agbara ni ipele ti o ga julọ ti batiri kan',
           batteryType: 'Iru awọn batiri',
           selectSensorType: 'Yan iru sensọ kan',
-          selectSensor: 'Select a sensor', // TODO
+          selectSensor: 'Yan sensọ',
           emptySensorListError:
-            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
+            'Ó dàbí pé kò sí àwọn sensọ tó so mọ́ àkọọlẹ {{type}} rẹ. Jọwọ so o kere tán kan pọ̀ kí o tún gbìyànjú lẹ́ẹkansi.',
           addTempSensor: 'Ṣafikun sensọ iwọn otutu si ẹyọ itutu rẹ.',
           sensorDesc: {
             default: 'Beere alaye yii lati ọdọ olupese sensọ rẹ ti ko ba wa ni ọwọ.',
@@ -824,10 +822,10 @@ export default {
           },
           ecozen: { username: 'Orukọ olumulo', password: 'oro-iwole', machineId: 'idanimo Ẹrọ' },
           genericSensorForm: {
-            username: 'Username/Email', // TODO
+            username: 'Orúkọ Olùmúlò / Ímẹ́lì',
             password: 'oro-iwole',
           },
-          unknownSensor: 'Unknown', // TODO
+          unknownSensor: 'Sensọ tí a kò mọ̀',
           hybridFields:
             'Iwọn ida ogorun wo ninu yara naa ni oun gba agbara nipasẹ awọn orisun oriṣiriṣi?',
           cropSpecificPricing: 'Ifowoleri-iru irugbin kan pato',
@@ -888,49 +886,49 @@ export default {
           label: 'Yan awọn ọna isanwo:',
           cash: 'Owo owo',
           creditCard: 'Kaddi kirediti',
-          bankTransfer: 'Bank Transfer', // TODO
+          bankTransfer: 'Fifiranṣẹ owó ilé-ifowopamọ̀',
         },
       },
       Coupons: {
-        title: 'Discount coupons', // TODO
+        title: 'Kúpọ́n díísíkàùntì',
         emptyMessage: 'Ko si awọn kuponu ti a ti ṣafikun sibẹsibẹ',
         addCoupon: 'Fi Kupọọnu kun',
         code: 'koodu kupọọnu',
         percentage: 'Kupọọnu ogorun',
         revokeTitle: 'Kupọọnu fagile',
-        revoke: 'Revoke', // TODO
+        revoke: 'Fagilé',
         revokeMessage:
           'Ṣe o da ọ loju pe o fẹ fagilee kupọọnu yii? Ni kete ti fagile, ko le ṣee lo lẹẹkansi ati pe ẹdinwo naa kii yoo wa mọ. Iṣe yii jẹ titilai ati pe ko le ṣe atunṣe.',
         messages: {
-          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+          codeField: 'Kò gbọdọ̀ ju àmọ̀ràn 25 lọ àti pé ó gbọdọ̀ ní àwọn lẹ́tà àti nọ́mbà nìkan',
         },
       },
     },
     Marketplace: {
       buyerSelection: {
-        onBehalfOfCompany: 'Buy on behalf of company', // TODO
-        forMyself: 'Buy for myself', // TODO
-        label: 'Buyer', // TODO
+        onBehalfOfCompany: 'Ra fún orúkọ ilé-iṣẹ́',
+        forMyself: 'Ra fún ara mi',
+        label: 'Olùrà',
       },
       sorting: {
-        'price-asc': 'Price ascending', // TODO
-        'price-desc': 'Price descending', // TODO
-        'nearby-me': 'Near to me', // TODO
+        'price-asc': 'Ìye tí ń gòkè lọ́pọ̀',
+        'price-desc': 'Ìye tí ń sọ̀kalẹ̀',
+        'nearby-me': 'Tó wà nítòsí mi',
       },
       distance: {
-        withing5Km: '1 to 5 KM away', // TODO
-        within10Km: '5 to 10 KM away', // TODO
-        within25Km: '10 to 25 KM away', // TODO
-        beyond25Km: 'More than 25 KM away', // TODO
+        withing5Km: 'Láàárín 1 sí 5 KM',
+        within10Km: 'Láàárín 5 sí 10 KM',
+        within25Km: 'Láàárín 10 sí 25 KM',
+        beyond25Km: 'Jù 25 KM lọ',
       },
-      priceConfig: 'The price configuration refers to product sale, not cooling storage fee.', // TODO
+      priceConfig: 'Ìtọ́kasi iye yìí jẹ́ fún tita ọja, kì í ṣe owó ìtútù.',
       addToCart: {
-        addToCartButton: 'Add to cart and continue shopping', // TODO
-        buyFullCrate: 'Buy full crate', // TODO
-        selectQuantity: 'Select quantity', // TODO
-        goToCart: 'Go to Cart Summary', // TODO
+        addToCartButton: 'Fi sí kẹrísì kí o tẹ̀síwájú sí rira',
+        buyFullCrate: 'Ra apoti pipe',
+        selectQuantity: 'Yan iye',
+        goToCart: 'Lọ sí àkótán kẹrísì',
       },
-      currentLocation: 'Current location', // TODO
+      currentLocation: 'Ipò lọwọlọwọ',
       invalidFormatWarning: 'Ikilọ: Ẹ̀rọ orúkọ ìlú kò tọ́. Àbájáde lè má jẹ́ dídáhùn dáadáa.',
       unresolvedCityFormatWarning:
         'Ikilọ: A kò lè rí ìlú tí a sọ ní kàkàkí. Àbájáde lè má jẹ́ dídáhùn dáadáa.',
@@ -938,21 +936,21 @@ export default {
         'Ikilọ: A kò lè dá ìdánilójú pé ìlú náà jẹ́ tọ́. Àbájáde lè má jẹ́ dídáhùn dáadáa.',
       filterGeneralWarning:
         'Ikilọ: Àṣìṣe kan ṣẹlẹ̀ nígbà àyẹ̀wò ibi. Àbájáde lè má jẹ́ dídáhùn dáadáa.',
-      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
-      owner: 'Owner', // TODO
-      priceRange: 'Range Price / KG',
+      standardCrateWeight: 'Ìwọn àpòòtọ̀ apoti jẹ́ {{value}} kg',
+      owner: 'Olùní',
+      priceRange: 'Ìyàtọ̀ Ìye / KG',
       Filters: {
-        min: 'Min',
-        max: 'Max',
-        label: 'Filters',
-        coolingUnitLabel: 'Cooling unit', // TODO
-        coolingUnitHeading: 'Select cooling units', // TODO
-        cropTypeLabel: 'Produce / Crop Type', // TODO
-        cropTypeHeading: 'Select crops', // TODO
-        companyLabel: 'Company', // TODO
-        companyHeading: 'Select companies', // TODO
+        min: 'Kekere jùlọ',
+        max: 'Tó pọ̀ jùlọ',
+        label: 'Àyẹ̀wò',
+        coolingUnitLabel: 'Ẹ̀ka ìtútù',
+        coolingUnitHeading: 'Yan ẹ̀ka ìtútù',
+        cropTypeLabel: 'Ọja / Irú Ọ̀gbìn',
+        cropTypeHeading: 'Yan irú ọ̀gbìn',
+        companyLabel: 'Ilé-iṣẹ́',
+        companyHeading: 'Yan àwọn ilé-iṣẹ́',
       },
-      maxDistance: 'Max Distance',
+      maxDistance: 'Ìjìnnà tó pọ̀ jùlọ',
     },
     AccountDetails: {
       popups: {
@@ -970,7 +968,7 @@ export default {
       toasts: { success: 'Ti se aṣeyọri imudojuiwọn olumulo' },
       sections: {
         sellerSettings: 'Awọn Eto Olutaja',
-        companySellerSettings: 'Seller Settings (Company)', // TODO
+        companySellerSettings: 'Àwọn Eto Olùtajà (Ilé-iṣẹ́)',
         buyerSettings: 'Olura Eto',
         details: 'Awọn alaye',
       },
@@ -981,27 +979,27 @@ export default {
       PayoutSettings: {
         addTitle: 'Jọwọ fi alaye akọọlẹ banki rẹ sii',
         editTitle: 'Alaye akọọlẹ banki rẹ',
-        addTittleForCompany: "Please insert you company's bank account information", // TODO
-        editTitleForCompany: "Your company's bank account information", // TODO
+        addTittleForCompany: 'Jọwọ tẹ àlàyé àkóọlẹ ilé-ifowopamọ̀ ilé-iṣẹ́ rẹ',
+        editTitleForCompany: 'Àlàyé àkóọlẹ ilé-ifowopamọ̀ ilé-iṣẹ́ rẹ',
         form: {
-          nameLabel: 'Account name', // TODO
-          namePlaceholder: 'Insert account name', // TODO
+          nameLabel: 'Orúkọ àkóọlẹ',
+          namePlaceholder: 'Tẹ orúkọ àkóọlẹ',
           accountNumberLabel: 'Nọmba ifowopamọ',
           accountNumberPlaceholder: 'Fi nọmba iroyin sii',
-          bank: 'Bank', // TODO
-          countryLabel: 'Country', // TODO
-          nigeria: 'Nigeria', // TODO
-          selectBank: 'Select bank from list', // TODO
-          accountType: 'Account Type', // TODO
-          selectAccountType: 'Select account type', // TODO
+          bank: 'Ilé-ifowopamọ̀',
+          countryLabel: 'Orílẹ̀-èdè',
+          nigeria: 'Nàìjíríà',
+          selectBank: 'Yan ilé-ifowopamọ̀ látinú àkójọ',
+          accountType: 'Ìrú àkóọlẹ',
+          selectAccountType: 'Yan irú àkóọlẹ',
           accountTypes: {
-            personal: 'Personal', // TODO
-            business: 'Business', // TODO
+            personal: 'Tí ẹni kọọkan',
+            business: 'Tí ilé-iṣẹ́',
           },
           errors: {
-            accountName: 'Account name is required', // TODO
+            accountName: 'Orúkọ àkóọlẹ jẹ́ dandan',
             account: 'A nilo nọmba akọọlẹ',
-            accountType: 'Account type is required', // TODO
+            accountType: 'Ìrú àkóọlẹ jẹ́ dandan',
             bank: 'Orukọ banki nilo',
           },
         },
@@ -1055,7 +1053,7 @@ export default {
       clickHere: 'tẹ ibi',
     },
     History: {
-      cropsLabel: '{{crop}} and {{amount}} more', // TODO
+      cropsLabel: '{{crop}} àti {{amount}} míì',
       priceLabel: 'Iye',
       empty:
         'Iwole ati Ijade yoo han ninu dasibodu nigbati o ba ṣe o kere ju iwole kan ni eyikeyi yara.',
@@ -1070,7 +1068,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'Ṣe igbasilẹ risiti pdf',
-          seeMovement: 'See movement', // TODO
+          seeMovement: 'Wo ìṣípọ̀',
         },
         checkOut: {
           seeDetails: 'Wo alaye',
@@ -1173,89 +1171,87 @@ export default {
       },
     },
     MyOrders: {
-      coolingFees: 'Cooling fees', // TODO
-      soldFor: 'Sold for', // TODO
-      ownedBy: 'Owned by', // TODO
-      you: 'You', // TODO
+      coolingFees: 'Owó ìtútù',
+      soldFor: 'Tà fún',
+      ownedBy: 'Tí ẹnikan ní',
+      you: 'Ìwọ',
       sort: {
-        mostRecent: 'Most recent', // TODO
-        oldest: 'Oldest', // TODO
-        date: 'Date', // TODO
+        mostRecent: 'Tó ṣẹṣẹ ṣẹlẹ̀',
+        oldest: 'Tó ti jìnà jùlọ',
+        date: 'Ọjọ́',
       },
       status: {
-        'payment-pending': 'Payment Pending', // TODO
-        'payment-expired': 'Payment Expired', // TODO
-        cancelled: 'Cancelled', // TODO
-        paid: 'Paid', // TODO
+        'payment-pending': 'Ìsanwó ń dúró de',
+        'payment-expired': 'Ìsanwó ti parí',
+        cancelled: 'Fagilé',
+        paid: 'Ti san',
       },
-      title: 'Order Overview', // TODO
-      orderId: 'Order ID', // TODO
-      cropType: 'Crop Type', // TODO
-      coolingUnit: 'Cooling Unit', // TODO
-      orderTotal: 'Order Total', // TODO
-      backToTopButton: 'Back to the top', // TODO
+      title: 'Àkótán Àṣẹ',
+      orderId: 'ID Àṣẹ',
+      cropType: 'Irú Ọ̀gbìn',
+      coolingUnit: 'Ẹ̀ka ìtútù',
+      orderTotal: 'Apapọ̀ Àṣẹ',
+      backToTopButton: 'Padà sórí ìbẹ̀rẹ̀',
     },
     ShoppingCart: {
       cartUpdatedMessage: 'Àwọn nkan kan ni a ti yọ kúrò nínú rírà rẹ nítorí wọn kò sí mọ́ láti rà.',
-      ownership: 'Change cart ownership to {{name}}', // TODO
+      ownership: 'Yí ìní kẹrísì padà sí {{name}}',
       changeOwnership:
-        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
-      empty: 'Your cart is empty', // TODO
-      daysLeft: 'days left', // TODO
-      weight: 'KG available', // TODO
-      perKg: '/ KG', // TODO
-      totalToPay: 'Total to pay', // TODO
-      pay: 'Pay', // TODO
-      orderHeader: 'Order', // TODO
-      subtotal: 'Subtotal', // TODO
-      produce: 'Produce', // TODO
-      discount: 'Discount', // TODO
-      fees: 'Service fees', // TODO
-      marketFees: 'Marketplace fee', // TODO
-      paymentFees: 'Payment fee', // TODO
-      coolingFees: 'Cooling fee', // TODO
-      viewContacts: 'View contact(s)', // TODO
-      contactsForDelivery: 'Contact(s) for delivery information', // TODO
-      gotItButton: 'Got it!', // TODO
-      pickupMethods: 'Pickup method', // TODO
-      selectPickupMethod: 'Select a pickup method', // TODO
-      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
-      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
-      pickUpToday: 'Pickup today', // TODO
-      keepInStorageDailyRate: 'Keep in storage ({{price}} / day)', // TODO
-      keepInStorageFixedRate: 'Keep in storage ({{price}})', // TODO
-      delivery: 'Delivery', // TODO
-      contactName: 'Contact name', // TODO
-      phoneNumber: 'Phone number', // TODO
-      thankYouMessage: 'Thank You for Ordering', // TODO
-      orderOverview: 'Order overview', // TODO
-      products: 'Products', // TODO
-      consultOrders: 'Consult My Orders', // TODO
-      total: 'Total', // TODO
-      couponQuestion: 'Have a discount coupon?', // TODO
-      redeem: 'Redeem code.', // TODO
-      redeemCoupon: 'Redeem coupon', // TODO
-      couponPlaceholder: 'E.g. 20OFF', // TODO
-      discountsApplied: 'Discounts Applied', // TODO
+        'Yí ìní kẹrísì rira padà sí {{name}}. Ìyí yìí lè ní ipa lórí àwọn nǹkan tó wà nínú kẹrísì rẹ, pẹ̀lú àǹfààní pe a lè yọ́ àwọn apoti kan tí kò sí mọ́. Ṣé o dájú pé o fẹ́ tẹ̀síwájú?',
+      empty: 'Kẹrísì rẹ ṣófo',
+      daysLeft: 'ọjọ tó kù',
+      weight: 'KG tó wà',
+      perKg: '/ KG',
+      totalToPay: 'Apapọ̀ tí yóò san',
+      pay: 'Sanwó',
+      orderHeader: 'Àṣẹ',
+      subtotal: 'Apapọ̀ Kékèké',
+      produce: 'Ọja',
+      discount: 'Díísíkàùntì',
+      fees: 'Owó ìṣẹ́',
+      marketFees: 'Owó ọjà',
+      paymentFees: 'Owó ìsanwó',
+      coolingFees: 'Owó ìtútù',
+      viewContacts: 'Wo olubasọrọ',
+      contactsForDelivery: 'Olubasọrọ fún ìfijiṣẹ',
+      gotItButton: 'Mo ti lò ó!',
+      pickupMethods: 'Ọ̀nà gbigbé',
+      selectPickupMethod: 'Yan ọ̀nà gbigbé',
+      selectPickupMethodInfo: 'Yan ọ̀nà gbigbé fún ẹ̀ka ìtútù kọọkan jẹ́ dandan.',
+      pickupMethodSelectionMissing: 'Ko tíì sí yíyan ọ̀nà gbigbé fún {{amount}} ẹ̀ka ìtútù.',
+      pickUpToday: 'Gba lónìí',
+      keepInStorageDailyRate: 'Fi sípamọ́ ({{price}} / ọjọ́)',
+      keepInStorageFixedRate: 'Fi sípamọ́ ({{price}})',
+      delivery: 'Ìfijiṣẹ',
+      contactName: 'Orúkọ olubasọrọ',
+      phoneNumber: 'Nọ́mbà fóònù',
+      thankYouMessage: 'O ṣeun fún pípaṣẹ',
+      orderOverview: 'Àkótán Àṣẹ',
+      products: 'Ọja',
+      consultOrders: 'Ṣàyẹ̀wò Àwọn Àṣẹ Mi',
+      total: 'Apapọ̀',
+      couponQuestion: 'Ṣé o ní kúpọ́n díísíkàùntì kan?',
+      redeem: 'Lo kóòdù.',
+      redeemCoupon: 'Lo kúpọ́n',
+      couponPlaceholder: 'Àpẹẹrẹ: 20OFF',
+      discountsApplied: 'Díísíkàùntì ti lò',
       pickupModal: {
-        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
+        today: 'Jọwọ gba àṣẹ rẹ ní {{company}}, tó wà ní {{location}} lónìí.',
         storage:
-          'Your crates are now being stored at {{company}}, located at {{location}}. Please pick up your order before {{ttpu}}.', // TODO
+          'Àwọn apoti rẹ wà nínú ìpamọ́ ní {{company}}, tó wà ní {{location}}. Jọwọ gba àṣẹ rẹ kí ọjọ́ {{ttpu}} tó pé.',
         delivery:
-          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+          'Jọwọ kan si àwọn nọ́mbà tó wà láti ṣètò ìfijiṣẹ. O lè wo àkójọ àwọn àṣàyàn ìfijiṣẹ nínú "Alaye Àṣẹ".',
       },
       errors: {
-        invalid: 'Invalid value', // TODO
-        minimumCartValue: 'Order must be at least ₦100.', // TODO
+        invalid: 'Iye tí kò bófin mu',
+        minimumCartValue: 'Ìbẹ̀rẹ̀ àṣẹ gbọdọ̀ jẹ́ o kere ju ₦100.',
       },
-      method: 'Method:', // TODO
+      method: 'Ọ̀nà:',
       deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
-      pickUpTodayInfo:
-        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
-      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
-      orderOverviewSubtitle:
-        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
+        'Jọwọ ṣàkíyèsí pé owó ìfijiṣẹ dá lórí ẹni tí ń pèsè. Tí ìfijiṣẹ bá jẹ́ fún ọ̀la, owó ìtútù {{value}} tún yóò wà.',
+      pickUpTodayInfo: 'Jọwọ rii dájú pé o gba ọjà rẹ kí ọjọ́ tó parí, láti yago fún owó ìtútù míì.',
+      keepInStorageInfo: 'Owó ìtútù yóò kó bá a nígbà tí o bá gba àṣẹ rẹ.',
+      orderOverviewSubtitle: 'O lè tún wo àlàyé yìí ní taabu "Àwọn Àṣẹ Mi" lórí iboju "Ọjà".',
     },
     Analytics: {
       emptyState: 'Ko si data lati ṣafihan',
@@ -1385,7 +1381,7 @@ export default {
           co2: '💨 CO2e jade fun itutu agbaiye',
           co2EmissionsLabel: 'CO2e itujade (kg)',
           co2DistributionLabel: 'CO2e pinpin irugbin',
-          co2Kg: 'Kg CO2 emitted', // TODO
+          co2Kg: 'Kg CO₂ tí a tú jáde',
         },
         impactTab: {
           occupancyLabel: 'Apapọ ibugbe ti itutu',
@@ -1428,43 +1424,42 @@ export default {
   tutorial: {
     welcome: 'Kaabo si Coldtivate. Eleyi jẹ kan Ririn ti awọn iṣẹ.',
     farmerWelcome:
-      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
+      'Kaabọ sí Coldtivate! Ìtọnisọna yìí yóò ràn ọ lọ́wọ́ láti mọ bí o ṣe lè lo app náà.',
     quit: 'jade kuro ninu idanilẹkọ',
     congratulations:
       'Idanilẹkọ! O ti pari ikẹkọ naa! Pada si dasibodu lati bẹrẹ lilo ohun elo naa.',
     prev: 'Igbesẹ ti tẹlẹ',
     next: 'Itele',
-    start: 'Start Tutorial', // TODO
-    final:
-      'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.', // TODO
-    backToDashboard: 'Laghachi na Dashboard', // TODO
+    start: 'Bẹrẹ Ìtọnisọna',
+    final: 'Ẹ kú oríire! O ti parí ìtọnisọna náà! Padà sí Dasibọ́ọ̀du láti bẹ̀rẹ̀ sí í lo app náà.',
+    backToDashboard: 'Padà sí Dasibọ́ọ̀du',
     steps: {
       openDrawer:
-        'On the top left, you find a menu with the main functionalities. Go ahead and click it.', // TODO
+        'Ní apá òkè òsì, o máa rí akojọ aṣayan pẹ̀lú àwọn iṣẹ́ pàtàkì. Jọwọ tẹ e láti tẹ̀síwájú.',
       repeatTutorial: 'Ti o ba fẹ wo ikẹkọ yii lẹẹkansi, o tun le rii ninu akojọ aṣayan.',
       managementNavigation:
         'Ninu akojọ aṣayan, o le lilö kiri si taabu “Iṣakoso” ati pe o ṣafikun Awọn ipo tuntun, Awọn ẹya Itutu agbaiye, Awọn oṣiṣẹ ti o forukọsilẹ ati Awọn oniṣẹ.',
       operatorManagementNavigation:
-        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
+        'Nínú Akojọ aṣayan, o le lọ sí "Ìṣàkóso" kí o tẹ̀ é láti fi Olùmúlò Ẹ̀ka Ìtútù kun tàbí ṣe àtúnṣe.',
       addCoolingUser:
         'Awọn olumulo itutu ti ko forukọsilẹ lori Coldtivate ni a le ṣafikun nipasẹ fifi awọn alaye wọn sii (orukọ, nọmba foonu). Awọn olumulo itutu ti o forukọsilẹ tẹlẹ ninu ohun elo naa le ṣafikun nipasẹ koodu. Wọn le wa koodu wọn lori profaili wọn -> "Awọn alaye akọọlẹ" -> "Koodu agbewọle Olumulo Itutu".',
-      navigateToCoolingUser: 'Go ahead and click the Cooling Users tab', // TODO
+      navigateToCoolingUser: 'Tẹ taabu Olùmúlò Ẹ̀ka Ìtútù láti tẹ̀síwájú.',
       listCoolingUsers:
         'Awọn olumulo itutu agbaiye pẹlu foonuiyara jẹ idanimọ nipasẹ aami foonu kan ni apa ọtun ti awọn iboju. Awọn miiran n tutu awọn olumulo pẹlu foonu ipilẹ kan. Ni awọn ọran mejeeji, o le tẹ orukọ kan lati wọle si awọn alaye wọn ati iwadii olumulo itutu agbaiye.',
-      navigateToAddCoolingUser: "Clicking the '+' sign allows you to add a new Cooling User.", // TODO
+      navigateToAddCoolingUser: 'Tí o bá tẹ àmi "+" o le fi Olùmúlò Ẹ̀ka Ìtútù tuntun kun.',
       coolingUnitStep:
         'O le lọ kiri kọja awọn iwọn itutu agbaiye nipa tite lori akojọ aṣayan silẹ ni oke.',
       initiateCheckIn1:
-        'Once you add a cooling user, you can make a check-in for that cooling user. Go ahead and click the activity button.', // TODO
-      initiateCheckIn2: 'Now click on the check-in button (the one in green).', // TODO
+        'Lẹ́yìn tí o bá fi Olùmúlò Ẹ̀ka Ìtútù kun, o le ṣe ìforúkọsílẹ̀ fún un. Jọwọ tẹ bọtìnì ìṣẹ̀lẹ̀ láti tẹ̀síwájú.',
+      initiateCheckIn2: 'Báyìí, tẹ bọtìnì ìforúkọsílẹ̀ (ẹni tó wà ní aláwọ̀ aláwọ̀ ewé).',
       checkIn1:
-        'To complete the check-in, you need to click on "Add Crates" and follow the instructions step by step. Click \'Continue\' to see what the result would look like.', // TODO
+        'Láti parí ìforúkọsílẹ̀, o nílò láti tẹ "Fi Àwọ̀n Apoti Kun" àti láti tẹ̀lé àwọn ìtọnisọna lẹ́sẹ̀kẹsẹ̀. Tẹ \'Tẹ̀síwájú\' láti rí bí abajade ṣe máa rí.',
       checkIn2:
         'Lẹhin ti ntẹriba pari gbogbo awọn igbesẹ, o yoo ri ohun Akopọ ti awọn crates ti o ba wa nipa lati ṣayẹwo sinu yara.',
       checkIn3:
         'Ti o ba ni itẹlọrun, o le tẹ “Jẹrisi” ati pe awọn apoti tuntun yoo ṣafikun si Dasibodu naa.',
       history:
-        'Clicking on "History", you can see all the movements in the room. The check-outs for which the after-storage survey has not been completed are marked by a red dot.', // TODO
+        'Tí o bá tẹ "Ìtàn", o máa rí gbogbo ìṣípọ̀ tó ṣẹlẹ̀ nínú yàrá. Àwọn ìjádè tí a kò tíì parí ìwádìí lẹ́yìn ìpamọ́ ni a fi àmi pupa hàn.',
       coolingUnits:
         'Tẹ “Awọn ẹya itutu agbaiye” lati rii agbara ti ẹyọ itutu agbaiye ni awọn ọjọ 7 to nbọ (Taabu Alakoso) ati iwọn otutu ti yara naa (taabu awọn ipo yara).',
       roomConditions:
@@ -1473,26 +1468,25 @@ export default {
         'Lati bẹrẹ ayẹwo-jade, tẹ lori bọtini aṣayan iṣẹ-ṣiṣe ati lẹhinna lori bọtini pupa. Lẹhinna tẹle awọn ilana lati pari ayẹwo-jade.',
       checkOut2: 'O le yan ẹyọ itutu agbaiye ati awọn irugbin ti o fẹ ṣayẹwo.',
       checkOut3: 'Ni kete ti awọn ohun kan ba san fun, tẹ lori bọtini oniwun ki o pari ayẹwo naa.',
-      navigateToLocations:
-        'The first thing you will need to do is add a location. Go ahead and click the locations tab.', // TODO
+      navigateToLocations: 'Ìgbésẹ̀ àkọ́kọ́ tí o nílò láti ṣe ni fí ìpò kun. Jọwọ tẹ taabu àwọn ìpò.',
       locations:
-        'You can add a location by selecting a name and adding its latitude and longitude, by sharing your GPS coordinates (if you are at the cold room location), or by typing the address.', // TODO
+        'O lè fi ìpò kun nipa yíyan orúkọ àti fífi latitude àti longitude kun, nipa pínpin àyípadà GPS rẹ (tó bá jẹ́ pé o wà níbi yàrá tútù), tàbí nipa tẹ̀sí adirẹ́sì náà.',
       navigateToCoolingUnits:
-        'After a location has been added, you can add a cooling unit. Go ahead and click the cooling units tab.', // TODO
+        'Lẹ́yìn tí a bá ti fi ìpò kun, o lè fi ẹ̀ka ìtútù kun. Jọwọ tẹ taabu Ẹ̀ka Ìtútù.',
       addCoolingUnits:
-        'A cooling unit can be added by completing the details above. If you have temperature sensors in the cooling unit and an API in place, you can input the credentials and automatically connect your sensors to the app.', // TODO
+        'O lè fi ẹ̀ka ìtútù kun nipa fífi gbogbo àlàyé lókè parí. Tó bá jẹ́ pé o ní àwọn sensọ iwọn otutu nínú ẹ̀ka ìtútù àti API, o le fi ìwé-ẹ̀rí wọlé kí o sì so àwọn sensọ rẹ pọ̀ mọ́ app náà laifọwọyi.',
       addEmployeesOperators:
-        'You can add Registered Employees and Operators through the Management screen. In order to add either role, you will need their phone number. They will receive an SMS with an invitation link. A phone number can be used for only one user.', // TODO
+        'O le fi àwọn oṣiṣẹ tó forúkọsílẹ̀ àti àwọn alábòójútó kun nípasẹ̀ iboju Ìṣàkóso. Látọ́run fi irú ipa kankan kun, o nílò nọ́mbà fóònù wọn. Wọ́n yóò gba SMS pẹ̀lú ìbáṣepọ̀ ìpèwọlé. Nọ́mbà fóònù kan le jẹ́ ti olùmúlò kan ṣoṣo.',
       employeeCoolingUnitsStep:
-        'Once you have selected a cooling unit you will see an overview of: the crates currently in storage in the "Dashboard" tab, statistics about utilisation and impact in the "Analytics" tab, and the list of crates for sale in the "Marketplace" tab. Clicking on "More", you can also navigate to the "Crop Prices", "History", "Cooling Units", and "Orders" tab.', // TODO
+        'Tí o bá ti yan ẹ̀ka ìtútù, o máa rí àkótán ti: àwọn apoti tó wà ní ìpamọ́ lórí taabu "Dasibọ́ọ̀du", ìṣirò lilo àti ipa rẹ lórí taabu "Ìtúpalẹ̀", àti àkójọ àwọn apoti tó wà fún tita lórí taabu "Ọjà". Tí o bá tẹ "Die e sii", o tún le lọ sí "Ìye Ọ̀gbìn", "Ìtàn", "Ẹ̀ka Ìtútù", àti "Àṣẹ" taabu.',
       localizationPreferences:
-        'You can change the language of the app by selecting "Localization Preferences". Make sure to click the "Save changes" button for the language to be changed!', // TODO
+        'O lè yí èdè app náà padà nipa yíyan "Àwọn Àṣàyàn Èdè". Rí i dájú pé o tẹ bọtìnì "Fipamọ́ àwọn ayípadà" kí èdè lè yí padà!',
       accountDetailsNavigation:
-        'In the menu, you can navigate to "Account Details" and tap there to view/edit a set of configurations related to your account. Go ahead and try it.', // TODO
+        'Nínú àkójọ aṣayan, o le lọ sí "Àlàyé Àkọọlẹ" kí o tẹ̀ é láti wo tàbí ṣàtúnṣe àwọn ètò tó jọmọ àkọọlẹ rẹ. Jọwọ gbìyànjú rẹ báyìí.',
       coolingUserSurvey:
         'Ni igba akọkọ ti o ṣii app, o beere lọwọ rẹ lati pari iwadi kukuru kan. O ṣe pataki pupọ pe ki o fọwọsi iwadi fun ohun elo naa lati pese fun ọ pẹlu awọn iṣeduro adani. Ti o ko ba le fọwọsi iwadi ni igba akọkọ ti o wọle, o le wọle si iwadi naa ni "Awọn alaye akọọlẹ" -> "Iwadii Olumulo Itutu". O ṣeun fun gbigba akoko lati pari iwadi naa!',
       coolingUserCode:
-        'The first time you arrive at a cold room to store your produce, the operator will ask you to provide her / him with your personal code, to add you to the list of cold room users. You can find this code in "Personal details" -> "Cooling User Import Code".', // TODO
+        'Nígbà àkọ́kọ́ tí o bá dé yàrá tútù láti fipamọ́ ọja rẹ, alábòójútó yóò béèrè kóòdù ẹni-kọọkan rẹ, kí wọ́n le fi orúkọ rẹ kun àkójọ àwọn olùmúlò yàrá tútù. O le rí kóòdù yìí nínú "Àlàyé Ara ẹni" → "Kóòdù Gbigbà Olùmúlò Yàrá Tútù".',
       knowledgeHub:
         'Ninu akojọ aṣayan, o le wa "Ile-iṣẹ Imọ", eyiti o ni imọran lori bii gigun awọn irugbin oriṣiriṣi le wa ni ipamọ, ati iwọn otutu to dara julọ. Ṣayẹwo rẹ lati ni oye iye ti yara tutu le ṣe iranlọwọ fun ọ lati ṣetọju didara awọn eso ati ẹfọ oriṣiriṣi!',
       faq: 'Ninu akojọ aṣayan, o tun le wa Awọn ibeere Nigbagbogbo (FAQ). A ṣeduro pe ki o ṣayẹwo wọn lati ni imọ siwaju sii nipa ohun elo naa ati anfani ti fifipamọ awọn ọja rẹ sinu awọn yara tutu.',
@@ -1507,18 +1501,35 @@ export default {
       dashboardStep5:
         'Ti o ba ni awọn apoti ti a fipamọ sinu awọn yara pupọ, o le yi yara ti o nwo pada nipa yiyan ile-iṣẹ kan ati ẹyọ itutu agbaiye lati inu isọ silẹ.',
       dashboardStep6:
-        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advises you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.', // TODO
+        'Tí àkókò ìgbaníjàde àwọn apoti rẹ bá ń bọ́, taabu rẹ máa yí padà sí pupa, a ó fi ìkìlọ̀ ranṣẹ́ pé kí o lọ sí yàrá náà, gbà àwọn apoti rẹ, kí o sì ta wọn. O le ṣàyẹ̀wò àwọn ìkìlọ̀ rẹ nípa títẹ agogo tó wà ní apá ọ̀tún.',
       farmerHistory:
-        'In the tab "History" you can see a summary of all check-ins and check-outs that you have completed in each room. If you see a red dot next to a check out, please click on the three dots and "Fill in market survey". Here, we would like to understand at what price you have sold your produce, and if anything got spoiled. We use this information to improve the operations at the cold room, so it is important that you answer accurately.', // TODO
+        'Nínú taabu "Ìtàn", o le rí àkótán gbogbo àwọn ìforúkọsílẹ̀ àti ìjádè tí o ti ṣe nínú kọọkan yàrá. Tí o bá rí àmi pupa lẹ́gbẹ̀ẹ́ ìjádè kan, jọwọ tẹ àmi mẹ́ta náà kí o sì yan "Fọwọ́ sí ìwádìí ọjà". Níbi yìí, a fẹ́ mọ iye tí o tà ọja rẹ sí, àti bóyá nkan kan bàjẹ́. A ń lo àlàyé yìí láti mú iṣẹ́ yàrá tútù dàra síi, nítorí náà ó ṣe pàtàkì kí o dáhùn dáadáa.',
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
+        'Láti ṣàyẹ̀wò àwọn ẹ̀ka ìtútù tó wà nítòsí rẹ, o le lọ sí àwọn bọtìnì tó wà ní ìsàlẹ̀ iboju, tẹ taabu "Die e sii", "Ẹ̀ka Ìtútù", kí o sì yan "Màápù". Tí o bá tẹ ọkọọkan àwọn ami lórí màápù, o le rí irú ẹ̀ka náà àti owó ìpamọ́ rẹ.',
       farmersUnitsPlanner:
         'Ninu taabu "Awọn ẹya itutu agbaiye" o le wa maapu naa, ibugbe lọwọlọwọ ati ọjọ iwaju ti yara naa (ni “Aṣeto”) ati iwọn otutu ti yara naa (ni “Awọn ipo yara”). Awọn iboju wọnyi ṣe iranlọwọ fun ọ lati ṣe atẹle latọna jijin ohun ti n ṣẹlẹ ni awọn yara tutu, laisi nini lati lọ sibẹ ni eniyan lati ṣayẹwo!',
       marketPrice:
-        'If you see a tab named "Crop Prices", you can check the prices of different fruits and vegetables across the country in the last days, and a forecast of the prices for the future. For now, this option is only available for selected countries.', // TODO
+        'Tí o bá rí taabu kan tó ń jẹ́ "Ìye Ọ̀gbìn", o le ṣàyẹ̀wò owó àwọn èso àti ẹ̀fọ̀ oríṣìíríṣìí káàkiri orílẹ̀-èdè láàárín ọ̀sẹ̀ tó kọjá, pẹ̀lú àsọtẹ́lẹ̀ owó wọn fún ọjọ́ iwájú. Lọ́wọ́lọ́wọ́, aṣàyàn yìí wà fún àwọn orílẹ̀-èdè pàtàkì nìkan.',
       farmerFinalStep:
-        'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.', // TODO
-      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
+        'Ẹ kú oríire! O ti parí ìtọnisọna yìí! Tí o bá ní ìbéèrè nípa app náà, a ṣàbẹ̀wò kí o ṣàyẹ̀wò FAQ, bẹ̀rẹ̀ lọ́wọ́ alábòójútó yàrá tútù, tàbí kọ lẹ́tà sí wa ní app@yourvcca.org.',
+      more: 'Tí o bá tẹ "Die e sii", o máa lè yan àwọn iboju "Ìtàn", "Ìye Ọ̀gbìn", "Ẹ̀ka Ìtútù", àti "Àṣẹ".',
+      marketplaceStep1:
+        'Eyi ni ọjà díjítàlì Coldtivate, níbi tí gbogbo àwọn olùmúlò ti le rà àti tà àwọn ọjà tí a ti fipamọ́ sínú yàrá tútù. Gbogbo apoti tí a fi sílẹ̀ fún tita wà níbí, o sì le rà iye kankan (ní kg) tàbí apoti kikun.',
+      marketplaceStep2:
+        'Lẹ́yìn yíyàn àwọn nǹkan tí o fẹ́ rà, tẹ aami kẹrísì rira láti wo àwọn nǹkan tó wà nínú rẹ.',
+      shoppingCart:
+        "Láti parí rira rẹ, o le ṣàyẹ̀wò àwọn nǹkan tó wà nínú kẹrísì rira rẹ, kí o sì tẹ 'tẹ̀síwájú' láti tẹ̀lé àwọn ìtọnisọna lẹ́sẹ̀kẹsẹ̀ láti parí àṣẹ rẹ.",
+      marketplaceStep3:
+        "Lórí taabu ọjà àkọ́kọ́, o tún le ṣàbẹ̀wò sí ìtàn kékèké àwọn àṣẹ àti tita rẹ nípasẹ̀ awọn ojúewé 'Àwọn Àṣẹ Mi' àti 'Àwọn Tita Mi'. Tẹ 'Àwọn Àṣẹ Mi' láti kọ́ ẹ̀kó síi.",
+      myOrders:
+        'Níbi yìí, o le rí gbogbo àṣẹ tí o ti ṣe nípasẹ̀ ọjà, pẹ̀lú gbogbo àlàyé àṣẹ kọọkan inú kàdì rẹ – tẹ ọfà tó wà ní apá ọ̀tún láti rí àlàyé kọọkan.',
+      operatorListForSale:
+        'O le ṣe ìtìlẹ́yìn fún Olùmúlò Ẹ̀ka Ìtútù láti fi nǹkan sílẹ̀ fún tita ní ọjà. Tẹ ọfà ní apá ọ̀tún láti rí àlàyé.',
+      coolingUserListForSale:
+        'O le ṣàkóso àwọn apoti wo ni kí o fi sílẹ̀ fún tita ní ọjà. Tẹ ọfà ní apá ọ̀tún láti rí àlàyé.',
+      commonListForSale: 'Tẹ “Fi sílẹ̀ fún tita” láti fi apoti #1 sílẹ̀ fún tita.',
+      commonListForSalePrice:
+        'Lẹ́yìn fífi apoti sílẹ̀ fún tita, o tún le tẹ ìye tita rẹ sílẹ̀ ní isalẹ! O le ṣe àtúnṣe àwọn àyípadà yìí nígbàkugba.',
     },
   },
 } satisfies Translations;

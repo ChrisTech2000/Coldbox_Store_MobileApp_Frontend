@@ -1,13 +1,19 @@
-import { GetMovementsHistoryResponse } from '#types/api.responses';
+import { Translator } from '#i18n/utils';
 import { ESortingOptions } from '#screens/Dashboard/Main/History/components/SortMenu';
 import { sortMovementCrops } from '#screens/Dashboard/Main/History/utils/sortMovements';
+import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EInitiatedFor } from '#types/global';
 
 type Movement = GetMovementsHistoryResponse[number];
 
-export function sortMovements(a: Movement, b: Movement, sorting: ESortingOptions): number {
-  const movementACrops = sortMovementCrops(a).join(', ');
-  const movementBCrops = sortMovementCrops(b).join(', ');
+export function sortMovements(
+  a: Movement,
+  b: Movement,
+  sorting: ESortingOptions,
+  t: Translator
+): number {
+  const movementACrops = sortMovementCrops(a, t).join(', ');
+  const movementBCrops = sortMovementCrops(b, t).join(', ');
   const movementAOwners = sortMovementOwners(a).join(', ');
   const movementBOwners = sortMovementOwners(b).join(', ');
 

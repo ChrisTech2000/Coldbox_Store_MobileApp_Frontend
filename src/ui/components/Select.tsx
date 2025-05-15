@@ -74,6 +74,7 @@ Select.Touchable = function SelectTouchable(props: {
   label: string;
   displayValue?: string;
   minifyLabel?: boolean;
+  testID?: string;
 }) {
   const { label, minifyLabel, displayValue } = props;
 
@@ -90,7 +91,7 @@ Select.Touchable = function SelectTouchable(props: {
   }, [error, disabled, variant, colors]);
 
   return (
-    <TouchableOpacity disabled={disabled} onPress={() => setIsOpen(true)}>
+    <TouchableOpacity disabled={disabled} onPress={() => setIsOpen(true)} testID={props.testID}>
       <View
         tw={cn(
           'flex flex-row items-center space-x-0.75',

@@ -144,7 +144,11 @@ export default function FormFields() {
         name="hasAcceptedTerms"
         render={({ field: { onChange, value } }) => (
           <View tw="flex flex-row items-center max-w-[75%] mt-5 space-x-2">
-            <Checkbox onPress={() => onChange(!value)} status={value ? 'checked' : 'unchecked'} />
+            <Checkbox
+              onPress={() => onChange(!value)}
+              status={value ? 'checked' : 'unchecked'}
+              testID="terms-checkbox"
+            />
             <Text>
               {t('Auth.SignUp.commonForm.terms.agree')}&nbsp;
               <Text tw="underline" onPress={() => navigation.navigate('LicenseAgreement')}>

@@ -1,6 +1,6 @@
 declare module 'react-native-config' {
   export interface NativeConfig {
-    BASE_API_URL?: string;
+    BASE_API_BASE_URL?: string;
     AIR_PROD_BASE_URL?: string;
     MAPBOX_ACCESS_TOKEN?: string;
     IMPACT_BACKUP_BASE_URL?: string;

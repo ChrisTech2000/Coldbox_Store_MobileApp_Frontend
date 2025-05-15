@@ -72,6 +72,14 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
+
+project.ext.react = [
+  entryFile: "index.js",
+  bundleInDebug: false,
+  bundleInRelease: true,
+  bundleInE2E: true
+]
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -105,11 +113,20 @@ android {
         debug {
             signingConfig signingConfigs.debug
         }
+
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
             signingConfig signingConfigs.release
+        }
+        
+        e2e {
+            initWith release
+            debuggable false
+            minifyEnabled enableProguardInReleaseBuilds
+            signingConfig signingConfigs.release
+            matchingFallbacks = ['release']
         }
     }
 }

@@ -87,7 +87,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
   );
 
   const sortedMovements = useMemo(
-    () => cloneDeep(usageData || []).sort((a, b) => sortMovements(a, b, sorting)),
+    () => cloneDeep(usageData || []).sort((a, b) => sortMovements(a, b, sorting, t)),
     [usageData, sorting]
   );
 
@@ -112,7 +112,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
       const matchesCode = movement.code.toLowerCase().includes(searchTerm);
       const matchesFarmer = movement.checkin?.ownerName?.toLowerCase().includes(searchTerm);
 
-      const crops = sortMovementCrops(movement).map((cropName) =>
+      const crops = sortMovementCrops(movement, t).map((cropName) =>
         find(translationMap, {
           name: cropName,
           country: company?.country || undefined,
@@ -124,7 +124,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
 
       return matchesCode || matchesFarmer || matchesCrop;
     });
-  }, [sortedMovements, startDate, endDate, search, language]);
+  }, [sortedMovements, startDate, endDate, search, language, t]);
 
   const { totalCheckIns, totalCrates, totalUsers, totalWeight } = useMemo(() => {
     const { totalCrates, totalWeight, users } = filteredMovements

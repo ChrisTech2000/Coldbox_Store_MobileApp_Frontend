@@ -170,6 +170,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
                     clearErrors();
                     onChange(EAccountProfile.EMPLOYEE);
                   }}
+                  testID="employee-account-card"
                 >
                   <Employee width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
                 </AccountCard>
@@ -194,6 +195,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
                     clearErrors();
                     onChange(EAccountProfile.OPERATOR);
                   }}
+                  testID="operator-account-card"
                 >
                   <Operator width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
                 </AccountCard>
@@ -216,6 +218,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
                     clearErrors();
                     onChange(EAccountProfile.FARMER);
                   }}
+                  testID="farmer-account-card"
                 >
                   <Farmer width={ACCOUNT_TYPE_SIZE} height={ACCOUNT_TYPE_SIZE} />
                 </AccountCard>

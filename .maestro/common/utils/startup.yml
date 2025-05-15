@@ -1,0 +1,10 @@
+appId: com.base.coldtivate
+tags:
+  - util
+---
+- launchApp:
+    clearState: true
+    arguments:
+      isE2E: 'true'
+    permissions:
+      all: unset

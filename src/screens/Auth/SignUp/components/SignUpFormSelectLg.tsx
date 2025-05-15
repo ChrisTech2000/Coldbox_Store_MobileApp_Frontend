@@ -17,6 +17,7 @@ type Props<T extends FieldValues> = {
   control: Control<T>;
   required?: boolean;
   search: string;
+  testID?: string;
   setSearch: (val: string) => void;
   onValueChange?: (prev: string | undefined, next: string) => void;
   computedDisplayValue?: (value: string) => string;
@@ -39,6 +40,7 @@ export function SignUpFormSelectLg<T extends FieldValues>(props: Props<T>) {
     <View>
       <Select variant="lg" isOpen={isModalOpen} onOpenChange={setIsModalOpen} error={error}>
         <Select.Touchable
+          testID={props.testID}
           label={required ? `${startCase(label)}*` : startCase(label)}
           displayValue={computedDisplayValue?.(field.value) || field.value || ''}
         />

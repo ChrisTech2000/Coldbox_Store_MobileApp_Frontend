@@ -1,7 +1,7 @@
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { LogBox, StatusBar } from 'react-native';
 import BootSplash from 'react-native-bootsplash';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
@@ -15,7 +15,9 @@ import AppVersionModal from './common/AppVersion';
 import InAppNotifications from './common/InAppNotifications';
 import StaleWhileRevalidate from './common/StaleWhileRevalidate';
 import { ENVIRONMENT, SENTRY_DSN } from './constants/environment';
+import launchArgs from './constants/launch.args';
 import { TUTORIAL_BACKDROP_COLOR } from './constants/ui';
+import { useI18n } from './i18n';
 import AuthNavigator from './navigation/Auth';
 import DashboardNavigator from './navigation/Dashboard';
 import linking from './navigation/deepLinking';
@@ -23,10 +25,18 @@ import { useAuthManager } from './stores/auth';
 import { useGlobalInformation } from './stores/dashboard';
 import { useCartInformation } from './stores/shoppingCart';
 import { navigatorTheme, paperTheme } from './ui/lib/theme';
-import { useI18n } from './i18n';
 
-if (typeof ENVIRONMENT === 'string' && ENVIRONMENT !== 'development') {
+if (
+  typeof ENVIRONMENT === 'string' &&
+  ENVIRONMENT !== 'development' &&
+  ENVIRONMENT !== 'e2e' &&
+  !launchArgs.isE2E
+) {
   Sentry.init({ dsn: SENTRY_DSN, environment: ENVIRONMENT, tracesSampleRate: 1.0 });
+}
+
+if (launchArgs.isE2E) {
+  LogBox.ignoreAllLogs();
 }
 
 enableExperimentalLayoutAnimation();

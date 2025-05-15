@@ -3,17 +3,16 @@ import { FlatList, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
+import * as BottomSheet from '#ui/components/BottomSheet';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
-import * as BottomSheet from '#ui/components/BottomSheet';
 
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useDashboardStore } from '#stores/dashboard';
-import { GetAllOrdersResponse } from '#types/api.responses';
-import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
 import { useManagementStore } from '#stores/management';
-import { cropTranslationLookup } from '#i18n/transl/misc/crops';
+import { GetAllOrdersResponse } from '#types/api.responses';
 
 export default function CropsBottomSheet() {
   const { t } = useTranslationUtils();
@@ -66,7 +65,7 @@ export default function CropsBottomSheet() {
             <View tw="py-2">
               <View tw="flex flex-row justify-between w-full">
                 <Text tw="text-base">
-                  {cropDatums?.[item.relCropId] ?? DEFAULT_CROP_VALUES.name}
+                  {cropDatums?.[item.relCropId] ?? getDefaultCropValues(t).name}
                 </Text>
                 <Text tw="text-base uppercase">
                   {item.orderedProduceWeight}

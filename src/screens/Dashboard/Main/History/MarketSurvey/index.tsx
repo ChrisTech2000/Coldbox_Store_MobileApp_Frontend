@@ -12,13 +12,12 @@ import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
+import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
 import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
-
-import { DEFAULT_CROP_VALUES } from '../../Marketplace/utils';
 
 function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>) {
   const { crops, ownerId, owner, companyCurrency, checkoutId } = props.route.params;
@@ -104,7 +103,9 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={cropsWithSurveyStatus}
-        keyExtractor={(item, index) => `crop-${item.name || DEFAULT_CROP_VALUES.name}-#${index}`}
+        keyExtractor={(item, index) =>
+          `crop-${item.name || getDefaultCropValues(t).name}-#${index}`
+        }
         renderItem={({ item }) => (
           <View tw="flex space-y-2 w-full my-2">
             <TouchableOpacity
@@ -120,7 +121,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
               disabled={!item.hasSurvey}
             >
               <Text variant="TextMedium" tw={cn('text-lg', !item.hasSurvey && 'text-gray-400')}>
-                {item.name || DEFAULT_CROP_VALUES.name}
+                {item.name || getDefaultCropValues(t).name}
               </Text>
               <Icon
                 source={LanguageManager.isRTL ? 'chevron-left' : 'chevron-right'}
@@ -138,7 +139,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
                   <Danger tw="w-7 h-7" />
                   <Text variant="TextMedium" tw="">
                     {t('Dashboard.History.survey.fillMessage', {
-                      crop: item.name || DEFAULT_CROP_VALUES.name,
+                      crop: item.name || getDefaultCropValues(t).name,
                     })}
                   </Text>
                 </TouchableOpacity>

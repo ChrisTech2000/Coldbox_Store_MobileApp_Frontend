@@ -18,7 +18,7 @@ export default {
       ig: 'ଇଗ୍ବୋ',
       yo: 'ୟୋରୁବା',
       ha: 'ହାଉସା',
-      ar: 'Arabic', // TODO
+      ar: 'ଆରବି',
     },
   },
   gender: {
@@ -63,12 +63,12 @@ export default {
       AddRegisteredEmployee: 'ପଞ୍ଜିକୃତ କର୍ମଚାରୀ ଯୋଡନ୍ତୁ',
       RegisteredEmployeeDetails: 'ପଞ୍ଜିକୃତ କର୍ମଚାରୀ ବିବରଣୀ',
       DeliveryContacts: 'ଡେଲିଭରୀ ସଂପର୍କ',
-      AddUserBankAccount: '{{user}} Bank Account', // TODO
+      AddUserBankAccount: '{{user}}ଙ୍କ ବ୍ୟାଙ୍କ ଖାତା',
     },
     bottomTabs: {
-      RootMainTabStack: "{{firstName}}'s Coldtivate",
+      RootMainTabStack: '{{firstName}}ଙ୍କ Coldtivate',
       ProduceDetails: '{{produceCode}}',
-      MarketplaceSettings: 'Marketplace settings', // TODO
+      MarketplaceSettings: 'ବଜାର ସେଟିଂସ୍',
       PriceTrend: 'ମୂଲ୍ୟ ଘଟଣା',
       PriceRanking: 'ମୂଲ୍ୟ ଅଙ୍କନ',
       Planner: 'ପ୍ଲାନର୍',
@@ -76,13 +76,13 @@ export default {
       CratesInfo: 'କ୍ରେଟ୍ସ ସୂଚନା',
       Dashboard: 'ଡ୍ୟାସ୍ବୋର୍ଡ',
       History: 'ଇତିହାସ',
-      MarketPrice: 'ବଜାର ମୂଲ୍ୟ', // TODO
+      MarketPrice: 'ବଜାର ମୂଲ୍ୟ',
       CoolingUnits: 'କୁଲିଙ୍ଗ ଇଉନିଟ୍ସ',
       Analytics: 'ଅନାଲିଟିକ୍ସ',
       CheckIn: 'ଚେକ୍-ଇନ୍',
       CheckOut: 'ଚେକ୍-ଆଉଟ୍',
       Maps: 'ମାପ୍ସ',
-      More: 'More', // TODO
+      More: 'ଅଧିକ',
     },
     dashboard: {
       AccountDetails: 'ଆକାଉଣ୍ଟ ବିବରଣୀ',
@@ -98,7 +98,7 @@ export default {
       MarketplaceFavoritesTab: 'ପସନ୍ଦ',
       Orders: 'ଅର୍ଡର',
       MyOrders: 'ମୋର ଅର୍ଡର',
-      MySales: 'My Sales', // TODO
+      MySales: 'ମୋ ବିକ୍ରୟ',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'ଜ୍ଞାନ କେନ୍ଦ୍ର',
       QuitTutorial: 'ଟ୍ୟୁଟୋରିଆଲ୍ ବାର୍ତ୍ତା',
@@ -118,7 +118,7 @@ export default {
       CheckIn: 'ଚେକ୍-ଇନ୍',
       CropList: '{{cropType}}',
       CrateSetup: 'ଚେକ୍-ଇନ୍',
-      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
+      CrateWeightAndPricing: 'କ୍ରେଟ୍ ଓଜନ ଏବଂ ମୂଲ୍ୟ',
     },
     about: {
       comsolAgreement: 'COMSOL ରଣଟାଇମ୍ ଲାଇସେନ୍ସ ସମ୍ମତି 6.0',
@@ -163,15 +163,15 @@ export default {
     continue: 'ଜାରି ରଖନ୍ତୁ',
     save: 'ସଞ୍ଚୟ କରନ୍ତୁ',
     update: 'ଅଦ୍ୟତନ କରନ୍ତୁ |',
-    clearAll: 'Clear all', // TODO
-    apply: 'Apply', // TODO
+    clearAll: 'ସବୁ ମିଛାନ୍ତୁ',
+    apply: 'ଲାଗୁ କରନ୍ତୁ',
   },
   components: {
     datePicker: {
-      heading: 'Select a date', // TODO
+      heading: 'ତାରିଖ ବାଛନ୍ତୁ',
       clearButtonLabel: 'ସଫା କରନ୍ତୁ',
       confirmButtonLabel: 'ନିଶ୍ଚିତ କରନ୍ତୁ',
-      placeholder: 'ଡ୍ଡ/ମ୍ମ/yyyy',
+      placeholder: 'dd/MM/yyyy',
       startDateSelection: 'ଆରମ୍ଭ ତାରିଖ ଚୟନ କରନ୍ତୁ:',
       endDateSelection: 'ଅନ୍ତିମ ତାରିଖ ଚୟନ କରନ୍ତୁ:',
       startDateError: 'ଆରମ୍ଭ ତାରିଖ ଶେଷ ତାରିଖଠାରୁ ପରେ ହୋଇପାରିବ ନାହିଁ।',
@@ -303,7 +303,7 @@ export default {
       },
       toasts: {
         error:
-          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
+          'ଦୟାକରି ନିଜ ବିବରଣୀ ସଠିକ୍ ବୋଲି ନିଶ୍ଚିତ କରନ୍ତୁ ଏବଂ ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ। ଧ୍ୟାନ ଦିଅନ୍ତୁ: ଗୋଟିଏ ଫୋନ୍ ନମ୍ବର ଓ ଇମେଲ୍ କେବଳ ଗୋଟିଏ ଆକାଉଣ୍ଟ ପାଇଁ ବ୍ୟବହୃତ ହୋଇପାରିବ।',
       },
     },
     ForgotPassword: {
@@ -314,7 +314,7 @@ export default {
         'ଆପଣଙ୍କର ପାସ୍‌ୱାର୍ଡ ରିସେଟ୍ କରିବାକୁ, ଦୟାକରି ସେହି ଫୋନ୍ ନମ୍ବର ସହିତ ଦେଶ କୋଡ୍ ଦାଖଲ କରନ୍ତୁ, ଯାହାକି ଖାତା ସହିତ ଯୋଡାଯାଇଛି।',
       phoneInputLabel: 'ଫୋନ୍ ନମ୍ବର',
       resetButton: 'ପୁନର୍ନିର୍ମାଣ',
-      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
+      requestLimitMessage: 'ଅନୁରୋଧ ସୀମାକୁ ପହଞ୍ଚିଛି। ୨ ଘଣ୍ଟା ପରେ ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ।',
     },
     ResetPassword: {
       schema: {
@@ -358,7 +358,7 @@ export default {
     noLocationsAvailable:
       'କୋଲ୍ଡଟିଭେଟ୍‌ରେ ସ୍ବାଗତ। ପରିଚାଳନା ପ୍ୟାନେଲରେ ସ୍ଥାନଗୁଡିକୁ ଯୋଡି ଆରମ୍ଭ କରନ୍ତୁ।',
     coolingUserNavigateToMarketplace:
-      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
+      "ଇମେ ଘରରେ ସଂରକ୍ଷିତ ଉତ୍ପାଦ କିଣିବାରେ ଆଗ୍ରହୀ? ତାହେଲେ ତଳ ଦାହିଣ ବାଟନରେ ଥିବା 'ବଜାର' ଟ୍ୟାବ୍ ବୁଲନ୍ତୁ!",
     MarketPrice: {
       emptyState: 'ଆପଣଙ୍କ ଦେଶରେ ବଜାର ମୂଲ୍ୟ ଉପଲବ୍ଧ ନାହିଁ',
       'no-data-found': 'ଏହି ବଜାର ଏବଂ ଖଣିଜ ମିଶ୍ରଣ ପାଇଁ କ data ଣସି ତଥ୍ୟ ମିଳିଲା ନାହିଁ |',
@@ -472,10 +472,10 @@ export default {
         discount: 'ଡିସ୍କାଉଣ୍ଟ',
         priceWithDiscount: 'ମୋଟ ମୂଲ୍ୟ',
         paymentType: {
-          label: 'Tipo de Pagamento',
-          cash: 'Dinheiro',
-          creditCard: 'Cartão de Crédito',
-          bankTransfer: 'Transferência Bancária',
+          label: 'ପେମେଣ୍ଟ ପ୍ରକାର',
+          cash: 'ଟଙ୍କା',
+          creditCard: 'କ୍ରେଡିଟ୍ କାର୍ଡ',
+          bankTransfer: 'ବ୍ୟାଙ୍କ ଟ୍ରାନ୍ସଫର୍',
         },
         bankTransfer: {
           title: 'ଗ୍ରାହକଙ୍କ ତଥ୍ୟ',
@@ -484,8 +484,7 @@ export default {
           bankName: 'ବ୍ୟାଙ୍କର ନାମ',
         },
         paid: 'ପେଇଡ୍',
-        lockedWithinPendingOrders:
-          'Crates that are locked in pending orders cannot be checked out.', // TODO
+        lockedWithinPendingOrders: 'ବିଲମ୍ବିତ ଅର୍ଡରରେ ଅଟକିଥିବା କ୍ରେଟ୍‌ଗୁଡିକୁ ବାହାର କରିହେବ ନାହିଁ।',
       },
       CheckIn: {
         emptyState: 'ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ବକ୍ସ ଯୋଡାଯାଇନି',
@@ -509,7 +508,7 @@ export default {
           codeLabel: 'କୋଡ୍ ଯୋଡନ୍ତୁ',
           codeErrorMessage: 'କୋଡ୍ ଆବଶ୍ୟକ',
           failedMessage:
-            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
+            'Kwanye ବିଫଳ ହୋଇଛି। ଦୟାକରି ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଆପଣଙ୍କ କୋଡ୍ ପূର୍ବରୁ ବ୍ୟବହୃତ ହୋଇନାହିଁ, କିମ୍ବା ସହଯୋଗ ପାଇଁ ସମ୍ପର୍କ କରନ୍ତୁ।',
         },
         SelectCropType: {
           fruits: 'ଫଳ',
@@ -546,7 +545,7 @@ export default {
             sellingPrice: 'ବିକ୍ରୟ ମୂଲ୍ୟ ତାଲିକାକରଣ',
             potentialSellingPrice: 'ସମ୍ଭାବ୍ୟ ବିକ୍ରୟ ମୂଲ୍ୟ',
             info: 'ମୂଲ୍ୟ ବ୍ୟବସ୍ଥାପନ ପ୍ରସ୍ତୁତି ବିକ୍ରୟ ସହ ଜଡିତ, ଠଣ୍ଡା ଗୋଦାମ ଫିସ୍‌ ସହ ନୁହେଁ।',
-            unavailableId: 'ID not set', // TODO
+            unavailableId: 'ID ନିର୍ଦ୍ଧାରିତ ହୋଇନାହିଁ',
           },
           cratesError: 'ଦୟାକରି ସକାରାତ୍ମକ କ୍ରେଟ୍ ସଂଖ୍ୟା ଦିଅନ୍ତୁ',
           crateWeightError: 'ଦୟାକରି ସକାରାତ୍ମକ କ୍ରେଟ୍ ଓଜନ ଦିଅନ୍ତୁ',
@@ -623,22 +622,22 @@ export default {
       days: 'ଦିନ',
       noDTMessage: 'ଏହି ବିଶେଷ ସାମଗ୍ରୀ ପାଇଁ ସେଲ୍ଫ-ଲାଇଫ୍ ମୋଡେଲ୍ ଉପଲବ୍ଧ ନୁହେଁ।',
       checkOutButton: 'ଚେକ୍-ଆଉଟ୍',
-      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      cratesListedForSale: '{{amount}} କ୍ରେଟ୍ ବିକ୍ରୟ ପାଇଁ ଚିହ୍ନଟ କରାଯାଇଛି',
       preSaleError:
-        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
+        'ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ: ବିଲମ୍ବିତ ଅର୍ଡର ଥିବା କ୍ରେଟ୍‌ଗୁଡିକର ଲିଷ୍ଟିଂ ସ୍ଥିତି ବଦଳାଯିପାରିବ ନାହିଁ। ଯଦି ଏହିଥିରେ କିଛି ଅନୁଚିତ ଲାଗେ, ସହଯୋଗ ପାଇଁ ଦୟାକରି ସମ୍ପର୍କ କରନ୍ତୁ।',
       operatorNoBankAccountWarning:
-        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+        '{{name}}ଙ୍କ ପାଖରେ ବିକ୍ରୟ ରାଶି ପାଇଁ ପାଉଟ୍ ଗ୍ରହଣ କରିବା ପାଇଁ କୌଣସି ବ୍ୟାଙ୍କ ଖାତା ବିବରଣୀ ନାହିଁ। ଯଦି ସେ ବ୍ୟାଙ୍କ ବିବରଣୀ ଅଂଶୀଦାର କରିଛନ୍ତି, ଦୟାକରି ଏହା ଯୋଡନ୍ତୁ।',
       farmerNoBankAccountWarning:
-        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+        'ଆପଣଙ୍କର ବିକ୍ରୟ ପାଇଁ ପାଉଟ୍ ଗ୍ରହଣ କରିବା ପାଇଁ କୌଣସି ବ୍ୟାଙ୍କ ଖାତା ନିର୍ଦ୍ଧାରିତ ନାହିଁ। ଦୟାକରି ନିଜ ବ୍ୟାଙ୍କ ଖାତା ବିବରଣୀ ଯୋଡନ୍ତୁ।',
       operatorNoCompanyBankAccount:
-        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+        'ଏହି ଇମେ ଘର ମାର୍କେଟପ୍ଲେସ୍ ଲିଷ୍ଟିଂକୁ ସମର୍ଥନ କରେ ନାହିଁ। ଦୟାକରି କମ୍ପାନୀର ପ୍ରବନ୍ଧକ ସହିତ ସମ୍ପର୍କ କରନ୍ତୁ।',
       employeeNoBankAccount:
-        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
-      addBankAccountButton: 'Add bank account details', // TODO
+        'ଏହି କମ୍ପାନୀ ପାଖରେ ଏହି ମାର୍କେଟପ୍ଲେସ୍‌ରେ ବିକ୍ରି ହେଉଥିବା ଉତ୍ପାଦ ଓ ଠଣ୍ଡା ରାସି ପାଇଁ ଅର୍ଥ ଗ୍ରହଣ କରିବା ପାଇଁ କୌଣସି ପେଆଉଟ୍ ବ୍ୟାଙ୍କ ଖାତା ସଜାଗ ନାହିଁ। ଦୟାକରି ଏହା ସେଟଅପ୍ କରନ୍ତୁ ଯାହାଫଳରେ କ୍ରେଟ୍‌ଗୁଡିକୁ ମାର୍କେଟପ୍ଲେସ୍‌ରେ ଲିଷ୍ଟ କରିହେବ।',
+      addBankAccountButton: 'ବ୍ୟାଙ୍କ ଖାତା ବିବରଣୀ ଯୋଡନ୍ତୁ',
       addBankAccountHeader:
-        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+        'ଆପଣ {{name}}ଙ୍କ ପକ୍ଷରୁ ବ୍ୟାଙ୍କ ଖାତା ବିବରଣୀ ସେଟଅପ୍ କରୁଛନ୍ତି। ଦୟାକରି ଏହି ତଥ୍ୟ ସାବଧାନରେ ଭରନ୍ତୁ, କାରଣ ପରେ ଏହାକୁ ବଦଳାଯିପାରିବ ନାହିଁ।',
       userWithoutPhone:
-        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
+        'ଏହି ଆକାଉଣ୍ଟ ସହିତ ସଂପୃକ୍ତ କ୍ରେଟ୍‌ଗୁଡିକୁ ବିକ୍ରୟ ପାଇଁ ଲିଷ୍ଟ କରିହେବ ନାହିଁ, କାରଣ ଫୋନ୍ ନଥିବା ବ୍ୟବହାରକାରୀଙ୍କ ସହିତ ବ୍ୟାଙ୍କ ଖାତା ଲିଙ୍କ କରିହେବ ନାହିଁ।',
     },
     SearchFilter: {
       detailsMessage:
@@ -696,8 +695,8 @@ export default {
           streetNumber: 'ସ୍ଟ୍ରୀଟ୍ ନମ୍ବର',
         },
         fieldErrorMessages: {
-          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
-          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+          latitude: 'ଦୟାକରି -90 ଓ 90 ମଧ୍ୟରେ ଥିବା ଏକ ସଂଖ୍ୟା ଭରନ୍ତୁ (ଉଦାହରଣ: 34.0522)',
+          longitude: 'ଦୟାକରି -180 ଓ 180 ମଧ୍ୟରେ ଥିବା ଏକ ସଂଖ୍ୟା ଭରନ୍ତୁ (ଉଦାହରଣ: -118.2437)',
         },
         modal: {
           message:
@@ -711,11 +710,13 @@ export default {
           editLocationSuccess: 'ସଫଳତାର ସହିତ ସ୍ଥାନ ସଂପାଦିତ କରାଯାଇଛି',
           removeLocationSuccess: 'ସ୍ଥାନ {{name}} ସଫଳତାର ସହିତ ହଟାଇଦିଆଗଲା।',
           failedToFetchLocation:
-            'Unable to retrieve the location. Please check the address and try again.', // TODO
-          positionCancelled: 'Location request canceled.', // TODO
-          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
-          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
-          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
+            'ଅବସ୍ଥାନ ଆଣିପାରିଲା ନାହିଁ। ଦୟାକରି ଠିକଣା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ।',
+          positionCancelled: 'ଅବସ୍ଥାନ ଅନୁରୋଧ ବାତିଲ ହୋଇଛି।',
+          positionUnauthorized:
+            'ଅବସ୍ଥାନ ଅନୁମତି ଦିଆଯାଇନାହିଁ। ଦୟାକରି ଚାଲୁ ରଖିବା ପାଇଁ ଅନୁମତି ଦିଅନ୍ତୁ।',
+          locationUnavailable: 'ଅବସ୍ଥାନ ବନ୍ଦ ଅଛି। ଦୟାକରି ଚାଲୁ କରନ୍ତୁ ଯାହାଫଳରେ ଆଗକୁ ବଢ଼ିପାରିବ।',
+          locationSubmissionError:
+            'ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଛି। ଦୟାକରି ଅବସ୍ଥାନକୁ ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ।',
         },
       },
       Operators: {
@@ -774,7 +775,7 @@ export default {
         },
         toasts: {
           success: 'ସଫଳତାର ସହିତ ସମ୍ପାଦିତ',
-          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
+          photoLibrary: 'ଅନୁମତି ନାମଞ୍ଜୁର: ଦୟାକରି ଆପଣଙ୍କର ଫଟୋ ଲାଇବ୍ରେରୀ ପ୍ରବେଶ ଚାଲୁ କରନ୍ତୁ।',
         },
       },
       RegisteredEmployee: {
@@ -808,7 +809,7 @@ export default {
         },
       },
       EditCoolingUsers: {
-        accountDetails: 'Payout Details', // TODO
+        accountDetails: 'ପେଆଉଟ୍ ବିବରଣୀ',
         toasts: {
           warning:
             'ଏହି ଖାତାକୁ ମିଟାଇବା ସମ୍ଭବ ନୁହେଁ କାରଣ ଏହି ବ୍ୟବହାରକାରୀଙ୍କର କୁଲିଂ ୟୁନିଟ୍(s) {{names}}ରେ ସକ୍ରିୟ ଚେକ-ଇନ୍ ଅଛି। ଦୟାକରି ବ୍ୟବହାରକାରୀକୁ ଅନୁସୂଚନା କରନ୍ତୁ ଯେ ସେ କମରେ ଆସି ଏହି ସାମଗ୍ରୀଗୁଡିକୁ ଆଣିବାକୁ ଓ ଚେକ-ଆଉଟ୍ ସମ୍ପୂର୍ଣ୍ଣ କରିବାକୁ। ତାପରେ ଖାତାକୁ ମିଟାଇବେ!',
@@ -816,7 +817,7 @@ export default {
             'ଆପଣ ଆପଣଙ୍କର କୁଲିଂ ୟୁଜର୍ ତାଲିକାରୁ ଏହି ବ୍ୟବହାରକାରୀକୁ ମିଟାଇବାକୁ ନିଶ୍ଚିତ କି? ଏହି କ୍ରିୟା ବ୍ୟବହାରକାରୀକୁ ମିଟାଇବେ ଏବଂ ପୂର୍ଣ୍ଣ ବାପସ ପାଇବା ସମ୍ଭବ ନୁହେଁ!',
           edit: 'ସଫଳତାର ସହିତ କୁଲିଂ ୟୁଜର୍ ସମ୍ପାଦନା',
           noCoolingUnits: 'ଆପଣଙ୍କର କୌଣସି କୁଲିଂ ୟୁନିଟ୍ ନାହିଁ',
-          noSurveys: 'No surveys have been completed yet.', // TODO
+          noSurveys: 'ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ସର୍ଭେ ସମ୍ପୂର୍ଣ୍ଣ ହୋଇନାହିଁ।',
           updateSuccess: 'ସଫଳତାର ସହିତ ଅଦ୍ୟତନ କରାଗଲା',
         },
         pdf: {
@@ -882,9 +883,9 @@ export default {
           batteryPeakEnergyStorage: 'ଏକ ବ୍ୟାଟେରୀ ର ପୀକ୍ ଷ୍ଟୋରେଜ୍ ଇନେର୍ଜୀ',
           batteryType: 'ବ୍ୟାଟେରୀ ପ୍ରକାର',
           selectSensorType: 'ସେନ୍ସର ପ୍ରକାର ଚୟନ କରନ୍ତୁ',
-          selectSensor: 'Select a sensor', // TODO
+          selectSensor: 'ଏକ ସେନ୍ସର ବାଛନ୍ତୁ',
           emptySensorListError:
-            'It seems there are no sensors connected to your {{type}} account. Please connect at least one and try again.', // TODO
+            'ଦେଖାଯାଉଛି ଆପଣଙ୍କ {{type}} ଆକାଉଣ୍ଟ ସହିତ କୌଣସି ସେନ୍ସର ସଂଯୁକ୍ତ ହୋଇନାହିଁ। ଦୟାକରି ଅତି କମରେ ଗୋଟିଏ ସେନ୍ସର ସଂଯୁକ୍ତ କରନ୍ତୁ ଏବଂ ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ।',
           addTempSensor: 'ଆପଣଙ୍କର କୁଲିଂ ଇଉନିଟ୍ କୁ ଏକ ତାପମାପକ ସେନ୍ସର୍ ଯୋଡନ୍ତୁ',
           sensorDesc: {
             default: 'ଯଦି ହାତରେ ନାହିଁ, ତେବେ ସେନ୍ସର୍ ପ୍ରଦାତା ସହିତ ଏହି ସୂଚନା ଅନୁରୋଧ କରନ୍ତୁ।',
@@ -896,10 +897,10 @@ export default {
             machineId: 'ମେସିନ୍ ID',
           },
           genericSensorForm: {
-            username: 'Username/Email', // TODO
+            username: 'ଉପଯୋଗକାରୀ ନାମ/ଇମେଲ୍',
             password: 'ପାସୱର୍ଡ',
           },
-          unknownSensor: 'Unknown', // TODO
+          unknownSensor: 'ଅଜଣା',
           hybridFields: 'ପ୍ରକୋଷ୍ଠ ର କେତେ ପ୍ରତିଶତ ଅଲଗା ଅଲଗା ବିଦ୍ୟୁତ ଉତ୍ସ ଦ୍ୱାରା ଚାଳିତ?',
           cropSpecificPricing: 'ଫସଲ ହିସାବରେ ନିର୍ଦ୍ଧିଷ୍ଟ ମୂଲ୍ୟ ନିରୂପଣ|',
           value: 'ମୂଲ୍ୟ',
@@ -977,7 +978,7 @@ export default {
         },
       },
       Coupons: {
-        title: 'Discount coupons', // TODO
+        title: 'ଡିସ୍କାଉଣ୍ଟ କୁପନ୍',
         emptyMessage: 'କୌଣସି କୁପନ୍ ଯୋଡାଯାଇନି',
         addCoupon: 'କୁପନ୍ ଯୋଡନ୍ତୁ',
         code: 'କୁପନ୍ କୋଡ୍',
@@ -987,15 +988,15 @@ export default {
         revokeMessage:
           'କିଏ ଆପଣ ଏହି କୁପନ୍ ପ୍ରତ୍ୟାହାର କରିବାକୁ ଚାହାନ୍ତି? ଏକେବାର ପ୍ରତ୍ୟାହାର କରାଗଲେ, ଏହା ପୁନର୍ବାର ବ୍ୟବହାର କରାଯିବ ନାହିଁ ଏବଂ ଅନୁଦାନ ଅପଲବ୍ଧ ନ ହେବ। ଏହି କାର୍ୟ ସ୍ଥାୟୀ ଏବଂ ପୂର୍ବବର୍ତ୍ତୀ ହୋଇପାରିବେ ନାହିଁ।',
         messages: {
-          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+          codeField: 'ସର୍ବାଧିକ 25 ଅକ୍ଷର ହେବା ଉଚିତ୍ ଏବଂ କେବଳ ଅକ୍ଷର ଓ ସଂଖ୍ୟା ଥିବା ଦରକାର',
         },
       },
     },
     Marketplace: {
       buyerSelection: {
-        onBehalfOfCompany: 'Buy on behalf of company', // TODO
-        forMyself: 'Buy for myself', // TODO
-        label: 'Buyer', // TODO
+        label: 'କ୍ରେତା',
+        onBehalfOfCompany: 'କମ୍ପାନୀ ପାଇଁ କିଣନ୍ତୁ',
+        forMyself: 'ନିଜ ପାଇଁ କିଣନ୍ତୁ',
       },
       sorting: {
         'price-asc': 'ମୂଲ୍ୟ ବୃଦ୍ଧି',
@@ -1003,17 +1004,17 @@ export default {
         'nearby-me': 'ମୋ ପାଖରେ',
       },
       distance: {
-        withing5Km: '1 to 5 KM away', // TODO
-        within10Km: '5 to 10 KM away', // TODO
-        within25Km: '10 to 25 KM away', // TODO
-        beyond25Km: 'More than 25 KM away', // TODO
+        withing5Km: '1 ରୁ 5 କି.ମି. ଦୂରେ',
+        within10Km: '5 ରୁ 10 କି.ମି. ଦୂରେ',
+        within25Km: '10 ରୁ 25 କି.ମି. ଦୂରେ',
+        beyond25Km: '25 କି.ମି. ଠାରୁ ଅଧିକ ଦୂରେ',
       },
       priceConfig: 'ମୂଲ୍ୟ କନଫିଗରେସନ୍ ଉତ୍ପାଦ ବିକ୍ରୟକୁ ସନ୍ଦର୍ଭ କରେ, କୁଲିଂ ସ୍ଥାନ ଶୁଳ୍କକୁ ନୁହେଁ।',
       addToCart: {
         addToCartButton: 'କାର୍ଟରେ ଯୋଡନ୍ତୁ ଏବଂ ଶପିଂ ଜାରି ରଖନ୍ତୁ',
         selectQuantity: 'ମାତ୍ରା ବାଛନ୍ତୁ',
-        buyFullCrate: 'Buy full crate', // TODO
-        goToCart: 'Go to Cart Summary', // TODO
+        buyFullCrate: 'ପୂର୍ଣ୍ଣ କ୍ରେଟ୍ କିଣନ୍ତୁ',
+        goToCart: 'କାର୍ଟ ସାରଂଶକୁ ଯାଆନ୍ତୁ',
       },
       currentLocation: 'ବର୍ତ୍ତମାନ ଅବସ୍ଥାନ',
       invalidFormatWarning: 'ସତର୍କତା: ସହରର ନାମର ଆକୃତି ଅବୈଧ। ପରିଣାମ ଠିକ୍ ନ ହୋଇପାରେ।',
@@ -1022,21 +1023,21 @@ export default {
       lowConfidenceWarning:
         'ସତର୍କତା: ସହରକୁ ନିଶ୍ଚିତତାର ସହିତ ଚିହ୍ନଟ କରାଯାଇପାରିଲା ନାହିଁ। ପରିଣାମ ଠିକ୍ ନ ହୋଇପାରେ।',
       filterGeneralWarning: 'ସତର୍କତା: ଭୂଲୋକଚିତ୍ରଣ ଦିନିକି ବିପରୀତ କିଛି ଘଟିଛି। ପରିଣାମ ଠିକ୍ ନ ହୋଇପାରେ।',
-      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
-      owner: 'Owner', // TODO
-      priceRange: 'Range Price / KG',
+      standardCrateWeight: 'କ୍ରେଟ୍‌ର ସାଧାରଣ ଓଜନ {{value}} କି.ଗ୍ରାମ୍',
+      owner: 'ମାଲିକ',
+      priceRange: 'କି.ଗ୍ରାମ୍ ପ୍ରତି ମୂଲ୍ୟ ରେଞ୍ଜ',
       Filters: {
-        min: 'Min',
-        max: 'Max',
-        label: 'Filters',
-        coolingUnitLabel: 'Cooling unit', // TODO
-        coolingUnitHeading: 'Select cooling units', // TODO
-        cropTypeLabel: 'Produce / Crop Type', // TODO
-        cropTypeHeading: 'Select crops', // TODO
-        companyLabel: 'Company', // TODO
-        companyHeading: 'Select companies', // TODO
+        min: 'ନ୍ୟୁନତମ',
+        max: 'ଅଧିକତମ',
+        label: 'ଫିଲ୍ଟର୍',
+        coolingUnitLabel: 'ଇମେ ଘର',
+        coolingUnitHeading: 'ଇମେ ଘର ବାଛନ୍ତୁ',
+        cropTypeLabel: 'ଉତ୍ପାଦ / ଶସ୍ୟ ପ୍ରକାର',
+        cropTypeHeading: 'ଶସ୍ୟ ବାଛନ୍ତୁ',
+        companyLabel: 'କମ୍ପାନୀ',
+        companyHeading: 'କମ୍ପାନୀ ବାଛନ୍ତୁ',
       },
-      maxDistance: 'Max Distance',
+      maxDistance: 'ସର୍ବାଧିକ ଦୂରତା',
     },
     AccountDetails: {
       popups: {
@@ -1060,7 +1061,7 @@ export default {
       sections: {
         sellerSettings: 'ବିକ୍ରେତା ସେଟିଂସ୍',
         buyerSettings: 'କ୍ରେତା ସେଟିଂସ୍',
-        companySellerSettings: 'Seller Settings (Company)', // TODO
+        companySellerSettings: 'ବିକ୍ରେତା ସେଟିଂସ୍ (କମ୍ପାନୀ)',
         details: 'ବିବରଣୀ',
       },
       ContactsSharing: {
@@ -1070,8 +1071,8 @@ export default {
       PayoutSettings: {
         addTitle: 'ଦୟାକରି ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା ଯୋଗ କରନ୍ତୁ',
         editTitle: 'ଆପଣଙ୍କର ବ୍ୟାଙ୍କ ଖାତା ସୂଚନା',
-        addTittleForCompany: "Please insert you company's bank account information", //TODO
-        editTitleForCompany: "Your company's bank account information", //TODO
+        addTittleForCompany: 'ଦୟାକରି ଆପଣଙ୍କ କମ୍ପାନୀର ବ୍ୟାଙ୍କ ଖାତା ବିବରଣୀ ପ୍ରବେଶ କରନ୍ତୁ',
+        editTitleForCompany: 'ଆପଣଙ୍କ କମ୍ପାନୀର ବ୍ୟାଙ୍କ ଖାତା ବିବରଣୀ',
         form: {
           nameLabel: 'ଖାତା ନାମ',
           namePlaceholder: 'ଖାତା ନାମ ଯୋଗ କରନ୍ତୁ',
@@ -1144,7 +1145,7 @@ export default {
       clickHere: 'ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ',
     },
     History: {
-      cropsLabel: '{{crop}} and {{amount}} more', // TODO
+      cropsLabel: '{{crop}} ଏବଂ {{amount}} ଅଧିକ',
       priceLabel: 'ମୂଲ୍ୟ',
       empty:
         'ଏହି ଡାଶବୋର୍ଡ୍ରେ ଚେକ୍-ଇନ୍ ଓ ଚେକ୍-ଆଉଟ୍ ସୂଚନା ପ୍ରଦର୍ଶିତ ହେବ, ଯେତେବେଳେ ଆପଣ କୌଣସି ରୁମରେ ଏକ ଚେକ୍-ଇନ୍ କରିବେ।',
@@ -1159,7 +1160,7 @@ export default {
       optionsMenu: {
         common: {
           pdfReceipt: 'PDF ରସିଦ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ',
-          seeMovement: 'See movement', // TODO
+          seeMovement: 'ଚଳନ ଦେଖନ୍ତୁ',
         },
         checkOut: {
           seeDetails: 'ବିସ୍ତୃତ ସୂଚନା ଦେଖନ୍ତୁ',
@@ -1187,7 +1188,7 @@ export default {
         dateLabel: 'ତାରିଖ',
         weightLabel: 'ଓଜନ (କିଲୋଗ୍ରାମ୍)',
         downloadButton: 'ଇନ୍ଭୟସ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ',
-        downloadName: '{{code}}-receipt',
+        downloadName: '{{code}}-ରସିଦ',
         successMessage: 'ରସିଦ୍ ଡାଉନଲୋଡ୍ ହେଲା!',
         errorMessage: 'କିଛି ତ୍ରୁଟି ଘଟିଛି। ଦୟାକରି ପुनଃଚେଷ୍ଟା କରନ୍ତୁ।',
         checkOut: {
@@ -1264,20 +1265,20 @@ export default {
       },
     },
     MyOrders: {
-      coolingFees: 'Cooling fees', // TODO
-      soldFor: 'Sold for', // TODO
-      ownedBy: 'Owned by', // TODO
-      you: 'You', // TODO
+      coolingFees: 'ଇମେ ଘର ଶୁଳ୍କ',
+      soldFor: 'ବିକ୍ରି ହେଲା',
+      ownedBy: 'ମାଲିକ ହେଉଛନ୍ତି',
+      you: 'ଆପଣ',
       sort: {
         mostRecent: 'ସମ୍ପ୍ରତି',
         oldest: 'ପୁରୁଣା',
         date: 'ତାରିଖ',
       },
       status: {
-        'payment-pending': 'Payment Pending', // TODO
-        'payment-expired': 'Payment Expired', // TODO
-        cancelled: 'Cancelled', // TODO
-        paid: 'Paid', // TODO
+        'payment-pending': 'ପେମେଣ୍ଟ ବକାୟା',
+        'payment-expired': 'ପେମେଣ୍ଟ ସମୟ ସମାପ୍ତ',
+        cancelled: 'ବାତିଲ',
+        paid: 'ପୂର୍ଣ୍ଣ ପେମେଣ୍ଟ ହୋଇଛି',
       },
       title: 'ଆର୍ଡର ସାରାଂଶ',
       orderId: 'ଆର୍ଡର ID',
@@ -1289,9 +1290,9 @@ export default {
     ShoppingCart: {
       cartUpdatedMessage:
         'କିଛି ପଣ୍ୟଗୁଡିକ ଆପଣଙ୍କ ଟ୍ରଲିରୁ ହଟାଇ ଦିଆଯାଇଛି କାରଣ ସେଗୁଡିକ ଏବେ ଚାଲୁ ରହିବାକୁ ଉପଲବ୍ଧ ନାହିଁ |',
-      ownership: 'Change cart ownership to {{name}}', // TODO
+      ownership: '{{name}}ଙ୍କ ନାମରେ କାର୍ଟ ମାଲିକାନା ବଦଳାନ୍ତୁ',
       changeOwnership:
-        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
+        '{{name}}ଙ୍କ ନାମରେ ଶପିଂ କାର୍ଟ ମାଲିକାନା ବଦଳାନ୍ତୁ। ଏହି ପରିବର୍ତ୍ତନ ପରେ କିଛି କ୍ରେଟ୍ ବିଲୋପ ହେବା ସମ୍ଭାବନା ରହିଛି, ଯାହା ବର୍ତ୍ତମାନ ଉପଲବ୍ଧ ନ ହେବା ସମ୍ଭାବନା ରହିଛି। ଆପଣ ନିଶ୍ଚିତ ଭାବେ ଆଗକୁ ବଢ଼ିବାକୁ ଚାହାଁନ୍ତି କି?',
       empty: 'ଆପଣଙ୍କର କାର୍ଟ ଖାଲି ଅଛି',
       daysLeft: 'ଦିନ ବାକି',
       weight: 'କେଜି ଉପଲବ୍ଧ',
@@ -1304,15 +1305,15 @@ export default {
       discount: 'ଛୁଟ',
       fees: 'ସେବା ଶୁଳ୍କ',
       marketFees: 'ବଜାର ଶୁଳ୍କ',
-      paymentFees: 'Payment fee', // TODO
-      coolingFees: 'Cooling fee', // TODO
+      paymentFees: 'ପେମେଣ୍ଟ ଶୁଳ୍କ',
+      coolingFees: 'ଇମେ ଘର ଶୁଳ୍କ',
       viewContacts: 'ସଂପର୍କ(ଗୁଡିକ) ଦେଖନ୍ତୁ',
       contactsForDelivery: 'ଡେଲିଭରୀ ସୂଚନା ପାଇଁ ସଂପର୍କ(ଗୁଡିକ)',
       gotItButton: 'ବୁଝିଗଲି!',
       pickupMethods: 'ପିକ୍‌ଅପ୍ ପଧ୍ଧତି',
-      selectPickupMethod: 'Select a pickup method', // TODO
-      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
-      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
+      selectPickupMethod: 'ଏକ ପିକଅପ୍ ଉପାୟ ବାଛନ୍ତୁ',
+      selectPickupMethodInfo: 'ପ୍ରତ୍ୟେକ ଇମେ ଘର ପାଇଁ ପିକଅପ୍ ଉପାୟ ବାଛିବା ଆବଶ୍ୟକ।',
+      pickupMethodSelectionMissing: '{{amount}} ଟି ଇମେ ଘର ପାଇଁ ପିକଅପ୍ ବାଛିବା ଉପାୟ ଅନୁପସ୍ଥିତ।',
       pickUpToday: 'ଆଜି ପିକ୍‌ଅପ୍',
       keepInStorageDailyRate: 'ସ୍ଥାନ ରେଖିବା ({{price}} / ଦିନ)',
       keepInStorageFixedRate: 'ସ୍ଥାନ ରେଖିବା ({{price}})',
@@ -1330,23 +1331,22 @@ export default {
       couponPlaceholder: 'ଉଦାହରଣ: 20OFF',
       discountsApplied: 'ଛୁଟ ଲାଗୁ କରାଯାଇଛି',
       pickupModal: {
-        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
+        today: 'ଦୟାକରି ଆପଣଙ୍କ ଅର୍ଡର {{company}} ରେ, {{location}} ରେ ଆଜି ଗଁଟିଯାନ୍ତୁ।',
+        storage: 'ଆପଣଙ୍କ କ୍ରେଟ୍‌ଗୁଡିକ ବର୍ତ୍ତମାନ {{company}} ରେ, {{location}} ରେ ସଂରକ୍ଷିତ ହେଉଛି।',
         delivery:
-          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+          'ଦୟାକରି ଡେଲିଭେରୀ ସଜାଗ କରିବା ପାଇଁ ଉପଲବ୍ଧ ଥିବା ନମ୍ବରଗୁଡିକ ସହିତ ସମ୍ପର୍କ କରନ୍ତୁ। ଆପଣ "ଅର୍ଡର ବିବରଣୀ" ଅଧିନରେ ବିକଳ୍ପଗୁଡିକୁ ଦେଖିପାରିବେ।',
       },
       errors: {
         invalid: 'ଅବୈଧ ମୂଲ୍ୟ',
         minimumCartValue: 'ଆର୍ଡର ଅତିକମ୍ ₦100 ହେବା ଉଚିତ।',
       },
-      method: 'Method:', // TODO
+      method: 'ଉପାୟ:',
       deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
-      pickUpTodayInfo:
-        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
-      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+        'ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ: ଡେଲିଭେରୀ ଶୁଳ୍କ ପ୍ରଦାନକାରୀ ଉପରେ ନିର୍ଭର କରେ। ଯଦି ଡେଲିଭେରୀ ଆସନ୍ତାକାଲି ପାଇଁ ନିର୍ଦ୍ଧାରିତ, ତେବେ {{value}} ଟଙ୍କା ଇମେ ଘର ଶୁଳ୍କ ଲାଗିବ।',
+      pickUpTodayInfo: 'ଅତିରିକ୍ତ ଇମେ ଘର ଶୁଳ୍କ ରୋକିବା ପାଇଁ ଦୟାକରି ଆଜି ମଧ୍ୟରେ ଆପଣଙ୍କ ଉତ୍ପାଦ ଉଠାନ୍ତୁ।',
+      keepInStorageInfo: 'ଅପଣ ଅର୍ଡର ଉଠାଇବା ବେଳେ ଇମେ ଘର ଶୁଳ୍କ ଲାଗିବ।',
       orderOverviewSubtitle:
-        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
+        'ଆପଣ "ମୋ ଅର୍ଡରଗୁଡିକ" ଟ୍ୟାବରେ, "ବଜାର" ସ୍କ୍ରିନ୍ ମାଧ୍ୟମରେ ଏହି ସୂଚନାକୁ ପୁଣି ଦେଖିପାରିବେ।',
     },
     Analytics: {
       emptyState: 'ଦେଖାଇବାକୁ କୌଣସି ତଥ୍ୟ ନାହିଁ',
@@ -1419,7 +1419,7 @@ export default {
           from: 'ଠାରୁ',
           to: 'ପର୍ଯ୍ୟନ୍ତ',
         },
-        downloadFileName: 'analytics-data',
+        downloadFileName: 'ବିଶ୍ଳେଷଣ-ତଥ୍ୟ',
         utilization: 'ବ୍ୟବହାର',
         goBackButton: 'ମୁଁ ପଛକୁ ଯାଆଁ',
         companyNameLabel: 'କମ୍ପାନୀ ନାମ',
@@ -1519,7 +1519,7 @@ export default {
   tutorial: {
     welcome: 'କୋଲ୍ଡଟିଭେଟ୍‌ରେ ଆପଣଙ୍କୁ ସ୍ବାଗତ। ଏହା କାର୍ୟଗତିର ଏକ ବ୍ରିଫିଂ।',
     farmerWelcome:
-      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
+      'Coldtivate କୁ ସ୍ୱାଗତ! ଏହି ଟ୍ୟୁଟୋରିଅଲ୍ ଆପଣଙ୍କୁ ଏହି ଆପ୍‌ ବ୍ୟବହାର କରିବା ବିଷୟରେ ବୁଝିବାରେ ସାହାଯ୍ୟ କରିବ।',
     quit: 'ଟ୍ୟୁଟୋରିଆଲ୍ ବନ୍ଦ କରନ୍ତୁ',
     congratulations:
       'ବଧାଇ! ଆପଣ ଟ୍ୟୁଟୋରିଆଲ୍ ସମାପ୍ତ କରିଛନ୍ତି! ଆପଣଙ୍କୁ ଆପ୍ଲିକେସନ୍ ବ୍ୟବହାର କରିବାକୁ ଡ୍ୟାସବୋର୍ଡକୁ ଫେରିବାକୁ କହାଯାଉଛି।',
@@ -1536,7 +1536,7 @@ export default {
       managementNavigation:
         'ମେନୁରେ, ଆପଣ "ମ୍ୟାନେଜ୍ମେଣ୍ଟ"କୁ ନାଭିଗେଟ୍ କରିପାରିବେ ଏବଂ ସେଠାରେ କୁଲିଙ୍ଗ୍ ୟୁଜର୍ସକୁ ଯୋଡିବା କିମ୍ବା ସଂପାଦନା କରିବାକୁ ଦବାଇପାରିବେ। ଏହାକୁ ଚେଷ୍ଟା କରନ୍ତୁ।',
       operatorManagementNavigation:
-        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
+        'ମେନୁ ମଧ୍ୟରେ, ଆପଣ "ପରିଚାଳନା" କୁ ଯାଇ ସେଠାରେ ଥିବା କ୍ଲିକ୍ ମାଧ୍ୟମରେ ଇମେ ଘର ବ୍ୟବହାରକାରୀଙ୍କୁ ଯୋଡ଼ିବା କିମ୍ବା ସମ୍ପାଦନ କରିପାରିବେ।',
       addCoolingUser:
         'କୋଲ୍ଡଟିଭେଟ୍‌ରେ ରେଜିଷ୍ଟର୍ ହୋଇନଥିବା କୁଲିଙ୍ଗ୍ ୟୁଜର୍ସକୁ ସେମାନଙ୍କର ବିବରଣୀ (ନାମ, ଫୋନ୍ ନମ୍ବର) ପ୍ରବେଶ କରି ଯୋଡାଯିବ। ଆପ୍ଲିକେସନ୍‌ରେ ରେଜିଷ୍ଟର୍ ହୋଇଥିବା କୁଲିଙ୍ଗ୍ ୟୁଜର୍ସକୁ କୋଡ୍ ଦ୍ୱାରା ଯୋଡାଯିବ। ସେମାନେ ସେମାନଙ୍କର ପ୍ରୋଫାଇଲ୍ -> "ଆକାଉଣ୍ଟ ବିବରଣୀ" -> "କୁଲିଙ୍ଗ୍ ୟୁଜର୍ ଇମ୍ପୋର୍ଟ୍ କୋଡ୍" ଉପରେ ଏହାକୁ ମିଳିବ।',
       navigateToCoolingUser: 'ଆଗକୁ ଯାଇ କୁଲିଙ୍ଗ୍ ୟୁଜର୍ସ ଟ୍ୟାବ୍କୁ ଦବାନ୍ତୁ',
@@ -1580,7 +1580,7 @@ export default {
       accountDetailsNavigation:
         'ମେନୁରେ, ଆପଣ "ଆକାଉଣ୍ଟ ବିବରଣୀ" ଉପରେ ଗତି କରିପାରିବେ ଏବଂ ତାହାରେ ଆପଣଙ୍କର ଆକାଉଣ୍ଟ ସହିତ ସମ୍ବନ୍ଧିତ କିଛି ବିବରଣୀ ଦେଖିବା/ସଂପାଦନା କରିବାକୁ କ୍ଲିକ୍ କରନ୍ତୁ। ଆଗକୁ ଯାଆନ୍ତୁ ଏବଂ ଏହାକୁ ପ୍ରୟୋଗ କରନ୍ତୁ।',
       coolingUserSurvey:
-        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
+        'ଯେତେବେଳେ ଆପଣ ପ୍ରଥମେ ଆପ୍ ଖୋଲନ୍ତି, ଆପଣଙ୍କୁ ଗୋଟିଏ ସଂକ୍ଷିପ୍ତ ସର୍ଭେ ଭରିବା ପାଇଁ ଅନୁରୋଧ କରାଯାଏ। ଏହି ସର୍ଭେ ଭରିବା ଅତ୍ୟନ୍ତ ଜରୁରୀ, ଯାହାଫଳରେ ଆପ୍ ଆପଣଙ୍କୁ ବ୍ୟକ୍ତିଗତ ସୁପାରିଶ ଦେଇପାରିବ। ଯଦି ଆପଣ ପ୍ରଥମେ ଲଗ୍ ଇନ୍ କଲାବେଳେ ସର୍ଭେ ଭରିପାରିନାହାନ୍ତି, ତେବେ ଆପଣ "ନିଜସ୍ୱ ବିବରଣୀ" → "ଇମେ ଘର ବ୍ୟବହାରକାରୀ ସର୍ଭେ" ମାଧ୍ୟମରେ ସର୍ଭେକୁ ପୁଣି ଆକ୍ସେସ୍ କରିପାରିବେ। ସର୍ଭେ ଭରିବା ପାଇଁ ସମୟ ଦେବାରେ ଧନ୍ୟବାଦ!',
       coolingUserCode:
         'ଆପଣ ଯେତେବେଳେ ପ୍ରଥମେ କୌଣସି କାଲା ଘରକୁ ଗଲେ, ତେବେ ଓପରେଟର ଆପଣଙ୍କୁ ଆପଣଙ୍କର ବ୍ୟକ୍ତିଗତ କୋଡ୍ ପ୍ରଦାନ କରିବାକୁ ମାଙ୍ଗିବେ, ଯାହା ଆପଣଙ୍କୁ କାଲା ଘର ୟୁଜର୍ ତାଲିକାରେ ଯୋଗ କରିବ। ଆପଣ ଏହି କୋଡ୍ "ବ୍ୟକ୍ତିଗତ ବିବରଣୀ" -> "କୁଲିଂ ୟୁଜର ଇମ୍ପୋର୍ଟ କୋଡ୍" ରେ ପାଇପାରିବେ।',
       knowledgeHub:
@@ -1597,18 +1597,36 @@ export default {
       dashboardStep5:
         'ଯଦି ଆପଣଙ୍କର ମଲ୍ଟିପ୍ଲ ଘରରେ କ୍ରେଟ୍ ରହିଛି, ତେବେ ଆପଣ ଏକ କମ୍ପାନୀ ଓ କୁଲିଂ ୟୁନିଟ୍ ଚୟନ କରି ଦେଖିବାକୁ କକ୍ଷ ବଦଳାଇପାରିବେ।',
       dashboardStep6:
-        'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
+        'ଯେତେବେଳେ ଆପଣଙ୍କ କ୍ରେଟ୍‌ଗୁଡିକୁ ଉଠାଇବା ସମୟ ନିକଟ ଆସିଥାଏ ଓ କାର୍ଡ ଟିକେ ଲାଲ ହୋଇଯାଏ, ତେବେ ଆପଣଙ୍କୁ ଗୋଟିଏ ବିଜ୍ଞପ୍ତି ମିଳିବ ଯାହା ଆପଣଙ୍କୁ ଇମେ ଘରକୁ ଯିବା, ଏହି କ୍ରେଟ୍‌ଗୁଡିକୁ ଉଠାଇବା, ଓ ବିକ୍ରି କରିବା ପାଇଁ ପ୍ରେରଣା ଦେବ। ଆପଣଙ୍କ ବିଜ୍ଞପ୍ତିଗୁଡିକୁ ଡାହାଣପଟେ ଥିବା ଘଣ୍ଟି ଉପରେ କ୍ଲିକ୍ କରି ଦେଖିପାରିବେ।',
       farmerHistory:
         'ତାଲିକା "ଇତିହାସ" ରେ ଆପଣ ପ୍ରତିଟି କକ୍ଷରେ ଆପଣଙ୍କର ସମସ୍ତ ଚେକ-ଇନ୍ ଓ ଚେକ-ଆଉଟ୍ ର ସାରାଂଶ ଦେଖିପାରିବେ। ଯଦି ଆପଣ ଏକ ଚେକ-ଆଉଟ୍ ପାଖରେ ଏକ ଲାଲ ତାରା ଦେଖନ୍ତି, ଦୟାକରି ତିନି ଡଟ୍ ସେଲକ୍ଟ କରିବା ପାଇଁ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ "ବଜାର ସର୍ଭେ ପୂରଣ କରନ୍ତୁ"। ଏଠାରେ, ଆମେ ଆପଣଙ୍କର ପ୍ରଦାନକୃତ ଉତ୍ପାଦ କେତେ ମୂଲ୍ୟରେ ବିକ୍ରୟ କରାଯାଇଛି ଏବଂ କିଛି ବିକୃତ ହୋଇଛି କି ନାହିଁ ବୁଝିବାକୁ ଚାହାଁୁ। ଏହି ସୂଚନାଗୁଡିକୁ କୋଲ୍ଡ ରୁମର କାର୍ୟକଳାପ ସୁଧାର କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯିବ, ତେଣୁ ଦୟାକରି ସଠିକ୍ ଉତ୍ତର ଦେବାକୁ ଯାଚନା କରୁଛୁ।',
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
+        'ନିଜ ସ୍ଥାନ ନିକଟ ଥିବା ଇମେ ଘର ଚେକ୍ କରିବା ପାଇଁ, ଆପଣ ଏକ୍ରାନ୍‌ର ତଳ ପଟରେ ଥିବା ବଟନଗୁଡିକୁ ଯାଇ, "ଅଧିକ", "ଇମେ ଘର" ଟ୍ୟାବ୍ କ୍ଲିକ୍ କରନ୍ତୁ ଓ "ମାପ୍" ବାଛନ୍ତୁ। ମାପ୍‌ରେ ଥିବା ପ୍ରତ୍ୟେକ ପିନ୍‌ ଉପରେ କ୍ଲିକ୍ କରି, ଆପଣ ଇମେ ଘରର ପ୍ରକାର ଓ ସଂରକ୍ଷଣ ମୂଲ୍ୟ ଦେଖିପାରିବେ।',
       farmersUnitsPlanner:
         '"କୋଲିଂ ଇଉନିଟ୍‌ଗୁଡିକ" ଟାବ୍‌ରେ, ଆପଣ ମାପ, କକ୍ଷର ବର୍ତ୍ତମାନ ଏବଂ ଭବିଷ୍ୟତ ସଂଖ୍ୟାକୁ ("ପ୍ଲାନର" ରେ) ଏବଂ କକ୍ଷର ତାପମାତ୍ରା ("କକ୍ଷର ସ୍ଥିତି" ରେ) ଦେଖିପାରିବେ। ଏହି ସ୍କ୍ରିନ୍‌ଗୁଡିକ ଆପଣଙ୍କୁ କୋଲ୍ଡ ରୁମଗୁଡିକର କାର୍ଯ୍ୟ ନିରୀକ୍ଷଣ କରିବାରେ ସାହାଯ୍ୟ କରିବ, ଯାହାକି ସେଠାରେ ଯାଆଁ ସହ ବିନା ଯାଞ୍ଚ କରିବାକୁ।',
       marketPrice:
-        'ଯଦି ଆପଣଙ୍କୁ "ବଜାର ମୂଲ୍ୟ" ନାମକ ଏକ ଟାବ୍‌ ଦେଖାଯାଉଛି, ତେବେ ଆପଣ ଦେଶର ବିଭିନ୍ନ ଫଳ ଓ ଶାକସାଗୁଲିର ମୂଲ୍ୟଗୁଡିକୁ ଗତ କିଛି ଦିନରେ ଏବଂ ଭବିଷ୍ୟତରେ ମୂଲ୍ୟ ଆବହାର ଚେକ୍ କରିପାରିବେ। ବର୍ତ୍ତମାନ, ଏହି ବିକଳ୍ପ କେବଳ ଚୟନିତ ଦେଶମାନଙ୍କ ପାଇଁ ଉପଲବ୍ଧ।', // TODO
+        'ଯଦି ଆପଣଙ୍କୁ "ବଜାର ମୂଲ୍ୟ" ନାମକ ଏକ ଟାବ୍‌ ଦେଖାଯାଉଛି, ତେବେ ଆପଣ ଦେଶର ବିଭିନ୍ନ ଫଳ ଓ ଶାକସାଗୁଲିର ମୂଲ୍ୟଗୁଡିକୁ ଗତ କିଛି ଦିନରେ ଏବଂ ଭବିଷ୍ୟତରେ ମୂଲ୍ୟ ଆବହାର ଚେକ୍ କରିପାରିବେ। ବର୍ତ୍ତମାନ, ଏହି ବିକଳ୍ପ କେବଳ ଚୟନିତ ଦେଶମାନଙ୍କ ପାଇଁ ଉପଲବ୍ଧ।',
       farmerFinalStep:
         'ବଧାଇ! ଆପଣ ଟ୍ୟୁଟୋରିଆଲ୍‌ ସମ୍ପୂର୍ଣ୍ଣ କରିଛନ୍ତି! ଯଦି ଆପଣଙ୍କୁ ଏହି ଆପ୍‌ ବିଷୟରେ ପ୍ରଶ୍ନ ଅଛି, ତେବେ ଆମେ ଏହି FAQ ଚେକ୍ କରିବାକୁ, କୋଲ୍ଡ ରୁମର ଏକ ଅପରେଟରଙ୍କୁ ପ୍ରଶ୍ନ କରିବାକୁ କିମ୍ବା app@yourvcca.org ଠାରେ ଲେଖିବାକୁ ପ୍ରଶଂସା କରୁଛୁ।',
-      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
+      more: 'ଯେତେବେଳେ ଆପଣ "ଅଧିକ" ଉପରେ କ୍ଲିକ୍ କରନ୍ତି, ତେବେ ଆପଣ "ଇତିହାସ", "ଉତ୍ପାଦ ମୂଲ୍ୟ", "ଇମେ ଘର", ଓ "ଅର୍ଡର" ସ୍କ୍ରିନ୍‌ଗୁଡିକ ବାଛିପାରିବେ।',
+      marketplaceStep1:
+        'ଏହା Coldtivate ର ଡିଜିଟାଲ୍ ମାର୍କେଟପ୍ଲେସ୍, ଯେଉଁଠାରେ ସମସ୍ତ ବ୍ୟବହାରକାରୀ ଠଣ୍ଡା ଘରରେ ସଞ୍ଚୟିତ ଉତ୍ପାଦ ବିକ୍ରି ଓ କ୍ରୟ କରିପାରିବେ। ବିକ୍ରି ପାଇଁ ପ୍ରତ୍ୟେକ ଖାଲି ଗାଦି ଏଠାରେ ଦିଆଯାଇଛି, ଏବଂ ଆପଣ କିଲୋଗ୍ରାମ୍ରେ ଯେକୌଣସି ପରିମାଣ କିମ୍ବା ସମ୍ପୂର୍ଣ୍ଣ ଗାଦି କିଣିପାରିବେ।',
+      marketplaceStep2:
+        'କିଣିବା ପାଇଁ ଉତ୍ପାଦ ବାଛିବା ପରେ, ଆପଣଙ୍କର ଶପିଂ କାର୍ଟ୍ ରେ ଥିବା ଉତ୍ପାଦ ଦେଖିବାକୁ ଶପିଂ କାର୍ଟ୍ ଆଇକନ୍ ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ।',
+      shoppingCart:
+        "ଆପଣଙ୍କର କିଣା ବାଣିଜ୍ୟ ସମ୍ପୂର୍ଣ୍ଣ କରିବା ପାଇଁ, ଶପିଂ କାର୍ଟ୍ ଭିତରେ ଥିବା ବସ୍ତୁଗୁଡ଼ିକୁ ସମୀକ୍ଷା କରନ୍ତୁ ଏବଂ ଆଦେଶ ସମ୍ପୂର୍ଣ୍ଣ କରିବାକୁ ପଦକ୍ଷେପ ଅନୁସରଣ କରି 'ଚାଲୁ ରଖନ୍ତୁ' ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ।",
+      marketplaceStep3:
+        "ମୁଖ୍ୟ ମାର୍କେଟ୍ପ୍ଲେସ୍ ଟ୍ୟାବ୍ ରେ ଆପଣ 'ମୋର ଆଦେଶ' ଓ 'ମୋର ବିକ୍ରୟ' ପୃଷ୍ଠା ମାଧ୍ୟମରେ ଆପଣଙ୍କର ଆଦେଶ ଓ ବିକ୍ରୟ ର ସାରାଂଶ ଇତିହାସ ଦେଖିପାରିବେ। ଅଧିକ ଜାଣିବା ପାଇଁ 'ମୋର ଆଦେଶ' ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ।",
+      myOrders:
+        'ଏଠାରେ ଆପଣ ମାର୍କେଟପ୍ଲେସ୍ ମାଧ୍ୟମରେ କରାଯାଇଥିବା ପ୍ରତ୍ୟେକ ଆଦେଶ ଦେଖିପାରିବେ, ପ୍ରତ୍ୟେକ ଆଦେଶ ସହିତ ଏଥିରେ ଥିବା ସବୁ ବିବରଣୀ ଦିଆଯାଇଛି – ପ୍ରତ୍ୟେକ ଆଦେଶ ଅଧିକ ଜାଣିବା ପାଇଁ ଡାହାଣପଟେ ଥିବା ତୀର ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ।',
+      operatorListForSale:
+        'ଆପଣ ଏକ ଠଣ୍ଡା ଘର ବ୍ୟବହାରକାରୀଙ୍କୁ ଉତ୍ପାଦ ବିକ୍ରୟ ପାଇଁ ମାର୍କେଟପ୍ଲେସ୍ ରେ ତାଲିକାଭୁକ୍ତ କରିବାରେ ସହଯୋଗ କରିପାରିବେ। ବିବରଣୀ ଦେଖିବା ପାଇଁ ଡାହାଣପଟେ ଥିବା ତୀର ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ।',
+      coolingUserListForSale:
+        'ଆପଣ କେଉଁ ଖାଲି ଗାଦିଗୁଡ଼ିକୁ ମାର୍କେଟପ୍ଲେସ୍ ରେ ବିକ୍ରୟ ପାଇଁ ଦେଖାଇବେ ତାହା ପରିଚାଳନା କରିପାରିବେ। ବିବରଣୀ ଦେଖିବା ପାଇଁ ଡାହାଣପଟେ ଥିବା ତୀର ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ।',
+      commonListForSale:
+        '"ବିକ୍ରୟ ପାଇଁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ" ଉପରେ କ୍ଲିକ୍ କରି igbe #1 ବିକ୍ରୟ ପାଇଁ ତାଲିକାରେ ଯୋଡନ୍ତୁ।',
+      commonListForSalePrice:
+        'ଖାଲି ଗାଦି ବିକ୍ରୟ ପାଇଁ ତାଲିକାଭୁକ୍ତ କରିବା ପରେ, ଆପଣ ଏଠି ନିମ୍ନରେ ବିକ୍ରୟ ମୂଲ୍ୟ ମଧ୍ୟ ଦିଅନ୍ତୁ! ଏହି ସେଟିଂଗୁଡ଼ିକୁ ଯେକୌଣସି ସମୟରେ ସଂପାଦନ କରାଯାଇପାରିବ।',
     },
   },
 } satisfies Translations;
