@@ -10,6 +10,7 @@ import colors from 'tailwindcss/colors';
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
@@ -20,6 +21,7 @@ import { useApiCall } from '#services/hooks/useAPiCall';
 import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import { useTutorialStore } from '#stores/tutorial';
 import type { CheckInResponse, CheckInWitCodeResponse } from '#types/api.responses';
 import { ECoolingUnitMetric, EDateCropped, EPricingType } from '#types/global';
 
@@ -29,10 +31,9 @@ import { Text } from '#ui/components/Text';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import reportCrash from '#ui/lib/reportCrash';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
-import reportCrash from '#ui/lib/reportCrash';
-import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 
 import {
   CheckIn1ScreenOverlay,
@@ -56,6 +57,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   const company = useManagementStore((store) => store.company);
+  const isTutorialActive = useTutorialStore((store) => store.isTutorialActive);
   const refreshData = useDashboardStore((store) => store.refreshData);
   const {
     checkOutCode,
@@ -92,7 +94,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     'getFarmerSurveys',
     ColdtivateService.getFarmerSurveys,
     { farmerId: user.id as number },
-    { skip: !user.id, defaultData: [] }
+    {
+      skip: !user.id || isTutorialActive,
+      defaultData: [],
+    }
   );
 
   const [isCodeModalOpen, setIsCodeModalOpen] = useState<boolean>(false);
