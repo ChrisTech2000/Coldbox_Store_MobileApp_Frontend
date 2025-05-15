@@ -19,24 +19,22 @@ def setup_dotenv(options)
 end
 
 
-def generate_build_id (options)
-  version_id = options[:version_id] || "0.0.1"
+def generate_build_id(options)
+    version_id = options[:version_id].to_s.strip
+    version_id = "0.0.1" if version_id.empty? || version_id == "0.0.0"
 
-  # Split the version_id into major, minor, and patch components
-  version_components = version_id.split('.')
-  major = version_components[0].to_i
-  minor = version_components[1].to_i
-  patch = version_components[2].to_i
+    version_components = version_id.split('.')
+    major = version_components[0].to_i
+    minor = version_components[1].to_i
+    patch = version_components[2].to_i
 
-  # Calculate the build_id
-  build_id = major * 10000 + minor * 100 + patch
+    build_id = major * 10000 + minor * 100 + patch
 
-  # Print the generated build_id
-  UI.message("Generated build_id: #{build_id}")
-
-  # Return the build_id
-  build_id
+    UI.message("Generated build_id: #{build_id} (from version_id: #{version_id})")
+    build_id
 end
+  
+  
 
 def parse_version_id (options)
   # Extract the version_id from the options or default to "0.0.0"
