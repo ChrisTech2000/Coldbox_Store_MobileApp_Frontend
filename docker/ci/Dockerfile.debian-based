@@ -4,6 +4,7 @@ FROM debian:sid-20250428-slim
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 
+# Install base packages and development tools
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked <<INSTALL
     apt-get update;
@@ -19,18 +20,19 @@ INSTALL
 
 # Install docker
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked <<INSTALL
-    install -m 0755 -d /etc/apt/keyrings; curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc; chmod a+r /etc/apt/keyrings/docker.asc;
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian bookworm stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null;
-    apt-get update;
-    apt-get install -y docker-ce=5:25.0.3-1~debian.12~bookworm;
-INSTALL
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    bash -c 'install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian bookworm stable" > /etc/apt/sources.list.d/docker.list && \
+    apt-get update && \
+    apt-get install -y \
+        docker-ce=5:25.0.3-1~debian.12~bookworm \
+        docker-ce-cli=5:25.0.3-1~debian.12~bookworm \
+        docker-buildx-plugin'
 
-# Set Java 8 version as the default jdk
-RUN update-java-alternatives --set "$(update-java-alternatives --list | grep java-1.8 |  cut -d " " -f1)"
-# # Set the default JVM to OpenJDK 8
-# ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk/
-# ENV JAVA_INCLUDE_DIR=$JAVA_HOME/include
+# Set Java 8 as default JDK
+RUN update-java-alternatives --set "$(update-java-alternatives --list | grep java-1.8 | cut -d ' ' -f1)"
 
 # NodeJS / NPM / Yarn
 ENV NODE_VERSION=20.13.1 \
@@ -42,14 +44,10 @@ RUN mkdir -p $NODE_HOME $YARN_HOME \
     && curl --silent --compressed -L "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | tar -C "$NODE_HOME" --strip-components 1 -xJf - \
     && curl --silent --compressed -L "https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz" | tar -C "$YARN_HOME" --strip-components 1 -xzf -
 
-
-# Android
+# Android SDK
 ENV ANDROID_HOME=/usr/local/android-sdk
 ENV PATH=$PATH:/usr/local/android-sdk/tools/bin:/usr/local/android-sdk/platform-tools
 
-# Download Android SDK and Install Android Build Tool and Libraries
-# Accept licenses and Update the SDK Manager repositories
-# Install build, platform, and platform tools
 RUN --mount=type=cache,target=/root/.android/cache,sharing=locked <<INSTALL
     mkdir "$ANDROID_HOME" ~/.android && touch ~/.android/repositories.cfg;
     cd "$ANDROID_HOME";
@@ -63,15 +61,10 @@ RUN --mount=type=cache,target=/root/.android/cache,sharing=locked <<INSTALL
 INSTALL
 
 # Set the default JVM to OpenJDK 17
-RUN update-java-alternatives --set "$(update-java-alternatives --list | grep java-1.17 |  cut -d " " -f1)"
+RUN update-java-alternatives --set "$(update-java-alternatives --list | grep java-1.17 | cut -d ' ' -f1)"
 
 # Install bundler
 RUN gem install bundler -v 2.4.22
 
-# Install docker tooling
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update -y && apt-get install -y docker-cli && \
-    apt-get clean autoclean && \
-    apt-get autoremove --yes
-RUN curl -L -o /usr/bin/docker-compose https://github.com/docker/compose/releases/download/v2.32.2/docker-compose-linux-`arch` && chmod +x /usr/bin/docker-compose
+# Install docker-compose separately
+RUN curl -L -o /usr/bin/docker-compose https://github.com/docker/compose/releases/download/v2.32.2/docker-compose-linux-$(arch) && chmod +x /usr/bin/docker-compose
