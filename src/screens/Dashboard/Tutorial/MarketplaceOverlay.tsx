@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useShallow } from 'zustand/react/shallow';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { MEDIUM_SCREEN_THRESHOLD, SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { useAuthStore } from '#stores/auth';
@@ -55,7 +55,10 @@ export function Marketplace1ScreenOverlay({ next, goTo, stop }: IOverlayComponen
       <Icon
         style={[
           {
-            top: 835,
+            top:
+              Platform.OS === 'ios' || screenHeight <= SMALL_SCREEN_THRESHOLD
+                ? screenHeight - 100
+                : screenHeight - 20,
             left: LanguageManager.isRTL ? undefined : '-35%',
             right: LanguageManager.isRTL ? '-55%' : undefined,
             transform: [{ rotate: '165deg' }],
@@ -336,7 +339,7 @@ export function Marketplace3ScreenOverlay({
           tw={LanguageManager.isRTL ? 'left-[-25%]' : 'right-[-25%]'}
           style={[
             {
-              top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 50 : 100),
+              top: mask.y + mask.height - 100,
               opacity: blinkAnim,
             },
           ]}
@@ -492,7 +495,7 @@ export function MarketplaceListing1ScreenOverlay({
       <TouchableOpacity
         tw={cn('absolute w-full h-[7%] items-end z-10')}
         style={{
-          top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 20 : 65),
+          top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 50 : 60),
         }}
         onPress={() => {
           rootNavigation.navigate(
@@ -510,7 +513,7 @@ export function MarketplaceListing1ScreenOverlay({
         <Animated.View
           style={[
             {
-              top: mask.y + mask.height - screenHeight * 0.45,
+              top: 30,
               opacity: blinkAnim,
             },
           ]}
@@ -520,7 +523,10 @@ export function MarketplaceListing1ScreenOverlay({
       </TouchableOpacity>
 
       <View
-        tw="absolute left-2.5 bottom-40 w-[95%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-2.5 w-[95%] h-auto bg-white p-3 rounded-md z-30',
+          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-32' : 'bottom-40'
+        )}
         style={[
           {
             shadowColor: '#000',
@@ -609,7 +615,11 @@ export function MarketplaceListing2ScreenOverlay({
             },
           ]}
         >
-          <MaterialIcon name="touch-app" size={40} color={colors.green.primary} />
+          <MaterialIcon
+            name="touch-app"
+            size={screenHeight <= SMALL_SCREEN_THRESHOLD ? 30 : 40}
+            color={colors.green.primary}
+          />
         </Animated.View>
       </TouchableOpacity>
 
@@ -673,14 +683,24 @@ export function MarketplaceListing3ScreenOverlay({ goTo, stop }: IOverlayCompone
         size={40}
         color={colors.green.primary}
         style={{
-          top: '60%',
+          top:
+            screenHeight > MEDIUM_SCREEN_THRESHOLD
+              ? '60%'
+              : screenHeight <= MEDIUM_SCREEN_THRESHOLD && screenHeight >= SMALL_SCREEN_THRESHOLD
+                ? '70%'
+                : '75%',
           left: LanguageManager.isRTL ? undefined : '50%',
           right: LanguageManager.isRTL ? '50%' : undefined,
         }}
       />
 
       <View
-        tw="absolute left-2.5 bottom-[50%] w-[95%] h-auto bg-white p-3 rounded-md z-30"
+        tw={cn(
+          'absolute left-2.5 w-[95%] h-auto bg-white p-3 rounded-md z-30',
+          Platform.OS === 'android' && screenHeight > SMALL_SCREEN_THRESHOLD
+            ? 'bottom-[55%]'
+            : 'bottom-[50%]'
+        )}
         style={[
           {
             shadowColor: '#000',

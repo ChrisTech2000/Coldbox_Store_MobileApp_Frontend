@@ -51,9 +51,9 @@ export default {
       EditLocation: 'Editar Localização',
       CoolingUnits: 'Unidades de Refrigeração',
       DisabledCoolingUnitsDescription: 'Adicione pelo menos uma localização',
-      CoolingUsers: 'Usuários de Refrigeração',
-      AddCoolingUser: 'Adicionar Usuário de Refrigeração',
-      EditCoolingUser: 'Editar Usuário de Refrigeração',
+      CoolingUsers: 'Utilizadores de Refrigeração',
+      AddCoolingUser: 'Adicionar Utilizador de Refrigeração',
+      EditCoolingUser: 'Editar Utilizador de Refrigeração',
       AddCoolingUnit: 'Adicionar Unidade de Refrigeração',
       EditCoolingUnit: 'Editar Unidade de Refrigeração',
       Operators: 'Operadores',
@@ -274,7 +274,7 @@ export default {
         submit: 'Registar',
         terms: {
           agree: 'Eu concordo com Coldtivate',
-          license: 'Contrato de licença de usuário',
+          license: 'Contrato de licença de utilizador',
           privacy: 'Privacidade Política',
           and: 'e',
           comsol: 'COMSOL Termos de uso',
@@ -1238,7 +1238,7 @@ export default {
           occupationFarmer: 'Um agricultor',
           occupationTrader: 'Um pequeno vendedor/comerciante/grossista',
           usageQuestion: 'Já usou a sala fria no passado?',
-          newUser: 'Não, sou um novo usuário',
+          newUser: 'Não, sou um novo utilizador',
           oldUser: 'Sim, já usei a sala fria',
           mostUsedCommoditiesQuestion: 'Quais são os produtos mais colhidos/comercializados?',
           commodity: 'Produto',
@@ -1526,7 +1526,7 @@ export default {
       pickup:
         'Suas caixas de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
       notifyCoolingUser:
-        'Por favor, notifique o usuário {{farmer}} que suas caixas de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
+        'Por favor, notifique o utilizador {{farmer}} que suas caixas de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
       checkIn: 'O operador {{farmer}} editou o check-in {{movementCode}} em {{date}}.',
       surveyAlreadyFilled: 'O questionário já foi preenchido',
       orderRequiresMovement:
@@ -1553,20 +1553,20 @@ export default {
       repeatTutorial:
         'Se quiser assistir a este tutorial novamente, também pode encontrá-lo no menu.',
       managementNavigation:
-        'No menu, pode navegar até "Gestão" e tocar lá para adicionar ou editar Usuários de Refrigeração. Vá em frente e tente.',
+        'No menu, pode navegar até "Gestão" e tocar lá para adicionar ou editar Utilizadores de Refrigeração. Vá em frente e tente.',
       operatorManagementNavigation:
         'No Menu, pode navegar para "Gestão" e premir ali para adicionar ou editar Utilizadores de Refrigeração.',
       addCoolingUser:
-        'Usuários de refrigeração que não se registraram no Coldtivate podem ser adicionados inserindo seus dados (nome, número de telefone). Usuários de refrigeração que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Usuário de Refrigeração".',
-      navigateToCoolingUser: 'Vá em frente e clique na guia Usuários de Refrigeração',
+        'Utilizadores de refrigeração que não se registraram no Coldtivate podem ser adicionados inserindo seus dados (nome, número de telefone). Utilizadores de refrigeração que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Utilizador de Refrigeração".',
+      navigateToCoolingUser: 'Vá em frente e clique na guia Utilizadores de Refrigeração',
       listCoolingUsers:
-        'Usuários de refrigeração com um smartphone são identificados por um ícone de telefone no lado direito das telas. Os outros são usuários de refrigeração com um telefone básico. Em ambos os casos, pode clicar em um nome para acessar seus detalhes e a pesquisa do usuário de refrigeração.',
+        'Utilizadores de refrigeração com um smartphone são identificados por um ícone de telefone no lado direito das telas. Os outros são utilizadores de refrigeração com um telefone básico. Em ambos os casos, pode clicar em um nome para acessar seus detalhes e a pesquisa do utilizador de refrigeração.',
       navigateToAddCoolingUser:
-        'Clicar no sinal "+" permite adicionar um novo Usuário de Refrigeração.',
+        'Clicar no sinal "+" permite adicionar um novo Utilizador de Refrigeração.',
       coolingUnitStep:
         'Pode navegar entre unidades de refrigeração clicando no menu suspenso na parte superior.',
       initiateCheckIn1:
-        'Depois de adicionar um usuário de refrigeração, pode fazer um check-in para esse usuário. Vá em frente e clique no botão de atividade.',
+        'Depois de adicionar um utilizador de refrigeração, pode fazer um check-in para esse utilizador. Vá em frente e clique no botão de atividade.',
       initiateCheckIn2: 'Agora clique no botão de check-in (o verde).',
       checkIn1:
         'Para completar o check-in, necessita clicar em "Adicionar Caixas" e seguir as instruções passo a passo. Clique em "Continuar" para ver como o resultado ficará.',
@@ -1592,7 +1592,7 @@ export default {
       addCoolingUnits:
         'Uma unidade de refrigeração pode ser adicionada preenchendo os detalhes acima. Se tiver sensores de temperatura na unidade de refrigeração e uma API configurada, pode inserir as credenciais e conectar automaticamente seus sensores aa aplicação.',
       addEmployeesOperators:
-        'Pode adicionar Funcionários e Operadores Registrados através da tela de Gestão. Para adicionar qualquer um dos papéis, necessitará do número de telefone deles. Eles receberão um SMS com um link de convite. Um número de telefone pode ser usado para apenas um usuário.',
+        'Pode adicionar Funcionários e Operadores Registrados através da tela de Gestão. Para adicionar qualquer um dos papéis, necessitará do número de telefone deles. Eles receberão um SMS com um link de convite. Um número de telefone pode ser usado para apenas um utilizador.',
       employeeCoolingUnitsStep:
         'Uma vez que tenha selecionado uma unidade de refrigeração, verá uma visão geral de: os check-ins na aba "Dashboard", os movimentos na aba "Histórico" e a taxa de utilização planejada e a temperatura da sala na aba "Unidades de Refrigeração".',
       localizationPreferences:
@@ -1602,7 +1602,7 @@ export default {
       coolingUserSurvey:
         'Na primeira vez que abrir a aplicação, ser-lhe-á pedido que preencha um pequeno questionário. É muito importante que o preencha para que a aplicação possa fornecer recomendações personalizadas. Se não conseguir preencher o questionário na primeira vez que iniciar sessão, pode aceder a ele em "Detalhes da conta" -> "Questionário do Utilizador da Unidade de Refrigeração". Obrigado por dedicar o seu tempo a preencher o questionário!',
       coolingUserCode:
-        'Na primeira vez que chegue a uma câmara fria para armazenar os seus produtos, o operador lhe pedirá seu código pessoal para adicioná-lo à lista de usuários da câmara fria. Pode encontrar este código em "Detalhes Pessoais" -> "Código de Importação do Usuário de Refrigeração".',
+        'Na primeira vez que chegue a uma câmara fria para armazenar os seus produtos, o operador lhe pedirá seu código pessoal para adicioná-lo à lista de utilizadores da câmara fria. Pode encontrar este código em "Detalhes Pessoais" -> "Código de Importação do Utilizador de Refrigeração".',
       knowledgeHub:
         'No menu, pode encontrar o "Centro de Conhecimento", que contém conselhos sobre quanto tempo diferentes culturas podem ser armazenadas e sua temperatura ideal. Confira para entender como a câmara fria pode ajudá-lo a preservar a qualidade de diferentes frutas e vegetais!',
       faq: 'No menu, também pode encontrar as Perguntas Frequentes (FAQ). Recomendamos que as consulte para aprender mais sobre a aplicação e os benefícios de armazenar sua produção nas câmaras frias.',
