@@ -127,12 +127,16 @@ platform :android do
         )
         setup_dotenv(options)
 
+        version_id_raw = options[:version_id] || ENV["VERSION_ID"] || "0.0.1"
+        version = parse_version_id(version_id: version_id_raw)
+        build_id = generate_build_id(version_id: version[:id])
+
         gradle(
             project_dir: "android",
             tasks: ["assembleE2e"],
             properties: {
-            "versionCode" => generate_build_id(version_id: parse_version_id(version_id: options[:version_id])[:id]),
-            "versionName" => parse_version_id(version_id: options[:version_id])[:id],
+                "versionCode" => build_id,
+                "versionName" => version[:id],
             }
         )
     end
