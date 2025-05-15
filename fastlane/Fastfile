@@ -184,7 +184,8 @@ platform :ios do
         team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
         type = options[:type] || "appstore" # "development", "appstore", "ad-hoc"
 
-        version = parse_version_id(version_id: options[:version_id] || "0.0.1")
+        version_id_raw = options[:version_id] || ENV["VERSION_ID"] || "0.0.1"
+        version = parse_version_id(version_id: version_id_raw)
         build_id = options[:build_id] || generate_build_id(version_id: version[:id])
 
         setup_dotenv(options)
