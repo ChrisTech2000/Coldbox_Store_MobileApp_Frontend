@@ -65,6 +65,7 @@ export function CartItem({ item }: CartItemProps) {
       skip: !item.ownedOnBehalfOfCompanyId,
     }
   );
+
   const { data: owner, isLoading: isLoadingOwner } = useApiCall(
     'getUser',
     ColdtivateService.getUser,

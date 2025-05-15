@@ -18,7 +18,7 @@ export default {
       ig: 'Igbo',
       yo: 'Iorubá',
       ha: 'Hausa',
-      ar: 'Arabic', // TODO
+      ar: 'Árabe',
     },
   },
   gender: {
@@ -49,13 +49,13 @@ export default {
       Locations: 'Localizações',
       AddLocation: 'Adicionar Localização',
       EditLocation: 'Editar Localização',
-      CoolingUnits: 'Unidades de Resfriamento',
+      CoolingUnits: 'Unidades de Refrigeração',
       DisabledCoolingUnitsDescription: 'Adicione pelo menos uma localização',
-      CoolingUsers: 'Usuários de Resfriamento',
-      AddCoolingUser: 'Adicionar Usuário de Resfriamento',
-      EditCoolingUser: 'Editar Usuário de Resfriamento',
-      AddCoolingUnit: 'Adicionar Unidade de Resfriamento',
-      EditCoolingUnit: 'Editar Unidade de Resfriamento',
+      CoolingUsers: 'Utilizadores de Refrigeração',
+      AddCoolingUser: 'Adicionar Utilizador de Refrigeração',
+      EditCoolingUser: 'Editar Utilizador de Refrigeração',
+      AddCoolingUnit: 'Adicionar Unidade de Refrigeração',
+      EditCoolingUnit: 'Editar Unidade de Refrigeração',
       Operators: 'Operadores',
       AddOperator: 'Adicionar Operador',
       EditOperator: 'Editar Operador',
@@ -63,7 +63,7 @@ export default {
       AddRegisteredEmployee: 'Adicionar Empregado Registrado',
       RegisteredEmployeeDetails: 'Detalhes do Empregado Registrado',
       DeliveryContacts: 'Contatos de Entrega',
-      AddUserBankAccount: '{{user}} Bank Account', // TODO
+      AddUserBankAccount: 'Conta bancária de {{user}}',
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate de {{firstName}}',
@@ -74,7 +74,7 @@ export default {
       Planner: 'Planeador',
       RoomConditions: 'Condições da Sala',
       CratesInfo: 'Informação das Caixas',
-      Dashboard: 'Painel',
+      Dashboard: 'Dashboard',
       History: 'Histórico',
       MarketPrice: 'Preço das Culturas',
       CoolingUnits: 'Unidades de Refrigeração',
@@ -89,7 +89,7 @@ export default {
       PersonalDetails: 'Detalhes Pessoais',
       LocalizationPreferences: 'Preferências de Localização',
       ContactsSharing: 'Compartilhamento de Contatos',
-      Coupons: 'Cupons',
+      Coupons: 'Cupões',
       CouponsActiveTab: 'Ativos',
       CouponsRevokedTab: 'Revogados',
       Marketplace: 'Mercado',
@@ -98,7 +98,7 @@ export default {
       MarketplaceFavoritesTab: 'Favoritos',
       Orders: 'Pedidos',
       MyOrders: 'Meus Pedidos',
-      MySales: 'My Sales', // TODO
+      MySales: 'Minhas Vendas',
       OrderDetails: '{{orderCode}}',
       KnowledgeHub: 'Centro de Conhecimento',
       QuitTutorial: 'Sair do Tutorial',
@@ -118,7 +118,7 @@ export default {
       CheckIn: 'Check-In',
       CropList: '{{cropType}}',
       CrateSetup: 'Check-In',
-      CrateWeightAndPricing: 'Crate weight and pricing', // TODO
+      CrateWeightAndPricing: 'Preço e peso de uma caixa',
     },
     about: {
       comsolAgreement: 'Acordo de Licença COMSOL Runtime 6.0',
@@ -163,12 +163,12 @@ export default {
     continue: 'Continuar',
     save: 'Salvar',
     update: 'atualizar',
-    clearAll: 'Clear all', // TODO
-    apply: 'Apply', // TODO
+    clearAll: 'Limpar',
+    apply: 'Aplicar',
   },
   components: {
     datePicker: {
-      heading: 'Select a date', // TODO
+      heading: 'Selecione uma data',
       clearButtonLabel: 'Limpar',
       confirmButtonLabel: 'Confirmar',
       placeholder: 'dd/mm/aaaa',
@@ -274,7 +274,7 @@ export default {
         submit: 'Registar',
         terms: {
           agree: 'Eu concordo com Coldtivate',
-          license: 'Contrato de licença de usuário',
+          license: 'Contrato de licença de utilizador',
           privacy: 'Privacidade Política',
           and: 'e',
           comsol: 'COMSOL Termos de uso',
@@ -304,7 +304,7 @@ export default {
       },
       toasts: {
         error:
-          'Please ensure your details are accurate and try again. Note that one phone number and email can only be used by one account.', // TODO
+          'Por favor, garanta que a informação está correta e tente novamente. Note que um número de telefone e email podem ser usados apenas por uma conta.',
       },
     },
     ForgotPassword: {
@@ -315,7 +315,7 @@ export default {
         'Para redefinir a sua palavra-passe, por favor, insira o número de telefone com o respetivo código de país, ao qual a conta está ligada.',
       phoneInputLabel: 'Número de Telefone',
       resetButton: 'Redefinir',
-      requestLimitMessage: 'Request limit reached. Try again in 2 hours.', // TODO
+      requestLimitMessage: 'Atingido o limite de pedidos. Tente novamente em 2 horas.',
     },
     ResetPassword: {
       schema: {
@@ -355,13 +355,13 @@ export default {
     },
     emptyGeneral: 'No momento, não há dados disponíveis.',
     emptyCoolingUser:
-      'Os itens em armazenamento aparecerão no painel quando realizar pelo menos um check-in em qualquer sala.',
+      'Os itens em armazenamento aparecerão no Dashboard quando realizar pelo menos um check-in em qualquer sala.',
     noCompanyAvailable: 'Nenhuma empresa disponível',
     noCoolingUnitAvailable: 'Nenhuma unidade de refrigeração disponível',
     noLocationsAvailable:
-      'Bem-vindo ao Coldtivate. Comece adicionando localizações ao seu aplicativo no painel de gestão.',
+      'Bem-vindo ao Coldtivate. Comece a adicionar localizações à sua aplicação no Dashboard.',
     coolingUserNavigateToMarketplace:
-      'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!', // TODO
+      'Interessado em comprar produtos armazenados em salas de refrigeração? Visite a aba do Marketplace, em baixo, à direita!',
     MarketPrice: {
       emptyState: 'Os preços de mercado não estão disponíveis no seu país',
       'no-data-found': 'Nenhum dado encontrado para esta combinação de mercado e commodity',
@@ -400,13 +400,13 @@ export default {
     CrateManagement: {
       userModalTitle: 'Selecione um utilizador de refrigeração',
       addUserLink:
-        'Utilizador não está na lista? Adicione o utilizador em Gestão ➜ Utilizadores de arrefecimento ➜ +.',
+        'Utilizador não está na lista? Adicione o utilizador em Gestão ➜ Utilizadores de refrigeração ➜ +.',
       coolingUserLabel: 'Utilizador de refrigeração',
       selectCoolingUnitLabel: 'Selecione uma unidade de refrigeração',
       coolingUnitLabel: 'Unidade de refrigeração',
       noUnitWarning: 'Por favor, selecione uma unidade de refrigeração',
       noCratesWarning:
-        'O Utilizador de Refrigeração selecionado não tem paletes nesta unidade de refrigeração',
+        'O Utilizador de Refrigeração selecionado não tem caixas nesta unidade de refrigeração',
       operationError: 'Algo correu mal. Por favor, tente novamente mais tarde.',
       FarmerSurvey: {
         warningMessage: 'Por favor, preencha o questionário de referência para {{crop}}!',
@@ -427,13 +427,13 @@ export default {
           commodityShortlist: 'Lista de produtos',
           unit: {
             kg: 'Kg',
-            crates: 'Paletes',
+            crates: 'Caixas',
             boxes: 'Caixas',
             sacks: 'Sacos',
             baskets: 'Cestas',
             singular: {
               kg: 'kg',
-              crates: 'palete',
+              crates: 'caixa',
               boxes: 'caixa',
               sacks: 'saco',
               baskets: 'cesta',
@@ -460,17 +460,17 @@ export default {
         },
       },
       CheckOut: {
-        selectCrateMessage: 'Selecione as paletes que deseja remover',
+        selectCrateMessage: 'Selecione as caixas que deseja remover',
         selectAll: 'Selecione Todos',
         checkIn: 'Check-in',
         days: 'dias',
         day: 'dia',
         ttp: 'TTP',
         daysLeft: '{{amount}} dias restantes',
-        numberOfCrates: 'Número de paletes',
+        numberOfCrates: 'Número de caixas',
         totalWeight: 'Peso Total',
         priceType: 'Tipo de preço',
-        crate: 'palete',
+        crate: 'caixa',
         pricePerProduct: 'Preço por produto:',
         calculatedPrice: 'Preço calculado',
         discount: 'Desconto',
@@ -489,31 +489,31 @@ export default {
         },
         paid: 'Pago',
         lockedWithinPendingOrders:
-          'Crates that are locked in pending orders cannot be checked out.', // TODO
+          'As caixas que estão bloqueadas em encomendas pendentes não podem ser retiradas.',
       },
       CheckIn: {
         emptyState: 'Nenhuma caixa adicionada ainda',
-        addCrates: 'Adicionar Paletes',
+        addCrates: 'Adicionar Caixas',
         checkInWithCode: 'Check-in com código',
         estimatedCost: 'Custo estimado',
         pricing: 'Preços',
         day: 'dia',
-        successMessage: 'As paletes foram registadas com sucesso',
-        emptyMessage: 'Por favor, adicione pelo menos uma palete ao seu check-in',
+        successMessage: 'As caixas foram registadas com sucesso',
+        emptyMessage: 'Por favor, adicione pelo menos uma caixa ao seu check-in',
         noPlannedDaysMessage:
           'Faltam dias planeados em alguns itens. Não é possível calcular o custo estimado.',
         seeMore: 'Ver mais',
         seeLess: 'Ver menos',
         listed: 'Listado',
-        cratesAddedLabel: 'Paletes adicionadas',
+        cratesAddedLabel: 'Caixas adicionadas',
         WithCode: {
           modalTitle: 'Criar Check-in a partir de Check-out existente',
           modalDescription:
-            'Você precisará do código de check-out para iniciar um novo check-in desta forma. Se não o tiver, considere iniciar um novo check-in. Se souber por quanto tempo planeia armazenar, considere adicionar o número de dias aqui.',
+            'Precisará do código de check-out para iniciar um novo check-in desta forma. Se não o tiver, considere iniciar um novo check-in. Se souber por quanto tempo planeia armazenar, considere adicionar o número de dias aqui.',
           codeLabel: 'Adicionar código',
           codeErrorMessage: 'Código é obrigatório',
           failedMessage:
-            "Check in failed. Please make sure your code hasn't been used already or contact support.", // TODO
+            'O check in falhou. Por favor, garanta que o seu código não foi usado antes ou contacte o suporte.',
         },
         SelectCropType: {
           fruits: 'Frutas',
@@ -527,11 +527,11 @@ export default {
         Setup: {
           selectedCrop: 'Produto selecionado',
           changeCropButton: 'Clique aqui para mudar o produto',
-          individualCrateWeightButton: 'Clique aqui para editar o peso das paletes',
-          individualCrateIdButton: 'Clique aqui para editar os IDs das paletes',
-          numberOfCratesLabel: 'Número de paletes',
-          crateWeightLabel: 'Peso da palete e listagem no marketplace',
-          pricePerDayAndCrateLabel: 'Preço por dia / palete',
+          individualCrateWeightButton: 'Clique aqui para editar o peso das caixas',
+          individualCrateIdButton: 'Clique aqui para editar os IDs das caixas',
+          numberOfCratesLabel: 'Número de caixas',
+          crateWeightLabel: 'Peso da caixa e listagem no marketplace',
+          pricePerDayAndCrateLabel: 'Preço por dia / caixa',
           pricePerDayAndKilogramLabel: 'Preço por dia / kg',
           fixedPriceLabel: 'Preço fixo',
           totalPriceLabel: 'Preço total',
@@ -550,16 +550,16 @@ export default {
             sellingPrice: 'Preço de venda',
             potentialSellingPrice: 'Valor potencial de venda',
             info: 'A configuração de preço refere-se à venda do produto, não à taxa de armazenamento a frio.',
-            unavailableId: 'ID not set', // TODO
+            unavailableId: 'ID não definido',
           },
-          cratesError: 'Por favor, insira um número positivo de paletes',
-          crateWeightError: 'Por favor, insira um peso positivo para a palete',
+          cratesError: 'Por favor, insira um número positivo de caixas',
+          crateWeightError: 'Por favor, insira um peso positivo para a caixa',
           harvestDateError: 'Data da colheita é obrigatória',
           modals: {
-            weight: 'Definir Peso Individual das Paletes',
-            id: 'Definir ID Individual das Paletes',
-            crateLabel: 'Palete',
-            selectInitialId: 'Por favor, defina o ID inicial da palete',
+            weight: 'Definir Peso Individual das Caixas',
+            id: 'Definir ID Individual das Caixas',
+            crateLabel: 'Caixa',
+            selectInitialId: 'Por favor, defina o ID inicial da caixa',
             serialize: 'Serializar',
           },
         },
@@ -587,7 +587,7 @@ export default {
       commodity: 'Produto',
       percentage: 'Percentagem',
       weight: 'Peso',
-      crates: 'Paletes',
+      crates: 'Caixas',
       optimalTemp: 'Temp. Óptima °C',
       messages: {
         empty:
@@ -612,11 +612,11 @@ export default {
       coolingUser: 'Utilizador de Refrigeração',
       contact: 'Contacto',
       contactCopied: 'Copiado!',
-      crates: 'paletes',
-      crate: 'palete',
+      crates: 'caixas',
+      crate: 'caixa',
       cropType: 'Tipo de produto',
-      numberOfCrates: 'Número de paletes',
-      crateIds: 'IDs das paletes',
+      numberOfCrates: 'Número de caixas',
+      crateIds: 'IDs das caixas',
       combinedWeight: 'Peso combinado',
       remainingTime: 'Tempo restante para recolha',
       currentStorageDays: 'Dias atuais de armazenamento',
@@ -627,29 +627,29 @@ export default {
       days: 'Dias',
       noDTMessage: 'Um modelo de validade não está disponível para este produto específico.',
       checkOutButton: 'Check-out',
-      cratesListedForSale: '{{amount}} crate(s) marked as listed for sale', // TODO
+      cratesListedForSale: '{{amount}} caixa(s) marcadas para venda',
       preSaleError:
-        "Please note: You can't change the listing status of crates with pending orders. If this doesn't seem to apply, please contact support for assistance.", // TODO
+        'Por favor, note: Não pode mudar o estado de listagem para venda de caixas com encomendas pendentes associadas. Se isto não for o caso, por favor contacte o suporte.',
       operatorNoBankAccountWarning:
-        "{{name}} doesn't have bank account details in order to receive payouts for their sales. Please add their Bank Account details in case they shared those with you.", // TODO
+        '{{name}} não tem dados bancários definidos de forma a poder receber transferências pelas suas vendas. Por favor, adicione os detalhes da conta bancária do utilizador, caso tenham sido partilhados consigo.',
       farmerNoBankAccountWarning:
-        "You don't have a Bank Account defined to receive payouts on your sales. Please add your Bank Account details", // TODO
+        'Não tem uma conta bancária definida para receber transferências pelas suas vendas. Por favor, adicione os seus dados bancários.',
       operatorNoCompanyBankAccount:
-        "This cooling unit doesn't support marketplace listings. Please reach out to the company's manager to handle this matter.", // TODO
+        'Esta unidade de refrigeração não suporta vendas no Marketplace. Por favor, contacte o gestor da empresa para resolver o assunto.',
       employeeNoBankAccount:
-        "This company doesn't have a Payouts Bank Account set up that enables receiving funds for both produces and cooling fees sold in the marketplace. Set it up to allow crates in your cooling units to be listed in the marketplace.", // TODO
-      addBankAccountButton: 'Add bank account details', // TODO
+        'Esta empresa não tem uma conta bancária de pagamentos configurada para receber fundos provenientes da venda de produtos e das taxas de refrigeração no Marketplace. Configure uma conta para permitir que as caixas nas suas unidades de refrigeração sejam listados no Marketplace.',
+      addBankAccountButton: 'Adicione os dados da sua conta bancária',
       addBankAccountHeader:
-        "You're setting up the bank account details on behalf of {{name}}. Please insert this data carefully as you'll not be able to make changes to it afterwards.", // TODO
+        'Está a definir os dados bancários em nome de {{name}}. Por favor, insira esta informação cuidadosamente uma vez que não será possível fazer alterações mais tarde.',
       userWithoutPhone:
-        'Crates belonging to this account cannot be listed for sale as no bank account can be linked to User without a phone', // TODO
+        'Caixas que pertecem a esta conta não podem ser listadas para venda no Marketplace, uma vez que não é possível associar uma conta bancária.',
     },
     SearchFilter: {
       detailsMessage:
         'Procure um check-in pelo tipo de produto, nome do agricultor, dias em armazenamento, dias restantes em armazenamento ou código de check-in',
-      idMessage: 'Procure uma palete pelo o ID que identifica uma palete específica',
-      crateDetailsButton: 'Pesquisar Detalhes da Palete',
-      crateIdButton: 'Pesquisar ID da Palete',
+      idMessage: 'Procure uma caixa pelo o ID que identifica uma caixa específica',
+      crateDetailsButton: 'Pesquisar Detalhes da Caixa',
+      crateIdButton: 'Pesquisar ID da Caixa',
       searchLabel: 'Pesquisar',
     },
     SortMenu: {
@@ -673,7 +673,7 @@ export default {
         phoneNumber: 'Número de Telefone',
         phoneNumberPlaceholder: 'Insira o número de telefone',
         emptyMessage: 'Nenhum contato foi adicionado ainda',
-        deleteContactMessage: 'Você tem certeza de que deseja excluir este contato?',
+        deleteContactMessage: 'Tem certeza de que deseja excluir este contato?',
         noAvailableContacts:
           'Não há contatos disponíveis para esta unidade de refrigeração específica.',
         contactedAddedSuccessfully: 'Contato adicionado com sucesso.',
@@ -702,8 +702,8 @@ export default {
           streetNumber: 'Número da Rua',
         },
         fieldErrorMessages: {
-          latitude: 'Enter a number between -90 and 90 (e.g., 34.0522)', // TODO
-          longitude: 'Enter a number between -180 and 180 (e.g., -118.2437)', // TODO
+          latitude: 'Insira um número entre -90 e 90 (ex., 34.0522)',
+          longitude: 'Insira um número entre -180 e 180 (ex., -118.2437)',
         },
         modal: {
           message:
@@ -717,11 +717,12 @@ export default {
           editLocationSuccess: 'Localização editada com sucesso',
           removeLocationSuccess: 'Localização {{name}} foi eliminada com sucesso.',
           failedToFetchLocation:
-            'Unable to retrieve the location. Please check the address and try again.', // TODO
-          positionCancelled: 'Location request canceled.', // TODO
-          positionUnauthorized: 'Location denied. Please grant permission to continue.', // TODO
-          locationUnavailable: 'Location disabled. Please enable to continue.', // TODO
-          locationSubmissionError: 'An error occurred. Please review your location and try again.', // TODO
+            'Impossível encontrar a localização. Por favor, confirme o endereço e tente novamente.',
+          positionCancelled: 'Pedido de localização cancelado.',
+          positionUnauthorized: 'Localização negada. Por favor, conceda permissão para continuar.',
+          locationUnavailable: 'Localização desativada. Por favor, ative para continuar.',
+          locationSubmissionError:
+            'Ocorreu um erro. Por favor, reveja a sua localização e tente novamente.',
         },
       },
       Operators: {
@@ -780,7 +781,7 @@ export default {
         },
         toasts: {
           success: 'Editado com sucesso',
-          photoLibrary: 'Permission Denied: Please enable access to your Photo Library.', // TODO
+          photoLibrary: 'Permissão negada: por favor, ative o acesso à sua Galeria de Fotos.',
         },
       },
       RegisteredEmployee: {
@@ -803,7 +804,7 @@ export default {
           selectMethod: 'Como deseja adicionar o utilizador?',
           userCode: 'Introduza um código de utilizador',
           userCodeDesc:
-            'Você pode encontrar o código nos detalhes da sua conta se se registou como utilizador de refrigeração.',
+            'Pode encontrar o código nos detalhes da sua conta se se registou como utilizador de refrigeração.',
           addByCode: 'Adicionar utilizador por código',
           addWithDetails: 'Adicionar utilizador com detalhes',
         },
@@ -813,15 +814,15 @@ export default {
         },
       },
       EditCoolingUsers: {
-        accountDetails: 'Payout Details', // TODO
+        accountDetails: 'Detalhes de Pagamentos',
         toasts: {
           warning:
             'Esta conta não pode ser eliminada porque o utilizador tem check-ins ativos na(s) unidade(s) de refrigeração {{names}}. Por favor, notifique o utilizador para vir à sala para recolher estes itens e concluir os check-outs antes de eliminar a conta!',
           confirmation:
             'Tem a certeza de que deseja eliminar este utilizador da sua lista de utilizadores de refrigeração? Esta operação irá eliminar este utilizador e não poderá ser revertida!',
           edit: 'Utilizador de refrigeração editado com sucesso',
-          noCoolingUnits: 'Você ainda não tem nenhuma unidade de refrigeração',
-          noSurveys: 'No surveys have been completed yet.', // TODO
+          noCoolingUnits: 'Ainda não tem nenhuma unidade de refrigeração',
+          noSurveys: 'Nenhum questionário foi ainda preenchido.',
           updateSuccess: 'Atualização bem-sucedida',
         },
         pdf: {
@@ -830,7 +831,7 @@ export default {
           coolingUnit: 'Unidade de refrigeração',
         },
         actions: {
-          downloadFarmers: 'Descarregar dados do painel dos agricultores',
+          downloadFarmers: 'Descarregar dados do Dashboard dos agricultores',
           completeLater: 'Completar mais tarde',
         },
       },
@@ -854,9 +855,9 @@ export default {
           height: 'Altura',
           weight: 'Peso',
           roomInsulator: 'Isolamento',
-          capacityInNumberCrates: 'Número máximo de paletes',
-          crateWeight: 'Peso padrão de uma palete',
-          crateSizeHeading: 'Dimensões de uma palete padrão',
+          capacityInNumberCrates: 'Número máximo de caixas',
+          crateWeight: 'Peso padrão de uma caixa',
+          crateSizeHeading: 'Dimensões de uma caixa padrão',
           editableCheckins: 'Tornar os check-ins editáveis pelos operadores',
           sensorAvailable: 'Sensor disponível',
           public:
@@ -889,7 +890,7 @@ export default {
           selectSensorType: 'Selecione tipo de sensor',
           selectSensor: 'Selecione um sensor',
           emptySensorListError:
-            'Não existem sensores conectados na sua conta {{type}}. Por favor conecte pelo menos um e tente novamente.', // TODO
+            'Não existem sensores conectados na sua conta {{type}}. Por favor, conecte pelo menos um e tente novamente.',
           addTempSensor: 'Adicionar um sensor de temperatura à sua unidade de refrigeração.',
           sensorDesc: {
             default: 'Solicite esta informação ao seu fornecedor de sensores se não a tiver.',
@@ -904,8 +905,8 @@ export default {
             username: 'Nome de utilizador/Email',
             password: 'Palavra-passe',
           },
-          unknownSensor: 'Unknown', // TODO
-          hybridFields: 'Qual porcentagem da sala é alimentada pelas diferentes fontes?',
+          unknownSensor: 'Desconhecido',
+          hybridFields: 'Qual percentagem da sala é alimentada pelas diferentes fontes?',
           cropSpecificPricing: 'Preços específicos para cada cultura',
           value: 'Valor',
           machineId: 'ID da Máquina',
@@ -929,7 +930,7 @@ export default {
         metricUnit: {
           label: 'Unidade',
           KILOGRAMS: 'kg',
-          CRATES: 'Palete',
+          CRATES: 'Caixa',
         },
         toasts: {
           addSuccess: 'Unidade de refrigeração adicionada com sucesso',
@@ -957,7 +958,7 @@ export default {
       UsageAnalysis: {
         dateSelectionLabel: 'Selecione os dias:',
         empty:
-          'Os check-ins e check-outs aparecerão no painel quando fizer pelo menos um check-in em qualquer sala.',
+          'Os check-ins e check-outs aparecerão no Dashboard quando fizer pelo menos um check-in em qualquer sala.',
         downloadDataButton: 'Baixar dados',
         modal: {
           title: 'Definir configuração',
@@ -965,7 +966,7 @@ export default {
         },
         summary: {
           totalCheckIns: 'Número total de check-ins:',
-          totalCrates: 'Número total de paletes:',
+          totalCrates: 'Número total de caixas:',
           totalWeight: 'Peso total:',
           totalUsers: 'Número total de utilizadores distintos:',
           weightUnit: 'kg',
@@ -983,25 +984,25 @@ export default {
         },
       },
       Coupons: {
-        title: 'Discount coupons', // TODO
-        emptyMessage: 'Nenhum cupom foi adicionado ainda',
-        addCoupon: 'Adicionar Cupom',
-        code: 'Código do Cupom',
-        percentage: 'Porcentagem do Cupom',
-        revokeTitle: 'Revogando Cupom',
+        title: 'Cupões de desconto',
+        emptyMessage: 'Nenhum cupão foi adicionado ainda',
+        addCoupon: 'Adicionar Cupão',
+        code: 'Código do Cupão',
+        percentage: 'Percentagem do Cupão',
+        revokeTitle: 'Revogar Cupão',
         revoke: 'Revogar',
         revokeMessage:
-          'Você tem certeza de que deseja revogar este cupom? Uma vez revogado, ele não poderá ser utilizado novamente e o desconto não estará mais disponível. Esta ação é permanente e não pode ser desfeita.',
+          'Tem certeza de que deseja revogar este cupão? Uma vez revogado, ele não poderá ser utilizado novamente e o desconto não estará mais disponível. Esta ação é permanente e não pode ser desfeita.',
         messages: {
-          codeField: 'Must be max 25 characters and contain only letters and numbers', // TODO
+          codeField: 'Deve ter no máximo 25 caracteres e conter apenas letras e números',
         },
       },
     },
     Marketplace: {
       buyerSelection: {
-        onBehalfOfCompany: 'Buy on behalf of company', // TODO
-        forMyself: 'Buy for myself', // TODO
-        label: 'Buyer', // TODO
+        onBehalfOfCompany: 'Comprar em nome da empresa',
+        forMyself: 'Comprar para mim',
+        label: 'Comprador',
       },
       sorting: {
         'price-asc': 'Preço em ordem crescente',
@@ -1009,18 +1010,18 @@ export default {
         'nearby-me': 'Perto de mim',
       },
       distance: {
-        withing5Km: '1 to 5 KM away', // TODO
-        within10Km: '5 to 10 KM away', // TODO
-        within25Km: '10 to 25 KM away', // TODO
-        beyond25Km: 'More than 25 KM away', // TODO
+        withing5Km: '1 a 5 KM de distância',
+        within10Km: '5 a 10 KM de distância',
+        within25Km: '10 a 25 KM de distância',
+        beyond25Km: 'Mais de 25 KM de distância',
       },
       priceConfig:
-        'A configuração de preço refere-se à venda de produtos, não à taxa de armazenamento em resfriamento.',
+        'A configuração de preço refere-se à venda de produtos, não à taxa de armazenamento em refrigeração.',
       addToCart: {
-        addToCartButton: 'Adicionar ao carrinho e continuar comprando',
+        addToCartButton: 'Adicionar ao carrinho e continuar a comprar',
         selectQuantity: 'Selecionar quantidade',
-        buyFullCrate: 'Buy full crate', // TODO
-        goToCart: 'Go to Cart Summary', // TODO
+        buyFullCrate: 'Comprar a caixa inteira',
+        goToCart: 'Ir para o carrinho',
       },
       currentLocation: 'Localização atual',
       invalidFormatWarning:
@@ -1031,27 +1032,27 @@ export default {
         'Aviso: Não foi possível identificar a cidade com confiança. Os resultados podem não ser precisos.',
       filterGeneralWarning:
         'Aviso: Ocorreu um problema durante a geolocalização. Os resultados podem não ser precisos.',
-      standardCrateWeight: 'Standard weight of crate is {{value}} kg', // TODO
-      owner: 'Owner', // TODO
-      priceRange: 'Range Price / KG',
+      standardCrateWeight: 'O peso habitual de uma caixa é de {{value}} kg',
+      owner: 'Proprietário',
+      priceRange: 'Intervalo de Preço / KG',
       Filters: {
         min: 'Min',
         max: 'Max',
-        label: 'Filters',
-        coolingUnitLabel: 'Cooling unit', // TODO
-        coolingUnitHeading: 'Select cooling units', // TODO
-        cropTypeLabel: 'Produce / Crop Type', // TODO
-        cropTypeHeading: 'Select crops', // TODO
-        companyLabel: 'Company', // TODO
-        companyHeading: 'Select companies', // TODO
+        label: 'Filtros',
+        coolingUnitLabel: 'Unidade de Refrigeração',
+        coolingUnitHeading: 'Selecione asUnidades de Refrigeração',
+        cropTypeLabel: 'Produto / Tipo de Colheita',
+        cropTypeHeading: 'Selecione as culturas',
+        companyLabel: 'Empresa',
+        companyHeading: 'Selecione as empresas',
       },
-      maxDistance: 'Max Distance',
+      maxDistance: 'Distância máxima',
     },
     AccountDetails: {
       popups: {
         default: 'Tem a certeza de que deseja apagar a sua conta?',
         lastRegisteredEmployee:
-          'Você é o único Funcionário Registrado na empresa; esta ação irá apagar a empresa!',
+          'É o único Funcionário Registrado na empresa; esta ação irá apagar a empresa!',
         activeCheckInOP:
           'A(s) unidade(s) de refrigeração {{names}} a que está atribuído tem check-ins ativos e você é o último operador. Precisa de fazer checkout de todos os produtos ou notificar um Funcionário Registrado para atribuir um operador diferente a esta unidade de refrigeração antes de poder apagar a sua conta!',
         activeCheckInRE:
@@ -1066,7 +1067,7 @@ export default {
       sections: {
         sellerSettings: 'Configurações do vendedor',
         buyerSettings: 'Configurações do comprador',
-        companySellerSettings: 'Seller Settings (Company)', // TODO
+        companySellerSettings: 'Configurações do Vendedor (Empresa)',
         details: 'Detalhes',
       },
       toasts: {
@@ -1147,7 +1148,7 @@ export default {
       optimal: 'Condições ideais de armazenamento em salas frigoríficas multi-commodities',
       table: 'Tabela de armazenamento de colheitas',
       sensors: 'Sensores de temperatura e modelo Time-to-Pick-Up',
-      tips: 'Dicas para verificar paletes',
+      tips: 'Dicas para verificar caixas',
       glitches: 'Como responder a falhas técnicas na sala frigorífica',
       source: 'Fonte: consulte o Manual dos Operadores para mais informações:',
       clickHere: 'Clique aqui',
@@ -1156,7 +1157,7 @@ export default {
       cropsLabel: '{{crop}} e mais {{amount}}',
       priceLabel: 'Preço',
       empty:
-        'Os check-ins e check-outs aparecerão no painel quando realizar pelo menos um check-in em qualquer sala.',
+        'Os check-ins e check-outs aparecerão no Dashboard quando realizar pelo menos um check-in em qualquer sala.',
       sortMenuOptions: {
         cropType: 'Tipo de produto',
         movementDate: 'Data de movimentação (primeiro para mais recente)',
@@ -1184,12 +1185,12 @@ export default {
         operatorNumberLabel: 'Número do operador de check-out',
         checkOutDateLabel: 'Data de Check-Out',
         marketSurveyLabel: 'Inquérito de mercado preenchido',
-        cratesLabel: 'Paletes',
+        cratesLabel: 'Caixas',
         combinedWeightLabel: 'Peso combinado',
         paymentMethodLabel: 'Método de pagamento',
         cropTypeLabel: 'Tipo de produto',
         checkInCodeLabel: 'Código de Check-In',
-        crateIdsLabel: 'IDs das paletes',
+        crateIdsLabel: 'IDs das caixas',
       },
       pdfModal: {
         coolingUserLabel: 'Utilizador de Refrigeração',
@@ -1216,7 +1217,7 @@ export default {
           coolingUnitLabel: 'Unidade de Refrigeração',
           priceLabel: 'Preço {{currency}} / Dia',
           cropLabel: 'Produto',
-          numberOfCratesLabel: 'Número de Paletes',
+          numberOfCratesLabel: 'Número de Caixas',
           totalLabel: 'Total',
         },
       },
@@ -1236,8 +1237,8 @@ export default {
           occupationQuestion: 'O que melhor o define?',
           occupationFarmer: 'Um agricultor',
           occupationTrader: 'Um pequeno vendedor/comerciante/grossista',
-          usageQuestion: 'Você já usou a sala fria no passado?',
-          newUser: 'Não, sou um novo usuário',
+          usageQuestion: 'Já usou a sala fria no passado?',
+          newUser: 'Não, sou um novo utilizador',
           oldUser: 'Sim, já usei a sala fria',
           mostUsedCommoditiesQuestion: 'Quais são os produtos mais colhidos/comercializados?',
           commodity: 'Produto',
@@ -1250,7 +1251,7 @@ export default {
         },
         marketSurvey: {
           title:
-            'Por favor, responda às seguintes perguntas sobre as paletes de {{crop}} de que fez check-out.',
+            'Por favor, responda às seguintes perguntas sobre as caixas de {{crop}} de que fez check-out.',
           locationQuestion: 'Onde vendeu a sua produção?',
           locations: {
             farm: 'Na propriedade',
@@ -1274,34 +1275,34 @@ export default {
       },
     },
     MyOrders: {
-      coolingFees: 'Cooling fees', // TODO
-      soldFor: 'Sold for', // TODO
-      ownedBy: 'Owned by', // TODO
-      you: 'You', // TODO
+      coolingFees: 'Taxas de refrigeração',
+      soldFor: 'Vendido por',
+      ownedBy: 'Pertence a',
+      you: 'Você',
       sort: {
         mostRecent: 'Mais recente',
         oldest: 'Mais antigo',
         date: 'Data',
       },
       status: {
-        'payment-pending': 'Payment Pending', // TODO
-        'payment-expired': 'Payment Expired', // TODO
-        cancelled: 'Cancelled', // TODO
-        paid: 'Paid', // TODO
+        'payment-pending': 'Pagamento pendente',
+        'payment-expired': 'Pagamento expirado',
+        cancelled: 'Cancelado',
+        paid: 'Pago',
       },
       title: 'Visão Geral do Pedido',
       orderId: 'ID do Pedido',
       cropType: 'Tipo de Cultivo',
-      coolingUnit: 'Unidade de Resfriamento',
+      coolingUnit: 'Unidade de Refrigeração',
       orderTotal: 'Total do Pedido',
       backToTopButton: 'Voltar ao topo',
     },
     ShoppingCart: {
       cartUpdatedMessage:
         'Alguns produtos foram removidos do seu carrinho porque já não estão disponíveis para compra.',
-      ownership: 'Change cart ownership to {{name}}', // TODO
+      ownership: 'Alterar a titularidade do carrinho para {{name}}',
       changeOwnership:
-        'Change the shopping cart ownership to {{name}}. This may affect the contents of your cart, including the possible removal of certain crates that might not be available after this change. Are you sure you want to proceed?', // TODO
+        'Mudar a titularidade do carrinho para {{name}}. Isto pode afetar o conteúdo do seu carrinho, incluíndo a possível remoção de certas caixas que podem não estar disponíveis após a mudança. Tem a certeza de que pretende continuar?',
       empty: 'O carrinho está vazio',
       daysLeft: 'dias restantes',
       weight: 'KG disponíveis',
@@ -1314,15 +1315,17 @@ export default {
       discount: 'Desconto',
       fees: 'Taxas de serviço',
       marketFees: 'Taxa de mercado',
-      paymentFees: 'Payment fee', // TODO
-      coolingFees: 'Cooling fee', // TODO
+      paymentFees: 'Taxa de pagamento',
+      coolingFees: 'Taxa de refrigeração',
       viewContacts: 'Ver contato(s)',
       contactsForDelivery: 'Contato(s) para informações de entrega',
       gotItButton: 'Entendi!',
       pickupMethods: 'Método de retirada',
-      selectPickupMethod: 'Select a pickup method', // TODO
-      selectPickupMethodInfo: 'A pickup method selection is required for each cooling unit.', // TODO
-      pickupMethodSelectionMissing: 'Missing pickup method selection for {{amount}} cooling units.', // TODO
+      selectPickupMethod: 'Selecione um método de recolha',
+      selectPickupMethodInfo:
+        'A seleção de um método de recolha para cada unidade de refrigeração é obrigatória.',
+      pickupMethodSelectionMissing:
+        'Seleção de um método de recolha em falta para {{amount}} unidades de refrigeração.',
       pickUpToday: 'Retirada hoje',
       keepInStorageDailyRate: 'Manter em armazenamento ({{price}} / dia)',
       keepInStorageFixedRate: 'Manter em armazenamento ({{price}})',
@@ -1334,29 +1337,30 @@ export default {
       products: 'Produtos',
       consultOrders: 'Consultar Meus Pedidos',
       total: 'Total',
-      couponQuestion: 'Tem um cupom de desconto?',
+      couponQuestion: 'Tem um cupão de desconto?',
       redeem: 'Resgatar código.',
-      redeemCoupon: 'Resgatar cupom',
+      redeemCoupon: 'Resgatar cupão',
       couponPlaceholder: 'Ex: 20OFF',
       discountsApplied: 'Descontos Aplicados',
       pickupModal: {
-        today: 'Please pick up your order at {{company}}, located at {{location}} today.', // TODO
-        storage: 'Your crates are now being stored at {{company}}, located at {{location}}.', // TODO
+        today:
+          'Por favor, recolha o seu pedido em {{company}}, localizada em {{location}}, ainda hoje.',
+        storage: 'As suas caixas estão armazenadas em {{company}}, localizada em {{location}}.',
         delivery:
-          "Please contact the available numbers to arrange delivery. You can see the list of delivery options under 'Order details'.", // TODO
+          "Por favor, contaxte os números disponíveis para combinar a entrega. Pode ver a lista de opções de entrega disponíveis em 'Detalhes da Encomenda'.",
       },
       errors: {
         invalid: 'Valor inválido',
         minimumCartValue: 'O pedido deve ser de pelo menos ₦100.',
       },
-      method: 'Method:', // TODO
+      method: 'Método:',
       deliveryInfo:
-        'Note that the delivery fee is dependant on the provider. If delivery is scheduled for tomorrow, a cooling fee of {{value}} will also be applied.', // TODO
+        'Note que a taxa de entrega depende do fornecedor. Se a entrega estiver marcada para amanhã, uma taxa de refrigereação no valor de {{value}} será aplicada.',
       pickUpTodayInfo:
-        'Please ensure you pick up your products by the end of the day to avoid any additional cooling fees.', // TODO
-      keepInStorageInfo: 'The cooling fee will be applied when you pick up your order.', // TODO
+        'Por favor, garanta que levanta os seus produtos até ao final do dia, de forma a evitar o pagamento de taxas de refrigeração adicionais.',
+      keepInStorageInfo: 'A taxa de refrigeração será aplicada quando levantar a sua encomenda.',
       orderOverviewSubtitle:
-        "You can revisit this information under the tab 'My Orders' in the 'Marketplace' screen.", // TODO
+        "Pode revisitar esta informação em 'Meus Pedidos', no ecrã do Marketplace.",
     },
     Analytics: {
       emptyState: 'Sem dados para exibir',
@@ -1372,7 +1376,7 @@ export default {
       usersTotal: 'Número total de utilizadores de refrigeração distintos = {{amount}}',
       operatorsTotal: 'Número total de operadores = {{amount}}',
       beneficiariesTotal: 'Número total de beneficiários indiretos = {{amount}}',
-      totalCratesLabel: '🧺 Total de paletes',
+      totalCratesLabel: '🧺 Total de caixas',
       totalQuantityLabel: '📦 Quantidade total (kg)',
       totalOperations: '👷🏽‍♂️ Total de operações',
       checkedInLabel: 'Check-ins: {{amount}}',
@@ -1385,9 +1389,9 @@ export default {
         coldStorageCost: 'Custo de Armazenamento Frio',
         days: 'dia(s)',
         baselineSurveyButton: 'Preencher Inquéritos Base',
-        baseLineSurveyMessage: 'Você tem {{amount}} inquéritos para completar 😟',
+        baseLineSurveyMessage: 'Tem {{amount}} inquéritos para completar 😟',
         postCheckOutSurveyButton: 'Preencher Inquéritos Pós-Check-Out',
-        postCheckOutSurveyMessage: 'Você tem {{amount}} inquéritos para completar 😟',
+        postCheckOutSurveyMessage: 'Tem {{amount}} inquéritos para completar 😟',
         noChangeFoodLoss: 'Sem alteração na perda de alimentos',
         increaseInFoodLoss: 'Aumento na perda de alimentos',
         decreaseInFoodLoss: 'Diminuição na perda de alimentos',
@@ -1449,7 +1453,7 @@ export default {
         configurationMessage:
           'Por favor, configure suas datas e unidades de refrigeração para ter acesso',
         configureButton: 'Configurar',
-        crates: 'Paletes',
+        crates: 'Caixas',
         dateRangeLabel: 'Intervalo de datas:',
         selectedUnitsLabel: 'Unidades de refrigeração selecionadas:',
         totalCo2Label: '💨 Total de CO2e emitido:',
@@ -1484,7 +1488,7 @@ export default {
           checkedOutCropDistribution: '🧺 Distribuição de culturas no check-out (caixas)',
           checkedOutKgDistribution: '⚖️ Distribuição de culturas no check-out (kg)',
           checkOutCropDistribution: 'Distribuição de culturas no check-out',
-          co2: '💨 CO2e emitido para resfriamento',
+          co2: '💨 CO2e emitido para refrigeração',
           co2EmissionsLabel: 'Emissões de CO2e (kg)',
           co2DistributionLabel: 'Distribuição de CO2e de culturas',
           co2Kg: 'Kg de CO2 emitido',
@@ -1516,115 +1520,132 @@ export default {
         'Por favor, preencha o inquérito de mercado para {{farmer}}, referente à movimentação {{movementCode}}.',
       link: 'Por favor, acesse aqui para completá-lo.',
       coolingUserSurvey:
-        'Você fez check-in de {{crop}}, mas não completou o inquérito para este produto.',
+        'Fez check-in de {{crop}}, mas não completou o inquérito para este produto.',
       operatorSurvey:
-        'Você fez check-in de {{crop}} para {{farmer}}, mas não completou o inquérito para este produto.',
+        'Fez check-in de {{crop}} para {{farmer}}, mas não completou o inquérito para este produto.',
       pickup:
-        'Suas paletes de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
+        'Suas caixas de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
       notifyCoolingUser:
-        'Por favor, notifique o usuário {{farmer}} que suas paletes de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
+        'Por favor, notifique o utilizador {{farmer}} que suas caixas de {{crop}} devem ser recolhidas o mais rápido possível! (data do check-in: {{checkIn}}, ID da unidade de refrigeração: {{unitId}}, ID do check-in: {{movementCode}}).',
       checkIn: 'O operador {{farmer}} editou o check-in {{movementCode}} em {{date}}.',
       surveyAlreadyFilled: 'O questionário já foi preenchido',
       orderRequiresMovement:
-        'Produtos precisam ser redistribuídos entre paletes. Clique para detalhes sobre quais itens mover.',
+        'Produtos precisam ser redistribuídos entre caixas. Clique para detalhes sobre quais itens mover.',
       listingPriceUpdated:
-        'Os preços de listagem para as paletes armazenando {{crop}} em {{unitName}} foram atualizados: {{priceTag}}',
+        'Os preços de listagem para as caixas a armazenar {{crop}} em {{unitName}} foram atualizados: {{priceTag}}',
     },
   },
   tutorial: {
     welcome: 'Bem-vindo ao Coldtivate! Este é um tutorial das funções.',
     farmerWelcome:
-      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.', // TODO
+      'Bem vido ao Coldtivate! Este tutorial vai ajudar a compreender o funcionamento da aplicação.',
     quit: 'Sair do tutorial',
     congratulations:
-      'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar a aplicação.',
+      'Parabéns! Completou o tutorial! Volte ao Dashboard para começar a usar a aplicação.',
     prev: 'Etapa anterior',
     next: 'Próximo',
     start: 'Iniciar tutorial',
-    final: 'Parabéns! Você completou o tutorial! Volte ao painel para começar a usar a aplicação.',
-    backToDashboard: 'Voltar ao painel',
+    final: 'Parabéns! Completou o tutorial! Volte ao Dashboard para começar a usar a aplicação.',
+    backToDashboard: 'Voltar ao Dashboard',
     steps: {
       openDrawer:
-        'No canto superior esquerdo, você encontrará um menu com as principais funcionalidades. Vá em frente e clique nele.',
+        'No canto superior esquerdo, encontrará um menu com as principais funcionalidades. Vá em frente e clique nele.',
       repeatTutorial:
-        'Se você quiser assistir a este tutorial novamente, também pode encontrá-lo no menu.',
+        'Se quiser assistir a este tutorial novamente, também pode encontrá-lo no menu.',
       managementNavigation:
-        'No menu, você pode navegar até "Gerenciamento" e tocar lá para adicionar ou editar Usuários de Resfriamento. Vá em frente e tente.',
+        'No menu, pode navegar até "Gestão" e tocar lá para adicionar ou editar Utilizadores de Refrigeração. Vá em frente e tente.',
       operatorManagementNavigation:
-        'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users', // TODO
+        'No Menu, pode navegar para "Gestão" e premir ali para adicionar ou editar Utilizadores de Refrigeração.',
       addCoolingUser:
-        'Usuários de resfriamento que não se registraram no Coldtivate podem ser adicionados inserindo seus dados (nome, número de telefone). Usuários de resfriamento que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Usuário de Resfriamento".',
-      navigateToCoolingUser: 'Vá em frente e clique na guia Usuários de Resfriamento',
+        'Utilizadores de refrigeração que não se registraram no Coldtivate podem ser adicionados inserindo seus dados (nome, número de telefone). Utilizadores de refrigeração que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Utilizador de Refrigeração".',
+      navigateToCoolingUser: 'Vá em frente e clique na guia Utilizadores de Refrigeração',
       listCoolingUsers:
-        'Usuários de resfriamento com um smartphone são identificados por um ícone de telefone no lado direito das telas. Os outros são usuários de resfriamento com um telefone básico. Em ambos os casos, você pode clicar em um nome para acessar seus detalhes e a pesquisa do usuário de resfriamento.',
+        'Utilizadores de refrigeração com um smartphone são identificados por um ícone de telefone no lado direito das telas. Os outros são utilizadores de refrigeração com um telefone básico. Em ambos os casos, pode clicar em um nome para acessar seus detalhes e a pesquisa do utilizador de refrigeração.',
       navigateToAddCoolingUser:
-        'Clicar no sinal "+" permite que você adicione um novo Usuário de Resfriamento.',
+        'Clicar no sinal "+" permite adicionar um novo Utilizador de Refrigeração.',
       coolingUnitStep:
-        'Você pode navegar entre unidades de resfriamento clicando no menu suspenso na parte superior.',
+        'Pode navegar entre unidades de refrigeração clicando no menu suspenso na parte superior.',
       initiateCheckIn1:
-        'Depois de adicionar um usuário de resfriamento, você pode fazer um check-in para esse usuário. Vá em frente e clique no botão de atividade.',
+        'Depois de adicionar um utilizador de refrigeração, pode fazer um check-in para esse utilizador. Vá em frente e clique no botão de atividade.',
       initiateCheckIn2: 'Agora clique no botão de check-in (o verde).',
       checkIn1:
-        'Para completar o check-in, você precisa clicar em "Adicionar Caixas" e seguir as instruções passo a passo. Clique em "Continuar" para ver como o resultado ficará.',
+        'Para completar o check-in, necessita clicar em "Adicionar Caixas" e seguir as instruções passo a passo. Clique em "Continuar" para ver como o resultado ficará.',
       checkIn2:
-        'Após ter concluído todas as etapas, você verá uma visão geral das caixas que está prestes a registrar na sala.',
+        'Após ter concluído todas as etapas, verá uma visão geral das caixas que está prestes a registrar na sala.',
       checkIn3:
-        "Se você estiver satisfeito, pode clicar em 'Confirmar' e as novas caixas serão adicionadas ao Painel.",
-      history: "Ao clicar em 'Histórico', você pode ver todos os movimentos na sala.",
+        "Se estiver satisfeito, pode clicar em 'Confirmar' e as novas caixas serão adicionadas ao Dashboard.",
+      history: "Ao clicar em 'Histórico', pode ver todos os movimentos na sala.",
       coolingUnits:
-        '"Unidades de Arrefecimento". Clique para visualizar a capacidade das unidades de arrefecimento nos próximos 7 dias (na aba Planeador) e a temperatura da sala (na aba Condições da Sala).',
+        '"Unidades de Refrigeração". Clique para visualizar a capacidade das unidades de refrigeração nos próximos 7 dias (na aba Planeador) e a temperatura da sala (na aba Condições da Sala).',
       roomConditions:
-        'Se o seu sensor não estiver conectado, você pode atualizar manualmente a temperatura da sala de arrefecimento em "Condições da Sala".',
+        'Se o seu sensor não estiver conectado, pode atualizar manualmente a temperatura da sala de refrigeração em "Condições da Sala".',
       checkOut1:
         'Para iniciar o checkout, clique no botão de ação e depois no botão vermelho. Siga as instruções para concluir o checkout.',
-      checkOut2: 'Você pode escolher uma unidade de arrefecimento e as culturas ao fazer checkout.',
+      checkOut2: 'Pode escolher uma unidade de refrigeração e as culturas ao fazer checkout.',
       checkOut3: 'Após o checkout, clique no botão correspondente para finalizar o processo.',
       navigateToLocations:
         'Seu primeiro trabalho é adicionar um local. Vá em frente e clique na aba de locais.',
       locations:
-        'Você pode adicionar uma localização selecionando um nome e adicionando sua latitude e longitude, compartilhando suas coordenadas GPS (se você estiver na localização da câmara fria) ou digitando o endereço.',
+        'Pode adicionar uma localização selecionando um nome e adicionando sua latitude e longitude, compartilhando as suas coordenadas GPS (se estiver na localização da câmara fria) ou escrevendo o endereço.',
       navigateToCoolingUnits:
-        'Após adicionar uma localização, você pode adicionar uma unidade de arrefecimento. Vá em frente e clique na aba de unidades de arrefecimento.',
+        'Após adicionar uma localização, pode adicionar uma unidade de refrigeração. Vá em frente e clique na aba de unidades de refrigeração.',
       addCoolingUnits:
-        'Uma unidade de arrefecimento pode ser adicionada preenchendo os detalhes acima. Se você tiver sensores de temperatura na unidade de arrefecimento e uma API configurada, pode inserir as credenciais e conectar automaticamente seus sensores aa aplicação.',
+        'Uma unidade de refrigeração pode ser adicionada preenchendo os detalhes acima. Se tiver sensores de temperatura na unidade de refrigeração e uma API configurada, pode inserir as credenciais e conectar automaticamente seus sensores aa aplicação.',
       addEmployeesOperators:
-        'Você pode adicionar Funcionários e Operadores Registrados através da tela de Gestão. Para adicionar qualquer um dos papéis, você precisará do número de telefone deles. Eles receberão um SMS com um link de convite. Um número de telefone pode ser usado para apenas um usuário.',
+        'Pode adicionar Funcionários e Operadores Registrados através da tela de Gestão. Para adicionar qualquer um dos papéis, necessitará do número de telefone deles. Eles receberão um SMS com um link de convite. Um número de telefone pode ser usado para apenas um utilizador.',
       employeeCoolingUnitsStep:
-        'Uma vez que você tenha selecionado uma unidade de arrefecimento, verá uma visão geral de: os check-ins na aba "Dashboard", os movimentos na aba "Histórico" e a taxa de utilização planejada e a temperatura da sala na aba "Unidades de Arrefecimento".',
+        'Uma vez que tenha selecionado uma unidade de refrigeração, verá uma visão geral de: os check-ins na aba "Dashboard", os movimentos na aba "Histórico" e a taxa de utilização planejada e a temperatura da sala na aba "Unidades de Refrigeração".',
       localizationPreferences:
-        'Você pode alterar o idioma da aplicação selecionando "Preferências de Localização". Certifique-se de clicar no botão "Salvar alterações" para que o idioma seja alterado!',
+        'Pode alterar o idioma da aplicação selecionando "Preferências de Localização". Certifique-se de clicar no botão "Salvar alterações" para que o idioma seja alterado!',
       accountDetailsNavigation:
-        'No menu, você pode navegar para "Detalhes da Conta" e tocar lá para visualizar/editar um conjunto de configurações relacionadas à sua conta. Vá em frente e experimente.',
+        'No menu, pode navegar para "Detalhes da Conta" e tocar lá para visualizar/editar um conjunto de configurações relacionadas à sua conta. Vá em frente e experimente.',
       coolingUserSurvey:
-        'The first time you open the app, you are asked to complete a short survey. It is very important that you fill in the survey for the app to provide you with customized recommendations. If you cannot fill in the survey the first time you log in, you can access the survey in "Account details" -> "Cooling User Survey". Thank you for taking the time to complete the survey!', // TODO
+        'Na primeira vez que abrir a aplicação, ser-lhe-á pedido que preencha um pequeno questionário. É muito importante que o preencha para que a aplicação possa fornecer recomendações personalizadas. Se não conseguir preencher o questionário na primeira vez que iniciar sessão, pode aceder a ele em "Detalhes da conta" -> "Questionário do Utilizador da Unidade de Refrigeração". Obrigado por dedicar o seu tempo a preencher o questionário!',
       coolingUserCode:
-        'Na primeira vez que você chegar a uma câmara fria para armazenar sua produção, o operador lhe pedirá seu código pessoal para adicioná-lo à lista de usuários da câmara fria. Você pode encontrar este código em "Detalhes Pessoais" -> "Código de Importação do Usuário de Arrefecimento".',
+        'Na primeira vez que chegue a uma câmara fria para armazenar os seus produtos, o operador lhe pedirá seu código pessoal para adicioná-lo à lista de utilizadores da câmara fria. Pode encontrar este código em "Detalhes Pessoais" -> "Código de Importação do Utilizador de Refrigeração".',
       knowledgeHub:
-        'No menu, você pode encontrar o "Centro de Conhecimento", que contém conselhos sobre quanto tempo diferentes culturas podem ser armazenadas e sua temperatura ideal. Confira para entender como a câmara fria pode ajudá-lo a preservar a qualidade de diferentes frutas e vegetais!',
-      faq: 'No menu, você também pode encontrar as Perguntas Frequentes (FAQ). Recomendamos que você as consulte para aprender mais sobre a aplicação e os benefícios de armazenar sua produção nas câmaras frias.',
+        'No menu, pode encontrar o "Centro de Conhecimento", que contém conselhos sobre quanto tempo diferentes culturas podem ser armazenadas e sua temperatura ideal. Confira para entender como a câmara fria pode ajudá-lo a preservar a qualidade de diferentes frutas e vegetais!',
+      faq: 'No menu, também pode encontrar as Perguntas Frequentes (FAQ). Recomendamos que as consulte para aprender mais sobre a aplicação e os benefícios de armazenar sua produção nas câmaras frias.',
       dashboardStep1:
-        'Uma vez que o operador tenha concluído um check-in para você, você poderá ver a produção armazenada na sala na seção "Dashboard". Cada cartão contém um conjunto de caixas do mesmo tipo de cultura que foram registradas juntas.',
+        'Uma vez que o operador tenha concluído um check-in para si, poderá ver a produção armazenada na sala na seção "Dashboard". Cada cartão contém um conjunto de caixas do mesmo tipo de cultura que foram registradas juntas.',
       dashboardStep2:
         'Cada cartão no dashboard contém informações sobre: o tipo de cultura, o número de caixas armazenadas, há quantos dias elas já estão armazenadas, o preço diário (para todas as caixas juntas) e o ID do check-in.',
       dashboardStep3:
         'O número colorido de dias indica o "Tempo para Retirada" (TTPU), que significa quantos dias sua produção ainda estará boa, se permanecer refrigerada. Uma cor vermelha significa que a produção está perdendo qualidade e deve ser retirada o mais rápido possível.',
       dashboardStep4:
-        'Se a cor do cartão for amarela (2-5 dias restantes) ou verde (mais de 5 dias), você não precisa se preocupar com as caixas. O número de dias é recalculado várias vezes ao dia, então, certifique-se de verificar o "Dashboard" regularmente para ver como a qualidade de suas caixas na sala está evoluindo.',
+        'Se a cor do cartão for amarela (2-5 dias restantes) ou verde (mais de 5 dias), não necessita preocupar-se com as caixas. O número de dias é recalculado várias vezes ao dia, então, certifique-se de verificar o "Dashboard" regularmente para ver como a qualidade de suas caixas na sala está a evoluir.',
       dashboardStep5:
-        'Se você tiver caixas armazenadas em várias salas, pode mudar a sala que está visualizando selecionando uma empresa e uma unidade de arrefecimento no menu suspenso.',
+        'Se tiver caixas armazenadas em várias salas, pode mudar a sala que está a visualizar selecionando uma empresa e uma unidade de refrigeração no menu suspenso.',
       dashboardStep6:
         'When your crates are approaching the Time to pick up and the card turns red, you will receive a notification that advise you to go to the room, pick up those crates, and sell them. You can check your notifications by clicking the bell on the right.',
       farmerHistory:
-        'Na aba "Histórico", você pode ver um resumo de todos os check-ins e check-outs que você completou em cada sala. Se você ver um ponto vermelho ao lado de um check-out, clique nos três pontos e em "Preencher pesquisa de mercado". Aqui, gostaríamos de entender a que preço você vendeu sua produção e se algo estragou. Usamos essas informações para melhorar as operações na câmara fria, portanto, é importante que você responda com precisão.',
+        'Na aba "Histórico", pode ver um resumo de todos os check-ins e check-outs que completou em cada sala. Se vir um ponto vermelho ao lado de um check-out, clique nos três pontos e em "Preencher pesquisa de mercado". Aqui, gostaríamos de entender a que preço vendeu a sua produção e se algo estragou. Usamos essas informações para melhorar as operações na câmara fria, portanto, é importante que responda com precisão.',
       farmersCoolingUnits:
-        'To check for cooling units near you, you can navigate to the buttons on the bottom of the screens, clicking on the tab "More", "Cooling units" and selecting "Map". By clicking on each pin on the map, you can see the type of unit and the price of storage.', // TODO
+        'Para verificar unidades de refrigeração perto de si, navegue até aos botões na parte inferior do ecrã, clique no separador "Mais", depois em "Unidades de Refrigeração" e selecione "Mapa". Ao tocar em cada marcador no mapa, poderá ver o tipo de unidade e o preço de armazenamento.',
       farmersUnitsPlanner:
-        'Na aba "Unidades de Arrefecimento", você pode encontrar o Mapa, a ocupação atual e futura da sala (na aba "Planejador") e a temperatura da sala (na aba "Condições da Sala"). Essas telas ajudam você a monitorar remotamente o que está acontecendo nas câmaras frias, sem precisar ir lá pessoalmente para verificar!',
+        'Na aba "Unidades de Refrigeração", pode encontrar o Mapa, a ocupação atual e futura da sala (em "Planeador") e a temperatura da sala (na aba "Condições da Sala"). Essas telas ajudam você a monitorar remotamente o que está acontecendo nas câmaras frias, sem precisar ir lá pessoalmente para verificar!',
       marketPrice:
-        'Se você ver uma aba chamada "Preço de Mercado", pode verificar os preços de diferentes frutas e vegetais em todo o país nos últimos dias e uma previsão dos preços para o futuro. Por enquanto, essa opção está disponível apenas para países selecionados.', // TODO
+        'Se vir uma aba chamada "Preço de Mercado", pode verificar os preços de diferentes frutas e vegetais em todo o país nos últimos dias e uma previsão dos preços para o futuro. Por enquanto, essa opção está disponível apenas para países selecionados.',
       farmerFinalStep:
-        'Parabéns! Completou o tutorial! Se tiver dúvidas sobre a aplicação, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da unidade de arrefecimento ou escreva-nos para app@yourvcca.org.',
-      more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.', // TODO
+        'Parabéns! Completou o tutorial! Se tiver dúvidas sobre a aplicação, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da unidade de refrigeração ou escreva-nos para app@yourvcca.org.',
+      more: 'Ao clicar em "Mais", poderá selecionar os ecrãs "Histórico", "Preços das Culturas", "Unidades de Refrigeração" e "Encomendas".',
+      marketplaceStep1:
+        'Este é o marketplace digital da Coldtivate, onde todos os utilizadores podem comprar e vender produtos que estão a ser armazenados na unidade de refrigeração. Cada caixa disponível para venda está listada aqui, e pode comprar qualquer quantidade (em kg) ou a caixa completa.',
+      marketplaceStep2:
+        'Depois de selecionar os itens para compra, clique no ícone do carrinho de compras para ver os itens no seu carrinho.',
+      shoppingCart:
+        'Para concluir a sua compra, pode rever os itens no seu carrinho de compras e clicar em continuar para seguir as instruções passo a passo até concluir a encomenda.',
+      marketplaceStep3:
+        'No separador principal do marketplace, também pode navegar para ver um resumo do histórico das suas encomendas e vendas através das páginas As Minhas Encomendas e As Minhas Vendas. Clique em As Minhas Encomendas para saber mais.',
+      myOrders:
+        'Aqui pode ver cada encomenda que fez através do marketplace, com todos os detalhes de cada uma apresentados em cartões — clique na seta à direita para mais detalhes sobre cada encomenda.',
+      operatorListForSale:
+        'Pode apoiar um utilizador da unidade de refrigeração a colocar um item à venda no marketplace. Clique na seta à direita para ver os detalhes.',
+      coolingUserListForSale:
+        'Pode gerir quais as caixas que pretende colocar à venda no mercado. Clique na seta à direita para ver os detalhes.',
+      commonListForSale: 'Clique em "Listar para venda" para colocar a caixa #1 à venda.',
+      commonListForSalePrice:
+        'Depois de listar a caixa para venda, também pode inserir o preço de venda abaixo! Estas definições podem ser editadas a qualquer momento.',
     },
   },
 } satisfies Translations;

@@ -3,13 +3,18 @@ import isNil from 'lodash/isNil';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, Icon, List } from 'react-native-paper';
+import { useShallow } from 'zustand/react/shallow';
 
 import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
+import RBAC from '#common/RBAC';
 import { API_BASE_URL } from '#constants/environment';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ProduceDetailsStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/ProduceDetailsStack';
+import { MarketplaceListing1ScreenOverlay } from '#screens/Dashboard/Tutorial/MarketplaceOverlay';
+import { EMarketplaceTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 import { useAuthStore } from '#stores/auth';
 import { ECoolingUnitMetric, EPricingType, ERoles } from '#types/global';
 
@@ -20,26 +25,22 @@ import { cn } from '#ui/lib/cn';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
-import RBAC from '#common/RBAC';
 import CheckoutButtonRedirect from './components/CheckoutButtonRedirect';
 
-// TODO: add operator contacts, if BE ever sends it back
 function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
-  const { produce, coolingUnit, currency } = props.route.params;
   const { t } = useTranslationUtils();
-  const { user } = useAuthStore();
+  const [user] = useAuthStore(useShallow((store) => [store.user]));
   const toast = InAppNotifications.useToast();
   const { guard } = RBAC.useRBAC();
 
+  const { produce, coolingUnit, currency } = props.route.params;
+
   const crates = produce.checkedInCrates.length;
 
-  const copyToClipboard = useCallback(
-    (text: string) => {
-      Clipboard.setString(text);
-      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
-    },
-    [toast]
-  );
+  const { onLayout } = useWalkthroughStep({
+    number: EMarketplaceTutorialSteps.LIST_FOR_SALE_STEP,
+    OverlayComponent: MarketplaceListing1ScreenOverlay,
+  });
 
   const pricing = useMemo(() => {
     const pricing = produce.checkedInCrates[0].pricing[0];
@@ -92,6 +93,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                   />
                 </View>
               ),
+              onLayout,
               custom: true,
             },
           ]
@@ -158,6 +160,14 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         0
       ),
     [produce]
+  );
+
+  const copyToClipboard = useCallback(
+    (text: string) => {
+      Clipboard.setString(text);
+      toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
+    },
+    [toast]
   );
 
   const renderContactDetails = () => {
@@ -271,6 +281,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
                 <React.Fragment>
                   <List.Item
                     tw="p-0 m-0 py-1"
+                    onLayout={item.onLayout}
                     title={undefined}
                     left={() => (
                       <View tw="flex-col">

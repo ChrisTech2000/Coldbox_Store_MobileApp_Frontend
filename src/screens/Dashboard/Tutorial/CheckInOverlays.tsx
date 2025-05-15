@@ -365,10 +365,18 @@ export function CheckIn3ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
               opacity: blinkAnim,
               transform: [{ rotate: '180deg' }],
               top: screenHeight <= SMALL_SCREEN_THRESHOLD ? -15 : Platform.OS === 'ios' ? -35 : -5,
-              left: screenHeight <= SMALL_SCREEN_THRESHOLD ? -70 : -90,
+              left: LanguageManager.isRTL
+                ? undefined
+                : screenHeight <= SMALL_SCREEN_THRESHOLD
+                  ? -70
+                  : -90,
+              right: LanguageManager.isRTL
+                ? screenHeight <= SMALL_SCREEN_THRESHOLD
+                  ? -70
+                  : -90
+                : undefined,
             },
           ]}
-          tw="-right-2/3 -top-2/3"
         >
           <MaterialIcon
             name="touch-app"

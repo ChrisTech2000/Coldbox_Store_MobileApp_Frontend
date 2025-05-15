@@ -198,7 +198,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                           <Text tw="text-lg font-bold">
                             {crop?.name ?? getDefaultCropValues(t).name}
                           </Text>
-                          <Text tw="text-zinc-500">{item.relCheckInMovementCode}</Text>
+                          <Text tw="text-zinc-500">{item.relCheckinMovementCode}</Text>
                         </View>
                         <FastImage
                           tw="w-24 h-20"

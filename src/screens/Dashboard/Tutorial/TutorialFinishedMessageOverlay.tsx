@@ -3,24 +3,34 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Modal, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
+import { useShallow } from 'zustand/react/shallow';
 
 import Logo from '#assets/images/coldtivate_logo.svg';
 
+import { DEFAULT_CUSTOMER_TYPE_COUNTRY } from '#common/RBAC/abilities';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useAuthStore } from '#stores/auth';
+import { useDashboardStore } from '#stores/dashboard';
+import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
 import {
   EEmployeeTutorialSteps,
   EFarmerTutorialSteps,
+  EMarketplaceTutorialSteps,
   EOperatorTutorialSteps,
 } from './utils/constants';
-import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/mockedData';
+import {
+  MOCKED_CHECK_OUT_DATA,
+  MOCKED_COOLING_UNIT,
+  MOCKED_PRODUCE_DETAILS_DATA,
+  MOCKED_USER,
+} from './utils/mockedData';
 
 const MOCKED_PARAMS = {
   user: MOCKED_USER,
@@ -36,7 +46,15 @@ export const TutorialFinishedMessageOverlay = ({
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const user = useAuthStore((store) => store.user);
+  const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
+  const [company] = useManagementStore(useShallow((store) => [store.company]));
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+
+  const isFarmer = user?.role === ERoles.COOLING_USER;
+  const isCompanyCountryNigeria =
+    company?.country === 'NG' || company?.country === DEFAULT_CUSTOMER_TYPE_COUNTRY;
+  const isFarmerCountryNigeria =
+    farmerCountry === 'NG' || farmerCountry === DEFAULT_CUSTOMER_TYPE_COUNTRY;
 
   return (
     <Modal transparent visible={isWalkthroughOn} animationType="fade">
@@ -60,6 +78,48 @@ export const TutorialFinishedMessageOverlay = ({
               icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
               mode="text"
               onPress={() => {
+                if (
+                  (isFarmer && isFarmerCountryNigeria) ||
+                  (!isFarmer && isCompanyCountryNigeria)
+                ) {
+                  switch (user?.role) {
+                    case ERoles.OPERATOR:
+                    case ERoles.COOLING_USER:
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      rootNavigation.navigate('ProduceDetailsStack', {
+                        screen: 'EditCrateWeightAndPricing',
+                        params: {
+                          ...MOCKED_PRODUCE_DETAILS_DATA,
+                          produce: {
+                            ...MOCKED_PRODUCE_DETAILS_DATA.produce,
+                            checkedInCrates: [
+                              {
+                                ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[0],
+                                listedInTheMarketplace: true,
+                              },
+                              { ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[1] },
+                            ],
+                          },
+                          companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
+                        },
+                      });
+                      goTo(EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_PRICE_STEP);
+                      break;
+                    default:
+                      rootNavigation.navigate('Marketplace', {
+                        screen: 'MarketplaceRoot',
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        params: {
+                          screen: 'MyOrders',
+                        },
+                      });
+                      goTo(EMarketplaceTutorialSteps.MY_ORDERS_STEP);
+                  }
+                  return;
+                }
+
                 if (user?.role === ERoles.OPERATOR) {
                   // eslint-disable-next-line
                   // @ts-ignore

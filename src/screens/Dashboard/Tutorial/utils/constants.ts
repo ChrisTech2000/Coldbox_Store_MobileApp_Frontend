@@ -10,6 +10,17 @@ export enum ECommonTutorialSteps {
   FINAL_STEP = 22,
 }
 
+export enum EMarketplaceTutorialSteps {
+  MARKETPLACE_STEP_1 = 43,
+  MARKETPLACE_STEP_2 = 44,
+  SHOPPING_CART_STEP = 45,
+  MARKETPLACE_STEP_3 = 46,
+  MY_ORDERS_STEP = 47,
+  LIST_FOR_SALE_STEP = 48,
+  COMMON_LIST_FOR_SALE_STEP = 49,
+  COMMON_LIST_FOR_SALE_PRICE_STEP = 50,
+}
+
 export enum EOperatorTutorialSteps {
   GO_TO_COOLING_USERS_STEP = 5,
   LIST_COOLING_USERS_STEP = 6,

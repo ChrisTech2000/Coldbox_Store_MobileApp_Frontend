@@ -1611,6 +1611,23 @@ const en = {
       farmerFinalStep:
         'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
       more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.',
+      marketplaceStep1:
+        'This is the Coldtivate digital marketplace, where all users can buy and sell produce that is being stored in the cold room. Each crate for sale is listed here, and you can buy any amount (in kg) or the full crate.',
+      marketplaceStep2:
+        'After selecting items to buy, click the shopping cart icon to see the items in your cart.',
+      shoppingCart:
+        'To complete your purchase, you can review the items in your shopping cart and click continue to follow the instructions step by step to complete your order.',
+      marketplaceStep3:
+        'On the main marketplace tab you can also navigate to view a summarized history of your orders and sales through the My orders and My sales pages. Go ahead and click My orders to learn more.',
+      myOrders:
+        'Here you can see each order you have made through the marketplace, with all the details of each order captured inside each card - click on the arrow on the right for more details about each order.',
+      operatorListForSale:
+        'You can support a Cooling User to place an item for sale on the marketplace. Click on the arrow to the right to see the details.',
+      coolingUserListForSale:
+        'You can manage which crates to place for sale on the marketplace. Click on the arrow to the right to see the details.',
+      commonListForSale: 'Click “List for sale” to place crate #1 for sale.',
+      commonListForSalePrice:
+        'After listing the crate for sale, you can also enter the listing selling price below! These settings can be edited at any time.',
     },
   },
 };

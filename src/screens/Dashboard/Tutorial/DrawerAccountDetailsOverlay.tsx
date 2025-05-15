@@ -31,7 +31,7 @@ export function DrawerAccountDetailsOverlay({ next, goTo, stop }: IOverlayCompon
     <View tw="h-full w-full absolute">
       <Touchable
         tw={cn(
-          'absolute left-3 w-[50%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2',
+          'absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2 z-10',
           Platform.OS === 'ios'
             ? 'top-[15.5%]'
             : screenHeight <= SMALL_SCREEN_THRESHOLD
@@ -57,7 +57,8 @@ export function DrawerAccountDetailsOverlay({ next, goTo, stop }: IOverlayCompon
                 : screenHeight <= SMALL_SCREEN_THRESHOLD
                   ? '17%'
                   : '13.5%',
-            left: '40%',
+            left: LanguageManager.isRTL ? undefined : '40%',
+            right: LanguageManager.isRTL ? '40%' : undefined,
             opacity: blinkAnim,
           },
         ]}

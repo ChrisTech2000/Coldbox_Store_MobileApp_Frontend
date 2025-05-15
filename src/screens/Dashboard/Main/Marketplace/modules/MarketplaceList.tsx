@@ -7,19 +7,20 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
 
-import { Text } from '#ui/components/Text';
-
-import { API_BASE_URL } from '#constants/environment';
-import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
-import type { ValueOf } from '#types/miscellaneous';
 import { GenericEmptyState } from '#ui/components/GenericEmptyState';
+import { Text } from '#ui/components/Text';
 import { useMap } from '#ui/hooks/useMap';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
-import MarketplaceItemWrapper from '../components/MarketplaceItem';
+import { API_BASE_URL } from '#constants/environment';
+import { useTranslationUtils, type TranslationPaths } from '#i18n/utils';
+import { MOCKED_MARKETPLACE_DATA } from '#screens/Dashboard/Tutorial/utils/mockedData';
+import { useTutorialStore } from '#stores/tutorial';
+import type { ValueOf } from '#types/miscellaneous';
 
+import MarketplaceItemWrapper from '../components/MarketplaceItem';
 import { useMarketplaceQueryParams } from '../store';
-import { type AvailableListingDatum, DEFAULT_COORDINATES, useMarketplaceListing } from '../utils';
+import { DEFAULT_COORDINATES, useMarketplaceListing, type AvailableListingDatum } from '../utils';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -135,6 +136,7 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
   const isLocationDenied = isEmpty(coordinates) || isEqual(coordinates, DEFAULT_COORDINATES);
 
   const [unitMap, unitMapActions] = useMap<number, UnitMapValue>();
+  const [isTutorialActive] = useTutorialStore((store) => [store.isTutorialActive]);
 
   useEffect(() => {
     const currentKeySet = new Set<number>(unitMap.keys());
@@ -151,10 +153,11 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
     if (hasChanges) {
       unitMapActions.setAll(new Map([...unitMap, ...nextEntries]));
     }
-  }, [listing, unitMap, unitMapActions]);
+  }, [isTutorialActive, listing, unitMap, unitMapActions]);
 
   const groupedData: Array<NearbyMeListItem> = useMemo(() => {
-    const dataByDistance = listing.reduce<
+    const data = isTutorialActive ? MOCKED_MARKETPLACE_DATA : listing;
+    const dataByDistance = data.reduce<
       Record<number, Record<GroupedDatum['distance'], Array<AvailableListingDatum>>>
     >((acc, datum) => {
       const key = datum.coolingUnit.id;
@@ -203,7 +206,7 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
 
       return items;
     }, []);
-  }, [listing, isLocationDenied]);
+  }, [isTutorialActive, listing, isLocationDenied]);
 
   const listExtraData = useMemo(() => ({ unitMap }), [unitMap]);
 

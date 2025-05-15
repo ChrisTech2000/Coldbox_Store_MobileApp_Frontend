@@ -22,7 +22,7 @@ import MainTabStack from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
 import AnalyticsStack from './AnalyticsStack';
 import ShoppingCartStack, { type ShoppingCartStackRoutes } from './ShoppingCartStack';
-import MarketplaceStack from './Marketplace/MarketplaceStack';
+import MarketplaceStack, { MarketplaceRoutes } from './Marketplace/MarketplaceStack';
 
 export type DashboardMainRoutes = {
   Dashboard: undefined;
@@ -43,7 +43,11 @@ export type DashboardMainRoutes = {
     screen: keyof ShoppingCartStackRoutes;
     params?: ShoppingCartStackRoutes | ShoppingCartStackRoutes;
   };
-  Marketplace: undefined;
+  Marketplace:
+    | {
+        screen: keyof MarketplaceRoutes;
+      }
+    | undefined;
 };
 
 export type DashboardMainRoutePaths = keyof DashboardMainRoutes;

@@ -5,8 +5,8 @@ import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import Logo from '#assets/images/coldtivate_logo.svg';
 
 import { useTranslationUtils } from '#i18n/utils';
-import { useTutorialStore } from '#stores/tutorial';
 import { useAuthStore } from '#stores/auth';
+import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 
 import { Button } from '#ui/components/Button';
