@@ -222,6 +222,7 @@ platform :ios do
             cocoapods(
                 podfile: 'ios/Podfile',
                 use_bundle_exec: false,
+                repo_update: true
             )
         ensure
             sh('rm ~/.netrc; if [ -f "~/.netrc.original" ]; then cp ~/.netrc.original ~/.netrc; fi;  exit 0')
