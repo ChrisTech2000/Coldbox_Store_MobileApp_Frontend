@@ -95,7 +95,14 @@ export function ManagementEmployeesOperatorsOverlay({ goTo, stop }: IOverlayComp
               onPress={() => {
                 stop();
                 toggleTutorial(false);
-                rootNavigation.navigate('Main', { screen: 'Dashboard' });
+                rootNavigation.navigate('Main', {
+                  screen: 'Dashboard',
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  params: {
+                    screen: 'RootMainTabStack',
+                  },
+                });
               }}
               labelStyle="text-red-700"
             >

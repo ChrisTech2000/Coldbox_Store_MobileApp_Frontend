@@ -18,14 +18,18 @@ import BottomNavigation from '../components/BottomNavigation';
 import { BOTTOM_NAV_ROUTES_SCOPE, useDashboardHeader } from '../lib/dashboardHeaderFactory';
 import CoolingUnitsTabs, { CoolingUnitsTabsRoutes } from './CoolingUnitsTabs';
 import HistoryTabStack, { HistoryTabStackRoutes } from './HistoryTabStack';
-import MainTabStack from './MainTabStack';
+import MainTabStack, { MainTabStackRoutes } from './MainTabStack';
 import MarketPriceTabs from './MarketPriceTabs';
 import AnalyticsStack from './AnalyticsStack';
 import ShoppingCartStack, { type ShoppingCartStackRoutes } from './ShoppingCartStack';
 import MarketplaceStack, { MarketplaceRoutes } from './Marketplace/MarketplaceStack';
 
 export type DashboardMainRoutes = {
-  Dashboard: undefined;
+  Dashboard:
+    | {
+        screen?: keyof MainTabStackRoutes;
+      }
+    | undefined;
   History:
     | {
         screen?: keyof HistoryTabStackRoutes;

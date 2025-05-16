@@ -128,7 +128,14 @@ export function Marketplace1ScreenOverlay({ next, goTo, stop }: IOverlayComponen
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -212,7 +219,14 @@ export function Marketplace2ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -289,7 +303,14 @@ export function ShoppingCartScreenOverlay({ next, goTo, stop }: IOverlayComponen
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -381,7 +402,14 @@ export function Marketplace3ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -463,7 +491,14 @@ export function MyOrdersScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -567,7 +602,14 @@ export function MarketplaceListing1ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -657,7 +699,14 @@ export function MarketplaceListing2ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -742,7 +791,14 @@ export function MarketplaceListing3ScreenOverlay({ goTo, stop }: IOverlayCompone
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
