@@ -128,7 +128,14 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -197,7 +204,14 @@ export function RoomConditionsOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
