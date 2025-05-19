@@ -49,8 +49,6 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
       language: values.language,
     });
 
-    setUser({ ...userDatum, role: values.kind });
-
     if (guard('VIEW', 'FarmerFields')) {
       const farmerDatum = await ColdtivateService.updateFarmer({
         farmerId,
@@ -66,6 +64,8 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
         farmerParentName: farmerDatum.parentName,
       });
     }
+
+    setUser({ ...userDatum, role: values.kind });
   }
 
   return (

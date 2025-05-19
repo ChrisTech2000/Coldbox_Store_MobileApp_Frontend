@@ -35,7 +35,9 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
   const toast = InAppNotifications.useToast();
 
   const formInitialValues = useRef<FormValues | undefined>(undefined);
-  const company = useManagementStore(useShallow((store) => store.company));
+  const [company, setCompany] = useManagementStore(
+    useShallow((store) => [store.company, store.setCompany])
+  );
   const { t } = useTranslationUtils();
 
   const { data: companyDetails, isLoading: isLoadingCompanyDetails } = useApiCall(
@@ -78,7 +80,14 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
       });
 
       toast.show(t('Dashboard.Management.CompanyDetails.toasts.success'), { type: 'md_success' });
-      await mutate(getQueryKey('getCompanyById', company.id));
+      const result = await mutate(getQueryKey('getCompanyById', company.id));
+      setCompany({
+        id: result.id,
+        country: result.country,
+        currency: result.currency,
+        name: result.name,
+        hasDigitalTwin: result.digitalTwin,
+      });
       navigation.goBack();
     } catch (exception) {
       reportCrash(exception as Error);
