@@ -105,7 +105,14 @@ export function OperatorActionsOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -192,7 +199,14 @@ export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProp
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('Dashboard');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -262,7 +276,14 @@ export function CheckIn1ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -326,7 +347,14 @@ export function CheckIn2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >
@@ -419,7 +447,14 @@ export function CheckIn3ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('RootMainTabStack');
+              // eslint-disable-next-line
+              // @ts-ignore
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
             }}
             labelStyle="text-red-700"
           >

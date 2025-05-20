@@ -92,7 +92,14 @@ export function CoolingUserSurveyOverlay({ next, goTo, stop }: IOverlayComponent
               onPress={() => {
                 stop();
                 toggleTutorial(false);
-                rootNavigation.navigate('Dashboard');
+                // eslint-disable-next-line
+                // @ts-ignore
+                rootNavigation.navigate('Main', {
+                  screen: 'Dashboard',
+                  params: {
+                    screen: 'RootMainTabStack',
+                  },
+                });
               }}
               labelStyle="text-red-700"
             >

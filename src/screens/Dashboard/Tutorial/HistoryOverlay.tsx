@@ -81,9 +81,16 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
           <Button
             mode="text"
             onPress={() => {
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+                // eslint-disable-next-line
+                // @ts-ignore
+                params: {
+                  screen: 'RootMainTabStack',
+                },
+              });
               stop();
               toggleTutorial(false);
-              rootNavigation.navigate('Main');
             }}
             labelStyle="text-red-700"
           >
