@@ -435,7 +435,7 @@ const en = {
           },
           reasonsForLoss: {
             improperHarvest: 'Improper harvest or handling',
-            inappropriateStorage: 'Inappropriate storage / lack of old storage',
+            inappropriateStorage: 'Inappropriate storage / lack of cold storage',
             overproduction: 'Overproduction',
             transportationDamage: 'Transportation damage',
             pest: 'Pest',

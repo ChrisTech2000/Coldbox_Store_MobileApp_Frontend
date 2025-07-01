@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Locale } from 'date-fns';
+import { isValid, type Locale } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
 import { enGB as englishLocale } from 'date-fns/locale/en-GB';
 import { fr as frenchLocale } from 'date-fns/locale/fr';
@@ -149,8 +149,21 @@ export function useTranslationUtils() {
 type Options = Parameters<typeof formatInTimeZone>[3];
 
 export function dateFmt(timestamp: string, dateFormat?: string, opts?: Options): string {
-  return formatInTimeZone(parseISO(timestamp), getTimeZone(), dateFormat ?? 'dd/MM/yyyy', {
-    ...opts,
-    locale: _currentDateFnsLocale,
-  });
+  const parsedDate = parseISO(timestamp);
+  if (!isValid(parsedDate)) {
+    return '';
+  }
+
+  const timeZone = getTimeZone();
+  const defaultTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  const zoneToUse = timeZone || defaultTimeZone;
+
+  try {
+    return formatInTimeZone(parsedDate, zoneToUse, dateFormat ?? 'dd/MM/yyyy', {
+      ...opts,
+      locale: _currentDateFnsLocale,
+    });
+  } catch {
+    return '';
+  }
 }

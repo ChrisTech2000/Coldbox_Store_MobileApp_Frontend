@@ -23,7 +23,10 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
-  const contextualFarmer = useApiCache<number, Farmer>(GET_FARMER_RECORD_SWR_KEY, farmerId);
+  const contextualFarmer = useApiCache<number, { farmer: Farmer }>(
+    GET_FARMER_RECORD_SWR_KEY,
+    farmerId
+  );
 
   const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
@@ -64,7 +67,7 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
           if (typeof contextualFarmer === 'undefined') throw new Error(); // safe guard
 
           const result = await execute({
-            farmer: contextualFarmer,
+            farmer: contextualFarmer.farmer,
             crops: crops ?? [],
             companies: companies ?? [],
           });

@@ -288,7 +288,7 @@ export function FarmersSurveyModal({
                       render={({ field: { onChange, value, onBlur } }) => (
                         <View tw="flex flex-row items-center justify-between space-x-2">
                           <TouchableOpacity
-                            onPress={() => onChange(!value ? 0 : Number(value) - 1)}
+                            onPress={() => onChange(!value ? '0' : `${Number(value) - 1}`)}
                             tw="ml-2"
                             disabled={isSubmitting}
                           >
@@ -304,7 +304,7 @@ export function FarmersSurveyModal({
                             disabled={isSubmitting}
                           />
                           <TouchableOpacity
-                            onPress={() => Number(onChange(Number(value ?? 0) + 1, onChange))}
+                            onPress={() => `${Number(onChange(Number(value ?? 0) + 1, onChange))}`}
                             tw="mr-2"
                             disabled={isSubmitting}
                           >

@@ -31,7 +31,7 @@ export default function TemperatureModal(props: Props) {
     defaultValues: { temperature: '' },
     resolver: zodResolver((z) =>
       z.object({
-        temperature: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number().gt(0)),
+        temperature: z.preprocess((v) => (v ? Number(v) : 0), z.coerce.number()),
       })
     ),
     reValidateMode: 'onSubmit',

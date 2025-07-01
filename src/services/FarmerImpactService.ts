@@ -22,7 +22,6 @@ class FarmerImpactService extends HttpClient {
   public getFarmerBaseImpact = async (farmer: number): Promise<FarmerBaseData | undefined> => {
     try {
       const query = qs.stringify({ farmer });
-
       const { data } = await this.axios.post<FarmerBaseData>(
         EFarmerImpactEndpoints.GET_FARMER_BASE,
         query

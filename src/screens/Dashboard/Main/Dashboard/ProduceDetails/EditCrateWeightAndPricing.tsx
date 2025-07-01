@@ -90,7 +90,7 @@ function EditCrateWeightAndPricing(
     }
   );
 
-  const isUserWithoutPhone = owner.firstName === USER_WITHOUT_PHONE && !owner.phone;
+  const isUserWithoutPhone = owner?.firstName === USER_WITHOUT_PHONE && !owner?.phone;
 
   const {
     data: eligibility,
@@ -104,7 +104,8 @@ function EditCrateWeightAndPricing(
       companyIds: [params.companyId, ...(ownedByCompanyId ? [ownedByCompanyId] : [])],
     },
     {
-      skip: !params.companyId || (!owner?.id && !user?.id) || isUserWithoutPhone,
+      skip:
+        !params.companyId || (!owner?.id && !user?.id) || isUserWithoutPhone || isTutorialActive,
     }
   );
 
@@ -273,7 +274,7 @@ function EditCrateWeightAndPricing(
         id: crate.id,
         weight: crate.weight.toString(),
         tag: crate.tag,
-        isSellable: isTutorialActive ? (crate.listedInTheMarketplace ?? false) : true,
+        isSellable: crate.listedInTheMarketplace ?? false,
       }));
 
       let price: undefined | string;
@@ -303,7 +304,7 @@ function EditCrateWeightAndPricing(
     } catch (exception) {
       reportCrash(exception as Error);
     } finally {
-      toggleIsSettingUp();
+      if (isSettingUp) toggleIsSettingUp();
     }
   }, 700);
 
@@ -333,10 +334,10 @@ function EditCrateWeightAndPricing(
     form.getValues('previous.sellableCrates')
   );
 
-  const companyEligible = eligibility.companies?.[params.companyId ?? ''] || isTutorialActive;
+  const companyEligible = eligibility?.companies?.[params.companyId ?? ''] || isTutorialActive;
   const farmerEligible =
-    eligibility.users?.[owner?.id ?? user?.id ?? ''] ||
-    (ownedByCompanyId && eligibility.companies?.[ownedByCompanyId]) ||
+    eligibility?.users?.[owner?.id ?? user?.id ?? ''] ||
+    (ownedByCompanyId && eligibility?.companies?.[ownedByCompanyId]) ||
     isTutorialActive;
 
   if (isSettingUp || isLoadingEligibility || isLoadingFarmer) {

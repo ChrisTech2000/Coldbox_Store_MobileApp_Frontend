@@ -223,7 +223,7 @@ function SalesRoot() {
                       <Text tw="text-base text-zinc-500">
                         {formatCurrencyWithSymbol(
                           DEFAULT_CURRENCY_CODE,
-                          item.items.reduce((acc, current) => (acc += current.produceAmount), 0)
+                          item.items.reduce((acc, current) => (acc += current.totalAmount), 0)
                         )}
                       </Text>
                     </View>

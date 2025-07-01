@@ -428,7 +428,7 @@ export default {
           },
           reasonsForLoss: {
             improperHarvest: 'Récolte ou manipulation inappropriée',
-            inappropriateStorage: 'Stockage inapproprié / manque de stockage ancien',
+            inappropriateStorage: 'Stockage inapproprié / absence de stockage frigorifique',
             overproduction: 'Surproduction',
             transportationDamage: 'Dommages lors du transport',
             pest: 'Insectes',

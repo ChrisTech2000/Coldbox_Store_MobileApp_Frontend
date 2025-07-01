@@ -420,7 +420,7 @@ export default {
           },
           reasonsForLoss: {
             improperHarvest: 'Girbi ko kulawa mara kyau',
-            inappropriateStorage: "Ma'ajiyar da ba ta dace ba / rashin tsohuwar ajiya",
+            inappropriateStorage: 'Ajiyar da bai dace ba / rashin ajiyar sanyi',
             overproduction: 'Yawan samarwa',
             transportationDamage: 'Lalacewar sufuri',
             pest: 'Kwari',

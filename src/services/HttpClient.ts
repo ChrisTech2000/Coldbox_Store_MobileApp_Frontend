@@ -68,6 +68,15 @@ export default class HttpClient {
           return Promise.reject(exception);
         }
 
+        if (exception.response?.status === 422) {
+          console.log('############################################');
+          console.log('Validation error:', exception.response.data);
+          console.log('Request config:', config);
+          console.log('############################################');
+
+          return Promise.reject(exception);
+        }
+
         if (exception.response?.status === 403) {
           if (typeof this.options.onForbidden === 'function') {
             this.options.onForbidden();

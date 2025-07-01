@@ -410,7 +410,7 @@ export default {
           },
           reasonsForLoss: {
             improperHarvest: 'Ikore ti ko tọ tabi mimu',
-            inappropriateStorage: 'Ibi ipamọ ti ko yẹ / aini ipamọ atijọ',
+            inappropriateStorage: 'Ipamọ aimuṣe to tọ / aini ibi ipamọ itura',
             overproduction: 'Apọju iṣelọpọ',
             transportationDamage: 'Ipalara gbigbe',
             pest: 'Kokoro',
