@@ -441,7 +441,7 @@ export default {
           },
           reasonsForLoss: {
             improperHarvest: 'Colheita ou manuseio inadequado',
-            inappropriateStorage: 'Armazenamento inadequado / falta de armazenamento adequado',
+            inappropriateStorage: 'Armazenamento inadequado / falta de armazenamento frigorífico',
             overproduction: 'Sobreprodução',
             transportationDamage: 'Danos durante o transporte',
             pest: 'Pragas',

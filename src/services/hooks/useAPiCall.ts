@@ -67,11 +67,7 @@ export const useLazyApiCall = <IData, IParams>(
 ) => {
   const fetcher: MutationFetcher<IData, string, IParams> = useCallback(
     async (_, extra) => {
-      try {
-        return await method(extra.arg);
-      } catch (exception) {
-        throw ErrorUtil.handleAxiosError(exception as AxiosError);
-      }
+      return await method(extra.arg);
     },
     [method]
   );

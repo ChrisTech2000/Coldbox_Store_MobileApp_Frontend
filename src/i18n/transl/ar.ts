@@ -407,7 +407,7 @@ export default {
           },
           reasonsForLoss: {
             improperHarvest: 'الحصاد أو المناولة غير السليمة',
-            inappropriateStorage: 'تخزين غير مناسب / عدم وجود تخزين قديم',
+            inappropriateStorage: 'تخزين غير مناسب / نقص في التخزين البارد',
             overproduction: 'الإفراط في الإنتاج',
             transportationDamage: 'أضرار النقل',
             pest: 'آفة',

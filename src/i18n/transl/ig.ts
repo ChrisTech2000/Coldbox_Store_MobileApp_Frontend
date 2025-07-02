@@ -415,7 +415,7 @@ export default {
           },
           reasonsForLoss: {
             improperHarvest: 'owuwe ihe ubi ma ọ bụ njikwa na-ezighi ezi',
-            inappropriateStorage: 'Nchekwa na-ekwesịghị ekwesị / enweghị nchekwa ochie',
+            inappropriateStorage: "Idobe ihe n'ụzọ na-adịghị mma / enweghị ebe oyi echekwa ihe",
             overproduction: 'Mmepụta karịrị akarị',
             transportationDamage: 'Mmebi nke njem',
             pest: 'Ihe ojoo',

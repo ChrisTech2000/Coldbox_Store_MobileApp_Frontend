@@ -436,7 +436,7 @@ export default {
           },
           reasonsForLoss: {
             improperHarvest: 'અસ્વસ્થ કાપણી અથવા હેન્ડલિંગ',
-            inappropriateStorage: 'અયોગ્ય સંગ્રહ / જૂના સંગ્રહની અછત',
+            inappropriateStorage: 'અયોગ્ય સ્ટોરેજ / ઠંડા સ્ટોરેજની ઉણપ',
             overproduction: 'અતિઉત્પાદન',
             transportationDamage: 'પરિવહન નુકસાન',
             pest: 'કીટ',

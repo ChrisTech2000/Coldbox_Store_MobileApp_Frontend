@@ -766,6 +766,23 @@ export function MarketplaceListing3ScreenOverlay({ goTo, stop }: IOverlayCompone
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
+              rootNavigation.navigate('ProduceDetailsStack', {
+                screen: 'EditCrateWeightAndPricing',
+                params: {
+                  ...MOCKED_PRODUCE_DETAILS_DATA,
+                  produce: {
+                    ...MOCKED_PRODUCE_DETAILS_DATA.produce,
+                    checkedInCrates: [
+                      {
+                        ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[0],
+                        listedInTheMarketplace: false,
+                      },
+                      { ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[1] },
+                    ],
+                  },
+                  companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
+                },
+              });
               goTo(EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_STEP);
             }}
             labelStyle="text-green-primary"

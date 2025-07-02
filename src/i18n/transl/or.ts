@@ -437,7 +437,7 @@ export default {
           },
           reasonsForLoss: {
             improperHarvest: 'ଅସମ୍ପୂର୍ଣ୍ଣ ତିଆରି କିମ୍ବା ହାଣ୍ଡଲିଙ୍ଗ',
-            inappropriateStorage: 'ଅନୁଚିତ ସ୍ଥାନ / ପୁରୁଣା ସ୍ଥାନର ଅଭାବ',
+            inappropriateStorage: 'ଅନୁଚିତ ସ୍ଟୋରେଜ୍ / ଠଣ୍ଡା ସ୍ଟୋରେଜର ଅଭାବ',
             overproduction: 'ଅଧିକ ଉତ୍ପାଦନ',
             transportationDamage: 'ପରିବହନ କ୍ଷତି',
             pest: 'କୀଟ',
