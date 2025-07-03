@@ -223,6 +223,8 @@ run e2e tests with maestro:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
     - export VERSION_ID=${CI_COMMIT_REF_NAME}
     - if [ "$VERSION_ID" == "" ]; then git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
+    # Inject correct MAPBOX token into .env.x
+    - sed -i "s|MAPBOX_ACCESS_TOKEN=.*|MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN|" ".env.$LANE"
     - bundler exec fastlane android "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:
@@ -261,6 +263,8 @@ run e2e tests with maestro:
     # Build a release with fastlane and self generate the version Name and ID from some CI/CD env data-points
     - export VERSION_ID=${CI_COMMIT_REF_NAME}
     - if [ "$VERSION_ID" == "" ]; then git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
+    # Inject correct MAPBOX token into .env.x
+    - sed -i "s|MAPBOX_ACCESS_TOKEN=.*|MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN|" ".env.$LANE"
     - bundler exec fastlane ios "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:
