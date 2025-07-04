@@ -96,16 +96,8 @@ export function FarmerAnalytics() {
         let toastId: string | undefined;
         if (exception instanceof Error) {
           switch (exception.message) {
-            case CONSTRAINT_EXCEPTIONS.NO_CHECK_INS:
-              toastId = toast.show(
-                t('Dashboard.Management.EditCoolingUsers.toasts.noCoolingUnits'),
-                { type: 'md_danger' }
-              );
-              break;
-            case CONSTRAINT_EXCEPTIONS.NO_SURVEYS:
-              toastId = toast.show(t('Dashboard.Management.EditCoolingUsers.toasts.noSurveys'), {
-                type: 'md_danger',
-              });
+            case CONSTRAINT_EXCEPTIONS.NO_COMPANY_ASSIGNED:
+              toastId = toast.show(t('Dashboard.noCompanyAvailable'), { type: 'md_danger' });
               break;
             default:
               break;

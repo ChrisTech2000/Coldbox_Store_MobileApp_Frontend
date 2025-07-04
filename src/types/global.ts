@@ -74,6 +74,7 @@ export type Crate = {
   runDt: boolean;
   qualityDt: boolean | number;
   tag: string;
+  initialWeight: number;
   listedInTheMarketplace?: boolean;
   lockedWithinPendingOrders: boolean;
 };
