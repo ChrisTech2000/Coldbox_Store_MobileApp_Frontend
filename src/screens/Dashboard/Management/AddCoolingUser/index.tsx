@@ -13,7 +13,7 @@ import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import AuthService from '#services/AuthService';
 import ColdtivateService from '#services/ColdtivateService';
-import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
+import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { EApiGender, type Farmer } from '#types/global';
@@ -39,25 +39,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   const { mutate } = useSWRConfig();
   const toast = InAppNotifications.useToast();
 
-  const { data, isLoading } = useApiCall(
-    'getFarmerByUserId',
-    ColdtivateService.getFarmerByUserId,
-    params?.userId as number,
-    {
-      skip: !params?.userId,
-      defaultData: [],
-    }
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="flex-1 items-center justify-center">
-        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
-      </View>
-    );
-  }
-
-  const contextualFarmer = data?.at(0);
+  const farmer = params?.farmer;
 
   async function revalidateCUCache(): Promise<void> {
     await mutate(getQueryKey('getOperatorFarmers', { operator: operator?.id }));
@@ -67,9 +49,9 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
     if (!company) return; // safe guard
     try {
       // assign existing cooling user to the company if he already has an account, fyk: added by code
-      if (typeof params?.userId !== 'undefined' && typeof contextualFarmer !== 'undefined') {
+      if (typeof farmer !== 'undefined') {
         await ColdtivateService.updateFarmerCompany({
-          farmerId: contextualFarmer.id,
+          farmerId: farmer.id,
           companyId: company.id,
         });
         await revalidateCUCache();
@@ -109,10 +91,10 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
     }
   }
 
-  const disabled = (data ?? []).length >= 1;
+  const disabled = !!farmer;
 
   return (
-    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(contextualFarmer)}>
+    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(farmer)}>
       {({ submitHandler, isSubmitting }) => (
         <View tw="flex-1 pt-4">
           <KeyboardAwareScrollView
@@ -153,15 +135,14 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   );
 }
 
-function _buildInitialValues(contextualFarmer?: Farmer) {
+function _buildInitialValues(farmer?: Farmer) {
   const values = {} as FormValues;
-  values.parentName = contextualFarmer?.parentName ?? '';
-  values.firstName = contextualFarmer?.user?.firstName ?? '';
-  values.lastName = contextualFarmer?.user?.lastName ?? '';
-  values.gender = contextualFarmer?.user?.gender ?? EApiGender.OTHER;
-  values.phone = contextualFarmer?.user?.phone ?? '';
-  values.language =
-    (contextualFarmer?.user?.language as TranslationLocales) ?? LanguageManager.read();
+  values.parentName = farmer?.parentName ?? '';
+  values.firstName = farmer?.user?.firstName ?? '';
+  values.lastName = farmer?.user?.lastName ?? '';
+  values.gender = farmer?.user?.gender ?? EApiGender.OTHER;
+  values.phone = farmer?.user?.phone ?? '';
+  values.language = (farmer?.user?.language as TranslationLocales) ?? LanguageManager.read();
   return values;
 }
 

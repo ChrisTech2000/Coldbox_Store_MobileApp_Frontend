@@ -6,8 +6,9 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
-import { Appbar } from 'react-native-paper';
 import { Dimensions } from 'react-native';
+import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
+import { Appbar } from 'react-native-paper';
 
 import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 import EditCheckIn from '#screens/Dashboard/Main/History/EditCheckIn';
@@ -33,18 +34,18 @@ import RegisteredEmployeeDetails from '#screens/Dashboard/Management/RegisteredE
 import { AddCoolingUserNavigationOverLay } from '#screens/Dashboard/Tutorial/AddCoolingUserNavigationOverlay';
 import { EOperatorTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
 
-import { useTranslationUtils, type TranslationPaths, LanguageManager } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils, type TranslationPaths } from '#i18n/utils';
+import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
+import { Farmer } from '#types/global';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
-import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import NavigatorHeader, { type NavigationHeaderProps } from '../../components/NavigatorHeader';
 import CouponsSettingsStack from '../AccountDetails/CouponSettings';
 import MarketSurveyStack, {
   MarketSurveyStackRoutes,
 } from '../Main/HistoryTabStack/MarketSurveyStack';
 import EditCoolingUserStack, { type EditCoolingUserStackRoutes } from './EditCoolingUserStack';
-import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 
 export type ManagementRoutes = {
   Root: undefined;
@@ -88,7 +89,7 @@ export type ManagementRoutes = {
   // Cooling User related routes
   CoolingUsers: undefined;
   AddCoolingUser?: {
-    userId: number;
+    farmer: Farmer;
   };
   EditCoolingUserStack: {
     screen: keyof EditCoolingUserStackRoutes;

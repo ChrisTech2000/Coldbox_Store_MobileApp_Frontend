@@ -57,22 +57,21 @@ export default function FormModal(props: Props) {
 
   async function onSubmit(values: FormValues) {
     try {
-      const result = await ColdtivateService.getFarmerByUserCode(values.code);
-      const coolingUser = result?.at(0);
+      const farmer = await ColdtivateService.getFarmerByUserCode(values.code);
 
-      if (!coolingUser) {
+      if (!farmer) {
         toast.show(t('Dashboard.Management.CoolingUsers.toasts.notFound'), { type: 'md_danger' });
         return;
       }
 
-      if (coolingUsersIds.includes(coolingUser.id)) {
+      if (coolingUsersIds.includes(farmer.id)) {
         toast.show(t('Dashboard.Management.CoolingUsers.toasts.taken'), { type: 'md_danger' });
         return;
       }
 
       onClose();
       navigation.navigate('AddCoolingUser', {
-        userId: coolingUser.user.id,
+        farmer,
       });
     } catch (exception) {
       reportCrash(exception as Error);

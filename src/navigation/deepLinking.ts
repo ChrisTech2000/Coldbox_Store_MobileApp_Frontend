@@ -11,7 +11,7 @@ const DEEP_LINK_URL = `https://${DEEP_LINK_DOMAIN}`;
 
 const DEEP_LINK_PATHS = {
   INVITE: 'invite/:inviteCode/:userType/:phoneNumber',
-  PASSWORD_RESET: 'password-reset/:resetCode/:phoneNumber',
+  PASSWORD_RESET: 'password-reset/:resetcode/:phoneNumber',
 } as const;
 
 export default {
@@ -56,7 +56,7 @@ export default {
       PasswordReset: {
         path: DEEP_LINK_PATHS.PASSWORD_RESET,
         parse: {
-          resetCode: String,
+          resetcode: String,
           phoneNumber: String,
         },
       },

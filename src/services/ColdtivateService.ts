@@ -228,10 +228,10 @@ class ColdtivateService extends HttpClient {
     }
   };
 
-  public getFarmerByUserCode = async (userCode: string): Promise<Array<Farmer>> => {
+  public getFarmerByUserCode = async (userCode: string): Promise<Farmer> => {
     try {
       const params = { user_code: userCode };
-      const { data } = await this.get<Array<Farmer>>(EUserEndpoints.GET_FARMER, { params });
+      const { data } = await this.get<Farmer>(EUserEndpoints.GET_FARMER_BY_CODE, { params });
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

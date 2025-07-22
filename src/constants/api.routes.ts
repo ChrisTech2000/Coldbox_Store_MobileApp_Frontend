@@ -115,6 +115,7 @@ export enum EUserEndpoints {
   GET_COMPANY_EMPLOYEE = 'user/v1/service-providers/:registeredEmployeeId/',
   GET_COMPANY_EMPLOYEES = 'user/v1/service-providers/',
   GET_FARMER = 'user/v1/farmers/',
+  GET_FARMER_BY_CODE = 'user/v1/farmers/by-code/',
   GET_FARMER_SURVEYS = 'user/v1/farmer-survey/',
   GET_INVITED_COMPANY_EMPLOYEES = 'user/v1/service-provider-invite/',
   GET_INVITED_OPERATORS = 'user/v1/operator-invite/',
