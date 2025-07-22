@@ -63,11 +63,11 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
 
   const onSubmit: SubmitHandler<PasswordResetSchema> = useCallback(async (data) => {
     try {
-      const { resetCode, phoneNumber } = route.params;
+      const { resetcode, phoneNumber } = route.params;
 
       await AuthService.resetPassword({
         phoneNumber,
-        code: resetCode,
+        code: resetcode,
         password: data.password,
       });
 
