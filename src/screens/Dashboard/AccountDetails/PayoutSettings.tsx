@@ -183,7 +183,7 @@ function PayoutSettings(
   );
 
   useEffect(() => {
-    if (bank) setValue('bank', `${bank.id}`, { shouldDirty: true });
+    if (bank) setValue('bank', `${bank.code}`, { shouldDirty: true });
   }, [bank]);
 
   useEffect(() => {
@@ -208,11 +208,11 @@ function PayoutSettings(
         accountName: accounts?.[0]?.accountName ?? '',
         accountNumber: accounts?.[0]?.accountNumber ?? '',
         accountType: accounts?.[0]?.accountType.toString(),
-        bank: availableBanks?.banks?.find((b) => b.id.toString() === accounts?.[0]?.bankCode)?.code,
+        bank: availableBanks?.banks?.find((b) => b.code === accounts?.[0]?.bankCode)?.code,
       });
 
       setBank(
-        availableBanks?.banks?.find((b) => b.id.toString() === accounts?.[0]?.bankCode) ?? null
+        availableBanks?.banks?.find((b) => b.code.toString() === accounts?.[0]?.bankCode) ?? null
       );
       setAccountType(accounts?.[0]?.accountType);
     }
