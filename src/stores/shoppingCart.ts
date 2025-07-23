@@ -60,7 +60,11 @@ const useCartStore = create<CartStoreState>((set, get) => ({
     const previousCart = get().cartData;
     set({ cartData: data.cart, isLoading: false });
 
-    if (previousCart && previousCart.items.length > data.cart.items.length) {
+    if (
+      previousCart?.items &&
+      data.cart?.items &&
+      previousCart.items.length > data.cart.items.length
+    ) {
       toast.show(t('Dashboard.ShoppingCart.cartUpdatedMessage'), {
         type: 'md_danger',
       });

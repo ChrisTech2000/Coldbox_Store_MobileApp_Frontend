@@ -87,9 +87,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
       },
       {
         label: t('Dashboard.AccountDetails.PayoutSettings.form.bank'),
-        value:
-          availableBanks?.banks?.find((b) => b.id.toString() === payoutDetails.bankCode)?.name ||
-          '',
+        value: availableBanks?.banks?.find((b) => b.code === payoutDetails.bankCode)?.name || '',
       },
     ];
   }, [payoutDetails]);
