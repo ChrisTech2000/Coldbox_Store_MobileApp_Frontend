@@ -129,10 +129,10 @@ class ColdtivateService extends HttpClient {
     params: GetDashboardProducesParams
   ): Promise<Array<DashboardProduce> | undefined> => {
     try {
-      const { data } = await this.get<Array<DashboardProduce>>(
-        EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
-        { params }
-      );
+      const url = subs(EStorageEndpoints.GET_COOLING_UNIT_PRODUCES, {
+        coolingUnitId: params.coolingUnit,
+      });
+      const { data } = await this.get<Array<DashboardProduce>>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -145,10 +145,11 @@ class ColdtivateService extends HttpClient {
     params: GetFarmerDashboardProducesParams
   ): Promise<Array<DashboardProduce> | undefined> => {
     try {
-      const { data } = await this.get<Array<DashboardProduce>>(
-        EStorageEndpoints.GET_DASHBOARD_PRODUCTS,
-        { params }
-      );
+      const url = subs(EStorageEndpoints.GET_FARMER_COOLING_UNIT_PRODUCES, {
+        coolingUnitId: params.coolingUnit,
+        farmerId: params.farmerId,
+      });
+      const { data } = await this.get<Array<DashboardProduce>>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -277,7 +278,6 @@ class ColdtivateService extends HttpClient {
       const url = subs(EUserEndpoints.UPDATE_FARMER, { farmerId });
       const { data } = await this.put<Farmer>(url, {
         ...rest,
-        unserializable: ['updateUser'],
       });
       return data;
     } catch (error) {
@@ -345,7 +345,7 @@ class ColdtivateService extends HttpClient {
   public checkIn = async (params: CheckInParams): Promise<CheckInResponse> => {
     const _params = {
       ...params,
-      produces: JSON.stringify(serialize(params.produces, ['hasPicture'])),
+      produces: JSON.stringify(serialize(params.produces)),
     };
 
     try {
@@ -365,8 +365,7 @@ class ColdtivateService extends HttpClient {
       const { data } = await this.post<CheckInWitCodeResponse>(
         EOperationEndpoints.MOVE_CHECKOUT,
         params,
-        undefined,
-        ['coolingUnitId']
+        undefined
       );
       return data;
     } catch (error) {

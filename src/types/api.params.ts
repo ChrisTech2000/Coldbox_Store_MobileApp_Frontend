@@ -436,7 +436,7 @@ export interface ListedCratesBaseParams {
 export interface GetAvailableListingParams extends JsonObject {
   location: [number, number] | [];
   sortBy?: 'price-asc' | 'price-desc' | 'nearby-me';
-  filterByCoolingUnitsIds?: Array<number>;
+  filterByCoolingUnitIds?: Array<number>;
   page?: number;
   itemsPerPage?: number;
   filterByMaxDistanceInKm?: number;

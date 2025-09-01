@@ -150,7 +150,7 @@ export function useMarketplaceListing() {
       sortBy: queryParams.sortBy,
       location: queryParams.location,
       filterByMaxDistanceInKm: queryParams.filterByMaxDistanceInKm,
-      filterByCoolingUnitsIds: Array.from(filtering.unitsToFilterIn),
+      filterByCoolingUnitIds: Array.from(filtering.unitsToFilterIn),
     },
     {
       skip: (queryParams?.location ?? []).length === 0 || isTutorialActive,
