@@ -104,6 +104,8 @@ export enum EStorageEndpoints {
   GET_COOLING_UNIT_SENSOR_DATA = 'storage/v1/cooling-units/:coolingUnitId/sensor-data/',
   GET_COOLING_UNITS = 'storage/v1/cooling-units/',
   GET_DASHBOARD_PRODUCTS = '/storage/v1/produces/',
+  GET_COOLING_UNIT_PRODUCES = '/storage/v1/cooling-units/:coolingUnitId/produces/',
+  GET_FARMER_COOLING_UNIT_PRODUCES = '/storage/v1/cooling-units/:coolingUnitId/farmers/:farmerId/produces/',
   GET_FARMER_CRATES = '/storage/v1/crates/',
   GET_LOCATION = '/storage/v1/locations/:locationId/',
   GET_MANAGEMENT_LOCATIONS = '/storage/v1/locations/',

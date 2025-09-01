@@ -681,7 +681,7 @@ export enum EPaymentThrough {
 }
 
 export enum EPaymentGateway {
-  PAYTACK = 'PAYTACK',
+  PAYSTACK = 'PAYSTACK',
   STRIPE = 'STRIPE',
 }
 

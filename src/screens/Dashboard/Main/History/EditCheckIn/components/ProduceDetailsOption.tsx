@@ -13,7 +13,7 @@ import { Input } from '#ui/components/Input';
 import { Schema } from '../schema';
 
 type ProduceDetailsOptionProps = {
-  option: { label?: string; id?: string; value?: string | number };
+  option: { label?: string; id?: string; value?: string | number | null };
   index: number;
   crops: Record<number, string>;
   control: Control<Schema>;

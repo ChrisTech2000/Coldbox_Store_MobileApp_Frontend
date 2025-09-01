@@ -1298,7 +1298,7 @@ CREATE TABLE public.storage_crate (
     price_per_crate_per_pricing_type double precision NOT NULL,
     cooling_unit_id bigint,
     produce_id bigint,
-    "runDT" boolean,
+    run_dt boolean,
     currency character varying(3),
     tag character varying(255),
     cmp_fully_checked_out boolean NOT NULL,
@@ -1609,7 +1609,7 @@ CREATE TABLE public.user_farmer (
     id bigint NOT NULL,
     birthday timestamp with time zone,
     parent_name character varying(255) NOT NULL,
-    "isUnknown" boolean NOT NULL,
+    "is_unknown" boolean NOT NULL,
     created_by_id bigint,
     user_id bigint NOT NULL,
     smartphone boolean NOT NULL,
@@ -6816,7 +6816,7 @@ COPY public.storage_coolingunitpower (id, power_consumption_in_mt, daily_room_wa
 COPY public.storage_coolingunitspecifications (id, value, specification_type, datetime_stamp, cooling_unit_id, set_point_value) FROM stdin;
 \.
 
-COPY public.storage_crate (id, weight, remaining_shelf_life, quality_dt, temperature_dt, modified_dt, planned_days, price_per_crate_per_pricing_type, cooling_unit_id, produce_id, "runDT", currency, tag, cmp_fully_checked_out, initial_weight, cmp_last_updated_at, cmp_total_due_in_cooling_fees, cmp_total_in_cooling_fees, cmp_total_paid_in_cooling_fees) FROM stdin;
+COPY public.storage_crate (id, weight, remaining_shelf_life, quality_dt, temperature_dt, modified_dt, planned_days, price_per_crate_per_pricing_type, cooling_unit_id, produce_id, run_dt, currency, tag, cmp_fully_checked_out, initial_weight, cmp_last_updated_at, cmp_total_due_in_cooling_fees, cmp_total_in_cooling_fees, cmp_total_paid_in_cooling_fees) FROM stdin;
 \.
 
 COPY public.storage_cratepartialcheckout (id, percentage, weight_in_kg, cooling_fees, checkout_id, crate_id) FROM stdin;
@@ -25846,7 +25846,7 @@ COPY public.user_country_crop (id, country_id, crop_id) FROM stdin;
 19512	222	77
 \.
 
-COPY public.user_farmer (id, birthday, parent_name, "isUnknown", created_by_id, user_id, smartphone, country, user_code) FROM stdin;
+COPY public.user_farmer (id, birthday, parent_name, "is_unknown", created_by_id, user_id, smartphone, country, user_code) FROM stdin;
 \.
 
 COPY public.user_farmer_companies (id, farmer_id, company_id) FROM stdin;
