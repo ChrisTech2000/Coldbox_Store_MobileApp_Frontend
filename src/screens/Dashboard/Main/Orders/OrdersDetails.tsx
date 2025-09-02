@@ -37,6 +37,7 @@ import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/c
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import ColdtivateService from '#services/ColdtivateService';
+import DataloaderService from '#services/DataloaderService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
@@ -416,8 +417,8 @@ function ProduceCard(props: {
   const { t } = useTranslationUtils();
 
   const { data: ownerCompany } = useApiCall(
-    'getCompanyById',
-    ColdtivateService.getCompanyById,
+    'getMarketplaceCompanyById',
+    DataloaderService.marketplaceCompanies.getById,
     props.ownedOnBehalfOfCompanyId!,
     {
       defaultData: undefined,

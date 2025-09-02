@@ -99,9 +99,11 @@ export function useMarketplaceListing() {
           const contextualUnit = await DataloaderService.coolingUnits.getById(
             node.relCoolingUnitId
           );
-          const contextualCompany = await DataloaderService.companies.getById(node.relCompanyId);
+          const contextualCompany = await DataloaderService.marketplaceCompanies.getById(
+            node.relCompanyId
+          );
           const owner = node.ownedOnBehalfOfCompanyId
-            ? await DataloaderService.companies.getById(node.ownedOnBehalfOfCompanyId)
+            ? await DataloaderService.marketplaceCompanies.getById(node.ownedOnBehalfOfCompanyId)
             : node.ownedByUserId
               ? await DataloaderService.users.getById(node.ownedByUserId)
               : null;

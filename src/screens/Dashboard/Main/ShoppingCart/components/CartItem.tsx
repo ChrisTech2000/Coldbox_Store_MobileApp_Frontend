@@ -25,6 +25,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { parsePoint } from '#screens/Dashboard/Management/utils';
 import ColdtivateService from '#services/ColdtivateService';
+import DataloaderService from '#services/DataloaderService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
@@ -48,8 +49,8 @@ export function CartItem({ item }: CartItemProps) {
   const [setCart, coolingUnits] = useCartStore((store) => [store.setCart, store.allCoolingUnits]);
 
   const { data: company, isLoading: isLoadingCompany } = useApiCall(
-    'getCompanyById',
-    ColdtivateService.getCompanyById,
+    'getMarketplaceCompanyById',
+    DataloaderService.marketplaceCompanies.getById,
     item.relCompanyId as number,
     {
       defaultData: undefined,
@@ -57,8 +58,8 @@ export function CartItem({ item }: CartItemProps) {
   );
 
   const { data: ownerCompany, isLoading: isLoadingOwnerCompany } = useApiCall(
-    'getCompanyById',
-    ColdtivateService.getCompanyById,
+    'getMarketplaceOwnerCompanyById',
+    DataloaderService.marketplaceCompanies.getById,
     item.ownedOnBehalfOfCompanyId as number,
     {
       defaultData: undefined,
