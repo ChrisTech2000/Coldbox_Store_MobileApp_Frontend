@@ -16,16 +16,18 @@ class MainActivity : ReactActivity() {
     RNBootSplash.init(this, R.style.BootTheme)
     super.onCreate(null)
     
-    // Fix for Android 15 keyboard positioning issues
+    // Fix for Android 15 edge-to-edge display and keyboard positioning issues
     if (Build.VERSION.SDK_INT >= 35) {
       val rootView = findViewById<View>(android.R.id.content)
       ViewCompat.setOnApplyWindowInsetsListener(rootView) { _, insets ->
-        val innerPadding = insets.getInsets(WindowInsetsCompat.Type.ime())
+        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+        
         rootView.setPadding(
-          innerPadding.left,
-          innerPadding.top,
-          innerPadding.right,
-          innerPadding.bottom
+          systemBars.left,
+          systemBars.top,
+          systemBars.right,
+          maxOf(systemBars.bottom, ime.bottom)
         )
         insets
       }
