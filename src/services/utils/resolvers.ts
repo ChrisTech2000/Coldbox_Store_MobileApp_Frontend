@@ -14,7 +14,7 @@ export const resolveOwnerName = async (
   onBehalfOfCompanyId?: number | null
 ): Promise<string> => {
   if (onBehalfOfCompanyId) {
-    const company = await DataloaderService.companies.getById(onBehalfOfCompanyId);
+    const company = await DataloaderService.marketplaceCompanies.getById(onBehalfOfCompanyId);
     return company?.name ?? '';
   }
 

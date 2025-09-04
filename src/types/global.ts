@@ -26,20 +26,20 @@ export type Farmer = {
 
 export type Company = {
   id: number;
-  hasCoolingUnits: boolean;
+  hasCoolingUnits?: boolean;
   name: string;
   country?: string;
   currency: string;
-  digitalTwin: boolean;
-  ml4Market: boolean;
-  ml4Quality: boolean;
-  ml4Farmers: boolean;
-  dateJoined: Date;
+  digitalTwin?: boolean;
+  ml4Market?: boolean;
+  ml4Quality?: boolean;
+  ml4Farmers?: boolean;
+  dateJoined?: Date;
   crop: Array<number>;
   logo: string | null;
 
-  bankDetails: BankDetails;
-  bankAccount: number;
+  bankDetails?: BankDetails;
+  bankAccount?: number;
 };
 
 export type Pricing = {
