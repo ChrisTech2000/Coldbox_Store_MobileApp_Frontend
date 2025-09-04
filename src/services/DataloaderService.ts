@@ -53,6 +53,10 @@ class DataloaderService extends HttpClient {
     const companies = await ColdtivateService.getCompanies();
     return companies ?? [];
   });
+  readonly marketplaceCompanies = EntireDatasetPreloader(async () => {
+    const companies = await ColdtivateService.getCompanies({ isMarketplace: true });
+    return companies ?? [];
+  });
   readonly crops = EntireDatasetPreloader(async () => {
     const crops = await ColdtivateService.getAllCrops();
     return crops ?? [];
@@ -69,6 +73,7 @@ class DataloaderService extends HttpClient {
   public clearAllCaches(): void {
     this.users.clearCache();
     this.companies.clearCache();
+    this.marketplaceCompanies.clearCache();
     this.crops.clearCache();
     this.coolingUnits.clearCache();
     this.farmers.clearCache();

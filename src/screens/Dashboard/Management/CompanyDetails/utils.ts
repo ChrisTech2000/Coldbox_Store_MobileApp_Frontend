@@ -27,36 +27,30 @@ export function derivedSubjects(company: Company) {
   }
 
   const bankNameValue: string | undefined =
-    // eslint-disable-next-line
-    // @ts-ignore
-    !!company.bankDetails && 'bankName' in company.bankDetails
+    company.bankDetails &&
+    typeof company.bankDetails === 'object' &&
+    'bankName' in company.bankDetails
       ? company.bankDetails.bankName === 'undefined'
         ? undefined
-        : // eslint-disable-next-line
-          // @ts-ignore
-          (company.bankDetails.bankName as string)
+        : (company.bankDetails.bankName as string)
       : undefined;
 
   const accountNameValue: string | undefined =
-    // eslint-disable-next-line
-    // @ts-ignore
-    !!company.bankDetails && 'accountName' in company.bankDetails
+    company.bankDetails &&
+    typeof company.bankDetails === 'object' &&
+    'accountName' in company.bankDetails
       ? company.bankDetails.accountName === 'undefined'
         ? undefined
-        : // eslint-disable-next-line
-          // @ts-ignore
-          (company.bankDetails.accountName as string)
+        : (company.bankDetails.accountName as string)
       : undefined;
 
   const accountNumberValue: string | undefined =
-    // eslint-disable-next-line
-    // @ts-ignore
-    !!company.bankDetails && 'accountNumber' in company.bankDetails
+    company.bankDetails &&
+    typeof company.bankDetails === 'object' &&
+    'accountNumber' in company.bankDetails
       ? company.bankDetails.accountNumber === 'undefined'
         ? undefined
-        : // eslint-disable-next-line
-          // @ts-ignore
-          (company.bankDetails.accountNumber as string)
+        : (company.bankDetails.accountNumber as string)
       : undefined;
 
   return {

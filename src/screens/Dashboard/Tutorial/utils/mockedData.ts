@@ -643,7 +643,7 @@ export const MOCKED_HISTORY_DATA = [
     },
     checkout: {
       id: 464,
-      paymentGateway: EPaymentGateway.PAYTACK,
+      paymentGateway: EPaymentGateway.PAYSTACK,
       paymentMethod: EPaymentMethod.CASH,
       paymentThrough: EPaymentThrough.COLDTIVATE,
       crates: [

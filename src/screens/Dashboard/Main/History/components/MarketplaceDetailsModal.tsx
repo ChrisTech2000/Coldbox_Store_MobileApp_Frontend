@@ -118,7 +118,7 @@ export function MarketplaceDetailsModal({ isOpen, movement, dismiss }: DetailsMo
                 {t('Dashboard.History.detailsModal.paymentMethodLabel')}:
               </Text>
               &nbsp;
-              {movement.checkout?.paymentGateway === EPaymentGateway.PAYTACK
+              {movement.checkout?.paymentGateway === EPaymentGateway.PAYSTACK
                 ? 'PAYSTACK'
                 : movement.checkout?.paymentGateway}
             </Text>
