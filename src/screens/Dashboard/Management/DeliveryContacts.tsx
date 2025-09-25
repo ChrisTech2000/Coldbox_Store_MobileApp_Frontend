@@ -5,7 +5,7 @@ import { Platform, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Dialog, Divider, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import validator from 'validator';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
@@ -234,7 +234,7 @@ function BottomSheet() {
           .string()
           .min(1, { message: t('Auth.SignUp.schema.phoneError') })
           .default('')
-          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+          .refine((value) => isValidPhoneNumber(value), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
         deliveryCompanyName: z

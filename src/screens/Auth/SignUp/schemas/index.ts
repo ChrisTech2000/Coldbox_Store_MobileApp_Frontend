@@ -1,4 +1,4 @@
-import validator from 'validator';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { z } from 'zod';
 
 import { passwordRegex, stripSpacesRegex } from '#constants/schemas';
@@ -88,7 +88,7 @@ export const SignUpAsCoolingUserSchema = (t: Translator) =>
       .string()
       .min(1, { message: t('Auth.SignUp.schema.phoneError') })
       .default('')
-      .refine((value) => !value || validator.isMobilePhone(value, 'any', { strictMode: false }), {
+      .refine((value) => !value || isValidPhoneNumber(value), {
         message: t('Auth.SignUp.schema.invalidPhoneError'),
       }),
     language: z
@@ -150,7 +150,7 @@ export const SignUpAsCompanySchema = (t: Translator) =>
       .default(''),
     phone: z
       .string()
-      .refine((value) => !value || validator.isMobilePhone(value, 'any', { strictMode: false }), {
+      .refine((value) => !value || isValidPhoneNumber(value), {
         message: t('Auth.SignUp.schema.invalidPhoneError'),
       })
       .optional(),
