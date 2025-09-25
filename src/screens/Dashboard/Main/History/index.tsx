@@ -153,14 +153,14 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
             />
           }
           showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
           data={
             (isTutorialActive
               ? MOCKED_HISTORY_DATA
               : filteredMovements) as GetMovementsHistoryResponse
           }
-          renderItem={({ item: movement, index }) => (
+          renderItem={({ item: movement }) => (
             <Movement
-              key={`${movement.id}-${index}`}
               movement={movement}
               movements={movements}
               coolingUnit={coolingUnit}

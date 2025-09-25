@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { DataTable, Dialog, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useSWRConfig } from 'swr';
@@ -166,7 +167,7 @@ export default function TemperatureAlert() {
                 <View tw="w-full">
                   <Text tw="p-2">{t('Dashboard.TemperatureAlert.subtitle')}</Text>
                   <DataTable>
-                    <FlatList
+                    <FlashList
                       nestedScrollEnabled
                       showsVerticalScrollIndicator={false}
                       ListHeaderComponent={
@@ -189,7 +190,8 @@ export default function TemperatureAlert() {
                         </DataTable.Header>
                       }
                       data={commodityInfo}
-                      keyExtractor={(item, index) => `data-table-row-${item.commodity}-${index}`}
+                      keyExtractor={(item) => `commodity-${item.commodity}`}
+                      estimatedItemSize={48}
                       renderItem={({ item }) => (
                         <DataTable.Row>
                           <DataTable.Cell>{item.commodity}</DataTable.Cell>

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Divider, List, TextInput } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -42,11 +43,12 @@ function FAQ() {
       />
 
       <List.AccordionGroup>
-        <FlatList
+        <FlashList
           nestedScrollEnabled
           showsVerticalScrollIndicator={false}
           data={faq}
-          keyExtractor={(item, itemIdx) => `faq-${item.id}-#${itemIdx}`}
+          keyExtractor={(item) => `faq-${item.id}`}
+          estimatedItemSize={80}
           renderItem={({ item }) => (
             <React.Fragment>
               <List.Accordion title={item.title} id={item.id} titleNumberOfLines={4}>

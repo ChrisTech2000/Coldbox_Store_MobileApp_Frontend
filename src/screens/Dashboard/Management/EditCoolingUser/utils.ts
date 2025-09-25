@@ -163,7 +163,7 @@ export class DataLoader {
       farmerInfo,
       stats: {
         aggregatedImpactData: { ...impactSlice.aggregated },
-        surveys: { ...impactSlice.surveys.at(0) },
+        surveys: { ...impactSlice.surveys?.at(0) },
         loss: { ...impactSlice.top5FoodLossEvolution },
         revenue: { ...impactSlice.top5RevenueEvolution },
         cools: farmerCoolingUnitsStats,

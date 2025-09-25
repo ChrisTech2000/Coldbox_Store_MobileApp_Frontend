@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useSWRConfig } from 'swr';
 
 import { Button } from '#ui/components/Button';
@@ -60,11 +61,12 @@ function ActiveCouponsTab(props: CouponStatusTabsRouteProps<'Active'>) {
     <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View tw="px-3 pt-3 pb-8">
-          <FlatList
+          <FlashList
             data={data.nodes}
-            keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+            keyExtractor={(item) => `coupon-${item.id}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
+            estimatedItemSize={92}
             renderItem={({ item }) => (
               <View tw="w-full p-5 flex-row items-center justify-between border border-solid border-zinc-300 rounded-2xl my-2">
                 <View tw="flex-1 flex-row items-center space-x-3">

@@ -2,7 +2,7 @@ import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/n
 import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -123,11 +123,12 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               </Text>
             </View>
 
-            <FlatList
+            <FlashList
               data={orderDataByCoolingUnit}
-              keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+              keyExtractor={(item) => `overview-cooling-unit-${item.coolingUnit}`}
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
+              estimatedItemSize={200}
               renderItem={({ item: { coolingUnit, items } }) => {
                 const heading = unitsMap.get(Number(coolingUnit))?.name ?? '';
 
@@ -156,11 +157,12 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               </Text>
 
               {order.pickupDetails?.length ? (
-                <FlatList
+                <FlashList
                   data={order.pickupDetails}
-                  keyExtractor={(item, index) => `cooling-unit-${item.coolingUnitId}-dm-${index}`}
+                  keyExtractor={(item) => `overview-pickup-${item.coolingUnitId}`}
                   scrollEnabled={false}
                   showsVerticalScrollIndicator={false}
+                  estimatedItemSize={120}
                   renderItem={({ item }) => {
                     const coolingUnit = unitsMap.get(item.coolingUnitId) as CoolingUnit;
 
@@ -184,11 +186,12 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
               <Text tw="text-base text-green-primary font-bold">
                 {t('Dashboard.ShoppingCart.produce')}
               </Text>
-              <FlatList
+              <FlashList
                 data={order.items}
-                keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+                keyExtractor={(item) => `overview-item-${item.relCheckinMovementCode}`}
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
+                estimatedItemSize={100}
                 renderItem={({ item }) => {
                   const crop = crops?.find((c) => c.id === item.relCropId);
                   return (

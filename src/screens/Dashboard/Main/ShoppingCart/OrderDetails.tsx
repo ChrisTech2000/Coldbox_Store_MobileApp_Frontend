@@ -1,6 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, GestureResponderEvent, Platform, TouchableOpacity, View } from 'react-native';
+import { GestureResponderEvent, Platform, TouchableOpacity, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
@@ -136,11 +137,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   return (
     <ScrollView tw={cn('py-4 bg-white', HORIZONTAL_SPACING)} showsVerticalScrollIndicator={false}>
       <View tw="flex-1 pb-8 space-y-6">
-        <FlatList
+        <FlashList
           data={cartDataByCoolingUnit}
-          keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+          keyExtractor={(item) => `cooling-unit-${item.coolingUnit}`}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
+          estimatedItemSize={200}
           renderItem={({ item: { coolingUnit, items } }) => {
             const heading = unitsMap.get(Number(coolingUnit))?.name ?? '';
 
@@ -186,11 +188,12 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
           />
 
           {cartData.pickupDetails?.length ? (
-            <FlatList
+            <FlashList
               data={cartData.pickupDetails}
-              keyExtractor={(item, index) => `cooling-unit-${item.coolingUnitId}-dm-${index}`}
+              keyExtractor={(item) => `pickup-${item.coolingUnitId}`}
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
+              estimatedItemSize={120}
               renderItem={({ item }) => {
                 const coolingUnit = unitsMap.get(item.coolingUnitId);
 

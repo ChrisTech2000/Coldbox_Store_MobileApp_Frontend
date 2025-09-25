@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider, Icon, Switch } from 'react-native-paper';
 import cloneDeep from 'lodash/cloneDeep';
@@ -262,16 +263,13 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         </View>
         <Divider tw="bg-gray-400 my-2" />
 
-        <View>
-          <FlatList
+        <View style={{ height: 200 }}>
+          <FlashList
             data={crates}
             showsVerticalScrollIndicator={false}
-            scrollEnabled={false}
+            keyExtractor={(item, index) => `billing-crate-${item.id}-${index}`}
             renderItem={({ item: crate, index }) => (
-              <View
-                key={`${crate.id}-${index}`}
-                tw="flex flex-row flex-wrap items-center justify-between"
-              >
+              <View tw="flex flex-row flex-wrap items-center justify-between py-1">
                 <View tw="flex flex-row space-x-1 items-center">
                   <Icon source="circle-medium" size={20} />
                   <Text variant="TextMedium" tw="text-lg">
@@ -287,6 +285,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
                 </Text>
               </View>
             )}
+            estimatedItemSize={50}
           />
         </View>
         <Divider tw="bg-gray-400 my-2" />

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { DataTable } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
@@ -12,7 +13,7 @@ type TableProps = {
   header: string;
   items: Array<{
     coolingUnitName: string;
-    value: string;
+    value: [string, string]; // [checkIn, checkOut]
   }>;
   total: number;
 };
@@ -65,14 +66,15 @@ export function Table({ items, header, total }: TableProps) {
         </DataTable.Cell>
       </DataTable.Header>
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-        <FlatList
+        <FlashList
           data={items}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, itemIdx) => `${item.coolingUnitName}-${itemIdx}`}
+          keyExtractor={(item) => `analytics-${item.coolingUnitName}`}
+          estimatedItemSize={56}
           renderItem={({ item }) => {
-            const checkInValue = item.value?.[0]?.toString() || '';
-            const checkOutValue = item.value?.[1]?.toString() || '';
+            const checkInValue = item.value?.[0] || '';
+            const checkOutValue = item.value?.[1] || '';
 
             const maxLength = Math.max(checkInValue.length, checkOutValue.length);
             const paddedCheckIn = checkInValue.padEnd(maxLength, ' ');
@@ -136,11 +138,12 @@ export function ExtendedTable({ items, column1, column2, total }: ExtendedTableP
         </DataTable.Cell>
       </DataTable.Header>
       <SkiaShadow blur={4} dx={0} dy={4} color={colors.zinc[200]} borderRadius={20}>
-        <FlatList
+        <FlashList
           data={items}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, itemIdx) => `${item.coolingUnitName}-${itemIdx}`}
+          estimatedItemSize={56}
           renderItem={({ item }) => (
             <DataTable.Row tw="bg-white space-x-4">
               <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
