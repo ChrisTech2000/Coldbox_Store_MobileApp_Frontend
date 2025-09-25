@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { useIsFocused } from '@react-navigation/native';
 import isEqual from 'lodash/isEqual';
-import validator from 'validator';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 import type { DetailsSectionParams } from '#navigation/Dashboard/AccountDetails';
 import { EApiGender, ERoles } from '#types/global';
@@ -47,7 +47,7 @@ export default function FormManager(props: FormManagerProps) {
           .string()
           .min(1, { message: t('Auth.SignUp.schema.phoneError') })
           .default('')
-          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+          .refine((value) => isValidPhoneNumber(value), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
         gender: z.union([

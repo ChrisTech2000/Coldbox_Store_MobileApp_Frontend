@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Banner, Divider } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import colors from 'tailwindcss/colors';
-import validator from 'validator';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
@@ -76,7 +76,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           .string()
           .min(1, { message: t('Auth.SignUp.schema.phoneError') })
           .default('')
-          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+          .refine((value) => isValidPhoneNumber(value), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
         coolingUnits: z.array(z.number()),
