@@ -1,7 +1,8 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FlatList, Platform, View } from 'react-native';
+import { Platform, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Dialog, Divider, Portal, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import validator from 'validator';
@@ -80,11 +81,11 @@ function DeliveryContacts() {
               <Text tw="text-base">{t('Dashboard.Management.Delivery.emptyMessage')}</Text>
             </View>
           ) : (
-            <FlatList
+            <FlashList
               data={data}
               keyExtractor={(item, index) => `contact-${item.contactName}-${index}`}
-              scrollEnabled={false}
               showsVerticalScrollIndicator={false}
+              estimatedItemSize={70}
               renderItem={({ item }) => (
                 <View tw="w-full px-5 py-3 space-y-3 border border-solid border-zinc-300 rounded-2xl my-2">
                   <View>

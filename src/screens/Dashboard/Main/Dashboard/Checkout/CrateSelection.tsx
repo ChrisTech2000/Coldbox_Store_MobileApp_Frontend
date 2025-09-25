@@ -28,7 +28,6 @@ import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { RadioButtonItem } from '#ui/components/RadioButton';
-import { ScrollView } from '#ui/components/ScrollView';
 import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithStore';
 import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
@@ -256,12 +255,11 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
                 />
               </TouchableOpacity>
 
-              <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle="pb-72">
+              <View style={{ height: DEVICE_HEIGHT - 400 }}>
                 <FlashList
                   data={crates}
                   extraData={{ selectedCrates, translatedCropNames }}
                   showsVerticalScrollIndicator={false}
-                  scrollEnabled={false}
                   keyExtractor={(item, itemIdx) => `checkout-list-item-${item.id}-#${itemIdx}`}
                   renderItem={({ item: crate, index }) => (
                     <View>
@@ -295,10 +293,10 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
                       ) : null}
                     </View>
                   )}
-                  estimatedItemSize={40}
+                  estimatedItemSize={80}
                   estimatedListSize={ESTIMATED_LIST_SIZE}
                 />
-              </ScrollView>
+              </View>
             </React.Fragment>
           ) : null}
         </_LoadingSlot>

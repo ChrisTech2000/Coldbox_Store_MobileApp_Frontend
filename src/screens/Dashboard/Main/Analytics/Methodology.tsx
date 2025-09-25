@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Divider, List, TextInput } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -39,10 +40,11 @@ function Methodology() {
       />
 
       <List.AccordionGroup>
-        <FlatList
+        <FlashList
           showsVerticalScrollIndicator={false}
           data={methodologyContent}
-          keyExtractor={(item, itemIdx) => `methodology-${item.title}-#${itemIdx}`}
+          keyExtractor={(item) => `methodology-${item.title}`}
+          estimatedItemSize={80}
           renderItem={({ item }) => (
             <React.Fragment>
               <List.Accordion title={item.title} id={item.title}>

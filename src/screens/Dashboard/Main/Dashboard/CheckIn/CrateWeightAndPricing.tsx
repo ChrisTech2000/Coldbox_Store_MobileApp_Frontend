@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Divider, TextInput } from 'react-native-paper';
@@ -18,6 +18,7 @@ import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
+import { FlashList } from '@shopify/flash-list';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -235,11 +236,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
             <Divider tw="bg-gray-400" />
           </View>
 
-          <FlatList
+          <FlashList
             tw="py-3"
             data={crateFields.fields}
-            keyExtractor={(field) => `crate-weight-and-pricing-list-item-#${field.id}`}
-            scrollEnabled={false}
+            keyExtractor={(field) => field.id}
+            estimatedItemSize={120}
             renderItem={({ item, index }) => {
               const isDisabled = applyToAll && index > 0;
               return (

@@ -1,6 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
-import { FlatList, Platform, RefreshControl, View } from 'react-native';
+import { Platform, RefreshControl, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -133,13 +134,13 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
         }
       >
         <View tw="flex-1 pb-8">
-          <FlatList
+          <FlashList
             data={datums}
             keyExtractor={(item) =>
               `marketplace-shopping-cart-list-item-#${item.marketListedCrateId}`
             }
-            scrollEnabled={false}
             renderItem={({ item }) => <CartItem item={item} />}
+            estimatedItemSize={120}
             ListFooterComponent={
               <View tw="flex-col w-full mt-6">
                 <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">

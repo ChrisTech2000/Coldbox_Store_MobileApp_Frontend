@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { FlatList, Platform, View } from 'react-native';
+import { Platform, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Divider, Portal, TextInput } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 import { useDebouncedCallback } from 'use-debounce';
@@ -134,12 +135,13 @@ export default function CropSpecificPricing() {
               />
             </View>
 
-            <FlatList
+            <FlashList
               scrollEnabled
               nestedScrollEnabled
               showsVerticalScrollIndicator={false}
               data={datums}
-              keyExtractor={(item, itemIdx) => `crop-specific-${item.path}-field-#${itemIdx}`}
+              keyExtractor={(item, itemIdx) => `crop-specific-${item.path}-field-${itemIdx}`}
+              estimatedItemSize={80}
               renderItem={({ item }) => (
                 <Controller
                   name={item.path as 'pricing'}

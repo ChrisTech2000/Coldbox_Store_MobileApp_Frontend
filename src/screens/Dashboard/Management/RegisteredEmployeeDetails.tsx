@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Divider } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -69,10 +70,11 @@ function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmploy
   return (
     <View tw={cn('flex-1 space-y-32', isRTL && 'space-y-12')}>
       <View>
-        <FlatList
+        <FlashList
           showsVerticalScrollIndicator={false}
           data={datums}
-          keyExtractor={(_, itemIdx) => `row-item-#${itemIdx}`}
+          keyExtractor={(item) => `employee-detail-${item.t}`}
+          estimatedItemSize={60}
           renderItem={({ item }) => (
             <React.Fragment>
               <View tw="flex-row h-12 max-h-12 px-4">
