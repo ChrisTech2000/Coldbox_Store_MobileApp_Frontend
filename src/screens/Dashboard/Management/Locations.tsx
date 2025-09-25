@@ -1,5 +1,6 @@
 import React from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -48,10 +49,11 @@ function Locations(props: ManagementRouteProps<'Locations'>) {
           {t('Dashboard.Management.Location.emptyState')}
         </Text>
       ) : (
-        <FlatList
+        <FlashList
           showsVerticalScrollIndicator={false}
           data={data}
-          keyExtractor={(item) => `location-item-#${item.id}`}
+          keyExtractor={(item) => `location-${item.id}`}
+          estimatedItemSize={72}
           renderItem={({ item }) => (
             <React.Fragment>
               <List.Item

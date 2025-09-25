@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { Dimensions, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import { Dimensions, RefreshControl, StyleSheet, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, DataTable } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
 import cloneDeep from 'lodash/cloneDeep';
@@ -92,26 +93,19 @@ function CoolingUnitsCratesInfo() {
           </Text>
         </View>
       ) : (
-        <DataTable style={styles.dataTable}>
-          <FlatList
-            stickyHeaderIndices={[0]}
+        <View style={styles.dataTable}>
+          <DataTable.Header tw="space-x-1 bg-zinc-50">
+            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.commodity')}</DataTable.Title>
+            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.percentage')}</DataTable.Title>
+            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.weight')}</DataTable.Title>
+            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.crates')}</DataTable.Title>
+            <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.optimalTemp')}</DataTable.Title>
+          </DataTable.Header>
+          <FlashList
             showsVerticalScrollIndicator={false}
-            nestedScrollEnabled
-            ListHeaderComponent={
-              <DataTable.Header tw="space-x-1 bg-zinc-50">
-                <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.commodity')}</DataTable.Title>
-                <DataTable.Title>
-                  {t('Dashboard.CoolingUnitsCratesInfo.percentage')}
-                </DataTable.Title>
-                <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.weight')}</DataTable.Title>
-                <DataTable.Title>{t('Dashboard.CoolingUnitsCratesInfo.crates')}</DataTable.Title>
-                <DataTable.Title>
-                  {t('Dashboard.CoolingUnitsCratesInfo.optimalTemp')}
-                </DataTable.Title>
-              </DataTable.Header>
-            }
             data={commodityInfos}
-            keyExtractor={(item, index) => `data-table-row-${item.commodity}-${index}`}
+            keyExtractor={(item) => item.commodity}
+            estimatedItemSize={56}
             renderItem={({ item }) => (
               <DataTable.Row tw="space-x-1">
                 <DataTable.Cell>
@@ -135,7 +129,7 @@ function CoolingUnitsCratesInfo() {
               <RefreshControl refreshing={isValidating} onRefresh={async () => await refetch()} />
             }
           />
-        </DataTable>
+        </View>
       )}
     </View>
   );
@@ -148,6 +142,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     paddingHorizontal: 0,
     marginHorizontal: 0,
+    flex: 1,
   },
 });
 

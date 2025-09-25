@@ -1,5 +1,6 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 
 import { ScrollView } from '#ui/components/ScrollView';
 import { Text } from '#ui/components/Text';
@@ -48,11 +49,12 @@ function RevokedCouponsTab(props: CouponStatusTabsRouteProps<'Revoked'>) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View tw="px-3 pt-3 pb-8">
-        <FlatList
+        <FlashList
           data={data.nodes}
-          keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+          keyExtractor={(item) => `revoked-coupon-${item.id}`}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
+          estimatedItemSize={92}
           renderItem={({ item }) => (
             <View tw="w-full p-5 flex-row items-center justify-between border border-solid border-zinc-300 rounded-2xl my-2">
               <View tw="flex-1 flex-row items-center space-x-3">

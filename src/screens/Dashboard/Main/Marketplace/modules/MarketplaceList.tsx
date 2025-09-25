@@ -47,7 +47,6 @@ export default function MarketplaceList() {
             ListEmptyComponent={<GenericEmptyState />}
             keyExtractor={(item) => `marketplace-list-item-#${item.id}`}
             showsVerticalScrollIndicator={false}
-            scrollEnabled={false}
             renderItem={({ item }) => (
               <MarketplaceItemWrapper shelfLife={item.shelfLife}>
                 <MarketplaceItemWrapper.Body

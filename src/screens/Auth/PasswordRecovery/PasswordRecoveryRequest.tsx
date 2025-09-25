@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { ActivityIndicator, Text, TextInput } from 'react-native-paper';
-import validator from 'validator';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 import { Button } from '#ui/components/Button';
 import reportCrash from '#ui/lib/reportCrash';
@@ -29,7 +29,7 @@ function PasswordRecoveryRequest() {
         phone: z
           .string()
           .default('')
-          .refine((value) => validator.isMobilePhone(value, undefined, { strictMode: true }), {
+          .refine((value) => isValidPhoneNumber(value), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
       })

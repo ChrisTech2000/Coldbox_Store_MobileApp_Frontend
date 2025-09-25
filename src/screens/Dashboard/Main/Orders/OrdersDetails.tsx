@@ -235,7 +235,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
           <Text tw="text-base text-green-primary font-bold">{t('Dashboard.MyOrders.title')}</Text>
           <FlatList
             data={orderDataByCoolingUnit}
-            keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+            keyExtractor={(_, itemIdx) => `order-cooling-unit-${itemIdx}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item: { coolingUnit, items } }) => {
@@ -290,7 +290,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
             {order.pickupDetails?.length ? (
               <FlatList
                 data={order.pickupDetails}
-                keyExtractor={(item, index) => `cooling-unit-${item.coolingUnitId}-dm-${index}`}
+                keyExtractor={(item, index) => `pickup-${item.coolingUnitId}-${index}`}
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => {
@@ -317,7 +317,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
             </Text>
             <FlatList
               data={order.items}
-              keyExtractor={(_, itemIdx) => `discount-coupons-active-tab-list-item-#${itemIdx}`}
+              keyExtractor={(_, itemIdx) => `order-item-${itemIdx}`}
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {

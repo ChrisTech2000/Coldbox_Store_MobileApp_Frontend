@@ -1,7 +1,8 @@
 import type { NavigationProp } from '@react-navigation/native';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useMemo } from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider, List, type ListItemProps } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
@@ -85,10 +86,11 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
 
   return (
     <View tw="flex-1 justify-start">
-      <FlatList
+      <FlashList
         showsVerticalScrollIndicator={false}
         data={datums}
         keyExtractor={(item) => `cooling-user-item-#${item.id}`}
+        estimatedItemSize={80}
         ListHeaderComponent={
           <View tw="m-4">
             <Button
