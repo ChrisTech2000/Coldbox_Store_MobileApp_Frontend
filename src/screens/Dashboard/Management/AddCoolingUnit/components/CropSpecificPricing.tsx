@@ -111,8 +111,8 @@ export default function CropSpecificPricing() {
         >
           <View
             tw={cn(
-              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 h-auto pt-6 pb-4 self-center space-y-2',
-              Platform.OS === 'ios' ? 'max-h-[70%]' : 'max-h-[90%]'
+              'w-full bg-white rounded-3xl w-5/6 max-w-5/6 pt-6 pb-4 self-center space-y-2',
+              Platform.OS === 'ios' ? 'h-[70%]' : 'h-[80%]'
             )}
           >
             <Text variant="TitleRegular" tw="px-6">
@@ -136,12 +136,13 @@ export default function CropSpecificPricing() {
             </View>
 
             <FlashList
+              style={{ flex: 1 }}
               scrollEnabled
               nestedScrollEnabled
               showsVerticalScrollIndicator={false}
               data={datums}
               keyExtractor={(item, itemIdx) => `crop-specific-${item.path}-field-${itemIdx}`}
-              estimatedItemSize={80}
+              estimatedItemSize={100}
               renderItem={({ item }) => (
                 <Controller
                   name={item.path as 'pricing'}
