@@ -267,6 +267,8 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           <FlashList
             data={crates}
             showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}
+            scrollEnabled={true}
             keyExtractor={(item, index) => `billing-crate-${item.id}-${index}`}
             renderItem={({ item: crate, index }) => (
               <View tw="flex flex-row flex-wrap items-center justify-between py-1">

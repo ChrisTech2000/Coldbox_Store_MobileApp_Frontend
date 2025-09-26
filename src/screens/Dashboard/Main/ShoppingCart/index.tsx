@@ -136,6 +136,8 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
         <View tw="flex-1 pb-8">
           <FlashList
             data={datums}
+            nestedScrollEnabled={true}
+            scrollEnabled={true}
             keyExtractor={(item) =>
               `marketplace-shopping-cart-list-item-#${item.marketListedCrateId}`
             }

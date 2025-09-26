@@ -243,6 +243,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
             ListEmptyComponent={
               <GenericEmptyState message={t('Dashboard.Management.UsageAnalysis.empty')} />
             }
+            nestedScrollEnabled={true}
             showsVerticalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
