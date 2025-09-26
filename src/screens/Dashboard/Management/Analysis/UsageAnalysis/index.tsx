@@ -223,6 +223,7 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
             ListEmptyComponent={
               <GenericEmptyState message={t('Dashboard.Management.UsageAnalysis.empty')} />
             }
+            nestedScrollEnabled={true}
             showsVerticalScrollIndicator={false}
             data={filteredMovements}
             renderItem={({ item: movement, index }) => (
