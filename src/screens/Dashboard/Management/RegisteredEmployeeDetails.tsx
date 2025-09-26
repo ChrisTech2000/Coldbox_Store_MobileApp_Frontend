@@ -69,7 +69,7 @@ function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmploy
 
   return (
     <View tw={cn('flex-1 space-y-32', isRTL && 'space-y-12')}>
-      <View>
+      <View style={{ flex: 1 }}>
         <FlashList
           showsVerticalScrollIndicator={false}
           data={datums}
