@@ -1,5 +1,7 @@
 // eslint-disable-next-line
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+// eslint-disable-next-line
+const path = require('path');
 
 // eslint-disable-next-line
 const { withSentryConfig } = require('@sentry/react-native/metro');
@@ -20,6 +22,9 @@ const config = {
   resolver: {
     assetExts: assetExts.filter((ext) => ext !== 'svg'),
     sourceExts: [...sourceExts, 'svg'],
+    extraNodeModules: {
+      'react-native-fs': path.resolve(__dirname, 'src/shims/react-native-fs.ts'),
+    },
   },
 };
 

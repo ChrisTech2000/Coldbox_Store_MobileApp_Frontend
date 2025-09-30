@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "*": ["src/*"],
+      "react-native-fs": ["./src/shims/react-native-fs.ts"],
       "#screens/*": ["./src/screens/*"],
       "#ui/*": ["./src/ui/*"],
       "#services/*": ["./src/services/*"],

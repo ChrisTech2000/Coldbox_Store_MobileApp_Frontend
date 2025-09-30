@@ -5,7 +5,7 @@ import {
   writeFile,
   exists,
   downloadFile,
-} from '@dr.pogodin/react-native-fs';
+} from 'react-native-fs';
 import { Platform } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
@@ -105,8 +105,8 @@ export class FileUtility {
         if (outcome !== RESULTS.GRANTED) throw new Error(PdfErrorType.PermissionsError);
       }
 
-      const result = await downloadFile({ fromUrl, toFile: filePath }).promise;
-      if (result.statusCode !== 200) throw new Error(PdfErrorType.DownloadError);
+      const result = await downloadFile(fromUrl, filePath);
+      if (result.status !== 200) throw new Error(PdfErrorType.DownloadError);
 
       if (!IS_ANDROID) {
         await Share.open({ url: `file://${filePath}`, type: MIME_TYPES[extension] });
