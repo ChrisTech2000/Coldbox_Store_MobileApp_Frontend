@@ -80,6 +80,14 @@ project.ext.react = [
   bundleInE2E: true
 ]
 
+// Force Mapbox 16KB-compatible versions
+configurations.all {
+    resolutionStrategy {
+        force "com.mapbox.maps:android:10.16.0"
+        force "com.mapbox.common:common:23.8.0"
+    }
+}
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -120,13 +128,20 @@ android {
             debuggable false
             signingConfig signingConfigs.release
         }
-        
+
         e2e {
             initWith release
             debuggable false
             minifyEnabled enableProguardInReleaseBuilds
             signingConfig signingConfigs.release
             matchingFallbacks = ['release']
+        }
+    }
+
+    // 16 KB page size compatibility
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
         }
     }
 }
