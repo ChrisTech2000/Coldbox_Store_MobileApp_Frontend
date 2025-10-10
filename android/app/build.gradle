@@ -9,6 +9,8 @@ apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.grad
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
 react {
+    autolinkLibrariesWithApp()
+
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '..'
     // root = file("../")
@@ -80,13 +82,6 @@ project.ext.react = [
   bundleInE2E: true
 ]
 
-// Force Mapbox 16KB-compatible versions
-configurations.all {
-    resolutionStrategy {
-        force "com.mapbox.maps:android:10.16.0"
-        force "com.mapbox.common:common:23.8.0"
-    }
-}
 
 android {
     ndkVersion rootProject.ext.ndkVersion
@@ -108,14 +103,15 @@ android {
         ]
     }
 
-    signingConfigs {
-        release {
-            storeFile file("$rootDir/keystores/base-key.jks")
-            storePassword System.getenv('COLDTIVATE_ANDROID_SIGNING_PASSWORD')
-            keyAlias "base-key"
-            keyPassword System.getenv('COLDTIVATE_ANDROID_SIGNING_PASSWORD')
-        }
-    }
+    // Temporarily disabled for testing
+    // signingConfigs {
+    //     release {
+    //         storeFile file("$rootDir/keystores/base-key.jks")
+    //         storePassword System.getenv('COLDTIVATE_ANDROID_SIGNING_PASSWORD')
+    //         keyAlias "base-key"
+    //         keyPassword System.getenv('COLDTIVATE_ANDROID_SIGNING_PASSWORD')
+    //     }
+    // }
 
     buildTypes {
         debug {
@@ -126,14 +122,14 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
-            signingConfig signingConfigs.release
+            // signingConfig signingConfigs.release
         }
 
         e2e {
             initWith release
             debuggable false
             minifyEnabled enableProguardInReleaseBuilds
-            signingConfig signingConfigs.release
+            // signingConfig signingConfigs.release
             matchingFallbacks = ['release']
         }
     }
@@ -158,5 +154,4 @@ dependencies {
     }
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
