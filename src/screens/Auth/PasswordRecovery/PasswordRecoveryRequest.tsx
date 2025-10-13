@@ -7,6 +7,8 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import { Button } from '#ui/components/Button';
 import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import RecaptchaModal from '#ui/components/RecaptchaModal';
+import { useRecaptcha } from '#hooks/useRecaptcha';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -23,6 +25,7 @@ function PasswordRecoveryRequest() {
     control,
     handleSubmit,
     formState: { isSubmitting, errors },
+    getValues,
   } = useForm<PasswordRecoverySchema>({
     resolver: zodResolver((z) =>
       z.object({
@@ -36,12 +39,29 @@ function PasswordRecoveryRequest() {
     ),
   });
 
-  const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(
-    async (values) => {
+  const { recaptchaRef, showRecaptcha, handleVerify, handleError } = useRecaptcha({
+    onVerify: async (recaptchaToken) => {
+      // Get form data and proceed with password recovery request
+      const formData = getValues();
+      await performPasswordRecovery(formData, recaptchaToken);
+    },
+    onError: (error) => {
+      toast.show(`reCAPTCHA error: ${error}`, { type: 'md_danger' });
+    },
+    onCancel: () => {
+      // User cancelled reCAPTCHA
+    },
+  });
+
+  const performPasswordRecovery = useCallback(
+    async (values: PasswordRecoverySchema, recaptchaToken: string | null) => {
       try {
-        await AuthService.requestResetPassword({
-          phoneNumber: values.phone,
-        });
+        await AuthService.requestResetPassword(
+          {
+            phoneNumber: values.phone,
+          },
+          recaptchaToken
+        );
         // For security reasons, we don't want to inform the user whether the introduced phone exists in our DB or not
         toast.show(t('Auth.ForgotPassword.messageSentNotification'), {
           type: 'md_success',
@@ -58,6 +78,11 @@ function PasswordRecoveryRequest() {
     },
     [toast]
   );
+
+  const onSubmit: SubmitHandler<PasswordRecoverySchema> = useCallback(async () => {
+    // Instead of directly calling AuthService, show reCAPTCHA first
+    showRecaptcha();
+  }, [showRecaptcha]);
 
   return (
     <View tw="flex-1 items-center">
@@ -99,6 +124,8 @@ function PasswordRecoveryRequest() {
           t('Auth.ForgotPassword.resetButton')
         )}
       </Button>
+
+      <RecaptchaModal ref={recaptchaRef} onVerify={handleVerify} onError={handleError} />
     </View>
   );
 }

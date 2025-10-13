@@ -225,6 +225,7 @@ export interface SendOperatorInvitationParams extends JsonObject {
   phone: string;
   coolingUnits: Array<number>;
   userId: number;
+  recaptchaToken?: string | null;
 }
 
 export interface SignupEmployeeByInviteParams extends JsonObject {

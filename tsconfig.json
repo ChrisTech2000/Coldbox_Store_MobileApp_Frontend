@@ -7,6 +7,7 @@
       "react-native-fs": ["./src/shims/react-native-fs.ts"],
       "#screens/*": ["./src/screens/*"],
       "#ui/*": ["./src/ui/*"],
+      "#hooks/*": ["./src/hooks/*"],
       "#services/*": ["./src/services/*"],
       "#common/*": ["./src/common/*"],
       "#navigation/*": ["./src/navigation/*"],

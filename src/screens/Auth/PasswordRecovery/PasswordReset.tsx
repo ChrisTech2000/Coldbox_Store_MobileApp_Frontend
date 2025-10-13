@@ -13,6 +13,8 @@ import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import RecaptchaModal from '#ui/components/RecaptchaModal';
+import { useRecaptcha } from '#hooks/useRecaptcha';
 
 type PasswordResetSchema = {
   password: string;
@@ -32,6 +34,7 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    getValues,
   } = useForm<PasswordResetSchema>({
     resolver: zodResolver((z, t) =>
       z
@@ -61,22 +64,47 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
     ),
   });
 
-  const onSubmit: SubmitHandler<PasswordResetSchema> = useCallback(async (data) => {
-    try {
-      const { resetcode, phoneNumber } = route.params;
+  const { recaptchaRef, showRecaptcha, handleVerify, handleError } = useRecaptcha({
+    onVerify: async (recaptchaToken) => {
+      // Get form data and proceed with password reset
+      const formData = getValues();
+      await performPasswordReset(formData, recaptchaToken);
+    },
+    onError: (error) => {
+      toast.show(`reCAPTCHA error: ${error}`, { type: 'md_danger' });
+    },
+    onCancel: () => {
+      // User cancelled reCAPTCHA
+    },
+  });
 
-      await AuthService.resetPassword({
-        phoneNumber,
-        code: resetcode,
-        password: data.password,
-      });
+  const performPasswordReset = useCallback(
+    async (data: PasswordResetSchema, recaptchaToken: string | null) => {
+      try {
+        const { resetcode, phoneNumber } = route.params;
 
-      navigation.navigate('SignIn');
-    } catch (err) {
-      toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
-      reportCrash(err as Error);
-    }
-  }, []);
+        await AuthService.resetPassword(
+          {
+            phoneNumber,
+            code: resetcode,
+            password: data.password,
+          },
+          recaptchaToken
+        );
+
+        navigation.navigate('SignIn');
+      } catch (err) {
+        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+        reportCrash(err as Error);
+      }
+    },
+    []
+  );
+
+  const onSubmit: SubmitHandler<PasswordResetSchema> = useCallback(async () => {
+    // Instead of directly calling AuthService, show reCAPTCHA first
+    showRecaptcha();
+  }, [showRecaptcha]);
 
   return (
     <View tw="flex-1 items-center mt-4 space-y-4">
@@ -144,6 +172,8 @@ function PasswordReset(props: AuthRouteProps<'PasswordReset'>) {
           t('Auth.ResetPassword.resetButton')
         )}
       </Button>
+
+      <RecaptchaModal ref={recaptchaRef} onVerify={handleVerify} onError={handleError} />
     </View>
   );
 }

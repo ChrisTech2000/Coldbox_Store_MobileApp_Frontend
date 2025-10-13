@@ -22,6 +22,8 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+import RecaptchaModal from '#ui/components/RecaptchaModal';
+import { useRecaptcha } from '#hooks/useRecaptcha';
 
 import { AccountCard } from './components/AccountCard';
 
@@ -105,17 +107,41 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   });
 
   const [hidePass, setHidePass] = useState<boolean>(true);
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
 
   const activeProfile = watch('activeProfile');
 
-  const onSubmit: SubmitHandler<SignInSchema> = useCallback(async (data) => {
+  const { recaptchaRef, showRecaptcha, handleVerify, handleError } = useRecaptcha({
+    onVerify: async (recaptchaToken) => {
+      try {
+        setIsAuthenticating(true);
+        const formData = watch();
+        await performSignIn(formData, recaptchaToken);
+      } finally {
+        setIsAuthenticating(false);
+      }
+    },
+    onError: async (error) => {
+      setIsAuthenticating(false);
+      toast.show(`reCAPTCHA error: ${error}`, { type: 'md_danger' });
+    },
+    onCancel: async () => {
+      setIsAuthenticating(false);
+      // User cancelled reCAPTCHA - could add analytics or cleanup here
+    },
+  });
+
+  const performSignIn = useCallback(async (data: SignInSchema, recaptchaToken: string | null) => {
     try {
-      const result = await AuthService.signIn({
-        userType: MAP_ROLES[data.activeProfile],
-        password: data.password,
-        username: data.user,
-        language: LanguageManager.read(),
-      });
+      const result = await AuthService.signIn(
+        {
+          userType: MAP_ROLES[data.activeProfile],
+          password: data.password,
+          username: data.user,
+          language: LanguageManager.read(),
+        },
+        recaptchaToken
+      );
 
       if (result) {
         if (typeof result.company !== 'undefined') {
@@ -150,6 +176,12 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
     }
   }, []);
 
+  const onSubmit: SubmitHandler<SignInSchema> = useCallback(async () => {
+    setIsAuthenticating(true);
+    await showRecaptcha();
+  }, [showRecaptcha]);
+
+  console.log(isSubmitting, 'isSubmitting');
   return (
     <KeyboardAwareScrollView tw="mt-[-24]" showsVerticalScrollIndicator={false}>
       <View tw="flex-1 items-center">
@@ -301,9 +333,9 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
           mode="contained"
           uppercase
           onPress={handleSubmit(onSubmit)}
-          disabled={isSubmitting}
+          disabled={isAuthenticating}
         >
-          {isSubmitting ? (
+          {isAuthenticating ? (
             <ActivityIndicator size="small" color="white" />
           ) : (
             t('Auth.SignIn.form.actions.logIn')
@@ -318,11 +350,13 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
             evt.stopPropagation();
             navigation.navigate('PasswordRecoveryRequest');
           }}
-          disabled={isSubmitting}
+          disabled={isAuthenticating}
         >
           {t('Auth.ForgotPassword.heading')}
         </Button>
       </View>
+
+      <RecaptchaModal ref={recaptchaRef} onVerify={handleVerify} onError={handleError} />
     </KeyboardAwareScrollView>
   );
 }

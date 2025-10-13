@@ -589,13 +589,14 @@ class ColdtivateService extends HttpClient {
 
   public sendOperatorInvitation = async (params: SendOperatorInvitationParams) => {
     try {
-      const { phone, coolingUnits, userId } = params;
+      const { phone, coolingUnits, userId, recaptchaToken } = params;
       const { data } = await this.post<Array<GetOperatorsResponse>>(
         EUserEndpoints.INVITE_OPERATOR,
         {
           coolingUnits,
           userId,
           phone,
+          recaptcha_response: recaptchaToken,
         }
       );
       return data;
@@ -611,13 +612,14 @@ class ColdtivateService extends HttpClient {
    * ============================================================ */
   public sendEmployeeInvitation = async (params: SendOperatorInvitationParams) => {
     try {
-      const { phone, coolingUnits, userId } = params;
+      const { phone, coolingUnits, userId, recaptchaToken } = params;
       const { data } = await this.post<Array<GetOperatorsResponse>>(
         EUserEndpoints.INVITE_EMPLOYEE,
         {
           coolingUnits,
           userId,
           phone,
+          recaptcha_response: recaptchaToken,
         }
       );
       return data;

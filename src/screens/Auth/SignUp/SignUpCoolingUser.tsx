@@ -18,6 +18,8 @@ import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import RecaptchaModal from '#ui/components/RecaptchaModal';
+import { useRecaptcha } from '#hooks/useRecaptcha';
 
 import launchArgs from '../../../constants/launch.args';
 import { EAccountProfile } from '../SignIn';
@@ -46,7 +48,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     getValues,
   } = useForm<SignUpCoolingUserSchemaType>({
     resolver: zodResolver(() => SignUpAsCoolingUserSchema(t)),
@@ -56,8 +58,29 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
   const [search, setSearch] = useState<string>('');
   const [hidePass, setHidePass] = useState<boolean>(true);
   const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
+  const [isRegistering, setIsRegistering] = useState<boolean>(false);
 
   const termsAgreement = watch('terms');
+
+  const { recaptchaRef, showRecaptcha, handleVerify, handleError } = useRecaptcha({
+    onVerify: async (recaptchaToken) => {
+      try {
+        setIsRegistering(true);
+        const formData = getValues();
+        await performSignUp(formData, recaptchaToken);
+      } finally {
+        setIsRegistering(false);
+      }
+    },
+    onError: async (error) => {
+      setIsRegistering(false);
+      toast.show(`reCAPTCHA error: ${error}`, { type: 'md_danger' });
+    },
+    onCancel: async () => {
+      setIsRegistering(false);
+      // User cancelled reCAPTCHA
+    },
+  });
 
   const countries = useMemo(() => {
     const lowerSearch = search.toLowerCase();
@@ -66,47 +89,59 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
       .sort(customCountrySort);
   }, [search]);
 
-  const onSubmit: SubmitHandler<SignUpCoolingUserSchemaType> = useCallback(async (data) => {
-    const {
-      firstName,
-      lastName,
-      phone,
-      password: { password },
-      gender,
-      country,
-      language,
-    } = data;
+  const performSignUp = useCallback(
+    async (data: SignUpCoolingUserSchemaType, recaptchaToken: string | null) => {
+      const {
+        firstName,
+        lastName,
+        phone,
+        password: { password },
+        gender,
+        country,
+        language,
+      } = data;
 
-    let result: SignUpAsCoolingUserResponse | undefined = undefined;
+      let result: SignUpAsCoolingUserResponse | undefined = undefined;
 
-    try {
-      result = await AuthService.signUpAsCoolingUser({
-        user: {
-          firstName,
-          lastName,
-          phone,
-          password,
-          language,
-          country,
-          gender: MAP_APP_GENDER_TO_API[gender],
-        },
-      });
-    } catch (exception) {
-      if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
-        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
-      } else {
-        toast.show(t('Auth.SignUp.toasts.error'), {
-          type: 'md_danger',
-          style: { marginBottom: 55 },
-        });
+      try {
+        result = await AuthService.signUpAsCoolingUser(
+          {
+            user: {
+              firstName,
+              lastName,
+              phone,
+              password,
+              language,
+              country,
+              gender: MAP_APP_GENDER_TO_API[gender],
+            },
+          },
+          recaptchaToken
+        );
+      } catch (exception) {
+        if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
+          toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+        } else {
+          toast.show(t('Auth.SignUp.toasts.error'), {
+            type: 'md_danger',
+            style: { marginBottom: 55 },
+          });
+        }
+        reportCrash(exception as Error);
       }
-      reportCrash(exception as Error);
-    }
 
-    if (result) {
-      navigation.navigate('SignIn', { accountProfile: EAccountProfile.FARMER });
-    }
-  }, []);
+      if (result) {
+        navigation.navigate('SignIn', { accountProfile: EAccountProfile.FARMER });
+      }
+    },
+    []
+  );
+
+  const onSubmit: SubmitHandler<SignUpCoolingUserSchemaType> = useCallback(async () => {
+    // Instead of directly calling AuthService, show reCAPTCHA first
+    setIsRegistering(true);
+    await showRecaptcha();
+  }, [showRecaptcha]);
 
   return (
     <KeyboardAwareScrollView
@@ -335,14 +370,16 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
         mode="contained"
         uppercase
         onPress={handleSubmit(onSubmit)}
-        disabled={!termsAgreement || isSubmitting}
+        disabled={!termsAgreement || isRegistering}
       >
-        {isSubmitting ? (
+        {isRegistering ? (
           <ActivityIndicator size="small" color="white" />
         ) : (
           t('Auth.SignUp.commonForm.submit')
         )}
       </Button>
+
+      <RecaptchaModal ref={recaptchaRef} onVerify={handleVerify} onError={handleError} />
     </KeyboardAwareScrollView>
   );
 }
