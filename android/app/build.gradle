@@ -101,6 +101,12 @@ android {
         manifestPlaceholders = [
             DEEP_LINK_DOMAIN: project.env.get("DEEP_LINK_DOMAIN"),
         ]
+        
+        externalNativeBuild {
+            cmake {
+                arguments "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,max-page-size=16384"
+            }
+        }
     }
 
     // Temporarily disabled for testing

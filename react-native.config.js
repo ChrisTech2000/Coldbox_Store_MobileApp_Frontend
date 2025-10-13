@@ -1,7 +1,9 @@
 module.exports = {
   project: {
     ios: {},
-    android: {},
+    android: {
+      packageName: 'com.base.coldtivate',
+    },
   },
   assets: ['./src/assets/images/', './src/assets/icons/', './src/assets/fonts/'],
   dependencies: {
