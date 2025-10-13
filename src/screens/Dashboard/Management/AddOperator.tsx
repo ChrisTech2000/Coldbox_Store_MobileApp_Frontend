@@ -14,11 +14,14 @@ import { Input } from '#ui/components/Input';
 import { Select } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
+import RecaptchaModal from '#ui/components/RecaptchaModal';
 import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+
+import { useRecaptcha } from '#hooks/useRecaptcha';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
@@ -87,7 +90,27 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [internalSelection, setInternalSelection] = useState<Array<number>>([]);
+  const [isInviting, setIsInviting] = useState<boolean>(false);
   const selectedCoolingUnits = watch('coolingUnits');
+
+  const { recaptchaRef, showRecaptcha, handleVerify, handleError } = useRecaptcha({
+    onVerify: async (recaptchaToken) => {
+      try {
+        setIsInviting(true);
+        const formData = watch();
+        await performInvite(formData, recaptchaToken);
+      } finally {
+        setIsInviting(false);
+      }
+    },
+    onError: async (error) => {
+      setIsInviting(false);
+      toast.show(`reCAPTCHA error: ${error}`, { type: 'md_danger' });
+    },
+    onCancel: async () => {
+      setIsInviting(false);
+    },
+  });
 
   const selectLabel = useMemo(() => {
     if (!options.length || !selectedCoolingUnits.length) {
@@ -99,7 +122,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
       .join(', ');
   }, [options, selectedCoolingUnits, t]);
 
-  async function onSubmit(values: FormValues) {
+  async function performInvite(values: FormValues, recaptchaToken: string | null) {
     const userId = useAuthStore.getState().user?.id;
     if (!userId) return; // safe guard
 
@@ -108,6 +131,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
         phone: values.phoneNumber,
         coolingUnits: values.coolingUnits,
         userId,
+        recaptchaToken,
       });
 
       toast.show(t('Dashboard.Management.AddOperator.toasts.success'), {
@@ -120,6 +144,11 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
       toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger' });
       reportCrash(exception as Error);
     }
+  }
+
+  async function onSubmit() {
+    setIsInviting(true);
+    await showRecaptcha();
   }
 
   if (isLoading) {
@@ -241,15 +270,17 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           mode="contained"
           icon={isSubmitting ? undefined : 'account-arrow-down-outline'}
           onPress={handleSubmit(onSubmit)}
-          disabled={isSubmitting}
+          disabled={isInviting}
         >
-          {isSubmitting ? (
+          {isInviting ? (
             <ActivityIndicator animating size="small" color="white" />
           ) : (
             t('Dashboard.Management.Operators.actions.invite')
           )}
         </Button>
       </HideWithKeyboardView>
+
+      <RecaptchaModal ref={recaptchaRef} onVerify={handleVerify} onError={handleError} />
     </View>
   );
 }

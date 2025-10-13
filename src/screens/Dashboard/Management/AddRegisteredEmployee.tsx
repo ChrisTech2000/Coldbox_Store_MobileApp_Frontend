@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -10,10 +10,13 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
+import RecaptchaModal from '#ui/components/RecaptchaModal';
 import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
+
+import { useRecaptcha } from '#hooks/useRecaptcha';
 
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useTranslationUtils } from '#i18n/utils';
@@ -50,6 +53,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues: { phoneNumber: '' },
@@ -67,7 +71,28 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
     reValidateMode: 'onSubmit',
   });
 
-  async function onSubmit(values: FormValues) {
+  const [isInviting, setIsInviting] = useState<boolean>(false);
+
+  const { recaptchaRef, showRecaptcha, handleVerify, handleError } = useRecaptcha({
+    onVerify: async (recaptchaToken) => {
+      try {
+        setIsInviting(true);
+        const formData = watch();
+        await performInvite(formData, recaptchaToken);
+      } finally {
+        setIsInviting(false);
+      }
+    },
+    onError: async (error) => {
+      setIsInviting(false);
+      toast.show(`reCAPTCHA error: ${error}`, { type: 'md_danger' });
+    },
+    onCancel: async () => {
+      setIsInviting(false);
+    },
+  });
+
+  async function performInvite(values: FormValues, recaptchaToken: string | null) {
     const userId = useAuthStore.getState().user?.id;
     if (!userId) return; // safe guard
 
@@ -78,6 +103,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
         coolingUnits,
         phone: values.phoneNumber,
         userId,
+        recaptchaToken,
       });
 
       toast.show(t('Dashboard.Management.AddRegisteredEmployee.toasts.success'), {
@@ -90,6 +116,11 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
       toast.show(t('Auth.SignUp.toasts.error'), { type: 'md_danger' });
       reportCrash(exception as Error);
     }
+  }
+
+  async function onSubmit() {
+    setIsInviting(true);
+    await showRecaptcha();
   }
 
   if (isLoading) {
@@ -149,15 +180,17 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
           tw="w-full"
           icon={isSubmitting ? undefined : 'account-arrow-down-outline'}
           onPress={handleSubmit(onSubmit)}
-          disabled={isSubmitting}
+          disabled={isInviting}
         >
-          {isSubmitting ? (
+          {isInviting ? (
             <ActivityIndicator animating size="small" color="white" />
           ) : (
             t('Dashboard.Management.Operators.actions.invite')
           )}
         </Button>
       </HideWithKeyboardView>
+
+      <RecaptchaModal ref={recaptchaRef} onVerify={handleVerify} onError={handleError} />
     </View>
   );
 }
