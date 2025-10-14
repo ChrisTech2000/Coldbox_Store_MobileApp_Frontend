@@ -109,15 +109,15 @@ android {
         }
     }
 
-    // Temporarily disabled for testing
-    // signingConfigs {
-    //     release {
-    //         storeFile file("$rootDir/keystores/base-key.jks")
-    //         storePassword System.getenv('COLDTIVATE_ANDROID_SIGNING_PASSWORD')
-    //         keyAlias "base-key"
-    //         keyPassword System.getenv('COLDTIVATE_ANDROID_SIGNING_PASSWORD')
-    //     }
-    // }
+    Temporarily disabled for testing
+    signingConfigs {
+        release {
+            storeFile file("$rootDir/keystores/base-key.jks")
+            storePassword System.getenv('COLDTIVATE_ANDROID_SIGNING_PASSWORD')
+            keyAlias "base-key"
+            keyPassword System.getenv('COLDTIVATE_ANDROID_SIGNING_PASSWORD')
+        }
+    }
 
     buildTypes {
         debug {
@@ -128,14 +128,14 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
-            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
 
         e2e {
             initWith release
             debuggable false
             minifyEnabled enableProguardInReleaseBuilds
-            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             matchingFallbacks = ['release']
         }
     }
