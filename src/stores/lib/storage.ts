@@ -1,7 +1,7 @@
 import { createJSONStorage } from 'zustand/middleware';
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 
-export const mmkv = new MMKV();
+export const mmkv = createMMKV();
 
 // eslint-disable-next-line
 export default createJSONStorage<any>(() => ({
@@ -13,6 +13,6 @@ export default createJSONStorage<any>(() => ({
     return value ?? null;
   },
   removeItem: (name) => {
-    return mmkv.delete(name);
+    return mmkv.remove(name);
   },
 }));

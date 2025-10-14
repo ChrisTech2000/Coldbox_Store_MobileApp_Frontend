@@ -1,6 +1,5 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
-import moize from 'moize';
 import React, { forwardRef, useMemo } from 'react';
 import {
   FlatList,
@@ -226,17 +225,14 @@ const BottomSheet = forwardRef<
   );
 });
 
-const TabItemComponent = ({
-  title,
-  isFocused,
-  onPress,
-  renderIcon,
-}: {
+type TabItemProps = {
   title: string;
   isFocused?: boolean;
   onPress?: (event: GestureResponderEvent) => void;
   renderIcon?: (iconProps: { focused: boolean; color: string; size: number }) => React.ReactNode;
-}) => (
+};
+
+const TabItemComponent = ({ title, isFocused, onPress, renderIcon }: TabItemProps) => (
   <View tw="flex-col items-center justify-start space-y-1">
     <View tw="rounded-full overflow-hidden">
       <Touchable
@@ -260,7 +256,13 @@ const TabItemComponent = ({
   </View>
 );
 
-const TabItem = moize.react(TabItemComponent, { maxSize: 3 });
+const areEqual = (prev: TabItemProps, next: TabItemProps) =>
+  prev.title === next.title &&
+  prev.isFocused === next.isFocused &&
+  prev.onPress === next.onPress &&
+  prev.renderIcon === next.renderIcon;
+
+export const TabItem = React.memo(TabItemComponent, areEqual);
 
 export default function BottomNavigationWrapper(props: BottomTabBarProps) {
   return <BottomNavigation {...props} />;

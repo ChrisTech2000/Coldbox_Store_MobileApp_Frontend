@@ -1,4 +1,3 @@
-import moize from 'moize';
 import React from 'react';
 import { Appbar } from 'react-native-paper';
 
@@ -8,15 +7,23 @@ export type NavigationHeaderProps = {
   rightContent?: React.ReactNode;
 };
 
-export default moize.react({
-  maxSize: 1,
-  isDeepEqual: true,
-})((props: NavigationHeaderProps) => {
+function NavigationHeader({ leftContent, rightContent, routeTitle }: NavigationHeaderProps) {
   return (
     <Appbar.Header>
-      {props.leftContent}
-      <Appbar.Content title={props.routeTitle} />
-      {props.rightContent}
+      {leftContent}
+      <Appbar.Content title={routeTitle} />
+      {rightContent}
     </Appbar.Header>
   );
-});
+}
+
+// Compare only what matters. React elements should be compared by identity (===).
+const arePropsEqual = (
+  prev: Readonly<NavigationHeaderProps>,
+  next: Readonly<NavigationHeaderProps>
+) =>
+  prev.routeTitle === next.routeTitle &&
+  prev.leftContent === next.leftContent &&
+  next.rightContent === prev.rightContent;
+
+export default React.memo(NavigationHeader, arePropsEqual);
