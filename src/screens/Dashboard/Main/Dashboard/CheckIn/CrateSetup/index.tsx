@@ -157,29 +157,55 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   const generalCrateWeight = watch('generalCrateWeight');
   const crates = watch('crates');
 
-  const totalPrice = useMemo(() => {
-    const price = coolingUnit?.commonPricingType?.value ?? 0;
-    const multiplier =
-      coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY ? (plannedDays ?? 0) : 1;
+  const effectivePricing = useMemo(() => {
+    const cropPricing = coolingUnit?.crops.find((c) => c.cropId === contextualCrop.id);
 
-    if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
-      if (!crates) return '0.00';
-      const dailyPrice = crates?.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0;
-      return (dailyPrice * multiplier).toFixed(2);
+    if (cropPricing?.pricing) {
+      const pricingType = cropPricing.pricing.pricingType;
+      const price =
+        pricingType === EPricingType.PERIODICITY
+          ? cropPricing.pricing.dailyRate
+          : cropPricing.pricing.fixedRate;
+      return { price, type: pricingType };
     }
 
-    return (price * (crates?.length ?? 0) * multiplier).toFixed(2);
-  }, [crates, coolingUnit, plannedDays]);
+    return {
+      price: coolingUnit?.commonPricingType?.value ?? 0,
+      type: coolingUnit?.commonPricingType?.type,
+    };
+  }, [coolingUnit, contextualCrop.id]);
+
+  const totalPrice = useMemo(() => {
+    if (!crates || crates.length === 0) return '0.00';
+
+    const { price, type } = effectivePricing;
+    const metric = coolingUnit?.commonPricingType?.metric;
+
+    return crates
+      .reduce((acc, crate) => {
+        const metricMultiplier = metric === ECoolingUnitMetric.KILOGRAMS ? crate.weight : 1;
+
+        if (type === EPricingType.FIXED) {
+          acc += metricMultiplier * price;
+        } else {
+          const multiplier = plannedDays ? plannedDays : 1;
+          acc += metricMultiplier * multiplier * price;
+        }
+
+        return acc;
+      }, 0)
+      .toFixed(2);
+  }, [crates, coolingUnit, plannedDays, effectivePricing]);
 
   const dailyPriceLabel = useMemo(() => {
-    if (coolingUnit?.commonPricingType?.type === EPricingType.FIXED) {
+    if (effectivePricing.type === EPricingType.FIXED) {
       return t('Dashboard.CrateManagement.CheckIn.Setup.fixedPriceLabel');
     }
     if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.KILOGRAMS) {
       return t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayAndKilogramLabel');
     }
     return t('Dashboard.CrateManagement.CheckIn.Setup.pricePerDayAndCrateLabel');
-  }, [coolingUnit]);
+  }, [coolingUnit, effectivePricing]);
 
   const onChangeNumericKeyboard = useCallback(
     (
@@ -391,7 +417,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         <FloatingFooter
           dailyPriceLabel={dailyPriceLabel}
           currencyCode={company?.currency || DEFAULT_CURRENCY_CODE}
-          commonPrice={(coolingUnit?.commonPricingType?.value ?? 0).toFixed(2)}
+          commonPrice={effectivePricing.price.toFixed(2)}
           totalPrice={totalPrice}
           cancelFunc={(evt) => {
             evt.stopPropagation();

@@ -41,8 +41,7 @@ export const useCheckInStore = create<State & Actions>((set, get) => ({
 
   addProduce: (produce: ProduceCrate) => {
     const currentProduces = get().produces;
-    currentProduces.push(produce);
-    set({ produces: currentProduces });
+    set({ produces: [...currentProduces, produce] });
   },
 
   resetCheckInStore: () =>

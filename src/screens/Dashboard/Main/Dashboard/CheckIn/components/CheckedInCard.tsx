@@ -51,15 +51,40 @@ export function CheckedInCard({
 
   const getCratePrice = useCallback(
     (crates: ProduceCrate['crates']) => {
-      const price = coolingUnit.commonPricingType?.value;
+      const cropPricing = coolingUnit.crops.find((c) => c.cropId === item.crop.id);
 
-      if (coolingUnit.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
-        return (price * crates.length).toFixed(2);
+      let price = 0;
+      let type: EPricingType | undefined;
+
+      if (cropPricing?.pricing) {
+        type = cropPricing.pricing.pricingType;
+        price =
+          type === EPricingType.PERIODICITY
+            ? cropPricing.pricing.dailyRate
+            : cropPricing.pricing.fixedRate;
+      } else {
+        price = coolingUnit.commonPricingType?.value || 0;
+        type = coolingUnit.commonPricingType?.type;
       }
 
-      return (crates.reduce((acc, current) => (acc += current.weight * price), 0) ?? 0).toFixed(2);
+      const metric = coolingUnit.commonPricingType?.metric;
+
+      let totalPrice = 0;
+
+      for (const crate of crates) {
+        const metricMultiplier = metric === ECoolingUnitMetric.KILOGRAMS ? crate.weight : 1;
+
+        if (type === EPricingType.FIXED) {
+          totalPrice += metricMultiplier * price;
+        } else {
+          // For periodicity pricing, show daily rate
+          totalPrice += metricMultiplier * price;
+        }
+      }
+
+      return totalPrice.toFixed(2);
     },
-    [coolingUnit]
+    [coolingUnit, item.crop.id]
   );
 
   const pricePerKilo = useMemo(() => {

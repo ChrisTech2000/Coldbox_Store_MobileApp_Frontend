@@ -114,7 +114,7 @@ export function CheckOutData(props: CheckOutDataProps) {
             </div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.calculatedPriceLabel')}:&nbsp;</div>
-              <div class="value">${movement.checkout?.totalPrice.toFixed(2)}</div>
+              <div class="value">${movement.checkout?.calculatedPrice.toFixed(2)}</div>
             </div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.discountLabel')}:&nbsp;</div>
@@ -122,7 +122,7 @@ export function CheckOutData(props: CheckOutDataProps) {
             </div>
             <div class="section-end">
               <div class="label">${t('Dashboard.History.pdfModal.checkOut.totalPrice')}:&nbsp;</div>
-              <div class="value">${(movement.checkout?.totalPrice - movement.checkout?.discount).toFixed(2)}</div>
+              <div class="value">${movement.checkout?.totalPrice.toFixed(2)}</div>
             </div>
           </div>
 

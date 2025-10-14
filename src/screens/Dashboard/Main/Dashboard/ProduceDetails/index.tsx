@@ -43,17 +43,15 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   });
 
   const pricing = useMemo(() => {
-    const pricing = produce.checkedInCrates[0].pricing[0];
-    const metric =
-      produce.checkedInCrates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
-        ? produce.cratesCombinedWeight
-        : produce.cratesAmount;
+    const pricingType =
+      produce.checkedInCrates[0]?.effectivePricingType ||
+      produce.checkedInCrates[0]?.pricing[0]?.pricingType;
 
-    if (pricing.pricingType === EPricingType.FIXED) {
-      return pricing.fixedRate * metric;
+    if (pricingType === EPricingType.FIXED) {
+      return produce.cratesCombinedCost;
     }
 
-    return produce.plannedDays ? pricing.dailyRate * metric * produce.plannedDays : 'N/A';
+    return produce.cratesCombinedCost * (produce.plannedDays || 1);
   }, [produce]);
 
   const percentage = useMemo(() => {
@@ -64,6 +62,13 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
   }, [produce]);
 
   const dailyPrice = useMemo(() => {
+    if (produce.checkedInCrates[0]?.calculatedDailyRate) {
+      const metric =
+        produce.checkedInCrates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
+          ? produce.cratesCombinedWeight
+          : produce.cratesAmount;
+      return produce.checkedInCrates[0].calculatedDailyRate * metric;
+    }
     return (
       produce.checkedInCrates[0].pricing[0].dailyRate *
       (produce.checkedInCrates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS

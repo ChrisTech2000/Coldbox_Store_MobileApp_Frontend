@@ -72,14 +72,24 @@ export class CustomError<T = CustomErrorType, E = unknown> extends Error {
   public originalError?: E;
   public timestamp: string;
   public isCustomError: boolean = true;
+  public debugMessage: string;
+  public context?: Record<string, unknown>;
 
-  constructor(type: T, message: string, originalError?: E) {
+  constructor(
+    type: T,
+    message: string,
+    originalError?: E,
+    debugMessage?: string,
+    context?: Record<string, unknown>
+  ) {
     super(message);
 
     this.name = 'CustomError';
     this.type = type;
     this.originalError = originalError;
     this.timestamp = new Date().toISOString();
+    this.debugMessage = debugMessage || message;
+    this.context = context;
 
     if (originalError) {
       const errorStack = this._getErrorStack(originalError);
@@ -106,9 +116,11 @@ export class CustomError<T = CustomErrorType, E = unknown> extends Error {
     return {
       name: this.name,
       message: this.message,
+      debugMessage: this.debugMessage,
       type: this.type,
       stack: this.stack,
       timestamp: this.timestamp,
+      context: this.context,
       originalError:
         this.originalError instanceof Error
           ? {
@@ -127,49 +139,107 @@ export class CustomError<T = CustomErrorType, E = unknown> extends Error {
 
 export default {
   handleAxiosError: (error: AxiosError<unknown>) => {
+    const method = error.config?.method?.toUpperCase();
+    const url = error.config?.url;
+    const baseURL = error.config?.baseURL;
+    const fullUrl = baseURL && url ? `${baseURL}${url}` : url || 'unknown';
+
     if (error.response) {
       const status = error.response.status;
+      const responseData = error.response.data;
+
+      // Extract backend error message if available
+      let backendMessage = '';
+      if (responseData && typeof responseData === 'object') {
+        const data = responseData as Record<string, unknown>;
+        backendMessage = (data.message || data.error || data.detail || '') as string;
+      }
+
+      const context = {
+        method,
+        url: fullUrl,
+        status,
+        responseData,
+        requestData: error.config?.data,
+        headers: error.config?.headers,
+      };
 
       if (STATUS_CODE_ERROR_MAP[status]) {
         const [type, message] = STATUS_CODE_ERROR_MAP[status];
-        return new CustomError<CustomErrorType, AxiosError>(type, message, error);
-      }
-
-      if (status >= 500) {
+        const debugMessage = `[${method} ${fullUrl}] ${status} - ${backendMessage || message}${
+          backendMessage ? ` (Backend: ${backendMessage})` : ''
+        }`;
         return new CustomError<CustomErrorType, AxiosError>(
-          CustomErrorType.ServerError,
-          'A server error occurred. Please try again later.',
-          error
+          type,
+          message,
+          error,
+          debugMessage,
+          context
         );
       }
 
+      if (status >= 500) {
+        const debugMessage = `[${method} ${fullUrl}] ${status} Server Error - ${
+          backendMessage || error.message
+        }${backendMessage ? ` (Backend: ${backendMessage})` : ''}`;
+        return new CustomError<CustomErrorType, AxiosError>(
+          CustomErrorType.ServerError,
+          'A server error occurred. Please try again later.',
+          error,
+          debugMessage,
+          context
+        );
+      }
+
+      const debugMessage = `[${method} ${fullUrl}] ${status} - ${backendMessage || error.message}${
+        backendMessage ? ` (Backend: ${backendMessage})` : ''
+      }`;
       return new CustomError<CustomErrorType, AxiosError>(
         CustomErrorType.RequestFailed,
         `Request failed with status: ${status}`,
-        error
+        error,
+        debugMessage,
+        context
       );
     }
 
     if (error.request) {
+      const debugMessage = `[${method} ${fullUrl}] Network Error - No response received. ${error.message}`;
+      const context = {
+        method,
+        url: fullUrl,
+        requestData: error.config?.data,
+      };
       return new CustomError<CustomErrorType, AxiosError>(
         CustomErrorType.NetworkError,
         'A network error occurred. Please check your internet connection.',
-        error
+        error,
+        debugMessage,
+        context
       );
     }
 
+    const debugMessage = `[${method} ${fullUrl}] Unknown Error - ${error.message}`;
     return new CustomError<CustomErrorType, unknown>(
       CustomErrorType.UnknownError,
       'An unknown error occurred.',
-      error
+      error,
+      debugMessage
     );
   },
   handleLocationGeocodingError: (error: unknown) => {
     if (error instanceof LocationError) {
+      const debugMessage = `Location Permission Error: ${error.message} (Code: ${error.code})`;
+      const context = {
+        errorCode: error.code,
+        errorMessage: error.message,
+      };
       return new CustomError<EGeolocationError, LocationError>(
         EGeolocationError.LocationPermission,
         GEOLOCATION_ERROR_MESSAGES[EGeolocationError.LocationPermission],
-        error
+        error,
+        debugMessage,
+        context
       );
     }
 
@@ -180,22 +250,33 @@ export default {
         ? errorMessage
         : EGeolocationError.GeneralError;
 
+      const debugMessage = `Geolocation Error [${type}]: ${error.message}`;
+      const context = {
+        errorType: type,
+        originalMessage: error.message,
+      };
+
       return new CustomError<EGeolocationError, Error>(
         type,
         GEOLOCATION_ERROR_MESSAGES[type],
-        error
+        error,
+        debugMessage,
+        context
       );
     }
 
+    const debugMessage = `Geolocation Unknown Error: ${JSON.stringify(error)}`;
     return new CustomError<EGeolocationError, unknown>(
       EGeolocationError.GeneralError,
       GEOLOCATION_ERROR_MESSAGES[EGeolocationError.GeneralError],
-      error
+      error,
+      debugMessage
     );
   },
   handlePdfErrors: (error: unknown) => {
     let type: PdfErrorType = PdfErrorType.GeneralError;
     let message: string = PDF_ERROR_MESSAGES[PdfErrorType.GeneralError];
+    let debugMessage = '';
 
     if (error instanceof Error) {
       const errorMessage = error.message as PdfErrorType;
@@ -203,8 +284,17 @@ export default {
         ? errorMessage
         : PdfErrorType.GeneralError;
       message = PDF_ERROR_MESSAGES[type];
+      debugMessage = `PDF Error [${type}]: ${error.message}`;
+
+      const context = {
+        errorType: type,
+        originalMessage: error.message,
+      };
+
+      return new CustomError<PdfErrorType, Error>(type, message, error, debugMessage, context);
     }
 
-    return new CustomError<PdfErrorType, Error | unknown>(type, message, error);
+    debugMessage = `PDF Unknown Error: ${JSON.stringify(error)}`;
+    return new CustomError<PdfErrorType, unknown>(type, message, error, debugMessage);
   },
 };

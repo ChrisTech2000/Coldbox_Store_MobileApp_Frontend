@@ -115,35 +115,10 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   }, [coolingUnit, currency]);
 
   const cratePrices = useMemo(() => {
-    const type = coolingUnit?.commonPricingType?.type;
-    const price = coolingUnit?.commonPricingType?.value;
-
     return (crates ?? []).map((crate) => {
-      const isMarketplaceOrder = crate.movementCode.startsWith('MO-#');
-      const checkinDate = new Date(crate.checkinDate);
-      const today = new Date();
-
-      checkinDate.setHours(0, 0, 0, 0);
-      today.setHours(0, 0, 0, 0);
-
-      if (isMarketplaceOrder && checkinDate.getTime() === today.getTime()) {
-        return 0;
-      }
-
-      if (!crate.initialWeight) {
-        return 0;
-      }
-
-      const deductibleFees =
-        crate.weight === crate.initialWeight ? 1 : crate.weight / crate.initialWeight;
-
-      return (
-        (type === EPricingType.PERIODICITY
-          ? (price ?? 0) * crate.currentStorageDays
-          : (price ?? 0)) * deductibleFees
-      );
+      return crate.calculatedTotalPrice || 0;
     });
-  }, [coolingUnit, crates]);
+  }, [crates]);
 
   const total = useMemo(() => {
     return cratePrices?.reduce((acc: number, current) => (acc += current ?? 0), 0) ?? 0;

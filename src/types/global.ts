@@ -77,6 +77,12 @@ export type Crate = {
   initialWeight: number;
   listedInTheMarketplace?: boolean;
   lockedWithinPendingOrders: boolean;
+
+  // Backend-calculated pricing fields
+  calculatedTotalPrice?: number;
+  calculatedDailyRate?: number;
+  calculatedFixedRate?: number;
+  effectivePricingType?: EPricingType;
 };
 
 export type DashboardProduce = {
@@ -595,6 +601,12 @@ export type MovementCrate = {
   ownedOnBehalfOfCompanyId?: number | null;
   ownerName?: string;
   affectedWeight?: number;
+
+  // Backend-calculated pricing fields
+  calculatedTotalPrice?: number;
+  calculatedDailyRate?: number;
+  calculatedFixedRate?: number;
+  effectivePricingType?: EPricingType;
 };
 
 //////////////////////// ENUMS
