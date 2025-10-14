@@ -125,9 +125,9 @@ export function CheckInData(props: CheckInDataProps) {
                       (acc, current) => (acc += current.initialWeight),
                       0
                     );
-                    const totalPrice = (
-                      (coolingUnit?.commonPricingType?.value ?? 0) * crates.length
-                    ).toFixed(2);
+                    const totalPrice = crates
+                      .reduce((acc, current) => (acc += current.calculatedTotalPrice ?? 0), 0)
+                      .toFixed(2);
 
                     const translatedName = find(translationMap, {
                       name: crop?.name ?? '',
@@ -149,7 +149,7 @@ export function CheckInData(props: CheckInDataProps) {
                   <td>${t('Dashboard.History.pdfModal.checkIn.totalLabel')}</td>
                   <td>${movement.checkin?.crates.length}</td>
                   <td>${movement.checkin?.crates.reduce((acc, current) => (acc += current.initialWeight), 0)}</td>
-                  <td>${((coolingUnit?.commonPricingType?.value ?? 0) * movement.checkin?.crates.length).toFixed(2)}</td>
+                  <td>${movement.checkin?.crates.reduce((acc, current) => (acc += current.calculatedTotalPrice ?? 0), 0).toFixed(2)}</td>
                 </tr>
               </tbody>
             </table>
@@ -311,7 +311,9 @@ export function CheckInData(props: CheckInDataProps) {
                 {crates.reduce((acc, current) => (acc += current.initialWeight), 0)}
               </DataTable.Cell>
               <DataTable.Cell numeric>
-                {((coolingUnit?.commonPricingType?.value ?? 0) * crates.length).toFixed(2)}
+                {crates
+                  .reduce((acc, current) => (acc += current.calculatedTotalPrice ?? 0), 0)
+                  .toFixed(2)}
               </DataTable.Cell>
             </DataTable.Row>
           ))}
@@ -330,9 +332,9 @@ export function CheckInData(props: CheckInDataProps) {
             </DataTable.Cell>
             <DataTable.Cell numeric>
               <Text tw="font-bold">
-                {(
-                  (coolingUnit?.commonPricingType?.value ?? 0) * movement.checkin?.crates.length
-                ).toFixed(2)}
+                {movement.checkin?.crates
+                  .reduce((acc, curr) => (acc += curr.calculatedTotalPrice ?? 0), 0)
+                  .toFixed(2)}
               </Text>
             </DataTable.Cell>
           </DataTable.Row>

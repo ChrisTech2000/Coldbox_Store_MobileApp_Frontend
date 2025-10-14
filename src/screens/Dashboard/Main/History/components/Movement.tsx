@@ -19,14 +19,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore, type ManagementCompany } from '#stores/management';
 import { type GetMovementsHistoryResponse } from '#types/api.responses';
-import {
-  ECoolingUnitMetric,
-  EInitiatedFor,
-  EPricingType,
-  ERoles,
-  type Company,
-  type CoolingUnit,
-} from '#types/global';
+import { EInitiatedFor, EPricingType, ERoles, type Company, type CoolingUnit } from '#types/global';
 import { useDashboardStore } from '#stores/dashboard';
 import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
@@ -122,21 +115,17 @@ export function Movement({
     if (isCheckOut)
       return `${movement.checkout?.totalPrice.toFixed(2)} ${company?.currency ?? selectedCompany?.currency}`;
 
-    const price = coolingUnit?.commonPricingType?.value ?? 0;
-    const suffix =
-      coolingUnit?.commonPricingType?.type === EPricingType.PERIODICITY
-        ? `/ ${t('Dashboard.CrateManagement.CheckIn.day')}`
-        : '';
+    const totalCalculatedPrice =
+      movement.checkin?.crates.reduce((acc, crate) => {
+        return acc + (crate.calculatedTotalPrice || 0);
+      }, 0) || 0;
 
-    if (coolingUnit?.commonPricingType?.metric === ECoolingUnitMetric.CRATES) {
-      const _price = price * movement.checkin?.crates.length;
-      return `${isNaN(_price) ? 0 : _price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
-    }
+    const isDailyRate =
+      movement.checkin?.crates[0]?.effectivePricingType === EPricingType.PERIODICITY;
+    const suffix = isDailyRate ? `/ ${t('Dashboard.CrateManagement.CheckIn.day')}` : '';
 
-    const _price =
-      movement.checkin?.crates.reduce((acc, curr) => (acc += curr.initialWeight), 0) * price;
-    return `${isNaN(_price) ? 0 : _price} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
-  }, [isCheckOut, movement, selectedCompany, coolingUnit, company, t]);
+    return `${totalCalculatedPrice.toFixed(2)} ${company?.currency ?? selectedCompany?.currency} ${suffix}`;
+  }, [isCheckOut, movement, company, selectedCompany, t]);
 
   const seePDFModal = useCallback(() => {
     setIsPDFModalOpen(true);
