@@ -18,6 +18,8 @@ import { Button } from '#ui/components/Button';
 import { Input } from '#ui/components/Input';
 import reportCrash from '#ui/lib/reportCrash';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
+import RecaptchaModal from '#ui/components/RecaptchaModal';
+import { useRecaptcha } from '#hooks/useRecaptcha';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import phoneNumberCodes from '#constants/phoneNumberCodes';
@@ -44,7 +46,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
     watch,
     setValue,
     clearErrors,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     getValues,
   } = useForm<SignUpCompanySchemaType>({
     resolver: zodResolver(() => SignUpAsCompanySchema(t)),
@@ -75,60 +77,93 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
   const [hidePass, setHidePass] = useState<boolean>(true);
   const [hideConfirmPass, setHideConfirmPass] = useState<boolean>(true);
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState<boolean>(false);
+  const [isRegistering, setIsRegistering] = useState<boolean>(false);
 
   const phoneNumber = watch('phone');
 
-  ////////////// ACTIONS
-  const onSubmit: SubmitHandler<SignUpCompanySchemaType> = useCallback(async (data) => {
-    const {
-      firstName,
-      lastName,
-      phone,
-      email,
-      password: { password },
-      gender,
-      companyName: name,
-      country,
-      currency,
-    } = data;
-
-    let result: SignUpAsCompanyResponse | undefined = undefined;
-
-    try {
-      result = await AuthService.signUpAsCompany({
-        user: {
-          firstName,
-          lastName,
-          ...(phone ? { phone } : {}),
-          email,
-          password,
-          gender: MAP_APP_GENDER_TO_API[gender],
-        },
-        company: {
-          name,
-          country,
-          currency: currenciesDict().getCodeByName(currency) ?? DEFAULT_CURRENCY_CODE,
-          language: LanguageManager.read(),
-          crop: [],
-        },
-      });
-    } catch (exception) {
-      if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
-        toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
-      } else {
-        toast.show(t('Auth.SignUp.toasts.error'), {
-          type: 'md_danger',
-          style: { marginBottom: 55 },
-        });
+  const { recaptchaRef, showRecaptcha, handleVerify, handleError } = useRecaptcha({
+    onVerify: async (recaptchaToken) => {
+      try {
+        setIsRegistering(true);
+        const formData = getValues();
+        await performSignUp(formData, recaptchaToken);
+      } finally {
+        setIsRegistering(false);
       }
-      reportCrash(exception as Error);
-    }
+    },
+    onError: async (error) => {
+      setIsRegistering(false);
+      toast.show(`reCAPTCHA error: ${error}`, { type: 'md_danger' });
+    },
+    onCancel: async () => {
+      setIsRegistering(false);
+      // User cancelled reCAPTCHA
+    },
+  });
 
-    if (result) {
-      closePhoneWarningModal();
-      navigation.navigate('SignIn');
-    }
-  }, []);
+  ////////////// ACTIONS
+  const performSignUp = useCallback(
+    async (data: SignUpCompanySchemaType, recaptchaToken: string | null) => {
+      const {
+        firstName,
+        lastName,
+        phone,
+        email,
+        password: { password },
+        gender,
+        companyName: name,
+        country,
+        currency,
+      } = data;
+
+      let result: SignUpAsCompanyResponse | undefined = undefined;
+
+      try {
+        result = await AuthService.signUpAsCompany(
+          {
+            user: {
+              firstName,
+              lastName,
+              ...(phone ? { phone } : {}),
+              email,
+              password,
+              gender: MAP_APP_GENDER_TO_API[gender],
+            },
+            company: {
+              name,
+              country,
+              currency: currenciesDict().getCodeByName(currency) ?? DEFAULT_CURRENCY_CODE,
+              language: LanguageManager.read(),
+              crop: [],
+            },
+          },
+          recaptchaToken
+        );
+      } catch (exception) {
+        if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
+          toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+        } else {
+          toast.show(t('Auth.SignUp.toasts.error'), {
+            type: 'md_danger',
+            style: { marginBottom: 55 },
+          });
+        }
+        reportCrash(exception as Error);
+      }
+
+      if (result) {
+        closePhoneWarningModal();
+        navigation.navigate('SignIn');
+      }
+    },
+    []
+  );
+
+  const onSubmit: SubmitHandler<SignUpCompanySchemaType> = useCallback(async () => {
+    // Instead of directly calling AuthService, show reCAPTCHA first
+    setIsRegistering(true);
+    await showRecaptcha();
+  }, [showRecaptcha]);
 
   const checkPhoneNumber = useCallback(async () => {
     if (!phoneNumber) {
@@ -420,9 +455,9 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
         mode="contained"
         uppercase
         onPress={handleSubmit(checkPhoneNumber)}
-        disabled={!termsAgreement || isSubmitting}
+        disabled={!termsAgreement || isRegistering}
       >
-        {isSubmitting ? (
+        {isRegistering ? (
           <ActivityIndicator size="small" color="white" />
         ) : (
           t('Auth.SignUp.commonForm.submit')
@@ -454,11 +489,14 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
                 tw="border-2 border-green-primary"
                 mode="contained"
                 uppercase
-                onPress={handleSubmit(onSubmit)}
+                onPress={async () => {
+                  setIsRegistering(true);
+                  await showRecaptcha();
+                }}
                 icon="close-circle-outline"
                 contentStyle="flex flex-row-reverse items-center"
               >
-                {isSubmitting ? (
+                {isRegistering ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
                   t('Auth.SignUp.SignUpCompany.modal.buttons.continue')
@@ -478,6 +516,8 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
           </Dialog.Content>
         </Dialog>
       </Portal>
+
+      <RecaptchaModal ref={recaptchaRef} onVerify={handleVerify} onError={handleError} />
     </KeyboardAwareScrollView>
   );
 }

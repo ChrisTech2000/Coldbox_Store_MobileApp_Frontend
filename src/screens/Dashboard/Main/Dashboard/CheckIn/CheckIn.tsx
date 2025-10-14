@@ -140,22 +140,41 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   const total = useMemo(() => {
     if (!coolingUnit.commonPricingType) return '0.00';
 
-    const { value: price, metric, type } = coolingUnit.commonPricingType;
+    const metric = coolingUnit.commonPricingType.metric;
 
-    if (!allHavePlannedDays || type === EPricingType.FIXED) {
-      return metric === ECoolingUnitMetric.KILOGRAMS
-        ? allCrates.reduce((acc, crate) => acc + crate.weight * price, 0).toFixed(2)
-        : (price * allCrates.length).toFixed(2);
-    }
+    return produces
+      .reduce((acc, produce) => {
+        const cropPricing = coolingUnit.crops.find((c) => c.cropId === produce.crop.id);
 
-    return allCrates
-      .reduce((acc, crate) => {
-        const days = crate.plannedDays ?? 1;
-        acc += metric === ECoolingUnitMetric.KILOGRAMS ? days * price * crate.weight : days * price;
+        let price = 0;
+        let type: EPricingType | undefined;
+
+        if (cropPricing?.pricing) {
+          type = cropPricing.pricing.pricingType;
+          price =
+            type === EPricingType.PERIODICITY
+              ? cropPricing.pricing.dailyRate
+              : cropPricing.pricing.fixedRate;
+        } else {
+          price = coolingUnit.commonPricingType?.value ?? 0;
+          type = coolingUnit.commonPricingType?.type;
+        }
+
+        for (const crate of produce.crates) {
+          const metricMultiplier = metric === ECoolingUnitMetric.KILOGRAMS ? crate.weight : 1;
+
+          if (type === EPricingType.FIXED) {
+            acc += metricMultiplier * price;
+          } else {
+            const multiplier = allHavePlannedDays ? (crate.plannedDays ?? 1) : 1;
+            acc += metricMultiplier * multiplier * price;
+          }
+        }
+
         return acc;
       }, 0)
       .toFixed(2);
-  }, [produces, coolingUnit, allHavePlannedDays, allCrates]);
+  }, [coolingUnit, produces, allHavePlannedDays]);
 
   const setCrateIDs = useCallback(
     (modalCrates: SetupSchema['crates'], item: ProduceCrate) => {

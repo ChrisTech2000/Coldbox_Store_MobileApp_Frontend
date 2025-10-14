@@ -1,20 +1,8 @@
-import { type DashboardProduce, ECoolingUnitMetric, EPricingType } from '#types/global';
+import { EPricingType, type DashboardProduce } from '#types/global';
 import { Translator } from '#i18n/utils';
 
 export function generateData(produce: DashboardProduce, t: Translator) {
-  const pricing = produce.checkedInCrates[0].pricing[0];
-  const metric =
-    produce.checkedInCrates[0].coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS
-      ? produce.cratesCombinedWeight
-      : produce.cratesAmount;
-
-  let price: number | string = '';
-
-  if (pricing.pricingType === EPricingType.FIXED) {
-    price = pricing.fixedRate * metric;
-  } else {
-    price = produce.plannedDays ? pricing.dailyRate * metric * produce.plannedDays : 'N/A';
-  }
+  const price = produce.cratesCombinedCost || 0;
 
   return [
     {

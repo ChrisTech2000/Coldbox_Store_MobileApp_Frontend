@@ -18,6 +18,7 @@ import type {
 } from '#types/api.responses';
 
 import HttpClient, { type HttpClientOptions } from './HttpClient';
+import RecaptchaService from './RecaptchaService';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 
 class AuthService extends HttpClient {
@@ -26,12 +27,18 @@ class AuthService extends HttpClient {
   }
 
   public signUpAsCompany = async (
-    params: SignUpAsCompanyParams
+    params: SignUpAsCompanyParams,
+    recaptchaToken?: string | null
   ): Promise<SignUpAsCompanyResponse | undefined> => {
     try {
+      // Add reCAPTCHA token to sign up request
+      const requestData = recaptchaToken
+        ? { ...params, recaptcha_response: recaptchaToken }
+        : await RecaptchaService.prepareRequestWithRecaptcha(params);
+
       const { data } = await this.post<SignUpAsCompanyResponse>(
         EAuthenticationEndpoints.SIGN_UP_AS_COMPANY_ENDPOINT,
-        params
+        requestData
       );
       return data;
     } catch (error) {
@@ -42,7 +49,8 @@ class AuthService extends HttpClient {
   };
 
   public signUpAsCoolingUser = async (
-    params: SignUpAsCoolingUserParams
+    params: SignUpAsCoolingUserParams,
+    recaptchaToken?: string | null
   ): Promise<SignUpAsCoolingUserResponse | undefined> => {
     const _params = {
       ...params,
@@ -51,9 +59,14 @@ class AuthService extends HttpClient {
     };
 
     try {
+      // Add reCAPTCHA token to cooling user sign up request
+      const requestData = recaptchaToken
+        ? { ..._params, recaptcha_response: recaptchaToken }
+        : await RecaptchaService.prepareRequestWithRecaptcha(_params);
+
       const { data } = await this.post<SignUpAsCoolingUserResponse>(
         EAuthenticationEndpoints.SIGN_UP_AS_COOLING_USER,
-        _params,
+        requestData,
         undefined
       );
       return data;
@@ -64,11 +77,19 @@ class AuthService extends HttpClient {
     }
   };
 
-  public signIn = async (params: SignInParams): Promise<SignInResponse | undefined> => {
+  public signIn = async (
+    params: SignInParams,
+    recaptchaToken?: string | null
+  ): Promise<SignInResponse | undefined> => {
     try {
+      // Add reCAPTCHA token to sign in request
+      const requestData = recaptchaToken
+        ? { ...params, recaptcha_response: recaptchaToken }
+        : await RecaptchaService.prepareRequestWithRecaptcha(params);
+
       const { data } = await this.post<SignInResponse>(
         EAuthenticationEndpoints.SIGN_IN_ENDPOINT,
-        params
+        requestData
       );
 
       if (!data.access || !data.refresh) throw new Error('No valid token pair provided');
@@ -99,17 +120,23 @@ class AuthService extends HttpClient {
   };
 
   public requestResetPassword = async (
-    params: RequestPasswordResetParams
+    params: RequestPasswordResetParams,
+    recaptchaToken?: string | null
   ): Promise<string | undefined> => {
     const _params = {
       phoneNumber: params.phoneNumber,
     };
 
     try {
+      // Add reCAPTCHA token to password reset request
+      const requestData = recaptchaToken
+        ? { ..._params, recaptcha_response: recaptchaToken }
+        : await RecaptchaService.prepareRequestWithRecaptcha(_params);
+
       // No need to map the keys in this request (BE is expecting camel case...)
       const { data } = await this.axios.post<string>(
         EAuthenticationEndpoints.RESET_PASSWORD,
-        _params
+        requestData
       );
 
       return data;
@@ -120,13 +147,23 @@ class AuthService extends HttpClient {
     }
   };
 
-  public resetPassword = async (params: ResetPasswordParams): Promise<void> => {
+  public resetPassword = async (
+    params: ResetPasswordParams,
+    recaptchaToken?: string | null
+  ): Promise<void> => {
     try {
       const { phoneNumber, ...rest } = params;
-      const { data } = await this.post<void>(EAuthenticationEndpoints.RESET_PASSWORD, {
+      const _params = {
         ...rest,
         phone: phoneNumber,
-      });
+      };
+
+      // Add reCAPTCHA token to password reset confirmation request
+      const requestData = recaptchaToken
+        ? { ..._params, recaptcha_response: recaptchaToken }
+        : await RecaptchaService.prepareRequestWithRecaptcha(_params);
+
+      const { data } = await this.post<void>(EAuthenticationEndpoints.RESET_PASSWORD, requestData);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -135,9 +172,20 @@ class AuthService extends HttpClient {
     }
   };
 
-  public signUpEmployeeByInvite = async (params: SignupEmployeeByInviteParams) => {
+  public signUpEmployeeByInvite = async (
+    params: SignupEmployeeByInviteParams,
+    recaptchaToken?: string | null
+  ) => {
     try {
-      const { data } = await this.post(EAuthenticationEndpoints.SIGN_UP_EMPLOYEE_BY_INVITE, params);
+      // Add reCAPTCHA token to employee invitation signup request
+      const requestData = recaptchaToken
+        ? { ...params, recaptcha_response: recaptchaToken }
+        : await RecaptchaService.prepareRequestWithRecaptcha(params);
+
+      const { data } = await this.post(
+        EAuthenticationEndpoints.SIGN_UP_EMPLOYEE_BY_INVITE,
+        requestData
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
@@ -146,9 +194,20 @@ class AuthService extends HttpClient {
     }
   };
 
-  public signUpOperatorByInvite = async (params: SignupOperatorByInviteParams) => {
+  public signUpOperatorByInvite = async (
+    params: SignupOperatorByInviteParams,
+    recaptchaToken?: string | null
+  ) => {
     try {
-      const { data } = await this.post(EAuthenticationEndpoints.SIGN_UP_OPERATOR_BY_INVITE, params);
+      // Add reCAPTCHA token to operator invitation signup request
+      const requestData = recaptchaToken
+        ? { ...params, recaptcha_response: recaptchaToken }
+        : await RecaptchaService.prepareRequestWithRecaptcha(params);
+
+      const { data } = await this.post(
+        EAuthenticationEndpoints.SIGN_UP_OPERATOR_BY_INVITE,
+        requestData
+      );
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
