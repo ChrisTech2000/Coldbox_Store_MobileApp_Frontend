@@ -9708,10 +9708,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-victory-native@41.19.1:
-  version "41.19.1"
-  resolved "https://registry.yarnpkg.com/victory-native/-/victory-native-41.19.1.tgz#f868304111194a02236371113d58616aa5613cd7"
-  integrity sha512-osVS+yEOQEYR5bvdtYzDSVNPc4N5VV9NoOzlAqAMZtoRBtl46hvUpWdJXu3CHvjd+28yA5cyDqDzE3Fmuv9S9w==
+victory-native@^41.19.1:
+  version "41.20.1"
+  resolved "https://registry.yarnpkg.com/victory-native/-/victory-native-41.20.1.tgz#476e7a07d2e266d7018523d694673db4472fa7da"
+  integrity sha512-wz+T0WqmYe7qydwuDrMcsGcXsO3acEVEKG7iw6xlHvy+ul8LBA2YSlHAoz3uM2CkOnTCWFWH3t37qlZrn1zHUg==
   dependencies:
     d3-scale "^4.0.2"
     d3-shape "^3.2.0"
