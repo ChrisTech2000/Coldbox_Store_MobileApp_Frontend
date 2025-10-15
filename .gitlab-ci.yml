@@ -225,6 +225,15 @@ run e2e tests with maestro:
     - if [ "$VERSION_ID" == "" ]; then git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
     # Inject correct MAPBOX token into .env.x
     - sed -i "s|MAPBOX_ACCESS_TOKEN=.*|MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN|" ".env.$LANE"
+    # Inject reCAPTCHA credentials
+    - |
+      if [ "$LANE" == "staging" ]; then
+        sed -i "s|RECAPTCHA_SITE_KEY=.*|RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY_STAGING|" ".env.$LANE"
+        sed -i "s|RECAPTCHA_BASE_URL=.*|RECAPTCHA_BASE_URL=$RECAPTCHA_BASE_URL_STAGING|" ".env.$LANE"
+      elif [ "$LANE" == "production" ]; then
+        sed -i "s|RECAPTCHA_SITE_KEY=.*|RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY_PRODUCTION|" ".env.$LANE"
+        sed -i "s|RECAPTCHA_BASE_URL=.*|RECAPTCHA_BASE_URL=$RECAPTCHA_BASE_URL_PRODUCTION|" ".env.$LANE"
+      fi
     - bundler exec fastlane android "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:
@@ -265,6 +274,15 @@ run e2e tests with maestro:
     - if [ "$VERSION_ID" == "" ]; then git fetch --tags; export VERSION_ID=$(git describe --tags --abbrev=0 || echo "0.0.1"); fi;
     # Inject correct MAPBOX token into .env.x
     - sed -i '' "s|MAPBOX_ACCESS_TOKEN=.*|MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN|" ".env.$LANE"
+    # Inject reCAPTCHA credentials
+    - |
+      if [ "$LANE" == "staging" ]; then
+        sed -i '' "s|RECAPTCHA_SITE_KEY=.*|RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY_STAGING|" ".env.$LANE"
+        sed -i '' "s|RECAPTCHA_BASE_URL=.*|RECAPTCHA_BASE_URL=$RECAPTCHA_BASE_URL_STAGING|" ".env.$LANE"
+      elif [ "$LANE" == "production" ]; then
+        sed -i '' "s|RECAPTCHA_SITE_KEY=.*|RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY_PRODUCTION|" ".env.$LANE"
+        sed -i '' "s|RECAPTCHA_BASE_URL=.*|RECAPTCHA_BASE_URL=$RECAPTCHA_BASE_URL_PRODUCTION|" ".env.$LANE"
+      fi
     - bundler exec fastlane ios "$LANE" "version_id:$VERSION_ID"
   artifacts:
     paths:

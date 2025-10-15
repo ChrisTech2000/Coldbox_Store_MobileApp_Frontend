@@ -1,8 +1,4 @@
-// Configuration from environment variables
-//const RECAPTCHA_ENABLED = process.env.RECAPTCHA_ENABLED === 'true';
-const RECAPTCHA_ENABLED = true;
-const RECAPTCHA_SITE_KEY =
-  process.env.RECAPTCHA_SITE_KEY || '6Lc1mbsrAAAAAGktGNBJD85-0FrQJW2BPbHQL_xw';
+import { RECAPTCHA_ENABLED, RECAPTCHA_SITE_KEY, RECAPTCHA_BASE_URL } from '#constants/environment';
 
 export interface RecaptchaToken {
   token: string | null;
@@ -17,7 +13,7 @@ export interface RecaptchaComponentProps {
 
 class RecaptchaService {
   private isEnabled: boolean = RECAPTCHA_ENABLED;
-  private siteKey: string = RECAPTCHA_SITE_KEY;
+  private siteKey: string = RECAPTCHA_SITE_KEY ?? '';
 
   /**
    * Check if reCAPTCHA is enabled
@@ -58,7 +54,7 @@ class RecaptchaService {
 
     return {
       siteKey: this.siteKey,
-      baseUrl: 'http://localhost:8081', // For React Native development
+      baseUrl: RECAPTCHA_BASE_URL,
       languageCode: 'en',
       onMessage: () => {}, // Will be overridden by the component
     };
