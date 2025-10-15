@@ -10,6 +10,9 @@ declare module 'react-native-config' {
     SENTRY_DSN?: string;
     ENVIRONMENT?: string;
     DEEP_LINK_DOMAIN?: string;
+    RECAPTCHA_ENABLED?: string;
+    RECAPTCHA_SITE_KEY?: string;
+    RECAPTCHA_BASE_URL?: string;
   }
 
   export const Config: NativeConfig;

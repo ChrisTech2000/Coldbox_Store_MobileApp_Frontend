@@ -10,3 +10,8 @@ export const YOUR_VCCA_PDF_LINK = `${Config.YOUR_VCCA_PDF_LINK}`;
 export const SENTRY_DSN = `${Config.SENTRY_DSN}`;
 export const ENVIRONMENT = `${Config.ENVIRONMENT}`;
 export const DEEP_LINK_DOMAIN = `${Config.DEEP_LINK_DOMAIN}`;
+
+// reCAPTCHA Configuration
+export const RECAPTCHA_ENABLED = Config.RECAPTCHA_ENABLED === 'true';
+export const RECAPTCHA_SITE_KEY = `${Config.RECAPTCHA_SITE_KEY}`;
+export const RECAPTCHA_BASE_URL = `${Config.RECAPTCHA_BASE_URL}`;

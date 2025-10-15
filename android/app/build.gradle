@@ -109,7 +109,7 @@ android {
         }
     }
 
-    Temporarily disabled for testing
+    // Temporarily disabled for testing
     signingConfigs {
         release {
             storeFile file("$rootDir/keystores/base-key.jks")
