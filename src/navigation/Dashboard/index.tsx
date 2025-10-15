@@ -1,7 +1,6 @@
 import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import moize from 'moize';
 import React, { useEffect } from 'react';
 import { Drawer } from 'react-native-drawer-layout';
 import { useWalkthrough } from 'react-native-interactive-walkthrough';
@@ -102,7 +101,10 @@ export const useRightDrawerStore = create<{
   toggle: (value) => set((state) => ({ isOpen: value ?? !state.isOpen })),
 }));
 
-const MemoizedNotificationsDrawerContent = moize.react(NotificationsDrawerContent);
+const MemoizedNotificationsDrawerContent = React.memo(
+  NotificationsDrawerContent,
+  (prev, next) => prev.notifications === next.notifications
+);
 
 export default function DashboardNavigator() {
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();

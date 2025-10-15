@@ -9,6 +9,8 @@ apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.grad
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
 react {
+    autolinkLibrariesWithApp()
+
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '..'
     // root = file("../")
@@ -80,6 +82,7 @@ project.ext.react = [
   bundleInE2E: true
 ]
 
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -98,8 +101,15 @@ android {
         manifestPlaceholders = [
             DEEP_LINK_DOMAIN: project.env.get("DEEP_LINK_DOMAIN"),
         ]
+        
+        externalNativeBuild {
+            cmake {
+                arguments "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,max-page-size=16384"
+            }
+        }
     }
 
+    Temporarily disabled for testing
     signingConfigs {
         release {
             storeFile file("$rootDir/keystores/base-key.jks")
@@ -120,13 +130,20 @@ android {
             debuggable false
             signingConfig signingConfigs.release
         }
-        
+
         e2e {
             initWith release
             debuggable false
             minifyEnabled enableProguardInReleaseBuilds
             signingConfig signingConfigs.release
             matchingFallbacks = ['release']
+        }
+    }
+
+    // 16 KB page size compatibility
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
         }
     }
 }
@@ -143,5 +160,4 @@ dependencies {
     }
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
