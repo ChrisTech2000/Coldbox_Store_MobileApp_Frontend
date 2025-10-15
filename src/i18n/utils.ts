@@ -148,18 +148,26 @@ export function useTranslationUtils() {
 
 type Options = Parameters<typeof formatInTimeZone>[3];
 
-export function dateFmt(timestamp: string, dateFormat?: string, opts?: Options): string {
-  const parsedDate = parseISO(timestamp);
-  if (!isValid(parsedDate)) {
-    return '';
-  }
+export function dateFmt(
+  timestamp: string | number | Date,
+  dateFormat = 'dd/MM/yyyy',
+  opts?: Options
+): string {
+  const d =
+    timestamp instanceof Date
+      ? timestamp
+      : typeof timestamp === 'number'
+        ? new Date(timestamp) // epoch ms
+        : parseISO(timestamp); // string → Date
+
+  if (!isValid(d)) return '';
 
   const timeZone = getTimeZone();
   const defaultTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
   const zoneToUse = timeZone || defaultTimeZone;
 
   try {
-    return formatInTimeZone(parsedDate, zoneToUse, dateFormat ?? 'dd/MM/yyyy', {
+    return formatInTimeZone(d, zoneToUse, dateFormat ?? 'dd/MM/yyyy', {
       ...opts,
       locale: _currentDateFnsLocale,
     });

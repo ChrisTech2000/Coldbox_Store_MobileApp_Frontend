@@ -1,4 +1,3 @@
-import moize from 'moize';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Dialog, Divider, Icon, Portal } from 'react-native-paper';
@@ -354,18 +353,22 @@ export function Movement({
   );
 }
 
-const _IconByMovementType = moize.react({
-  maxSize: 1,
-  isDeepEqual: true,
-})((props: { movementType: EInitiatedFor }) => {
-  switch (props.movementType) {
-    case EInitiatedFor.CHECK_IN:
-      return <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />;
-    case EInitiatedFor.CHECK_OUT:
-      return <CheckOut width={20} height={20} fill={colors.red[700]} stroke={colors.red[700]} />;
-    case EInitiatedFor.MARKETPLACE_ORDER:
-      return <MaterialIcon name="cart-outline" size={25} color={colors.blue[500]} />;
-    default:
-      return null;
-  }
-});
+type Props = { movementType: EInitiatedFor };
+
+const _IconByMovementType = React.memo(
+  function IconByMovementType({ movementType }: Props) {
+    switch (movementType) {
+      case EInitiatedFor.CHECK_IN:
+        return (
+          <CheckIn width={20} height={20} fill={colors.green[500]} stroke={colors.green[500]} />
+        );
+      case EInitiatedFor.CHECK_OUT:
+        return <CheckOut width={20} height={20} fill={colors.red[700]} stroke={colors.red[700]} />;
+      case EInitiatedFor.MARKETPLACE_ORDER:
+        return <MaterialIcon name="cart-outline" size={25} color={colors.blue[500]} />;
+      default:
+        return null;
+    }
+  },
+  (prev, next) => prev.movementType === next.movementType
+);
