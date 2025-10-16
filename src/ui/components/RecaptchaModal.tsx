@@ -38,7 +38,7 @@ const RecaptchaModal = forwardRef<RecaptchaModalRef, RecaptchaModalProps>(
         siteKey={recaptchaProps.siteKey}
         baseUrl={recaptchaProps.baseUrl} // e.g. https://app.yourcompany.com (MUST match Console)
         lang={recaptchaProps.languageCode}
-        size="normal" // or 'compact' | 'invisible'
+        size="compact"
         theme="light" // or 'dark'
         onVerify={onVerify}
         onExpire={() => onError?.('reCAPTCHA verification expired')}
@@ -46,6 +46,10 @@ const RecaptchaModal = forwardRef<RecaptchaModalRef, RecaptchaModalProps>(
         onClose={() => onCancel?.()}
         modalProps={{ style: { paddingTop: 100, justifyContent: 'center' } }}
         webViewProps={{
+          // Enable better touch handling
+          androidLayerType: 'hardware',
+          scrollEnabled: false,
+          bounces: false,
           injectedJavaScript: `
           const interval = setInterval(() => {
             const iFrames = document.querySelectorAll('iframe');
@@ -66,9 +70,19 @@ const RecaptchaModal = forwardRef<RecaptchaModalRef, RecaptchaModalProps>(
 
             if (lastDivWithIFrame) {
               lastDivWithIFrame.style.marginTop = "${insets.top}px";
+              // Ensure pointer events are enabled
+              lastDivWithIFrame.style.pointerEvents = "auto";
               clearInterval(interval);
             }
           }, 500);
+
+          // Ensure all reCAPTCHA elements can receive touch events
+          // Add touch delay to prevent double-firing
+          document.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
+          }, { passive: false });
+
+          true;
         `,
         }}
       />
