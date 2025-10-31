@@ -8,7 +8,6 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardRoutes } from '#navigation/Dashboard';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { useCheckInStore } from '#stores/checkIn';
 import { useTutorialStore } from '#stores/tutorial';
@@ -24,17 +23,18 @@ import { MOCKED_CHECK_IN_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils/
 import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 export function OperatorActionsOverlay({
   next,
   stop,
   goTo,
-  step: { onPressMask },
+  step: { onPressMask, mask },
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
   const isRTL = LanguageManager.isRTL;
@@ -42,10 +42,13 @@ export function OperatorActionsOverlay({
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn(
-          'absolute right-3 w-[15%] h-[8%]',
-          Platform.OS === 'ios' ? 'bottom-32' : 'bottom-20'
-        )}
+        tw="absolute"
+        style={{
+          top: mask.y,
+          left: isRTL ? screenWidth - mask.x - mask.width : mask.x,
+          height: mask.height,
+          width: mask.width,
+        }}
         onPress={() => {
           onPressMask?.();
           next();
@@ -56,8 +59,8 @@ export function OperatorActionsOverlay({
             {
               opacity: blinkAnim,
               transform: [{ rotate: '90deg' }, ...(isRTL ? [{ scaleY: -1 }] : [])],
-              top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 25 : 50,
-              left: -40,
+              top: mask.height / 2,
+              right: isRTL ? mask.x * 2 + 10 : mask.width - 5,
             },
           ]}
           tw="-top-2/3 -right-2/3"
@@ -105,13 +108,8 @@ export function OperatorActionsOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
               rootNavigation.navigate('Main', {
                 screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
               });
             }}
             labelStyle="text-red-700"
@@ -124,11 +122,11 @@ export function OperatorActionsOverlay({
   );
 }
 
-export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProps) {
+export function CheckInButtonOverlay({ next, stop, goTo, step: { mask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
   const navigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
@@ -137,16 +135,15 @@ export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProp
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn(
-          'absolute right-1/4 w-[20%] h-[9%]',
-          Platform.OS === 'ios' ? 'bottom-28 right-[26%]' : 'bottom-20'
-        )}
+        tw="absolute"
+        style={{
+          top: mask.y,
+          left: isRTL ? screenWidth - mask.x - mask.width : mask.x,
+        }}
         onPress={() => {
           navigation.navigate('CheckInStack', {
             screen: 'CheckIn',
-            // eslint-disable-next-line
-            // @ts-ignore
-            params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
+            params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT, isTutorial: true },
           });
           next();
         }}
@@ -156,11 +153,11 @@ export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProp
             {
               opacity: blinkAnim,
               transform: [{ rotate: '90deg' }, ...(isRTL ? [{ scaleY: -1 }] : [])],
-              top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 60,
+              top: mask.height / 2 - 10,
+              right: isRTL ? mask.x * 2 + 10 : mask.width - 5,
               left: screenHeight <= SMALL_SCREEN_THRESHOLD ? -45 : -30,
             },
           ]}
-          tw="-top-2/3 -right-2/3"
         >
           <MaterialIcon
             name="touch-app"
@@ -199,13 +196,8 @@ export function CheckInButtonOverlay({ next, stop, goTo }: IOverlayComponentProp
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
               rootNavigation.navigate('Main', {
                 screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
               });
             }}
             labelStyle="text-red-700"
@@ -222,7 +214,7 @@ export function CheckIn1ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
   const { t } = useTranslationUtils();
   const setProduces = useCheckInStore((store) => store.setProduces);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const mainTabNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -247,9 +239,12 @@ export function CheckIn1ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              rootNavigation.navigate('RootMainTabStack');
-              emitter.emit(APP_EVENTS.DISPATCH_OPEN_OPERATOR_ACTIONS);
               goTo(EOperatorTutorialSteps.INITIATE_CHECK_IN_STEP_2);
+              mainTabNavigation.navigate('RootMainTabStack');
+
+              setTimeout(() => {
+                emitter.emit(APP_EVENTS.DISPATCH_OPEN_OPERATOR_ACTIONS);
+              }, 100);
             }}
             labelStyle="text-green-primary"
           >
@@ -276,14 +271,7 @@ export function CheckIn1ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              mainTabNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-red-700"
           >
@@ -298,7 +286,7 @@ export function CheckIn1ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
 export function CheckIn2ScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
   const setProduces = useCheckInStore((store) => store.setProduces);
 
   return (
@@ -347,13 +335,8 @@ export function CheckIn2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
               rootNavigation.navigate('Main', {
                 screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
               });
             }}
             labelStyle="text-red-700"
@@ -366,21 +349,32 @@ export function CheckIn2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
   );
 }
 
-export function CheckIn3ScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function CheckIn3ScreenOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const resetCheckInStore = useCheckInStore((store) => store.resetCheckInStore);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const bottomTabNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const colors = useTailwindColors();
-
   const blinkAnim = useBlinkAnimation();
+
+  const isRTL = LanguageManager.isRTL;
 
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw="absolute bottom-4 right-3 w-[46%] h-[8%]"
+        tw="absolute"
+        style={{
+          top: mask.y,
+          left: isRTL ? screenWidth - mask.x - mask.width : mask.x,
+          height: mask.height,
+          width: mask.width,
+        }}
         onPress={() => {
           bottomTabNavigation.navigate('Main', { screen: 'History' });
           resetCheckInStore();
@@ -392,17 +386,8 @@ export function CheckIn3ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             {
               opacity: blinkAnim,
               transform: [{ rotate: '180deg' }],
-              top: screenHeight <= SMALL_SCREEN_THRESHOLD ? -15 : Platform.OS === 'ios' ? -35 : -5,
-              left: LanguageManager.isRTL
-                ? undefined
-                : screenHeight <= SMALL_SCREEN_THRESHOLD
-                  ? -70
-                  : -90,
-              right: LanguageManager.isRTL
-                ? screenHeight <= SMALL_SCREEN_THRESHOLD
-                  ? -70
-                  : -90
-                : undefined,
+              bottom: mask.height,
+              left: isRTL ? mask.width - 90 : -mask.width + 90,
             },
           ]}
         >
@@ -447,13 +432,8 @@ export function CheckIn3ScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
+              bottomTabNavigation.navigate('Main', {
                 screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
               });
             }}
             labelStyle="text-red-700"

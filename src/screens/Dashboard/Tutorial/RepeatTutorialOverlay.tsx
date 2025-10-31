@@ -1,8 +1,7 @@
 import React from 'react';
-import { Dimensions, Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
@@ -14,9 +13,12 @@ import { cn } from '#ui/lib/cn';
 import { ECommonTutorialSteps, EFarmerTutorialSteps } from './utils/constants';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
-const screenHeight = Dimensions.get('window').height;
-
-export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function RepeatTutorialOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
@@ -25,26 +27,14 @@ export function RepeatTutorialOverlay({ next, goTo, stop }: IOverlayComponentPro
   return (
     <View tw="h-full w-full absolute">
       <View
-        tw={cn(
-          'absolute left-3 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          user?.role === ERoles.COOLING_USER
-            ? screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-[41.5%]'
-              : Platform.OS === 'ios'
-                ? 'top-[35%]'
-                : 'top-1/3'
-            : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-[49.25%]'
-              : Platform.OS === 'ios'
-                ? 'top-[42%]'
-                : 'top-[40%]'
-        )}
+        tw={cn('absolute left-3 w-[90%] h-auto bg-white p-3 rounded-md z-30')}
         style={[
           {
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
             shadowRadius: 4,
+            top: mask.y + 70,
           },
         ]}
       >

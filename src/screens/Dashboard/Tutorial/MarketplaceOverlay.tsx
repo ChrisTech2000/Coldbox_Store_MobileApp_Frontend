@@ -3,13 +3,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Animated, Dimensions, Platform, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useShallow } from 'zustand/react/shallow';
 
-import { MEDIUM_SCREEN_THRESHOLD, SMALL_SCREEN_THRESHOLD } from '#constants/ui';
+import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
+import { MarketplaceTabsRoutes } from '#navigation/Dashboard/Main/Marketplace/MarketplaceTabs';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
@@ -35,6 +36,7 @@ import {
 import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const MOCKED_PARAMS = {
   user: MOCKED_USER,
@@ -44,31 +46,14 @@ const MOCKED_PARAMS = {
 
 export function Marketplace1ScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
-  const colors = useTailwindColors();
 
   const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
   const [user] = useAuthStore(useShallow((store) => [store.user]));
 
   return (
     <View tw="h-full w-full absolute">
-      <Icon
-        style={[
-          {
-            top:
-              Platform.OS === 'ios' || screenHeight <= SMALL_SCREEN_THRESHOLD
-                ? screenHeight - 100
-                : screenHeight - 20,
-            left: LanguageManager.isRTL ? undefined : '-35%',
-            right: LanguageManager.isRTL ? '-55%' : undefined,
-            transform: [{ rotate: '165deg' }],
-          },
-        ]}
-        name="cursor-pointer"
-        size={screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 40}
-        color={colors.green.primary}
-      />
-
       <View
         tw="absolute left-5 bottom-48 w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={[
@@ -88,24 +73,24 @@ export function Marketplace1ScreenOverlay({ next, goTo, stop }: IOverlayComponen
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.OPERATOR) {
-                rootNavigation.navigate('CheckOutStack', {
-                  screen: 'BillingInfo',
+                goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_3);
+
+                dashboardNavigation.navigate('Dashboard', {
+                  screen: 'CheckOutStack',
                   params: {
-                    ...MOCKED_PARAMS,
-                    // eslint-disable-next-line
-                    // @ts-ignore
-                    user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
+                    screen: 'BillingInfo',
+                    params: {
+                      ...MOCKED_PARAMS,
+                      user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
+                    },
                   },
                 });
-                goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_3);
               } else if (user?.role === ERoles.EMPLOYEE) {
-                rootNavigation.navigate('RootMainTabStack');
                 goTo(EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP);
+                dashboardNavigation.navigate('Dashboard');
               } else {
-                // eslint-disable-next-line
-                // @ts-ignore
-                rootNavigation.navigate('MarketPrice');
                 goTo(EFarmerTutorialSteps.MARKET_PRICE);
+                dashboardNavigation.navigate('MarketPrice');
               }
             }}
             labelStyle="text-green-primary"
@@ -128,14 +113,7 @@ export function Marketplace1ScreenOverlay({ next, goTo, stop }: IOverlayComponen
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-red-700"
           >
@@ -163,16 +141,13 @@ export function Marketplace2ScreenOverlay({
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn(
-          'absolute w-[13%] h-[7%] right-1',
-          Platform.OS === 'ios'
-            ? screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-8'
-              : 'top-14'
-            : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-10'
-              : 'top-16'
-        )}
+        tw="absolute"
+        style={{
+          top: mask.y,
+          height: mask.height,
+          width: mask.width,
+          left: LanguageManager.isRTL ? screenWidth - mask.x - mask.width : mask.x,
+        }}
         onPress={() => {
           onPressMask?.();
           next();
@@ -181,7 +156,7 @@ export function Marketplace2ScreenOverlay({
         <Animated.View
           style={[
             {
-              top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 50 : 70),
+              top: mask.height,
               opacity: blinkAnim,
             },
           ]}
@@ -190,13 +165,14 @@ export function Marketplace2ScreenOverlay({
         </Animated.View>
       </TouchableOpacity>
       <View
-        tw="absolute left-5 top-48 w-[90%] h-auto bg-white p-3 rounded-md z-30"
+        tw="absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={[
           {
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
             shadowRadius: 4,
+            top: mask.y + 120,
           },
         ]}
       >
@@ -219,14 +195,7 @@ export function Marketplace2ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-red-700"
           >
@@ -238,9 +207,10 @@ export function Marketplace2ScreenOverlay({
   );
 }
 
-export function ShoppingCartScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function ShoppingCartScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   return (
@@ -263,13 +233,8 @@ export function ShoppingCartScreenOverlay({ next, goTo, stop }: IOverlayComponen
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Marketplace', {
+              dashboardNavigation.navigate('Marketplace', {
                 screen: 'MarketplaceRoot',
-                params: {
-                  screen: 'Marketplace',
-                },
               });
               goTo(EMarketplaceTutorialSteps.MARKETPLACE_STEP_2);
             }}
@@ -282,15 +247,10 @@ export function ShoppingCartScreenOverlay({ next, goTo, stop }: IOverlayComponen
             icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Marketplace', {
+              dashboardNavigation.navigate('Marketplace', {
                 screen: 'MarketplaceRoot',
-                params: {
-                  screen: 'Marketplace',
-                },
               });
-              next();
+              goTo(EMarketplaceTutorialSteps.MARKETPLACE_STEP_3);
             }}
             labelStyle="text-green-primary"
             contentStyle="flex flex-row-reverse"
@@ -303,14 +263,7 @@ export function ShoppingCartScreenOverlay({ next, goTo, stop }: IOverlayComponen
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-red-700"
           >
@@ -330,7 +283,9 @@ export function Marketplace3ScreenOverlay({
 }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const marketplaceTabsNavigation =
+    useNavigation<NativeStackNavigationProp<MarketplaceTabsRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const colors = useTailwindColors();
 
   const blinkAnim = useBlinkAnimation();
@@ -338,21 +293,15 @@ export function Marketplace3ScreenOverlay({
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn(
-          'absolute w-[30%] h-[8%]',
-          LanguageManager.isRTL ? 'left-[35%]' : 'right-[35%]',
-          Platform.OS === 'ios'
-            ? screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-16'
-              : 'top-24'
-            : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-20'
-              : 'top-28'
-        )}
+        tw="absolute w-[30%] h-[8%]"
+        style={{
+          top: mask.y,
+          left: mask.x,
+          height: mask.height,
+          width: mask.width,
+        }}
         onPress={() => {
-          // eslint-disable-next-line
-          // @ts-ignore
-          rootNavigation.navigate('MyOrders');
+          marketplaceTabsNavigation.navigate('MyOrders');
           next();
         }}
       >
@@ -360,7 +309,7 @@ export function Marketplace3ScreenOverlay({
           tw={LanguageManager.isRTL ? 'left-[-25%]' : 'right-[-25%]'}
           style={[
             {
-              top: mask.y + mask.height - 100,
+              top: mask.height,
               opacity: blinkAnim,
             },
           ]}
@@ -387,9 +336,7 @@ export function Marketplace3ScreenOverlay({
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('ShoppingCart');
+              rootNavigation.navigate('ShoppingCart', { screen: 'Root' });
               goTo(EMarketplaceTutorialSteps.SHOPPING_CART_STEP);
             }}
             labelStyle="text-green-primary"
@@ -402,14 +349,7 @@ export function Marketplace3ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-red-700"
           >
@@ -425,6 +365,7 @@ export function MyOrdersScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
   const [user] = useAuthStore(useShallow((store) => [store.user]));
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   return (
@@ -440,20 +381,15 @@ export function MyOrdersScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
           },
         ]}
       >
-        <Text tw="text-base">{t('tutorial.steps.shoppingCart')}</Text>
+        <Text tw="text-base">{t('tutorial.steps.myOrders')}</Text>
 
         <View tw="flex flex-row flex-wrap justify-center items-center mt-2">
           <Button
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Marketplace', {
+              dashboardNavigation.navigate('Marketplace', {
                 screen: 'MarketplaceRoot',
-                params: {
-                  screen: 'Marketplace',
-                },
               });
               goTo(EMarketplaceTutorialSteps.MARKETPLACE_STEP_3);
             }}
@@ -469,14 +405,17 @@ export function MyOrdersScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
               switch (user?.role) {
                 case ERoles.OPERATOR:
                 case ERoles.COOLING_USER:
-                  rootNavigation.navigate('ProduceDetailsStack', {
-                    screen: 'Root',
-                    params: MOCKED_PRODUCE_DETAILS_DATA,
+                  dashboardNavigation.navigate('Dashboard', {
+                    screen: 'ProduceDetailsStack',
+                    params: {
+                      screen: 'Root',
+                      params: MOCKED_PRODUCE_DETAILS_DATA,
+                    },
                   });
                   goTo(EMarketplaceTutorialSteps.LIST_FOR_SALE_STEP);
                   break;
                 default:
-                  rootNavigation.navigate('RootMainTabStack');
+                  dashboardNavigation.navigate('Dashboard');
                   goTo(ECommonTutorialSteps.FINAL_STEP);
               }
             }}
@@ -491,14 +430,7 @@ export function MyOrdersScreenOverlay({ goTo, stop }: IOverlayComponentProps) {
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-red-700"
           >
@@ -520,7 +452,9 @@ export function MarketplaceListing1ScreenOverlay({
   const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
   const [user] = useAuthStore(useShallow((store) => [store.user]));
 
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+
   const colors = useTailwindColors();
 
   const blinkAnim = useBlinkAnimation();
@@ -528,20 +462,24 @@ export function MarketplaceListing1ScreenOverlay({
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn('absolute w-full h-[7%] items-end z-10')}
+        tw="absolute items-end z-10"
         style={{
-          top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 50 : 60),
+          top: mask.y,
+          height: mask.height,
+          width: mask.width,
+          left: mask.x,
         }}
         onPress={() => {
-          rootNavigation.navigate(
-            // eslint-disable-next-line
-            // @ts-ignore
-            'EditCrateWeightAndPricing',
-            {
-              ...MOCKED_PRODUCE_DETAILS_DATA,
-              companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
-            }
-          );
+          dashboardNavigation.navigate('Dashboard', {
+            screen: 'ProduceDetailsStack',
+            params: {
+              screen: 'EditCrateWeightAndPricing',
+              params: {
+                ...MOCKED_PRODUCE_DETAILS_DATA,
+                companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
+              },
+            },
+          });
           next();
         }}
       >
@@ -582,15 +520,18 @@ export function MarketplaceListing1ScreenOverlay({
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Marketplace', {
+              dashboardNavigation.navigate('Marketplace', {
                 screen: 'MarketplaceRoot',
+                // eslint-disable-next-line
+                // @ts-ignore
                 params: {
                   screen: 'MyOrders',
                 },
               });
-              goTo(EMarketplaceTutorialSteps.MY_ORDERS_STEP);
+
+              setTimeout(() => {
+                goTo(EMarketplaceTutorialSteps.MY_ORDERS_STEP);
+              }, 150);
             }}
             labelStyle="text-green-primary"
           >
@@ -602,14 +543,7 @@ export function MarketplaceListing1ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-red-700"
           >
@@ -630,6 +564,7 @@ export function MarketplaceListing2ScreenOverlay({
   const { t } = useTranslationUtils();
   const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
 
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const colors = useTailwindColors();
 
@@ -638,9 +573,12 @@ export function MarketplaceListing2ScreenOverlay({
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw="absolute w-[45%] h-[5%] items-start self-end z-10"
+        tw="absolute items-start z-10"
         style={{
           top: mask.y,
+          width: mask.width,
+          height: mask.height,
+          ...(LanguageManager.isRTL ? { right: mask.x + 15 } : { left: mask.x }),
         }}
         onPress={() => {
           onPressMask?.();
@@ -683,9 +621,12 @@ export function MarketplaceListing2ScreenOverlay({
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              rootNavigation.navigate('ProduceDetailsStack', {
-                screen: 'Root',
-                params: MOCKED_PRODUCE_DETAILS_DATA,
+              dashboardNavigation.navigate('Dashboard', {
+                screen: 'ProduceDetailsStack',
+                params: {
+                  screen: 'Root',
+                  params: MOCKED_PRODUCE_DETAILS_DATA,
+                },
               });
               goTo(EMarketplaceTutorialSteps.LIST_FOR_SALE_STEP);
             }}
@@ -699,14 +640,7 @@ export function MarketplaceListing2ScreenOverlay({
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-red-700"
           >
@@ -722,27 +656,11 @@ export function MarketplaceListing3ScreenOverlay({ goTo, stop }: IOverlayCompone
   const { t } = useTranslationUtils();
   const [toggleTutorial] = useTutorialStore(useShallow((store) => [store.toggleTutorial]));
 
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
-  const colors = useTailwindColors();
 
   return (
     <View tw="h-full w-full absolute">
-      <Icon
-        name="cursor-pointer"
-        size={40}
-        color={colors.green.primary}
-        style={{
-          top:
-            screenHeight > MEDIUM_SCREEN_THRESHOLD
-              ? '60%'
-              : screenHeight <= MEDIUM_SCREEN_THRESHOLD && screenHeight >= SMALL_SCREEN_THRESHOLD
-                ? '70%'
-                : '75%',
-          left: LanguageManager.isRTL ? undefined : '50%',
-          right: LanguageManager.isRTL ? '50%' : undefined,
-        }}
-      />
-
       <View
         tw={cn(
           'absolute left-2.5 w-[95%] h-auto bg-white p-3 rounded-md z-30',
@@ -766,21 +684,24 @@ export function MarketplaceListing3ScreenOverlay({ goTo, stop }: IOverlayCompone
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              rootNavigation.navigate('ProduceDetailsStack', {
-                screen: 'EditCrateWeightAndPricing',
+              dashboardNavigation.navigate('Dashboard', {
+                screen: 'ProduceDetailsStack',
                 params: {
-                  ...MOCKED_PRODUCE_DETAILS_DATA,
-                  produce: {
-                    ...MOCKED_PRODUCE_DETAILS_DATA.produce,
-                    checkedInCrates: [
-                      {
-                        ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[0],
-                        listedInTheMarketplace: false,
-                      },
-                      { ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[1] },
-                    ],
+                  screen: 'EditCrateWeightAndPricing',
+                  params: {
+                    ...MOCKED_PRODUCE_DETAILS_DATA,
+                    produce: {
+                      ...MOCKED_PRODUCE_DETAILS_DATA.produce,
+                      checkedInCrates: [
+                        {
+                          ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[0],
+                          listedInTheMarketplace: false,
+                        },
+                        { ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[1] },
+                      ],
+                    },
+                    companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
                   },
-                  companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
                 },
               });
               goTo(EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_STEP);
@@ -808,14 +729,7 @@ export function MarketplaceListing3ScreenOverlay({ goTo, stop }: IOverlayCompone
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('RootMainTabStack');
             }}
             labelStyle="text-red-700"
           >

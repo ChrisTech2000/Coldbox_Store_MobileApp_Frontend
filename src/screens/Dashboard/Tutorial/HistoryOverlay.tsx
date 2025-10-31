@@ -5,10 +5,11 @@ import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
-import { DashboardRoutes } from '#navigation/Dashboard';
+import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
+
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
@@ -18,7 +19,7 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -45,9 +46,7 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.COOLING_USER) {
-                // eslint-disable-next-line
-                // @ts-ignore
-                rootNavigation.navigate('RootMainTabStack');
+                dashboardNavigation.navigate('Dashboard', { screen: 'RootMainTabStack' });
               }
               goTo(ECommonTutorialSteps.MORE_STEP);
             }}
@@ -61,14 +60,10 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
             mode="text"
             onPress={() => {
               if (user?.role === ERoles.COOLING_USER) {
-                // eslint-disable-next-line
-                // @ts-ignore
-                rootNavigation.navigate('CoolingUnits', { screen: 'Maps' });
+                dashboardNavigation.navigate('CoolingUnits', { screen: 'Maps' });
                 goTo(EFarmerTutorialSteps.COOLING_UNITS_FARMER_STEP);
               } else {
-                // eslint-disable-next-line
-                // @ts-ignore
-                rootNavigation.navigate('CoolingUnits', { screen: 'Planner' });
+                dashboardNavigation.navigate('CoolingUnits', { screen: 'Planner' });
                 next();
               }
             }}
@@ -81,14 +76,7 @@ export function HistoryOverlay({ next, goTo, stop }: IOverlayComponentProps) {
           <Button
             mode="text"
             onPress={() => {
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                // eslint-disable-next-line
-                // @ts-ignore
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              dashboardNavigation.navigate('Dashboard', { screen: 'RootMainTabStack' });
               stop();
               toggleTutorial(false);
             }}

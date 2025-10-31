@@ -10,7 +10,6 @@ import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
 import { CoolingUnitsTabsRoutes } from '#navigation/Dashboard/Main/CoolingUnitsTabs';
-import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
@@ -26,6 +25,7 @@ import {
   ECommonTutorialSteps,
   EFarmerTutorialSteps,
   EMarketplaceTutorialSteps,
+  EOperatorTutorialSteps,
 } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
@@ -128,14 +128,7 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-red-700"
           >
@@ -147,10 +140,10 @@ export function CoolingUnitsOverlay({ next, stop, goTo }: IOverlayComponentProps
   );
 }
 
-export function RoomConditionsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function RoomConditionsOverlay({ goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
-  const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
@@ -189,9 +182,12 @@ export function RoomConditionsOverlay({ next, goTo, stop }: IOverlayComponentPro
             icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
-              rootNavigation.navigate('RootMainTabStack');
-              emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
-              next();
+              goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_1);
+              rootNavigation.navigate('Dashboard', { screen: 'RootMainTabStack' });
+
+              setTimeout(() => {
+                emitter.emit(APP_EVENTS.DISPATCH_OPEN_OPERATOR_ACTIONS);
+              }, 100);
             }}
             labelStyle="text-green-primary"
             contentStyle="flex flex-row-reverse"
@@ -204,14 +200,7 @@ export function RoomConditionsOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-red-700"
           >

@@ -85,36 +85,33 @@ export const TutorialFinishedMessageOverlay = ({
                   switch (user?.role) {
                     case ERoles.OPERATOR:
                     case ERoles.COOLING_USER:
-                      // eslint-disable-next-line
-                      // @ts-ignore
-                      rootNavigation.navigate('ProduceDetailsStack', {
-                        screen: 'EditCrateWeightAndPricing',
+                      rootNavigation.navigate('Dashboard', {
+                        screen: 'ProduceDetailsStack',
                         params: {
-                          ...MOCKED_PRODUCE_DETAILS_DATA,
-                          produce: {
-                            ...MOCKED_PRODUCE_DETAILS_DATA.produce,
-                            checkedInCrates: [
-                              {
-                                ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[0],
-                                listedInTheMarketplace: true,
-                              },
-                              { ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[1] },
-                            ],
+                          screen: 'EditCrateWeightAndPricing',
+                          params: {
+                            ...MOCKED_PRODUCE_DETAILS_DATA,
+                            produce: {
+                              ...MOCKED_PRODUCE_DETAILS_DATA.produce,
+                              checkedInCrates: [
+                                {
+                                  ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[0],
+                                  listedInTheMarketplace: true,
+                                },
+                                { ...MOCKED_PRODUCE_DETAILS_DATA.produce.checkedInCrates[1] },
+                              ],
+                            },
+                            companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
                           },
-                          companyCurrency: MOCKED_PRODUCE_DETAILS_DATA.currency,
                         },
                       });
-                      goTo(EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_PRICE_STEP);
+
+                      setTimeout(() => {
+                        goTo(EMarketplaceTutorialSteps.COMMON_LIST_FOR_SALE_PRICE_STEP);
+                      }, 150);
                       break;
                     default:
-                      rootNavigation.navigate('Marketplace', {
-                        screen: 'MarketplaceRoot',
-                        // eslint-disable-next-line
-                        // @ts-ignore
-                        params: {
-                          screen: 'MyOrders',
-                        },
-                      });
+                      rootNavigation.navigate('Marketplace');
                       goTo(EMarketplaceTutorialSteps.MY_ORDERS_STEP);
                   }
                   return;
@@ -137,12 +134,17 @@ export const TutorialFinishedMessageOverlay = ({
                     },
                   });
 
-                  goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_3);
+                  setTimeout(() => {
+                    goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_3);
+                  }, 150);
                 } else if (user?.role === ERoles.EMPLOYEE) {
                   goTo(EEmployeeTutorialSteps.EMPLOYEE_COOLING_UNITS_STEP);
                 } else {
                   rootNavigation.navigate('MarketPrice');
-                  goTo(EFarmerTutorialSteps.MARKET_PRICE);
+
+                  setTimeout(() => {
+                    goTo(EFarmerTutorialSteps.MARKET_PRICE);
+                  }, 150);
                 }
               }}
               labelStyle="text-green-primary"

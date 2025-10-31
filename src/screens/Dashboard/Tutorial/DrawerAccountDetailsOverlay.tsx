@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Animated, Dimensions, Platform, View } from 'react-native';
+import { Animated, Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -12,36 +12,38 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { cn } from '#ui/lib/cn';
 
 import { ECommonTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { DashboardRoutes } from 'navigation/Dashboard';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerAccountDetailsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function DrawerAccountDetailsOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
 
   return (
     <View tw="h-full w-full absolute">
       <Touchable
-        tw={cn(
-          'absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2 z-10',
-          Platform.OS === 'ios'
-            ? 'top-[15.5%]'
-            : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-[16.5%]'
-              : 'top-[12.5%]'
-        )}
+        tw="absolute z-10"
+        style={{
+          top: mask.y,
+          height: mask.height,
+          width: mask.width,
+        }}
         onPress={() => {
-          // eslint-disable-next-line
-          // @ts-ignore
-          navigation.navigate('AccountDetails');
+          navigation.navigate('AccountDetails', { screen: 'Root' });
           next();
         }}
       />
@@ -49,16 +51,9 @@ export function DrawerAccountDetailsOverlay({ next, goTo, stop }: IOverlayCompon
       <Animated.View
         style={[
           {
-            top:
-              Platform.OS === 'ios'
-                ? screenHeight <= SMALL_SCREEN_THRESHOLD
-                  ? '16%'
-                  : '17%'
-                : screenHeight <= SMALL_SCREEN_THRESHOLD
-                  ? '17%'
-                  : '13.5%',
-            left: LanguageManager.isRTL ? undefined : '40%',
-            right: LanguageManager.isRTL ? '40%' : undefined,
+            top: mask.y + 10,
+            left: LanguageManager.isRTL ? undefined : mask.x + mask.width / 2,
+            right: LanguageManager.isRTL ? mask.x + 0.25 * mask.width : undefined,
             opacity: blinkAnim,
           },
         ]}

@@ -1,7 +1,7 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { Dimensions, Platform, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 
@@ -17,7 +17,12 @@ import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function CoolingUserSurveyOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function CoolingUserSurveyOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -26,16 +31,11 @@ export function CoolingUserSurveyOverlay({ next, goTo, stop }: IOverlayComponent
     <View tw="h-full w-full absolute">
       <View>
         <View
-          tw={cn(
-            'absolute w-full h-auto bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? Platform.OS === 'ios'
-                ? 'top-64'
-                : 'top-60'
-              : Platform.OS === 'ios'
-                ? 'top-72'
-                : 'top-64'
-          )}
+          tw="absolute bg-white"
+          style={{
+            top: mask.y,
+            height: mask.height,
+          }}
         >
           <List.Item
             tw="pl-4 pr-7 py-2 w-[90%]"

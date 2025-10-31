@@ -166,7 +166,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       farmerId: farmerId as number,
     },
     {
-      skip: !farmerId || !coolingUnit?.id,
+      skip: !farmerId || !coolingUnit?.id || isTutorialOn,
       defaultData: [],
     }
   );
@@ -183,7 +183,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       coolingUnit: coolingUnit?.id as number,
     },
     {
-      skip: user?.role === ERoles.COOLING_USER || !coolingUnit?.id,
+      skip: user?.role === ERoles.COOLING_USER || !coolingUnit?.id || isTutorialOn,
       defaultData: [],
     }
   );

@@ -54,16 +54,21 @@ export function MoreNavigationOverlay({ next, goTo, stop }: IOverlayComponentPro
                 // eslint-disable-next-line
                 // @ts-ignore
                 setProduces(MOCKED_CHECK_IN_DATA);
+                goTo(EOperatorTutorialSteps.CHECK_IN_STEP_3);
+
                 // eslint-disable-next-line
                 // @ts-ignore
-                rootNavigation.navigate('CheckInStack', {
-                  screen: 'CheckIn',
-                  // eslint-disable-next-line
-                  // @ts-ignore
-                  params: { user: MOCKED_USER, coolingUnit: MOCKED_COOLING_UNIT },
+                rootNavigation.navigate('Dashboard', {
+                  screen: 'CheckInStack',
+                  params: {
+                    screen: 'CheckIn',
+                    params: {
+                      user: MOCKED_USER,
+                      coolingUnit: MOCKED_COOLING_UNIT,
+                      isTutorial: true,
+                    },
+                  },
                 });
-
-                goTo(EOperatorTutorialSteps.CHECK_IN_STEP_3);
               } else if (user?.role === ERoles.COOLING_USER) {
                 goTo(EFarmerTutorialSteps.DASHBOARD_STEP_6);
               }

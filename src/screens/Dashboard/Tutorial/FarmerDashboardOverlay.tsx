@@ -85,16 +85,14 @@ export function Dashboard2Overlay({ next, goTo, stop }: IOverlayComponentProps) 
   return (
     <View tw="h-full w-full absolute">
       <View
-        tw={cn(
-          'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'bottom-6' : 'bottom-32'
-        )}
+        tw="absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={[
           {
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
             shadowRadius: 4,
+            top: 90,
           },
         ]}
       >
@@ -312,7 +310,7 @@ export function Dashboard5Overlay({ next, goTo, stop }: IOverlayComponentProps) 
   );
 }
 
-export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
+export function Dashboard6Overlay({ goTo, stop, step: { mask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -329,7 +327,7 @@ export function Dashboard6Overlay({ goTo, stop }: IOverlayComponentProps) {
           style={[
             {
               position: 'absolute',
-              top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 30 : 70,
+              top: mask.y + 0.5 * mask.height,
               left: screenHeight <= SMALL_SCREEN_THRESHOLD ? '78%' : '80%',
               transform: [{ rotate: '90deg' }, ...(isRTL ? [{ scaleY: -1 }] : [])],
             },

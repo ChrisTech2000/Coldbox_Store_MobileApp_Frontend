@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Platform, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -17,7 +17,12 @@ import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function PersonalDetailsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function PersonalDetailsOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
@@ -26,14 +31,11 @@ export function PersonalDetailsOverlay({ next, goTo, stop }: IOverlayComponentPr
     <View tw="h-full w-full absolute">
       <View>
         <View
-          tw={cn(
-            'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-36'
-              : Platform.OS === 'ios'
-                ? 'top-44'
-                : 'top-40'
-          )}
+          tw="absolute bg-white"
+          style={{
+            top: mask.y,
+            height: mask.height,
+          }}
         >
           <List.Item
             tw="pl-4 pr-7 py-2 w-[90%]"

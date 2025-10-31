@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
-import type { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
   type MaterialTopTabNavigationOptions,
+  type MaterialTopTabNavigationProp,
+  type MaterialTopTabScreenProps,
 } from '@react-navigation/material-top-tabs';
 import type { RouteProp } from '@react-navigation/native';
 import React, { useCallback } from 'react';
@@ -30,11 +31,11 @@ export type MarketplaceTabsRoutes = {
 
 export type MarketplaceTabsRoutePaths = keyof MarketplaceTabsRoutes;
 export type MarketplaceTabsRouteProps<Path extends MarketplaceTabsRoutePaths> =
-  BottomTabScreenProps<MarketplaceTabsRoutes, Path>;
+  MaterialTopTabScreenProps<MarketplaceTabsRoutes, Path>;
 
 type ScreenOptions = (props: {
   route: RouteProp<MarketplaceTabsRoutes, MarketplaceTabsRoutePaths>;
-  navigation: BottomTabNavigationProp<MarketplaceTabsRoutes, MarketplaceTabsRoutePaths>;
+  navigation: MaterialTopTabNavigationProp<MarketplaceTabsRoutes, MarketplaceTabsRoutePaths>;
 }) => MaterialTopTabNavigationOptions;
 
 const TAB_HEADERS: Record<MarketplaceTabsRoutePaths, TranslationPaths | undefined> = {

@@ -64,19 +64,19 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
     } satisfies DetailsSectionParams;
   }
 
-  useWalkthroughStep({
+  const { onLayout: onLocalizationPreferencesLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_LOCALIZATION_PREFERENCES_STEP,
     OverlayComponent: LocalizationPreferencesOverlay,
     fullScreen: true,
   });
 
-  useWalkthroughStep({
+  const { onLayout: onPersonalDetailsLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_PERSONAL_DETAILS,
     OverlayComponent: PersonalDetailsOverlay,
     fullScreen: true,
   });
 
-  useWalkthroughStep({
+  const { onLayout: onSurveyLayout } = useWalkthroughStep({
     number: EFarmerTutorialSteps.GO_TO_COOLING_USERS_SURVEY_STEP,
     OverlayComponent: CoolingUserSurveyOverlay,
     fullScreen: true,
@@ -97,6 +97,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
               <List.Item
                 tw="px-0 py-2"
                 title={undefined}
+                onLayout={onPersonalDetailsLayout}
                 left={() => (
                   <Text tw="text-base w-[80%]">{t('navigation.dashboard.PersonalDetails')}</Text>
                 )}
@@ -111,6 +112,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
             </View>
             <View>
               <List.Item
+                onLayout={onLocalizationPreferencesLayout}
                 tw="px-0 py-2"
                 title={undefined}
                 left={() => (
@@ -132,6 +134,7 @@ function AccountDetails(props: AccountDetailsRouteProps<'Root'>) {
                 <List.Item
                   tw="p-0 py-2"
                   title={undefined}
+                  onLayout={onSurveyLayout}
                   left={() => (
                     <Text tw="text-base w-[80%]" numberOfLines={1}>
                       {t('navigation.history.BaseSurvey')}

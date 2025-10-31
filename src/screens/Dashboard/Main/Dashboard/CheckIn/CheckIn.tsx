@@ -51,7 +51,7 @@ import { formatCurrencyWithSymbol, processMarketplaceCrateListing } from './util
 const screenWidth = Dimensions.get('window').width;
 
 function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
-  const { user, coolingUnit } = route.params;
+  const { user, coolingUnit, isTutorial = false } = route.params;
 
   const { t } = useTranslationUtils();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
@@ -95,7 +95,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
     ColdtivateService.getFarmerSurveys,
     { farmerId: user.id as number },
     {
-      skip: !user.id || isTutorialActive,
+      skip: !user.id || isTutorialActive || isTutorial,
       defaultData: [],
     }
   );
