@@ -1,8 +1,22 @@
-import { EPricingType, type DashboardProduce } from '#types/global';
+import { ECoolingUnitMetric, EPricingType, type DashboardProduce } from '#types/global';
 import { Translator } from '#i18n/utils';
 
 export function generateData(produce: DashboardProduce, t: Translator) {
-  const price = produce.cratesCombinedCost || 0;
+  const dailyPrice = produce.checkedInCrates.reduce((sum, crate) => {
+    const dailyRate = crate.calculatedDailyRate || crate.pricing[0]?.dailyRate || 0;
+    const metricMultiplier =
+      crate.coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS ? crate.weight : 1;
+    return sum + dailyRate * metricMultiplier;
+  }, 0);
+
+  const pricingType =
+    produce.checkedInCrates[0]?.effectivePricingType ||
+    produce.checkedInCrates[0]?.pricing[0]?.pricingType;
+  const plannedStorageCost = !produce.plannedDays
+    ? null
+    : pricingType === EPricingType.FIXED
+      ? produce.cratesCombinedCost
+      : dailyPrice * produce.plannedDays;
 
   return [
     {
@@ -38,19 +52,19 @@ export function generateData(produce: DashboardProduce, t: Translator) {
     {
       id: 'plannedDays',
       label: t('Dashboard.ProduceDetails.plannedDays'),
-      value: produce.plannedDays,
+      value: produce.plannedDays || '-',
     },
     produce.checkedInCrates[0].pricing[0].pricingType === EPricingType.PERIODICITY
       ? {
           id: 'pricePerDay',
           label: t('Dashboard.ProduceDetails.pricePerDay'),
-          value: produce.checkedInCrates[0].pricing[0].dailyRate,
+          value: dailyPrice,
         }
       : {},
     {
       id: 'price',
       label: t('Dashboard.ProduceDetails.plannedStorageCost'),
-      value: price,
+      value: plannedStorageCost !== null ? plannedStorageCost : '-',
     },
   ];
 }

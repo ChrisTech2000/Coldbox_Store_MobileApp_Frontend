@@ -61,7 +61,9 @@ export function CoolingUsersModalOverlay({ next, goTo, stop }: IOverlayComponent
               emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, false);
               // eslint-disable-next-line
               // @ts-ignore
-              rootNavigation.navigate('RootMainTabStack');
+              rootNavigation.navigate('Main', {
+                screen: 'Dashboard',
+              });
               next();
             }}
             labelStyle="text-green-primary"

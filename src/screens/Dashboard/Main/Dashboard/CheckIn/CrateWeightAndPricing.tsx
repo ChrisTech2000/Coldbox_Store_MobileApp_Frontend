@@ -1,10 +1,11 @@
 import { useIsFocused } from '@react-navigation/native';
+import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Dimensions, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Pressable } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Divider, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 import { create } from 'zustand';
@@ -18,7 +19,6 @@ import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
-import { FlashList } from '@shopify/flash-list';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -90,7 +90,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
 
   const isUserWithoutPhone = user?.user.firstName === USER_WITHOUT_PHONE && !user.user.phone;
 
-  const { data: eligibility, refetch } = useApiCall(
+  const {
+    data: eligibility,
+    isLoading,
+    refetch,
+  } = useApiCall(
     'checkMarketplaceEligibility',
     MarketplaceService.checkMarketplaceEligibility,
     {
@@ -175,6 +179,14 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
       !form.formState.isDirty ||
       (allowedToSetPricing && !parsedPrice));
 
+  if (isLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
+
   return (
     <React.Fragment>
       <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
@@ -215,7 +227,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               control={form.control}
               name="applyToAll"
               render={({ field: { value, onChange } }) => (
-                <TouchableOpacity
+                <Pressable
                   tw="pb-2 px-2 flex flex-row items-center justify-between"
                   disabled={!allowedToSetPricing}
                   onPress={() => {
@@ -230,7 +242,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                     {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.applyAll')}
                   </Text>
                   <Checkbox status={value ? 'checked' : 'unchecked'} />
-                </TouchableOpacity>
+                </Pressable>
               )}
             />
             <Divider tw="bg-gray-400" />
@@ -336,7 +348,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                       control={form.control}
                       name={`crates.${index}.isSellable`}
                       render={({ field: { value, onChange } }) => (
-                        <TouchableOpacity
+                        <Pressable
                           tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1 w-30"
                           onPress={() => {
                             if (!applyToAll) {
@@ -364,7 +376,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                               'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list'
                             )}
                           </Text>
-                        </TouchableOpacity>
+                        </Pressable>
                       )}
                     />
                   </RBAC.ProtectedResource>
@@ -438,12 +450,12 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                   'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.potentialSellingPrice'
                 )}
               </Text>
-              <TouchableOpacity
+              <Pressable
                 onPress={() => setInfoVisible(true)}
                 disabled={form.formState.isSubmitting}
               >
                 <Icon name="information-outline" size={20} />
-              </TouchableOpacity>
+              </Pressable>
             </View>
 
             <Text tw="text-lg text-green-primary">

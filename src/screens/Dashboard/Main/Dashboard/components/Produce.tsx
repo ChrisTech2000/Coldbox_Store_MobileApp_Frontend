@@ -11,7 +11,13 @@ import MineCart from '#assets/icons/mine-cart.svg';
 import InAppNotifications from '#common/InAppNotifications';
 import { API_BASE_URL } from '#constants/environment';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
-import { type DashboardProduce, EPricingType, ERoles, type Farmer } from '#types/global';
+import {
+  type DashboardProduce,
+  ECoolingUnitMetric,
+  EPricingType,
+  ERoles,
+  type Farmer,
+} from '#types/global';
 
 import RBAC from '#common/RBAC';
 import { Text } from '#ui/components/Text';
@@ -39,10 +45,24 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
   }, []);
 
   const getPricing = useCallback((produce: DashboardProduce, currency: string) => {
-    const totalPrice = produce.cratesCombinedCost || 0;
     const isDailyRate =
       produce.checkedInCrates[0]?.effectivePricingType === EPricingType.PERIODICITY;
-    return `${totalPrice}${currencies.find((c) => c.code === currency)?.symbol ?? ''}${isDailyRate ? ` / ${t('Dashboard.CrateManagement.CheckOut.day')}` : ''}`;
+
+    let displayPrice;
+
+    if (isDailyRate) {
+      displayPrice =
+        produce.checkedInCrates?.reduce((sum, crate) => {
+          const dailyRate = crate.calculatedDailyRate || 0;
+          const metricMultiplier =
+            crate.coolingUnitMetric === ECoolingUnitMetric.KILOGRAMS ? crate.weight : 1;
+          return sum + dailyRate * metricMultiplier;
+        }, 0) || 0;
+    } else {
+      displayPrice = produce.cratesCombinedCost || 0;
+    }
+
+    return `${displayPrice}${currencies.find((c) => c.code === currency)?.symbol ?? ''}${isDailyRate ? ` / ${t('Dashboard.CrateManagement.CheckOut.day')}` : ''}`;
   }, []);
 
   const copyToClipboard = useCallback(

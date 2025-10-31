@@ -35,6 +35,7 @@ export type SignInResponse = {
 
 export type RefreshSessionResponse = {
   access: string;
+  refresh?: string; // Optional because backend returns new refresh token when ROTATE_REFRESH_TOKENS is enabled
 };
 
 export type SignUpAsCompanyResponse = {

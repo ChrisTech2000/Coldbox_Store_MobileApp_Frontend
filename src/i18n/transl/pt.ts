@@ -74,7 +74,7 @@ export default {
       Planner: 'Planeador',
       RoomConditions: 'Condições da Sala',
       CratesInfo: 'Informação das Caixas',
-      Dashboard: 'Dashboard',
+      Dashboard: 'Painel',
       History: 'Histórico',
       MarketPrice: 'Preço das Culturas',
       CoolingUnits: 'Unidades de Refrigeração',
@@ -355,11 +355,11 @@ export default {
     },
     emptyGeneral: 'No momento, não há dados disponíveis.',
     emptyCoolingUser:
-      'Os itens em armazenamento aparecerão no Dashboard quando realizar pelo menos um check-in em qualquer sala.',
+      'Os itens em armazenamento aparecerão no Painel quando realizar pelo menos um check-in em qualquer sala.',
     noCompanyAvailable: 'Nenhuma empresa disponível',
     noCoolingUnitAvailable: 'Nenhuma unidade de refrigeração disponível',
     noLocationsAvailable:
-      'Bem-vindo ao Coldtivate. Comece a adicionar localizações à sua aplicação no Dashboard.',
+      'Bem-vindo ao Coldtivate. Comece a adicionar localizações à sua aplicação no Painel.',
     coolingUserNavigateToMarketplace:
       'Interessado em comprar produtos armazenados em salas de refrigeração? Visite a aba do Marketplace, em baixo, à direita!',
     MarketPrice: {
@@ -831,7 +831,7 @@ export default {
           coolingUnit: 'Unidade de refrigeração',
         },
         actions: {
-          downloadFarmers: 'Descarregar dados do Dashboard dos agricultores',
+          downloadFarmers: 'Descarregar dados do Painel dos agricultores',
           completeLater: 'Completar mais tarde',
         },
       },
@@ -958,7 +958,7 @@ export default {
       UsageAnalysis: {
         dateSelectionLabel: 'Selecione os dias:',
         empty:
-          'Os check-ins e check-outs aparecerão no Dashboard quando fizer pelo menos um check-in em qualquer sala.',
+          'Os check-ins e check-outs aparecerão no Painel quando fizer pelo menos um check-in em qualquer sala.',
         downloadDataButton: 'Baixar dados',
         modal: {
           title: 'Definir configuração',
@@ -1157,7 +1157,7 @@ export default {
       cropsLabel: '{{crop}} e mais {{amount}}',
       priceLabel: 'Preço',
       empty:
-        'Os check-ins e check-outs aparecerão no Dashboard quando realizar pelo menos um check-in em qualquer sala.',
+        'Os check-ins e check-outs aparecerão no Painel quando realizar pelo menos um check-in em qualquer sala.',
       sortMenuOptions: {
         cropType: 'Tipo de produto',
         movementDate: 'Data de movimentação (primeiro para mais recente)',
@@ -1541,12 +1541,12 @@ export default {
       'Bem vido ao Coldtivate! Este tutorial vai ajudar a compreender o funcionamento da aplicação.',
     quit: 'Sair do tutorial',
     congratulations:
-      'Parabéns! Completou o tutorial! Volte ao Dashboard para começar a usar a aplicação.',
+      'Parabéns! Completou o tutorial! Volte ao Painel para começar a usar a aplicação.',
     prev: 'Etapa anterior',
     next: 'Próximo',
     start: 'Iniciar tutorial',
-    final: 'Parabéns! Completou o tutorial! Volte ao Dashboard para começar a usar a aplicação.',
-    backToDashboard: 'Voltar ao Dashboard',
+    final: 'Parabéns! Completou o tutorial! Volte ao Painel para começar a usar a aplicação.',
+    backToDashboard: 'Voltar ao Painel',
     steps: {
       openDrawer:
         'No canto superior esquerdo, encontrará um menu com as principais funcionalidades. Vá em frente e clique nele.',
@@ -1573,7 +1573,7 @@ export default {
       checkIn2:
         'Após ter concluído todas as etapas, verá uma visão geral das caixas que está prestes a registrar na sala.',
       checkIn3:
-        "Se estiver satisfeito, pode clicar em 'Confirmar' e as novas caixas serão adicionadas ao Dashboard.",
+        "Se estiver satisfeito, pode clicar em 'Confirmar' e as novas caixas serão adicionadas ao Painel.",
       history: "Ao clicar em 'Histórico', pode ver todos os movimentos na sala.",
       coolingUnits:
         '"Unidades de Refrigeração". Clique para visualizar a capacidade das unidades de refrigeração nos próximos 7 dias (na aba Planeador) e a temperatura da sala (na aba Condições da Sala).',
@@ -1594,7 +1594,7 @@ export default {
       addEmployeesOperators:
         'Pode adicionar Funcionários e Operadores Registrados através da tela de Gestão. Para adicionar qualquer um dos papéis, necessitará do número de telefone deles. Eles receberão um SMS com um link de convite. Um número de telefone pode ser usado para apenas um utilizador.',
       employeeCoolingUnitsStep:
-        'Uma vez que tenha selecionado uma unidade de refrigeração, verá uma visão geral de: os check-ins na aba "Dashboard", os movimentos na aba "Histórico" e a taxa de utilização planejada e a temperatura da sala na aba "Unidades de Refrigeração".',
+        'Uma vez que tenha selecionado uma unidade de refrigeração, verá uma visão geral de: os check-ins na aba "Painel", os movimentos na aba "Histórico" e a taxa de utilização planejada e a temperatura da sala na aba "Unidades de Refrigeração".',
       localizationPreferences:
         'Pode alterar o idioma da aplicação selecionando "Preferências de Localização". Certifique-se de clicar no botão "Salvar alterações" para que o idioma seja alterado!',
       accountDetailsNavigation:
@@ -1607,13 +1607,13 @@ export default {
         'No menu, pode encontrar o "Centro de Conhecimento", que contém conselhos sobre quanto tempo diferentes culturas podem ser armazenadas e sua temperatura ideal. Confira para entender como a câmara fria pode ajudá-lo a preservar a qualidade de diferentes frutas e vegetais!',
       faq: 'No menu, também pode encontrar as Perguntas Frequentes (FAQ). Recomendamos que as consulte para aprender mais sobre a aplicação e os benefícios de armazenar sua produção nas câmaras frias.',
       dashboardStep1:
-        'Uma vez que o operador tenha concluído um check-in para si, poderá ver a produção armazenada na sala na seção "Dashboard". Cada cartão contém um conjunto de caixas do mesmo tipo de cultura que foram registradas juntas.',
+        'Uma vez que o operador tenha concluído um check-in para si, poderá ver a produção armazenada na sala na seção "Painel". Cada cartão contém um conjunto de caixas do mesmo tipo de cultura que foram registradas juntas.',
       dashboardStep2:
         'Cada cartão no dashboard contém informações sobre: o tipo de cultura, o número de caixas armazenadas, há quantos dias elas já estão armazenadas, o preço diário (para todas as caixas juntas) e o ID do check-in.',
       dashboardStep3:
         'O número colorido de dias indica o "Tempo para Retirada" (TTPU), que significa quantos dias sua produção ainda estará boa, se permanecer refrigerada. Uma cor vermelha significa que a produção está perdendo qualidade e deve ser retirada o mais rápido possível.',
       dashboardStep4:
-        'Se a cor do cartão for amarela (2-5 dias restantes) ou verde (mais de 5 dias), não necessita preocupar-se com as caixas. O número de dias é recalculado várias vezes ao dia, então, certifique-se de verificar o "Dashboard" regularmente para ver como a qualidade de suas caixas na sala está a evoluir.',
+        'Se a cor do cartão for amarela (2-5 dias restantes) ou verde (mais de 5 dias), não necessita preocupar-se com as caixas. O número de dias é recalculado várias vezes ao dia, então, certifique-se de verificar o "Painel" regularmente para ver como a qualidade de suas caixas na sala está a evoluir.',
       dashboardStep5:
         'Se tiver caixas armazenadas em várias salas, pode mudar a sala que está a visualizar selecionando uma empresa e uma unidade de refrigeração no menu suspenso.',
       dashboardStep6:

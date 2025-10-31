@@ -15,22 +15,30 @@ import { cn } from '#ui/lib/cn';
 
 import { EFarmerTutorialSteps } from './utils/constants';
 import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
+import { DashboardRoutes } from 'navigation/Dashboard';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function LocalizationPreferencesOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function LocalizationPreferencesOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const mainNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   return (
     <View tw="h-full w-full absolute">
       <View>
         <View
-          tw={cn(
-            'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-44' : 'top-56'
-          )}
+          tw="absolute bg-white"
+          style={{
+            top: mask.y,
+            height: mask.height,
+          }}
         >
           <List.Item
             tw="pl-4 pr-7 py-2 w-[90%]"
@@ -63,8 +71,8 @@ export function LocalizationPreferencesOverlay({ next, goTo, stop }: IOverlayCom
               icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
               mode="text"
               onPress={() => {
-                rootNavigation.navigate('Dashboard');
-                rootNavigation.dispatch(DrawerActions.openDrawer());
+                mainNavigation.navigate('Main', { screen: 'Dashboard' });
+                mainNavigation.dispatch(DrawerActions.openDrawer());
                 goTo(EFarmerTutorialSteps.GO_TO_ACCOUNT_DETAILS_STEP);
               }}
               labelStyle="text-green-primary"
@@ -87,14 +95,8 @@ export function LocalizationPreferencesOverlay({ next, goTo, stop }: IOverlayCom
               onPress={() => {
                 stop();
                 toggleTutorial(false);
-                // eslint-disable-next-line
-                // @ts-ignore
-                rootNavigation.navigate('Main', {
-                  screen: 'Dashboard',
-                  params: {
-                    screen: 'RootMainTabStack',
-                  },
-                });
+
+                rootNavigation.navigate('Dashboard', { screen: 'RootMainTabStack' });
               }}
               labelStyle="text-red-700"
             >

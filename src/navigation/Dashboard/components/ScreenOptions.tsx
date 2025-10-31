@@ -1,6 +1,6 @@
 import React from 'react';
-import type { NavigationProp, RouteProp } from '@react-navigation/native';
-import type { DrawerNavigationOptions } from '@react-navigation/drawer';
+import type { RouteProp } from '@react-navigation/native';
+import type { DrawerNavigationOptions, DrawerNavigationProp } from '@react-navigation/drawer';
 import { Appbar } from 'react-native-paper';
 
 import NavigatorHeader from '#navigation/components/NavigatorHeader';
@@ -11,7 +11,7 @@ import { goBackWithDrawer } from '#navigation/utils/navigationUtils';
 
 type Props = {
   route: RouteProp<DashboardRoutes, DashboardRoutePaths>;
-  navigation: NavigationProp<Record<string, unknown>>;
+  navigation: DrawerNavigationProp<DashboardRoutes>;
 };
 
 const NAVIGATOR_HEADERS: Record<DashboardRoutePaths, TranslationPaths | undefined> = {

@@ -1,5 +1,4 @@
-import { useDrawerStatus } from '@react-navigation/drawer';
-import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types';
+import { useDrawerStatus, DrawerNavigationProp } from '@react-navigation/drawer';
 import React from 'react';
 import { Dimensions, LayoutChangeEvent } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -19,6 +18,7 @@ import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
+import type { DashboardRoutes } from '../../index';
 
 type DrawerItemProps = {
   t: Translator;
@@ -29,7 +29,7 @@ type DrawerItemProps = {
   };
   focusedRoute: string;
   routeName: string;
-  navigation: DrawerNavigationHelpers;
+  navigation: DrawerNavigationProp<DashboardRoutes>;
 };
 
 type LayoutFn = (event: LayoutChangeEvent) => void;
@@ -108,7 +108,7 @@ export function DrawerItem({ t, datums, routeName, focusedRoute, navigation }: D
         evt.stopPropagation();
         switch (routeName) {
           case 'AccountDetails':
-            return navigation.navigate('AccountDetails', { screen: 'Root' });
+            return navigation.navigate('AccountDetails', { screen: 'Root', params: undefined });
           case 'Management':
             return navigation.navigate('Management', { screen: 'Root' });
           case 'Tutorial': {
@@ -117,10 +117,14 @@ export function DrawerItem({ t, datums, routeName, focusedRoute, navigation }: D
             if (user?.role === ERoles.OPERATOR) {
               emitter.emit(APP_EVENTS.DISPATCH_CLOSE_OPERATOR_ACTIONS);
             }
-            return navigation.navigate('Dashboard', { screen: 'RootMainTabStack' });
+            return navigation.navigate('Main', { screen: 'Dashboard' });
           }
-          default:
-            return navigation.navigate(routeName);
+          case 'KnowledgeHub':
+            return navigation.navigate('KnowledgeHub');
+          case 'FAQ':
+            return navigation.navigate('FAQ');
+          case 'About':
+            return navigation.navigate('About');
         }
       }}
       icon={datums.iconName}

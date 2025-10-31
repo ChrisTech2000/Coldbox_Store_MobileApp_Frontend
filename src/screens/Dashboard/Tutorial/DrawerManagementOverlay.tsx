@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Animated, Dimensions, Platform, View } from 'react-native';
+import { Animated, Dimensions, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -13,14 +13,18 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { cn } from '#ui/lib/cn';
 
 import { ECommonTutorialSteps, EEmployeeTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function DrawerManagementOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const user = useAuthStore((store) => store.user);
   const colors = useTailwindColors();
@@ -32,16 +36,12 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
   return (
     <View tw="h-full w-full absolute">
       <Touchable
-        tw={cn(
-          'absolute left-3 w-[60%] h-[7%] p-3 rounded-md flex flex-row items-center space-x-2 z-10',
-          screenHeight <= SMALL_SCREEN_THRESHOLD
-            ? user?.role === ERoles.OPERATOR
-              ? 'top-[23%]'
-              : 'top-[23%]'
-            : Platform.OS === 'ios'
-              ? 'top-[21%]'
-              : 'top-[18%]'
-        )}
+        tw="absolute left-3 p-3 flex flex-row items-center space-x-2 z-10"
+        style={{
+          top: mask.y,
+          height: mask.height,
+          width: mask.width,
+        }}
         onPress={() => {
           // eslint-disable-next-line
           // @ts-ignore
@@ -53,12 +53,7 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
       <Animated.View
         style={[
           {
-            top:
-              screenHeight <= SMALL_SCREEN_THRESHOLD
-                ? '24%'
-                : Platform.OS === 'ios'
-                  ? '23%'
-                  : '20%',
+            top: mask.y + 10,
             left: LanguageManager.isRTL ? undefined : '40%',
             right: LanguageManager.isRTL ? '40%' : undefined,
             opacity: blinkAnim,
@@ -73,20 +68,14 @@ export function DrawerManagementOverlay({ next, goTo, stop }: IOverlayComponentP
       </Animated.View>
 
       <View
-        tw={cn(
-          'absolute left-3 top-1/3 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD
-            ? 'top-[30.5%]'
-            : Platform.OS === 'ios'
-              ? 'top-[29%]'
-              : 'top-[26%]'
-        )}
+        tw="absolute left-3 w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={[
           {
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
             shadowRadius: 4,
+            top: mask.y + 70,
           },
         ]}
       >

@@ -237,6 +237,16 @@ class AuthService extends HttpClient {
       throw customError;
     }
   };
+
+  public logout = async (refreshToken: string): Promise<void> => {
+    try {
+      await this.post<void>(EAuthenticationEndpoints.LOGOUT_ENDPOINT, { refresh: refreshToken });
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
 }
 
 export default new AuthService();

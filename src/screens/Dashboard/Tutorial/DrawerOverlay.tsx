@@ -1,21 +1,18 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Animated, Dimensions, Platform, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, TouchableOpacity, View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { cn } from '#ui/lib/cn';
 
 import { ECommonTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
 
-const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export function DrawerOverlay({ next, stop, goTo, step: { mask } }: IOverlayComponentProps) {
@@ -30,26 +27,24 @@ export function DrawerOverlay({ next, stop, goTo, step: { mask } }: IOverlayComp
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn(
-          'absolute w-[10%] h-[5%] left-4',
-          Platform.OS === 'ios'
-            ? screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-8'
-              : 'top-14'
-            : screenHeight <= SMALL_SCREEN_THRESHOLD
-              ? 'top-10'
-              : 'top-16'
-        )}
+        tw="absolute"
+        style={{
+          top: mask.y,
+          left: isRTL ? screenWidth - mask.x - mask.width : mask.x,
+          width: mask.width,
+          height: mask.height,
+        }}
         onPress={() => {
           navigation.dispatch(DrawerActions.openDrawer());
           next();
         }}
       >
         <Animated.View
+          tw="absolute"
           style={[
             {
-              top: mask.y + mask.height - (screenHeight <= SMALL_SCREEN_THRESHOLD ? 80 : 110),
-              [isRTL ? 'right' : 'left']: isRTL ? (screenWidth - mask.x) / 2 - 45 : mask.x + 25,
+              top: mask.height / 2 - 20,
+              left: mask.width / 2,
               opacity: blinkAnim,
               transform: [{ rotate: isRTL ? '90deg' : '270deg' }],
             },
@@ -60,11 +55,11 @@ export function DrawerOverlay({ next, stop, goTo, step: { mask } }: IOverlayComp
       </TouchableOpacity>
 
       <View
-        tw="absolute bg-white p-3 rounded-md z-30"
+        tw="absolute w-[85%] bg-white p-3 rounded-md z-30"
         style={[
           {
-            top: mask.y + mask.height + 10,
-            [isRTL ? 'right' : 'left']: isRTL ? (screenWidth - mask.x) / 2 : mask.x / 2,
+            top: mask.y + mask.height + 16,
+            ...(isRTL ? { right: 20 } : { left: 20 }),
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,

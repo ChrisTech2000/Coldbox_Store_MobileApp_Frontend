@@ -19,6 +19,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
+import { useTutorialStore } from '#stores/tutorial';
 import { CoolingUnit, Crate } from '#types/global';
 
 import { CheckOutScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
@@ -56,6 +57,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
   const { user, owner, coolingUnit: _coolingUnit, crates: _crates } = route.params;
   const { t } = useTranslationUtils();
   const { coolingUnits } = useDashboardStore();
+  const isTutorialActive = useTutorialStore(useShallow((store) => store.isTutorialActive));
   const { selectedItem: coolingUnit, onSelect: onSelectCoolingUnit } =
     useCrateSelectionCoolingUnitStore();
 
@@ -80,7 +82,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     },
     {
       defaultData: [],
-      skip: !user?.id || !coolingUnit?.id || !!_crates?.length,
+      skip: !user?.id || !coolingUnit?.id || !!_crates?.length || isTutorialActive,
     }
   );
 
@@ -95,7 +97,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
       coolingUnit: coolingUnit?.id as number,
     },
     {
-      skip: !user?.id || !coolingUnit?.id || !!_crates?.length,
+      skip: !user?.id || !coolingUnit?.id || !!_crates?.length || isTutorialActive,
       defaultData: [],
     }
   );

@@ -14,14 +14,13 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { cn } from '#ui/lib/cn';
 import { ECommonTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
 import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function ManagementOverlay({ next, goTo, stop, step: { mask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -33,10 +32,11 @@ export function ManagementOverlay({ next, goTo, stop }: IOverlayComponentProps) 
     <View tw="h-full w-full absolute">
       <View>
         <Touchable
-          tw={cn(
-            'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-32' : 'top-40'
-          )}
+          tw="absolute w-full bg-white"
+          style={{
+            top: mask.y,
+            height: mask.height,
+          }}
           onPress={() => {
             // eslint-disable-next-line
             // @ts-ignore
@@ -57,9 +57,10 @@ export function ManagementOverlay({ next, goTo, stop }: IOverlayComponentProps) 
             style={[
               {
                 opacity: blinkAnim,
+                bottom: mask.height - 10,
               },
             ]}
-            tw={cn('-top-2/3', LanguageManager.isRTL ? 'right-1/3' : '-right-2/3')}
+            tw={LanguageManager.isRTL ? 'right-1/3' : '-right-2/3'}
           >
             <MaterialIcon
               name="touch-app"
@@ -70,16 +71,14 @@ export function ManagementOverlay({ next, goTo, stop }: IOverlayComponentProps) 
         </Touchable>
 
         <View
-          tw={cn(
-            'absolute left-8 w-[80%] h-auto bg-white p-3 rounded-md z-40',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-48' : 'top-56'
-          )}
+          tw="absolute left-8 w-[80%] h-auto bg-white p-3 rounded-md z-40"
           style={[
             {
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.3,
               shadowRadius: 4,
+              top: mask.y + 70,
             },
           ]}
         >
