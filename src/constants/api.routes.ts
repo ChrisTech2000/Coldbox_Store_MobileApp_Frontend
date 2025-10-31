@@ -3,6 +3,7 @@
 export enum EAuthenticationEndpoints {
   BACKEND_ANDROID_VERSION = 'storage/version-code/android/',
   BACKEND_IOS_VERSION = 'storage/version-code/ios/',
+  LOGOUT_ENDPOINT = 'user/v1/logout/',
   REFRESH_TOKEN_ENDPOINT = 'user/token/refresh/',
   RESET_PASSWORD = 'user/v1/reset-password/',
   SIGN_IN_ENDPOINT = 'user/v1/login/',

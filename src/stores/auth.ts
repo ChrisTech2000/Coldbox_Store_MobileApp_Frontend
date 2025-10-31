@@ -2,6 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import moize from 'moize';
 import ms from 'ms';
 import { useEffect } from 'react';
+import { AppState, type AppStateStatus } from 'react-native';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
@@ -72,11 +73,30 @@ export const useAuthStore = create(
             throw new Error('Token not available');
           }
           const result = await AuthService.refreshToken(refreshToken);
-          set({ tokens: { accessToken: result.access, refreshToken } });
+          // Use the new refresh token from the response (token rotation)
+          set({
+            tokens: { accessToken: result.access, refreshToken: result.refresh || refreshToken },
+          });
         },
         { maxAge: ms('15 seconds') }
       ),
-      revokeSession: () => set({ tokens: null, isAuthenticated: false, user: null }),
+      revokeSession: async () => {
+        const refreshToken = get().tokens?.refreshToken;
+
+        // Clear local state first to immediately revoke access
+        set({ tokens: null, isAuthenticated: false, user: null });
+
+        // Then notify backend to blacklist the token (fire and forget)
+        // Even if this fails, the local session is already cleared
+        if (refreshToken) {
+          try {
+            await AuthService.logout(refreshToken);
+          } catch (error) {
+            console.log('Failed to blacklist token on server:', error);
+            // Don't throw - logout should succeed locally even if server call fails
+          }
+        }
+      },
     }),
     { name: 'session', storage }
   )
@@ -94,12 +114,26 @@ export function useAuthManager() {
   );
 
   useEffect(() => {
-    try {
-      const isExpired = verifySession();
-      if (isExpired) revokeSession();
-    } catch {
-      // silent error
-    }
+    const checkAndRenewSession = async () => {
+      try {
+        const isExpired = verifySession();
+        if (isExpired) {
+          // Access token expired, try to refresh before logging out
+          try {
+            await renewSession();
+            console.log('Session renewed successfully after detecting expired token');
+          } catch (error) {
+            // Refresh failed (refresh token also expired or invalid), log out
+            console.log('Failed to renew session, logging out:', error);
+            revokeSession();
+          }
+        }
+      } catch {
+        // No session initialized, silent error
+      }
+    };
+
+    checkAndRenewSession();
   }, [accessToken]);
 
   useInterval(
@@ -113,6 +147,45 @@ export function useAuthManager() {
     },
     isAuthenticated ? TOKEN_RENEWAL_TIMER : undefined
   );
+
+  // Handle app state changes (background/foreground)
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      async (nextAppState: AppStateStatus) => {
+        console.log('AppState changed to:', nextAppState);
+
+        // App came to foreground
+        if (nextAppState === 'active' && isAuthenticated) {
+          console.log('App became active, checking token...');
+          try {
+            const isExpired = verifySession();
+            console.log('Token expired?', isExpired);
+
+            if (isExpired) {
+              // Token expired while app was in background, try to refresh
+              console.log('Attempting to renew session...');
+              try {
+                await renewSession();
+                console.log('✅ Session renewed after app returned to foreground');
+              } catch (error) {
+                console.log('❌ Failed to renew session on foreground:', error);
+                revokeSession();
+              }
+            } else {
+              console.log('Token still valid, no refresh needed');
+            }
+          } catch (error) {
+            console.log('Error checking session:', error);
+          }
+        }
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [isAuthenticated, verifySession, renewSession, revokeSession]);
 
   return isAuthenticated;
 }
