@@ -1,20 +1,16 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Dimensions, Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 
 import { EFarmerTutorialSteps } from './utils/constants';
 
-const screenHeight = Dimensions.get('window').height;
-
-export function DrawerFAQOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function DrawerFAQOverlay({ next, goTo, stop, step: { mask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const navigation = useNavigation();
@@ -22,20 +18,14 @@ export function DrawerFAQOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   return (
     <View tw="h-full w-full absolute">
       <View
-        tw={cn(
-          'absolute left-3 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD
-            ? 'top-[55%]'
-            : Platform.OS === 'ios'
-              ? 'top-[42%]'
-              : 'top-[45%]'
-        )}
+        tw="absolute left-3 bg-white p-3 rounded-md z-30"
         style={[
           {
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
             shadowRadius: 4,
+            top: mask.y + 90,
           },
         ]}
       >

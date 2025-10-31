@@ -4,7 +4,11 @@ import {
   type BottomTabNavigationProp,
   type BottomTabScreenProps,
 } from '@react-navigation/bottom-tabs';
-import { getFocusedRouteNameFromRoute, type RouteProp } from '@react-navigation/native';
+import {
+  getFocusedRouteNameFromRoute,
+  type NavigatorScreenParams,
+  type RouteProp,
+} from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useShallow } from 'zustand/react/shallow';
@@ -25,11 +29,7 @@ import ShoppingCartStack, { type ShoppingCartStackRoutes } from './ShoppingCartS
 import MarketplaceStack, { MarketplaceRoutes } from './Marketplace/MarketplaceStack';
 
 export type DashboardMainRoutes = {
-  Dashboard:
-    | {
-        screen?: keyof MainTabStackRoutes;
-      }
-    | undefined;
+  Dashboard: NavigatorScreenParams<MainTabStackRoutes> | undefined;
   History:
     | {
         screen?: keyof HistoryTabStackRoutes;

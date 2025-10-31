@@ -12,14 +12,19 @@ import { useTutorialStore } from '#stores/tutorial';
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
-import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 import { useBlinkAnimation } from './utils/useAnimation';
 import { EOperatorTutorialSteps } from './utils/constants';
 
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
-export function AddCoolingUserNavigationOverLay({ next, goTo, stop }: IOverlayComponentProps) {
+export function AddCoolingUserNavigationOverLay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -31,19 +36,23 @@ export function AddCoolingUserNavigationOverLay({ next, goTo, stop }: IOverlayCo
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn(
-          'absolute w-[15%] h-14',
-          isRTL ? 'right-8' : 'right-2',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-6' : 'top-14'
-        )}
+        tw="absolute"
+        style={{
+          top: mask.y,
+          left: isRTL ? screenWidth - mask.x - mask.width : mask.x,
+          height: mask.height,
+          width: mask.width,
+        }}
         onPress={() => {
           emitter.emit(APP_EVENTS.DISPATCH_CU_PROMPT, true);
           next();
         }}
       >
         <Animated.View
-          style={{ opacity: blinkAnim }}
-          tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-9 left-4' : 'top-8 left-5'}
+          style={{
+            opacity: blinkAnim,
+            top: 20,
+          }}
         >
           <MaterialIcon
             name="touch-app"
@@ -54,16 +63,14 @@ export function AddCoolingUserNavigationOverLay({ next, goTo, stop }: IOverlayCo
       </TouchableOpacity>
 
       <View
-        tw={cn(
-          'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-32' : 'top-44'
-        )}
+        tw="absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={[
           {
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
             shadowRadius: 4,
+            top: mask.y + 90,
           },
         ]}
       >

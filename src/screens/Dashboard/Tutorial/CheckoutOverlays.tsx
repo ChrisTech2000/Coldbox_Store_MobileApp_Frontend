@@ -24,6 +24,7 @@ import { MOCKED_CHECK_OUT_DATA, MOCKED_COOLING_UNIT, MOCKED_USER } from './utils
 import { useBlinkAnimation } from './utils/useAnimation';
 
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const MOCKED_PARAMS = {
   user: MOCKED_USER,
@@ -31,49 +32,39 @@ const MOCKED_PARAMS = {
   coolingUnit: MOCKED_COOLING_UNIT,
 };
 
-export function OperatorActionsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function OperatorActionsOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
   const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const mainTabNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
 
   return (
     <View tw="h-full w-full absolute">
       <TouchableOpacity
-        tw={cn(
-          'absolute w-[14%] h-[9%] right-14',
-          Platform.OS === 'ios' ? 'bottom-28' : 'bottom-20'
-        )}
+        tw="absolute"
+        style={{
+          height: mask.height,
+          width: mask.width,
+          top: mask.y,
+          left: LanguageManager.isRTL ? screenWidth - mask.x - mask.width : mask.x,
+        }}
         onPress={() => {
-          // eslint-disable-next-line
-          // @ts-ignore
-          rootNavigation.navigate('Main', {
-            screen: 'Dashboard',
-            params: {
-              screen: 'CheckOutStack',
-              params: {
-                screen: 'CrateSelection',
-                params: MOCKED_PARAMS,
-              },
-            },
+          mainTabNavigation.navigate('CheckOutStack', {
+            screen: 'CrateSelection',
+            params: MOCKED_PARAMS,
           });
-
           next();
         }}
       >
-        <Animated.View
-          style={[
-            {
-              top: screenHeight <= SMALL_SCREEN_THRESHOLD ? 22 : 45,
-              left: LanguageManager.isRTL ? undefined : -40,
-              right: LanguageManager.isRTL ? -30 : undefined,
-              opacity: blinkAnim,
-              transform: [{ rotate: '90deg' }],
-            },
-          ]}
-        >
+        <Animated.View style={[{ top: 20, opacity: blinkAnim }]}>
           <MaterialIcon
             name="touch-app"
             size={screenHeight <= SMALL_SCREEN_THRESHOLD ? 35 : 40}
@@ -83,19 +74,13 @@ export function OperatorActionsOverlay({ next, goTo, stop }: IOverlayComponentPr
       </TouchableOpacity>
 
       <View
-        tw={cn(
-          'absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30',
-          screenHeight <= SMALL_SCREEN_THRESHOLD
-            ? 'top-[27%]'
-            : Platform.OS === 'ios'
-              ? 'top-[60%]'
-              : 'top-2/3'
-        )}
+        tw="absolute left-5 w-[90%] h-auto bg-white p-3 rounded-md z-30"
         style={{
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.3,
           shadowRadius: 4,
+          top: Platform.OS === 'ios' ? mask.y - 150 : mask.y - 200,
         }}
       >
         <Text tw="text-base">{t('tutorial.steps.checkOut1')}</Text>
@@ -118,14 +103,7 @@ export function OperatorActionsOverlay({ next, goTo, stop }: IOverlayComponentPr
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-red-700"
           >
@@ -166,10 +144,12 @@ export function CheckOutScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('RootMainTabStack');
               goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_1);
+              rootNavigation.navigate('Dashboard', { screen: 'RootMainTabStack' });
+
+              setTimeout(() => {
+                emitter.emit(APP_EVENTS.DISPATCH_OPEN_OPERATOR_ACTIONS);
+              }, 100);
             }}
             labelStyle="text-green-primary"
           >
@@ -180,15 +160,10 @@ export function CheckOutScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             icon={LanguageManager.isRTL ? 'arrow-left' : 'arrow-right'}
             mode="text"
             onPress={() => {
-              navigation.navigate(
-                'BillingInfo',
-                // eslint-disable-next-line
-                // @ts-ignore
-                {
-                  ...MOCKED_PARAMS,
-                  user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
-                }
-              );
+              navigation.navigate('BillingInfo', {
+                ...MOCKED_PARAMS,
+                user: `${MOCKED_PARAMS.user.user.firstName} ${MOCKED_PARAMS.user.user.lastName}`,
+              });
               next();
             }}
             labelStyle="text-green-primary"
@@ -202,14 +177,7 @@ export function CheckOutScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              rootNavigation.navigate('Dashboard');
             }}
             labelStyle="text-red-700"
           >
@@ -224,6 +192,7 @@ export function CheckOutScreenOverlay({ next, goTo, stop }: IOverlayComponentPro
 export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
+  const dashboardNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
   const rootNavigation = useNavigation<NativeStackNavigationProp<MainTabStackRoutes>>();
   const { company } = useManagementStore();
 
@@ -247,19 +216,12 @@ export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPr
             icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
             mode="text"
             onPress={() => {
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'CheckOutStack',
-                  params: {
-                    screen: 'CrateSelection',
-                    params: MOCKED_PARAMS,
-                  },
-                },
-              });
               goTo(EOperatorTutorialSteps.CHECK_OUT_STEP_2);
+
+              rootNavigation.navigate('CheckOutStack', {
+                screen: 'CrateSelection',
+                params: MOCKED_PARAMS,
+              });
             }}
             labelStyle="text-green-primary"
           >
@@ -271,17 +233,12 @@ export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPr
             mode="text"
             onPress={() => {
               if (company?.country === 'NG' || company?.country === 'Nigeria') {
-                // eslint-disable-next-line
-                // @ts-ignore
-                rootNavigation.navigate('Marketplace', {
+                dashboardNavigation.navigate('Marketplace', {
                   screen: 'MarketplaceRoot',
-                  params: {
-                    screen: 'Marketplace',
-                  },
                 });
                 goTo(EMarketplaceTutorialSteps.MARKETPLACE_STEP_1);
               } else {
-                rootNavigation.navigate('RootMainTabStack');
+                dashboardNavigation.navigate('Dashboard', { screen: 'RootMainTabStack' });
                 next();
               }
             }}
@@ -296,14 +253,7 @@ export function CheckOut2ScreenOverlay({ next, goTo, stop }: IOverlayComponentPr
             onPress={() => {
               stop();
               toggleTutorial(false);
-              // eslint-disable-next-line
-              // @ts-ignore
-              rootNavigation.navigate('Main', {
-                screen: 'Dashboard',
-                params: {
-                  screen: 'RootMainTabStack',
-                },
-              });
+              dashboardNavigation.navigate('Dashboard');
             }}
             labelStyle="text-red-700"
           >

@@ -46,25 +46,24 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
     }
   );
 
-  useWalkthroughStep({
+  const { onLayout: onCoolingUsersLayout } = useWalkthroughStep({
     number: EOperatorTutorialSteps.GO_TO_COOLING_USERS_STEP,
     OverlayComponent: ManagementOverlay,
-    fullScreen: true,
   });
 
-  useWalkthroughStep({
+  const { onLayout: onLocationsLayout } = useWalkthroughStep({
     number: EEmployeeTutorialSteps.LOCATIONS_STEP,
     OverlayComponent: LocationsOverlay,
     fullScreen: true,
   });
 
-  useWalkthroughStep({
+  const { onLayout: onCoolingUnitsLayout } = useWalkthroughStep({
     number: EEmployeeTutorialSteps.COOLING_UNITS_STEP,
     OverlayComponent: ManagementCoolingUnitsOverlay,
     fullScreen: true,
   });
 
-  useWalkthroughStep({
+  const { onLayout: onOperatorsLayout } = useWalkthroughStep({
     number: EEmployeeTutorialSteps.ADD_EMPLOYEES_OPERATORS_STEP,
     OverlayComponent: ManagementEmployeesOperatorsOverlay,
     fullScreen: true,
@@ -88,6 +87,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
               <Text tw="text-base w-[80%]">{t('navigation.management.CoolingUsers')}</Text>
             )}
             onPress={() => navigation.navigate('CoolingUsers')}
+            onLayout={onCoolingUsersLayout}
             right={ListItemArrow}
           />
           <Divider />
@@ -109,6 +109,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
         <RBAC.ProtectedResource action="NAVIGATE" subject="Locations">
           <List.Item
             testID="locations-list-item"
+            onLayout={onLocationsLayout}
             tw="px-0 py-2"
             title={undefined}
             left={() => <Text tw="text-base w-[80%]">{t('navigation.management.Locations')}</Text>}
@@ -123,6 +124,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
         <RBAC.ProtectedResource action="NAVIGATE" subject="CoolingUnits">
           <List.Item
             testID="cooling-units-list-item"
+            onLayout={onCoolingUnitsLayout}
             tw="px-0 py-2"
             title={disabledCoolingUnits ? t('navigation.management.CoolingUnits') : undefined}
             description={
@@ -147,6 +149,7 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
         <RBAC.ProtectedResource action="NAVIGATE" subject="Operators">
           <List.Item
             testID="operators-list-item"
+            onLayout={onOperatorsLayout}
             tw="px-0 py-2"
             title={undefined}
             left={() => <Text tw="text-base w-[80%]">{t('navigation.management.Operators')}</Text>}

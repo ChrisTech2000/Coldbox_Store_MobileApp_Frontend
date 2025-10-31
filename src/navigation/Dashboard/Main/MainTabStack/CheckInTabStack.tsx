@@ -24,7 +24,7 @@ import { AccountDetailsRoutes } from '#navigation/Dashboard/AccountDetails';
 import PayoutSettings from '#screens/Dashboard/AccountDetails/PayoutSettings';
 
 export type CheckInStackRoutes = {
-  CheckIn: { coolingUnit: CoolingUnit; user: Farmer };
+  CheckIn: { coolingUnit: CoolingUnit; user: Farmer; isTutorial?: boolean };
   AddFarmerBankAccount: AccountDetailsRoutes['PayoutSettings'];
   SelectCropType: undefined;
   CropList: { type: ECropType };

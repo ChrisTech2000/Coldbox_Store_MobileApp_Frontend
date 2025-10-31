@@ -22,7 +22,12 @@ import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function ManagementCoolingUnitsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function ManagementCoolingUnitsOverlay({
+  next,
+  goTo,
+  stop,
+  step: { mask },
+}: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
@@ -34,10 +39,11 @@ export function ManagementCoolingUnitsOverlay({ next, goTo, stop }: IOverlayComp
     <View tw="h-full w-full absolute">
       <View>
         <Touchable
-          tw={cn(
-            'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-44' : 'top-64'
-          )}
+          tw="absolute w-full bg-white"
+          style={{
+            top: mask.y,
+            height: mask.height,
+          }}
           onPress={() => {
             // eslint-disable-next-line
             // @ts-ignore

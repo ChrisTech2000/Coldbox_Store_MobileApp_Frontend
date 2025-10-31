@@ -1,5 +1,5 @@
 import { createDrawerNavigator, type DrawerScreenProps } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, type NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { Drawer } from 'react-native-drawer-layout';
@@ -31,14 +31,10 @@ import DashboardMainBottomTabs, { DashboardMainRoutes } from './Main';
 import ManagementStack, { type ManagementRoutes } from './Management';
 
 export type DashboardRoutes = {
-  Main:
-    | {
-        screen: keyof DashboardMainRoutes;
-      }
-    | undefined;
+  Main: NavigatorScreenParams<DashboardMainRoutes> | undefined;
   AccountDetails: {
     screen: keyof AccountDetailsRoutes;
-    params: AccountDetailsRoutes[keyof AccountDetailsRoutes];
+    params?: AccountDetailsRoutes[keyof AccountDetailsRoutes];
   };
   Management:
     | {

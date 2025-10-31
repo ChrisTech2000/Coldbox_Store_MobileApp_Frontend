@@ -1,4 +1,4 @@
-import { type RouteProp } from '@react-navigation/native';
+import { type NavigatorScreenParams, type RouteProp } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   type NativeStackNavigationOptions,
@@ -20,7 +20,6 @@ import {
 } from '#navigation/Dashboard/lib/dashboardHeaderFactory';
 import NavigatorHeader, { NavigationHeaderProps } from '#navigation/components/NavigatorHeader';
 import { useAuthStore } from '#stores/auth';
-import type { CoolingUnit, Crate, Farmer } from '#types/global';
 import { Text } from '#ui/components/Text';
 
 import CheckInStack, { type CheckInStackRoutes } from './CheckInTabStack';
@@ -29,25 +28,9 @@ import ProduceDetailsStack, { type ProduceDetailsStackRoutes } from './ProduceDe
 
 export type MainTabStackRoutes = {
   RootMainTabStack: undefined;
-  ProduceDetailsStack: {
-    screen: keyof ProduceDetailsStackRoutes;
-    params: ProduceDetailsStackRoutes[keyof ProduceDetailsStackRoutes];
-  };
-  CheckInStack: {
-    screen: keyof CheckInStackRoutes;
-    params: {
-      user?: Farmer;
-      coolingUnit?: CoolingUnit;
-    };
-  };
-  CheckOutStack: {
-    screen: keyof CheckOutStackRoutes;
-    params: {
-      crates?: Array<Crate>;
-      user?: Farmer;
-      coolingUnit: CoolingUnit | null;
-    };
-  };
+  ProduceDetailsStack: NavigatorScreenParams<ProduceDetailsStackRoutes>;
+  CheckInStack: NavigatorScreenParams<CheckInStackRoutes>;
+  CheckOutStack: NavigatorScreenParams<CheckOutStackRoutes>;
 };
 
 export type MainTabStackRoutePaths = keyof MainTabStackRoutes;

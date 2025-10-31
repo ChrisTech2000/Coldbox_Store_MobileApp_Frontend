@@ -57,7 +57,7 @@ const en = {
       Operators: 'Operators',
       AddOperator: 'Add Operator',
       EditOperator: 'Edit Operator',
-      RegisteredEmployee: 'Registered Employee',
+      RegisteredEmployee: 'Registered Employees',
       AddRegisteredEmployee: 'Add Registered Employee',
       RegisteredEmployeeDetails: 'Registered Employee Details',
       DeliveryContacts: 'Delivery Contacts',

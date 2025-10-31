@@ -8,24 +8,28 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
-import { DashboardMainRoutes } from '#navigation/Dashboard/Main';
+import { DashboardRoutes } from '#navigation/Dashboard';
+import { ManagementRoutes } from '#navigation/Dashboard/Management';
 import { useTutorialStore } from '#stores/tutorial';
+
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 import { Touchable } from '#ui/components/Touchable';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { cn } from '#ui/lib/cn';
+
+import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 import { ECommonTutorialSteps } from './utils/constants';
 import { useBlinkAnimation } from './utils/useAnimation';
-import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
 
 const screenHeight = Dimensions.get('window').height;
 
-export function LocationsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
+export function LocationsOverlay({ next, goTo, stop, step: { mask } }: IOverlayComponentProps) {
   const { t } = useTranslationUtils();
   const toggleTutorial = useTutorialStore((store) => store.toggleTutorial);
   const colors = useTailwindColors();
-  const rootNavigation = useNavigation<NativeStackNavigationProp<DashboardMainRoutes>>();
+  const navigation = useNavigation<NativeStackNavigationProp<ManagementRoutes>>();
+  const mainNavigation = useNavigation<NativeStackNavigationProp<DashboardRoutes>>();
 
   const blinkAnim = useBlinkAnimation();
 
@@ -33,14 +37,13 @@ export function LocationsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
     <View tw="h-full w-full absolute">
       <View>
         <Touchable
-          tw={cn(
-            'absolute w-full h-14 bg-white',
-            screenHeight <= SMALL_SCREEN_THRESHOLD ? 'top-44' : 'top-52'
-          )}
+          tw="absolute w-full bg-white"
+          style={{
+            top: mask.y,
+            height: mask.height,
+          }}
           onPress={() => {
-            // eslint-disable-next-line
-            // @ts-ignore
-            rootNavigation.navigate('AddLocation');
+            navigation.navigate('AddLocation');
             next();
           }}
         >
@@ -88,8 +91,8 @@ export function LocationsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
               icon={LanguageManager.isRTL ? 'arrow-right' : 'arrow-left'}
               mode="text"
               onPress={() => {
-                rootNavigation.navigate('Dashboard');
-                rootNavigation.dispatch(DrawerActions.openDrawer());
+                mainNavigation.navigate('Main');
+                navigation.dispatch(DrawerActions.openDrawer());
                 goTo(ECommonTutorialSteps.GO_TO_MANAGEMENT_STEP);
               }}
               labelStyle="text-green-primary"
@@ -101,14 +104,8 @@ export function LocationsOverlay({ next, goTo, stop }: IOverlayComponentProps) {
               onPress={() => {
                 stop();
                 toggleTutorial(false);
-                // eslint-disable-next-line
-                // @ts-ignore
-                rootNavigation.navigate('Main', {
-                  screen: 'Dashboard',
-                  params: {
-                    screen: 'RootMainTabStack',
-                  },
-                });
+                mainNavigation.navigate('Main');
+                navigation.dispatch(DrawerActions.closeDrawer());
               }}
               labelStyle="text-red-700"
             >
