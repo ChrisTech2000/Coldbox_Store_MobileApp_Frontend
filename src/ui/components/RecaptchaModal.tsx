@@ -38,7 +38,7 @@ const RecaptchaModal = forwardRef<RecaptchaModalRef, RecaptchaModalProps>(
         siteKey={recaptchaProps.siteKey}
         baseUrl={recaptchaProps.baseUrl} // e.g. https://app.yourcompany.com (MUST match Console)
         lang={recaptchaProps.languageCode}
-        size="compact"
+        size="invisible"
         theme="light" // or 'dark'
         onVerify={onVerify}
         onExpire={() => onError?.('reCAPTCHA verification expired')}

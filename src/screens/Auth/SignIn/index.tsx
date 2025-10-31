@@ -68,7 +68,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
     handleSubmit,
     watch,
     clearErrors,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<SignInSchema>({
     resolver: zodResolver((z, t) =>
       z
@@ -181,7 +181,6 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
     await showRecaptcha();
   }, [showRecaptcha]);
 
-  console.log(isSubmitting, 'isSubmitting');
   return (
     <KeyboardAwareScrollView tw="mt-[-24]" showsVerticalScrollIndicator={false}>
       <View tw="flex-1 items-center">
