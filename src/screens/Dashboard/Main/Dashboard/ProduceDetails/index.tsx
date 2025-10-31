@@ -42,18 +42,6 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
     OverlayComponent: MarketplaceListing1ScreenOverlay,
   });
 
-  const pricing = useMemo(() => {
-    const pricingType =
-      produce.checkedInCrates[0]?.effectivePricingType ||
-      produce.checkedInCrates[0]?.pricing[0]?.pricingType;
-
-    if (pricingType === EPricingType.FIXED) {
-      return produce.cratesCombinedCost;
-    }
-
-    return produce.cratesCombinedCost * (produce.plannedDays || 1);
-  }, [produce]);
-
   const percentage = useMemo(() => {
     const quality = produce.qualityDt * 100;
     if (quality > 100) return 100;
@@ -76,6 +64,23 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         : produce.cratesAmount)
     );
   }, [produce]);
+
+  const plannedStorageCost = useMemo(() => {
+    if (!produce.plannedDays) {
+      return null;
+    }
+
+    const pricingType =
+      produce.checkedInCrates[0]?.effectivePricingType ||
+      produce.checkedInCrates[0]?.pricing[0]?.pricingType;
+
+    if (pricingType === EPricingType.FIXED) {
+      return produce.cratesCombinedCost;
+    }
+
+    // For PERIODICITY: dailyPrice × plannedDays
+    return dailyPrice * produce.plannedDays;
+  }, [produce, dailyPrice]);
 
   const data = useMemo(
     () => [
@@ -134,7 +139,7 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       {
         key: 'plannedDays',
         label: t('Dashboard.ProduceDetails.plannedDays'),
-        value: produce.plannedDays,
+        value: produce.plannedDays || '-',
       },
       produce.checkedInCrates[0].pricing[0].pricingType === EPricingType.PERIODICITY
         ? {
@@ -149,13 +154,16 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
       {
         key: 'plannedStorageCost',
         label: t('Dashboard.ProduceDetails.plannedStorageCost'),
-        value: pricing.toLocaleString('en-US', {
-          style: 'currency',
-          currency: currency,
-        }),
+        value:
+          plannedStorageCost !== null
+            ? plannedStorageCost.toLocaleString('en-US', {
+                style: 'currency',
+                currency: currency,
+              })
+            : '-',
       },
     ],
-    [produce, pricing, currency, dailyPrice, guard, user]
+    [produce, plannedStorageCost, currency, dailyPrice, guard, user]
   );
 
   const amountOfListedCrates = useMemo(
